@@ -486,6 +486,36 @@ For each host indicated at `server.ingress.extraHosts`, please indicate a `name`
 
 For annotations, please see [this document](https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md). Not all annotations are supported by all ingress controllers, but this document does a good job of indicating which annotation is supported by many popular ingress controllers.
 
+#### TLS
+
+This chart will facilitate the creation of TLS secrets for use with the ingress controller, however, this is not required. There are four common use cases:
+
+- Helm generates/manages certificate secrets based on the parameters.
+- User generates/manages certificates separately.
+- Helm creates self-signed certificates and generates/manages certificate secrets.
+- An additional tool (like [cert-manager](https://github.com/jetstack/cert-manager/)) manages the secrets for the application.
+In the first two cases, it's needed a certificate and a key. We would expect them to look like this:
+- certificate files should look like (and there can be more than one certificate if there is a certificate chain)
+  ```console
+  -----BEGIN CERTIFICATE-----
+  MIID6TCCAtGgAwIBAgIJAIaCwivkeB5EMA0GCSqGSIb3DQEBCwUAMFYxCzAJBgNV
+  ...
+  jScrvkiBO65F46KioCL9h5tDvomdU1aqpI/CBzhvZn1c0ZTf87tGQR8NK7v7
+  -----END CERTIFICATE-----
+  ```
+- keys should look like:
+  ```console
+  -----BEGIN RSA PRIVATE KEY-----
+  MIIEogIBAAKCAQEAvLYcyu8f3skuRyUgeeNpeDvYBCDcgq+LsWap6zbX5f8oLqp4
+  ...
+  wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
+  -----END RSA PRIVATE KEY-----
+  ```
+- If you are going to use Helm to manage the certificates based on the parameters, please copy these values into the `certificate` and `key` values for a given `server.ingress.secrets` entry.
+- In case you are going to manage TLS secrects separately, please know that you can must a TLS secret with name *INGRESS_HOSTNAME-tls* (where *INGRESS_HOSTNAME* is a placeholder to be replaced with the hostname you set using the `server.ingress.hostname` parameter).
+- To use self-signed certificates created by Helm, set `server.ingress.tls` to `true` and `server.ingress.certManager` to `false`.
+- If your cluster has a [cert-manager](https://github.com/jetstack/cert-manager) add-on to automate the management and issuance of TLS certificates, set `server.ingress.certManager` boolean to true to enable the corresponding annotations for cert-manager.
+
 ### Setting Pod's affinity
 
 This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
