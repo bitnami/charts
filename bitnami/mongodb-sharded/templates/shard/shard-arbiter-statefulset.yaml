@@ -44,7 +44,7 @@ spec:
       hostAliases: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.arbiter.hostAliases "context" $) | nindent 8 }}
       {{- end }}
       {{- if $.Values.shardsvr.arbiter.affinity }}
-      affinity: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.arbiter.affinity "context" $) | nindent 8 }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.arbiter.affinity "context" (set $ "arbiterLoopId" $i)) | nindent 8 }}
       {{- else }}
       affinity:
         podAffinity: {{- include "common.affinities.pods" (dict "type" $.Values.shardsvr.arbiter.podAffinityPreset "component" "shardsvr-arbiter" "context" $) | nindent 10 }}

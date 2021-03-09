@@ -9,6 +9,7 @@
 #   storageClass: myStorageClass
 
 zookeeper:
+  enabled: true
   replicaCount: 3
   ## Size in MB for the Java Heap options (Xmx and XMs). This env var is ignored if Xmx an Xms are configured via JVMFLAGS
   ##
@@ -71,6 +72,46 @@ kafka:
                   values:
                     - zookeeper
             topologyKey: "kubernetes.io/hostname"
+  ## Prometheus Exporters / Metrics
+  ##
+  metrics:
+    ## Prometheus Kafka Exporter: exposes complimentary metrics to JMX Exporter
+    ##
+    kafka:
+      enabled: false
+      ## Prometheus Kafka Exporter' resource requests and limits
+      ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+      ##
+      resources:
+        limits: {}
+        requests:
+          cpu: 100m
+          memory: 128Mi
+      ## Service configuration
+      ##
+      service:
+        ## Kafka Exporter Prometheus port to be used in wavefront configuration
+        ##
+        port: 9308
+
+    ## Prometheus JMX Exporter: exposes the majority of Kafkas metrics
+    ##
+    jmx:
+      enabled: false
+      ## Prometheus JMX Exporter' resource requests and limits
+      ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+      ##
+      resources:
+        limits: {}
+        requests:
+          cpu: 100m
+          memory: 128Mi
+      ## Service configuration
+      ##
+      service:
+        ## JMX Exporter Prometheus port
+        ##
+        port: 5556
   zookeeper:
     enabled: false
   ## This value is only used when zookeeper.enabled is set to false.
@@ -88,6 +129,9 @@ spark:
   ## Spark master specific configuration
   ##
   master:
+    ## Spark container ports
+    ##
+    webPort: 8080
     resources:
       ## Recommended values for cpu and memory requests
       ##
@@ -111,6 +155,9 @@ spark:
   ##
   worker:
     replicaCount: 2
+    ## Spark container ports
+    ##
+    webPort: 8081
     ## Anti affinity rules set for resiliency
     ##
     affinity:
@@ -131,12 +178,32 @@ spark:
       requests:
         cpu: 250m
         memory: 5120Mi
+  ## Metrics configuration
+  ##
+  metrics:
+    enabled: false
+    ## Annotations for the Prometheus metrics on master nodes
+    ##
+    masterAnnotations:
+      prometheus.io/scrape: 'true'
+      prometheus.io/path: '/metrics/'
+      prometheus.io/port: '8080'
+    ## Annotations for the Prometheus metrics on worker nodes
+    ##
+    workerAnnotations:
+      prometheus.io/scrape: 'true'
+      prometheus.io/path: '/metrics/'
+      prometheus.io/port: '8081'
 
 ## Solr Subchart parameters
 ##
 solr:
   enabled: true
   replicaCount: 2
+  ## Exporter deployment does not work with authentication enabled- Bug
+  ##
+  authentication:
+    enabled: false
 
   ## Java memory options recommended value
   ##
@@ -161,6 +228,30 @@ solr:
     requests:
       cpu: 250m
       memory: 5120Mi
+  ## Configuration for the solr prometheus exporter
+  ##
+  exporter:
+    enabled: false
+    ## Solr exporter port
+    ##
+    port: 9983
+    affinity:
+      podAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+         - weight: 50
+           podAffinityTerm:
+             labelSelector:
+               matchExpressions:
+               - key: app.kubernetes.io/name
+                 operator: In
+                 values:
+                   - solr
+             topologyKey: "kubernetes.io/hostname"
+    resources:
+      limits: {}
+      requests:
+        cpu: 100m
+        memory: 128Mi
   zookeeper:
     enabled: false
   ## This value is only used when zookeeper.enabled is set to false
@@ -170,3 +261,110 @@ solr:
     ##
     servers:
       - '{{ .Release.Name }}-zookeeper'
+
+## Wavefront Subchart parameters
+##
+wavefront:
+  enabled: false
+  ## This is a unique name for the cluster (required)
+  ## All metrics will receive a `cluster` tag with this value
+  ##
+  clusterName: KUBERNETES_CLUSTER_NAME
+  ## Wavefront URL (cluster) and API Token (required)
+  ##
+  wavefront:
+    url: https://YOUR_CLUSTER.wavefront.com
+    token: YOUR_API_TOKEN
+    ## Name of an existing secret containing the token
+    ##
+    existingSecret:
+  ## Wavefront Collector is responsible to get all Kubernetes metrics from your cluster.
+  ## It will capture Kubernetes resources metrics available from the kubelets,
+  ## as well as auto-discovery capabilities.
+  ##
+  collector:
+    ## Rules based discovery configuration
+    ## Ref: https://github.com/wavefrontHQ/wavefront-kubernetes-collector/blob/master/docs/discovery.md
+    ##
+    resources:
+      limits: {}
+      requests:
+        cpu: 200m
+        memory: 10Mi
+    discovery:
+      enabled: true
+      ## Whether to enable runtime discovery configurations
+      ## Ref: https://github.com/wavefrontHQ/wavefront-collector-for-kubernetes/blob/master/docs/discovery.md#runtime-configurations
+      ##
+      enableRuntimeConfigs: true
+      ## Can be used to add additional discovery rules
+      ##
+      config:
+      ## auto-discover kafka-exporter
+      ##
+      - name: kafka-discovery
+        type: prometheus
+        selectors:
+          images:
+          - '*bitnami/kafka-exporter*'
+        port: 9308
+        path: /metrics
+        scheme: http
+        prefix: kube.kafka.
+
+      ## auto-discover jmx exporter
+      ##
+      - name: kafka-jmx-discovery
+        type: prometheus
+        selectors:
+          images:
+          - '*bitnami/jmx-exporter*'
+        port: 5556
+        path: /metrics
+        scheme: http
+        prefix: kube.kafkajmx.
+
+      ## auto-discover solr
+      ##
+      - name: solr-discovery
+        type: prometheus
+        selectors:
+          images:
+          - '*bitnami/solr*'
+        port: 9983
+        path: /metrics
+        scheme: http
+        prefix: kube.solr.
+
+      ## auto-discover spark
+      ##
+      - name: spark-worker-discovery
+        type: prometheus
+        selectors:
+          images:
+          - '*bitnami/spark*'
+        port: 8081
+        path: /metrics/
+        scheme: http
+        prefix: kube.spark.
+
+      ## auto-discover spark
+      ##
+      - name: spark-master-discovery
+        type: prometheus
+        selectors:
+          images:
+          - '*bitnami/spark*'
+        port: 8080
+        path: /metrics/
+        scheme: http
+        prefix: kube.spark.
+  proxy:
+    ## Wavefront Proxy resource requests and limits
+    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ##
+    resources:
+      limits: {}
+      requests:
+        cpu: 100m
+        memory: 5Gi

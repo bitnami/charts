@@ -56,109 +56,104 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 
 ### Common parameters
 
-| Parameter                           | Description                                                          | Default                             |
-|-------------------------------------|----------------------------------------------------------------------|-------------------------------------|
-| `nameOverride`                      | String to partially override scdf.fullname                           | `nil`                               |
-| `fullnameOverride`                  | String to fully override scdf.fullname                               | `nil`                               |
-| `clusterDomain`                     | Default Kubernetes cluster domain                                    | `cluster.local`                     |
-| `commonLabels`                      | Labels to add to all deployed objects                                | `{}`                                |
-| `commonAnnotations`                 | Annotations to add to all deployed objects                           | `{}`                                |
-| `extraDeploy`                       | Array of extra objects to deploy with the release                    | `[]` (evaluated as a template)      |
-| `kubeVersion`                       | Force target Kubernetes version (using Helm capabilities if not set) | `nil`                               |
-| `deployer.resources.limits`         | Streaming applications resource limits                               | `{ cpu: "500m", memory: "1024Mi" }` |
-| `deployer.resources.requests`       | Streaming applications resource requests                             | `{}`                                |
-| `deployer.resources.readinessProbe` | Streaming applications readiness probes requests                     | Check `values.yaml` file            |
-| `deployer.resources.livenessProbe`  | Streaming applications liveness probes  requests                     | Check `values.yaml` file            |
-| `deployer.nodeSelector`             | Streaming applications nodeSelector                                  | `""`                                |
-| `deployer.tolerations`              | Streaming applications tolerations                                   | `{}`                                |
-| `deployer.volumeMounts`             | Streaming applications extra volume mounts                           | `{}`                                |
-| `deployer.volumes`                  | Streaming applications extra volumes                                 | `{}`                                |
-| `deployer.environmentVariables`     | Streaming applications environment variables                         | `""`                                |
-| `deployer.podSecurityContext`       | Streaming applications Security Context.                             | `{runAsUser: 1001}`                 |
+| Parameter           | Description                                                          | Default                        |
+|---------------------|----------------------------------------------------------------------|--------------------------------|
+| `nameOverride`      | String to partially override common.names.fullname                   | `nil`                          |
+| `fullnameOverride`  | String to fully override common.names.fullname                       | `nil`                          |
+| `clusterDomain`     | Default Kubernetes cluster domain                                    | `cluster.local`                |
+| `commonLabels`      | Labels to add to all deployed objects                                | `{}`                           |
+| `commonAnnotations` | Annotations to add to all deployed objects                           | `{}`                           |
+| `extraDeploy`       | Array of extra objects to deploy with the release                    | `[]` (evaluated as a template) |
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set) | `nil`                          |
 
 ### Dataflow Server parameters
 
-| Parameter                                    | Description                                                                                                      | Default                                                 |
-|----------------------------------------------|------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `server.image.registry`                      | Spring Cloud Dataflow image registry                                                                             | `docker.io`                                             |
-| `server.image.repository`                    | Spring Cloud Dataflow image name                                                                                 | `bitnami/spring-cloud-dataflow`                         |
-| `server.image.tag`                           | Spring Cloud Dataflow image tag                                                                                  | `{TAG_NAME}`                                            |
-| `server.image.pullPolicy`                    | Spring Cloud Dataflow image pull policy                                                                          | `IfNotPresent`                                          |
-| `server.image.pullSecrets`                   | Specify docker-registry secret names as an array                                                                 | `[]` (does not add image pull secrets to deployed pods) |
-| `server.composedTaskRunner.image.registry`   | Spring Cloud Dataflow Composed Task Runner image registry                                                        | `docker.io`                                             |
-| `server.composedTaskRunner.image.repository` | Spring Cloud Dataflow Composed Task Runner image name                                                            | `bitnami/spring-cloud-dataflow-composed-task-runner`    |
-| `server.composedTaskRunner.image.tag`        | Spring Cloud Dataflow Composed Task Runner image tag                                                             | `{TAG_NAME}`                                            |
-| `server.configuration.streamingEnabled`      | Enables or disables streaming data processing                                                                    | `true`                                                  |
-| `server.configuration.batchEnabled`          | Enables or disables bath data (tasks and schedules) processing                                                   | `true`                                                  |
-| `server.configuration.accountName`           | The name of the account to configure for the Kubernetes platform                                                 | `default`                                               |
-| `server.configuration.trustK8sCerts`         | Trust K8s certificates when querying the Kubernetes API                                                          | `false`                                                 |
-| `server.configuration.containerRegistries`   | Container registries configuration                                                                               | `{}` (check `values.yaml` for more information)         |
-| `server.configuration.metricsDashboard`      | Endpoint to the metricsDashboard instance                                                                        | `nil`                                                   |
-| `server.existingConfigmap`                   | Name of existing ConfigMap with Dataflow server configuration                                                    | `nil`                                                   |
-| `server.extraEnvVars`                        | Extra environment variables to be set on Dataflow server container                                               | `{}`                                                    |
-| `server.extraEnvVarsCM`                      | Name of existing ConfigMap containing extra env vars                                                             | `nil`                                                   |
-| `server.extraEnvVarsSecret`                  | Name of existing Secret containing extra env vars                                                                | `nil`                                                   |
-| `server.replicaCount`                        | Number of Dataflow server replicas to deploy                                                                     | `1`                                                     |
-| `server.hostAliases`                         | Add deployment host aliases                                                                                      | `[]`                                                    |
-| `server.strategyType`                        | Deployment Strategy Type                                                                                         | `RollingUpdate`                                         |
-| `server.podAffinityPreset`                   | Dataflow server pod affinity preset. Ignored if `server.affinity` is set. Allowed values: `soft` or `hard`       | `""`                                                    |
-| `server.podAntiAffinityPreset`               | Dataflow server pod anti-affinity preset. Ignored if `server.affinity` is set. Allowed values: `soft` or `hard`  | `soft`                                                  |
-| `server.nodeAffinityPreset.type`             | Dataflow server node affinity preset type. Ignored if `server.affinity` is set. Allowed values: `soft` or `hard` | `""`                                                    |
-| `server.nodeAffinityPreset.key`              | Dataflow server node label key to match Ignored if `server.affinity` is set.                                     | `""`                                                    |
-| `server.nodeAffinityPreset.values`           | Dataflow server node label values to match. Ignored if `server.affinity` is set.                                 | `[]`                                                    |
-| `server.affinity`                            | Dataflow server affinity for pod assignment                                                                      | `{}` (evaluated as a template)                          |
-| `server.nodeSelector`                        | Dataflow server node labels for pod assignment                                                                   | `{}` (evaluated as a template)                          |
-| `server.tolerations`                         | Dataflow server tolerations for pod assignment                                                                   | `[]` (evaluated as a template)                          |
-| `server.priorityClassName`                   | Controller priorityClassName                                                                                     | `nil`                                                   |
-| `server.podSecurityContext`                  | Dataflow server pods' Security Context                                                                           | `{ fsGroup: "1001" }`                                   |
-| `server.containerSecurityContext`            | Dataflow server containers' Security Context                                                                     | `{ runAsUser: "1001" }`                                 |
-| `server.resources.limits`                    | The resources limits for the Dataflow server container                                                           | `{}`                                                    |
-| `server.resources.requests`                  | The requested resources for the Dataflow server container                                                        | `{}`                                                    |
-| `server.podAnnotations`                      | Annotations for Dataflow server pods                                                                             | `{}`                                                    |
-| `server.livenessProbe`                       | Liveness probe configuration for Dataflow server                                                                 | Check `values.yaml` file                                |
-| `server.readinessProbe`                      | Readiness probe configuration for Dataflow server                                                                | Check `values.yaml` file                                |
-| `server.customLivenessProbe`                 | Override default liveness probe                                                                                  | `nil`                                                   |
-| `server.customReadinessProbe`                | Override default readiness probe                                                                                 | `nil`                                                   |
-| `server.service.type`                        | Kubernetes service type                                                                                          | `ClusterIP`                                             |
-| `server.service.port`                        | Service HTTP port                                                                                                | `8080`                                                  |
-| `server.service.nodePort`                    | Service HTTP node port                                                                                           | `nil`                                                   |
-| `server.service.clusterIP`                   | Dataflow server service clusterIP IP                                                                             | `None`                                                  |
-| `server.service.externalTrafficPolicy`       | Enable client source IP preservation                                                                             | `Cluster`                                               |
-| `server.service.loadBalancerIP`              | loadBalancerIP if service type is `LoadBalancer`                                                                 | `nil`                                                   |
-| `server.service.loadBalancerSourceRanges`    | Address that are allowed when service is LoadBalancer                                                            | `[]`                                                    |
-| `server.service.annotations`                 | Annotations for Dataflow server service                                                                          | `{}`                                                    |
-| `server.ingress.enabled`                     | Enable ingress controller resource                                                                               | `false`                                                 |
-| `server.ingress.pathType`                    | Ingress path type                                                                                                | `ImplementationSpecific`                                |
-| `server.ingress.path`                        | Ingress path                                                                                                     | `/`                                                     |
-| `server.ingress.certManager`                 | Add annotations for cert-manager                                                                                 | `false`                                                 |
-| `server.ingress.hostname`                    | Default host for the ingress resource                                                                            | `dataflow.local`                                        |
-| `server.ingress.annotations`                 | Ingress annotations                                                                                              | `[]`                                                    |
-| `server.ingress.extraHosts[0].name`          | Additional hostnames to be covered                                                                               | `nil`                                                   |
-| `server.ingress.extraHosts[0].path`          | Additional hostnames to be covered                                                                               | `nil`                                                   |
-| `server.ingress.extraTls[0].hosts[0]`        | TLS configuration for additional hostnames to be covered                                                         | `nil`                                                   |
-| `server.ingress.extraTls[0].secretName`      | TLS configuration for additional hostnames to be covered                                                         | `nil`                                                   |
-| `server.ingress.tls`                         | Enables TLS configuration for the Ingress component                                                              | `false`                                                 |
-| `server.ingress.secrets[0].name`             | TLS Secret Name                                                                                                  | `nil`                                                   |
-| `server.ingress.secrets[0].certificate`      | TLS Secret Certificate                                                                                           | `nil`                                                   |
-| `server.ingress.secrets[0].key`              | TLS Secret Key                                                                                                   | `nil`                                                   |
-| `server.initContainers`                      | Add additional init containers to the Dataflow server pods                                                       | `{}` (evaluated as a template)                          |
-| `server.sidecars`                            | Add additional sidecar containers to the Dataflow server pods                                                    | `{}` (evaluated as a template)                          |
-| `server.pdb.create`                          | Enable/disable a Pod Disruption Budget creation                                                                  | `false`                                                 |
-| `server.pdb.minAvailable`                    | Minimum number/percentage of pods that should remain scheduled                                                   | `1`                                                     |
-| `server.pdb.maxUnavailable`                  | Maximum number/percentage of pods that may be made unavailable                                                   | `nil`                                                   |
-| `server.autoscaling.enabled`                 | Enable autoscaling for Dataflow server                                                                           | `false`                                                 |
-| `server.autoscaling.minReplicas`             | Minimum number of Dataflow server replicas                                                                       | `nil`                                                   |
-| `server.autoscaling.maxReplicas`             | Maximum number of Dataflow server replicas                                                                       | `nil`                                                   |
-| `server.autoscaling.targetCPU`               | Target CPU utilization percentage                                                                                | `nil`                                                   |
-| `server.autoscaling.targetMemory`            | Target Memory utilization percentage                                                                             | `nil`                                                   |
-| `server.jdwp.enabled`                        | Enable Java Debug Wire Protocol (JDWP)                                                                           | `false`                                                 |
-| `server.jdwp.port`                           | JDWP TCP port                                                                                                    | `5005`                                                  |
-| `server.extraVolumes`                        | Extra Volumes to be set on the Dataflow Server Pod                                                               | `nil`                                                   |
-| `server.extraVolumeMounts`                   | Extra VolumeMounts to be set on the Dataflow Container                                                           | `nil`                                                   |
-| `server.proxy.host`                          | Proxy host                                                                                                       | `nil`                                                   |
-| `server.proxy.port`                          | Proxy port                                                                                                       | `nil`                                                   |
-| `server.proxy.user`                          | Proxy username (if authentication is required)                                                                   | `nil`                                                   |
-| `server.proxy.password`                      | Proxy password (if authentication is required)                                                                   | `nil`                                                   |
+| Parameter                                     | Description                                                                                                      | Default                                                 |
+|-----------------------------------------------|------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| `server.image.registry`                       | Spring Cloud Dataflow image registry                                                                             | `docker.io`                                             |
+| `server.image.repository`                     | Spring Cloud Dataflow image name                                                                                 | `bitnami/spring-cloud-dataflow`                         |
+| `server.image.tag`                            | Spring Cloud Dataflow image tag                                                                                  | `{TAG_NAME}`                                            |
+| `server.image.pullPolicy`                     | Spring Cloud Dataflow image pull policy                                                                          | `IfNotPresent`                                          |
+| `server.image.pullSecrets`                    | Specify docker-registry secret names as an array                                                                 | `[]` (does not add image pull secrets to deployed pods) |
+| `server.composedTaskRunner.image.registry`    | Spring Cloud Dataflow Composed Task Runner image registry                                                        | `docker.io`                                             |
+| `server.composedTaskRunner.image.repository`  | Spring Cloud Dataflow Composed Task Runner image name                                                            | `bitnami/spring-cloud-dataflow-composed-task-runner`    |
+| `server.composedTaskRunner.image.tag`         | Spring Cloud Dataflow Composed Task Runner image tag                                                             | `{TAG_NAME}`                                            |
+| `server.composedTaskRunner.image.pullPolicy`  | Spring Cloud Dataflow Composed Task Runner image pull policy                                                     | `IfNotPresent`                                          |
+| `server.composedTaskRunner.image.pullSecrets` | Spring Cloud Dataflow Composed Task Runner image pull secrets                                                    | `[]`                                                    |
+| `server.command`                              | Override sever command                                                                                           | `nil`                                                   |
+| `server.args`                                 | Override server args                                                                                             | `nil`                                                   |
+| `server.configuration.streamingEnabled`       | Enables or disables streaming data processing                                                                    | `true`                                                  |
+| `server.configuration.batchEnabled`           | Enables or disables bath data (tasks and schedules) processing                                                   | `true`                                                  |
+| `server.configuration.accountName`            | The name of the account to configure for the Kubernetes platform                                                 | `default`                                               |
+| `server.configuration.trustK8sCerts`          | Trust K8s certificates when querying the Kubernetes API                                                          | `false`                                                 |
+| `server.configuration.containerRegistries`    | Container registries configuration                                                                               | `{}` (check `values.yaml` for more information)         |
+| `server.configuration.metricsDashboard`       | Endpoint to the metricsDashboard instance                                                                        | `nil`                                                   |
+| `server.existingConfigmap`                    | Name of existing ConfigMap with Dataflow server configuration                                                    | `nil`                                                   |
+| `server.extraEnvVars`                         | Extra environment variables to be set on Dataflow server container                                               | `{}`                                                    |
+| `server.extraEnvVarsCM`                       | Name of existing ConfigMap containing extra env vars                                                             | `nil`                                                   |
+| `server.extraEnvVarsSecret`                   | Name of existing Secret containing extra env vars                                                                | `nil`                                                   |
+| `server.replicaCount`                         | Number of Dataflow server replicas to deploy                                                                     | `1`                                                     |
+| `server.hostAliases`                          | Add deployment host aliases                                                                                      | `[]`                                                    |
+| `server.strategyType`                         | Deployment Strategy Type                                                                                         | `RollingUpdate`                                         |
+| `server.podAffinityPreset`                    | Dataflow server pod affinity preset. Ignored if `server.affinity` is set. Allowed values: `soft` or `hard`       | `""`                                                    |
+| `server.podAntiAffinityPreset`                | Dataflow server pod anti-affinity preset. Ignored if `server.affinity` is set. Allowed values: `soft` or `hard`  | `soft`                                                  |
+| `server.nodeAffinityPreset.type`              | Dataflow server node affinity preset type. Ignored if `server.affinity` is set. Allowed values: `soft` or `hard` | `""`                                                    |
+| `server.nodeAffinityPreset.key`               | Dataflow server node label key to match Ignored if `server.affinity` is set.                                     | `""`                                                    |
+| `server.nodeAffinityPreset.values`            | Dataflow server node label values to match. Ignored if `server.affinity` is set.                                 | `[]`                                                    |
+| `server.affinity`                             | Dataflow server affinity for pod assignment                                                                      | `{}` (evaluated as a template)                          |
+| `server.nodeSelector`                         | Dataflow server node labels for pod assignment                                                                   | `{}` (evaluated as a template)                          |
+| `server.tolerations`                          | Dataflow server tolerations for pod assignment                                                                   | `[]` (evaluated as a template)                          |
+| `server.priorityClassName`                    | Controller priorityClassName                                                                                     | `nil`                                                   |
+| `server.podSecurityContext`                   | Dataflow server pods' Security Context                                                                           | `{ fsGroup: "1001" }`                                   |
+| `server.containerSecurityContext`             | Dataflow server containers' Security Context                                                                     | `{ runAsUser: "1001" }`                                 |
+| `server.resources.limits`                     | The resources limits for the Dataflow server container                                                           | `{}`                                                    |
+| `server.resources.requests`                   | The requested resources for the Dataflow server container                                                        | `{}`                                                    |
+| `server.podAnnotations`                       | Annotations for Dataflow server pods                                                                             | `{}`                                                    |
+| `server.livenessProbe`                        | Liveness probe configuration for Dataflow server                                                                 | Check `values.yaml` file                                |
+| `server.readinessProbe`                       | Readiness probe configuration for Dataflow server                                                                | Check `values.yaml` file                                |
+| `server.customLivenessProbe`                  | Override default liveness probe                                                                                  | `nil`                                                   |
+| `server.customReadinessProbe`                 | Override default readiness probe                                                                                 | `nil`                                                   |
+| `server.service.type`                         | Kubernetes service type                                                                                          | `ClusterIP`                                             |
+| `server.service.port`                         | Service HTTP port                                                                                                | `8080`                                                  |
+| `server.service.nodePort`                     | Service HTTP node port                                                                                           | `nil`                                                   |
+| `server.service.clusterIP`                    | Dataflow server service clusterIP IP                                                                             | `None`                                                  |
+| `server.service.externalTrafficPolicy`        | Enable client source IP preservation                                                                             | `Cluster`                                               |
+| `server.service.loadBalancerIP`               | loadBalancerIP if service type is `LoadBalancer`                                                                 | `nil`                                                   |
+| `server.service.loadBalancerSourceRanges`     | Address that are allowed when service is LoadBalancer                                                            | `[]`                                                    |
+| `server.service.annotations`                  | Annotations for Dataflow server service                                                                          | `{}`                                                    |
+| `server.containerPort`                        | Dataflow server port                                                                                             | `8080                                                   |
+| `server.ingress.enabled`                      | Enable ingress controller resource                                                                               | `false`                                                 |
+| `server.ingress.pathType`                     | Ingress path type                                                                                                | `ImplementationSpecific`                                |
+| `server.ingress.path`                         | Ingress path                                                                                                     | `/`                                                     |
+| `server.ingress.certManager`                  | Add annotations for cert-manager                                                                                 | `false`                                                 |
+| `server.ingress.hostname`                     | Default host for the ingress resource                                                                            | `dataflow.local`                                        |
+| `server.ingress.annotations`                  | Ingress annotations                                                                                              | `[]`                                                    |
+| `server.ingress.extraHosts[0].name`           | Additional hostnames to be covered                                                                               | `nil`                                                   |
+| `server.ingress.extraHosts[0].path`           | Additional hostnames to be covered                                                                               | `nil`                                                   |
+| `server.ingress.extraTls[0].hosts[0]`         | TLS configuration for additional hostnames to be covered                                                         | `nil`                                                   |
+| `server.ingress.extraTls[0].secretName`       | TLS configuration for additional hostnames to be covered                                                         | `nil`                                                   |
+| `server.ingress.tls`                          | Enables TLS configuration for the Ingress component                                                              | `false`                                                 |
+| `server.ingress.secrets[0].name`              | TLS Secret Name                                                                                                  | `nil`                                                   |
+| `server.ingress.secrets[0].certificate`       | TLS Secret Certificate                                                                                           | `nil`                                                   |
+| `server.ingress.secrets[0].key`               | TLS Secret Key                                                                                                   | `nil`                                                   |
+| `server.initContainers`                       | Add additional init containers to the Dataflow server pods                                                       | `{}` (evaluated as a template)                          |
+| `server.sidecars`                             | Add additional sidecar containers to the Dataflow server pods                                                    | `{}` (evaluated as a template)                          |
+| `server.pdb.create`                           | Enable/disable a Pod Disruption Budget creation                                                                  | `false`                                                 |
+| `server.pdb.minAvailable`                     | Minimum number/percentage of pods that should remain scheduled                                                   | `1`                                                     |
+| `server.pdb.maxUnavailable`                   | Maximum number/percentage of pods that may be made unavailable                                                   | `nil`                                                   |
+| `server.autoscaling.enabled`                  | Enable autoscaling for Dataflow server                                                                           | `false`                                                 |
+| `server.autoscaling.minReplicas`              | Minimum number of Dataflow server replicas                                                                       | `nil`                                                   |
+| `server.autoscaling.maxReplicas`              | Maximum number of Dataflow server replicas                                                                       | `nil`                                                   |
+| `server.autoscaling.targetCPU`                | Target CPU utilization percentage                                                                                | `nil`                                                   |
+| `server.autoscaling.targetMemory`             | Target Memory utilization percentage                                                                             | `nil`                                                   |
+| `server.jdwp.enabled`                         | Enable Java Debug Wire Protocol (JDWP)                                                                           | `false`                                                 |
+| `server.jdwp.port`                            | JDWP TCP port                                                                                                    | `5005`                                                  |
+| `server.extraVolumes`                         | Extra Volumes to be set on the Dataflow Server Pod                                                               | `nil`                                                   |
+| `server.extraVolumeMounts`                    | Extra VolumeMounts to be set on the Dataflow Container                                                           | `nil`                                                   |
+| `server.proxy.host`                           | Proxy host                                                                                                       | `nil`                                                   |
+| `server.proxy.port`                           | Proxy port                                                                                                       | `nil`                                                   |
+| `server.proxy.user`                           | Proxy username (if authentication is required)                                                                   | `nil`                                                   |
+| `server.proxy.password`                       | Proxy password (if authentication is required)                                                                   | `nil`                                                   |
 
 ### Dataflow Skipper parameters
 
@@ -183,7 +178,7 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 | `skipper.nodeAffinityPreset.type`          | Skipper node affinity preset type. Ignored if `skipper.affinity` is set. Allowed values: `soft` or `hard` | `""`                                                    |
 | `skipper.nodeAffinityPreset.key`           | Skipper node label key to match Ignored if `skipper.affinity` is set.                                     | `""`                                                    |
 | `skipper.nodeAffinityPreset.values`        | Skipper node label values to match. Ignored if `skipper.affinity` is set.                                 | `[]`                                                    |
-| `skipper.hostAliases`                       | Add deployment host aliases                                                                               | `[]`                                                    |
+| `skipper.hostAliases`                      | Add deployment host aliases                                                                               | `[]`                                                    |
 | `skipper.affinity`                         | Skipper affinity for pod assignment                                                                       | `{}` (evaluated as a template)                          |
 | `skipper.nodeSelector`                     | Skipper node labels for pod assignment                                                                    | `{}` (evaluated as a template)                          |
 | `skipper.tolerations`                      | Skipper tolerations for pod assignment                                                                    | `[]` (evaluated as a template)                          |
@@ -222,13 +217,28 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 | `externalSkipper.host`                     | Host of a external Skipper Server                                                                         | `localhost`                                             |
 | `externalSkipper.port`                     | External Skipper Server port number                                                                       | `7577`                                                  |
 
+### Deployer parameters
+
+| Parameter                           | Description                                      | Default                             |
+|-------------------------------------|--------------------------------------------------|-------------------------------------|
+| `deployer.resources.limits`         | Streaming applications resource limits           | `{ cpu: "500m", memory: "1024Mi" }` |
+| `deployer.resources.requests`       | Streaming applications resource requests         | `{}`                                |
+| `deployer.resources.readinessProbe` | Streaming applications readiness probes requests | Check `values.yaml` file            |
+| `deployer.resources.livenessProbe`  | Streaming applications liveness probes  requests | Check `values.yaml` file            |
+| `deployer.nodeSelector`             | Streaming applications nodeSelector              | `""`                                |
+| `deployer.tolerations`              | Streaming applications tolerations               | `{}`                                |
+| `deployer.volumeMounts`             | Streaming applications extra volume mounts       | `{}`                                |
+| `deployer.volumes`                  | Streaming applications extra volumes             | `{}`                                |
+| `deployer.environmentVariables`     | Streaming applications environment variables     | `""`                                |
+| `deployer.podSecurityContext`       | Streaming applications Security Context.         | `{runAsUser: 1001}`                 |
+
 ### RBAC parameters
 
-| Parameter               | Description                                                                         | Default                                      |
-|-------------------------|-------------------------------------------------------------------------------------|----------------------------------------------|
-| `serviceAccount.create` | Enable the creation of a ServiceAccount for Dataflow server and Skipper server pods | `true`                                       |
-| `serviceAccount.name`   | Name of the created serviceAccount                                                  | Generated using the `scdf.fullname` template |
-| `rbac.create`           | Weather to create & use RBAC resources or not                                       | `true`                                       |
+| Parameter               | Description                                                                         | Default                                              |
+|-------------------------|-------------------------------------------------------------------------------------|------------------------------------------------------|
+| `serviceAccount.create` | Enable the creation of a ServiceAccount for Dataflow server and Skipper server pods | `true`                                               |
+| `serviceAccount.name`   | Name of the created serviceAccount                                                  | Generated using the `common.names.fullname` template |
+| `rbac.create`           | Weather to create & use RBAC resources or not                                       | `true`                                               |
 
 ### Metrics parameters
 
@@ -307,7 +317,7 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 ### Kafka chart parameters
 
 | Parameter                             | Description                                 | Default          |
-| ------------------------------------- | ------------------------------------------- | ---------------- |
+|---------------------------------------|---------------------------------------------|------------------|
 | `kafka.enabled`                       | Enable/disable Kafka chart installation     | `false`          |
 | `kafka.replicaCount`                  | Number of Kafka brokers                     | `1`              |
 | `kafka.offsetsTopicReplicationFactor` | Kafka Secret Key                            | `1`              |
@@ -395,7 +405,7 @@ externalDatabase.dataflow.user=myskipperuser
 externalDatabase.dataflow.database=myskipperdatabase
 ```
 
-NOTE: When using the indidual propertes (scheme, host, port, database, an optional jdbcParameters) this chart will format the JDBC URL as `jdbc:{scheme}://{host}:{port}/{database}{jdbcParameters}`. The URL format follows that of the MariaDB database drive but may not work for other database vendors.
+NOTE: When using the indidual properties (scheme, host, port, database, an optional jdbcParameters) this chart will format the JDBC URL as `jdbc:{scheme}://{host}:{port}/{database}{jdbcParameters}`. The URL format follows that of the MariaDB database drive but may not work for other database vendors.
 
 To use an alternate database vendor (other than MariaDB) you can use the `externalDatabase.dataflow.url` and `externalDatabase.skipper.url` properties to provide the JDBC URLs for the dataflow server and skipper respectively. If these properties are defined, they will take precedence over the individual attributes. As an example of configuring an external MS SQL Server database:
 
@@ -476,6 +486,36 @@ For each host indicated at `server.ingress.extraHosts`, please indicate a `name`
 
 For annotations, please see [this document](https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md). Not all annotations are supported by all ingress controllers, but this document does a good job of indicating which annotation is supported by many popular ingress controllers.
 
+#### TLS
+
+This chart will facilitate the creation of TLS secrets for use with the ingress controller, however, this is not required. There are four common use cases:
+
+- Helm generates/manages certificate secrets based on the parameters.
+- User generates/manages certificates separately.
+- Helm creates self-signed certificates and generates/manages certificate secrets.
+- An additional tool (like [cert-manager](https://github.com/jetstack/cert-manager/)) manages the secrets for the application.
+In the first two cases, it's needed a certificate and a key. We would expect them to look like this:
+- certificate files should look like (and there can be more than one certificate if there is a certificate chain)
+  ```console
+  -----BEGIN CERTIFICATE-----
+  MIID6TCCAtGgAwIBAgIJAIaCwivkeB5EMA0GCSqGSIb3DQEBCwUAMFYxCzAJBgNV
+  ...
+  jScrvkiBO65F46KioCL9h5tDvomdU1aqpI/CBzhvZn1c0ZTf87tGQR8NK7v7
+  -----END CERTIFICATE-----
+  ```
+- keys should look like:
+  ```console
+  -----BEGIN RSA PRIVATE KEY-----
+  MIIEogIBAAKCAQEAvLYcyu8f3skuRyUgeeNpeDvYBCDcgq+LsWap6zbX5f8oLqp4
+  ...
+  wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
+  -----END RSA PRIVATE KEY-----
+  ```
+- If you are going to use Helm to manage the certificates based on the parameters, please copy these values into the `certificate` and `key` values for a given `server.ingress.secrets` entry.
+- In case you are going to manage TLS secrets separately, please know that you must create a TLS secret with name *INGRESS_HOSTNAME-tls* (where *INGRESS_HOSTNAME* is a placeholder to be replaced with the hostname you set using the `server.ingress.hostname` parameter).
+- To use self-signed certificates created by Helm, set `server.ingress.tls` to `true` and `server.ingress.certManager` to `false`.
+- If your cluster has a [cert-manager](https://github.com/jetstack/cert-manager) add-on to automate the management and issuance of TLS certificates, set `server.ingress.certManager` boolean to true to enable the corresponding annotations for cert-manager.
+
 ### Setting Pod's affinity
 
 This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
@@ -484,7 +524,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ## Troubleshooting
 
-Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+Find more information about how to deal with common errors related to Bitnami Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
 

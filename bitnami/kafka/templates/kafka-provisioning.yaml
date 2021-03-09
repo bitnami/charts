@@ -24,7 +24,10 @@ spec:
         {{- end }}
       annotations:
     spec:
-{{- include "kafka.imagePullSecrets" . | indent 6 }}
+      {{- include "kafka.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.provisioning.schedulerName }}
+      schedulerName: {{ .Values.provisioning.schedulerName | quote }}
+      {{- end }}
       restartPolicy: OnFailure
       terminationGracePeriodSeconds: 0
       initContainers:

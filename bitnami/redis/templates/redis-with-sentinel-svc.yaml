@@ -25,13 +25,13 @@ spec:
   {{ end -}}
   {{- end -}}
   ports:
-    - name: redis
+    - name: tcp-redis
       port: {{ .Values.sentinel.service.redisPort }}
       targetPort: redis
       {{- if .Values.sentinel.service.redisNodePort }}
       nodePort: {{ .Values.sentinel.service.redisNodePort }}
       {{- end }}
-    - name: redis-sentinel
+    - name: tcp-sentinel
       port: {{ .Values.sentinel.service.sentinelPort }}
       targetPort: redis-sentinel
       {{- if .Values.sentinel.service.sentinelNodePort }}

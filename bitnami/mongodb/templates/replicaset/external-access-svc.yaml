@@ -1,4 +1,4 @@
-{{- if and (eq .Values.architecture "replicaset") .Values.externalAccess.enabled }}
+{{- if and (eq .Values.architecture "replicaset") .Values.externalAccess.enabled (not (eq .Values.externalAccess.service.type "ClusterIP"))}}
 {{- $fullName := include "mongodb.fullname" . }}
 {{- $replicaCount := .Values.replicaCount | int }}
 {{- $root := . }}
