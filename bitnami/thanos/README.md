@@ -488,6 +488,21 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `ruler.pdb.create`                            | Enable/disable a Pod Disruption Budget creation                                                              | `false`                        |
 | `ruler.pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled                                               | `1`                            |
 | `ruler.pdb.maxUnavailable`                    | Maximum number/percentage of pods that may be made unavailable                                               | `nil`                          |
+| `ruler.ingress.enabled`                       | Enable ingress controller resource                                                                           | `false`                        |
+| `ruler.ingress.apiVersion`                    | Force Ingress API version (automatically detected if not set)                                                | ``                             |
+| `ruler.ingress.path`                          | Ingress path                                                                                                 | `/`                            |
+| `ruler.ingress.pathType`                      | Ingress path type                                                                                            | `ImplementationSpecific`       |
+| `ruler.ingress.certManager`                   | Add annotations for cert-manager                                                                             | `false`                        |
+| `ruler.ingress.hostname`                      | Default host for the ingress resource                                                                        | `thanos-bucketweb.local`       |
+| `ruler.ingress.annotations`                   | Ingress annotations                                                                                          | `[]`                           |
+| `ruler.ingress.tls`                           | Create ingress TLS section                                                                                   | `false`                        |
+| `ruler.ingress.extraHosts[0].name`            | Additional hostnames to be covered                                                                           | `nil`                          |
+| `ruler.ingress.extraHosts[0].path`            | Additional hostnames to be covered                                                                           | `nil`                          |
+| `ruler.ingress.extraTls[0].hosts[0]`          | TLS configuration for additional hostnames to be covered                                                     | `nil`                          |
+| `ruler.ingress.extraTls[0].secretName`        | TLS configuration for additional hostnames to be covered                                                     | `nil`                          |
+| `ruler.ingress.secrets[0].name`               | TLS Secret Name                                                                                              | `nil`                          |
+| `ruler.ingress.secrets[0].certificate`        | TLS Secret Certificate                                                                                       | `nil`                          |
+| `ruler.ingress.secrets[0].key`                | TLS Secret Key                                                                                               | `nil`                          |
 
 ### Thanos Receive parameters
 
