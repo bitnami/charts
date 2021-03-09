@@ -202,13 +202,9 @@ podManagementPolicy: Parallel
 ##
 hostAliases: []
 
-## lifecycleHooks for the etcd container to automate configuration before or after startup.
+## Override default lifecycleHooks for the etcd container to automate configuration before or after startup.
 ##
-lifecycleHooks:
-  preStop:
-    exec:
-      command:
-        - /opt/bitnami/scripts/etcd/prestop.sh
+lifecycleHooks: {}
 
 ## etcd container ports to open
 ##

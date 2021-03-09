@@ -100,7 +100,7 @@ The following tables lists the configurable parameters of the etcd chart and the
 | `maxProcs`                          | Set GOMAXPROCS environment variable to limit the number of CPUs                           | `nil`                                                   |
 | `configuration`                     | etcd configuration. Specify content for etcd.conf.yml                                     | `nil`                                                   |
 | `existingConfigmap`                 | Name of existing ConfigMap with etcd configuration                                        | `nil`                                                   |
-| `command`                           | Default container command (useful when using custom images)                               | `["/scripts/setup.sh"]`                                 |
+| `command`                           | Default container command (useful when using custom images)                               | `nil`                                                   |
 | `args`                              | Default container args (useful when using custom images)                                  | `nil`                                                   |
 | `extraEnvVars`                      | Extra environment variables to be set on etcd container                                   | `{}`                                                    |
 | `extraEnvVarsCM`                    | Name of existing ConfigMap containing extra env vars                                      | `nil`                                                   |
@@ -118,7 +118,7 @@ The following tables lists the configurable parameters of the etcd chart and the
 | `resources.limits`          | The resources limits for the etcd container                                               | `{}`                           |
 | `resources.requests`        | The requested resources for the etcd container                                            | `{}`                           |
 | `hostAliases`               | etcd pod host aliases                                                                     | `[]`                           |
-| `lifecycleHooks`            | LifecycleHooks to set additional configuration at startup                                 | Check `values.yaml` file       |
+| `lifecycleHooks`            | Override default lifecycleHooks                                                           | `[]`                           |
 | `livenessProbe`             | Liveness probe configuration for etcd                                                     | Check `values.yaml` file       |
 | `readinessProbe`            | Readiness probe configuration for etcd                                                    | Check `values.yaml` file       |
 | `startupProbe`              | Startup probe configuration for etcd                                                      | Check `values.yaml` file       |
