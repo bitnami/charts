@@ -29,6 +29,11 @@ image:
   ##
   debug: false
 
+## Enable HOST Network
+## If hostNetwork true ->  dnsPolicy is set to ClusterFirstWithHostNet
+##
+hostNetwork: false
+
 ## Force target Kubernetes version (using Helm capabilites if not set)
 ##
 kubeVersion:
