@@ -113,16 +113,24 @@ persistence:
   ## If true, use a Persistent Volume Claim, If false, use emptyDir
   ##
   enabled: true
-  ## Persistent Volume Storage Class
-  ## If defined, storageClassName: <storageClass>
-  ## If set to "-", storageClassName: "", which disables dynamic provisioning
-  ## If undefined (the default) or set to null, no storageClassName spec is
-  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-  ##   GKE, AWS & OpenStack)
-  ##
-  # storageClass: "-"
-  ## Persistent Volume Claim annotations
-  ##
+    ## Persistent Volume Storage Class
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    # storageClass: "-"
+    ### Storage class to use with CASSANDRA_COMMITLOG_DIR to reduce the concurrence for writing data and commit logs
+    ## ref: https://github.com/bitnami/bitnami-docker-cassandra
+    ## If set to "-", commitStorageClass: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    # commitStorageClass: "-"
+    ## Persistent Volume Claim annotations
+    ##
   annotations:
   ## Persistent Volume Access Mode
   ##
@@ -131,9 +139,15 @@ persistence:
   ## Persistent Volume size
   ##
   size: 8Gi
+  ## Commit Log Persistent Volume size
+  ##
+  # commitLogsize: 2Gi
   ## The path the volume will be mounted at
   ##
   mountPath: /bitnami/cassandra
+  ## The path the volume will be mounted at
+  ##
+  # commitLogMountPath: /bitnami/cassandra/commitlog
 
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.

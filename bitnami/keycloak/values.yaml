@@ -47,7 +47,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/keycloak
-  tag: 12.0.4-debian-10-r5
+  tag: 12.0.4-debian-10-r9
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -729,3 +729,140 @@ externalDatabase:
   ## Database name
   ##
   database: bitnami_keycloak
+
+## Configuration for keycloak-config-cli
+## ref: https://github.com/adorsys/keycloak-config-cli
+##
+keycloakConfigCli:
+  ## Whether to enable keycloak-config-cli
+  ##
+  enabled: false
+
+  ## Bitnami keycloak-config-cli image
+  ## ref: https://hub.docker.com/r/bitnami/keycloak-config-cli/tags/
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/keycloak-config-cli
+    tag: 3.1.0-debian-10-r16
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+
+  ## Annotations for keycloak-config-cli job
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  annotations:
+    helm.sh/hook: "post-install,post-upgrade,post-rollback"
+    helm.sh/hook-delete-policy: "hook-succeeded,before-hook-creation"
+    helm.sh/hook-weight: "5"
+
+  ## Command and args for running the container (set to default if not set). Use array form
+  ##
+  command: []
+  args: []
+
+  ## Job pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
+  ## keycloak-config-cli resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits: {}
+    #   cpu: 200m
+    #   memory: 256Mi
+    requests: {}
+    #   cpu: 200m
+    #   memory: 10Mi
+
+  ## keycloak-config-cli containers' Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+
+  ## keycloak-config-cli pods' Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+
+  ## Number of retries before considering a Job as failed
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy
+  ##
+  backoffLimit: 1
+
+  ## Pod extra labels
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+
+  ## Annotations for job pod
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+
+  ## Additional environment variables to set
+  ## Example:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+
+  ## ConfigMap with extra environment variables
+  ##
+  extraEnvVarsCM:
+
+  ## Secret with extra environment variables
+  ##
+  extraEnvVarsSecret:
+
+  ## Extra volumes to add to the job
+  ##
+  extraVolumes: []
+
+  ## Extra volume mounts to add to the container
+  ##
+  extraVolumeMounts: []
+
+  ## keycloak-config-cli configuration files
+  ## NOTE: nil keys will be considered files to import locally
+  ## Example:
+  ## configuration:
+  ##   realm1.json: |
+  ##     {
+  ##       "realm": "realm1",
+  ##       "clients": []
+  ##     }
+  ##   files/realm2.yaml:
+  ##   realm3.yaml: |
+  ##     realm: realm3
+  ##     clients: []
+  ##
+  configuration: {}
+
+  ## ConfigMap with keycloak-config-cli configuration
+  ## NOTE: This will override keycloakConfigCli.configuration
+  ##
+  existingConfigmap:

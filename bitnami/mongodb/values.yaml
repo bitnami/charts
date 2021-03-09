@@ -571,7 +571,7 @@ externalAccess:
   ## A new service per broker will be created
   ##
   service:
-    ## Service type. Allowed values: LoadBalancer or NodePort
+    ## Service type. Allowed values: LoadBalancer, NodePort or ClusterIP
     ##
     type: LoadBalancer
     ## Port used when service type is LoadBalancer

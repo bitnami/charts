@@ -24,7 +24,7 @@
     below:
 
       kubectl logs --namespace {{ .Release.Namespace }} $(kubectl get --namespace {{ .Release.Namespace }} \
-        pods -l app={{ template "elasticsearch.name" . }},role=master -o jsonpath='{.items[0].metadata.name}') \
+        pods -l app={{ template "common.names.name" . }},role=master -o jsonpath='{.items[0].metadata.name}') \
 	elasticsearch
 
     You can adapt the Kernel parameters on you cluster as described in the
@@ -66,7 +66,7 @@
   The Jobs will not be removed automagically when deleting this Helm chart.
   To remove these jobs, run the following:
 
-    kubectl -n {{ .Release.Namespace }} delete job -l app={{ template "elasticsearch.name" . }},role=curator
+    kubectl -n {{ .Release.Namespace }} delete job -l app={{ template "common.names.name" . }},role=curator
 
 {{- end }}
 

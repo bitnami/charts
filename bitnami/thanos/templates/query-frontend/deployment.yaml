@@ -20,6 +20,9 @@ spec:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: query-frontend
+        {{- if and .Values.queryFrontend.enabled .Values.queryFrontend.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.podLabels "context" $) | nindent 8 }}
+        {{- end }}
       {{- if or .Values.queryFrontend.podAnnotations (include "thanos.queryFrontend.createConfigmap" .) }}
       annotations:
         {{- if (include "thanos.queryFrontend.createConfigmap" .) }}
