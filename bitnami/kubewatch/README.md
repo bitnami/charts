@@ -98,15 +98,22 @@ The following tables lists the configurable parameters of the Kubewatch chart an
 | `smtp.auth.secret`                       | Secret for CRAM-MD5 auth mech                                        | `""`                                                    |
 | `smtp.requireTLS`                        | Force STARTTLS                                                       | `false`                                                 |
 | `namespaceToWatch`                       | namespace to watch, leave it empty for watching all                  | `""`                                                    |
-| `resourcesToWatch`                       | list of resources which kubewatch should watch and notify slack      | `{pod: true, deployment: true}`                         |
-| `resourcesToWatch.pod`                   | watch changes to Pods                                                | `true`                                                  |
+| `resourcesToWatch`                       | Map of resources which kubewatch should watch and notify the handler | `{po: true, deployment: true}`                          |
+| `resourcesToWatch.clusterrole`           | watch changes to Cluster roles                                       | `false`                                                 |
+| `resourcesToWatch.configmap`             | watch changes to Configmaps                                          | `false`                                                 |
 | `resourcesToWatch.deployment`            | watch changes to Deployments                                         | `true`                                                  |
-| `resourcesToWatch.replicationcontroller` | watch changes to ReplicationControllers                              | `false`                                                 |
-| `resourcesToWatch.replicaset`            | watch changes to ReplicaSets                                         | `false`                                                 |
-| `resourcesToWatch.daemonset`             | watch changes to DaemonSets                                          | `false`                                                 |
-| `resourcesToWatch.services`              | watch changes to Services                                            | `false`                                                 |
+| `resourcesToWatch.ds`                    | watch changes to Daemonsets                                          | `false`                                                 |
+| `resourcesToWatch.ing`                   | watch changes to Ingress                                             | `false`                                                 |
 | `resourcesToWatch.job`                   | watch changes to Jobs                                                | `false`                                                 |
-| `resourcesToWatch.persistentvolume`      | watch changes to PersistentVolumes                                   | `false`                                                 |
+| `resourcesToWatch.node`                  | watch changes to Nodes                                               | `false`                                                 |
+| `resourcesToWatch.ns`                    | watch changes to Namespaces                                          | `false`                                                 |
+| `resourcesToWatch.po`                    | watch changes to Pods                                                | `true`                                                  |
+| `resourcesToWatch.pv`                    | watch changes to PersistentVolumes                                   | `false`                                                 |
+| `resourcesToWatch.rc`                    | watch changes to ReplicationControllers                              | `false`                                                 |
+| `resourcesToWatch.rs`                    | watch changes to ReplicaSets                                         | `false`                                                 |
+| `resourcesToWatch.sa`                    | watch changes to Service Accounts                                    | `false`                                                 |
+| `resourcesToWatch.secret`                | watch changes to Secrets                                             | `false`                                                 |
+| `resourcesToWatch.svc`                   | watch changes to Services                                            | `false`                                                 |
 | `command`                                | Override default container command (useful when using custom images) | `nil`                                                   |
 | `args`                                   | Override default container args (useful when using custom images)    | `nil`                                                   |
 | `extraEnvVars`                           | Extra environment variables to be set on Kubewatch container         | `{}`                                                    |
@@ -134,6 +141,7 @@ The following tables lists the configurable parameters of the Kubewatch chart an
 | `affinity`                  | Affinity for pod assignment                                                               | `{}` (evaluated as a template) |
 | `nodeSelector`              | Node labels for pod assignment                                                            | `{}` (evaluated as a template) |
 | `tolerations`               | Tolerations for pod assignment                                                            | `[]` (evaluated as a template) |
+| `priorityClassName`         | Controller priorityClassName                                                              | `nil`                          |
 | `podLabels`                 | Extra labels for Kubewatch pods                                                           | `{}`                           |
 | `podAnnotations`            | Annotations for Kubewatch pods                                                            | `{}`                           |
 | `extraVolumeMounts`         | Optionally specify extra list of additional volumeMounts for Kubewatch container(s)       | `[]`                           |

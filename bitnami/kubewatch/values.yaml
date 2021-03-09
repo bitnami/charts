@@ -100,13 +100,13 @@ namespaceToWatch: ""
 # Resources to watch
 resourcesToWatch:
   deployment: true
-  replicationcontroller: false
-  replicaset: false
-  daemonset: false
-  services: false
-  pod: true
+  ds: false
   job: false
-  persistentvolume: false
+  po: true
+  pv: false
+  rc: false
+  rs: false
+  svc: false
 
 ## Command and args for running the container (set to default if not set). Use array form
 ##
@@ -240,6 +240,11 @@ nodeSelector: {}
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
+
+## Pod priority
+## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+##
+# priorityClassName: ""
 
 ## Pod extra labels
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
