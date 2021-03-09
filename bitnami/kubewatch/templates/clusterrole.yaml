@@ -15,14 +15,17 @@ rules:
   - apiGroups:
       - ""
     resources:
+      - configmaps
       - daemonsets
       - deployments
       - events
       - namespaces
+      - nodes
       - persistentvolumes
       - pods
       - replicasets
       - replicationcontrollers
+      - secrets
       - services
     verbs:
       - list
