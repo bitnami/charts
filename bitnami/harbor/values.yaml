@@ -1837,7 +1837,7 @@ chartmuseum:
 ## Clair parameters
 ##
 clair:
-  enabled: true
+  enabled: false
 
   replicas: 1
 

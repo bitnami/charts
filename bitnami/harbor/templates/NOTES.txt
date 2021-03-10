@@ -63,4 +63,13 @@
   {{- $passwordErrors = append $passwordErrors $redisPasswordValidationErrors -}}
 {{- end -}}
 
+{{- if .Values.clair.enabled -}}
+Clair scanner was deployed. Follow these steps to add it as an additional interrogation service for Harbor:
+https://goharbor.io/docs/latest/administration/vulnerability-scanning/pluggable-scanners
+
+  Endpoint: {{ include "harbor.clairAdapter.url" . | quote }}
+  Authorization: "None"
+  Options: "Use internal registry address"
+{{- end -}}
+
 {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordErrors "context" $) -}}

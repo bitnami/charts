@@ -28,14 +28,6 @@ data:
   CORE_LOCAL_URL: "{{ ternary "https://127.0.0.1:8443" "http://127.0.0.1:8080" .Values.internalTLS.enabled }}"
   CFG_EXPIRATION: "5"
   ADMIRAL_URL: "NA"
-  WITH_CLAIR: {{ .Values.clair.enabled | quote }}
-  CLAIR_DB_HOST: {{ include "harbor.database.host" . | quote }}
-  CLAIR_DB_PORT: {{ include "harbor.database.port" . | quote }}
-  CLAIR_DB_USERNAME: {{ include "harbor.database.clairUsername" . | quote }}
-  CLAIR_DB: {{ include "harbor.database.clairDatabase" . | quote }}
-  CLAIR_DB_SSLMODE: {{ include "harbor.database.sslmode" . | quote }}
-  CLAIR_URL: {{ printf "http://%s:6060" (include "harbor.clair" .) | quote }}
-  CLAIR_ADAPTER_URL: {{ include "harbor.clairAdapter.url" . | quote }}
   WITH_TRIVY: {{ .Values.trivy.enabled | quote }}
   TRIVY_ADAPTER_URL: {{ include "harbor.trivy.url" . | quote }}
   REGISTRY_STORAGE_PROVIDER_NAME: {{ .Values.persistence.imageChartStorage.type | quote }}
