@@ -65,6 +65,7 @@ spec:
             - web
             - --http-address=0.0.0.0:8080
             - --log.level={{ .Values.bucketweb.logLevel }}
+            - --log.format={{ .Values.bucketweb.logFormat }}
             - --objstore.config-file=/conf/objstore.yml
             {{- if .Values.bucketweb.refresh }}
             - --refresh={{ .Values.bucketweb.refresh }}
