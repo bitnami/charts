@@ -50,6 +50,7 @@ rules:
       - daemonsets
       - deployments
       - deployments/scale
+      - ingresses
       - replicasets
       - replicasets/scale
       - replicationcontrollers/scale
