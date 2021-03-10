@@ -208,7 +208,7 @@ The following table lists the configurable parameters of the MinIO&reg; chart an
 
 | Parameter                                 | Description                                                                         | Default                                                      |
 |-------------------------------------------|-------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `metrics.prometheusAuthType`             | Authentication mode for Prometheus (`jwt` or `public`)  | `public`                                                |
+| `metrics.prometheusAuthType`              | Authentication mode for Prometheus (`jwt` or `public`)                              | `public`                                                     |
 | `metrics.serviceMonitor.enabled`          | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator        | `false`                                                      |
 | `metrics.serviceMonitor.namespace`        | Namespace which Prometheus is running in                                            | `nil`                                                        |
 | `metrics.serviceMonitor.interval`         | Interval at which metrics should be scraped                                         | `30s`                                                        |
@@ -217,6 +217,25 @@ The following table lists the configurable parameters of the MinIO&reg; chart an
 | `metrics.serviceMonitor.honorLabels`      | honorLabels chooses the metric's labels on collisions with target labels.           | `false`                                                      |
 | `metrics.serviceMonitor.additionalLabels` | Used to pass Labels that are required by the Installed Prometheus Operator          | `{}`                                                         |
 | `metrics.serviceMonitor.release`          | Used to pass Labels release that sometimes should be custom for Prometheus Operator | `nil`                                                        |
+
+### Gateway parameters
+
+| Parameter                                 | Description                                                                         | Default                                                      |
+|-------------------------------------------|-------------------------------------------------------------------------------------|--------------------------------------------------------------|
+| `gateway.enabled`                         | Use MinIO&reg; as Gateway for other storage systems                                 | `false`                                                      |
+| `gateway.type`                            | Gateway type. Supported types are: `azure`, `gcs`, `nas`, `s3`                      | `s3`                                                         |
+| `gateway.replicaCount`                    | Number of MinIO&reg; Gateway replicas                                               | `4`                                                          |
+| `gateway.auth.azure.storageAccountName`   | Azure Storage Account Name to use to access Azure Blob Storage                      | `nil`                                                        |
+| `gateway.auth.azure.storageAccountKey`    | Azure Storage Account Key to use to access Azure Blob Storage                       | `nil`                                                        |
+| `gateway.auth.gcs.accessKey`              | Access Key to access MinIO using GCS Gateway                                        | `nil`                                                        |
+| `gateway.auth.gcs.secretKey`              | Secret Key to access MinIO using GCS Gateway                                        | `nil`                                                        |
+| `gateway.auth.gcs.keyJSON`                | Service Account key to access GCS                                                   | `nil`                                                        |
+| `gateway.auth.gcs.projectID`              | GCP Project ID to use                                                               | `nil`                                                        |
+| `gateway.auth.nas.accessKey`              | Access Key to access MinIO using NAS Gateway                                        | `nil`                                                        |
+| `gateway.auth.nas.secretKey`              | Secret Key to access MinIO using NAS Gateway                                        | `nil`                                                        |
+| `gateway.auth.s3.serviceEndpoint`         | AWS S3 endpoint                                                                     | `https://s3.amazonaws.com`                                   |
+| `gateway.auth.s3.accessKey`               | Access Key to use to access AWS S3                                                  | `nil`                                                        |
+| `gateway.auth.s3.secretKey`               | Secret Key to use to access AWS S3                                                  | `nil`                                                        |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -327,6 +346,32 @@ In the first two cases, it's needed a certificate and a key. Files are expected 
 - In case you are going to manage TLS secrets separately, please know that you must create a TLS secret with name *INGRESS_HOSTNAME-tls* (where *INGRESS_HOSTNAME* is a placeholder to be replaced with the hostname you set using the `ingress.hostname` parameter).
 - To use self-signed certificates created by Helm, set `ingress.tls` to `true`, and `ingress.certManager` to `false`.
 - If your cluster has a [cert-manager](https://github.com/jetstack/cert-manager) add-on to automate the management and issuance of TLS certificates, set `ingress.certManager` boolean to `true` to enable the corresponding annotations for cert-manager.
+
+### MinIO&reg; Gateway
+
+MinIO&reg; can be configured as a Gateway for other other storage systems. Currently this chart supports to setup MinIO&reg; as a Gateway for the storage systems below:
+
+- [Azure Blob Storage](https://azure.microsoft.com/en-us/services/storage/blobs/)
+- [GCS](https://cloud.google.com/storage)
+- NAS: Network Attached Storage
+- [AWS S3](https://aws.amazon.com/s3/)
+
+The enable this feature, install the chart setting `gateway.enabled` to `true`. You can choose the Gateway type setting the `gateway.type` parameter. For instance, to install the chart as a S3 Gateway, install the chart the using the following parameters:
+
+```console
+gateway.enabled=true
+gateway.replicaCount=4
+gateway.type=s3
+gateway.auth.s3.serviceEndpoint=https://s3.amazonaws.com
+gateway.auth.s3.accessKey=S3_ACCESS_KEY
+gateway.auth.s3.secretKey=S3_SECRET_KEY
+```
+
+> Note: remember to replace the S3_ACCESS_KEY and S3_SECRET_KEY placeholders with your actual S3 access & secret keys.
+
+Find all the available parameters to configure MinIO&reg; as a Gateway in the [Gateway parameters section](#gateway-parameters).
+
+> Note: when using MinIO&reg; as a NAS Gateway, you need ReadWriteMany PVs to deploy multiple MinIO&reg; instances. Ensure you K8s cluster supports this kind of cluster, and install the chart setting `persistence.accessModes[0]` to `ReadWriteMany` to do so.
 
 ### Adding extra environment variables
 

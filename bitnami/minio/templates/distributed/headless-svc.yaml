@@ -1,4 +1,4 @@
-{{- if eq .Values.mode "distributed" }}
+{{- if and (eq .Values.mode "distributed") (not .Values.gateway.enabled) }}
 apiVersion: v1
 kind: Service
 metadata:

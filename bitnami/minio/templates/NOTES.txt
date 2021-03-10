@@ -1,13 +1,17 @@
 ** Please be patient while the chart is being deployed **
 
+{{- if .Values.gateway.enabled }}
+MinIO(R) deployed as a {{ upper .Values.gateway.type }} Gateway
+{{- end }}
+
 MinIO(R) can be accessed via port {{ .Values.service.port }} on the following DNS name from within your cluster:
 
    {{ include "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
 
 To get your credentials run:
 
-   export ACCESS_KEY=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "minio.secretName" . }} -o jsonpath="{.data.access-key}" | base64 --decode)
-   export SECRET_KEY=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "minio.secretName" . }} -o jsonpath="{.data.secret-key}" | base64 --decode)
+   export ACCESS_KEY=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "minio.secretName" . }} -o jsonpath="{.data.{{ include "minio.secret.userKey" . }}}" | base64 --decode)
+   export SECRET_KEY=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "minio.secretName" . }} -o jsonpath="{.data.{{ include "minio.secret.passwordKey" . }}}" | base64 --decode)
 
 To connect to your MinIO(R) server using a client:
 
@@ -29,7 +33,7 @@ To connect to your MinIO(R) server using a client:
    "{{ template "common.names.fullname" . }}-client=true" will be able to connect to MinIO(R).
 
 {{- end }}
-{{- if not .Values.disableWebUI }}
+{{- if or .Values.gateway.enabled (not .Values.disableWebUI) }}
 
 To access the MinIO(R) web UI:
 
@@ -73,8 +77,8 @@ To access the MinIO(R) web UI:
 {{- $requiredPassword := list -}}
 {{- $secretName := include "minio.secretName" . -}}
 {{- if and (not .Values.existingSecret) (not .Values.forceNewKeys) -}}
-  {{- $requiredAccessKey := dict "valueKey" "accessKey.password" "secret" $secretName "field" "access-key" -}}
-  {{- $requiredSecretKey := dict "valueKey" "secretKey.password" "secret" $secretName "field" "secret-key" -}}
+  {{- $requiredAccessKey := dict "valueKey" "accessKey.password" "secret" $secretName "field" (include "minio.secret.userKey" .) -}}
+  {{- $requiredSecretKey := dict "valueKey" "secretKey.password" "secret" $secretName "field" (include "minio.secret.passwordKey" .) -}}
   {{- $requiredPassword = append $requiredPassword $requiredAccessKey -}}
   {{- $requiredPassword = append $requiredPassword $requiredSecretKey -}}
 {{- end -}}
