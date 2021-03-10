@@ -30,4 +30,4 @@ name: jasperreports
 sources:
   - https://github.com/bitnami/bitnami-docker-jasperreports
   - http://community.jaspersoft.com/project/jasperreports-server
-version: 10.2.2
+version: 10.2.3
