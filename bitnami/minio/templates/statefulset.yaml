@@ -126,8 +126,6 @@ spec:
               value: {{ ternary "true" "false" .Values.image.debug | quote }}
             - name: MINIO_DISTRIBUTED_MODE_ENABLED
               value: "yes"
-            - name: MINIO_SKIP_CLIENT
-              value: "yes"
             - name: MINIO_DISTRIBUTED_NODES
               {{- $clusters := list }}
               {{- range $i := until $zoneCount }}
@@ -161,6 +159,12 @@ spec:
                 secretKeyRef:
                   name: {{ include "minio.secretName" . }}
                   key: secret-key
+            {{- end }}
+            - name: MINIO_SKIP_CLIENT
+              value: {{ ternary "yes" "no" (empty .Values.defaultBuckets) | quote }}
+            {{- if .Values.defaultBuckets }}
+            - name: MINIO_DEFAULT_BUCKETS
+              value: {{ .Values.defaultBuckets }}
             {{- end }}
             - name: MINIO_BROWSER
               value: {{ ternary "off" "on" .Values.disableWebUI | quote }}

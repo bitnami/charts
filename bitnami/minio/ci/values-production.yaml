@@ -23,6 +23,7 @@ ingress:
 
 networkPolicy:
   enabled: true
+  allowExternal: false
 
 pdb:
   create: true
