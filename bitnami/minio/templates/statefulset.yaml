@@ -1,11 +1,17 @@
 {{- if eq .Values.mode "distributed" }}
+{{- $fullname := include "common.names.fullname" . }}
+{{- $headlessService := printf "%s-headless" (include "common.names.fullname" .) | trunc 63 }}
+{{- $releaseNamespace := .Release.Namespace }}
+{{- $clusterDomain := .Values.clusterDomain }}
 {{- $replicaCount := int .Values.statefulset.replicaCount }}
-{{- if and (eq (mod $replicaCount 2) 0) (gt $replicaCount 3) (lt $replicaCount 33) }}
+{{- $zoneCount := int .Values.statefulset.zones }}
+{{- $drivesPerNode := int .Values.statefulset.drivesPerNode }}
+{{- $mountPath := .Values.persistence.mountPath }}
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ include "common.names.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  name: {{ $fullname }}
+  namespace: {{ $releaseNamespace  }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -16,8 +22,8 @@ metadata:
 spec:
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
-  serviceName: {{ include "common.names.fullname" . }}-headless
-  replicas: {{ .Values.statefulset.replicaCount }}
+  serviceName: {{ $headlessService }}
+  replicas: {{ mul $zoneCount $replicaCount }}
   podManagementPolicy: {{ .Values.statefulset.podManagementPolicy }}
   updateStrategy:
     type: {{ .Values.statefulset.updateStrategy }}
@@ -27,6 +33,9 @@ spec:
   template:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
+        {{- if .Values.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
+        {{- end }}
       {{- if or .Values.podAnnotations (include "minio.createSecret" .) }}
       annotations:
         {{- if (include "minio.createSecret" .) }}
@@ -37,11 +46,11 @@ spec:
         {{- end }}
       {{- end }}
     spec:
+      {{- include "minio.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.schedulerName }}
       schedulerName: {{ .Values.schedulerName }}
       {{- end }}
       serviceAccountName: {{ template "minio.serviceAccountName" . }}
-      {{- include "minio.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
       {{- else }}
@@ -63,8 +72,12 @@ spec:
       securityContext:
         fsGroup: {{ .Values.securityContext.fsGroup }}
       {{- end }}
-      {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
+      {{- if or .Values.initContainers (and .Values.volumePermissions.enabled .Values.persistence.enabled) }}
       initContainers:
+        {{- if .Values.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
         - name: volume-permissions
           image: {{ template "minio.volumePermissions.image" . }}
           imagePullPolicy: {{ default "" .Values.volumePermissions.image.pullPolicy | quote }}
@@ -72,15 +85,27 @@ spec:
             - /bin/bash
             - -ec
             - |
-              chown -R {{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }} {{ .Values.persistence.mountPath }}
+              {{- if and .Values.persistence.enabled (gt $drivesPerNode 1) }}
+              chown -R {{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }} {{ range $diskId := until $drivesPerNode }}{{  $mountPath }}-{{ $diskId }} {{ end }}
+              {{- else }}
+              chown -R {{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }} {{ $mountPath }}
+              {{- end }}
           securityContext:
             runAsUser: 0
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
+            {{- if and .Values.persistence.enabled (gt $drivesPerNode 1) }}
+            {{- range $diskId := until $drivesPerNode }}
+            - name: data-{{ $diskId }}
+              mountPath: {{  $mountPath }}-{{ $diskId }}
+            {{- end }}
+            {{- else }}
             - name: data
-              mountPath: {{ .Values.persistence.mountPath }}
+              mountPath: {{  $mountPath }}
+            {{- end }}
+        {{- end }}
       {{- end }}
       containers:
         - name: minio
@@ -90,6 +115,12 @@ spec:
           securityContext:
             runAsUser: {{ .Values.securityContext.runAsUser }}
           {{- end }}
+          {{- if .Values.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
+          {{- end }}
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.image.debug | quote }}
@@ -98,10 +129,17 @@ spec:
             - name: MINIO_SKIP_CLIENT
               value: "yes"
             - name: MINIO_DISTRIBUTED_NODES
-              {{- $minioFullname := include "common.names.fullname" . }}
-              {{- $minioHeadlessServiceName := printf "%s-%s" $minioFullname "headless" | trunc 63  }}
-              {{- $releaseNamespace := .Release.Namespace }}
-              value: {{range $i, $e := until $replicaCount }}{{ $minioFullname }}-{{ $e }}.{{ $minioHeadlessServiceName }}.{{ $releaseNamespace }}.svc.{{ $.Values.clusterDomain }},{{ end }}
+              {{- $clusters := list }}
+              {{- range $i := until $zoneCount }}
+                  {{- $factor := mul $i $replicaCount }}
+                  {{- $endIndex := sub (add $factor $replicaCount) 1 }}
+                  {{- $beginIndex := mul $i $replicaCount }}
+                  {{- $bucket := ternary (printf "%s-{0...%d}" $mountPath (sub $drivesPerNode 1)) $mountPath (gt $drivesPerNode 1) }}
+                  {{- $clusters = append $clusters (printf "%s-{%d...%d}.%s.%s.svc.%s%s" $fullname $beginIndex $endIndex $headlessService $releaseNamespace $clusterDomain $bucket) }}
+              {{- end }}
+              value: {{ join "," $clusters | quote }}
+            - name: MINIO_SCHEME
+              value: {{ ternary "https" "http" .Values.tls.enabled | quote }}
             - name: MINIO_FORCE_NEW_KEYS
               value: {{ ternary "yes" "no" .Values.forceNewKeys | quote }}
             {{- if .Values.useCredentialsFile }}
@@ -126,39 +164,63 @@ spec:
             {{- end }}
             - name: MINIO_BROWSER
               value: {{ ternary "off" "on" .Values.disableWebUI | quote }}
-            {{- if .Values.prometheusAuthType }}
             - name: MINIO_PROMETHEUS_AUTH_TYPE
-              value: {{ .Values.prometheusAuthType }}
-            {{- end }}
+              value: {{ .Values.metrics.prometheusAuthType | quote }}
             {{- if .Values.extraEnv }}
-            {{- toYaml .Values.extraEnv | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraEnv "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsSecret "context" $) }}
             {{- end }}
           ports:
             - name: minio
-              containerPort: 9000
+              containerPort: {{ .Values.containerPort }}
+              protocol: TCP
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
-            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.livenessProbe.successThreshold }}
-            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
             httpGet:
               path: /minio/health/live
               port: minio
-          {{- end }}
-          {{- if .Values.readinessProbe.enabled }}
-          readinessProbe:
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+          {{- else if .Values.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.readinessProbe.enabled }}
+          readinessProbe:
             tcpSocket:
               port: minio
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+          {{- else if .Values.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.startupProbe.enabled }}
+          startupProbe:
+            tcpSocket:
+              port: minio
+            initialDelaySeconds: {{ .Values.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.startupProbe.failureThreshold }}
+          {{- else if .Values.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.resources }}
-          resources: {{ toYaml .Values.resources | nindent 12 }}
+          resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
             {{- if .Values.useCredentialsFile }}
@@ -169,8 +231,21 @@ spec:
             - name: minio-certs
               mountPath: /opt/bitnami/minio/certs/
             {{- end }}
+            {{- if and .Values.persistence.enabled (gt $drivesPerNode 1) }}
+            {{- range $diskId := until $drivesPerNode }}
+            - name: data-{{ $diskId }}
+              mountPath: {{  $mountPath }}-{{ $diskId }}
+            {{- end }}
+            {{- else }}
             - name: data
-              mountPath: {{ .Values.persistence.mountPath }}
+              mountPath: {{  $mountPath }}
+            {{- end }}
+            {{- if .Values.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+        {{- if .Values.sidecars }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
+        {{- end }}
       volumes:
         {{- if .Values.useCredentialsFile }}
         - name: minio-credentials
@@ -189,11 +264,33 @@ spec:
             - key: ca.crt
               path: CAs/public.crt
         {{- end }}
-{{- if not .Values.persistence.enabled }}
+        {{- if .Values.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+  {{- if not .Values.persistence.enabled }}
         - name: data
           emptyDir: {}
-{{- else }}
+  {{- else }}
   volumeClaimTemplates:
+  {{- if gt $drivesPerNode 1 }}
+    {{- range $diskId := until $drivesPerNode }}
+    - metadata:
+        name: data-{{ $diskId }}
+        labels: {{- include "common.labels.matchLabels" $ | nindent 10 }}
+        {{- if $.Values.persistence.annotations }}
+        annotations: {{- include "common.tplvalues.render" ( dict "value" $.Values.persistence.annotations "context" $) | nindent 10 }}
+        {{- end }}
+      spec:
+        accessModes:
+        {{- range $.Values.persistence.accessModes }}
+          - {{ . | quote }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ $.Values.persistence.size | quote }}
+        {{- include "common.storage.class" (dict "persistence" $.Values.persistence "global" $.Values.global) | nindent 8 }}
+    {{- end }}
+  {{- else }}
     - metadata:
         name: data
         labels: {{- include "common.labels.matchLabels" . | nindent 10 }}
@@ -201,11 +298,14 @@ spec:
         annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.persistence.annotations "context" $) | nindent 10 }}
         {{- end }}
       spec:
-        accessModes: {{ toYaml .Values.persistence.accessModes | nindent 10 }}
-        {{- include "common.storage.class" (dict "persistence" .Values.persistence "global" .Values.global) | nindent 8 }}
+        accessModes:
+        {{- range .Values.persistence.accessModes }}
+          - {{ . | quote }}
+        {{- end }}
         resources:
           requests:
             storage: {{ .Values.persistence.size | quote }}
-{{- end }}
-{{- end }}
+        {{- include "common.storage.class" (dict "persistence" .Values.persistence "global" .Values.global) | nindent 8 }}
+  {{- end }}
+  {{- end }}
 {{- end }}
