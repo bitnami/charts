@@ -5,9 +5,7 @@ volumePermissions:
   enabled: true
 
 mode: distributed
-
 useCredentialsFile: true
-
 disableWebUI: false
 
 podAnnotations:
@@ -25,3 +23,7 @@ ingress:
 
 networkPolicy:
   enabled: true
+  allowExternal: false
+
+pdb:
+  create: true

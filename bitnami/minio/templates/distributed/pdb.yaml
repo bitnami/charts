@@ -1,6 +1,6 @@
-{{- if (include "minio.createSecret" .) }}
-apiVersion: v1
-kind: Secret
+{{- if and .Values.pdb.create (eq .Values.mode "distributed") }}
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
 metadata:
   name: {{ include "common.names.fullname" . }}
   namespace: {{ .Release.Namespace }}
@@ -11,8 +11,13 @@ metadata:
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
-type: Opaque
-data:
-  access-key: {{ include "minio.accessKey" . | b64enc | quote }}
-  secret-key: {{ include "minio.secretKey" . | b64enc | quote }}
+spec:
+  {{- if .Values.pdb.minAvailable }}
+  minAvailable: {{ .Values.pdb.minAvailable }}
+  {{- end }}
+  {{- if .Values.pdb.maxUnavailable }}
+  maxUnavailable: {{ .Values.pdb.maxUnavailable }}
+  {{- end }}
+  selector:
+    matchLabels: {{ include "common.labels.matchLabels" . | nindent 6 }}
 {{- end }}

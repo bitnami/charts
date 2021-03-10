@@ -82,6 +82,26 @@ Return true if a secret object should be created
 {{- end -}}
 
 {{/*
+Return true if a PVC object should be created (only in standalone mode)
+*/}}
+{{- define "minio.createPVC" -}}
+{{- if and .Values.persistence.enabled (not .Values.persistence.existingClaim) (eq .Values.mode "standalone") }}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the PVC name (only in standalone mode)
+*/}}
+{{- define "minio.claimName" -}}
+{{- if and .Values.persistence.existingClaim }}
+    {{- printf "%s" (tpl .Values.persistence.existingClaim $) -}}
+{{- else -}}
+    {{- printf "%s" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Returns the proper service account name depending if an explicit service account name is set
 in the values file. If the name is not set it will default to either common.names.fullname if serviceAccount.create
 is true or default otherwise.
@@ -100,7 +120,8 @@ Compile all warnings into a single message, and call fail.
 {{- define "minio.validateValues" -}}
 {{- $messages := list -}}
 {{- $messages := append $messages (include "minio.validateValues.mode" .) -}}
-{{- $messages := append $messages (include "minio.validateValues.replicaCount" .) -}}
+{{- $messages := append $messages (include "minio.validateValues.totalDrives" .) -}}
+{{- $messages := append $messages (include "minio.validateValues.tls" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -118,18 +139,28 @@ minio: mode
 {{- end -}}
 {{- end -}}
 
-{{/* Validate values of MinIO(R) - number of replicas must be even, greater than 4 and lower than 32 */}}
-{{- define "minio.validateValues.replicaCount" -}}
+{{/*
+Validate values of MinIO(R) - total number of drives should be multiple of 4
+*/}}
+{{- define "minio.validateValues.totalDrives" -}}
 {{- $replicaCount := int .Values.statefulset.replicaCount }}
-{{- if and (eq .Values.mode "distributed") (or (eq (mod $replicaCount 2) 1) (lt $replicaCount 4) (gt $replicaCount 32)) -}}
-minio: replicaCount
-    Number of replicas must be even, greater than 4 and lower than 32!!
-    Please set a valid number of replicas (--set statefulset.replicaCount=X)
+{{- $drivesPerNode := int .Values.statefulset.drivesPerNode }}
+{{- $totalDrives := mul $replicaCount $drivesPerNode }}
+{{- if and (eq .Values.mode "distributed") (or (not (eq (mod $totalDrives 4) 0)) (lt $totalDrives 4)) -}}
+minio: total drives
+    The total number of drives should be multiple of 4 to guarantee erasure coding!
+    Please set a combination of nodes, and drives per node that match this condition.
+    For instance (--set statefulset.replicaCount=2 --set statefulset.drivesPerNode=2)
 {{- end -}}
 {{- end -}}
 
-{{/* Check if there are rolling tags in the images */}}
-{{- define "minio.checkRollingTags" -}}
-{{- include "common.warnings.rollingTag" .Values.image }}
-{{- include "common.warnings.rollingTag" .Values.clientImage }}
+{{/*
+Validate values of MinIO(R) - TLS secret must provided if TLS is enabled
+*/}}
+{{- define "minio.validateValues.tls" -}}
+{{- if and .Values.tls.enabled (not .Values.tls.secretName) }}
+minio: tls.secretName
+    The name of an existin secret containing the certificates must be provided
+    if TLS is enabled. Please set its name (--set tls.secretName=X)
+{{- end -}}
 {{- end -}}

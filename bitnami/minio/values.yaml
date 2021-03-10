@@ -1,17 +1,24 @@
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
-## Current available global Docker image parameters: imageRegistry and imagePullSecrets
 ##
 global:
+  ## Global imageRegistry
+  ##
+  # imageRegistry: myRegistryName
+  ## Global imagePullSecrets
+  ##
+  imagePullSecrets: []
+  ## Global storageClass
+  ##
+  # storageClass: myStorageClass
+  ## Global MinIO(R) credentials
+  ## e.g:
+  ## minio:
+  ##   existingSecret: ""
+  ##   accessKey: ""
+  ##   secretKey: ""
+  ##
   minio: {}
-#  minio:
-#    existingSecret: ""
-#    accessKey: ""
-#    secretKey: ""
-#  imageRegistry: myRegistryName
-#  imagePullSecrets:
-#    - myRegistryKeySecretName
-#   storageClass: myStorageClass
 
 ## Bitnami MinIO(R) image version
 ## ref: https://hub.docker.com/r/bitnami/minio/tags/
@@ -19,7 +26,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/minio
-  tag: 2021.3.4-debian-10-r0
+  tag: 2021.3.4-debian-10-r6
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -28,18 +35,22 @@ image:
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
   ##
-  # pullSecrets:
-  #   - myRegistryKeySecretName
-
+  pullSecrets: []
   ## Set to true if you would like to see extra information on logs
-  ## It turns BASH and/or NAMI debugging in the image
   ##
   debug: false
 
-## Force target Kubernetes version (using Helm capabilites if not set)
+## Bitnami MinIO(R) Client image version
+## ref: https://hub.docker.com/r/bitnami/minio-client/tags/
 ##
-kubeVersion:
+clientImage:
+  registry: docker.io
+  repository: bitnami/minio-client
+  tag: 2021.2.19-debian-10-r12
 
 ## String to partially override common.names.fullname template (will maintain the release name)
 ##
@@ -57,70 +68,100 @@ commonLabels: {}
 ##
 commonAnnotations: {}
 
-## Scheduler name
-## https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+## Force target Kubernetes version (using Helm capabilites if not set)
 ##
-# schedulerName: stork
-
-## Deployment pod host aliases
-## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
-##
-hostAliases: []
-
-serviceAccount:
-  # Specifies whether a ServiceAccount should be created
-  create: true
-  # The name of the ServiceAccount to use.
-  # If not set and create is true, a name is generated using the fullname template
-  name:
+kubeVersion:
 
 ## Cluster domain
 ##
 clusterDomain: cluster.local
 
-## Bitnami MinIO(R) Client image version
-## ref: https://hub.docker.com/r/bitnami/minio-client/tags/
+## Extra objects to deploy (value evaluated as a template)
 ##
-clientImage:
-  registry: docker.io
-  repository: bitnami/minio-client
-  tag: 2021.2.19-debian-10-r12
-
-## Init containers parameters:
-## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
-##
-volumePermissions:
-  enabled: false
-  image:
-    registry: docker.io
-    repository: bitnami/bitnami-shell
-    tag: "10"
-    pullPolicy: Always
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ##
-    # pullSecrets:
-    #   - myRegistryKeySecretName
-  ## Init container' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ##
-  resources:
-    # We usually recommend not to specify default resources and to leave this as a conscious
-    # choice for the user. This also increases chances charts run on environments with little
-    # resources, such as Minikube. If you do want to specify resources, uncomment the following
-    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    limits: {}
-    #   cpu: 100m
-    #   memory: 128Mi
-    requests: {}
-    #   cpu: 100m
-    #   memory: 128Mi
+extraDeploy: []
 
 ## MinIO(R) server mode. Allowed values: standalone or distributed.
-## Distributed Minio ref: https://docs.minio.io/docs/distributed-minio-quickstart-guide
+## ref: https://docs.minio.io/docs/distributed-minio-quickstart-guide
 ##
 mode: standalone
+
+## MinIO(R) credentials
+##
+accessKey:
+  ## MinIO(R) Access Key
+  ## ref: https://github.com/bitnami/bitnami-docker-minio/#setting-up-minio-in-distributed-mode
+  ##
+  password:
+  ## Option to force users to specify a password. That is required for 'helm upgrade' to work properly.
+  ## If it is not force, a random password will be generated.
+  ##
+  forcePassword: false
+secretKey:
+  ## MinIO(R) Secret Key
+  ## ref: https://github.com/bitnami/bitnami-docker-minio/#setting-up-minio-in-distributed-mode
+  ##
+  password:
+  ## Option to force users to specify a password. That is required for 'helm upgrade' to work properly.
+  ## If it is not force, a random password will be generated.
+  ##
+  forcePassword: false
+
+## Use existing secret (ignores accessKey, and secretKey passwords)
+##
+# existingSecret:
+
+## Mount MinIO(R) secret as a file instead of passing environment variable
+##
+useCredentialsFile: false
+
+## Force reconfiguring new keys whenever the credentials change
+##
+forceNewKeys: false
+
+## Comma, semi-colon or space separated list of buckets to create at initialization
+##
+# defaultBuckets: "my-bucket, my-second-bucket"
+
+## Disable MinIO(R) Web UI
+## ref: https://github.com/minio/minio/tree/master/docs/config/#browser
+##
+disableWebUI: false
+
+## Enable tls in front of MinIO(R) containers.
+##
+tls:
+  ## If true, mount an existing secret to the container
+  ##
+  enabled: false
+  ## Name of an existing secret holding the certificate information
+  ##
+  secretName: ""
+
+## An array to add extra env vars
+## e.g:
+## extraEnv:
+##   - name: FOO
+##     value: "bar"
+##
+extraEnv: {}
+
+## ConfigMap with extra environment variables
+##
+extraEnvVarsCM: ""
+
+## Secret with extra environment variables
+##
+extraEnvVarsSecret: ""
+
+## Command and args for running the MinIO(R) container (set to default if not set). Use array form
+##
+command: []
+args: []
+
+## Scheduler name
+## https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+##
+# schedulerName: stork
 
 ## MinIO(R) deployment parameters
 ## Only when mode is 'standalone'
@@ -128,7 +169,7 @@ mode: standalone
 deployment:
   ## Set to Recreate if you use persistent volume that cannot be mounted by more than one pods to makesure the pods is destroyed first.
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
-  ## Example:
+  ## e.g:
   ## updateStrategy:
   ##  type: RollingUpdate
   ##  rollingUpdate:
@@ -156,55 +197,22 @@ statefulset:
   ##
   replicaCount: 4
 
-## Use existing secret (ignores accessKey, and secretKey passwords)
-##
-# existingSecret:
-
-## Mount MinIO(R) secret as a file instead of passing environment variable
-##
-useCredentialsFile: false
-
-## Force reconfiguring new keys whenever the credentials change
-##
-forceNewKeys: false
-
-## MinIO(R) credentials
-##
-accessKey:
-  ## MinIO(R) Access Key
-  ## ref: https://github.com/bitnami/bitnami-docker-minio/#setting-up-minio-in-distributed-mode
+  ## Number of expanded MinIO(R) clusters
   ##
-  password:
-  ## Option to force users to specify a password. That is required for 'helm upgrade' to work properly.
-  ## If it is not force, a random password will be generated.
+  zones: 1
+
+  ## Number of drives (PVC) attached to every node
   ##
-  forcePassword: false
-secretKey:
-  ## MinIO(R) Secret Key
-  ## ref: https://github.com/bitnami/bitnami-docker-minio/#setting-up-minio-in-distributed-mode
-  ##
-  password:
-  ## Option to force users to specify a password. That is required for 'helm upgrade' to work properly.
-  ## If it is not force, a random password will be generated.
-  ##
-  forcePassword: false
+  drivesPerNode: 1
 
-## Comma, semi-colon or space separated list of buckets to create at initialization (only in standalone mode)
+## MinIO(R) pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
-# defaultBuckets: "my-bucket, my-second-bucket"
+hostAliases: []
 
-## Disable MinIO(R) Web UI
-## ref: https://github.com/minio/minio/tree/master/docs/config/#browser
+## MinIO(R) container ports to open
 ##
-disableWebUI: false
-
-## Define custom environment variables to pass to the image here
-##
-extraEnv: {}
-
-## Define a custom command for the minio container
-##
-command: {}
+containerPort: 9000
 
 ## Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
@@ -213,6 +221,11 @@ securityContext:
   enabled: true
   fsGroup: 1001
   runAsUser: 1001
+
+## Pod labels
+## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
+podLabels: {}
 
 ## Pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
@@ -284,8 +297,8 @@ resources:
   #   cpu: 250m
   #   memory: 256Mi
 
-## MinIO(R) containers' liveness and readiness probes
-## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+## Configure extra options for liveness, readiness and startup probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
 ##
 livenessProbe:
   enabled: true
@@ -301,54 +314,51 @@ readinessProbe:
   timeoutSeconds: 1
   successThreshold: 1
   failureThreshold: 5
-
-## Enable tls in front of MinIO(R) containers.
-##
-tls:
-  ## If true, mount an existing secret to the container
-  ##
+startupProbe:
   enabled: false
-  ## Name of an existing secret holding the certificate information
-  ##
-  secretName: ""
+  initialDelaySeconds: 0
+  periodSeconds: 10
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 60
 
-## Enable persistence using Persistent Volume Claims
-## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+## Custom Liveness, Readiness, and Startup probes for MinIO(R)
 ##
-persistence:
-  ## If true, use a Persistent Volume Claim, If false, use emptyDir
-  ##
-  enabled: true
+customLivenessProbe: {}
+customReadinessProbe: {}
+customStartupProbe: {}
 
-  ## Enable persistence using an existing PVC (only in standalone mode)
-  ##
-  # existingClaim:
+## Extra volumes to add to the MinIO(R) statefulset
+##
+extraVolumes: []
 
-  ## Data volume mount path
-  ##
-  mountPath: /data
+## Extra volume mounts to add to MinIO(R) containers
+##
+extraVolumeMounts: []
 
-  ## Persistent Volume Access Mode
-  ##
-  accessModes:
-    - ReadWriteOnce
+## Add init containers to the MinIO(R) pods.
+## e.g:
+## initContainers:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+initContainers: {}
 
-  ## Persistent Volume size
-  ##
-  size: 8Gi
-
-  ## Persistent Volume Storage Class
-  ## If defined, storageClassName: <storageClass>
-  ## If set to "-", storageClassName: "", which disables dynamic provisioning
-  ## If undefined (the default) or set to null, no storageClassName spec is
-  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-  ##   GKE, AWS & OpenStack)
-  ##
-  # storageClass: "-"
-
-  ## Persistent Volume Claim annotations
-  ##
-  annotations: {}
+## Add sidecars to the MinIO(R) pods.
+## e.g:
+## sidecars:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+sidecars: {}
 
 ## MinIO(R) Service properties
 ##
@@ -356,26 +366,33 @@ service:
   ## MinIO(R) Service type
   ##
   type: ClusterIP
-
   ## MinIO(R) Service port
   ##
   port: 9000
-
   ## Specify the nodePort value for the LoadBalancer and NodePort service types.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
   # nodePort:
-
+  ## loadBalancerIP for the MinIO(R) Service (optional, cloud specific)
+  ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+  ##
+  # loadBalancerIP:
+  ## Load Balancer sources
+  ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+  ## e.g:
+  ## loadBalancerSourceRanges:
+  ##   - 10.10.10.0/24
+  ##
+  loadBalancerSourceRanges: []
+  ## Enable client source IP preservation
+  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ##
+  externalTrafficPolicy: Cluster
   ## Provide any additional annotations which may be required. This can be used to
   ## set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
   annotations: {}
-
-  ## loadBalancerIP for the PrestaShop Service (optional, cloud specific)
-  ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
-  ##
-  # loadBalancerIP:
 
 ## Configure the ingress resource that allows you to access the
 ## MinIO(R) installation. Set up the URL
@@ -390,10 +407,6 @@ ingress:
   ##
   certManager: false
 
-  ## Ingress Path type
-  ##
-  pathType: ImplementationSpecific
-
   ## Override API Version (automatically detected if not set)
   ##
   apiVersion:
@@ -406,6 +419,15 @@ ingress:
   ## with ALB ingress controllers.
   ##
   path: /
+
+  ## Ingress Path type
+  ##
+  pathType: ImplementationSpecific
+
+  ## The service port to be used by this ingress.
+  ## Default is http. Alternative is https.
+  ##
+  servicePort: minio
 
   ## Ingress annotations done as key:value pairs
   ## For a full list of possible ingress annotations, please see
@@ -423,10 +445,12 @@ ingress:
 
   ## The list of additional hostnames to be covered with this ingress record.
   ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
+  ## e.g:
   ## extraHosts:
-  ## - name: minio.local
-  ##   path: /
+  ##   - name: minio.local
+  ##     path: /
   ##
+  extraHosts: []
 
   ## Any additional arbitrary paths that may need to be added to the ingress under the main host.
   ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
@@ -436,30 +460,34 @@ ingress:
   ##     serviceName: ssl-redirect
   ##     servicePort: use-annotation
   ##
+  extraPaths: []
 
   ## The tls configuration for additional hostnames to be covered with this ingress record.
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ## e.g:
   ## extraTls:
   ## - hosts:
   ##     - minio.local
   ##   secretName: minio.local-tls
   ##
+  extraTls: []
 
   ## If you're providing your own certificates, please use this to add the certificates as secrets
-  ## key and certificate should start with -----BEGIN CERTIFICATE----- or
-  ## -----BEGIN RSA PRIVATE KEY-----
+  ## key and certificate are expected in PEM format
+  ## name should line up with a secretName set further up
   ##
-  ## name should line up with a tlsSecret set further up
-  ## If you're using cert-manager, this is unneeded, as it will create the secret for you if it is not set
-  ##
+  ## If it is not set and you're using cert-manager, this is unneeded, as it will create a secret for you with valid certificates
+  ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created valid for 365 days
   ## It is also possible to create and manage the certificates outside of this helm chart
   ## Please see README.md for more information
   ##
-  secrets: []
-  ## - name: minio.local-tls
-  ##   key:
-  ##   certificate:
+  ## Example
+  ## secrets:
+  ##   - name: minio.local-tls
+  ##     key: ""
+  ##     certificate: ""
   ##
+  secrets: []
 
 ## NetworkPolicy parameters
 ##
@@ -475,11 +503,126 @@ networkPolicy:
   ##
   allowExternal: true
 
-## MinIO(R) supports two authentication modes for Prometheus either jwt or public, by default MinIO(R) runs in jwt mode.
-## To allow public access without authentication for prometheus metrics set environment as follows.
+## Enable persistence using Persistent Volume Claims
+## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
-prometheusAuthType: public
+persistence:
+  ## If true, use a Persistent Volume Claim, If false, use emptyDir
+  ##
+  enabled: true
+  ## Persistent Volume Storage Class
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
+  ##
+  # storageClass: "-"
+  ## Data volume mount path
+  ##
+  mountPath: /data
+  ## Persistent Volume Access Mode
+  ##
+  accessModes:
+    - ReadWriteOnce
+  ## Persistent Volume size
+  ##
+  size: 8Gi
+  ## Persistent Volume Claim annotations
+  ##
+  annotations: {}
+  ## Enable persistence using an existing PVC (only in standalone mode)
+  ##
+  # existingClaim:
 
-## Extra objects to deploy (value evaluated as a template)
+## Init containers parameters:
+## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
 ##
-extraDeploy: []
+volumePermissions:
+  enabled: false
+  image:
+    registry: docker.io
+    repository: bitnami/bitnami-shell
+    tag: "10"
+    pullPolicy: Always
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## Init container' resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    ## We usually recommend not to specify default resources and to leave this as a conscious
+    ## choice for the user. This also increases chances charts run on environments with little
+    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## e.g:
+    ## limits:
+    ##   cpu: 500m
+    ##   memory: 1Gi
+    ##
+    limits: {}
+    requests: {}
+
+## Specifies whether a ServiceAccount should be created
+##
+serviceAccount:
+  create: true
+  ## The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the common.names.fullname template
+  ##
+  name: ""
+
+## MinIO(R) Pod Disruption Budget configuration (only in distributed mode)
+## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+##
+pdb:
+  create: false
+  ## Min number of pods that must still be available after the eviction
+  ##
+  minAvailable: 1
+  ## Max number of pods that can be unavailable after the eviction
+  ##
+  # maxUnavailable: 1
+
+## Metrics configuration
+##
+metrics:
+  ## MinIO(R) supports two authentication modes for Prometheus either jwt or public, by default MinIO(R) runs in jwt mode.
+  ## To allow public access without authentication for prometheus metrics set environment as follows.
+  ##
+  prometheusAuthType: public
+
+  ## Prometheus Operator ServiceMonitor configuration
+  ##
+  serviceMonitor:
+    ## If the operator is installed in your cluster, set to true to create a Service Monitor Entry
+    ##
+    enabled: false
+    ## Specify the namespace in which the serviceMonitor resource will be created
+    ##
+    # namespace: ""
+    ## Specify the interval at which metrics should be scraped
+    ##
+    interval: 30s
+    ## Specify the timeout after which the scrape is ended
+    ##
+    # scrapeTimeout: 30s
+    ## Specify Metric Relabellings to add to the scrape endpoint
+    ##
+    # relabellings:
+    ## Specify honorLabels parameter to add the scrape endpoint
+    ##
+    honorLabels: false
+    ## Specify the release for ServiceMonitor. Sometimes it should be custom for prometheus operator to work
+    ##
+    # release: ""
+    ## Used to pass Labels that are used by the Prometheus installed in your cluster to select Service Monitors to work with
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
+    ##
+    additionalLabels: {}

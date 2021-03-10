@@ -6,8 +6,8 @@ MinIO(R) can be accessed via port {{ .Values.service.port }} on the following DN
 
 To get your credentials run:
 
-   export MINIO_ACCESS_KEY=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} -o jsonpath="{.data.access-key}" | base64 --decode)
-   export MINIO_SECRET_KEY=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} -o jsonpath="{.data.secret-key}" | base64 --decode)
+   export ACCESS_KEY=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "minio.secretName" . }} -o jsonpath="{.data.access-key}" | base64 --decode)
+   export SECRET_KEY=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "minio.secretName" . }} -o jsonpath="{.data.secret-key}" | base64 --decode)
 
 To connect to your MinIO(R) server using a client:
 
@@ -15,8 +15,8 @@ To connect to your MinIO(R) server using a client:
 
    kubectl run --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }}-client \
      --rm --tty -i --restart='Never' \
-     --env MINIO_SERVER_ACCESS_KEY=$MINIO_ACCESS_KEY \
-     --env MINIO_SERVER_SECRET_KEY=$MINIO_SECRET_KEY \
+     --env MINIO_SERVER_ACCESS_KEY=$ACCESS_KEY \
+     --env MINIO_SERVER_SECRET_KEY=$SECRET_KEY \
      --env MINIO_SERVER_HOST={{ include "common.names.fullname" . }} \
      {{- if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}
      --labels="{{ include "common.names.fullname" . }}-client=true" \
@@ -27,6 +27,7 @@ To connect to your MinIO(R) server using a client:
 
    NOTE: Since NetworkPolicy is enabled, only pods with label
    "{{ template "common.names.fullname" . }}-client=true" will be able to connect to MinIO(R).
+
 {{- end }}
 {{- if not .Values.disableWebUI }}
 
@@ -65,11 +66,17 @@ To access the MinIO(R) web UI:
    WARN: MinIO(R) Web UI is disabled.
 {{- end }}
 
-{{- if and (.Values.tls.enabled) (not .Values.tls.secretName) }}
+{{- include "common.warnings.rollingTag" .Values.image }}
+{{- include "common.warnings.rollingTag" .Values.clientImage }}
+{{- include "minio.validateValues" . }}
 
-   ERROR: Since TLS is enabled, the name of a secret containing the certificates has to be provided.
-   {{- fail -}}
-{{- end }}
-
-{{ include "minio.validateValues" . }}
-{{ include "minio.checkRollingTags" . }}
+{{- $requiredPassword := list -}}
+{{- $secretName := include "minio.secretName" . -}}
+{{- if and (not .Values.existingSecret) (not .Values.forceNewKeys) -}}
+  {{- $requiredAccessKey := dict "valueKey" "accessKey.password" "secret" $secretName "field" "access-key" -}}
+  {{- $requiredSecretKey := dict "valueKey" "secretKey.password" "secret" $secretName "field" "secret-key" -}}
+  {{- $requiredPassword = append $requiredPassword $requiredAccessKey -}}
+  {{- $requiredPassword = append $requiredPassword $requiredSecretKey -}}
+{{- end -}}
+{{- $requiredMinioPasswordErrors := include "common.validations.values.multiple.empty" (dict "required" $requiredPassword "context" $) -}}
+{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" (list $requiredMinioPasswordErrors) "context" $) -}}
