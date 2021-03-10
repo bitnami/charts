@@ -28,4 +28,4 @@ name: kubewatch
 sources:
   - https://github.com/bitnami/bitnami-docker-kubewatch
   - https://github.com/bitnami-labs/kubewatch
-version: 3.2.0
+version: 3.2.1
