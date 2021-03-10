@@ -82,3 +82,25 @@ cassandra: cluster.seedCount
     equal to `replicaCount`.
 {{- end -}}
 {{- end -}}
+
+{{/* vim: set filetype=mustache: */}}
+{{/*
+Return  the proper Commit Storage Class
+{{ include "cassandra.commitstorage.class" ( dict "persistence" .Values.path.to.the.persistence "global" $) }}
+*/}}
+{{- define "cassandra.commitstorage.class" -}}
+{{- $storageClass := .persistence.commitStorageClass -}}
+{{- if .global -}}
+    {{- if .global.storageClass -}}
+        {{- $storageClass = .global.commitStorageClass -}}
+    {{- end -}}
+{{- end -}}
+
+{{- if $storageClass -}}
+  {{- if (eq "-" $storageClass) -}}
+      {{- printf "storageClassName: \"\"" -}}
+  {{- else }}
+      {{- printf "storageClassName: %s" $storageClass -}}
+  {{- end -}}
+{{- end -}}
+{{- end -}}

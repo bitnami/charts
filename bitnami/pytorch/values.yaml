@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/pytorch
-  tag: 1.7.1-debian-10-r56
+  tag: 1.8.0-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -46,7 +46,7 @@ image:
 git:
   registry: docker.io
   repository: bitnami/git
-  tag: 2.30.1-debian-10-r13
+  tag: 2.30.1-debian-10-r24
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.

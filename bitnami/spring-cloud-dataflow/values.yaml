@@ -134,6 +134,10 @@ server:
   ##
   podAntiAffinityPreset: soft
 
+  ## Dataflow Server port
+  ##
+  containerPort: 8080
+
   ## Dataflow Server node affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
   ## Allowed values: soft, hard

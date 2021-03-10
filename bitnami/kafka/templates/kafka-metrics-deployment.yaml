@@ -26,7 +26,10 @@ spec:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: metrics
     spec:
-{{- include "kafka.imagePullSecrets" . | indent 6 }}
+      {{- include "kafka.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.metrics.kafka.schedulerName }}
+      schedulerName: {{ .Values.metrics.kafka.schedulerName | quote }}
+      {{- end }}
       containers:
         - name: kafka-exporter
           image: {{ include "kafka.metrics.kafka.image" . }}
