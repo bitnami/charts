@@ -118,7 +118,7 @@ useCredentialsFile: false
 ##
 forceNewKeys: false
 
-## Comma, semi-colon or space separated list of buckets to create at initialization (only in standalone mode)
+## Comma, semi-colon or space separated list of buckets to create at initialization
 ##
 # defaultBuckets: "my-bucket, my-second-bucket"
 
@@ -473,11 +473,11 @@ ingress:
   extraTls: []
 
   ## If you're providing your own certificates, please use this to add the certificates as secrets
-  ## key and certificate should start with -----BEGIN CERTIFICATE----- or -----BEGIN RSA PRIVATE KEY-----
+  ## key and certificate are expected in PEM format
   ## name should line up with a secretName set further up
   ##
-  ## If it is not set and you're using cert-manager, this is unneeded, as it will create the secret for you
-  ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created
+  ## If it is not set and you're using cert-manager, this is unneeded, as it will create a secret for you with valid certificates
+  ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created valid for 365 days
   ## It is also possible to create and manage the certificates outside of this helm chart
   ## Please see README.md for more information
   ##
@@ -578,7 +578,7 @@ serviceAccount:
   ##
   name: ""
 
-## MinIO Pod Disruption Budget configuration
+## MinIO(R) Pod Disruption Budget configuration (only in distributed mode)
 ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
 ##
 pdb:
