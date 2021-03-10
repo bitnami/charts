@@ -97,6 +97,11 @@ command: ["metrics-server"]
 ##
 extraArgs: {}
 
+## Pod labels
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
+podLabels: {}
+
 ## Additional pod annotations for MariaDB Galera pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
