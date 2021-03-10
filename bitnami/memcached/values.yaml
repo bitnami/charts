@@ -143,6 +143,11 @@ securityContext:
   runAsUser: 1001
   readOnlyRootFilesystem: false
 
+## Pod extra labels
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
+podLabels: {}
+
 ## Pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
