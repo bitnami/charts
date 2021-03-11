@@ -145,6 +145,12 @@ initialClusterState: ""
 ##
 # maxProcs:
 
+## Use a PreStop hook to remove the etcd members from the etcd cluster
+## they the containers are terminated
+## NOTE: Ignored if lifecycleHooks is set
+##
+removeMemberOnContainerTermination: true
+
 ## etcd configuration
 ## Specify content for etcd.conf.yml
 ## e.g:
@@ -202,7 +208,7 @@ podManagementPolicy: Parallel
 ##
 hostAliases: []
 
-## Override default lifecycleHooks for the etcd container to automate configuration before or after startup.
+## Override default etcd container hooks
 ##
 lifecycleHooks: {}
 

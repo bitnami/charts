@@ -92,15 +92,15 @@ spec:
         - name: etcd
           image: {{ include "etcd.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.lifecycleHooks "context" $) | nindent 12 }}
+          {{- else if .Values.removeMemberOnContainerTermination }}
           lifecycle:
-            {{- if .Values.lifecycleHooks }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.lifecycleHooks "context" $) | nindent 12 }}
-            {{- else }}
             preStop:
               exec:
                 command:
                   - /opt/bitnami/scripts/etcd/prestop.sh
-            {{- end }}
+          {{- end }}
           {{- if .Values.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}

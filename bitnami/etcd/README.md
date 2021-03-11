@@ -98,6 +98,7 @@ The following tables lists the configurable parameters of the etcd chart and the
 | `auth.peer.caFilename`              | Name of the file containing the peer CA certificate                                       | `""`                                                    |
 | `initialClusterState`               | Initial cluster state. Allowed values: 'new' or 'existing'                                | `nil`                                                   |
 | `maxProcs`                          | Set GOMAXPROCS environment variable to limit the number of CPUs                           | `nil`                                                   |
+| `removeMemberOnContainerTermination`| Use a PreStop hook to remove the etcd members from the cluster on container termination   | `true`                                                  |
 | `configuration`                     | etcd configuration. Specify content for etcd.conf.yml                                     | `nil`                                                   |
 | `existingConfigmap`                 | Name of existing ConfigMap with etcd configuration                                        | `nil`                                                   |
 | `command`                           | Default container command (useful when using custom images)                               | `nil`                                                   |
@@ -118,7 +119,7 @@ The following tables lists the configurable parameters of the etcd chart and the
 | `resources.limits`          | The resources limits for the etcd container                                               | `{}`                           |
 | `resources.requests`        | The requested resources for the etcd container                                            | `{}`                           |
 | `hostAliases`               | etcd pod host aliases                                                                     | `[]`                           |
-| `lifecycleHooks`            | Override default lifecycleHooks                                                           | `[]`                           |
+| `lifecycleHooks`            | Override default etcd container hooks                                                     | `{}`                           |
 | `livenessProbe`             | Liveness probe configuration for etcd                                                     | Check `values.yaml` file       |
 | `readinessProbe`            | Readiness probe configuration for etcd                                                    | Check `values.yaml` file       |
 | `startupProbe`              | Startup probe configuration for etcd                                                      | Check `values.yaml` file       |
