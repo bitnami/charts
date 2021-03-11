@@ -26,4 +26,4 @@ name: nginx-ingress-controller
 sources:
   - https://github.com/bitnami/bitnami-docker-nginx-ingress-controller
   - https://github.com/kubernetes/ingress-nginx
-version: 7.4.7
+version: 7.4.8
