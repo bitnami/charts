@@ -42,6 +42,17 @@
   echo Username: "admin"
   echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "harbor.core" . }}-envvars -o jsonpath="{.data.HARBOR_ADMIN_PASSWORD}" | base64 --decode)
 
+{{- if .Values.clair.enabled }}
+
+Clair scanner was deployed. Follow these steps to add it as an additional interrogation service for Harbor:
+https://goharbor.io/docs/latest/administration/vulnerability-scanning/pluggable-scanners
+
+  Endpoint: {{ include "harbor.clairAdapter.url" . | quote }}
+  Authorization: "None"
+  Options: "Use internal registry address"
+
+{{- end }}
+
 {{ include "harbor.validateValues" . }}
 {{ include "harbor.checkRollingTags" . }}
 
@@ -61,15 +72,6 @@
   {{- $requiredRedisPassword := dict "valueKey" "redis.password" "secret" $redisSecretName "field" "redis-password" -}}
   {{- $redisPasswordValidationErrors := include "common.validations.values.multiple.empty" (dict "required" (list $requiredRedisPassword) "context" $) -}}
   {{- $passwordErrors = append $passwordErrors $redisPasswordValidationErrors -}}
-{{- end -}}
-
-{{- if .Values.clair.enabled -}}
-Clair scanner was deployed. Follow these steps to add it as an additional interrogation service for Harbor:
-https://goharbor.io/docs/latest/administration/vulnerability-scanning/pluggable-scanners
-
-  Endpoint: {{ include "harbor.clairAdapter.url" . | quote }}
-  Authorization: "None"
-  Options: "Use internal registry address"
 {{- end -}}
 
 {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordErrors "context" $) -}}
