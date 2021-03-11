@@ -147,7 +147,7 @@ initialClusterState: ""
 
 ## Use a PreStop hook to remove the etcd members from the etcd cluster
 ## they the containers are terminated
-## NOTE: Ignored if lifecycleHooks is set
+## NOTE: Ignored if lifecycleHooks is set or replicaCount=1
 ##
 removeMemberOnContainerTermination: true
 

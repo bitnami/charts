@@ -85,7 +85,7 @@ To connect to your etcd server from outside the cluster execute the following co
 {{- include "etcd.validateValues" . }}
 {{- $requiredPassword := list -}}
 {{- $secretName := include "etcd.secretName" . -}}
-{{- if not .Values.auth.rbac.existingSecret -}}
+{{- if and .Values.auth.rbac.enabled (not .Values.auth.rbac.existingSecret) -}}
   {{- $requiredEtcdPassword := dict "valueKey" "auth.rbac.rootPassword" "secret" $secretName "field" "etcd-root-password" -}}
   {{- $requiredPassword = append $requiredPassword $requiredEtcdPassword -}}
 {{- end -}}

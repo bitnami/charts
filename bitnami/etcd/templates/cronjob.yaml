@@ -43,19 +43,12 @@ spec:
                 value: {{ ternary "true" "false" .Values.image.debug | quote }}
               - name: ETCDCTL_API
                 value: "3"
-              {{- $replicaCount := int .Values.replicaCount }}
-              {{- $clientPort := int .Values.service.port }}
-              {{- $etcdFullname := include "common.names.fullname" . }}
               {{- $releaseNamespace := .Release.Namespace }}
+              {{- $etcdFullname := include "common.names.fullname" . }}
               {{- $etcdHeadlessServiceName := printf "%s-%s" $etcdFullname "headless" }}
               {{- $clusterDomain := .Values.clusterDomain }}
-              {{- $etcdClientProtocol := include "etcd.clientProtocol" . }}
-              {{- $endpoints := list }}
-              {{- range $e, $i := until $replicaCount }}
-              {{- $endpoints = append $endpoints (printf "%s-%d.%s.%s.svc.%s:%d" $etcdFullname $i $etcdHeadlessServiceName $releaseNamespace $clusterDomain $clientPort) }}
-              {{- end }}
-              - name: ETCDCTL_ENDPOINTS
-                value: {{ join "," $endpoints | quote }}
+              - name: ETCD_CLUSTER_DOMAIN
+                value: {{ printf "%s.%s.svc.%s" $etcdHeadlessServiceName $releaseNamespace $clusterDomain | quote }}
               - name: ETCD_SNAPSHOT_HISTORY_LIMIT
                 value: {{ .Values.disasterRecovery.cronjob.snapshotHistoryLimit | quote }}
               {{- if .Values.auth.client.secureTransport }}
