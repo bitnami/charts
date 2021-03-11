@@ -86,7 +86,7 @@ spec:
             - gateway
             - {{ .Values.gateway.type }}
             {{- if eq .Values.gateway.type "gcs" }}
-            - {{ required "A GCP Project ID is required!" .Values.gateway.auth.gcs.projectID }}
+            - {{ .Values.gateway.auth.gcs.projectID }}
             {{- else if eq .Values.gateway.type "nas" }}
             - {{ .Values.persistence.mountPath }}
             {{- else if eq .Values.gateway.type "s3" }}
@@ -128,12 +128,12 @@ spec:
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
-            {{- if and (eq .Values.gateway.type "gcs") .Values.gateway.auth.gcs.keyJson }}
+            {{- if and (eq .Values.gateway.type "gcs") .Values.gateway.auth.gcs.keyJSON }}
             - name: minio-credentials
               mountPath: /opt/bitnami/minio/secrets/
               readOnly: true
             {{- end }}
-            {{- if and .Values.gateway.enabled (eq .Values.gateway.type "nas") }}
+            {{- if eq .Values.gateway.type "nas" }}
             - name: data
               mountPath: {{ .Values.persistence.mountPath }}
             {{- end }}
@@ -144,12 +144,12 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        {{- if and (eq .Values.gateway.type "gcs") .Values.gateway.auth.gcs.keyJson }}
+        {{- if and (eq .Values.gateway.type "gcs") .Values.gateway.auth.gcs.keyJSON }}
         - name: minio-credentials
           secret:
             secretName: {{ include "minio.secretName" . }}
         {{- end }}
-        {{- if and .Values.gateway.enabled (eq .Values.gateway.type "nas") }}
+        {{- if eq .Values.gateway.type "nas" }}
         - name: data
           {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:

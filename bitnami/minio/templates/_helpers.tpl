@@ -46,11 +46,7 @@ Get the user to use to access MinIO(R)
 {{- define "minio.secret.userValue" -}}
 {{- if .Values.gateway.enabled }}
     {{- if eq .Values.gateway.type "azure" }}
-        {{- if .Values.gateway.auth.azure.storageAccountName }}
-            {{- .Values.gateway.auth.azure.storageAccountName -}}
-        {{- else -}}
-            {{ required "A Storage Account Name is required for Azure!" .Values.gateway.auth.azure.storageAccountName }}
-        {{- end -}}
+        {{- .Values.gateway.auth.azure.storageAccountName -}}
     {{- else if eq .Values.gateway.type "gcs" }}
         {{- if .Values.gateway.auth.gcs.accessKey }}
             {{- .Values.gateway.auth.gcs.accessKey -}}
@@ -64,11 +60,7 @@ Get the user to use to access MinIO(R)
             {{- randAlphaNum 10 -}}
         {{- end -}}
     {{- else if eq .Values.gateway.type "s3" }}
-        {{- if .Values.gateway.auth.s3.accessKey }}
-            {{- .Values.gateway.auth.s3.accessKey -}}
-        {{- else -}}
-            {{ required "An Access Key is required for S3!" .Values.gateway.auth.s3.accessKey }}
-        {{- end -}}
+        {{- .Values.gateway.auth.s3.accessKey -}}
     {{- end -}}
 {{- else }}
     {{- $accessKey := coalesce .Values.global.minio.accessKey .Values.accessKey.password -}}
@@ -99,11 +91,7 @@ Get the password to use to access MinIO(R)
 {{- define "minio.secret.passwordValue" -}}
 {{- if .Values.gateway.enabled }}
     {{- if eq .Values.gateway.type "azure" }}
-        {{- if .Values.gateway.auth.azure.storageAccountKey }}
-            {{- .Values.gateway.auth.azure.storageAccountKey -}}
-        {{- else -}}
-            {{ required "A Storage Account Key is required for Azure!" .Values.gateway.auth.azure.storageAccountKey }}
-        {{- end -}}
+        {{- .Values.gateway.auth.azure.storageAccountKey -}}
     {{- else if eq .Values.gateway.type "gcs" }}
         {{- if .Values.gateway.auth.gcs.secretKey }}
             {{- .Values.gateway.auth.gcs.secretKey -}}
@@ -117,11 +105,7 @@ Get the password to use to access MinIO(R)
             {{- randAlphaNum 40 -}}
         {{- end -}}
     {{- else if eq .Values.gateway.type "s3" }}
-        {{- if .Values.gateway.auth.s3.secretKey }}
-            {{- .Values.gateway.auth.s3.secretKey -}}
-        {{- else -}}
-            {{ required "A Secret Key is required for S3!" .Values.gateway.auth.s3.secretKey }}
-        {{- end -}}
+        {{- .Values.gateway.auth.s3.secretKey -}}
     {{- end -}}
 {{- else }}
     {{- $secretKey := coalesce .Values.global.minio.secretKey .Values.secretKey.password -}}
@@ -163,7 +147,7 @@ Return true if a secret object should be created
 Return true if a PVC object should be created (only in standalone mode)
 */}}
 {{- define "minio.createPVC" -}}
-{{- if and .Values.persistence.enabled (not .Values.persistence.existingClaim) }}
+{{- if and .Values.persistence.enabled (not .Values.persistence.existingClaim) (or (and (eq .Values.mode "standalone") (not .Values.gateway.enabled)) (and .Values.gateway.enabled (eq .Values.gateway.type "nas"))) }}
     {{- true -}}
 {{- end -}}
 {{- end -}}
@@ -201,7 +185,10 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := append $messages (include "minio.validateValues.totalDrives" .) -}}
 {{- $messages := append $messages (include "minio.validateValues.tls" .) -}}
 {{- $messages := append $messages (include "minio.validateValues.gateway.type" .) -}}
+{{- $messages := append $messages (include "minio.validateValues.gateway.azure.credentials" .) -}}
+{{- $messages := append $messages (include "minio.validateValues.gateway.gcs.projectID" .) -}}
 {{- $messages := append $messages (include "minio.validateValues.gateway.nas.persistence" .) -}}
+{{- $messages := append $messages (include "minio.validateValues.gateway.s3.credentials" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -261,6 +248,28 @@ minio: gateway.type
 {{- end -}}
 
 {{/*
+Validate values of MinIO(R) - when using MinIO(R) as an Azure Gateway, the StorageAccount Name/Key are required
+*/}}
+{{- define "minio.validateValues.gateway.azure.credentials" -}}
+{{- if and .Values.gateway.enabled (eq .Values.gateway.type "azure") (or (empty .Values.gateway.auth.azure.storageAccountName) (empty .Values.gateway.auth.azure.storageAccountKey)) }}
+minio: gateway.auth.azure
+    The StorageAccount name and key are required to use MinIO(R) as a Azure Gateway.
+    Please set a valid StorageAccount information (--set gateway.auth.azure.storageAccountName="xxxx",gateway.auth.azure.storageAccountKey="yyyy")
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of MinIO(R) - when using MinIO(R) as a GCS Gateway, the GCP project ID is required
+*/}}
+{{- define "minio.validateValues.gateway.gcs.projectID" -}}
+{{- if and .Values.gateway.enabled (eq .Values.gateway.type "gcs") (empty .Values.gateway.auth.gcs.projectID) }}
+minio: gateway.auth.gcs.projectID
+    A GCP project ID is required to use MinIO(R) as a GCS Gateway.
+    Please set a valid project ID (--set gateway.auth.gcs.projectID="xxxx")
+{{- end -}}
+{{- end -}}
+
+{{/*
 Validate values of MinIO(R) - when using MinIO(R) as a NAS Gateway, ReadWriteMany volumes are required
 */}}
 {{- define "minio.validateValues.gateway.nas.persistence" -}}
@@ -273,5 +282,16 @@ minio: persistence.enabled
 minio: persistence.accessModes
     ReadWriteMany volumes are required to use MinIO(R) as a NAS Gateway with N replicas.
     Please set a valid mode (--set persistence.accessModes[0]="ReadWriteMany")
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of MinIO(R) - when using MinIO(R) as a S3 Gateway, the Access & Secret keys are required
+*/}}
+{{- define "minio.validateValues.gateway.s3.credentials" -}}
+{{- if and .Values.gateway.enabled (eq .Values.gateway.type "s3") (or (empty .Values.gateway.auth.s3.accessKey) (empty .Values.gateway.auth.s3.secretKey)) }}
+minio: gateway.auth.s3
+    The Access & Secret keys are required to use MinIO(R) as a S3 Gateway.
+    Please set valid keys (--set gateway.auth.s3.accessKey="xxxx",gateway.auth.s3.secretKey="yyyy")
 {{- end -}}
 {{- end -}}

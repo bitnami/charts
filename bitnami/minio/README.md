@@ -112,11 +112,12 @@ The following table lists the configurable parameters of the MinIO&reg; chart an
 | `statefulset.zones`               | Number of zones (only for MinIO&reg; distributed mode)                                    | `1`                            |
 | `statefulset.drivesPerNode`       | Number of drives per node (only for MinIO&reg; distributed mode)                          | `1`                            |
 | `statefulset.updateStrategy`      | Statefulset update strategy policy                                                        | `RollingUpdate`                |
-| `statefulset.podManagementpolicy` | Statefulset pods management policy                                                        | `Parallel`                     |
+| `statefulset.podManagementPolicy` | Statefulset pods management policy                                                        | `Parallel`                     |
 | `deployment.updateStrategy`       | Deployment update strategy policy                                                         | `Recreate`                     |
 | `securityContext.enabled`         | Enable security context                                                                   | `true`                         |
 | `securityContext.fsGroup`         | Group ID for the container                                                                | `1001`                         |
 | `securityContext.runAsUser`       | User ID for the container                                                                 | `1001`                         |
+| `containerPort`                   | MinIO(R) container port to open                                                           | `9000`                         |
 | `resources.limits`                | The resources limits for the MinIO&reg; container                                         | `{}`                           |
 | `resources.requests`              | The requested resources for the MinIO&reg; container                                      | `{}`                           |
 | `livenessProbe`                   | Liveness probe configuration for MinIO&reg;                                               | Check `values.yaml` file       |
@@ -160,6 +161,7 @@ The following table lists the configurable parameters of the MinIO&reg; chart an
 | `ingress.hostname`                 | Default host for the ingress resource                                             | `minio.local`                  |
 | `ingress.tls`                      | Enable TLS configuration for the hostname defined at `ingress.hostname` parameter | `false`                        |
 | `ingress.annotations`              | Ingress annotations                                                               | `{}` (evaluated as a template) |
+| `ingress.extraPaths`               | Any additional paths that may need to be added to the ingress under the main host | `[]`                           |
 | `ingress.extraHosts[0].name`       | Additional hostnames to be covered                                                | `nil`                          |
 | `ingress.extraHosts[0].path`       | Additional hostnames to be covered                                                | `nil`                          |
 | `ingress.extraTls[0].hosts[0]`     | TLS configuration for additional hostnames to be covered                          | `nil`                          |
@@ -178,7 +180,7 @@ The following table lists the configurable parameters of the MinIO&reg; chart an
 | `persistence.enabled`              | Enable MinIO&reg; data persistence using PVC                                       | `true`                         |
 | `persistence.storageClass`         | PVC Storage Class for MinIO&reg; data volume                                       | `nil`                          |
 | `persistence.mountPath`            | Path to mount the volume at                                                        | `/data`                        |
-| `persistence.accessMode`           | PVC Access Mode for MinIO&reg; data volume                                         | `ReadWriteOnce`                |
+| `persistence.accessModes`          | PVC Access Modes for MinIO&reg; data volume                                        | `[ReadWriteOnce]`              |
 | `persistence.size`                 | PVC Storage Request for MinIO&reg; data volume                                     | `8Gi`                          |
 | `persistence.selector`             | Selector to match an existing Persistent Volume                                    | `{}`(evaluated as a template)  |
 | `persistence.annotations`          | Annotations for the PVC                                                            | `{}`(evaluated as a template)  |
@@ -203,6 +205,14 @@ The following table lists the configurable parameters of the MinIO&reg; chart an
 |-------------------------|-------------------------------------------------------------|------------------------------------------------------|
 | `serviceAccount.create` | Enable the creation of a ServiceAccount for MinIO&reg; pods | `true`                                               |
 | `serviceAccount.name`   | Name of the created ServiceAccount                          | Generated using the `common.names.fullname` template |
+
+### Other parameters
+
+| Parameter               | Description                                                    | Default |
+|-------------------------|----------------------------------------------------------------|---------|
+| `pdb.create`            | Enable/disable a Pod Disruption Budget creation                | `false` |
+| `pdb.minAvailable`      | Minimum number/percentage of pods that should remain scheduled | `1`     |
+| `pdb.maxUnavailable`    | Maximum number/percentage of pods that may be made unavailable | `nil`   |
 
 ### Metrics parameters
 

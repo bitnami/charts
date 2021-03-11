@@ -1,4 +1,4 @@
-{{- if and (eq .Values.mode "standalone") (not .Values.gateway.enabled) (include "minio.createPVC" .) }}
+{{- if (include "minio.createPVC" .) }}
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
