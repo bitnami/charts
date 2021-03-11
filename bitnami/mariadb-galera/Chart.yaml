@@ -19,7 +19,6 @@ keywords:
   - sql
   - prometheus
   - galera
-  - percona
 maintainers:
   - email: containers@bitnami.com
     name: Bitnami
