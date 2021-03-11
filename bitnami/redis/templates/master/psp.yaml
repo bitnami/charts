@@ -1,4 +1,5 @@
 {{- if .Values.podSecurityPolicy.create }}
+{{ template "podSecurityPolicy.checkCreate" . }}
 apiVersion: {{ template "podSecurityPolicy.apiVersion" . }}
 kind: PodSecurityPolicy
 metadata:

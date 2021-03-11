@@ -317,30 +317,31 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Other Parameters
 
-| Name                                    | Description                                                         | Value   |
-| --------------------------------------- | ------------------------------------------------------------------- | ------- |
-| `networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                          | `false` |
-| `networkPolicy.allowExternal`           | Don't require client label for connections                          | `true`  |
-| `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                        | `[]`    |
-| `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                        | `[]`    |
-| `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces              | `{}`    |
-| `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces          | `{}`    |
-| `podSecurityPolicy.create`              | Specifies whether a PodSecurityPolicy should be created             | `false` |
-| `rbac.create`                           | Specifies whether RBAC resources should be created                  | `false` |
-| `rbac.rules`                            | Custom RBAC rules to set                                            | `[]`    |
-| `serviceAccount.create`                 | Specifies whether a ServiceAccount should be created                | `true`  |
-| `serviceAccount.name`                   | The name of the ServiceAccount to use.                              | `""`    |
-| `serviceAccount.annotations`            | Additional custom annotations for the ServiceAccount                | `{}`    |
-| `pdb.create`                            | Specifies whether a ServiceAccount should be created                | `false` |
-| `pdb.minAvailable`                      | Min number of pods that must still be available after the eviction  | `1`     |
-| `pdb.maxUnavailable`                    | Max number of pods that can be unavailable after the eviction       | `nil`   |
-| `tls.enabled`                           | Enable TLS traffic                                                  | `false` |
-| `tls.authClients`                       | Require clients to authenticate                                     | `true`  |
-| `tls.certificatesSecret`                | Then name of the existing secret that contains the TLS certificates | `nil`   |
-| `tls.certFilename`                      | Certificate filename                                                | `nil`   |
-| `tls.certKeyFilename`                   | Certificate Key filename                                            | `nil`   |
-| `tls.certCAFilename`                    | CA Certificate filename                                             | `nil`   |
-| `tls.dhParamsFilename`                  | File containing DH params (in order to support DH based ciphers)    | `nil`   |
+| Name                                    | Description                                                                                                         | Value   |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------- |
+| `networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                                                                          | `false` |
+| `networkPolicy.allowExternal`           | Don't require client label for connections                                                                          | `true`  |
+| `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                                        | `[]`    |
+| `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                        | `[]`    |
+| `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                                              | `{}`    |
+| `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                                          | `{}`    |
+| `podSecurityPolicy.enabled`             | Enable PodSecurityPolicy                                                                                            | `false` |
+| `podSecurityPolicy.create`              | Specifies whether a PodSecurityPolicy should be created. You also need to set `podSecurityPolicy.enabled` to `true` | `false` |
+| `rbac.create`                           | Specifies whether RBAC resources should be created                                                                  | `false` |
+| `rbac.rules`                            | Custom RBAC rules to set                                                                                            | `[]`    |
+| `serviceAccount.create`                 | Specifies whether a ServiceAccount should be created                                                                | `true`  |
+| `serviceAccount.name`                   | The name of the ServiceAccount to use.                                                                              | `""`    |
+| `serviceAccount.annotations`            | Additional custom annotations for the ServiceAccount                                                                | `{}`    |
+| `pdb.create`                            | Specifies whether a ServiceAccount should be created                                                                | `false` |
+| `pdb.minAvailable`                      | Min number of pods that must still be available after the eviction                                                  | `1`     |
+| `pdb.maxUnavailable`                    | Max number of pods that can be unavailable after the eviction                                                       | `nil`   |
+| `tls.enabled`                           | Enable TLS traffic                                                                                                  | `false` |
+| `tls.authClients`                       | Require clients to authenticate                                                                                     | `true`  |
+| `tls.certificatesSecret`                | Then name of the existing secret that contains the TLS certificates                                                 | `nil`   |
+| `tls.certFilename`                      | Certificate filename                                                                                                | `nil`   |
+| `tls.certKeyFilename`                   | Certificate Key filename                                                                                            | `nil`   |
+| `tls.certCAFilename`                    | CA Certificate filename                                                                                             | `nil`   |
+| `tls.dhParamsFilename`                  | File containing DH params (in order to support DH based ciphers)                                                    | `nil`   |
 
 
 ### Metrics Parameters
