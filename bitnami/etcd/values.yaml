@@ -116,11 +116,11 @@ allowNoneAuthentication: true
 # Auto Compaction Parameters
 #
 # auto compaction mode , by default periodic
-#autoCompactionMode: periodic
+# autoCompactionMode: periodic
 #
 # auto compaction retention is interpred on the basis of auto compaction mode
 # by default 0 , means disabled
-#autoCompactionRetention: 0
+# autoCompactionRetention: 0
 #
 
 ## Authentication parameteres
