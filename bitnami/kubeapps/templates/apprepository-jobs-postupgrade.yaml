@@ -15,19 +15,19 @@ spec:
     metadata:
       labels:
         app: {{ template "kubeapps.apprepository-job-postupgrade.fullname" . }}
-        app.kubernetes.io/name: {{ template "kubeapps.name" . }}
+        app.kubernetes.io/name: {{ template "common.names.name" . }}
         release: {{ .Release.Name }}
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
 {{- include "kubeapps.imagePullSecrets" . | indent 6 }}
       {{- if .Values.hooks.affinity }}
-      affinity: {{- include "kubeapps.tplValue" (dict "value" .Values.hooks.affinity "context" $) | nindent 8 }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.hooks.affinity "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.hooks.nodeSelector }}
-      nodeSelector: {{- include "kubeapps.tplValue" (dict "value" .Values.hooks.nodeSelector "context" $) | nindent 8 }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.hooks.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.hooks.tolerations }}
-      tolerations: {{- include "kubeapps.tplValue" (dict "value" .Values.hooks.tolerations "context" $) | nindent 8 }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.hooks.tolerations "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
@@ -38,7 +38,7 @@ spec:
       serviceAccountName: {{ template "kubeapps.apprepository-job-postupgrade.fullname" . }}
       containers:
         - name: invalidate-cache
-          image: {{ template "kubeapps.image" (list .Values.apprepository.syncImage .Values.global) }}
+          image: {{ include "common.images.image" (dict "imageRoot" .Values.apprepository.syncImage "global" .Values.global) }}
           imagePullPolicy: {{ .Values.apprepository.syncImage.pullPolicy | quote }}
           command:
             - /asset-syncer
@@ -58,7 +58,7 @@ spec:
         # Helm 3.1 supports a lookup template tag to create a secret if it does not exist
         # but we can't yet restrict to helm 3.1, hence manually doing this with an initContainer.
         - name: ensure-postgres-password
-          image: {{ template "kubeapps.image" (list .Values.hooks.image .Values.global) }}
+          image: {{ include "common.images.image" (dict "imageRoot" .Values.hooks.image "global" .Values.global) }}
           imagePullPolicy: {{ .Values.hooks.image.pullPolicy | quote }}
           command:
             - /bin/bash

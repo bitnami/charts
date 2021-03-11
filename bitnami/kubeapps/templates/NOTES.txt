@@ -6,7 +6,7 @@ Tip:
 
 Kubeapps can be accessed via port {{ .Values.frontend.service.port }} on the following DNS name from within your cluster:
 
-   {{ template "kubeapps.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
+   {{ template "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
 
 {{- $reposWithOrphanSecrets := include "kubeapps.repos-with-orphan-secrets" . }}
 {{- if ne $reposWithOrphanSecrets "" }}
@@ -35,22 +35,22 @@ To access Kubeapps from outside your K8s cluster, follow the steps below:
 {{- if contains "NodePort" .Values.frontend.service.type }}
 
    export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-   export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "kubeapps.fullname" . }})
+   export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "common.names.fullname" . }})
    echo "Kubeapps URL: http://$NODE_IP:$NODE_PORT"
 
 {{- else if contains "LoadBalancer" .Values.frontend.service.type }}
 
  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-       Watch the status by running 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "kubeapps.fullname" . }}'
+       Watch the status by running 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "common.names.fullname" . }}'
 
-   export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "kubeapps.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+   export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
    echo "Kubeapps URL: http://$SERVICE_IP:{{ .Values.frontend.service.port }}"
 
 {{- else if contains "ClusterIP" .Values.frontend.service.type }}
 
 {{- $portNumber := include "kubeapps.frontend-port-number" . }}
    echo "Kubeapps URL: http://127.0.0.1:{{ $portNumber }}"
-   kubectl port-forward --namespace {{ .Release.Namespace }} service/{{ template "kubeapps.fullname" . }} {{ $portNumber }}:{{ .Values.frontend.service.port }}
+   kubectl port-forward --namespace {{ .Release.Namespace }} service/{{ template "common.names.fullname" . }} {{ $portNumber }}:{{ .Values.frontend.service.port }}
 
 {{- end }}
 {{- end }}
