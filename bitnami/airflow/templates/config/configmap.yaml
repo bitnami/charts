@@ -49,7 +49,7 @@ data:
             - |
                 . /opt/bitnami/scripts/libairflow.sh
 
-                airflow_initialize
+                airflow_generate_config # Generate the config file
                 cp /opt/bitnami/airflow/airflow.cfg /opt/bitnami/airflow/k8s-executor-config/airflow.cfg
 
           env:
