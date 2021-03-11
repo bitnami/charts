@@ -26,7 +26,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/minio
-  tag: 2021.3.4-debian-10-r6
+  tag: 2021.3.4-debian-10-r9
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -50,7 +50,7 @@ image:
 clientImage:
   registry: docker.io
   repository: bitnami/minio-client
-  tag: 2021.2.19-debian-10-r12
+  tag: 2021.3.10-debian-10-r1
 
 ## String to partially override common.names.fullname template (will maintain the release name)
 ##
@@ -164,10 +164,10 @@ args: []
 # schedulerName: stork
 
 ## MinIO(R) deployment parameters
-## Only when mode is 'standalone'
+## Only when 'mode' is 'standalone' or 'gateway.enabled' is 'true'
 ##
 deployment:
-  ## Set to Recreate if you use persistent volume that cannot be mounted by more than one pods to makesure the pods is destroyed first.
+  ## Set to Recreate if you use persistent volume that cannot be mounted by more than one pods to make sure the pods is destroyed first.
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
   ## e.g:
   ## updateStrategy:
@@ -626,3 +626,51 @@ metrics:
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
     ##
     additionalLabels: {}
+
+## MinIO(R) Gateway configuration
+##
+gateway:
+  ## Use MinIO(R) as Gateway for other storage systems
+  ##
+  enabled: false
+  ## Gateway type
+  ## Current supported types are: azure, gcs, nas, and s3
+  ## ref: https://docs.minio.io/docs/minio-gateway-for-azure
+  ## ref: https://docs.minio.io/docs/minio-gateway-for-gcs
+  ## ref: https://docs.minio.io/docs/minio-gateway-for-nas
+  ## ref: https://docs.minio.io/docs/minio-gateway-for-s3
+  ##
+  type: s3
+  ## Number of Gateway replicas
+  ##
+  replicaCount: 4
+  ## Gateway authentication configuration
+  ##
+  auth:
+    ## Authentication configuration for Azure
+    ## Ignored unless type=azure
+    ##
+    azure:
+      storageAccountName: ""
+      storageAccountKey: ""
+    ## Authentication configuration for GCS
+    ## Ignored unless type=gcs
+    ##
+    gcs:
+      accessKey: ""
+      secretKey: ""
+      keyJSON: ""
+      projectID: ""
+    ## Authentication configuration for NAS
+    ## Ignored unless type=nas
+    ##
+    nas:
+      accessKey: ""
+      secretKey: ""
+    ## Authentication configuration for S3
+    ## Ignored unless type=s3
+    ##
+    s3:
+      accessKey: ""
+      secretKey: ""
+      serviceEndpoint: https://s3.amazonaws.com

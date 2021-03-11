@@ -1,4 +1,4 @@
-{{- if eq .Values.mode "distributed" }}
+{{- if and (eq .Values.mode "distributed") (not .Values.gateway.enabled) }}
 {{- $fullname := include "common.names.fullname" . }}
 {{- $headlessService := printf "%s-headless" (include "common.names.fullname" .) | trunc 63 }}
 {{- $releaseNamespace := .Release.Namespace }}
@@ -7,7 +7,7 @@
 {{- $zoneCount := int .Values.statefulset.zones }}
 {{- $drivesPerNode := int .Values.statefulset.drivesPerNode }}
 {{- $mountPath := .Values.persistence.mountPath }}
-apiVersion: apps/v1
+apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
   name: {{ $fullname }}
@@ -142,23 +142,23 @@ spec:
               value: {{ ternary "yes" "no" .Values.forceNewKeys | quote }}
             {{- if .Values.useCredentialsFile }}
             - name: MINIO_ACCESS_KEY_FILE
-              value: "/opt/bitnami/minio/secrets/access-key"
+              value: {{ printf "/opt/bitnami/minio/secrets/%s" (include "minio.secret.userKey" .) | quote }}
             {{- else }}
             - name: MINIO_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
                   name: {{ include "minio.secretName" . }}
-                  key: access-key
+                  key: {{ include "minio.secret.userKey" . }}
             {{- end }}
             {{- if .Values.useCredentialsFile }}
             - name: MINIO_SECRET_KEY_FILE
-              value: "/opt/bitnami/minio/secrets/secret-key"
+              value: {{ printf "/opt/bitnami/minio/secrets/%s" (include "minio.secret.passwordKey" .) | quote }}
             {{- else }}
             - name: MINIO_SECRET_KEY
               valueFrom:
                 secretKeyRef:
                   name: {{ include "minio.secretName" . }}
-                  key: secret-key
+                  key: {{ include "minio.secret.passwordKey" . }}
             {{- end }}
             - name: MINIO_SKIP_CLIENT
               value: {{ ternary "yes" "no" (empty .Values.defaultBuckets) | quote }}
