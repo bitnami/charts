@@ -113,15 +113,15 @@ allowNoneAuthentication: true
 ##
 # maxProcs:
 
-# Auto Compaction Parameters
-#
-# auto compaction mode , by default periodic
+## Auto compaction mode, by default periodic. Valid values: ‘periodic’, ‘revision’. 
+## - 'periodic' for duration based retention, defaulting to hours if no time unit is provided (e.g. ‘5m’). 
+## - 'revision' for revision number based retention.
+##
 # autoCompactionMode: periodic
-#
-# auto compaction retention is interpred on the basis of auto compaction mode
-# by default 0 , means disabled
+
+## Auto compaction retention for mvcc key value store in hour, by default 0, means disabled
+##
 # autoCompactionRetention: 0
-#
 
 ## Authentication parameteres
 ## https://github.com/bitnami/bitnami-docker-etcd#security
