@@ -76,8 +76,8 @@ The following tables lists the configurable parameters of the etcd chart and the
 | `envVarsConfigMap`                              | ConfigMap that contains environment variables to be set in the container                                                                                  | `nil`                                                       |
 | `allowNoneAuthentication`                       | Allow to use etcd without configuring RBAC authentication                                                                                                 | `true`                                                      |
 | `maxProcs`                                      | Set GOMAXPROCS environment variable to limit the number of CPUs                                                                                           | `nil`                                                       |
-| `autoCompactionMode`                            | Set ETCD_AUTO_COMPACTION_MODE environment variable to define mode of auto compaction                                                                     | `periodic`                                                       |
-| `autoCompactionRetention`                       | Set ETCD_AUTO_COMPACTION_RETENTION environment variable to define retention of auto compaction                                                           | `0`                                                       |
+| `autoCompactionMode`                            | Set ETCD_AUTO_COMPACTION_MODE environment variable to define mode of auto compaction                                                                     | `nil`                                                       |
+| `autoCompactionRetention`                       | Set ETCD_AUTO_COMPACTION_RETENTION environment variable to define retention of auto compaction                                                           | `nil`                                                       |
 | `etcd.initialClusterState`                      | Initial cluster state. Allowed values: 'new' or 'existing'                                                                                                | `nil`                                                       |
 | `auth.rbac.enabled`                             | Switch to enable the etcd authentication.                                                                                                                 | `true`                                                      |
 | `auth.rbac.rootPassword`                        | Password for the root user                                                                                                                                | `nil`                                                       |
@@ -273,6 +273,11 @@ If `startFromSnapshot` is enabled at the same time than `disasterRecovery`, the 
 ### Auto Compaction
 
 Since etcd keeps an exact history of its keyspace, this history should be periodically compacted to avoid performance degradation and eventual storage space exhaustion. Compacting the keyspace history drops all information about keys superseded prior to a given keyspace revision. The space used by these keys then becomes available for additional writes to the keyspace.
+
+`autoCompactionMode`, by default periodic. Valid values: ‘periodic’, ‘revision’. 
+- 'periodic' for duration based retention, defaulting to hours if no time unit is provided (e.g. ‘5m’). 
+- 'revision' for revision number based retention.
+`autoCompactionRetention` for mvcc key value store in hour, by default 0, means disabled.
 
 You can enable auto compaction by using following parameters:
 
