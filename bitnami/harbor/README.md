@@ -524,7 +524,7 @@ The following tables list the configurable parameters of the Harbor chart and th
 | `clairAdapterImage.pullSecrets`      | Specify docker-registry secret names as an array                                                                                                                             | `[]` (does not add image pull secrets to deployed pods) |
 | `clairAdapterImage.debug`            | Specify if debug logs should be enabled                                                                                                                                      | `false`                                                 |
 | `clair.updateStrategy`               | The update strategy for deployments with persistent volumes: RollingUpdate or Recreate. Set it as Recreate when RWM for volumes isn't supported                              | `RollingUpdate`                                         |
-| `clair.enabled`                      | Enable Clair                                                                                                                                                                 | `true`                                                  |
+| `clair.enabled`                      | Enable Clair scanner. Add it as an additional interrogation service by following https://goharbor.io/docs/latest/administration/vulnerability-scanning/pluggable-scanners    | `false`                                                 |
 | `clair.replicas`                     | The replica count                                                                                                                                                            | `1`                                                     |
 | `clair.httpProxy`                    | The http proxy used to update vulnerabilities database from internet                                                                                                         | undefined                                               |
 | `clair.httpsProxy`                   | The https proxy used to update vulnerabilities database from internet                                                                                                        | undefined                                               |
@@ -873,6 +873,12 @@ Find more information about how to deal with common errors related to Bitnami’
 ## Upgrading
 
 > NOTE: In you are upgrading an installation that contains a high amount of data, it is recommended to disable the liveness/readiness probes as the migration can take a substantial amount of time.
+
+### To 9.7.0
+
+This new version of the chart bumps the version of Harbor to [`2.2.0`](https://github.com/goharbor/harbor/releases/tag/v2.2.0) which deprecates built-in Clair. If you still want to use Clair, you will need to set `clair.enabled` to `true` and Clair scanner and the Harbor adapter will be deployed. Follow [these steps](https://goharbor.io/docs/latest/administration/vulnerability-scanning/pluggable-scanners) to add it as an additional interrogation service for Harbor.
+
+Please note that Clair might be fully deprecated from this chart in following updates.
 
 ### To 9.0.0
 
