@@ -113,8 +113,8 @@ allowNoneAuthentication: true
 ##
 # maxProcs:
 
-## Auto compaction mode, by default periodic. Valid values: ‘periodic’, ‘revision’. 
-## - 'periodic' for duration based retention, defaulting to hours if no time unit is provided (e.g. ‘5m’). 
+## Auto compaction mode, by default periodic. Valid values: ‘periodic’, ‘revision’.
+## - 'periodic' for duration based retention, defaulting to hours if no time unit is provided (e.g. ‘5m’).
 ## - 'revision' for revision number based retention.
 ##
 # autoCompactionMode: periodic
