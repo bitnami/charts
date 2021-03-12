@@ -776,7 +776,7 @@ serviceAccount:
   ##
   create: true
   ## The name of the ServiceAccount to use.
-  ## If not set and create is true, a name is generated using the fluentd.fullname template
+  ## If not set and create is true, a name is generated using the kafka.serviceAccountName template
   ##
   # name:
 

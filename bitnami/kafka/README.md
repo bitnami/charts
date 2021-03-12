@@ -227,11 +227,11 @@ The following tables lists the configurable parameters of the Kafka chart and th
 
 ### RBAC parameters
 
-| Parameter               | Description                                      | Default                                       |
-|-------------------------|--------------------------------------------------|-----------------------------------------------|
-| `serviceAccount.create` | Enable creation of ServiceAccount for Kafka pods | `true`                                        |
-| `serviceAccount.name`   | Name of the created serviceAccount               | Generated using the `kafka.fullname` template |
-| `rbac.create`           | Weather to create & use RBAC resources or not    | `false`                                       |
+| Parameter               | Description                                                                                    | Default                                                 |
+|-------------------------|------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| `serviceAccount.create` | Enable creation of ServiceAccount for Kafka pods                                               | `true`                                                  |
+| `serviceAccount.name`   | The name of the service account to use. If not set and `create` is `true`, a name is generated | Generated using the `kafka.serviceAccountName` template |
+| `rbac.create`           | Whether to create & use RBAC resources or not                                                  | `false`                                                 |
 
 ### Volume Permissions parameters
 
