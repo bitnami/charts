@@ -94,7 +94,7 @@ To access Spring Cloud Data Flow dashboard from outside the cluster execute the 
     {{- $requiredExternalDbPassword := dict "valueKey" "externalDatabase.password" "secret" $secretNameExternalDb "field" "mariadb-password" -}}
     {{- $passwordWarnings =  append $passwordWarnings $requiredExternalDbPassword -}}
   {{- end -}}
-  {{- if and (.Values.externalRabbitmq.enabled) (not .Values.rabbitmq.enabled) (not .Values.externalRabbitmq.existingPasswordSecret) -}}
+  {{- if and (.Values.externalRabbitmq.enabled) (.Values.rabbitmq.enabled) (not .Values.externalRabbitmq.existingPasswordSecret) -}}
     {{- $requiredExternalRabbitmqPassword := dict "valueKey" "externalRabbitmq.password" "secret" $secretNameExternalRabbitmq "field" "rabbitmq-password" -}}
     {{- $passwordWarnings =  append $passwordWarnings $requiredExternalRabbitmqPassword -}}
   {{- end -}}
