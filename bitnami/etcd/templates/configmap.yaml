@@ -1,8 +1,8 @@
-{{- if .Values.pdb.create }}
-apiVersion: policy/v1beta1
-kind: PodDisruptionBudget
+{{- if (include "etcd.createConfigmap" .) }}
+apiVersion: v1
+kind: ConfigMap
 metadata:
-  name: {{ include "common.names.fullname" . }}
+  name: {{ printf "%s-configuration" (include "common.names.fullname" .) -}}
   namespace: {{ .Release.Namespace }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
@@ -11,13 +11,7 @@ metadata:
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
-spec:
-  {{- if .Values.pdb.minAvailable }}
-  minAvailable: {{ .Values.pdb.minAvailable }}
-  {{- end }}
-  {{- if .Values.pdb.maxUnavailable }}
-  maxUnavailable: {{ .Values.pdb.maxUnavailable }}
-  {{- end }}
-  selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+data:
+  etcd.conf.yml: |-
+    {{- include "common.tplvalues.render" ( dict "value" .Values.configuration "context" $ ) | nindent 4 }}
 {{- end }}

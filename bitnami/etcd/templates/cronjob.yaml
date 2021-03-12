@@ -2,8 +2,15 @@
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: {{ include "etcd.fullname" . }}-snapshotter
-  labels: {{- include "etcd.labels" . | nindent 4 }}
+  name: {{ printf "%s-snapshotter" (include "common.names.fullname" .) }}
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   concurrencyPolicy: Forbid
   schedule: {{ .Values.disasterRecovery.cronjob.schedule | quote }}
@@ -12,31 +19,40 @@ spec:
     spec:
       template:
         metadata:
-          labels: {{- include "etcd.labels" . | nindent 12 }}
+          labels: {{- include "common.labels.standard" . | nindent 12 }}
             app.kubernetes.io/component: snapshotter
           {{- if .Values.disasterRecovery.cronjob.podAnnotations }}
-          annotations: {{- include "etcd.tplValue" ( dict "value" .Values.disasterRecovery.cronjob.podAnnotations "context" $) | nindent 12 }}
+          annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.disasterRecovery.cronjob.podAnnotations "context" $) | nindent 12 }}
           {{- end }}
         spec:
           restartPolicy: OnFailure
-          {{- if .Values.securityContext.enabled }}
-          securityContext:
-            fsGroup: {{ .Values.securityContext.fsGroup }}
-            runAsUser: {{ .Values.securityContext.runAsUser }}
+          {{- if .Values.podSecurityContext.enabled }}
+          securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           containers:
             - name: etcd-snapshotter
               image: {{ include "etcd.image" . }}
               imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+              {{- if .Values.containerSecurityContext.enabled }}
+              securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 16 }}
+              {{- end }}
               command:
-                - /scripts/save-snapshot.sh
+                - /opt/bitnami/scripts/etcd/snapshot.sh
               env:
-              - name: BITNAMI_SNAPSHOT_DEBUG
-                value: {{ ternary "true" "false" .Values.disasterRecovery.debug | quote }}
               - name: BITNAMI_DEBUG
                 value: {{ ternary "true" "false" .Values.image.debug | quote }}
               - name: ETCDCTL_API
                 value: "3"
+              - name: ETCD_ON_K8S
+                value: "yes"
+              {{- $releaseNamespace := .Release.Namespace }}
+              {{- $etcdFullname := include "common.names.fullname" . }}
+              {{- $etcdHeadlessServiceName := printf "%s-%s" $etcdFullname "headless" }}
+              {{- $clusterDomain := .Values.clusterDomain }}
+              - name: ETCD_CLUSTER_DOMAIN
+                value: {{ printf "%s.%s.svc.%s" $etcdHeadlessServiceName $releaseNamespace $clusterDomain | quote }}
+              - name: ETCD_SNAPSHOT_HISTORY_LIMIT
+                value: {{ .Values.disasterRecovery.cronjob.snapshotHistoryLimit | quote }}
               {{- if .Values.auth.client.secureTransport }}
               - name: ETCD_CERT_FILE
                 value: "/opt/bitnami/etcd/certs/client/{{ .Values.auth.client.certFilename }}"
@@ -56,16 +72,13 @@ spec:
               - name: ETCD_ROOT_PASSWORD
                 valueFrom:
                   secretKeyRef:
-                    name: {{ if .Values.auth.rbac.existingSecret }}{{ .Values.auth.rbac.existingSecret }}{{ else }}{{ include "etcd.fullname" . }}{{ end }}
+                    name: {{ include "etcd.secretName" . }}
                     key: etcd-root-password
               {{- end }}
               {{- if .Values.disasterRecovery.cronjob.resources }}
               resources: {{- toYaml .Values.disasterRecovery.cronjob.resources | nindent 16 }}
               {{- end }}
               volumeMounts:
-                - name: scripts
-                  mountPath: /scripts/save-snapshot.sh
-                  subPath: save-snapshot.sh
                 - name: snapshot-volume
                   mountPath: /snapshots
                 {{- if .Values.auth.client.secureTransport }}
@@ -80,10 +93,6 @@ spec:
                 secretName: {{ required "A secret containinig the client certificates is required" .Values.auth.client.existingSecret }}
                 defaultMode: 256
             {{- end }}
-            - name: scripts
-              configMap:
-                name: {{ include "etcd.fullname" . }}-scripts
-                defaultMode: 0755
             - name: snapshot-volume
               persistentVolumeClaim:
                 claimName: {{ include "etcd.disasterRecovery.pvc.name" . }}

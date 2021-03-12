@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/etcd
-  tag: 3.4.14-debian-10-r69
+  tag: 3.4.15-debian-10-r9
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -23,89 +23,121 @@ image:
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
   ##
-  # pullSecrets:
-  #   - myRegistryKeySecretName
-
+  pullSecrets: []
   ## Set to true if you would like to see extra information on logs
-  ## It turns BASH and/or NAMI debugging in the image and in etcd pod scripts
   ##
   debug: false
 
-## String to partially override etcd.fullname template (will maintain the release name)
+## String to partially override common.names.fullname template (will maintain the release name)
 ##
 # nameOverride:
 
-## String to fully override etcd.fullname template
+## String to fully override common.names.fullname template
 ##
 # fullnameOverride:
 
-## Deployment pod host aliases
-## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+## Add labels to all the deployed resources
 ##
-hostAliases: []
+commonLabels: {}
 
-## Init containers parameters:
-## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
+## Add annotations to all the deployed resources
 ##
-volumePermissions:
-  enabled: false
-  image:
-    registry: docker.io
-    repository: bitnami/bitnami-shell
-    tag: "10"
-    pullPolicy: Always
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+commonAnnotations: {}
+
+## Force target Kubernetes version (using Helm capabilities if not set)
+##
+kubeVersion: ""
+
+## Kubernetes Cluster Domain
+##
+clusterDomain: cluster.local
+
+## Extra objects to deploy (value evaluated as a template)
+##
+extraDeploy: []
+
+## Authentication parameters
+##
+auth:
+  ## Role-based access control parameters
+  ## ref: https://etcd.io/docs/current/op-guide/authentication/
+  ##
+  rbac:
+    enabled: true
+    ## Allow to use etcd without configuring RBAC authentication
     ##
-    # pullSecrets:
-    #   - myRegistryKeySecretName
-  ## Init container' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ##
-  resources:
-    # We usually recommend not to specify default resources and to leave this as a conscious
-    # choice for the user. This also increases chances charts run on environments with little
-    # resources, such as Minikube. If you do want to specify resources, uncomment the following
-    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    limits: {}
-    #   cpu: 100m
-    #   memory: 128Mi
-    requests: {}
-    #   cpu: 100m
-    #   memory: 128Mi
+    allowNoneAuthentication: true
+    ## root user password. The root user is always `root`
+    ##
+    rootPassword: ""
+    ## Name of the existing secret containing credentials for the root user
+    ##
+    existingSecret: ""
 
-## Statefulset parameters
-##
-statefulset:
-  ## Number of replicas
+  ## TLS authentication for client-to-server communications
+  ## ref: https://etcd.io/docs/current/op-guide/security/
   ##
-  replicaCount: 1
-  ## Update strategy, can be set to RollingUpdate or OnDelete by default.
-  ## https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#updating-statefulsets
-  ##
-  updateStrategy: RollingUpdate
-  ## Partition update strategy
-  ## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
-  ##
-  # rollingUpdatePartition:
-  ## Pod management policy
-  ## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
-  ##
-  podManagementPolicy: Parallel
+  client:
+    ## Switch to encrypt client-to-server communications using TLS
+    ##
+    secureTransport: false
+    ## Switch to automatically create the TLS certificates
+    ##
+    useAutoTLS: false
+    ## Name of the existing secret containing the TLS certificates for client-to-server communications
+    ##
+    existingSecret: ""
+    ## Switch to enable host authentication using TLS certificates. Requires existing secret
+    ##
+    enableAuthentication: false
+    ## Name of the file containing the client certificate
+    ##
+    certFilename: cert.pem
+    ## Name of the file containing the client certificate private key
+    ##
+    certKeyFilename: key.pem
+    ## Name of the file containing the client CA certificate
+    ## If not specified and `auth.client.enableAuthentication=true` or `auth.rbac.enabled=true`, the default is is `ca.crt`
+    ##
+    caFilename: ""
 
-## ConfigMap that includes the etcd.conf.yml file
-##
-# configFileConfigMap:
+  ## TLS authentication for server-to-server communications
+  ## ref: https://etcd.io/docs/current/op-guide/security/
+  ##
+  peer:
+    ## Switch to encrypt server-to-server communications using TLS
+    ##
+    secureTransport: false
+    ## Switch to automatically create the TLS certificates
+    ##
+    useAutoTLS: false
+    ## Name of the existing secret containing the TLS certificates for server-to-server communications
+    ##
+    existingSecret: ""
+    ## Switch to enable host authentication using TLS certificates. Requires existing secret
+    ##
+    enableAuthentication: false
+    ## Name of the file containing the peer certificate
+    ##
+    certFilename: cert.pem
+    ## Name of the file containing the peer certificate private key
+    ##
+    certKeyFilename: key.pem
+    ## Name of the file containing the peer CA certificate
+    ## If not specified and `auth.peer.enableAuthentication=true` or `rbac.enabled=true`, the default is is `ca.crt`
+    ##
+    caFilename: ""
 
-## ConfigMap that includes extra environment variables
+## Initial cluster state. Allowed values: 'new' or 'existing'
+## If this values is not set, the default values below are set:
+## - 'new': when installing the chart ('helm install ...')
+## - 'existing': when upgrading the chart ('helm upgrade ...')
 ##
-# envVarsConfigMap:
-
-## Allow to use etcd without configuring RBAC authentication
-##
-allowNoneAuthentication: true
+initialClusterState: ""
 
 ## Limits the number of operating system threads that can execute user-level
 ## Go code simultaneously by setting GOMAXPROCS environment variable
@@ -113,181 +145,112 @@ allowNoneAuthentication: true
 ##
 # maxProcs:
 
-## Authentication parameteres
-## https://github.com/bitnami/bitnami-docker-etcd#security
+## Use a PreStop hook to remove the etcd members from the etcd cluster
+## they the containers are terminated
+## NOTE: Ignored if lifecycleHooks is set or replicaCount=1
 ##
-auth:
-  rbac:
-    enabled: true
-    ## etcd root user password. The root user is always `root`
-    ##
-    # rootPassword:
-    ## Name of the existing secret containing credentials for the root user.
-    ##
-    # existingSecret: name-of-existing-secret
+removeMemberOnContainerTermination: true
 
-  client:
-    ## Switch to encrypt client communication using TLS certificates
-    ##
-    secureTransport: false
-    ## Switch to automatically create the TLS certificates
-    ##
-    useAutoTLS: false
-    ## Switch to enable host authentication using TLS certificates. Requires existing secret.
-    ##
-    enableAuthentication: false
-    ## Name of the existing secret containing cert files for client communication.
-    ##
-    # existingSecret: name-of-existing-secret
-    ## Name of the file containing the client certificate.
-    ##
-    certFilename: cert.pem
-    ## Name of the file containing the client certificate private key.
-    ##
-    certKeyFilename: key.pem
-    ## Name of the file containing the client CA certificate.
-    ## If not specified and `enableAuthentication: true` or `rbac.enabled: true`, the default is is `ca.crt`.
-    ##
-    caFilename: ""
-
-  peer:
-    ## Switch to encrypt peer communication using TLS certificates
-    ##
-    secureTransport: false
-    ## Switch to automatically create the TLS certificates
-    ##
-    useAutoTLS: false
-    ## Switch to enable host authentication using TLS certificates. Requires existing secret.
-    ##
-    enableAuthentication: false
-    ## Name of the existing secret containing cert files for peer communication.
-    ##
-    # existingSecret: name-of-existing-secret
-    ## Name of the file containing the peer certificate.
-    ##
-    certFilename: cert.pem
-    ## Name of the file containing the peer certificate private key.
-    ##
-    certKeyFilename: key.pem
-    ## Name of the file containing the peer CA certificate.
-    ## If not specified and `enableAuthentication: true` or `rbac.enabled: true`, the default is is `ca.crt`.
-    ##
-    caFilename: ""
-
-## Kubernetes Security Context
-## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+## etcd configuration
+## Specify content for etcd.conf.yml
+## e.g:
+## configuration: |-
+##    foo: bar
+##    baz:
 ##
-securityContext:
+# configuration:
+
+## Existing ConfigMap with etcd configuration
+## NOTE: When it's set the configuration parameter is ignored
+##
+# existingConfigmap:
+
+## An array to add extra env vars
+## e.g:
+## extraEnvVars:
+##   - name: FOO
+##     value: "bar"
+##
+extraEnvVars: []
+
+## ConfigMap with extra environment variables
+##
+extraEnvVarsCM: ""
+
+## Secret with extra environment variables
+##
+extraEnvVarsSecret: ""
+
+## Command and args for running the container (set to default if not set). Use array form
+##
+command: []
+args: []
+
+## Number of replicas
+##
+replicaCount: 1
+
+## Update strategy
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+##
+updateStrategy:
+  ## Update strategy type, can be set to RollingUpdate or OnDelete.
+  ##
+  type: RollingUpdate
+
+## Pod management policy
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+##
+podManagementPolicy: Parallel
+
+## etcd pod host aliases
+## ref: https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
+
+## Override default etcd container hooks
+##
+lifecycleHooks: {}
+
+## etcd container ports to open
+##
+containerPorts:
+  client: 2379
+  peer: 2380
+
+## etcd containers' SecurityContext
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+##
+podSecurityContext:
   enabled: true
   fsGroup: 1001
-  runAsUser: 1001
 
-## Kubernetes Cluster Domain
+## etcd pods' Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ##
-clusterDomain: cluster.local
-
-## etcd variables
-##
-etcd:
-  ## Initial cluster state. Allowed values: 'new' or 'existing'
-  ## If this values is not set, the default values below are set:
-  ## - 'new': when installing the chart ('helm install ...')
-  ## - 'existing': when upgrading the chart ('helm upgrade ...')
-  ##
-  initialClusterState: ""
-
-## Service parameters
-##
-service:
-  ## K8s service type
-  ##
-  type: ClusterIP
-  ## etcd client port
-  ##
-  port: 2379
-  ## etcd client port name override
-  ##
-  clientPortNameOverride: ""
-  ## etcd peer port
-  ##
-  peerPort: 2380
-  ## etcd peer port name override
-  ##
-  peerPortNameOverride: ""
-  ## Specify the nodePort(s) value(s) for the LoadBalancer and NodePort service types.
-  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
-  ##
-  nodePorts:
-    clientPort: ""
-    peerPort: ""
-  ## Set the LoadBalancer service type to internal only.
-  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
-  ##
-  # loadBalancerIP:
-  # loadBalancerSourceRanges: ["10.0.0.0/8"]
-  externalIPs: []
-  ## Provide any additional annotations which may be required. This can be used to
-  ## set the LoadBalancer service type to internal only.
-  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
-  ##
-  annotations: {}
-
-## Enable persistence using Persistent Volume Claims
-## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
-##
-persistence:
-  ## If true, use a Persistent Volume Claim, If false, use emptyDir
-  ##
+containerSecurityContext:
   enabled: true
-  ## Persistent Volume Storage Class
-  ## If defined, storageClassName: <storageClass>
-  ## If set to "-", storageClassName: "", which disables dynamic provisioning
-  ## If undefined (the default) or set to null, no storageClassName spec is
-  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-  ##   GKE, AWS & OpenStack)
-  ##
-  # storageClass: "-"
-  ## Persistent Volume Claim annotations
-  ##
-  annotations: {}
-  ## Persistent Volume Access Mode
-  ##
-  accessModes:
-    - ReadWriteOnce
-  ## Persistent Volume size
-  ##
-  size: 8Gi
-  ## Persistent Volume selector
-  ## Can specify a label selector to further filter the set of volumes.
-  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/#selector
-  ##
-  selector: {}
+  runAsUser: 1001
+  runAsNonRoot: true
 
-## Define a disruption budget
-## ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions/
-##
-pdb:
-  enabled: false
-  # minAvailable: 1
-  # maxUnavailable: 1
-
-## Etcd containers' resource requests and limits
+## etcd containers' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ##
 resources:
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## e.g:
+  ## limits:
+  ##   cpu: 500m
+  ##   memory: 1Gi
+  ##
   limits: {}
-  #   cpu: 500m
-  #   memory: 1Gi
   requests: {}
-  #   cpu: 250m
-  #   memory: 256Mi
 
-## Etcd containers' liveness and readiness probes
-## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+## Configure extra options for liveness, readiness and startup probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
 ##
 livenessProbe:
   enabled: true
@@ -303,18 +266,64 @@ readinessProbe:
   timeoutSeconds: 5
   successThreshold: 1
   failureThreshold: 5
+startupProbe:
+  enabled: false
+  initialDelaySeconds: 0
+  periodSeconds: 10
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 60
 
-## Statefulset labels. Evaluated as a template
-## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+## Custom Liveness probes for etcd
 ##
-statefulsetLabels: {}
+customLivenessProbe: {}
+
+## Custom Readiness probes for etcd
+##
+customReadinessProbe: {}
+
+## Custom Startup probe for etcd
+##
+customStartupProbe: {}
+
+## Extra volumes to add to the etcd statefulset
+##
+extraVolumes: []
+
+## Extra volume mounts to add to etcd containers
+##
+extraVolumeMounts: []
+
+## Add init containers to the etcd pods.
+## e.g:
+## initContainers:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+initContainers: {}
+
+## Add sidecars to the etcd pods.
+## e.g:
+## sidecars:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+sidecars: {}
 
 ## Pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
 
-## Pod labels. Evaluated as a template
+## Pod labels
 ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
 podLabels: {}
@@ -341,12 +350,12 @@ nodeAffinityPreset:
   ##
   type: ""
   ## Node label key to match
-  ## E.g.
+  ## e.g:
   ## key: "kubernetes.io/e2e-az-name"
   ##
   key: ""
   ## Node label values to match
-  ## E.g.
+  ## e.g:
   ## values:
   ##   - e2e-az1
   ##   - e2e-az2
@@ -355,7 +364,7 @@ nodeAffinityPreset:
 
 ## Affinity for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
+## Note: podAffinityPreset, podAntiAffinityPreset, and nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
 
@@ -374,82 +383,189 @@ tolerations: []
 ##
 priorityClassName: ""
 
-## Etcd Prometheus exporter configuration
+## etcd Pod Disruption Budget configuration
+## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+##
+pdb:
+  create: false
+  ## Min number of pods that must still be available after the eviction
+  ##
+  minAvailable: 1
+  ## Max number of pods that can be unavailable after the eviction
+  ##
+  # maxUnavailable: 1
+
+## Service parameters
+##
+service:
+  ## K8s service type
+  ##
+  type: ClusterIP
+  ## etcd client port
+  ##
+  port: 2379
+  ## etcd client port name override
+  ##
+  clientPortNameOverride: ""
+  ## etcd peer port
+  ##
+  peerPort: 2380
+  ## etcd peer port name override
+  ##
+  peerPortNameOverride: ""
+  ## Specify the nodePort(s) value(s) for the LoadBalancer and NodePort service types.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+  ##
+  nodePorts:
+    clientPort: ""
+    peerPort: ""
+  ## loadBalancerIP for the etcd service (optional, cloud specific)
+  ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+  ##
+  loadBalancerIP: ""
+  ## Load Balancer sources
+  ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+  ## e.g:
+  ## loadBalancerSourceRanges:
+  ##   - 10.10.10.0/24
+  ##
+  loadBalancerSourceRanges: []
+  ## External IPs
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#external-ips
+  ##
+  externalIPs: []
+  ## Provide any additional annotations which may be required (evaluated as a template)
+  ##
+  annotations: {}
+
+## Enable persistence using Persistent Volume Claims
+## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+##
+persistence:
+  ## If true, use a Persistent Volume Claim. If false, use emptyDir.
+  ##
+  enabled: true
+  ## Persistent Volume Storage Class
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
+  ##
+  # storageClass: "-"
+  ## Persistent Volume Claim annotations (evaluated as a template)
+  ##
+  annotations: {}
+  ## Persistent Volume Access Modes
+  ##
+  accessModes:
+    - ReadWriteOnce
+  ## Persistent Volume size
+  ##
+  size: 8Gi
+  ## Provide any additional label selector to further filter the set of volumes (evaluated as a template)
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/#selector
+  ##
+  selector: {}
+
+## Init containers parameters:
+## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
+##
+volumePermissions:
+  enabled: false
+  image:
+    registry: docker.io
+    repository: bitnami/bitnami-shell
+    tag: "10"
+    pullPolicy: Always
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+
+  ## Init container' resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    ## We usually recommend not to specify default resources and to leave this as a conscious
+    ## choice for the user. This also increases chances charts run on environments with little
+    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## e.g:
+    ## limits:
+    ##   cpu: 500m
+    ##   memory: 1Gi
+    ##
+    limits: {}
+    requests: {}
+
+## etcd metrics configuration
 ##
 metrics:
   enabled: false
+  ## Annotations for the Prometheus metrics on etcd pods
+  ##
   podAnnotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "2379"
 
-  ## Prometheus Operator ServiceMonitor configuration
+  ## Prometheus Service Monitor
+  ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
   ##
-  serviceMonitor:
+  podMonitor:
+    ## If the Prometheus Operator is installed in your cluster, set to true to create a PodMonitor entry
+    ##
     enabled: false
     ## Namespace in which Prometheus is running
     ##
     # namespace: monitoring
-
-    ## Interval at which metrics should be scraped.
-    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ## Specify the interval at which metrics should be scraped
     ##
-    # interval: 10s
-
-    ## MetricRelabelConfigs to apply to samples before ingestion
-    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#podmetricsendpoint
+    interval: 30s
+    ## Specify the timeout after which the scrape is ended
     ##
-    # metricRelabelings: []
-
-    ## RelabelConfigs to apply to samples before ingestion
-    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#podmetricsendpoint
+    # scrapeTimeout: 30s
+    ## Used to pass Labels that are used by the Prometheus installed in your cluster to select PodMonitors to work with
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
     ##
-    # relabelings: []
-
-    ## HTTP scheme to use for scraping.
+    additionalLabels: {}
+    ## Scheme to use for scraping.
     ##
-    # scheme: ""
-
-    ## Timeout after which the scrape is ended
-    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
-    ##
-    # scrapeTimeout: 10s
-
-    ## ServiceMonitor selector labels
-    ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
-    ##
-    # selector:
-    #   prometheus: my-prometheus
-
+    scheme: http
     ## TLS configuration for the endpoints to be scraped.
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#tlsconfig
-    # tlsConfig:
-    #  ca:
-    #    secret:
-    #      name: existingSecretName
+    ## e.g:
+    ## tlsConfig:
+    ##   ca:
+    ##     secret:
+    ##       name: existingSecretName
+    ##
+    tlsConfig: {}
 
-## Start a new etcd cluster recovering the data from an existing snaptshot before
-## initializing the members
+## Start a new etcd cluster recovering the data from an existing snapshot
+## before bootstrapping
 ##
 startFromSnapshot:
   enabled: false
-  ## Existingn PVC containing the etcd snapshot
+  ## Existing PVC containing the etcd snapshot
   ##
-  # existingClaim
+  existingClaim: ""
   ## Snapshot filename
   ##
-  # snapshotFilename
+  snapshotFilename: ""
 
-## Enable auto disaster recovery by periodically snapshotting the keyspace
+## Enable auto disaster recovery by periodically snapshotting the keyspace:
 ## - It creates a cronjob to periodically snapshotting the keyspace
 ## - It also creates a ReadWriteMany PVC to store the snapshots
-## If the cluster permanently loses more than (N-1)/2 members, it tries to recover
-## the cluster from a previous snapshot.
+## If the cluster permanently loses more than (N-1)/2 members, it tries to
+## recover itself from the last available snapshot.
 ##
 disasterRecovery:
   enabled: false
-  ## Set to true if you would like to see extra information on logs for snapshotting
-  ##
-  debug: true
   cronjob:
     ## Schedule in Cron format to save snapshots
     ## See https://en.wikipedia.org/wiki/Cron
@@ -465,10 +581,21 @@ disasterRecovery:
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
     ##
     podAnnotations: {}
-    ## Configure resource requests and limits
+    ## Configure resource requests and limits for snapshotter containers
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
     ##
-    # resources:
+    resources:
+      ## We usually recommend not to specify default resources and to leave this as a conscious
+      ## choice for the user. This also increases chances charts run on environments with little
+      ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+      ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+      ## e.g:
+      ## limits:
+      ##   cpu: 500m
+      ##   memory: 1Gi
+      ##
+      limits: {}
+      requests: {}
   pvc:
     ## A manually managed Persistent Volume and Claim
     ## If defined, PVC must be created manually before volume will be bound
