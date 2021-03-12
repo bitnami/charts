@@ -82,6 +82,7 @@ spec:
           args:
             - compact
             - --log.level={{ .Values.compactor.logLevel }}
+            - --log.format={{ .Values.compactor.logFormat }}
             - --http-address=0.0.0.0:10902
             - --data-dir=/data
             - --retention.resolution-raw={{ .Values.compactor.retentionResolutionRaw }}

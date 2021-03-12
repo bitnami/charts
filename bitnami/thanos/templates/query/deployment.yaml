@@ -67,6 +67,7 @@ spec:
           args:
             - query
             - --log.level={{ $query.logLevel }}
+            - --log.format={{ $query.logFormat }}
             - --grpc-address=0.0.0.0:10901
             - --http-address=0.0.0.0:10902
             {{- if kindIs "string" $query.replicaLabel }}

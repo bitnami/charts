@@ -86,6 +86,7 @@ spec:
           args:
             - rule
             - --log.level={{ .Values.ruler.logLevel }}
+            - --log.format={{ .Values.ruler.logFormat }}
             - --grpc-address=0.0.0.0:10901
             - --http-address=0.0.0.0:10902
             - --data-dir=/data

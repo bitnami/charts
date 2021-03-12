@@ -78,6 +78,10 @@ query:
   ##
   logLevel: info
 
+  ## Log format
+  ##
+  logFormat: logfmt
+
   ## Provide any additional annotations which may be required
   ##
   serviceAccount:
@@ -492,6 +496,10 @@ queryFrontend:
   ##
   logLevel: info
 
+  ## Log format
+  ##
+  logFormat: logfmt
+
   ## Provide any additional annotations which may be required
   ##
   serviceAccount:
@@ -773,6 +781,10 @@ bucketweb:
   ##
   logLevel: info
 
+  ## Log format
+  ##
+  logFormat: logfmt
+
   ## Provide any additional annotations which may be required
   ##
   serviceAccount:
@@ -1042,6 +1054,10 @@ compactor:
   ##
   logLevel: info
 
+  ## Log format
+  ##
+  logFormat: logfmt
+
   ## Provide any additional annotations which may be required
   ##
   serviceAccount:
@@ -1251,6 +1267,10 @@ storegateway:
   ## Log level
   ##
   logLevel: info
+
+  ## Log format
+  ##
+  logFormat: logfmt
 
   ## Provide any additional annotations which may be required
   ##
@@ -1531,6 +1551,10 @@ ruler:
   ## Log level
   ##
   logLevel: info
+
+  ## Log format
+  ##
+  logFormat: logfmt
 
   ## Label to treat as a replica indicator along which data is deduplicated
   ##
@@ -1859,6 +1883,10 @@ receive:
   ## Log level
   ##
   logLevel: info
+
+  ## Log format
+  ##
+  logFormat: logfmt
 
   ## Replication Factor
   ##
