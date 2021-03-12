@@ -263,13 +263,25 @@ The etcd chart can be configured with Role-based access control and TLS encrypti
 
 [Learn more about security in the chart documentation](https://docs.bitnami.com/kubernetes/infrastructure/etcd/administration/enable-security/).
 
-## Persistence
+### Persistence
 
 The [Bitnami etcd](https://github.com/bitnami/bitnami-docker-etcd) image stores the etcd data at the `/bitnami/etcd` path of the container. Persistent Volume Claims are used to keep the data across statefulsets.
 
 The chart mounts a [Persistent Volume](https://kubernetes.io/docs/user-guide/persistent-volumes/) volume at this location. The volume is created using dynamic volume provisioning by default. An existing PersistentVolumeClaim can also be defined for this purpose.
 
 [Learn more about persistence in the chart documentation](https://docs.bitnami.com/kubernetes/infrastructure/etcd/configuration/understand-chart-persistence/).
+
+### Backup and restore the etcd keyspace
+
+The Bitnami etcd chart provides mechanisms to bootstrap the etcd cluster restoring an existing snapshot before initializing. 
+
+[Learn more about backup/restore features in the chart documentation](https://docs.bitnami.com/kubernetes/infrastructure/etcd/administration/backup-restore/).
+
+### Exposing etcd metrics
+
+The metrics exposed by etcd can be exposed to be scraped by Prometheus. This can be done by adding the required annotations for Prometheus to discover the metrics endpoints or creating a PodMonitor entry if you are using the Prometheus Operator.
+
+[Learn more about exposing metrics in the chart documentation](https://docs.bitnami.com/kubernetes/infrastructure/etcd/administration/enable-metrics/).
 
 ### Using custom configuration
 
