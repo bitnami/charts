@@ -123,6 +123,8 @@ spec:
                   fieldPath: metadata.name
             - name: ETCDCTL_API
               value: "3"
+            - name: ETCD_ON_K8S
+              value: "yes"
             - name: ETCD_START_FROM_SNAPSHOT
               value: {{ ternary "yes" "no" .Values.startFromSnapshot.enabled | quote }}
             - name: ETCD_DISASTER_RECOVERY
