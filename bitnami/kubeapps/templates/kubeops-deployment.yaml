@@ -64,6 +64,9 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
+            {{- if .Values.kubeops.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.kubeops.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
           ports:
             - name: http
               containerPort: {{ .Values.kubeops.service.port }}

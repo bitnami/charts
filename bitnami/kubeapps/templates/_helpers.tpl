@@ -140,7 +140,7 @@ apprepo-{{ .name }}-secrets
 Create name for the secrets related to oauth2_proxy
 */}}
 {{- define "kubeapps.oauth2_proxy-secret.name" -}}
-{{ template "kubeapps.fullname" . }}-oauth2
+{{ template "common.names.fullname" . }}-oauth2
 {{- end -}}
 
 {{/*

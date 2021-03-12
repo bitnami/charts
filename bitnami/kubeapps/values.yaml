@@ -381,6 +381,13 @@ kubeops:
       port: 8080
     initialDelaySeconds: 0
     timeoutSeconds: 5
+  ## Additional environment variables to set
+  ## E.g:
+  ## extraEnvVars:
+  ##   - name: TZ
+  ##     value: Europe/Madrid
+  ##
+  extraEnvVars: []
   nodeSelector: {}
   tolerations: []
   affinity: {}
@@ -460,7 +467,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-dashboard
-    tag: 2.2.1-debian-10-r14
+    tag: 2.2.1-debian-10-r15
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
