@@ -255,7 +255,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 The Bitnami etcd chart can be used to bootstrap an etcd cluster, easy to scale and with available features to implement disaster recovery.
 
-Refer to the [chart documentation](https://docs.bitnami.com/kubernetes/infrastructure/etcd/configuration/understand-cluster/) for more information about all these details.
+Refer to the [chart documentation](https://docs.bitnami.com/kubernetes/infrastructure/etcd/get-started/understand-default-configuration/) for more information about all these details.
 
 ### Enable security for etcd
 
@@ -269,7 +269,7 @@ The [Bitnami etcd](https://github.com/bitnami/bitnami-docker-etcd) image stores 
 
 The chart mounts a [Persistent Volume](https://kubernetes.io/docs/user-guide/persistent-volumes/) volume at this location. The volume is created using dynamic volume provisioning by default. An existing PersistentVolumeClaim can also be defined for this purpose.
 
-[Learn more about persistence in the chart documentation](https://docs.bitnami.com/kubernetes/infrastructure/etcd/configuration/chart-persistence/).
+[Learn more about persistence in the chart documentation](https://docs.bitnami.com/kubernetes/infrastructure/etcd/configuration/understand-chart-persistence/).
 
 ### Using custom configuration
 
