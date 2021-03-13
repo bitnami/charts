@@ -42,6 +42,17 @@
   echo Username: "admin"
   echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "harbor.core" . }}-envvars -o jsonpath="{.data.HARBOR_ADMIN_PASSWORD}" | base64 --decode)
 
+{{- if .Values.clair.enabled }}
+
+Clair scanner was deployed. Follow these steps to add it as an additional interrogation service for Harbor:
+https://goharbor.io/docs/latest/administration/vulnerability-scanning/pluggable-scanners
+
+  Endpoint: {{ include "harbor.clairAdapter.url" . | quote }}
+  Authorization: "None"
+  Options: "Use internal registry address"
+
+{{- end }}
+
 {{ include "harbor.validateValues" . }}
 {{ include "harbor.checkRollingTags" . }}
 

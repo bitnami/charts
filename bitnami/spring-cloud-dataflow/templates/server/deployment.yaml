@@ -12,6 +12,7 @@ metadata:
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
+  namespace: {{ .Release.Namespace }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -58,7 +59,6 @@ spec:
       {{- if .Values.server.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.server.tolerations "context" $) | nindent 8 }}
       {{- end }}
-
       {{- if .Values.server.priorityClassName }}
       priorityClassName: {{ .Values.server.priorityClassName | quote }}
       {{- end }}
@@ -168,7 +168,7 @@ spec:
           {{- end }}
           ports:
             - name: http
-              containerPort: 8080
+              containerPort: {{ .Values.server.containerPort }}
               protocol: TCP
             {{- if .Values.server.jdwp.enabled }}
             - name: jdwp

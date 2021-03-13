@@ -202,13 +202,13 @@ spec:
               value: {{ ternary "yes" "no" .Values.enableIPv6 | quote }}
             - name: MONGODB_ENABLE_DIRECTORY_PER_DB
               value: {{ ternary "yes" "no" .Values.directoryPerDB | quote }}
+            {{- $extraFlags := .Values.extraFlags | join " " -}}
             {{- if .Values.tls.enabled }}
-            - name: MONGODB_EXTRA_FLAGS
-              value: --tlsMode=requireTLS --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert
+              {{- $extraFlags = printf "%s %s" "--tlsMode=requireTLS --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert" $extraFlags  }}
             {{- end }}
-            {{- if .Values.extraFlags }}
+            {{- if ne $extraFlags ""}}
             - name: MONGODB_EXTRA_FLAGS
-              value: {{ .Values.extraFlags | join " " | quote }}
+              value: {{ $extraFlags | quote }}
             {{- end }}
             {{- if .Values.tls.enabled }}
             - name: MONGODB_CLIENT_EXTRA_FLAGS

@@ -134,6 +134,7 @@ The following tables lists the configurable parameters of the Kubewatch chart an
 | `affinity`                  | Affinity for pod assignment                                                               | `{}` (evaluated as a template) |
 | `nodeSelector`              | Node labels for pod assignment                                                            | `{}` (evaluated as a template) |
 | `tolerations`               | Tolerations for pod assignment                                                            | `[]` (evaluated as a template) |
+| `priorityClassName`         | Controller priorityClassName                                                              | `nil`                          |
 | `podLabels`                 | Extra labels for Kubewatch pods                                                           | `{}`                           |
 | `podAnnotations`            | Annotations for Kubewatch pods                                                            | `{}`                           |
 | `extraVolumeMounts`         | Optionally specify extra list of additional volumeMounts for Kubewatch container(s)       | `[]`                           |

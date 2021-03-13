@@ -1,11 +1,19 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "etcd.fullname" . }}
-  labels: {{- include "etcd.labels" . | nindent 4 }}
-  {{- if .Values.service.annotations }}
-  annotations: {{- include "etcd.tplValue" ( dict "value" .Values.service.annotations "context" $) | nindent 4 }}
-  {{- end }}
+  name: {{ include "common.names.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  annotations:
+    {{- if .Values.service.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.service.annotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
 spec:
   type: {{ .Values.service.type }}
   {{- if and (eq .Values.service.type "LoadBalancer") (not (empty .Values.service.loadBalancerIP)) }}
@@ -15,15 +23,10 @@ spec:
   loadBalancerSourceRanges: {{- toYaml .Values.service.loadBalancerSourceRanges | nindent 4 }}
   {{- end }}
   {{- if .Values.service.externalIPs }}
-  externalIPs:
-    {{ toYaml .Values.service.externalIPs | indent 4 }}
+  externalIPs: {{- toYaml .Values.service.externalIPs | nindent 4 }}
   {{- end }}
   ports:
-    {{- if .Values.auth.client.clientPortNameOverride }}
-    - name: {{ .Values.service.clientPortNameOverride }}
-    {{- else }}
-    - name: "client"
-    {{- end }}
+    - name: {{ default "client" .Values.auth.client.clientPortNameOverride | quote }}
       port: {{ .Values.service.port  }}
       targetPort: client
       {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.clientPort)) }}
@@ -31,11 +34,7 @@ spec:
       {{- else if eq .Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-    {{- if .Values.auth.client.peerPortNameOverride }}
-    - name: {{ .Values.service.peerPortNameOverride }}
-    {{- else }}
-    - name: "peer"
-    {{- end }}
+    - name: {{ default "peer" .Values.auth.client.clientPortNameOverride | quote }}
       port: {{ .Values.service.peerPort  }}
       targetPort: peer
       {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.peerPort)) }}
@@ -43,4 +42,4 @@ spec:
       {{- else if eq .Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-  selector: {{- include "etcd.matchLabels" . | nindent 4 }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}

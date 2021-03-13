@@ -1,4 +1,4 @@
-apiVersion: apps/v1
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ template "kubeapps.apprepository.fullname" . }}
@@ -16,18 +16,18 @@ spec:
         app: {{ template "kubeapps.apprepository.fullname" . }}
         release: {{ .Release.Name }}
         app.kubernetes.io/instance: {{ .Release.Name }}
-        app.kubernetes.io/name: {{ template "kubeapps.name" . }}
+        app.kubernetes.io/name: {{ template "common.names.name" . }}
     spec:
       serviceAccountName: {{ template "kubeapps.apprepository.fullname" . }}
 {{- include "kubeapps.imagePullSecrets" . | indent 6 }}
       {{- if .Values.apprepository.affinity }}
-      affinity: {{- include "kubeapps.tplValue" (dict "value" .Values.apprepository.affinity "context" $) | nindent 8 }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.apprepository.affinity "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.apprepository.nodeSelector }}
-      nodeSelector: {{- include "kubeapps.tplValue" (dict "value" .Values.apprepository.nodeSelector "context" $) | nindent 8 }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.apprepository.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.apprepository.tolerations }}
-      tolerations: {{- include "kubeapps.tplValue" (dict "value" .Values.apprepository.tolerations "context" $) | nindent 8 }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.apprepository.tolerations "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
@@ -36,13 +36,13 @@ spec:
       {{- end }}
       containers:
         - name: controller
-          image: {{ template "kubeapps.image" (list .Values.apprepository.image .Values.global) }}
+          image: {{ include "common.images.image" (dict "imageRoot" .Values.apprepository.image "global" .Values.global) }}
           imagePullPolicy: {{ .Values.apprepository.image.pullPolicy | quote }}
           command:
             - /apprepository-controller
           args:
             - --user-agent-comment=kubeapps/{{ .Chart.AppVersion }}
-            - --repo-sync-image={{ template "kubeapps.image" (list .Values.apprepository.syncImage .Values.global) }}
+            - --repo-sync-image={{ include "common.images.image" (dict "imageRoot" .Values.apprepository.syncImage "global" .Values.global) }}
            {{- if .Values.global }}
              {{- if.Values.global.imagePullSecrets }}
                {{- range $key, $value := .Values.global.imagePullSecrets }}

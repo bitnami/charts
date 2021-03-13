@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/owncloud
-  tag: 10.6.0-debian-10-r41
+  tag: 10.6.0-debian-10-r71
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -542,7 +542,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.8.0-debian-10-r286
+    tag: 0.8.0-debian-10-r315
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images

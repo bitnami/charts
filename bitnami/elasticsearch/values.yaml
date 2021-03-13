@@ -35,11 +35,11 @@ image:
   ##
   debug: false
 
-## String to partially override elasticsearch.fullname template (will maintain the release name)
+## String to partially override common.names.fullname template (will maintain the release name)
 ##
 # nameOverride:
 
-## String to fully override elasticsearch.fullname template
+## String to fully override common.names.fullname template
 ##
 # fullnameOverride:
 

@@ -1,4 +1,4 @@
-apiVersion: apps/v1
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ template "kubeapps.dashboard.fullname" . }}
@@ -16,7 +16,7 @@ spec:
         checksum/config: {{ include (print $.Template.BasePath "/dashboard-config.yaml") . | sha256sum }}
       labels:
         app: {{ template "kubeapps.dashboard.fullname" . }}
-        app.kubernetes.io/name: {{ template "kubeapps.name" . }}
+        app.kubernetes.io/name: {{ template "common.names.name" . }}
         release: {{ .Release.Name }}
         app.kubernetes.io/instance: {{ .Release.Name }}
         chart: {{ template "kubeapps.chart" . }}
@@ -24,13 +24,13 @@ spec:
     spec:
 {{- include "kubeapps.imagePullSecrets" . | indent 6 }}
       {{- if .Values.dashboard.affinity }}
-      affinity: {{- include "kubeapps.tplValue" (dict "value" .Values.dashboard.affinity "context" $) | nindent 8 }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.affinity "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.dashboard.nodeSelector }}
-      nodeSelector: {{- include "kubeapps.tplValue" (dict "value" .Values.dashboard.nodeSelector "context" $) | nindent 8 }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.dashboard.tolerations }}
-      tolerations: {{- include "kubeapps.tplValue" (dict "value" .Values.dashboard.tolerations "context" $) | nindent 8 }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.tolerations "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
@@ -39,7 +39,7 @@ spec:
       {{- end }}
       containers:
         - name: dashboard
-          image: {{ template "kubeapps.image" (list .Values.dashboard.image .Values.global) }}
+          image: {{ include "common.images.image" (dict "imageRoot" .Values.dashboard.image "global" .Values.global) }}
           imagePullPolicy: {{ .Values.dashboard.image.pullPolicy | quote }}
           {{- if .Values.dashboard.livenessProbe }}
           livenessProbe: {{- toYaml .Values.dashboard.livenessProbe | nindent 12 }}

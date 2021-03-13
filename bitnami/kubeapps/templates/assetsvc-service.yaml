@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: {{ template "kubeapps.assetsvc.fullname" . }}
   labels:{{ include "kubeapps.extraAppLabels" . | nindent 4 }}
-    app: {{ template "kubeapps.name" . }}
+    app: {{ template "common.names.name" . }}
 spec:
   type: ClusterIP
   ports:

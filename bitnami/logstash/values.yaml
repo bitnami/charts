@@ -13,7 +13,7 @@
 image:
   registry: docker.io
   repository: bitnami/logstash
-  tag: 7.11.1-debian-10-r0
+  tag: 7.11.2-debian-10-r0
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -400,7 +400,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/logstash-exporter
-    tag: 7.3.0-debian-10-r103
+    tag: 7.3.0-debian-10-r124
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##

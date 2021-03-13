@@ -13,7 +13,7 @@
 image:
   registry: docker.io
   repository: bitnami/metrics-server
-  tag: 0.4.2-debian-10-r0
+  tag: 0.4.2-debian-10-r30
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -61,6 +61,10 @@ serviceAccount:
   ## The name of the ServiceAccount to use.
   ## If not set and create is true, a name is generated using the common.names.fullname template
   # name:
+  ## Automount API credentials for a service account.
+  ##
+  # automountServiceAccountToken: true
+
 
 ## API service parameters
 ##
@@ -92,6 +96,11 @@ command: ["metrics-server"]
 ##   kubelet-preferred-address-types: InternalIP
 ##
 extraArgs: {}
+
+## Pod labels
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
+podLabels: {}
 
 ## Additional pod annotations for MariaDB Galera pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/

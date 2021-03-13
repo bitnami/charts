@@ -19,6 +19,9 @@ spec:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: compactor
+        {{- if and .Values.compactor.enabled .Values.compactor.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.compactor.podLabels "context" $) | nindent 8 }}
+        {{- end }}
       annotations:
         checksum/ojbstore-configuration: {{ include (print $.Template.BasePath "/objstore-secret.yaml") . | sha256sum }}
         {{- if .Values.compactor.podAnnotations }}
@@ -79,6 +82,7 @@ spec:
           args:
             - compact
             - --log.level={{ .Values.compactor.logLevel }}
+            - --log.format={{ .Values.compactor.logFormat }}
             - --http-address=0.0.0.0:10902
             - --data-dir=/data
             - --retention.resolution-raw={{ .Values.compactor.retentionResolutionRaw }}

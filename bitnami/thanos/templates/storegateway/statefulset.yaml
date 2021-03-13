@@ -21,6 +21,9 @@ spec:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: storegateway
+        {{- if and .Values.storegateway.enabled .Values.storegateway.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.podLabels "context" $) | nindent 8 }}
+        {{- end }}
       annotations:
         checksum/ojbstore-configuration: {{ include (print $.Template.BasePath "/objstore-secret.yaml") . | sha256sum }}
         {{- if (include "thanos.storegateway.createConfigmap" .) }}
@@ -84,6 +87,7 @@ spec:
           args:
             - store
             - --log.level={{ .Values.storegateway.logLevel }}
+            - --log.format={{ .Values.storegateway.logFormat }}
             - --grpc-address=0.0.0.0:10901
             - --http-address=0.0.0.0:10902
             - --data-dir=/data

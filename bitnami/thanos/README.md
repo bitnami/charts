@@ -82,7 +82,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 ### Global parameters
 
 | Parameter                 | Description                                     | Default                                                 |
-|---------------------------|-------------------------------------------------|---------------------------------------------------------|
+| ------------------------- | ----------------------------------------------- | ------------------------------------------------------- |
 | `global.imageRegistry`    | Global Docker image registry                    | `nil`                                                   |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]` (does not add image pull secrets to deployed pods) |
 | `global.storageClass`     | Global storage class for dynamic provisioning   | `nil`                                                   |
@@ -90,7 +90,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 ### Common parameters
 
 | Parameter                     | Description                                                                               | Default                                                 |
-|-------------------------------|-------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| ----------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------------- |
 | `image.registry`              | Thanos image registry                                                                     | `docker.io`                                             |
 | `image.repository`            | Thanos image name                                                                         | `bitnami/thanos`                                        |
 | `image.tag`                   | Thanos image tag                                                                          | `{TAG_NAME}`                                            |
@@ -110,9 +110,10 @@ The following tables lists the configurable parameters of the Thanos chart and t
 ### Thanos Query parameters
 
 | Parameter                                        | Description                                                                                                                                                   | Default                         |
-|--------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------|
+| ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------- |
 | `query.enabled`                                  | Enable/disable Thanos Query component                                                                                                                         | `true`                          |
 | `query.logLevel`                                 | Thanos Query log level                                                                                                                                        | `info`                          |
+| `query.logFormat`                                | Thanos Query log format                                                                                                                                       | `logfmt`                        |
 | `query.replicaLabel`                             | Replica indicator(s) along which data is deduplicated                                                                                                         | `[replica]`                     |
 | `query.hostAliases`                              | Add deployment host aliases                                                                                                                                   | `[]`                            |
 | `query.dnsDiscovery.enabled`                     | Enable store APIs discovery via DNS                                                                                                                           | `true`                          |
@@ -131,6 +132,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `query.affinity`                                 | Thanos Query affinity for pod assignment                                                                                                                      | `{}` (evaluated as a template)  |
 | `query.nodeSelector`                             | Thanos Query node labels for pod assignment                                                                                                                   | `{}` (evaluated as a template)  |
 | `query.tolerations`                              | Thanos Query tolerations for pod assignment                                                                                                                   | `[]` (evaluated as a template)  |
+| `query.podLabels`                                | Thanos Query pod labels                                                                                                                                       | `{}` (evaluated as a template)  |
 | `query.priorityClassName`                        | Controller priorityClassName                                                                                                                                  | `nil`                           |
 | `query.securityContext.enabled`                  | Enable security context for Thanos Query pods                                                                                                                 | `true`                          |
 | `query.securityContext.fsGroup`                  | Group ID for the Thanos Query filesystem                                                                                                                      | `1001`                          |
@@ -204,9 +206,10 @@ The following tables lists the configurable parameters of the Thanos chart and t
 ### Thanos Query Frontend parameters
 
 | Parameter                                        | Description                                                                                                                   | Default                        |
-|--------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------|--------------------------------|
+| ------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
 | `queryFrontend.enabled`                          | Enable/disable Thanos Query Frontend component                                                                                | `true`                         |
 | `queryFrontend.logLevel`                         | Thanos Query Frontend log level                                                                                               | `info`                         |
+| `queryFrontend.logFormat`                        | Thanos Query Frontend log format                                                                                              | `logfmt`                       |
 | `queryFrontend.extraFlags`                       | Extra Flags to passed to Thanos Query Frontend                                                                                | `[]`                           |
 | `queryFrontend.config`                           | Thanos Query Frontend cache configuration                                                                                     | `nil`                          |
 | `queryFrontend.hostAliases`                      | Add deployment host aliases                                                                                                   | `[]`                           |
@@ -220,6 +223,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `queryFrontend.affinity`                         | Thanos Query Frontend affinity for pod assignment                                                                             | `{}` (evaluated as a template) |
 | `queryFrontend.nodeSelector`                     | Thanos Query Frontend node labels for pod assignment                                                                          | `{}` (evaluated as a template) |
 | `queryFrontend.tolerations`                      | Thanos Query Frontend tolerations for pod assignment                                                                          | `[]` (evaluated as a template) |
+| `queryFrontend.podLabels`                        | Thanos Query Frontend pod labels                                                                                              | `{}` (evaluated as a template) |
 | `queryFrontend.priorityClassName`                | Controller priorityClassName                                                                                                  | `nil`                          |
 | `queryFrontend.securityContext.enabled`          | Enable security context for Thanos Query Frontend pods                                                                        | `true`                         |
 | `queryFrontend.securityContext.fsGroup`          | Group ID for the Thanos Query Frontend filesystem                                                                             | `1001`                         |
@@ -266,9 +270,10 @@ The following tables lists the configurable parameters of the Thanos chart and t
 ### Thanos Bucket Web parameters
 
 | Parameter                                         | Description                                                                                                           | Default                        |
-|---------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------|--------------------------------|
+| ------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
 | `bucketweb.enabled`                               | Enable/disable Thanos Bucket Web component                                                                            | `false`                        |
 | `bucketweb.logLevel`                              | Thanos Bucket Web log level                                                                                           | `info`                         |
+| `bucketweb.logFormat`                             | Thanos Bucket Web log format                                                                                          | `logfmt`                       |
 | `bucketweb.refresh`                               | Refresh interval to download metadata from remote storage                                                             | `30m`                          |
 | `bucketweb.timeout`                               | Timeout to download metadata from remote storage                                                                      | `5m`                           |
 | `bucketweb.extraFlags`                            | Extra Flags to passed to Thanos Bucket Web                                                                            | `[]`                           |
@@ -282,6 +287,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `bucketweb.affinity`                              | Thanos Bucket Web affinity for pod assignment                                                                         | `{}` (evaluated as a template) |
 | `bucketweb.nodeSelector`                          | Thanos Bucket Web node labels for pod assignment                                                                      | `{}` (evaluated as a template) |
 | `bucketweb.tolerations`                           | Thanos Bucket Web tolerations for pod assignment                                                                      | `[]` (evaluated as a template) |
+| `bucketweb.podLabels`                             | Thanos Bucket Web pod labels                                                                                          | `{}` (evaluated as a template) |
 | `bucketweb.priorityClassName`                     | Controller priorityClassName                                                                                          | `nil`                          |
 | `bucketweb.securityContext.enabled`               | Enable security context for Thanos Bucket Web pods                                                                    | `true`                         |
 | `bucketweb.securityContext.fsGroup`               | Group ID for the Thanos Bucket Web filesystem                                                                         | `1001`                         |
@@ -323,9 +329,10 @@ The following tables lists the configurable parameters of the Thanos chart and t
 ### Thanos Compactor parameters
 
 | Parameter                                         | Description                                                                                                          | Default                        |
-|---------------------------------------------------|----------------------------------------------------------------------------------------------------------------------|--------------------------------|
+| ------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
 | `compactor.enabled`                               | Enable/disable Thanos Compactor component                                                                            | `false`                        |
 | `compactor.logLevel`                              | Thanos Compactor log level                                                                                           | `info`                         |
+| `compactor.logFormat`                             | Thanos Compactor log format                                                                                          | `logfmt`                       |
 | `compactor.retentionResolutionRaw`                | Resolution and Retention flag                                                                                        | `30d`                          |
 | `compactor.retentionResolution5m`                 | Resolution and Retention flag                                                                                        | `30d`                          |
 | `compactor.retentionResolution1h`                 | Resolution and Retention flag                                                                                        | `10y`                          |
@@ -340,6 +347,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `compactor.affinity`                              | Thanos Compactor affinity for pod assignment                                                                         | `{}` (evaluated as a template) |
 | `compactor.nodeSelector`                          | Thanos Compactor node labels for pod assignment                                                                      | `{}` (evaluated as a template) |
 | `compactor.tolerations`                           | Thanos Compactor tolerations for pod assignment                                                                      | `[]` (evaluated as a template) |
+| `compactor.podLabels`                             | Thanos Compactor pod labels                                                                                          | `{}` (evaluated as a template) |
 | `compactor.priorityClassName`                     | Controller priorityClassName                                                                                         | `nil`                          |
 | `compactor.securityContext.enabled`               | Enable security context for Thanos Compactor pods                                                                    | `true`                         |
 | `compactor.securityContext.fsGroup`               | Group ID for the Thanos Compactor filesystem                                                                         | `1001`                         |
@@ -367,72 +375,75 @@ The following tables lists the configurable parameters of the Thanos chart and t
 
 ### Thanos Store Gateway parameters
 
-| Parameter                                            | Description                                                                                                                 | Default                        |
-|------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------|--------------------------------|
-| `storegateway.enabled`                               | Enable/disable Thanos Store Gateway component                                                                               | `false`                        |
-| `storegateway.logLevel`                              | Thanos Store Gateway log level                                                                                              | `info`                         |
-| `storegateway.extraFlags`                            | Extra Flags to passed to Thanos Store Gateway                                                                               | `[]`                           |
-| `storegateway.grpc.tls.enabled`                 | Enable TLS for GRPC server                                                                                   | `false`                                                 |
-| `storegateway.grpc.tls.cert`                   | TLS Certificate for gRPC server - ignored if existingSecret is provided                                                                              | `nil`                                                   |
-| `storegateway.grpc.tls.key`                    | TLS Key for gRPC server - ignored if existingSecret is provided                                                                                      | `nil`                                                   |
-| `storegateway.grpc.tls.ca`                     | TLS client CA for gRPC server used for client verification purposes on the server - ignored if existingSecret is provided                            | `nil`                                                   |
-| `storegateway.grpc.tls.existingSecret.name` | Existing secret name containing your own TLS certificates for server                           | `nil`                                                   |
-| `storegateway.grpc.tls.existingSecret.keyMapping` | Key mapping between the expected keys and the existing secret's keys. [See more](https://github.com/bitnami/charts/tree/master/bitnami/common#existingsecret)                           | `nil`                                                   |
-| `storegateway.hostAliases`                           | Add deployment host aliases                                                                                                 | `[]`                           |
-| `storegateway.config`                                | Thanos Store Gateway cache configuration                                                                                    | `nil`                          |
-| `storegateway.existingConfigmap`                     | Name of existing ConfigMap with Thanos Store Gateway cache configuration                                                    | `nil`                          |
-| `storegateway.updateStrategyType`                    | Statefulset Update Strategy Type                                                                                            | `RollingUpdate`                |
-| `storegateway.podManagementPolicy`                   | Statefulset Pod Management Policy Type                                                                                      | `OrderedReady`                 |
-| `storegateway.replicaCount`                          | Number of Thanos Store Gateway replicas to deploy                                                                           | `1`                            |
-| `storegateway.podAntiAffinityPreset`                 | Thanos Store Gateway pod anti-affinity preset. Ignored if `storegateway.affinity` is set. Allowed values: `soft` or `hard`  | `soft`                         |
-| `storegateway.nodeAffinityPreset.type`               | Thanos Store Gateway node affinity preset type. Ignored if `storegateway.affinity` is set. Allowed values: `soft` or `hard` | `""`                           |
-| `storegateway.nodeAffinityPreset.key`                | Thanos Store Gateway node label key to match Ignored if `storegateway.affinity` is set.                                     | `""`                           |
-| `storegateway.nodeAffinityPreset.values`             | Thanos Store Gateway node label values to match. Ignored if `storegateway.affinity` is set.                                 | `[]`                           |
-| `storegateway.affinity`                              | Thanos Store Gateway affinity for pod assignment                                                                            | `{}` (evaluated as a template) |
-| `storegateway.nodeSelector`                          | Thanos Store Gateway node labels for pod assignment                                                                         | `{}` (evaluated as a template) |
-| `storegateway.tolerations`                           | Thanos Store Gateway tolerations for pod assignment                                                                         | `[]` (evaluated as a template) |
-| `storegateway.priorityClassName`                     | Controller priorityClassName                                                                                                | `nil`                          |
-| `storegateway.securityContext.enabled`               | Enable security context for Thanos Store Gateway pods                                                                       | `true`                         |
-| `storegateway.securityContext.fsGroup`               | Group ID for the Thanos Store Gateway filesystem                                                                            | `1001`                         |
-| `storegateway.securityContext.runAsUser`             | User ID for the Thanos Store Gateway container                                                                              | `1001`                         |
-| `storegateway.resources.limits`                      | The resources limits for the Thanos Store Gateway container                                                                 | `{}`                           |
-| `storegateway.resources.requests`                    | The requested resources for the Thanos Store Gateway container                                                              | `{}`                           |
-| `storegateway.podAnnotations`                        | Annotations for Thanos Store Gateway pods                                                                                   | `{}`                           |
-| `storegateway.livenessProbe`                         | Liveness probe configuration for Thanos Store Gateway                                                                       | `Check values.yaml file`       |
-| `storegateway.readinessProbe`                        | Readiness probe configuration for Thanos Store Gateway                                                                      | `Check values.yaml file`       |
-| `storegateway.service.type`                          | Kubernetes service type                                                                                                     | `ClusterIP`                    |
-| `storegateway.service.clusterIP`                     | Thanos Store Gateway service clusterIP IP                                                                                   | `None`                         |
-| `storegateway.service.http.port`                     | Service HTTP port                                                                                                           | `9090`                         |
-| `storegateway.service.http.nodePort`                 | Service HTTP node port                                                                                                      | `nil`                          |
-| `storegateway.service.grpc.port`                     | Service GRPC port                                                                                                           | `10901`                        |
-| `storegateway.service.grpc.nodePort`                 | Service GRPC node port                                                                                                      | `nil`                          |
-| `storegateway.service.loadBalancerIP`                | loadBalancerIP if service type is `LoadBalancer`                                                                            | `nil`                          |
-| `storegateway.service.loadBalancerSourceRanges`      | Address that are allowed when service is LoadBalancer                                                                       | `[]`                           |
-| `storegateway.service.annotations`                   | Annotations for Thanos Store Gateway service                                                                                | `{}`                           |
-| `storegateway.service.labelSelectorsOverride`        | Selector for Thanos query service                                                                                           | `{}`                           |
-| `storegateway.service.additionalHeadless`            | Additional Headless service                                                                                                 | `false`                        |
-| `storegateway.serviceAccount.annotations`            | Annotations for Thanos Store Gateway Service Account                                                                        | `{}`                           |
-| `storegateway.serviceAccount.existingServiceAccount` | Name for an existing Thanos Store Gateway Service Account                                                                   | `nil`                          |
-| `storegateway.persistence.enabled`                   | Enable data persistence                                                                                                     | `true`                         |
-| `storegateway.persistence.existingClaim`             | Use a existing PVC which must be created manually before bound                                                              | `nil`                          |
-| `storegateway.persistence.storageClass`              | Specify the `storageClass` used to provision the volume                                                                     | `nil`                          |
-| `storegateway.persistence.accessModes`               | Access modes of data volume                                                                                                 | `["ReadWriteOnce"]`            |
-| `storegateway.persistence.size`                      | Size of data volume                                                                                                         | `8Gi`                          |
-| `storegateway.autoscaling.enabled`                   | Enable autoscaling for Thanos Store Gateway                                                                                 | `false`                        |
-| `storegateway.autoscaling.minReplicas`               | Minimum number of Thanos Store Gateway replicas                                                                             | `nil`                          |
-| `storegategay.autoscaling.maxReplicas`               | Maximum number of Thanos Store Gateway replicas                                                                             | `nil`                          |
-| `storegateway.autoscaling.targetCPU`                 | Target CPU utilization percentage                                                                                           | `nil`                          |
-| `storegateway.autoscaling.targetMemory`              | Target Memory utilization percentage                                                                                        | `nil`                          |
-| `storegateway.pdb.create`                            | Enable/disable a Pod Disruption Budget creation                                                                             | `false`                        |
-| `storegateway.pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled                                                              | `1`                            |
-| `storegateway.pdb.maxUnavailable`                    | Maximum number/percentage of pods that may be made unavailable                                                              | `nil`                          |
+| Parameter                                            | Description                                                                                                                                                   | Default                        |
+| ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
+| `storegateway.enabled`                               | Enable/disable Thanos Store Gateway component                                                                                                                 | `false`                        |
+| `storegateway.logLevel`                              | Thanos Store Gateway log level                                                                                                                                | `info`                         |
+| `storegateway.logFormat`                              | Thanos Store Gateway log format                                                                                                                                | `logfmt`                         |
+| `storegateway.extraFlags`                            | Extra Flags to passed to Thanos Store Gateway                                                                                                                 | `[]`                           |
+| `storegateway.grpc.tls.enabled`                      | Enable TLS for GRPC server                                                                                                                                    | `false`                        |
+| `storegateway.grpc.tls.cert`                         | TLS Certificate for gRPC server - ignored if existingSecret is provided                                                                                       | `nil`                          |
+| `storegateway.grpc.tls.key`                          | TLS Key for gRPC server - ignored if existingSecret is provided                                                                                               | `nil`                          |
+| `storegateway.grpc.tls.ca`                           | TLS client CA for gRPC server used for client verification purposes on the server - ignored if existingSecret is provided                                     | `nil`                          |
+| `storegateway.grpc.tls.existingSecret.name`          | Existing secret name containing your own TLS certificates for server                                                                                          | `nil`                          |
+| `storegateway.grpc.tls.existingSecret.keyMapping`    | Key mapping between the expected keys and the existing secret's keys. [See more](https://github.com/bitnami/charts/tree/master/bitnami/common#existingsecret) | `nil`                          |
+| `storegateway.hostAliases`                           | Add deployment host aliases                                                                                                                                   | `[]`                           |
+| `storegateway.config`                                | Thanos Store Gateway cache configuration                                                                                                                      | `nil`                          |
+| `storegateway.existingConfigmap`                     | Name of existing ConfigMap with Thanos Store Gateway cache configuration                                                                                      | `nil`                          |
+| `storegateway.updateStrategyType`                    | Statefulset Update Strategy Type                                                                                                                              | `RollingUpdate`                |
+| `storegateway.podManagementPolicy`                   | Statefulset Pod Management Policy Type                                                                                                                        | `OrderedReady`                 |
+| `storegateway.replicaCount`                          | Number of Thanos Store Gateway replicas to deploy                                                                                                             | `1`                            |
+| `storegateway.podAntiAffinityPreset`                 | Thanos Store Gateway pod anti-affinity preset. Ignored if `storegateway.affinity` is set. Allowed values: `soft` or `hard`                                    | `soft`                         |
+| `storegateway.nodeAffinityPreset.type`               | Thanos Store Gateway node affinity preset type. Ignored if `storegateway.affinity` is set. Allowed values: `soft` or `hard`                                   | `""`                           |
+| `storegateway.nodeAffinityPreset.key`                | Thanos Store Gateway node label key to match Ignored if `storegateway.affinity` is set.                                                                       | `""`                           |
+| `storegateway.nodeAffinityPreset.values`             | Thanos Store Gateway node label values to match. Ignored if `storegateway.affinity` is set.                                                                   | `[]`                           |
+| `storegateway.affinity`                              | Thanos Store Gateway affinity for pod assignment                                                                                                              | `{}` (evaluated as a template) |
+| `storegateway.nodeSelector`                          | Thanos Store Gateway node labels for pod assignment                                                                                                           | `{}` (evaluated as a template) |
+| `storegateway.tolerations`                           | Thanos Store Gateway tolerations for pod assignment                                                                                                           | `[]` (evaluated as a template) |
+| `storegateway.podLabels`                             | Thanos Store Gateway pod labels                                                                                                                               | `{}` (evaluated as a template) |
+| `storegateway.priorityClassName`                     | Controller priorityClassName                                                                                                                                  | `nil`                          |
+| `storegateway.securityContext.enabled`               | Enable security context for Thanos Store Gateway pods                                                                                                         | `true`                         |
+| `storegateway.securityContext.fsGroup`               | Group ID for the Thanos Store Gateway filesystem                                                                                                              | `1001`                         |
+| `storegateway.securityContext.runAsUser`             | User ID for the Thanos Store Gateway container                                                                                                                | `1001`                         |
+| `storegateway.resources.limits`                      | The resources limits for the Thanos Store Gateway container                                                                                                   | `{}`                           |
+| `storegateway.resources.requests`                    | The requested resources for the Thanos Store Gateway container                                                                                                | `{}`                           |
+| `storegateway.podAnnotations`                        | Annotations for Thanos Store Gateway pods                                                                                                                     | `{}`                           |
+| `storegateway.livenessProbe`                         | Liveness probe configuration for Thanos Store Gateway                                                                                                         | `Check values.yaml file`       |
+| `storegateway.readinessProbe`                        | Readiness probe configuration for Thanos Store Gateway                                                                                                        | `Check values.yaml file`       |
+| `storegateway.service.type`                          | Kubernetes service type                                                                                                                                       | `ClusterIP`                    |
+| `storegateway.service.clusterIP`                     | Thanos Store Gateway service clusterIP IP                                                                                                                     | `None`                         |
+| `storegateway.service.http.port`                     | Service HTTP port                                                                                                                                             | `9090`                         |
+| `storegateway.service.http.nodePort`                 | Service HTTP node port                                                                                                                                        | `nil`                          |
+| `storegateway.service.grpc.port`                     | Service GRPC port                                                                                                                                             | `10901`                        |
+| `storegateway.service.grpc.nodePort`                 | Service GRPC node port                                                                                                                                        | `nil`                          |
+| `storegateway.service.loadBalancerIP`                | loadBalancerIP if service type is `LoadBalancer`                                                                                                              | `nil`                          |
+| `storegateway.service.loadBalancerSourceRanges`      | Address that are allowed when service is LoadBalancer                                                                                                         | `[]`                           |
+| `storegateway.service.annotations`                   | Annotations for Thanos Store Gateway service                                                                                                                  | `{}`                           |
+| `storegateway.service.labelSelectorsOverride`        | Selector for Thanos query service                                                                                                                             | `{}`                           |
+| `storegateway.service.additionalHeadless`            | Additional Headless service                                                                                                                                   | `false`                        |
+| `storegateway.serviceAccount.annotations`            | Annotations for Thanos Store Gateway Service Account                                                                                                          | `{}`                           |
+| `storegateway.serviceAccount.existingServiceAccount` | Name for an existing Thanos Store Gateway Service Account                                                                                                     | `nil`                          |
+| `storegateway.persistence.enabled`                   | Enable data persistence                                                                                                                                       | `true`                         |
+| `storegateway.persistence.existingClaim`             | Use a existing PVC which must be created manually before bound                                                                                                | `nil`                          |
+| `storegateway.persistence.storageClass`              | Specify the `storageClass` used to provision the volume                                                                                                       | `nil`                          |
+| `storegateway.persistence.accessModes`               | Access modes of data volume                                                                                                                                   | `["ReadWriteOnce"]`            |
+| `storegateway.persistence.size`                      | Size of data volume                                                                                                                                           | `8Gi`                          |
+| `storegateway.autoscaling.enabled`                   | Enable autoscaling for Thanos Store Gateway                                                                                                                   | `false`                        |
+| `storegateway.autoscaling.minReplicas`               | Minimum number of Thanos Store Gateway replicas                                                                                                               | `nil`                          |
+| `storegategay.autoscaling.maxReplicas`               | Maximum number of Thanos Store Gateway replicas                                                                                                               | `nil`                          |
+| `storegateway.autoscaling.targetCPU`                 | Target CPU utilization percentage                                                                                                                             | `nil`                          |
+| `storegateway.autoscaling.targetMemory`              | Target Memory utilization percentage                                                                                                                          | `nil`                          |
+| `storegateway.pdb.create`                            | Enable/disable a Pod Disruption Budget creation                                                                                                               | `false`                        |
+| `storegateway.pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled                                                                                                | `1`                            |
+| `storegateway.pdb.maxUnavailable`                    | Maximum number/percentage of pods that may be made unavailable                                                                                                | `nil`                          |
 
 ### Thanos Ruler parameters
 
 | Parameter                                     | Description                                                                                                  | Default                        |
-|-----------------------------------------------|--------------------------------------------------------------------------------------------------------------|--------------------------------|
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------ |
 | `ruler.enabled`                               | Enable/disable Thanos Ruler component                                                                        | `false`                        |
 | `ruler.logLevel`                              | Thanos Ruler log level                                                                                       | `info`                         |
+| `ruler.logFormat`                              | Thanos Ruler log format                                                                                       | `logfmt`                         |
 | `ruler.replicaLabel`                          | Label to treat as a replica indicator along which data is deduplicated                                       | `replica`                      |
 | `ruler.dnsDiscovery.enabled`                  | Enable Query APIs discovery via DNS                                                                          | `true`                         |
 | `ruler.alertmanagers`                         | Alermanager URLs array                                                                                       | `[]`                           |
@@ -452,6 +463,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `ruler.affinity`                              | Thanos Ruler affinity for pod assignment                                                                     | `{}` (evaluated as a template) |
 | `ruler.nodeSelector`                          | Thanos Ruler node labels for pod assignment                                                                  | `{}` (evaluated as a template) |
 | `ruler.tolerations`                           | Thanos Ruler tolerations for pod assignment                                                                  | `[]` (evaluated as a template) |
+| `ruler.podLabels`                             | Thanos Ruler pod labels                                                                                      | `{}` (evaluated as a template) |
 | `ruler.priorityClassName`                     | Controller priorityClassName                                                                                 | `nil`                          |
 | `ruler.securityContext.enabled`               | Enable security context for Thanos Ruler pods                                                                | `true`                         |
 | `ruler.securityContext.fsGroup`               | Group ID for the Thanos Ruler filesystem                                                                     | `1001`                         |
@@ -482,14 +494,30 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `ruler.pdb.create`                            | Enable/disable a Pod Disruption Budget creation                                                              | `false`                        |
 | `ruler.pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled                                               | `1`                            |
 | `ruler.pdb.maxUnavailable`                    | Maximum number/percentage of pods that may be made unavailable                                               | `nil`                          |
+| `ruler.ingress.enabled`                       | Enable ingress controller resource                                                                           | `false`                        |
+| `ruler.ingress.apiVersion`                    | Force Ingress API version (automatically detected if not set)                                                | ``                             |
+| `ruler.ingress.path`                          | Ingress path                                                                                                 | `/`                            |
+| `ruler.ingress.pathType`                      | Ingress path type                                                                                            | `ImplementationSpecific`       |
+| `ruler.ingress.certManager`                   | Add annotations for cert-manager                                                                             | `false`                        |
+| `ruler.ingress.hostname`                      | Default host for the ingress resource                                                                        | `thanos-bucketweb.local`       |
+| `ruler.ingress.annotations`                   | Ingress annotations                                                                                          | `[]`                           |
+| `ruler.ingress.tls`                           | Create ingress TLS section                                                                                   | `false`                        |
+| `ruler.ingress.extraHosts[0].name`            | Additional hostnames to be covered                                                                           | `nil`                          |
+| `ruler.ingress.extraHosts[0].path`            | Additional hostnames to be covered                                                                           | `nil`                          |
+| `ruler.ingress.extraTls[0].hosts[0]`          | TLS configuration for additional hostnames to be covered                                                     | `nil`                          |
+| `ruler.ingress.extraTls[0].secretName`        | TLS configuration for additional hostnames to be covered                                                     | `nil`                          |
+| `ruler.ingress.secrets[0].name`               | TLS Secret Name                                                                                              | `nil`                          |
+| `ruler.ingress.secrets[0].certificate`        | TLS Secret Certificate                                                                                       | `nil`                          |
+| `ruler.ingress.secrets[0].key`                | TLS Secret Key                                                                                               | `nil`                          |
 
 ### Thanos Receive parameters
 
 | Parameter                                       | Description                                                                                                    | Default                                 |
-|-------------------------------------------------|----------------------------------------------------------------------------------------------------------------|-----------------------------------------|
+| ----------------------------------------------- | -------------------------------------------------------------------------------------------------------------- | --------------------------------------- |
 | `receive.enabled`                               | Enable/disable Thanos Receive component                                                                        | `false`                                 |
 | `receive.logLevel`                              | Thanos Receive log level                                                                                       | `info`                                  |
-| `receive.replicationFactor`                     | Thanos Receive replication-factor                                                                              | `1`                                  |
+| `receive.logFormat`                              | Thanos Receive log format                                                                                       | `logfmt`                                  |
+| `receive.replicationFactor`                     | Thanos Receive replication-factor                                                                              | `1`                                     |
 | `receive.replicaLabel`                          | Label to treat as a replica indicator along which data is deduplicated                                         | `replica`                               |
 | `receive.alertmanagers`                         | Alermanager URLs array                                                                                         | `[]`                                    |
 | `receive.extraFlags`                            | Extra Flags to passed to Thanos Receive                                                                        | `[]`                                    |
@@ -505,6 +533,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `receive.affinity`                              | Thanos Receive affinity for pod assignment                                                                     | `{}` (evaluated as a template)          |
 | `receive.nodeSelector`                          | Thanos Receive node labels for pod assignment                                                                  | `{}` (evaluated as a template)          |
 | `receive.tolerations`                           | Thanos Receive tolerations for pod assignment                                                                  | `[]` (evaluated as a template)          |
+| `receive.podLabels`                             | Thanos Receive pod labels                                                                                      | `{}` (evaluated as a template)          |
 | `receive.priorityClassName`                     | Controller priorityClassName                                                                                   | `nil`                                   |
 | `receive.securityContext.enabled`               | Enable security context for Thanos Receive pods                                                                | `true`                                  |
 | `receive.securityContext.fsGroup`               | Group ID for the Thanos Receive filesystem                                                                     | `1001`                                  |
@@ -541,7 +570,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 ### Metrics parameters
 
 | Parameter                              | Description                                                                                            | Default                                   |
-|----------------------------------------|--------------------------------------------------------------------------------------------------------|-------------------------------------------|
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------ | ----------------------------------------- |
 | `metrics.enabled`                      | Enable the export of Prometheus metrics                                                                | `false`                                   |
 | `metrics.serviceMonitor.enabled`       | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`) | `false`                                   |
 | `metrics.serviceMonitor.namespace`     | Namespace in which Prometheus is running                                                               | `nil`                                     |
@@ -552,7 +581,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 ### Volume Permissions parameters
 
 | Parameter                             | Description                                                                                                          | Default                                                 |
-|---------------------------------------|----------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| ------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
 | `volumePermissions.enabled`           | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                                                 |
 | `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                                     | `docker.io`                                             |
 | `volumePermissions.image.repository`  | Init container volume-permissions image name                                                                         | `bitnami/bitnami-shell`                                 |
@@ -563,7 +592,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 ### MinIO&reg; chart parameters
 
 | Parameter                  | Description                                                    | Default                                   |
-|----------------------------|----------------------------------------------------------------|-------------------------------------------|
+| -------------------------- | -------------------------------------------------------------- | ----------------------------------------- |
 | `minio.enabled`            | Enable/disable MinIO&reg; chart installation                   | `false`                                   |
 | `minio.accessKey.password` | MinIO&reg; Access Key                                          | _random 10 character alphanumeric string_ |
 | `minio.secretKey.password` | MinIO&reg; Secret Key                                          | _random 40 character alphanumeric string_ |
@@ -768,6 +797,7 @@ querier.strategyType                          -> query.strategyType
 querier.affinity                              -> query.affinity
 querier.nodeSelector                          -> query.nodeSelector
 querier.tolerations                           -> query.tolerations
+querier.podLabels                             -> query.podLabels
 querier.priorityClassName                     -> query.priorityClassName
 querier.securityContext.enabled               -> query.securityContext.enabled
 querier.securityContext.fsGroup               -> query.securityContext.fsGroup

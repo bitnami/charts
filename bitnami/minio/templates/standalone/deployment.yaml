@@ -1,9 +1,9 @@
-{{- if eq .Values.mode "standalone" }}
-apiVersion: apps/v1
+{{- if and (eq .Values.mode "standalone") (not .Values.gateway.enabled) }}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "common.names.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ .Release.Namespace }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -13,13 +13,16 @@ metadata:
   {{- end }}
 spec:
   {{- if .Values.deployment.updateStrategy }}
-  strategy: {{ toYaml .Values.deployment.updateStrategy | nindent 4 }}
+  strategy: {{- toYaml .Values.deployment.updateStrategy | nindent 4 }}
   {{- end }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
   template:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
+        {{- if .Values.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
+        {{- end }}
       {{- if or .Values.podAnnotations (include "minio.createSecret" .) }}
       annotations:
         {{- if (include "minio.createSecret" .) }}
@@ -30,11 +33,11 @@ spec:
         {{- end }}
       {{- end }}
     spec:
+      {{- include "minio.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.schedulerName }}
       schedulerName: {{ .Values.schedulerName }}
       {{- end }}
       serviceAccountName: {{ template "minio.serviceAccountName" . }}
-      {{- include "minio.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
       {{- else }}
@@ -56,8 +59,12 @@ spec:
       securityContext:
         fsGroup: {{ .Values.securityContext.fsGroup }}
       {{- end }}
-      {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
+      {{- if or .Values.initContainers (and .Values.volumePermissions.enabled .Values.persistence.enabled) }}
       initContainers:
+        {{- if .Values.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
         - name: volume-permissions
           image: {{ template "minio.volumePermissions.image" . }}
           imagePullPolicy: {{ default "" .Values.volumePermissions.image.pullPolicy | quote }}
@@ -74,6 +81,7 @@ spec:
           volumeMounts:
             - name: data
               mountPath: {{ .Values.persistence.mountPath }}
+        {{- end }}
       {{- end }}
       containers:
         - name: minio
@@ -83,6 +91,12 @@ spec:
           securityContext:
             runAsUser: {{ .Values.securityContext.runAsUser }}
           {{- end }}
+          {{- if .Values.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
+          {{- end }}
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.image.debug | quote }}
@@ -90,23 +104,23 @@ spec:
               value: {{ ternary "yes" "no" .Values.forceNewKeys | quote }}
             {{- if .Values.useCredentialsFile }}
             - name: MINIO_ACCESS_KEY_FILE
-              value: "/opt/bitnami/minio/secrets/access-key"
+              value: {{ printf "/opt/bitnami/minio/secrets/%s" (include "minio.secret.userKey" .) | quote }}
             {{- else }}
             - name: MINIO_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
                   name: {{ include "minio.secretName" . }}
-                  key: access-key
+                  key: {{ include "minio.secret.userKey" . }}
             {{- end }}
             {{- if .Values.useCredentialsFile }}
             - name: MINIO_SECRET_KEY_FILE
-              value: "/opt/bitnami/minio/secrets/secret-key"
+              value: {{ printf "/opt/bitnami/minio/secrets/%s" (include "minio.secret.passwordKey" .) | quote }}
             {{- else }}
             - name: MINIO_SECRET_KEY
               valueFrom:
                 secretKeyRef:
                   name: {{ include "minio.secretName" . }}
-                  key: secret-key
+                  key: {{ include "minio.secret.passwordKey" . }}
             {{- end }}
             {{- if .Values.defaultBuckets }}
             - name: MINIO_DEFAULT_BUCKETS
@@ -114,50 +128,77 @@ spec:
             {{- end }}
             - name: MINIO_BROWSER
               value: {{ ternary "off" "on" .Values.disableWebUI | quote }}
-            {{- if .Values.prometheusAuthType }}
             - name: MINIO_PROMETHEUS_AUTH_TYPE
-              value: {{ .Values.prometheusAuthType }}
-            {{- end }}
+              value: {{ .Values.metrics.prometheusAuthType | quote }}
             {{- if .Values.extraEnv }}
-            {{- toYaml .Values.extraEnv | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraEnv "context" $) | nindent 12 }}
             {{- end }}
-          {{ if .Values.command }}
-          command: {{- toYaml .Values.command |  nindent 12 }}
-          {{- end }}
+          envFrom:
+            {{- if .Values.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsSecret "context" $) }}
+            {{- end }}
           ports:
             - name: minio
-              containerPort: 9000
+              containerPort: {{ .Values.containerPort }}
+              protocol: TCP
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
+            httpGet:
+              path: /minio/health/live
+              port: minio
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
-            httpGet:
-              path: /minio/health/live
-              port: minio
+          {{- else if .Values.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.readinessProbe.enabled }}
           readinessProbe:
+            tcpSocket:
+              port: minio
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+          {{- else if .Values.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.startupProbe.enabled }}
+          startupProbe:
             tcpSocket:
               port: minio
+            initialDelaySeconds: {{ .Values.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.startupProbe.failureThreshold }}
+          {{- else if .Values.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.resources }}
-          resources: {{ toYaml .Values.resources | nindent 12 }}
+          resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
             {{- if .Values.useCredentialsFile }}
             - name: minio-credentials
               mountPath: /opt/bitnami/minio/secrets/
             {{- end }}
-            - name: "data"
+            - name: data
               mountPath: {{ .Values.persistence.mountPath }}
+            {{- if .Values.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+        {{- if .Values.sidecars }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
+        {{- end }}
       volumes:
         {{- if .Values.useCredentialsFile }}
         - name: minio-credentials
@@ -167,8 +208,11 @@ spec:
         - name: data
           {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:
-            claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ include "common.names.fullname" . }}{{- end }}
+            claimName: {{ include "minio.claimName" . }}
           {{- else }}
           emptyDir: {}
           {{- end }}
- {{- end }}
+        {{- if .Values.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+{{- end }}

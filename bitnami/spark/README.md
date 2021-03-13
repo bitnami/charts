@@ -67,13 +67,14 @@ The following tables lists the configurable parameters of the spark chart and th
 
 ### Spark parameters
 
-| Parameter           | Description                                      | Default                                                 |
-|---------------------|--------------------------------------------------|---------------------------------------------------------|
-| `image.registry`    | spark image registry                             | `docker.io`                                             |
-| `image.repository`  | spark Image name                                 | `bitnami/spark`                                         |
-| `image.tag`         | spark Image tag                                  | `{TAG_NAME}`                                            |
-| `image.pullPolicy`  | spark image pull policy                          | `IfNotPresent`                                          |
-| `image.pullSecrets` | Specify docker-registry secret names as an array | `[]` (does not add image pull secrets to deployed pods) |
+| Parameter           | Description                                                                             | Default                                                 |
+|---------------------|-----------------------------------------------------------------------------------------|---------------------------------------------------------|
+| `image.registry`    | spark image registry                                                                    | `docker.io`                                             |
+| `image.repository`  | spark Image name                                                                        | `bitnami/spark`                                         |
+| `image.tag`         | spark Image tag                                                                         | `{TAG_NAME}`                                            |
+| `image.pullPolicy`  | spark image pull policy                                                                 | `IfNotPresent`                                          |
+| `image.pullSecrets` | Specify docker-registry secret names as an array                                        | `[]` (does not add image pull secrets to deployed pods) |
+| `hostNetwork`       | Use Host-Network for the PODs (if true, also dnsPolicy: ClusterFirstWithHostNet is set) | `false`                                                 |
 
 ### Spark master parameters
 
