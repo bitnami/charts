@@ -19,4 +19,3 @@ data:
   my.cnf: |-
     {{ .Values.primary.configuration | nindent 4 }}
 {{- end -}}
-
