@@ -406,7 +406,7 @@ primary:
     ##
     # maxUnavailable: 1
     
-  ## MySQL Secondary pod label
+  ## MySQL Primary pod label. If labels are same as commonLabels , this will take precedence.
   ##
   podLabels: {}
 
@@ -701,7 +701,7 @@ secondary:
     ##
     # maxUnavailable: 1
     
-  ## MySQL Secondary pod label
+  ## MySQL Secondary pod label. If labels are same as commonLabels , this will take precedence.
   ##
   podLabels: {}
 
