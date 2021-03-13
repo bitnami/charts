@@ -405,6 +405,10 @@ primary:
     ## Max number of pods that can be unavailable after the eviction
     ##
     # maxUnavailable: 1
+    
+  ## MySQL Secondary pod label
+  ##
+  podLabels: {}
 
 ## MySQL Secondary parameters
 ##
@@ -696,6 +700,10 @@ secondary:
     ## Max number of pods that can be unavailable after the eviction
     ##
     # maxUnavailable: 1
+    
+  ## MySQL Secondary pod label
+  ##
+  podLabels: {}
 
 ## MySQL pods ServiceAccount
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
