@@ -301,8 +301,6 @@ extraEnvVars:
 
 - Using a custom `etcd.conf.yml`: The etcd chart allows mounting a custom `etcd.conf.yml` file as ConfigMap. In order to so, you can use the `configuration` property. Alternatively, you can use an existing ConfigMap using the `existingConfigmap` parameter.
 
-### Sidecars and Init Containers
-
 ### Auto Compaction
 
 Since etcd keeps an exact history of its keyspace, this history should be periodically compacted to avoid performance degradation and eventual storage space exhaustion. Compacting the keyspace history drops all information about keys superseded prior to a given keyspace revision. The space used by these keys then becomes available for additional writes to the keyspace.
@@ -319,7 +317,7 @@ autoCompactionMode=periodic
 autoCompactionRetention=10m
 ```
 
-### Setting Pod's affinity
+### Sidecars and Init Containers
 
 If you have a need for additional containers to run within the same pod as the etcd app (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
 
