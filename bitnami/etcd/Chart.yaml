@@ -25,4 +25,4 @@ name: etcd
 sources:
   - https://github.com/bitnami/bitnami-docker-etcd
   - https://coreos.com/etcd/
-version: 6.1.0
+version: 6.1.1
