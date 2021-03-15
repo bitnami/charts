@@ -152,6 +152,14 @@ spec:
               value: "{{ $etcdPeerProtocol }}://$(MY_POD_NAME).{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.svc.{{ $clusterDomain }}:{{ .Values.service.peerPort }}"
             - name: ETCD_LISTEN_PEER_URLS
               value: "{{ $etcdPeerProtocol }}://0.0.0.0:{{ .Values.service.peerPort }}"
+            {{- if .Values.autoCompactionMode }}
+            - name: ETCD_AUTO_COMPACTION_MODE
+              value: {{ .Values.autoCompactionMode }}
+            {{- end }}
+            {{- if .Values.autoCompactionRetention }}
+            - name: ETCD_AUTO_COMPACTION_RETENTION
+              value: {{ .Values.autoCompactionRetention }}
+            {{- end }}
             {{- if .Values.maxProcs }}
             - name: GOMAXPROCS
               value: {{ .Values.maxProcs }}

@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/etcd
-  tag: 3.4.15-debian-10-r9
+  tag: 3.4.15-debian-10-r12
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -59,6 +59,16 @@ clusterDomain: cluster.local
 ## Extra objects to deploy (value evaluated as a template)
 ##
 extraDeploy: []
+
+## Auto compaction mode, by default periodic. Valid values: ‘periodic’, ‘revision’.
+## - 'periodic' for duration based retention, defaulting to hours if no time unit is provided (e.g. ‘5m’).
+## - 'revision' for revision number based retention.
+##
+# autoCompactionMode: periodic
+
+## Auto compaction retention for mvcc key value store in hour, by default 0, means disabled
+##
+# autoCompactionRetention: 0
 
 ## Authentication parameters
 ##

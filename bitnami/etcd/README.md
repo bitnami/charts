@@ -98,6 +98,8 @@ The following tables lists the configurable parameters of the etcd chart and the
 | `auth.peer.caFilename`              | Name of the file containing the peer CA certificate                                       | `""`                                                    |
 | `initialClusterState`               | Initial cluster state. Allowed values: 'new' or 'existing'                                | `nil`                                                   |
 | `maxProcs`                          | Set GOMAXPROCS environment variable to limit the number of CPUs                           | `nil`                                                   |
+| `autoCompactionMode`                | Set ETCD_AUTO_COMPACTION_MODE environment variable to define mode of autoCompaction       | `nil`                                                   |
+| `autoCompactionRetention`           | Set ETCD_AUTO_COMPACTION_RETENTION environment variable to define autoCompaction retention| `nil`                                                   |
 | `removeMemberOnContainerTermination`| Use a PreStop hook to remove the etcd members from the cluster on container termination   | `true`                                                  |
 | `configuration`                     | etcd configuration. Specify content for etcd.conf.yml                                     | `nil`                                                   |
 | `existingConfigmap`                 | Name of existing ConfigMap with etcd configuration                                        | `nil`                                                   |
@@ -298,6 +300,22 @@ extraEnvVars:
 ```
 
 - Using a custom `etcd.conf.yml`: The etcd chart allows mounting a custom `etcd.conf.yml` file as ConfigMap. In order to so, you can use the `configuration` property. Alternatively, you can use an existing ConfigMap using the `existingConfigmap` parameter.
+
+### Auto Compaction
+
+Since etcd keeps an exact history of its keyspace, this history should be periodically compacted to avoid performance degradation and eventual storage space exhaustion. Compacting the keyspace history drops all information about keys superseded prior to a given keyspace revision. The space used by these keys then becomes available for additional writes to the keyspace.
+
+`autoCompactionMode`, by default periodic. Valid values: ‘periodic’, ‘revision’. 
+- 'periodic' for duration based retention, defaulting to hours if no time unit is provided (e.g. ‘5m’). 
+- 'revision' for revision number based retention.
+`autoCompactionRetention` for mvcc key value store in hour, by default 0, means disabled.
+
+You can enable auto compaction by using following parameters:
+
+```console
+autoCompactionMode=periodic
+autoCompactionRetention=10m
+```
 
 ### Sidecars and Init Containers
 
