@@ -35,8 +35,16 @@
     As an alternative, you can specify "sysctlImage.enabled=true" to use a
     privileged initContainer to change those settings in the Kernel:
 
-      helm upgrade {{ .Release.Name }} bitnami/elasticsearch \
-        --set sysctlImage.enabled=true
+      helm upgrade {{ .Release.Name }} bitnami/elasticsearch --set sysctlImage.enabled=true
+
+    Note that this requires the ability to run privileged containers, which is likely not
+    the case on many secure clusters. To cover this use case, you can also set some parameters
+    in the config file to customize the default settings:
+
+      https://www.elastic.co/guide/en/elasticsearch/reference/current/index-modules-store.html
+      https://www.elastic.co/guide/en/cloud-on-k8s/master/k8s-virtual-memory.html
+
+    For that, you can place the desired parameters by using the "config" block present in the values.yaml
 
 {{- else if .Values.sysctlImage.enabled }}
 

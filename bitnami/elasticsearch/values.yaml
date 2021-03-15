@@ -125,6 +125,11 @@ name: elastic
 # snapshotRepoPath:
 
 ## Customize elasticsearch configuration
+## See below example:
+## config:
+##   node:
+##     store:
+##       allow_mmap: false
 ## ref: https://www.elastic.co/guide/en/elasticsearch/reference/current/settings.html
 ##
 # config:
