@@ -7,12 +7,12 @@ metadata:
 data:
   vhost.conf: |-
     server {
-      listen {{ .Values.dashboard.service.port }};
+      listen 8080;
   {{- if .Values.frontend.largeClientHeaderBuffers }}
       large_client_header_buffers {{ .Values.frontend.largeClientHeaderBuffers }};
   {{- end }}
   {{- if .Values.enableIPv6 }}
-      listen [::]:{{ .Values.dashboard.service.port }};
+      listen [::]:8080;
   {{- end}}
       server_name _;
 
