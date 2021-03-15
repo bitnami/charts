@@ -136,6 +136,8 @@ tls:
   ## Name of an existing secret holding the certificate information
   ##
   secretName: ""
+  ## The mounted path where the secret will be located
+  mountPath: /certs
 
 ## An array to add extra env vars
 ## e.g:

@@ -233,7 +233,7 @@ spec:
             {{- end }}
             {{- if .Values.tls.enabled }}
             - name: minio-certs
-              mountPath: /opt/bitnami/minio/certs/
+              mountPath: {{ .Values.tls.mountPath }}
             {{- end }}
             {{- if and .Values.persistence.enabled (gt $drivesPerNode 1) }}
             {{- range $diskId := until $drivesPerNode }}
