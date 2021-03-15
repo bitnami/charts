@@ -425,6 +425,10 @@ ingress:
   ##
   apiVersion:
 
+  ## Set this to true in order to add the corresponding annotations for cert-manager
+  ##
+  certManager: false
+
   ## The list of hostnames to be covered with this ingress record
   ##
   hosts:
