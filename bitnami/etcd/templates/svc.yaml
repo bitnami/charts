@@ -26,7 +26,7 @@ spec:
   externalIPs: {{- toYaml .Values.service.externalIPs | nindent 4 }}
   {{- end }}
   ports:
-    - name: {{ default "client" .Values.auth.client.clientPortNameOverride | quote }}
+    - name: {{ default "client" .Values.service.clientPortNameOverride | quote }}
       port: {{ .Values.service.port  }}
       targetPort: client
       {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.clientPort)) }}
@@ -34,7 +34,7 @@ spec:
       {{- else if eq .Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-    - name: {{ default "peer" .Values.auth.client.clientPortNameOverride | quote }}
+    - name: {{ default "peer" .Values.service.peerPortNameOverride | quote }}
       port: {{ .Values.service.peerPort  }}
       targetPort: peer
       {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.peerPort)) }}
