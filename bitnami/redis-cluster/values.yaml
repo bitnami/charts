@@ -47,6 +47,13 @@ cluster:
   init: true
   ## Number of Redis(TM) nodes to be deployed
   ##
+  ## Note:
+  ## This is total number of nodes including the replicas. Meaning there will be 3 master and 3 replica
+  ## nodes (as replica count is set to 1 by default, there will be 1 replica per master node).
+  ## Hence, nodes = numberOfMasterNodes + numberOfMasterNodes * replicas
+  ##
+  ## The number of master nodes should always be >= 3, otherwise cluster creation will fail
+  ##
   nodes: 6
   ## Parameter to be passed as --cluster-replicas to the redis-cli --cluster create
   ## 1 means that we want a replica for every master created
