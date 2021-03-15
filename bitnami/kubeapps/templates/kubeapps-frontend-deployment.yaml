@@ -113,6 +113,8 @@ spec:
               value: {{ .Values.pinnipedProxy.defaultAuthenticatorType }}
             - name: DEFAULT_PINNIPED_AUTHENTICATOR_NAME
               value: {{ .Values.pinnipedProxy.defaultAuthenticatorName }}
+            - name: DEFAULT_PINNIPED_API_SUFFIX
+              value: {{ .Values.pinnipedProxy.defaultPinnipedAPISuffix }}
             - name: RUST_LOG
               value: info
           image: {{ include "common.images.image" (dict "imageRoot" .Values.pinnipedProxy.image "global" .Values.global) }}

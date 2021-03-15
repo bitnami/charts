@@ -467,7 +467,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-dashboard
-    tag: 2.2.1-debian-10-r15
+    tag: 2.2.1-debian-10-r18
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -686,6 +686,9 @@ pinnipedProxy:
   defaultPinnipedNamespace: pinniped-concierge
   defaultAuthenticatorType: JWTAuthenticator
   defaultAuthenticatorName: jwt-authenticator
+  ## The defaultPinnipedAPISuffix flag is not fully supported yet, 
+  ## please use the default value "pinniped.dev"
+  defaultPinnipedAPISuffix: pinniped.dev
 
   ## OAuth2 Proxy containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
