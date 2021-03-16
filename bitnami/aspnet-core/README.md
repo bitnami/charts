@@ -259,7 +259,7 @@ For example, you can deploy a sample [Kestrel server](https://docs.microsoft.com
 ```console
 appFromExternalRepo.enabled=true
 appFromExternalRepo.clone.repository=https://github.com/dotnet/AspNetCore.Docs.git
-appFromExternalRepo.clone.branch=main
+appFromExternalRepo.clone.revision=main
 appFromExternalRepo.publish.aspnetcore/fundamentals/servers/kestrel/samples/3.x/KestrelSample
 appFromExternalRepo.startCommand[0]=dotnet
 appFromExternalRepo.startCommand[1]=KestrelSample.dll
