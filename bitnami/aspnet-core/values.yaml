@@ -79,7 +79,7 @@ appFromExternalRepo:
     repository: https://github.com/dotnet/AspNetCore.Docs.git
     ## Git revision to checkout
     ##
-    revision: master
+    revision: main
   publish:
     ## Bitnami .NET SDK image version
     ## ref: https://hub.docker.com/r/bitnami/dotnet-sdk/tags/
