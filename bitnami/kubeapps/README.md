@@ -57,11 +57,11 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```bash
 helm install kubeapps --namespace kubeapps \
-  --set assetsvc.service.port=9090 \
+  --set ingress.enabled=true \
     bitnami/kubeapps
 ```
 
-The above command sets the port for the assetsvc Service to 9090.
+The above command enables an Ingress Rule to expose Kubeapps.
 
 Alternatively, a YAML file that specifies the values for parameters can be provided while installing the chart. For example,
 

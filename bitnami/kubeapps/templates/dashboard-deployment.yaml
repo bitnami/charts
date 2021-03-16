@@ -59,7 +59,7 @@ spec:
               name: custom-locale
           ports:
             - name: http
-              containerPort: 8080
+              containerPort: {{ .Values.dashboard.service.port }}
           {{- if .Values.dashboard.resources }}
           resources: {{- toYaml .Values.dashboard.resources | nindent 12 }}
           {{- end }}
