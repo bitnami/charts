@@ -323,8 +323,8 @@ Value.kong.extraEnvVars:
 
 #### Short Story
 Kong 1.1 added the capability to run Kong without a database, using only in-memory storage for entities: we call this DB-less mode. When running Kong DB-less, the configuration of entities is done in a second configuration file, in YAML or JSON, using declarative configuration (ref. [Link](https://docs.konghq.com/gateway-oss/1.1.x/db-less-and-declarative-config/)).
-On the step 4 of [kong official docker installation](https://docs.konghq.com/install/docker#db-less-mode),
-just change the config of docker run command FROM -e "KONG_DATABASE=postgres" TO -e "KONG_DATABASE=off" and you can go ahead!
+As is said in the step 4 of [kong official docker installation](https://docs.konghq.com/install/docker#db-less-mode),
+just add the env variable "KONG_DATABASE=off".
 
 ### Sidecars and Init Containers
 
