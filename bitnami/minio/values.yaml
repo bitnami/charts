@@ -137,7 +137,8 @@ tls:
   ##
   secretName: ""
   ## The mounted path where the secret will be located
-  mountPath: /certs
+  ##  Custom mount path where the certificates will be located, if empty will default to /certs
+  mountPath: ""
 
 ## An array to add extra env vars
 ## e.g:
