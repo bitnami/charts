@@ -233,7 +233,7 @@ spec:
             {{- end }}
             {{- if .Values.tls.enabled }}
             - name: minio-certs
-              mountPath: {{ .Values.tls.mountPath }}
+              mountPath: {{ default "/certs" .Values.tls.mountPath }}
             {{- end }}
             {{- if and .Values.persistence.enabled (gt $drivesPerNode 1) }}
             {{- range $diskId := until $drivesPerNode }}
