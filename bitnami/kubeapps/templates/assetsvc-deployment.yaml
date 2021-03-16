@@ -47,8 +47,12 @@ spec:
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.postgresql.existingSecret }}
                   key: postgresql-password
+              {{- if .Values.postgresql.existingSecret }}
+                  name: {{ .Values.postgresql.existingSecret }}
+              {{- else }}
+                  name: {{ template "kubeapps.postgresql.fullname" . }}
+              {{- end }}
             - name: POD_NAMESPACE
               valueFrom:
                 fieldRef:
