@@ -1,18 +1,17 @@
-# spring-cloud-gateway
+# wavefront-prometheus-storage-adapter
 
-[Spring Cloud Gateway](https://spring.io/projects/spring-cloud-gateway) aims to provide a simple, yet effective way to route to APIs and provide cross cutting concerns to them such as: security, monitoring/metrics, and resiliency.
-
+[Wavefront Storage Adapter for Prometheus](https://github.com/wavefrontHQ/prometheus-storage-adapter) is a Prometheus integration to transfer metrics from Prometheus to Wavefront. It works as a "fork", such that data written to Prometheus is also written to Wavefront. It supports metrics path conversion and direct ingestion of metrics.
 ## TL;DR
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/spring-cloud-gateway
+$ helm install my-release bitnami/wavefront-prometheus-storage-adapter
 ```
 
 ## Introduction
 Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
 
-This chart bootstraps a [Spring Cloud Gateway](https://spring.io/projects/spring-cloud-gateway) Deployment in a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+Wavefront Storage Adapter for Prometheus Cloud Gateway](https://github.com/wavefrontHQ/prometheus-storage-adapter) Deployment in a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
@@ -27,10 +26,10 @@ To install the chart with the release name `my-release`:
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/spring-cloud-gateway
+$ helm install my-release bitnami/wavefront-prometheus-storage-adapter
 ```
 
-These commands deploy spring-cloud-gateway on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
+These commands deploy wavefront-prometheus-storage-adapter on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
@@ -49,7 +48,7 @@ The command removes all the Kubernetes components associated with the chart and 
 ### Global parameters
 
 | Name                      | Description                                        | Value           |
-| ------------------------- | -------------------------------------------------- | --------------- |
+|---------------------------|----------------------------------------------------|-----------------|
 | `global.imageRegistry`    | Global Docker image registry                       | `nil`           |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array    | `[]`            |
 | `kubeVersion`             | Override Kubernetes version                        | `nil`           |
@@ -60,11 +59,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `clusterDomain`           | Kubernetes cluster domain name                     | `cluster.local` |
 | `extraDeploy`             | Array of extra objects to deploy with the release  | `[]`            |
 
-
 ### Wavefront Prometheus Storage Adapter deployment parameters
 
 | Name                                    | Description                                                                               | Value                                          |
-| --------------------------------------- | ----------------------------------------------------------------------------------------- | ---------------------------------------------- |
+|-----------------------------------------|-------------------------------------------------------------------------------------------|------------------------------------------------|
 | `image.registry`                        | Adapter image registry                                                                    | `docker.io`                                    |
 | `image.repository`                      | Adapter image repository                                                                  | `bitnami/wavefront-prometheus-storage-adapter` |
 | `image.tag`                             | Adapter image tag (immutabe tags are recommended)                                         | `1.0.3-debian-10-r0`                           |
@@ -121,11 +119,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `adapterPrefix`                         | Adapter `prefix` parameter                                                                | `nil`                                          |
 | `adapterTags`                           | Adapter `tags` parameter                                                                  | `nil`                                          |
 
-
 ### Traffic Exposure Parameters
 
 | Name                               | Description                                  | Value       |
-| ---------------------------------- | -------------------------------------------- | ----------- |
+|------------------------------------|----------------------------------------------|-------------|
 | `service.type`                     | Adapter service type                         | `ClusterIP` |
 | `service.port`                     | Adapter service port                         | `1234`      |
 | `service.loadBalancerIP`           | Adapter service LoadBalancer IP              | `nil`       |
@@ -133,11 +130,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.nodePorts.http`           | NodePort for the HTTP endpoint               | `""`        |
 | `service.externalTrafficPolicy`    | External traffic policy for the service      | `Cluster`   |
 
-
 ### Wavefront sub-chart parameters
 
 | Name                              | Description                                                                               | Value   |
-| --------------------------------- | ----------------------------------------------------------------------------------------- | ------- |
+|-----------------------------------|-------------------------------------------------------------------------------------------|---------|
 | `wavefront.enabled`               | Deploy Wavefront chart (necessary if externalProxyHost is not set)                        | `true`  |
 | `wavefront.collector.enabled`     | Deploy Wavefront collector (not used by the Adapter pod)                                  | `false` |
 | `wavefront.rbac.create`           | Create RBAC rules (not necessary if the Adapter only uses wavefront-proxy)                | `false` |
@@ -145,13 +141,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `wavefront.proxy.port`            | Deployed Wavefront Proxy port (required if externalProxyHost is not set)                  | `2878`  |
 | `wavefront.serviceAccount.create` | Create Wavefront serivce account (not necessary if the Adapter only uses wavefront-proxy) | `false` |
 
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
 $ helm install my-release \
   --set livenessProbe.successThreshold=5 \
-    bitnami/spring-cloud-gateway
+    bitnami/wavefront-prometheus-storage-adapter
 ```
 
 The above command sets the `livenessProbe.successThreshold` to `5`.
@@ -159,7 +154,7 @@ The above command sets the `livenessProbe.successThreshold` to `5`.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```bash
-$ helm install my-release -f values.yaml bitnami/spring-cloud-gateway
+$ helm install my-release -f values.yaml bitnami/wavefront-prometheus-storage-adapter
 ```
 
 ## Configuration and installation details
@@ -211,5 +206,5 @@ Find more information about how to deal with common errors related to Bitnami’
 ## Upgrading
 
 ```bash
-$ helm upgrade my-release bitnami/spring-cloud-gateway
+$ helm upgrade my-release bitnami/wavefront-prometheus-storage-adapter
 ```
