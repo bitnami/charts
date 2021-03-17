@@ -106,7 +106,7 @@ spec:
             {{- if (include "kafka.tlsEncryption" .) }}
             - name: kafka-certificates
               secret:
-                secretName: {{ include "kafka.jksSecretName" . }}
+                secretName: {{ include "kafka.tlsSecretName" . }}
                 defaultMode: 256
             {{- end }}
 {{- end }}
