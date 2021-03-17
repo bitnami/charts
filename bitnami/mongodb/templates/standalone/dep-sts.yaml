@@ -151,6 +151,7 @@ spec:
               cd /certs/
               shopt -s extglob
               rm -rf !(mongodb-ca-cert|mongodb.pem|CAs|openssl.cnf)
+              chmod 0600 mongodb-ca-cert mongodb.pem
               EOF
         {{- end }}
       {{- end }}
@@ -375,10 +376,10 @@ spec:
             items:
             - key: mongodb-ca-cert
               path: mongodb-ca-cert
-              mode: 511
+              mode: 0600
             - key: mongodb-ca-key
               path: mongodb-ca-key
-              mode: 511
+              mode: 0600
         {{- end }}
   {{- if not .Values.persistence.enabled }}
         - name: datadir
