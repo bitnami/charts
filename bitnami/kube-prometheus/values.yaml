@@ -827,6 +827,11 @@ prometheus:
       # pullSecrets:
       #   - myRegistryKeySecretName
 
+
+    ## Override default prometheus url "http://localhost:9090"
+    ##
+    prometheusUrl: ""
+
     ## Extra arguments passed to thanos sidecar 'args' section
     ##
     extraArgs: []
