@@ -830,7 +830,7 @@ prometheus:
 
     ## Override default prometheus url "http://localhost:9090"
     ##
-    prometheusUrlOverride: ""
+    prometheusUrl: ""
 
     ## Extra arguments passed to thanos sidecar 'args' section
     ##
