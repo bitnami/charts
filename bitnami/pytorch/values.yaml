@@ -148,7 +148,7 @@ cloneFilesFromGit:
   ## E.g:
   ## extraVolumeMounts:
   ##   - name: ssh-dir
-  ##     mountPath: /root/.ssh/
+  ##     mountPath: /.ssh/
   ##
   extraVolumeMounts: []
 
