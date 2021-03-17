@@ -257,6 +257,8 @@ spec:
               value: {{ .Values.systemLogVerbosity | quote }}
             - name: MONGODB_DISABLE_SYSTEM_LOG
               value: {{ ternary "yes" "no" .Values.disableSystemLog | quote }}
+            - name: MONGODB_DISABLE_JAVASCRIPT
+              value: {{ ternary "yes" "no" .Values.disableJavascript | quote }}
             - name: MONGODB_ENABLE_IPV6
               value: {{ ternary "yes" "no" .Values.enableIPv6 | quote }}
             - name: MONGODB_ENABLE_DIRECTORY_PER_DB

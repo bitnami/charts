@@ -142,6 +142,11 @@ directoryPerDB: false
 systemLogVerbosity: 0
 disableSystemLog: false
 
+## MongoDB(R) server-side JavaScript execution
+## ref: https://docs.mongodb.com/manual/core/server-side-javascript/
+##
+disableJavascript: false
+
 ## MongoDB(R) configuration file for Primary and Secondary nodes. For documentation of all options, see:
 ##   http://docs.mongodb.org/manual/reference/configuration-options/
 ## Example:
