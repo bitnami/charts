@@ -79,7 +79,7 @@ spec:
             - --tsdb.path=/var/thanos/receive
             - --label={{ .Values.receive.replicaLabel }}="$(NAME)"
             - --label=receive="true"
-            - --tsdb.retention=15d
+            - --tsdb.retention={{ .Values.receive.tsdbRetention }}
             {{- if not .Values.receive.service.additionalHeadless }}
             - --receive.local-endpoint=127.0.0.1:10901
             {{- else }}
