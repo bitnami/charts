@@ -1,7 +1,7 @@
 annotations:
   category: Analytics
 apiVersion: v2
-appVersion: 1.1.1
+appVersion: 1.1.2
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -24,4 +24,4 @@ sources:
   - https://github.com/bitnami/bitnami-docker-node-exporter
   - https://github.com/prometheus/node_exporter
   - https://prometheus.io/
-version: 2.2.3
+version: 2.2.4

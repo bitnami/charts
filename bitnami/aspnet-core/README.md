@@ -134,7 +134,7 @@ The following tables lists the configurable parameters of the ASP.NET Core chart
 | `appFromExternalRepo.clone.image.pullPolicy`      | GIT image pull policy                                                          | `IfNotPresent`                                                     |
 | `appFromExternalRepo.clone.image.pullSecrets`     | Specify docker-registry secret names as an array                               | `[]` (does not add image pull secrets to deployed pods)            |
 | `appFromExternalRepo.clone.repository`            | GIT Repository to clone                                                        | `https://github.com/dotnet/AspNetCore.Docs.git`                    |
-| `appFromExternalRepo.clone.revision`              | GIT revision to checkout                                                       | `master`                                                           |
+| `appFromExternalRepo.clone.revision`              | GIT revision to checkout                                                       | `main`                                                             |
 | `appFromExternalRepo.publish.image.registry`      | .NET SDK image registry                                                        | `docker.io`                                                        |
 | `appFromExternalRepo.publish.image.repository`    | .NET SDK Image name                                                            | `bitnami/git`                                                      |
 | `appFromExternalRepo.publish.image.tag`           | .NET SDK Image tag                                                             | `{TAG_NAME}`                                                       |
@@ -259,7 +259,7 @@ For example, you can deploy a sample [Kestrel server](https://docs.microsoft.com
 ```console
 appFromExternalRepo.enabled=true
 appFromExternalRepo.clone.repository=https://github.com/dotnet/AspNetCore.Docs.git
-appFromExternalRepo.clone.branch=master
+appFromExternalRepo.clone.revision=main
 appFromExternalRepo.publish.aspnetcore/fundamentals/servers/kestrel/samples/3.x/KestrelSample
 appFromExternalRepo.startCommand[0]=dotnet
 appFromExternalRepo.startCommand[1]=KestrelSample.dll

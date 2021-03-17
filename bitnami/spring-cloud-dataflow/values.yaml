@@ -838,6 +838,11 @@ metrics:
     # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
     limits: {}
     requests: {}
+
+  ## Number of Dataflow Prometheus Rsocket Proxy replicas to deploy.
+  ##
+  replicaCount: 1
+
   service:
     ## Prometheus Rsocket Proxy HTTP port
     ##
@@ -855,7 +860,11 @@ metrics:
   ##
   serviceMonitor:
     enabled: false
-    ## Namespace in which Prometheus is running
+    ## Labels to add to ServiceMonitor, in case prometheus operator is configured with serviceMonitorSelector
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
+    ##
+    extraLabels: {}
+    ## Namespace in which ServiceMonitor is created if different from release
     ##
     # namespace: monitoring
     ## Interval at which metrics should be scraped.
@@ -866,6 +875,27 @@ metrics:
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
     # scrapeTimeout: 10s
+
+  ## Prometheus Rsocket Proxy Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+  ##
+  pdb:
+    create: false
+    ## Min number of pods that must still be available after the eviction
+    ##
+    minAvailable: 1
+    ## Max number of pods that can be unavailable after the eviction
+    ##
+    # maxUnavailable: 1
+
+  ## Prometheus Rsocket Proxy Autoscaling parameters.
+  ##
+  autoscaling:
+    enabled: false
+    # minReplicas: 1
+    # maxReplicas: 11
+    # targetCPU: 50
+    # targetMemory: 50
 
 ##
 ## MariaDB chart configuration

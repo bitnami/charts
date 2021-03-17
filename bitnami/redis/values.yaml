@@ -84,7 +84,7 @@ sentinel:
   port: 26379
 
   ## Delay seconds when cleaning nodes IPs
-  ## When starting it will clean the sentiles IP (RESET "*") in all the nodes
+  ## When starting it will clean the sentinels IP (RESET "*") in all the nodes
   ## This is the delay time before sending the command to the next node
   ##
   cleanDelaySeconds: 5
