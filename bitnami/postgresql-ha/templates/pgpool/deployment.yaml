@@ -300,6 +300,19 @@ spec:
           {{- else if .Values.pgpool.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
+          {{- if and .Values.pgpool.startupProbe.enabled (not .Values.ldap.enabled) }}
+          startupProbe:
+            exec:
+              command:
+                - /opt/bitnami/scripts/pgpool/healthcheck.sh
+            initialDelaySeconds: {{ .Values.pgpool.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.pgpool.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.pgpool.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.pgpool.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.pgpool.startupProbe.failureThreshold }}
+          {{- else if .Values.pgpool.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.pgpool.resources }}
           resources: {{- toYaml .Values.pgpool.resources | nindent 12 }}
           {{- end }}
