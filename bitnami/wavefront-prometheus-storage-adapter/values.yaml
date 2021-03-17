@@ -17,12 +17,12 @@
 ##
 kubeVersion:
 
-## String to partially override aspnet-core.fullname template (will maintain the release name)
+## String to partially override common.names.fullname template (will maintain the release name)
 ## @param nameOverride String to partially override common.names.fullname
 ##
 nameOverride:
 
-## String to fully override aspnet-core.fullname template
+## String to fully override common.names.fullname template
 ## @param fullnameOverride String to fully override common.names.fullname
 ##
 fullnameOverride:

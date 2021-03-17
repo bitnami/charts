@@ -1,7 +1,7 @@
 {{/*
 Return the proper wavefront-prometheus-storage-adapter image name
 */}}
-{{- define "wavefront-prometheus-storage-adapter.image" -}}
+{{- define "wfpsa.image" -}}
 {{ include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) }}
 {{- end -}}
 
@@ -9,23 +9,23 @@ Return the proper wavefront-prometheus-storage-adapter image name
 Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
-{{- define "wavefront-prometheus-storage-adapter.proxy.fullname" -}}
+{{- define "wfpsa.proxy.fullname" -}}
 {{- printf "%s-%s" .Release.Name "wavefront-proxy" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
 Return the proper Docker Image Registry Secret Names
 */}}
-{{- define "wavefront-prometheus-storage-adapter.imagePullSecrets" -}}
+{{- define "wfpsa.imagePullSecrets" -}}
 {{- include "common.images.pullSecrets" (dict "images" (list .Values.image) "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
 Compile all warnings into a single message.
 */}}
-{{- define "wavefront-prometheus-storage-adapter.validateValues" -}}
+{{- define "wfpsa.validateValues" -}}
 {{- $messages := list -}}
-{{- $messages := append $messages (include "wavefront-prometheus-storage-adapter.validateValues.proxy" .) -}}
+{{- $messages := append $messages (include "wfpsa.validateValues.proxy" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -35,7 +35,7 @@ Compile all warnings into a single message.
 {{- end -}}
 
 {{/* Validate values of Wavefront Prometheus Storage Adapter - Wavefront Proxy configuration */}}
-{{- define "wavefront-prometheus-storage-adapter.validateValues.proxy" -}}
+{{- define "wfpsa.validateValues.proxy" -}}
 {{- if and (not .Values.wavefront.enabled) (not .Values.externalProxy.host) -}}
 wavefront-prometheus-storage-adaper: MissingProxy
     The Storage Adapter must connect to a Wavefront Proxy instance. Use one of the following options:

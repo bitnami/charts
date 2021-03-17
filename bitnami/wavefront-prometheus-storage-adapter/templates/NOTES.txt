@@ -17,4 +17,4 @@
 {{- end }}
 
 {{- include "common.warnings.rollingTag" .Values.image }}
-{{- include "wavefront-prometheus-storage-adapter.validateValues" . }}
+{{- include "wfpsa.validateValues" . }}
