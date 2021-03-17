@@ -136,10 +136,10 @@ The command removes all the Kubernetes components associated with the chart and 
 |-----------------------------------|-------------------------------------------------------------------------------------------|---------|
 | `wavefront.enabled`               | Deploy Wavefront chart (necessary if externalProxyHost is not set)                        | `true`  |
 | `wavefront.collector.enabled`     | Deploy Wavefront collector (not used by the Adapter pod)                                  | `false` |
-| `wavefront.rbac.create`           | Create RBAC rules (not necessary if the Adapter only uses wavefront-proxy)                | `false` |
+| `wavefront.rbac.create`           | Create RBAC rules (not necessary as the Adapter only uses wavefront-proxy)                | `false` |
 | `wavefront.proxy.enabled`         | Deploy Wavefront Proxy (required if externalProxyHost is not set)                         | `true`  |
 | `wavefront.proxy.port`            | Deployed Wavefront Proxy port (required if externalProxyHost is not set)                  | `2878`  |
-| `wavefront.serviceAccount.create` | Create Wavefront serivce account (not necessary if the Adapter only uses wavefront-proxy) | `false` |
+| `wavefront.serviceAccount.create` | Create Wavefront serivce account (not necessary as the Adapter only uses wavefront-proxy) | `false` |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

@@ -391,7 +391,7 @@ wavefront:
   ##
   collector:
     enabled: false
-  ## @param wavefront.rbac.create Create RBAC rules (not necessary if the Adapter only uses wavefront-proxy)
+  ## @param wavefront.rbac.create Create RBAC rules (not necessary as the Adapter only uses wavefront-proxy)
   ##
   rbac:
     create: false
@@ -402,7 +402,7 @@ wavefront:
     ## @param wavefront.proxy.port Deployed Wavefront Proxy port (required if externalProxyHost is not set)
     ##
     port: 2878
-  ## @param wavefront.serviceAccount.create Create Wavefront serivce account (not necessary if the Adapter only uses wavefront-proxy)
+  ## @param wavefront.serviceAccount.create Create Wavefront serivce account (not necessary as the Adapter only uses wavefront-proxy)
   ##
   serviceAccount:
     create: false
