@@ -58,7 +58,7 @@ To connect to your Solr from outside the cluster execute the following commands:
 
   * Internally, within the kubernetes cluster on:
 
-{{ include "solr.exporter-name" . }}.{{ .Release.Name }}.svc.{{ .Values.clusterDomain }}:{{ .Values.exporter.port }}/metrics
+{{ include "solr.exporter-name" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:{{ .Values.exporter.port }}/metrics
 
 {{- end }}
 
