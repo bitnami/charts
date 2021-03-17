@@ -467,7 +467,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-dashboard
-    tag: 2.2.1-debian-10-r19
+    tag: 2.2.1-debian-10-r20
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -526,6 +526,10 @@ dashboard:
   ##      background-color: #991700;
   ##    }
   customStyle: ""
+  ## Custom Form components injected into the BasicDeploymentForm
+  ## Read the reference below for a step-by-step integration
+  ## https://github.com/kubeapps/kubeapps/blob/master/docs/developer/custom-form-component-support.md
+  customComponents: ""
   ## Custom translations injected to the Dashboard to customize the strings used in Kubeapps
   ## Ref: https://github.com/kubeapps/kubeapps/blob/master/docs/developer/translate-kubeapps.md
   ## e.g:

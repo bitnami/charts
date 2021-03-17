@@ -27,6 +27,10 @@ data:
         root /app/custom-locale/;
       }
 
+      location /custom_components.js {
+        root /app/custom-components/;
+      }
+
       location / {
         # Redirects are required to be relative otherwise the internal hostname will be exposed
         absolute_redirect off;
@@ -50,6 +54,8 @@ data:
     }
   custom_style.css: |-
 {{- .Values.dashboard.customStyle | nindent 4 }}
+  custom_components.js: |-
+{{- .Values.dashboard.customComponents | nindent 4 }}
   custom_locale.json: |-
 {{- .Values.dashboard.customLocale | toJson | nindent 4 }}
   config.json: |-
