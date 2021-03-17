@@ -26,5 +26,10 @@ spec:
       port: {{ .Values.service.port }}
       targetPort: http
       protocol: TCP
+      {{- if (and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.http))) }}
+      nodePort: {{ .Values.service.nodePorts.http }}
+      {{- else if eq .Values.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: wavefront-prometheus-storage-adapter

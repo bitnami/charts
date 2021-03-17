@@ -22,7 +22,7 @@ kubeVersion:
 image:
   registry: docker.io
   repository: bitnami/influxdb
-  tag: 2.0.4-debian-10-r0
+  tag: 2.0.4-debian-10-r29
 
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -782,7 +782,7 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/google-cloud-sdk
-        tag: 0.327.0-debian-10-r4
+        tag: 0.331.0-debian-10-r5
 
         ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
         ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -807,7 +807,7 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/azure-cli
-        tag: 2.19.1-debian-10-r4
+        tag: 2.20.0-debian-10-r12
 
         ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
         ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images

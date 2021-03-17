@@ -47,9 +47,7 @@ clusterDomain: cluster.local
 ##
 extraDeploy: []
 
-## @section wavefront-prometheus-storage-adapter deployment parameters
-##
-## wavefront-prometheus-storage-adapter container image
+## @section Wavefront Prometheus Storage Adapter deployment parameters
 ##
 image:
   ## @param image.registry Adapter image registry
@@ -334,7 +332,7 @@ externalProxy:
   host:
   ## @param externalProxy.port Host of a wavefront-proxy instance (required if wavefront.enabled = false)
   ##
-  port:
+  port: 2878
 
 ## Adapter prefix parameter
 ## @param adapterPrefix Adapter `prefix` parameter
@@ -397,10 +395,13 @@ wavefront:
   ##
   rbac:
     create: false
-  ## @param wavefront.proxy.enabled Deploy Wavefront Proxy (required if externalProxyHost is not set)
-  ##
   proxy:
+    ## @param wavefront.proxy.enabled Deploy Wavefront Proxy (required if externalProxyHost is not set)
+    ##
     enabled: true
+    ## @param wavefront.proxy.port Deployed Wavefront Proxy port (required if externalProxyHost is not set)
+    ##
+    port: 2878
   ## @param wavefront.serviceAccount.create Create Wavefront serivce account (not necessary if the Adapter only uses wavefront-proxy)
   ##
   serviceAccount:

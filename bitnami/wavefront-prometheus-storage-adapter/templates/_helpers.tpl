@@ -14,13 +14,6 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
-Return the proper image name (for the init container volume-permissions image)
-*/}}
-{{- define "wavefront-prometheus-storage-adapter.volumePermissions.image" -}}
-{{- include "common.images.image" ( dict "imageRoot" .Values.volumePermissions.image "global" .Values.global ) -}}
-{{- end -}}
-
-{{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "wavefront-prometheus-storage-adapter.imagePullSecrets" -}}
@@ -28,27 +21,74 @@ Return the proper Docker Image Registry Secret Names
 {{- end -}}
 
 {{/*
-Create the name of the service account to use
-*/}}
-{{- define "wavefront-prometheus-storage-adapter.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create -}}
-    {{ default (printf "%s-foo" (include "common.names.fullname" .)) .Values.serviceAccount.name }}
-{{- else -}}
-    {{ default "default" .Values.serviceAccount.name }}
-{{- end -}}
-{{- end -}}
-
-{{/*
 Compile all warnings into a single message.
 */}}
 {{- define "wavefront-prometheus-storage-adapter.validateValues" -}}
 {{- $messages := list -}}
-{{- $messages := append $messages (include "wavefront-prometheus-storage-adapter.validateValues.foo" .) -}}
-{{- $messages := append $messages (include "wavefront-prometheus-storage-adapter.validateValues.bar" .) -}}
+{{- $messages := append $messages (include "wavefront-prometheus-storage-adapter.validateValues.proxy" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
 {{- if $message -}}
 {{-   printf "\nVALUES VALIDATION:\n%s" $message -}}
 {{- end -}}
+{{- end -}}
+
+{{/* Validate values of Wavefront Prometheus Storage Adapter - Wavefront Proxy configuration */}}
+{{- define "wavefront-prometheus-storage-adapter.validateValues.proxy" -}}
+{{- if and (not .Values.wavefront.enabled) (not .Values.externalProxy.host) -}}
+wavefront-prometheus-storage-adaper: MissingProxy
+    The Storage Adapter must connect to a Wavefront Proxy instance. Use one of the following options:
+
+    1) Deploy the Wavefront subchart with the Wavefront Proxy. Recommended values:
+
+    wavefront:
+      enabled: true
+      collector:
+        enabled: false
+      rbac:
+        create: false
+      serviceAccount:
+        create: false
+      proxy:
+        enabled: true
+
+    2) Use an existing Wavefront Proxy instance. Set the externalProxy.host and externalProxy.port values
+{{- end -}}
+
+{{- if and (.Values.wavefront.enabled) (not .Values.wavefront.proxy.enabled) -}}
+wavefront-prometheus-storage-adaper: SubchartProxyNotDeployed
+    The Wavefront subchart is being deployed without the mandatory Wavefront Proxy instance. Set wavefront.proxy.enabled=true. We recommend the following values:
+
+    wavefront:
+      enabled: true
+      collector:
+        enabled: false
+      rbac:
+        create: false
+      serviceAccount:
+        create: false
+      proxy:
+        enabled: true
+{{- end }}
+
+{{- if and .Values.wavefront.enabled .Values.externalProxy.host -}}
+wavefront-prometheus-storage-adaper: ConflictingProxies
+    The Wavefront subchart is being deployed and an external Wavefront Proxy is set. Select ONLY one of the following options:
+
+    1) Deploy the Wavefront subchart with the Wavefront Proxy. Recommended values:
+
+    wavefront:
+      enabled: true
+      collector:
+        enabled: false
+      rbac:
+        create: false
+      serviceAccount:
+        create: false
+      proxy:
+        enabled: true
+
+    2) Use an existing Wavefront Proxy instance. Set the externalProxy.host and externalProxy.port values
+{{- end }}
 {{- end -}}

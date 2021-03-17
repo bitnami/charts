@@ -79,7 +79,7 @@ spec:
             - "-p"
             - {{ .Values.exporter.port | quote }}
             - "-z"
-            - "{{ include "solr.zookeeper.host" . }}:{{ .Values.zookeeper.port }}/solr"
+            - "{{ include "solr.zookeeper.host" . }}/solr"
             - "-n"
             - {{ .Values.exporter.threads | quote }}
             - "-f"

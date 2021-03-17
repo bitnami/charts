@@ -28,7 +28,6 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
         {{- end }}
     spec:
-      serviceAccountName: {{ template "wavefront-prometheus-storage-adapter.serviceAccountName" . }}
       {{- include "wavefront-prometheus-storage-adapter.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
@@ -37,8 +36,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "component" wavefront-prometheus-storage-adapter "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "component" wavefront-prometheus-storage-adapter "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "component" "wavefront-prometheus-storage-adapter" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "component" "wavefront-prometheus-storage-adapter" "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.nodeSelector }}
@@ -83,7 +82,9 @@ spec:
             {{- else }}
             - -proxy={{ .Values.externalProxy.host }}
             {{- end }}
-            {{- if .Values.externalProxy.proxyPort }}
+            {{- if .Values.wavefront.proxy.enabled }}
+            - -proxy-port={{ .Values.wavefront.proxy.port }}
+            {{- else }}
             - -proxy-port={{ .Values.externalProxy.port }}
             {{- end }}
             {{- if .Values.adapterPrefix }}

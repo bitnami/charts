@@ -61,7 +61,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraDeploy`             | Array of extra objects to deploy with the release  | `[]`            |
 
 
-### wavefront-prometheus-storage-adapter deployment parameters
+### Wavefront Prometheus Storage Adapter deployment parameters
 
 | Name                                    | Description                                                                               | Value                                          |
 | --------------------------------------- | ----------------------------------------------------------------------------------------- | ---------------------------------------------- |
@@ -117,7 +117,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `initContainers`                        | Add additional init containers to the Adapter pods                                        | `{}`                                           |
 | `sidecars`                              | Add additional sidecar containers to the Adapter pod                                      | `{}`                                           |
 | `externalProxy.host`                    | Host of a wavefront-proxy instance (required if wavefront.enabled = false)                | `nil`                                          |
-| `externalProxy.port`                    | Host of a wavefront-proxy instance (required if wavefront.enabled = false)                | `nil`                                          |
+| `externalProxy.port`                    | Host of a wavefront-proxy instance (required if wavefront.enabled = false)                | `2878`                                         |
 | `adapterPrefix`                         | Adapter `prefix` parameter                                                                | `nil`                                          |
 | `adapterTags`                           | Adapter `tags` parameter                                                                  | `nil`                                          |
 
@@ -142,6 +142,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `wavefront.collector.enabled`     | Deploy Wavefront collector (not used by the Adapter pod)                                  | `false` |
 | `wavefront.rbac.create`           | Create RBAC rules (not necessary if the Adapter only uses wavefront-proxy)                | `false` |
 | `wavefront.proxy.enabled`         | Deploy Wavefront Proxy (required if externalProxyHost is not set)                         | `true`  |
+| `wavefront.proxy.port`            | Deployed Wavefront Proxy port (required if externalProxyHost is not set)                  | `2878`  |
 | `wavefront.serviceAccount.create` | Create Wavefront serivce account (not necessary if the Adapter only uses wavefront-proxy) | `false` |
 
 
@@ -169,22 +170,38 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### Deploying extra resources
+### Connecting to a Wavefront Proxy
 
-There are cases where you may want to deploy extra objects, such your custom *SpringCloudGateway*, *SpringCloudGatewayMapping* or *SpringCloudGatewayRouteConfig* objects. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter.
+The Wavefront Prometheus Storage Adapter chart needs to be connected to a Wavefront Proxy instance. This can be done in two different ways:
 
-For instance, to deploy your custom *SpringCloudGateway* definition, you can install the Spring Cloud Gateway chart using the values below:
+- Deploying the Wavefront subchart, using only the Wavefront Proxy component (default behavior). This is done by setting `wavefront.enabled=true` and `wavefront.proxy.enabled=true`. We recommend disabling the rest of the Wavefront sub-chart resources as they would not be used by the Prometheus Storage Adapter. In this case, you should not set the `externalProxy.host` value
 
 ```yaml
-extraDeploy:
-  - apiVersion: "tanzu.vmware.com/v1"
-    kind: SpringCloudGateway
-    metadata:
-      name: test-gateway-sso
-    spec:
-      count: 1
-      sso:
-        secret: test-gateway-sso-credentials
+externalProxy:
+  host:
+  port:
+
+wavefront:
+  enabled: true
+  collector:
+    enabled: false
+  rbac:
+    create: false
+  serviceAccount:
+    create: false
+  proxy:
+    enabled: true
+```
+
+- Using an external Wavefront Proxy instance. This is done by setting the `externalProxy.host` and `externalProxy.port` values. In this case, you should not set the `wavefront.enabled` value to `true`.
+
+```yaml
+externalProxy:
+  host: example-proxy
+  port: 2878
+
+wavefront:
+  enabled: false
 ```
 
 ## Troubleshooting

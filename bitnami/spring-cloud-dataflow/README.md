@@ -250,15 +250,26 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 | `metrics.image.tag`                    | Prometheus Rsocket Proxy image tag                                                                     | `{TAG_NAME}`                                            |
 | `metrics.image.pullPolicy`             | Prometheus Rsocket Proxy image pull policy                                                             | `IfNotPresent`                                          |
 | `metrics.image.pullSecrets`            | Specify docker-registry secret names as an array                                                       | `[]` (does not add image pull secrets to deployed pods) |
+| `metrics.replicaCount`                 | Number of Prometheus Rsocket Proxy replicas to deploy                                                  | `1`                                                     |
 | `metrics.resources.limits`             | The resources limits for the Prometheus Rsocket Proxy container                                        | `{}`                                                    |
 | `metrics.resources.requests`           | The requested resources for the Prometheus Rsocket Proxy container                                     | `{}`                                                    |
 | `metrics.kafka.service.httpPort`       | Prometheus Rsocket Proxy HTTP port                                                                     | `8080`                                                  |
 | `metrics.kafka.service.rsocketPort`    | Prometheus Rsocket Proxy Rsocket port                                                                  | `8080`                                                  |
 | `metrics.kafka.service.annotations`    | Annotations for Prometheus Rsocket Proxy service                                                       | `Check values.yaml file`                                |
 | `metrics.serviceMonitor.enabled`       | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`) | `false`                                                 |
-| `metrics.serviceMonitor.namespace`     | Namespace in which Prometheus is running                                                               | `nil`                                                   |
+| `metrics.serviceMonitor.namespace`     | Namespace in which ServiceMonitor is created if different from release                                 | `nil`                                                   |
+| `metrics.serviceMonitor.extraLabels`   | Labels to add to ServiceMonitor                                                                        | `{}`                                                    |
 | `metrics.serviceMonitor.interval`      | Interval at which metrics should be scraped.                                                           | `nil` (Prometheus Operator default value)               |
 | `metrics.serviceMonitor.scrapeTimeout` | Timeout after which the scrape is ended                                                                | `nil` (Prometheus Operator default value)               |
+| `metrics.pdb.create`                   | Enable/disable a Pod Disruption Budget creation                                                        | `false`                                                 |
+| `metrics.pdb.minAvailable`             | Minimum number/percentage of pods that should remain scheduled                                         | `1`                                                     |
+| `metrics.pdb.maxUnavailable`           | Maximum number/percentage of pods that may be made unavailable                                         | `nil`                                                   |
+| `metrics.autoscaling.enabled`          | Enable autoscaling for Prometheus Rsocket Proxy                                                        | `false`                                                 |
+| `metrics.autoscaling.minReplicas`      | Minimum number of Prometheus Rsocket Proxy replicas                                                    | `nil`                                                   |
+| `metrics.autoscaling.maxReplicas`      | Maximum number of Prometheus Rsocket Proxy replicas                                                    | `nil`                                                   |
+| `metrics.autoscaling.targetCPU`        | Target CPU utilization percentage                                                                      | `nil`                                                   |
+| `metrics.autoscaling.targetMemory`     | Target Memory utilization percentage                                                                   | `nil`                                                   |
+
 
 ### Init Container parameters
 
