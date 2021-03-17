@@ -56,7 +56,7 @@ spec:
             - /bin/bash
             - -ec
             - |
-              . /opt/bitnami/scripts/git/entrypoint.sh
+              . /opt/bitnami/scripts/git/entrypoint.sh || true
 
               git clone {{ .Values.repository }} --branch {{ .Values.revision }} /app
           volumeMounts:
