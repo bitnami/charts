@@ -542,7 +542,7 @@ git:
   image:
     registry: docker.io
     repository: bitnami/git
-    tag: 2.30.2-debian-10-r4
+    tag: 2.31.0-debian-10-r2
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
