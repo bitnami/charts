@@ -1,4 +1,4 @@
-{{- if and .Values.pdb.create (eq .Values.mode "distributed") }}
+{{- if and .Values.pdb.create (eq .Values.mode "distributed") (not .Values.gateway.enabled) }}
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:

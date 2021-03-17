@@ -100,6 +100,18 @@ spec:
           secret:
             secretName: {{ .Values.metrics.kafka.tlsCaSecret }}
             defaultMode: 0440
-      {{- end }}      
+      {{- end }}
+      {{- end }}
+      {{- if .Values.metrics.kafka.affinity }}
+      affinity:
+        {{ toYaml .Values.metrics.kafka.affinity | nindent 8 }}
+      {{- end }}
+      {{- if .Values.metrics.kafka.tolerations }}
+      tolerations:
+        {{ toYaml .Values.metrics.kafka.tolerations | nindent 8 }}
+      {{- end }}
+      {{- if .Values.metrics.kafka.nodeSelector }}
+      nodeSelector:
+        {{ toYaml .Values.metrics.kafka.nodeSelector | nindent 8 }}
       {{- end }}
 {{- end }}

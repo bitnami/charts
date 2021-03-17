@@ -776,7 +776,7 @@ serviceAccount:
   ##
   create: true
   ## The name of the ServiceAccount to use.
-  ## If not set and create is true, a name is generated using the fluentd.fullname template
+  ## If not set and create is true, a name is generated using the kafka.serviceAccountName template
   ##
   # name:
 
@@ -919,6 +919,22 @@ metrics:
       requests: {}
       #   cpu: 100m
       #   memory: 128Mi
+
+    ## Affinity for pod assignment
+    ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+    ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
+    ##
+    affinity: {}
+
+    ## Node labels for pod assignment
+    ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+    ##
+    nodeSelector: {}
+
+    ## Tolerations for pod assignment
+    ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+    ##
+    tolerations: []
 
     ## Service configuration
     ##

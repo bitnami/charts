@@ -103,7 +103,11 @@ Return the MariaDB Secret Name
 */}}
 {{- define "wordpress.databaseSecretName" -}}
 {{- if .Values.mariadb.enabled }}
-    {{- printf "%s" (include "wordpress.mariadb.fullname" .) -}}
+    {{- if .Values.mariadb.auth.existingSecret -}}
+        {{- printf "%s" .Values.mariadb.auth.existingSecret -}}
+    {{- else -}}
+        {{- printf "%s" (include "wordpress.mariadb.fullname" .) -}}
+    {{- end -}}
 {{- else if .Values.externalDatabase.existingSecret -}}
     {{- printf "%s" .Values.externalDatabase.existingSecret -}}
 {{- else -}}

@@ -54,6 +54,21 @@ commonAnnotations: {}
 ##
 commonLabels: {}
 
+## Cassandra pods ServiceAccount
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+##
+serviceAccount:
+  ## Specifies whether a ServiceAccount should be created
+  ##
+  create: true
+  ## The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the cassandra.fullname template
+  ##
+  # name:
+  ## Annotations to add to the service account (evaluated as a template)
+  ##
+  annotations: {}
+
 ## Cassandra container ports to open
 ## If hostNetwork true: the hostPort is set identical to the containerPort
 ##

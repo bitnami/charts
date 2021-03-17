@@ -67,6 +67,7 @@ spec:
           args:
             - query-frontend
             - --log.level={{ .Values.queryFrontend.logLevel }}
+            - --log.format={{ .Values.queryFrontend.logFormat }}
             - --http-address=0.0.0.0:10902
             - --query-frontend.downstream-url=http://{{ include "common.names.fullname" . }}-query:{{ $query.service.http.port }}
             {{- if or .Values.queryFrontend.config .Values.queryFrontend.existingConfigmap }}

@@ -87,6 +87,7 @@ spec:
           args:
             - store
             - --log.level={{ .Values.storegateway.logLevel }}
+            - --log.format={{ .Values.storegateway.logFormat }}
             - --grpc-address=0.0.0.0:10901
             - --http-address=0.0.0.0:10902
             - --data-dir=/data

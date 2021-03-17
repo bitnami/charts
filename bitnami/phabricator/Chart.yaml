@@ -1,7 +1,7 @@
 annotations:
   category: ProjectManagement
 apiVersion: v2
-appVersion: 2021.10.0
+appVersion: 2021.11.0
 dependencies:
   - condition: mariadb.enabled
     name: mariadb
@@ -37,4 +37,4 @@ name: phabricator
 sources:
   - https://github.com/bitnami/bitnami-docker-phabricator
   - https://www.phacility.com/phabricator/
-version: 11.0.7
+version: 11.0.8

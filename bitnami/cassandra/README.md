@@ -148,6 +148,13 @@ The following table lists the configurable parameters of the Cassandra chart and
 | `metrics.containerPorts.http`        | HTTP Port on the Host and Container                                                       | `8080`                         |
 | `metrics.containerPorts.jmx`         | JMX Port on the Host and Container                                                        | `5555`                         |
 
+### RBAC parameters
+
+| Parameter                    | Description                                                | Default                                           |
+|------------------------------|------------------------------------------------------------|---------------------------------------------------|
+| `serviceAccount.create`      | Enable the creation of a ServiceAccount for Cassandra pods | `true`                                            |
+| `serviceAccount.name`        | Name of the created ServiceAccount                         | Generated using the `cassandra.fullname` template |
+| `serviceAccount.annotations` | Annotations for Cassandra Service Account                  | `{}` (evaluated as a template)                    |
 
 ### Exposure parameters
 

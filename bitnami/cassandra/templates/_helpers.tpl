@@ -29,6 +29,17 @@ Return the proper Docker Image Registry Secret Names
 {{- end -}}
 
 {{/*
+Create the name of the service account to use
+*/}}
+{{- define "cassandra.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create -}}
+    {{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the list of Cassandra seed nodes
 */}}
 {{- define "cassandra.seeds" -}}

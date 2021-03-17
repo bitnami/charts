@@ -88,9 +88,7 @@ spec:
       {{- if .Values.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
-      {{- if .Values.serviceAccount.create }}
       serviceAccountName: {{ template "kafka.serviceAccountName" . }}
-      {{- end }}
       {{- if or (and .Values.volumePermissions.enabled .Values.persistence.enabled) (and .Values.externalAccess.enabled .Values.externalAccess.autoDiscovery.enabled) .Values.initContainers }}
       initContainers:
         {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}

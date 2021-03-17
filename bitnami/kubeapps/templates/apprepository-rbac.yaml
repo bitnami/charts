@@ -1,5 +1,5 @@
 {{- if .Values.rbac.create -}}
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: Role
 metadata:
   name: {{ template "kubeapps.apprepository.fullname" . }}
@@ -40,7 +40,7 @@ rules:
       - update
       - watch
 ---
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: RoleBinding
 metadata:
   name: {{ template "kubeapps.apprepository.fullname" . }}
@@ -56,7 +56,7 @@ subjects:
     namespace: {{ .Release.Namespace }}
 ---
 # Define role, but no binding, so users can be bound to this role
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: Role
 metadata:
   name: {{ .Release.Name }}-repositories-read
@@ -70,7 +70,7 @@ rules:
       - get
 ---
 # Define role, but no binding, so users can be bound to this role
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: Role
 metadata:
   name: {{ .Release.Name }}-repositories-write
@@ -91,7 +91,7 @@ rules:
 # The Kubeapps app repository controller can read and watch its own
 # AppRepository resources cluster-wide. The read and write cluster-roles can
 # also be bound to users in specific namespaces as required.
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
   name: "kubeapps:{{ .Release.Namespace }}:apprepositories-read"
@@ -108,7 +108,7 @@ rules:
       - list
       - watch
 ---
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRoleBinding
 metadata:
   name: "kubeapps:controller:{{ .Release.Namespace }}:apprepositories-read"
@@ -123,7 +123,7 @@ subjects:
     name: {{ template "kubeapps.apprepository.fullname" . }}
     namespace: {{ .Release.Namespace }}
 ---
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
   name: "kubeapps:{{ .Release.Namespace }}:apprepositories-write"
@@ -143,7 +143,7 @@ rules:
     verbs:
       - '*'
 ---
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
   name: "kubeapps:{{ .Release.Namespace }}:apprepositories-refresh"

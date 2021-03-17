@@ -2,7 +2,7 @@
 # Helm 3.1 supports a lookup template tag to create a secret if it does not exist
 # but we can't yet restrict to helm 3.1, hence manually doing this with an initContainer.
 # in the post upgrade job.
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: Role
 metadata:
   name: {{ template "kubeapps.apprepository-job-postupgrade.fullname" . }}
@@ -17,7 +17,7 @@ rules:
       - get
       - create
 ---
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: RoleBinding
 metadata:
   name: {{ template "kubeapps.apprepository-job-postupgrade.fullname" . }}
