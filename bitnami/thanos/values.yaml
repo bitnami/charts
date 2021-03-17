@@ -1888,6 +1888,10 @@ receive:
   ##
   logFormat: logfmt
 
+  ## TSDB retention period
+  ##
+  tsdbRetention: 15d
+
   ## Replication Factor
   ##
   replicationFactor: 1
