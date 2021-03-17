@@ -125,6 +125,14 @@ cloneStaticSiteFromGit:
   ##     value: BAR
   ##
   extraEnvVars: []
+  ## Add extra volume mounts for the GIT containers
+  ## Useful to mount keys to connect through ssh. (normally used with extraVolumes)
+  ## E.g:
+  ## extraVolumeMounts:
+  ##   - name: ssh-dir
+  ##     mountPath: /root/.ssh/
+  ##
+  extraVolumeMounts: []
 
 ## Custom server block to be added to NGINX configuration
 ## PHP-FPM example server block:

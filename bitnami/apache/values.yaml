@@ -122,6 +122,14 @@ cloneHtdocsFromGit:
   # branch:
   interval: 60
   resources: {}
+  ## Add extra volume mounts for the GIT containers
+  ## Useful to mount keys to connect through ssh. (normally used with extraVolumes)
+  ## E.g:
+  ## extraVolumeMounts:
+  ##   - name: ssh-dir
+  ##     mountPath: /root/.ssh/
+  ##
+  extraVolumeMounts: []
 
 ## Name of a config map with the server static content
 ##

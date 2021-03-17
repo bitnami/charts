@@ -80,6 +80,14 @@ appFromExternalRepo:
     ## Git revision to checkout
     ##
     revision: main
+    ## Add extra volume mounts for the GIT container
+    ## Useful to mount keys to connect through ssh. (normally used with extraVolumes)
+    ## E.g:
+    ## extraVolumeMounts:
+    ##   - name: ssh-dir
+    ##     mountPath: /root/.ssh/
+    ##
+    extraVolumeMounts: []
   publish:
     ## Bitnami .NET SDK image version
     ## ref: https://hub.docker.com/r/bitnami/dotnet-sdk/tags/

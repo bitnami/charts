@@ -83,6 +83,8 @@ Returns the init container that will clone repositories files from a given list 
     - /bin/bash
     - -ec
     - |
+    . /opt/bitnami/scripts/git/entrypoint.sh
+
     {{- if .Values.git.dags.enabled }}
       {{- range .Values.git.dags.repositories }}
         git clone {{ .repository }} --branch {{ .branch }} /dags-{{ include "airflow.git.repository.name" . }}
@@ -134,6 +136,8 @@ Returns the a container that will pull and sync repositories files from a given 
     - /bin/bash
     - -ec
     - |
+    . /opt/bitnami/scripts/git/entrypoint.sh
+
       while true; do
       {{- if .Values.git.dags.enabled }}
         {{- range .Values.git.dags.repositories }}
