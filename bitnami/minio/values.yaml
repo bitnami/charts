@@ -26,7 +26,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/minio
-  tag: 2021.3.4-debian-10-r9
+  tag: 2021.3.17-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -50,7 +50,7 @@ image:
 clientImage:
   registry: docker.io
   repository: bitnami/minio-client
-  tag: 2021.3.10-debian-10-r1
+  tag: 2021.3.12-debian-10-r6
 
 ## String to partially override common.names.fullname template (will maintain the release name)
 ##
@@ -136,6 +136,9 @@ tls:
   ## Name of an existing secret holding the certificate information
   ##
   secretName: ""
+  ## The mounted path where the secret will be located
+  ##  Custom mount path where the certificates will be located, if empty will default to /certs
+  mountPath: ""
 
 ## An array to add extra env vars
 ## e.g:

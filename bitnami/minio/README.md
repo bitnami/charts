@@ -95,6 +95,7 @@ The following table lists the configurable parameters of the MinIO&reg; chart an
 | `forceNewKeys`                    | Force admin credentials (access and secret key) to be reconfigured every time they change in the secrets | `false`                                                 |
 | `tls.enabled`                     | Enable tls in front of the container                                                                     | `true`                                                  |
 | `tls.secretName`                  | The name of the secret containing the certificates and key.                                              | `nil`                                                   |
+| `tls.mountPath`                   | The mount path where the secret will be located.                                                         | `nil`                                                   |
 | `defaultBuckets`                  | Comma, semi-colon or space separated list of buckets to create (only in standalone mode)                 | `nil`                                                   |
 | `disableWebUI`                    | Disable MinIO&reg; Web UI                                                                                | `false`                                                 |
 | `command`                         | Default container command (useful when using custom images)                                              | `{}`                                                    |
