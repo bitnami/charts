@@ -30,23 +30,16 @@ Return the proper Docker Image Registry Secret Names
 {{- end -}}
 
 {{/*
-Get the credentials secret key to obtain the user
-*/}}
-{{- define "minio.secret.userKey" -}}
-{{- if or (not .Values.gateway.enabled) (eq .Values.gateway.type "nas") (eq .Values.gateway.type "gcs") (eq .Values.gateway.type "s3") -}}
-access-key
-{{- else if and .Values.gateway.enabled (eq .Values.gateway.type "azure") -}}
-azure-storage-account-name
-{{- end -}}
-{{- end -}}
-
-{{/*
 Get the user to use to access MinIO(R)
 */}}
 {{- define "minio.secret.userValue" -}}
 {{- if .Values.gateway.enabled }}
     {{- if eq .Values.gateway.type "azure" }}
-        {{- .Values.gateway.auth.azure.storageAccountName -}}
+        {{- if .Values.gateway.auth.azure.accessKey }}
+            {{- .Values.gateway.auth.azure.accessKey -}}
+        {{- else -}}
+            {{- randAlphaNum 10 -}}
+        {{- end -}}
     {{- else if eq .Values.gateway.type "gcs" }}
         {{- if .Values.gateway.auth.gcs.accessKey }}
             {{- .Values.gateway.auth.gcs.accessKey -}}
@@ -75,23 +68,16 @@ Get the user to use to access MinIO(R)
 {{- end -}}
 
 {{/*
-Get the credentials secret key to obtain the password
-*/}}
-{{- define "minio.secret.passwordKey" -}}
-{{- if or (not .Values.gateway.enabled) (eq .Values.gateway.type "nas") (eq .Values.gateway.type "gcs") (eq .Values.gateway.type "s3") -}}
-secret-key
-{{- else if and .Values.gateway.enabled (eq .Values.gateway.type "azure") -}}
-azure-storage-account-key
-{{- end -}}
-{{- end -}}
-
-{{/*
 Get the password to use to access MinIO(R)
 */}}
 {{- define "minio.secret.passwordValue" -}}
 {{- if .Values.gateway.enabled }}
     {{- if eq .Values.gateway.type "azure" }}
-        {{- .Values.gateway.auth.azure.storageAccountKey -}}
+        {{- if .Values.gateway.auth.azure.secretKey }}
+            {{- .Values.gateway.auth.azure.secretKey -}}
+        {{- else -}}
+            {{- randAlphaNum 40 -}}
+        {{- end -}}
     {{- else if eq .Values.gateway.type "gcs" }}
         {{- if .Values.gateway.auth.gcs.secretKey }}
             {{- .Values.gateway.auth.gcs.secretKey -}}

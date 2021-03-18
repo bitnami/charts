@@ -236,14 +236,16 @@ The following table lists the configurable parameters of the MinIO&reg; chart an
 | `gateway.enabled`                         | Use MinIO&reg; as Gateway for other storage systems                                 | `false`                                                      |
 | `gateway.type`                            | Gateway type. Supported types are: `azure`, `gcs`, `nas`, `s3`                      | `s3`                                                         |
 | `gateway.replicaCount`                    | Number of MinIO&reg; Gateway replicas                                               | `4`                                                          |
+| `gateway.auth.azure.accessKey`            | Access Key to access MinIO using Azure Gateway                                      | _random 10 character alphanumeric string_                    |
+| `gateway.auth.azure.secretKey`            | Secret Key to access MinIO using Azure Gateway                                      | _random 40 character alphanumeric string_                    |
 | `gateway.auth.azure.storageAccountName`   | Azure Storage Account Name to use to access Azure Blob Storage                      | `nil`                                                        |
 | `gateway.auth.azure.storageAccountKey`    | Azure Storage Account Key to use to access Azure Blob Storage                       | `nil`                                                        |
-| `gateway.auth.gcs.accessKey`              | Access Key to access MinIO using GCS Gateway                                        | `nil`                                                        |
-| `gateway.auth.gcs.secretKey`              | Secret Key to access MinIO using GCS Gateway                                        | `nil`                                                        |
+| `gateway.auth.gcs.accessKey`              | Access Key to access MinIO using GCS Gateway                                        | _random 10 character alphanumeric string_                    |
+| `gateway.auth.gcs.secretKey`              | Secret Key to access MinIO using GCS Gateway                                        | _random 40 character alphanumeric string_                    |
 | `gateway.auth.gcs.keyJSON`                | Service Account key to access GCS                                                   | `nil`                                                        |
 | `gateway.auth.gcs.projectID`              | GCP Project ID to use                                                               | `nil`                                                        |
-| `gateway.auth.nas.accessKey`              | Access Key to access MinIO using NAS Gateway                                        | `nil`                                                        |
-| `gateway.auth.nas.secretKey`              | Secret Key to access MinIO using NAS Gateway                                        | `nil`                                                        |
+| `gateway.auth.nas.accessKey`              | Access Key to access MinIO using NAS Gateway                                        | _random 10 character alphanumeric string_                    |
+| `gateway.auth.nas.secretKey`              | Secret Key to access MinIO using NAS Gateway                                        | _random 40 character alphanumeric string_                    |
 | `gateway.auth.s3.serviceEndpoint`         | AWS S3 endpoint                                                                     | `https://s3.amazonaws.com`                                   |
 | `gateway.auth.s3.accessKey`               | Access Key to use to access AWS S3                                                  | `nil`                                                        |
 | `gateway.auth.s3.secretKey`               | Secret Key to use to access AWS S3                                                  | `nil`                                                        |
