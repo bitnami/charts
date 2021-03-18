@@ -75,9 +75,12 @@ The following table lists the helpers available in the library which are scoped 
 
 ### Ingress
 
-| Helper identifier        | Description                                                          | Expected Input                                                                                                                                                                   |
-|--------------------------|----------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `common.ingress.backend` | Generate a proper Ingress backend entry depending on the API version | `dict "serviceName" "foo" "servicePort" "bar"`, see the [Ingress deprecation notice](https://kubernetes.io/blog/2019/07/18/api-deprecations-in-1-16/) for the syntax differences |
+| Helper identifier                         | Description                                                          | Expected Input                                                                                                                                                                   |
+|-------------------------------------------|----------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `common.ingress.backend`                  | Generate a proper Ingress backend entry depending on the API version | `dict "serviceName" "foo" "servicePort" "bar"`, see the [Ingress deprecation notice](https://kubernetes.io/blog/2019/07/18/api-deprecations-in-1-16/) for the syntax differences |
+| `common.ingress.supportsPathType`         | Prints "true" if the pathType field is supported                     | `.` Chart context                                                                                                                                                                |
+| `common.ingress.supportsIngressClassname` | Returns true if the ingressClassname field is supported              | `.` Chart context                                                                                                                                                                |
+
 
 ### Labels
 
