@@ -1,7 +1,7 @@
 annotations:
   category: MachineLearning
 apiVersion: v2
-appVersion: 1.7.0
+appVersion: 1.8.0
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -24,4 +24,4 @@ name: mxnet
 sources:
   - https://github.com/bitnami/bitnami-docker-mxnet
   - https://mxnet.apache.org/
-version: 2.2.2
+version: 2.2.3

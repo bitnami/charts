@@ -30,4 +30,9 @@ spec:
             if [ "$n" -eq 5 ]; then
               exit 1
             fi
+      {{- if .Values.securityContext.enabled }}
+      securityContext:
+        fsGroup: {{ .Values.securityContext.fsGroup }}
+        runAsUser: {{ .Values.securityContext.runAsUser }}
+      {{- end }}
   restartPolicy: Never

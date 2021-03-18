@@ -28,4 +28,4 @@ name: thanos
 sources:
   - https://github.com/bitnami/bitnami-docker-thanos
   - https://thanos.io
-version: 3.13.1
+version: 3.13.2
