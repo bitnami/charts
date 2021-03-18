@@ -150,6 +150,7 @@ spec:
                   name: {{ $globalSecretName }}
                   key: {{ include "common.secrets.key" (dict "existingSecret" .Values.auth.existingSecret "key" "management-password") }}
                 {{- end }}
+            {{- if (not .Values.externalDatabase.existingSecret) }}
             - name: KEYCLOAK_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -160,6 +161,7 @@ spec:
                   name: {{ $globalSecretName }}
                   key: {{ include "common.secrets.key" (dict "existingSecret" .Values.auth.existingSecret "key" "database-password") }}
                 {{- end }}
+            {{- end }}
             {{- if .Values.auth.tls.enabled }}
             {{- if or .Values.auth.tls.keystorePassword .Values.auth.existingSecretPerPassword }}
             - name: KEYCLOAK_TLS_KEYSTORE_PASSWORD
@@ -203,6 +205,10 @@ spec:
             {{- if .Values.extraEnvVarsSecret }}
             - secretRef:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+            {{- if and .Values.externalDatabase.existingSecret (not .Values.postgresql.enabled) }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.externalDatabase.existingSecret "context" $) }}
             {{- end }}
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
