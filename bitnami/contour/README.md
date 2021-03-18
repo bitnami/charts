@@ -136,6 +136,7 @@ The following tables lists the configurable parameters of the contour chart and 
 | `envoy.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                                                                                                             | `[]` (does not add image pull secrets to deployed pods) |
 | `envoy.resources.limits`                   | Specify resource limits which the container is not allowed to succeed.                                                                                                                                       | `{}` (does not add resource limits to deployed pods)    |
 | `envoy.resources.requests`                 | Specify resource requests which the container needs to spawn.                                                                                                                                                | `{}` (does not add resource limits to deployed pods)    |
+| `envoy.extraArgs`                          | Extra arguments passed to Envoy container                                                                                                                                                                    | `[]`                                                    |
 | `envoy.hostAliases`                        | Add deployment host aliases                                                                                                                                                                                  | `[]`                                                    |
 | `envoy.podAffinityPreset`                  | Envoy Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                    | `""`                                                    |
 | `envoy.podAntiAffinityPreset`              | Envoy Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                               | `""`                                                    |
@@ -364,7 +365,7 @@ Please carefully read through the guide "Upgrading Contour" at https://projectco
 
 ### To 4.0.0
 
-The 4.0 version of this chart introduces changes to handle Contour CRD upgrades. While Helm 3.x introduced the `crd` folder to place CRDs, Helm explicitly does not handle the [CRD upgrade scenario](https://helm.sh/docs/chart_best_practices/custom_resource_definitions/#some-caveats-and-explanations). 
+The 4.0 version of this chart introduces changes to handle Contour CRD upgrades. While Helm 3.x introduced the `crd` folder to place CRDs, Helm explicitly does not handle the [CRD upgrade scenario](https://helm.sh/docs/chart_best_practices/custom_resource_definitions/#some-caveats-and-explanations).
 
 **What changes were introduced in this major version?**
 

@@ -57,6 +57,8 @@ spec:
               name: custom-css
             - mountPath: /app/custom-locale
               name: custom-locale
+            - mountPath: /app/custom-components
+              name: custom-components
           ports:
             - name: http
               containerPort: {{ .Values.dashboard.service.port }}
@@ -88,3 +90,9 @@ spec:
             items:
               - key: custom_locale.json
                 path: custom_locale.json
+        - name: custom-components
+          configMap:
+            name: {{ template "kubeapps.dashboard-config.fullname" . }}
+            items:
+              - key: custom_components.js
+                path: custom_components.js
