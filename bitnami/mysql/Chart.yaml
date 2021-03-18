@@ -25,4 +25,4 @@ name: mysql
 sources:
   - https://github.com/bitnami/bitnami-docker-mysql
   - https://mysql.com
-version: 8.4.4
+version: 8.5.0
