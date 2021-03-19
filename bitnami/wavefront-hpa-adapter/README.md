@@ -1,6 +1,6 @@
 # wavefront-hpa-adapter
 
-[Wavefront HPA Adapter for Kubernetes](https://github.com/wavefrontHQ/prometheus-storage-adapter) Wavefront HPA Adapter for Kubernetes is a Kubernetes Horizontal Pod Autoscaler adapter. It enables Kubernetes workloads to be scaled based on Wavefront metrics.
+[Wavefront HPA Adapter for Kubernetes](https://github.com/wavefrontHQ/wavefront-kubernetes-adapter) Wavefront HPA Adapter for Kubernetes is a Kubernetes Horizontal Pod Autoscaler adapter. It enables Kubernetes workloads to be scaled based on Wavefront metrics.
 
 ## TL;DR
 
@@ -49,7 +49,7 @@ The command removes all the Kubernetes components associated with the chart and 
 ### Global parameters
 
 | Name                      | Description                                        | Value           |
-| ------------------------- | -------------------------------------------------- | --------------- |
+|---------------------------|----------------------------------------------------|-----------------|
 | `global.imageRegistry`    | Global Docker image registry                       | `nil`           |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array    | `[]`            |
 | `kubeVersion`             | Override Kubernetes version                        | `nil`           |
@@ -60,11 +60,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `clusterDomain`           | Kubernetes cluster domain name                     | `cluster.local` |
 | `extraDeploy`             | Array of extra objects to deploy with the release  | `[]`            |
 
-
 ### Wavefront HPA Adapter for Kubernetes deployment parameters
 
 | Name                                    | Description                                                                               | Value                                |
-| --------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------ |
+|-----------------------------------------|-------------------------------------------------------------------------------------------|--------------------------------------|
 | `image.registry`                        | Adapter image registry                                                                    | `docker.io`                          |
 | `image.repository`                      | Adapter image repository                                                                  | `bitnami/wavefront-hpa-adapter`      |
 | `image.tag`                             | Adapter image tag (immutabe tags are recommended)                                         | `1.0.3-debian-10-r0`                 |
@@ -124,11 +123,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `wavefront.url`                         | External Wavefront URL                                                                    | `https://YOUR_CLUSTER.wavefront.com` |
 | `wavefront.token`                       | External Wavefront Token                                                                  | `YOUR_API_TOKEN`                     |
 
-
 ### Traffic Exposure Parameters
 
 | Name                               | Description                                  | Value       |
-| ---------------------------------- | -------------------------------------------- | ----------- |
+|------------------------------------|----------------------------------------------|-------------|
 | `service.type`                     | Adapter service type                         | `ClusterIP` |
 | `service.port`                     | Adapter service port                         | `443`       |
 | `service.loadBalancerIP`           | Adapter service LoadBalancer IP              | `nil`       |
@@ -136,16 +134,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.nodePorts.http`           | NodePort for the HTTP endpoint               | `""`        |
 | `service.externalTrafficPolicy`    | External traffic policy for the service      | `Cluster`   |
 
-
 ### RBAC parameters
 
 | Name                    | Description                                                 | Value  |
-| ----------------------- | ----------------------------------------------------------- | ------ |
+|-------------------------|-------------------------------------------------------------|--------|
 | `rbac.create`           | Weather to create & use RBAC resources or not               | `true` |
 | `serviceAccount.create` | Enable the creation of a ServiceAccount for Reconciler pods | `true` |
 | `serviceAccount.name`   | Name of the created ServiceAccount                          | `nil`  |
 | `apiService.create`     | Create the APIService objects in Kubernetes API             | `true` |
-
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
