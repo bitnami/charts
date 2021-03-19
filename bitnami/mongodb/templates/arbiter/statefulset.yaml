@@ -119,6 +119,7 @@ spec:
               shopt -s extglob
               rm -rf !(mongodb-ca-cert|mongodb.pem|CAs|openssl.cnf)
               chmod 0600 mongodb-ca-cert mongodb.pem
+              EOF
         {{- end }}
       containers:
         - name: mongodb-arbiter
