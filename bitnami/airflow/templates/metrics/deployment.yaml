@@ -57,8 +57,8 @@ spec:
             - name: AIRFLOW_PROMETHEUS_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "airflow.postgresql.secretName" . }}
-                  key: postgresql-password
+                  name: {{ include "airflow.database.secretName" . }}
+                  key: {{ include "airflow.database.existingsecret.key" . }}
             - name: AIRFLOW_PROMETHEUS_DATABASE_NAME
               value: {{ include "airflow.database.name" . }}
           ports:
