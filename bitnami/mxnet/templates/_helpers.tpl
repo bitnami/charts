@@ -72,6 +72,7 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := append $messages (include "mxnet.validateValues.mode" .) -}}
 {{- $messages := append $messages (include "mxnet.validateValues.workerCount" .) -}}
 {{- $messages := append $messages (include "mxnet.validateValues.serverCount" .) -}}
+{{- $messages := append $messages (include "mxnet.validateValues.extraVolumes" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -106,6 +107,15 @@ mxnet: worker.replicaCount
 mxnet: server.replicaCount
     Server count must be greater than 0 in distributed mode!!
     Please set a valid worker count size (--set server.replicaCount=X)
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of Apache MXNet (Incubating) - Incorrect extra volume settings */}}
+{{- define "mxnet.validateValues.extraVolumes" -}}
+{{- if and (.Values.extraVolumes) (not (or .Values.extraVolumeMounts .Values.cloneFilesFromGit.extraVolumeMounts)) -}}
+mxnet: missing-extra-volume-mounts
+    You specified extra volumes but not mount points for them. Please set
+    the extraVolumeMounts value
 {{- end -}}
 {{- end -}}
 

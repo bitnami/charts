@@ -132,10 +132,11 @@ The following table lists the configurable parameters of the Node chart and thei
 
 | Parameter                      | Description                                      | Default                                      |
 |--------------------------------|--------------------------------------------------|----------------------------------------------|
-| `git.registry`                 | Git image registry                               | `docker.io`                                  |
-| `git.repository`               | Git image name                                   | `bitnami/git`                                |
-| `git.tag`                      | Git image tag                                    | `{TAG_NAME}`                                 |
-| `git.pullPolicy`               | Git image pull policy                            | `IfNotPresent`                               |
+| `git.image.registry`           | Git image registry                               | `docker.io`                                  |
+| `git.image.repository`         | Git image name                                   | `bitnami/git`                                |
+| `git.image.tag`                | Git image tag                                    | `{TAG_NAME}`                                 |
+| `git.image.pullPolicy`         | Git image pull policy                            | `IfNotPresent`                               |
+| `git.extraVolumeMounts`        | Add extra volume mounts for the Git container    | `[]`                                         |
 | `getAppFromExternalRepository` | Whether to get app from external git repo or not | `true`                                       |
 | `repository`                   | Repo of the application                          | `https://github.com/bitnami/sample-mean.git` |
 | `revision`                     | Revision to checkout                             | `master`                                     |

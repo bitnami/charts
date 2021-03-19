@@ -137,6 +137,15 @@ cloneFilesFromGit:
   # repository:
   # revision: master
 
+  ## Add extra volume mounts for the GIT container
+  ## Useful to mount keys to connect through ssh. (normally used with extraVolumes)
+  ## E.g:
+  ## extraVolumeMounts:
+  ##   - name: ssh-dir
+  ##     mountPath: /.ssh/
+  ##
+  extraVolumeMounts: []
+
 ## Additional environment variables for all node types
 ## Example:
 ## commonExtraEnvVars:
@@ -526,3 +535,11 @@ sidecars: []
 ##       containerPort: 1234
 ##
 initContainers: []
+
+## Array to add extra volumes (evaluated as a template)
+##
+extraVolumes: []
+
+## Array to add extra mounts (normally used with extraVolumes, evaluated as a template)
+##
+extraVolumeMounts: []
