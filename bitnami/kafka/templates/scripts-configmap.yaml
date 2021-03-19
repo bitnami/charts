@@ -15,6 +15,9 @@ data:
   {{- $clusterDomain := .Values.clusterDomain }}
   {{- $interBrokerPort := .Values.service.internalPort }}
   {{- $clientPort := .Values.service.port }}
+  {{- $jksTruststoreSecret := coalesce .Values.auth.tls.jksTruststoreSecret .Values.auth.jksTruststoreSecret -}}
+  {{- $jksTruststore := coalesce .Values.auth.tls.jksTruststore .Values.auth.jksTruststore -}}
+  {{- $jksKeystoreSAN := coalesce .Values.auth.tls.jksKeystoreSAN .Values.auth.jksKeystoreSAN -}}
   {{- if .Values.externalAccess.autoDiscovery.enabled }}
   auto-discovery.sh: |-
     #!/bin/bash
@@ -109,32 +112,33 @@ data:
     export KAFKA_CFG_ADVERTISED_LISTENERS="INTERNAL://${MY_POD_NAME}.{{ $fullname }}-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $interBrokerPort }},CLIENT://${MY_POD_NAME}.{{ $fullname }}-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $clientPort }},EXTERNAL://${EXTERNAL_ACCESS_IP}:${EXTERNAL_ACCESS_PORT}"
     {{- end }}
     {{- end }}
-    {{- if (include "kafka.tlsEncryption" .) }}
-    
-    {{- if and .Values.auth.jksTruststoreSecret .Values.auth.jksTruststore }}
-    JKS_TRUSTSTORE="/truststore/{{ .Values.auth.jksTruststore }}"
-    {{- else if .Values.auth.jksTruststoreSecret  }}
-    JKS_TRUSTSTORE="/truststore/kafka.truststore.jks"
-    {{- else if .Values.auth.jksTruststore  }}
-    JKS_TRUSTSTORE="/certs/{{ .Values.auth.jksTruststore }}"
-    {{- else }}
-    JKS_TRUSTSTORE="/certs/kafka.truststore.jks"
-    {{- end }}
-    
-    {{- if .Values.auth.jksKeystoreSAN }}
-    JKS_KEYSTORE="/certs/{{ .Values.auth.jksKeystoreSAN }}"
-    {{- else }}
-    JKS_KEYSTORE="/certs/kafka-${ID}.keystore.jks"
-    {{- end }}
 
-    if [[ -f "${JKS_TRUSTSTORE}" ]] && [[ -f "${JKS_KEYSTORE}" ]]; then
-        mkdir -p /opt/bitnami/kafka/config/certs
-        cp "${JKS_TRUSTSTORE}" "/opt/bitnami/kafka/config/certs/kafka.truststore.jks"
-        cp "${JKS_KEYSTORE}" "/opt/bitnami/kafka/config/certs/kafka.keystore.jks"
+    {{- if (include "kafka.tlsEncryption" .) }}
+    mkdir -p /opt/bitnami/kafka/config/certs
+    {{- if eq .Values.auth.tls.type "jks" }}
+    JKS_TRUSTSTORE={{ printf "/%s/%s" (ternary "certs" "truststore" (empty $jksTruststoreSecret)) (default "kafka.truststore.jks" $jksTruststore) | quote }}
+    JKS_KEYSTORE={{ printf "/certs/%s" (default "kafka-${ID}.keystore.jks" $jksKeystoreSAN) | quote }}
+    if [[ -f "$JKS_TRUSTSTORE" ]] && [[ -f "$JKS_KEYSTORE" ]]; then
+        cp "$JKS_TRUSTSTORE" "/opt/bitnami/kafka/config/certs/kafka.truststore.jks"
+        cp "$JKS_KEYSTORE" "/opt/bitnami/kafka/config/certs/kafka.keystore.jks"
     else
         echo "Couldn't find the expected Java Key Stores (JKS) files! They are mandatory when encryption via TLS is enabled."
         exit 1
     fi
+    {{- else if eq .Values.auth.tls.type "pem" }}
+    PEM_CA="/certs/kafka.truststore.pem"
+    PEM_CERT="/certs/kafka-${ID}.keystore.pem"
+    PEM_KEY="/certs/kafka-${ID}.keystore.key"
+    if [[ -f "$PEM_CA" ]] && [[ -f "$PEM_CERT" ]] && [[ -f "$PEM_KEY" ]]; then
+        cp "$PEM_CA" "/opt/bitnami/kafka/config/certs/kafka.truststore.pem"
+        cp "$PEM_CERT" "/opt/bitnami/kafka/config/certs/kafka.keystore.pem"
+        # Ensure the key used PEM format with PKCS#8
+        openssl pkcs8 -topk8 -nocrypt -in "$PEM_KEY" > "/opt/bitnami/kafka/config/certs/kafka.keystore.key"
+    else
+        echo "Couldn't find the expected PEM files! They are mandatory when encryption via TLS is enabled."
+        exit 1
+    fi
+    {{- end }}
     {{- end }}
 
     exec /entrypoint.sh /run.sh
