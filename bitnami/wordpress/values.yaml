@@ -563,6 +563,8 @@ persistence:
   ##
   accessModes:
     - ReadWriteOnce
+  ## DEPRECATED: use `persistence.accessModes` instead
+  accessMode: ReadWriteOnce
   ## Persistent Volume size
   ##
   size: 10Gi
