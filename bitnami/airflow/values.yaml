@@ -873,6 +873,9 @@ externalDatabase:
   ## Name of an existing secret resource containing the DB password in a 'postgresql-password' key
   ##
   existingSecret:
+  ## Name of an existing secret key containing the DB password
+  ##
+  existingSecretPasswordKey:
   ## Database name
   ##
   database: bitnami_airflow

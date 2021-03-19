@@ -216,8 +216,8 @@ Add environment variables to configure database values
 {{/*
 Add environment variables to configure database values
 */}}
-{{- define "airflow.database.name" -}}
-{{- ternary .Values.postgresql.postgresqlDatabase .Values.externalDatabase.database .Values.postgresql.enabled | quote -}}
+{{- define "airflow.database.existingsecret.key" -}}
+{{- ternary "postgresql-password" .Values.externalDatabase.existingSecretPasswordKey .Values.postgresql.enabled | quote -}}
 {{- end -}}
 
 {{/*
@@ -239,7 +239,7 @@ Add environment variables to configure database values
   valueFrom:
     secretKeyRef:
       name: {{ include "airflow.postgresql.secretName" . }}
-      key: postgresql-password
+      key: {{ include "airflow.database.existingsecret.key" . }}
 - name: AIRFLOW_DATABASE_HOST
   value: {{ include "airflow.database.host" . }}
 - name: AIRFLOW_DATABASE_PORT_NUMBER
