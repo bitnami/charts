@@ -180,7 +180,7 @@ The following table lists the configurable parameters of the WordPress chart and
 | `persistence.enabled`       | Enable persistence using PVC             | `true`                                      |
 | `persistence.existingClaim` | Enable persistence using an existing PVC | `nil`                                       |
 | `persistence.storageClass`  | PVC Storage Class                        | `nil` (uses alpha storage class annotation) |
-| `persistence.accessMode`    | PVC Access Mode                          | `ReadWriteOnce`                             |
+| `persistence.accessModes`   | PVC Access Modes                        | `[ReadWriteOnce]`                            |
 | `persistence.size`          | PVC Storage Request                      | `10Gi`                                      |
 | `persistence.dataSource`    | PVC data source                          | `{}`                                        |
 
@@ -203,6 +203,8 @@ The following table lists the configurable parameters of the WordPress chart and
 | `externalDatabase.database`               | Name of the existing database                        | `bitnami_wordpress`                            |
 | `externalDatabase.port`                   | Database port number                                 | `3306`                                         |
 | `externalDatabase.existingSecret`         | Name of the database existing Secret Object          | `nil`                                          |
+| `memcached.enabled`                       | Deploy Memcached for caching database queries        | `false`                                        |
+| `memcached.architecture`                  | Memcached architecture                               | `standalone`                                   |
 
 ### Volume Permissions parameters
 

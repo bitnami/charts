@@ -212,7 +212,7 @@ spec:
             - mountPath: /htaccess
               name: custom-htaccess
             {{- end }}
-            {{- if .Values.customPostInitScripts }}
+            {{- if or .Values.customPostInitScripts .Values.memcached.enabled }}
             - mountPath: /docker-entrypoint-init.d
               name: custom-postinit
             {{- end }}
@@ -258,10 +258,10 @@ spec:
               - key: wordpress-htaccess.conf
                 path: wordpress-htaccess.conf
         {{- end }}
-        {{- if .Values.customPostInitScripts }}
+        {{- if or .Values.customPostInitScripts .Values.memcached.enabled }}
         - name: custom-postinit
           configMap:
-            name: {{ include "common.names.fullname" . }}-postinit
+            name: {{ printf "%s-postinit" (include "common.names.fullname" .) }}
             defaultMode: 0755
         {{- end }}
         - name: wordpress-data
