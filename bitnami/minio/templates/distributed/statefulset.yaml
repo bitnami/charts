@@ -170,6 +170,10 @@ spec:
               value: {{ ternary "off" "on" .Values.disableWebUI | quote }}
             - name: MINIO_PROMETHEUS_AUTH_TYPE
               value: {{ .Values.metrics.prometheusAuthType | quote }}
+            {{- if .Values.tls.mountPath }}
+            - name: MINIO_CERTSDIR
+              value: {{ .Values.tls.mountPath | quote }}
+            {{- end }}
             {{- if .Values.extraEnv }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnv "context" $) | nindent 12 }}
             {{- end }}
@@ -233,7 +237,7 @@ spec:
             {{- end }}
             {{- if .Values.tls.enabled }}
             - name: minio-certs
-              mountPath: /opt/bitnami/minio/certs/
+              mountPath: {{ default "/certs" .Values.tls.mountPath }}
             {{- end }}
             {{- if and .Values.persistence.enabled (gt $drivesPerNode 1) }}
             {{- range $diskId := until $drivesPerNode }}

@@ -1,0 +1,25 @@
+{{- if .Values.metrics.pdb.create }}
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "scdf.fullname" . }}-prometheus-proxy
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: prometheus-proxy
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  namespace: {{ .Release.Namespace }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if .Values.metrics.pdb.minAvailable }}
+  minAvailable: {{ .Values.metrics.pdb.minAvailable }}
+  {{- end }}
+  {{- if .Values.metrics.pdb.maxUnavailable }}
+  maxUnavailable: {{ .Values.metrics.pdb.maxUnavailable }}
+  {{- end }}
+  selector:
+    matchLabels: {{ include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: prometheus-proxy
+{{- end }}

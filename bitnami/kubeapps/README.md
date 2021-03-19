@@ -57,11 +57,11 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```bash
 helm install kubeapps --namespace kubeapps \
-  --set assetsvc.service.port=9090 \
+  --set ingress.enabled=true \
     bitnami/kubeapps
 ```
 
-The above command sets the port for the assetsvc Service to 9090.
+The above command enables an Ingress Rule to expose Kubeapps.
 
 Alternatively, a YAML file that specifies the values for parameters can be provided while installing the chart. For example,
 
@@ -194,6 +194,7 @@ kubectl delete namespace kubeapps
 - [Can Kubeapps install apps into more than one cluster?](#can-kubeapps-install-apps-into-more-than-one-cluster)
 - [Can Kubeapps be installed without Internet connection?](#can-kubeapps-be-installed-without-internet-connection)
 - [Does Kubeapps support private repositories?](#does-kubeapps-support-private-repositories)
+- [Is there any API documentation?](#is-there-any-api-documentation)
 - [Why can't I configure global private repositories?](#why-cant-i-configure-global-private-repositories)
 - [Does Kubeapps support Operators?](#does-kubeapps-support-operators)
 - [More questions?](#more-questions)
@@ -255,6 +256,10 @@ Yes! Follow the [offline installation documentation](https://github.com/kubeapps
 ### Does Kubeapps support private repositories?
 
 Of course! Have a look at the [private app repositories documentation](https://github.com/kubeapps/kubeapps/blob/master/docs/user/private-app-repository.md) to learn how to configure a private repository in Kubeapps.
+
+### Is there any API documentation?
+
+Yes! But it is not definitive and is still subject to change. Check out the [latest API online documentation](https://app.swaggerhub.com/apis/kubeapps/Kubeapps) or download the Kubeapps [OpenAPI Specification yaml file](./dashboard/public/openapi.yaml) from the repository.
 
 ### Why can't I configure global private repositories?
 
