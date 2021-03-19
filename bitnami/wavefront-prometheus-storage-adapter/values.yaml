@@ -387,6 +387,14 @@ wavefront:
   ## @param wavefront.enabled Deploy Wavefront chart (necessary if externalProxyHost is not set)
   ##
   enabled: true
+
+  ## @param wavefront.wavefront.url Wavefront SAAS service URL
+  ## @param wavefront.wavefront.token Wavefront SAAS token
+  ##
+  wavefront:
+    url: https://YOUR_CLUSTER.wavefront.com
+    token: YOUR_API_TOKEN
+
   ## @param wavefront.collector.enabled Deploy Wavefront collector (not used by the Adapter pod)
   ##
   collector:

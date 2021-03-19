@@ -132,14 +132,16 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Wavefront sub-chart parameters
 
-| Name                              | Description                                                                               | Value   |
-|-----------------------------------|-------------------------------------------------------------------------------------------|---------|
-| `wavefront.enabled`               | Deploy Wavefront chart (necessary if externalProxyHost is not set)                        | `true`  |
-| `wavefront.collector.enabled`     | Deploy Wavefront collector (not used by the Adapter pod)                                  | `false` |
-| `wavefront.rbac.create`           | Create RBAC rules (not necessary as the Adapter only uses wavefront-proxy)                | `false` |
-| `wavefront.proxy.enabled`         | Deploy Wavefront Proxy (required if externalProxyHost is not set)                         | `true`  |
-| `wavefront.proxy.port`            | Deployed Wavefront Proxy port (required if externalProxyHost is not set)                  | `2878`  |
-| `wavefront.serviceAccount.create` | Create Wavefront serivce account (not necessary as the Adapter only uses wavefront-proxy) | `false` |
+| Name                              | Description                                                                               | Value                                |
+|-----------------------------------|-------------------------------------------------------------------------------------------|--------------------------------------|
+| `wavefront.enabled`               | Deploy Wavefront chart (necessary if externalProxyHost is not set)                        | `true`                               |
+| `wavefront.wavefront.url`         | Wavefront SAAS service URL                                                                | `https://YOUR_CLUSTER.wavefront.com` |
+| `wavefront.wavefront.token`       | Wavefront SAAS token                                                                      | `YOUR_API_TOKEN`                     |
+| `wavefront.collector.enabled`     | Deploy Wavefront collector (not used by the Adapter pod)                                  | `false`                              |
+| `wavefront.rbac.create`           | Create RBAC rules (not necessary as the Adapter only uses wavefront-proxy)                | `false`                              |
+| `wavefront.proxy.enabled`         | Deploy Wavefront Proxy (required if externalProxyHost is not set)                         | `true`                               |
+| `wavefront.proxy.port`            | Deployed Wavefront Proxy port (required if externalProxyHost is not set)                  | `2878`                               |
+| `wavefront.serviceAccount.create` | Create Wavefront serivce account (not necessary as the Adapter only uses wavefront-proxy) | `false`                              |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -169,7 +171,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 The Wavefront Prometheus Storage Adapter chart needs to be connected to a Wavefront Proxy instance. This can be done in two different ways:
 
-- Deploying the Wavefront subchart, using only the Wavefront Proxy component (default behavior). This is done by setting `wavefront.enabled=true` and `wavefront.proxy.enabled=true`. We recommend disabling the rest of the Wavefront sub-chart resources as they would not be used by the Prometheus Storage Adapter. In this case, you should not set the `externalProxy.host` value
+- Deploying the Wavefront subchart, using only the Wavefront Proxy component (default behavior). This is done by setting `wavefront.enabled=true` and `wavefront.proxy.enabled=true`. We recommend disabling the rest of the Wavefront sub-chart resources as they would not be used by the Prometheus Storage Adapter. In this case, you should not set the `externalProxy.host` value. You also need to configure the Wavefront SaaS URL and token using the `wavefont.wavefront.url` and `wavefront.wavefront.token`.
 
 ```yaml
 externalProxy:
