@@ -50,7 +50,7 @@ spec:
             - /bin/bash
             - -ec
             - |
-              . /opt/bitnami/scripts/git/entrypoint.sh || true
+              [[ -f "/opt/bitnami/scripts/git/entrypoint.sh" ]] && source "/opt/bitnami/scripts/git/entrypoint.sh"
 
               git clone {{ .Values.cloneHtdocsFromGit.repository }} --branch {{ .Values.cloneHtdocsFromGit.branch }} /app
           resources: {{- toYaml .Values.cloneHtdocsFromGit.resources | nindent 12 }}
@@ -74,7 +74,7 @@ spec:
             - /bin/bash
             - -ec
             - |
-              . /opt/bitnami/scripts/git/entrypoint.sh || true
+              [[ -f "/opt/bitnami/scripts/git/entrypoint.sh" ]] && source "/opt/bitnami/scripts/git/entrypoint.sh"
 
               while true; do
                   cd /app && git pull origin {{ .Values.cloneHtdocsFromGit.branch }}

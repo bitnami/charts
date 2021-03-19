@@ -56,7 +56,7 @@ spec:
             - /bin/bash
             - -ec
             - |
-              . /opt/bitnami/scripts/git/entrypoint.sh || true
+              [[ -f "/opt/bitnami/scripts/git/entrypoint.sh" ]] && source "/opt/bitnami/scripts/git/entrypoint.sh"
 
               git clone {{ .Values.repository }} --branch {{ .Values.revision }} /app
           volumeMounts:
