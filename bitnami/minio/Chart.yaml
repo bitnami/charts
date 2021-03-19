@@ -26,4 +26,3 @@ sources:
   - https://github.com/bitnami/bitnami-docker-minio
   - https://min.io
 version: 6.6.0
-
