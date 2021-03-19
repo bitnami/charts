@@ -365,9 +365,6 @@ You can configure different authentication protocols for each listener you confi
 
 [Learn more about how to configure Kafka to use the different authentication protocols in the chart documentation](https://docs.bitnami.com/kubernetes/infrastructure/kafka/administration/enable-security/).
 
-
-
-
 If you enabled SASL authentication on any listener, you can set the SASL credentials using the parameters below:
 
 - `auth.jaas.clientUsers`/`auth.jaas.clientPasswords`: when enabling SASL authentication for communications with clients.
