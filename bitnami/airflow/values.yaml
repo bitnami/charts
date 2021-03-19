@@ -858,9 +858,6 @@ postgresql:
   ## In case of postgresql.enabled = true, allow the usage of existing secrets for postgresql
   ##
   existingSecret:
-  ## Provide existingSecretPasswordKey to specify the password key inside existingSecret
-  ##
-  existingSecretPasswordKey:
 
 externalDatabase:
   ## All of these values are only used when postgresql.enabled is set to false
