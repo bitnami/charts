@@ -208,6 +208,18 @@ tolerations: []
 ##
 # priorityClassName: ""
 
+## memcached pods ServiceAccount
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+##
+serviceAccount:
+  ## Specifies whether a ServiceAccount should be created
+  ##
+  create: true
+  ## The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the memcached.serviceAccountName template
+  ##
+  # name:
+
 ## Persistence - used for dumping and restoring states between recreations
 ## Ref: https://github.com/memcached/memcached/wiki/WarmRestart
 ##

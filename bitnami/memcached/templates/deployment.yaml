@@ -57,7 +57,7 @@ spec:
         fsGroup: {{ .Values.securityContext.fsGroup }}
         runAsUser: {{ .Values.securityContext.runAsUser }}
       {{- end }}
-      serviceAccountName: {{ include "common.names.fullname" . }}
+      serviceAccountName: {{ template "memcached.serviceAccountName" . }}
       containers:
         - name: memcached
           image: {{ template "memcached.image" . }}
