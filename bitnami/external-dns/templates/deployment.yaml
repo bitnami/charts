@@ -123,6 +123,8 @@ spec:
             # Alibaba Cloud arguments
             {{- if or (and .Values.alibabacloud.accessKeyId .Values.alibabacloud.accessKeySecret) .Values.alibabacloud.secretName }}
             - --alibaba-cloud-config-file=/etc/kubernetes/alibaba-cloud.json
+            {{- else }}
+            - --alibaba-cloud-config-file=
             {{- end }}
             {{- if .Values.alibabacloud.zoneType }}
             - --alibaba-cloud-zone-type={{ .Values.alibabacloud.zoneType }}
