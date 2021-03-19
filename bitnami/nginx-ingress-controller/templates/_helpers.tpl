@@ -77,7 +77,7 @@ Return the appropriate apiVersion for PodSecurityPolicy
 {{/*
 Return the appropriate apiGroup for PodSecurityPolicy.
 */}}
-{{- define "podSecurityPolicy.apiGroup" -}}
+{{- define "nginx-ingress-controller.podSecurityPolicy.apiGroup" -}}
 {{- if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
 {{- print "policy" -}}
 {{- else -}}
