@@ -216,6 +216,13 @@ Add environment variables to configure database values
 {{/*
 Add environment variables to configure database values
 */}}
+{{- define "airflow.database.name" -}}
+{{- ternary .Values.postgresql.postgresqlDatabase .Values.externalDatabase.database .Values.postgresql.enabled | quote -}}
+{{- end -}}
+
+{{/*
+Add environment variables to configure database values
+*/}}
 {{- define "airflow.database.existingsecret.key" -}}
 {{- if (.Values.postgresql.enabled) -}}
     {{- if (.Values.postgresql.existingSecret) -}}

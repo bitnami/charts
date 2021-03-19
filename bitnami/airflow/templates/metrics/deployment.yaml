@@ -57,7 +57,7 @@ spec:
             - name: AIRFLOW_PROMETHEUS_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "airflow.database.secretName" . }}
+                  name: {{ include "airflow.postgresql.secretName" . }}
                   key: {{ include "airflow.database.existingsecret.key" . }}
             - name: AIRFLOW_PROMETHEUS_DATABASE_NAME
               value: {{ include "airflow.database.name" . }}
