@@ -406,6 +406,10 @@ primary:
     ##
     # maxUnavailable: 1
 
+  ## MySQL Primary pod label. If labels are same as commonLabels , this will take precedence.
+  ##
+  podLabels: {}
+
 ## MySQL Secondary parameters
 ##
 secondary:
@@ -696,6 +700,10 @@ secondary:
     ## Max number of pods that can be unavailable after the eviction
     ##
     # maxUnavailable: 1
+
+  ## MySQL Secondary pod label. If labels are same as commonLabels , this will take precedence.
+  ##
+  podLabels: {}
 
 ## MySQL pods ServiceAccount
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
