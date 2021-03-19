@@ -323,6 +323,38 @@ influxdb:
     ##
     annotations: {}
 
+collectd:
+  enabled: false
+  service:
+    ## Service type
+    ##
+    type: ClusterIP
+    ## InfluxDB(TM) collectd listener port
+    ## This requires corresponding configuration in influxdb.conf to enable
+    ## collectd block
+    ##
+    port: 25826
+    ## Specify the nodePort value for the LoadBalancer and NodePort service types.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ##
+    nodePort: ""
+    ## Set the LoadBalancer service type to internal only.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+    ##
+    # loadBalancerIP:
+    ## Load Balancer sources
+    ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ##
+    # loadBalancerSourceRanges:
+    # - 10.10.10.0/24
+    ## Set the Cluster IP to use
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#choosing-your-own-ip-address
+    ##
+    # clusterIP: None
+    # annotations:
+    # Enable metallb annotations if you want to share the LB Ip between collectd and influx services
+    ##     metallb.universe.tf/allow-shared-ip: "true"
+
 ## InfluxDB Relay(TM) parameters
 ##
 relay:
