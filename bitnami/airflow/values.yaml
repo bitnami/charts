@@ -602,6 +602,10 @@ git:
     ## Secret with extra environment variables
     ##
     extraEnvVarsSecret:
+    ## Clone init container resource requests and limits
+    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ##
+    resources: {}
   sync:
     ## Interval in seconds to pull the git repository containing the plugins and/or DAG files
     ##
@@ -624,6 +628,10 @@ git:
     ## Secret with extra environment variables
     ##
     extraEnvVarsSecret:
+    ## Sync sidecar container resource requests and limits
+    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ##
+    resources: {}
 
 ## LDAP configuration
 ##
