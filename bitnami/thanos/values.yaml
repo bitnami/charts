@@ -331,6 +331,9 @@ query:
     ##
     # loadBalancerSourceRanges:
     # - 10.10.10.0/24
+    ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints
+    ##
+    externalTrafficPolicy: Cluster
     ## Provide any additional annotations which may be required
     ##
     annotations: {}
@@ -677,6 +680,9 @@ queryFrontend:
     ##
     # loadBalancerSourceRanges:
     # - 10.10.10.0/24
+    ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints
+    ##
+    externalTrafficPolicy: Cluster
     ## Provide any additional annotations which may be required
     ##
     annotations: {}
@@ -954,6 +960,9 @@ bucketweb:
     ##
     # loadBalancerSourceRanges:
     # - 10.10.10.0/24
+    ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints
+    ##
+    externalTrafficPolicy: Cluster
     ## Provide any additional annotations which may be required
     ##
     annotations: {}
@@ -1226,6 +1235,9 @@ compactor:
     ##
     # loadBalancerSourceRanges:
     # - 10.10.10.0/24
+    ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints
+    ##
+    externalTrafficPolicy: Cluster
     ## Provide any additional annotations which may be required
     ##
     annotations: {}
@@ -1485,6 +1497,9 @@ storegateway:
     ##
     # loadBalancerSourceRanges:
     # - 10.10.10.0/24
+    ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints
+    ##
+    externalTrafficPolicy: Cluster
     ## Provide any additional annotations which may be required
     ##
     annotations: {}
@@ -1761,6 +1776,9 @@ ruler:
     ##
     # loadBalancerSourceRanges:
     # - 10.10.10.0/24
+    ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints
+    ##
+    externalTrafficPolicy: Cluster
     ## Provide any additional annotations which may be required
     ##
     annotations: {}
@@ -2110,6 +2128,9 @@ receive:
     ##
     # loadBalancerSourceRanges:
     # - 10.10.10.0/24
+    ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints
+    ##
+    externalTrafficPolicy: Cluster
     ## Provide any additional annotations which may be required
     ##
     annotations: {}
