@@ -62,8 +62,8 @@ spec:
             {{- if .Values.triggerLoopOnEvent }}
             - --events
             {{- end }}
-            {{- if .Values.namespace }}
-            - --namespace={{ .Values.namespace }}
+            {{- if (include "external-dns.namespace" .) }}
+            - --namespace={{ template "external-dns.namespace" . }}
             {{- end }}
             {{- if .Values.fqdnTemplates }}
             - --fqdn-template={{ join "," .Values.fqdnTemplates }}{{/* Explicitly wants comma separated list */}}
