@@ -21,10 +21,10 @@ data:
     {{- if .Values.auth.enabled }}
     authorization {
       {{- if .Values.auth.user }}
-      user: {{ .Values.auth.user }}
-      password: {{ $authPwd }}
+      user: {{ .Values.auth.user | quote }}
+      password: {{ $authPwd | quote }}
       {{- else if .Values.auth.token }}
-      token: {{ .Values.auth.token }}
+      token: {{ .Values.auth.token | quote }}
       {{- end }}
       timeout:  1
     }
@@ -61,10 +61,10 @@ data:
       {{- if .Values.clusterAuth.enabled }}
       authorization {
         {{- if .Values.clusterAuth.user }}
-        user: {{ .Values.clusterAuth.user }}
-        password: {{ $clusterAuthPwd }}
+        user: {{ .Values.clusterAuth.user | quote }}
+        password: {{ $clusterAuthPwd | quote }}
         {{- else if .Values.clusterAuth.token }}
-        token: {{ .Values.clusterAuth.token }}
+        token: {{ .Values.clusterAuth.token | quote }}
         {{- end }}
         timeout:  1
       }

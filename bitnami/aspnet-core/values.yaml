@@ -62,7 +62,7 @@ appFromExternalRepo:
     image:
       registry: docker.io
       repository: bitnami/git
-      tag: 2.31.0-debian-10-r0
+      tag: 2.31.0-debian-10-r2
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -80,6 +80,14 @@ appFromExternalRepo:
     ## Git revision to checkout
     ##
     revision: main
+    ## Add extra volume mounts for the GIT container
+    ## Useful to mount keys to connect through ssh. (normally used with extraVolumes)
+    ## E.g:
+    ## extraVolumeMounts:
+    ##   - name: ssh-dir
+    ##     mountPath: /root/.ssh/
+    ##
+    extraVolumeMounts: []
   publish:
     ## Bitnami .NET SDK image version
     ## ref: https://hub.docker.com/r/bitnami/dotnet-sdk/tags/

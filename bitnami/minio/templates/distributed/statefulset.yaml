@@ -142,23 +142,23 @@ spec:
               value: {{ ternary "yes" "no" .Values.forceNewKeys | quote }}
             {{- if .Values.useCredentialsFile }}
             - name: MINIO_ACCESS_KEY_FILE
-              value: {{ printf "/opt/bitnami/minio/secrets/%s" (include "minio.secret.userKey" .) | quote }}
+              value: "/opt/bitnami/minio/secrets/access-key"
             {{- else }}
             - name: MINIO_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
                   name: {{ include "minio.secretName" . }}
-                  key: {{ include "minio.secret.userKey" . }}
+                  key: access-key
             {{- end }}
             {{- if .Values.useCredentialsFile }}
             - name: MINIO_SECRET_KEY_FILE
-              value: {{ printf "/opt/bitnami/minio/secrets/%s" (include "minio.secret.passwordKey" .) | quote }}
+              value: "/opt/bitnami/minio/secrets/secret-key"
             {{- else }}
             - name: MINIO_SECRET_KEY
               valueFrom:
                 secretKeyRef:
                   name: {{ include "minio.secretName" . }}
-                  key: {{ include "minio.secret.passwordKey" . }}
+                  key: secret-key
             {{- end }}
             - name: MINIO_SKIP_CLIENT
               value: {{ ternary "yes" "no" (empty .Values.defaultBuckets) | quote }}

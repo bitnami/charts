@@ -1,7 +1,7 @@
 annotations:
   category: HumanResourceManagement
 apiVersion: v2
-appVersion: 4.7.0-0
+appVersion: 4.8.0-0
 dependencies:
   - condition: mariadb.enabled
     name: mariadb
@@ -31,4 +31,4 @@ name: orangehrm
 sources:
   - https://github.com/bitnami/bitnami-docker-orangehrm
   - https://www.orangehrm.com
-version: 10.1.3
+version: 10.1.4

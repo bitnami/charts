@@ -4,7 +4,7 @@
 {{- $clusterDomain := .Values.clusterDomain -}}
 {{- $fullname := include "kafka.fullname" . -}}
 {{- $servicePort := int .Values.service.port -}}
-apiVersion: apps/v1
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ template "kafka.fullname" . }}-exporter
@@ -65,9 +65,10 @@ spec:
               {{- end }}
               --web.listen-address=:9308
           {{- if (include "kafka.client.saslAuthentication" .) }}
+          {{- $clientUsers := coalesce .Values.auth.sasl.jaas.clientUsers .Values.auth.jaas.clientUsers -}}
           env:
             - name: SASL_USERNAME
-              value: {{ index .Values.auth.jaas.clientUsers 0 | quote }}
+              value: {{ index $clientUsers 0 | quote }}
             - name: SASL_USER_PASSWORD
               valueFrom:
                 secretKeyRef:

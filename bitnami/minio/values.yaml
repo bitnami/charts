@@ -654,6 +654,8 @@ gateway:
     ## Ignored unless type=azure
     ##
     azure:
+      accessKey: ""
+      secretKey: ""
       storageAccountName: ""
       storageAccountKey: ""
     ## Authentication configuration for GCS
