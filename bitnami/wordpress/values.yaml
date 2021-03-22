@@ -23,22 +23,20 @@ image:
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
   ##
-  # pullSecrets:
-  #   - myRegistryKeySecretName
+  pullSecrets: []
   ## Set to true if you would like to see extra information on logs
   ##
   debug: false
 
-## Force target Kubernetes version (using Helm capabilites if not set)
-##
-kubeVersion:
-
-## String to partially override aspnet-core.fullname template (will maintain the release name)
+## String to partially override common.names.fullname template (will maintain the release name)
 ##
 # nameOverride:
 
-## String to fully override aspnet-core.fullname template
+## String to fully override common.names.fullname template
 ##
 # fullnameOverride:
 
@@ -50,18 +48,13 @@ commonLabels: {}
 ##
 commonAnnotations: {}
 
+## Force target Kubernetes version (using Helm capabilites if not set)
+##
+kubeVersion:
+
 ## Kubernetes Cluster Domain
 ##
 clusterDomain: cluster.local
-
-## Deployment pod host aliases
-## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
-##
-hostAliases:
-  # Necessary for apache-exporter to work
-  - ip: "127.0.0.1"
-    hostnames:
-      - "status.localhost"
 
 ## Extra objects to deploy (value evaluated as a template)
 ##
@@ -71,34 +64,34 @@ extraDeploy: []
 ##
 serviceAccountName: default
 
-## User of the application
+## WordPress username
 ## ref: https://github.com/bitnami/bitnami-docker-wordpress#environment-variables
 ##
 wordpressUsername: user
 
-## Application password
+## WordPress user password
 ## Defaults to a random 10-character alphanumeric string if not set
 ## ref: https://github.com/bitnami/bitnami-docker-wordpress#environment-variables
 ##
-# wordpressPassword:
+wordpressPassword: ""
 
 ## Use existing secret (does not create the WordPress Secret object)
-## Must contain key `wordpress-secret`
+## NOTE: Must contain key `wordpress-password`
 ## NOTE: When it's set, the `wordpressPassword` parameter is ignored
 ##
 # existingSecret:
 
-## Admin email
+## WordPress user email
 ## ref: https://github.com/bitnami/bitnami-docker-wordpress#environment-variables
 ##
 wordpressEmail: user@example.com
 
-## First name
+## WordPress user first name
 ## ref: https://github.com/bitnami/bitnami-docker-wordpress#environment-variables
 ##
 wordpressFirstName: FirstName
 
-## Last name
+## WordPress user last name
 ## ref: https://github.com/bitnami/bitnami-docker-wordpress#environment-variables
 ##
 wordpressLastName: LastName
@@ -118,56 +111,39 @@ wordpressTablePrefix: wp_
 ##
 wordpressScheme: http
 
-## Skip wizard installation (only if you use an external database that already contains WordPress data)
+## Skip wizard installation (recommended if you use an external database that already contains WordPress data)
 ## ref: https://github.com/bitnami/bitnami-docker-wordpress#connect-wordpress-docker-container-to-an-existing-database
 ##
 wordpressSkipInstall: false
 
 ## Add extra content to the default configuration file
+## e.g:
+## wordpressExtraConfigContent: |
+##   @ini_set( 'post_max_size', '128M');
+##   @ini_set( 'memory_limit', '256M' );
 ##
 wordpressExtraConfigContent: ""
 
-## Set to `false` to allow the container to be started with blank passwords
-## ref: https://github.com/bitnami/bitnami-docker-wordpress#environment-variables
+## Make use of custom post-init.d user scripts functionality inside the bitnami/wordpress image
+## ref: https://github.com/bitnami/bitnami-docker-wordpress/tree/master/5/debian-10/rootfs/post-init.d
 ##
-allowEmptyPassword: true
-
-## Set Apache allowOverride to None
-## ref: https://github.com/bitnami/bitnami-docker-wordpress#environment-variables
+## The logic of the post-init.d user scripts is that all is all files with extensions .sh, .sql or .php are executed for one time only, at the very first initialization of the pod as the very last step of entrypoint.sh.
+## e.g:
+## customPostInitScripts:
+##   enable-multisite.sh: |
+##     #!/bin/bash
+##     chmod +w /bitnami/wordpress/wp-config.php
+##     wp core multisite-install --url=example.com --title="Welcome to the WordPress Multisite" --admin_user="doesntmatternotreallyused" --admin_password="doesntmatternotreallyused" --admin_email="user@example.com"
+##     cat /docker-entrypoint-init.d/.htaccess > /bitnami/wordpress/.htaccess
+##     chmod -w bitnami/wordpress/wp-config.php
+##   .htaccess: |
+##     RewriteEngine On
+##     RewriteBase /
+##     ...
 ##
-allowOverrideNone: false
-
-## Persist the custom changes of the htaccess. It depends on the value of
-## `.Values.allowOverrideNone`, when `yes` it will persist `/opt/bitnami/wordpress/wordpress-htaccess.conf`
-## if `no` it will persist `/opt/bitnami/wordpress/.htaccess`
+## NOTE: Combined with extraVolume and extraVolumeMounts to mount the configmap to /docker-entrypoint-init.d where custom user init scripts are looked for
 ##
-htaccessPersistenceEnabled: false
-
-## ConfigMap with custom wordpress-htaccess.conf file (requires allowOverrideNone to true)
-##
-customHTAccessCM:
-
-## Command and args for running the container (set to default if not set). Use array form
-##
-command: []
-args: []
-
-## Set up update strategy for wordpress installation. Set to Recreate if you use persistent volume that cannot be mounted by more than one pods to makesure the pods is destroyed first.
-## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
-## Example:
-## updateStrategy:
-##  type: RollingUpdate
-##  rollingUpdate:
-##    maxSurge: 25%
-##    maxUnavailable: 25%
-##
-updateStrategy:
-  type: RollingUpdate
-
-## Use an alternate scheduler, e.g. "stork".
-## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
-##
-# schedulerName:
+customPostInitScripts: {}
 
 ## SMTP mail delivery configuration
 ## ref: https://github.com/bitnami/bitnami-docker-wordpress/#smtp-configuration
@@ -185,12 +161,33 @@ updateStrategy:
 ##
 # smtpExistingSecret:
 
-## Number of replicas (requires ReadWriteMany PVC support)
+## Set to `false` to allow the container to be started with blank passwords
+## ref: https://github.com/bitnami/bitnami-docker-wordpress#environment-variables
 ##
-replicaCount: 1
+allowEmptyPassword: true
+
+## Set Apache allowOverride to None
+## ref: https://github.com/bitnami/bitnami-docker-wordpress#environment-variables
+##
+allowOverrideNone: false
+
+## Persist the custom changes of the htaccess.
+## If `allowOverrideNone` is `true`, it will persist `/opt/bitnami/wordpress/wordpress-htaccess.conf`
+## If `allowOverrideNone` is `false`, it will persist `/opt/bitnami/wordpress/.htaccess`
+##
+htaccessPersistenceEnabled: false
+
+## Existing ConfigMap with containing a custom wordpress-htaccess.conf file (requires `allowOverrideNone=true`)
+##
+customHTAccessCM: ""
+
+## Command and args for running the container (set to default if not set). Use array form
+##
+command: []
+args: []
 
 ## An array to add extra env vars
-## Example:
+## e.g:
 ## extraEnvVars:
 ##   - name: FOO
 ##     value: "bar"
@@ -205,6 +202,36 @@ extraEnvVarsCM:
 ##
 extraEnvVarsSecret:
 
+## Number of replicas (requires ReadWriteMany PVC support)
+##
+replicaCount: 1
+
+## Set up update strategy for wordpress installation. Set to Recreate if you use persistent volume that cannot be mounted by more than one pods to makesure the pods is destroyed first.
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+## e.g:
+## updateStrategy:
+##  type: RollingUpdate
+##  rollingUpdate:
+##    maxSurge: 25%
+##    maxUnavailable: 25%
+##
+updateStrategy:
+  type: RollingUpdate
+
+## Use an alternate scheduler, e.g. "stork".
+## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+##
+# schedulerName:
+
+## WordPress pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases:
+  ## Required for apache-exporter to work
+  - ip: "127.0.0.1"
+    hostnames:
+      - "status.localhost"
+
 ## Extra volumes to add to the deployment
 ##
 extraVolumes: []
@@ -214,7 +241,7 @@ extraVolumes: []
 extraVolumeMounts: []
 
 ## Add sidecars to the pod.
-## Example:
+## e.g:
 ## sidecars:
 ##   - name: your-image-name
 ##     image: your-image
@@ -227,7 +254,7 @@ sidecars: {}
 
 ## Add init containers to the pod.
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
-## Example:
+## e.g:
 ## initContainers:
 ##  - name: your-image-name
 ##    image: your-image
@@ -376,10 +403,12 @@ containerPorts:
   http: 8080
   https: 8443
 
-## Kubernetes configuration
-## For minikube, set this to NodePort, elsewhere use LoadBalancer or ClusterIP
+## WordPress Service properties
 ##
 service:
+  ## WordPress Service type
+  ## For minikube, set this to NodePort, elsewhere use LoadBalancer or ClusterIP
+  ##
   type: LoadBalancer
   ## HTTP Port
   ##
@@ -400,7 +429,7 @@ service:
   nodePorts:
     http: ""
     https: ""
-  ## Service clusterIP.
+  ## Service clusterIP
   ##
   # clusterIP: None
   ## loadBalancerIP for the SuiteCRM Service (optional, cloud specific)
@@ -409,7 +438,7 @@ service:
   # loadBalancerIP:
   ## Load Balancer sources
   ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
-  ## Example:
+  ## e.g:
   ## loadBalancerSourceRanges:
   ##   - 10.10.10.0/24
   ##
@@ -471,10 +500,12 @@ ingress:
 
   ## The list of additional hostnames to be covered with this ingress record.
   ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
+  ## e.g:
   ## extraHosts:
-  ## - name: wordpress.local
-  ##   path: /
+  ##   - name: wordpress.local
+  ##     path: /
   ##
+  extraHosts: []
 
   ## Any additional arbitrary paths that may need to be added to the ingress under the main host.
   ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
@@ -484,35 +515,41 @@ ingress:
   ##     serviceName: ssl-redirect
   ##     servicePort: use-annotation
   ##
+  extraPaths: []
 
   ## The tls configuration for additional hostnames to be covered with this ingress record.
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ## e.g:
   ## extraTls:
   ## - hosts:
   ##     - wordpress.local
   ##   secretName: wordpress.local-tls
   ##
+  extraTls: []
 
   ## If you're providing your own certificates, please use this to add the certificates as secrets
-  ## key and certificate should start with -----BEGIN CERTIFICATE----- or
-  ## -----BEGIN RSA PRIVATE KEY-----
+  ## key and certificate are expected in PEM format
+  ## name should line up with a secretName set further up
   ##
-  ## name should line up with a tlsSecret set further up
-  ## If you're using cert-manager, this is unneeded, as it will create the secret for you if it is not set
-  ##
+  ## If it is not set and you're using cert-manager, this is unneeded, as it will create a secret for you with valid certificates
+  ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created valid for 365 days
   ## It is also possible to create and manage the certificates outside of this helm chart
   ## Please see README.md for more information
   ##
-  secrets: []
-  ## - name: wordpress.local-tls
-  ##   key:
-  ##   certificate:
+  ## Example
+  ## secrets:
+  ##   - name: wordpress.local-tls
+  ##     key: ""
+  ##     certificate: ""
   ##
+  secrets: []
 
 ## Enable persistence using Persistent Volume Claims
 ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
 persistence:
+  ## If true, use a Persistent Volume Claim, If false, use emptyDir
+  ##
   enabled: true
   ## wordpress data Persistent Volume Storage Class
   ## If defined, storageClassName: <storageClass>
@@ -522,15 +559,67 @@ persistence:
   ##   GKE, AWS & OpenStack)
   ##
   # storageClass: "-"
+  ## Persistent Volume Access Modes
   ##
-  ## If you want to reuse an existing claim, you can pass the name of the PVC using
-  ## the existingClaim variable
-  # existingClaim: your-claim
+  accessModes:
+    - ReadWriteOnce
+  ## DEPRECATED: use `persistence.accessModes` instead
   accessMode: ReadWriteOnce
+  ## Persistent Volume size
+  ##
   size: 10Gi
   ## Custom dataSource
   ##
   dataSource: {}
+  ## Enable persistence using an existing PVC
+  ##
+  # existingClaim:
+
+## Init containers parameters:
+## volumePermissions: Change the owner and group of the persistent volume mount point to runAsUser:fsGroup values
+## based on the podSecurityContext/containerSecurityContext parameters
+##
+volumePermissions:
+  enabled: false
+  image:
+    registry: docker.io
+    repository: bitnami/bitnami-shell
+    tag: "10"
+    pullPolicy: Always
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## Init container' resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    ## We usually recommend not to specify default resources and to leave this as a conscious
+    ## choice for the user. This also increases chances charts run on environments with little
+    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## e.g:
+    ## limits:
+    ##   cpu: 500m
+    ##   memory: 1Gi
+    ##
+    limits: {}
+    requests: {}
+  ## Init container Security Context
+  ## Note: the chown of the data folder is done to containerSecurityContext.runAsUser
+  ## and not the below volumePermissions.securityContext.runAsUser
+  ## When runAsUser is set to special value "auto", init container will try to chwon the
+  ## data folder to autodetermined user&group, using commands: `id -u`:`id -G | cut -d" " -f2`
+  ## "auto" is especially useful for OpenShift which has scc with dynamic userids (and 0 is not allowed).
+  ## You may want to use this volumePermissions.securityContext.runAsUser="auto" in combination with
+  ## podSecurityContext.enabled=false,containerSecurityContext.enabled=false
+  ##
+  securityContext:
+    runAsUser: 0
 
 ## Wordpress Pod Disruption Budget configuration
 ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
@@ -565,9 +654,11 @@ metrics:
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
     ##
-    # pullSecrets:
-    #   - myRegistryKeySecretName
+    pullSecrets: []
 
   ## Prometheus expoter service parameters
   ##
@@ -597,13 +688,16 @@ metrics:
     ##
     enabled: false
     ## Specify the namespace in which the serviceMonitor resource will be created
+    ##
     # namespace: ""
     ## Specify the interval at which metrics should be scraped
     ##
     interval: 30s
     ## Specify the timeout after which the scrape is ended
+    ##
     # scrapeTimeout: 30s
     ## Specify Metric Relabellings to add to the scrape endpoint
+    ##
     # relabellings:
     ## Specify honorLabels parameter to add the scrape endpoint
     ##
@@ -615,8 +709,7 @@ metrics:
 
 ##
 ## MariaDB chart configuration
-##
-## https://github.com/bitnami/charts/blob/master/bitnami/mariadb/values.yaml
+## ref: https://github.com/bitnami/charts/blob/master/bitnami/mariadb/values.yaml
 ##
 mariadb:
   ## Whether to deploy a mariadb server to satisfy the applications database requirements. To use an external database set this to false and configure the externalDatabase parameters
@@ -684,64 +777,17 @@ externalDatabase:
   ##
   # existingSecret:
 
-## Make use of custom post-init.d user scripts functionality inside the bitnami/wordpress image
-## ref: https://github.com/bitnami/bitnami-docker-wordpress/tree/master/5/debian-10/rootfs/post-init.d
 ##
-## The logic of the post-init.d user scripts is that all is all files with extensions .sh, .sql or .php are executed for one time only, at the very first initialization of the pod as the very last step of entrypoint.sh.
-## Example:
-## customPostInitScripts:
-##   enable-multisite.sh: |
-##     #!/bin/bash
-##     chmod +w /bitnami/wordpress/wp-config.php
-##     wp core multisite-install --url=example.com --title="Welcome to the WordPress Multisite" --admin_user="doesntmatternotreallyused" --admin_password="doesntmatternotreallyused" --admin_email="user@example.com"
-##     cat /docker-entrypoint-init.d/.htaccess > /bitnami/wordpress/.htaccess
-##     chmod -w bitnami/wordpress/wp-config.php
-##   .htaccess: |
-##     RewriteEngine On
-##     RewriteBase /
-##     ...
+## Memcached chart configuration
+## ref: https://github.com/bitnami/charts/blob/master/bitnami/memcached/values.yaml
 ##
-## NOTE: Combined with extraVolume and extraVolumeMounts to mount the configmap to /docker-entrypoint-init.d where custom user init scripts are looked for
-##
-customPostInitScripts: {}
-
-##
-## Init containers parameters:
-## volumePermissions: Change the owner of the persist volume mountpoint to RunAsUser:fsGroup
-##
-volumePermissions:
-  enabled: false
-  image:
-    registry: docker.io
-    repository: bitnami/bitnami-shell
-    tag: "10"
-    pullPolicy: Always
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ##
-    # pullSecrets:
-    #   - myRegistryKeySecretName
-  resources:
-    # We usually recommend not to specify default resources and to leave this as a conscious
-    # choice for the user. This also increases chances charts run on environments with little
-    # resources, such as Minikube. If you do want to specify resources, uncomment the following
-    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    limits: {}
-    #   cpu: 100m
-    #   memory: 128Mi
-    requests: {}
-    #   cpu: 100m
-    #   memory: 128Mi
-
-  ## Init container Security Context
-  ## Note: the chown of the data folder is done to containerSecurityContext.runAsUser
-  ## and not the below volumePermissions.securityContext.runAsUser
-  ## When runAsUser is set to special value "auto", init container will try to chwon the
-  ## data folder to autodetermined user&group, using commands: `id -u`:`id -G | cut -d" " -f2`
-  ## "auto" is especially useful for OpenShift which has scc with dynamic userids (and 0 is not allowed).
-  ## You may want to use this volumePermissions.securityContext.runAsUser="auto" in combination with
-  ## podSecurityContext.enabled=false,containerSecurityContext.enabled=false
+memcached:
+  ## Whether to deploy a memcached server for caching database queries
   ##
-  securityContext:
-    runAsUser: 0
+  enabled: false
+  ## Service parameters
+  ##
+  service:
+    ## Memcached port
+    ##
+    port: 11211
