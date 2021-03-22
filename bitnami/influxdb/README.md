@@ -186,17 +186,16 @@ The following tables lists the configurable parameters of the InfluxDB<sup>TM</s
 
 ### InfluxDB Collectd<sup>TM</sup> parameters
 
-| Parameter                                | Description                                                                                                                  | Default                                                 |
-| ---------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
-| `collectd.enabled`                       | InfluxDB Collectd<sup>TM</sup> service enable                                                                                | `false`                                                 |
-| `relay.service.type`                     | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)                                                          | `ClusterIP`                                             |
-| `relay.service.port`                     | InfluxDB Collectd<sup>TM</sup> UDP port (should match with corresponding port in influxdb.conf)                              | `25826`                                                 |
-| `relay.service.nodePort`                 | Kubernetes HTTP node port                                                                                                    | `""`                                                    |
-| `relay.service.annotations`              | Annotations for InfluxDB Collectd<sup>TM</sup> service                                                                       | `{}`                                                    |
-| `relay.service.loadBalancerIP`           | loadBalancerIP if service type is `LoadBalancer`                                                                             | `nil`                                                   |
-| `relay.service.loadBalancerSourceRanges` | Address that are allowed when service is LoadBalancer                                                                        | `[]`                                                    |
-| `relay.service.clusterIP`                | Static clusterIP or None for headless services                                                                               | `nil`                                                   |
-
+| Parameter                                   | Description                                                                                                                  | Default                                                 |
+| ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+| `collectd.enabled`                          | InfluxDB Collectd<sup>TM</sup> service enable                                                                                | `false`                                                 |
+| `collectd.service.type`                     | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)                                                          | `ClusterIP`                                             |
+| `collectd.service.port`                     | InfluxDB Collectd<sup>TM</sup> UDP port (should match with corresponding port in influxdb.conf)                              | `25826`                                                 |
+| `collectd.service.nodePort`                 | Kubernetes HTTP node port                                                                                                    | `""`                                                    |
+| `collectd.service.annotations`              | Annotations for InfluxDB Collectd<sup>TM</sup> service                                                                       | `{}`                                                    |
+| `collectd.service.loadBalancerIP`           | loadBalancerIP if service type is `LoadBalancer`                                                                             | `nil`                                                   |
+| `collectd.service.loadBalancerSourceRanges` | Address that are allowed when service is LoadBalancer                                                                        | `[]`                                                    |
+| `collectd.service.clusterIP`                | Static clusterIP or None for headless services                                                                               | `nil`                                                   |
 
 ### Exposing parameters
 
