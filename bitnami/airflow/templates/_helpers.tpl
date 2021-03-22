@@ -224,11 +224,11 @@ Add environment variables to configure database values
 Add environment variables to configure database values
 */}}
 {{- define "airflow.database.existingsecret.key" -}}
-{{- if (.Values.postgresql.enabled) -}}
+{{- if .Values.postgresql.enabled -}}
     {{- printf "%s" "postgresql-password" -}}
 {{- else -}}
-    {{- if (.Values.externalDatabase.existingSecret) -}}
-        {{- if (.Values.externalDatabase.existingSecretPasswordKey) -}}
+    {{- if .Values.externalDatabase.existingSecret -}}
+        {{- if .Values.externalDatabase.existingSecretPasswordKey -}}
             {{- printf "%s" .Values.externalDatabase.existingSecretPasswordKey -}}
         {{- else -}}
             {{- printf "%s" "postgresql-password" -}}
