@@ -350,6 +350,14 @@ postgresql:
   ## Mount PostgreSQL secret as a file instead of passing environment variable
   # usePasswordFile: false
 
+  ## Store Repmgr username and password into a passfile with format "*:*:*:username:password" and use it to configure Repmgr instead of using password (Requires Postgresql 10+, otherwise ignored)
+  # ref: https://repmgr.org/docs/current/configuration-password-management.html
+  #      https://www.postgresql.org/docs/current/libpq-pgpass.html
+  # repmgrUsePassfile: false
+
+  ## Store Repmgr in a custom path
+  # repmgrPassfilePath:
+
   ## Upgrade repmgr extension in the database
   ##
   upgradeRepmgrExtension: false
