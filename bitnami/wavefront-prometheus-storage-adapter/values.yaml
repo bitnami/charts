@@ -90,11 +90,11 @@ image:
 ##
 livenessProbe:
   enabled: true
-  failureThreshold: 3
-  initialDelaySeconds: 10
+  failureThreshold: 5
+  initialDelaySeconds: 15
   periodSeconds: 10
-  successThreshold: 1
-  timeoutSeconds: 1
+  successThreshold: 5
+  timeoutSeconds: 5
 ## @param readinessProbe.enabled Enable readinessProbe
 ## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
 ## @param readinessProbe.periodSeconds Period seconds for readinessProbe
@@ -104,11 +104,11 @@ livenessProbe:
 ##
 readinessProbe:
   enabled: true
-  failureThreshold: 3
-  initialDelaySeconds: 10
+  failureThreshold: 5
+  initialDelaySeconds: 15
   periodSeconds: 10
-  successThreshold: 1
-  timeoutSeconds: 1
+  successThreshold: 5
+  timeoutSeconds: 5
 
 ## Command and args for running the container (set to default if not set). Use array form
 ## @param command Override default container command (useful when using custom images)
