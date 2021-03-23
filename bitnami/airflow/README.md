@@ -321,6 +321,7 @@ The following tables lists the configurable parameters of the Airflow chart and 
 | `git.clone.extraEnvVarsCM`               | ConfigMap containing extra env vars                                                                               | `nil`                   |
 | `git.clone.extraEnvVarsSecret`           | Secret containing extra env vars (in case of sensitive data)                                                      | `nil`                   |
 | `git.clone.extraVolumeMounts`            | Array of extra volume mounts to be added (evaluated as template). Normally used with `extraVolumes`.              | `nil`                   |
+| `git.clone.resources`                    | The resources for the clone init container                                                                        | {}                      |
 | `git.dags.enabled`                       | Enable in order to download DAG files from git repository.                                                        | `false`                 |
 | `git.dags.repositories[0].branch`        | Branch from repository to checkout                                                                                | `nil`                   |
 | `git.dags.repositories[0].name`          | An unique identifier for repository, must be unique for each repository, by default: `[0].repository` in kebacase | `nil`                   |
@@ -342,6 +343,7 @@ The following tables lists the configurable parameters of the Airflow chart and 
 | `git.sync.extraEnvVarsCM`                | ConfigMap containing extra env vars                                                                               | `nil`                   |
 | `git.sync.extraEnvVarsSecret`            | Secret containing extra env vars (in case of sensitive data)                                                      | `nil`                   |
 | `git.sync.extraVolumeMounts`             | Array of extra volume mounts to be added (evaluated as template). Normally used with `extraVolumes`.              | `nil`                   |
+| `git.sync.resources`                     | The resources for the sync sidecar container                                                                      | {}                      |
 | `git.sync.interval`                      | Interval (in seconds) to pull the git repository containing the plugins and/or DAG files                          | `60`                    |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
