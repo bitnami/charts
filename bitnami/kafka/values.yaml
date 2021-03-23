@@ -215,7 +215,7 @@ zookeeperConnectionTimeoutMs: 6000
 ##
 command:
   - /scripts/setup.sh
-args:
+args: []
 
 ## All the parameters from the configuration file can be overwritten by using environment variables with this format: KAFKA_CFG_{KEY}
 ## ref: https://github.com/bitnami/bitnami-docker-kafka#configuration
@@ -878,6 +878,11 @@ provisioning:
     requests: {}
     #   cpu: 250m
     #   memory: 256Mi
+
+  ## Command and args for running the container (set to default if not set). Use array form
+  ##
+  command: []
+  args: []
 
   topics: []
   # - name: topic-name
