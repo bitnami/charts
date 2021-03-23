@@ -93,7 +93,7 @@ livenessProbe:
   failureThreshold: 5
   initialDelaySeconds: 15
   periodSeconds: 10
-  successThreshold: 5
+  successThreshold: 1
   timeoutSeconds: 5
 ## @param readinessProbe.enabled Enable readinessProbe
 ## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
@@ -107,7 +107,7 @@ readinessProbe:
   failureThreshold: 5
   initialDelaySeconds: 15
   periodSeconds: 10
-  successThreshold: 5
+  successThreshold: 1
   timeoutSeconds: 5
 
 ## Command and args for running the container (set to default if not set). Use array form
