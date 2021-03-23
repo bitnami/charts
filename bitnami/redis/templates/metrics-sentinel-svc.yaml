@@ -18,16 +18,17 @@ metadata:
   {{- end }}
 spec:
   type: {{ .Values.sentinel.metrics.service.type }}
-  {{ if eq .Values.sentinel.metrics.service.type "LoadBalancer" }}
+  {{- if eq .Values.sentinel.metrics.service.type "LoadBalancer" }}
   externalTrafficPolicy: {{ .Values.sentinel.metrics.service.externalTrafficPolicy }}
   {{- end }}
-  {{ if and (eq .Values.sentinel.metrics.service.type "LoadBalancer") .Values.sentinel.metrics.service.loadBalancerIP }}
+  {{- if and (eq .Values.sentinel.metrics.service.type "LoadBalancer") .Values.sentinel.metrics.service.loadBalancerIP }}
   loadBalancerIP: {{ .Values.sentinel.metrics.service.loadBalancerIP }}
   {{- end }}
   ports:
-    - name: sentinelmetrics
-      port: 9355
+    - port: {{ .Values.sentinel.metrics.service.port }}
       targetPort: sentinelmetrics
+      protocol: TCP
+      name: sentinelmetrics
   selector:
     app: {{ template "redis.name" . }}
     release: {{ .Release.Name }}
