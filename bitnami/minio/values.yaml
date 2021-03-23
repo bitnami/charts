@@ -610,6 +610,9 @@ metrics:
     ## Specify the namespace in which the serviceMonitor resource will be created
     ##
     # namespace: ""
+    ## HTTP path to scrape for metrics
+    ##
+    path: /minio/v2/metrics/cluster
     ## Specify the interval at which metrics should be scraped
     ##
     interval: 30s
