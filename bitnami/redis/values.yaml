@@ -182,8 +182,8 @@ sentinel:
 
     image:
       registry: docker.io
-      repository: leominov/redis_sentinel_exporter
-      tag: 1.7.1
+      repository: bitnami/redis-sentinel-exporter
+      tag: 1.7.1-debian-10-r94
       pullPolicy: IfNotPresent
       ## Optionally specify an array of imagePullSecrets.
       ## Secrets must be manually created in the namespace.

@@ -384,7 +384,7 @@ spec:
           securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           command:
-            - /go/bin/redis_sentinel_exporter{{- range $key, $value := .Values.metrics.extraArgs }} --{{ $key }}={{ $value }}{{- end }}
+            - redis_sentinel_exporter{{- range $key, $value := .Values.sentinel.metrics.extraArgs }} --{{ $key }}={{ $value }}{{- end }}
           env:
             {{- if and .Values.sentinel.usePassword (and .Values.usePassword (not .Values.usePasswordFile)) }}
             - name: SENTINEL_PASSWORD
