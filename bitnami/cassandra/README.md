@@ -148,6 +148,13 @@ The following table lists the configurable parameters of the Cassandra chart and
 | `metrics.containerPorts.http`        | HTTP Port on the Host and Container                                                       | `8080`                         |
 | `metrics.containerPorts.jmx`         | JMX Port on the Host and Container                                                        | `5555`                         |
 
+### RBAC parameters
+
+| Parameter                    | Description                                                | Default                                           |
+|------------------------------|------------------------------------------------------------|---------------------------------------------------|
+| `serviceAccount.create`      | Enable the creation of a ServiceAccount for Cassandra pods | `true`                                            |
+| `serviceAccount.name`        | Name of the created ServiceAccount                         | Generated using the `cassandra.fullname` template |
+| `serviceAccount.annotations` | Annotations for Cassandra Service Account                  | `{}` (evaluated as a template)                    |
 
 ### Exposure parameters
 
@@ -167,14 +174,17 @@ The following table lists the configurable parameters of the Cassandra chart and
 
 ### Persistence parameters
 
-| Parameter                  | Description                                     | Default                        |
-|----------------------------|-------------------------------------------------|--------------------------------|
-| `persistence.enabled`      | Enable Cassandra data persistence using PVC     | `true`                         |
-| `persistence.storageClass` | PVC Storage Class for Cassandra data volume     | `nil`                          |
-| `persistence.annotations`  | Persistent Volume Claim annotations Annotations | `{}` (evaluated as a template) |
-| `persistence.accessMode`   | PVC Access Mode for Cassandra data volume       | `[ReadWriteOnce]`              |
-| `persistence.size`         | PVC Storage Request for Cassandra data volume   | `8Gi`                          |
-| `persistence.mountPath`    | The path the volume will be mounted at          | `/bitnami/cassandra`           |
+| Parameter                        | Description                                         | Default                        |
+|----------------------------------|-----------------------------------------------------|--------------------------------|
+| `persistence.enabled`            | Enable Cassandra data persistence using PVC         | `true`                         |
+| `persistence.storageClass`       | PVC Storage Class for Cassandra data volume         | `nil`                          |
+| `persistence.commitStorageClass` | PVC Storage Class for Cassandra Commit Log volume   | `nil`                          |
+| `persistence.annotations`        | Persistent Volume Claim annotations Annotations     | `{}` (evaluated as a template) |
+| `persistence.accessMode`         | PVC Access Mode for Cassandra data volume           | `[ReadWriteOnce]`              |
+| `persistence.size`               | PVC Storage Request for Cassandra data volume       | `8Gi`                          |
+| `persistence.commitLogsize`      | PVC Storage Request for Cassandra commit log volume | `nil`                          |
+| `persistence.mountPath`          | The path the data volume will be mounted at         | `/bitnami/cassandra`           |
+| `persistence.commitLogMountPath` | The path the commit log volume will be mounted at   | `nil`                          |
 
 ### Volume Permissions parameters
 
@@ -182,8 +192,8 @@ The following table lists the configurable parameters of the Cassandra chart and
 |-----------------------------------------------|----------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `volumePermissions.enabled`                   | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                                                 |
 | `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                     | `docker.io`                                             |
-| `volumePermissions.image.repository`          | Init container volume-permissions image name                                                                         | `bitnami/minideb`                                       |
-| `volumePermissions.image.tag`                 | Init container volume-permissions image tag                                                                          | `buster`                                                |
+| `volumePermissions.image.repository`          | Init container volume-permissions image name                                                                         | `bitnami/bitnami-shell`                                 |
+| `volumePermissions.image.tag`                 | Init container volume-permissions image tag                                                                          | `"10"`                                                  |
 | `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                  | `Always`                                                |
 | `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                     | `[]` (does not add image pull secrets to deployed pods) |
 | `volumePermissions.resources.limits`          | Init container volume-permissions resource  limits                                                                   | `{}`                                                    |

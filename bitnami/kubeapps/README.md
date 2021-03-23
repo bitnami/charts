@@ -57,11 +57,11 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```bash
 helm install kubeapps --namespace kubeapps \
-  --set assetsvc.service.port=9090 \
+  --set ingress.enabled=true \
     bitnami/kubeapps
 ```
 
-The above command sets the port for the assetsvc Service to 9090.
+The above command enables an Ingress Rule to expose Kubeapps.
 
 Alternatively, a YAML file that specifies the values for parameters can be provided while installing the chart. For example,
 
@@ -110,11 +110,39 @@ For annotations, please see [this document](https://github.com/kubeapps/kubeapps
 
 ##### TLS
 
-To enable TLS, please set `ingress.tls` to `true`. When enabling this parameter, the TLS certificates will be retrieved from a TLS secret with name *INGRESS_HOSTNAME-tls* (where *INGRESS_HOSTNAME* is a placeholder to be replaced with the hostname you set using the `ingress.hostname` parameter).
+This chart will facilitate the creation of TLS secrets for use with the ingress controller, however, this is not required. There are four common use cases:
 
-You can use the `ingress.extraTls` to provide the TLS configuration for the extra hosts you set using the `ingress.extraHosts` array. Please see [this example](https://kubernetes.github.io/ingress-nginx/examples/tls-termination/) for more information.
+- Helm generates/manages certificate secrets based on the parameters.
+- User generates/manages certificates separately.
+- Helm creates self-signed certificates and generates/manages certificate secrets.
+- An additional tool (like [cert-manager](https://github.com/jetstack/cert-manager/)) manages the secrets for the application.
 
-You can provide your own certificates using the `ingress.secrets` object. If your cluster has a [cert-manager](https://github.com/jetstack/cert-manager) add-on to automate the management and issuance of TLS certificates, set `ingress.certManager` boolean to true to enable the corresponding annotations for cert-manager. For a full list of configuration parameters related to configuring TLS can see the [values.yaml](values.yaml) file.
+In the first two cases, it's needed a certificate and a key. We would expect them to look like this:
+
+- certificate files should look like (and there can be more than one certificate if there is a certificate chain)
+
+  ```console
+  -----BEGIN CERTIFICATE-----
+  MIID6TCCAtGgAwIBAgIJAIaCwivkeB5EMA0GCSqGSIb3DQEBCwUAMFYxCzAJBgNV
+  ...
+  jScrvkiBO65F46KioCL9h5tDvomdU1aqpI/CBzhvZn1c0ZTf87tGQR8NK7v7
+  -----END CERTIFICATE-----
+  ```
+
+- keys should look like:
+
+  ```console
+  -----BEGIN RSA PRIVATE KEY-----
+  MIIEogIBAAKCAQEAvLYcyu8f3skuRyUgeeNpeDvYBCDcgq+LsWap6zbX5f8oLqp4
+  ...
+  wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
+  -----END RSA PRIVATE KEY-----
+  ```
+
+- If you are going to use Helm to manage the certificates based on the parameters, please copy these values into the `certificate` and `key` values for a given `ingress.secrets` entry.
+- In case you are going to manage TLS secrects separately, please know that you can must a TLS secret with name *INGRESS_HOSTNAME-tls* (where *INGRESS_HOSTNAME* is a placeholder to be replaced with the hostname you set using the `ingress.hostname` parameter).
+- To use self-signed certificates created by Helm, set `ingress.tls` to `true` and `ingress.certManager` to `false`.
+- If your cluster has a [cert-manager](https://github.com/jetstack/cert-manager) add-on to automate the management and issuance of TLS certificates, set `ingress.certManager` boolean to true to enable the corresponding annotations for cert-manager.
 
 ## Upgrading Kubeapps
 
@@ -166,6 +194,7 @@ kubectl delete namespace kubeapps
 - [Can Kubeapps install apps into more than one cluster?](#can-kubeapps-install-apps-into-more-than-one-cluster)
 - [Can Kubeapps be installed without Internet connection?](#can-kubeapps-be-installed-without-internet-connection)
 - [Does Kubeapps support private repositories?](#does-kubeapps-support-private-repositories)
+- [Is there any API documentation?](#is-there-any-api-documentation)
 - [Why can't I configure global private repositories?](#why-cant-i-configure-global-private-repositories)
 - [Does Kubeapps support Operators?](#does-kubeapps-support-operators)
 - [More questions?](#more-questions)
@@ -227,6 +256,10 @@ Yes! Follow the [offline installation documentation](https://github.com/kubeapps
 ### Does Kubeapps support private repositories?
 
 Of course! Have a look at the [private app repositories documentation](https://github.com/kubeapps/kubeapps/blob/master/docs/user/private-app-repository.md) to learn how to configure a private repository in Kubeapps.
+
+### Is there any API documentation?
+
+Yes! But it is not definitive and is still subject to change. Check out the [latest API online documentation](https://app.swaggerhub.com/apis/kubeapps/Kubeapps) or download the Kubeapps [OpenAPI Specification yaml file](./dashboard/public/openapi.yaml) from the repository.
 
 ### Why can't I configure global private repositories?
 
@@ -371,7 +404,7 @@ $ kubectl delete statefulset -n kubeapps kubeapps-postgresql-master kubeapps-pos
 Kubeapps 2.0 (Chart version 4.0.0) introduces some breaking changes:
 
  - Helm 2 is no longer supported. If you are still using some Helm 2 charts, [migrate them with the available tools](https://helm.sh/docs/topics/v2_v3_migration/). Note that some charts (but not all of them) may require to be migrated to the [new Chart specification (v2)](https://helm.sh/docs/topics/charts/#the-apiversion-field). If you are facing any issue managing this migration and Kubeapps, please open a new issue!
- - MongoDB is no longer supported. Since 2.0, the only database supported is PostgreSQL.
+ - MongoDB&reg; is no longer supported. Since 2.0, the only database supported is PostgreSQL.
  - PostgreSQL chart dependency has been upgraded to a new major version.
 
 Due to the last point, it's necessary to run a command before upgrading to Kubeapps 2.0:

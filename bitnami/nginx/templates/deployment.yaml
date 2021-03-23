@@ -33,6 +33,7 @@ spec:
       {{- end }}
     spec:
       {{- include "nginx.imagePullSecrets" . | nindent 6 }}
+      serviceAccountName: {{ template "nginx.serviceAccountName" . }}
       {{- if .Values.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -62,10 +63,18 @@ spec:
             - /bin/bash
             - -ec
             - |
+              [[ -f "/opt/bitnami/scripts/git/entrypoint.sh" ]] && source "/opt/bitnami/scripts/git/entrypoint.sh"
               git clone {{ .Values.cloneStaticSiteFromGit.repository }} --branch {{ .Values.cloneStaticSiteFromGit.branch }} /app
           volumeMounts:
             - name: staticsite
               mountPath: /app
+          {{- if .Values.cloneStaticSiteFromGit.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.cloneStaticSiteFromGit.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.cloneStaticSiteFromGit.extraEnvVars }}
+          env:
+            {{- include "common.tplvalues.render" (dict "value" .Values.cloneStaticSiteFromGit.extraEnvVars "context" $) | nindent 12 }}
+          {{- end }}
       containers:
         - name: git-repo-syncer
           image: {{ include "nginx.cloneStaticSiteFromGit.image" . }}
@@ -74,6 +83,7 @@ spec:
             - /bin/bash
             - -ec
             - |
+              [[ -f "/opt/bitnami/scripts/git/entrypoint.sh" ]] && source "/opt/bitnami/scripts/git/entrypoint.sh"
               while true; do
                   cd /app && git pull origin {{ .Values.cloneStaticSiteFromGit.branch }}
                   sleep {{ .Values.cloneStaticSiteFromGit.interval }}
@@ -81,6 +91,13 @@ spec:
           volumeMounts:
             - name: staticsite
               mountPath: /app
+          {{- if .Values.cloneStaticSiteFromGit.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.cloneStaticSiteFromGit.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.cloneStaticSiteFromGit.extraEnvVars }}
+          env:
+            {{- include "common.tplvalues.render" (dict "value" .Values.cloneStaticSiteFromGit.extraEnvVars "context" $) | nindent 12 }}
+          {{- end }}
       {{- else }}
       {{- with .Values.initContainers }}
       initContainers:

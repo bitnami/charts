@@ -1,7 +1,7 @@
 annotations:
   category: Analytics
 apiVersion: v2
-appVersion: 0.45.0
+appVersion: 0.46.0
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -34,4 +34,4 @@ sources:
   - https://github.com/bitnami/bitnami-docker-prometheus
   - https://github.com/bitnami/bitnami-docker-alertmanager
   - https://github.com/prometheus-operator/kube-prometheus
-version: 4.0.1
+version: 4.2.0

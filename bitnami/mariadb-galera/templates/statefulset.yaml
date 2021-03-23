@@ -19,7 +19,7 @@ spec:
       {{- if .Values.podAnnotations }}
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.matchLabels" . | nindent 8 }}
         {{- if .Values.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
         {{- end }}
@@ -151,6 +151,14 @@ spec:
             {{- if .Values.ldap.scope }}
             - name: LDAP_SCOPE
               value: {{ .Values.ldap.scope }}
+            {{- end }}
+            {{- if .Values.ldap.filter }}
+            - name: LDAP_SEARCH_FILTER
+              value: {{ .Values.ldap.filter }}
+            {{- end }}
+            {{- if .Values.ldap.map }}
+            - name: LDAP_SEARCH_MAP
+              value: {{ .Values.ldap.map }}
             {{- end }}
             {{- if .Values.ldap.tls_reqcert }}
             - name: LDAP_TLS_REQCERT
@@ -292,13 +300,13 @@ spec:
               containerPort: 9104
           livenessProbe:
             httpGet:
-              path: /metrics
+              path: /
               port: metrics
             initialDelaySeconds: 30
             timeoutSeconds: 5
           readinessProbe:
             httpGet:
-              path: /metrics
+              path: /
               port: metrics
             initialDelaySeconds: 5
             timeoutSeconds: 1

@@ -13,7 +13,7 @@
 image:
   registry: docker.io
   repository: bitnami/external-dns
-  tag: 0.7.6-debian-10-r25
+  tag: 0.7.6-debian-10-r53
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -163,6 +163,10 @@ azure:
   ## If you use Azure MSI, this should be set to true
   ##
   useManagedIdentityExtension: false
+  ## If you use Azure MSI, this is Client ID of Azure user-assigned managed identity (optional,
+  # system-assigned managed identity is used if empty)
+  #
+  userAssignedIdentityID: ""
 
 ## Cloudflare configuration to be set via arguments/env. variables
 ##
@@ -384,6 +388,9 @@ domainFilters: []
 ## Exclude subdomains (optional)
 ##
 excludeDomains: []
+## Filter target zones by zone domain (optional)
+##
+zoneNameFilters: []
 ## Limit possible target zones by zone id (optional)
 ##
 zoneIdFilters: []
@@ -400,7 +407,7 @@ triggerLoopOnEvent: false
 ##
 interval: "1m"
 ## Verbosity of the ExternalDNS logs. Available values are:
-## - panic, debug, info, warn, error, fatal
+## - panic, debug, info, warning, error, fatal, trace
 ##
 logLevel: info
 ## Formats of the ExternalDNS logs. Available values are:
@@ -567,6 +574,9 @@ serviceAccount:
   ## Annotations for the Service Account
   ##
   annotations: {}
+  ## Automount API credentials for a service account.
+  ##
+  automountServiceAccountToken: true
 
 ## RBAC parameteres
 ## https://kubernetes.io/docs/reference/access-authn-authz/rbac/
@@ -641,6 +651,10 @@ extraVolumes: []
 ## Configure extra volumeMounts
 ##
 extraVolumeMounts: []
+
+## Configure PodDisruptionBudget
+## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+podDisruptionBudget: {}
 
 ## Prometheus Exporter / Metrics
 ##

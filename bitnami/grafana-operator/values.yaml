@@ -15,6 +15,10 @@
 ##
 # fullnameOverride:
 
+## Extra objects to deploy (value evaluated as a template)
+##
+extraDeploy: []
+
 ## Add labels to all the deployed resources
 ##
 commonLabels: {}
@@ -49,7 +53,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/grafana-operator
-    tag: 3.9.0-debian-10-r0
+    tag: 3.9.0-debian-10-r28
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## Ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -200,7 +204,7 @@ grafana:
   image:
     registry: docker.io
     repository: bitnami/grafana
-    tag: 7.4.1-debian-10-r0
+    tag: 7.4.3-debian-10-r17
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -218,16 +222,6 @@ grafana:
     runAsNonRoot: true
     fsGroup: 1001
     # supplementalGroups: []
-
-  ## Grafana admin username
-  ## Ref: https://github.com/bitnami/charts/blob/master/bitnami/grafana-operator/crds/grafanas.yaml#L40
-  ##
-  adminUsername:
-
-  ## Grafana admin password (plain text)
-  ## Ref: https://github.com/bitnami/charts/blob/master/bitnami/grafana-operator/crds/grafanas.yaml#L43
-  ##
-  adminPassword:
 
   ## Container securityContext
   ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
@@ -399,6 +393,10 @@ grafana:
     security:
       disable_initial_admin_creation: false
       disable_gravatar: false
+      # ## Grafana Admin credentials, if omitted they will be admin:<random_pass>
+      # admin_user:
+      # admin_password:
+      #
       # ## OIDC configuration
       # ##
       # auth:
@@ -417,6 +415,16 @@ grafana:
       #   # role_attribute_path: contains(groups[*], 'platform-readonly') && 'Viewer' || contains(groups[*], 'platform-admin') && 'Admin' || contains(groups[*], 'platform-emergency') && 'Admin' || contains(groups[*], 'customer-poweruser') && 'Admin' || contains(groups[*], 'customer-collaborator') && 'Editor' || contains(groups[*], 'customer-readonly') && 'Viewer'
       #   # allowed_domains: example.com
       #   allow_sign_up: True
+
+  ## Mount extra configmaps and secrets into the Grafana pod
+  ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/extra_files.md
+  ##
+  configMaps: []
+  #  - myCustomConfigMap
+  #
+  secrets: []
+  #  - myCustomSecret
+  #
 
   ## Configuring the read for jsonnetLibraries to pull in.
   ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md#jsonnet-library-discovery
@@ -455,7 +463,7 @@ grafanaPluginInit:
   image:
     registry: docker.io
     repository: bitnami/grafana
-    tag: 7.4.1-debian-10-r0
+    tag: 7.4.3-debian-10-r17
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/

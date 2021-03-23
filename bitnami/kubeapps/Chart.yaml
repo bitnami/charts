@@ -1,8 +1,13 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 2.1.0
+appVersion: 2.3.0
 dependencies:
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 1.x.x
   - name: postgresql
     repository: https://charts.bitnami.com/bitnami
     version: '10.X.X'
@@ -20,4 +25,4 @@ maintainers:
 name: kubeapps
 sources:
   - https://github.com/kubeapps/kubeapps
-version: 5.1.0
+version: 5.4.0

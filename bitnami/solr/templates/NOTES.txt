@@ -58,7 +58,7 @@ To connect to your Solr from outside the cluster execute the following commands:
 
   * Internally, within the kubernetes cluster on:
 
-{{ include "solr.exporter-name" . }}.{{ .Release.Name }}.svc.{{ .Values.clusterDomain }}:{{ .Values.exporter.port }}/solr
+{{ include "solr.exporter-name" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:{{ .Values.exporter.port }}/metrics
 
 {{- end }}
 
@@ -70,7 +70,7 @@ To connect to your Solr from outside the cluster execute the following commands:
 {{- $secretNameSolr := include "solr.secretName" . -}}
 
 {{- if not .Values.existingSecret -}}
-  {{- $requiredSolrPassword := dict "valueKey" "solrPassword" "secret" $secretNameSolr "field" "solr-password" -}}
+  {{- $requiredSolrPassword := dict "valueKey" "authentication.adminPassword" "secret" $secretNameSolr "field" "solr-password" -}}
   {{- $requiredPasswords = append $requiredPasswords $requiredSolrPassword -}}
 {{- end -}}
 

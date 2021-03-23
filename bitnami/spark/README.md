@@ -67,13 +67,14 @@ The following tables lists the configurable parameters of the spark chart and th
 
 ### Spark parameters
 
-| Parameter           | Description                                      | Default                                                 |
-|---------------------|--------------------------------------------------|---------------------------------------------------------|
-| `image.registry`    | spark image registry                             | `docker.io`                                             |
-| `image.repository`  | spark Image name                                 | `bitnami/spark`                                         |
-| `image.tag`         | spark Image tag                                  | `{TAG_NAME}`                                            |
-| `image.pullPolicy`  | spark image pull policy                          | `IfNotPresent`                                          |
-| `image.pullSecrets` | Specify docker-registry secret names as an array | `[]` (does not add image pull secrets to deployed pods) |
+| Parameter           | Description                                                                             | Default                                                 |
+|---------------------|-----------------------------------------------------------------------------------------|---------------------------------------------------------|
+| `image.registry`    | spark image registry                                                                    | `docker.io`                                             |
+| `image.repository`  | spark Image name                                                                        | `bitnami/spark`                                         |
+| `image.tag`         | spark Image tag                                                                         | `{TAG_NAME}`                                            |
+| `image.pullPolicy`  | spark image pull policy                                                                 | `IfNotPresent`                                          |
+| `image.pullSecrets` | Specify docker-registry secret names as an array                                        | `[]` (does not add image pull secrets to deployed pods) |
+| `hostNetwork`       | Use Host-Network for the PODs (if true, also dnsPolicy: ClusterFirstWithHostNet is set) | `false`                                                 |
 
 ### Spark master parameters
 
@@ -88,6 +89,7 @@ The following tables lists the configurable parameters of the spark chart and th
 | `master.securityContext.enabled`            | Enable security context                                                                                                                    | `true`                                      |
 | `master.securityContext.fsGroup`            | Group ID for the container                                                                                                                 | `1001`                                      |
 | `master.securityContext.runAsUser`          | User ID for the container                                                                                                                  | `1001`                                      |
+| `master.securityContext.seLinuxOptions`     | SELinux options for the container                                                                                                          | `{}`                                        |
 | `master.podAnnotations`                     | Annotations for pods in StatefulSet                                                                                                        | `{}` (The value is evaluated as a template) |
 | `master.extraPodLabels`                     | Extra labels for pods in StatefulSet                                                                                                       | `{}` (The value is evaluated as a template) |
 | `master.podAffinityPreset`                  | Spark master pod affinity preset. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard`                                    | `""`                                        |
@@ -137,6 +139,7 @@ The following tables lists the configurable parameters of the spark chart and th
 | `worker.securityContext.enabled`            | Enable security context                                                                                                                                                              | `true`                                      |
 | `worker.securityContext.fsGroup`            | Group ID for the container                                                                                                                                                           | `1001`                                      |
 | `worker.securityContext.runAsUser`          | User ID for the container                                                                                                                                                            | `1001`                                      |
+| `worker.securityContext.seLinuxOptions`     | SELinux options for the container                                                                                                                                                    | `{}`                                        |
 | `worker.podAnnotations`                     | Annotations for pods in StatefulSet                                                                                                                                                  | `{}`                                        |
 | `worker.extraPodLabels`                     | Extra labels for pods in StatefulSet                                                                                                                                                 | `{}` (The value is evaluated as a template) |
 | `worker.podAffinityPreset`                  | Spark worker pod affinity preset. Ignored if `worker.affinity` is set. Allowed values: `soft` or `hard`                                                                              | `""`                                        |

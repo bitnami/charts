@@ -55,6 +55,13 @@ spec:
       securityContext:
         fsGroup: {{ .Values.worker.securityContext.fsGroup }}
         runAsUser: {{ .Values.worker.securityContext.runAsUser }}
+        {{- if .Values.worker.securityContext.seLinuxOptions }}
+        seLinuxOptions: {{- include "common.tplvalues.render" (dict "value" .Values.worker.securityContext.seLinuxOptions "context" $) | nindent 10 }}
+        {{- end }}
+      {{- end }}
+      {{- if .Values.hostNetwork }}
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
       {{- end }}
       containers:
         - name: spark-worker

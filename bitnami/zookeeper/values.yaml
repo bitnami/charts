@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/zookeeper
-  tag: 3.6.2-debian-10-r124
+  tag: 3.6.2-debian-10-r156
 
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -28,8 +28,7 @@ image:
   # pullSecrets:
   #   - myRegistryKeySecretName
   ## Set to true if you would like to see extra information on logs
-  ## It turns BASH and NAMI debugging in minideb
-  ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ## It turns BASH and/or NAMI debugging in the image
   ##
   debug: false
 
@@ -48,6 +47,10 @@ hostAliases: []
 ##
 clusterDomain: cluster.local
 
+## Extra objects to deploy (value evaluated as a template)
+##
+extraDeploy: []
+
 ## Add labels to all the deployed resources
 ##
 commonLabels: {}
@@ -63,8 +66,8 @@ volumePermissions:
   enabled: false
   image:
     registry: docker.io
-    repository: bitnami/minideb
-    tag: buster
+    repository: bitnami/bitnami-shell
+    tag: "10"
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

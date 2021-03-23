@@ -208,6 +208,8 @@ spec:
               mountPath: /opt/bitnami/redis/mounted-etc
             - name: redis-tmp-conf
               mountPath: /opt/bitnami/redis/etc
+            - name: tmp
+              mountPath: /tmp
             {{- if .Values.tls.enabled }}
             - name: redis-certificates
               mountPath: /opt/bitnami/redis/certs
@@ -294,6 +296,13 @@ spec:
           {{- else if .Values.sentinel.customReadinessProbe }}
           readinessProbe: {{- toYaml .Values.sentinel.customReadinessProbe | nindent 12 }}
           {{- end }}
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - /bin/bash
+                  - -c
+                  - /opt/bitnami/scripts/start-scripts/prestop-sentinel.sh
           resources: {{- toYaml .Values.sentinel.resources | nindent 12 }}
           volumeMounts:
             - name: start-scripts
@@ -469,6 +478,8 @@ spec:
         - name: sentinel-tmp-conf
           emptyDir: {}
         - name: redis-tmp-conf
+          emptyDir: {}
+        - name: tmp
           emptyDir: {}
     {{- if .Values.tls.enabled }}
         - name: redis-certificates

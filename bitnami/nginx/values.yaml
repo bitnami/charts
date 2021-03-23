@@ -13,7 +13,7 @@
 image:
   registry: docker.io
   repository: bitnami/nginx
-  tag: 1.19.6-debian-10-r37
+  tag: 1.19.8-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -96,7 +96,7 @@ cloneStaticSiteFromGit:
   image:
     registry: docker.io
     repository: bitnami/git
-    tag: 2.30.0-debian-10-r26
+    tag: 2.31.0-debian-10-r2
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -117,6 +117,22 @@ cloneStaticSiteFromGit:
   ## Interval for sidecar container pull from the repository
   ##
   interval: 60
+
+  ## Additional environment variables to set for the in the containers that clone static site from git
+  ## E.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: BAR
+  ##
+  extraEnvVars: []
+  ## Add extra volume mounts for the GIT containers
+  ## Useful to mount keys to connect through ssh. (normally used with extraVolumes)
+  ## E.g:
+  ## extraVolumeMounts:
+  ##   - name: ssh-dir
+  ##     mountPath: /root/.ssh/
+  ##
+  extraVolumeMounts: []
 
 ## Custom server block to be added to NGINX configuration
 ## PHP-FPM example server block:
@@ -300,6 +316,22 @@ extraVolumes: []
 ##
 extraVolumeMounts: []
 
+## Pods Service Account
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+##
+serviceAccount:
+  ## Specifies whether a ServiceAccount should be created
+  ##
+  create: false
+  ## The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the `common.names.fullname` template
+  # name:
+
+  ## Annotations for service account. Evaluated as a template.
+  ## Only used if `create` is `true`.
+  ##
+  annotations: {}
+
 ## NGINX Service properties
 ##
 service:
@@ -361,7 +393,7 @@ ldapDaemon:
   image:
     registry: docker.io
     repository: bitnami/nginx-ldap-auth-daemon
-    tag: 0.20200116.0-debian-10-r236
+    tag: 0.20200116.0-debian-10-r276
     pullPolicy: IfNotPresent
 
   ## LDAP Daemon port
@@ -664,7 +696,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/nginx-exporter
-    tag: 0.8.0-debian-10-r206
+    tag: 0.8.0-debian-10-r247
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

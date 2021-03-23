@@ -132,8 +132,8 @@ The following table lists the configurable parameters of the Redis<sup>TM</sup> 
 | `service.loadBalancerIP`                | loadBalancerIP if service.type is `LoadBalancer`                                                                                                    | `nil`                                                   |
 | `volumePermissions.enabled`             | Enable init container that changes volume permissions in the registry (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                                                 |
 | `volumePermissions.image.registry`      | Init container volume-permissions image registry                                                                                                    | `docker.io`                                             |
-| `volumePermissions.image.repository`    | Init container volume-permissions image name                                                                                                        | `bitnami/minideb`                                       |
-| `volumePermissions.image.tag`           | Init container volume-permissions image tag                                                                                                         | `buster`                                                |
+| `volumePermissions.image.repository`    | Init container volume-permissions image name                                                                                                        | `bitnami/bitnami-shell`                                 |
+| `volumePermissions.image.tag`           | Init container volume-permissions image tag                                                                                                         | `"10"`                                                  |
 | `volumePermissions.image.pullPolicy`    | Init container volume-permissions image pull policy                                                                                                 | `Always`                                                |
 | `volumePermissions.resources`           | Init container volume-permissions CPU/Memory resource requests/limits                                                                               | {}                                                      |
 | `volumePermissions.image.pullSecrets`   | Specify docker-registry secret names as an array                                                                                                    | `[]` (does not add image pull secrets to deployed pods) |
@@ -151,6 +151,7 @@ The following table lists the configurable parameters of the Redis<sup>TM</sup> 
 | `redis.command`                            | Redis<sup>TM</sup> entrypoint string. The command `redis-server` is executed if this is not provided.              | `nil`                            |
 | `redis.args`                               | Arguments for the provided command if needed                                                                       | `nil`                            |
 | `redis.schedulerName`                      | Name of an alternate scheduler                                                                                     | `nil`                            |
+| `redis.shareProcessNamespace`              | Redis pod `shareProcessNamespace` option. Enables /pause reap zombie PIDs.                                            | `false`                          |
 | `redis.configmap`                          | Additional Redis<sup>TM</sup> configuration for the nodes (this value is evaluated as a template)                  | `nil`                            |
 | `redis.podAffinityPreset`                  | Redis<sup>TM</sup> pod affinity preset. Ignored if `redis.affinity` is set. Allowed values: `soft` or `hard`       | `""`                             |
 | `redis.podAntiAffinityPreset`              | Redis<sup>TM</sup> pod anti-affinity preset. Ignored if `redis.affinity` is set. Allowed values: `soft` or `hard`  | `soft`                           |
@@ -250,8 +251,8 @@ The following table lists the configurable parameters of the Redis<sup>TM</sup> 
 | Parameter                                       | Description                                                                                                                                       | Default        |
 |-------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|----------------|
 | `cluster.init`                                  | Enable the creation of a job that initializes the Redis<sup>TM</sup> Cluster                                                                      | `true`         |
-| `cluster.nodes`                                 | Number of nodes in the Redis<sup>TM</sup> cluster                                                                                                 | `6`            |
-| `cluster.replicas`                              | Number of replicas for every master in the cluster                                                                                                | `1`            |
+| `cluster.nodes`                                 | Total Number of nodes in the Redis<sup>TM</sup> cluster including `replicas`. See the "Cluster topology" section                                                                                       | `6`            |
+| `cluster.replicas`                              | Number of replicas for every master in the cluster                                                                                              | `1`            |
 | `cluster.externalAccess.enabled`                | Enable access to the Redis<sup>TM</sup> cluster from Outside the Kubernetes Cluster                                                               | `false`        |
 | `cluster.externalAccess.service.type`           | Type for the services used to expose every Pod                                                                                                    | `LoadBalancer` |
 | `cluster.externalAccess.service.port`           | Port for the services used to expose every Pod                                                                                                    | `6379`         |
@@ -289,17 +290,17 @@ The following table lists the configurable parameters of the Redis<sup>TM</sup> 
 
 #### Sysctl Image parameters
 
-| Parameter                  | Description                                                    | Default           |
-|----------------------------|----------------------------------------------------------------|-------------------|
-| `sysctlImage.enabled`      | Enable an init container to modify Kernel settings             | `false`           |
-| `sysctlImage.command`      | sysctlImage command to execute                                 | []                |
-| `sysctlImage.registry`     | sysctlImage Init container registry                            | `docker.io`       |
-| `sysctlImage.repository`   | sysctlImage Init container name                                | `bitnami/minideb` |
-| `sysctlImage.tag`          | sysctlImage Init container tag                                 | `buster`          |
-| `sysctlImage.pullPolicy`   | sysctlImage Init container pull policy                         | `Always`          |
-| `sysctlImage.mountHostSys` | Mount the host `/sys` folder to `/host-sys`                    | `false`           |
-| `sysctlImage.resources`    | sysctlImage Init container CPU/Memory resource requests/limits | {}                |
-| `sysctlImage.pullSecrets`  | Specify docker-registry secret names as an array               | `nil`             |
+| Parameter                  | Description                                                    | Default                 |
+|----------------------------|----------------------------------------------------------------|-------------------------|
+| `sysctlImage.enabled`      | Enable an init container to modify Kernel settings             | `false`                 |
+| `sysctlImage.command`      | sysctlImage command to execute                                 | []                      |
+| `sysctlImage.registry`     | sysctlImage Init container registry                            | `docker.io`             |
+| `sysctlImage.repository`   | sysctlImage Init container name                                | `bitnami/bitnami-shell` |
+| `sysctlImage.tag`          | sysctlImage Init container tag                                 | `"10"`                  |
+| `sysctlImage.pullPolicy`   | sysctlImage Init container pull policy                         | `Always`                |
+| `sysctlImage.mountHostSys` | Mount the host `/sys` folder to `/host-sys`                    | `false`                 |
+| `sysctlImage.resources`    | sysctlImage Init container CPU/Memory resource requests/limits | {}                      |
+| `sysctlImage.pullSecrets`  | Specify docker-registry secret names as an array               | `nil`                   |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -337,7 +338,9 @@ To modify the Redis<sup>TM</sup> version used in this chart you can specify a [v
 
 ### Cluster topology
 
-The Helm Chart will deploy by default 3 redis masters and 3 replicas. By default the Redis<sup>TM</sup> Cluster is not accessible from outside the Kubernetes cluster, to access the Redis<sup>TM</sup> Cluster from outside you have to set `cluster.externalAccess.enabled=true` at deployment time. It will create in the first installation only 6 LoadBalancer services, one for each Redis<sup>TM</sup> node, once you have the external IPs of each service you will need to perform an upgrade passing those IPs to the `cluster.externalAccess.service.loadbalancerIP` array.
+To successfully set the cluster up, it will need to have at least 3 master nodes. The total number of nodes is calculated like- `nodes = numOfMasterNodes + numOfMasterNodes * replicas`. Hence, the defaults `cluster.nodes = 6` and `cluster.replicas = 1` means, 3 master and 3 replica nodes will be deployed by the chart.
+
+By default the Redis<sup>TM</sup> Cluster is not accessible from outside the Kubernetes cluster, to access the Redis<sup>TM</sup> Cluster from outside you have to set `cluster.externalAccess.enabled=true` at deployment time. It will create in the first installation only 6 LoadBalancer services, one for each Redis<sup>TM</sup> node, once you have the external IPs of each service you will need to perform an upgrade passing those IPs to the `cluster.externalAccess.service.loadbalancerIP` array.
 
 The replicas will be read-only replicas of the masters. By default only one service is exposed (when not using the external access mode). You will connect your client to the exposed service, regardless you need to read or write. When a write operation arrives to a replica it will redirect the client to the proper master node. For example, using `redis-cli` you will need to provide the `-c` flag for `redis-cli` to follow the redirection automatically.
 
@@ -500,7 +503,6 @@ sysctlImage:
     - /bin/sh
     - -c
     - |-
-      install_packages procps
       sysctl -w net.core.somaxconn=10000
       echo never > /host-sys/kernel/mm/transparent_hugepage/enabled
 ```

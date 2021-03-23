@@ -112,6 +112,8 @@ The following table lists the configurable parameters of the MariaDB Galera char
 | `ldap.bslookup`                            | LDAP base lookup                                                                                                                                                                                                                                                                 | `nil`                                                             |
 | `ldap.nss_initgroups_ignoreusers`          | LDAP ignored users                                                                                                                                                                                                                                                               | `root,nslcd`                                                      |
 | `ldap.scope`                               | LDAP search scope                                                                                                                                                                                                                                                                | `nil`                                                             |
+| `ldap.filter`                               | LDAP custom filter                                                                                                                                                                                                                                                                | `nil`                                                             |
+| `ldap.map`                               | LDAP custom map                                                                                                                                                                                                                                                                 | `nil`                                                             |
 | `ldap.tls_reqcert`                         | LDAP TLS check on server certificates                                                                                                                                                                                                                                            | `nil`                                                             |
 | `tls.enabled`                              | Enable TLS support for replication traffic                                                                                                                                                                                                                                       | `false`                                                           |
 | `tls.certificatesSecret`                   | Name of the secret that contains the certificates                                                                                                                                                                                                                                | `nil`                                                             |
@@ -253,6 +255,8 @@ LDAP support can be enabled in the chart by specifying the `ldap.` parameters wh
 - `ldap.bslookup`: LDAP base lookup. No defaults.
 - `ldap.nss_initgroups_ignoreusers`: LDAP ignored users. `root,nslcd`.
 - `ldap.scope`: LDAP search scope. No defaults.
+- `ldap.filter`: LDAP custom search filter. No defaults.
+- `ldap.map`: LDAP custom map to use. No defaults.
 - `ldap.tls_reqcert`: LDAP TLS check on server certificates. No defaults.
 
 For example:
@@ -266,6 +270,8 @@ ldap.bindpw="admin"
 ldap.bslookup="ou=group-ok,dc=example,dc=org"
 ldap.nss_initgroups_ignoreusers="root,nslcd"
 ldap.scope="sub"
+ldap.filter="AccountName"
+ldap.map="number"
 ldap.tls_reqcert="demand"
 ```
 
@@ -340,7 +346,7 @@ The feature allows for specifying a template string for a initContainer in the p
 ```yaml
 extraInitContainers:
 - name: initcontainer
-  image: bitnami/minideb:buster
+  image: bitnami/minideb
   command: ["/bin/sh", "-c"]
   args:
     - install_packages curl && curl http://api-service.local/db/starting;

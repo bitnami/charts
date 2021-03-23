@@ -225,6 +225,35 @@ Return true if a configmap object should be created for MongoDB(R) Arbiter
 {{- end -}}
 
 {{/*
+Return true if the Hidden should be deployed
+*/}}
+{{- define "mongodb.hidden.enabled" -}}
+{{- if and (eq .Values.architecture "replicaset") .Values.hidden.enabled }}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the configmap with the MongoDB(R) configuration for the Hidden
+*/}}
+{{- define "mongodb.hidden.configmapName" -}}
+{{- if .Values.hidden.existingConfigmap -}}
+    {{- printf "%s" (tpl .Values.hidden.existingConfigmap $) -}}
+{{- else -}}
+    {{- printf "%s-hidden" (include "mongodb.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if a configmap object should be created for MongoDB(R) Hidden
+*/}}
+{{- define "mongodb.hidden.createConfigmap" -}}
+{{- if and  (include "mongodb.hidden.enabled" .) .Values.hidden.enabled .Values.hidden.configuration (not .Values.hidden.existingConfigmap) }}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Compile all warnings into a single message, and call fail.
 */}}
 {{- define "mongodb.validateValues" -}}
@@ -280,9 +309,9 @@ mongodb: auth.username, auth.database
 Validate values of MongoDB(R) - service type for external access
 */}}
 {{- define "mongodb.validateValues.externalAccessServiceType" -}}
-{{- if and (eq .Values.architecture "replicaset") (not (eq .Values.externalAccess.service.type "NodePort")) (not (eq .Values.externalAccess.service.type "LoadBalancer")) -}}
+{{- if and (eq .Values.architecture "replicaset") (not (eq .Values.externalAccess.service.type "NodePort")) (not (eq .Values.externalAccess.service.type "LoadBalancer")) (not (eq .Values.externalAccess.service.type "ClusterIP")) -}}
 mongodb: externalAccess.service.type
-    Available service type for external access are NodePort or LoadBalancer.
+    Available service type for external access are NodePort, LoadBalancer or ClusterIP.
 {{- end -}}
 {{- end -}}
 

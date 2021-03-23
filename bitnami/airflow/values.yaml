@@ -65,7 +65,7 @@ web:
   image:
     registry: docker.io
     repository: bitnami/airflow
-    tag: 2.0.1-debian-10-r4
+    tag: 2.0.1-debian-10-r37
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -78,8 +78,7 @@ web:
     pullSecrets: []
     #   - myRegistryKeySecretName
     ## Set to true if you would like to see extra information on logs
-    ## It turns BASH and NAMI debugging in minideb
-    ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+    ## It turns BASH and/or NAMI debugging in the image
     ##
     debug: false
   ## Number of web replicas
@@ -211,7 +210,7 @@ scheduler:
   image:
     registry: docker.io
     repository: bitnami/airflow-scheduler
-    tag: 2.0.1-debian-10-r3
+    tag: 2.0.1-debian-10-r35
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -224,8 +223,7 @@ scheduler:
     pullSecrets: []
     #   - myRegistryKeySecretName
     ## Set to true if you would like to see extra information on logs
-    ## It turns BASH and NAMI debugging in minideb
-    ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+    ## It turns BASH and/or NAMI debugging in the image
     ##
     debug: false
   ## Number of scheduler replicas
@@ -329,7 +327,7 @@ worker:
   image:
     registry: docker.io
     repository: bitnami/airflow-worker
-    tag: 2.0.1-debian-10-r3
+    tag: 2.0.1-debian-10-r34
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -342,8 +340,7 @@ worker:
     pullSecrets: []
     #   - myRegistryKeySecretName
     ## Set to true if you would like to see extra information on logs
-    ## It turns BASH and NAMI debugging in minideb
-    ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+    ## It turns BASH and/or NAMI debugging in the image
     ##
     debug: false
   ## Port where the worker will be exposed
@@ -545,7 +542,7 @@ git:
   image:
     registry: docker.io
     repository: bitnami/git
-    tag: 2.30.1-debian-10-r3
+    tag: 2.31.0-debian-10-r3
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -873,9 +870,12 @@ externalDatabase:
   ## Database password
   ##
   password:
-  ## Name of an existing secret resource containing the DB password in a 'postgresql-password' key
+  ## Name of an existing secret resource containing the DB password
   ##
   existingSecret:
+  ## Name of an existing secret key containing the DB password
+  ##
+  existingSecretPasswordKey:
   ## Database name
   ##
   database: bitnami_airflow
@@ -927,7 +927,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/airflow-exporter
-    tag: 0.20210126.0-debian-10-r16
+    tag: 0.20210126.0-debian-10-r49
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

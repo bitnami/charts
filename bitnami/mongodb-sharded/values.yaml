@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/mongodb-sharded
-  tag: 4.4.4-debian-10-r0
+  tag: 4.4.4-debian-10-r34
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -27,8 +27,6 @@ image:
   pullSecrets:
 
   ## Set to true if you would like to see extra information on logs
-  ## It turns on Bitnami debugging in minideb-extras-base
-  ## ref:  https://github.com/bitnami/minideb-extras-base
   ##
   debug: false
 
@@ -302,6 +300,11 @@ shardsvr:
       values: []
     ## Affinity for pod assignment
     ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+    ## You can set arbiterLoopId (or any other parameter) by setting the below code block under this 'affinity' section:
+    ## affinity:
+    ##   matchLabels:
+    ##     shard: "{{ .arbiterLoopId }}"
+    ##
     ## Note: shardsvr.arbiter.podAffinityPreset, shardsvr.arbiter.podAntiAffinityPreset, and shardsvr.arbiter.nodeAffinityPreset will be ignored when it's set
     ##
     affinity: {}
@@ -891,8 +894,8 @@ volumePermissions:
   enabled: false
   image:
     registry: docker.io
-    repository: bitnami/minideb
-    tag: buster
+    repository: bitnami/bitnami-shell
+    tag: "10"
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -997,7 +1000,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mongodb-exporter
-    tag: 0.11.2-debian-10-r79
+    tag: 0.11.2-debian-10-r113
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

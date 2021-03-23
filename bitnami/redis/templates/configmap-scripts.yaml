@@ -12,19 +12,27 @@ data:
 {{- if and .Values.cluster.enabled .Values.sentinel.enabled }}
   start-node.sh: |
     #!/bin/bash
-    is_boolean_yes() {
-        local -r bool="${1:-}"
-        # comparison is performed without regard to the case of alphabetic characters
-        shopt -s nocasematch
-        if [[ "$bool" = 1 || "$bool" =~ ^(yes|true)$ ]]; then
-            true
-        else
-            false
-        fi
+
+    . /opt/bitnami/scripts/libos.sh
+    . /opt/bitnami/scripts/liblog.sh
+    . /opt/bitnami/scripts/libvalidations.sh
+
+    not_exists_dns_entry() {
+      myip=$(hostname -i)
+
+      if [[ -z "$(getent ahosts "$HEADLESS_SERVICE" | grep "^${myip}" )" ]]; then
+          warn "$HEADLESS_SERVICE does not contain the IP of this pod: ${myip}"
+          return 1
+      fi
+      info "$HEADLESS_SERVICE has my IP: ${myip}"
+      return 0
     }
 
     HEADLESS_SERVICE="{{ template "redis.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
     REDIS_SERVICE="{{ template "redis.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
+
+    # Waits for DNS to add this ip to the service DNS entry
+    retry_while not_exists_dns_entry
 
     export REDIS_REPLICATION_MODE="slave"
     if [[ -z "$(getent ahosts "$HEADLESS_SERVICE" | grep -v "^$(hostname -i) ")" ]]; then
@@ -137,25 +145,11 @@ data:
 
   start-sentinel.sh: |
     #!/bin/bash
-    replace_in_file() {
-        local filename="${1:?filename is required}"
-        local match_regex="${2:?match regex is required}"
-        local substitute_regex="${3:?substitute regex is required}"
-        local posix_regex=${4:-true}
 
-        local result
+    . /opt/bitnami/scripts/libos.sh
+    . /opt/bitnami/scripts/libvalidations.sh
+    . /opt/bitnami/scripts/libfile.sh
 
-        # We should avoid using 'sed in-place' substitutions
-        # 1) They are not compatible with files mounted from ConfigMap(s)
-        # 2) We found incompatibility issues with Debian10 and "in-place" substitutions
-        del=$'\001' # Use a non-printable character as a 'sed' delimiter to avoid issues
-        if [[ $posix_regex = true ]]; then
-            result="$(sed -E "s${del}${match_regex}${del}${substitute_regex}${del}g" "$filename")"
-        else
-            result="$(sed "s${del}${match_regex}${del}${substitute_regex}${del}g" "$filename")"
-        fi
-        echo "$result" > "$filename"
-    }
     sentinel_conf_set() {
         local -r key="${1:?missing key}"
         local value="${2:-}"
@@ -171,18 +165,18 @@ data:
     sentinel_conf_add() {
         echo $'\n'"$@" >> "/opt/bitnami/redis-sentinel/etc/sentinel.conf"
     }
-    is_boolean_yes() {
-        local -r bool="${1:-}"
-        # comparison is performed without regard to the case of alphabetic characters
-        shopt -s nocasematch
-        if [[ "$bool" = 1 || "$bool" =~ ^(yes|true)$ ]]; then
-            true
-        else
-            false
-        fi
-    }
     host_id() {
       echo "$1" | openssl sha1 | awk '{print $2}'
+    }
+    not_exists_dns_entry() {
+      myip=$(hostname -i)
+
+      if [[ -z "$(getent ahosts "$HEADLESS_SERVICE" | grep "^${myip}" )" ]]; then
+          warn "$HEADLESS_SERVICE does not contain the IP of this pod: ${myip}"
+          return 1
+      fi
+      info "$HEADLESS_SERVICE has my IP: ${myip}"
+      return 0
     }
 
     HEADLESS_SERVICE="{{ template "redis.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
@@ -207,9 +201,25 @@ data:
     fi
 
     export REDIS_REPLICATION_MODE="slave"
-    if [[ -z "$(getent ahosts "$HEADLESS_SERVICE" | grep -v "^$(hostname -i) ")" ]]; then
+
+    # Waits for DNS to add this ip to the service DNS entry
+    retry_while not_exists_dns_entry
+
+    if [[ -z "$(getent ahosts "$HEADLESS_SERVICE" | grep -v "^$(hostname -i)")" ]]; then
       export REDIS_REPLICATION_MODE="master"
     fi
+
+    # Clean sentineles from the current sentinel nodes
+    for node in $( getent ahosts "$HEADLESS_SERVICE" | grep -v "^$(hostname -i)" | cut -f 1 -d ' ' | uniq ); do
+      info "Cleaning sentinels in sentinel node: $node"
+      if is_boolean_yes "$REDIS_SENTINEL_TLS_ENABLED"; then
+        redis-cli {{- if .Values.usePassword }} -a $REDIS_PASSWORD {{- end }} -h $node -p {{ .Values.sentinel.port }} --tls --cert ${REDIS_SENTINEL_TLS_CERT_FILE} --key ${REDIS_SENTINEL_TLS_KEY_FILE} --cacert ${REDIS_SENTINEL_TLS_CA_FILE} sentinel reset "*"
+      else
+        redis-cli {{- if .Values.usePassword }} -a $REDIS_PASSWORD {{- end }} -h $node -p {{ .Values.sentinel.port }} sentinel reset "*"
+      fi
+      sleep {{ .Values.sentinel.cleanDelaySeconds }}
+    done
+    info "Sentinels clean up done"
 
     if [[ "$REDIS_REPLICATION_MODE" == "master" ]]; then
       REDIS_MASTER_HOST="$(hostname -i)"
@@ -280,6 +290,33 @@ data:
     {{ .Values.sentinel.preExecCmds | nindent 4 }}
     {{- end }}
     exec redis-server /opt/bitnami/redis-sentinel/etc/sentinel.conf --sentinel {{- if .Values.tls.enabled }} "${ARGS[@]}" {{- end }}
+  prestop-sentinel.sh: |
+    #!/bin/bash
+
+    . /opt/bitnami/scripts/libvalidations.sh
+
+    REDIS_SERVICE="{{ include "redis.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
+
+    if [[ -n "$REDIS_PASSWORD_FILE" ]]; then
+      password_aux=$(cat "$REDIS_PASSWORD_FILE")
+      export REDIS_PASSWORD="$password_aux"
+    fi
+
+    if is_boolean_yes "$REDIS_SENTINEL_TLS_ENABLED"; then
+      sentinel_info_command="redis-cli {{- if .Values.usePassword }} -a ${REDIS_PASSWORD} {{- end }} -h ${REDIS_SERVICE} -p {{ .Values.sentinel.port }} --tls --cert ${REDIS_SENTINEL_TLS_CERT_FILE} --key ${REDIS_SENTINEL_TLS_KEY_FILE} --cacert ${REDIS_SENTINEL_TLS_CA_FILE} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
+    else
+      sentinel_info_command="redis-cli {{- if .Values.usePassword }} -a ${REDIS_PASSWORD} {{- end }} -h ${REDIS_SERVICE} -p {{ .Values.sentinel.port }} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
+    fi
+    REDIS_SENTINEL_INFO=($($sentinel_info_command))
+    REDIS_MASTER_HOST="${REDIS_SENTINEL_INFO[0]}"
+
+    if [[ "$REDIS_MASTER_HOST" == "$(hostname -i)" ]]; then
+      if is_boolean_yes "$REDIS_SENTINEL_TLS_ENABLED"; then
+        redis-cli {{- if .Values.usePassword }} -a "$REDIS_PASSWORD" {{- end }} -h "$REDIS_SERVICE" -p {{ .Values.sentinel.port }} --tls --cert "$REDIS_SENTINEL_TLS_CERT_FILE" --key "$REDIS_SENTINEL_TLS_KEY_FILE" --cacert "$REDIS_SENTINEL_TLS_CA_FILE" sentinel failover mymaster
+      else
+        redis-cli {{- if .Values.usePassword }} -a "$REDIS_PASSWORD" {{- end }} -h "$REDIS_SERVICE" -p {{ .Values.sentinel.port }} sentinel failover mymaster
+      fi
+    fi
 {{- else }}
   start-master.sh: |
     #!/bin/bash

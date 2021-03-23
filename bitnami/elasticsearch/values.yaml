@@ -19,7 +19,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/elasticsearch
-  tag: 7.10.2-debian-10-r10
+  tag: 7.10.2-debian-10-r59
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -32,26 +32,23 @@ image:
   # pullSecrets:
   #   - myRegistryKeySecretName
   ## Set to true if you would like to see extra information on logs
-  ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
   ##
   debug: false
 
-## String to partially override elasticsearch.fullname template (will maintain the release name)
+## String to partially override common.names.fullname template (will maintain the release name)
 ##
 # nameOverride:
 
-## String to fully override elasticsearch.fullname template
+## String to fully override common.names.fullname template
 ##
 # fullnameOverride:
 
-## Bitnami Minideb image version
-## ref: https://hub.docker.com/r/bitnami/minideb/tags/
 ##
 sysctlImage:
   enabled: true
   registry: docker.io
-  repository: bitnami/minideb
-  tag: buster
+  repository: bitnami/bitnami-shell
+  tag: "10"
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -85,8 +82,8 @@ volumePermissions:
   enabled: false
   image:
     registry: docker.io
-    repository: bitnami/minideb
-    tag: buster
+    repository: bitnami/bitnami-shell
+    tag: "10"
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -128,6 +125,11 @@ name: elastic
 # snapshotRepoPath:
 
 ## Customize elasticsearch configuration
+## See below example:
+## config:
+##   node:
+##     store:
+##       allow_mmap: false
 ## ref: https://www.elastic.co/guide/en/elasticsearch/reference/current/settings.html
 ##
 # config:
@@ -198,6 +200,11 @@ master:
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
+
+  ## Use an alternate scheduler, e.g. "stork".
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  # schedulerName:
 
   heapSize: 128m
   ## Provide annotations for master-eligible pods.
@@ -383,6 +390,11 @@ coordinating:
   ##
   hostAliases: []
 
+  ## Use an alternate scheduler, e.g. "stork".
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  # schedulerName:
+
   ## updateStrategy for ElasticSearch coordinating deployment
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
   ##
@@ -529,6 +541,12 @@ data:
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
+
+  ## Use an alternate scheduler, e.g. "stork".
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  # schedulerName:
+
   ## updateStrategy for ElasticSearch Data statefulset
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
@@ -702,6 +720,11 @@ ingest:
   ##
   hostAliases: []
 
+  ## Use an alternate scheduler, e.g. "stork".
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  # schedulerName:
+
   ## Extra labels to add to Pod
   ##
   podLabels: {}
@@ -824,7 +847,7 @@ curator:
   image:
     registry: docker.io
     repository: bitnami/elasticsearch-curator
-    tag: 5.8.3-debian-10-r43
+    tag: 5.8.3-debian-10-r91
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -841,6 +864,11 @@ curator:
     failedJobsHistoryLimit: ""
     successfulJobsHistoryLimit: ""
     jobRestartPolicy: Never
+
+  ## Use an alternate scheduler, e.g. "stork".
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  # schedulerName:
 
   ## Provide annotations for the data pods.
   ##
@@ -1007,7 +1035,7 @@ curator:
   ## Ensure that it is available at http://elasticsearch:9200
   ##
   # elasticsearch-s3-repository:
-  #   image: bitnami/minideb:latest
+  #   image: bitnami/minideb
   #   imagePullPolicy: "IfNotPresent"
   #   command:
   #   - "/bin/bash"
@@ -1045,7 +1073,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/elasticsearch-exporter
-    tag: 1.1.0-debian-10-r339
+    tag: 1.1.0-debian-10-r387
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1058,6 +1086,11 @@ metrics:
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
+
+  ## Use an alternate scheduler, e.g. "stork".
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  # schedulerName:
 
   ## Elasticsearch Prometheus exporter service type
   ##

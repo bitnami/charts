@@ -1,7 +1,7 @@
 annotations:
   category: E-Commerce
 apiVersion: v2
-appVersion: 2.4.1
+appVersion: 2.4.2
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -35,4 +35,4 @@ name: magento
 sources:
   - https://github.com/bitnami/bitnami-docker-magento
   - https://magento.com/
-version: 17.2.0
+version: 17.2.4

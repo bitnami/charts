@@ -29,7 +29,7 @@
 postgresqlImage:
   registry: docker.io
   repository: bitnami/postgresql-repmgr
-  tag: 11.10.0-debian-10-r78
+  tag: 11.11.0-debian-10-r25
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -41,7 +41,6 @@ postgresqlImage:
   #   - myRegistryKeySecretName
 
   ## Set to true if you would like to see extra information on logs
-  ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
   ##
   debug: false
 
@@ -51,7 +50,7 @@ postgresqlImage:
 pgpoolImage:
   registry: docker.io
   repository: bitnami/pgpool
-  tag: 4.2.1-debian-10-r37
+  tag: 4.2.2-debian-10-r21
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -63,17 +62,16 @@ pgpoolImage:
   #   - myRegistryKeySecretName
 
   ## Set to true if you would like to see extra information on logs
-  ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
   ##
   debug: false
 
-## Bitnami Minideb image
-## ref: https://hub.docker.com/r/bitnami/pgpool/tags/
+## Init containers parameters:
+## volumePermissions: Change the owner and group of the persistent volume mountpoint
 ##
 volumePermissionsImage:
   registry: docker.io
-  repository: bitnami/minideb
-  tag: buster
+  repository: bitnami/bitnami-shell
+  tag: "10"
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -90,7 +88,7 @@ volumePermissionsImage:
 metricsImage:
   registry: docker.io
   repository: bitnami/postgres-exporter
-  tag: 0.8.0-debian-10-r346
+  tag: 0.9.0-debian-10-r6
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -102,7 +100,6 @@ metricsImage:
   #   - myRegistryKeySecretName
 
   ## Set to true if you would like to see extra information on logs
-  ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
   ##
   debug: false
 
@@ -117,6 +114,14 @@ metricsImage:
 ## Kubernetes Cluster Domain
 ##
 clusterDomain: cluster.local
+
+## Pod Service Account
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+##
+serviceAccount:
+  enabled: false
+  ## Name of an already existing service account. Setting this value disables the automatic service account creation.
+  # name:
 
 ## Common annotations to add to all resources (sub-charts are not considered). Evaluated as a template
 ##
@@ -233,6 +238,10 @@ postgresql:
   ##
   customReadinessProbe: {}
 
+  ## Custom Startup probe
+  ##
+  customStartupProbe: {}
+
   ## Container command (using container default if not set)
   ##
   command:
@@ -291,7 +300,7 @@ postgresql:
     #   cpu: 250m
     #   memory: 256Mi
 
-  ## PostgreSQL container's liveness and readiness probes
+  ## PostgreSQL container's liveness, readiness, and startup probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
   livenessProbe:
@@ -308,6 +317,13 @@ postgresql:
     timeoutSeconds: 5
     successThreshold: 1
     failureThreshold: 6
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 10
 
   ## Pod disruption budget configuration
   ##
@@ -494,6 +510,8 @@ postgresql:
 
   ## initdb scripts
   ## Specify dictionary of scripts to be run at first boot
+  ## The allowed extensions are `.sh`, `.sql` and `.sql.gz`
+  ## ref: https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#initialize-a-fresh-instance
   ##
   # initdbScripts:
   #   my_init_script.sh: |
@@ -556,6 +574,10 @@ pgpool:
   ## Custom Readiness probe
   ##
   customReadinessProbe: {}
+
+  ## Custom Startup probe
+  ##
+  customStartupProbe: {}
 
   ## Container command (using container default if not set)
   ##
@@ -693,7 +715,7 @@ pgpool:
     #   cpu: 250m
     #   memory: 256Mi
 
-  ## Pgpool container's liveness and readiness probes
+  ## Pgpool container's liveness, readiness, and startup probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
   livenessProbe:
@@ -710,6 +732,13 @@ pgpool:
     timeoutSeconds: 5
     successThreshold: 1
     failureThreshold: 5
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 10
 
   ## Pod disruption budget configuration
   ##
@@ -815,6 +844,8 @@ pgpool:
 
   ## initdb scripts
   ## Specify dictionary of scripts to be run every time Pgpool container is initialized
+  ## The allowed extension is `.sh`
+  ## ref: https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#initialize-a-fresh-instance
   ##
   # initdbScripts:
   #   my_init_script.sh: |
@@ -927,7 +958,7 @@ metrics:
     #   cpu: 250m
     #   memory: 256Mi
 
-  ## Prometheus exporter container's liveness and readiness probes
+  ## Prometheus exporter container's liveness, readiness, and startup probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
   livenessProbe:
@@ -944,6 +975,13 @@ metrics:
     timeoutSeconds: 5
     successThreshold: 1
     failureThreshold: 6
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 10
 
   ## Annotations for Prometheus exporter
   ##

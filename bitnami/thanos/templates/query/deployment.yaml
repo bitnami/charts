@@ -20,6 +20,9 @@ spec:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: query
+        {{- if and $query.enabled $query.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" $query.podLabels "context" $) | nindent 8 }}
+        {{- end }}
       {{- if or (include "thanos.query.createSDConfigmap" .) $query.existingSDConfigmap $query.podAnnotations }}
       annotations:
         {{- if or (include "thanos.query.createSDConfigmap" .) $query.existingSDConfigmap }}
@@ -64,6 +67,7 @@ spec:
           args:
             - query
             - --log.level={{ $query.logLevel }}
+            - --log.format={{ $query.logFormat }}
             - --grpc-address=0.0.0.0:10901
             - --http-address=0.0.0.0:10902
             {{- if kindIs "string" $query.replicaLabel }}
@@ -87,9 +91,6 @@ spec:
             {{- end }}
             {{- if and .Values.receive.enabled $query.dnsDiscovery.enabled }}
             - --store=dnssrv+_grpc._tcp.{{ include "common.names.fullname" . }}-receive{{ if .Values.receive.service.additionalHeadless }}-headless{{ end }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
-            {{- end }}
-            {{- if and .Values.receive.enabled $query.dnsDiscovery.enabled }}
-            - --store=dnssrv+_grpc._tcp.{{ include "common.names.fullname" . }}-receive.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
             {{- end }}
             {{- range $query.stores }}
             - --store={{ . }}

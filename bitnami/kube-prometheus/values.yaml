@@ -42,7 +42,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/prometheus-operator
-    tag: 0.45.0-debian-10-r10
+    tag: 0.46.0-debian-10-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -270,7 +270,7 @@ prometheus:
   image:
     registry: docker.io
     repository: bitnami/prometheus
-    tag: 2.24.1-debian-10-r10
+    tag: 2.25.0-debian-10-r6
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -816,7 +816,7 @@ prometheus:
     image:
       registry: docker.io
       repository: bitnami/thanos
-      tag: 0.17.2-scratch-r2
+      tag: 0.18.0-scratch-r3
       ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
       ##
@@ -826,6 +826,11 @@ prometheus:
       ##
       # pullSecrets:
       #   - myRegistryKeySecretName
+
+
+    ## Override default prometheus url "http://localhost:9090"
+    ##
+    prometheusUrl: ""
 
     ## Extra arguments passed to thanos sidecar 'args' section
     ##
@@ -937,6 +942,10 @@ prometheus:
       ##
       tls: {}
 
+  ## Port name used for the pods and governing service. This defaults to web
+  ##
+  portName: web
+
 ## Configuration for alertmanager
 ## ref: https://prometheus.io/docs/alerting/alertmanager/
 ##
@@ -949,7 +958,7 @@ alertmanager:
   image:
     registry: docker.io
     repository: bitnami/alertmanager
-    tag: 0.21.0-debian-10-r209
+    tag: 0.21.0-debian-10-r232
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -1310,6 +1319,15 @@ alertmanager:
   ## AdditionalPeers allows injecting a set of additional Alertmanagers to peer with to form a highly available cluster.
   ##
   additionalPeers: []
+
+  ## Prefix used to register routes, overriding externalUrl route.
+  ## Useful for proxies that rewrite URLs.
+  ##
+  routePrefix: /
+
+  ## Port name used for the pods and governing service. This defaults to web
+  ##
+  portName: web
 
 ## Exporters
 ##

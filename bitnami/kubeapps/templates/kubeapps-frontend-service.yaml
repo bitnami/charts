@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "kubeapps.fullname" . }}
+  name: {{ template "common.names.fullname" . }}
   labels:{{ include "kubeapps.labels" . | nindent 4 }}
   {{- if .Values.frontend.service.annotations }}
-  annotations: {{- include "kubeapps.tplValue" (dict "value" .Values.frontend.service.annotations "context" $) | nindent 4 }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.frontend.service.annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   type: {{ .Values.frontend.service.type }}
@@ -24,7 +24,7 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app: {{ template "kubeapps.fullname" . }}
+    app: {{ template "common.names.fullname" . }}
     release: {{ .Release.Name }}
 {{- if .Values.pinnipedProxy.enabled }}
 ---
@@ -43,6 +43,6 @@ spec:
       protocol: TCP
       name: pinniped-proxy
   selector:
-    app: {{ template "kubeapps.fullname" . }}
+    app: {{ template "common.names.fullname" . }}
     release: {{ .Release.Name }}
 {{- end }}

@@ -66,6 +66,9 @@ spec:
       {{- if .Values.postgresql.securityContext.enabled }}
       securityContext: {{- omit .Values.postgresql.securityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
+      {{- if .Values.serviceAccount.enabled }}
+      serviceAccountName: {{ default (include "common.names.fullname" . ) .Values.serviceAccount.name}}
+      {{- end }}
       initContainers:
       {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
         - name: init-chmod-data
@@ -75,8 +78,8 @@ spec:
             - sh
             - -c
             - |
-              mkdir -p {{ .Values.persistence.mountPath }}/conf {{ .Values.persistence.mountPath }}/data
-              chmod 700 {{ .Values.persistence.mountPath }}/conf {{ .Values.persistence.mountPath }}/data
+              mkdir -p {{ .Values.persistence.mountPath }}/conf {{ .Values.persistence.mountPath }}/data {{ .Values.persistence.mountPath }}/lock
+              chmod 700 {{ .Values.persistence.mountPath }}/conf {{ .Values.persistence.mountPath }}/data {{ .Values.persistence.mountPath }}/lock
               find {{ .Values.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | \
                 xargs chown -R {{ .Values.postgresql.containerSecurityContext.runAsUser }}:{{ .Values.postgresql.securityContext.fsGroup }}
           securityContext: {{- .Values.volumePermissions.securityContext | toYaml | nindent 12 }}
@@ -280,8 +283,8 @@ spec:
           livenessProbe:
             exec:
               command:
-                - sh
-                - -c
+                - bash
+                - -ec
                 - '{{ include "postgresql-ha.pgpassword" . }} psql -w -U {{ include "postgresql-ha.postgresqlUsername" . | quote }} -d {{ (include "postgresql-ha.postgresqlDatabase" .) | quote }}  -h 127.0.0.1 -c "SELECT 1"'
             initialDelaySeconds: {{ .Values.postgresql.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.postgresql.livenessProbe.periodSeconds }}
@@ -295,8 +298,8 @@ spec:
           readinessProbe:
             exec:
               command:
-                - sh
-                - -c
+                - bash
+                - -ec
                 - '{{ include "postgresql-ha.pgpassword" . }} psql -w -U {{ include "postgresql-ha.postgresqlUsername" . | quote }} -d {{ (include "postgresql-ha.postgresqlDatabase" .) | quote }}  -h 127.0.0.1 -c "SELECT 1"'
             initialDelaySeconds: {{ .Values.postgresql.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.postgresql.readinessProbe.periodSeconds }}
@@ -305,6 +308,21 @@ spec:
             failureThreshold: {{ .Values.postgresql.readinessProbe.failureThreshold }}
           {{- else if .Values.postgresql.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.postgresql.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.postgresql.startupProbe.enabled }}
+          startupProbe:
+            exec:
+              command:
+                - bash
+                - -ec
+                - '{{ include "postgresql-ha.pgpassword" . }} psql -w -U {{ include "postgresql-ha.postgresqlUsername" . | quote }} -d {{ (include "postgresql-ha.postgresqlDatabase" .) | quote }}  -h 127.0.0.1 -c "SELECT 1"'
+            initialDelaySeconds: {{ .Values.postgresql.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.postgresql.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.postgresql.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.postgresql.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.postgresql.startupProbe.failureThreshold }}
+          {{- else if .Values.postgresql.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.postgresql.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.postgresql.resources }}
           resources: {{- toYaml .Values.postgresql.resources | nindent 12 }}
@@ -385,6 +403,17 @@ spec:
             timeoutSeconds: {{ .Values.metrics.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.metrics.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.metrics.readinessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.metrics.startupProbe.enabled }}
+          startupProbe:
+            httpGet:
+              path: /
+              port: metrics
+            initialDelaySeconds: {{ .Values.metrics.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.metrics.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.metrics.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.metrics.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.metrics.startupProbe.failureThreshold }}
           {{- end }}
           {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}

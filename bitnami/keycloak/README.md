@@ -89,14 +89,20 @@ The following tables lists the configurable parameters of the Keycloak chart and
 | `auth.tls.keystorePassword`       | Password to access the keystore when it's password-protected                                                                                                  | `nil`                                                   |
 | `auth.tls.truststorePassword`     | Password to access the truststore when it's password-protected                                                                                                | `nil`                                                   |
 | `auth.tls.image.registry`         | TLS init container image registry                                                                                                                             | `docker.io`                                             |
-| `auth.tls.image.repository`       | TLS init container image repository                                                                                                                           | `bitnami/minideb`                                       |
-| `auth.tls.image.tag`              | TLS init container image tag                                                                                                                                  | `buster`                                                |
+| `auth.tls.image.repository`       | TLS init container image repository                                                                                                                           | `bitnami/bitnami-shell`                                 |
+| `auth.tls.image.tag`              | TLS init container image tag                                                                                                                                  | `"10"`                                                  |
 | `auth.tls.image.pullPolicy`       | TLS init container image pull policy                                                                                                                          | `Always`                                                |
 | `auth.tls.image.pullSecrets`      | TLS init container image pull secrets                                                                                                                         | `[]` (does not add image pull secrets to deployed pods) |
 | `auth.tls.resources.limits`       | The resources limits for the TLS init container                                                                                                               | `{}`                                                    |
 | `auth.tls.resources.requests`     | The requested resources for the TLS init container                                                                                                            | `{}`                                                    |
 | `auth.existingSecret.name`        | Name for an existing secret containing passwords                                                                                                              | `nil`                                                   |
 | `auth.existingSecret.keyMapping`  | Key mapping between the expected keys and the existing secret's keys. [See more](https://github.com/bitnami/charts/tree/master/bitnami/common#existingsecret) | `nil`                                                   |
+| `auth.existingSecretPerPassword.adminPassword.name`  | Name of the secret which contains the Keycloak admin password. Overrides `existingSecret` and `adminPassword` and  | `nil`                                                   |
+| `auth.existingSecretPerPassword.managementPassword.name`  | Name of the secret which contains the Widlfly admin password. Overrides `existingSecret` and `managementPassword` and  | `nil`                                                   |
+| `auth.existingSecretPerPassword.databasePassword.name`  | Name of the secret which contains the database password. Overrides `existingSecret` and `databaseEncryptedPassword` and  | `nil`                                                   |
+| `auth.existingSecretPerPassword.tlsKeystorePassword.name`  | Name of the secret which contains the JKS keystore password. Overrides `existingSecret` and `keystorePassword` and  | `nil`                                                   |
+| `auth.existingSecretPerPassword.tlsTruststorePassword.name`  | Name of the secret which contains the JKS truststore password. Overrides `existingSecret` and `truststorePassword` and  | `nil`                                                   |
+| `auth.existingSecretPerPassword.keyMapping`  | Key mapping between the expected keys and the existing secrets' keys. [See more](https://github.com/bitnami/charts/tree/master/bitnami/common#existingsecret) | `nil`
 | `proxyAddressForwarding`          | Enable Proxy Address Forwarding                                                                                                                               | `false`                                                 |
 | `serviceDiscovery.enabled`        | Enable Service Discovery for Keycloak (required if `replicaCount` > `1`)                                                                                      | `false`                                                 |
 | `serviceDiscovery.protocol`       | Sets the protocol that Keycloak nodes would use to discover new peers                                                                                         | `kubernetes.KUBE_PING`                                  |
@@ -115,6 +121,35 @@ The following tables lists the configurable parameters of the Keycloak chart and
 | `extraEnvVars`                    | Extra environment variables to be set on Keycloak container                                                                                                   | `{}`                                                    |
 | `extraEnvVarsCM`                  | Name of existing ConfigMap containing extra env vars                                                                                                          | `nil`                                                   |
 | `extraEnvVarsSecret`              | Name of existing Secret containing extra env vars                                                                                                             | `nil`                                                   |
+
+### keycloak-config-cli parameters
+
+| Parameter                                    | Description                                                                                     | Default                                                 |
+| -------------------------------------------- | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+| `keycloakConfigCli.enabled`                  | Whether to enable keycloak-config-cli                                                           | `false`                                                 |
+| `keycloakConfigCli.image.registry`           | keycloak-config-cli container image registry                                                    | `docker.io`                                             |
+| `keycloakConfigCli.image.repository`         | keycloak-config-cli container image repository                                                  | `bitnami/keycloak-config-cli`                           |
+| `keycloakConfigCli.image.tag`                | keycloak-config-cli container image tag                                                         | `{TAG_NAME}`                                            |
+| `keycloakConfigCli.image.pullPolicy`         | keycloak-config-cli container image pull policy                                                 | `IfNotPresent`                                          |
+| `keycloakConfigCli.image.pullSecrets`        | keycloak-config-cli container image pull secrets                                                | `[]` (does not add image pull secrets to deployed pods) |
+| `keycloakConfigCli.annotations`              | Annotations for keycloak-config-cli job                                                         | Check `values.yaml` file                                |
+| `keycloakConfigCli.command`                  | Command for running the container (set to default if not set). Use array form                   | `[]`                                                    |
+| `keycloakConfigCli.args`                     | Args for running the container (set to default if not set). Use array form                      | `[]`                                                    |
+| `keycloakConfigCli.hostAliases`              | Job pod host aliases                                                                            | `[]`                                                    |
+| `keycloakConfigCli.resources.limits`         | The resources limits for the keycloak-config-cli container                                      | `{}`                                                    |
+| `keycloakConfigCli.resources.requests`       | The requested resources for the keycloak-config-cli container                                   | `{}`                                                    |
+| `keycloakConfigCli.containerSecurityContext` | keycloak-config-cli containers' Security Context                                                | Check `values.yaml` file                                |
+| `keycloakConfigCli.podSecurityContext`       | keycloak-config-cli pods' Security Context                                                      | Check `values.yaml` file                                |
+| `keycloakConfigCli.backoffLimit`             | Number of retries before considering a Job as failed                                            | `1`                                                     |
+| `keycloakConfigCli.podLabels`                | Pod extra labels                                                                                | `{}`                                                    |
+| `keycloakConfigCli.podAnnotations`           | Annotations for job pod                                                                         | `{}`                                                    |
+| `keycloakConfigCli.extraEnvVars`             | Additional environment variables to set                                                         | `[]`                                                    |
+| `keycloakConfigCli.extraEnvVarsCM`           | ConfigMap with extra environment variables                                                      | `nil`                                                   |
+| `keycloakConfigCli.extraEnvVarsSecret`       | Secret with extra environment variables                                                         | `nil`                                                   |
+| `keycloakConfigCli.extraVolumes`             | Extra volumes to add to the job                                                                 | `[]`                                                    |
+| `keycloakConfigCli.extraVolumeMounts`        | Extra volume mounts to add to the container                                                     | `[]`                                                    |
+| `keycloakConfigCli.configuration`            | keycloak-config-cli realms configuration                                                        | `{}`                                                    |
+| `keycloakConfigCli.existingConfigmap`        | ConfigMap with keycloak-config-cli configuration. This will override `keycloakConfigCli.config` | `nil`                                                   |
 
 ### Keycloak deployment/statefulset parameters
 
@@ -179,6 +214,7 @@ The following tables lists the configurable parameters of the Keycloak chart and
 | `ingress.secrets[0].name`          | TLS Secret Name                                                                   | `nil`                          |
 | `ingress.secrets[0].certificate`   | TLS Secret Certificate                                                            | `nil`                          |
 | `ingress.secrets[0].key`           | TLS Secret Key                                                                    | `nil`                          |
+| `ingress.servicePort`              | Service port to be used                                                           | `http`                          |
 | `networkPolicy.enabled`            | Enable the default NetworkPolicy policy                                           | `false`                        |
 | `networkPolicy.allowExternal`      | Don't require client label for connections                                        | `true`                         |
 | `networkPolicy.additionalRules`    | Additional NetworkPolicy rules                                                    | `{}` (evaluated as a template) |
@@ -236,6 +272,7 @@ The following tables lists the configurable parameters of the Keycloak chart and
 | `externalDatabase.user`          | PostgreSQL username (when using an external db)                              | `bn_keycloak`      |
 | `externalDatabase.password`      | Password for the above username (when using an external db)                  | `""`               |
 | `externalDatabase.database`      | Name of the existing database (when using an external db)                    | `bitnami_keycloak` |
+| `externalDatabase.existingSecret`| Use an existing secret file with the external PostgreSQL credentials         | `nil`              |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -382,6 +419,65 @@ If you are going to use Helm to manage the certificates, please copy these value
 
 If you are going to manage TLS secrets outside of Helm, please know that you can create a TLS secret (named `keycloak.local-tls` for example).
 
+### Secrets and passwords
+
+This chart provides several ways to manage passwords:
+- Values passed to the chart
+- An existing secret with all the passwords
+- Passwords present among several secrets
+
+In the first case, a new Secret including all the passwords will be created during the chart installation. When upgrading it is necessary to provide the secrets using the `--set` option as shown below:
+For example:
+\```console
+  $ helm upgrade keycloak bitnami/keycloak \
+      --set auth.adminPassword=$KEYCLOAK_ADMIN_PASSWORD \
+      --set auth.managementPassword=$KEYCLOAK_MANAGEMENT_PASSWORD \
+      --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD \
+      --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC
+\```
+
+When installing using an existing secret, passwords can be stored in single secret or separeted into differect secrets.
+
+To use a single existing secret `existingSecret` can be configured at values.yaml:
+
+\```yaml
+    existingSecret:
+      name: mySecret
+      keyMapping:
+        admin-password: myPasswordKey
+        management-password: myManagementPasswordKey
+        database-password: myDatabasePasswordKey
+        tls-keystore-password: myTlsKeystorePasswordKey
+        tls-truestore-password: myTlsTruestorePasswordKey
+\```
+
+The keyMapping links the passwords in the chart with the passwords stored in the existing Secret.
+
+Configuring multiple existing secrets can be done by using `auth.existingSecretPerPassword` instead:
+
+\```yaml
+      existingSecretPerPassword:
+        keyMapping:
+          adminPassword: KEYCLOAK_ADMIN_PASSWORD
+          managementPassword: KEYCLOAK_MANAGEMENT_PASSWORD
+          databasePassword: password
+          tlsKeystorePassword: JKS_KEYSTORE_TRUSTSTORE_PASSWORD
+          tlsTruststorePassword: JKS_KEYSTORE_TRUSTSTORE_PASSWORD
+        adminPassword:
+          name: mySecret
+        managementPassword:
+          name: mySecret
+        databasePassword:
+          name: myOtherSecret
+        tlsKeystorePassword:
+          name: mySecret
+        tlsTruststorePassword:
+          name: mySecret
+\```
+
+Additionally to the key mapping, a different Secret name can be configured per password.
+
+> NOTE: 'auth.existingSecretPerPassword' will overwrite the configuration at 'auth.existingSecret'
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).

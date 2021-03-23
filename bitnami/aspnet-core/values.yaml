@@ -17,7 +17,7 @@ kubeVersion:
 image:
   registry: docker.io
   repository: bitnami/aspnet-core
-  tag: 3.1.9-debian-10-r95
+  tag: 3.1.9-debian-10-r135
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -62,7 +62,7 @@ appFromExternalRepo:
     image:
       registry: docker.io
       repository: bitnami/git
-      tag: 2.30.0-debian-10-r26
+      tag: 2.31.0-debian-10-r2
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -79,7 +79,15 @@ appFromExternalRepo:
     repository: https://github.com/dotnet/AspNetCore.Docs.git
     ## Git revision to checkout
     ##
-    revision: master
+    revision: main
+    ## Add extra volume mounts for the GIT container
+    ## Useful to mount keys to connect through ssh. (normally used with extraVolumes)
+    ## E.g:
+    ## extraVolumeMounts:
+    ##   - name: ssh-dir
+    ##     mountPath: /root/.ssh/
+    ##
+    extraVolumeMounts: []
   publish:
     ## Bitnami .NET SDK image version
     ## ref: https://hub.docker.com/r/bitnami/dotnet-sdk/tags/
@@ -87,7 +95,7 @@ appFromExternalRepo:
     image:
       registry: docker.io
       repository: bitnami/dotnet-sdk
-      tag: 3.1.405-debian-10-r9
+      tag: 3.1.407-debian-10-r5
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images

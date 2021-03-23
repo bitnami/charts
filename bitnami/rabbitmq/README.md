@@ -136,6 +136,7 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `nodeAffinityPreset.values` | Node label values to match. Ignored if `affinity` is set.                                 | `[]`                           |
 | `nodeSelector`              | Node labels for pod assignment                                                            | `{}` (evaluated as a template) |
 | `tolerations`               | Tolerations for pod assignment                                                            | `[]` (evaluated as a template) |
+| `topologySpreadConstraints` | Topology Spread Constraints for pod assignment                                            | `{}` (evaluated as a template) |
 | `affinity`                  | Affinity for pod assignment                                                               | `{}` (evaluated as a template) |
 | `priorityClassName`         | Name of the existing priority class to be used by rabbitmq pods                           | `""`                           |
 | `podSecurityContext`        | RabbitMQ pods' Security Context                                                           | `{}`                           |
@@ -170,6 +171,7 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `service.distPort`                 | Erlang distribution server port                                                   | `25672`                        |
 | `service.distPortName`             | Erlang distribution service port name                                             | `dist`                         |
 | `service.distNodePort`             | Node port override for `dist` port, if serviceType NodePort                       | `nil`                          |
+| `service.managerPortEnable`        | Enable the RabbitMQ Manager port                                                  | `true`                         |
 | `service.managerPort`              | RabbitMQ Manager port                                                             | `15672`                        |
 | `service.managerPortName`          | RabbitMQ Manager service port name                                                | `http-stats`                   |
 | `service.managerNodePort`          | Node port override for `http-stats` port, if serviceType NodePort                 | `nil`                          |
@@ -185,6 +187,7 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `service.externalTrafficPolicy`    | Enable client source IP preservation                                              | `Cluster`                      |
 | `service.labels`                   | Service labels                                                                    | `{}` (evaluated as a template) |
 | `service.annotations`              | Service annotations                                                               | `{}` (evaluated as a template) |
+| `service.annotationsHeadless`      | Headless service annotations different from regular service                       | `{}` (evaluated as a template) |
 | `ingress.enabled`                  | Enable ingress resource for Management console                                    | `false`                        |
 | `ingress.path`                     | Path for the default host                                                         | `/`                            |
 | `ingress.certManager`              | Add annotations for cert-manager                                                  | `false`                        |
@@ -230,8 +233,8 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 |----------------------------------------|----------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                                                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                     | `docker.io`                                             |
-| `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                         | `bitnami/minideb`                                       |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                          | `buster`                                                |
+| `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                         | `bitnami/bitnami-shell`                                 |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                          | `"10"`                                                  |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                  | `Always`                                                |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                     | `[]` (does not add image pull secrets to deployed pods) |
 | `volumePermissions.resources.limits`   | Init container volume-permissions resource  limits                                                                   | `{}`                                                    |

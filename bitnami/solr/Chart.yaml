@@ -1,7 +1,7 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 8.8.0
+appVersion: 8.8.1
 dependencies:
   - condition: zookeeper.enabled
     name: zookeeper
@@ -27,4 +27,4 @@ name: solr
 sources:
   - https://github.com/bitnami/bitnami-docker-solr
   - https://lucene.apache.org/solr/
-version: 0.1.0
+version: 0.2.5

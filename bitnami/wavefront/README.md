@@ -68,20 +68,21 @@ The following table lists the configurable parameters of the Wavefront chart and
 
 ### Common parameters
 
-| Parameter                  | Description                                                 | Default                              |
-|----------------------------|-------------------------------------------------------------|--------------------------------------|
-| `clusterName`              | Unique name for the Kubernetes cluster (required)           | `KUBERNETES_CLUSTER_NAME`            |
-| `wavefront.url`            | Wavefront URL for your cluster (required)                   | `https://YOUR_CLUSTER.wavefront.com` |
-| `wavefront.token`          | Wavefront API Token (required)                              | `YOUR_API_TOKEN`                     |
-| `wavefront.existingSecret` | Name of an existing secret containing the token             | `nil`                                |
-| `commonLabels`             | Labels to add to all deployed objects                       | `{}`                                 |
-| `commonAnnotations`        | Annotations to add to all deployed objects                  | `{}`                                 |
-| `extraDeploy`              | Array of extra objects to deploy with the release           | `[]` (evaluated as a template)       |
-| `rbac.create`              | Create RBAC resources                                       | `true`                               |
-| `serviceAccount.create`    | Create Wavefront service account                            | `true`                               |
-| `serviceAccount.name`      | Name of Wavefront service account                           | `nil`                                |
-| `podSecurityPolicy.create` | Create a PodSecurityPolicy resources                        | `false`                              |
-| `projectPacific.enabled`   | Enable and create role binding for Tanzu kubernetes cluster | `false`                              |
+| Parameter                  | Description                                                                 | Default                              |
+|----------------------------|-----------------------------------------------------------------------------|--------------------------------------|
+| `clusterName`              | Unique name for the Kubernetes cluster (required)                           | `KUBERNETES_CLUSTER_NAME`            |
+| `wavefront.url`            | Wavefront URL for your cluster (required)                                   | `https://YOUR_CLUSTER.wavefront.com` |
+| `wavefront.token`          | Wavefront API Token (required)                                              | `YOUR_API_TOKEN`                     |
+| `wavefront.existingSecret` | Name of an existing secret containing the token                             | `nil`                                |
+| `commonLabels`             | Labels to add to all deployed objects                                       | `{}`                                 |
+| `commonAnnotations`        | Annotations to add to all deployed objects                                  | `{}`                                 |
+| `extraDeploy`              | Array of extra objects to deploy with the release                           | `[]` (evaluated as a template)       |
+| `rbac.create`              | Create RBAC resources                                                       | `true`                               |
+| `serviceAccount.create`    | Create Wavefront service account                                            | `true`                               |
+| `serviceAccount.name`      | Name of Wavefront service account                                           | `nil`                                |
+| `podSecurityPolicy.create` | Create a PodSecurityPolicy resources                                        | `false`                              |
+| `projectPacific.enabled`   | Enable and create role binding for Tanzu kubernetes cluster                 | `false`                              |
+| `tkgi.enabled`             | Enable and create role binding for Tanzu Kubernetes Grid Integrated Edition | `false`                              |
 
 ### Collector parameters
 
@@ -94,6 +95,7 @@ The following table lists the configurable parameters of the Wavefront chart and
 | `collector.image.pullPolicy`               | Image pull policy                                                                                                       | `IfNotPresent`                            |
 | `collector.image.pullSecrets`              | Specify docker-registry secret names as an array                                                                        | `nil`                                     |
 | `collector.useDaemonset`                   | Use Wavefront collector in Daemonset mode                                                                               | `true`                                    |
+| `collector.usePKSPrefix`                   | (TKGi only) Prefix metrics with 'pks.kubernetes.'                                                                       | `false`                                   |
 | `collector.hostAliases`                    | Add deployment host aliases                                                                                             | `[]`                                      |
 | `collector.maxProx`                        | Max number of CPU cores that can be used (< 1 for default)                                                              | `0`                                       |
 | `collector.logLevel`                       | Min logging level (info, debug, trace)                                                                                  | `info`                                    |
@@ -105,11 +107,12 @@ The following table lists the configurable parameters of the Wavefront chart and
 | `collector.proxyAddress`                   | Non-default Wavefront Proxy address to use, should only be set when `proxy.enabled` is false                            | `nil`                                     |
 | `collector.apiServerMetrics`               | Collect metrics about Kubernetes API server                                                                             | `false`                                   |
 | `collector.kubernetesState`                | Collect metrics about Kubernetes resource states                                                                        | `true`                                    |
+| `collector.filters`                        | Filters to apply towards all collected metrics                                                                          | See values.yaml                           |
 | `collector.tags`                           | Map of tags (key/value) to add to all metrics collected                                                                 | `nil`                                     |
 | `collector.events.enabled`                 | Events can also be collected and sent to Wavefront                                                                      | `false`                                   |
 | `collector.discovery.enabled`              | Rules based and Prometheus endpoints auto-discovery                                                                     | `true`                                    |
 | `collector.discovery.annotationPrefix`     | Replaces `prometheus.io` as prefix for annotations of auto-discovered Prometheus endpoints                              | `prometheus.io`                           |
-| `collector.discovery.enableRuntimeConfigs` | Enable runtime discovery rules                                                                                          | `false`                                   |
+| `collector.discovery.enableRuntimeConfigs` | Enable runtime discovery rules                                                                                          | `true`                                    |
 | `collector.discovery.config`               | Configuration for rules based auto-discovery                                                                            | `nil`                                     |
 | `collector.existingConfigmap`              | Name of existing ConfigMap with collector configuration                                                                 | `nil`                                     |
 | `collector.command`                        | Override default container command (useful when using custom images)                                                    | `nil`                                     |
@@ -188,6 +191,8 @@ The following table lists the configurable parameters of the Wavefront chart and
 | `proxy.zipkinPort`                  | Port for Zipkin format distributed tracing data (usually 9411)                                                         | `nil`                                     |
 | `proxy.traceSamplingRate`           | Distributed tracing data sampling rate (0 to 1)                                                                        | `nil`                                     |
 | `proxy.traceSamplingDuration`       | When set to greater than 0, spans that exceed this duration will force trace to be sampled (ms)                        | `nil`                                     |
+| `proxy.traceJaegerApplicationName`  | Custom application name for traces received on Jaeger's traceJaegerListenerPorts or traceJaegerHttpListenerPorts.      | `nil`                                     |
+| `proxy.traceZipkinApplicationName`  | Custom application name for traces received on Zipkin's traceZipkinListenerPorts.                                      | `nil`                                     |
 | `proxy.histogramPort`               | Port for histogram distribution format data (usually 40000)                                                            | `nil`                                     |
 | `proxy.histogramMinutePort`         | Port to accumulate 1-minute based histograms on Wavefront data format (usually 40001)                                  | `nil`                                     |
 | `proxy.histogramHourPort`           | Port to accumulate 1-hour based histograms on Wavefront data format (usually 40002)                                    | `nil`                                     |

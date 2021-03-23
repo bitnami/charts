@@ -132,24 +132,25 @@ The following table lists the configurable parameters of the Node chart and thei
 
 | Parameter                      | Description                                      | Default                                      |
 |--------------------------------|--------------------------------------------------|----------------------------------------------|
-| `git.registry`                 | Git image registry                               | `docker.io`                                  |
-| `git.repository`               | Git image name                                   | `bitnami/git`                                |
-| `git.tag`                      | Git image tag                                    | `{TAG_NAME}`                                 |
-| `git.pullPolicy`               | Git image pull policy                            | `IfNotPresent`                               |
+| `git.image.registry`           | Git image registry                               | `docker.io`                                  |
+| `git.image.repository`         | Git image name                                   | `bitnami/git`                                |
+| `git.image.tag`                | Git image tag                                    | `{TAG_NAME}`                                 |
+| `git.image.pullPolicy`         | Git image pull policy                            | `IfNotPresent`                               |
+| `git.extraVolumeMounts`        | Add extra volume mounts for the Git container    | `[]`                                         |
 | `getAppFromExternalRepository` | Whether to get app from external git repo or not | `true`                                       |
 | `repository`                   | Repo of the application                          | `https://github.com/bitnami/sample-mean.git` |
 | `revision`                     | Revision to checkout                             | `master`                                     |
 
 ## Volume permissions parameters
 
-| Parameter                            | Description                                                                 | Default           |
-|--------------------------------------|-----------------------------------------------------------------------------|-------------------|
-| `volumePermissions.enabled`          | Enable init container that changes volume permissions in the data directory | `false`           |
-| `volumePermissions.image.registry`   | Init container volume-permissions image registry                            | `docker.io`       |
-| `volumePermissions.image.repository` | Init container volume-permissions image name                                | `bitnami/minideb` |
-| `volumePermissions.image.tag`        | Init container volume-permissions image tag                                 | `buster`          |
-| `volumePermissions.image.pullPolicy` | Init container volume-permissions image pull policy                         | `Always`          |
-| `volumePermissions.resources`        | Init container resource requests/limit                                      | `{}`              |
+| Parameter                            | Description                                                                 | Default                 |
+|--------------------------------------|-----------------------------------------------------------------------------|-------------------------|
+| `volumePermissions.enabled`          | Enable init container that changes volume permissions in the data directory | `false`                 |
+| `volumePermissions.image.registry`   | Init container volume-permissions image registry                            | `docker.io`             |
+| `volumePermissions.image.repository` | Init container volume-permissions image name                                | `bitnami/bitnami-shell` |
+| `volumePermissions.image.tag`        | Init container volume-permissions image tag                                 | `"10"`                  |
+| `volumePermissions.image.pullPolicy` | Init container volume-permissions image pull policy                         | `Always`                |
+| `volumePermissions.resources`        | Init container resource requests/limit                                      | `{}`                    |
 
 ### Persistence parameters
 

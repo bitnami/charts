@@ -184,6 +184,19 @@ The following tables lists the configurable parameters of the InfluxDB<sup>TM</s
 | `relay.service.loadBalancerSourceRanges` | Address that are allowed when service is LoadBalancer                                                                        | `[]`                                                    |
 | `relay.service.clusterIP`                | Static clusterIP or None for headless services                                                                               | `nil`                                                   |
 
+### InfluxDB Collectd<sup>TM</sup> parameters
+
+| Parameter                                   | Description                                                                                                                  | Default                                                 |
+| ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+| `collectd.enabled`                          | InfluxDB Collectd<sup>TM</sup> service enable                                                                                | `false`                                                 |
+| `collectd.service.type`                     | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)                                                          | `ClusterIP`                                             |
+| `collectd.service.port`                     | InfluxDB Collectd<sup>TM</sup> UDP port (should match with corresponding port in influxdb.conf)                              | `25826`                                                 |
+| `collectd.service.nodePort`                 | Kubernetes HTTP node port                                                                                                    | `""`                                                    |
+| `collectd.service.annotations`              | Annotations for InfluxDB Collectd<sup>TM</sup> service                                                                       | `{}`                                                    |
+| `collectd.service.loadBalancerIP`           | loadBalancerIP if service type is `LoadBalancer`                                                                             | `nil`                                                   |
+| `collectd.service.loadBalancerSourceRanges` | Address that are allowed when service is LoadBalancer                                                                        | `[]`                                                    |
+| `collectd.service.clusterIP`                | Static clusterIP or None for headless services                                                                               | `nil`                                                   |
+
 ### Exposing parameters
 
 | Parameter                        | Description                                                   | Default                        |
@@ -229,8 +242,8 @@ The following tables lists the configurable parameters of the InfluxDB<sup>TM</s
 | --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
 | `volumePermissions.enabled`                   | Enable init container that changes the owner and group of the persistent volume mountpoint to `runAsUser:fsGroup` | `false`                                                 |
 | `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                  | `docker.io`                                             |
-| `volumePermissions.image.repository`          | Init container volume-permissions image name                                                                      | `bitnami/minideb`                                       |
-| `volumePermissions.image.tag`                 | Init container volume-permissions image tag                                                                       | `buster`                                                |
+| `volumePermissions.image.repository`          | Init container volume-permissions image name                                                                      | `bitnami/bitnami-shell`                                 |
+| `volumePermissions.image.tag`                 | Init container volume-permissions image tag                                                                       | `"10"`                                                  |
 | `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                               | `Always`                                                |
 | `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                  | `[]` (does not add image pull secrets to deployed pods) |
 | `volumePermissions.securityContext.runAsUser` | User ID for the init container (when facing issues in OpenShift or uid unknown, try value "auto")                 | `0`                                                     |

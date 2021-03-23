@@ -17,7 +17,7 @@ image:
   ## Bitnami Cassandra image tag
   ## ref: https://github.com/bitnami/bitnami-docker-cassandra#supported-tags-and-respective-dockerfile-links
   ##
-  tag: 3.11.10-debian-10-r6
+  tag: 3.11.10-debian-10-r23
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -30,7 +30,7 @@ image:
   # pullSecrets:
   #   - myRegistryKeySecretName
   ## Set to true if you would like to see extra information on logs
-  ## It turns BASH debugging in minideb-extras-base
+  ## It turns BASH and/or NAMI debugging in the image
   ##
   debug: false
 
@@ -53,6 +53,21 @@ commonAnnotations: {}
 ## Common labels to add to all Cassandra resources (sub-charts are not considered). Evaluated as a template
 ##
 commonLabels: {}
+
+## Cassandra pods ServiceAccount
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+##
+serviceAccount:
+  ## Specifies whether a ServiceAccount should be created
+  ##
+  create: true
+  ## The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the cassandra.fullname template
+  ##
+  # name:
+  ## Annotations to add to the service account (evaluated as a template)
+  ##
+  annotations: {}
 
 ## Cassandra container ports to open
 ## If hostNetwork true: the hostPort is set identical to the containerPort
@@ -113,16 +128,24 @@ persistence:
   ## If true, use a Persistent Volume Claim, If false, use emptyDir
   ##
   enabled: true
-  ## Persistent Volume Storage Class
-  ## If defined, storageClassName: <storageClass>
-  ## If set to "-", storageClassName: "", which disables dynamic provisioning
-  ## If undefined (the default) or set to null, no storageClassName spec is
-  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-  ##   GKE, AWS & OpenStack)
-  ##
-  # storageClass: "-"
-  ## Persistent Volume Claim annotations
-  ##
+    ## Persistent Volume Storage Class
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    # storageClass: "-"
+    ### Storage class to use with CASSANDRA_COMMITLOG_DIR to reduce the concurrence for writing data and commit logs
+    ## ref: https://github.com/bitnami/bitnami-docker-cassandra
+    ## If set to "-", commitStorageClass: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    # commitStorageClass: "-"
+    ## Persistent Volume Claim annotations
+    ##
   annotations:
   ## Persistent Volume Access Mode
   ##
@@ -131,9 +154,15 @@ persistence:
   ## Persistent Volume size
   ##
   size: 8Gi
+  ## Commit Log Persistent Volume size
+  ##
+  # commitLogsize: 2Gi
   ## The path the volume will be mounted at
   ##
   mountPath: /bitnami/cassandra
+  ## The path the volume will be mounted at
+  ##
+  # commitLogMountPath: /bitnami/cassandra/commitlog
 
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
@@ -142,8 +171,8 @@ volumePermissions:
   enabled: false
   image:
     registry: docker.io
-    repository: bitnami/minideb
-    tag: buster
+    repository: bitnami/bitnami-shell
+    tag: "10"
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -475,7 +504,7 @@ metrics:
     registry: docker.io
     pullPolicy: IfNotPresent
     repository: bitnami/cassandra-exporter
-    tag: 2.3.4-debian-10-r315
+    tag: 2.3.4-debian-10-r331
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/

@@ -1,34 +1,34 @@
-apiVersion: apps/v1
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ template "kubeapps.fullname" . }}
+  name: {{ template "common.names.fullname" . }}
   labels:{{ include "kubeapps.extraAppLabels" . | nindent 4 }}
-    app: {{ template "kubeapps.fullname" . }}
+    app: {{ template "common.names.fullname" . }}
 spec:
   replicas: {{ .Values.frontend.replicaCount }}
   selector:
     matchLabels:
-      app: {{ template "kubeapps.fullname" . }}
+      app: {{ template "common.names.fullname" . }}
       release: {{ .Release.Name }}
   template:
     metadata:
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/kubeapps-frontend-config.yaml") . | sha256sum }}
       labels:
-        app: {{ template "kubeapps.fullname" . }}
-        app.kubernetes.io/name: {{ template "kubeapps.name" . }}
+        app: {{ template "common.names.fullname" . }}
+        app.kubernetes.io/name: {{ template "common.names.name" . }}
         release: {{ .Release.Name }}
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
 {{- include "kubeapps.imagePullSecrets" . | indent 6 }}
       {{- if .Values.frontend.affinity }}
-      affinity: {{- include "kubeapps.tplValue" (dict "value" .Values.frontend.affinity "context" $) | nindent 8 }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.frontend.affinity "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.frontend.nodeSelector }}
-      nodeSelector: {{- include "kubeapps.tplValue" (dict "value" .Values.frontend.nodeSelector "context" $) | nindent 8 }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.frontend.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.frontend.tolerations }}
-      tolerations: {{- include "kubeapps.tplValue" (dict "value" .Values.frontend.tolerations "context" $) | nindent 8 }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.frontend.tolerations "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
@@ -37,7 +37,7 @@ spec:
       {{- end }}
       containers:
         - name: nginx
-          image: {{ template "kubeapps.image" (list .Values.frontend.image .Values.global) }}
+          image: {{ include "common.images.image" (dict "imageRoot" .Values.frontend.image "global" .Values.global) }}
           imagePullPolicy: {{ .Values.frontend.image.pullPolicy | quote }}
           {{- if .Values.frontend.livenessProbe }}
           livenessProbe: {{- toYaml .Values.frontend.livenessProbe | nindent 12 }}
@@ -58,9 +58,6 @@ spec:
         - name: auth-proxy
           args:
             - --provider={{ required "You must fill \".Values.authProxy.provider\" with the provider. Valid values at https://pusher.github.io/oauth2_proxy/auth-configuration" .Values.authProxy.provider }}
-            - --client-id={{ required "You must fill \".Values.authProxy.clientID\" with the Client ID of the provider" .Values.authProxy.clientID }}
-            - --client-secret={{ required "You must fill \".Values.authProxy.clientSecret\" with the Client Secret of the provider" .Values.authProxy.clientSecret }}
-            - --cookie-secret={{ required "You must fill \".Values.authProxy.cookieSecret\" with a 16, 24 or 32 byte base64 encoded seed string for secure cookies" .Values.authProxy.cookieSecret }}
             - --upstream=http://localhost:8080/
             - --http-address=0.0.0.0:3000
             - --email-domain={{ .Values.authProxy.emailDomain }}
@@ -68,6 +65,8 @@ spec:
             - --pass-access-token=true
             - --pass-authorization-header=true
             - --skip-auth-regex=^\/config\.json$
+            - --skip-auth-regex=^\/custom_style\.css$
+            - --skip-auth-regex=^\/custom_locale\.json$
             - --skip-auth-regex=^\/favicon.*\.png$
             - --skip-auth-regex=^\/static\/
             - --skip-auth-regex=^\/$
@@ -75,8 +74,24 @@ spec:
             {{- range .Values.authProxy.additionalFlags }}
             - {{ . }}
             {{- end }}
-          image: {{ template "kubeapps.image" (list .Values.authProxy.image .Values.global) }}
+          image: {{ include "common.images.image" (dict "imageRoot" .Values.authProxy.image "global" .Values.global) }}
           imagePullPolicy: {{ .Values.authProxy.image.pullPolicy | quote }}
+          env:
+            - name: OAUTH2_PROXY_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "kubeapps.oauth2_proxy-secret.name" . }}
+                  key: clientID
+            - name: OAUTH2_PROXY_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "kubeapps.oauth2_proxy-secret.name" . }}
+                  key: clientSecret
+            - name: OAUTH2_PROXY_COOKIE_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "kubeapps.oauth2_proxy-secret.name" . }}
+                  key: cookieSecret
           ports:
             - name: proxy
               containerPort: 3000
@@ -89,8 +104,8 @@ spec:
         {{- end }}
         {{- if and .Values.pinnipedProxy.enabled }}
         - name: pinniped-proxy
-          args:
-            - /pinniped-proxy
+          command:
+            - pinniped-proxy
           env:
             - name: DEFAULT_PINNIPED_NAMESPACE
               value: {{ .Values.pinnipedProxy.defaultPinnipedNamespace }}
@@ -98,9 +113,11 @@ spec:
               value: {{ .Values.pinnipedProxy.defaultAuthenticatorType }}
             - name: DEFAULT_PINNIPED_AUTHENTICATOR_NAME
               value: {{ .Values.pinnipedProxy.defaultAuthenticatorName }}
+            - name: DEFAULT_PINNIPED_API_SUFFIX
+              value: {{ .Values.pinnipedProxy.defaultPinnipedAPISuffix }}
             - name: RUST_LOG
               value: info
-          image: {{ template "kubeapps.image" (list .Values.pinnipedProxy.image .Values.global) }}
+          image: {{ include "common.images.image" (dict "imageRoot" .Values.pinnipedProxy.image "global" .Values.global) }}
           imagePullPolicy: {{ .Values.pinnipedProxy.image.pullPolicy | quote }}
           ports:
             - name: pinniped-proxy

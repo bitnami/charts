@@ -29,6 +29,17 @@ Return the proper Docker Image Registry Secret Names
 {{- end -}}
 
 {{/*
+Create the name of the service account to use
+*/}}
+{{- define "cassandra.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create -}}
+    {{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the list of Cassandra seed nodes
 */}}
 {{- define "cassandra.seeds" -}}
@@ -80,5 +91,27 @@ cassandra: cluster.seedCount
 
     Number of seed nodes must be greater or equal than 1 and less or 
     equal to `replicaCount`.
+{{- end -}}
+{{- end -}}
+
+{{/* vim: set filetype=mustache: */}}
+{{/*
+Return  the proper Commit Storage Class
+{{ include "cassandra.commitstorage.class" ( dict "persistence" .Values.path.to.the.persistence "global" $) }}
+*/}}
+{{- define "cassandra.commitstorage.class" -}}
+{{- $storageClass := .persistence.commitStorageClass -}}
+{{- if .global -}}
+    {{- if .global.storageClass -}}
+        {{- $storageClass = .global.commitStorageClass -}}
+    {{- end -}}
+{{- end -}}
+
+{{- if $storageClass -}}
+  {{- if (eq "-" $storageClass) -}}
+      {{- printf "storageClassName: \"\"" -}}
+  {{- else }}
+      {{- printf "storageClassName: %s" $storageClass -}}
+  {{- end -}}
 {{- end -}}
 {{- end -}}

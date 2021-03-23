@@ -64,7 +64,7 @@ service:
 image:
   registry: docker.io
   repository: bitnami/solr
-  tag: 8.8.0-debian-10-r10
+  tag: 8.8.1-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -140,6 +140,22 @@ authentication:
 ## Secret with Solr password
 ##
 # existingSecret:
+
+##
+## TLS configuration
+##
+tls:
+  ## Enable TLS traffic
+  enabled: false
+  ## Name of the secret that contains the certificates
+  ## It should contains two keys called "keystore.p12" and "trustore.p12" with the files in JKS or P12 format.
+  ##   certificatesSecretName: cert-files
+  ##
+  # certificatesSecretName:
+
+  ## Name of the secret that contains the passwords for the certificate storage files. It should contains two keys called "tls-keystore-password" and "tls-truststore-password".
+  ## passwordsSecretName: my-passwords
+  # passwordsSecretName:
 
 ## Container Command (set to default if not set).
 ##
@@ -317,8 +333,8 @@ volumePermissions:
   enabled: false
   image:
     registry: docker.io
-    repository: bitnami/minideb
-    tag: buster
+    repository: bitnami/bitnami-shell
+    tag: "10"
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -418,7 +434,7 @@ exporter:
   image:
     registry: docker.io
     repository: bitnami/solr
-    tag: latest
+    tag: 8.8.0-debian-10-r15
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -439,7 +455,7 @@ exporter:
     periodSeconds: 5
     timeoutSeconds: 15
     failureThreshold: 15
-    successThreshold: 15
+    successThreshold: 1
   readinessProbe:
     enabled: true
     initialDelaySeconds: 10

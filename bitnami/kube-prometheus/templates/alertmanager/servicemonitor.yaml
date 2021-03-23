@@ -16,7 +16,7 @@ spec:
       {{- if .Values.alertmanager.serviceMonitor.interval }}
       interval: {{ .Values.alertmanager.serviceMonitor.interval }}
       {{- end }}
-      path: "/metrics"
+      path: {{ trimSuffix "/" .Values.alertmanager.routePrefix }}/metrics
       {{- if .Values.alertmanager.serviceMonitor.metricRelabelings }}
       metricRelabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.alertmanager.serviceMonitor.metricRelabelings "context" $) | nindent 8 }}
       {{- end }}
