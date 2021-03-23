@@ -521,21 +521,22 @@ There are cases where you may want to deploy extra objects, such as Kafka Connec
 ```yaml
 ## Extra objects to deploy (value evaluated as a template)
 ##
-extraDeploy: |-
-  - apiVersion: apps/v1
+extraDeploy:
+  - |
+    apiVersion: apps/v1
     kind: Deployment
     metadata:
       name: {{ include "kafka.fullname" . }}-connect
-      labels: {{- include "common.labels.standard" . | nindent 6 }}
+      labels: {{- include "common.labels.standard" . | nindent 4 }}
         app.kubernetes.io/component: connector
     spec:
       replicas: 1
       selector:
-        matchLabels: {{- include "common.labels.matchLabels" . | nindent 8 }}
+        matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
           app.kubernetes.io/component: connector
       template:
         metadata:
-          labels: {{- include "common.labels.standard" . | nindent 10 }}
+          labels: {{- include "common.labels.standard" . | nindent 8 }}
             app.kubernetes.io/component: connector
         spec:
           containers:
@@ -552,11 +553,12 @@ extraDeploy: |-
             - name: configuration
               configMap:
                 name: {{ include "kafka.fullname" . }}-connect
-  - apiVersion: v1
+  - |
+    apiVersion: v1
     kind: ConfigMap
     metadata:
       name: {{ include "kafka.fullname" . }}-connect
-      labels: {{- include "common.labels.standard" . | nindent 6 }}
+      labels: {{- include "common.labels.standard" . | nindent 4 }}
         app.kubernetes.io/component: connector
     data:
       connect-standalone.properties: |-
@@ -565,18 +567,19 @@ extraDeploy: |-
       mongodb.properties: |-
         connection.uri=mongodb://root:password@mongodb-hostname:27017
         ...
-  - apiVersion: v1
+  - | 
+    apiVersion: v1
     kind: Service
     metadata:
       name: {{ include "kafka.fullname" . }}-connect
-      labels: {{- include "common.labels.standard" . | nindent 6 }}
+      labels: {{- include "common.labels.standard" . | nindent 4 }}
         app.kubernetes.io/component: connector
     spec:
       ports:
         - protocol: TCP
           port: 8083
           targetPort: connector
-      selector: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
         app.kubernetes.io/component: connector
 ```
 
