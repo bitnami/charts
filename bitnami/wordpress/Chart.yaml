@@ -35,4 +35,4 @@ name: wordpress
 sources:
   - https://github.com/bitnami/bitnami-docker-wordpress
   - http://www.wordpress.com/
-version: 10.7.1
+version: 10.7.2
