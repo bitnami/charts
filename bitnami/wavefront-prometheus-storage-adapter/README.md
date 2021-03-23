@@ -201,6 +201,15 @@ wavefront:
   enabled: false
 ```
 
+### Configuring Prometheus
+
+Once the Wavefront Prometheus Storage Adapter is deployed, you will need to configure the `prometheus.yml` file in your Prometheus installation adding the following lines (substitute the RELEASE_NAME placeholder):
+
+```yaml
+remote_write:
+  - url: "http://RELEASE_NAME-wavefront-prometheus-storage-adapter:1234/receive"
+```
+
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).

@@ -16,5 +16,10 @@
     kubectl port-forward svc/{{ template "common.names.fullname" . }} {{ .Values.service.port }}:{{ .Values.service.port }} &
 {{- end }}
 
+2. Make sure that your running Prometheus instance has the following configuration in the prometheus.yml file
+
+    remote_write:
+      - url: "http://{{ template "common.names.fullname" . }}:{{ .Values.service.port }}/receive"
+
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "wfpsa.validateValues" . }}
