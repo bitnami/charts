@@ -15,13 +15,13 @@ Returns the volume mounts that will be used by git containers (clone and sync)
 {{- if .Values.git.dags.enabled }}
   {{- range .Values.git.dags.repositories }}
 - name: git-cloned-dag-files-{{ include "airflow.git.repository.name" . }}
-  mountPath: /dags-{{ include "airflow.git.repository.name" . }}
+  mountPath: /dags_{{ include "airflow.git.repository.name" . }}
   {{- end }}
 {{- end }}
 {{- if .Values.git.plugins.enabled }}
   {{- range .Values.git.plugins.repositories }}
 - name: git-cloned-plugins-files-{{ include "airflow.git.repository.name" . }}
-  mountPath: /plugins-{{ include "airflow.git.repository.name" . }}
+  mountPath: /plugins_{{ include "airflow.git.repository.name" . }}
   {{- end }}
 {{- end }}
 {{- end -}}
@@ -33,7 +33,7 @@ Returns the volume mounts that will be used by the main container
 {{- if .Values.git.dags.enabled }}
   {{- range .Values.git.dags.repositories }}
 - name: git-cloned-dag-files-{{ include "airflow.git.repository.name" . }}
-  mountPath: /opt/bitnami/airflow/dags/git-{{ include "airflow.git.repository.name" . }}
+  mountPath: /opt/bitnami/airflow/dags/git_{{ include "airflow.git.repository.name" . }}
     {{- if .path }}
   subPath: {{ .path }}
     {{- end }}
@@ -42,7 +42,7 @@ Returns the volume mounts that will be used by the main container
 {{- if .Values.git.plugins.enabled }}
   {{- range .Values.git.plugins.repositories }}
 - name: git-cloned-plugins-files-{{ include "airflow.git.repository.name" . }}
-  mountPath: /opt/bitnami/airflow/git-{{ include "airflow.git.repository.name" . }}
+  mountPath: /opt/bitnami/airflow/git_{{ include "airflow.git.repository.name" . }}
     {{- if .path }}
   subPath: {{ .path }}
     {{- end }}
@@ -151,12 +151,12 @@ Returns the a container that will pull and sync repositories files from a given 
       while true; do
       {{- if .Values.git.dags.enabled }}
         {{- range .Values.git.dags.repositories }}
-          cd /dags-{{ include "airflow.git.repository.name" . }} && git pull origin {{ .branch }}
+          cd /dags_{{ include "airflow.git.repository.name" . }} && git pull origin {{ .branch }}
         {{- end }}
       {{- end }}
       {{- if .Values.git.plugins.enabled }}
         {{- range .Values.git.plugins.repositories }}
-          cd /plugins-{{ include "airflow.git.repository.name" . }} && git pull origin {{ .branch }}
+          cd /plugins_{{ include "airflow.git.repository.name" . }} && git pull origin {{ .branch }}
         {{- end }}
       {{- end }}
           sleep {{ default "60" .Values.git.sync.interval }}
