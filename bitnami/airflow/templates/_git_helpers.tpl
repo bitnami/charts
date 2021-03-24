@@ -92,12 +92,12 @@ Returns the init container that will clone repositories files from a given list 
         [[ -f "/opt/bitnami/scripts/git/entrypoint.sh" ]] && source "/opt/bitnami/scripts/git/entrypoint.sh"
     {{- if .Values.git.dags.enabled }}
       {{- range .Values.git.dags.repositories }}
-        git clone {{ .repository }} --branch {{ .branch }} /dags-{{ include "airflow.git.repository.name" . }}
+        git clone {{ .repository }} --branch {{ .branch }} /dags_{{ include "airflow.git.repository.name" . }}
       {{- end }}
     {{- end }}
     {{- if .Values.git.plugins.enabled }}
       {{- range .Values.git.plugins.repositories }}
-        git clone {{ .repository }} --branch {{ .branch }} /plugins-{{ include "airflow.git.repository.name" . }}
+        git clone {{ .repository }} --branch {{ .branch }} /plugins_{{ include "airflow.git.repository.name" . }}
       {{- end }}
     {{- end }}
 {{- end }}
