@@ -92,21 +92,21 @@ spec:
               mountPath: /certs
               readOnly: true
             {{- end }}
-          volumes:
-            {{- if or .Values.config .Values.existingConfigmap }}
-            - name: kafka-config
-              configMap:
-                name: {{ include "kafka.configmapName" . }}
-            {{- end }}
-            {{- if or .Values.log4j .Values.existingLog4jConfigMap }}
-            - name: log4j-config
-              configMap:
-                name: {{ include "kafka.log4j.configMapName" . }}
-            {{ end }}
-            {{- if (include "kafka.tlsEncryption" .) }}
-            - name: kafka-certificates
-              secret:
-                secretName: {{ include "kafka.tlsSecretName" . }}
-                defaultMode: 256
-            {{- end }}
+      volumes:
+        {{- if or .Values.config .Values.existingConfigmap }}
+        - name: kafka-config
+          configMap:
+            name: {{ include "kafka.configmapName" . }}
+        {{- end }}
+        {{- if or .Values.log4j .Values.existingLog4jConfigMap }}
+        - name: log4j-config
+          configMap:
+            name: {{ include "kafka.log4j.configMapName" . }}
+        {{ end }}
+        {{- if (include "kafka.tlsEncryption" .) }}
+        - name: kafka-certificates
+          secret:
+            secretName: {{ include "kafka.tlsSecretName" . }}
+            defaultMode: 256
+        {{- end }}
 {{- end }}
