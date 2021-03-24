@@ -1,7 +1,7 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 0.9.5
+appVersion: 0.9.6
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -30,4 +30,4 @@ sources:
   - https://github.com/metallb/metallb
   - https://github.com/bitnami/bitnami-docker-metallb
   - https://metallb.universe.tf
-version: 2.3.3
+version: 2.3.4
