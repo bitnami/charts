@@ -76,6 +76,12 @@ Returns the init container that will clone repositories files from a given list 
 - name: clone-repositories
   image: {{ include "git.image" . | quote }}
   imagePullPolicy: {{ .Values.git.image.pullPolicy | quote }}
+{{- if .Values.containerSecurityContext.enabled }}
+  securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+{{- end }}
+{{- if .Values.git.clone.resources}}
+  resources: {{- toYaml .Values.git.clone.resources | nindent 4 }}
+{{- end }}
 {{- if .Values.git.clone.command }}
   command: {{- include "common.tplvalues.render" (dict "value" .Values.git.clone.command "context" $) | nindent 4 }}
 {{- else }}
@@ -83,14 +89,15 @@ Returns the init container that will clone repositories files from a given list 
     - /bin/bash
     - -ec
     - |
+        [[ -f "/opt/bitnami/scripts/git/entrypoint.sh" ]] && source "/opt/bitnami/scripts/git/entrypoint.sh"
     {{- if .Values.git.dags.enabled }}
       {{- range .Values.git.dags.repositories }}
-        git clone {{ .repository }} --branch {{ .branch }} /dags-{{ include "airflow.git.repository.name" . }}
+        git clone {{ .repository }} --branch {{ .branch }} /dags_{{ include "airflow.git.repository.name" . }}
       {{- end }}
     {{- end }}
     {{- if .Values.git.plugins.enabled }}
       {{- range .Values.git.plugins.repositories }}
-        git clone {{ .repository }} --branch {{ .branch }} /plugins-{{ include "airflow.git.repository.name" . }}
+        git clone {{ .repository }} --branch {{ .branch }} /plugins_{{ include "airflow.git.repository.name" . }}
       {{- end }}
     {{- end }}
 {{- end }}
@@ -127,6 +134,12 @@ Returns the a container that will pull and sync repositories files from a given 
 - name: sync-repositories
   image: {{ include "git.image" . | quote }}
   imagePullPolicy: {{ .Values.git.image.pullPolicy | quote }}
+{{- if .Values.containerSecurityContext.enabled }}
+  securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+{{- end }}
+{{- if .Values.git.sync.resources}}
+  resources: {{- toYaml .Values.git.sync.resources | nindent 4 }}
+{{- end }}
 {{- if .Values.git.sync.command }}
   command: {{- include "common.tplvalues.render" (dict "value" .Values.git.sync.command "context" $) | nindent 4 }}
 {{- else }}
@@ -134,6 +147,7 @@ Returns the a container that will pull and sync repositories files from a given 
     - /bin/bash
     - -ec
     - |
+      [[ -f "/opt/bitnami/scripts/git/entrypoint.sh" ]] && source "/opt/bitnami/scripts/git/entrypoint.sh"
       while true; do
       {{- if .Values.git.dags.enabled }}
         {{- range .Values.git.dags.repositories }}
