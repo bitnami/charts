@@ -16,7 +16,7 @@ Required password params:
   {{- if and $validationErrors .context.Release.IsUpgrade -}}
     {{- $errorString := "\nPASSWORDS ERROR: You must provide your current passwords when upgrading the release." -}}
     {{- $errorString = print $errorString "\n                 Note that even after reinstallation old credentials may be needed as they may be kept in persistent volume claims." -}}
-    {{- $errorString = print $errorString "\n                 Furhter information can be obtained at https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues/#credential-errors-while-upgrading-chart-releases" -}}
+    {{- $errorString = print $errorString "\n                 Further information can be obtained at https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues/#credential-errors-while-upgrading-chart-releases" -}}
     {{- $errorString = print $errorString "\n%s" -}}
     {{- printf $errorString $validationErrors | fail -}}
   {{- end -}}
