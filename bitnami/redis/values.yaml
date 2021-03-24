@@ -180,6 +180,9 @@ sentinel:
   metrics:
     enabled: false
 
+    ## Bitnami Redis Sentinel Exporter image
+    ## ref: https://hub.docker.com/r/bitnami/redis-sentinel-exporter/tags/
+    ##
     image:
       registry: docker.io
       repository: bitnami/redis-sentinel-exporter
