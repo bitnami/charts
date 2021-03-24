@@ -14,14 +14,14 @@ metadata:
 spec:
   adapter: {{ include "common.names.fullname" . }}-wavefront
   connection:
-    address: {{ printf "%s:%s" (include "common.names.fullname" .) .Values.service.port }}
+    address: {{ printf "%s.%s.svc.%s:%d" (include "common.names.fullname" .) .Release.Namespace .Values.clusterDomain (int .Values.service.port) }}
   params:
     {{- if  .Values.wavefront.proxy.enabled }}
     proxy:
-      address: {{ printf "%s:%s" (include "common.names.fullname" .) .Values.service.port }}
+      address: {{ printf "%s.%s.svc.%s:%d" (include "wfafi.proxy.fullname" .) .Release.Namespace .Values.clusterDomain (int .Values.wavefront.proxy.port) }}
     {{- else if .Values.externalProxy.host }}
     proxy:
-      address: {{ printf "%s:%s" .Values.externalProxy.host .Values.externalProxy.port }}
+      address: {{ printf "%s:%s" .Values.externalProxy.host (int .Values.externalProxy.port) }}
     {{- else }}
     direct:
       server: {{ .Values.wavefront.wavefront.url }}

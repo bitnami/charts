@@ -104,8 +104,14 @@ spec:
               name: grpc
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
-            tcpSocket:
-              port: grpc
+            exec:
+              # As it is a grpc port, we cannot httpGet. tcpSocket cannot be used either
+              # because it adds noise in the logs
+              command:
+                - bash
+                - -ec
+                - |
+                  ps auxf | grep wavefront
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
@@ -116,8 +122,14 @@ spec:
           {{- end }}
           {{- if .Values.readinessProbe.enabled }}
           readinessProbe:
-            tcpSocket:
-              port: grpc
+            exec:
+              # As it is a grpc port, we cannot httpGet. tcpSocket cannot be used either
+              # because it adds noise in the logs
+              command:
+                - bash
+                - -ec
+                - |
+                  ps auxf | grep wavefront
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
