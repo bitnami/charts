@@ -1,0 +1,25 @@
+** Please be patient while the chart is being deployed **
+
+1. Get the application URL by running these commands:
+
+{{- if contains "NodePort" .Values.service.type }}
+    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "common.names.fullname" . }})
+    export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+    echo http://$NODE_IP:$NODE_PORT
+{{- else if contains "LoadBalancer" .Values.service.type }}
+     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+           You can watch the status of by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ template "common.names.fullname" . }}
+    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+    echo http://$SERVICE_IP:{{ .Values.service.port }}
+{{- else if contains "ClusterIP" .Values.service.type }}
+    echo "The renconciler is available at http://127.0.0.1:{{ .Values.service.port }}"
+    kubectl port-forward svc/{{ template "common.names.fullname" . }} {{ .Values.service.port }}:{{ .Values.service.port }} &
+{{- end }}
+
+2. Make sure that your running Prometheus instance has the following configuration in the prometheus.yml file
+
+    remote_write:
+      - url: "http://{{ template "common.names.fullname" . }}:{{ .Values.service.port }}/receive"
+
+{{- include "common.warnings.rollingTag" .Values.image }}
+{{- include "wfpsa.validateValues" . }}
