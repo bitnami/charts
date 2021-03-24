@@ -34,4 +34,4 @@ sources:
   - https://github.com/bitnami/bitnami-docker-harbor-registry
   - https://github.com/bitnami/bitnami-docker-harbor-registryctl
   - https://goharbor.io/
-version: 9.8.0
+version: 9.8.1

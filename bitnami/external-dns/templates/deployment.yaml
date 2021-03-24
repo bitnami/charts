@@ -62,8 +62,8 @@ spec:
             {{- if .Values.triggerLoopOnEvent }}
             - --events
             {{- end }}
-            {{- if .Values.namespace }}
-            - --namespace={{ .Values.namespace }}
+            {{- if (include "external-dns.namespace" .) }}
+            - --namespace={{ template "external-dns.namespace" . }}
             {{- end }}
             {{- if .Values.fqdnTemplates }}
             - --fqdn-template={{ join "," .Values.fqdnTemplates }}{{/* Explicitly wants comma separated list */}}
@@ -123,6 +123,8 @@ spec:
             # Alibaba Cloud arguments
             {{- if or (and .Values.alibabacloud.accessKeyId .Values.alibabacloud.accessKeySecret) .Values.alibabacloud.secretName }}
             - --alibaba-cloud-config-file=/etc/kubernetes/alibaba-cloud.json
+            {{- else }}
+            - --alibaba-cloud-config-file=
             {{- end }}
             {{- if .Values.alibabacloud.zoneType }}
             - --alibaba-cloud-zone-type={{ .Values.alibabacloud.zoneType }}

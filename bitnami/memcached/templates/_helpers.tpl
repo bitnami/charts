@@ -1,6 +1,15 @@
 {{/* vim: set filetype=mustache: */}}
 
 {{/*
+Create a default fully qualified app name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+If release name contains chart name it will be used as a full name.
+*/}}
+{{- define "memcached.fullname" -}}
+{{- include "common.names.fullname" . -}}
+{{- end -}}
+
+{{/*
 Return the proper Memcached image name
 */}}
 {{- define "memcached.image" -}}
@@ -71,5 +80,16 @@ memcached: replicaCount
 memcached: securityContext.readOnlyRootFilesystem
     Enabling authentication is not compatible with using a read-only filesystem.
     Please disable it (--set securityContext.readOnlyRootFilesystem=false)
+{{- end -}}
+{{- end -}}
+
+{{/*
+ Create the name of the service account to use
+ */}}
+{{- define "memcached.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create -}}
+    {{ default (include "memcached.fullname" .) .Values.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}
 {{- end -}}

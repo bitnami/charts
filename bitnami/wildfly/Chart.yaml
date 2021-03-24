@@ -1,7 +1,7 @@
 annotations:
   category: ApplicationServer
 apiVersion: v2
-appVersion: 22.0.1
+appVersion: 23.0.0
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -26,4 +26,4 @@ name: wildfly
 sources:
   - https://github.com/bitnami/bitnami-docker-wildfly
   - http://wildfly.org
-version: 8.1.4
+version: 9.0.0

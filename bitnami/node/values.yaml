@@ -85,7 +85,7 @@ git:
   image:
     registry: docker.io
     repository: bitnami/git
-    tag: 2.30.1-debian-10-r14
+    tag: 2.31.0-debian-10-r2
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -97,6 +97,15 @@ git:
     ##
     pullSecrets: []
     #   - myRegistryKeySecretName
+
+  ## Add extra volume mounts for the GIT container
+  ## Useful to mount keys to connect through ssh. (normally used with extraVolumes)
+  ## E.g:
+  ## extraVolumeMounts:
+  ##   - name: ssh-dir
+  ##     mountPath: /root/.ssh/
+  ##
+  extraVolumeMounts: []
 
 ## Enable to download app from external git repository.
 ## Disable it if your docker image already includes your application at /app

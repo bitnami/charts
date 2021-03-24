@@ -13,6 +13,9 @@ spec:
   {{- if and .Values.queryFrontend.service.clusterIP (eq .Values.queryFrontend.service.type "ClusterIP") }}
   clusterIP: {{ .Values.queryFrontend.service.clusterIP }}
   {{- end }}
+  {{- if ne .Values.queryFrontend.service.type "ClusterIP" }}
+  externalTrafficPolicy: {{ .Values.queryFrontend.service.externalTrafficPolicy }}
+  {{- end }}
   {{- if and .Values.queryFrontend.service.loadBalancerIP (eq .Values.queryFrontend.service.type "LoadBalancer") }}
   loadBalancerIP: {{ .Values.queryFrontend.service.loadBalancerIP }}
   {{- end }}

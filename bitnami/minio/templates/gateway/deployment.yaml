@@ -94,7 +94,18 @@ spec:
             {{- end }}
             {{- end }}
           env:
-            {{- if and (eq .Values.gateway.type "gcs") .Values.gateway.auth.gcs.keyJSON }}
+            {{- if eq .Values.gateway.type "azure" }}
+            - name: AZURE_STORAGE_ACCOUNT
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "minio.secretName" . }}
+                  key: azure-storage-account-name
+            - name: AZURE_STORAGE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "minio.secretName" . }}
+                  key: azure-storage-account-key
+            {{- else if and (eq .Values.gateway.type "gcs") .Values.gateway.auth.gcs.keyJSON }}
             - name: GOOGLE_APPLICATION_CREDENTIALS
               value: "/opt/bitnami/minio/secrets/key.json"
             {{- end }}
@@ -102,12 +113,14 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "minio.secretName" . }}
-                  key: {{ include "minio.secret.userKey" . }}
+                  key: access-key
             - name: MINIO_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "minio.secretName" . }}
-                  key: {{ include "minio.secret.passwordKey" . }}
+                  key: secret-key
+            - name: MINIO_PROMETHEUS_AUTH_TYPE
+              value: {{ .Values.metrics.prometheusAuthType | quote }}
             {{- if .Values.extraEnv }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnv "context" $) | nindent 12 }}
             {{- end }}

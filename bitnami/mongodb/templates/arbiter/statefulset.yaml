@@ -118,6 +118,7 @@ spec:
               cd /certs/
               shopt -s extglob
               rm -rf !(mongodb-ca-cert|mongodb.pem|CAs|openssl.cnf)
+              chmod 0600 mongodb-ca-cert mongodb.pem
               EOF
         {{- end }}
       containers:
@@ -258,10 +259,10 @@ spec:
             items:
             - key: mongodb-ca-cert
               path: mongodb-ca-cert
-              mode: 511
+              mode: 0600
             - key: mongodb-ca-key
               path: mongodb-ca-key
-              mode: 511
+              mode: 0600
         {{- end }}
         {{- if .Values.arbiter.extraVolumes }}
         {{- toYaml .Values.arbiter.extraVolumes | nindent 8 }}

@@ -272,6 +272,7 @@ The following tables lists the configurable parameters of the Keycloak chart and
 | `externalDatabase.user`          | PostgreSQL username (when using an external db)                              | `bn_keycloak`      |
 | `externalDatabase.password`      | Password for the above username (when using an external db)                  | `""`               |
 | `externalDatabase.database`      | Name of the existing database (when using an external db)                    | `bitnami_keycloak` |
+| `externalDatabase.existingSecret`| Use an existing secret file with the external PostgreSQL credentials         | `nil`              |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

@@ -21,9 +21,30 @@ spec:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: prometheus-proxy
+      annotations:
+        {{- if .Values.metrics.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
     spec:
       {{- include "scdf.imagePullSecrets" . | nindent 6 }}
       serviceAccountName: {{ include "scdf.serviceAccountName" . }}
+      {{- if .Values.metrics.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.metrics.podAffinityPreset "component" "prometheus-proxy" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.metrics.podAntiAffinityPreset "component" "prometheus-proxy" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.metrics.nodeAffinityPreset.type "key" .Values.metrics.nodeAffinityPreset.key "values" .Values.metrics.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.metrics.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.metrics.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.metrics.priorityClassName }}
+      priorityClassName: {{ .Values.metrics.priorityClassName | quote }}
+      {{- end }}
       containers:
         - name: prometheus-proxy
           image: {{ include "scdf.metrics.image" . }}
