@@ -209,6 +209,9 @@ spec:
               mountPath: /opt/bitnami/redis/certs
               readOnly: true
             {{- end }}
+            {{- if .Values.slave.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.slave.extraVolumeMounts "context" $ ) | nindent 8 }}
+            {{- end }}
         {{- if .Values.metrics.enabled }}
         - name: metrics
           image: {{ template "redis.metrics.image" . }}
@@ -329,6 +332,9 @@ spec:
         {{- end }}
         - name: redis-tmp-conf
           emptyDir: {}
+        {{- if .Values.slave.extraVolumes }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.slave.extraVolumes "context" $ ) | nindent 8 }}
+        {{- end }}
     {{- if .Values.tls.enabled }}
         - name: redis-certificates
           secret:
