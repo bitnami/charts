@@ -1,5 +1,5 @@
 apiVersion: {{ include "wfafi.istio.apiVersion" . }}
-kind: AttributeManifest
+kind: attributemanifest
 metadata:
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: wavefront-adapter-for-istio
@@ -116,7 +116,7 @@ spec:
       valueType: STRING
 ---
 apiVersion: {{ include "wfafi.istio.apiVersion" . }}
-kind: AttributeManifest
+kind: attributemanifest
 metadata:
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: wavefront-adapter-for-istio

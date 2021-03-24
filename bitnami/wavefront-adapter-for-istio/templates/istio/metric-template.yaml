@@ -1,5 +1,5 @@
 apiVersion: {{ include "wfafi.istio.apiVersion" . }}
-kind: Template
+kind: template
 metadata:
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: wavefront-adapter-for-istio

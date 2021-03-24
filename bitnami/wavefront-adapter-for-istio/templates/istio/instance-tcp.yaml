@@ -1,7 +1,7 @@
 {{- if .Values.metrics.tcp }}
 # tcpsentbytes instance for template metric
 apiVersion: {{ include "wfafi.istio.apiVersion" . }}
-kind: Instance
+kind: instance
 metadata:
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: wavefront-adapter-for-istio
@@ -30,7 +30,7 @@ spec:
 ---
 # tcpreceivedbytes instance for template metric
 apiVersion: {{ include "wfafi.istio.apiVersion" . }}
-kind: Instance
+kind: instance
 metadata:
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: wavefront-adapter-for-istio
@@ -59,7 +59,7 @@ spec:
 ---
 # tcpconnectionsopened instance for template metric
 apiVersion: {{ include "wfafi.istio.apiVersion" . }}
-kind: Instance
+kind: instance
 metadata:
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: wavefront-adapter-for-istio
@@ -88,7 +88,7 @@ spec:
 ---
 # tcpconnectionsclosed instance for template metric
 apiVersion: {{ include "wfafi.istio.apiVersion" . }}
-kind: Instance
+kind: instance
 metadata:
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: wavefront-adapter-for-istio

@@ -1,7 +1,7 @@
 {{- if .Values.metrics.http }}
 # rule to dispatch to handler wavefront-handler
 apiVersion: {{ include "wfafi.istio.apiVersion" . }}
-kind: Rule
+kind: rule
 metadata:
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: wavefront-adapter-for-istio

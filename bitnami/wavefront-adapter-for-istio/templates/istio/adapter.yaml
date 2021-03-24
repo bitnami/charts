@@ -1,7 +1,7 @@
 # this config is created through command
 # mixgen adapter -c $GOPATH/src/istio.io/istio/mixer/adapter/wavefront/config/config.proto_descriptor -o $GOPATH/src/istio.io/istio/mixer/adapter/wavefront/config -s=false -n wavefront -t metric
 apiVersion: {{ include "wfafi.istio.apiVersion" . }}
-kind: Adapter
+kind: adapter
 metadata:
   name: {{ include "common.names.fullname" . }}-wavefront
   labels: {{- include "common.labels.standard" . | nindent 4 }}

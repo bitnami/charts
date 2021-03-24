@@ -1,7 +1,7 @@
 {{- if .Values.metrics.tcp }}
 # rule to dispatch tcp metrics to handler wavefront-handler
 apiVersion: {{ include "wfafi.istio.apiVersion" . }}
-kind: Rule
+kind: rule
 metadata:
   name: {{ include "common.names.fullname" . }}-wavefront-tcp-rule
   namespace: {{ .Values.istioNamespace }}
@@ -18,7 +18,7 @@ spec:
 ---
 # rule to dispatch tcp connection open metric to handler wavefront-handler
 apiVersion: {{ include "wfafi.istio.apiVersion" . }}
-kind: Rule
+kind: rule
 metadata:
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: wavefront-adapter-for-istio
@@ -39,7 +39,7 @@ spec:
 ---
 # rule to dispatch tcp connection close metric to handler wavefront-handler
 apiVersion: {{ include "wfafi.istio.apiVersion" . }}
-kind: Rule
+kind: rule
 metadata:
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: wavefront-adapter-for-istio
