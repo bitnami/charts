@@ -50,14 +50,20 @@ spec:
           image: {{ include "kafka.provisioning.image" . }}
           imagePullPolicy: {{ .Values.provisioning.image.pullPolicy | quote }}
           command:
+            {{- if .Values.provisioning.command }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.provisioning.command "context" $) | nindent 12 }}
+            {{- else }}
             - /bin/bash
-            - -c
-            - >-
-              set -e;
-            {{- $bootstrapServer := printf "%s:%d" (include "kafka.fullname" .) (.Values.service.port | int64) }}
-            {{- range $topic := .Values.provisioning.topics }}
-              echo "Ensure topic '{{ $topic.name }}' exists";
-
+            {{- end }}
+          args:
+            {{- if .Values.provisioning.args }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.provisioning.args "context" $) | nindent 12 }}
+            {{- else }}
+            - -ec
+            - |
+              {{- $bootstrapServer := printf "%s:%d" (include "kafka.fullname" .) (.Values.service.port | int64) }}
+              {{- range $topic := .Values.provisioning.topics }}
+              echo "Ensure topic '{{ $topic.name }}' exists"
               /opt/bitnami/kafka/bin/kafka-topics.sh \
                 --create \
                 --if-not-exists \
@@ -67,9 +73,10 @@ spec:
                 {{- range $name, $value := $topic.config }}
                 --config {{ $name }}={{ $value }} \
                 {{- end }}
-                --topic {{ $topic.name }};
+                --topic {{ $topic.name }}
+              {{- end }}
+              echo "Provisioning succeeded"
             {{- end }}
-              echo "Provisioning succeeded";
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.provisioning.image.debug | quote }}
