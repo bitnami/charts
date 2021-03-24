@@ -13,7 +13,7 @@ $ helm install my-release bitnami/wordpress
 
 This chart bootstraps a [WordPress](https://github.com/bitnami/bitnami-docker-wordpress) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment for the database requirements of the WordPress application.
+It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment for the database requirements of the WordPress application, and the [Bitnami Memcached chart](https://github.com/bitnami/charts/tree/master/bitnami/memcached) that can be used to cache database queries.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
 
@@ -180,7 +180,7 @@ The following table lists the configurable parameters of the WordPress chart and
 | `persistence.enabled`       | Enable persistence using PVC             | `true`                                      |
 | `persistence.existingClaim` | Enable persistence using an existing PVC | `nil`                                       |
 | `persistence.storageClass`  | PVC Storage Class                        | `nil` (uses alpha storage class annotation) |
-| `persistence.accessMode`    | PVC Access Mode                          | `ReadWriteOnce`                             |
+| `persistence.accessModes`   | PVC Access Modes                        | `[ReadWriteOnce]`                            |
 | `persistence.size`          | PVC Storage Request                      | `10Gi`                                      |
 | `persistence.dataSource`    | PVC data source                          | `{}`                                        |
 
@@ -203,6 +203,7 @@ The following table lists the configurable parameters of the WordPress chart and
 | `externalDatabase.database`               | Name of the existing database                        | `bitnami_wordpress`                            |
 | `externalDatabase.port`                   | Database port number                                 | `3306`                                         |
 | `externalDatabase.existingSecret`         | Name of the database existing Secret Object          | `nil`                                          |
+| `memcached.enabled`                       | Deploy Memcached for caching database queries        | `false`                                        |
 
 ### Volume Permissions parameters
 
@@ -298,23 +299,6 @@ kubectl exec $(kubectl get pods -l app.kubernetes.io/name=wordpress -o jsonpath=
 kubectl exec $(kubectl get pods -l app.kubernetes.io/name=wordpress -o jsonpath='{.items[2].metadata.name}') -c wordpress -- wp maintenance-mode activate
 ```
 
-### Additional environment variables
-
-In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property.
-
-```yaml
-wordpress:
-  extraEnvVars:
-    - name: LOG_LEVEL
-      value: error
-```
-
-Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
-
-### Sidecars
-
-If additional containers are needed in the same pod as WordPress (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/apps/wordpress/administration/configure-use-sidecars/).
-
 ### External database support
 
 You may want to have WordPress connect to an external database rather than installing one inside your cluster. Typical reasons for this are to use a managed database service, or to share a common database server for all your applications. To achieve this, the chart allows you to specify credentials for an external database with the [`externalDatabase` parameter](#parameters). You should also disable the MariaDB installation with the `mariadb.enabled` option. Here is an example:
@@ -330,11 +314,11 @@ externalDatabase.port=3306
 
 Refer to the [documentation on using an external database with WordPress](https://docs.bitnami.com/kubernetes/apps/wordpress/configuration/use-external-database/) and the [tutorial on integrating WordPress with a managed cloud database](https://docs.bitnami.com/tutorials/secure-wordpress-kubernetes-managed-database-ssl-upgrades/) for more information.
 
-### Pod affinity
+### Memcached
 
-This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+This chart provides support for using Memcached to cache database queries improving the website performance. To enable this feature, set `memcached.enabled` to `true`.
 
-As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+When this features is enabled, a Memcached server will be deployed in your K8s cluster using the Bitnami Memcached chart and the [W3 Total Cache](https://wordpress.org/plugins/w3-total-cache/) plugin will be activated and configured to use the Memcached server for database caching.
 
 ### Ingress
 
@@ -357,6 +341,29 @@ By default, the container image includes all the default `.htaccess` files in Wo
 ## Persistence
 
 The [Bitnami WordPress](https://github.com/bitnami/bitnami-docker-wordpress) image stores the WordPress data and configurations at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments. [Learn more about persistence in the chart documentation](https://docs.bitnami.com/kubernetes/apps/wordpress/configuration/chart-persistence/).
+
+### Additional environment variables
+
+In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property.
+
+```yaml
+wordpress:
+  extraEnvVars:
+    - name: LOG_LEVEL
+      value: error
+```
+
+Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
+
+### Sidecars
+
+If additional containers are needed in the same pod as WordPress (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/apps/wordpress/administration/configure-use-sidecars/).
+
+### Pod affinity
+
+This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ## Troubleshooting
 

@@ -46,7 +46,7 @@ image:
 git:
   registry: docker.io
   repository: bitnami/git
-  tag: 2.30.1-debian-10-r24
+  tag: 2.31.0-debian-10-r2
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
@@ -142,6 +142,15 @@ cloneFilesFromGit:
   enabled: false
   # repository:
   # revision: master
+
+  ## Add extra volume mounts for the GIT container
+  ## Useful to mount keys to connect through ssh. (normally used with extraVolumes)
+  ## E.g:
+  ## extraVolumeMounts:
+  ##   - name: ssh-dir
+  ##     mountPath: /.ssh/
+  ##
+  extraVolumeMounts: []
 
 ## Additional environment variables
 ##
@@ -275,3 +284,11 @@ persistence:
   ## Persistent Volume Claim annotations
   ##
   annotations: {}
+
+## Array to add extra volumes (evaluated as a template)
+##
+extraVolumes: []
+
+## Array to add extra mounts (normally used with extraVolumes, evaluated as a template)
+##
+extraVolumeMounts: []

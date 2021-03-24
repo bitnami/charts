@@ -22,7 +22,7 @@ kubeVersion:
 image:
   registry: docker.io
   repository: bitnami/influxdb
-  tag: 2.0.4-debian-10-r29
+  tag: 2.0.4-debian-10-r36
 
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -322,6 +322,38 @@ influxdb:
     ## Provide any additional annotations which may be required
     ##
     annotations: {}
+
+collectd:
+  enabled: false
+  service:
+    ## Service type
+    ##
+    type: ClusterIP
+    ## InfluxDB(TM) collectd listener port
+    ## This requires corresponding configuration in influxdb.conf to enable
+    ## collectd block
+    ##
+    port: 25826
+    ## Specify the nodePort value for the LoadBalancer and NodePort service types.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ##
+    nodePort: ""
+    ## Set the LoadBalancer service type to internal only.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+    ##
+    # loadBalancerIP:
+    ## Load Balancer sources
+    ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ##
+    # loadBalancerSourceRanges:
+    # - 10.10.10.0/24
+    ## Set the Cluster IP to use
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#choosing-your-own-ip-address
+    ##
+    # clusterIP: None
+    # annotations:
+    # Enable metallb annotations if you want to share the LB Ip between collectd and influx services
+    ##     metallb.universe.tf/allow-shared-ip: "true"
 
 ## InfluxDB Relay(TM) parameters
 ##
@@ -782,7 +814,7 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/google-cloud-sdk
-        tag: 0.331.0-debian-10-r5
+        tag: 0.332.0-debian-10-r5
 
         ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
         ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -807,7 +839,7 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/azure-cli
-        tag: 2.20.0-debian-10-r12
+        tag: 2.20.0-debian-10-r18
 
         ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
         ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images

@@ -40,7 +40,7 @@ data:
   PORTAL_URL: {{ include "harbor.portal.url" . | quote }}
   REGISTRY_CONTROLLER_URL: {{ include "harbor.registryCtl.url" . | quote }}
   REGISTRY_CREDENTIAL_USERNAME: {{ .Values.registry.credentials.username | quote }}
-  PERMITTED_REGISTRY_TYPES_FOR_PROXY_CACHE: "docker-hub,harbor"
+  PERMITTED_REGISTRY_TYPES_FOR_PROXY_CACHE: "docker-hub,harbor,aws-ecr,azure-acr,quay,google-gcr"
   {{- if .Values.core.uaaSecretName }}
   UAA_CA_ROOT: "/etc/core/ca/auth-ca.crt"
   {{- end }}

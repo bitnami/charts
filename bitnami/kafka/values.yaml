@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/kafka
-  tag: 2.7.0-debian-10-r68
+  tag: 2.7.0-debian-10-r90
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -260,94 +260,140 @@ auth:
   clientProtocol: plaintext
   interBrokerProtocol: plaintext
 
-  ## Allowed SASL mechanisms when clientProtocol or interBrokerProtocol are using either sasl or sasl_tls
+  ## SASL configuration
   ##
+  sasl:
+    ## Comma separated list of allowed SASL mechanisms.
+    ## Note: ignored unless `auth.clientProtocol` or `auth.interBrokerProtocol` are using either `sasl` or `sasl_tls`
+    ##
+    mechanisms: plain,scram-sha-256,scram-sha-512
+    ## SASL mechanism for inter broker communication.
+    ##
+    interBrokerMechanism: plain
+    ## JAAS configuration for SASL authentication.
+    ##
+    jaas:
+      ## Kafka client user list
+      ##
+      ## clientUsers:
+      ##   - user1
+      ##   - user2
+      ##
+      clientUsers:
+        - user
+      ## Kafka client passwords. This is mandatory if more than one user is specified in clientUsers.
+      ##
+      ## clientPasswords:
+      ##   - password1
+      ##   - password2"
+      ##
+      clientPasswords: []
+      ## Kafka inter broker communication user
+      ##
+      interBrokerUser: admin
+      ## Kafka inter broker communication password
+      ##
+      interBrokerPassword: ""
+      ## Kafka Zookeeper user
+      ##
+      zookeeperUser: ""
+      ## Kafka Zookeeper password
+      ##
+      zookeeperPassword: ""
+      ## Name of the existing secret containing credentials for clientUsers, interBrokerUser and zookeeperUser.
+      ## Create this secret running the command below where SECRET_NAME is the name of the secret you want to create:
+      ##       kubectl create secret generic SECRET_NAME --from-literal=client-passwords=CLIENT_PASSWORD1,CLIENT_PASSWORD2 --from-literal=inter-broker-password=INTER_BROKER_PASSWORD --from-literal=zookeeper-password=ZOOKEEPER_PASSWORD
+      ##
+      existingSecret: ""
+
+  ## DEPRECATED: use `auth.sasl.mechanisms` instead.
   saslMechanisms: plain,scram-sha-256,scram-sha-512
-  ## SASL mechanism for inter broker communication
-  ##
+  ## DEPRECATED: use `auth.sasl.interBrokerMechanism` instead.
   saslInterBrokerMechanism: plain
-
-  ## Name of the existing secret containing the truststore and
-  ## one keystore per Kafka broker you have in the Kafka cluster.
-  ## MANDATORY when 'tls', 'mtls', or 'sasl_tls' authentication protocols are used.
-  ## Create this secret following the steps below:
-  ## 1) Generate your trustore and keystore files. Helpful script: https://raw.githubusercontent.com/confluentinc/confluent-platform-security-tools/master/kafka-generate-ssl.sh
-  ## 2) Rename your truststore to `kafka.truststore.jks`.
-  ## 3) Rename your keystores to `kafka-X.keystore.jks` where X is the ID of each Kafka broker.
-  ## 4) Run the command below where SECRET_NAME is the name of the secret you want to create:
-  ##       kubectl create secret generic SECRET_NAME --from-file=./kafka.truststore.jks --from-file=./kafka-0.keystore.jks --from-file=./kafka-1.keystore.jks ...
-  ## Alternatively, you can put your JKS files under the files/jks directory
-  ##
-  # jksSecret:
-
-  ## The secret key from the jksSecret containing the keystore with a SAN certificate. The SAN certificate in it should be
-  ## issued with Subject Alternative Names for all headless services. Example for 3 Broker:
-  ##  - kafka-0.kafka-headless.kafka.svc.cluster.local
-  ##  - kafka-1.kafka-headless.kafka.svc.cluster.local
-  ##  - kafka-2.kafka-headless.kafka.svc.cluster.local
-  ##
-  # jksKeystoreSAN:
-
-  ## Name of the existing secret containing your truststore if truststore not existing or different from the one in the jksSecret.
-  ##
-  # jksTruststoreSecret:
-
-  ## The secret key from the jksSecret or jksTruststoreSecret if truststore key different from the default (kafka.truststore.jks)
-  ##
-  # jksTruststore:
-
-  ## Password to access the JKS files when they are password-protected.
-  ##
-  # jksPassword:
-
-  ## The endpoint identification algorithm used by clients to validate server host name.
-  ## Disable server host name verification by setting it to an empty string
-  ## See: https://docs.confluent.io/current/kafka/authentication_ssl.html#optional-settings
-  ##
-  tlsEndpointIdentificationAlgorithm: https
-
-  ## JAAS configuration for SASL authentication
-  ## MANDATORY when method is 'sasl', or 'sasl_tls'
-  ##
+  ## DEPRECATED: use `auth.sasl.jaas` instead.
   jaas:
-    ## Kafka client user list
-    ##
-    ## clientUsers:
-    ##   - user1
-    ##   - user2
-    ##
     clientUsers:
       - user
-
-    ## Kafka client passwords. This is mandatory if more than one user is specified in clientUsers.
-    ##
-    ## clientPasswords:
-    ##   - password1
-    ##   - password2"
-    ##
     clientPasswords: []
-
-    ## Kafka inter broker communication user
-    ##
     interBrokerUser: admin
-
-    ## Kafka inter broker communication password
-    ##
     interBrokerPassword: ""
+    zookeeperUser: ""
+    zookeeperPassword: ""
+    existingSecret: ""
 
-    ## Kafka Zookeeper user
+  ## TLS configuration
+  ##
+  tls:
+    ## Format to use for TLS certificates
+    ## Supported values: 'jks' and 'pem'
     ##
-    # zookeeperUser:
+    type: jks
+    ## Name of an existing secret containing the TLS certificates
+    ##
+    ## When using 'jks' format for certificates, the secret should contain:
+    ##  - A truststore
+    ##  - One keystore per Kafka broker you have in the cluster
+    ## Create this secret following the steps below:
+    ## 1) Generate your trustore and keystore files. Helpful script: https://raw.githubusercontent.com/confluentinc/confluent-platform-security-tools/master/kafka-generate-ssl.sh
+    ## 2) Rename your truststore to `kafka.truststore.jks`.
+    ## 3) Rename your keystores to `kafka-X.keystore.jks` where X is the ID of each Kafka broker.
+    ## 4) Run the command below where SECRET_NAME is the name of the secret you want to create:
+    ##       kubectl create secret generic SECRET_NAME --from-file=./kafka.truststore.jks --from-file=./kafka-0.keystore.jks --from-file=./kafka-1.keystore.jks ...
+    ##
+    ## When using 'pem' format for certificates, the secret should contain:
+    ##  - A public CA certificate
+    ##  - One public certificate and one private key per Kafka broker you have in the cluster
+    ## Create this secret following the steps below:
+    ## 1) Create a certificate key and signing request per Kafka broker, and sign the signing request with your CA
+    ## 2) Rename your CA file to `kafka.truststore.pem`.
+    ## 3) Rename your certificates to `kafka-X.keystore.pem` where X is the ID of each Kafka broker.
+    ## 3) Rename your keys to `kafka-X.keystore.key` where X is the ID of each Kafka broker.
+    ## 5) Run the command below where SECRET_NAME is the name of the secret you want to create:
+    ##       kubectl create secret generic SECRET_NAME --from-file=./kafka.truststore.pem --from-file=./kafka-0.keystore.pem --from-file=./kafka-0.keystore.key --from-file=./kafka-1.keystore.pem --from-file=./kafka-1.keystore.key ...
+    ##
+    existingSecret: ""
+    ## Create self-signed TLS certificates. Currently only supported for 'pem' format.
+    ## Note: ignored when using 'jks' format or `auth.tls.existingSecret` is not empty
+    ##
+    autoGenerated: false
+    ## Password to access the JKS files or PEM key when they are password-protected.
+    ##
+    password: ""
+    ## Name of an existing secret containing your JKS truststore if the JKS truststore doesn't exist
+    ## or is different from the one in the `auth.tls.existingSecret`.
+    ## Note: ignored when using 'pem' format for certificates .
+    ##
+    jksTruststoreSecret: ""
+    ## The secret key from the `auth.tls.existingSecret` containing the keystore with a SAN certificate.
+    ## The SAN certificate in it should be issued with Subject Alternative Names for all headless services:
+    ##  - kafka-0.kafka-headless.kafka.svc.cluster.local
+    ##  - kafka-1.kafka-headless.kafka.svc.cluster.local
+    ##  - kafka-2.kafka-headless.kafka.svc.cluster.local
+    ## Note: ignored when using 'pem' format for certificates.
+    ##
+    jksKeystoreSAN: ""
+    ## The secret key from the `auth.tls.existingSecret` or `auth.tls.jksTruststoreSecret` containing the truststore.
+    ## Note: ignored when using 'pem' format for certificates.
+    ##
+    jksTruststore: ""
+    ## The endpoint identification algorithm used by clients to validate server host name.
+    ## Disable server host name verification by setting it to an empty string.
+    ## ref: https://docs.confluent.io/current/kafka/authentication_ssl.html#optional-settings
+    ##
+    endpointIdentificationAlgorithm: https
 
-    ## Kafka Zookeeper password
-    ##
-    # zookeeperPassword:
-
-    ## Name of the existing secret containing credentials for clientUsers, interBrokerUser and zookeeperUser.
-    ## Create this secret running the command below where SECRET_NAME is the name of the secret you want to create:
-    ##       kubectl create secret generic SECRET_NAME --from-literal=client-passwords=CLIENT_PASSWORD1,CLIENT_PASSWORD2 --from-literal=inter-broker-password=INTER_BROKER_PASSWORD --from-literal=zookeeper-password=ZOOKEEPER_PASSWORD
-    ##
-    # existingSecret:
+  ## DEPRECATED: use `auth.tls.existingSecret` instead.
+  jksSecret: ""
+  ## DEPRECATED: use `auth.tls.jksTruststoreSecret` instead.
+  jksTruststoreSecret: ""
+  ## DEPRECATED: use `auth.tls.jksKeystoreSAN` instead.
+  jksKeystoreSAN: ""
+  ## DEPRECATED: use `auth.tls.jksTruststore` instead.
+  jksTruststore: ""
+  ## DEPRECATED: use `auth.tls.password` instead.
+  jksPassword: ""
+  ## DEPRECATED: use `auth.tls.endpointIdentificationAlgorithm` instead.
+  tlsEndpointIdentificationAlgorithm: https
 
 ## The address(es) the socket server listens on.
 ## When it's set to an empty array, the listeners will be configured
@@ -598,7 +644,7 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.17.17-debian-10-r39
+      tag: 1.17.17-debian-10-r60
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -798,7 +844,7 @@ provisioning:
   image:
     registry: docker.io
     repository: bitnami/kafka
-    tag: 2.7.0-debian-10-r67
+    tag: 2.7.0-debian-10-r89
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -856,7 +902,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/kafka-exporter
-      tag: 1.2.0-debian-10-r376
+      tag: 1.2.0-debian-10-r397
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -982,7 +1028,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/jmx-exporter
-      tag: 0.15.0-debian-10-r31
+      tag: 0.15.0-debian-10-r50
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images

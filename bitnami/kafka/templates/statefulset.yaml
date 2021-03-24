@@ -4,11 +4,11 @@
 {{- $clusterDomain := .Values.clusterDomain }}
 {{- $interBrokerPort := .Values.service.internalPort }}
 {{- $clientPort := .Values.service.port }}
-{{- $interBrokerProtocol := include "kafka.listenerType" ( dict "protocol" .Values.auth.interBrokerProtocol ) -}}
-{{- $clientProtocol := include "kafka.listenerType" ( dict "protocol" .Values.auth.clientProtocol ) -}}
+{{- $interBrokerProtocol := include "kafka.listenerType" (dict "protocol" .Values.auth.interBrokerProtocol) -}}
+{{- $clientProtocol := include "kafka.listenerType" (dict "protocol" .Values.auth.clientProtocol) -}}
 {{- $loadBalancerIPListLength := len .Values.externalAccess.service.loadBalancerIPs }}
 {{- if not (and .Values.externalAccess.enabled (not .Values.externalAccess.autoDiscovery.enabled) (not (eq $replicaCount $loadBalancerIPListLength )) (eq .Values.externalAccess.service.type "LoadBalancer")) }}
-apiVersion: apps/v1
+apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
   name: {{ include "kafka.fullname" . }}
@@ -48,7 +48,10 @@ spec:
         checksum/configuration: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
         {{- end }}
         {{- if (include "kafka.createJaasSecret" .) }}
-        checksum/secret: {{ include (print $.Template.BasePath "/jaas-secret.yaml") . | sha256sum }}
+        checksum/jaas-secret: {{ include (print $.Template.BasePath "/jaas-secret.yaml") . | sha256sum }}
+        {{- end }}
+         {{- if (include "kafka.createTlsSecret" .) }}
+        checksum/tls-secret: {{ include (print $.Template.BasePath "/tls-secret.yaml") . | sha256sum }}
         {{- end }}
         {{- if .Values.externalAccess.enabled }}
         checksum/scripts: {{ include (print $.Template.BasePath "/scripts-configmap.yaml") . | sha256sum }}
@@ -176,11 +179,11 @@ spec:
               {{- else }}
               value: "INTERNAL:{{ $interBrokerProtocol }},CLIENT:{{ $clientProtocol }}"
               {{- end }}
-            {{- if or ($clientProtocol | regexFind "SASL") ($interBrokerProtocol | regexFind "SASL") .Values.auth.jaas.zookeeperUser }}
+            {{- if or ($clientProtocol | regexFind "SASL") ($interBrokerProtocol | regexFind "SASL") (coalesce .Values.auth.sasl.jaas.zookeeperUser .Values.auth.jaas.zookeeperUser) }}
             - name: KAFKA_CFG_SASL_ENABLED_MECHANISMS
-              value: {{ include "kafka.auth.saslMechanisms" ( dict "type" .Values.auth.saslMechanisms ) }}
+              value: {{ upper (coalesce .Values.auth.sasl.mechanisms .Values.auth.saslMechanisms) | quote }}
             - name: KAFKA_CFG_SASL_MECHANISM_INTER_BROKER_PROTOCOL
-              value: {{ upper .Values.auth.saslInterBrokerMechanism | quote }}
+              value: {{ upper (coalesce .Values.auth.sasl.interBrokerMechanism .Values.auth.saslInterBrokerMechanism) | quote }}
             {{- end }}
             - name: KAFKA_CFG_LISTENERS
               {{- if .Values.listeners }}
@@ -210,13 +213,13 @@ spec:
               {{- end }}
             {{- end }}
             - name: ALLOW_PLAINTEXT_LISTENER
-              value: {{ ternary "yes" "no" (or .Values.auth.enabled .Values.allowPlaintextListener) | quote }}
+              value: {{ ternary "yes" "no" .Values.allowPlaintextListener | quote }}
             {{- if or (include "kafka.client.saslAuthentication" .) (include "kafka.interBroker.saslAuthentication" .) }}
             - name: KAFKA_OPTS
               value: "-Djava.security.auth.login.config=/opt/bitnami/kafka/config/kafka_jaas.conf"
             {{- if (include "kafka.client.saslAuthentication" .) }}
             - name: KAFKA_CLIENT_USERS
-              value: {{ join "," .Values.auth.jaas.clientUsers | quote }}
+              value: {{ join "," (coalesce .Values.auth.sasl.jaas.clientUsers .Values.auth.jaas.clientUsers) | quote }}
             - name: KAFKA_CLIENT_PASSWORDS
               valueFrom:
                 secretKeyRef:
@@ -225,7 +228,7 @@ spec:
             {{- end }}
             {{- if (include "kafka.interBroker.saslAuthentication" .) }}
             - name: KAFKA_INTER_BROKER_USER
-              value: {{ .Values.auth.jaas.interBrokerUser | quote }}
+              value: {{ coalesce .Values.auth.sasl.jaas.interBrokerUser .Values.auth.jaas.interBrokerUser | quote }}
             - name: KAFKA_INTER_BROKER_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -233,11 +236,11 @@ spec:
                   key: inter-broker-password
             {{- end }}
             {{- end }}
-            {{- if .Values.auth.jaas.zookeeperUser }}
+            {{- if (coalesce .Values.auth.sasl.jaas.zookeeperUser .Values.auth.jaas.zookeeperUser) }}
             - name: KAFKA_ZOOKEEPER_PROTOCOL
               value: "SASL"
             - name: KAFKA_ZOOKEEPER_USER
-              value: {{ .Values.auth.jaas.zookeeperUser | quote }}
+              value: {{ coalesce .Values.auth.sasl.jaas.zookeeperUser .Values.auth.jaas.zookeeperUser | quote }}
             - name: KAFKA_ZOOKEEPER_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -245,14 +248,15 @@ spec:
                   key: zookeeper-password
             {{- end }}
             {{- if (include "kafka.tlsEncryption" .) }}
+            - name: KAFKA_CFG_TLS_TYPE
+              value: {{ upper .Values.auth.tls.type | quote }}
             - name: KAFKA_CFG_SSL_ENDPOINT_IDENTIFICATION_ALGORITHM
-              value: {{ .Values.auth.tlsEndpointIdentificationAlgorithm | quote }}
+              value: {{ coalesce .Values.auth.tls.endpointIdentificationAlgorithm .Values.auth.tlsEndpointIdentificationAlgorithm | quote }}
             - name: KAFKA_CFG_TLS_CLIENT_AUTH
               value: {{ ternary "required" "none" (eq .Values.auth.clientProtocol "mtls") | quote }}
-            {{- if .Values.auth.jksPassword }}
+            {{- $tlsPassword := coalesce .Values.auth.tls.password .Values.auth.jksPassword }}
             - name: KAFKA_CERTIFICATE_PASSWORD
-              value: {{ .Values.auth.jksPassword | quote }}
-            {{- end }}
+              value: {{ default "" $tlsPassword | quote }}
             {{- end }}
             {{- if .Values.metrics.jmx.enabled }}
             - name: JMX_PORT
@@ -373,7 +377,7 @@ spec:
             - name: kafka-certificates
               mountPath: /certs
               readOnly: true
-            {{- if  .Values.auth.jksTruststoreSecret }}
+            {{- if (coalesce .Values.auth.tls.jksTruststoreSecret .Values.auth.jksTruststoreSecret) }}
             - name: kafka-truststore
               mountPath: /truststore
               readOnly: true
@@ -436,12 +440,12 @@ spec:
         {{- if (include "kafka.tlsEncryption" .) }}
         - name: kafka-certificates
           secret:
-            secretName: {{ include "kafka.jksSecretName" . }}
+            secretName: {{ include "kafka.tlsSecretName" . }}
             defaultMode: 256
-        {{- if .Values.auth.jksTruststoreSecret }}
+        {{- if (coalesce .Values.auth.tls.jksTruststoreSecret .Values.auth.jksTruststoreSecret) }}
         - name: kafka-truststore
           secret:
-            secretName: {{ .Values.auth.jksTruststoreSecret }}
+            secretName: {{ coalesce .Values.auth.tls.jksTruststoreSecret .Values.auth.jksTruststoreSecret }}
             defaultMode: 256
         {{- end }}
         {{- end }}

@@ -69,7 +69,7 @@ spec:
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
           command:
             - sh
-            - c
+            - -c
             - chown -R "{{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}" "/bitnami/solr"
           {{- if .Values.volumePermissions.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.volumePermissions.containerSecurityContext "enabled" | toYaml | nindent 12 }}

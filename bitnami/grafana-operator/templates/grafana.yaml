@@ -38,6 +38,8 @@ spec:
     {{- if .Values.commonAnnotations }}
     annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 6 }}
     {{- end }}
+  serviceAccount:
+    {{- include "common.images.pullSecrets" (dict "images" (list .Values.operator.image .Values.grafana.image .Values.grafanaPluginInit.image) "global" .Values.global) | nindent 4 }}
   deployment:
     labels: {{- include "common.labels.standard" . | nindent 6 }}
       {{- if .Values.commonLabels }}

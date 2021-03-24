@@ -65,10 +65,14 @@ spec:
             - /bin/bash
             - -ec
             - |
+              [[ -f "/opt/bitnami/scripts/git/entrypoint.sh" ]] && source "/opt/bitnami/scripts/git/entrypoint.sh"
               git clone {{ .Values.appFromExternalRepo.clone.repository }} --branch {{ .Values.appFromExternalRepo.clone.revision }} /repo
           volumeMounts:
             - name: repo
               mountPath: /repo
+          {{- if .Values.appFromExternalRepo.clone.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.appFromExternalRepo.clone.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
         - name: dotnet-publish
           image: {{ include "aspnet-core.sdk.image" . }}
           imagePullPolicy: {{ .Values.appFromExternalRepo.publish.image.pullPolicy | quote }}

@@ -154,11 +154,11 @@ spec:
               value: "{{ $etcdPeerProtocol }}://0.0.0.0:{{ .Values.service.peerPort }}"
             {{- if .Values.autoCompactionMode }}
             - name: ETCD_AUTO_COMPACTION_MODE
-              value: {{ .Values.autoCompactionMode }}
+              value: {{ .Values.autoCompactionMode | quote }}
             {{- end }}
             {{- if .Values.autoCompactionRetention }}
             - name: ETCD_AUTO_COMPACTION_RETENTION
-              value: {{ .Values.autoCompactionRetention }}
+              value: {{ .Values.autoCompactionRetention | quote }}
             {{- end }}
             {{- if .Values.maxProcs }}
             - name: GOMAXPROCS
@@ -354,7 +354,7 @@ spec:
         {{- end }}
         resources:
           requests:
-            storage: {{ .Values.persistence.size | quote }}        
+            storage: {{ .Values.persistence.size | quote }}
         {{- if .Values.persistence.selector }}
         selector: {{- include "common.tplvalues.render" ( dict "value" .Values.persistence.selector "context" $) | nindent 10 }}
         {{- end }}
