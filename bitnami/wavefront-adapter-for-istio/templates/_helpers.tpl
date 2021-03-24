@@ -24,8 +24,8 @@ Return the proper Docker Image Registry Secret Names
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "wfafi.istio.apiVersion" -}}
-{{- if .Values.istioApiVersion -}}
-{{- .Values.istioApiVersion -}}
+{{- if .Values.istio.apiVersion -}}
+{{- .Values.istio.apiVersion -}}
 {{- else -}}
 {{ print "config.istio.io/v1alpha2" }}
 {{- end -}}

@@ -1,3 +1,4 @@
+{{- if .Values.istio.create }}
 apiVersion: {{ include "wfafi.istio.apiVersion" . }}
 kind: handler
 metadata:
@@ -7,7 +8,7 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
   name: {{ include "common.names.fullname" . }}-wavefront-handler
-  namespace: {{ .Values.istioNamespace }}
+  namespace: {{ .Values.istio.namespace }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -89,3 +90,4 @@ spec:
     {{- end }}
     logs:
       level: {{ .Values.adapterLogLevel }}
+{{- end }}

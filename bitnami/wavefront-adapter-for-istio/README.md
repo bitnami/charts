@@ -130,8 +130,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalProxy.host`                    | Host of a wavefront-proxy instance (required if wavefront.enabled = false)                | `nil`                                 |
 | `externalProxy.port`                    | Host of a wavefront-proxy instance (required if wavefront.enabled = false)                | `2878`                                |
 | `adapterLogLevel`                       | Adapter log level                                                                         | `info`                                |
-| `istioNamespace`                        | Namespace to deploy the Istio objects                                                     | `istio-system`                        |
-| `istioApiVersion`                       | Override Istio API version                                                                | `nil`                                 |
+| `istio.namespace`                       | Namespace to deploy the Istio objects                                                     | `istio-system`                        |
+| `istio.apiVersion`                      | Override Istio API version                                                                | `nil`                                 |
 | `metrics.flushInterval`                 | Interval to flush the metrics                                                             | `5s`                                  |
 | `metrics.source`                        | Source tag for all metrics handled by the adapter                                         | `istio`                               |
 | `metrics.prefix`                        | Prefix to prepend to all metrics handled by the adapter                                   | `istio`                               |

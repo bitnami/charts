@@ -1,3 +1,4 @@
+{{- if .Values.istio.create }}
 apiVersion: {{ include "wfafi.istio.apiVersion" . }}
 kind: attributemanifest
 metadata:
@@ -183,3 +184,4 @@ spec:
       valueType: STRING
     destination.workload.namespace:
       valueType: STRING
+{{- end }}

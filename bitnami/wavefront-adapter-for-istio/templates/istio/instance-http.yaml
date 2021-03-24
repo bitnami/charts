@@ -1,4 +1,4 @@
-{{- if .Values.metrics.http }}
+{{- if and .Values.istio.create .Values.metrics.http }}
 # requestsize instance for template metric
 apiVersion: {{ include "wfafi.istio.apiVersion" . }}
 kind: instance

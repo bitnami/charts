@@ -341,15 +341,18 @@ externalProxy:
 ##
 adapterLogLevel: info
 
-## Adapter tags parameter
-## @param istioNamespace Namespace to deploy the Istio objects
+## Istio settings
 ##
-istioNamespace: istio-system
-
-## Override Istio API version
-## @param istioApiVersion Override Istio API version
-##
-istioApiVersion:
+istio:
+  ## @param istio.create Deploy istio objects
+  ##
+  create: true
+  ## @param istio.namespace Namespace to deploy the Istio objects
+  ##
+  namespace: istio-system
+  ## @param istio.apiVersion Override Istio API version
+  ##
+  apiVersion:
 
 ## Adapter Metrics parameters
 ##

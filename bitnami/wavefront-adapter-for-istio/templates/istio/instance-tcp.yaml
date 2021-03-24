@@ -1,4 +1,4 @@
-{{- if .Values.metrics.tcp }}
+{{- if and .Values.istio.create .Values.metrics.tcp }}
 # tcpsentbytes instance for template metric
 apiVersion: {{ include "wfafi.istio.apiVersion" . }}
 kind: instance
