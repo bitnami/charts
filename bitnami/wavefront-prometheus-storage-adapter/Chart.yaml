@@ -6,7 +6,7 @@ dependencies:
   - condition: wavefront.enabled
     name: wavefront
     repository: https://charts.bitnami.com/bitnami
-    version: 1.x.x
+    version: 2.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
@@ -29,4 +29,4 @@ maintainers:
 name: wavefront-prometheus-storage-adapter
 sources:
   - https://github.com/bitnami/bitnami-docker-wavefront-prometheus-storage-adapter
-version: 0.1.0
+version: 0.2.0
