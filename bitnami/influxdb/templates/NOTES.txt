@@ -137,7 +137,7 @@ To connect to your database from outside the cluster execute the following comma
 
 {{- end }}
 
-{{- if and (eq .Values.architecture "high-availability") (not .Values.influxdb.service.sessionAffinity) (not .Values.influxdb.ingress.enabled) }}
+{{- if and (eq .Values.architecture "high-availability") (not .Values.influxdb.service.sessionAffinity) (not .Values.ingress.enabled) }}
   NOTE: When using "high-availability" it is recommended to configure 'influxdb.service.sessionAffinity' to prevent client connections from switching pods when connecting to InfluxDB.
         When using an IngressController, it is necessary to configure it with affinity/session stickiness settings.
 {{- end }}
