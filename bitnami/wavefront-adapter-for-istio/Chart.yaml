@@ -1,0 +1,33 @@
+annotations:
+  category: Infrastructure
+apiVersion: v2
+appVersion: 0.1.5
+dependencies:
+  - condition: wavefront.enabled
+    name: wavefront
+    repository: https://charts.bitnami.com/bitnami
+    version: 2.x.x
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 1.x.x
+description: Wavefront Adapter for Istio is a lightweight Istio adapter that exposes Istio metrics to Wavefront. It supports Istio v1.4+ and Kubernetes v1.15+.
+engine: gotpl
+home: https://github.com/vmware/wavefront-adapter-for-istio/
+icon: https://bitnami.com/assets/stacks/wavefront-adapter-for-istio/img/wavefront-adapter-for-istio-stack-220x234.png
+keywords:
+  - alerting
+  - adapter
+  - istio
+  - metrics
+  - monitoring
+  - observability
+  - wavefront
+maintainers:
+  - email: containers@bitnami.com
+    name: Bitnami
+name: wavefront-adapter-for-istio
+sources:
+  - https://github.com/bitnami/bitnami-docker-wavefront-adapter-for-istio
+version: 0.1.0
