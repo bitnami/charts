@@ -186,7 +186,7 @@ spec:
             {{- end }}
             {{- if .Values.core.uaaSecretName }}
             - name: auth-ca-cert
-              mountPath: /etc/core/ca/auth-ca.crt
+              mountPath: /etc/core/auth-ca/auth-ca.crt
               subPath: auth-ca.crt
             {{- end }}
             - name: psc
