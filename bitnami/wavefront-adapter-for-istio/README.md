@@ -1,4 +1,4 @@
-# wavefront-adapter-for-istio
+# Wavefront Adapter for Istio
 
 [Wavefront Adapter for Istio](https://github.com/vmware/wavefront-adapter-for-istio/) is a lightweight Istio adapter that exposes Istio metrics to Wavefront.
 
