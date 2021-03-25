@@ -323,6 +323,15 @@ influxdb:
     ##
     annotations: {}
 
+    ## Set the service SessionAffinity for session stickiness
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#proxy-mode-userspace
+    # sessionAffinity: ClientIP
+
+    ## Customize the SessionAffinity configuration. The default value for sessionAffinityConfig.clientIP.timeoutSeconds is 10800 (3 hours)
+    # sessionAffinityConfig:
+    #   clientIP:
+    #     timeoutSeconds: 300
+
 collectd:
   enabled: false
   service:
