@@ -1,5 +1,5 @@
 {{- if .Values.apiService.create -}}
-{{- if (semverCompare "<1.19-0" (include "common.capabilities.kubeVersion" .)) }}
+{{- if semverCompare "<1.19-0" (include "common.capabilities.kubeVersion" .) }}
 apiVersion: apiregistration.k8s.io/v1beta1
 {{- else }}
 apiVersion: apiregistration.k8s.io/v1
