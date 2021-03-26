@@ -187,6 +187,8 @@ The following tables lists the configurable parameters of the Airflow chart and 
 
 | Parameter                                   | Description                                                                                                                                                            | Default                                                 |
 | ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+| `worker.affinity`                           | Affinity for worker pod assignment. Supersedes the common 
+affinity configuration                                                                                       | `nil`                                                   |
 | `worker.args`                               | Override default container args (useful when using custom images)                                                                                                      | `nil`                                                   |
 | `worker.autoscaling.enabled`                | Switch to enable Horizontal Pod Autoscaler for Airflow worker component (only when executor is `CeleryExecutor`). When enable you should also set `resources.requests` | `false`                                                 |
 | `worker.autoscaling.replicas.max`           | Maximum amount of replicas                                                                                                                                             | `3`                                                     |
@@ -234,6 +236,8 @@ The following tables lists the configurable parameters of the Airflow chart and 
 | `worker.resources.requests`                 | The requested resources for the worker containers                                                                                                                      | `{}`                                                    |
 | `worker.rollingUpdatePartition`             | Partition update strategy                                                                                                                                              | `nil`                                                   |
 | `worker.sidecars`                           | List of sidecar containers to be added to the worker's pods                                                                                                            | `nil`                                                   |
+| `worker.tolerations`                        | Tolerations for worker pod assignment. Supersedes the common 
+tolerations configuration                                                                                       | `nil`                                                   |
 | `worker.updateStrategy`                     | pdate strategy for the statefulset                                                                                                                                     | `"RollingUpdate"`                                       |
 
 ### Airflow database parameters
