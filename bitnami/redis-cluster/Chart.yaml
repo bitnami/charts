@@ -1,7 +1,7 @@
 annotations:
   category: Database
 apiVersion: v2
-appVersion: 6.0.12
+appVersion: 6.2.1
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -23,4 +23,4 @@ name: redis-cluster
 sources:
   - https://github.com/bitnami/bitnami-docker-redis
   - http://redis.io/
-version: 4.4.1
+version: 5.0.0
