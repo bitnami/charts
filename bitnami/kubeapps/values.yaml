@@ -132,6 +132,9 @@ ingress:
 ##
 frontend:
   replicaCount: 2
+  ## Add additional annotations to the frontend pods
+  ##
+  podAnnotations: {}
   ## Bitnami Nginx image
   ## ref: https://hub.docker.com/r/bitnami/nginx/tags/
   ##
@@ -229,6 +232,9 @@ apprepository:
   ## Running a single controller replica to avoid sync job duplication
   ##
   replicaCount: 1
+  ## Add additional annotations to the controllers pods
+  ##
+  podAnnotations: {}
   ## Schedule for syncing apprepositories. Every ten minutes by default
   # crontab: "*/10 * * * *"
   ## Bitnami Kubeapps AppRepository Controller image
@@ -348,6 +354,9 @@ hooks:
 # Kubeops is an interface between the Kubeapps Dashboard and Helm 3/Kubernetes.
 kubeops:
   replicaCount: 2
+  ## Add additional annotations to the kubeops pods
+  ##
+  podAnnotations: {}
   image:
     registry: docker.io
     repository: bitnami/kubeapps-kubeops
@@ -391,11 +400,18 @@ kubeops:
   nodeSelector: {}
   tolerations: []
   affinity: {}
+  ## Kubeops QPS and Burst configuration (per user request)
+  ## Used when requesting namespaces
+  # QPS: 10
+  # burst: 15
 
 ## Assetsvc is used to serve assets metadata over a REST API.
 ##
 assetsvc:
   replicaCount: 2
+  ## Add additional annotations to the assetsvc pods
+  ##
+  podAnnotations: {}
   ## Bitnami Kubeapps Assetsvc image
   ## ref: https://hub.docker.com/r/bitnami/kubeapps-assetsvc/tags/
   ##
@@ -461,13 +477,16 @@ assetsvc:
 ##
 dashboard:
   replicaCount: 2
+  ## Add additional annotations to the dashboard pods
+  ##
+  podAnnotations: {}
   ## Bitnami Kubeapps Dashboard image
   ## ref: https://hub.docker.com/r/bitnami/kubeapps-dashboard/tags/
   ##
   image:
     registry: docker.io
     repository: bitnami/kubeapps-dashboard
-    tag: 2.3.0-debian-10-r0
+    tag: 2.3.0-debian-10-r6
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -581,7 +600,7 @@ rbac:
 securityContext:
   enabled: false
   runAsUser: 1001
-  # fsGroup: 1001
+  fsGroup: 1001
 
 ## Image used for the tests. The only requirement is to include curl
 ##
