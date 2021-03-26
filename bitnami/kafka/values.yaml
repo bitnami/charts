@@ -506,6 +506,10 @@ nodeSelector: {}
 ##
 tolerations: []
 
+## Seconds the pod needs to gracefully terminate
+#terminationGracePeriodSeconds: 30
+##
+
 ## Kafka pods' Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ##
