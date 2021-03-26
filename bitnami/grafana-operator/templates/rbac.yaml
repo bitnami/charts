@@ -140,6 +140,7 @@ rules:
     resources:
       - grafanadashboards
       - grafanadashboards/status
+      - configmaps
     verbs: ['get', 'list', 'update', 'watch']
   - apiGroups:
       - ""
