@@ -401,6 +401,8 @@ Then, specify the `load_definitions` property as an `extraConfiguration` pointin
 If needed, you can use `extraSecrets` to let the chart create the secret for you. This way, you don't need to manually create it before deploying a release. These secrets can also be templated to use supplied chart values. For example:
 
 ```yaml
+auth:
+  password: CHANGEME
 extraSecrets:
   load-definition:
     load_definition.json: |

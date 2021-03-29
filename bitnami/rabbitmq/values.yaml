@@ -198,10 +198,12 @@ extraContainerPorts: []
 ## To add more configuration, use `extraConfiguration` of `advancedConfiguration` instead
 ##
 configuration: |-
+  {{- if not .Values.loadDefinition.enabled -}}
   ## Username and password
   ##
   default_user = {{ .Values.auth.username }}
   default_pass = CHANGEME
+  {{- end }}
   ## Clustering
   ##
   cluster_formation.peer_discovery_backend  = rabbit_peer_discovery_k8s
