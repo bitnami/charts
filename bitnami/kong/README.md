@@ -310,21 +310,20 @@ The Bitnami Kong chart allows setting two database backends: PostgreSQL or Cassa
     --set cassandra.external.user=_USER_OF_YOUR_CASSANDRA_INSTALLATION_ \
     --set cassandra.external.password=_PASSWORD_OF_YOUR_CASSANDRA_INSTALLATION_
 ```
+
 ### DB-less
 
-#### TL; DR
-1. Set `Value.database` with any value other than "postgresql" or "cassandra". For example `Value.database: "off"`
-2. Set
-```
-Value.kong.extraEnvVars:
+Kong 1.1 added the capability to run Kong without a database, using only in-memory storage for entities: we call this DB-less mode. When running Kong DB-less, the configuration of entities is done in a second configuration file, in YAML or JSON, using declarative configuration (ref. [Link](https://docs.konghq.com/gateway-oss/1.1.x/db-less-and-declarative-config/)).
+As is said in step 4 of [kong official docker installation](https://docs.konghq.com/install/docker#db-less-mode), just add the env variable "KONG_DATABASE=off".
+
+#### How to enable it
+
+1. Set `database` value with any value other than "postgresql" or "cassandra". For example `database: "off"`
+2. Use `kong.extraEnvVars` value to set the `KONG_DATABASE` environment variable:
+```yaml
+kong.extraEnvVars:
 - name: KONG_DATABASE
   value: "off"
-```
-
-#### Short Story
-Kong 1.1 added the capability to run Kong without a database, using only in-memory storage for entities: we call this DB-less mode. When running Kong DB-less, the configuration of entities is done in a second configuration file, in YAML or JSON, using declarative configuration (ref. [Link](https://docs.konghq.com/gateway-oss/1.1.x/db-less-and-declarative-config/)).
-As is said in the step 4 of [kong official docker installation](https://docs.konghq.com/install/docker#db-less-mode),
-just add the env variable "KONG_DATABASE=off".
 
 ### Sidecars and Init Containers
 
