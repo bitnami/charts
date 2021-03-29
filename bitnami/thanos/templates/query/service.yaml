@@ -14,6 +14,9 @@ spec:
   {{- if and $query.service.clusterIP (eq $query.service.type "ClusterIP") }}
   clusterIP: {{ $query.service.clusterIP }}
   {{- end }}
+  {{- if ne $query.service.type "ClusterIP" }}
+  externalTrafficPolicy: {{ $query.service.externalTrafficPolicy }}
+  {{- end }}
   {{- if and $query.service.loadBalancerIP (eq $query.service.type "LoadBalancer") }}
   loadBalancerIP: {{ $query.service.loadBalancerIP }}
   {{- end }}

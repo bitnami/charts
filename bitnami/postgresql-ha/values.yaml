@@ -238,6 +238,10 @@ postgresql:
   ##
   customReadinessProbe: {}
 
+  ## Custom Startup probe
+  ##
+  customStartupProbe: {}
+
   ## Container command (using container default if not set)
   ##
   command:
@@ -296,7 +300,7 @@ postgresql:
     #   cpu: 250m
     #   memory: 256Mi
 
-  ## PostgreSQL container's liveness and readiness probes
+  ## PostgreSQL container's liveness, readiness, and startup probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
   livenessProbe:
@@ -313,6 +317,13 @@ postgresql:
     timeoutSeconds: 5
     successThreshold: 1
     failureThreshold: 6
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 10
 
   ## Pod disruption budget configuration
   ##
@@ -338,6 +349,14 @@ postgresql:
 
   ## Mount PostgreSQL secret as a file instead of passing environment variable
   # usePasswordFile: false
+
+  ## Store Repmgr username and password into a passfile with format "*:*:*:username:password" and use it to configure Repmgr instead of using password (Requires Postgresql 10+, otherwise ignored)
+  # ref: https://repmgr.org/docs/current/configuration-password-management.html
+  #      https://www.postgresql.org/docs/current/libpq-pgpass.html
+  # repmgrUsePassfile: false
+
+  ## Store Repmgr in a custom path
+  # repmgrPassfilePath:
 
   ## Upgrade repmgr extension in the database
   ##
@@ -564,6 +583,10 @@ pgpool:
   ##
   customReadinessProbe: {}
 
+  ## Custom Startup probe
+  ##
+  customStartupProbe: {}
+
   ## Container command (using container default if not set)
   ##
   command:
@@ -700,7 +723,7 @@ pgpool:
     #   cpu: 250m
     #   memory: 256Mi
 
-  ## Pgpool container's liveness and readiness probes
+  ## Pgpool container's liveness, readiness, and startup probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
   livenessProbe:
@@ -717,6 +740,13 @@ pgpool:
     timeoutSeconds: 5
     successThreshold: 1
     failureThreshold: 5
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 10
 
   ## Pod disruption budget configuration
   ##
@@ -936,7 +966,7 @@ metrics:
     #   cpu: 250m
     #   memory: 256Mi
 
-  ## Prometheus exporter container's liveness and readiness probes
+  ## Prometheus exporter container's liveness, readiness, and startup probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
   livenessProbe:
@@ -953,6 +983,13 @@ metrics:
     timeoutSeconds: 5
     successThreshold: 1
     failureThreshold: 6
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 10
 
   ## Annotations for Prometheus exporter
   ##

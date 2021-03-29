@@ -135,6 +135,7 @@ The following tables lists the configurable parameters of the ASP.NET Core chart
 | `appFromExternalRepo.clone.image.pullSecrets`     | Specify docker-registry secret names as an array                               | `[]` (does not add image pull secrets to deployed pods)            |
 | `appFromExternalRepo.clone.repository`            | GIT Repository to clone                                                        | `https://github.com/dotnet/AspNetCore.Docs.git`                    |
 | `appFromExternalRepo.clone.revision`              | GIT revision to checkout                                                       | `main`                                                             |
+| `appFromExternalRepo.clone.extraVolumeMounts`     | Add extra volume mounts for the GIT container                                  | `[]`                                                               |
 | `appFromExternalRepo.publish.image.registry`      | .NET SDK image registry                                                        | `docker.io`                                                        |
 | `appFromExternalRepo.publish.image.repository`    | .NET SDK Image name                                                            | `bitnami/git`                                                      |
 | `appFromExternalRepo.publish.image.tag`           | .NET SDK Image tag                                                             | `{TAG_NAME}`                                                       |

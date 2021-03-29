@@ -2,7 +2,8 @@ apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ template "kubeapps.kubeops.fullname" . }}
-  labels:{{ include "kubeapps.extraAppLabels" . | nindent 4 }}
+  labels:
+    {{- include "kubeapps.extraAppLabels" . | nindent 4 }}
     app: {{ template "kubeapps.kubeops.fullname" . }}
 spec:
   replicas: {{ .Values.kubeops.replicaCount }}
@@ -12,6 +13,10 @@ spec:
       release: {{ .Release.Name }}
   template:
     metadata:
+      {{- with .Values.kubeops.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       labels:
         app: {{ template "kubeapps.kubeops.fullname" . }}
         app.kubernetes.io/name: {{ template "common.names.name" . }}
@@ -51,6 +56,12 @@ spec:
             {{- end }}
             {{- if .Values.pinnipedProxy.enabled }}
             - --pinniped-proxy-url=http://kubeapps-internal-pinniped-proxy.{{ .Release.Namespace }}:{{ .Values.pinnipedProxy.service.port }}
+            {{- end }}
+            {{- if .Values.kubeops.burst }}
+            - --burst={{ .Values.kubeops.burst }}
+            {{- end }}
+            {{- if .Values.kubeops.QPS }}
+            - --qps={{ .Values.kubeops.QPS }}
             {{- end }}
           {{- if .Values.clusters }}
           volumeMounts:

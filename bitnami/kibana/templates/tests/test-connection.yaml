@@ -1,15 +1,17 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: "{{ include "common.names.fullname" . }}-test-connection"
+  name: {{ printf "%s-test-connection" (include "common.names.fullname" .) }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app: test-connection
   annotations:
     "helm.sh/hook": test-success
 spec:
   containers:
-    - name: wget
-      image: bitnami/minideb
-      command: ['wget']
-      args: ['{{ include "common.names.fullname" . }}:{{ .Values.service.port }}']
+    - name: test-connection
+      image: bitnami/bitnami-shell
+      command:
+        - curl
+      args:
+        - {{ include "common.names.fullname" . }}:{{ .Values.service.port }}
   restartPolicy: Never

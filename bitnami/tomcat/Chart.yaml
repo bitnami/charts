@@ -26,4 +26,4 @@ name: tomcat
 sources:
   - https://github.com/bitnami/bitnami-docker-tomcat
   - http://tomcat.apache.org
-version: 8.2.5
+version: 8.3.0

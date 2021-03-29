@@ -742,3 +742,14 @@ Return the ExternalDNS service account name
     {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Return the ExternalDNS namespace to be used
+*/}}
+{{- define "external-dns.namespace" -}}
+{{- if and .Values.rbac.create (not .Values.rbac.clusterRole) -}}
+    {{ default .Release.Namespace .Values.namespace }}
+{{- else -}}
+    {{ .Values.namespace }}
+{{- end -}}
+{{- end -}}

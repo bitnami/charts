@@ -58,7 +58,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "airflow.postgresql.secretName" . }}
-                  key: postgresql-password
+                  key: {{ include "airflow.database.existingsecret.key" . }}
             - name: AIRFLOW_PROMETHEUS_DATABASE_NAME
               value: {{ include "airflow.database.name" . }}
           ports:

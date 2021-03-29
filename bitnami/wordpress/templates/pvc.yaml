@@ -12,7 +12,13 @@ metadata:
   {{- end }}
 spec:
   accessModes:
+  {{- if not (empty .Values.persistence.accessModes) }}
+  {{- range .Values.persistence.accessModes }}
+    - {{ . | quote }}
+  {{- end }}
+  {{- else }}
     - {{ .Values.persistence.accessMode | quote }}
+  {{- end }}
   resources:
     requests:
       storage: {{ .Values.persistence.size | quote }}

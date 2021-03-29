@@ -157,6 +157,7 @@ spec:
               cd /certs/
               shopt -s extglob
               rm -rf !(mongodb-ca-cert|mongodb.pem|CAs|openssl.cnf)
+              chmod 0600 mongodb-ca-cert mongodb.pem
               EOF
         {{- end }}
         {{- if and .Values.externalAccess.enabled .Values.externalAccess.autoDiscovery.enabled (eq .Values.externalAccess.service.type "LoadBalancer") }}
@@ -257,6 +258,8 @@ spec:
               value: {{ .Values.systemLogVerbosity | quote }}
             - name: MONGODB_DISABLE_SYSTEM_LOG
               value: {{ ternary "yes" "no" .Values.disableSystemLog | quote }}
+            - name: MONGODB_DISABLE_JAVASCRIPT
+              value: {{ ternary "yes" "no" .Values.disableJavascript | quote }}
             - name: MONGODB_ENABLE_IPV6
               value: {{ ternary "yes" "no" .Values.enableIPv6 | quote }}
             - name: MONGODB_ENABLE_DIRECTORY_PER_DB
@@ -449,10 +452,10 @@ spec:
             items:
             - key: mongodb-ca-cert
               path: mongodb-ca-cert
-              mode: 511
+              mode: 0600
             - key: mongodb-ca-key
               path: mongodb-ca-key
-              mode: 511
+              mode: 0600
         {{- end }}
   {{- if not .Values.persistence.enabled }}
         - name: datadir

@@ -96,7 +96,7 @@ cloneStaticSiteFromGit:
   image:
     registry: docker.io
     repository: bitnami/git
-    tag: 2.30.1-debian-10-r27
+    tag: 2.31.0-debian-10-r2
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -125,6 +125,14 @@ cloneStaticSiteFromGit:
   ##     value: BAR
   ##
   extraEnvVars: []
+  ## Add extra volume mounts for the GIT containers
+  ## Useful to mount keys to connect through ssh. (normally used with extraVolumes)
+  ## E.g:
+  ## extraVolumeMounts:
+  ##   - name: ssh-dir
+  ##     mountPath: /root/.ssh/
+  ##
+  extraVolumeMounts: []
 
 ## Custom server block to be added to NGINX configuration
 ## PHP-FPM example server block:

@@ -26,7 +26,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/minio
-  tag: 2021.3.4-debian-10-r9
+  tag: 2021.3.26-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -50,7 +50,7 @@ image:
 clientImage:
   registry: docker.io
   repository: bitnami/minio-client
-  tag: 2021.3.10-debian-10-r1
+  tag: 2021.3.23-debian-10-r3
 
 ## String to partially override common.names.fullname template (will maintain the release name)
 ##
@@ -136,6 +136,9 @@ tls:
   ## Name of an existing secret holding the certificate information
   ##
   secretName: ""
+  ## The mounted path where the secret will be located
+  ##  Custom mount path where the certificates will be located, if empty will default to /certs
+  mountPath: ""
 
 ## An array to add extra env vars
 ## e.g:
@@ -607,6 +610,9 @@ metrics:
     ## Specify the namespace in which the serviceMonitor resource will be created
     ##
     # namespace: ""
+    ## HTTP path to scrape for metrics
+    ##
+    path: /minio/v2/metrics/cluster
     ## Specify the interval at which metrics should be scraped
     ##
     interval: 30s
@@ -651,6 +657,8 @@ gateway:
     ## Ignored unless type=azure
     ##
     azure:
+      accessKey: ""
+      secretKey: ""
       storageAccountName: ""
       storageAccountKey: ""
     ## Authentication configuration for GCS

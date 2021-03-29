@@ -1,8 +1,8 @@
-# MinIO&reg; Helm Chart packaged by Bitnami
+# Bitnami Object Storage Helm Chart based on MinIO&reg;
 
 [MinIO&reg;](https://min.io) is an object storage server, compatible with Amazon S3 cloud storage service, mainly used for storing unstructured data (such as photos, videos, log files, etc.)
 
-Disclaimer: All software products, projects and company names are trademarks&trade; or registered&reg; trademarks of their respective holders, and use of them does not imply any affiliation or endorsement. This software is licensed to you subject to one or more open source licenses and VMware provides the software on an AS-IS basis.
+Disclaimer: All software products, projects and company names are trademark&trade; or registered&reg; trademarks of their respective holders, and use of them does not imply any affiliation or endorsement. This software is licensed to you subject to one or more open source licenses and VMware provides the software on an AS-IS basis. MinIO&reg; is a registered trademark of the MinIO, Inc in the US and other countries. Bitnami is not affiliated, associated, authorized, endorsed by, or in any way officially connected with MinIO Inc.
 
 ## TL;DR
 
@@ -95,6 +95,7 @@ The following table lists the configurable parameters of the MinIO&reg; chart an
 | `forceNewKeys`                    | Force admin credentials (access and secret key) to be reconfigured every time they change in the secrets | `false`                                                 |
 | `tls.enabled`                     | Enable tls in front of the container                                                                     | `true`                                                  |
 | `tls.secretName`                  | The name of the secret containing the certificates and key.                                              | `nil`                                                   |
+| `tls.mountPath`                   | The mount path where the secret will be located.                                                         | `nil`                                                   |
 | `defaultBuckets`                  | Comma, semi-colon or space separated list of buckets to create (only in standalone mode)                 | `nil`                                                   |
 | `disableWebUI`                    | Disable MinIO&reg; Web UI                                                                                | `false`                                                 |
 | `command`                         | Default container command (useful when using custom images)                                              | `{}`                                                    |
@@ -220,6 +221,7 @@ The following table lists the configurable parameters of the MinIO&reg; chart an
 |-------------------------------------------|-------------------------------------------------------------------------------------|--------------------------------------------------------------|
 | `metrics.prometheusAuthType`              | Authentication mode for Prometheus (`jwt` or `public`)                              | `public`                                                     |
 | `metrics.serviceMonitor.enabled`          | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator        | `false`                                                      |
+| `metrics.serviceMonitor.path`             | HTTP path to scrape for metrics                                                     | `/minio/v2/metrics/cluster`                                  |
 | `metrics.serviceMonitor.namespace`        | Namespace which Prometheus is running in                                            | `nil`                                                        |
 | `metrics.serviceMonitor.interval`         | Interval at which metrics should be scraped                                         | `30s`                                                        |
 | `metrics.serviceMonitor.scrapeTimeout`    | Specify the timeout after which the scrape is ended                                 | `nil`                                                        |
@@ -235,14 +237,16 @@ The following table lists the configurable parameters of the MinIO&reg; chart an
 | `gateway.enabled`                         | Use MinIO&reg; as Gateway for other storage systems                                 | `false`                                                      |
 | `gateway.type`                            | Gateway type. Supported types are: `azure`, `gcs`, `nas`, `s3`                      | `s3`                                                         |
 | `gateway.replicaCount`                    | Number of MinIO&reg; Gateway replicas                                               | `4`                                                          |
+| `gateway.auth.azure.accessKey`            | Access Key to access MinIO using Azure Gateway                                      | _random 10 character alphanumeric string_                    |
+| `gateway.auth.azure.secretKey`            | Secret Key to access MinIO using Azure Gateway                                      | _random 40 character alphanumeric string_                    |
 | `gateway.auth.azure.storageAccountName`   | Azure Storage Account Name to use to access Azure Blob Storage                      | `nil`                                                        |
 | `gateway.auth.azure.storageAccountKey`    | Azure Storage Account Key to use to access Azure Blob Storage                       | `nil`                                                        |
-| `gateway.auth.gcs.accessKey`              | Access Key to access MinIO using GCS Gateway                                        | `nil`                                                        |
-| `gateway.auth.gcs.secretKey`              | Secret Key to access MinIO using GCS Gateway                                        | `nil`                                                        |
+| `gateway.auth.gcs.accessKey`              | Access Key to access MinIO using GCS Gateway                                        | _random 10 character alphanumeric string_                    |
+| `gateway.auth.gcs.secretKey`              | Secret Key to access MinIO using GCS Gateway                                        | _random 40 character alphanumeric string_                    |
 | `gateway.auth.gcs.keyJSON`                | Service Account key to access GCS                                                   | `nil`                                                        |
 | `gateway.auth.gcs.projectID`              | GCP Project ID to use                                                               | `nil`                                                        |
-| `gateway.auth.nas.accessKey`              | Access Key to access MinIO using NAS Gateway                                        | `nil`                                                        |
-| `gateway.auth.nas.secretKey`              | Secret Key to access MinIO using NAS Gateway                                        | `nil`                                                        |
+| `gateway.auth.nas.accessKey`              | Access Key to access MinIO using NAS Gateway                                        | _random 10 character alphanumeric string_                    |
+| `gateway.auth.nas.secretKey`              | Secret Key to access MinIO using NAS Gateway                                        | _random 40 character alphanumeric string_                    |
 | `gateway.auth.s3.serviceEndpoint`         | AWS S3 endpoint                                                                     | `https://s3.amazonaws.com`                                   |
 | `gateway.auth.s3.accessKey`               | Access Key to use to access AWS S3                                                  | `nil`                                                        |
 | `gateway.auth.s3.secretKey`               | Secret Key to use to access AWS S3                                                  | `nil`                                                        |
@@ -300,13 +304,13 @@ statefulset.drivesPerNode=2
 
 ### Prometheus exporter
 
-MinIO&reg; exports Prometheus metrics at `/minio/prometheus/metrics`. To allow Prometheus collecting your MinIO&reg; metrics, modify the `values.yaml` adding the corresponding annotations:
+MinIO&reg; exports Prometheus metrics at `/minio/v2/metrics/cluster`. To allow Prometheus collecting your MinIO&reg; metrics, modify the `values.yaml` adding the corresponding annotations:
 
 ```diff
 - podAnnotations: {}
 + podAnnotations:
 +   prometheus.io/scrape: "true"
-+   prometheus.io/path: "/minio/prometheus/metrics"
++   prometheus.io/path: "/minio/v2/metrics/cluster"
 +   prometheus.io/port: "9000"
 ```
 
@@ -314,7 +318,7 @@ MinIO&reg; exports Prometheus metrics at `/minio/prometheus/metrics`. To allow P
 
 ## Persistence
 
-The [Bitnami MinIO&reg;](https://github.com/bitnami/bitnami-docker-minio) image stores data at the `/data` path of the container.
+The [Bitnami Object Storage based on MinIO&reg;](https://github.com/bitnami/bitnami-docker-minio) image stores data at the `/data` path of the container.
 
 The chart mounts a [Persistent Volume](http://kubernetes.io/docs/user-guide/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning.
 

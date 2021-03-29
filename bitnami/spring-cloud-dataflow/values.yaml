@@ -838,6 +838,71 @@ metrics:
     # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
     limits: {}
     requests: {}
+
+  ## Number of Prometheus Rsocket Proxy replicas to deploy.
+  ##
+  replicaCount: 1
+
+  ## Prometheus Rsocket Proxy pod affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAffinityPreset: ""
+
+  ## Prometheus Rsocket Proxy pod anti-affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAntiAffinityPreset: soft
+
+  ## Prometheus Rsocket Proxy node affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ## Allowed values: soft, hard
+  ##
+  nodeAffinityPreset:
+    ## Node affinity type
+    ## Allowed values: soft, hard
+    ##
+    type: ""
+    ## Node label key to match
+    ## E.g.
+    ## key: "kubernetes.io/e2e-az-name"
+    ##
+    key: ""
+    ## Node label values to match
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+
+  ## Affinity for Prometheus Rsocket Proxy pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Note: metrics.podAffinityPreset, metrics.podAntiAffinityPreset, and metrics.nodeAffinityPreset will be ignored when it's set
+  ##
+  affinity: {}
+
+  ## Node labels for Prometheus Rsocket Proxy pods assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+
+  ## Tolerations for Prometheus Rsocket Proxy pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+
+  ## Annotations for Prometheus Rsocket Proxy pods.
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+
+  ## Prometheus Rsocket Proxy pods' priority.
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+  ##
+  # priorityClassName: ""
+
   service:
     ## Prometheus Rsocket Proxy HTTP port
     ##
@@ -855,7 +920,11 @@ metrics:
   ##
   serviceMonitor:
     enabled: false
-    ## Namespace in which Prometheus is running
+    ## Labels to add to ServiceMonitor, in case prometheus operator is configured with serviceMonitorSelector
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
+    ##
+    extraLabels: {}
+    ## Namespace in which ServiceMonitor is created if different from release
     ##
     # namespace: monitoring
     ## Interval at which metrics should be scraped.
@@ -866,6 +935,27 @@ metrics:
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
     # scrapeTimeout: 10s
+
+  ## Prometheus Rsocket Proxy Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+  ##
+  pdb:
+    create: false
+    ## Min number of pods that must still be available after the eviction
+    ##
+    minAvailable: 1
+    ## Max number of pods that can be unavailable after the eviction
+    ##
+    # maxUnavailable: 1
+
+  ## Prometheus Rsocket Proxy Autoscaling parameters.
+  ##
+  autoscaling:
+    enabled: false
+    # minReplicas: 1
+    # maxReplicas: 11
+    # targetCPU: 50
+    # targetMemory: 50
 
 ##
 ## MariaDB chart configuration

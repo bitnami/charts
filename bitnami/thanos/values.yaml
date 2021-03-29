@@ -18,7 +18,7 @@ kubeVersion:
 image:
   registry: docker.io
   repository: bitnami/thanos
-  tag: 0.18.0-scratch-r3
+  tag: 0.18.0-scratch-r5
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -331,6 +331,9 @@ query:
     ##
     # loadBalancerSourceRanges:
     # - 10.10.10.0/24
+    ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints
+    ##
+    externalTrafficPolicy: Cluster
     ## Provide any additional annotations which may be required
     ##
     annotations: {}
@@ -677,6 +680,9 @@ queryFrontend:
     ##
     # loadBalancerSourceRanges:
     # - 10.10.10.0/24
+    ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints
+    ##
+    externalTrafficPolicy: Cluster
     ## Provide any additional annotations which may be required
     ##
     annotations: {}
@@ -954,6 +960,9 @@ bucketweb:
     ##
     # loadBalancerSourceRanges:
     # - 10.10.10.0/24
+    ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints
+    ##
+    externalTrafficPolicy: Cluster
     ## Provide any additional annotations which may be required
     ##
     annotations: {}
@@ -1226,6 +1235,9 @@ compactor:
     ##
     # loadBalancerSourceRanges:
     # - 10.10.10.0/24
+    ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints
+    ##
+    externalTrafficPolicy: Cluster
     ## Provide any additional annotations which may be required
     ##
     annotations: {}
@@ -1485,6 +1497,9 @@ storegateway:
     ##
     # loadBalancerSourceRanges:
     # - 10.10.10.0/24
+    ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints
+    ##
+    externalTrafficPolicy: Cluster
     ## Provide any additional annotations which may be required
     ##
     annotations: {}
@@ -1761,6 +1776,9 @@ ruler:
     ##
     # loadBalancerSourceRanges:
     # - 10.10.10.0/24
+    ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints
+    ##
+    externalTrafficPolicy: Cluster
     ## Provide any additional annotations which may be required
     ##
     annotations: {}
@@ -1887,6 +1905,10 @@ receive:
   ## Log format
   ##
   logFormat: logfmt
+
+  ## TSDB retention period
+  ##
+  tsdbRetention: 15d
 
   ## Replication Factor
   ##
@@ -2106,6 +2128,9 @@ receive:
     ##
     # loadBalancerSourceRanges:
     # - 10.10.10.0/24
+    ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints
+    ##
+    externalTrafficPolicy: Cluster
     ## Provide any additional annotations which may be required
     ##
     annotations: {}

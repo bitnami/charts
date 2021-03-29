@@ -2,7 +2,8 @@ apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ template "kubeapps.apprepository.fullname" . }}
-  labels:{{ include "kubeapps.extraAppLabels" . | nindent 4 }}
+  labels:
+    {{- include "kubeapps.extraAppLabels" . | nindent 4 }}
     app: {{ template "kubeapps.apprepository.fullname" . }}
 spec:
   replicas: {{ .Values.apprepository.replicaCount }}
@@ -12,6 +13,10 @@ spec:
       release: {{ .Release.Name }}
   template:
     metadata:
+      {{- with .Values.apprepository.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       labels:
         app: {{ template "kubeapps.apprepository.fullname" . }}
         release: {{ .Release.Name }}

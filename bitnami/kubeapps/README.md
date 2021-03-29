@@ -194,8 +194,10 @@ kubectl delete namespace kubeapps
 - [Can Kubeapps install apps into more than one cluster?](#can-kubeapps-install-apps-into-more-than-one-cluster)
 - [Can Kubeapps be installed without Internet connection?](#can-kubeapps-be-installed-without-internet-connection)
 - [Does Kubeapps support private repositories?](#does-kubeapps-support-private-repositories)
+- [Is there any API documentation?](#is-there-any-api-documentation)
 - [Why can't I configure global private repositories?](#why-cant-i-configure-global-private-repositories)
 - [Does Kubeapps support Operators?](#does-kubeapps-support-operators)
+- [Slow response when listing namespaces?](#slow-response-when-listing-namespaces)
 - [More questions?](#more-questions)
 
 ### How to install Kubeapps for demo purposes?
@@ -256,6 +258,10 @@ Yes! Follow the [offline installation documentation](https://github.com/kubeapps
 
 Of course! Have a look at the [private app repositories documentation](https://github.com/kubeapps/kubeapps/blob/master/docs/user/private-app-repository.md) to learn how to configure a private repository in Kubeapps.
 
+### Is there any API documentation?
+
+Yes! But it is not definitive and is still subject to change. Check out the [latest API online documentation](https://app.swaggerhub.com/apis/kubeapps/Kubeapps) or download the Kubeapps [OpenAPI Specification yaml file](./dashboard/public/openapi.yaml) from the repository.
+
 ### Why can't I configure global private repositories?
 
 You can, but you will need to configure the `imagePullSecrets` manually.
@@ -269,6 +275,12 @@ You could alternatively ensure that the `imagePullSecret` is available in all na
 ### Does Kubeapps support Operators?
 
 Yes! You can get started by following the [operators documentation](https://github.com/kubeapps/kubeapps/blob/master/docs/user/operators.md).
+
+### Slow response when listing namespaces
+
+Kubeapps uses the currently logged-in user credential to retrieve the list of all namespaces. If the user doesn't have permission to list namespaces, the backend will try again with its own service account to list all namespaces and then iterate through each namespace to check if the user has permissions to get secrets for each namespace (to verify if they should be allowed to use that namespace or not and hence whether it is included in the selector). This can lead to a slow response if the number of namespaces on the cluster is large.
+
+To reduce this time, you can increase the number of checks that Kubeapps will perform in parallel (per connection) setting the value: `kubeops.burst=<desired_number>` and `kubeops.QPS=<desired_number>`. The default value, if not set, is 15 burst requests and 10 QPS afterwards.
 
 ### More questions? 
 

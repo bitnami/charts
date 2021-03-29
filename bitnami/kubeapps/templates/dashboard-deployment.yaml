@@ -2,7 +2,8 @@ apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ template "kubeapps.dashboard.fullname" . }}
-  labels:{{ include "kubeapps.extraAppLabels" . | nindent 4 }}
+  labels:
+    {{- include "kubeapps.extraAppLabels" . | nindent 4 }}
     app: {{ template "kubeapps.dashboard.fullname" . }}
 spec:
   replicas: {{ .Values.dashboard.replicaCount }}
@@ -14,6 +15,9 @@ spec:
     metadata:
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/dashboard-config.yaml") . | sha256sum }}
+        {{- with .Values.dashboard.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
       labels:
         app: {{ template "kubeapps.dashboard.fullname" . }}
         app.kubernetes.io/name: {{ template "common.names.name" . }}
@@ -57,6 +61,8 @@ spec:
               name: custom-css
             - mountPath: /app/custom-locale
               name: custom-locale
+            - mountPath: /app/custom-components
+              name: custom-components
           ports:
             - name: http
               containerPort: {{ .Values.dashboard.service.port }}
@@ -88,3 +94,9 @@ spec:
             items:
               - key: custom_locale.json
                 path: custom_locale.json
+        - name: custom-components
+          configMap:
+            name: {{ template "kubeapps.dashboard-config.fullname" . }}
+            items:
+              - key: custom_components.js
+                path: custom_components.js

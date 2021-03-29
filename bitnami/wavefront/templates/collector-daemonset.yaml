@@ -81,7 +81,7 @@ spec:
           {{- if .Values.collector.command }}
           {{- include "common.tplvalues.render" (dict "value" .Values.collector.command "context" $) | nindent 12 }}
           {{- else }}
-            - wavefront-collector
+            - /wavefront-collector
             - --daemon=true
             - --config-file=/etc/collector/config.yaml
             {{- if .Values.collector.maxProcs }}
