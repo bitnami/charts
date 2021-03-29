@@ -324,6 +324,7 @@ As is said in step 4 of [kong official docker installation](https://docs.konghq.
 kong.extraEnvVars:
 - name: KONG_DATABASE
   value: "off"
+```
 
 ### Sidecars and Init Containers
 
