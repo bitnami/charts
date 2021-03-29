@@ -13,6 +13,7 @@ metadata:
 spec:
   serviceName: {{ template "common.names.fullname" . }}-headless
   replicas: {{ .Values.worker.replicaCount }}
+  podManagementPolicy: {{ .Values.worker.podManagementPolicy }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: worker

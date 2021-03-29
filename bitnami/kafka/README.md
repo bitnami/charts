@@ -169,6 +169,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `command`                   | Override kafka container command                                                          | `['/scripts/setup.sh']`  (evaluated as a template) |
 | `args`                      | Override kafka container arguments                                                        | `[]` (evaluated as a template)                     |
 | `sidecars`                  | Attach additional sidecar containers to the Kafka pod                                     | `{}`                                               |
+| `terminationGracePeriodSeconds`                  | Seconds the pod needs to gracefully terminate                                      | `nil`                                               |
 
 ### Exposure parameters
 

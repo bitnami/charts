@@ -241,6 +241,11 @@ worker:
   ##
   replicaCount: 2
 
+  ## Pod management policy
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  ##
+  podManagementPolicy: OrderedReady
+
   ## Kubernetes Security Context
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##

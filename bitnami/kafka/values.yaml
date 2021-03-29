@@ -506,6 +506,11 @@ nodeSelector: {}
 ##
 tolerations: []
 
+## Configure the grace time period for sig term
+## ref: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#hook-handler-execution
+##
+# terminationGracePeriodSeconds: 30
+
 ## Kafka pods' Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ##
