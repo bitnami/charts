@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/rabbitmq
-  tag: 3.8.14-debian-10-r0
+  tag: 3.8.14-debian-10-r24
 
   ## set to true if you would like to see extra information on logs
   ## It turns BASH and/or NAMI debugging in the image
@@ -198,10 +198,12 @@ extraContainerPorts: []
 ## To add more configuration, use `extraConfiguration` of `advancedConfiguration` instead
 ##
 configuration: |-
+  {{- if not .Values.loadDefinition.enabled -}}
   ## Username and password
   ##
   default_user = {{ .Values.auth.username }}
   default_pass = CHANGEME
+  {{- end }}
   ## Clustering
   ##
   cluster_formation.peer_discovery_backend  = rabbit_peer_discovery_k8s
