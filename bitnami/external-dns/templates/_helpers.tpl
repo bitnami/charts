@@ -190,7 +190,10 @@ Return the name of the Secret used to store the passwords
   "accessKeyId": "{{ .Values.alibabacloud.accessKeyId }}",
   {{- end}}
   {{- if .Values.alibabacloud.accessKeySecret }}
-  "accessKeySecret": "{{ .Values.alibabacloud.accessKeySecret }}"
+  "accessKeySecret": "{{ .Values.alibabacloud.accessKeySecret }}",
+  {{- end}}
+  {{- if .Values.alibabacloud.vpcId }}
+  "vpcId": "{{ .Values.alibabacloud.vpcId }}"
   {{- end}}
 }
 {{ end }}
