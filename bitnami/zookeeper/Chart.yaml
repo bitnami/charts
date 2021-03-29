@@ -1,7 +1,7 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 3.6.2
+appVersion: 3.7.0
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -21,4 +21,4 @@ name: zookeeper
 sources:
   - https://github.com/bitnami/bitnami-docker-zookeeper
   - https://zookeeper.apache.org/
-version: 6.5.3
+version: 6.5.4

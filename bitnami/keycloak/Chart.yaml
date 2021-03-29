@@ -26,4 +26,4 @@ name: keycloak
 sources:
   - https://github.com/bitnami/bitnami-docker-keycloak
   - https://github.com/keycloak/keycloak
-version: 2.4.1
+version: 2.4.2
