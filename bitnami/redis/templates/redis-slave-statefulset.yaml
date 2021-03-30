@@ -210,7 +210,7 @@ spec:
               readOnly: true
             {{- end }}
             {{- if .Values.slave.extraVolumeMounts }}
-            {{- include "common.tplvalues.render" ( dict "value" .Values.slave.extraVolumeMounts "context" $ ) | nindent 8 }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.slave.extraVolumeMounts "context" $ ) | nindent 12 }}
             {{- end }}
         {{- if .Values.metrics.enabled }}
         - name: metrics
