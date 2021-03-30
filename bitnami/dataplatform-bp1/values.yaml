@@ -238,15 +238,15 @@ solr:
     affinity:
       podAffinity:
         preferredDuringSchedulingIgnoredDuringExecution:
-         - weight: 50
-           podAffinityTerm:
-             labelSelector:
-               matchExpressions:
-               - key: app.kubernetes.io/name
-                 operator: In
-                 values:
-                   - solr
-             topologyKey: "kubernetes.io/hostname"
+          - weight: 50
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                  - key: app.kubernetes.io/name
+                    operator: In
+                    values:
+                      - solr
+              topologyKey: "kubernetes.io/hostname"
     resources:
       limits: {}
       requests:
@@ -300,65 +300,65 @@ wavefront:
       ## Can be used to add additional discovery rules
       ##
       config:
-      ## auto-discover kafka-exporter
-      ##
-      - name: kafka-discovery
-        type: prometheus
-        selectors:
-          images:
-          - '*bitnami/kafka-exporter*'
-        port: 9308
-        path: /metrics
-        scheme: http
-        prefix: kube.kafka.
+        ## auto-discover kafka-exporter
+        ##
+        - name: kafka-discovery
+          type: prometheus
+          selectors:
+            images:
+              - '*bitnami/kafka-exporter*'
+          port: 9308
+          path: /metrics
+          scheme: http
+          prefix: kube.kafka.
 
-      ## auto-discover jmx exporter
-      ##
-      - name: kafka-jmx-discovery
-        type: prometheus
-        selectors:
-          images:
-          - '*bitnami/jmx-exporter*'
-        port: 5556
-        path: /metrics
-        scheme: http
-        prefix: kube.kafkajmx.
+        ## auto-discover jmx exporter
+        ##
+        - name: kafka-jmx-discovery
+          type: prometheus
+          selectors:
+            images:
+              - '*bitnami/jmx-exporter*'
+          port: 5556
+          path: /metrics
+          scheme: http
+          prefix: kube.kafkajmx.
 
-      ## auto-discover solr
-      ##
-      - name: solr-discovery
-        type: prometheus
-        selectors:
-          images:
-          - '*bitnami/solr*'
-        port: 9983
-        path: /metrics
-        scheme: http
-        prefix: kube.solr.
+        ## auto-discover solr
+        ##
+        - name: solr-discovery
+          type: prometheus
+          selectors:
+            images:
+              - '*bitnami/solr*'
+          port: 9983
+          path: /metrics
+          scheme: http
+          prefix: kube.solr.
 
-      ## auto-discover spark
-      ##
-      - name: spark-worker-discovery
-        type: prometheus
-        selectors:
-          images:
-          - '*bitnami/spark*'
-        port: 8081
-        path: /metrics/
-        scheme: http
-        prefix: kube.spark.
+        ## auto-discover spark
+        ##
+        - name: spark-worker-discovery
+          type: prometheus
+          selectors:
+            images:
+              - '*bitnami/spark*'
+          port: 8081
+          path: /metrics/
+          scheme: http
+          prefix: kube.spark.
 
-      ## auto-discover spark
-      ##
-      - name: spark-master-discovery
-        type: prometheus
-        selectors:
-          images:
-          - '*bitnami/spark*'
-        port: 8080
-        path: /metrics/
-        scheme: http
-        prefix: kube.spark.
+        ## auto-discover spark
+        ##
+        - name: spark-master-discovery
+          type: prometheus
+          selectors:
+            images:
+              - '*bitnami/spark*'
+          port: 8080
+          path: /metrics/
+          scheme: http
+          prefix: kube.spark.
   proxy:
     ## Wavefront Proxy resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
