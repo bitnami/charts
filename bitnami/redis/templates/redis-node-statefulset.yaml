@@ -405,7 +405,7 @@ spec:
           ports:
             - name: sentinelmetrics
               containerPort: 9355
-          resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.resources "context" $) | nindent 12 }}
         {{- end }}
       {{- $needsVolumePermissions := and .Values.volumePermissions.enabled .Values.slave.persistence.enabled .Values.securityContext.enabled .Values.containerSecurityContext.enabled }}
       {{- if or $needsVolumePermissions .Values.sysctlImage.enabled }}

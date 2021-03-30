@@ -11,7 +11,7 @@ metadata:
     heritage: {{ .Release.Service }}
     app.kubernetes.io/component: "sentinel-metrics"
     {{- if .Values.sentinel.metrics.service.labels -}}
-    {{- toYaml .Values.sentinel.metrics.service.labels | nindent 4 }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.sentinel.metrics.service.labels "context" $) | nindent 4 }}
     {{- end -}}
   {{- if .Values.sentinel.metrics.service.annotations }}
   annotations: {{- toYaml .Values.sentinel.metrics.service.annotations | nindent 4 }}
