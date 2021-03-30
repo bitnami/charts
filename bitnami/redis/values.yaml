@@ -216,7 +216,8 @@ sentinel:
     ##   check-keys: myKey,myOtherKey
     # extraArgs: {}
 
-    # Enable this if you're using https://github.com/coreos/prometheus-operator
+    ## Enable this if you're using https://github.com/coreos/prometheus-operator
+    ##
     serviceMonitor:
       enabled: false
       ## Specify a namespace if needed
@@ -226,6 +227,7 @@ sentinel:
       ## Defaults to what's used if you follow CoreOS [Prometheus Install Instructions](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#tldr)
       ## [Prometheus Selector Label](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-operator-1)
       ## [Kube Prometheus Selector Label](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#exporters)
+      ## 
       selector:
         prometheus: kube-prometheus
 
@@ -237,10 +239,11 @@ sentinel:
       port: 9355
       ## External traffic policy (when service type is LoadBalancer)
       ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+      ##
       externalTrafficPolicy: Cluster
 
-      ## Use serviceLoadBalancerIP to request a specific static IP,
-      ## otherwise leave blank
+      ## Use serviceLoadBalancerIP to request a specific static IP, otherwise leave blank
+      ##
       # loadBalancerIP:
       annotations: {}
       labels: {}

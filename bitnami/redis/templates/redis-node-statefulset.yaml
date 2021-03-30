@@ -390,15 +390,15 @@ spec:
             - name: SENTINEL_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "redis.secretName" . }}
-                  key: {{ template "redis.secretPasswordKey" . }}
+                  name: {{ include "redis.secretName" . }}
+                  key: {{ include "redis.secretPasswordKey" . }}
             {{- end }}
-            {{- if and .Values.sentinel.usePassword (and .Values.usePassword .Values.usePasswordFile) }}
+            {{- if and .Values.sentinel.usePassword .Values.usePassword .Values.usePasswordFile }}
             - name: SENTINEL_PASSWORD_FILE
               value: /secrets/redis-password
             {{- end }}
           volumeMounts:
-            {{- if and .Values.sentinel.usePassword (and .Values.usePassword .Values.usePasswordFile) }}
+            {{- if and .Values.sentinel.usePassword .Values.usePassword .Values.usePasswordFile }}
             - name: redis-password
               mountPath: /secrets/
             {{- end }}
