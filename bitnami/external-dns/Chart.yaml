@@ -24,4 +24,4 @@ sources:
   - https://github.com/kubernetes-sigs/external-dns
   - https://github.com/bitnami/bitnami-docker-external-dns
   - https://github.com/kubernetes-sigs/external-dns
-version: 4.9.3
+version: 4.9.4

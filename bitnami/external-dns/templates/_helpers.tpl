@@ -186,6 +186,9 @@ Return the name of the Secret used to store the passwords
   {{- if .Values.alibabacloud.regionId }}
   "regionId": "{{ .Values.alibabacloud.regionId }}",
   {{- end}}
+  {{- if .Values.alibabacloud.vpcId }}
+  "vpcId": "{{ .Values.alibabacloud.vpcId }}",
+  {{- end}}
   {{- if .Values.alibabacloud.accessKeyId }}
   "accessKeyId": "{{ .Values.alibabacloud.accessKeyId }}",
   {{- end}}
