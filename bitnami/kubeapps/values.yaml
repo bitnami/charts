@@ -132,13 +132,16 @@ ingress:
 ##
 frontend:
   replicaCount: 2
+  ## Add additional annotations to the frontend pods
+  ##
+  podAnnotations: {}
   ## Bitnami Nginx image
   ## ref: https://hub.docker.com/r/bitnami/nginx/tags/
   ##
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.19.7-debian-10-r1
+    tag: 1.19.8-debian-10-r14
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -229,6 +232,9 @@ apprepository:
   ## Running a single controller replica to avoid sync job duplication
   ##
   replicaCount: 1
+  ## Add additional annotations to the controllers pods
+  ##
+  podAnnotations: {}
   ## Schedule for syncing apprepositories. Every ten minutes by default
   # crontab: "*/10 * * * *"
   ## Bitnami Kubeapps AppRepository Controller image
@@ -237,7 +243,7 @@ apprepository:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-apprepository-controller
-    tag: 2.3.0-scratch-r0
+    tag: 2.3.1-scratch-r0
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -249,7 +255,7 @@ apprepository:
   syncImage:
     registry: docker.io
     repository: bitnami/kubeapps-asset-syncer
-    tag: 2.3.0-scratch-r0
+    tag: 2.3.1-scratch-r0
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -326,7 +332,7 @@ hooks:
   image:
     registry: docker.io
     repository: bitnami/kubectl
-    tag: 1.18.16-debian-10-r0
+    tag: 1.19.9-debian-10-r7
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -348,10 +354,13 @@ hooks:
 # Kubeops is an interface between the Kubeapps Dashboard and Helm 3/Kubernetes.
 kubeops:
   replicaCount: 2
+  ## Add additional annotations to the kubeops pods
+  ##
+  podAnnotations: {}
   image:
     registry: docker.io
     repository: bitnami/kubeapps-kubeops
-    tag: 2.3.0-scratch-r0
+    tag: 2.3.1-scratch-r0
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -391,18 +400,25 @@ kubeops:
   nodeSelector: {}
   tolerations: []
   affinity: {}
+  ## Kubeops QPS and Burst configuration (per user request)
+  ## Used when requesting namespaces
+  # QPS: 10
+  # burst: 15
 
 ## Assetsvc is used to serve assets metadata over a REST API.
 ##
 assetsvc:
   replicaCount: 2
+  ## Add additional annotations to the assetsvc pods
+  ##
+  podAnnotations: {}
   ## Bitnami Kubeapps Assetsvc image
   ## ref: https://hub.docker.com/r/bitnami/kubeapps-assetsvc/tags/
   ##
   image:
     registry: docker.io
     repository: bitnami/kubeapps-assetsvc
-    tag: 2.3.0-scratch-r1
+    tag: 2.3.1-scratch-r0
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -461,13 +477,16 @@ assetsvc:
 ##
 dashboard:
   replicaCount: 2
+  ## Add additional annotations to the dashboard pods
+  ##
+  podAnnotations: {}
   ## Bitnami Kubeapps Dashboard image
   ## ref: https://hub.docker.com/r/bitnami/kubeapps-dashboard/tags/
   ##
   image:
     registry: docker.io
     repository: bitnami/kubeapps-dashboard
-    tag: 2.3.0-debian-10-r0
+    tag: 2.3.1-debian-10-r0
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -542,19 +561,22 @@ dashboard:
 ## ref: https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
 ##
 postgresql:
+  # Enable PostgreSQL. This should be true
+  enabled: true
   ## Enable replication for high availability
   replication:
     enabled: true
   ## Create a database for Kubeapps on the first run
   postgresqlDatabase: assets
+  ## PostgreSQL password
+  ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#setting-the-root-password-on-first-run
+  ##
+  # postgresqlPassword:
   ## Kubeapps uses PostgreSQL as a cache and persistence is not required
   ##
   persistence:
     enabled: false
     size: 8Gi
-  ## PostgreSQL credentials are handled by kubeapps to facilitate upgrades
-  ##
-  existingSecret: kubeapps-db
   ## Pod Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
@@ -581,14 +603,14 @@ rbac:
 securityContext:
   enabled: false
   runAsUser: 1001
-  # fsGroup: 1001
+  fsGroup: 1001
 
 ## Image used for the tests. The only requirement is to include curl
 ##
 testImage:
   registry: docker.io
   repository: bitnami/nginx
-  tag: 1.19.7-debian-10-r1
+  tag: 1.19.8-debian-10-r14
 
 # Auth Proxy configuration for OIDC support
 # ref: https://github.com/kubeapps/kubeapps/blob/master/docs/user/using-an-OIDC-provider.md
@@ -620,7 +642,7 @@ authProxy:
   image:
     registry: docker.io
     repository: bitnami/oauth2-proxy
-    tag: 7.0.1-debian-10-r5
+    tag: 7.1.0-debian-10-r0
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##

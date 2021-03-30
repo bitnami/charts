@@ -564,6 +564,10 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ## Upgrading
 
+### To 5.0.0
+
+This major version updates the Redis<sup>TM</sup> docker image version used from `6.0` to `6.2`, the new stable version. There are no major changes in the chart and there shouldn't be any breaking changes in it as `6.2` breaking changes center around some command and behaviour changes. For more information, please refer to [Redis<sup>TM</sup> 6.2 release notes](https://raw.githubusercontent.com/redis/redis/6.2/00-RELEASENOTES).
+
 ### To 4.0.0
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.

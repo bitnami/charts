@@ -135,16 +135,6 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `initContainers`                          | Add extra init containers                                                                                                                            | `[]`                                                    |
 | `podManagementPolicy`                     | Management Policy for Kafka StatefulSet (either Parallel or OrderedReady)                                                                            | `Parallel`                                              |
 
-### Kafka provisioning parameters
-
-| Parameter                    | Description                                                           | Default                  |
-|------------------------------|-----------------------------------------------------------------------|--------------------------|
-| `provisioning.enabled`       | Enable kafka provisioning Job                                         | `false`                  |
-| `provisioning.image`         | Kafka provisioning Job image                                          | `Check values.yaml file` |
-| `provisioning.resources`     | Kafka provisioning Job resources                                      | `Check values.yaml file` |
-| `provisioning.topics`        | Kafka provisioning topics                                             | `[]`                     |
-| `provisioning.schedulerName` | Name of the k8s scheduler (other than default) for kafka provisioning | `nil`                    |
-
 ### Statefulset parameters
 
 | Parameter                   | Description                                                                               | Default                                            |
@@ -179,6 +169,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `command`                   | Override kafka container command                                                          | `['/scripts/setup.sh']`  (evaluated as a template) |
 | `args`                      | Override kafka container arguments                                                        | `[]` (evaluated as a template)                     |
 | `sidecars`                  | Attach additional sidecar containers to the Kafka pod                                     | `{}`                                               |
+| `terminationGracePeriodSeconds`                  | Seconds the pod needs to gracefully terminate                                      | `nil`                                               |
 
 ### Exposure parameters
 
@@ -299,6 +290,18 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `metrics.serviceMonitor.interval`      | Interval at which metrics should be scraped                                                                                      | `nil`                                                   |
 | `metrics.serviceMonitor.scrapeTimeout` | Timeout after which the scrape is ended                                                                                          | `nil` (Prometheus Operator default value)               |
 | `metrics.serviceMonitor.selector`      | ServiceMonitor selector labels                                                                                                   | `nil` (Prometheus Operator default value)               |
+
+### Kafka provisioning parameters
+
+| Parameter                    | Description                                                           | Default                        |
+|------------------------------|-----------------------------------------------------------------------|--------------------------------|
+| `provisioning.enabled`       | Enable kafka provisioning Job                                         | `false`                        |
+| `provisioning.image`         | Kafka provisioning Job image                                          | `Check values.yaml file`       |
+| `provisioning.resources`     | Kafka provisioning Job resources                                      | `Check values.yaml file`       |
+| `provisioning.topics`        | Kafka provisioning topics                                             | `[]`                           |
+| `provisioning.schedulerName` | Name of the k8s scheduler (other than default) for kafka provisioning | `nil`                          |
+| `provisioning.command`       | Override provisioning container command                               | `[]` (evaluated as a template) |
+| `provisioning.args`          | Override provisioning container arguments                             | `[]` (evaluated as a template) |
 
 ### Zookeeper chart parameters
 
@@ -548,7 +551,7 @@ extraDeploy:
                   containerPort: 8083
               volumeMounts:
                 - name: configuration
-                  mountPath: /opt/bitnami/kafka/config
+                  mountPath: /bitnami/kafka/config
           volumes:
             - name: configuration
               configMap:

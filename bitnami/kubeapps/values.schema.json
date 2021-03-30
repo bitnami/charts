@@ -130,6 +130,24 @@
           }
         }
       }
+    },
+    "securityContext": {
+      "properties": {
+        "enabled": {
+          "title": "Enable security context",
+          "type": "boolean",
+          "default": false
+        },
+        "fsgroup": {
+          "title": "File System Group ID",
+          "type": "integer"
+        },
+        "runAsUser": {
+          "title": "File System User ID",
+          "type": "integer"
+        }
+      },
+      "title": "Security Context"
     }
   }
 }

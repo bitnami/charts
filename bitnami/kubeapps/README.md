@@ -197,6 +197,7 @@ kubectl delete namespace kubeapps
 - [Is there any API documentation?](#is-there-any-api-documentation)
 - [Why can't I configure global private repositories?](#why-cant-i-configure-global-private-repositories)
 - [Does Kubeapps support Operators?](#does-kubeapps-support-operators)
+- [Slow response when listing namespaces?](#slow-response-when-listing-namespaces)
 - [More questions?](#more-questions)
 
 ### How to install Kubeapps for demo purposes?
@@ -275,6 +276,12 @@ You could alternatively ensure that the `imagePullSecret` is available in all na
 
 Yes! You can get started by following the [operators documentation](https://github.com/kubeapps/kubeapps/blob/master/docs/user/operators.md).
 
+### Slow response when listing namespaces
+
+Kubeapps uses the currently logged-in user credential to retrieve the list of all namespaces. If the user doesn't have permission to list namespaces, the backend will try again with its own service account to list all namespaces and then iterate through each namespace to check if the user has permissions to get secrets for each namespace (to verify if they should be allowed to use that namespace or not and hence whether it is included in the selector). This can lead to a slow response if the number of namespaces on the cluster is large.
+
+To reduce this time, you can increase the number of checks that Kubeapps will perform in parallel (per connection) setting the value: `kubeops.burst=<desired_number>` and `kubeops.QPS=<desired_number>`. The default value, if not set, is 15 burst requests and 10 QPS afterwards.
+
 ### More questions? 
 
 Feel free to [open an issue](https://github.com/kubeapps/kubeapps/issues/new) if you have any questions! 
@@ -324,7 +331,10 @@ It is possible that when upgrading Kubeapps an error appears. That can be caused
 
 > Note: These steps assume that you have installed Kubeapps in the namespace `kubeapps` using the name `kubeapps`. If that is not the case replace the command with your namespace and/or name.
 
+> Note: If you are upgrading from 2.3.1 see the [following section](#upgrading-to-2-3-1).
+
 > Note: If you are upgrading from 1.X to 2.X see the [following section](#upgrading-to-2-0).
+
 
 1.  (Optional) Backup your personal repositories (if you have any):
 
@@ -416,3 +426,47 @@ kubectl delete statefulset -n kubeapps kubeapps-postgresql-master kubeapps-postg
 ```
 
 After that you should be able to upgrade Kubeapps as always and the database will be repopulated.
+
+### Upgrading to 2.3.1
+
+Kubeapps 2.3.1 (Chart version 6.0.0) introduces some breaking changes. Helm specific functionality has been removed in order to support other installation methods (like using YAML manifests, [`kapp`](https://carvel.dev/kapp) or `kustomize`(https://kustomize.io/)). Because of that, there are some steps required before upgrading from a previous version:
+
+1. Kubeapps will no longer create a database secret for you automatically but rather will rely on the default behavior of the PostgreSQL chart. If you try to upgrade Kubeapps and you installed it without setting a password, you will get the following error:
+
+```console
+Error: UPGRADE FAILED: template: kubeapps/templates/NOTES.txt:73:4: executing "kubeapps/templates/NOTES.txt" at <include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $)>: error calling include: template: kubeapps/charts/common/templates/_errors.tpl:18:48: executing "common.errors.upgrade.passwords.empty" at <fail>: error calling fail: 
+PASSWORDS ERROR: you must provide your current passwords when upgrade the release
+    'postgresql.postgresqlPassword' must not be empty, please add '--set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD' to the command. To get the current value:
+```
+
+The error gives you generic instructions for retrieving the PostgreSQL password, but if you have installed a Kubeapps version prior to 2.3.1, the name of the secret will differ. Execute:
+
+```console
+export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace "kubeapps" kubeapps-db -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+```
+
+> NOTE: Replace the namespace in the command with the namespace in which you have deployed Kubeapps.
+
+Make sure that you have stored the password in the variable `$POSTGRESQL_PASSWORD` before continuing with the next issue.
+
+2. The chart initialRepos are no longer installed using [Helm hooks](https://helm.sh/docs/topics/charts_hooks/) which caused these repos to not be handled by Helm after the first installation. Now they will be tracked for every update but if you don't delete the existing ones, it will fail to update with:
+
+```console
+Error: UPGRADE FAILED: rendered manifests contain a resource that already exists. Unable to continue with update: AppRepository "bitnami" in namespace "kubeapps" exists and cannot be imported into the current release: invalid ownership metadata; annotation validation error: missing key "meta.helm.sh/release-name": must be set to "kubeapps"; annotation validation error: missing key "meta.helm.sh/release-namespace": must be set to "kubeapps"
+```
+
+To bypass this issue, you will need to before delete all the initialRepos from the chart values (only the `bitnami` repo by default):
+
+```console
+$ kubectl delete apprepositories.kubeapps.com -n kubeapps bitnami
+```
+
+> NOTE: Replace the namespace in the command with the namespace in which you have deployed Kubeapps.
+
+After that, you will be able to upgrade Kubeapps to 2.3.1 using the existing database secret:
+
+> **WARNING**: Make sure that the variable `$POSTGRESQL_PASSWORD` is properly populated. Setting a wrong (or empty) password will corrupt the release.
+
+```console
+$ helm upgrade kubeapps bitnami/kubeapps -n kubeapps --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD
+```

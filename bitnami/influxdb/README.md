@@ -144,6 +144,8 @@ The following tables lists the configurable parameters of the InfluxDB<sup>TM</s
 | `influxdb.service.loadBalancerIP`           | loadBalancerIP if service type is `LoadBalancer`                                                                                                                                                                                                                     | `nil`                                                   |
 | `influxdb.service.loadBalancerSourceRanges` | Address that are allowed when service is LoadBalancer                                                                                                                                                                                                                | `[]`                                                    |
 | `influxdb.service.clusterIP`                | Static clusterIP or None for headless services                                                                                                                                                                                                                       | `nil`                                                   |
+| `influxdb.service.sessionAffinity`          | Session affinity for the InfluxDB<sup>TM</sup> service                                                                                                                                                                                                               | `nil`                                                   |
+| `influxdb.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                                                                                                                                                          | `{}`                                                    |
 
 ### InfluxDB Relay<sup>TM</sup> parameters
 
@@ -377,6 +379,8 @@ The high availability install a statefulset with N InfluxDB<sup>TM</sup> servers
       |                                   ▲
       └───────────────────────────────────┘
 ```
+
+When using the high-availability architecture, it is recommended to configure sticky sessions using `--set influxdb.service.sessionAffinity="ClientIP"` or configuring the IngressController accordingly.
 
 ### Configure the way how to expose InfluxDB<sup>TM</sup>
 

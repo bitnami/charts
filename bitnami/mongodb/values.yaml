@@ -20,7 +20,7 @@ image:
   ## Bitnami MongoDB(R) image tag
   ## ref: https://hub.docker.com/r/bitnami/mongodb/tags/
   ##
-  tag: 4.4.4-debian-10-r36
+  tag: 4.4.4-debian-10-r41
   ## Specify a imagePullPolicy
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##

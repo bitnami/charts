@@ -42,7 +42,7 @@ data:
   REGISTRY_CREDENTIAL_USERNAME: {{ .Values.registry.credentials.username | quote }}
   PERMITTED_REGISTRY_TYPES_FOR_PROXY_CACHE: "docker-hub,harbor,aws-ecr,azure-acr,quay,google-gcr"
   {{- if .Values.core.uaaSecretName }}
-  UAA_CA_ROOT: "/etc/core/ca/auth-ca.crt"
+  UAA_CA_ROOT: "/etc/core/auth-ca/auth-ca.crt"
   {{- end }}
   {{- if has "core" .Values.proxy.components }}
   HTTP_PROXY: {{ .Values.proxy.httpProxy | quote }}

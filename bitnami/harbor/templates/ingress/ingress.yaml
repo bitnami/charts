@@ -122,7 +122,7 @@ spec:
     {{- else if .Values.service.tls.existingSecret }}
     - secretName: {{ .Values.service.tls.existingSecret }}
     {{- else }}
-    - secretName: {{ include "harbor.ingress" . }}
+    - secretName: {{ include "harbor.ingress-notary" . }}
     {{- end }}
       {{- if .Values.ingress.hosts.notary }}
       hosts:
