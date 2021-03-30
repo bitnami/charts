@@ -240,10 +240,12 @@ spec:
             {{- if .Values.tls.enabled }}
             - name: REDIS_ADDR
               value: rediss://localhost:{{ .Values.redisPort }}
+              {{- if .Values.tls.authClients }}
             - name: REDIS_EXPORTER_TLS_CLIENT_KEY_FILE
               value: {{ template "redis.tlsCertKey" . }}
             - name: REDIS_EXPORTER_TLS_CLIENT_CERT_FILE
               value: {{ template "redis.tlsCert" . }}
+              {{- end }}
             - name: REDIS_EXPORTER_TLS_CA_CERT_FILE
               value: {{ template "redis.tlsCACert" . }}
             {{- end }}
