@@ -264,6 +264,8 @@ controller:
       metricRelabelings: []
       relabelings: []
 
+  priorityClassName: system-node-critical
+
 ## Metallb Speaker daemonset.
 ## ref: https://hub.docker.com/r/bitnami/metallb-speaker/tags
 ##
@@ -437,3 +439,5 @@ speaker:
       interval: ""
       metricRelabelings: []
       relabelings: []
+
+  priorityClassName: system-node-critical

@@ -125,6 +125,7 @@ The following tables lists the configurable parameters of the metallb chart and 
 | `controller.prometheus.serviceMonitor.interval`          | Specify the scrape interval if not specified use defaul prometheus scrapeIntervall           | `""`                                                    |
 | `controller.prometheus.serviceMonitor.metricRelabelings` | Specify additional relabeling of metrics.                                                    | `[]`                                                    |
 | `controller.prometheus.serviceMonitor.relabelings`       | Specify general relabeling.                                                                  | `[]`                                                    |
+| `controller.priorityClassName`                           | Specify priorityClassName.                                                                   | `system-node-critical`                                  |
 
 ### Speaker parameters
 
@@ -177,6 +178,8 @@ The following tables lists the configurable parameters of the metallb chart and 
 | `speaker.prometheus.serviceMonitor.interval`          | Specify the scrape interval if not specified use defaul prometheus scrapeIntervall           | `""`                                                    |
 | `speaker.prometheus.serviceMonitor.metricRelabelings` | Specify additional relabeling of metrics.                                                    | `[]`                                                    |
 | `speaker.prometheus.serviceMonitor.relabelings`       | Specify general relabeling.                                                                  | `[]`                                                    |
+| `speaker.priorityClassName`                           | Specify priorityClassName.                                                                   | `system-node-critical`                                  |
+
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
