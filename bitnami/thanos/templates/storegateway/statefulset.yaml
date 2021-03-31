@@ -109,6 +109,10 @@ spec:
             {{- if .Values.storegateway.extraFlags }}
             {{- .Values.storegateway.extraFlags | toYaml | nindent 12 }}
             {{- end }}
+          {{- if .Values.storegateway.extraEnv }}
+          env:
+          {{- toYaml .Values.storegateway.extraEnv | nindent 10 }}
+          {{- end }}
           ports:
             - name: http
               containerPort: 10902

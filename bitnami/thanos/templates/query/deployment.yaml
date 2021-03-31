@@ -120,6 +120,10 @@ spec:
             {{- if $query.extraFlags }}
             {{- $query.extraFlags | toYaml | nindent 12 }}
             {{- end }}
+          {{- if .Values.query.extraEnv }}
+          env:
+          {{- toYaml .Values.query.extraEnv | nindent 10 }}
+          {{- end }}
           ports:
             - name: http
               containerPort: 10902

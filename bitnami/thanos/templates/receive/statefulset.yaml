@@ -103,6 +103,9 @@ spec:
               secretKeyRef:
                 key: objstore.yml
                 name: {{ include "thanos.objstoreSecretName" . }}
+          {{- if .Values.receive.extraEnv }}
+          {{- toYaml .Values.receive.extraEnv | nindent 10 }}
+          {{- end }}
           ports:
             - containerPort: 10901
               name: grpc
