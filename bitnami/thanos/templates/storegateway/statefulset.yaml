@@ -111,7 +111,7 @@ spec:
             {{- end }}
           {{- if .Values.storegateway.extraEnv }}
           env:
-          {{- toYaml .Values.storegateway.extraEnv | nindent 10 }}
+            {{- toYaml .Values.storegateway.extraEnv | nindent 12 }}
           {{- end }}
           ports:
             - name: http

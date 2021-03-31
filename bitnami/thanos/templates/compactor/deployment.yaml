@@ -96,7 +96,7 @@ spec:
             - --wait
           {{- if .Values.compactor.extraEnv }}
           env:
-          {{- toYaml .Values.compactor.extraEnv | nindent 10 }}
+            {{- toYaml .Values.compactor.extraEnv | nindent 12 }}
           {{- end }}
           ports:
             - name: http

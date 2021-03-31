@@ -78,7 +78,7 @@ spec:
             {{- end }}
           {{- if .Values.bucketweb.extraEnv }}
           env:
-          {{- toYaml .Values.bucketweb.extraEnv | nindent 10 }}
+            {{- toYaml .Values.bucketweb.extraEnv | nindent 12 }}
           {{- end }}
           ports:
             - name: http

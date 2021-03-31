@@ -109,13 +109,13 @@ spec:
             {{- .Values.ruler.extraFlags | toYaml | nindent 12 }}
             {{- end }}
           env:
-          - name: POD_NAME
-            valueFrom:
-              fieldRef:
-                fieldPath: metadata.name
-          {{- if .Values.ruler.extraEnv }}
-          {{- toYaml .Values.ruler.extraEnv | nindent 10 }}
-          {{- end }}
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            {{- if .Values.ruler.extraEnv }}
+            {{- toYaml .Values.ruler.extraEnv | nindent 12 }}
+            {{- end }}
           ports:
             - name: http
               containerPort: 10902

@@ -78,7 +78,7 @@ spec:
             {{- end }}
           {{- if .Values.queryFrontend.extraEnv }}
           env:
-          {{- toYaml .Values.queryFrontend.extraEnv | nindent 10 }}
+            {{- toYaml .Values.queryFrontend.extraEnv | nindent 12 }}
           {{- end }}
           ports:
             - name: http
