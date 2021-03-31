@@ -490,7 +490,7 @@ master:
 
   ## Redis(TM) Master pod priorityClassName
   ##
-  priorityClassName: {}
+  priorityClassName: null
 
   ## An array to add extra env vars
   ## For example:
@@ -654,7 +654,7 @@ slave:
   podAnnotations: {}
 
   ## Redis(TM) slave pod priorityClassName
-  priorityClassName: {}
+  priorityClassName: null
 
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
@@ -832,7 +832,7 @@ metrics:
     rules: []
 
   ## Metrics exporter pod priorityClassName
-  priorityClassName: {}
+  priorityClassName: null
   service:
     type: ClusterIP
 
