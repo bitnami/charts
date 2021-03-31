@@ -2,15 +2,15 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ template "redis.fullname" . }}-sentinel-metrics
+  name: {{ include "redis.fullname" . }}-sentinel-metrics
   {{- if .Values.sentinel.metrics.serviceMonitor.namespace }}
   namespace: {{ .Values.sentinel.metrics.serviceMonitor.namespace }}
   {{- else }}
   namespace: {{ .Release.Namespace | quote }}
   {{- end }}
   labels:
-    app: {{ template "redis.name" . }}
-    chart: {{ template "redis.chart" . }}
+    app: {{ include "redis.name" . }}
+    chart: {{ include "redis.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
     {{- range $key, $value := .Values.sentinel.metrics.serviceMonitor.selector }}
@@ -24,7 +24,7 @@ spec:
       {{- end }}
   selector:
     matchLabels:
-      app: {{ template "redis.name" . }}
+      app: {{ include "redis.name" . }}
       release: {{ .Release.Name }}
       app.kubernetes.io/component: "sentinel-metrics"
   namespaceSelector:

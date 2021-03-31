@@ -384,7 +384,7 @@ spec:
         {{- end }}
         {{- if .Values.sentinel.metrics.enabled }}
         - name: sentinel-metrics
-          image: {{ template "sentinel.metrics.image" . }}
+          image: {{ include "sentinel.metrics.image" . }}
           imagePullPolicy: {{ .Values.sentinel.metrics.image.pullPolicy | quote }}
           {{- if .Values.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
