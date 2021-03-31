@@ -198,6 +198,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `externalAccess.service.loadBalancerSourceRanges` | Address(es) that are allowed when service is LoadBalancer                                     | `[]`                          |
 | `externalAccess.service.domain`                   | Domain or external ip used to configure Kafka external listener when service type is NodePort | `nil`                         |
 | `externalAccess.service.nodePorts`                | Array of node ports used to configure Kafka external listener when service type is NodePort   | `[]`                          |
+| `externalAccess.service.useHostIPs`               | Use service host IPs to configure Kafka external listener when service type is NodePort       | `false`                       |
 | `externalAccess.service.annotations`              | Service annotations for external access                                                       | `{}`(evaluated as a template) |
 
 ### Persistence parameters
@@ -483,7 +484,7 @@ externalAccess.service.nodePorts[1]='node-port-2'
 
 Note: You need to know in advance the node ports that will be exposed so each Kafka broker advertised listener is configured with it.
 
-The pod will try to get the external ip of the node using `curl -s https://ipinfo.io/ip` unless `externalAccess.service.domain` is provided.
+The pod will try to get the external ip of the node using `curl -s https://ipinfo.io/ip` unless `externalAccess.service.domain` or `externalAccess.service.useHostIPs` is provided.
 
 Following the aforementioned steps will also allow to connect the brokers from the outside using the cluster's default service (when `service.type` is `LoadBalancer` or `NodePort`). Use the property `service.externalPort` to specify the port used for external connections.
 
@@ -570,7 +571,7 @@ extraDeploy:
       mongodb.properties: |-
         connection.uri=mongodb://root:password@mongodb-hostname:27017
         ...
-  - | 
+  - |
     apiVersion: v1
     kind: Service
     metadata:

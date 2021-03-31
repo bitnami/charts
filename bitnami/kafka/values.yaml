@@ -708,6 +708,8 @@ externalAccess:
     ##   - 30002
     ##
     nodePorts: []
+    ## Use worker host ips
+    useHostIPs: false
     ## When service type is NodePort, you can specify the domain used for Kafka advertised listeners.
     ## If not specified, the container will try to get the kubernetes node external IP
     ##
