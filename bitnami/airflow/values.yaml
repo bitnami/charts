@@ -486,6 +486,16 @@ worker:
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
+  ## Affinity for worker pod assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Note: this configuration supersedes the global affinity configuration
+  ##
+  affinity: {}
+  ## Tolerations for worker pod assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ## Note: this configuration supersedes the global tolerations configuration
+  ##
+  tolerations: []
 
 ## Add labels to all the deployed resources
 ##
