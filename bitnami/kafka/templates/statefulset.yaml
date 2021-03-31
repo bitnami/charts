@@ -201,7 +201,7 @@ spec:
             - name: SHARED_FILE
               value: "/shared/info.txt"
             {{- end }}
-            {{- if eq .Values.externalAccess.service.useHostIPs "NodePort" }}
+            {{- if eq .Values.externalAccess.service.type "NodePort" }}
             - name: HOST_IP
               valueFrom:
                 fieldRef:
