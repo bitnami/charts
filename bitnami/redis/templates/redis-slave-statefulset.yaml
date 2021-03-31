@@ -230,14 +230,16 @@ spec:
           env:
             - name: REDIS_ALIAS
               value: {{ template "redis.fullname" . }}
+            {{- if .Values.usePassword }}
             - name: REDIS_USER
               value: default
-            {{- if and .Values.usePassword (not .Values.usePasswordFile) }}
+              {{- if (not .Values.usePasswordFile) }}
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ template "redis.secretName" . }}
                   key: {{ template "redis.secretPasswordKey" . }}
+              {{- end }}
             {{- end }}
             {{- if .Values.tls.enabled }}
             - name: REDIS_ADDR
