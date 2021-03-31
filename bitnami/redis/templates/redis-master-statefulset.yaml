@@ -217,6 +217,8 @@ spec:
             - name: REDIS_ALIAS
               value: {{ template "redis.fullname" . }}
             {{- if and .Values.usePassword (not .Values.usePasswordFile) }}
+            - name: REDIS_USER
+              value: default
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -225,7 +227,7 @@ spec:
             {{- end }}
             {{- if .Values.tls.enabled }}
             - name: REDIS_ADDR
-              value: rediss://localhost:{{ .Values.redisPort }}
+              value: rediss://{{ .Values.metrics.redisTargetHost }}:{{ .Values.redisPort }}
               {{- if .Values.tls.authClients }}
             - name: REDIS_EXPORTER_TLS_CLIENT_KEY_FILE
               value: {{ template "redis.tlsCertKey" . }}

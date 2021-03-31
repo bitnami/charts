@@ -737,6 +737,10 @@ metrics:
     # pullSecrets:
     #   - myRegistryKeySecretName
 
+  # A way to specify an alternative redis hostname, if you set a local endpoint in hostAliases for example
+  # Useful for certificate CN/SAN matching
+  redisTargetHost: "localhost"
+
   ## Metrics exporter resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
