@@ -6,11 +6,7 @@ apiVersion: apiregistration.k8s.io/v1
 {{- end }}
 kind: APIService
 metadata:
-{{- if semverCompare "<1.19-0" (include "common.capabilities.kubeVersion" .) }}
   name: v1beta1.metrics.k8s.io
-{{- else }}
-  name: v1.metrics.k8s.io
-{{- end }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
 spec:
   service:
