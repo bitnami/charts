@@ -15,7 +15,9 @@ spec:
   {{- if .Values.updateStrategy }}
   strategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
   {{- end }}
+  {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
+  {{- end }}
   template:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
