@@ -96,28 +96,28 @@ extraVolumeMounts: []
 ## User of the application
 ## ref: https://github.com/bitnami/bitnami-docker-odoo#configuration
 ##
-odooUsername: devops1@rg-21.com
+odooUsername: devops1@rg1.us
 
 ## Admin email
 ## ref: https://github.com/bitnami/bitnami-docker-odoo#configuration
 ##
-odooEmail: devops1@rg-21.com
+odooEmail: devops1@rg1.us
 
 ## Application password
 ## Defaults to a random 10-character alphanumeric string if not set
 ## ref: https://github.com/bitnami/bitnami-docker-odoo#configuration
 ##
 
-odooPassword: Devops123!
+odooPassword: odoo
 
 ## SMTP mail delivery configuration
 ## ref: https://github.com/bitnami/bitnami-docker-odoo/#smtp-configuration
 
-smtpHost: in-v3.mailjet.com
-smtpPort: 587
-smtpUser: 742e3f75925d389a30b16ee2f601252b
-smtpPassword: f045fd585a0cd37ff0d546cb08ca8483
-smtpProtocol: tls
+smtpHost:  
+smtpPort:  
+smtpUser:  
+smtpPassword:  
+smtpProtocol:  
 
 ## Use existing secret for the application password
 ##
@@ -126,13 +126,13 @@ existingSecret:
 externalDatabase:
   ## All of these values are only used when postgresql.enabled is set to false
   ## Database host
-  host: 10.59.176.3
+  host: 34.74.224.210
 
   ## non-root Username for Odoo database
-  user: odoo2
+  user: odoo
 
   ## Database password
-  password: Odoo123!
+  password: odoo
 
   ## Database port number
   port: 5432
