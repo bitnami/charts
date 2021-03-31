@@ -363,7 +363,7 @@ spec:
             - name: CASSANDRA_EXPORTER_CONFIG_listenPort
               value: {{ .Values.metrics.containerPorts.http | quote }}
             - name:  CASSANDRA_EXPORTER_CONFIG_host
-              value: localhost:{{ .Values.containerPorts.cassandra.jmx }}
+              value: localhost:{{ .Values.containerPorts.jmx }}
           {{- end }}
           ports:
             - name: metrics
