@@ -171,7 +171,7 @@ hub:
       {{- end }}
       networkTools:
         image:
-          name: {{ .Values.auxiliaryImage.registry }}/{{ .Values.auxiliaryImage.repository }}
+          name: {{ include "jupyterhub.hubconfiguration.imageEntry" ( dict "imageRoot" .Values.auxiliaryImage "global" $) }}
           tag: {{ .Values.auxiliaryImage.tag }}
           pullPolicy: {{ .Values.auxiliaryImage.pullPolicy }}
           pullSecrets: {{- include "jupyterhub.imagePullSecrets" . | nindent 8 }}
@@ -237,7 +237,7 @@ hub:
           volumeNameTemplate: {{ include "common.names.fullname" . }}-volume-{username}{servername}
           storageAccessModes: {{- include "common.tplvalues.render" ( dict "value" .Values.singleuser.persistence.accessModes "context" $ ) | nindent 8 }}
       image:
-        name: {{ .Values.singleuser.image.registry }}/{{ .Values.singleuser.image.repository }}
+        name: {{ include "jupyterhub.hubconfiguration.imageEntry" ( dict "imageRoot" .Values.singleuser.image "global" $) }}
         tag: {{ .Values.singleuser.image.tag }}
         pullPolicy: {{ .Values.singleuser.image.pullPolicy }}
         pullSecrets: {{- include "jupyterhub.imagePullSecrets" . | nindent 8 }}

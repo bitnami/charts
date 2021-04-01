@@ -6,6 +6,25 @@ Return the proper hub image name
 {{- end -}}
 
 {{/*
+Return the proper singleuser image name (to be set in the hub.configuration part)
+{{ include "jupyterhub.hubconfiguration.imageEntry" ( dict "imageRoot" .Values.path.to.the.image "global" $) }}
+*/}}
+{{- define "jupyterhub.hubconfiguration.imageEntry" -}}
+{{- $registryName := .imageRoot.registry -}}
+{{- $repositoryName := .imageRoot.repository -}}
+{{- if .global }}
+    {{- if .global.imageRegistry }}
+     {{- $registryName = .global.imageRegistry -}}
+    {{- end -}}
+{{- end -}}
+{{- if $registryName }}
+{{- printf "%s/%s" $registryName $repositoryName -}}
+{{- else -}}
+{{- printf "%s" $repositoryName -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the proper hub image name
 */}}
 {{- define "jupyterhub.proxy.image" -}}
