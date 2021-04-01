@@ -441,7 +441,7 @@ The chart mounts a [Persistent Volume](http://kubernetes.io/docs/user-guide/pers
 
 Custom Prometheus rules can be defined for the Prometheus Operator by using the `prometheusRule` parameter.
 
-Refer to the [chart documentation for an example of a custom rule](https://docs.bitnami.com/kubernetes/infrastructure/mongodb/configuration/understand-chart-persistence/).
+Refer to the [chart documentation for an example of a custom rule](https://docs.bitnami.com/kubernetes/infrastructure/mongodb/administration/use-prometheus-rules/).
 
 ## Enable SSL/TLS
 
