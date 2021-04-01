@@ -6,7 +6,7 @@ Return the proper hub image name
 {{- end -}}
 
 {{/*
-Return the proper singleuser image name (to be set in the hub.configuration part)
+Return the proper singleuser image name (to be set in the hub.configuration part). We cannot use common.images.image because of the tag
 {{ include "jupyterhub.hubconfiguration.imageEntry" ( dict "imageRoot" .Values.path.to.the.image "global" $) }}
 */}}
 {{- define "jupyterhub.hubconfiguration.imageEntry" -}}
