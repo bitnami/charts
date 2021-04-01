@@ -62,8 +62,9 @@ serviceAccount:
   ## If not set and create is true, a name is generated using the common.names.fullname template
   # name:
   ## Automount API credentials for a service account.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/#use-the-default-service-account-to-access-the-api-server
   ##
-  # automountServiceAccountToken: true
+  automountServiceAccountToken: true
 
 
 ## API service parameters

@@ -263,6 +263,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `queryFrontend.ingress.certManager`              | Add annotations for cert-manager                                                                                              | `false`                        |
 | `queryFrontend.ingress.hostname`                 | Default host for the ingress resource                                                                                         | `thanos.local`                 |
 | `queryFrontend.ingress.annotations`              | Ingress annotations                                                                                                           | `[]`                           |
+| `queryFrontend.ingress.tls`                      | Create ingress TLS section                                                                                                    | `false`
 | `queryFrontend.ingress.extraHosts[0].name`       | Additional hostnames to be covered                                                                                            | `nil`                          |
 | `queryFrontend.ingress.extraHosts[0].path`       | Additional hostnames to be covered                                                                                            | `nil`                          |
 | `queryFrontend.ingress.extraTls[0].hosts[0]`     | TLS configuration for additional hostnames to be covered                                                                      | `nil`                          |

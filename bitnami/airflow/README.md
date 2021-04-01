@@ -187,6 +187,8 @@ The following tables lists the configurable parameters of the Airflow chart and 
 
 | Parameter                                   | Description                                                                                                                                                            | Default                                                 |
 | ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+| `worker.affinity`                           | Affinity for worker pod assignment. Supersedes the common 
+affinity configuration                                                                                       | `nil`                                                   |
 | `worker.args`                               | Override default container args (useful when using custom images)                                                                                                      | `nil`                                                   |
 | `worker.autoscaling.enabled`                | Switch to enable Horizontal Pod Autoscaler for Airflow worker component (only when executor is `CeleryExecutor`). When enable you should also set `resources.requests` | `false`                                                 |
 | `worker.autoscaling.replicas.max`           | Maximum amount of replicas                                                                                                                                             | `3`                                                     |
@@ -234,6 +236,8 @@ The following tables lists the configurable parameters of the Airflow chart and 
 | `worker.resources.requests`                 | The requested resources for the worker containers                                                                                                                      | `{}`                                                    |
 | `worker.rollingUpdatePartition`             | Partition update strategy                                                                                                                                              | `nil`                                                   |
 | `worker.sidecars`                           | List of sidecar containers to be added to the worker's pods                                                                                                            | `nil`                                                   |
+| `worker.tolerations`                        | Tolerations for worker pod assignment. Supersedes the common 
+tolerations configuration                                                                                       | `nil`                                                   |
 | `worker.updateStrategy`                     | pdate strategy for the statefulset                                                                                                                                     | `"RollingUpdate"`                                       |
 
 ### Airflow database parameters
@@ -583,7 +587,7 @@ $ export AIRFLOW_PASSWORD=$(kubectl get secret --namespace default airflow -o js
 $ export AIRFLOW_FERNETKEY=$(kubectl get secret --namespace default airflow -o jsonpath="{.data.airflow-fernetKey}" | base64 --decode)
 $ export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default airflow-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
 $ export REDIS_PASSWORD=$(kubectl get secret --namespace default airflow-redis -o jsonpath="{.data.redis-password}" | base64 --decode)
-$ export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=postgresql,role=master -o jsonpath="{.items[0].metadata.name}")
+$ export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=airflow,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
 ```
 
 ##### Delete statefulsets
