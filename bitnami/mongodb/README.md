@@ -435,7 +435,7 @@ The [Bitnami MongoDB&reg;](https://github.com/bitnami/bitnami-docker-mongodb) im
 
 The chart mounts a [Persistent Volume](http://kubernetes.io/docs/user-guide/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning.
 
-[Learn more about persistence in the chart documentation](https://docs.bitnami.com/kubernetes/infrastructure/mysql/configuration/chart-persistence/).
+[Learn more about persistence in the chart documentation](https://docs.bitnami.com/kubernetes/infrastructure/mongodb/configuration/understand-chart-persistence/).
 
 ## Use custom Prometheus rules
 
