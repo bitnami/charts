@@ -6,8 +6,6 @@ metadata:
 {{- if .namespace }}
   namespace: {{ .namespace }}
 {{- end }}
-  annotations:
-    "helm.sh/hook": post-install
   labels:{{ include "kubeapps.extraAppLabels" $ | nindent 4 }}
     app: {{ template "kubeapps.apprepository.fullname" $ }}
 spec:

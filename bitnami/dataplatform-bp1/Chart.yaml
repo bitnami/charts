@@ -22,7 +22,7 @@ dependencies:
   - condition: wavefront.enabled
     name: wavefront
     repository: https://charts.bitnami.com/bitnami
-    version: 1.x.x
+    version: 2.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
@@ -58,4 +58,4 @@ sources:
   - https://github.com/bitnami/bitnami-docker-wavefront-proxy
   - https://github.com/wavefrontHQ/wavefront-collector-for-kubernetes
   - https://github.com/wavefrontHQ/wavefront-proxy
-version: 0.2.0
+version: 1.0.0

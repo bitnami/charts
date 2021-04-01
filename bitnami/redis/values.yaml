@@ -175,6 +175,79 @@ sentinel:
   ##
   extraEnvVarsSecret: []
 
+  ## Prometheus Exporter / Metrics for Redis Sentinel Exporter
+  ##
+  metrics:
+    enabled: false
+
+    ## Bitnami Redis Sentinel Exporter image
+    ## ref: https://hub.docker.com/r/bitnami/redis-sentinel-exporter/tags/
+    ##
+    image:
+      registry: docker.io
+      repository: bitnami/redis-sentinel-exporter
+      tag: 1.7.1-debian-10-r94
+      pullPolicy: IfNotPresent
+      ## Optionally specify an array of imagePullSecrets.
+      ## Secrets must be manually created in the namespace.
+      ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+      ##
+      # pullSecrets:
+      #   - myRegistryKeySecretName
+
+    ## Sentinel metrics exporter resource requests and limits
+    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ##
+    resources:
+      ## We usually recommend not to specify default resources and to leave this as a conscious
+      ## choice for the user. This also increases chances charts run on environments with little
+      ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+      ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+      ## e.g:
+      ## limits:
+      ##   cpu: 500m
+      ##   memory: 1Gi
+      ##
+      limits: {}
+      requests: {}
+
+    ## Extra arguments for Sentinel metrics exporter, for example:
+    ## extraArgs:
+    ##   check-keys: myKey,myOtherKey
+    # extraArgs: {}
+
+    ## Enable this if you're using https://github.com/coreos/prometheus-operator
+    ##
+    serviceMonitor:
+      enabled: false
+      ## Specify a namespace if needed
+      # namespace: monitoring
+      # fallback to the prometheus default unless specified
+      # interval: 10s
+      ## Defaults to what's used if you follow CoreOS [Prometheus Install Instructions](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#tldr)
+      ## [Prometheus Selector Label](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-operator-1)
+      ## [Kube Prometheus Selector Label](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#exporters)
+      ##
+      selector:
+        prometheus: kube-prometheus
+
+    service:
+      type: ClusterIP
+
+      ## Metrics port
+      ##
+      port: 9355
+      ## External traffic policy (when service type is LoadBalancer)
+      ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+      ##
+      externalTrafficPolicy: Cluster
+
+      ## Use serviceLoadBalancerIP to request a specific static IP, otherwise leave blank
+      ##
+      # loadBalancerIP:
+      annotations: {}
+      labels: {}
+
 ## Specifies the Kubernetes Cluster's Domain Name.
 ##
 clusterDomain: cluster.local
@@ -490,7 +563,7 @@ master:
 
   ## Redis(TM) Master pod priorityClassName
   ##
-  priorityClassName: {}
+  priorityClassName: null
 
   ## An array to add extra env vars
   ## For example:
@@ -654,7 +727,7 @@ slave:
   podAnnotations: {}
 
   ## Redis(TM) slave pod priorityClassName
-  priorityClassName: {}
+  priorityClassName: null
 
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
@@ -736,6 +809,10 @@ metrics:
     ##
     # pullSecrets:
     #   - myRegistryKeySecretName
+
+  # A way to specify an alternative redis hostname, if you set a local endpoint in hostAliases for example
+  # Useful for certificate CN/SAN matching
+  redisTargetHost: "localhost"
 
   ## Metrics exporter resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -832,7 +909,7 @@ metrics:
     rules: []
 
   ## Metrics exporter pod priorityClassName
-  priorityClassName: {}
+  priorityClassName: null
   service:
     type: ClusterIP
 

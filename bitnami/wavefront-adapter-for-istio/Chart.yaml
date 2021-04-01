@@ -30,4 +30,4 @@ maintainers:
 name: wavefront-adapter-for-istio
 sources:
   - https://github.com/bitnami/bitnami-docker-wavefront-adapter-for-istio
-version: 0.1.0
+version: 0.1.1
