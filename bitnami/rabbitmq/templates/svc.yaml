@@ -1,81 +1,87 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "rabbitmq.fullname" . }}
-  namespace: {{ .Release.Namespace }}
-  labels:
-    app: {{ template "rabbitmq.name" . }}
-    chart: {{ template "rabbitmq.chart" . }}
-    release: "{{ .Release.Name }}"
-    heritage: "{{ .Release.Service }}"
-{{- if .Values.service.labels }}
-{{- toYaml .Values.service.labels | indent 4 }}
-{{- end }}
-{{- if .Values.service.annotations }}
-  annotations:
-{{ toYaml .Values.service.annotations | indent 4 }}
-{{- end }}
+  name: {{ include "rabbitmq.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.service.labels }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.service.labels "context" $) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.service.annotations }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.service.annotations "context" $) | nindent 4 }}
+  {{- end }}
 spec:
   type: {{ .Values.service.type }}
-{{- if and (eq .Values.service.type "LoadBalancer") .Values.service.loadBalancerSourceRanges }}
-  loadBalancerSourceRanges:
-  {{ with .Values.service.loadBalancerSourceRanges }}
-{{ toYaml . | indent 4 }}
-{{- end }}
-{{- end }}
-  {{- if (and (eq .Values.service.type "LoadBalancer") (not (empty .Values.service.loadBalancerIP))) }}
+  {{- if eq .Values.service.type "LoadBalancer" }}
+  {{- if not (empty .Values.service.loadBalancerIP) }}
   loadBalancerIP: {{ .Values.service.loadBalancerIP }}
   {{- end }}
-  {{- if (not (empty .Values.service.externalIP)) }}
-  externalIPs: 
-  - {{ .Values.service.externalIP}}
+  {{- if .Values.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges: {{- toYaml .Values.service.loadBalancerSourceRanges | nindent 4 }}
+  {{- end }}
+  {{- end }}
+  {{- if (or (eq .Values.service.type "LoadBalancer") (eq .Values.service.type "NodePort")) }}
+  externalTrafficPolicy: {{ .Values.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if .Values.service.externalIPs }}
+  externalIPs: {{- toYaml .Values.service.externalIPs | nindent 4 }}
   {{- end }}
   ports:
-    - name: epmd
-      port: 4369
-      targetPort: epmd
-      {{- if (eq .Values.service.type "ClusterIP") }}
-      nodePort: null
-      {{- end }}
-    - name: amqp
+    - name: {{ .Values.service.portName }}
       port: {{ .Values.service.port }}
       targetPort: amqp
       {{- if (eq .Values.service.type "ClusterIP") }}
       nodePort: null
-      {{- else if (and (eq .Values.service.type "NodePort") (not (empty .Values.service.nodePort))) }}
+      {{- else if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePort)) }}
       nodePort: {{ .Values.service.nodePort }}
       {{- end }}
-    {{- if .Values.rabbitmq.tls.enabled }}
-    - name: amqp-ssl
+    {{- if .Values.auth.tls.enabled }}
+    - name: {{ .Values.service.tlsPortName }}
       port: {{ .Values.service.tlsPort }}
       targetPort: amqp-ssl
-      {{- if (and (eq .Values.service.type "NodePort") (not (empty .Values.service.nodeTlsPort))) }}
-      nodePort: {{ .Values.service.nodeTlsPort }}
+      {{- if (eq .Values.service.type "ClusterIP") }}
+      nodePort: null
+      {{- else if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.tlsNodePort)) }}
+      nodePort: {{ .Values.service.tlsNodePort }}
       {{- end }}
     {{- end }}
-    - name: dist
+    - name: {{ .Values.service.epmdPortName }}
+      port: 4369
+      targetPort: epmd
+      {{- if (eq .Values.service.type "ClusterIP") }}
+      nodePort: null
+      {{- else if (and (eq .Values.service.type "NodePort") (not (empty .Values.service.epmdNodePort))) }}
+      nodePort: {{ .Values.service.epmdNodePort }}
+      {{- end }}
+    - name: {{ .Values.service.distPortName }}
       port: {{ .Values.service.distPort }}
       targetPort: dist
-      {{- if (eq .Values.service.type "ClusterIP") }}
+      {{- if eq .Values.service.type "ClusterIP" }}
       nodePort: null
+      {{- else if (and (eq .Values.service.type "NodePort") (not (empty .Values.service.distNodePort))) }}
+      nodePort: {{ .Values.service.distNodePort }}
       {{- end }}
-    - name: stats
+    {{- if .Values.service.managerPortEnabled }}
+    - name: {{ .Values.service.managerPortName }}
       port: {{ .Values.service.managerPort }}
       targetPort: stats
-      {{- if (eq .Values.service.type "ClusterIP") }}
+      {{- if eq .Values.service.type "ClusterIP" }}
       nodePort: null
+      {{- else if (and (eq .Values.service.type "NodePort") (not (empty .Values.service.managerNodePort))) }}
+      nodePort: {{ .Values.service.managerNodePort }}
       {{- end }}
-  {{- if .Values.metrics.enabled }}
-    - name: metrics
-      port: {{ .Values.metrics.port }}
+    {{- end }}
+    {{- if .Values.metrics.enabled }}
+    - name: {{ .Values.service.metricsPortName }}
+      port: {{ .Values.service.metricsPort }}
       targetPort: metrics
-      {{- if (eq .Values.service.type "ClusterIP") }}
+      {{- if eq .Values.service.type "ClusterIP" }}
       nodePort: null
+      {{- else if (and (eq .Values.service.type "NodePort") (not (empty .Values.service.metricsNodePort))) }}
+      nodePort: {{ .Values.service.metricsNodePort }}
       {{- end }}
-  {{- end }}
-{{- if .Values.service.extraPorts }}
-{{ toYaml .Values.service.extraPorts | indent 4 }}
-{{- end }}
-  selector:
-    app: {{ template "rabbitmq.name" . }}
-    release: "{{ .Release.Name }}"
+    {{- end }}
+    {{- if .Values.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  selector: {{ include "common.labels.matchLabels" . | nindent 4 }}

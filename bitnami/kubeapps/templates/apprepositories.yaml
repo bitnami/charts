@@ -3,16 +3,24 @@ apiVersion: kubeapps.com/v1alpha1
 kind: AppRepository
 metadata:
   name: {{ .name }}
-  annotations:
-    "helm.sh/hook": post-install
-  labels:
+{{- if .namespace }}
+  namespace: {{ .namespace }}
+{{- end }}
+  labels:{{ include "kubeapps.extraAppLabels" $ | nindent 4 }}
     app: {{ template "kubeapps.apprepository.fullname" $ }}
-    chart: {{ template "kubeapps.chart" $ }}
-    release: {{ $.Release.Name }}
-    heritage: {{ $.Release.Service }}
 spec:
+{{- if .type }}
+  type: {{ .type }}
+{{- else }}
   type: helm
+{{- end }}
   url: {{ .url }}
+{{- if .ociRepositories }}
+  ociRepositories:
+{{- range .ociRepositories }}
+  - {{ . }}
+{{- end }}
+{{- end }}
 {{- if or $.Values.securityContext.enabled $.Values.apprepository.initialReposProxy.enabled .nodeSelector }}
   syncJobPodTemplate:
     spec:

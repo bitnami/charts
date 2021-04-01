@@ -2,31 +2,30 @@
   "$schema": "http://json-schema.org/schema#",
   "type": "object",
   "properties": {
-    "rootUser": {
-      "type": "object",
-      "properties": {
-        "password": {
-          "type": "string",
-          "title": "MariaDB admin password",
-          "form": true,
-          "description": "Defaults to a random 10-character alphanumeric string if not set",
-          "hidden": {
-            "condition": false,
-            "value": "usePassword"
-          }
-        }
-      }
+    "architecture": {
+      "type": "string",
+      "title": "MariaDB architecture",
+      "form": true,
+      "description": "Allowed values: `standalone` or `replication`"
     },
-    "db": {
+    "auth": {
       "type": "object",
+      "title": "Authentication configuration",
+      "form": true,
       "properties": {
-        "name": {
+        "rootPassword": {
+          "type": "string",
+          "title": "MariaDB root password",
+          "form": true,
+          "description": "Defaults to a random 10-character alphanumeric string if not set"
+        },
+        "database": {
           "type": "string",
           "title": "MariaDB custom database",
           "description": "Name of the custom database to be created during the 1st initialization of MariaDB",
           "form": true
         },
-        "user": {
+        "username": {
           "type": "string",
           "title": "MariaDB custom user",
           "description": "Name of the custom user to be created during the 1st initialization of MariaDB. This user only has permissions on the MariaDB custom database",
@@ -35,35 +34,43 @@
         "password": {
           "type": "string",
           "title": "Password for MariaDB custom user",
-          "form": true,
           "description": "Defaults to a random 10-character alphanumeric string if not set",
+          "form": true,
           "hidden": {
-            "condition": false,
-            "value": "usePassword"
+            "value": false,
+            "path": "usePassword"
+          }
+        },
+        "replicationUser": {
+          "type": "string",
+          "title": "MariaDB replication user",
+          "description": "Name of user used to manage replication.",
+          "form": true,
+          "hidden": {
+            "value": "standalone",
+            "path": "architecture"
+          }
+        },
+        "replicationPassword": {
+          "type": "string",
+          "title": "Password for MariaDB replication user",
+          "description": "Defaults to a random 10-character alphanumeric string if not set",
+          "form": true,
+          "hidden": {
+            "value": "standalone",
+            "path": "architecture"
           }
         }
       }
     },
-    "replication": {
+    "primary": {
       "type": "object",
-      "title": "Replication configuration",
-      "form": true,
-      "properties": {
-        "enabled": {
-          "type": "boolean",
-          "form": true,
-          "title": "Enable replication configuration"
-        }
-      }
-    },
-    "master": {
-      "type": "object",
-      "title": "Master replicas settings",
+      "title": "Primary replicas settings",
       "form": true,
       "properties": {
         "persistence": {
           "type": "object",
-          "title": "Persistence for master replicas",
+          "title": "Persistence for primary replicas",
           "form": true,
           "properties": {
             "enabled": {
@@ -81,26 +88,26 @@
               "sliderMax": 100,
               "sliderUnit": "Gi",
               "hidden": {
-                "condition": false,
-                "value": "persistence.enabled"
+                "value": false,
+                "path": "persistence/enabled"
               }
             }
           }
         }
       }
     },
-    "slave": {
+    "secondary": {
       "type": "object",
-      "title": "Slave replicas settings",
+      "title": "Secondary replicas settings",
       "form": true,
       "hidden": {
-        "condition": false,
-        "value": "replication.enabled"
+        "value": false,
+        "path": "replication/enabled"
       },
       "properties": {
         "persistence": {
           "type": "object",
-          "title": "Persistence for slave replicas",
+          "title": "Persistence for secondary replicas",
           "form": true,
           "properties": {
             "enabled": {
@@ -118,8 +125,8 @@
               "sliderMax": 100,
               "sliderUnit": "Gi",
               "hidden": {
-                "condition": false,
-                "value": "persistence.enabled"
+                "value": false,
+                "path": "persistence/enabled"
               }
             }
           }
@@ -157,8 +164,8 @@
               "description": "Create a ServiceMonitor to track metrics using Prometheus Operator",
               "form": true,
               "hidden": {
-                "condition": false,
-                "value": "metrics.enabled"
+                "value": false,
+                "path": "metrics/enabled"
               }
             }
           }

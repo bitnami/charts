@@ -1,19 +1,32 @@
-apiVersion: v1
-name: prestashop
-version: 9.2.6
-appVersion: 1.7.6-5
+annotations:
+  category: E-Commerce
+apiVersion: v2
+appVersion: 1.7.7-3
+dependencies:
+  - condition: mariadb.enabled
+    name: mariadb
+    repository: https://charts.bitnami.com/bitnami
+    version: 9.x.x
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 1.x.x
 description: A popular open source ecommerce solution. Professional tools are easily accessible to increase online sales including instant guest checkout, abandoned cart reminders and automated Email marketing.
-keywords:
-- prestashop
-- e-commerce
-- http
-- web
-- php
-home: https://prestashop.com/
-sources:
-- https://github.com/bitnami/bitnami-docker-prestashop
-maintainers:
-- name: Bitnami
-  email: containers@bitnami.com
 engine: gotpl
-icon: https://bitnami.com/assets/stacks/prestashop/img/prestashop-stack-110x117.png
+home: https://github.com/bitnami/charts/tree/master/bitnami/prestashop
+icon: https://bitnami.com/assets/stacks/prestashop/img/prestashop-stack-220x234.png
+keywords:
+  - prestashop
+  - e-commerce
+  - http
+  - web
+  - php
+maintainers:
+  - email: containers@bitnami.com
+    name: Bitnami
+name: prestashop
+sources:
+  - https://github.com/bitnami/bitnami-docker-prestashop
+  - https://prestashop.com/
+version: 13.1.6

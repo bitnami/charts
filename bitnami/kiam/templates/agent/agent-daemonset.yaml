@@ -1,0 +1,220 @@
+{{- if .Values.agent.enabled }}
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: agent
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  name: {{ template "common.names.fullname" . }}-agent
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if .Values.agent.updateStrategy }}
+  updateStrategy: {{- toYaml .Values.agent.updateStrategy | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: agent
+  template:
+    metadata:
+      {{- if .Values.agent.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.agent.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app.kubernetes.io/component: agent
+        {{- if .Values.agent.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.agent.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- include "kiam.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.agent.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.agent.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ template "kiam.agent.serviceAccountName" . }}
+      dnsPolicy: {{ .Values.agent.dnsPolicy }}
+      hostNetwork: {{ .Values.agent.useHostNetwork }}
+      {{- if .Values.agent.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.agent.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.agent.podAffinityPreset "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.agent.podAntiAffinityPreset "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.agent.nodeAffinityPreset.type "key" .Values.agent.nodeAffinityPreset.key "values" .Values.agent.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.agent.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.agent.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.agent.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.agent.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.agent.priorityClassName }}
+      priorityClassName: {{ .Values.agent.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.agent.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.agent.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.agent.initContainers }}
+      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.agent.initContainers "context" $) | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: agent
+          image: {{ template "kiam.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.agent.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.agent.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.agent.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.agent.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.agent.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.agent.command "context" $) | nindent 12 }}
+          {{- else }}
+          command:
+            - kiam
+            - agent
+          {{- end }}
+          {{- if .Values.agent.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.agent.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            {{- if .Values.agent.iptables }}
+            - --iptables
+            {{- end }}
+            {{- if not .Values.agent.iptablesRemoveOnShutdown }}
+            - --no-iptables-remove
+            {{- end }}
+            - --host-interface={{ .Values.agent.hostInterface }}
+            {{- if .Values.agent.logJsonOutput }}
+            - --json-log
+            {{- end }}
+            - --level={{ .Values.agent.logLevel }}
+            - --port={{ .Values.agent.containerPort }}
+            - --cert=/bitnami/kiam/tls/{{ .Values.agent.tlsCerts.certFileName }}
+            - --key=/bitnami/kiam/tls/{{ .Values.agent.tlsCerts.keyFileName }}
+            - --ca=/bitnami/kiam/tls/{{ .Values.agent.tlsCerts.caFileName }}
+            - --server-address={{ template "common.names.fullname" . }}-server:{{ .Values.server.service.port }}
+            {{- if .Values.agent.metrics.enabled }}
+            - --prometheus-listen-addr=0.0.0.0:{{ .Values.agent.metrics.port }}
+            - --prometheus-sync-interval={{ .Values.agent.metrics.syncInterval }}
+            {{- end }}
+            {{- if .Values.agent.allowRouteRegExp }}
+            - --allow-route-regexp={{ .Values.agent.allowRouteRegExp }}
+            {{- end }}
+            - --gateway-timeout-creation={{ .Values.agent.gatewayTimeoutCreation }}
+            {{- if .Values.agent.keepaliveParams.time }}
+            - --grpc-keepalive-time-ms={{ .Values.agent.keepaliveParams.time }}
+            {{- end }}
+            {{- if .Values.agent.keepaliveParams.timeout }}
+            - --grpc-keepalive-timeout-ms={{ .Values.agent.keepaliveParams.timeout }}
+            {{- end }}
+            {{- if .Values.agent.keepaliveParams.permitWithoutStream }}
+            - --grpc-keepalive-permit-without-stream
+            {{- end }}
+            {{- range $key, $value := .Values.agent.extraArgs }}
+            {{- if $value }}
+            - --{{ $key }}={{ $value }}
+            {{- else }}
+            - --{{ $key }}
+            {{- end }}
+            {{- end }}
+          {{- end }}
+          env:
+            - name: HOST_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            {{- if .Values.agent.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.agent.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.agent.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.agent.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.agent.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.agent.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          ports:
+            {{- if .Values.agent.metrics.enabled }}
+            - name: metrics
+              containerPort: {{ .Values.agent.metrics.port }}
+              protocol: TCP
+            {{- end }}
+          {{- if .Values.agent.resources }}
+          resources: {{- toYaml .Values.agent.resources | nindent 12 }}
+          {{- end }}
+          {{- if .Values.agent.livenessProbe.enabled }}
+          livenessProbe:
+            httpGet:
+              {{- if .Values.agent.enableDeepProbe }}
+              path: /health?deep=1
+              {{- else }}
+              path: /ping
+              {{- end }}
+              port: {{ .Values.agent.containerPort }}
+            initialDelaySeconds: {{ .Values.agent.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.agent.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.agent.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.agent.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.agent.livenessProbe.failureThreshold }}
+          {{- else if .Values.agent.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.agent.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.agent.readinessProbe.enabled }}
+          readinessProbe:
+            httpGet:
+              {{- if .Values.agent.enableDeepProbe }}
+              path: /health?deep=1
+              {{- else }}
+              path: /ping
+              {{- end }}
+              port: {{ .Values.agent.containerPort }}
+            initialDelaySeconds: {{ .Values.agent.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.agent.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.agent.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.agent.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.agent.readinessProbe.failureThreshold }}
+          {{- else if .Values.agent.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.agent.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - mountPath: /bitnami/kiam/tls
+              name: tls
+            {{- if .Values.server.sslCertHostPath }}
+            - mountPath: /etc/ssl/certs
+              name: ssl-certs
+              readOnly: true
+            {{- end }}
+            - mountPath: /var/run/xtables.lock
+              name: xtables
+            {{- if .Values.agent.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.agent.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+        {{- if .Values.agent.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.agent.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: tls
+          secret:
+            {{- if .Values.agent.tlsSecret }}
+            secretName: {{ .Values.agent.tlsSecret }}
+            {{else}}
+            secretName: {{ template "common.names.fullname" . }}-agent
+            {{- end }}
+        {{- if .Values.server.sslCertHostPath }}
+        - name: ssl-certs
+          hostPath:
+            path: {{ .Values.server.sslCertHostPath }}
+        {{- end }}
+        - name: xtables
+          hostPath:
+            path: /run/xtables.lock
+            type: FileOrCreate
+        {{- if .Values.agent.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.agent.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+{{- end }}

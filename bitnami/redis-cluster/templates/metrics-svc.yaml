@@ -2,14 +2,21 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "redis-cluster.fullname" . }}-metrics
-  labels: {{- include "redis-cluster.labels" . | nindent 4 }}
+  name: {{ template "common.names.fullname" . }}-metrics
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.metrics.service.labels }}
-    {{ include "common.tplvalues.render" ( dict "value" .Values.metrics.service.labels "context" $ ) | indent 4 }}
+    {{ include "common.tplvalues.render" ( dict "value" .Values.metrics.service.labels "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
     app.kubernetes.io/component: "metrics"
+  annotations:
+  {{- if .Values.commonAnnotations }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
   {{- if .Values.metrics.service.annotations }}
-  annotations: {{ include "common.tplvalues.render" ( dict "value" .Values.metrics.service.annotations "context" $ ) | nindent 4 }}
+  {{ include "common.tplvalues.render" ( dict "value" .Values.metrics.service.annotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
   type: {{ .Values.metrics.service.type }}
@@ -20,5 +27,5 @@ spec:
     - name: metrics
       port: 9121
       targetPort: http-metrics
-  selector: {{- include "redis-cluster.matchLabels" $ | nindent 4 }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
 {{- end }}

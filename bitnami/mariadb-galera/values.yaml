@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/mariadb-galera
-  tag: 10.4.13-debian-10-r23
+  tag: 10.5.9-debian-10-r27
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -28,15 +28,14 @@ image:
   #   - myRegistryKeySecretName
 
   ## Set to true if you would like to see extra information on logs
-  ## It turns BASH debugging in minideb-extras-base
   ##
   debug: false
 
-## String to partially override mariadb-galera.fullname template (will maintain the release name)
+## String to partially override common.names.fullname template (will maintain the release name)
 ##
 # nameOverride:
 
-## String to fully override mariadb-galera.fullname template
+## String to fully override common.names.fullname template
 ##
 # fullnameOverride:
 
@@ -54,6 +53,11 @@ clusterDomain: cluster.local
 ##
 podManagementPolicy: OrderedReady
 
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
+
 ## MariaDB Gallera K8s svc properties
 ##
 service:
@@ -67,6 +71,11 @@ service:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
   # nodePort: 30001
+
+  ## Specify the externalIP value ClusterIP service type.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#external-ips
+  ##
+  # externalIPs: []
 
   ## Set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -85,6 +94,15 @@ service:
   ##
   annotations: {}
 
+  ## Headless service properties
+  ##
+  headless:
+    ## Additional annotations for headless service.
+    ## Can be useful in case peer-finder is used in a sidecar,
+    ## e.g.: service.alpha.kubernetes.io/tolerate-unready-endpoints="true"
+    ##
+    annotations: {}
+
 ## Pods Service Account
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 ##
@@ -93,7 +111,7 @@ serviceAccount:
   ##
   create: false
   ## The name of the ServiceAccount to use.
-  ## If not set and create is true, a name is generated using the mariadb-galera.fullname template
+  ## If not set and create is true, a name is generated using the common.names.fullname template
   ##
   name: ""
 
@@ -132,6 +150,9 @@ securityContext:
 ## Database credentials for root (admin) user
 ##
 rootUser:
+  ## MariaDB admin user
+  ##
+  user: root
   ## MariaDB admin password
   ## Password is ignored if existingSecret is specified.
   ## ref: https://github.com/bitnami/bitnami-docker-mariadb-galera#setting-the-root-password-on-first-run
@@ -173,12 +194,14 @@ galera:
 
   ## Bootstraping options
   ## ref: https://github.com/bitnami/bitnami-docker-mariadb-galera#bootstraping
+  ##
   bootstrap:
-    ## Node to bootstrap from, you will need to change this parameter incase you want to bootstrap from other node
+    ## Node to bootstrap from, you will need to change this parameter in case you want to bootstrap from other node
     ##
-    bootstrapFromNode: 0
-    ## Force bootstrap
+    bootstrapFromNode:
+    ## Force safe_to_bootstrap in grastate.date file.
     ## This will set safe_to_bootstrap=1 in the node indicated by bootstrapFromNode.
+    ##
     forceSafeToBootstrap: false
 
   ## Credentials to perform backups
@@ -206,6 +229,8 @@ ldap:
   binddn: ""
   bindpw: ""
   bslookup:
+  filter:
+  map:
   nss_initgroups_ignoreusers: root,nslcd
   scope:
   tls_reqcert:
@@ -250,15 +275,18 @@ mariadbConfiguration: |-
   bind_address=0.0.0.0
 
   ## Character set
+  ##
   collation_server=utf8_unicode_ci
   init_connect='SET NAMES utf8'
   character_set_server=utf8
 
   ## MyISAM
+  ##
   key_buffer_size=32M
   myisam_recover_options=FORCE,BACKUP
 
   ## Safety
+  ##
   skip_host_cache
   skip_name_resolve
   max_allowed_packet=16M
@@ -267,6 +295,7 @@ mariadbConfiguration: |-
   sysdate_is_now=1
 
   ## Binary Logging
+  ##
   log_bin=mysql-bin
   expire_logs_days=14
   # Disabling for performance per http://severalnines.com/blog/9-tips-going-production-galera-cluster-mysql
@@ -275,6 +304,7 @@ mariadbConfiguration: |-
   binlog_format=row
 
   ## Caches and Limits
+  ##
   tmp_table_size=32M
   max_heap_table_size=32M
   # Re-enabling as now works with Maria 10.1.2
@@ -288,6 +318,7 @@ mariadbConfiguration: |-
   table_open_cache=4096
 
   ## InnoDB
+  ##
   innodb=FORCE
   innodb_strict_mode=1
   # Mandatory per https://github.com/codership/documentation/issues/25
@@ -305,6 +336,7 @@ mariadbConfiguration: |-
   innodb_file_format=Barracuda
 
   ## Logging
+  ##
   log_error=/opt/bitnami/mariadb/logs/mysqld.log
   slow_query_log_file=/opt/bitnami/mariadb/logs/mysqld.log
   log_queries_not_using_indexes=1
@@ -375,6 +407,7 @@ mariadbConfiguration: |-
 ## Can be used to specify command line flags, for example:
 ##
 ## extraFlags: "--max-connect-errors=1000 --max_connections=155"
+##
 
 ## Desired number of cluster nodes
 ##
@@ -386,25 +419,65 @@ replicaCount: 3
 updateStrategy:
   type: RollingUpdate
 
-## Additional pod annotations for MariaDB Galera pods
+## Additional labels for MariaDB Galera pods
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
+podLabels: {}
+
+## Additional annotations for MariaDB Galera pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
 
+## Pod affinity preset
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+##
+podAffinityPreset: ""
+
+## Pod anti-affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+##
+podAntiAffinityPreset: soft
+
+## Node affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+## Allowed values: soft, hard
+##
+nodeAffinityPreset:
+  ## Node affinity type
+  ## Allowed values: soft, hard
+  ##
+  type: ""
+  ## Node label key to match
+  ## E.g.
+  ## key: "kubernetes.io/e2e-az-name"
+  ##
+  key: ""
+  ## Node label values to match
+  ## E.g.
+  ## values:
+  ##   - e2e-az1
+  ##   - e2e-az2
+  ##
+  values: []
+
 ## Affinity for pod assignment. Evaluated as a template.
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+## Note: podAffinityPreset, podAntiAffinityPreset, and nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
 
 ## Node labels for pod assignment. Evaluated as a template.
-## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+## ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
 nodeSelector: {}
 
 ## Tolerations for pod assignment. Evaluated as a template.
-## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
-tolerations: {}
+tolerations: []
 
 ## Enable persistence using Persistent Volume Claims
 ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
@@ -418,6 +491,12 @@ persistence:
   # Subdirectory of the volume to mount
   # subPath:
   mountPath: /bitnami/mariadb
+  ## selector can be used to match an existing PersistentVolume
+  ## selector:
+  ##   matchLabels:
+  ##     app: my-app
+  ##
+  selector: {}
   ## Persistent Volume Storage Class
   ## If defined, storageClassName: <storageClass>
   ## If set to "-", storageClassName: "", which disables dynamic provisioning
@@ -437,11 +516,6 @@ persistence:
   ##
   size: 8Gi
 
-## Additional pod labels
-##
-# podLabels:
-#   extraLabel: extraValue
-
 ## Priority Class Name
 #
 # priorityClassName: 'priorityClass'
@@ -450,7 +524,7 @@ persistence:
 ##
 extraInitContainers: []
 # - name: do-something
-#   image: bitnami/minideb:buster
+#   image: bitnami/minideb
 #   command: ['do', 'something']
 
 ## Additional containers
@@ -512,6 +586,17 @@ readinessProbe:
   timeoutSeconds: 1
   successThreshold: 1
   failureThreshold: 3
+startupProbe:
+  enabled: false
+  ## Initializing the database could take some time
+  ##
+  initialDelaySeconds: 120
+  periodSeconds: 10
+  timeoutSeconds: 1
+  successThreshold: 1
+  ## Let's wait 600 seconds by default, it should give enough time in any cluster for mysql to init
+  ##
+  failureThreshold: 48
 
 ## Pod disruption budget configuration
 ##
@@ -532,7 +617,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mysqld-exporter
-    tag: 0.12.1-debian-10-r133
+    tag: 0.12.1-debian-10-r389
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -540,6 +625,13 @@ metrics:
     ##
     # pullSecrets:
     #   - myRegistryKeySecretName
+  ## MySQL exporter additional command line flags
+  ## Can be used to specify command line flags
+  ## E.g.:
+  ## extraFlags:
+  ##   - --collect.binlog_size
+  ##
+  extraFlags: []
   ## MySQL Prometheus exporter containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -586,3 +678,46 @@ metrics:
     ##
     selector:
       prometheus: kube-prometheus
+
+    ## RelabelConfigs to apply to samples before scraping
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+    ## Value is evalued as a template
+    ##
+    relabelings: []
+
+    ## MetricRelabelConfigs to apply to samples before ingestion
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+    ## Value is evalued as a template
+    ##
+    metricRelabelings: []
+    #  - sourceLabels:
+    #      - "__name__"
+    #    targetLabel: "__name__"
+    #    action: replace
+    #    regex: '(.*)'
+    #    replacement: 'example_prefix_$1'
+
+  ## Prometheus Operator PrometheusRule configuration
+  ##
+  prometheusRules:
+    enabled: false
+
+    ## Additional labels to add to the PrometheusRule so it is picked up by the operator.
+    ## If using the [Helm Chart](https://github.com/helm/charts/tree/master/stable/prometheus-operator) this is the name of the Helm release and 'app: prometheus-operator'
+    ##
+    selector:
+      app: prometheus-operator
+      release: prometheus
+
+    ## Rules as a map.
+    ##
+    rules: {}
+    #  - alert: MariaDB-Down
+    #    annotations:
+    #      message: 'MariaDB instance {{ $labels.instance }} is down'
+    #      summary: MariaDB instance is down
+    #    expr: absent(up{job="mariadb-galera"} == 1)
+    #    labels:
+    #      severity: warning
+    #      service: mariadb-galera
+    #    for: 5m

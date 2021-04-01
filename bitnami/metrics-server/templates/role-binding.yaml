@@ -1,16 +1,16 @@
 {{- if .Values.rbac.create -}}
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: RoleBinding
 metadata:
-  name: {{ template "metrics-server.fullname" . }}-auth-reader
+  name: {{ printf "%s-auth-reader" (include "common.names.fullname" .) }}
   namespace: kube-system
-  labels: {{- include "metrics-server.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
   name: extension-apiserver-authentication-reader
 subjects:
   - kind: ServiceAccount
-    name: {{ template "metrics-server.fullname" . }}
+    name: {{ template "common.names.fullname" . }}
     namespace: {{ .Release.Namespace }}
 {{- end -}}

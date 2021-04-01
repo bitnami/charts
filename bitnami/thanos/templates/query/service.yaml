@@ -1,0 +1,52 @@
+{{- $query := (include "thanos.query.values" . | fromYaml) -}}
+{{- if $query.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "common.names.fullname" . }}-query
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: query
+  {{- if $query.service.annotations }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" $query.service.annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ $query.service.type }}
+  {{- if and $query.service.clusterIP (eq $query.service.type "ClusterIP") }}
+  clusterIP: {{ $query.service.clusterIP }}
+  {{- end }}
+  {{- if ne $query.service.type "ClusterIP" }}
+  externalTrafficPolicy: {{ $query.service.externalTrafficPolicy }}
+  {{- end }}
+  {{- if and $query.service.loadBalancerIP (eq $query.service.type "LoadBalancer") }}
+  loadBalancerIP: {{ $query.service.loadBalancerIP }}
+  {{- end }}
+  {{- if and (eq $query.service.type "LoadBalancer") $query.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges: {{- toYaml $query.service.loadBalancerSourceRanges | nindent 4 }}
+  {{- end }}
+  ports:
+    - port: {{ $query.service.http.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+      {{- if (and (or (eq $query.service.type "NodePort") (eq $query.service.type "LoadBalancer")) $query.service.http.nodePort) }}
+      nodePort: {{ $query.service.http.nodePort }}
+      {{- else if eq $query.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    - port: {{ $query.service.grpc.port }}
+      targetPort: grpc
+      protocol: TCP
+      name: grpc
+      {{- if (and (or (eq $query.service.type "NodePort") (eq $query.service.type "LoadBalancer")) $query.service.grpc.nodePort) }}
+      nodePort: {{ $query.service.grpc.nodePort }}
+      {{- else if eq $query.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+  selector: 
+    {{- if $query.service.labelSelectorsOverride }}
+    {{- include "common.tplvalues.render" (dict "value" $query.service.labelSelectorsOverride "context" $) | nindent 4 }}
+    {{- else }}
+    {{- include "common.labels.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: query
+    {{- end }}
+{{- end }}

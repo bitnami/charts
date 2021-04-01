@@ -17,10 +17,15 @@ serverBlock: |-
 
 ingress:
   enabled: true
-  tls: []
+  tls: true
 
 metrics:
   enabled: true
   ## Kubeval doesn't recognise ServiceMonitor as a valid K8s object
   # serviceMonitor:
   #   enabled: true
+
+pdb:
+  create: true
+  minAvailable: 3
+  maxUnavailable: 5

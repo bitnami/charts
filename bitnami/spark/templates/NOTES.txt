@@ -1,7 +1,7 @@
 1. Get the Spark master WebUI URL by running these commands:
 {{- if .Values.ingress.enabled }}
 
-  export HOSTNAME=$(kubectl get ingress --namespace {{ .Release.Namespace }} {{ include "spark.fullname" . }}-ingress -o jsonpath='{.spec.rules[0].host}')
+  export HOSTNAME=$(kubectl get ingress --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }}-ingress -o jsonpath='{.spec.rules[0].host}')
   echo "Spark-master URL: http://$HOSTNAME/"
 
 {{- else -}}
@@ -30,41 +30,40 @@
 2. Submit an application to the cluster:
 
   To submit an application to the cluster the spark-submit script must be used. That script can be
-  obtained at https://github.com/apache/spark/tree/master/bin. Also you can use kubectl run. 
+  obtained at https://github.com/apache/spark/tree/master/bin. Also you can use kubectl run.
 
 {{- if or (eq "NodePort" .Values.service.type) (eq "LoadBalancer" .Values.service.type) }}
 
   Run the commands below to obtain the master IP and submit your application.
-{{- end -}}
+{{- end }}
 
+  export EXAMPLE_JAR=$(kubectl exec -ti --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }}-worker-0 -- find examples/jars/ -name 'spark-example*\.jar' | tr -d '\r')
 {{- if eq "NodePort" .Values.service.type }}
-
   export SUBMIT_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[?(@.name=='cluster')].nodePort}" services {{ include "spark.master.service.name" . }})
   export SUBMIT_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
 
-  kubectl run --namespace {{ .Release.Namespace }} {{ template "spark.fullname" . }}-client --rm --tty -i --restart='Never' \
+  kubectl run --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }}-client --rm --tty -i --restart='Never' \
     --image {{ template "spark.image" . }} \
     -- spark-submit --master spark://$SUBMIT_IP:$SUBMIT_PORT \
     --class org.apache.spark.examples.SparkPi \
     --deploy-mode cluster \
-    examples/jars/spark-examples_2.11-2.4.4.jar 1000
+    $EXAMPLE_JAR 1000
 
 {{- else if eq "LoadBalancer" .Values.service.type }}
-
   export SUBMIT_IP=$(kubectl get --namespace {{ .Release.Namespace }} svc {{ include "spark.master.service.name" . }} -o jsonpath="{.status.loadBalancer.ingress[0]['ip', 'hostname'] }")
 
-  kubectl run --namespace {{ .Release.Namespace }} {{ template "spark.fullname" . }}-client --rm --tty -i --restart='Never' \
+  kubectl run --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }}-client --rm --tty -i --restart='Never' \
     --image {{ template "spark.image" . }} \
     -- spark-submit --master spark://$SUBMIT_IP:{{ .Values.service.clusterPort }} \
     --deploy-mode cluster \
     --class org.apache.spark.examples.SparkPi \
-    examples/jars/spark-examples_2.11-2.4.4.jar 1000
+    $EXAMPLE_JAR 1000
 
 {{- else }}
 
-  kubectl exec -ti {{ include "spark.fullname" . }}-worker-0 -- spark-submit --master spark://{{ include "spark.master.service.name" . }}:{{ .Values.service.clusterPort }} \
+  kubectl exec -ti --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }}-worker-0 -- spark-submit --master spark://{{ include "spark.master.service.name" . }}:{{ .Values.service.clusterPort }} \
     --class org.apache.spark.examples.SparkPi \
-    examples/jars/spark-examples_2.11-2.4.4.jar 5
+    $EXAMPLE_JAR 5
 
 ** IMPORTANT: When submit an application from outside the cluster service type should be set to the NodePort or LoadBalancer. **
 
@@ -74,6 +73,6 @@
 
 ** Please be patient while the chart is being deployed **
 
-{{ include "spark.rollingTags.warning" . }}
+{{ include "spark.checkRollingTags" . }}
 
 {{ include "spark.validateValues" . }}

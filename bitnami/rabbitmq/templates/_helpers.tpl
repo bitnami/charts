@@ -3,7 +3,7 @@
 Expand the name of the chart.
 */}}
 {{- define "rabbitmq.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
+{{- include "common.names.name" . -}}
 {{- end -}}
 
 {{/*
@@ -12,59 +12,50 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 If release name contains chart name it will be used as a full name.
 */}}
 {{- define "rabbitmq.fullname" -}}
-{{- if .Values.fullnameOverride -}}
-{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- $name := default .Chart.Name .Values.nameOverride -}}
-{{- if contains $name .Release.Name -}}
-{{- .Release.Name | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Create chart name and version as used by the chart label.
-*/}}
-{{- define "rabbitmq.chart" -}}
-{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{/*
-Return the proper RabbitMQ plugin list
-*/}}
-{{- define "rabbitmq.plugins" -}}
-{{- $plugins := .Values.rabbitmq.plugins -}}
-{{- if .Values.rabbitmq.extraPlugins -}}
-{{- $plugins = printf "%s %s" $plugins .Values.rabbitmq.extraPlugins -}}
-{{- end -}}
-{{- if .Values.metrics.enabled -}}
-{{- $plugins = printf "%s %s" $plugins .Values.metrics.plugins -}}
-{{- end -}}
-{{- printf "[%s]." $plugins | replace " " ", " | indent 4 -}}
+{{- include "common.names.fullname" . -}}
 {{- end -}}
 
 {{/*
 Return the proper RabbitMQ image name
 */}}
 {{- define "rabbitmq.image" -}}
-{{- $registryName := .Values.image.registry -}}
-{{- $repositoryName := .Values.image.repository -}}
-{{- $tag := .Values.image.tag | toString -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) }}
+{{- end -}}
+
 {{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-Also, we can't use a single if because lazy evaluation is not an option
+Return the proper image name (for the init container volume-permissions image)
 */}}
-{{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-    {{- else -}}
-        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-    {{- end -}}
+{{- define "rabbitmq.volumePermissions.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.volumePermissions.image "global" .Values.global) }}
+{{- end -}}
+
+{{/*
+Return the proper Docker Image Registry Secret Names
+*/}}
+{{- define "rabbitmq.imagePullSecrets" -}}
+{{ include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.volumePermissions.image) "global" .Values.global) }}
+{{- end -}}
+
+{{/*
+Return podAnnotations
+*/}}
+{{- define "rabbitmq.podAnnotations" -}}
+{{- if .Values.podAnnotations }}
+{{ include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) }}
+{{- end }}
+{{- if .Values.metrics.enabled }}
+{{ include "common.tplvalues.render" (dict "value" .Values.metrics.podAnnotations "context" $) }}
+{{- end }}
+{{- end -}}
+
+{{/*
+ Create the name of the service account to use
+ */}}
+{{- define "rabbitmq.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create -}}
+    {{ default (include "rabbitmq.fullname" .) .Values.serviceAccount.name }}
 {{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+    {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
 
@@ -72,8 +63,8 @@ Also, we can't use a single if because lazy evaluation is not an option
 Get the password secret.
 */}}
 {{- define "rabbitmq.secretPasswordName" -}}
-    {{- if .Values.rabbitmq.existingPasswordSecret -}}
-        {{- printf "%s" .Values.rabbitmq.existingPasswordSecret -}}
+    {{- if .Values.auth.existingPasswordSecret -}}
+        {{- printf "%s" (tpl .Values.auth.existingPasswordSecret $) -}}
     {{- else -}}
         {{- printf "%s" (include "rabbitmq.fullname" .) -}}
     {{- end -}}
@@ -83,104 +74,83 @@ Get the password secret.
 Get the erlang secret.
 */}}
 {{- define "rabbitmq.secretErlangName" -}}
-    {{- if .Values.rabbitmq.existingErlangSecret -}}
-        {{- printf "%s" .Values.rabbitmq.existingErlangSecret -}}
+    {{- if .Values.auth.existingErlangSecret -}}
+        {{- printf "%s" (tpl .Values.auth.existingErlangSecret $) -}}
     {{- else -}}
         {{- printf "%s" (include "rabbitmq.fullname" .) -}}
     {{- end -}}
 {{- end -}}
 
 {{/*
-Return the proper Docker Image Registry Secret Names
+Get the TLS secret.
 */}}
-{{- define "rabbitmq.imagePullSecrets" -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else logic.
-Also, we can not use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-{{- if .Values.global.imagePullSecrets }}
-imagePullSecrets:
-{{- range .Values.global.imagePullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- else if or .Values.image.pullSecrets .Values.volumePermissions.image.pullSecrets }}
-imagePullSecrets:
-{{- range .Values.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.volumePermissions.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- end -}}
-{{- else if or .Values.image.pullSecrets .Values.volumePermissions.image.pullSecrets }}
-imagePullSecrets:
-{{- range .Values.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.volumePermissions.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- end -}}
+{{- define "rabbitmq.secretTLSName" -}}
+    {{- if .Values.auth.tls.existingSecret -}}
+        {{- printf "%s" .Values.auth.tls.existingSecret -}}
+    {{- else -}}
+        {{- printf "%s-certs" (include "rabbitmq.fullname" .) -}}
+    {{- end -}}
 {{- end -}}
 
 {{/*
-Return the proper image name (for the init container volume-permissions image)
+Get the Ingress TLS secret.
 */}}
-{{- define "rabbitmq.volumePermissions.image" -}}
-{{- $registryName := .Values.volumePermissions.image.registry -}}
-{{- $repositoryName := .Values.volumePermissions.image.repository -}}
-{{- $tag := .Values.volumePermissions.image.tag | toString -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-Also, we can't use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
+{{- define "rabbitmq.ingressSecretTLSName" -}}
+    {{- if .Values.ingress.existingSecret -}}
+        {{- printf "%s" .Values.ingress.existingSecret -}}
     {{- else -}}
-        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+        {{- printf "%s-tls" .Values.ingress.hostname -}}
     {{- end -}}
-{{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-{{- end -}}
 {{- end -}}
 
 {{/*
-Return  the proper Storage Class
+Return the proper RabbitMQ plugin list
 */}}
-{{- define "rabbitmq.storageClass" -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else logic.
-*/}}
-{{- if .Values.global -}}
-    {{- if .Values.global.storageClass -}}
-        {{- if (eq "-" .Values.global.storageClass) -}}
-            {{- printf "storageClassName: \"\"" -}}
-        {{- else }}
-            {{- printf "storageClassName: %s" .Values.global.storageClass -}}
-        {{- end -}}
-    {{- else -}}
-        {{- if .Values.persistence.storageClass -}}
-              {{- if (eq "-" .Values.persistence.storageClass) -}}
-                  {{- printf "storageClassName: \"\"" -}}
-              {{- else }}
-                  {{- printf "storageClassName: %s" .Values.persistence.storageClass -}}
-              {{- end -}}
-        {{- end -}}
-    {{- end -}}
-{{- else -}}
-    {{- if .Values.persistence.storageClass -}}
-        {{- if (eq "-" .Values.persistence.storageClass) -}}
-            {{- printf "storageClassName: \"\"" -}}
-        {{- else }}
-            {{- printf "storageClassName: %s" .Values.persistence.storageClass -}}
-        {{- end -}}
-    {{- end -}}
+{{- define "rabbitmq.plugins" -}}
+{{- $plugins := .Values.plugins -}}
+{{- if .Values.extraPlugins -}}
+{{- $plugins = printf "%s %s" $plugins .Values.extraPlugins -}}
 {{- end -}}
+{{- if .Values.metrics.enabled -}}
+{{- $plugins = printf "%s %s" $plugins .Values.metrics.plugins -}}
+{{- end -}}
+{{- printf "%s" $plugins | replace " " ", " -}}
+{{- end -}}
+
+{{/*
+Return the number of bytes given a value
+following a base 2 o base 10 number system.
+Usage:
+{{ include "rabbitmq.toBytes" .Values.path.to.the.Value }}
+*/}}
+{{- define "rabbitmq.toBytes" -}}
+{{- $value := int (regexReplaceAll "([0-9]+).*" . "${1}") }}
+{{- $unit := regexReplaceAll "[0-9]+(.*)" . "${1}" }}
+{{- if eq $unit "Ki" }}
+    {{- mul $value 1024 }}
+{{- else if eq $unit "Mi" }}
+    {{- mul $value 1024 1024 }}
+{{- else if eq $unit "Gi" }}
+    {{- mul $value 1024 1024 1024 }}
+{{- else if eq $unit "Ti" }}
+    {{- mul $value 1024 1024 1024 1024 }}
+{{- else if eq $unit "Pi" }}
+    {{- mul $value 1024 1024 1024 1024 1024 }}
+{{- else if eq $unit "Ei" }}
+    {{- mul $value 1024 1024 1024 1024 1024 1024 }}
+{{- else if eq $unit "K" }}
+    {{- mul $value 1000 }}
+{{- else if eq $unit "M" }}
+    {{- mul $value 1000 1000 }}
+{{- else if eq $unit "G" }}
+    {{- mul $value 1000 1000 1000 }}
+{{- else if eq $unit "T" }}
+    {{- mul $value 1000 1000 1000 1000 }}
+{{- else if eq $unit "P" }}
+    {{- mul $value 1000 1000 1000 1000 1000 }}
+{{- else if eq $unit "E" }}
+    {{- mul $value 1000 1000 1000 1000 1000 1000 }}
+{{- end }}
 {{- end -}}
 
 {{/*
@@ -189,6 +159,7 @@ Compile all warnings into a single message, and call fail.
 {{- define "rabbitmq.validateValues" -}}
 {{- $messages := list -}}
 {{- $messages := append $messages (include "rabbitmq.validateValues.ldap" .) -}}
+{{- $messages := append $messages (include "rabbitmq.validateValues.memoryHighWatermark" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -202,14 +173,15 @@ Validate values of rabbitmq - LDAP support
 */}}
 {{- define "rabbitmq.validateValues.ldap" -}}
 {{- if .Values.ldap.enabled }}
-{{- if not (and .Values.ldap.server .Values.ldap.port .Values.ldap.user_dn_pattern) }}
+{{- $serversListLength := len .Values.ldap.servers }}
+{{- if or (not (gt $serversListLength 0)) (not (and .Values.ldap.port .Values.ldap.user_dn_pattern)) }}
 rabbitmq: LDAP
-    Invalid LDAP configuration. When enabling LDAP support, the parameters "ldap.server",
+    Invalid LDAP configuration. When enabling LDAP support, the parameters "ldap.servers",
     "ldap.port", and "ldap. user_dn_pattern" are mandatory. Please provide them:
 
     $ helm install {{ .Release.Name }} bitnami/rabbitmq \
       --set ldap.enabled=true \
-      --set ldap.server="lmy-ldap-server" \
+      --set ldap.servers[0]="lmy-ldap-server" \
       --set ldap.port="389" \
       --set user_dn_pattern="cn=${username},dc=example,dc=org"
 {{- end -}}
@@ -217,26 +189,29 @@ rabbitmq: LDAP
 {{- end -}}
 
 {{/*
-Renders a value that contains template.
-Usage:
-{{ include "rabbitmq.tplValue" (dict "value" .Values.path.to.the.Value "context" $) }}
+Validate values of rabbitmq - Memory high watermark
 */}}
-{{- define "rabbitmq.tplValue" -}}
-    {{- if typeIs "string" .value }}
-        {{- tpl .value .context }}
-    {{- else }}
-        {{- tpl (.value | toYaml) .context }}
-    {{- end }}
-{{- end -}}
+{{- define "rabbitmq.validateValues.memoryHighWatermark" -}}
+{{- if and (not (eq .Values.memoryHighWatermark.type "absolute")) (not (eq .Values.memoryHighWatermark.type "relative")) }}
+rabbitmq: memoryHighWatermark.type
+    Invalid Memory high watermark type. Valid values are "absolute" and
+    "relative". Please set a valid mode (--set memoryHighWatermark.type="xxxx")
+{{- else if and .Values.memoryHighWatermark.enabled (not .Values.resources.limits.memory) (eq .Values.memoryHighWatermark.type "relative") }}
+rabbitmq: memoryHighWatermark
+    You enabled configuring memory high watermark using a relative limit. However,
+    no memory limits were defined at POD level. Define your POD limits as shown below:
 
-{{/*
-Return podAnnotations
-*/}}
-{{- define "rabbitmq.podAnnotations" -}}
-{{- if .Values.podAnnotations }}
-{{ toYaml .Values.podAnnotations }}
-{{- end }}
-{{- if .Values.metrics.enabled }}
-{{ include "rabbitmq.tplValue" ( dict "value" .Values.metrics.podAnnotations "context" $) }}
-{{- end }}
+    $ helm install {{ .Release.Name }} bitnami/rabbitmq \
+      --set memoryHighWatermark.enabled=true \
+      --set memoryHighWatermark.type="relative" \
+      --set memoryHighWatermark.value="0.4" \
+      --set resources.limits.memory="2Gi"
+
+    Altenatively, user an absolute value for the memory memory high watermark :
+
+    $ helm install {{ .Release.Name }} bitnami/rabbitmq \
+      --set memoryHighWatermark.enabled=true \
+      --set memoryHighWatermark.type="absolute" \
+      --set memoryHighWatermark.value="512MB"
+{{- end -}}
 {{- end -}}

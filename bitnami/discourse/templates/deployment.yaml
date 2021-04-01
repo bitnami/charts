@@ -1,0 +1,251 @@
+{{- if and (include "discourse.host" .) (or .Values.postgresql.enabled .Values.externalDatabase.host) -}}
+apiVersion: {{ template "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ template "common.names.fullname" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    component: discourse
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      component: discourse
+  {{- if .Values.updateStrategy }}
+  strategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
+  {{- end }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmaps.yaml") . | sha256sum }}
+        checksum/secrets-discourse: {{ include (print $.Template.BasePath "/secrets-discourse.yaml") . | sha256sum }}
+        checksum/secrets-database: {{ include (print $.Template.BasePath "/secrets-database.yaml") . | sha256sum }}
+        checksum/secrets-redis: {{ include (print $.Template.BasePath "/secrets-redis.yaml") . | sha256sum }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        component: discourse
+        {{- if .Values.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+      {{- if .Values.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+    spec:
+      {{- include "discourse.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "discourse.serviceAccountName" . }}
+      securityContext: {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      {{- if .Values.initContainers }}
+      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: discourse
+          securityContext: {{- toYaml .Values.discourse.containerSecurityContext | nindent 12 }}
+          image: {{ template "discourse.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.discourse.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.discourse.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.discourse.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.discourse.args "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            {{- if .Values.image.debug }}
+            - name: NAMI_DEBUG
+              value: "--log-level trace"
+            {{- end }}
+            - name: DISCOURSE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "discourse.secretName" . }}
+                  key: discourse-password
+            - name: DISCOURSE_POSTGRESQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "discourse.postgresql.secretName" . }}
+                  key: postgresql-password
+            {{- if and (not .Values.postgresql.enabled) .Values.externalDatabase.postgresqlPostgresUser }}
+            - name: POSTGRESQL_ROOT_USER
+              value: {{ .Values.externalDatabase.postgresqlPostgresUser | quote }}
+            {{- end }}
+            - name: POSTGRESQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "discourse.postgresql.secretName" . }}
+                  key: postgresql-postgres-password
+            {{- if (include "discourse.redis.usePassword" .) }}
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "discourse.redis.secretName" . }}
+                  key: {{ include "discourse.redis.secretPasswordKey" . }}
+            {{- end }}
+            {{- if .Values.discourse.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.discourse.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "common.names.fullname" . }}
+            {{- if .Values.discourse.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ .Values.discourse.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.discourse.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.discourse.extraEnvVarsSecret }}
+            {{- end }}
+          ports:
+            - name: http
+              containerPort: 3000
+              protocol: TCP
+          {{- if .Values.discourse.livenessProbe.enabled }}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: {{ .Values.discourse.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.discourse.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.discourse.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.discourse.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.discourse.livenessProbe.failureThreshold }}
+          {{- else if .Values.discourse.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.discourse.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.discourse.readinessProbe.enabled }}
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: {{ .Values.discourse.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.discourse.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.discourse.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.discourse.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.discourse.readinessProbe.failureThreshold }}
+          {{- else if .Values.discourse.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.discourse.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: discourse-data
+              mountPath: /bitnami/discourse
+              subPath: discourse
+            {{- if .Values.discourse.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.discourse.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if .Values.discourse.resources }}
+          resources: {{- toYaml .Values.discourse.resources | nindent 12 }}
+          {{- end }}
+        - name: sidekiq
+          securityContext: {{- toYaml .Values.sidekiq.containerSecurityContext | nindent 12 }}
+          image: {{ template "discourse.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.sidekiq.command "context" $) | nindent 12 }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.sidekiq.args "context" $) | nindent 12 }}
+          env:
+            {{- if .Values.image.debug }}
+            - name: NAMI_DEBUG
+              value: "--log-level trace"
+            {{- end }}
+            - name: DISCOURSE_HOST
+              value: "127.0.0.1"
+            - name: DISCOURSE_PORT
+              value: "3000"
+            - name: DISCOURSE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "discourse.secretName" . }}
+                  key: discourse-password
+            - name: DISCOURSE_POSTGRESQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "discourse.postgresql.secretName" . }}
+                  key: postgresql-password
+            {{- if (include "discourse.redis.usePassword" .) }}
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "discourse.redis.secretName" . }}
+                  key: {{ include "discourse.redis.secretPasswordKey" . }}
+            {{- end }}
+            {{- if .Values.sidekiq.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.sidekiq.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "common.names.fullname" . }}
+            {{- if .Values.sidekiq.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ .Values.sidekiq.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.sidekiq.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.sidekiq.extraEnvVarsSecret }}
+            {{- end }}
+          {{- if .Values.sidekiq.livenessProbe.enabled }}
+          livenessProbe:
+            exec:
+              command: ["/bin/sh", "-c", "nami status discourse-sidekiq"]
+            initialDelaySeconds: {{ .Values.sidekiq.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.sidekiq.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.sidekiq.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.sidekiq.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.sidekiq.livenessProbe.failureThreshold }}
+          {{- else if .Values.sidekiq.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.sidekiq.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.sidekiq.readinessProbe.enabled }}
+          readinessProbe:
+            exec:
+              command: ["/bin/sh", "-c", "nami status discourse-sidekiq"]
+            initialDelaySeconds: {{ .Values.sidekiq.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.sidekiq.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.sidekiq.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.sidekiq.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.sidekiq.readinessProbe.failureThreshold }}
+          {{- else if .Values.sidekiq.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.sidekiq.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: discourse-data
+              mountPath: /bitnami/discourse
+              subPath: discourse
+            {{- if .Values.sidekiq.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.sidekiq.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if .Values.sidekiq.resources }}
+          resources: {{- toYaml .Values.sidekiq.resources | nindent 12 }}
+          {{- end }}
+        {{- if .Values.sidecars }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | indent 8 }}
+        {{- end }}
+      volumes:
+        - name: discourse-data
+          {{- if .Values.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.persistence.existingClaim | default (include "common.names.fullname" .) }}
+          {{- else }}
+          emptyDir: {}
+          {{ end }}
+        {{- if .Values.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+{{- end }}

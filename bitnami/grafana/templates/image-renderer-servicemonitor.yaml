@@ -2,18 +2,20 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ include "grafana.fullname" . }}-image-renderer
+  name: {{ include "common.names.fullname" . }}-image-renderer
   {{- if .Values.imageRenderer.metrics.serviceMonitor.namespace }}
   namespace: {{ .Values.imageRenderer.metrics.serviceMonitor.namespace }}
+  {{- else }}
+  namespace: {{ .Release.Namespace }}
   {{- end }}
-  labels: {{- include "grafana.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: image-renderer
     {{- range $key, $value := .Values.imageRenderer.metrics.serviceMonitor.selector }}
     {{ $key }}: {{ $value | quote }}
     {{- end }}
 spec:
   selector:
-    matchLabels: {{ include "grafana.matchLabels" . | nindent 6 }}
+    matchLabels: {{ include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: image-renderer
   endpoints:
     - port: http

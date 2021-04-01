@@ -13,7 +13,7 @@
 image:
   registry: docker.io
   repository: bitnami/logstash
-  tag: 7.7.1-debian-10-r0
+  tag: 7.12.0-debian-10-r0
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -25,9 +25,17 @@ image:
   #   - myRegistryKeySecretName
 
   ## Set to true if you would like to see extra information on logs
-  ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
   ##
   debug: false
+
+## Force target Kubernetes version (using Helm capabilites if not set)
+##
+kubeVersion:
+
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
 
 ## String to partially override logstash.fullname template (will maintain the release name)
 ##
@@ -102,12 +110,17 @@ output: |-
 ##
 # existingConfiguration:
 
+## Allows user to use multiple pipelines
+## ref: https://www.elastic.co/guide/en/logstash/master/multiple-pipelines.html
+##
+enableMultiplePipelines: false
 
 ## Array to add extra volumes (evaluated as a template)
 ## extraVolumes:
 ##   - name: myvolume
 ##     configMap:
 ##       name: myconfigmap
+##
 extraVolumes: []
 
 ## Array to add extra mounts (normally used with extraVolumes, evaluated as a template)
@@ -116,6 +129,7 @@ extraVolumes: []
 ##   - mountPath: /opt/bitnami/desired-path
 ##     name: myvolume
 ##     readOnly: true
+##
 extraVolumeMounts: []
 
 containerPorts:
@@ -151,8 +165,43 @@ podManagementPolicy: OrderedReady
 ##
 podAnnotations: {}
 
-## Affinity for pod assignment
+## Pod affinity preset
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+##
+podAffinityPreset: ""
+
+## Pod anti-affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+##
+podAntiAffinityPreset: soft
+
+## Node affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+## Allowed values: soft, hard
+##
+nodeAffinityPreset:
+  ## Node affinity type
+  ## Allowed values: soft, hard
+  ##
+  type: ""
+  ## Node label key to match
+  ## E.g.
+  ## key: "kubernetes.io/e2e-az-name"
+  ##
+  key: ""
+  ## Node label values to match
+  ## E.g.
+  ## values:
+  ##   - e2e-az1
+  ##   - e2e-az2
+  ##
+  values: []
+
+## Affinity for pod assignment. Evaluated as a template.
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+## Note: podAffinityPreset, podAntiAffinityPreset, and nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
 
@@ -164,7 +213,7 @@ nodeSelector: {}
 ## Tolerations for pod assignment. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
-tolerations: {}
+tolerations: []
 
 ## Pod priority
 ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
@@ -216,7 +265,7 @@ readinessProbe:
   # successThreshold: 1
   # failureThreshold: 6
 
-## Service paramaters
+## Service parameters
 ##
 service:
   ## Service type
@@ -241,6 +290,12 @@ service:
   ## Load Balancer sources
   ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
   ##
+
+  ## Enable client source IP preservation
+  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ##
+  externalTrafficPolicy: ""
+
   # loadBalancerSourceRanges:
   # - 10.10.10.0/24
   ## Set the Cluster IP to use
@@ -251,38 +306,74 @@ service:
   ##
   annotations: {}
 
-## Ingress paramaters
+## Configure the ingress resource that allows you to access the
+## Logstash installation. Set up the URL
+## ref: http://kubernetes.io/docs/user-guide/ingress/
 ##
 ingress:
   ## Set to true to enable ingress record generation
+  ##
   enabled: false
 
   ## Set this to true in order to add the corresponding annotations for cert-manager
+  ##
   certManager: false
+
+  ## Ingress Path type
+  ##
+  pathType: ImplementationSpecific
+
+  ## Override API Version (automatically detected if not set)
+  ##
+  apiVersion:
+
+  ## When the ingress is enabled, a host pointing to this will be created
+  ##
+  hostname: logstash.local
+
+  ## The Path to Logstash. You may need to set this to '/*' in order to use this
+  ## with ALB ingress controllers.
+  ##
+  path: /
 
   ## Ingress annotations done as key:value pairs
   ## For a full list of possible ingress annotations, please see
-  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/annotations.md
+  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
   ##
-  ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
   ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+  ##
   annotations: {}
-  #  kubernetes.io/ingress.class: nginx
 
-  ## The list of hostnames to be covered with this ingress record.
-  ## Most likely this will be just one host, but in the event more hosts are needed, this is an array
-  hosts:
-    - name: logstash.local
-      path: /
+  ## Enable TLS configuration for the hostname defined at ingress.hostname parameter
+  ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
+  ## You can use the ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
+  ##
+  tls: false
 
-  ## The tls configuration for the ingress
+  ## The list of additional hostnames to be covered with this ingress record.
+  ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
+  ## extraHosts:
+  ## - name: logstash.local
+  ##   path: /
+  ##
+
+  ## Any additional arbitrary paths that may need to be added to the ingress under the main host.
+  ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
+  ## extraPaths:
+  ## - path: /*
+  ##   backend:
+  ##     serviceName: ssl-redirect
+  ##     servicePort: use-annotation
+  ##
+
+  ## The tls configuration for additional hostnames to be covered with this ingress record.
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
-  # tls:
-  # - hosts:
-  #   - logstash.local
-  #   secretName: logstash.local-tls
+  ## extraTls:
+  ## - hosts:
+  ##     - logstash.local
+  ##   secretName: logstash.local-tls
+  ##
 
-  secrets:
   ## If you're providing your own certificates, please use this to add the certificates as secrets
   ## key and certificate should start with -----BEGIN CERTIFICATE----- or
   ## -----BEGIN RSA PRIVATE KEY-----
@@ -292,9 +383,12 @@ ingress:
   ##
   ## It is also possible to create and manage the certificates outside of this helm chart
   ## Please see README.md for more information
-  # - name: logstash.local-tls
-  #   key:
-  #   certificate:
+  ##
+  secrets: []
+  ## - name: logstash.local-tls
+  ##   key:
+  ##   certificate:
+  ##
 
 ## Prometheus metrics
 ##
@@ -306,7 +400,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/logstash-exporter
-    tag: 0.1.2-debian-10-r132
+    tag: 7.3.0-debian-10-r137
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -418,3 +512,7 @@ podDisruptionBudget:
   create: false
   minAvailable: 1
   # maxUnavailable: 1
+
+## Array of extra objects to deploy
+##
+extraDeploy:

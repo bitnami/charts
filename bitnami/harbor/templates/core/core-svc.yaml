@@ -2,14 +2,21 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "harbor.core" . }}
-  labels: {{- include "harbor.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    app.kubernetes.io/component: core
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
-  {{- if  (eq .Values.service.ingress.controller "gce") }}
+  {{- if  (eq .Values.ingress.controller "gce") }}
   type: NodePort
   {{- end }}
   ports:
     - name: http
-      port: 80
+      port: {{ include "harbor.core.servicePort" . }}
       targetPort: http
-  selector: {{- include "harbor.matchLabels" . | nindent 4 }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: core

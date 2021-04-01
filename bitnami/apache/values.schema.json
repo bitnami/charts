@@ -5,7 +5,7 @@
     "ingress": {
       "type": "object",
       "form": true,
-      "title": "Ingress Details",
+      "title": "Ingress Configuration",
       "properties": {
         "enabled": {
           "type": "boolean",
@@ -19,8 +19,8 @@
           "title": "Enable TLS annotations via cert-manager",
           "description": "Set this to true in order to add the corresponding annotations for cert-manager",
           "hidden": {
-            "condition": false,
-            "value": "ingress.enabled"
+            "value": false,
+            "path": "ingress/enabled"
           }
         },
         "hostname": {
@@ -28,9 +28,22 @@
           "form": true,
           "title": "Hostname",
           "hidden": {
-            "condition": false,
-            "value": "ingress.enabled"
+            "value": false,
+            "path": "ingress/enabled"
           }
+        }
+      }
+    },
+    "service": {
+      "type": "object",
+      "form": true,
+      "title": "Service Configuration",
+      "properties": {
+        "type": {
+          "type": "string",
+          "form": true,
+          "title": "Service Type",
+          "description": "Allowed values: \"ClusterIP\", \"NodePort\" and \"LoadBalancer\""
         }
       }
     },

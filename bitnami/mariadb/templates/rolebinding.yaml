@@ -1,18 +1,21 @@
 {{- if and .Values.serviceAccount.create .Values.rbac.create }}
 kind: RoleBinding
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
-  name: {{ template "master.fullname" . }}
-  labels:
-    app: "{{ template "mariadb.name" . }}"
-    chart: "{{ template "mariadb.chart" . }}"
-    release: {{ .Release.Name | quote }}
-    heritage: {{ .Release.Service | quote }}
+  name: {{ include "common.names.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 subjects:
   - kind: ServiceAccount
-    name: {{ template "mariadb.serviceAccountName" . }}
+    name: {{ include "mariadb.serviceAccountName" . }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: {{ template "master.fullname" . }}
+  name: {{ include "common.names.fullname" . -}}
 {{- end }}

@@ -1,0 +1,22 @@
+{{- if and .Values.queryFrontend.enabled .Values.queryFrontend.pspEnabled .Values.queryFrontend.rbac.create -}}
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: {{ include "common.names.fullname" . }}-query-frontend
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: query-frontend
+spec:
+  fsGroup:
+    rule: RunAsAny
+  runAsUser:
+    ranges:
+    - max: 1001
+      min: 1001
+    rule: MustRunAs
+  seLinux:
+    rule: RunAsAny
+  supplementalGroups:
+    rule: RunAsAny
+  volumes:
+  - secret
+{{- end -}}

@@ -1,12 +1,21 @@
-{{- if and (ne .Values.service.type "Ingress") (not .Values.service.tls.enabled) }}
+{{- if and (not .Values.ingress.enabled) (not .Values.service.tls.enabled) }}
+{{- $scheme := include "harbor.component.scheme" . -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ include "harbor.nginx" . }}
-  labels: {{- include "harbor.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    app.kubernetes.io/component: nginx
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 data:
   nginx.conf: |+
     worker_processes auto;
+    pid /opt/bitnami/nginx/tmp/nginx.pid;
 
     events {
       worker_connections 1024;
@@ -15,31 +24,30 @@ data:
     }
 
     http {
+      client_body_temp_path  "/opt/bitnami/nginx/tmp/client_body" 1 2;
+      proxy_temp_path        "/opt/bitnami/nginx/tmp/proxy" 1 2;
+      fastcgi_temp_path      "/opt/bitnami/nginx/tmp/fastcgi" 1 2;
+      scgi_temp_path         "/opt/bitnami/nginx/tmp/scgi" 1 2;
+      uwsgi_temp_path        "/opt/bitnami/nginx/tmp/uwsgi" 1 2;
       tcp_nodelay on;
 
       # this is necessary for us to be able to disable request buffering in all cases
       proxy_http_version 1.1;
 
       upstream core {
-        server {{ template "harbor.core" . }};
+        server {{ template "harbor.core" . }}:{{ template "harbor.core.servicePort" . }};
       }
 
       upstream portal {
-        server {{ template "harbor.portal" . }};
+        server {{ template "harbor.portal" . }}:{{ template "harbor.portal.servicePort" . }};
       }
 
-      log_format timed_combined '$remote_addr - '
+      log_format timed_combined '[$time_local]:$remote_addr - '
         '"$request" $status $body_bytes_sent '
         '"$http_referer" "$http_user_agent" '
         '$request_time $upstream_response_time $pipe';
 
       access_log /dev/stdout timed_combined;
-
-      client_body_temp_path  "/opt/bitnami/nginx/tmp/client_body" 1 2;
-      proxy_temp_path        "/opt/bitnami/nginx/tmp/proxy" 1 2;
-      fastcgi_temp_path      "/opt/bitnami/nginx/tmp/fastcgi" 1 2;
-      scgi_temp_path         "/opt/bitnami/nginx/tmp/scgi" 1 2;
-      uwsgi_temp_path        "/opt/bitnami/nginx/tmp/uwsgi" 1 2;
 
       server {
         listen 8080;
@@ -47,8 +55,12 @@ data:
         # disable any limits to avoid HTTP 413 for large image uploads
         client_max_body_size 0;
 
+        # Add extra headers
+        add_header X-Frame-Options DENY;
+        add_header Content-Security-Policy "frame-ancestors 'none'";
+
         location / {
-          proxy_pass http://portal/;
+          proxy_pass {{ $scheme }}://portal/;
           proxy_set_header Host $host;
           proxy_set_header X-Real-IP $remote_addr;
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -62,7 +74,11 @@ data:
         }
 
         location /api/ {
-          proxy_pass http://core/api/;
+          proxy_pass {{ $scheme }}://core/api/;
+          {{- if and .Values.internalTLS.enabled }}
+          proxy_ssl_verify        off;
+          proxy_ssl_session_reuse on;
+          {{- end }}
           proxy_set_header Host $host;
           proxy_set_header X-Real-IP $remote_addr;
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -76,7 +92,11 @@ data:
         }
 
         location /chartrepo/ {
-          proxy_pass http://core/chartrepo/;
+          proxy_pass {{ $scheme }}://core/chartrepo/;
+          {{- if and .Values.internalTLS.enabled }}
+          proxy_ssl_verify        off;
+          proxy_ssl_session_reuse on;
+          {{- end }}
           proxy_set_header Host $host;
           proxy_set_header X-Real-IP $remote_addr;
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -90,7 +110,7 @@ data:
         }
 
         location /c/ {
-          proxy_pass http://core/c/;
+          proxy_pass {{ $scheme }}://core/c/;
           proxy_set_header Host $host;
           proxy_set_header X-Real-IP $remote_addr;
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -108,7 +128,7 @@ data:
         }
 
         location /v2/ {
-          proxy_pass http://core/v2/;
+          proxy_pass {{ $scheme }}://core/v2/;
           proxy_set_header Host $http_host;
           proxy_set_header X-Real-IP $remote_addr;
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -122,7 +142,7 @@ data:
         }
 
         location /service/ {
-          proxy_pass http://core/service/;
+          proxy_pass {{ $scheme }}://core/service/;
           proxy_set_header Host $host;
           proxy_set_header X-Real-IP $remote_addr;
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;

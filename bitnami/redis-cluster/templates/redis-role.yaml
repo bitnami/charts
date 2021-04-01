@@ -1,15 +1,21 @@
 {{- if .Values.rbac.create -}}
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: Role
 metadata:
-  name: {{ template "redis-cluster.fullname" . }}
-  labels: {{- include "redis-cluster.labels" . | nindent 4 }}
+  name: {{ template "common.names.fullname" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 rules:
 {{- if .Values.podSecurityPolicy.create }}
   - apiGroups: ['{{ template "podSecurityPolicy.apiGroup" . }}']
     resources: ['podsecuritypolicies']
     verbs: ['use']
-    resourceNames: [{{ template "redis-cluster.fullname" . }}]
+    resourceNames: [{{ template "common.names.fullname" . }}]
 {{- end -}}
 {{- if .Values.rbac.role.rules }}
 {{- toYaml .Values.rbac.role.rules | nindent 2 }}

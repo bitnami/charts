@@ -1,8 +1,8 @@
 {{- if and .Values.metrics.enabled .Values.metrics.serviceMonitor.enabled .Values.metrics.serviceMonitor.rbac.create }}
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: Role
 metadata:
-  name: {{ template "kong.fullname" . }}-prometheus
+  name: {{ template "common.names.fullname" . }}-prometheus
   namespace: {{ .Release.Namespace }}
 rules:
 - apiGroups: [""]

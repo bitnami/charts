@@ -1,17 +1,26 @@
-apiVersion: v1
-appVersion: 7.7.1
+annotations:
+  category: LogManagement
+apiVersion: v2
+appVersion: 7.12.0
+dependencies:
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 1.x.x
 description: Logstash is an open source, server-side data processing pipeline that ingests data from a multitude of sources simultaneously, transforms it, and then sends it to your favorite "stash".
 engine: gotpl
-home: https://www.elastic.co/products/logstash
+home: https://github.com/bitnami/charts/tree/master/bitnami/logstash
 icon: https://bitnami.com/assets/stacks/logstash/img/logstash-stack-220x234.png
 keywords:
   - logstash
   - logging
   - elk
 maintainers:
-  - name: Bitnami
-    email: containers@bitnami.com
+  - email: containers@bitnami.com
+    name: Bitnami
 name: logstash
 sources:
   - https://github.com/bitnami/bitnami-docker-logstash
-version: 0.4.1
+  - https://www.elastic.co/products/logstash
+version: 3.2.3

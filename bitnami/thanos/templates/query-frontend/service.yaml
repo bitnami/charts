@@ -1,0 +1,42 @@
+{{- if .Values.queryFrontend.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "common.names.fullname" . }}-query-frontend
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: query-frontend
+  {{- if .Values.queryFrontend.service.annotations }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.service.annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.queryFrontend.service.type }}
+  {{- if and .Values.queryFrontend.service.clusterIP (eq .Values.queryFrontend.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.queryFrontend.service.clusterIP }}
+  {{- end }}
+  {{- if ne .Values.queryFrontend.service.type "ClusterIP" }}
+  externalTrafficPolicy: {{ .Values.queryFrontend.service.externalTrafficPolicy }}
+  {{- end }}
+  {{- if and .Values.queryFrontend.service.loadBalancerIP (eq .Values.queryFrontend.service.type "LoadBalancer") }}
+  loadBalancerIP: {{ .Values.queryFrontend.service.loadBalancerIP }}
+  {{- end }}
+  {{- if and (eq .Values.queryFrontend.service.type "LoadBalancer") .Values.queryFrontend.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges: {{- toYaml .Values.queryFrontend.service.loadBalancerSourceRanges | nindent 4 }}
+  {{- end }}
+  ports:
+    - port: {{ .Values.queryFrontend.service.http.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+      {{- if (and (or (eq .Values.queryFrontend.service.type "NodePort") (eq .Values.queryFrontend.service.type "LoadBalancer")) .Values.queryFrontend.service.http.nodePort) }}
+      nodePort: {{ .Values.queryFrontend.service.http.nodePort }}
+      {{- else if eq .Values.queryFrontend.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+  selector:
+    {{- if .Values.queryFrontend.service.labelSelectorsOverride }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.service.labelSelectorsOverride "context" $) | nindent 4 }}
+    {{- else }}
+    {{- include "common.labels.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: query-frontend
+    {{- end }}
+{{- end }}

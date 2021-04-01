@@ -1,0 +1,40 @@
+{{- if .Values.kubeScheduler.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ template "kube-prometheus.fullname" . }}-kube-scheduler
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "kube-prometheus.labels" . | nindent 4 }}
+    app.kubernetes.io/component: {{ template "kube-prometheus.fullname" . }}-kube-scheduler
+spec:
+  jobLabel: component
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: {{ template "kube-prometheus.fullname" . }}-kube-scheduler
+  namespaceSelector:
+    matchNames:
+      - {{ .Values.kubeScheduler.namespace }}
+  endpoints:
+    - port: http-metrics
+      {{- if .Values.kubeScheduler.serviceMonitor.interval }}
+      interval: {{ .Values.kubeScheduler.serviceMonitor.interval }}
+      {{- end }}
+      bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+      {{- if .Values.kubeScheduler.serviceMonitor.https }}
+      scheme: https
+      tlsConfig:
+        caFile: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+        {{- if .Values.kubeScheduler.serviceMonitor.insecureSkipVerify }}
+        insecureSkipVerify: {{ .Values.kubeScheduler.serviceMonitor.insecureSkipVerify }}
+        {{- end}}
+        {{- if .Values.kubeScheduler.serviceMonitor.serverName }}
+        serverName: {{ .Values.kubeScheduler.serviceMonitor.serverName }}
+        {{- end}}
+      {{- end}}
+      {{- if .Values.kubeScheduler.serviceMonitor.metricRelabelings }}
+      metricRelabelings: {{- include "common.tplvalues.render" (dict "value" .Values.kubeScheduler.serviceMonitor.metricRelabelings "context" $) | nindent 6 }}
+      {{- end }}
+      {{- if .Values.kubeScheduler.serviceMonitor.relabelings }}
+      metricRelabelings: {{- include "common.tplvalues.render" (dict "value" .Values.kubeScheduler.serviceMonitor.relabelings "context" $) | nindent 6 }}
+      {{- end }}
+{{- end }}

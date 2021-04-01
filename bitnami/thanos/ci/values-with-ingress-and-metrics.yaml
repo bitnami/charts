@@ -9,4 +9,6 @@ metrics:
   serviceMonitor:
     ## Enable only if you previously installed the Prometheus Operator 
     ## in your cluster
-    enabled: false
+    enabled: true
+    labels:
+      release: prometheus-operator

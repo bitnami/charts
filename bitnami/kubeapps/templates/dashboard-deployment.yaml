@@ -1,12 +1,10 @@
-apiVersion: apps/v1
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ template "kubeapps.dashboard.fullname" . }}
   labels:
+    {{- include "kubeapps.extraAppLabels" . | nindent 4 }}
     app: {{ template "kubeapps.dashboard.fullname" . }}
-    chart: {{ template "kubeapps.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
 spec:
   replicas: {{ .Values.dashboard.replicaCount }}
   selector:
@@ -17,19 +15,26 @@ spec:
     metadata:
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/dashboard-config.yaml") . | sha256sum }}
+        {{- with .Values.dashboard.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
       labels:
         app: {{ template "kubeapps.dashboard.fullname" . }}
+        app.kubernetes.io/name: {{ template "common.names.name" . }}
         release: {{ .Release.Name }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        chart: {{ template "kubeapps.chart" . }}
+        helm.sh/chart: {{ template "kubeapps.chart" . }}
     spec:
 {{- include "kubeapps.imagePullSecrets" . | indent 6 }}
       {{- if .Values.dashboard.affinity }}
-      affinity: {{- include "kubeapps.tplValue" (dict "value" .Values.dashboard.affinity "context" $) | nindent 8 }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.affinity "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.dashboard.nodeSelector }}
-      nodeSelector: {{- include "kubeapps.tplValue" (dict "value" .Values.dashboard.nodeSelector "context" $) | nindent 8 }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.dashboard.tolerations }}
-      tolerations: {{- include "kubeapps.tplValue" (dict "value" .Values.dashboard.tolerations "context" $) | nindent 8 }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.tolerations "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
@@ -38,7 +43,7 @@ spec:
       {{- end }}
       containers:
         - name: dashboard
-          image: {{ template "kubeapps.image" (list .Values.dashboard.image .Values.global) }}
+          image: {{ include "common.images.image" (dict "imageRoot" .Values.dashboard.image "global" .Values.global) }}
           imagePullPolicy: {{ .Values.dashboard.image.pullPolicy | quote }}
           {{- if .Values.dashboard.livenessProbe }}
           livenessProbe: {{- toYaml .Values.dashboard.livenessProbe | nindent 12 }}
@@ -52,9 +57,15 @@ spec:
             - name: config
               mountPath: /app/config.json
               subPath: config.json
+            - mountPath: /app/custom-css
+              name: custom-css
+            - mountPath: /app/custom-locale
+              name: custom-locale
+            - mountPath: /app/custom-components
+              name: custom-components
           ports:
             - name: http
-              containerPort: 8080
+              containerPort: {{ .Values.dashboard.service.port }}
           {{- if .Values.dashboard.resources }}
           resources: {{- toYaml .Values.dashboard.resources | nindent 12 }}
           {{- end }}
@@ -71,3 +82,21 @@ spec:
             items:
               - key: config.json
                 path: config.json
+        - name: custom-css
+          configMap:
+            name: {{ template "kubeapps.dashboard-config.fullname" . }}
+            items:
+              - key: custom_style.css
+                path: custom_style.css
+        - name: custom-locale
+          configMap:
+            name: {{ template "kubeapps.dashboard-config.fullname" . }}
+            items:
+              - key: custom_locale.json
+                path: custom_locale.json
+        - name: custom-components
+          configMap:
+            name: {{ template "kubeapps.dashboard-config.fullname" . }}
+            items:
+              - key: custom_components.js
+                path: custom_components.js

@@ -1,5 +1,5 @@
 {{- if .Values.cluster.externalAccess.enabled }}
-{{- $fullName := include "redis-cluster.fullname" . }}
+{{- $fullName := include "common.names.fullname" . }}
 {{- $nodesCount := .Values.cluster.nodes | int }}
 {{- $root := . }}
 
@@ -10,10 +10,19 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "redis-cluster.fullname" $ }}-{{ $i }}-svc
-  labels: {{- include "redis-cluster.labels" $ | nindent 4 }}
+  name: {{ template "common.names.fullname" $ }}-{{ $i }}-svc
+  labels: {{- include "common.labels.standard" $ | nindent 4 }}
     pod: {{ $targetPod }}
-  annotations: {{ include "common.tplvalues.render" ( dict "value" $root.Values.cluster.externalAccess.service.annotations "context" $) | nindent 4 }}
+    {{- if $root.Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" $root.Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  annotations:
+  {{- if $root.Values.commonAnnotations }}
+  {{- include "common.tplvalues.render" ( dict "value" $root.Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+  {{- if $root.Values.cluster.externalAccess.service.annotations }}
+  {{ include "common.tplvalues.render" ( dict "value" $root.Values.cluster.externalAccess.service.annotations "context" $) | nindent 4 }}
+  {{- end }}
 spec:
   type: {{ $root.Values.cluster.externalAccess.service.type }}
   {{- if $root.Values.cluster.externalAccess.service.loadBalancerIP }}
@@ -25,8 +34,8 @@ spec:
       targetPort: tcp-redis
     - name: tcp-redis-bus
       targetPort: tcp-redis-bus
-      port: {{ $root.Values.cluster.busPort }}
-  selector: {{- include "redis-cluster.matchLabels" $ | nindent 4 }}
+      port: {{ $root.Values.redis.busPort }}
+  selector: {{- include "common.labels.matchLabels" $ | nindent 4 }}
     statefulset.kubernetes.io/pod-name: {{ $targetPod }}
 ---
 {{- end }}

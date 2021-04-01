@@ -2,11 +2,8 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ template "kubeapps.assetsvc.fullname" . }}
-  labels:
-    app: {{ template "kubeapps.name" . }}
-    chart: {{ template "kubeapps.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+  labels:{{ include "kubeapps.extraAppLabels" . | nindent 4 }}
+    app: {{ template "common.names.name" . }}
 spec:
   type: ClusterIP
   ports:

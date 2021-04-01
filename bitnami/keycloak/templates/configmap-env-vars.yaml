@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ printf "%s-env-vars" (include "keycloak.fullname" .) }}
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: keycloak
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  KEYCLOAK_CREATE_ADMIN_USER: {{ ternary "true" "false" .Values.auth.createAdminUser | quote }}
+  KEYCLOAK_ADMIN_USER: {{ .Values.auth.adminUser | quote }}
+  KEYCLOAK_MANAGEMENT_USER: {{ .Values.auth.managementUser | quote }}
+  KEYCLOAK_HTTP_PORT: {{ .Values.containerPorts.http | quote }}
+  KEYCLOAK_PROXY_ADDRESS_FORWARDING: {{ ternary "true" "false" .Values.proxyAddressForwarding | quote }}
+  KEYCLOAK_ENABLE_STATISTICS: {{ ternary "true" "false" .Values.metrics.enabled | quote }}
+  {{- if (not .Values.externalDatabase.existingSecret) }}
+  KEYCLOAK_DATABASE_HOST: {{ include "keycloak.databaseHost" . | quote }}
+  KEYCLOAK_DATABASE_PORT: {{ include "keycloak.databasePort" . }}
+  KEYCLOAK_DATABASE_NAME: {{ include "keycloak.databaseName" . | quote }}
+  KEYCLOAK_DATABASE_USER: {{ include "keycloak.databaseUser" . | quote }}
+  {{- end }}
+  {{- if .Values.serviceDiscovery.enabled }}
+  KEYCLOAK_JGROUPS_DISCOVERY_PROTOCOL: {{ .Values.serviceDiscovery.protocol | quote }}
+  KEYCLOAK_JGROUPS_DISCOVERY_PROPERTIES: {{ (tpl (join "," .Values.serviceDiscovery.properties) $) | quote }}
+  KEYCLOAK_JGROUPS_TRANSPORT_STACK: {{ .Values.serviceDiscovery.transportStack | quote }}
+  {{- end }}
+  KEYCLOAK_CACHE_OWNERS_COUNT: {{ .Values.cache.ownersCount | quote }}
+  KEYCLOAK_AUTH_CACHE_OWNERS_COUNT: {{ .Values.cache.authOwnersCount | quote }}
+  KEYCLOAK_ENABLE_TLS: {{ ternary "true" "false" .Values.auth.tls.enabled | quote }}
+  {{- if .Values.auth.tls.enabled }}
+  KEYCLOAK_HTTPS_PORT: {{ .Values.containerPorts.https | quote }}
+  KEYCLOAK_TLS_KEYSTORE_FILE: "/opt/bitnami/keycloak/certs/keycloak.keystore.jks"
+  KEYCLOAK_TLS_TRUSTSTORE_FILE: "/opt/bitnami/keycloak/certs/keycloak.truststore.jks"
+  {{- end }}

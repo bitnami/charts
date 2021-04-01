@@ -1,0 +1,193 @@
+{{- if eq .Values.executor "CeleryExecutor" }}
+apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
+kind: StatefulSet
+metadata:
+  name: {{ include "common.names.fullname" . }}-worker
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: worker
+    {{- if .Values.commonLabels }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if .Values.worker.podManagementPolicy }}
+  podManagementPolicy: {{ .Values.worker.podManagementPolicy | quote }}
+  {{- end }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: worker
+  serviceName: {{ include "common.names.fullname" . }}-worker-headless
+  replicas: {{ default 1 .Values.worker.replicaCount }}
+  updateStrategy:
+    type: {{ .Values.worker.updateStrategy | quote }}
+    {{- if (eq "Recreate" .Values.worker.updateStrategy) }}
+    rollingUpdate: null
+    {{- else if .Values.worker.rollingUpdatePartition }}
+    rollingUpdate:
+      partition: {{ .Values.worker.rollingUpdatePartition }}
+    {{- end }}
+  template:
+    metadata:
+      annotations:
+        checksum/configmap: {{ include (print $.Template.BasePath "/config/configmap.yaml") . | sha256sum }}
+      {{- if .Values.worker.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.worker.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app.kubernetes.io/component: worker
+      {{- if .Values.worker.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.worker.podLabels "context" $) | nindent 8 }}
+      {{- end }}
+    spec:
+      {{- include "airflow.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.worker.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.worker.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      priorityClassName: {{ .Values.worker.priorityClassName | quote }}
+      {{- if .Values.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "airflow.serviceAccountName" . }}
+      {{- if or .Values.affinity .Values.worker.affinity }}
+      {{- if .Values.worker.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.worker.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
+      {{- end }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "component" "worker" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "component" "worker" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if or .Values.nodeSelector .Values.worker.nodeSelector }}
+      {{- if .Values.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
+      {{- else }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.worker.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- end }}
+      {{- if or .Values.tolerations .Values.worker.tolerations }}
+      {{- if .Values.worker.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.worker.tolerations "context" $) | nindent 8 }}
+      {{- else }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- end }}
+      initContainers: {{- include "airflow.git.containers.clone" . | trim | nindent 8 }}
+      {{- if .Values.worker.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.worker.initContainers "context" $) | trim | nindent 8 }}
+      {{- end }}
+      {{- if .Values.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | trim | nindent 8 }}
+      {{- end }}
+      containers: {{- include "airflow.git.containers.sync" . | trim | nindent 8 }}
+        - name: airflow-worker
+          image: {{ include "airflow.workerImage" . }}
+          imagePullPolicy: {{ .Values.worker.image.pullPolicy | quote }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.worker.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.worker.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.worker.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.worker.args "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.worker.resources }}
+          resources: {{- toYaml .Values.worker.resources | nindent 12 }}
+          {{- end }}
+          env:
+            {{- include "airflow.configure.airflow.common"  . | nindent 12 }}
+            {{- include "airflow.configure.database" . | nindent 12 }}
+            {{- include "airflow.configure.redis" . | nindent 12 }}
+            - name: AIRFLOW_WEBSERVER_HOST
+              value: {{ include "common.names.fullname" . }}
+            - name: AIRFLOW_WEBSERVER_PORT_NUMBER
+              value: {{ .Values.service.port | quote }}
+            {{- if .Values.extraEnvVars }}
+              {{ toYaml .Values.extraEnvVars | nindent 12 }}
+            {{- end }}
+            {{- if .Values.worker.extraEnvVars }}
+              {{- include "common.tplvalues.render" (dict "value" .Values.worker.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ .Values.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.extraEnvVarsSecret }}
+            {{- end }}
+            {{- if .Values.worker.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ .Values.worker.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.worker.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.worker.extraEnvVarsSecret }}
+            {{- end }}
+          ports:
+            - name: worker
+              containerPort: {{ .Values.worker.port }}
+          {{- if .Values.worker.livenessProbe.enabled }}
+          livenessProbe:
+            tcpSocket:
+              port: worker
+            {{ omit .Values.worker.livenessProbe "enabled" | toYaml | nindent 12 }}
+          {{- else if .Values.worker.customLivenessProbe }}
+          livenessProbe:
+            {{- include "common.tplvalues.render" (dict "value" .Values.worker.customLivenessProbe "context" $) | trim | nindent 12 }}
+          {{- end }}
+          {{- if .Values.worker.readinessProbe.enabled }}
+          readinessProbe:
+            tcpSocket:
+              port: worker
+            {{ omit .Values.worker.readinessProbe "enabled" | toYaml | nindent 12 }}
+          {{- else if .Values.worker.customRedinessProbe }}
+          readinessProbe:
+            {{- include "common.tplvalues.render" (dict "value" .Values.worker.customRedinessProbe "context" $) | trim | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+          {{- if .Files.Glob "files/dags/*.py" }}
+            - name: local-dag-files
+              mountPath: /opt/bitnami/airflow/dags/local
+          {{- end }}
+          {{- if .Values.dagsConfigMap }}
+            - name: external-dag-files
+              mountPath: /opt/bitnami/airflow/dags/external
+          {{- end }}
+          {{- if include "airflow.shouldUseConfigFromConfigMap" . }}
+            - name: custom-configuration-file
+              mountPath: /opt/bitnami/airflow/airflow.cfg
+              subPath: airflow.cfg
+          {{- end }}
+            {{- include "airflow.git.maincontainer.volumeMounts" . | trim | nindent 12 }}
+          {{- if .Values.worker.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.worker.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+      {{- if .Values.worker.sidecars }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.worker.sidecars "context" $) | trim | nindent 8 }}
+      {{- end }}
+      {{- if .Values.sidecars }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | trim | nindent 8 }}
+      {{- end }}
+      volumes:
+      {{- if .Values.dagsConfigMap }}
+        - name: external-dag-files
+          configMap:
+            name: {{ .Values.dagsConfigMap }}
+      {{- end }}
+      {{- if include "airflow.shouldUseConfigFromConfigMap" . }}
+        - name: custom-configuration-file
+          configMap:
+            name: {{ include "airflow.configMapName"  . }}
+      {{- end }}
+        {{- include "airflow.git.volumes" . | trim | nindent 8 }}
+      {{- if .Values.worker.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.worker.extraVolumes "context" $) | nindent 8 }}
+      {{- end }}
+{{- end }}

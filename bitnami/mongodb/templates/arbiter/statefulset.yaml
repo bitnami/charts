@@ -1,0 +1,271 @@
+{{- if (include "mongodb.arbiter.enabled" .) }}
+apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
+kind: StatefulSet
+metadata:
+  name: {{ include "mongodb.fullname" . }}-arbiter
+  namespace: {{ include "mongodb.namespace" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: arbiter
+    {{- if .Values.arbiter.labels }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.labels "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.arbiter.annotations }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  serviceName: {{ include "mongodb.arbiter.service.nameOverride" . }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: arbiter
+  template:
+    metadata:
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app.kubernetes.io/component: arbiter
+        {{- if .Values.arbiter.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+      {{- if or (include "mongodb.arbiter.createConfigmap" .) .Values.arbiter.podAnnotations }}
+      annotations:
+        {{- if (include "mongodb.arbiter.createConfigmap" .) }}
+        checksum/configuration: {{ include (print $.Template.BasePath "/arbiter/configmap.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if .Values.arbiter.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+      {{- end }}
+    spec:
+      {{- include "mongodb.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.schedulerName }}
+      schedulerName: "{{ .Values.schedulerName }}"
+      {{- end }}
+      serviceAccountName: {{ template "mongodb.serviceAccountName" . }}
+      {{- if .Values.arbiter.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.arbiter.podAffinityPreset "component" "arbiter" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.arbiter.podAntiAffinityPreset "component" "arbiter" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.arbiter.nodeAffinityPreset.type "key" .Values.arbiter.nodeAffinityPreset.key "values" .Values.arbiter.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.arbiter.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.arbiter.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.arbiter.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.arbiter.priorityClassName }}
+      priorityClassName: {{ .Values.arbiter.priorityClassName }}
+      {{- end }}
+      {{- if .Values.arbiter.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.arbiter.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      initContainers:
+        {{- if .Values.arbiter.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if and .Values.tls.enabled .Values.arbiter.enabled }}
+        - name: generate-client
+          image: {{ include "mongodb.tls.image" . }}
+          imagePullPolicy: {{ .Values.tls.image.pullPolicy | quote }}
+          env:
+            - name: MY_POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          volumeMounts:
+          - name: certs-volume
+            mountPath: /certs/CAs
+          - name: certs
+            mountPath: /certs
+          command:
+            - sh
+            - "-c"
+            - |
+              /bin/bash <<'EOF'
+              my_hostname=$(hostname)
+              svc=$(echo -n "$my_hostname" | sed s/-[0-9]*$//)-headless
+
+              cp /certs/CAs/* /certs/
+
+              cat >/certs/openssl.cnf <<EOL
+              [req]
+              req_extensions = v3_req
+              distinguished_name = req_distinguished_name
+              [req_distinguished_name]
+              [ v3_req ]
+              basicConstraints = CA:FALSE
+              keyUsage = nonRepudiation, digitalSignature, keyEncipherment
+              subjectAltName = @alt_names
+              [alt_names]
+              DNS.1 = $svc
+              DNS.2 = $my_hostname
+              DNS.3 = $my_hostname.$svc.$MY_POD_NAMESPACE.svc.cluster.local
+              DNS.4 = localhost
+              DNS.5 = 127.0.0.1
+              EOL
+
+              export RANDFILE=/certs/.rnd && openssl genrsa -out /certs/mongo.key 2048
+              #Create the client/server cert
+              openssl req -new -key /certs/mongo.key -out /certs/mongo.csr -subj "/C=US/O=My Organisations/OU=IT/CN=$my_hostname" -config /certs/openssl.cnf
+              #Signing the server cert with the CA cert and key
+              openssl x509 -req -in /certs/mongo.csr -CA /certs/mongodb-ca-cert -CAkey /certs/mongodb-ca-key -CAcreateserial -out /certs/mongo.crt -days 3650 -extensions v3_req -extfile /certs/openssl.cnf
+              rm /certs/mongo.csr
+              #Concatenate to a pem file for use as the client PEM file which can be used for both member and client authentication.
+              cat /certs/mongo.crt /certs/mongo.key > /certs/mongodb.pem
+              cd /certs/
+              shopt -s extglob
+              rm -rf !(mongodb-ca-cert|mongodb.pem|CAs|openssl.cnf)
+              chmod 0600 mongodb-ca-cert mongodb.pem
+              EOF
+        {{- end }}
+      containers:
+        - name: mongodb-arbiter
+          image: {{ include "mongodb.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.arbiter.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.arbiter.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.arbiter.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.arbiter.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.args "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" .Values.image.debug | quote }}
+            - name: MY_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: MY_POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: K8S_SERVICE_NAME
+              value: "{{ include "mongodb.arbiter.service.nameOverride" . }}"
+            - name: MONGODB_REPLICA_SET_MODE
+              value: "arbiter"
+            - name: MONGODB_INITIAL_PRIMARY_HOST
+              value: "{{ include "mongodb.fullname" . }}-0.{{ include "mongodb.service.nameOverride" . }}.$(MY_POD_NAMESPACE).svc.{{ .Values.clusterDomain }}"
+            - name: MONGODB_REPLICA_SET_NAME
+              value: {{ .Values.replicaSetName | quote }}
+            - name: MONGODB_ADVERTISED_HOSTNAME
+              value: "$(MY_POD_NAME).$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.{{ .Values.clusterDomain }}"
+            {{- if .Values.auth.enabled }}
+            - name: MONGODB_INITIAL_PRIMARY_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mongodb.secretName" . }}
+                  key: mongodb-root-password
+            - name: MONGODB_REPLICA_SET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mongodb.secretName" . }}
+                  key: mongodb-replica-set-key
+            {{- end }}
+            - name: ALLOW_EMPTY_PASSWORD
+              value: {{ ternary "no" "yes" .Values.auth.enabled | quote }}
+            {{- if and .Values.tls.enabled .Values.arbiter.enabled }}
+            - name: MONGODB_EXTRA_FLAGS
+              value: --tlsMode=requireTLS --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert
+            {{- end }}
+            {{- if .Values.arbiter.extraFlags }}
+            - name: MONGODB_EXTRA_FLAGS
+              value: {{ .Values.arbiter.extraFlags | join " " | quote }}
+            {{- end }}
+            {{- if and .Values.tls.enabled  .Values.arbiter.enabled }}
+            - name: MONGODB_CLIENT_EXTRA_FLAGS
+              value: --tls --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert
+            {{- end }}
+            {{- if .Values.arbiter.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.arbiter.extraEnvVarsCM .Values.arbiter.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.arbiter.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ tpl .Values.arbiter.extraEnvVarsCM . | quote }}
+            {{- end }}
+            {{- if .Values.arbiter.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ tpl .Values.arbiter.extraEnvVarsSecret . | quote }}
+            {{- end }}
+          {{- end }}
+          ports:
+            - containerPort: 27017
+              name: mongodb
+          {{- if .Values.arbiter.livenessProbe.enabled }}
+          livenessProbe:
+            tcpSocket:
+              port: mongodb
+            initialDelaySeconds: {{ .Values.arbiter.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.arbiter.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.arbiter.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.arbiter.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.arbiter.livenessProbe.failureThreshold }}
+          {{- else if .Values.arbiter.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.arbiter.readinessProbe.enabled }}
+          readinessProbe:
+            tcpSocket:
+              port: mongodb
+            initialDelaySeconds: {{ .Values.arbiter.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.arbiter.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.arbiter.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.arbiter.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.arbiter.readinessProbe.failureThreshold }}
+          {{- else if .Values.arbiter.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.arbiter.resources }}
+          resources: {{- toYaml .Values.arbiter.resources | nindent 12 }}
+          {{- end }}
+          {{- if or .Values.arbiter.configuration .Values.arbiter.existingConfigmap .Values.arbiter.extraVolumeMounts .Values.tls.enabled }}
+          volumeMounts:
+            {{- if or .Values.arbiter.configuration .Values.arbiter.existingConfigmap }}
+            - name: config
+              mountPath: /opt/bitnami/mongodb/conf/mongodb.conf
+              subPath: mongodb.conf
+            {{- end }}
+            {{- if and .Values.tls.enabled .Values.arbiter.enabled }}
+            - name: certs
+              mountPath: /certs
+            {{- end }}
+            {{- if .Values.arbiter.extraVolumeMounts }}
+            {{- toYaml .Values.arbiter.extraVolumeMounts | nindent 12 }}
+            {{- end }}
+          {{- end }}
+        {{- if .Values.arbiter.sidecars }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      {{- if or .Values.arbiter.configuration .Values.arbiter.existingConfigmap .Values.arbiter.extraVolumes .Values.tls.enabled }}
+      volumes:
+        {{- if or .Values.arbiter.configuration .Values.arbiter.existingConfigmap }}
+        - name: config
+          configMap:
+            name: {{ include "mongodb.arbiter.configmapName" . }}
+        {{- end }}
+        {{- if and .Values.tls.enabled .Values.arbiter.enabled }}
+        - name: certs
+          emptyDir: {}
+        - name: certs-volume
+          secret:
+            secretName: {{ template "mongodb.caSecretName" . }}
+            items:
+            - key: mongodb-ca-cert
+              path: mongodb-ca-cert
+              mode: 0600
+            - key: mongodb-ca-key
+              path: mongodb-ca-key
+              mode: 0600
+        {{- end }}
+        {{- if .Values.arbiter.extraVolumes }}
+        {{- toYaml .Values.arbiter.extraVolumes | nindent 8 }}
+        {{- end }}
+      {{- end }}
+{{- end }}

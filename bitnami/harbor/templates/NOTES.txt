@@ -2,36 +2,36 @@
 
 1. Get the Harbor URL:
 
-{{- if contains "Ingress" .Values.service.type }}
+{{- if .Values.ingress.enabled }}
 
   You should be able to access your new Harbor installation through {{ include "harbor.externalUrl" . }}
 
 {{- else if contains "LoadBalancer" .Values.service.type }}
 
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ .Values.service.loadBalancer.name }}'
+        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ include "common.names.fullname" . }}'
 
-{{- $port:=.Values.service.loadBalancer.ports.httpPort | toString }}
-  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ .Values.service.loadBalancer.name }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
-  echo "Harbor URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.loadBalancer.ports.httpPort  }}{{ end }}/"
+{{- $port:=.Values.service.ports.http | toString }}
+  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+  echo "Harbor URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.ports.http  }}{{ end }}/"
 
 {{- else if contains "ClusterIP" .Values.service.type }}
 
   {{- if .Values.service.tls.enabled }}
 
   echo "Harbor URL: https://127.0.0.1:8443/"
-  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ .Values.service.clusterIP.name }} 8443:{{ .Values.service.clusterIP.ports.httpsPort }}
+  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "common.names.fullname" . }} 8443:{{ .Values.service.ports.https }}
 
   {{- else }}
 
   echo "Harbor URL: http://127.0.0.1:8080/"
-  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ .Values.service.clusterIP.name }} 8080:{{ .Values.service.clusterIP.ports.httpPort }}
+  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "common.names.fullname" . }} 8080:{{ .Values.service.ports.http }}
 
   {{- end }}
 
 {{- else if contains "NodePort" .Values.service.type }}
 
-  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ .Values.service.nodePort.name }})
+  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "common.names.fullname" . }})
   export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
   echo "Harbor URL: http://$NODE_IP:$NODE_PORT/"
 
@@ -42,5 +42,36 @@
   echo Username: "admin"
   echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "harbor.core" . }}-envvars -o jsonpath="{.data.HARBOR_ADMIN_PASSWORD}" | base64 --decode)
 
+{{- if .Values.clair.enabled }}
+
+Clair scanner was deployed. Follow these steps to add it as an additional interrogation service for Harbor:
+https://goharbor.io/docs/latest/administration/vulnerability-scanning/pluggable-scanners
+
+  Endpoint: {{ include "harbor.clairAdapter.url" . | quote }}
+  Authorization: "None"
+  Options: "Use internal registry address"
+
+{{- end }}
+
 {{ include "harbor.validateValues" . }}
 {{ include "harbor.checkRollingTags" . }}
+
+{{- $passwordErrors := list -}}
+
+{{- $harborSecretName := printf "%s-envvars" (include "harbor.core" .) -}}
+{{- $requiredAdminPassword := dict "valueKey" "harborAdminPassword" "secret" $harborSecretName "field" "HARBOR_ADMIN_PASSWORD" -}}
+{{- $requiredHarborErrors := include "common.validations.values.multiple.empty" (dict "required" (list $requiredAdminPassword) "context" $) -}}
+{{- $passwordErrors = append $passwordErrors $requiredHarborErrors -}}
+
+{{- $postgresqlSecretName := include "harbor.postgresql.fullname" . -}}
+{{- $postgresqlPasswordValidationErrors := include "common.validations.values.postgresql.passwords" (dict "secret" $postgresqlSecretName "subchart" true "context" $) -}}
+{{- $passwordErrors = append $passwordErrors $postgresqlPasswordValidationErrors -}}
+
+{{- if .Values.redis.usePassword -}}
+  {{- $redisSecretName := printf "%s-%s" .Release.Name "redis" -}}
+  {{- $requiredRedisPassword := dict "valueKey" "redis.password" "secret" $redisSecretName "field" "redis-password" -}}
+  {{- $redisPasswordValidationErrors := include "common.validations.values.multiple.empty" (dict "required" (list $requiredRedisPassword) "context" $) -}}
+  {{- $passwordErrors = append $passwordErrors $redisPasswordValidationErrors -}}
+{{- end -}}
+
+{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordErrors "context" $) -}}

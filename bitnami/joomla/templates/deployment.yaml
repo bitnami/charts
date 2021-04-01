@@ -1,181 +1,218 @@
-{{- if or .Values.mariadb.enabled .Values.externalDatabase.host -}}
-apiVersion: {{ template "joomla.deployment.apiVersion" . }}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ template "joomla.fullname" . }}
-  labels:
-    app: {{ template "joomla.fullname" . }}
-    chart: {{ template "joomla.chart" . }}
-    release: {{ .Release.Name | quote }}
-    heritage: {{ .Release.Service | quote }}
+  name: {{ template "common.names.fullname" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: joomla
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   selector:
-    matchLabels:
-      app: {{ template "joomla.fullname" . }}
-      release: "{{ .Release.Name }}"
-  replicas: 1
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+  {{- if .Values.updateStrategy }}
+  strategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
+  {{- end }}
+  replicas: {{ .Values.replicaCount }}
   template:
     metadata:
-      labels:
-        app: {{ template "joomla.fullname" . }}
-        chart: {{ template "joomla.chart" . }}
-        release: {{ .Release.Name | quote }}
-{{- if or .Values.podAnnotations .Values.metrics.enabled }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app.kubernetes.io/component: joomla
+        {{- if .Values.commonLabels }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
+        {{- end }}
       annotations:
-  {{- if .Values.podAnnotations }}
-{{ toYaml .Values.podAnnotations | indent 8 }}
-  {{- end }}
-  {{- if .Values.metrics.podAnnotations }}
-{{ toYaml .Values.metrics.podAnnotations | indent 8 }}
-  {{- end }}
-{{- end }}
+        {{- if .Values.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.metrics.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
     spec:
-{{- include "joomla.imagePullSecrets" . | indent 6 }}
-      hostAliases:
-      - ip: "127.0.0.1"
-        hostnames:
-        - "status.localhost"
-      containers:
-      - name: joomla
-        image: {{ template "joomla.image" . }}
-        imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-        env:
-        - name: ALLOW_EMPTY_PASSWORD
-          value: {{ .Values.allowEmptyPassword | quote }}
-        {{- if .Values.mariadb.enabled }}
-        - name: MARIADB_HOST
-          value: {{ template "joomla.mariadb.fullname" . }}
-        - name: MARIADB_PORT_NUMBER
-          value: "3306"
-        - name: JOOMLA_DATABASE_NAME
-          value: {{ .Values.mariadb.db.name | quote }}
-        - name: JOOMLA_DATABASE_USER
-          value: {{ .Values.mariadb.db.user | quote }}
-        - name: JOOMLA_DATABASE_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: {{ template "joomla.mariadb.fullname" . }}
-              key: mariadb-password
-        {{- else }}
-        - name: MARIADB_HOST
-          value: {{ .Values.externalDatabase.host | quote }}
-        - name: MARIADB_PORT_NUMBER
-          value: {{ .Values.externalDatabase.port | quote }}
-        - name: JOOMLA_DATABASE_NAME
-          value: {{ .Values.externalDatabase.database | quote }}
-        - name: JOOMLA_DATABASE_USER
-          value: {{ .Values.externalDatabase.user | quote }}
-        - name: JOOMLA_DATABASE_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: {{ printf "%s-%s" .Release.Name "externaldb" }}
-              key: db-password
-        {{- end }}
-        - name: JOOMLA_USERNAME
-          value: {{ .Values.joomlaUsername | quote }}
-        - name: JOOMLA_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: {{ template "joomla.fullname" . }}
-              key: joomla-password
-        - name: JOOMLA_EMAIL
-          value: {{ .Values.joomlaEmail | quote }}
-        {{- if .Values.smtpHost }}
-        - name: SMTP_HOST
-          value: {{ .Values.smtpHost | quote }}
-        {{- end }}
-        {{- if .Values.smtpPort }}
-        - name: SMTP_PORT
-          value: {{ .Values.smtpPort | quote }}
-        {{- end }}
-        {{- if .Values.smtpUser }}
-        - name: SMTP_USER
-          value: {{ .Values.smtpUser | quote }}
-        {{- end }}
-        {{- if .Values.smtpPassword }}
-        - name: SMTP_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: {{ template "joomla.fullname" . }}
-              key: smtp-password
-        {{- end }}
-        {{- if .Values.smtpProtocol }}
-        - name: SMTP_PROTOCOL
-          value: {{ .Values.smtpProtocol | quote }}
-        {{- end }}
-        ports:
-        - name: http
-          containerPort: 80
-        - name: https
-          containerPort: 443
-        {{- if .Values.livenessProbe.enabled }}
-        livenessProbe:
-          httpGet:
-            path: /index.php
-            port: http
-          initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
-          periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
-          timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
-          successThreshold: {{ .Values.livenessProbe.successThreshold }}
-          failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
-        {{- end }}
-        {{- if .Values.readinessProbe.enabled }}
-        readinessProbe:
-          httpGet:
-            path: /index.php
-            port: http
-          initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
-          periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
-          timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
-          successThreshold: {{ .Values.readinessProbe.successThreshold }}
-          failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
-        {{- end }}
-        resources:
-{{ toYaml .Values.resources | indent 10 }}
-        volumeMounts:
-        - name: joomla-data
-          mountPath: /bitnami/joomla
-{{- if .Values.metrics.enabled }}
-      - name: metrics
-        image: {{ template "joomla.metrics.image" . }}
-        imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
-        command: [ '/bin/apache_exporter', '--scrape_uri', 'http://status.localhost:80/server-status/?auto']
-        ports:
-        - name: metrics
-          containerPort: 9117
-        livenessProbe:
-          httpGet:
-            path: /metrics
-            port: metrics
-          initialDelaySeconds: 15
-          timeoutSeconds: 5
-        readinessProbe:
-          httpGet:
-            path: /metrics
-            port: metrics
-          initialDelaySeconds: 5
-          timeoutSeconds: 1
-        resources:
-  {{ toYaml .Values.metrics.resources | indent 10 }}
-{{- end }}
-      volumes:
-      - name: joomla-data
-      {{- if .Values.persistence.enabled }}
-        persistentVolumeClaim:
-          claimName: {{ template "joomla.fullname" . }}-joomla
+      {{- include "joomla.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.podSecurityContext.enabled }}
+      securityContext:
+        fsGroup: {{ .Values.podSecurityContext.fsGroup }}
+      {{- end }}
+      {{- if .Values.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
       {{- else }}
-        emptyDir: {}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.nodeSelector }}
-      nodeSelector:
-{{ toYaml .Values.nodeSelector | indent 8 }}
-      {{- end -}}
-      {{- with .Values.affinity }}
-      affinity:
-{{ toYaml . | indent 8 }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
-      {{- with .Values.tolerations }}
-      tolerations:
-{{ toYaml . | indent 8 }}
+      {{- if .Values.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
       {{- end }}
-{{- end }}
+      {{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.initContainers }}
+      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.hostAliases }}
+      # yamllint disable rule:indentation
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
+      # yamllint enable rule:indentation
+      {{- end }}
+      containers:
+        - name: joomla
+          image: {{ template "joomla.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext:
+            runAsUser: {{ .Values.containerSecurityContext.runAsUser }}
+          {{- end }}
+          {{- if .Values.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" .Values.image.debug | quote }}
+            - name: ALLOW_EMPTY_PASSWORD
+              value: {{ .Values.allowEmptyPassword | quote }}
+            - name: APACHE_HTTP_PORT_NUMBER
+              value: {{ .Values.containerPorts.http | quote }}
+            - name: APACHE_HTTPS_PORT_NUMBER
+              value: {{ .Values.containerPorts.https | quote }}
+            - name: JOOMLA_DATABASE_HOST
+              value: {{ include "joomla.databaseHost" . | quote }}
+            - name: JOOMLA_DATABASE_PORT_NUMBER
+              value: {{ include "joomla.databasePort" . | quote }}
+            - name: JOOMLA_DATABASE_NAME
+              value: {{ include "joomla.databaseName" . | quote }}
+            - name: JOOMLA_DATABASE_USER
+              value: {{ include "joomla.databaseUser" . | quote }}
+            - name: JOOMLA_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "joomla.databaseSecretName" . }}
+                  key: mariadb-password
+            - name: JOOMLA_SKIP_BOOTSTRAP
+              value: {{ default "no" .Values.joomlaSkipInstall | quote }}
+            - name: JOOMLA_USERNAME
+              value: {{ default "" .Values.joomlaUsername | quote }}
+            - name: JOOMLA_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "joomla.secretName" . }}
+                  key: joomla-password
+            - name: JOOMLA_EMAIL
+              value: {{ default "" .Values.joomlaEmail | quote }}
+            - name: SMTP_HOST
+              value: {{ default "" .Values.smtpHost | quote }}
+            - name: SMTP_PORT
+              value: {{ default "" .Values.smtpPort | quote }}
+            - name: SMTP_USER
+              value: {{ default "" .Values.smtpUser | quote }}
+            - name: SMTP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "joomla.secretName" . }}
+                  key: smtp-password
+            - name: SMTP_PROTOCOL
+              value: {{ default "" .Values.smtpProtocol | quote }}
+            {{- if .Values.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.containerPorts.http }}
+            - name: https
+              containerPort: {{ .Values.containerPorts.https }}
+          {{- if .Values.livenessProbe.enabled }}
+          livenessProbe:
+            httpGet:
+              path: /index.php
+              port: http
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+          {{- else if .Values.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.readinessProbe.enabled }}
+          readinessProbe:
+            httpGet:
+              path: /index.php
+              port: http
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+          {{- else if .Values.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.resources }}
+          resources: {{ toYaml .Values.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: joomla-data
+              mountPath: /bitnami
+            {{- if .Values.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+        {{- if .Values.metrics.enabled }}
+        - name: metrics
+          image: {{ template "joomla.metrics.image" . }}
+          imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
+          command: [ '/bin/apache_exporter', '--scrape_uri', 'http://status.localhost:80/server-status/?auto']
+          ports:
+            - name: metrics
+              containerPort: 9117
+          livenessProbe:
+            httpGet:
+              path: /metrics
+              port: metrics
+            initialDelaySeconds: 15
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /metrics
+              port: metrics
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
+          resources: {{ toYaml .Values.metrics.resources | nindent 12 }}
+        {{- end }}
+        {{- if .Values.sidecars }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: joomla-data
+          {{- if .Values.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.persistence.existingClaim | default (include "common.names.fullname" . ) }}
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+          {{- if .Values.extraVolumes }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
+          {{- end }}

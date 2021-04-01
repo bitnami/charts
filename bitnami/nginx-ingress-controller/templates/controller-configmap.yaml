@@ -1,18 +1,28 @@
-{{- if or .Values.config (or (or .Values.proxySetHeaders .Values.headers) .Values.addHeaders) }}
+{{- if or .Values.config (or (or .Values.proxySetHeaders .Values.headers) .Values.addHeaders) .Values.dhParam }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ template "nginx-ingress.fullname" . }}
-  labels: {{- include "nginx-ingress.labels" . | nindent 4 }}
-    component: {{ .Values.name }}
+  name: {{ include "common.names.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: controller
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 data:
   {{- if .Values.addHeaders }}
-  add-headers: {{ .Release.Namespace }}/{{ template "nginx-ingress.fullname" . }}-custom-add-headers
+  add-headers: {{ .Release.Namespace }}/{{ printf "%s-custom-add-headers" (include "common.names.fullname" .) }}
   {{- end }}
   {{- if or .Values.proxySetHeaders .Values.headers }}
-  proxy-set-headers: {{ .Release.Namespace }}/{{ template "nginx-ingress.fullname" . }}-custom-proxy-headers
+  proxy-set-headers: {{ .Release.Namespace }}/{{ printf "%s-custom-proxy-headers" (include "common.names.fullname" .) }}
+  {{- end }}
+  {{- if .Values.dhParam }}
+  ssl-dh-param: {{ printf "%s/%s" .Release.Namespace (include "common.names.fullname" .) }}
   {{- end }}
   {{- if .Values.config }}
-  {{- toYaml .Values.config | nindent 2 }}
+  {{- include "common.tplvalues.render" (dict "value" .Values.config "context" $) | nindent 2 }}
   {{- end }}
 {{- end }}

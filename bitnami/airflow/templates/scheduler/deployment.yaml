@@ -1,0 +1,168 @@
+{{- $kube := eq .Values.executor "KubernetesExecutor" -}}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ include "common.names.fullname" . }}-scheduler
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: scheduler
+    {{- if .Values.commonLabels }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | trim | nindent 4 }}
+  {{- end }}
+spec:
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: scheduler
+  replicas: {{ default 1 .Values.scheduler.replicaCount }}
+  template:
+    metadata:
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app.kubernetes.io/component: scheduler
+      {{- if .Values.scheduler.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.scheduler.podLabels "context" $) | nindent 8 }}
+      {{- end }}
+      annotations:
+        checksum/configmap: {{ include (print $.Template.BasePath "/config/configmap.yaml") . | sha256sum }}
+      {{- if .Values.scheduler.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.scheduler.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+    spec:
+      {{- include "airflow.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.scheduler.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.scheduler.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      priorityClassName: {{ .Values.scheduler.priorityClassName | quote }}
+      {{- if .Values.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "airflow.serviceAccountName" . }}
+      {{- if .Values.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "component" "scheduler" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "component" "scheduler" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if or .Values.nodeSelector .Values.scheduler.nodeSelector }}
+      {{- if .Values.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
+      {{- else }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.scheduler.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- end }}
+      {{- if .Values.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      initContainers: {{- include "airflow.git.containers.clone" . | trim | nindent 8 }}
+      {{- if .Values.scheduler.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.scheduler.initContainers "context" $) | trim | nindent 8 }}
+      {{- end }}
+      {{- if .Values.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | trim | nindent 8 }}
+      {{- end }}
+      containers: {{- include "airflow.git.containers.sync" . | trim | nindent 8 }}
+        - name: airflow-scheduler
+          image: {{ include "airflow.schedulerImage" . | quote }}
+          imagePullPolicy: {{ .Values.scheduler.image.pullPolicy | quote }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.scheduler.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.scheduler.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.scheduler.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.scheduler.args "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            {{- include "airflow.configure.airflow.common" . | nindent 12 }}
+            {{- include "airflow.configure.database" . | nindent 12 }}
+            {{- include "airflow.configure.redis" . | nindent 12 }}
+            {{- include "airflow.configure.airflow.kubernetesExecutor" . | nindent 12 }}
+            - name: AIRFLOW_WEBSERVER_HOST
+              value: {{ include "common.names.fullname" . }}
+            - name: AIRFLOW_WEBSERVER_PORT_NUMBER
+              value: {{ .Values.service.port | quote }}
+            {{- if .Values.extraEnvVars }}
+              {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+            {{- if .Values.scheduler.extraEnvVars }}
+              {{- include "common.tplvalues.render" (dict "value" .Values.scheduler.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ .Values.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.extraEnvVarsSecret }}
+            {{- end }}
+            {{- if .Values.scheduler.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ .Values.scheduler.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.scheduler.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.scheduler.extraEnvVarsSecret }}
+            {{- end }}
+          ports:
+            - name: task-logs
+              containerPort: {{ .Values.worker.port }}
+          {{- if .Values.scheduler.customLivenessProbe }}
+          livenessProbe:
+            {{- include "common.tplvalues.render" (dict "value" .Values.scheduler.customLivenessProbe "context" $) | trim | nindent 12 }}
+          {{- end }}
+          {{- if .Values.scheduler.customRedinessProbe }}
+          readinessProbe:
+            {{- include "common.tplvalues.render" (dict "value" .Values.scheduler.customRedinessProbe "context" $) | trim | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+          {{- if .Files.Glob "files/dags/*.py" }}
+            - name: local-dag-files
+              mountPath: /opt/bitnami/airflow/dags/local
+          {{- end }}
+          {{- if .Values.dagsConfigMap }}
+            - name: external-dag-files
+              mountPath: /opt/bitnami/airflow/dags/external
+          {{- end }}
+          {{- if include "airflow.shouldUseConfigFromConfigMap" . }}
+            - name: custom-configuration-file
+              mountPath: /opt/bitnami/airflow/airflow.cfg
+              subPath: airflow.cfg
+          {{- end }}
+          {{- if $kube }}
+            - name: custom-configuration-file
+              mountPath: /opt/bitnami/airflow/pod_template.yaml
+              subPath: pod_template.yaml
+          {{- end }}
+            {{- include "airflow.git.maincontainer.volumeMounts" . | trim | nindent 12 }}
+          {{- if .Values.scheduler.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.scheduler.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.scheduler.resources }}
+          resources: {{- toYaml .Values.scheduler.resources | nindent 12 }}
+          {{- end }}
+      {{- if .Values.scheduler.sidecars }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.scheduler.sidecars "context" $) | trim | nindent 8 }}
+      {{- end }}
+      {{- if .Values.sidecars }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | trim | nindent 8 }}
+      {{- end }}
+      volumes:
+      {{- if .Values.dagsConfigMap }}
+        - name: external-dag-files
+          configMap:
+            name: {{ .Values.dagsConfigMap }}
+      {{- end }}
+      {{- if or (include "airflow.shouldUseConfigFromConfigMap" .) $kube }}
+        - name: custom-configuration-file
+          configMap:
+            name: {{ include "airflow.configMapName"  . }}
+      {{- end }}
+        {{- include "airflow.git.volumes" . | trim | nindent 8 }}
+      {{- if .Values.scheduler.extraVolumes }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.scheduler.extraVolumes "context" $) | nindent 8 }}
+      {{- end }}

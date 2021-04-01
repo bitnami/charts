@@ -1,22 +1,27 @@
-{{- $jobservice := .Values.persistence.persistentVolumeClaim.jobservice -}}
-{{- if and .Values.persistence.enabled (not $jobservice.existingClaim) }}
+{{- if and .Values.persistence.enabled (not .Values.persistence.persistentVolumeClaim.jobservice.existingClaim) }}
 {{- if eq .Values.jobservice.jobLogger "file" }}
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: {{ include "harbor.jobservice" . }}
-  {{- if eq .Values.persistence.resourcePolicy "keep" }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    app.kubernetes.io/component: jobservice
   annotations:
+  {{- if eq .Values.persistence.resourcePolicy "keep" }}
     helm.sh/resource-policy: keep
   {{- end }}
-  labels: {{- include "harbor.labels" . | nindent 4 }}
-    app.kubernetes.io/component: jobservice
+  {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   accessModes:
-    - {{ $jobservice.accessMode }}
+    - {{ .Values.persistence.persistentVolumeClaim.jobservice.accessMode }}
   resources:
     requests:
-      storage: {{ $jobservice.size }}
-  {{ include "harbor.jobservice.storageClass" . }}
+      storage: {{ .Values.persistence.persistentVolumeClaim.jobservice.size }}
+  {{- include "harbor.jobservice.storageClass" . | nindent 2 }}
 {{- end }}
 {{- end }}

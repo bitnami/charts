@@ -1,112 +1,107 @@
 {{/* vim: set filetype=mustache: */}}
 
 {{/*
-Expand the name of the chart.
-*/}}
-{{- define "minio.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-*/}}
-{{- define "minio.fullname" -}}
-{{- if .Values.fullnameOverride -}}
-{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- $name := default .Chart.Name .Values.nameOverride -}}
-{{- if contains $name .Release.Name -}}
-{{- .Release.Name | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Create chart name and version as used by the chart label.
-*/}}
-{{- define "minio.chart" -}}
-{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{/*
-Common labels
-*/}}
-{{- define "minio.labels" -}}
-app.kubernetes.io/name: {{ include "minio.name" . }}
-helm.sh/chart: {{ include "minio.chart" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- end -}}
-
-{{/*
-Labels to use on deploy.spec.selector.matchLabels and svc.spec.selector
-*/}}
-{{- define "minio.matchLabels" -}}
-app.kubernetes.io/name: {{ include "minio.name" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
-{{- end -}}
-
-{{/*
-Return the proper MinIO image name
+Return the proper MinIO(R) image name
 */}}
 {{- define "minio.image" -}}
-{{- $registryName := coalesce .Values.global.imageRegistry .Values.image.registry -}}
-{{- $repositoryName := .Values.image.repository -}}
-{{- $tag := .Values.image.tag | toString -}}
-{{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) }}
+
 {{- end -}}
 
 {{/*
-Return the proper MinIO Client image name
+Return the proper MinIO(R) Client image name
 */}}
 {{- define "minio.clientImage" -}}
-{{- $registryName := coalesce .Values.global.imageRegistry .Values.clientImage.registry -}}
-{{- $repositoryName := .Values.clientImage.repository -}}
-{{- $tag := .Values.clientImage.tag | toString -}}
-{{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.clientImage "global" .Values.global) }}
+{{- end -}}
+
+{{/*
+Return the proper image name (for the init container volume-permissions image)
+*/}}
+{{- define "minio.volumePermissions.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.volumePermissions.image "global" .Values.global) }}
 {{- end -}}
 
 {{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "minio.imagePullSecrets" -}}
-{{- $imagePullSecrets := coalesce .Values.global.imagePullSecrets .Values.image.pullSecrets .Values.volumePermissions.image.pullSecrets -}}
-{{- if $imagePullSecrets }}
-imagePullSecrets:
-{{- range $imagePullSecrets }}
-  - name: {{ . }}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.clientImage .Values.volumePermissions.image) "global" .Values.global) -}}
 {{- end -}}
+
+{{/*
+Get the user to use to access MinIO(R)
+*/}}
+{{- define "minio.secret.userValue" -}}
+{{- if .Values.gateway.enabled }}
+    {{- if eq .Values.gateway.type "azure" }}
+        {{- if .Values.gateway.auth.azure.accessKey }}
+            {{- .Values.gateway.auth.azure.accessKey -}}
+        {{- else -}}
+            {{- randAlphaNum 10 -}}
+        {{- end -}}
+    {{- else if eq .Values.gateway.type "gcs" }}
+        {{- if .Values.gateway.auth.gcs.accessKey }}
+            {{- .Values.gateway.auth.gcs.accessKey -}}
+        {{- else -}}
+            {{- randAlphaNum 10 -}}
+        {{- end -}}
+    {{- else if eq .Values.gateway.type "nas" }}
+        {{- if .Values.gateway.auth.nas.accessKey }}
+            {{- .Values.gateway.auth.nas.accessKey -}}
+        {{- else -}}
+            {{- randAlphaNum 10 -}}
+        {{- end -}}
+    {{- else if eq .Values.gateway.type "s3" }}
+        {{- .Values.gateway.auth.s3.accessKey -}}
+    {{- end -}}
+{{- else }}
+    {{- $accessKey := coalesce .Values.global.minio.accessKey .Values.accessKey.password -}}
+    {{- if $accessKey }}
+        {{- $accessKey -}}
+    {{- else if (not .Values.accessKey.forcePassword) }}
+        {{- randAlphaNum 10 -}}
+    {{- else -}}
+        {{ required "An Access Key is required!" .Values.accessKey.password }}
+    {{- end -}}
 {{- end -}}
 {{- end -}}
 
 {{/*
-Return MinIO accessKey
+Get the password to use to access MinIO(R)
 */}}
-{{- define "minio.accessKey" -}}
-{{- $accessKey := coalesce .Values.global.minio.accessKey .Values.accessKey.password -}}
-{{- if $accessKey }}
-    {{- $accessKey -}}
-{{- else if (not .Values.accessKey.forcePassword) }}
-    {{- randAlphaNum 10 -}}
-{{- else -}}
-    {{ required "An Access Key is required!" .Values.accessKey.password }}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return MinIO secretKey
-*/}}
-{{- define "minio.secretKey" -}}
-{{- $secretKey := coalesce .Values.global.minio.secretKey .Values.secretKey.password -}}
-{{- if $secretKey }}
-    {{- $secretKey -}}
-{{- else if (not .Values.secretKey.forcePassword) }}
-    {{- randAlphaNum 40 -}}
-{{- else -}}
-    {{ required "A Secret Key is required!" .Values.secretKey.password }}
+{{- define "minio.secret.passwordValue" -}}
+{{- if .Values.gateway.enabled }}
+    {{- if eq .Values.gateway.type "azure" }}
+        {{- if .Values.gateway.auth.azure.secretKey }}
+            {{- .Values.gateway.auth.azure.secretKey -}}
+        {{- else -}}
+            {{- randAlphaNum 40 -}}
+        {{- end -}}
+    {{- else if eq .Values.gateway.type "gcs" }}
+        {{- if .Values.gateway.auth.gcs.secretKey }}
+            {{- .Values.gateway.auth.gcs.secretKey -}}
+        {{- else -}}
+            {{- randAlphaNum 40 -}}
+        {{- end -}}
+    {{- else if eq .Values.gateway.type "nas" }}
+        {{- if .Values.gateway.auth.nas.secretKey }}
+            {{- .Values.gateway.auth.nas.secretKey -}}
+        {{- else -}}
+            {{- randAlphaNum 40 -}}
+        {{- end -}}
+    {{- else if eq .Values.gateway.type "s3" }}
+        {{- .Values.gateway.auth.s3.secretKey -}}
+    {{- end -}}
+{{- else }}
+    {{- $secretKey := coalesce .Values.global.minio.secretKey .Values.secretKey.password -}}
+    {{- if $secretKey }}
+        {{- $secretKey -}}
+    {{- else if (not .Values.secretKey.forcePassword) }}
+        {{- randAlphaNum 40 -}}
+    {{- else -}}
+        {{ required "A Secret Key is required!" .Values.secretKey.password }}
+    {{- end -}}
 {{- end -}}
 {{- end -}}
 
@@ -119,7 +114,7 @@ Get the credentials secret.
 {{- else if .Values.existingSecret -}}
     {{- printf "%s" .Values.existingSecret -}}
 {{- else -}}
-    {{- printf "%s" (include "minio.fullname" .) -}}
+    {{- printf "%s" (include "common.names.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
@@ -135,12 +130,51 @@ Return true if a secret object should be created
 {{- end -}}
 
 {{/*
+Return true if a PVC object should be created (only in standalone mode)
+*/}}
+{{- define "minio.createPVC" -}}
+{{- if and .Values.persistence.enabled (not .Values.persistence.existingClaim) (or (and (eq .Values.mode "standalone") (not .Values.gateway.enabled)) (and .Values.gateway.enabled (eq .Values.gateway.type "nas"))) }}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the PVC name (only in standalone mode)
+*/}}
+{{- define "minio.claimName" -}}
+{{- if and .Values.persistence.existingClaim }}
+    {{- printf "%s" (tpl .Values.persistence.existingClaim $) -}}
+{{- else -}}
+    {{- printf "%s" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Returns the proper service account name depending if an explicit service account name is set
+in the values file. If the name is not set it will default to either common.names.fullname if serviceAccount.create
+is true or default otherwise.
+*/}}
+{{- define "minio.serviceAccountName" -}}
+    {{- if .Values.serviceAccount.create -}}
+        {{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
+    {{- else -}}
+        {{ default "default" .Values.serviceAccount.name }}
+    {{- end -}}
+{{- end -}}
+
+{{/*
 Compile all warnings into a single message, and call fail.
 */}}
 {{- define "minio.validateValues" -}}
 {{- $messages := list -}}
 {{- $messages := append $messages (include "minio.validateValues.mode" .) -}}
-{{- $messages := append $messages (include "minio.validateValues.replicaCount" .) -}}
+{{- $messages := append $messages (include "minio.validateValues.totalDrives" .) -}}
+{{- $messages := append $messages (include "minio.validateValues.tls" .) -}}
+{{- $messages := append $messages (include "minio.validateValues.gateway.type" .) -}}
+{{- $messages := append $messages (include "minio.validateValues.gateway.azure.credentials" .) -}}
+{{- $messages := append $messages (include "minio.validateValues.gateway.gcs.projectID" .) -}}
+{{- $messages := append $messages (include "minio.validateValues.gateway.nas.persistence" .) -}}
+{{- $messages := append $messages (include "minio.validateValues.gateway.s3.credentials" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -149,117 +183,101 @@ Compile all warnings into a single message, and call fail.
 {{- end -}}
 {{- end -}}
 
-{{/* Validate values of MinIO - must provide a valid mode ("distributed" or "standalone") */}}
+{{/*
+Validate values of MinIO(R) - must provide a valid mode ("distributed" or "standalone")
+*/}}
 {{- define "minio.validateValues.mode" -}}
-{{- if and (ne .Values.mode "distributed") (ne .Values.mode "standalone") -}}
+{{- $allowedValues := list "distributed" "standalone" }}
+{{- if not (has .Values.mode $allowedValues) -}}
 minio: mode
     Invalid mode selected. Valid values are "distributed" and
     "standalone". Please set a valid mode (--set mode="xxxx")
 {{- end -}}
 {{- end -}}
 
-{{/* Validate values of MinIO - number of replicas must be even, greater than 4 and lower than 32 */}}
-{{- define "minio.validateValues.replicaCount" -}}
+{{/*
+Validate values of MinIO(R) - total number of drives should be multiple of 4
+*/}}
+{{- define "minio.validateValues.totalDrives" -}}
 {{- $replicaCount := int .Values.statefulset.replicaCount }}
-{{- if and (eq .Values.mode "distributed") (or (eq (mod $replicaCount 2) 1) (lt $replicaCount 4) (gt $replicaCount 32)) -}}
-minio: replicaCount
-    Number of replicas must be even, greater than 4 and lower than 32!!
-    Please set a valid number of replicas (--set statefulset.replicaCount=X)
-{{- end -}}
-{{- end -}}
-
-{{/* Check if there are rolling tags in the images */}}
-{{- define "minio.checkRollingTags" -}}
-{{- if and (contains "bitnami/" .Values.image.repository) (not (.Values.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
-WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
-+info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
-{{- end }}
-{{- if and (contains "bitnami/" .Values.clientImage.repository) (not (.Values.clientImage.tag | toString | regexFind "-r\\d+$|sha256:")) }}
-WARNING: Rolling tag detected ({{ .Values.clientImage.repository }}:{{ .Values.clientImage.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
-+info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
-{{- end }}
-{{- end -}}
-
-{{/*
-Return the proper image name (for the init container volume-permissions image)
-*/}}
-{{- define "minio.volumePermissions.image" -}}
-{{- $registryName := .Values.volumePermissions.image.registry -}}
-{{- $repositoryName := .Values.volumePermissions.image.repository -}}
-{{- $tag := .Values.volumePermissions.image.tag | toString -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-Also, we can't use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-    {{- else -}}
-        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-    {{- end -}}
-{{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+{{- $drivesPerNode := int .Values.statefulset.drivesPerNode }}
+{{- $totalDrives := mul $replicaCount $drivesPerNode }}
+{{- if and (eq .Values.mode "distributed") (or (not (eq (mod $totalDrives 4) 0)) (lt $totalDrives 4)) -}}
+minio: total drives
+    The total number of drives should be multiple of 4 to guarantee erasure coding!
+    Please set a combination of nodes, and drives per node that match this condition.
+    For instance (--set statefulset.replicaCount=2 --set statefulset.drivesPerNode=2)
 {{- end -}}
 {{- end -}}
 
 {{/*
-Return the proper Storage Class
+Validate values of MinIO(R) - TLS secret must provided if TLS is enabled
 */}}
-{{- define "minio.storageClass" -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else logic.
-*/}}
-{{- if .Values.global -}}
-    {{- if .Values.global.storageClass -}}
-        {{- if (eq "-" .Values.global.storageClass) -}}
-            {{- printf "storageClassName: \"\"" -}}
-        {{- else }}
-            {{- printf "storageClassName: %s" .Values.global.storageClass -}}
-        {{- end -}}
-    {{- else -}}
-        {{- if .Values.persistence.storageClass -}}
-              {{- if (eq "-" .Values.persistence.storageClass) -}}
-                  {{- printf "storageClassName: \"\"" -}}
-              {{- else }}
-                  {{- printf "storageClassName: %s" .Values.persistence.storageClass -}}
-              {{- end -}}
-        {{- end -}}
-    {{- end -}}
-{{- else -}}
-    {{- if .Values.persistence.storageClass -}}
-        {{- if (eq "-" .Values.persistence.storageClass) -}}
-            {{- printf "storageClassName: \"\"" -}}
-        {{- else }}
-            {{- printf "storageClassName: %s" .Values.persistence.storageClass -}}
-        {{- end -}}
-    {{- end -}}
+{{- define "minio.validateValues.tls" -}}
+{{- if and .Values.tls.enabled (not .Values.tls.secretName) }}
+minio: tls.secretName
+    The name of an existing secret containing the certificates must be provided
+    if TLS is enabled. Please set its name (--set tls.secretName=X)
 {{- end -}}
 {{- end -}}
 
 {{/*
-Renders a value that contains template.
-Usage:
-{{ include "minio.tplValue" ( dict "value" .Values.path.to.the.Value "context" $) }}
+Validate values of MinIO(R) - must provide a valid gateway type ("azure", "gcs", "nas" or "s3")
 */}}
-{{- define "minio.tplValue" -}}
-    {{- if typeIs "string" .value }}
-        {{- tpl .value .context }}
-    {{- else }}
-        {{- tpl (.value | toYaml) .context }}
-    {{- end }}
+{{- define "minio.validateValues.gateway.type" -}}
+{{- $allowedValues := list "azure" "gcs" "nas" "s3" }}
+{{- if and .Values.gateway.enabled (not (has .Values.gateway.type $allowedValues)) -}}
+minio: gateway.type
+    Invalid Gateway type. Valid values are "azure", "gcs", "nas" and "s3".
+    Please set a valid mode (--set gateway.type="xxxx")
+{{- end -}}
 {{- end -}}
 
 {{/*
-Returns the proper service account name depending if an explicit service account name is set
-in the values file. If the name is not set it will default to either minio.fullname if serviceAccount.create
-is true or default otherwise.
+Validate values of MinIO(R) - when using MinIO(R) as an Azure Gateway, the StorageAccount Name/Key are required
 */}}
-{{- define "minio.serviceAccountName" -}}
-    {{- if .Values.serviceAccount.create -}}
-        {{ default (include "minio.fullname" .) .Values.serviceAccount.name }}
-    {{- else -}}
-        {{ default "default" .Values.serviceAccount.name }}
-    {{- end -}}
+{{- define "minio.validateValues.gateway.azure.credentials" -}}
+{{- if and .Values.gateway.enabled (eq .Values.gateway.type "azure") (or (empty .Values.gateway.auth.azure.storageAccountName) (empty .Values.gateway.auth.azure.storageAccountKey)) }}
+minio: gateway.auth.azure
+    The StorageAccount name and key are required to use MinIO(R) as a Azure Gateway.
+    Please set a valid StorageAccount information (--set gateway.auth.azure.storageAccountName="xxxx",gateway.auth.azure.storageAccountKey="yyyy")
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of MinIO(R) - when using MinIO(R) as a GCS Gateway, the GCP project ID is required
+*/}}
+{{- define "minio.validateValues.gateway.gcs.projectID" -}}
+{{- if and .Values.gateway.enabled (eq .Values.gateway.type "gcs") (empty .Values.gateway.auth.gcs.projectID) }}
+minio: gateway.auth.gcs.projectID
+    A GCP project ID is required to use MinIO(R) as a GCS Gateway.
+    Please set a valid project ID (--set gateway.auth.gcs.projectID="xxxx")
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of MinIO(R) - when using MinIO(R) as a NAS Gateway, ReadWriteMany volumes are required
+*/}}
+{{- define "minio.validateValues.gateway.nas.persistence" -}}
+{{- $replicaCount := int .Values.gateway.replicaCount }}
+{{- if and .Values.gateway.enabled (eq .Values.gateway.type "nas") (gt $replicaCount 1) (not .Values.persistence.enabled) }}
+minio: persistence.enabled
+    ReadWriteMany volumes are required to use MinIO(R) as a NAS Gateway with N replicas.
+    Please enable persistence (--set persistence.enabled=true)
+{{- else if and .Values.gateway.enabled (eq .Values.gateway.type "nas") (gt $replicaCount 1) (include "minio.createPVC" .) (not (has "ReadWriteMany" .Values.persistence.accessModes)) }}
+minio: persistence.accessModes
+    ReadWriteMany volumes are required to use MinIO(R) as a NAS Gateway with N replicas.
+    Please set a valid mode (--set persistence.accessModes[0]="ReadWriteMany")
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of MinIO(R) - when using MinIO(R) as a S3 Gateway, the Access & Secret keys are required
+*/}}
+{{- define "minio.validateValues.gateway.s3.credentials" -}}
+{{- if and .Values.gateway.enabled (eq .Values.gateway.type "s3") (or (empty .Values.gateway.auth.s3.accessKey) (empty .Values.gateway.auth.s3.secretKey)) }}
+minio: gateway.auth.s3
+    The Access & Secret keys are required to use MinIO(R) as a S3 Gateway.
+    Please set valid keys (--set gateway.auth.s3.accessKey="xxxx",gateway.auth.s3.secretKey="yyyy")
+{{- end -}}
 {{- end -}}

@@ -1,0 +1,14 @@
+{{- if gt (len .Values.clusters) 0 -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "kubeapps.kubeops-config.fullname" . }}
+  labels:
+    app: {{ template "kubeapps.kubeops-config.fullname" . }}
+    chart: {{ template "kubeapps.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+data:
+  clusters.conf: |-
+{{ .Values.clusters | toPrettyJson | indent 4 }}
+{{- end -}}

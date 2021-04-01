@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "common.names.fullname" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  {{- if .Values.commonLabels }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  {{- $port:=.Values.service.port | toString }}
+  DISCOURSE_HOSTNAME: "{{ include "discourse.host" . }}{{- if ne $port "80" }}:{{ .Values.service.port }}{{ end }}"
+  DISCOURSE_USERNAME: {{ .Values.discourse.username | quote }}
+  DISCOURSE_EMAIL: {{ .Values.discourse.email | quote }}
+  DISCOURSE_SITENAME: {{ .Values.discourse.siteName | quote }}
+  REDIS_HOST: {{ template "discourse.redisHost" . }}
+  REDIS_PORT_NUMBER: {{ template "discourse.redisPort" . }}
+  POSTGRESQL_HOST: {{ template "discourse.databaseHost" . }}
+  POSTGRESQL_PORT_NUMBER: {{ template "discourse.databasePort" . }}
+  DISCOURSE_POSTGRESQL_NAME: {{ template "discourse.databaseName" . }}
+  DISCOURSE_POSTGRESQL_USERNAME: {{ template "discourse.databaseUser" . }}
+  POSTGRESQL_ROOT_USER: "postgres"
+  {{- if .Values.discourse.skipInstall }}
+  DISCOURSE_SKIP_INSTALL: "yes"
+  {{- else }}
+  DISCOURSE_SKIP_INSTALL: "no"
+  {{- end }}

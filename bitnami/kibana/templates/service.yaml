@@ -1,8 +1,8 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "kibana.fullname" . }}
-  labels: {{- include "kibana.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
 {{- if or (and .Values.metrics.enabled .Values.metrics.service.annotations) .Values.service.annotations }}
   annotations:
   {{- if and .Values.metrics.enabled .Values.metrics.service.annotations }}
@@ -35,4 +35,4 @@ spec:
 {{- if .Values.service.extraPorts }}
   {{- tpl (toYaml .Values.service.extraPorts) $ | nindent 4 }}
 {{- end }}
-  selector: {{- include "kibana.matchLabels" . | nindent 4 }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}

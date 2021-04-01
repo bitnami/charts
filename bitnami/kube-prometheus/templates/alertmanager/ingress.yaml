@@ -1,0 +1,51 @@
+{{- if and .Values.alertmanager.enabled .Values.alertmanager.ingress.enabled }}
+apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
+kind: Ingress
+metadata:
+  name: {{ template "kube-prometheus.alertmanager.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "kube-prometheus.alertmanager.labels" . | nindent 4 }}
+  annotations:
+    {{- if .Values.alertmanager.ingress.certManager }}
+    kubernetes.io/tls-acme: "true"
+    {{- end }}
+    {{- range $key, $value := .Values.alertmanager.ingress.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+spec:
+  rules:
+    {{- if .Values.alertmanager.ingress.hostname }}
+    - host: {{ .Values.alertmanager.ingress.hostname }}
+      http:
+        paths:
+          {{- if .Values.alertmanager.ingress.extraPaths }}
+          {{- toYaml .Values.alertmanager.ingress.extraPaths | nindent 10 }}
+          {{- end }}
+          - path: {{ .Values.alertmanager.ingress.path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+            pathType: {{ .Values.alertmanager.ingress.pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "kube-prometheus.alertmanager.fullname" $) "servicePort" "http" "context" $)  | nindent 14 }}
+    {{- end }}
+    {{- range .Values.alertmanager.ingress.extraHosts }}
+    - host: {{ .name | quote }}
+      http:
+        paths:
+          - path: {{ default "/" .path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
+            pathType: {{ default "ImplementationSpecific" .pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "kube-prometheus.alertmanager.fullname" $) "servicePort" "http" "context" $) | nindent 14 }}
+    {{- end }}
+  {{- if or .Values.alertmanager.ingress.tls .Values.alertmanager.ingress.extraTls }}
+  tls:
+    {{- if .Values.alertmanager.ingress.tls }}
+    - hosts:
+        - {{ .Values.alertmanager.ingress.hostname }}
+      secretName: {{ printf "%s-tls" .Values.alertmanager.ingress.hostname }}
+    {{- end }}
+    {{- if .Values.alertmanager.ingress.extraTls }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.alertmanager.ingress.extraTls "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+{{- end }}

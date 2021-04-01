@@ -1,37 +1,56 @@
 
 ** Please be patient while the chart is being deployed **
 
+{{- if .Values.ingress.enabled }}
+
+1. Get the Wildfly URL and associate its hostname to your cluster external IP:
+
+   export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
+   echo "Wildfly URL: http{{ if .Values.ingress.tls }}s{{ end }}://{{ .Values.ingress.hostname }}"
+   echo "$CLUSTER_IP  {{ .Values.ingress.hostname }}" | sudo tee -a /etc/hosts
+
+{{- else }}
+
 1. Get the WildFly URL by running:
 
 {{- if contains "NodePort" .Values.service.type }}
 
-  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "wildfly.fullname" . }})
+  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "common.names.fullname" . }})
+  export NODE_MGMT_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[1].nodePort}" services {{ template "common.names.fullname" . }})
   export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-  echo http://$NODE_IP:$NODE_PORT/
+  echo "WildFly URL:            http://$NODE_IP:$NODE_PORT"
+  echo "WildFly Management URL: http://$NODE_IP:$NODE_MGMT_PORT"
 
 {{- else if contains "LoadBalancer" .Values.service.type }}
 
-** Please ensure an external IP is associated to the {{ template "wildfly.fullname" . }} service before proceeding **
-** Watch the status using: kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "wildfly.fullname" . }} **
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "common.names.fullname" . }}'
 
-  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "wildfly.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
-{{- $port:=.Values.service.port | toString }}
-  echo URL            : http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.port }}{{ end }}/
-  echo Management Url : http://$SERVICE_IP:{{ .Values.service.mgmtPort }}/
+  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+  {{- $port:=.Values.service.port | toString }}
+  {{- $mgmtPort:=.Values.service.mgmtPort | toString }}
+  echo "WildFly URL:            http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.port }}{{ end }}/
+  echo "WildFly Management URL: http://$SERVICE_IP{{- if ne $mgmtPort "80" }}:{{ .Values.service.mgmtPort }}{{ end }}/
+
 {{- else if contains "ClusterIP"  .Values.service.type }}
-  echo URL            : http://127.0.0.1:8080/
-  echo Management URL : http://127.0.0.1:9990/
-  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "wildfly.fullname" . }} 8080:{{ .Values.service.port}} 9990:{{ .Values.service.mgmtPort }}
+
+  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "common.names.fullname" . }} 8080:{{ .Values.service.port }} &
+  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "common.names.fullname" . }} 9990:{{ .Values.service.mgmtPort }} &
+  echo "WildFly URL:            http://127.0.0.1:8080/"
+  echo "WildFly Management URL: http://127.0.0.1:9990/:
+
+{{- end }}
 {{- end }}
 
 2. Login with the following credentials
 
   echo Username: {{ .Values.wildflyUsername }}
-  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "wildfly.fullname" . }} -o jsonpath="{.data.wildfly-password}" | base64 --decode)
+  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} -o jsonpath="{.data.wildfly-password}" | base64 --decode)
 
-{{- if and (contains "bitnami/" .Values.image.repository) (not (.Values.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
-
-WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
-+info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
-
-{{- end }}
+{{- include "wildfly.checkRollingTags" . }}
+{{- $passwordValidationErrors := list -}}
+{{- $secretName := include "common.names.fullname" . -}}
+{{- $requiredWildflyPassword := dict "valueKey" "wildflyPassword" "secret" $secretName "field" "wildfly-password" "context" $ -}}
+{{- $requiredWildflyPasswordError := include "common.validations.values.single.empty" $requiredWildflyPassword -}}
+{{- $passwordValidationErrors = append $passwordValidationErrors $requiredWildflyPasswordError -}}
+{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}

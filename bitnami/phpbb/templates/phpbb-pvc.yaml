@@ -1,18 +1,24 @@
-{{- if .Values.persistence.enabled -}}
+{{- if and .Values.persistence.enabled (not .Values.persistence.existingClaim) -}}
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: "{{ template "phpbb.fullname" . }}-phpbb"
-  labels:
-    app: "{{ template "phpbb.fullname" . }}"
-    chart: "{{ template "phpbb.chart" . }}"
-    release: {{ .Release.Name | quote }}
-    heritage: {{ .Release.Service | quote }}
+  name: {{ template "common.names.fullname" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: phpbb
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
+  {{- if .Values.persistence.hostPath }}
+  storageClassName: ""
+  {{- end }}
   accessModes:
-    - {{ .Values.persistence.phpbb.accessMode | quote }}
+    - {{ .Values.persistence.accessMode | quote }}
   resources:
     requests:
-      storage: {{ .Values.persistence.phpbb.size | quote }}
-  {{ include "phpbb.storageClass" . }}
+      storage: {{ .Values.persistence.size | quote }}
+  {{- include "phpbb.storageClass" . | nindent 2 }}
 {{- end -}}

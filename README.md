@@ -14,11 +14,15 @@ $ helm install my-release bitnami/<chart>
 
 ## Before you begin
 
+### Prerequisites
+- Kubernetes 1.12+
+- Helm 3.1.0
+
 ### Setup a Kubernetes Cluster
 
 The quickest way to setup a Kubernetes cluster to install Bitnami Charts is following the "Bitnami Get Started" guides for the different services:
 
-- [Get Started with Bitnami Charts using VMware Enterprise PKS](https://docs.bitnami.com/kubernetes/get-started-charts-pks/)
+- [Get Started with Bitnami Charts using VMware Tanzu Kubernetes Grid](https://docs.bitnami.com/kubernetes/get-started-tkg/)
 - [Get Started with Bitnami Charts using VMware Tanzu Mission Control](https://docs.bitnami.com/tutorials/tanzu-mission-control-get-started/)
 - [Get Started with Bitnami Charts using the Azure Kubernetes Service (AKS)](https://docs.bitnami.com/kubernetes/get-started-aks/)
 - [Get Started with Bitnami Charts using the Amazon Elastic Container Service for Kubernetes (EKS)](https://docs.bitnami.com/kubernetes/get-started-eks/)
@@ -54,7 +58,7 @@ Useful Helm Client Commands:
 
 # License
 
-Copyright (c) 2020 Bitnami
+Copyright (c) 2015-2021 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

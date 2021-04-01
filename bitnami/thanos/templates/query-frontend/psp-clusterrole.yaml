@@ -1,0 +1,12 @@
+{{- if and .Values.queryFrontend.enabled .Values.queryFrontend.pspEnabled .Values.queryFrontend.rbac.create -}}
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
+kind: ClusterRole
+metadata:
+  name: {{ include "common.names.fullname" . }}-query-frontend
+rules:
+- apiGroups: ['policy']
+  resources: ['podsecuritypolicies']
+  verbs:     ['use']
+  resourceNames:
+  - {{ include "common.names.fullname" . }}-query-frontend
+{{- end -}}

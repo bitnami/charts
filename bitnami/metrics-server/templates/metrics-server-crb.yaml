@@ -1,15 +1,15 @@
 {{- if .Values.rbac.create -}}
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRoleBinding
 metadata:
-  name: system:{{ template "metrics-server.fullname" . }}
-  labels: {{- include "metrics-server.labels" . | nindent 4 }}
+  name: {{ template "common.names.fullname" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: system:{{ template "metrics-server.fullname" . }}
+  name: {{ template "common.names.fullname" . }}
 subjects:
   - kind: ServiceAccount
-    name: {{ template "metrics-server.fullname" . }}
+    name: {{ template "common.names.fullname" . }}
     namespace: {{ .Release.Namespace }}
 {{- end -}}

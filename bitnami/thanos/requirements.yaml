@@ -1,5 +1,0 @@
-dependencies:
-  - name: minio
-    version: 3.x.x
-    repository: https://charts.bitnami.com/bitnami
-    condition: minio.enabled

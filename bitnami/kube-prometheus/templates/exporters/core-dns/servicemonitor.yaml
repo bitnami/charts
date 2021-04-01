@@ -1,0 +1,29 @@
+{{- if .Values.coreDns.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ template "kube-prometheus.fullname" . }}-coredns
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "kube-prometheus.labels" . | nindent 4 }}
+    app.kubernetes.io/component: {{ template "kube-prometheus.fullname" . }}-coredns
+spec:
+  jobLabel: k8s-app
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: {{ template "kube-prometheus.fullname" . }}-coredns
+  namespaceSelector:
+    matchNames:
+      - {{ .Values.coreDns.namespace }}
+  endpoints:
+    - port: http-metrics
+      {{- if .Values.coreDns.serviceMonitor.interval}}
+      interval: {{ .Values.coreDns.serviceMonitor.interval }}
+      {{- end }}
+      bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+      {{- if .Values.coreDns.serviceMonitor.metricRelabelings }}
+      metricRelabelings: {{- include "common.tplvalues.render" (dict "value" .Values.coreDns.serviceMonitor.metricRelabelings "context" $) | nindent 6 }}
+      {{- end }}
+      {{- if .Values.coreDns.serviceMonitor.relabelings }}
+      relabelings: {{- include "common.tplvalues.render" (dict "value" .Values.coreDns.serviceMonitor.relabelings "context" $) | nindent 6 }}
+      {{- end }}
+{{- end }}

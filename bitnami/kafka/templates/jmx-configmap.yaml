@@ -3,10 +3,16 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ template "kafka.fullname" . }}-jmx-configuration
-  labels: {{- include "kafka.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 data:
   jmx-kafka-prometheus.yml: |-
-    {{- include "kafka.tplValue" ( dict "value" .Values.metrics.jmx.config "context" $ ) | nindent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.jmx.config "context" $ ) | nindent 4 }}
     rules:
       - pattern: kafka.controller<type=(ControllerChannelManager), name=(QueueSize), broker-id=(\d+)><>(Value)
         name: kafka_controller_$1_$2_$4

@@ -1,0 +1,1112 @@
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets, and storageClass
+##
+# global:
+#   imageRegistry: myRegistryName
+#   imagePullSecrets:
+#     - myRegistryKeySecretName
+#   storageClass: myStorageClass
+
+## String to partially override scdf.fullname template (will maintain the release name).
+##
+# nameOverride:
+
+## String to fully override scdf.fullname template.
+##
+# fullnameOverride:
+
+## Force target Kubernetes version (using Helm capabilites if not set)
+##
+kubeVersion:
+
+## Kubernetes Cluster Domain.
+##
+clusterDomain: cluster.local
+
+##
+## Spring Cloud Dataflow Server parameters.
+##
+server:
+  ## Bitnami Spring Cloud Dataflow Server image
+  ## ref: https://hub.docker.com/r/bitnami/spring-cloud-dataflow/tags/
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/spring-cloud-dataflow
+    tag: 2.7.1-debian-10-r35
+    ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ##
+    # pullSecrets:
+    #   - myRegistryKeySecretName
+    ## Set to true if you would like to see extra information on logs
+    ##
+    debug: false
+
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
+  composedTaskRunner:
+    ## Bitnami Spring Cloud Dataflow Composed Task Runner image
+    ## ref: https://hub.docker.com/r/bitnami/spring-cloud-dataflow/tags/
+    ##
+    image:
+      registry: docker.io
+      repository: bitnami/spring-cloud-dataflow-composed-task-runner
+      tag: 2.7.1-debian-10-r39
+
+  ## Spring Cloud Dataflow Server configuration parameters
+  ##
+  configuration:
+    ## Enables or disables streams
+    ##
+    streamingEnabled: true
+    ## Enables or disables tasks and schedules
+    ##
+    batchEnabled: true
+    ## The name of the account to configure for the Kubernetes platform.
+    ##
+    accountName: default
+    ## Trust K8s certificates when querying the Kubernetes API.
+    ##
+    trustK8sCerts: false
+    ## Container registries configuration parameters
+    ## Example:
+    ## containerRegistries:
+    ##   default:
+    ##     registry-host: registry-1.docker.io
+    ##     authorization-type: dockeroauth2
+    ##
+    containerRegistries: {}
+    ## Endpoint to the grafana instance (Deprecated: use the metricsDashboard instead)
+    ##
+    grafanaInfo:
+    ## Endpoint to the metricsDashboard instance
+    ##
+    metricsDashboard:
+
+  ## ConfigMap with Spring Cloud Dataflow Server Configuration
+  ## NOTE: When it's set the server.configuration.* and deployer.*
+  ##  parameters are ignored,
+  ##
+  # existingConfigmap:
+
+  ## Additional environment variables to set
+  ## E.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: BAR
+  ##
+  extraEnvVars: []
+
+  ## ConfigMap with extra environment variables
+  ##
+  # extraEnvVarsCM:
+
+  ## Secret with extra environment variables
+  ##
+  # extraEnvVarsSecret:
+
+  ## Number of Dataflow Server replicas to deploy.
+  ##
+  replicaCount: 1
+
+  ## StrategyType, can be set to RollingUpdate or Recreate by default.
+  ##
+  strategyType: RollingUpdate
+
+  ## Dataflow Server pod affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAffinityPreset: ""
+
+  ## Dataflow Server pod anti-affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAntiAffinityPreset: soft
+
+  ## Dataflow Server port
+  ##
+  containerPort: 8080
+
+  ## Dataflow Server node affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ## Allowed values: soft, hard
+  ##
+  nodeAffinityPreset:
+    ## Node affinity type
+    ## Allowed values: soft, hard
+    ##
+    type: ""
+    ## Node label key to match
+    ## E.g.
+    ## key: "kubernetes.io/e2e-az-name"
+    ##
+    key: ""
+    ## Node label values to match
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+
+  ## Affinity for Dataflow Server pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Note: server.podAffinityPreset, server.podAntiAffinityPreset, and server.nodeAffinityPreset will be ignored when it's set
+  ##
+  affinity: {}
+
+  ## Node labels for Dataflow Server pods assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+
+  ## Tolerations for Dataflow Server pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+
+  ## Annotations for server pods.
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+
+  ## Dataflow Server pods' priority.
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+  ##
+  # priorityClassName: ""
+
+  ## Dataflow Server pods' Security Context.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ##
+  podSecurityContext:
+    fsGroup: 1001
+
+  ## Dataflow Server containers' Security Context (only main container).
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ##
+  containerSecurityContext:
+    runAsUser: 1001
+
+  ## Dataflow Server containers' resource requests and limits.
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits: {}
+    #   cpu: 100m
+    #   memory: 128Mi
+    requests: {}
+    #   cpu: 100m
+    #   memory: 128Mi
+
+  ## Dataflow Server pods' liveness and readiness probes. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 120
+    timeoutSeconds: 1
+    periodSeconds: 20
+    failureThreshold: 6
+    successThreshold: 1
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 120
+    timeoutSeconds: 1
+    periodSeconds: 20
+    failureThreshold: 6
+    successThreshold: 1
+
+  ## Custom Liveness probes for Dataflow Server pods
+  ##
+  customLivenessProbe: {}
+
+  ## Custom Rediness probes Dataflow Server pods
+  ##
+  customReadinessProbe: {}
+
+  ## Dataflow Server Service parameters.
+  ##
+  service:
+    ## Service type.
+    ##
+    type: ClusterIP
+    ## Service port.
+    ##
+    port: 8080
+    ## Specify the nodePort value for the LoadBalancer and NodePort service types.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ##
+    # nodePort:
+    ## Service clusterIP.
+    ##
+    # clusterIP: None
+    ## Enable client source IP preservation
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## Set the LoadBalancer service type to internal only.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+    ##
+    # loadBalancerIP:
+    ## Load Balancer sources.
+    ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ##
+    # loadBalancerSourceRanges:
+    # - 10.10.10.0/24
+    ## Provide any additional annotations which may be required. Evaluated as a template.
+    ##
+    annotations: {}
+
+  ## Configure the ingress resource that allows you to access Dataflow Server
+  ##
+  ingress:
+    ## Set to true to enable ingress record generation
+    ##
+    enabled: false
+
+    ## The Path to WordPress. You may need to set this to '/*' in order to use this
+    ## with ALB ingress controllers.
+    ##
+    path: /
+
+    ## Ingress Path type
+    ##
+    pathType: ImplementationSpecific
+
+    ## Set this to true in order to add the corresponding annotations for cert-manager
+    ##
+    certManager: false
+
+    ## When the ingress is enabled, a host pointing to this will be created
+    ##
+    hostname: dataflow.local
+
+    ## Ingress annotations done as key:value pairs
+    ## For a full list of possible ingress annotations, please see
+    ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ##
+    ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+    ##
+    annotations: {}
+
+    ## Enable TLS configuration for the hostname defined at ingress.hostname parameter
+    ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
+    ## You can use the ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
+    ##
+    tls: false
+
+    ## The list of additional hostnames to be covered with this ingress record.
+    ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
+    ## extraHosts:
+    ## - name: dataflow.local
+    ##   path: /
+    ##
+
+    ## The tls configuration for additional hostnames to be covered with this ingress record.
+    ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+    ## extraTls:
+    ## - hosts:
+    ##     - dataflow.local
+    ##   secretName: dataflow.local-tls
+    ##
+
+    ## If you're providing your own certificates, please use this to add the certificates as secrets
+    ## key and certificate should start with -----BEGIN CERTIFICATE----- or
+    ## -----BEGIN RSA PRIVATE KEY-----
+    ##
+    ## name should line up with a tlsSecret set further up
+    ## If you're using cert-manager, this is unneeded, as it will create the secret for you if it is not set
+    ##
+    ## It is also possible to create and manage the certificates outside of this helm chart
+    ## Please see README.md for more information
+    ##
+    secrets: []
+    ## - name: dataflow.local-tls
+    ##   key:
+    ##   certificate:
+    ##
+
+  ## Add init containers to the Dataflow Server pods.
+  ## Example:
+  ## initContainers:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  initContainers: {}
+
+  ## Add sidecars to the Dataflow Server pods.
+  ## Example:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: {}
+
+  ## Dataflow Server Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+  ##
+  pdb:
+    create: false
+    ## Min number of pods that must still be available after the eviction
+    ##
+    minAvailable: 1
+    ## Max number of pods that can be unavailable after the eviction
+    ##
+    # maxUnavailable: 1
+
+  ## Dataflow Server Autoscaling parameters.
+  ##
+  autoscaling:
+    enabled: false
+    # minReplicas: 1
+    # maxReplicas: 11
+    # targetCPU: 50
+    # targetMemory: 50
+
+  ## Extra volumes to mount
+  ##
+  # extraVolumes:
+  #   - name: sample
+  #     emptyDir: {}
+  #
+  # extraVolumeMounts:
+  #   - name: sample
+  #     mountPath: /temp/sample
+
+  ## Java Debug Wire Protocol (JDWP) parameters.
+  ##
+  jdwp:
+    ## Set to true to enable Java debugger.
+    ##
+    enabled: false
+    ## Specify port for remote debugging.
+    ##
+    port: 5005
+
+  ## Add proxy configuration for SCDF server
+  ## Example:
+  ## proxy:
+  ##   host: "myproxy.com"
+  ##   port: 8080
+  ##   user: ""
+  ##   password: ""
+  ##
+  proxy: {}
+
+##
+## Spring Cloud Skipper parameters.
+##
+skipper:
+  ## Set to true to enable Spring Cloud Skipper component.
+  ## Note: it'll be also enabled if streams are enabled in Dataflow server configuration.
+  ##
+  enabled: true
+
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
+  ## Bitnami Spring Cloud Skipper image
+  ## ref: https://hub.docker.com/r/bitnami/spring-cloud-skipper/tags/
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/spring-cloud-skipper
+    tag: 2.6.1-debian-10-r38
+    ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ##
+    # pullSecrets:
+    #   - myRegistryKeySecretName
+    ## Set to true if you would like to see extra information on logs
+    ##
+    debug: false
+
+  ## Skipper Server configuration parameters
+  ##
+  configuration:
+    ## The name of the account to configure for the Kubernetes platform.
+    ##
+    accountName: default
+    ## Trust K8s certificates when querying the Kubernetes API.
+    ##
+    trustK8sCerts: false
+
+  ## ConfigMap with Spring Cloud Dataflow Server Configuration
+  ## NOTE: When it's set the server.configuration.* and deployer.*
+  ##  parameters are ignored,
+  ##
+  # existingConfigmap:
+
+  ## Additional environment variables to set
+  ## E.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: BAR
+  ##
+  extraEnvVars: []
+
+  ## ConfigMap with extra environment variables
+  ##
+  # extraEnvVarsCM:
+
+  ## Secret with extra environment variables
+  ##
+  # extraEnvVarsSecret:
+
+  ## Number of Skipper replicas to deploy.
+  ##
+  replicaCount: 1
+
+  ## StrategyType, can be set to RollingUpdate or Recreate by default.
+  ##
+  strategyType: RollingUpdate
+
+  ## Skipper pod affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAffinityPreset: ""
+
+  ## Skipper pod anti-affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAntiAffinityPreset: soft
+
+  ## Skipper node affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ## Allowed values: soft, hard
+  ##
+  nodeAffinityPreset:
+    ## Node affinity type
+    ## Allowed values: soft, hard
+    ##
+    type: ""
+    ## Node label key to match
+    ## E.g.
+    ## key: "kubernetes.io/e2e-az-name"
+    ##
+    key: ""
+    ## Node label values to match
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+
+  ## Affinity for Skipper pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Note: skipper.podAffinityPreset, skipper.podAntiAffinityPreset, and skipper.nodeAffinityPreset will be ignored when it's set
+  ##
+  affinity: {}
+
+  ## Node labels for Skipper pods assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+
+  ## Tolerations for Skipper pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+
+  ## Annotations for Skipper pods.
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+
+  ## Skipper pods' priority.
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+  ##
+  # priorityClassName: ""
+
+  ## Skipper pods' Security Context.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ##
+  podSecurityContext:
+    fsGroup: 1001
+
+  ## Skipper containers' Security Context (only main container).
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ##
+  containerSecurityContext:
+    runAsUser: 1001
+
+  ## Skipper containers' resource requests and limits.
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits: {}
+    #   cpu: 100m
+    #   memory: 128Mi
+    requests: {}
+    #   cpu: 100m
+    #   memory: 128Mi
+
+  ## Skipper pods' liveness and readiness probes. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 120
+    timeoutSeconds: 1
+    periodSeconds: 20
+    failureThreshold: 6
+    successThreshold: 1
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 120
+    timeoutSeconds: 1
+    periodSeconds: 20
+    failureThreshold: 6
+    successThreshold: 1
+
+  ## Custom Liveness probes for Skipper pods
+  ##
+  customLivenessProbe: {}
+
+  ## Custom Rediness probes Skipper pods
+  ##
+  customReadinessProbe: {}
+
+  ## Skipper Service parameters.
+  ##
+  service:
+    ## Service type.
+    ##
+    type: ClusterIP
+    ## Service port.
+    ##
+    port: 80
+    ## Specify the nodePort value for the LoadBalancer and NodePort service types.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ##
+    # nodePort:
+    ## Service clusterIP.
+    ##
+    # clusterIP: None
+    ## Enable client source IP preservation
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## Set the LoadBalancer service type to internal only.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+    ##
+    # loadBalancerIP:
+    ## Load Balancer sources.
+    ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ##
+    # loadBalancerSourceRanges:
+    # - 10.10.10.0/24
+    ## Provide any additional annotations which may be required. Evaluated as a template.
+    ##
+    annotations: {}
+
+  ## Add init containers to the Dataflow Skipper pods.
+  ## Example:
+  ## initContainers:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  initContainers: {}
+
+  ## Add sidecars to the Skipper pods.
+  ## Example:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: {}
+
+  ## Skipper Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+  ##
+  pdb:
+    create: false
+    ## Min number of pods that must still be available after the eviction
+    ##
+    minAvailable: 1
+    ## Max number of pods that can be unavailable after the eviction
+    ##
+    # maxUnavailable: 1
+
+  ## Skipper Autoscaling parameters.
+  ##
+  autoscaling:
+    enabled: false
+    # minReplicas: 1
+    # maxReplicas: 11
+    # targetCPU: 50
+    # targetMemory: 50
+
+  ## Extra volumes to mount
+  # extraVolumes:
+  #   - name: sample
+  #     emptyDir: {}
+  #
+  # extraVolumeMounts:
+  #   - name: sample
+  #     mountPath: /temp/sample
+
+  ## Java Debug Wire Protocol (JDWP) parameters.
+  ##
+  jdwp:
+    ## Set to true to enable Java debugger.
+    ##
+    enabled: false
+    ## Specify port for remote debugging.
+    ##
+    port: 5005
+
+##
+## External Skipper Configuration
+##
+## All of these values are ignored when skipper.enabled is set to true
+##
+externalSkipper:
+  ## External Skipper server host and port
+  ##
+  host: localhost
+  port: 7577
+
+## Spring Cloud Deployer for Kubernetes parameters.
+##
+deployer:
+  ## Streaming applications resource requests and limits.
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    limits:
+      cpu: 500m
+      memory: 1024Mi
+    requests: {}
+    #   cpu: 100m
+    #   memory: 128Mi
+  readinessProbe:
+    initialDelaySeconds: 120
+  livenessProbe:
+    initialDelaySeconds: 90
+  ## The node selectors to apply to the streaming applications deployments in "key:value" format.
+  ## Multiple node selectors are comma separated.
+  ##
+  nodeSelector: ''
+  tolerations: {}
+  ## Extra volume mounts.
+  ##
+  volumeMounts: {}
+  ## Extra volumes.
+  ##
+  volumes: {}
+  ## List of extra environment variables to set for any deployed app container. These environments will not override
+  ## RabbitMQ/Kafka envs. Multiple values are comma separated.
+  ##
+  environmentVariables: ''
+  ## Streams containers' Security Context. This security context will be use in every deployed stream.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ##
+  podSecurityContext:
+    runAsUser: 1001
+
+## Init containers parameters:
+## wait-for-backends: Wait for the database and other services (such as Kafka or RabbitMQ) used when enabling streaming
+##
+waitForBackends:
+  enabled: true
+  image:
+    registry: docker.io
+    repository: bitnami/kubectl
+    tag: 1.18.16-debian-10-r13
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## Example:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## Init container resource requests and limits.
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    ## We usually recommend not to specify default resources and to leave this as a conscious
+    ## choice for the user. This also increases chances charts run on environments with little
+    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ##
+    limits: {}
+    #   cpu: 100m
+    #   memory: 128Mi
+    requests: {}
+    #   cpu: 100m
+    #   memory: 128Mi
+
+## K8s Service Account.
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+##
+serviceAccount:
+  ## Specifies whether a ServiceAccount should be created.
+  ##
+  create: true
+  ## The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the scdf.fullname template
+  ##
+  # name:
+
+## Role Based Access
+## ref: https://kubernetes.io/docs/admin/authorization/rbac/
+##
+rbac:
+  ## Specifies whether RBAC rules should be created
+  ## binding Spring Cloud Dataflow ServiceAccount to a role
+  ## that allows pods querying the K8s API
+  ##
+  create: true
+
+## Prometheus metrics
+##
+metrics:
+  enabled: false
+  ## Bitnami Prometheus Rsocket Proxy image
+  ## ref: https://hub.docker.com/r/bitnami/prometheus-rsocket-proxy/tags/
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/prometheus-rsocket-proxy
+    tag: 1.3.0-debian-10-r83
+    ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ##
+    # pullSecrets:
+    #   - myRegistryKeySecretName
+  ## Prometheus Rsocket Proxy containers' resource requests and limits.
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits: {}
+    requests: {}
+
+  ## Number of Prometheus Rsocket Proxy replicas to deploy.
+  ##
+  replicaCount: 1
+
+  ## Prometheus Rsocket Proxy pod affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAffinityPreset: ""
+
+  ## Prometheus Rsocket Proxy pod anti-affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAntiAffinityPreset: soft
+
+  ## Prometheus Rsocket Proxy node affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ## Allowed values: soft, hard
+  ##
+  nodeAffinityPreset:
+    ## Node affinity type
+    ## Allowed values: soft, hard
+    ##
+    type: ""
+    ## Node label key to match
+    ## E.g.
+    ## key: "kubernetes.io/e2e-az-name"
+    ##
+    key: ""
+    ## Node label values to match
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+
+  ## Affinity for Prometheus Rsocket Proxy pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Note: metrics.podAffinityPreset, metrics.podAntiAffinityPreset, and metrics.nodeAffinityPreset will be ignored when it's set
+  ##
+  affinity: {}
+
+  ## Node labels for Prometheus Rsocket Proxy pods assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+
+  ## Tolerations for Prometheus Rsocket Proxy pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+
+  ## Annotations for Prometheus Rsocket Proxy pods.
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+
+  ## Prometheus Rsocket Proxy pods' priority.
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+  ##
+  # priorityClassName: ""
+
+  service:
+    ## Prometheus Rsocket Proxy HTTP port
+    ##
+    httpPort: 8080
+    ## Prometheus Rsocket Proxy Rsocket port
+    ##
+    rsocketPort: 7001
+    ## Annotations for the Prometheus Rsocket Proxy service
+    ##
+    annotations:
+      prometheus.io/scrape: 'true'
+      prometheus.io/port: '{{ .Values.metrics.service.httpPort }}'
+      prometheus.io/path: '/metrics/proxy'
+  ## Prometheus Operator ServiceMonitor configuration
+  ##
+  serviceMonitor:
+    enabled: false
+    ## Labels to add to ServiceMonitor, in case prometheus operator is configured with serviceMonitorSelector
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
+    ##
+    extraLabels: {}
+    ## Namespace in which ServiceMonitor is created if different from release
+    ##
+    # namespace: monitoring
+    ## Interval at which metrics should be scraped.
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ##
+    # interval: 10s
+    ## Timeout after which the scrape is ended
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ##
+    # scrapeTimeout: 10s
+
+  ## Prometheus Rsocket Proxy Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+  ##
+  pdb:
+    create: false
+    ## Min number of pods that must still be available after the eviction
+    ##
+    minAvailable: 1
+    ## Max number of pods that can be unavailable after the eviction
+    ##
+    # maxUnavailable: 1
+
+  ## Prometheus Rsocket Proxy Autoscaling parameters.
+  ##
+  autoscaling:
+    enabled: false
+    # minReplicas: 1
+    # maxReplicas: 11
+    # targetCPU: 50
+    # targetMemory: 50
+
+##
+## MariaDB chart configuration
+##
+## https://github.com/bitnami/charts/blob/master/bitnami/mariadb/values.yaml
+##
+mariadb:
+  enabled: true
+  ## MariaDB architecture. Allowed values: standalone or replication
+  ##
+  architecture: standalone
+  ## Custom user/db credentials
+  ##
+  auth:
+    ## MariaDB root password
+    ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-the-root-password-on-first-run
+    ##
+    rootPassword: ''
+    ## MariaDB custom user and database
+    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-on-first-run
+    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-user-on-first-run
+    ##
+    username: dataflow
+    password: change-me
+    ## Database to create
+    ## ref: https://github.com/bitnami/bitnami-docker-mariadb#creating-a-database-on-first-run
+    ##
+    database: dataflow
+    forcePassword: false
+    usePasswordFiles: false
+  ## initdb scripts: specify dictionary of scripts to be run at first boot
+  ## We can only create one database on MariaDB using parameters. However, when streaming
+  ## is enabled we need a second database for Skipper.
+  ## Improvements: support creating N users/databases on MariaDB chart.
+  ##
+  initdbScripts:
+    create_databases.sql: |
+      CREATE OR REPLACE USER 'skipper'@'%' identified by 'change-me';
+      CREATE DATABASE IF NOT EXISTS `skipper`;
+      GRANT ALL ON skipper.* to 'skipper'@'%';
+      FLUSH PRIVILEGES;
+
+##
+## External Database Configuration
+##
+## All of these values are ignored when mariadb.enabled is set to true
+##
+externalDatabase:
+
+  ## Database server host and port
+  ##
+  host: localhost
+  port: 3306
+  ## Database driver and scheme
+  ##
+  # driver:
+  # scheme:
+  password: ''
+  # existingPasswordSecret: name-of-existing-secret
+  # existingPasswordKey: key in existingPasswordSecret, defaults to "datasource-password"
+  ## Data Flow user and database
+  ##
+  dataflow:
+    ## Database JDBC URL
+    ## This provides a mechanism to define a fully customized JDBC URL for the data flow server rather than having it
+    ## derived from the common, individual attributes. This property, when defined, has precedence over the
+    ## individual attributes (scheme, host, port, database)
+    ##
+    url: ""
+    database: dataflow
+    username: dataflow
+  ## Skipper and database
+  ##
+  skipper:
+    ## Database JDBC URL
+    ## This provides a mechanism to define a fully customized JDBC URL for skipper rather than having it
+    ## derived from the common, individual attributes. This property, when defined, has precedence over the
+    ## individual attributes (scheme, host, port, database)
+    ##
+    url: ""
+    database: skipper
+    username: skipper
+  ## Hibernate Dialect
+  ## e.g: org.hibernate.dialect.MariaDB102Dialect
+  ##
+  hibernateDialect: ''
+
+##
+## RabbitMQ chart configuration
+##
+## https://github.com/bitnami/charts/blob/master/bitnami/rabbitmq/values.yaml
+##
+rabbitmq:
+  enabled: true
+  auth:
+    username: user
+
+##
+## External RabbitMQ Configuration
+##
+## All of these values are ignored when rabbitmq.enabled is set to true
+##
+externalRabbitmq:
+  ## Enables or disables external RabbitMQ, can be disabled when Kafka is using
+  ##
+  enabled: false
+  ## RabbitMQ host and port
+  ##
+  host: localhost
+  port: 5672
+  ## RabbitMQ username and password, password will be saved in a kubernetes secret
+  ##
+  username: guest
+  password: guest
+  # vhost: /
+  # existingPasswordSecret: name-of-existing-secret
+
+##
+## Kafka chart configuration
+##
+## https://github.com/bitnami/charts/blob/master/bitnami/kafka/values.yaml
+##
+kafka:
+  enabled: false
+  replicaCount: 1
+  offsetsTopicReplicationFactor: 1
+  ##
+  ## Zookeeper chart configuration
+  ##
+  ## https://github.com/bitnami/charts/blob/master/bitnami/zookeeper/values.yaml
+  ##
+  zookeeper:
+    replicaCount: 1
+
+##
+## External Kafka Configuration
+##
+## All of these values are ignored when kafka.enabled is set to true
+##
+externalKafka:
+  enabled: false
+
+  ## External Kafka brokers
+  ## Multiple brokers can be provided in a comma separated list, e.g. host1:port1,host2:port2
+  ##
+  brokers: localhost:9092
+
+  ## External Zookeeper nodes
+  ##
+  zkNodes: localhost:2181
+
+## Extra objects to deploy (value evaluated as a template)
+##
+extraDeploy: []

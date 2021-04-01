@@ -1,0 +1,17 @@
+osclassHost: osclass.local
+service:
+  type: ClusterIP
+ingress:
+  enabled: true
+  tls: true
+  hostname: osclass.local
+metrics:
+  enabled: true
+# Avoids issues with yamllint
+livenessProbe:
+  httpGet:
+    httpHeaders: []
+readinessProbe:
+  httpGet:
+    httpHeaders: []
+

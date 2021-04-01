@@ -1,0 +1,19 @@
+{{- if and .Values.aggregator.enabled .Values.aggregator.service.ports -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "fluentd.fullname" . }}-headless
+  labels: {{- include "fluentd.labels" . | nindent 4 }}
+    app.kubernetes.io/component: aggregator
+    app: aggregator
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+  {{- range $key, $value := .Values.aggregator.service.ports }}
+    - name: {{ $key }}
+      {{ omit $value "nodePort" | toYaml | nindent 6 }}
+  {{- end }}
+  selector: {{- include "fluentd.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: aggregator
+{{- end -}}

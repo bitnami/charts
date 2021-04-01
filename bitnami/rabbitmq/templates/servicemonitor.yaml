@@ -2,37 +2,34 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ template "rabbitmq.fullname" . }}
+  name: {{ include "rabbitmq.fullname" . }}
   {{- if .Values.metrics.serviceMonitor.namespace }}
   namespace: {{ .Values.metrics.serviceMonitor.namespace }}
   {{- else }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace | quote }}
   {{- end }}
-  labels:
-    app: {{ template "rabbitmq.name" . }}
-    chart: {{ template "rabbitmq.chart" .  }}
-    heritage: "{{ .Release.Service }}"
-    release: {{ if .Values.metrics.serviceMonitor.release }}"{{ .Values.metrics.serviceMonitor.release }}"{{ else }}"{{ .Release.Name }}"{{ end }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.metrics.serviceMonitor.additionalLabels }}
-{{ toYaml .Values.metrics.serviceMonitor.additionalLabels | indent 4 }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.metrics.serviceMonitor.additionalLabels "context" $) | nindent 4 }}
     {{- end }}
 spec:
   endpoints:
-  - port: metrics
-    interval: {{ .Values.metrics.serviceMonitor.interval }}
-    {{- if .Values.metrics.serviceMonitor.scrapeTimeout }}
-    scrapeTimeout: {{ .Values.metrics.serviceMonitor.scrapeTimeout }}
-    {{- end }}
-    honorLabels: {{ .Values.metrics.serviceMonitor.honorLabels }}
-    {{- if .Values.metrics.serviceMonitor.relabellings }}
-    metricRelabelings:
-{{ toYaml .Values.metrics.serviceMonitor.relabellings | indent 6 }}
-    {{- end }}
+    - port: metrics
+      {{- if .Values.metrics.serviceMonitor.interval }}
+      interval: {{ .Values.metrics.serviceMonitor.interval }}
+      {{- end }}
+      {{- if .Values.metrics.serviceMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ .Values.metrics.serviceMonitor.scrapeTimeout }}
+      {{- end }}
+      {{- if .Values.metrics.serviceMonitor.honorLabels }}
+      honorLabels: {{ .Values.metrics.serviceMonitor.honorLabels }}
+      {{- end }}
+      {{- if .Values.metrics.serviceMonitor.relabellings }}
+      metricRelabelings: {{- toYaml .Values.metrics.serviceMonitor.relabellings | nindent 6 }}
+      {{- end }}
   namespaceSelector:
     matchNames:
-      - {{ .Release.Namespace }}
+      - {{ .Release.Namespace | quote }}
   selector:
-    matchLabels:
-      app: {{ template "rabbitmq.name" . }}
-      release: "{{ .Release.Name }}"
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
 {{- end }}

@@ -1,0 +1,51 @@
+{{- if .Values.healthIngress.enabled -}}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ include "aspnet-core.fullname" . }}-health
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  annotations:
+    {{- if .Values.healthIngress.certManager }}
+    kubernetes.io/tls-acme: "true"
+    {{- end }}
+    {{- if .Values.healthIngress.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.healthIngress.annotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+spec:
+  rules:
+    {{- if .Values.healthIngress.hostname }}
+    - host: {{ .Values.healthIngress.hostname }}
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: {{ include "aspnet-core.fullname" . }}
+              servicePort: http
+    {{- end }}
+    {{- range .Values.healthIngress.extraHosts }}
+    - host: {{ .name }}
+      http:
+        paths:
+          - path: {{ default "/" .path }}
+            backend:
+              serviceName: {{ include "aspnet-core.fullname" $ }}
+              servicePort: http
+    {{- end }}
+  {{- if or .Values.healthIngress.tls .Values.healthIngress.extraTls .Values.healthIngress.hosts }}
+  tls:
+    {{- if .Values.healthIngress.tls }}
+    - hosts:
+        - {{ .Values.healthIngress.hostname }}
+      secretName: {{ printf "%s-tls" .Values.healthIngress.hostname }}
+    {{- end }}
+    {{- if .Values.healthIngress.extraTls }}
+    {{- toYaml .Values.healthIngress.extraTls | nindent 4 }}
+    {{- end }}
+  {{- end }}
+{{- end }}

@@ -1,19 +1,19 @@
 {{- if and .Values.metrics.enabled .Values.metrics.serviceMonitor.enabled .Values.metrics.serviceMonitor.rbac.create }}
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: RoleBinding
 metadata:
-  name: {{ template "kong.fullname" . }}-prometheus
+  name: {{ template "common.names.fullname" . }}-prometheus
   namespace: {{ .Release.Namespace }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: {{ template "kong.fullname" . }}-prometheus
+  name: {{ template "common.names.fullname" . }}-prometheus
 subjects:
   {{- if .Values.metrics.serviceMonitor.namespace }}
   - namespace: {{ .Values.metrics.serviceMonitor.namespace }}
   {{- else }}
   - namespace: {{ .Release.Namespace }}
-  {{- end }}        
+  {{- end }}
   kind: ServiceAccount
   name: {{ required "A valid .Values.metrics.serviceMonitor.serviceAccount entry required!" .Values.metrics.serviceMonitor.serviceAccount }}
 {{- end }}

@@ -1,17 +1,28 @@
-apiVersion: v1
-name: moodle
-version: 7.2.14
-appVersion: 3.8.3
-description: Moodle is a learning platform designed to provide educators, administrators and learners with a single robust, secure and integrated system to create personalised learning environments
-keywords:
-- moodle
-- learning
-- php
-home: http://www.moodle.org/
-sources:
-- https://github.com/bitnami/bitnami-docker-moodle
-maintainers:
-- name: Bitnami
-  email: containers@bitnami.com
+annotations:
+  category: E-Learning
+apiVersion: v2
+appVersion: 3.10.3
+dependencies:
+  - condition: mariadb.enabled
+    name: mariadb
+    repository: https://charts.bitnami.com/bitnami
+    version: 9.x.x
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    version: 1.x.x
+description: Moodle(TM) is a learning platform designed to provide educators, administrators and learners with a single robust, secure and integrated system to create personalised learning environments
 engine: gotpl
-icon: https://bitnami.com/assets/stacks/moodle/img/moodle-stack-110x117.png
+home: https://github.com/bitnami/charts/tree/master/bitnami/moodle
+icon: https://bitnami.com/assets/stacks/moodle/img/moodle-stack-220x234.png
+keywords:
+  - moodle
+  - learning
+  - php
+maintainers:
+  - email: containers@bitnami.com
+    name: Bitnami
+name: moodle
+sources:
+  - https://github.com/bitnami/bitnami-docker-moodle
+  - http://www.moodle.org/
+version: 11.0.7

@@ -1,14 +1,10 @@
-{{- if .Values.useHelm3 -}}
 {{- if .Values.rbac.create -}}
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: Role
 metadata:
   name: {{ template "kubeapps.kubeops.fullname" . }}
-  labels:
+  labels:{{ include "kubeapps.extraAppLabels" . | nindent 4 }}
     app: {{ template "kubeapps.kubeops.fullname" . }}
-    chart: {{ template "kubeapps.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
 rules:
   - apiGroups:
       - ""
@@ -24,16 +20,14 @@ rules:
       - apprepositories
     verbs:
       - get
+      - list
 ---
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: RoleBinding
 metadata:
   name: {{ template "kubeapps.kubeops.fullname" . }}
-  labels:
+  labels:{{ include "kubeapps.extraAppLabels" . | nindent 4 }}
     app: {{ template "kubeapps.kubeops.fullname" . }}
-    chart: {{ template "kubeapps.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -44,15 +38,12 @@ subjects:
     namespace: {{ .Release.Namespace }}
 {{- if .Values.allowNamespaceDiscovery }}
 ---
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
   name: "kubeapps:controller:kubeops-ns-discovery-{{ .Release.Namespace }}"
-  labels:
+  labels:{{ include "kubeapps.extraAppLabels" . | nindent 4 }}
     app: {{ template "kubeapps.kubeops.fullname" . }}
-    chart: {{ template "kubeapps.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
 rules:
   - apiGroups:
       - ""
@@ -61,15 +52,12 @@ rules:
     verbs:
       - list
 ---
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRoleBinding
 metadata:
   name: "kubeapps:controller:kubeops-ns-discovery-{{ .Release.Namespace }}"
-  labels:
+  labels:{{ include "kubeapps.extraAppLabels" . | nindent 4 }}
     app: {{ template "kubeapps.kubeops.fullname" . }}
-    chart: {{ template "kubeapps.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -78,18 +66,14 @@ subjects:
   - kind: ServiceAccount
     name: {{ template "kubeapps.kubeops.fullname" . }}
     namespace: {{ .Release.Namespace }}
-{{- end -}}
-{{- if .Values.featureFlags.operators }}
+{{- end }}
 ---
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
   name: "kubeapps:controller:kubeops-operators-{{ .Release.Namespace }}"
-  labels:
+  labels:{{ include "kubeapps.extraAppLabels" . | nindent 4 }}
     app: {{ template "kubeapps.kubeops.fullname" . }}
-    chart: {{ template "kubeapps.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
 rules:
   - apiGroups:
       - packages.operators.coreos.com
@@ -98,15 +82,12 @@ rules:
     verbs:
       - get
 ---
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRoleBinding
 metadata:
   name: "kubeapps:controller:kubeops-operators-{{ .Release.Namespace }}"
-  labels:
+  labels:{{ include "kubeapps.extraAppLabels" . | nindent 4 }}
     app: {{ template "kubeapps.kubeops.fullname" . }}
-    chart: {{ template "kubeapps.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -115,6 +96,4 @@ subjects:
   - kind: ServiceAccount
     name: {{ template "kubeapps.kubeops.fullname" . }}
     namespace: {{ .Release.Namespace }}
-{{- end -}}
-{{- end -}}
-{{- end }}{{/* matches useHelm3 */}}
+{{- end }}

@@ -1,0 +1,301 @@
+apiVersion: {{ if .Values.mongos.useStatefulSet }}{{ include "common.capabilities.statefulset.apiVersion" . }}{{- else }}{{ include "common.capabilities.deployment.apiVersion" . }}{{- end }}
+kind: {{ if .Values.mongos.useStatefulSet }}StatefulSet{{- else }}Deployment{{- end }}
+metadata:
+  name: {{ include "common.names.fullname" . }}-mongos
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: mongos
+spec:
+  {{- if .Values.mongos.useStatefulSet }}
+  serviceName: {{ include "mongodb-sharded.serviceName" . }}
+  podManagementPolicy: {{ .Values.mongos.podManagementPolicy }}
+  updateStrategy:
+  {{- else }}
+  strategy:
+  {{- end }}
+    {{- toYaml .Values.mongos.updateStrategy | nindent 4 }}
+  replicas: {{ .Values.mongos.replicas }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: mongos
+  template:
+    metadata:
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app.kubernetes.io/component: mongos
+        {{- if .Values.mongos.podLabels }}
+          {{- include "common.tplvalues.render" ( dict "value" .Values.mongos.podLabels "context" $ ) | nindent 8 }}
+        {{- end }}
+      {{- if or .Values.common.podAnnotations .Values.mongos.podAnnotations .Values.metrics.enabled }}
+      annotations:
+        {{- if .Values.common.podAnnotations }}
+           {{- include "common.tplvalues.render" ( dict "value" .Values.common.podAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.mongos.podAnnotations }}
+          {{- include "common.tplvalues.render" ( dict "value" .Values.mongos.podAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.metrics.enabled }}
+           {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.podAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
+      {{- end }}
+    spec:
+      {{- if .Values.common.schedulerName }}
+      schedulerName: {{ .Values.common.schedulerName | quote }}
+      {{- end }}
+      serviceAccountName: {{ include "mongodb-sharded.serviceAccountName" (dict "value" $.Values.mongos.serviceAccount "context" $) }}
+      {{- if .Values.mongos.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.mongos.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.mongos.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.mongos.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.mongos.podAffinityPreset "component" "mongos" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.mongos.podAntiAffinityPreset "component" "mongos" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.mongos.nodeAffinityPreset.type "key" .Values.mongos.nodeAffinityPreset.key "values" .Values.mongos.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.mongos.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.mongos.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.mongos.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.mongos.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.securityContext.enabled }}
+      securityContext:
+        fsGroup: {{ .Values.securityContext.fsGroup }}
+      {{- end }}
+      {{- include "mongodb-sharded.imagePullSecrets" . | nindent 6 }}
+      {{- if or $.Values.mongos.initContainers $.Values.common.initContainers }}
+      initContainers:
+        {{- with $.Values.mongos.initContainers }}
+        {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8}}
+        {{- end }}
+        {{- with $.Values.common.initContainers }}
+        {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8}}
+        {{- end }}
+      {{- end }}
+      containers:
+        - name: mongos
+          image: {{ include "mongodb-sharded.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.securityContext.enabled }}
+          securityContext:
+            runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
+            runAsUser: {{ .Values.securityContext.runAsUser }}
+          {{- end }}
+          env:
+            {{- if .Values.image.debug }}
+            - name: BITNAMI_DEBUG
+              value: "true"
+            {{- end }}
+            - name: MONGODB_SHARDING_MODE
+              value: "mongos"
+            - name: MONGODB_MAX_TIMEOUT
+              value: {{ .Values.common.mongodbMaxWaitTimeout | quote }}
+            {{- if .Values.usePasswordFile }}
+            - name: MONGODB_ROOT_PASSWORD_FILE
+              value: "/bitnami/mongodb/secrets/mongodb-root-password"
+            - name: MONGODB_REPLICA_SET_KEY_FILE
+              value: "/bitnami/mongodb/secrets/mongodb-replica-set-key"
+            {{- else }}
+            - name: MONGODB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mongodb-sharded.secret" . }}
+                  key: mongodb-root-password
+            - name: MONGODB_REPLICA_SET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mongodb-sharded.secret" . }}
+                  key: mongodb-replica-set-key
+            {{- end }}
+            - name: MONGODB_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            {{- if .Values.common.useHostnames }}
+            - name: MONGODB_ADVERTISED_HOSTNAME
+              value: "$(MONGODB_POD_NAME)"
+            {{- end }}
+            - name: MONGODB_CFG_PRIMARY_HOST
+              value: {{ include "mongodb-sharded.configServer.primaryHost" . }}
+            - name: MONGODB_CFG_REPLICA_SET_NAME
+              value: {{ include "mongodb-sharded.configServer.rsName" . }}
+            - name: MONGODB_SYSTEM_LOG_VERBOSITY
+              value: {{ .Values.common.mongodbSystemLogVerbosity | quote }}
+            - name: MONGODB_DISABLE_SYSTEM_LOG
+              {{- if .Values.mongodbDisableSystemLog }}
+              value: "yes"
+              {{- else }}
+              value: "no"
+              {{- end }}
+            - name: MONGODB_ENABLE_IPV6
+            {{- if .Values.common.mongodbEnableIPv6 }}
+              value: "yes"
+            {{- else }}
+              value: "no"
+            {{- end }}
+            - name: MONGODB_ENABLE_DIRECTORY_PER_DB
+            {{- if .Values.common.mongodbDirectoryPerDB }}
+              value: "yes"
+            {{- else }}
+              value: "no"
+            {{- end }}
+            {{- if .Values.mongos.mongodbExtraFlags }}
+            - name: MONGODB_EXTRA_FLAGS
+              value: {{ .Values.mongos.mongodbExtraFlags | join " " | quote }}
+            {{- end }}
+            {{- if .Values.common.extraEnvVars }}
+              {{- include "common.tplvalues.render" ( dict "value" $.Values.common.extraEnvVars "context" $ ) | nindent 12 }}
+            {{- end }}
+            {{- if .Values.mongos.extraEnvVars }}
+              {{- include "common.tplvalues.render" ( dict "value" $.Values.mongos.extraEnvVars "context" $ ) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.common.extraEnvVarsCM .Values.common.extraEnvVarsSecret .Values.mongos.extraEnvVarsCM .Values.mongos.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.common.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" ( dict "value" .Values.common.extraEnvVarsCM "context" $ ) }}
+            {{- end }}
+            {{- if .Values.common.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" ( dict "value" .Values.common.extraEnvVarsSecret "context" $ ) }}
+            {{- end }}
+            {{- if .Values.configsvr.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" ( dict "value" .Values.mongos.extraEnvVarsCM "context" $ ) }}
+            {{- end }}
+            {{- if .Values.mongos.extraEnvVarsSecret }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" ( dict "value" .Values.mongos.extraEnvVarsSecret "context" $ ) }}
+            {{- end }}
+          {{- end }}
+          ports:
+            - name: mongodb
+              containerPort: 27017
+          {{- if .Values.livenessProbe.enabled }}
+          livenessProbe:
+            exec:
+              command:
+                - mongo
+                - --disableImplicitSessions
+                - --eval
+                - "db.adminCommand('ping')"
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.readinessProbe.enabled }}
+          readinessProbe:
+            exec:
+              command:
+                - mongo
+                - --disableImplicitSessions
+                - --eval
+                - "db.adminCommand('ping')"
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+          {{- end }}
+          volumeMounts:
+            {{- if .Values.usePasswordFile }}
+            - name: secrets
+              mountPath: /bitnami/mongodb/secrets/
+            {{- end }}
+            {{- if or .Values.mongos.config .Values.mongos.configCM }}
+            - name: config
+              mountPath: /bitnami/mongodb/conf/
+            {{- end }}
+            {{- if $.Values.common.extraVolumeMounts }}
+              {{- include "common.tplvalues.render" ( dict "value" $.Values.common.extraVolumeMounts "context" $ ) | nindent 12 }}
+            {{- end }}
+            {{- if $.Values.mongos.extraVolumeMounts }}
+              {{- include "common.tplvalues.render" ( dict "value" $.Values.mongos.extraVolumeMounts "context" $ ) | nindent 12 }}
+            {{- end }}
+          resources: {{- toYaml .Values.mongos.resources | nindent 12 }}
+        {{- if .Values.metrics.enabled }}
+        - name: metrics
+          image: {{ include "mongodb-sharded.metrics.image" . }}
+          imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
+          {{- if .Values.securityContext.enabled }}
+          securityContext:
+            runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
+            runAsUser: {{ .Values.securityContext.runAsUser }}
+          {{- end }}
+          env:
+          {{- if .Values.usePasswordFile }}
+            - name: MONGODB_ROOT_PASSWORD_FILE
+              value: "/bitnami/mongodb/secrets/mongodb-root-password"
+          {{- else }}
+            - name: MONGODB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mongodb-sharded.secret" . }}
+                  key: mongodb-root-password
+          {{- end }}
+          command:
+            - sh
+            - -ec
+            - |-
+              #!/bin/sh
+              {{- if .Values.usePasswordFile }}
+              export MONGODB_ROOT_PASSWORD="$(cat "${MONGODB_ROOT_PASSWORD_FILE}")"
+              {{- end }}
+              /bin/mongodb_exporter --web.listen-address ":{{ .Values.metrics.containerPort }}" --mongodb.uri mongodb://root:`echo $MONGODB_ROOT_PASSWORD | sed -r "s/@/%40/g;s/:/%3A/g"`@localhost:{{ .Values.service.port }}/admin {{ .Values.metrics.extraArgs }}
+          {{- if .Values.usePasswordFile }}
+          volumeMounts:
+            - name: secrets
+              mountPath: /bitnami/mongodb/secrets/
+          {{- end }}
+          ports:
+            - name: metrics
+              containerPort: {{ .Values.metrics.containerPort }}
+          {{- if .Values.metrics.livenessProbe.enabled }}
+          livenessProbe:
+            httpGet:
+              path: /metrics
+              port: metrics
+            initialDelaySeconds: {{ .Values.metrics.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.metrics.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.metrics.livenessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.metrics.livenessProbe.failureThreshold }}
+            successThreshold: {{ .Values.metrics.livenessProbe.successThreshold }}
+          {{- end }}
+          {{- if .Values.metrics.readinessProbe.enabled }}
+          readinessProbe:
+            httpGet:
+              path: /metrics
+              port: metrics
+            initialDelaySeconds: {{ .Values.metrics.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.metrics.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.metrics.readinessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.metrics.readinessProbe.failureThreshold }}
+            successThreshold: {{ .Values.metrics.readinessProbe.successThreshold }}
+          {{- end }}
+          resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
+        {{- end }}
+        {{- with $.Values.mongos.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8}}
+        {{- end }}
+        {{- with $.Values.common.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8}}
+        {{- end }}
+      volumes:
+        {{- if .Values.usePasswordFile }}
+        - name: secrets
+          secret:
+            secretName: {{ include "mongodb-sharded.secret" . }}
+        {{- end }}
+        {{- if or .Values.mongos.config .Values.mongos.configCM }}
+        - name: config
+          configMap:
+            name: {{ include "mongodb-sharded.mongos.configCM" . }}
+        {{- end }}
+        {{- if $.Values.common.extraVolumes }}
+          {{- include "common.tplvalues.render" ( dict "value" $.Values.common.extraVolumes "context" $ ) | nindent 8 }}
+        {{- end }}
+        {{- if $.Values.mongos.extraVolumes }}
+          {{- include "common.tplvalues.render" ( dict "value" $.Values.mongos.extraVolumes "context" $ ) | nindent 8 }}
+        {{- end }}

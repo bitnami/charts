@@ -1,0 +1,15 @@
+{{- if and .Values.forwarder.enabled .Values.forwarder.rbac.create }}
+kind: ClusterRoleBinding
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
+metadata:
+  name: {{ include "fluentd.fullname" . }}
+  labels: {{- include "fluentd.labels" . | nindent 4 }}
+roleRef:
+  kind: ClusterRole
+  apiGroup: rbac.authorization.k8s.io
+  name: {{ template "fluentd.fullname" . }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ template "fluentd.forwarder.serviceAccountName" . }}
+    namespace: {{ .Release.Namespace }}
+{{- end }}

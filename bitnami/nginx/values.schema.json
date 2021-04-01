@@ -18,9 +18,22 @@
           "form": true,
           "title": "Hostname",
           "hidden": {
-            "condition": false,
-            "value": "ingress.enabled"
+            "value": false,
+            "path": "ingress/enabled"
           }
+        }
+      }
+    },
+    "service": {
+      "type": "object",
+      "form": true,
+      "title": "Service Configuration",
+      "properties": {
+        "type": {
+          "type": "string",
+          "form": true,
+          "title": "Service Type",
+          "description": "Allowed values: \"ClusterIP\", \"NodePort\" and \"LoadBalancer\""
         }
       }
     },
@@ -56,11 +69,25 @@
               "description": "Create a ServiceMonitor to track metrics using Prometheus Operator",
               "form": true,
               "hidden": {
-                "condition": false,
-                "value": "metrics.enabled"
+                "value": false,
+                "path": "metrics/enabled"
               }
             }
           }
+        }
+      }
+    },
+    "pdb": {
+      "type": "object",
+      "properties": {
+        "create": {
+          "type": "boolean"
+        },
+        "minAvailable": {
+          "type": "integer"
+        },
+        "maxUnavailable": {
+          "type": "integer"
         }
       }
     }

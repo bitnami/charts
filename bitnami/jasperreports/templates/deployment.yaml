@@ -1,128 +1,168 @@
-apiVersion: {{ template "jasperreports.deployment.apiVersion" . }}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ template "jasperreports.fullname" . }}
-  labels:
-    app: "{{ template "jasperreports.fullname" . }}"
-    chart: "{{ template "jasperreports.chart" . }}"
-    release: {{ .Release.Name | quote }}
-    heritage: {{ .Release.Service | quote }}
+  name: {{ template "common.names.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   selector:
-    matchLabels:
-      app: "{{ template "jasperreports.fullname" . }}"
-      release: {{ .Release.Name | quote }}
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+  strategy: {{- include "common.tplvalues.render" (dict "value" .Values.updateStrategy "context" $ ) | nindent 4 }}
   template:
     metadata:
-      labels:
-        app: "{{ template "jasperreports.fullname" . }}"
-        chart: "{{ template "jasperreports.chart" . }}"
-        release: {{ .Release.Name | quote }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        {{- if .Values.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+      {{- if .Values.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
     spec:
-{{- include "jasperreports.imagePullSecrets" . | indent 6 }}
-      containers:
-      - name: {{ template "jasperreports.fullname" . }}
-        image: {{ template "jasperreports.image" . }}
-        imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-        env:
-        - name: ALLOW_EMPTY_PASSWORD
-          value: {{ .Values.allowEmptyPassword | quote }}
-        {{- if .Values.mariadb.enabled }}
-        - name: MARIADB_HOST
-          value: {{ template "jasperreports.mariadb.fullname" . }}
-        - name: MARIADB_PORT_NUMBER
-          value: "3306"
-        - name: JASPERREPORTS_DATABASE_NAME
-          value: {{ .Values.mariadb.db.name | quote }}
-        - name: JASPERREPORTS_DATABASE_USER
-          value: {{ .Values.mariadb.db.user | quote }}
-        - name: JASPERREPORTS_DATABASE_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: {{ template "jasperreports.mariadb.fullname" . }}
-              key: mariadb-password
-        {{- else }}
-        - name: MARIADB_HOST
-          value: {{ .Values.externalDatabase.host | quote }}
-        - name: MARIADB_PORT_NUMBER
-          value: {{ .Values.externalDatabase.port | quote }}
-        - name: JASPERREPORTS_DATABASE_NAME
-          value: {{ .Values.externalDatabase.database | quote }}
-        - name: JASPERREPORTS_DATABASE_USER
-          value: {{ .Values.externalDatabase.user | quote }}
-        - name: JASPERREPORTS_DATABASE_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: {{ printf "%s-%s" .Release.Name "externaldb" }}
-              key: db-password
-        {{- end }}
-        - name: JASPERREPORTS_USERNAME
-          value: {{ .Values.jasperreportsUsername | quote }}
-        - name: JASPERREPORTS_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: {{ template "jasperreports.fullname" . }}
-              key: jasperreports-password
-        - name: JASPERREPORTS_EMAIL
-          value: {{ .Values.jasperreportsEmail | quote }}
-        {{- if .Values.smtpHost }}
-        - name: SMTP_HOST
-          value: {{ .Values.smtpHost | quote }}
-        {{- end }}
-        {{- if .Values.smtpPort }}
-        - name: SMTP_PORT
-          value: {{ .Values.smtpPort | quote }}
-        {{- end }}
-        {{- if .Values.smtpEmail }}
-        - name: SMTP_EMAIL
-          value: {{ .Values.smtpEmail| quote }}
-        {{- end }}
-        {{- if .Values.smtpUser }}
-        - name: SMTP_USER
-          value: {{ .Values.smtpUser | quote }}
-        {{- end }}
-        {{- if .Values.smtpPassword }}
-        - name: SMTP_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: {{ template "jasperreports.fullname" . }}
-              key: smtp-password
-        {{- end }}
-        {{- if .Values.smtpProtocol }}
-        - name: SMTP_PROTOCOL
-          value: {{ .Values.smtpProtocol | quote }}
-        {{- end }}
-        ports:
-        - name: http
-          containerPort: 8080
-        livenessProbe:
-          httpGet:
-            path: /jasperserver/login.html
-            port: http
-          initialDelaySeconds: 300
-          timeoutSeconds: 5
-          failureThreshold: 6
-        readinessProbe:
-          httpGet:
-            path: /jasperserver/login.html
-            port: http
-          initialDelaySeconds: 30
-          timeoutSeconds: 3
-          periodSeconds: 5
-        resources:
-{{ toYaml .Values.resources | indent 10 }}
-        volumeMounts:
-        - name: jasperreports-data
-          mountPath: /bitnami/jasperreports
-      volumes:
-      - name: jasperreports-data
-      {{- if .Values.persistence.enabled }}
-        persistentVolumeClaim:
-          claimName: {{ template "jasperreports.fullname" . }}
+      {{- include "jasperreports.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
       {{- else }}
-        emptyDir: {}
-      {{- end }}
-      {{- with .Values.affinity }}
       affinity:
-{{ toYaml . | indent 8 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
+      {{- if .Values.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.initContainers }}
+      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: jasperreports
+          image: {{ template "jasperreports.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            - name: ALLOW_EMPTY_PASSWORD
+              value: {{ .Values.allowEmptyPassword | quote }}
+            - name: MARIADB_HOST
+              value: {{ include "jasperreports.databaseHost" . | quote }}
+            - name: MARIADB_PORT_NUMBER
+              value: {{ include "jasperreports.databasePort" . | quote }}
+            - name: JASPERREPORTS_DATABASE_NAME
+              value: {{ include "jasperreports.databaseName" . | quote }}
+            - name: JASPERREPORTS_DATABASE_USER
+              value: {{ include "jasperreports.databaseUser" . | quote }}
+            - name: JASPERREPORTS_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "jasperreports.databaseSecretName" . }}
+                  key: {{ include "jasperreports.databasePasswordKey" . }}
+            - name: JASPERREPORTS_USERNAME
+              value: {{ .Values.jasperreportsUsername | quote }}
+            - name: JASPERREPORTS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "common.names.fullname" . }}
+                  key: jasperreports-password
+            - name: JASPERREPORTS_EMAIL
+              value: {{ .Values.jasperreportsEmail | quote }}
+            {{- if .Values.smtpHost }}
+            - name: SMTP_HOST
+              value: {{ .Values.smtpHost | quote }}
+            {{- end }}
+            {{- if .Values.smtpPort }}
+            - name: SMTP_PORT
+              value: {{ .Values.smtpPort | quote }}
+            {{- end }}
+            {{- if .Values.smtpEmail }}
+            - name: SMTP_EMAIL
+              value: {{ .Values.smtpEmail| quote }}
+            {{- end }}
+            {{- if .Values.smtpUser }}
+            - name: SMTP_USER
+              value: {{ .Values.smtpUser | quote }}
+            {{- end }}
+            {{- if .Values.smtpPassword }}
+            - name: SMTP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "common.names.fullname" . }}
+                  key: smtp-password
+            {{- end }}
+            {{- if .Values.smtpProtocol }}
+            - name: SMTP_PROTOCOL
+              value: {{ .Values.smtpProtocol | quote }}
+            {{- end }}
+            {{- if .Values.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.extraEnvVarsCM .Values.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.containerPort }}
+          {{- if .Values.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.livenessProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.readinessProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.resources }}
+          resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: jasperreports-data
+              mountPath: /bitnami/jasperreports
+            {{- if .Values.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+        {{- if .Values.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: jasperreports-data
+          {{- if .Values.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ template "common.names.fullname" . }}
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+        {{- if .Values.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}

@@ -1,8 +1,16 @@
 magentoHost: magento.local
+service:
+  type: ClusterIP
 ingress:
   enabled: true
-  hosts:
-    - name: magento.local
-      path: /
-      tls: true
-      tlsSecret: magento.local-tls
+  tls: true
+  hostname: magento.local
+metrics:
+  enabled: true
+# Avoids issues with yamllint
+livenessProbe:
+  httpGet:
+    httpHeaders: []
+readinessProbe:
+  httpGet:
+    httpHeaders: []

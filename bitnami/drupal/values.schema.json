@@ -40,7 +40,7 @@
     "ingress": {
       "type": "object",
       "form": true,
-      "title": "Ingress Details",
+      "title": "Ingress Configuration",
       "properties": {
         "enabled": {
           "type": "boolean",
@@ -53,9 +53,22 @@
           "form": true,
           "title": "Hostname",
           "hidden": {
-            "condition": false,
-            "value": "ingress.enabled"
+            "value": false,
+            "path": "ingress/enabled"
           }
+        }
+      }
+    },
+    "service": {
+      "type": "object",
+      "form": true,
+      "title": "Service Configuration",
+      "properties": {
+        "type": {
+          "type": "string",
+          "form": true,
+          "title": "Service Type",
+          "description": "Allowed values: \"ClusterIP\", \"NodePort\" and \"LoadBalancer\"" 
         }
       }
     },
@@ -70,7 +83,7 @@
           "form": true,
           "description": "Whether to deploy a mariadb server to satisfy the applications database requirements. To use an external database switch this off and configure the external database details"
         },
-        "master": {
+        "primary": {
           "type": "object",
           "properties": {
             "persistence": {
@@ -81,8 +94,8 @@
                   "title": "Volume Size",
                   "form": true,
                   "hidden": {
-                    "condition": false,
-                    "value": "mariadb.enabled"
+                    "value": false,
+                    "path": "mariadb/enabled"
                   },
                   "render": "slider",
                   "sliderMin": 1,
@@ -100,7 +113,7 @@
       "title": "External Database Details",
       "description": "If MariaDB is disabled. Use this section to specify the external database details",
       "form": true,
-      "hidden": "mariadb.enabled",
+      "hidden": "mariadb/enabled",
       "properties": {
         "host": {
           "type": "string",

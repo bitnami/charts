@@ -1,57 +1,109 @@
-apiVersion: {{ template "wordpress.deployment.apiVersion" . }}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ template "wordpress.fullname" . }}
-  labels: {{- include "wordpress.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   selector:
-    matchLabels: {{- include "wordpress.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
   {{- if .Values.updateStrategy }}
-  strategy: {{ toYaml .Values.updateStrategy | nindent 4 }}
+  strategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
   {{- end }}
   replicas: {{ .Values.replicaCount }}
   template:
     metadata:
-      labels: {{- include "wordpress.labels" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        {{- if .Values.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
+        {{- end }}
       {{- if or .Values.podAnnotations .Values.metrics.enabled }}
       annotations:
         {{- if .Values.podAnnotations }}
-        {{- include "wordpress.tplValue" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
         {{- if .Values.metrics.podAnnotations }}
-        {{- include "wordpress.tplValue" (dict "value" .Values.metrics.podAnnotations "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
       {{- end }}
     spec:
-{{- include "wordpress.imagePullSecrets" . | indent 6 }}
+      {{- include "wordpress.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.schedulerName }}
       schedulerName: {{ .Values.schedulerName | quote }}
       {{- end }}
-      hostAliases:
-        - ip: "127.0.0.1"
-          hostnames:
-            - "status.localhost"
+      serviceAccountName: {{ .Values.serviceAccountName }}
+      {{- if .Values.hostAliases }}
+      # yamllint disable rule:indentation
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
+      # yamllint enable rule:indentation
+      {{- end }}
       {{- if .Values.affinity }}
-      affinity: {{- include "wordpress.tplValue" (dict "value" .Values.affinity "context" $) | nindent 8 }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.nodeSelector }}
-      nodeSelector: {{- include "wordpress.tplValue" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.tolerations }}
-      tolerations: {{- include "wordpress.tplValue" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.securityContext.enabled }}
-      securityContext:
-        runAsUser: {{ .Values.securityContext.runAsUser }}
-        fsGroup: {{ .Values.securityContext.fsGroup }}
+      {{- if .Values.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
-      {{- if .Values.initContainers }}
-      initContainers: {{- include "wordpress.tplValue" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
+      {{- if or (and .Values.podSecurityContext.enabled .Values.volumePermissions.enabled .Values.persistence.enabled) (.Values.initContainers) }}
+      initContainers:
+        {{- if and .Values.podSecurityContext.enabled .Values.volumePermissions.enabled .Values.persistence.enabled }}
+        - name: volume-permissions
+          image: "{{ template "wordpress.volumePermissions.image" . }}"
+          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          command:
+            - /bin/sh
+            - -cx
+            - |
+              {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
+              chown -R `id -u`:`id -G | cut -d " " -f2` /bitnami/wordpress
+              {{- else }}
+              chown -R {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }} /bitnami/wordpress
+              {{- end }}
+          {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto "}}
+          securityContext: {{- omit .Values.volumePermissions.securityContext "runAsUser" | toYaml | nindent 12 }}
+          {{- else }}
+          securityContext: {{- .Values.volumePermissions.securityContext | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.volumePermissions.resources }}
+          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - mountPath: /bitnami/wordpress
+              name: wordpress-data
+              subPath: wordpress
+        {{- end }}
+        {{- if .Values.initContainers }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
+        {{- end }}
       {{- end }}
       containers:
         - name: wordpress
           image: {{ template "wordpress.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.command }}
+          command: {{- include "common.tplvalues.render" ( dict "value" .Values.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.args }}
+          args: {{- include "common.tplvalues.render" ( dict "value" .Values.args "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
           env:
             {{- if .Values.image.debug }}
             - name: NAMI_DEBUG
@@ -77,7 +129,7 @@ spec:
             - name: WORDPRESS_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "wordpress.fullname" . }}
+                  name: {{ include "wordpress.secretName" . }}
                   key: wordpress-password
             - name: WORDPRESS_EMAIL
               value: {{ .Values.wordpressEmail | quote }}
@@ -97,6 +149,8 @@ spec:
               value: {{ .Values.wordpressTablePrefix | quote }}
             - name: WORDPRESS_SCHEME
               value: {{ .Values.wordpressScheme | quote }}
+            - name: WORDPRESS_EXTRA_WP_CONFIG_CONTENT
+              value: {{ .Values.wordpressExtraConfigContent | quote }}
             {{- if .Values.smtpHost }}
             - name: SMTP_HOST
               value: {{ .Values.smtpHost | quote }}
@@ -109,66 +163,46 @@ spec:
             - name: SMTP_USER
               value: {{ .Values.smtpUser | quote }}
             {{- end }}
-            {{- if .Values.smtpPassword }}
+            {{- if or .Values.smtpPassword .Values.smtpExistingSecret }}
             - name: SMTP_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "wordpress.fullname" . }}
+                  name: {{ include "wordpress.smtpSecretName" . }}
                   key: smtp-password
-            {{- end }}
-            {{- if .Values.smtpUsername }}
-            - name: SMTP_USERNAME
-              value: {{ .Values.smtpUsername | quote }}
             {{- end }}
             {{- if .Values.smtpProtocol }}
             - name: SMTP_PROTOCOL
               value: {{ .Values.smtpProtocol | quote }}
             {{- end }}
-            {{- if .Values.extraEnv }}
-            {{- include "wordpress.tplValue" (dict "value" .Values.extraEnv "context" $) | nindent 12 }}
+            {{- if .Values.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsSecret "context" $) }}
             {{- end }}
           ports:
             - name: http
-              containerPort: 8080
+              containerPort: {{ .Values.containerPorts.http }}
             - name: https
-              containerPort: 8443
+              containerPort: {{ .Values.containerPorts.https }}
           {{- if .Values.livenessProbe.enabled }}
-          livenessProbe:
-            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.livenessProbe.successThreshold }}
-            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
-            httpGet:
-              path: /wp-login.php
-              port: {{ ternary "https" "http" .Values.healthcheckHttps }}
-              {{- if .Values.healthcheckHttps }}
-              scheme: HTTPS
-              {{- end }}
-              {{- if .Values.livenessProbeHeaders }}
-              httpHeaders: {{- toYaml .Values.livenessProbeHeaders | nindent 16 }}
-              {{- end }}
+          livenessProbe: {{- omit .Values.livenessProbe "enabled" | toYaml | nindent 12 }}
           {{- else if .Values.customLivenessProbe }}
-          livenessProbe: {{- include "wordpress.tplValue" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.readinessProbe.enabled }}
-          readinessProbe:
-            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.readinessProbe.successThreshold }}
-            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
-            httpGet:
-              path: /wp-login.php
-              port: {{ ternary "https" "http" .Values.healthcheckHttps }}
-              {{- if .Values.healthcheckHttps }}
-              scheme: HTTPS
-              {{- end }}
-              {{- if .Values.readinessProbeHeaders }}
-              httpHeaders: {{- toYaml .Values.readinessProbeHeaders | nindent 16 }}
-              {{- end }}
+          readinessProbe: {{- omit .Values.readinessProbe "enabled" | toYaml | nindent 12 }}
           {{- else if .Values.customReadinessProbe }}
-          readinessProbe: {{- include "wordpress.tplValue" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.resources }}
+          resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
             - mountPath: /bitnami/wordpress
@@ -178,12 +212,13 @@ spec:
             - mountPath: /htaccess
               name: custom-htaccess
             {{- end }}
-            {{- if .Values.extraVolumeMounts }}
-            {{- include "wordpress.tplValue" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- if or .Values.customPostInitScripts .Values.memcached.enabled }}
+            - mountPath: /docker-entrypoint-init.d
+              name: custom-postinit
             {{- end }}
-          {{- if .Values.resources }}
-          resources: {{- toYaml .Values.resources | nindent 12 }}
-          {{- end }}
+            {{- if .Values.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
         {{- if .Values.metrics.enabled }}
         - name: metrics
           image: {{ template "wordpress.metrics.image" . }}
@@ -212,7 +247,7 @@ spec:
           {{- end }}
         {{- end }}
         {{- if .Values.sidecars }}
-        {{- include "wordpress.tplValue" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
         {{- if and .Values.allowOverrideNone .Values.customHTAccessCM }}
@@ -223,13 +258,19 @@ spec:
               - key: wordpress-htaccess.conf
                 path: wordpress-htaccess.conf
         {{- end }}
+        {{- if or .Values.customPostInitScripts .Values.memcached.enabled }}
+        - name: custom-postinit
+          configMap:
+            name: {{ printf "%s-postinit" (include "common.names.fullname" .) }}
+            defaultMode: 0755
+        {{- end }}
         - name: wordpress-data
           {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:
-            claimName: {{ .Values.persistence.existingClaim | default (include "wordpress.fullname" .) }}
+            claimName: {{ .Values.persistence.existingClaim | default (include "common.names.fullname" .) }}
           {{- else }}
           emptyDir: {}
           {{ end }}
         {{- if .Values.extraVolumes }}
-        {{- include "wordpress.tplValue" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

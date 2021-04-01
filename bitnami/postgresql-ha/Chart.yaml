@@ -1,8 +1,15 @@
-apiVersion: v1
-name: postgresql-ha
-version: 3.2.9
-appVersion: 11.8.0
+annotations:
+  category: Database
+apiVersion: v2
+appVersion: 11.11.0
+dependencies:
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    version: 1.x.x
 description: Chart for PostgreSQL with HA architecture (using Replication Manager (repmgr) and Pgpool).
+engine: gotpl
+home: https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha
+icon: https://bitnami.com/assets/stacks/postgresql/img/postgresql-stack-220x234.png
 keywords:
   - postgresql
   - repmgr
@@ -13,11 +20,11 @@ keywords:
   - replication
   - cluster
   - high availability
-home: https://www.postgresql.org/
-icon: https://bitnami.com/assets/stacks/postgresql/img/postgresql-stack-110x117.png
+maintainers:
+  - email: containers@bitnami.com
+    name: Bitnami
+name: postgresql-ha
 sources:
   - https://github.com/bitnami/bitnami-docker-postgresql
-maintainers:
-  - name: Bitnami
-    email: containers@bitnami.com
-engine: gotpl
+  - https://www.postgresql.org/
+version: 6.8.1

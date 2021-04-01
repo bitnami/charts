@@ -1,0 +1,35 @@
+{{- if or .Values.customPostInitScripts .Values.memcached.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ printf "%s-postinit" (include "common.names.fullname" .) }}
+data:
+  {{- if .Values.memcached.enabled }}
+  {{- $memcachedFullname := include "wordpress.memcached.fullname" . }}
+  {{- $memcachedPort := int .Values.memcached.service.port }}
+  {{- $releaseNamespace := .Release.Namespace }}
+  {{- $clusterDomain := .Values.clusterDomain }}
+  00-configure-w3-total-cache.sh: |-
+    #!/bin/bash
+
+    # Add permisions to edit wp-config.php
+    chmod +w /bitnami/wordpress/wp-config.php
+
+    # Activate W3 Total Cache pairs
+    wp plugin activate w3-total-cache
+    wp total-cache fix_environment
+
+    # Choose 'Memcached' as database cache method
+    wp total-cache option set dbcache.engine memcached --type=string
+    wp total-cache flush all
+    wp total-cache option set dbcache.memcached.servers {{ $memcachedFullname }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $memcachedPort }} --type=string
+    wp total-cache option set dbcache.enabled true --type=boolean
+    wp total-cache flush all
+
+    # Revoke permisions to edit wp-config.php
+    chmod -w bitnami/wordpress/wp-config.php
+  {{- end }}
+  {{- if .Values.customPostInitScripts }}
+  {{- include "common.tplvalues.render" (dict "value" .Values.customPostInitScripts "context" $) | nindent 2 }}
+  {{- end }}
+{{- end }}

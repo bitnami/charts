@@ -1,0 +1,87 @@
+
+** Please be patient while the chart is being deployed **
+
+Keycloak can be accessed through the following DNS name from within your cluster:
+
+    {{ include "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} (port {{ .Values.service.port }})
+
+To access Keycloak from outside the cluster execute the following commands:
+
+{{- if .Values.ingress.enabled }}
+
+1. Get the Keycloak URL and associate its hostname to your cluster external IP:
+
+   export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
+   echo "Keycloak URL: http{{ if .Values.ingress.tls }}s{{ end }}://{{ .Values.ingress.hostname }}/auth"
+   echo "$CLUSTER_IP  {{ .Values.ingress.hostname }}" | sudo tee -a /etc/hosts
+
+{{- else }}
+
+1. Get the Keycloak URL by running these commands:
+
+{{- if contains "NodePort" .Values.service.type }}
+
+    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "common.names.fullname" . }})
+    export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+    echo "http://${NODE_IP}:${NODE_PORT}/auth"
+
+{{- else if contains "LoadBalancer" .Values.service.type }}
+
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+        You can watch its status by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ include "common.names.fullname" . }}'
+
+    export SERVICE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].port}" services {{ include "common.names.fullname" . }})
+    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+    echo "http://${SERVICE_IP}:${SERVICE_PORT}/auth"
+
+{{- else if contains "ClusterIP" .Values.service.type }}
+
+    export SERVICE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].port}" services {{ include "common.names.fullname" . }})
+    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "common.names.fullname" . }} ${SERVICE_PORT}:${SERVICE_PORT} &
+    echo "http://127.0.0.1:${SERVICE_PORT}/auth"
+
+{{- end }}
+{{- end }}
+
+2. Access Keycloak using the obtained URL.
+{{- if .Values.auth.createAdminUser }}
+3. Access the Administration Console using the following credentials:
+
+  echo Username: {{ .Values.auth.adminUser }}
+{{- if not .Values.auth.existingSecretPerPassword }}  
+  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ printf "%s-env-vars" (include "common.names.fullname" .) }} -o jsonpath="{.data.admin-password}" | base64 --decode)
+{{- else }}  
+  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "common.secrets.name" (dict "existingSecret" .Values.auth.existingSecretPerPassword.adminPassword "context" $) }} -o jsonpath="\{ {{ include "common.secrets.key" (dict "existingSecret" .Values.auth.existingSecretPerPassword "key" "adminPassword") }} \}" | base64 --decode)
+{{- end }}
+{{- end }}
+{{- if .Values.metrics.enabled }}
+
+You can access the Prometheus metrics following the steps below:
+
+1. Get the Keycloak Prometheus metrics URL by running:
+
+    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ printf "%s-metrics" (include "keycloak.fullname" .) }} {{ .Values.metrics.service.port }}:{{ .Values.metrics.service.port }} &
+    echo "Keycloak Prometheus metrics URL: http://127.0.0.1:{{ .Values.metrics.service.port }}/metrics"
+
+2. Open a browser and access Keycloak Prometheus metrics using the obtained URL.
+
+{{- end }}
+
+{{- include "keycloak.validateValues" . }}
+{{- include "common.warnings.rollingTag" .Values.image }}
+
+{{- $passwordErrors := list -}}
+
+{{- $postgresqlSecretName := include "keycloak.postgresql.fullname" . -}}
+{{- $postgresqlPasswordValidationErrors := include "common.validations.values.postgresql.passwords" (dict "secret" $postgresqlSecretName "subchart" true "context" $) -}}
+{{- $passwordErrors = append $passwordErrors $postgresqlPasswordValidationErrors -}}
+
+{{- if and (not .Values.auth.existingSecret) (not .Values.auth.existingSecretPerPassword) }}
+    {{- $keycloakSecretName := include "common.secrets.name" (dict "existingSecret" .Values.auth.existingSecret "context" $) -}}
+
+    {{- $requiredAdminPassword := dict "valueKey" "auth.adminPassword" "secret" $keycloakSecretName "field" "admin-password" -}}
+    {{- $requiredAdminKeycloakErrors := include "common.validations.values.multiple.empty" (dict "required" (list $requiredAdminPassword) "context" $) -}}
+    {{- $passwordErrors = append $passwordErrors $requiredAdminKeycloakErrors -}}
+{{- end }}
+
+{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordErrors "context" $) -}}

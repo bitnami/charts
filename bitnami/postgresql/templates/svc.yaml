@@ -1,32 +1,30 @@
-{{- $serviceAnnotations := coalesce .Values.master.service.annotations .Values.service.annotations -}}
-{{- $serviceType := coalesce .Values.master.service.type .Values.service.type -}}
-{{- $serviceLoadBalancerIP := coalesce .Values.master.service.loadBalancerIP .Values.service.loadBalancerIP -}}
-{{- $serviceLoadBalancerSourceRanges := coalesce .Values.master.service.loadBalancerSourceRanges .Values.service.loadBalancerSourceRanges -}}
-{{- $serviceClusterIP := coalesce .Values.master.service.clusterIP .Values.service.clusterIP -}}
-{{- $serviceNodePort := coalesce .Values.master.service.nodePort .Values.service.nodePort -}}
+{{- $serviceAnnotations := coalesce .Values.primary.service.annotations .Values.service.annotations -}}
+{{- $serviceType := coalesce .Values.primary.service.type .Values.service.type -}}
+{{- $serviceLoadBalancerIP := coalesce .Values.primary.service.loadBalancerIP .Values.service.loadBalancerIP -}}
+{{- $serviceLoadBalancerSourceRanges := coalesce .Values.primary.service.loadBalancerSourceRanges .Values.service.loadBalancerSourceRanges -}}
+{{- $serviceClusterIP := coalesce .Values.primary.service.clusterIP .Values.service.clusterIP -}}
+{{- $serviceNodePort := coalesce .Values.primary.service.nodePort .Values.service.nodePort -}}
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "postgresql.fullname" . }}
+  name: {{ template "common.names.fullname" . }}
   labels:
-    app: {{ template "postgresql.name" . }}
-    chart: {{ template "postgresql.chart" . }}
-    release: {{ .Release.Name | quote }}
-    heritage: {{ .Release.Service | quote }}
+  {{- include "common.labels.standard" . | nindent 4 }}
   annotations:
   {{- if .Values.commonAnnotations }}
-  {{- include "postgresql.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
   {{- if $serviceAnnotations }}
-  {{- include "postgresql.tplValue" (dict "value" $serviceAnnotations "context" $) | nindent 4 }}
+  {{- include "common.tplvalues.render" (dict "value" $serviceAnnotations "context" $) | nindent 4 }}
   {{- end }}
+  namespace: {{ .Release.Namespace }}
 spec:
   type: {{ $serviceType }}
   {{- if and $serviceLoadBalancerIP (eq $serviceType "LoadBalancer") }}
   loadBalancerIP: {{ $serviceLoadBalancerIP }}
   {{- end }}
   {{- if and (eq $serviceType "LoadBalancer") $serviceLoadBalancerSourceRanges }}
-  loadBalancerSourceRanges: {{- include "postgresql.tplValue" (dict "value" $serviceLoadBalancerSourceRanges "context" $) | nindent 4 }}
+  loadBalancerSourceRanges: {{- include "common.tplvalues.render" (dict "value" $serviceLoadBalancerSourceRanges "context" $) | nindent 4 }}
   {{- end }}
   {{- if and (eq $serviceType "ClusterIP") $serviceClusterIP }}
   clusterIP: {{ $serviceClusterIP }}
@@ -39,6 +37,5 @@ spec:
       nodePort: {{ $serviceNodePort }}
       {{- end }}
   selector:
-    app: {{ template "postgresql.name" . }}
-    release: {{ .Release.Name | quote }}
-    role: master
+  {{- include "common.labels.matchLabels" . | nindent 4 }}
+    role: primary

@@ -1,14 +1,11 @@
-{{ if  (.Files.Glob "files/docker-entrypoint-initdb.d/*[sh|js|json]") }}
+{{- if and .Values.initdbScripts (not .Values.initdbScriptsConfigMap) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ template "mongodb.fullname" . }}-init-scripts
-  namespace: {{ template "mongodb.namespace" . }}
-  labels:
-    app: {{ template "mongodb.name" . }}
-    chart: {{ template "mongodb.chart" . }}
-    release: {{ .Release.Name | quote }}
-    heritage: {{ .Release.Service | quote }}
+  name: {{ include "mongodb.fullname" . }}-init-scripts
+  namespace: {{ include "mongodb.namespace" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: mongodb
 data:
-{{ tpl (.Files.Glob "files/docker-entrypoint-initdb.d/*[sh|js|json]").AsConfig . | indent 2 }}
-{{ end }}
+{{- include "common.tplvalues.render" (dict "value" .Values.initdbScripts "context" .) | nindent 2 }}
+{{- end }}

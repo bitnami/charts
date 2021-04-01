@@ -1,16 +1,16 @@
 {{- if .Values.rbac.create -}}
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRoleBinding
 metadata:
-  name: {{ template "metrics-server.fullname" . }}:system:auth-delegator
+  name: {{ include "common.names.fullname" . }}-auth-delegator
   namespace: kube-system
-  labels: {{- include "metrics-server.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: system:auth-delegator
 subjects:
   - kind: ServiceAccount
-    name: {{ template "metrics-server.fullname" . }}
+    name: {{ template "common.names.fullname" . }}
     namespace: {{ .Release.Namespace }}
 {{- end -}}

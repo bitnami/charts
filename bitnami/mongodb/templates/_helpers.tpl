@@ -3,7 +3,88 @@
 Expand the name of the chart.
 */}}
 {{- define "mongodb.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
+{{- include "common.names.name" . -}}
+{{- end -}}
+
+{{/*
+Create a default fully qualified app name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+If release name contains chart name it will be used as a full name.
+*/}}
+{{- define "mongodb.fullname" -}}
+{{- include "common.names.fullname" . -}}
+{{- end -}}
+
+{{/*
+Create a default mongo service name which can be overridden.
+*/}}
+{{- define "mongodb.service.nameOverride" -}}
+    {{- if .Values.service -}}
+        {{- if .Values.service.nameOverride }}
+            {{- .Values.service.nameOverride -}}
+        {{- else -}}
+            {{ include "mongodb.fullname" . }}-headless
+        {{- end -}}
+    {{- else -}}
+        {{ include "mongodb.fullname" . }}-headless
+    {{- end }}
+{{- end }}
+
+{{/*
+Create a default mongo arbiter service name which can be overridden.
+*/}}
+{{- define "mongodb.arbiter.service.nameOverride" -}}
+    {{- if .Values.arbiter.service -}}
+        {{- if .Values.arbiter.service.nameOverride }}
+            {{- .Values.arbiter.service.nameOverride -}}
+        {{- else -}}
+            {{ include "mongodb.fullname" . }}-arbiter-headless
+        {{- end -}}
+    {{- else -}}
+        {{ include "mongodb.fullname" . }}-arbiter-headless
+    {{- end }}
+{{- end }}
+
+{{/*
+Return the proper MongoDB(R) image name
+*/}}
+{{- define "mongodb.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) }}
+{{- end -}}
+
+{{/*
+Return the proper image name (for the metrics image)
+*/}}
+{{- define "mongodb.metrics.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.metrics.image "global" .Values.global) }}
+{{- end -}}
+
+{{/*
+Return the proper image name (for the init container volume-permissions image)
+*/}}
+{{- define "mongodb.volumePermissions.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.volumePermissions.image "global" .Values.global) }}
+{{- end -}}
+
+{{/*
+Return the proper image name (for the init container auto-discovery image)
+*/}}
+{{- define "mongodb.externalAccess.autoDiscovery.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.externalAccess.autoDiscovery.image "global" .Values.global) }}
+{{- end -}}
+
+{{/*
+Return the proper image name (for the TLS Certs image)
+*/}}
+{{- define "mongodb.tls.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.tls.image "global" .Values.global) }}
+{{- end -}}
+
+{{/*
+Return the proper Docker Image Registry Secret Names
+*/}}
+{{- define "mongodb.imagePullSecrets" -}}
+{{ include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.metrics.image .Values.volumePermissions.image) "global" .Values.global) }}
 {{- end -}}
 
 {{/*
@@ -20,282 +101,19 @@ Allow the release namespace to be overridden for multi-namespace deployments in 
         {{- .Release.Namespace -}}
     {{- end }}
 {{- end -}}
-
 {{- define "mongodb.serviceMonitor.namespace" -}}
     {{- if .Values.metrics.serviceMonitor.namespace -}}
         {{- .Values.metrics.serviceMonitor.namespace -}}
     {{- else -}}
-        {{- template "mongodb.namespace" . -}}
+        {{- include "mongodb.namespace" . -}}
     {{- end }}
 {{- end -}}
-
-{{/*
-Renders a value that contains template.
-Usage:
-{{ include "mongodb.tplValue" ( dict "value" .Values.path.to.the.Value "context" $) }}
-*/}}
-{{- define "mongodb.tplValue" -}}
-    {{- if typeIs "string" .value }}
-        {{- tpl .value .context }}
-    {{- else }}
-        {{- tpl (.value | toYaml) .context }}
+{{- define "mongodb.prometheusRule.namespace" -}}
+    {{- if .Values.metrics.prometheusRule.namespace -}}
+        {{- .Values.metrics.prometheusRule.namespace -}}
+    {{- else -}}
+        {{- include "mongodb.namespace" . -}}
     {{- end }}
-{{- end -}}
-
-{{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-If release name contains chart name it will be used as a full name.
-*/}}
-{{- define "mongodb.fullname" -}}
-{{- if .Values.fullnameOverride -}}
-{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- $name := default .Chart.Name .Values.nameOverride -}}
-{{- if contains $name .Release.Name -}}
-{{- .Release.Name | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Create chart name and version as used by the chart label.
-*/}}
-{{- define "mongodb.chart" -}}
-{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{/*
-Return the proper MongoDB image name
-*/}}
-{{- define "mongodb.image" -}}
-{{- $registryName := .Values.image.registry -}}
-{{- $repositoryName := .Values.image.repository -}}
-{{- $tag := .Values.image.tag | toString -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-Also, we can't use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-    {{- else -}}
-        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-    {{- end -}}
-{{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return the proper image name (for the metrics image)
-*/}}
-{{- define "mongodb.metrics.image" -}}
-{{- $registryName := .Values.metrics.image.registry -}}
-{{- $repositoryName := .Values.metrics.image.repository -}}
-{{- $tag := .Values.metrics.image.tag | toString -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-Also, we can't use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-    {{- else -}}
-        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-    {{- end -}}
-{{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return the proper Docker Image Registry Secret Names
-*/}}
-{{- define "mongodb.imagePullSecrets" -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else logic.
-Also, we can not use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-{{- if .Values.global.imagePullSecrets }}
-imagePullSecrets:
-{{- range .Values.global.imagePullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- else if or .Values.image.pullSecrets .Values.metrics.image.pullSecrets .Values.volumePermissions.image.pullSecrets }}
-imagePullSecrets:
-{{- range .Values.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.metrics.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.volumePermissions.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- end -}}
-{{- else if or .Values.image.pullSecrets .Values.metrics.image.pullSecrets .Values.volumePermissions.image.pullSecrets }}
-imagePullSecrets:
-{{- range .Values.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.metrics.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.volumePermissions.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return the proper image name (for the init container volume-permissions image)
-*/}}
-{{- define "mongodb.volumePermissions.image" -}}
-{{- $registryName := .Values.volumePermissions.image.registry -}}
-{{- $repositoryName := .Values.volumePermissions.image.repository -}}
-{{- $tag := .Values.volumePermissions.image.tag | toString -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-Also, we can't use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-    {{- else -}}
-        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-    {{- end -}}
-{{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Compile all warnings into a single message, and call fail.
-*/}}
-{{- define "mongodb.validateValues" -}}
-{{- $messages := list -}}
-{{- $messages := append $messages (include "mongodb.validateValues.mongodbCustomDatabase" .) -}}
-{{- $messages := without $messages "" -}}
-{{- $message := join "\n" $messages -}}
-
-{{- if $message -}}
-{{-   printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Validate values of MongoDB - both mongodbUsername and mongodbDatabase are necessary
-to create a custom user and database during 1st initialization
-*/}}
-{{- define "mongodb.validateValues.mongodbCustomDatabase" -}}
-{{- if or (and .Values.mongodbUsername (not .Values.mongodbDatabase)) (and (not .Values.mongodbUsername) .Values.mongodbDatabase) }}
-mongodb: mongodbUsername, mongodbDatabase
-    Both mongodbUsername and mongodbDatabase must be provided to create
-    a custom user and database during 1st initialization.
-    Please set both of them (--set mongodbUsername="xxxx",mongodbDatabase="yyyy")
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return  the proper Storage Class
-*/}}
-{{- define "mongodb.storageClass" -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else logic.
-*/}}
-{{- if .Values.global -}}
-    {{- if .Values.global.storageClass -}}
-        {{- if (eq "-" .Values.global.storageClass) -}}
-            {{- printf "storageClassName: \"\"" -}}
-        {{- else }}
-            {{- printf "storageClassName: %s" .Values.global.storageClass -}}
-        {{- end -}}
-    {{- else -}}
-        {{- if .Values.persistence.storageClass -}}
-              {{- if (eq "-" .Values.persistence.storageClass) -}}
-                  {{- printf "storageClassName: \"\"" -}}
-              {{- else }}
-                  {{- printf "storageClassName: %s" .Values.persistence.storageClass -}}
-              {{- end -}}
-        {{- end -}}
-    {{- end -}}
-{{- else -}}
-    {{- if .Values.persistence.storageClass -}}
-        {{- if (eq "-" .Values.persistence.storageClass) -}}
-            {{- printf "storageClassName: \"\"" -}}
-        {{- else }}
-            {{- printf "storageClassName: %s" .Values.persistence.storageClass -}}
-        {{- end -}}
-    {{- end -}}
-{{- end -}}
-{{- end -}}
-{{- define "mongodb.storageClassSecondary" -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else logic.
-*/}}
-{{- if .Values.global -}}
-    {{- if .Values.global.storageClass -}}
-        {{- if (eq "-" .Values.global.storageClass) -}}
-            {{- printf "storageClassName: \"\"" -}}
-        {{- else }}
-            {{- printf "storageClassName: %s" .Values.global.storageClass -}}
-        {{- end -}}
-    {{- else -}}
-        {{- if (or .Values.persistence.storageClass .Values.persistence.storageClassSecondary) -}}
-            {{- if .Values.persistence.storageClassSecondary -}}
-                {{- if (eq "-" .Values.persistence.storageClassSecondary) -}}
-                    {{- printf "storageClassName: \"\"" -}}
-                {{- else }}
-                    {{- printf "storageClassName: %s" .Values.persistence.storageClassSecondary -}}
-                {{- end -}}
-            {{- else }}
-                {{- if (eq "-" .Values.persistence.storageClass) -}}
-                  {{- printf "storageClassName: \"\"" -}}
-                {{- else }}
-                    {{- printf "storageClassName: %s" .Values.persistence.storageClass -}}
-                {{- end -}}
-            {{- end -}}
-        {{- end -}}
-    {{- end -}}
-{{- else -}}
-    {{- if (or .Values.persistence.storageClass .Values.persistence.storageClassSecondary) -}}
-        {{- if .Values.persistence.storageClassSecondary -}}
-            {{- if (eq "-" .Values.persistence.storageClassSecondary) -}}
-                {{- printf "storageClassName: \"\"" -}}
-            {{- else }}
-                {{- printf "storageClassName: %s" .Values.persistence.storageClassSecondary -}}
-            {{- end -}}
-        {{- else }}
-            {{- if (eq "-" .Values.persistence.storageClass) -}}
-                {{- printf "storageClassName: \"\"" -}}
-            {{- else }}
-                {{- printf "storageClassName: %s" .Values.persistence.storageClass -}}
-            {{- end -}}
-        {{- end -}}
-    {{- end -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Returns the proper Service name depending if an explicit service name is set
-in the values file. If the name is not explicitly set it will take the "mongodb.fullname"
-*/}}
-{{- define "mongodb.serviceName" -}}
-  {{- if .Values.service.name -}}
-    {{ .Values.service.name }}
-  {{- else -}}
-    {{ template "mongodb.fullname" .}}
-  {{- end -}}
 {{- end -}}
 
 {{/*
@@ -309,4 +127,260 @@ is true or default otherwise.
     {{- else -}}
         {{ default "default" .Values.serviceAccount.name }}
     {{- end -}}
+{{- end -}}
+
+{{/*
+Return the configmap with the MongoDB(R) configuration
+*/}}
+{{- define "mongodb.configmapName" -}}
+{{- if .Values.existingConfigmap -}}
+    {{- printf "%s" (tpl .Values.existingConfigmap $) -}}
+{{- else -}}
+    {{- printf "%s" (include "mongodb.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if a configmap object should be created for MongoDB(R)
+*/}}
+{{- define "mongodb.createConfigmap" -}}
+{{- if and .Values.configuration (not .Values.existingConfigmap) }}
+    {{- true -}}
+{{- else -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the secret with MongoDB(R) credentials
+*/}}
+{{- define "mongodb.secretName" -}}
+    {{- if .Values.auth.existingSecret -}}
+        {{- printf "%s" .Values.auth.existingSecret -}}
+    {{- else -}}
+        {{- printf "%s" (include "mongodb.fullname" .) -}}
+    {{- end -}}
+{{- end -}}
+
+{{/*
+Return true if a secret object should be created for MongoDB(R)
+*/}}
+{{- define "mongodb.createSecret" -}}
+{{- if and .Values.auth.enabled (not .Values.auth.existingSecret) }}
+    {{- true -}}
+{{- else -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if a secret object should be created for MongoDB(R)
+*/}}
+{{- define "mongodb.caSecretName" -}}
+{{- if .Values.tls.existingSecret -}}
+    {{ .Values.tls.existingSecret }}
+{{- else -}}
+    {{ include "mongodb.fullname" . }}-ca
+{{- end -}}
+{{- end -}}
+
+{{/*
+Get the initialization scripts ConfigMap name.
+*/}}
+{{- define "mongodb.initdbScriptsCM" -}}
+{{- if .Values.initdbScriptsConfigMap -}}
+{{- printf "%s" .Values.initdbScriptsConfigMap -}}
+{{- else -}}
+{{- printf "%s-init-scripts" (include "mongodb.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if the Arbiter should be deployed
+*/}}
+{{- define "mongodb.arbiter.enabled" -}}
+{{- if and (eq .Values.architecture "replicaset") .Values.arbiter.enabled }}
+    {{- true -}}
+{{- else -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the configmap with the MongoDB(R) configuration for the Arbiter
+*/}}
+{{- define "mongodb.arbiter.configmapName" -}}
+{{- if .Values.arbiter.existingConfigmap -}}
+    {{- printf "%s" (tpl .Values.arbiter.existingConfigmap $) -}}
+{{- else -}}
+    {{- printf "%s-arbiter" (include "mongodb.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if a configmap object should be created for MongoDB(R) Arbiter
+*/}}
+{{- define "mongodb.arbiter.createConfigmap" -}}
+{{- if and (eq .Values.architecture "replicaset") .Values.arbiter.enabled .Values.arbiter.configuration (not .Values.arbiter.existingConfigmap) }}
+    {{- true -}}
+{{- else -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if the Hidden should be deployed
+*/}}
+{{- define "mongodb.hidden.enabled" -}}
+{{- if and (eq .Values.architecture "replicaset") .Values.hidden.enabled }}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the configmap with the MongoDB(R) configuration for the Hidden
+*/}}
+{{- define "mongodb.hidden.configmapName" -}}
+{{- if .Values.hidden.existingConfigmap -}}
+    {{- printf "%s" (tpl .Values.hidden.existingConfigmap $) -}}
+{{- else -}}
+    {{- printf "%s-hidden" (include "mongodb.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if a configmap object should be created for MongoDB(R) Hidden
+*/}}
+{{- define "mongodb.hidden.createConfigmap" -}}
+{{- if and  (include "mongodb.hidden.enabled" .) .Values.hidden.enabled .Values.hidden.configuration (not .Values.hidden.existingConfigmap) }}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Compile all warnings into a single message, and call fail.
+*/}}
+{{- define "mongodb.validateValues" -}}
+{{- $messages := list -}}
+{{- $messages := append $messages (include "mongodb.validateValues.pspAndRBAC" .) -}}
+{{- $messages := append $messages (include "mongodb.validateValues.architecture" .) -}}
+{{- $messages := append $messages (include "mongodb.validateValues.customDatabase" .) -}}
+{{- $messages := append $messages (include "mongodb.validateValues.externalAccessServiceType" .) -}}
+{{- $messages := append $messages (include "mongodb.validateValues.loadBalancerIPsListLength" .) -}}
+{{- $messages := append $messages (include "mongodb.validateValues.nodePortListLength" .) -}}
+{{- $messages := append $messages (include "mongodb.validateValues.externalAccessAutoDiscoveryRBAC" .) -}}
+{{- $messages := without $messages "" -}}
+{{- $message := join "\n" $messages -}}
+
+{{- if $message -}}
+{{-   printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
+{{- end -}}
+{{- end -}}
+
+{{/* Validate RBAC is created when using PSP */}}
+{{- define "mongodb.validateValues.pspAndRBAC" -}}
+{{- if and (.Values.podSecurityPolicy.create) (not .Values.rbac.create) -}}
+mongodb: podSecurityPolicy.create, rbac.create
+    Both podSecurityPolicy.create and rbac.create must be true, if you want
+    to create podSecurityPolicy
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of MongoDB(R) - must provide a valid architecture */}}
+{{- define "mongodb.validateValues.architecture" -}}
+{{- if and (ne .Values.architecture "standalone") (ne .Values.architecture "replicaset") -}}
+mongodb: architecture
+    Invalid architecture selected. Valid values are "standalone" and
+    "replicaset". Please set a valid architecture (--set mongodb.architecture="xxxx")
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of MongoDB(R) - both auth.username and auth.database are necessary
+to create a custom user and database during 1st initialization
+*/}}
+{{- define "mongodb.validateValues.customDatabase" -}}
+{{- if or (and .Values.auth.username (not .Values.auth.database)) (and (not .Values.auth.username) .Values.auth.database) }}
+mongodb: auth.username, auth.database
+    Both auth.username and auth.database must be provided to create
+    a custom user and database during 1st initialization.
+    Please set both of them (--set auth.username="xxxx",auth.database="yyyy")
+{{- end -}}
+{{- end -}}
+
+
+{{/*
+Validate values of MongoDB(R) - service type for external access
+*/}}
+{{- define "mongodb.validateValues.externalAccessServiceType" -}}
+{{- if and (eq .Values.architecture "replicaset") (not (eq .Values.externalAccess.service.type "NodePort")) (not (eq .Values.externalAccess.service.type "LoadBalancer")) (not (eq .Values.externalAccess.service.type "ClusterIP")) -}}
+mongodb: externalAccess.service.type
+    Available service type for external access are NodePort, LoadBalancer or ClusterIP.
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of MongoDB(R) - number of replicas must be the same than LoadBalancer IPs list
+*/}}
+{{- define "mongodb.validateValues.loadBalancerIPsListLength" -}}
+{{- $replicaCount := int .Values.replicaCount }}
+{{- $loadBalancerListLength := len .Values.externalAccess.service.loadBalancerIPs }}
+{{- if and (eq .Values.architecture "replicaset") .Values.externalAccess.enabled (not .Values.externalAccess.autoDiscovery.enabled ) (eq .Values.externalAccess.service.type "LoadBalancer") (not (eq $replicaCount $loadBalancerListLength )) -}}
+mongodb: .Values.externalAccess.service.loadBalancerIPs
+    Number of replicas and loadBalancerIPs array length must be the same.
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of MongoDB(R) - number of replicas must be the same than NodePort list
+*/}}
+{{- define "mongodb.validateValues.nodePortListLength" -}}
+{{- $replicaCount := int .Values.replicaCount }}
+{{- $nodePortListLength := len .Values.externalAccess.service.nodePorts }}
+{{- if and (eq .Values.architecture "replicaset") .Values.externalAccess.enabled (eq .Values.externalAccess.service.type "NodePort") (not (eq $replicaCount $nodePortListLength )) -}}
+mongodb: .Values.externalAccess.service.nodePorts
+    Number of replicas and nodePorts array length must be the same.
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of MongoDB(R) - RBAC should be enabled when autoDiscovery is enabled
+*/}}
+{{- define "mongodb.validateValues.externalAccessAutoDiscoveryRBAC" -}}
+{{- if and (eq .Values.architecture "replicaset") .Values.externalAccess.enabled .Values.externalAccess.autoDiscovery.enabled (not .Values.rbac.create )}}
+mongodb: rbac.create
+    By specifying "externalAccess.enabled=true" and "externalAccess.autoDiscovery.enabled=true"
+    an initContainer will be used to autodetect the external IPs/ports by querying the
+    K8s API. Please note this initContainer requires specific RBAC resources. You can create them
+    by specifying "--set rbac.create=true".
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of MongoDB(R) exporter URI string - auth.enabled and/or tls.enabled must be enabled or it defaults
+*/}}
+{{- define "mongodb.mongodb_exporter.uri" -}}
+    {{- $uriTlsArgs := ternary "tls=true&tlsCertificateKeyFile=/certs/mongodb.pem&tlsCAFile=/certs/mongodb-ca-cert" "" .Values.tls.enabled -}}
+    {{- $uriAuth := ternary "root:$(echo $MONGODB_ROOT_PASSWORD | sed -r \"s/@/%40/g;s/:/%3A/g\")@" "" .Values.auth.enabled -}}
+
+    {{- printf "mongodb://%slocalhost:27017/admin?%s" $uriAuth $uriTlsArgs -}}
+{{- end -}}
+
+
+{{/*
+Return the appropriate apiGroup for PodSecurityPolicy.
+*/}}
+{{- define "podSecurityPolicy.apiGroup" -}}
+{{- if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
+{{- print "policy" -}}
+{{- else -}}
+{{- print "extensions" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the appropriate apiVersion for PodSecurityPolicy.
+*/}}
+{{- define "podSecurityPolicy.apiVersion" -}}
+{{- if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
+{{- print "policy/v1beta1" -}}
+{{- else -}}
+{{- print "extensions/v1beta1" -}}
+{{- end -}}
 {{- end -}}

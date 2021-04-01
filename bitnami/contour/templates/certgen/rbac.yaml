@@ -1,0 +1,39 @@
+{{- if and .Values.rbac.create .Values.contour.enabled (include "contour.contour-certgen.enabled" .) }}
+---
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
+kind: Role
+metadata:
+  name: {{ include "common.names.fullname" .}}-contour-certgen
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": "pre-install,pre-upgrade"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: contour-certgen
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - secrets
+    verbs:
+      - create
+      - update
+---
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
+kind: RoleBinding
+metadata:
+  name: {{ include "common.names.fullname" .}}-contour-certgen
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": "pre-install,pre-upgrade"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: contour-certgen
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ include "common.names.fullname" .}}-contour-certgen
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "contour.contourCertGenServiceAccountName" . }}
+{{- end }}

@@ -1,0 +1,48 @@
+{{- if and .Values.metrics.enabled .Values.metrics.podMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: {{ include "common.names.fullname" . }}
+  {{- if .Values.metrics.podMonitor.namespace }}
+  namespace: {{ .Values.metrics.podMonitor.namespace }}
+  {{- else }}
+  namespace: {{ .Release.Namespace }}
+  {{- end }}
+  labels:
+    {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: metrics
+    {{- if .Values.metrics.podMonitor.additionalLabels }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.metrics.podMonitor.additionalLabels "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  podMetricsEndpoints:
+    - port: http
+      path: /metrics/
+      {{- if .Values.metrics.podMonitor.interval }}
+      interval: {{ .Values.metrics.podMonitor.interval }}
+      {{- end }}
+      {{- if .Values.metrics.podMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ .Values.metrics.podMonitor.scrapeTimeout }}
+      {{- end }}
+  {{- range .Values.metrics.podMonitor.extraMetricsEndpoints }}
+    - port: {{ .port }}
+      path: {{ .path }}
+    {{- if $.Values.metrics.podMonitor.interval }}
+      interval: {{ $.Values.metrics.podMonitor.interval }}
+    {{- end }}
+    {{- if $.Values.metrics.podMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ $.Values.metrics.podMonitor.scrapeTimeout }}
+    {{- end }}
+  {{- end }}
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+{{- end }}

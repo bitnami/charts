@@ -1,0 +1,27 @@
+{{- if and .Values.forwarder.enabled .Values.forwarder.rbac.create }}
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
+kind: ClusterRole
+metadata:
+  name: {{ include "fluentd.fullname" . }}
+  labels: {{- include "fluentd.labels" . | nindent 4 }}
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - "namespaces"
+      - "pods"
+    verbs:
+      - "get"
+      - "watch"
+      - "list"
+  {{- if .Values.forwarder.rbac.pspEnabled }}
+  - apiGroups:
+      - "policy"
+    resources:
+      - "podsecuritypolicies"
+    resourceNames:
+      - {{ include "fluentd.fullname" . }}-forwarder
+    verbs:
+      - "use"
+  {{- end }}
+{{- end }}

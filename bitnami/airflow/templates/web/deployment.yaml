@@ -1,0 +1,243 @@
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ include "common.names.fullname" . }}-web
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: web
+    {{- if .Values.commonLabels }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: web
+  replicas: {{ default 1 .Values.web.replicaCount }}
+  template:
+    metadata:
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app.kubernetes.io/component: web
+      {{- if .Values.web.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.web.podLabels "context" $) | nindent 8 }}
+      {{- end }}
+      annotations:
+        checksum/configmap: {{ include (print $.Template.BasePath "/config/configmap.yaml") . | sha256sum }}
+      {{- if .Values.web.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.web.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+    spec:
+      {{- include "airflow.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.web.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.web.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      priorityClassName: {{ .Values.web.priorityClassName | quote }}
+      {{- if .Values.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "airflow.serviceAccountName" . }}
+      {{- if .Values.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "component" "web" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "component" "web" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if or .Values.nodeSelector .Values.web.nodeSelector }}
+      {{- if .Values.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
+      {{- else }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.web.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- end }}
+      {{- if .Values.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      initContainers: {{- include "airflow.git.containers.clone" . | trim | nindent 8 }}
+      {{- if .Values.web.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.web.initContainers "context" $) | trim | nindent 8 }}
+      {{- end }}
+      {{- if .Values.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | trim | nindent 8 }}
+      {{- end }}
+      containers: {{- include "airflow.git.containers.sync" . | trim | nindent 8 }}
+        - name: airflow-web
+          image: {{ include "airflow.image" . }}
+          imagePullPolicy: {{ .Values.web.image.pullPolicy | quote }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.web.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.web.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.web.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.web.args "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            {{- include "airflow.configure.airflow.common"  . | nindent 12 }}
+            {{- include "airflow.configure.database" . | nindent 12 }}
+            {{- include "airflow.configure.redis" . | nindent 12 }}
+            {{- include "airflow.configure.airflow.kubernetesExecutor" . | nindent 12 }}
+            - name: AIRFLOW_WEBSERVER_HOST
+              value: '0.0.0.0'
+            - name: AIRFLOW_WEBSERVER_PORT_NUMBER
+              value: {{ .Values.web.containerPort | quote }}
+            - name: AIRFLOW_USERNAME
+              value: {{ .Values.auth.username }}
+            - name: AIRFLOW_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "airflow.secretName" . }}
+                  key: airflow-password
+            {{- $baseUrl := include "airflow.baseUrl" . }}
+            {{- if $baseUrl }}
+            - name: AIRFLOW_BASE_URL
+              value: {{ $baseUrl }}
+            {{- end }}
+            - name: AIRFLOW_LDAP_ENABLE
+              value: {{ ternary "yes" "no" .Values.ldap.enabled | quote }}
+            {{- if .Values.ldap.enabled }}
+            - name: AIRFLOW_LDAP_URI
+              value: {{ .Values.ldap.uri }}
+            - name: AIRFLOW_LDAP_SEARCH
+              value: {{ .Values.ldap.base }}
+            - name: AIRFLOW_LDAP_BIND_USER
+              value: {{ .Values.ldap.binddn }}
+            - name: AIRFLOW_LDAP_BIND_PASSWORD
+              value: {{ .Values.ldap.bindpw }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "airflow.ldapSecretName" . }}
+                  key: bind-password
+            - name: AIRFLOW_LDAP_UID_FIELD
+              value: {{ .Values.ldap.uidField }}
+            - name: AIRFLOW_LDAP_USE_TLS
+              value: {{ ternary "yes" "no" .Values.ldap.tls.enabled | quote }}
+            {{- if .Values.ldap.tls.enabled }}
+            - name: AIRFLOW_LDAP_ALLOW_SELF_SIGNED
+              value: {{ .Values.ldap.tls.allowSelfSigned }}
+            - name: AIRFLOW_LDAP_TLS_CA_CERTIFICATE
+              value: {{ include "airflow.ldapCAFilename" . | quote }}
+            {{- end }}
+            {{- end }}
+            {{- if .Values.extraEnvVars }}
+              {{- toYaml .Values.extraEnvVars | nindent 12 }}
+            {{- end }}
+            {{- if .Values.web.extraEnvVars }}
+              {{- include "common.tplvalues.render" (dict "value" .Values.web.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ .Values.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.extraEnvVarsSecret }}
+            {{- end }}
+            {{- if .Values.web.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ .Values.web.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.web.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.web.extraEnvVarsSecret }}
+            {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.web.containerPort }}
+        {{- if .Values.web.livenessProbe.enabled }}
+          livenessProbe:
+          {{- if $baseUrl }}
+            tcpSocket:
+              port: http
+          {{- else }}
+            httpGet:
+              path: /health
+              port: http
+          {{- end }}
+            {{ omit .Values.web.livenessProbe "enabled" | toYaml | nindent 12 }}
+        {{- else if .Values.web.customLivenessProbe }}
+          livenessProbe:
+            {{- include "common.tplvalues.render" (dict "value" .Values.web.customLivenessProbe "context" $) | trim | nindent 12 }}
+        {{- end }}
+        {{- if .Values.web.readinessProbe.enabled }}
+          readinessProbe:
+          {{- if $baseUrl }}
+            tcpSocket:
+              port: http
+          {{- else }}
+            httpGet:
+              path: /health
+              port: http
+          {{- end }}
+            {{ omit .Values.web.readinessProbe "enabled" | toYaml | nindent 12 }}
+        {{- else if .Values.web.customRedinessProbe }}
+          readinessProbe:
+            {{- include "common.tplvalues.render" (dict "value" .Values.web.customRedinessProbe "context" $) | trim | nindent 12 }}
+        {{- end }}
+          volumeMounts:
+          {{- if .Files.Glob "files/dags/*.py" }}
+            - name: local-dag-files
+              mountPath: /opt/bitnami/airflow/dags/local
+          {{- end }}
+          {{- if .Values.dagsConfigMap }}
+            - name: external-dag-files
+              mountPath: /opt/bitnami/airflow/dags/external
+          {{- end }}
+          {{- if include "airflow.shouldUseConfigFromConfigMap" . }}
+            - name: custom-configuration-file
+              mountPath: /opt/bitnami/airflow/airflow.cfg
+              subPath: airflow.cfg
+          {{- end }}
+          {{- if .Values.web.configMap }}
+            - name: custom-webserver-configuration-file
+              mountPath: /opt/bitnami/airflow/webserver_config.py
+              subPath: webserver_config.py
+          {{- end }}
+          {{- if .Values.ldap.tls.enabled }}
+            - name: airflow-ldap-ca-certificate
+              mountPath: /opt/bitnami/airflow/conf/certs/
+              readOnly: true
+          {{- end }}
+            {{- include "airflow.git.maincontainer.volumeMounts" . | trim | nindent 12 }}
+          {{- if .Values.web.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.web.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.web.resources }}
+          resources: {{- toYaml .Values.web.resources | nindent 12 }}
+          {{- end }}
+      {{- if .Values.web.sidecars }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.web.sidecars "context" $) | trim | nindent 8 }}
+      {{- end }}
+      {{- if .Values.sidecars }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | trim | nindent 8 }}
+      {{- end }}
+      volumes:
+      {{- if .Values.dagsConfigMap }}
+        - name: external-dag-files
+          configMap:
+            name: {{ .Values.dagsConfigMap }}
+      {{- end }}
+      {{- if include "airflow.shouldUseConfigFromConfigMap" . }}
+        - name: custom-configuration-file
+          configMap:
+            name: {{ include "airflow.configMapName"  . }}
+      {{- end }}
+      {{- if .Values.web.configMap }}
+        - name: custom-webserver-configuration-file
+          configMap:
+            name: {{ .Values.web.configMap }}
+      {{- end }}
+      {{- if .Values.ldap.tls.enabled }}
+        - name: airflow-ldap-ca-certificate
+          secret:
+            secretName: {{ required "A secret containing the LDAP CA certificate. It is required when SSL in enabled" .Values.ldap.tls.CAcertificateSecret }}
+            defaultMode: 256
+      {{- end }}
+        {{- include "airflow.git.volumes" . | trim | nindent 8 }}
+      {{- if .Values.web.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.web.extraVolumes "context" $) | nindent 8 }}
+      {{- end }}

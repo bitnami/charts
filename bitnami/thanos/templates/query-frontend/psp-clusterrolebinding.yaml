@@ -1,0 +1,15 @@
+{{- if and .Values.queryFrontend.enabled .Values.queryFrontend.pspEnabled .Values.queryFrontend.rbac.create -}}
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
+kind: ClusterRoleBinding
+metadata:
+  name: {{ include "common.names.fullname" . }}-query-frontend
+roleRef:
+  kind: ClusterRole
+  name: {{ include "common.names.fullname" . }}-query-frontend
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+# Authorize specific service accounts:
+- kind: ServiceAccount
+  name: {{ include "thanos.serviceaccount.name" (dict "component" "query-frontend" "context" $) }}
+  namespace: {{ .Release.Namespace }}
+{{- end -}}

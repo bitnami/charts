@@ -1,19 +1,30 @@
-apiVersion: v1
-name: odoo
-version: 14.0.7
-appVersion: 13.0.20200510
+annotations:
+  category: CRM
+apiVersion: v2
+appVersion: 14.0.20210310
+dependencies:
+  - condition: postgresql.enabled
+    name: postgresql
+    repository: https://charts.bitnami.com/bitnami
+    version: 10.x.x
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    version: 1.x.x
 description: A suite of web based open source business apps.
-home: https://www.odoo.com/
-icon: https://bitnami.com/assets/stacks/odoo/img/odoo-stack-110x117.png
-keywords:
-- odoo
-- crm
-- www
-- http
-- web
-sources:
-- https://github.com/bitnami/bitnami-docker-odoo
-maintainers:
-- name: Bitnami
-  email: containers@bitnami.com
 engine: gotpl
+home: https://github.com/bitnami/charts/tree/master/bitnami/odoo
+icon: https://bitnami.com/assets/stacks/odoo/img/odoo-stack-220x234.png
+keywords:
+  - odoo
+  - crm
+  - www
+  - http
+  - web
+maintainers:
+  - email: containers@bitnami.com
+    name: Bitnami
+name: odoo
+sources:
+  - https://github.com/bitnami/bitnami-docker-odoo
+  - https://www.odoo.com/
+version: 18.2.3

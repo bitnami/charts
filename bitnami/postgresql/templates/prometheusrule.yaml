@@ -2,20 +2,17 @@
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
-  name: {{ template "postgresql.fullname" . }}
+  name: {{ template "common.names.fullname" . }}
 {{- with .Values.metrics.prometheusRule.namespace }}
   namespace: {{ . }}
 {{- end }}
   labels:
-    app: {{ template "postgresql.name" . }}
-    chart: {{ template "postgresql.chart" . }}
-    release: {{ .Release.Name | quote }}
-    heritage: {{ .Release.Service | quote }}
+  {{- include "common.labels.standard" . | nindent 4 }}
   {{- with .Values.metrics.prometheusRule.additionalLabels }}
   {{- toYaml . | nindent 4 }}
   {{- end }}
   {{- if .Values.commonAnnotations }}
-  annotations: {{- include "postgresql.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
 {{- with .Values.metrics.prometheusRule.rules }}

@@ -4,13 +4,11 @@ kind: ConfigMap
 metadata:
   name: {{ template "postgresql.metricsCM" . }}
   labels:
-    app: {{ template "postgresql.name" . }}
-    chart: {{ template "postgresql.chart" . }}
-    release: {{ .Release.Name | quote }}
-    heritage: {{ .Release.Service | quote }}
+  {{- include "common.labels.standard" . | nindent 4 }}
   {{- if .Values.commonAnnotations }}
-  annotations: {{- include "postgresql.tplValue" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
+  namespace: {{ .Release.Namespace }}
 data:
   custom-metrics.yaml: {{ toYaml .Values.metrics.customMetrics | quote }}
 {{- end }}

@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/node
-  tag: 10.21.0-debian-10-r0
+  tag: 14.16.0-debian-10-r28
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -27,6 +27,10 @@ image:
   # pullSecrets:
   #   - myRegistryKeySecretName
 
+## Force target Kubernetes version (using Helm capabilites if not set)
+##
+kubeVersion:
+
 ## String to partially override node.fullname template (will maintain the release name)
 ##
 # nameOverride:
@@ -35,6 +39,11 @@ image:
 ##
 # fullnameOverride:
 
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
+
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
 ##
@@ -42,8 +51,8 @@ volumePermissions:
   enabled: false
   image:
     registry: docker.io
-    repository: bitnami/minideb
-    tag: buster
+    repository: bitnami/bitnami-shell
+    tag: "10"
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -70,16 +79,33 @@ volumePermissions:
 ## ref: https://hub.docker.com/r/bitnami/git/tags/
 ##
 git:
-  registry: docker.io
-  repository: bitnami/git
-  tag: 2.27.0-debian-10-r1
-  pullPolicy: IfNotPresent
-  ## Optionally specify an array of imagePullSecrets.
-  ## Secrets must be manually created in the namespace.
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## Bitnami git image version
+  ## ref: https://hub.docker.com/r/bitnami/git/tags/
   ##
-  # pullSecrets:
-  #   - myRegistryKeySecretName
+  image:
+    registry: docker.io
+    repository: bitnami/git
+    tag: 2.31.0-debian-10-r10
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ##
+    pullSecrets: []
+    #   - myRegistryKeySecretName
+
+  ## Add extra volume mounts for the GIT container
+  ## Useful to mount keys to connect through ssh. (normally used with extraVolumes)
+  ## E.g:
+  ## extraVolumeMounts:
+  ##   - name: ssh-dir
+  ##     mountPath: /root/.ssh/
+  ##
+  extraVolumeMounts: []
 
 ## Enable to download app from external git repository.
 ## Disable it if your docker image already includes your application at /app
@@ -95,17 +121,47 @@ revision: master
 
 ## Specify the number of replicas for the application
 ##
-replicas: 1
+replicaCount: 1
 
 ## Specify the port where your application will be running
 ##
 applicationPort: 3000
 
-## Define custom environment variables to pass to the image here
+## Pod affinity preset
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
 ##
-extraEnv: {}
+podAffinityPreset: ''
 
-## Affinity for pod assignment
+## Pod anti-affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+##
+podAntiAffinityPreset: soft
+
+## Node affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+## Allowed values: soft, hard
+##
+nodeAffinityPreset:
+  ## Node affinity type
+  ## Allowed values: soft, hard
+  ##
+  type: ''
+  ## Node label key to match
+  ## E.g.
+  ## key: "kubernetes.io/e2e-az-name"
+  ##
+  key: ''
+  ## Node label values to match
+  ## E.g.
+  ## values:
+  ##   - e2e-az1
+  ##   - e2e-az2
+  ##
+  values: []
+
+## Affinity for pod assignment. Evaluated as a template.
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ##
 affinity: {}
@@ -120,13 +176,128 @@ nodeSelector: {}
 ##
 tolerations: {}
 
-## Pod Security Context
+## Add labels to all the deployed resources
+##
+commonLabels: {}
+
+## Add annotations to all the deployed resources
+##
+commonAnnotations: {}
+
+## Additional pod annotations
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+##
+podAnnotations: {}
+
+## Additional pod labels
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
+podLabels: {}
+
+## Extra objects to deploy (value evaluated as a template)
+##
+extraDeploy: []
+
+## Configure extra options for liveness and readiness probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+##
+livenessProbe:
+  enabled: true
+  path: '/'
+  initialDelaySeconds: 60
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+readinessProbe:
+  enabled: true
+  path: '/'
+  initialDelaySeconds: 10
+  periodSeconds: 5
+  timeoutSeconds: 3
+  failureThreshold: 3
+  successThreshold: 1
+
+## Custom Liveness probes for Node
+##
+customLivenessProbe: {}
+
+## Custom Rediness probes Node
+##
+customReadinessProbe: {}
+
+## Node pods' priority.
+## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+##
+# priorityClassName: ""
+
+## lifecycleHooks for the Node container to automate configuration before or after startup.
+##
+lifecycleHooks: {}
+
+## Add sidecars to the Node pods.
+## Example:
+## sidecars:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+sidecars: {}
+
+## Add init containers to the Node pods.
+## Example:
+## initContainers:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+initContainers: {}
+
+## An array to add extra env vars
+## For example:
+##
+extraEnvVars: []
+#  - name: BEARER_AUTH
+#    value: true
+
+## ConfigMap with extra environment variables
+##
+extraEnvVarsCM:
+
+## Secret with extra environment variables
+##
+extraEnvVarsSecret:
+
+## Command and args for running the container (set to default if not set). Use array form
+##
+command: ['/bin/bash', '-ec', 'npm start']
+args: []
+
+## Extra volumes to add to the deployment
+##
+extraVolumes: []
+
+## Extra volume mounts to add to the container
+##
+extraVolumeMounts: []
+
+## SecurityContext configuration
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 ##
-securityContext:
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1001
+  runAsNonRoot: true
+
+podSecurityContext:
   enabled: true
   fsGroup: 1001
-  runAsUser: 1001
 
 ## Node conatiners' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -149,14 +320,18 @@ resources:
 persistence:
   enabled: false
   path: /app/data
-  ## If defined, volume.beta.kubernetes.io/storage-class: <storageClass>
-  ## Default: volume.alpha.kubernetes.io/storage-class: default
+  ## Persistent Volume Storage Class
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
   ##
-  # storageClass:
+  # storageClass: "-"
   accessMode: ReadWriteOnce
   size: 1Gi
 
-## Service paramaters
+## Service parameters
 ##
 service:
   ## Service type
@@ -165,6 +340,18 @@ service:
   ## HTTP Port
   ##
   port: 80
+
+  ## clusterIP: ""
+  ## loadBalancerIP for the Node Service (optional, cloud specific)
+  ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+  ##
+
+  ## Control where client requests go, to the same pod or round-robin
+  ## Values: ClientIP or None
+  ## ref: https://kubernetes.io/docs/user-guide/services/
+  ##
+  sessionAffinity: 'None'
+
   ## Specify the nodePort value for the LoadBalancer and NodePort service types.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
@@ -177,41 +364,80 @@ service:
   ## set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
+  # loadBalancerSourceRanges:
+  ## In order to limit which client IP's can access the Network Load Balancer, specify loadBalancerSourceRanges.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#aws-nlb-support
+  ##
   annotations: {}
 
-## Ingress paramaters
+## Configure the ingress resource that allows you to access the
+## Node.js installation. Set up the URL
+## ref: http://kubernetes.io/docs/user-guide/ingress/
 ##
 ingress:
   ## Set to true to enable ingress record generation
   ##
   enabled: false
 
-  ## The list of hostnames to be covered with this ingress record.
-  ## Most likely this will be just one host, but in the event more hosts are needed, this is an array
-  hosts:
-    - name: node.local
+  ## Set this to true in order to add the corresponding annotations for cert-manager
+  ##
+  certManager: false
 
-      ## Set this to true in order to enable TLS on the ingress record
-      ##
-      tls: false
+  ## Ingress Path type
+  ##
+  pathType: ImplementationSpecific
 
-      ## Set this to true in order to add the corresponding annotations for cert-manager
-      ##
-      certManager: false
+  ## Override API Version (automatically detected if not set)
+  ##
+  apiVersion:
 
-      ## If TLS is set to true, you must declare what secret will store the key/certificate for TLS
-      ##
-      tlsSecret: node.local-tls
+  ## When the ingress is enabled, a host pointing to this will be created
+  ##
+  hostname: node.local
 
-      ## Ingress annotations done as key:value pairs
-      ## For a full list of possible ingress annotations, please see
-      ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
-      ##
-      ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
-      annotations:
-      #  kubernetes.io/ingress.class: nginx
+  ## The Path to Node.js. You may need to set this to '/*' in order to use this
+  ## with ALB ingress controllers.
+  ##
+  path: /
 
-  secrets:
+  ## Ingress annotations done as key:value pairs
+  ## For a full list of possible ingress annotations, please see
+  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ##
+  ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+  ##
+  annotations: {}
+
+  ## Enable TLS configuration for the hostname defined at ingress.hostname parameter
+  ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
+  ## You can use the ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
+  ##
+  tls: false
+
+  ## The list of additional hostnames to be covered with this ingress record.
+  ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
+  ## extraHosts:
+  ## - name: node.local
+  ##   path: /
+  ##
+
+  ## Any additional arbitrary paths that may need to be added to the ingress under the main host.
+  ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
+  ## extraPaths:
+  ## - path: /*
+  ##   backend:
+  ##     serviceName: ssl-redirect
+  ##     servicePort: use-annotation
+  ##
+
+  ## The tls configuration for additional hostnames to be covered with this ingress record.
+  ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ## extraTls:
+  ## - hosts:
+  ##     - node.local
+  ##   secretName: node.local-tls
+  ##
+
   ## If you're providing your own certificates, please use this to add the certificates as secrets
   ## key and certificate should start with -----BEGIN CERTIFICATE----- or
   ## -----BEGIN RSA PRIVATE KEY-----
@@ -221,30 +447,55 @@ ingress:
   ##
   ## It is also possible to create and manage the certificates outside of this helm chart
   ## Please see README.md for more information
-  # - name: node.local-tls
-  #   key:
-  #   certificate:
+  ##
+  secrets: []
+  ## - name: node.local-tls
+  ##   key:
+  ##   certificate:
+  ##
 
-## MongoDB chart configuration
+##
+## MongoDB(R) chart configuration
 ## ref: https://github.com/bitnami/charts/blob/master/bitnami/mongodb/values.yaml
 ##
 mongodb:
-  ## Whether to deploy a mongodb server to satisfy the applications database requirements.
+  ## Whether to deploy a MongoDB(R) server to satisfy the applications database requirements.
   ## To use an external database set this to false and configure the externaldb parameters
-  install: true
-  ## MongoDB custom user and database
-  ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#creating-a-user-and-database-on-first-run
   ##
-  mongodbUsername: user
-  mongodbDatabase: test_db
-  mongodbPassword: secret_password
+  enabled: true
 
-## Provision an external database (Only if mongodb.install is false)
-## You can:
+  ## MongoDB(R) Authentication parameters
+  ##
+  auth:
+    ## Enable authentication
+    ## ref: https://docs.mongodb.com/manual/tutorial/enable-authentication/
+    ##
+    enabled: true
+
+    ## MongoDB(R) root password
+    ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#setting-the-root-password-on-first-run
+    ##
+    rootPassword: ''
+
+    ## MongoDB(R) custom user and database
+    ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#creating-a-user-and-database-on-first-run
+    ##
+    username: user
+    database: test_db
+    password: secret_password
+
+##
+## External Database Configuration
+##
+## Provision an external database
+## You have two alternatives:
 ##    1) Pass an already existing Secret with your database credentials
 ##    2) Pass an already existing ServiceInstance name and specify the service catalog broker to automatically create a ServiceBinding for your application.
 ##
 externaldb:
+  ## Enables or disables external database
+  ##
+  enabled: false
   ## Set to true if your external database has ssl enabled
   ##
   ssl: false

@@ -1,0 +1,13 @@
+{{- $query := (include "thanos.query.values" . | fromYaml) -}}
+{{- if and $query.enabled $query.pspEnabled $query.rbac.create -}}
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
+kind: ClusterRole
+metadata:
+  name: {{ include "common.names.fullname" . }}-query
+rules:
+- apiGroups: ['policy']
+  resources: ['podsecuritypolicies']
+  verbs:     ['use']
+  resourceNames:
+  - {{ include "common.names.fullname" . }}-query
+{{- end -}}

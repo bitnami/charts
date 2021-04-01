@@ -1,17 +1,32 @@
-apiVersion: {{ template "deployment.apiVersion" . }}
+apiVersion: {{ template "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "harbor.core" . }}
-  labels: {{- include "harbor.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
     app.kubernetes.io/component: core
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   replicas: {{ .Values.core.replicas }}
+  {{- if .Values.core.updateStrategy }}
+  strategy: {{- toYaml .Values.core.updateStrategy | nindent 4 }}
+  {{- end }}
   selector:
-    matchLabels: {{- include "harbor.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: core
   template:
     metadata:
-      labels: {{- include "harbor.matchLabels" . | nindent 8 }}
+      labels: {{- include "common.labels.matchLabels" . | nindent 8 }}
+        {{- if .Values.commonLabels }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.core.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.core.podLabels "context" $) | nindent 8 }}
+        {{- end }}
         app.kubernetes.io/component: core
       annotations:
         checksum/configmap: {{ include (print $.Template.BasePath "/core/core-cm.yaml") . | sha256sum }}
@@ -19,60 +34,109 @@ spec:
         checksum/secret: {{ include (print $.Template.BasePath "/core/core-secret.yaml") . | sha256sum }}
         checksum/secret-envvars: {{ include (print $.Template.BasePath "/core/core-secret-envvars.yaml") . | sha256sum }}
         checksum/secret-jobservice: {{ include (print $.Template.BasePath "/jobservice/jobservice-secrets.yaml") . | sha256sum }}
+        {{- if and .Values.internalTLS.enabled (not .Values.core.tls.existingSecret) }}
+        checksum/tls: {{ include (print $.Template.BasePath "/internal/internal-crt-secret.yaml") . | sha256sum }}
+        {{- end }}
         {{- if .Values.core.podAnnotations }}
-        {{- include "harbor.tplValue" (dict "value" .Values.core.podAnnotations "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.core.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
     spec:
-{{- include "harbor.imagePullSecrets" . | indent 6 }}
+      {{- include "harbor.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: false
       {{- if .Values.core.affinity }}
-      affinity: {{- include "harbor.tplValue" (dict "value" .Values.core.affinity "context" $) | nindent 8 }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.core.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.core.podAffinityPreset "component" "core" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.core.podAntiAffinityPreset "component" "core" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.core.nodeAffinityPreset.type "key" .Values.core.nodeAffinityPreset.key "values" .Values.core.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.core.nodeSelector }}
-      nodeSelector: {{- include "harbor.tplValue" (dict "value" .Values.core.nodeSelector "context" $) | nindent 8 }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.core.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.core.tolerations }}
-      tolerations: {{- include "harbor.tplValue" (dict "value" .Values.core.tolerations "context" $) | nindent 8 }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.core.tolerations "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.securityContext.enabled }}
-      securityContext:
-        fsGroup: {{ .Values.securityContext.fsGroup }}
-        runAsUser: {{ .Values.securityContext.runAsUser }}
+      {{- if .Values.podSecurityContext }}
+      securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.core.initContainers }}
+      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.core.initContainers "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.core.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.core.hostAliases "context" $) | nindent 8 }}
       {{- end }}
       containers:
         - name: core
           image: {{ include "harbor.coreImage" . }}
           imagePullPolicy: {{ .Values.coreImage.pullPolicy | quote }}
-         {{- if .Values.lifecycleHooks }}
-          lifecycle:
-{{ tpl .Values.lifecycleHooks . | indent 12 }}
+          {{- if .Values.core.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.core.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.core.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.core.args "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.containerSecurityContext }}
+          securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.core.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.core.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.core.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
-              path: /api/ping
+              path: /api/v2.0/ping
+              scheme: {{ include "harbor.component.scheme" . | upper }}
               port: http
             initialDelaySeconds: {{ .Values.core.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.core.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.core.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.core.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.core.livenessProbe.failureThreshold }}
+          {{- else if .Values.core.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.core.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.core.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
-              path: /api/ping
+              path: /api/v2.0/ping
+              scheme: {{ include "harbor.component.scheme" . | upper }}
               port: http
             initialDelaySeconds: {{ .Values.core.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.core.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.core.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.core.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.core.readinessProbe.failureThreshold }}
+          {{- else if .Values.core.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.core.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.core.startupProbe.enabled }}
+          startupProbe:
+            httpGet:
+              path: /api/v2.0/ping
+              scheme: {{ include "harbor.component.scheme" . | upper }}
+              port: http
+            initialDelaySeconds: {{ .Values.core.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.core.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.core.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.core.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.core.startupProbe.failureThreshold }}
+          {{- else if .Values.core.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.core.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           envFrom:
             - configMapRef:
                 name: {{ include "harbor.core" . }}-envvars
             - secretRef:
                 name: {{ include "harbor.core" . }}-envvars
+            {{- if .Values.core.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.core.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.core.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.core.extraEnvVarsSecret "context" $) }}
+            {{- end }}
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.coreImage.debug | quote }}
@@ -86,8 +150,21 @@ spec:
                 secretKeyRef:
                   name: {{ include "harbor.jobservice" . }}
                   key: secret
+            {{- if .Values.internalTLS.enabled }}
+            - name: INTERNAL_TLS_ENABLED
+              value: "true"
+            - name: INTERNAL_TLS_KEY_PATH
+              value: /etc/harbor/ssl/core/tls.key
+            - name: INTERNAL_TLS_CERT_PATH
+              value: /etc/harbor/ssl/core/tls.crt
+            - name: INTERNAL_TLS_TRUST_CA_PATH
+              value: /etc/harbor/ssl/core/ca.crt
+            {{- end }}
+            {{- if .Values.core.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.core.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
           ports:
-            - containerPort: 8080
+            - containerPort: {{ include "harbor.core.containerPort" . }}
               name: http
           volumeMounts:
             - name: config
@@ -99,20 +176,33 @@ spec:
             - name: token-service-private-key
               mountPath: /etc/core/private_key.pem
               subPath: tls.key
+            {{- if .Values.internalTLS.enabled }}
+            - name: internal-tls-certs
+              mountPath: /etc/harbor/ssl/core
+            {{- end }}
             {{- if .Values.service.tls.enabled }}
             - name: ca-download
               mountPath: /etc/core/ca
             {{- end }}
-            {{- if .Values.uaaSecretName }}
+            {{- if .Values.core.uaaSecretName }}
             - name: auth-ca-cert
-              mountPath: /etc/core/ca/auth-ca.crt
+              mountPath: /etc/core/auth-ca/auth-ca.crt
               subPath: auth-ca.crt
             {{- end }}
             - name: psc
               mountPath: /etc/core/token
+            {{- if .Values.caBundleSecretName }}
+{{ include "harbor.caBundleVolumeMount" . | indent 12 }}
+            {{- end }}
+            {{- if .Values.core.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.core.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
           {{- if .Values.core.resources }}
           resources: {{- toYaml .Values.core.resources | nindent 12 }}
           {{- end }}
+        {{- if .Values.core.sidecars }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.core.sidecars "context" $) | nindent 8 }}
+        {{- end }}
       volumes:
         - name: config
           configMap:
@@ -126,13 +216,21 @@ spec:
             items:
               - key: secretKey
                 path: key
+        {{- if .Values.caBundleSecretName }}
+{{ include "harbor.caBundleVolume" . | indent 8 }}
+        {{- end }}
         - name: token-service-private-key
           secret:
             {{- if .Values.core.secretName }}
             secretName: {{ .Values.core.secretName }}
             {{- else }}
-            secretName: {{ template "harbor.core" . }}
+            secretName: {{ include "harbor.core" . }}
             {{- end }}
+        {{- if .Values.internalTLS.enabled }}
+        - name: internal-tls-certs
+          secret:
+            secretName: {{ include "harbor.core.tls.secretName" . }}
+        {{- end }}
         {{- if .Values.service.tls.enabled }}
         - name: ca-download
           secret:
@@ -141,16 +239,19 @@ spec:
           {{- else if eq (include "harbor.autoGenCertForNginx" .) "true" }}
             secretName: {{ include "harbor.nginx" . }}
           {{- else }}
-            secretName: {{ .Values.service.tls.secretName }}
+            secretName: {{ .Values.service.tls.existingSecret }}
           {{- end }}
         {{- end }}
-        {{- if .Values.uaaSecretName }}
+        {{- if .Values.core.uaaSecretName }}
         - name: auth-ca-cert
           secret:
-            secretName: {{ .Values.uaaSecretName }}
+            secretName: {{ .Values.core.uaaSecretName }}
             items:
               - key: ca.crt
                 path: auth-ca.crt
         {{- end }}
         - name: psc
           emptyDir: {}
+      {{- if .Values.core.extraVolumes }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.core.extraVolumes "context" $) | nindent 8 }}
+      {{- end }}

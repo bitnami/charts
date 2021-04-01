@@ -1,0 +1,97 @@
+{{- if .Values.operator.enabled }}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ template "kube-prometheus.operator.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "kube-prometheus.operator.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {{- include "kube-prometheus.operator.matchLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels: {{- include "kube-prometheus.operator.labels" . | nindent 8 }}
+      {{- if .Values.operator.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.operator.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+    spec:
+      serviceAccountName: {{ template "kube-prometheus.operator.serviceAccountName" . }}
+      {{- if .Values.operator.schedulerName }}
+      schedulerName: {{ .Values.operator.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.operator.securityContext.enabled }}
+      securityContext:
+        runAsUser: {{ .Values.operator.securityContext.runAsUser }}
+        fsGroup: {{ .Values.operator.securityContext.fsGroup }}
+        runAsNonRoot: {{ .Values.operator.securityContext.runAsNonRoot }}
+      {{- end }}
+      {{- if .Values.operator.priorityClassName }}
+      priorityClassName: {{ .Values.operator.priorityClassName }}
+      {{- end }}
+      {{- if .Values.operator.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.operator.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.operator.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.operator.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.operator.podAffinityPreset "component" "operator" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.operator.podAntiAffinityPreset "component" "operator" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.operator.nodeAffinityPreset.type "key" .Values.operator.nodeAffinityPreset.key "values" .Values.operator.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.operator.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.operator.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.operator.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.operator.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: prometheus-operator
+          image: {{ template "kube-prometheus.image" . }}
+          imagePullPolicy: {{ .Values.operator.image.pullPolicy }}
+          env:
+            - name: PROMETHEUS_CONFIG_RELOADER
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ template "kube-prometheus.operator.fullname" . }}
+                  key: prometheus-config-reloader
+          args:
+            {{- if .Values.operator.kubeletService.enabled }}
+            - --kubelet-service={{ .Values.operator.kubeletService.namespace }}/{{ template "kube-prometheus.fullname" . }}-kubelet
+            {{- end }}
+            {{- if .Values.operator.logFormat }}
+            - --log-format={{ .Values.operator.logFormat }}
+            {{- end }}
+            {{- if .Values.operator.logLevel }}
+            - --log-level={{ .Values.operator.logLevel }}
+            {{- end }}
+            - --localhost=127.0.0.1
+            - --prometheus-config-reloader=$(PROMETHEUS_CONFIG_RELOADER)
+          {{- if .Values.operator.configReloaderCpu }}
+            - --config-reloader-cpu={{ .Values.operator.configReloaderCpu }}
+          {{- end }}
+          {{- if .Values.operator.configReloaderMemory }}
+            - --config-reloader-memory={{ .Values.operator.configReloaderMemory }}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /metrics
+              port: http
+          {{- toYaml .Values.operator.livenessProbe | nindent 12 }}
+          readinessProbe:
+            httpGet:
+              path: /metrics
+              port: http
+          {{- toYaml .Values.operator.readinessProbe | nindent 12 }}
+          {{- if .Values.operator.resources }}
+          resources: {{- toYaml .Values.operator.resources | nindent 12 }}
+          {{- end }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false
+{{- end }}

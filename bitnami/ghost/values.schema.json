@@ -54,7 +54,7 @@
           "form": true,
           "description": "Whether to deploy a mariadb server to satisfy the applications database requirements. To use an external database switch this off and configure the external database parameters"
         },
-        "master": {
+        "primary": {
           "type": "object",
           "properties": {
             "persistence": {
@@ -65,8 +65,8 @@
                   "title": "Volume Size",
                   "form": true,
                   "hidden": {
-                    "condition": false,
-                    "value": "mariadb.enabled"
+                    "value": false,
+                    "path": "mariadb/enabled"
                   },
                   "render": "slider",
                   "sliderMin": 1,
@@ -89,31 +89,31 @@
           "type": "string",
           "form": true,
           "title": "Database Host",
-          "hidden": "mariadb.enabled"
+          "hidden": "mariadb/enabled"
         },
         "user": {
           "type": "string",
           "form": true,
           "title": "Database Username",
-          "hidden": "mariadb.enabled"
+          "hidden": "mariadb/enabled"
         },
         "password": {
           "type": "string",
           "form": true,
           "title": "Database Password",
-          "hidden": "mariadb.enabled"
+          "hidden": "mariadb/enabled"
         },
         "database": {
           "type": "string",
           "form": true,
           "title": "Database Name",
-          "hidden": "mariadb.enabled"
+          "hidden": "mariadb/enabled"
         },
         "port": {
           "type": "integer",
           "form": true,
           "title": "Database Port",
-          "hidden": "mariadb.enabled"
+          "hidden": "mariadb/enabled"
         }
       }
     },

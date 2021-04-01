@@ -1,0 +1,76 @@
+{{- if and .Values.contour.enabled (include "contour.contour-certgen.enabled" .) }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "common.names.fullname" . }}-contour-certgen
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": "pre-install,pre-upgrade"
+    "helm.sh/hook-weight": "1"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: contour-certgen
+spec:
+  ttlSecondsAfterFinished: 0
+  template:
+    metadata:
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app.kubernetes.io/component: contour-certgen
+    spec:
+      {{- include "common.images.pullSecrets" ( dict "images" (list .Values.contour.image) "global" .Values.global) | nindent 6 }}
+      {{- if .Values.contour.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.contour.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.contour.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.contour.affinity "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.contour.tolerations}}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.contour.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: contour
+          image: {{ include "common.images.image" ( dict "imageRoot" .Values.contour.image "global" .Values.global) }}
+          imagePullPolicy: {{ .Values.contour.image.pullPolicy }}
+          command:
+            - contour
+          args:
+            - certgen
+            - --kube
+            - --incluster
+            - --overwrite
+            - --secrets-format=compact
+            - --namespace=$(CONTOUR_NAMESPACE)
+          env:
+            - name: CONTOUR_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            {{- if .Values.contour.extraEnvVars }}
+              {{- include "common.tplvalues.render" (dict "value" .Values.contour.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.contour.extraEnvVarsConfigMap .Values.contour.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.contour.extraEnvVarsConfigMap }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" ( dict "value" .Values.contour.extraEnvVarsConfigMap "context" $ ) }}
+            {{- end }}
+            {{- if .Values.contour.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" ( dict "value" .Values.contour.extraEnvVarsSecret "context" $ ) }}
+            {{- end }}
+          {{- end }}
+          resources: {{ toYaml .Values.contour.resources | nindent 12 }}
+      restartPolicy: Never
+      serviceAccountName: {{ include "contour.contourCertGenServiceAccountName" . }}
+      {{- if .Values.contour.securityContext.enabled }}
+      securityContext:
+        runAsUser: {{ .Values.contour.securityContext.runAsUser }}
+        runAsGroup: {{ .Values.contour.securityContext.runAsGroup }}
+        fsGroup: {{ .Values.contour.securityContext.fsGroup }}
+        runAsNonRoot: {{ .Values.contour.securityContext.runAsNonRoot }}
+      {{- end }}
+  parallelism: 1
+  completions: 1
+  backoffLimit: 1
+{{- end }}

@@ -1,198 +1,111 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ template "rabbitmq.fullname" . }}
-  namespace: {{ .Release.Namespace }}
-  labels:
-    app: {{ template "rabbitmq.name" . }}
-    chart: {{ template "rabbitmq.chart" .  }}
-    release: "{{ .Release.Name }}"
-    heritage: "{{ .Release.Service }}"
-    {{- if .Values.podLabels }}
-    {{- toYaml .Values.podLabels | nindent 4 }}
+  name: {{ include "rabbitmq.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.statefulsetLabels }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.statefulsetLabels "context" $) | nindent 4 }}
     {{- end }}
 spec:
   serviceName: {{ template "rabbitmq.fullname" . }}-headless
   podManagementPolicy: {{ .Values.podManagementPolicy }}
-  replicas: {{ .Values.replicas }}
+  replicas: {{ .Values.replicaCount }}
   updateStrategy:
-    type: {{ .Values.updateStrategy.type }}
-    {{- if (eq "Recreate" .Values.updateStrategy.type) }}
+    type: {{ .Values.updateStrategyType }}
+    {{- if (eq "OnDelete" .Values.updateStrategyType) }}
     rollingUpdate: null
     {{- end }}
   selector:
-    matchLabels:
-      app: {{ template "rabbitmq.name" . }}
-      release: "{{ .Release.Name }}"
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
   template:
     metadata:
-      labels:
-        app: {{ template "rabbitmq.name" . }}
-        release: "{{ .Release.Name }}"
-        chart: {{ template "rabbitmq.chart" .  }}
-      {{- if .Values.podLabels }}
-      {{- toYaml .Values.podLabels | nindent 8 }}
-      {{- end }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        {{- if .Values.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
+        {{- end }}
       annotations:
-        {{- if or (not .Values.rabbitmq.existingErlangSecret) (not .Values.rabbitmq.existingPasswordSecret) }}
+        checksum/config: {{ include (print $.Template.BasePath "/configuration.yaml") . | sha256sum }}
+        {{- if or (not .Values.auth.existingErlangSecret) (not .Values.auth.existingPasswordSecret) .Values.extraSecrets }}
         checksum/secret: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if and .Values.auth.tls.enabled (not .Values.auth.tls.existingSecret) }}
+        checksum/secret-cert: {{ include (print $.Template.BasePath "/certs.yaml") . | sha256sum }}
         {{- end }}
         {{- if or .Values.podAnnotations .Values.metrics.enabled }}
         {{- include "rabbitmq.podAnnotations" . | nindent 8 }}
         {{- end }}
     spec:
+      {{- include "rabbitmq.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.schedulerName }}
-      schedulerName: "{{ .Values.schedulerName }}"
+      schedulerName: {{ .Values.schedulerName | quote }}
       {{- end }}
-{{- include "rabbitmq.imagePullSecrets" . | indent 6 }}
-      {{- if .Values.rbacEnabled}}
-      serviceAccountName: {{ template "rabbitmq.fullname" . }}
-      {{- end }}
+      serviceAccountName: {{ template "rabbitmq.serviceAccountName" . }}
       {{- if .Values.affinity }}
-      affinity: {{- include "rabbitmq.tplValue" (dict "value" .Values.affinity "context" .) | nindent 8 }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" .) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.nodeSelector "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName }}
       {{- end }}
-      {{- if .Values.nodeSelector }}
-      nodeSelector: {{- toYaml .Values.nodeSelector | nindent 8 }}
+      {{- if .Values.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
-      {{- if .Values.tolerations }}
-      tolerations: {{- toYaml .Values.tolerations | nindent 8 }}
-      {{- end }}
-      terminationGracePeriodSeconds: 10
-      {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled .Values.securityContext.enabled }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      {{- if or (.Values.initContainers) (and .Values.volumePermissions.enabled .Values.persistence.enabled .Values.podSecurityContext) }}
       initContainers:
+        {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled .Values.podSecurityContext }}
         - name: volume-permissions
-          image: "{{ template "rabbitmq.volumePermissions.image" . }}"
-          imagePullPolicy: {{ default "" .Values.volumePermissions.image.pullPolicy | quote }}
-          command: ["/bin/chown", "-R", "{{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }}", "{{ .Values.persistence.path }}"]
+          image: {{ include "rabbitmq.volumePermissions.image" . }}
+          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - |
+              mkdir -p "/bitnami/rabbitmq/mnesia"
+              chown -R "{{ .Values.podSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}" "/bitnami/rabbitmq/mnesia"
           securityContext:
             runAsUser: 0
           {{- if .Values.volumePermissions.resources }}
-          resources: {{- toYaml .Values.volumePermissions.resources | indent 12 }}
+          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: data
-              mountPath: "{{ .Values.persistence.path }}"
+              mountPath: /bitnami/rabbitmq/mnesia
+        {{- end }}
+        {{- if .Values.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
+        {{- end }}
       {{- end }}
       containers:
         - name: rabbitmq
           image: {{ template "rabbitmq.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-          command:
-            - bash
-            - -ec
-            - |
-               mkdir -p /opt/bitnami/rabbitmq/.rabbitmq/
-               mkdir -p /opt/bitnami/rabbitmq/etc/rabbitmq/
-               touch /opt/bitnami/rabbitmq/var/lib/rabbitmq/.start
-               #persist the erlang cookie in both places for server and cli tools
-               echo $RABBITMQ_ERL_COOKIE > /opt/bitnami/rabbitmq/var/lib/rabbitmq/.erlang.cookie
-               cp /opt/bitnami/rabbitmq/var/lib/rabbitmq/.erlang.cookie /opt/bitnami/rabbitmq/.rabbitmq/
-               #change permission so only the user has access to the cookie file
-               chmod 600 /opt/bitnami/rabbitmq/.rabbitmq/.erlang.cookie /opt/bitnami/rabbitmq/var/lib/rabbitmq/.erlang.cookie
-               #copy the mounted configuration to both places
-               cp  /opt/bitnami/rabbitmq/conf/* /opt/bitnami/rabbitmq/etc/rabbitmq
-               # Apply resources limits
-               {{- if .Values.rabbitmq.setUlimitNofiles }}
-               ulimit -n "${RABBITMQ_ULIMIT_NOFILES}"
-               {{- end }}
-               #replace the default password that is generated
-               sed -i "/CHANGEME/cdefault_pass=${RABBITMQ_PASSWORD//\\/\\\\}" /opt/bitnami/rabbitmq/etc/rabbitmq/rabbitmq.conf
-               {{- if and .Values.persistence.enabled .Values.forceBoot.enabled }}
-               if [ -d "{{ .Values.persistence.path }}/mnesia/${RABBITMQ_NODENAME}" ]; then rabbitmqctl force_boot; fi
-               {{- end }}
-               exec rabbitmq-server
-          {{- if .Values.resources }}
-          resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- if .Values.containerSecurityContext }}
+          securityContext: {{- toYaml .Values.containerSecurityContext | nindent 12 }}
           {{- end }}
-          volumeMounts:
-            {{- if .Values.extraVolumeMounts }}
-            {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
-            {{- end }}
-            - name: config-volume
-              mountPath: /opt/bitnami/rabbitmq/conf
-            - name: healthchecks
-              mountPath: /usr/local/sbin/rabbitmq-api-check
-              subPath: rabbitmq-api-check
-            - name: healthchecks
-              mountPath: /usr/local/sbin/rabbitmq-health-check
-              subPath: rabbitmq-health-check
-            {{- if .Values.rabbitmq.tls.enabled }}
-            - name: {{ template "rabbitmq.fullname" . }}-certs
-              mountPath: /opt/bitnami/rabbitmq/certs
-            {{- end }}
-            - name: data
-              mountPath: "{{ .Values.persistence.path }}"
-            {{- if .Values.rabbitmq.loadDefinition.enabled }}
-            - name: load-definition-volume
-              mountPath: /app
-              readOnly: true
-            {{- end }}
-          ports:
-            - name: epmd
-              containerPort: 4369
-            - name: amqp
-              containerPort: {{ .Values.service.port }}
-            {{- if .Values.rabbitmq.tls.enabled }}
-            - name: amqp-ssl
-              containerPort: {{ .Values.service.tlsPort }}
-            {{- end }}
-            - name: dist
-              containerPort: {{ .Values.service.distPort }}
-            - name: stats
-              containerPort: {{ .Values.service.managerPort }}
-            {{- if .Values.metrics.enabled }}
-            - name: metrics
-              containerPort: {{ .Values.metrics.port }}
-            {{- end }}
-            {{- if .Values.service.extraContainerPorts }}
-            {{- toYaml .Values.service.extraContainerPorts | nindent 12 }}
-            {{- end }}
-            {{- if .Values.livenessProbe.enabled }}
-          livenessProbe:
-            exec:
-              command:
-                {{- if .Values.livenessProbe.commandOverride }}
-                {{- toYaml .Values.livenessProbe.commandOverride | nindent 16 }}
-                {{- else }}
-                - sh
-                - -c
-                - rabbitmq-api-check "http://{{ .Values.rabbitmq.username }}:$RABBITMQ_PASSWORD@127.0.0.1:{{ .Values.service.managerPort }}/api/healthchecks/node" '{"status":"ok"}'
-                {{- end }}
-            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
-            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
-            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
-            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
-            successThreshold: {{ .Values.livenessProbe.successThreshold }}
+          {{- if .Values.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.readinessProbe.enabled }}
-          readinessProbe:
-            exec:
-              command:
-                {{- if .Values.readinessProbe.commandOverride }}
-                {{- toYaml .Values.readinessProbe.commandOverride | nindent 16 }}
-                {{- else }}
-                - sh
-                - -c
-                - rabbitmq-health-check "http://{{ .Values.rabbitmq.username }}:$RABBITMQ_PASSWORD@127.0.0.1:{{ .Values.service.managerPort }}/api/healthchecks/node" '{"status":"ok"}'
-                {{- end }}
-            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
-            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
-            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
-            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
-            successThreshold: {{ .Values.readinessProbe.successThreshold }}
-          {{- end }}
-          {{- if and (gt (.Values.replicas | int) 1) ( eq .Values.rabbitmq.clustering.rebalance true) }}
-          lifecycle:
-            postStart:
-              exec:
-                command:
-                  - /bin/sh
-                  - -c
-                  - until rabbitmqctl cluster_status >/dev/null; do echo Waiting for
-                    cluster readiness...; sleep 5 ; done; rabbitmq-queues rebalance "all"
+          {{- if .Values.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
@@ -212,39 +125,39 @@ spec:
             - name: K8S_SERVICE_NAME
               value: "{{ template "rabbitmq.fullname" . }}-headless"
             - name: K8S_ADDRESS_TYPE
-              value: {{ .Values.rabbitmq.clustering.address_type }}
-            {{- if (eq "hostname" .Values.rabbitmq.clustering.address_type) }}
-            - name: RABBITMQ_NODENAME
-              value: "rabbit@$(MY_POD_NAME).$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.{{ .Values.rabbitmq.clustering.k8s_domain }}"
+              value: {{ .Values.clustering.addressType }}
+            - name: RABBITMQ_FORCE_BOOT
+              value: {{ ternary "yes" "no" .Values.clustering.forceBoot | quote }}
+            {{- if (eq "hostname" .Values.clustering.addressType) }}
+            - name: RABBITMQ_NODE_NAME
+              value: "rabbit@$(MY_POD_NAME).$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.{{ .Values.clusterDomain }}"
             - name: K8S_HOSTNAME_SUFFIX
-              value: ".$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.{{ .Values.rabbitmq.clustering.k8s_domain }}"
+              value: ".$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.{{ .Values.clusterDomain }}"
             {{- else }}
-            - name: RABBITMQ_NODENAME
-              {{- if .Values.rabbitmq.rabbitmqClusterNodeName }}
-              value: {{ .Values.rabbitmq.rabbitmqClusterNodeName | quote }}
-              {{- else }}
+            - name: RABBITMQ_NODE_NAME
               value: "rabbit@$(MY_POD_NAME)"
-              {{- end }}
             {{- end }}
-            {{- if .Values.ldap.enabled }}
+            - name: RABBITMQ_MNESIA_DIR
+              value: "/bitnami/rabbitmq/mnesia/$(RABBITMQ_NODE_NAME)"
             - name: RABBITMQ_LDAP_ENABLE
-              value: "yes"
+              value: {{ ternary "yes" "no" .Values.ldap.enabled | quote }}
+            {{- if .Values.ldap.enabled }}
             - name: RABBITMQ_LDAP_TLS
               value: {{ ternary "yes" "no" .Values.ldap.tls.enabled | quote }}
-            - name: RABBITMQ_LDAP_SERVER
-              value: {{ .Values.ldap.server }}
-            - name: RABBITMQ_LDAP_SERVER_PORT
+            - name: RABBITMQ_LDAP_SERVERS
+              value: {{ .Values.ldap.servers | join "," | quote }}
+            - name: RABBITMQ_LDAP_SERVERS_PORT
               value: {{ .Values.ldap.port | quote }}
             - name: RABBITMQ_LDAP_USER_DN_PATTERN
               value: {{ .Values.ldap.user_dn_pattern }}
             {{- end }}
             - name: RABBITMQ_LOGS
-              value: {{ .Values.rabbitmq.logs | quote }}
+              value: {{ .Values.logs | quote }}
             - name: RABBITMQ_ULIMIT_NOFILES
-              value: {{ .Values.rabbitmq.ulimitNofiles | quote }}
-            {{- if and .Values.rabbitmq.maxAvailableSchedulers }}
+              value: {{ .Values.ulimitNofiles | quote }}
+            {{- if and .Values.maxAvailableSchedulers }}
             - name: RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS
-              value: {{ printf "+S %s:%s" (toString .Values.rabbitmq.maxAvailableSchedulers) (toString .Values.rabbitmq.onlineSchedulers) -}}
+              value: {{ printf "+S %s:%s" (toString .Values.maxAvailableSchedulers) (toString .Values.onlineSchedulers) -}}
             {{- end }}
             - name: RABBITMQ_USE_LONGNAME
               value: "true"
@@ -253,94 +166,203 @@ spec:
                 secretKeyRef:
                   name: {{ template "rabbitmq.secretErlangName" . }}
                   key: rabbitmq-erlang-cookie
+            {{- if .Values.loadDefinition.enabled }}
+            - name: RABBITMQ_LOAD_DEFINITIONS
+              value: "yes"
+            - name: RABBITMQ_SECURE_PASSWORD
+              value: "no"
+            {{- else }}
+            - name: RABBITMQ_LOAD_DEFINITIONS
+              value: "no"
+            - name: RABBITMQ_SECURE_PASSWORD
+              value: "yes"
+            - name: RABBITMQ_USERNAME
+              value: {{ .Values.auth.username | quote }}
             - name: RABBITMQ_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ template "rabbitmq.secretPasswordName" . }}
                   key: rabbitmq-password
-            {{- range $key, $value := .Values.rabbitmq.env }}
-            - name: {{ $key }}
-              value: {{ $value | quote }}
             {{- end }}
-      {{- if .Values.securityContext.enabled }}
-      securityContext:
-        fsGroup: {{ .Values.securityContext.fsGroup }}
-        runAsUser: {{ .Values.securityContext.runAsUser }}
-        {{- if .Values.securityContext.extra }}
-        {{- toYaml .Values.securityContext.extra | nindent 8 }}
+            - name: RABBITMQ_PLUGINS
+              value: {{ include "rabbitmq.plugins" . | quote }}
+            {{- if .Values.communityPlugins }}
+            - name: RABBITMQ_COMMUNITY_PLUGINS
+              value: {{ .Values.communityPlugins | quote }}
+            {{- end }}
+            {{- if .Values.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.extraEnvVarsCM .Values.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ tpl .Values.extraEnvVarsCM . | quote }}
+            {{- end }}
+            {{- if .Values.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ tpl .Values.extraEnvVarsSecret . | quote }}
+            {{- end }}
+          {{- end }}
+          ports:
+            - name: amqp
+              containerPort: 5672
+            {{- if .Values.auth.tls.enabled }}
+            - name: amqp-ssl
+              containerPort: 5671
+            {{- end }}
+            - name: dist
+              containerPort: 25672
+            - name: stats
+              containerPort: 15672
+            - name: epmd
+              containerPort: 4369
+            {{- if .Values.metrics.enabled }}
+            - name: metrics
+              containerPort: 9419
+            {{- end }}
+            {{- if .Values.extraContainerPorts }}
+            {{- toYaml .Values.extraContainerPorts | nindent 12 }}
+            {{- end }}
+          {{- if .Values.livenessProbe.enabled }}
+          livenessProbe:
+            exec:
+              command:
+                - /bin/bash
+                - -ec
+                - rabbitmq-diagnostics -q ping
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+          {{- else if .Values.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.readinessProbe.enabled }}
+          readinessProbe:
+            exec:
+              command:
+                - /bin/bash
+                - -ec
+                - rabbitmq-diagnostics -q check_running && rabbitmq-diagnostics -q check_local_alarms
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+          {{- else if .Values.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.resources }}
+          resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- end }}
+          lifecycle:
+          {{- if and .Values.clustering.rebalance (gt (.Values.replicaCount | int) 1) }}
+            postStart:
+              exec:
+                command:
+                  - /bin/bash
+                  - -ec
+                  - |
+                    until rabbitmqctl cluster_status >/dev/null; do
+                        echo "Waiting for cluster readiness..."
+                        sleep 5
+                    done
+                    rabbitmq-queues rebalance "all"
+          {{- end }}
+            preStop:
+              exec:
+                command:
+                  - /bin/bash
+                  - -ec
+                  - |
+                    if [[ -f /opt/bitnami/scripts/rabbitmq/nodeshutdown.sh ]]; then
+                        /opt/bitnami/scripts/rabbitmq/nodeshutdown.sh -t {{ .Values.terminationGracePeriodSeconds | quote }} -d  {{ ternary "true" "false" .Values.image.debug | quote }}
+                    else
+                        rabbitmqctl stop_app
+                    fi
+          volumeMounts:
+            - name: configuration
+              mountPath: /bitnami/rabbitmq/conf
+            - name: data
+              mountPath: /bitnami/rabbitmq/mnesia
+            {{- if .Values.auth.tls.enabled }}
+            - name: certs
+              mountPath: /opt/bitnami/rabbitmq/certs
+            {{- end }}
+            {{- if .Values.loadDefinition.enabled }}
+            - name: load-definition-volume
+              mountPath: /app
+              readOnly: true
+            {{- end }}
+            {{- if .Values.extraVolumeMounts }}
+            {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
+            {{- end }}
+        {{- if .Values.sidecars }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
-      {{- end }}
       volumes:
-        {{- if .Values.rabbitmq.tls.enabled }}
-        - name: {{ template "rabbitmq.fullname" . }}-certs
+        {{- if .Values.persistence.volumes }}
+        {{- toYaml .Values.persistence.volumes | nindent 8 }}
+        {{- end }}
+        {{- if .Values.auth.tls.enabled }}
+        - name: certs
           secret:
-            secretName: {{ if .Values.rabbitmq.tls.existingSecret }}{{ .Values.rabbitmq.tls.existingSecret }}{{- else }}{{ template "rabbitmq.fullname" . }}-certs{{- end }}
+            secretName: {{ template "rabbitmq.secretTLSName" . }}
             items:
-              - key: ca.crt
+              - key: {{ ternary "tls.crt" "ca.crt" .Values.auth.tls.existingSecretFullChain }}
                 path: ca_certificate.pem
               - key: tls.crt
                 path: server_certificate.pem
               - key: tls.key
                 path: server_key.pem
         {{- end }}
-        - name: config-volume
+        - name: configuration
           configMap:
             name: {{ template "rabbitmq.fullname" . }}-config
             items:
               - key: rabbitmq.conf
                 path: rabbitmq.conf
-              {{- if .Values.rabbitmq.advancedConfiguration}}
+              {{- if .Values.advancedConfiguration}}
               - key: advanced.config
                 path: advanced.config
               {{- end }}
-              - key: enabled_plugins
-                path: enabled_plugins
-        - name: healthchecks
-          configMap:
-            name: {{ template "rabbitmq.fullname" . }}-healthchecks
-            items:
-              - key: rabbitmq-health-check
-                path: rabbitmq-health-check
-                mode: 111
-              - key: rabbitmq-api-check
-                path: rabbitmq-api-check
-                mode: 111
-        {{- if .Values.rabbitmq.loadDefinition.enabled }}
+        {{- if .Values.loadDefinition.enabled }}
         - name: load-definition-volume
           secret:
-            secretName: {{ tpl .Values.rabbitmq.loadDefinition.secretName . | quote }}
+            secretName: {{ tpl .Values.loadDefinition.existingSecret . | quote }}
         {{- end }}
         {{- if .Values.extraVolumes }}
         {{- toYaml .Values.extraVolumes | nindent 8 }}
         {{- end }}
-      {{- if not .Values.persistence.enabled }}
+  {{- if not (contains "data" (quote .Values.persistence.volumes)) }}
+  {{- if not .Values.persistence.enabled }}
         - name: data
           emptyDir: {}
-      {{- else if .Values.persistence.existingClaim }}
+  {{- else if .Values.persistence.existingClaim }}
         - name: data
           persistentVolumeClaim:
-          {{- with .Values.persistence.existingClaim }}
+            {{- with .Values.persistence.existingClaim }}
             claimName: {{ tpl . $ }}
-          {{- end }}
+            {{- end }}
   {{- else }}
   volumeClaimTemplates:
     - metadata:
         name: data
-        labels:
-          app: {{ template "rabbitmq.name" . }}
-          release: "{{ .Release.Name }}"
-          heritage: "{{ .Release.Service }}"
+        labels: {{- include "common.labels.matchLabels" . | nindent 10 }}
       spec:
         accessModes:
           - {{ .Values.persistence.accessMode | quote }}
         resources:
           requests:
             storage: {{ .Values.persistence.size | quote }}
-        {{ include "rabbitmq.storageClass" . }}
+        {{ include "common.storage.class" (dict "persistence" .Values.persistence "global" .Values.global) }}
         {{- if .Values.persistence.selector }}
-        selector:
-          {{- with .Values.persistence.selector -}}
-          {{ toYaml . | nindent 10 }}
-          {{- end -}}
+        selector: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.selector "context" $) | nindent 10 }}
         {{- end -}}
+  {{- end }}
   {{- end }}

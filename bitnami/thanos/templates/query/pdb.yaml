@@ -1,0 +1,19 @@
+{{- $query := (include "thanos.query.values" . | fromYaml) -}}
+{{- if and $query.enabled $query.pdb.create }}
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "common.names.fullname" . }}-query
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: query
+spec:
+  {{- if $query.pdb.minAvailable }}
+  minAvailable: {{ $query.pdb.minAvailable }}
+  {{- end }}
+  {{- if $query.pdb.maxUnavailable }}
+  maxUnavailable: {{ $query.pdb.maxUnavailable }}
+  {{- end }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: query
+{{- end }}

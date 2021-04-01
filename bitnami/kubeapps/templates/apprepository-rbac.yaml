@@ -1,13 +1,10 @@
 {{- if .Values.rbac.create -}}
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: Role
 metadata:
   name: {{ template "kubeapps.apprepository.fullname" . }}
-  labels:
+  labels:{{ include "kubeapps.extraAppLabels" . | nindent 4 }}
     app: {{ template "kubeapps.apprepository.fullname" . }}
-    chart: {{ template "kubeapps.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
 rules:
   - apiGroups:
       - ""
@@ -15,6 +12,7 @@ rules:
       - events
     verbs:
       - create
+      - patch
   - apiGroups:
       - batch
     resources:
@@ -43,15 +41,12 @@ rules:
       - update
       - watch
 ---
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: RoleBinding
 metadata:
   name: {{ template "kubeapps.apprepository.fullname" . }}
-  labels:
+  labels:{{ include "kubeapps.extraAppLabels" . | nindent 4 }}
     app: {{ template "kubeapps.apprepository.fullname" . }}
-    chart: {{ template "kubeapps.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -62,7 +57,7 @@ subjects:
     namespace: {{ .Release.Namespace }}
 ---
 # Define role, but no binding, so users can be bound to this role
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: Role
 metadata:
   name: {{ .Release.Name }}-repositories-read
@@ -76,7 +71,7 @@ rules:
       - get
 ---
 # Define role, but no binding, so users can be bound to this role
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: Role
 metadata:
   name: {{ .Release.Name }}-repositories-write
@@ -97,15 +92,12 @@ rules:
 # The Kubeapps app repository controller can read and watch its own
 # AppRepository resources cluster-wide. The read and write cluster-roles can
 # also be bound to users in specific namespaces as required.
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
   name: "kubeapps:{{ .Release.Namespace }}:apprepositories-read"
-  labels:
+  labels:{{ include "kubeapps.extraAppLabels" . | nindent 4 }}
     app: {{ template "kubeapps.apprepository.fullname" . }}
-    chart: {{ template "kubeapps.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
 rules:
   - apiGroups:
       - kubeapps.com
@@ -117,15 +109,12 @@ rules:
       - list
       - watch
 ---
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRoleBinding
 metadata:
   name: "kubeapps:controller:{{ .Release.Namespace }}:apprepositories-read"
-  labels:
+  labels:{{ include "kubeapps.extraAppLabels" . | nindent 4 }}
     app: {{ template "kubeapps.apprepository.fullname" . }}
-    chart: {{ template "kubeapps.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -135,15 +124,12 @@ subjects:
     name: {{ template "kubeapps.apprepository.fullname" . }}
     namespace: {{ .Release.Namespace }}
 ---
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
   name: "kubeapps:{{ .Release.Namespace }}:apprepositories-write"
-  labels:
+  labels:{{ include "kubeapps.extraAppLabels" . | nindent 4 }}
     app: {{ template "kubeapps.apprepository.fullname" . }}
-    chart: {{ template "kubeapps.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
 rules:
   - apiGroups:
       - kubeapps.com
@@ -156,5 +142,20 @@ rules:
     resources:
       - secrets
     verbs:
-      - create
+      - '*'
+---
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
+kind: ClusterRole
+metadata:
+  name: "kubeapps:{{ .Release.Namespace }}:apprepositories-refresh"
+  labels:{{ include "kubeapps.extraAppLabels" . | nindent 4 }}
+    app: {{ template "kubeapps.apprepository.fullname" . }}
+rules:
+  - apiGroups:
+      - kubeapps.com
+    resources:
+      - apprepositories
+    verbs:
+      - get
+      - update
 {{- end -}}

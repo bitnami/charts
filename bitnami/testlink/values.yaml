@@ -8,13 +8,17 @@
 #     - myRegistryKeySecretName
 #   storageClass: myStorageClass
 
+## Force target Kubernetes version (using Helm capabilites if not set)
+##
+kubeVersion:
+
 ## Bitnami TestLink image version
 ## ref: https://hub.docker.com/r/bitnami/testlink/tags/
 ##
 image:
   registry: docker.io
   repository: bitnami/testlink
-  tag: 1.9.20-debian-10-r106
+  tag: 1.9.20-debian-10-r352
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -24,37 +28,52 @@ image:
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
   ##
-  # pullSecrets:
+  pullSecrets:
   #   - myRegistryKeySecretName
+
+  ## Set to true if you would like to see extra information on logs
+  ##
+  debug: false
 
 ## String to partially override testlink.fullname template (will maintain the release name)
 ##
-# nameOverride:
+nameOverride:
 
 ## String to fully override testlink.fullname template
 ##
-# fullnameOverride:
+fullnameOverride:
 
-## List of nodeSelectors to limit where testlink can run
-## i.e
+## Number of replicas (requires ReadWriteMany PVC support)
 ##
-## nodeSelector:
-##   kops.k8s.io/instancegroup: my-ig
-nodeSelector: {}
+replicaCount: 1
 
-## Admin username
-## ref: https://github.com/bitnami/bitnami-docker-testlink#environment-variables
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases:
+  # Necessary for apache-exporter to work
+  - ip: "127.0.0.1"
+    hostnames:
+      - "status.localhost"
+
+## Skip TestLink installation wizard. Useful for migrations and restoring from SQL dump
+## ref: https://github.com/bitnami/bitnami-docker-testlink#configuration
+##
+testlinkSkipInstall: false
+
+## User of the application
+## ref: https://github.com/bitnami/bitnami-docker-testlink#configuration
 ##
 testlinkUsername: user
 
-## Admin user password
+## Application password
 ## Defaults to a random 10-character alphanumeric string if not set
-## ref: https://github.com/bitnami/bitnami-docker-testlink#environment-variables
+## ref: https://github.com/bitnami/bitnami-docker-testlink#configuration
 ##
-# testlinkPassword:
+testlinkPassword:
 
-## Admin user email
-## ref: https://github.com/bitnami/bitnami-docker-testlink#environment-variables
+## Admin email
+## ref: https://github.com/bitnami/bitnami-docker-testlink#configuration
 ##
 testlinkEmail: user@example.com
 
@@ -63,49 +82,106 @@ testlinkEmail: user@example.com
 ##
 testlinkLanguage: en_US
 
-## Set to `yes` to allow the container to be started with blank passwords
+## Set to `true` to allow the container to be started with blank passwords
 ## ref: https://github.com/bitnami/bitnami-docker-testlink#environment-variables
-allowEmptyPassword: "yes"
+##
+allowEmptyPassword: true
+
+## Container command (using container default if not set)
+##
+command:
+## Container args (using container default if not set)
+##
+args:
+
+## Common annotations to add to all TestLink resources (sub-charts are not considered). Evaluated as a template
+##
+commonAnnotations: {}
+
+## Common labels to add to all TestLink resources (sub-charts are not considered). Evaluated as a template
+##
+commonLabels: {}
+
+## Update strategy - only really applicable for deployments with RWO PVs attached
+## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
+## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
+## terminate the single previous pod, so that the new, incoming pod can attach to the PV
+##
+updateStrategy:
+  type: RollingUpdate
+
+## An array to add extra env vars
+## For example:
+##
+extraEnvVars: []
+#  - name: BEARER_AUTH
+#    value: true
+
+## ConfigMap with extra environment variables
+##
+extraEnvVarsCM:
+
+## Secret with extra environment variables
+##
+extraEnvVarsSecret:
+
+## Extra volumes to add to the deployment
+##
+extraVolumes: []
+
+## Extra volume mounts to add to the container
+##
+extraVolumeMounts: []
+
+## Extra init containers to add to the deployment
+##
+initContainers: []
+
+## Extra sidecar containers to add to the deployment
+##
+sidecars: []
+
+## Tolerations for pod assignment. Evaluated as a template.
+## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+##
+tolerations: []
+
+## Use existing secret for the application password
+##
+existingSecret:
 
 ##
 ## External database configuration
 ##
 externalDatabase:
-
-  ## If set to 'true' db and db user will be created as specified
-  create: false
-
-  ## Database user privileges
-  # privileges: ALL
-
-  ## admin user to create db and user.
-  # rootUser:
-  # rootPassword:
-
   ## Database host
+  ##
   host:
 
   ## Database host
+  ##
   port: 3306
 
   ## Database user
+  ##
   user: bn_testlink
 
   ## Database password
+  ##
   password:
 
   ## Database name
+  ##
   database: bitnami_testlink
 
 ## SMTP mail delivery configuration
-## ref: https://github.com/bitnami/bitnami-docker-testlink#smtp-configuration
+## ref: https://github.com/bitnami/bitnami-docker-testlink/#smtp-configuration
 ##
-smtpEnable: false
-# smtpHost:
-# smtpPort:
-# smtpUser:
-# smtpPassword:
-# smtpConnectionMode:
+smtpHost:
+smtpPort:
+smtpUser:
+smtpPassword:
+smtpProtocol:
 
 ##
 ## MariaDB chart configuration
@@ -114,31 +190,32 @@ smtpEnable: false
 ##
 mariadb:
   ## Whether to deploy a mariadb server to satisfy the applications database requirements. To use an external database set this to false and configure the externalDatabase parameters
+  ##
   enabled: true
-  ## Disable MariaDB replication
-  replication:
-    enabled: false
 
-  ## Create a database and a database user
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-user-on-first-run
+  ## MariaDB architecture. Allowed values: standalone or replication
   ##
-  db:
-    name: bitnami_testlink
-    user: bn_testlink
-    ## If the password is not specified, mariadb will generates a random password
+  architecture: standalone
+
+  ## MariaDB Authentication parameters
+  ##
+  auth:
+    ## MariaDB root password
+    ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-the-root-password-on-first-run
     ##
-    # password:
+    rootPassword: ""
+    ## MariaDB custom user and database
+    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-on-first-run
+    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-user-on-first-run
+    ##
+    database: bitnami_testlink
+    username: bn_testlink
+    password: ""
 
-  ## MariaDB admin password
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#setting-the-root-password-on-first-run
-  ##
-  # rootUser:
-  #   password:
-
-  ## Enable persistence using Persistent Volume Claims
-  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
-  ##
-  master:
+  primary:
+    ## Enable persistence using Persistent Volume Claims
+    ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+    ##
     persistence:
       enabled: true
       ## mariadb data Persistent Volume Storage Class
@@ -148,9 +225,22 @@ mariadb:
       ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
       ##   GKE, AWS & OpenStack)
       ##
-      # storageClass: "-"
-      accessMode: ReadWriteOnce
+      storageClass:
+      accessModes:
+        - ReadWriteOnce
       size: 8Gi
+      ## Set path in case you want to use local host path volumes (not recommended in production)
+      ##
+      hostPath:
+      ## Use an existing PVC
+      ##
+      existingClaim:
+
+## Container ports
+##
+containerPorts:
+  http: 8080
+  https: 8443
 
 ## Kubernetes configuration
 ## For minikube, set this to NodePort, elsewhere use LoadBalancer
@@ -161,11 +251,18 @@ service:
   port: 80
   # HTTPS Port
   httpsPort: 443
-  ##
+  ## clusterIP:
+  ## Control hosts connecting to "LoadBalancer" only
+  ## loadBalancerSourceRanges:
+  ##   - 0.0.0.0/0
+  ## loadBalancerIP for the TestLink Service (optional, cloud specific)
+  ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
   ## loadBalancerIP:
+  ##
   ## nodePorts:
   ##   http: <to set explicitly, choose port between 30000-32767>
   ##   https: <to set explicitly, choose port between 30000-32767>
+  ##
   nodePorts:
     http: ""
     https: ""
@@ -173,51 +270,23 @@ service:
   ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: Cluster
-  ## Provide any additional annotations which may be required.
-  ## Evaluated as a template
-  ##
-  annotations: {}
-
-## Enable persistence using Persistent Volume Claims
-## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
-##
-persistence:
-  enabled: true
-  testlink:
-    ## testlink data Persistent Volume Storage Class
-    ## If defined, storageClassName: <storageClass>
-    ## If set to "-", storageClassName: "", which disables dynamic provisioning
-    ## If undefined (the default) or set to null, no storageClassName spec is
-    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-    ##   GKE, AWS & OpenStack)
-    ##
-    # storageClass: "-"
-    accessMode: ReadWriteOnce
-    size: 8Gi
-
-## Configure resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-##
-resources:
-  requests:
-    memory: 512Mi
-    cpu: 300m
-
-## Pod annotations
-## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-##
-podAnnotations: {}
 
 ## Configure the ingress resource that allows you to access the
-## Testlink installation. Set up the URL
+## TestLink installation. Set up the URL
 ## ref: http://kubernetes.io/docs/user-guide/ingress/
 ##
 ingress:
   ## Set to true to enable ingress record generation
+  ##
   enabled: false
 
   ## Set this to true in order to add the corresponding annotations for cert-manager
+  ##
   certManager: false
+
+  ## When the ingress is enabled, a host pointing to this will be created
+  ##
+  hostname: testlink.local
 
   ## Ingress annotations done as key:value pairs
   ## For a full list of possible ingress annotations, please see
@@ -225,27 +294,28 @@ ingress:
   ##
   ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
   ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
-  annotations:
+  ##
+  annotations: {}
   #  kubernetes.io/ingress.class: nginx
 
-  ## The list of hostnames to be covered with this ingress record.
-  ## Most likely this will be just one host, but in the event more hosts are needed, this is an array
+  ## The list of additional hostnames to be covered with this ingress record.
+  ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
+  ## hosts:
+  ## - name: testlink.local
+  ##   path: /
+  ##   pathType: ImplementationSpecific
+  ##
   hosts:
-  - name: testlink.local
-    path: /
+  ## The tls configuration for the ingress
+  ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ##
 
-    ## Set this to true in order to enable TLS on the ingress record
-    tls: false
-
-    ## Optionally specify the TLS hosts for the ingress record
-    ## Useful when the Ingress controller supports www-redirection
-    ## If not specified, the above host name will be used
-    # tlsHosts:
-    # - www.testlink.local
-    # - testlink.local
-
-    ## If TLS is set to true, you must declare what secret will store the key/certificate for TLS
-    tlsSecret: testlink.local-tls
+  ## tls:
+  ## - hosts:
+  ##     - testlink.local
+  ##   secretName: testlink.local-tls
+  ##
+  tls:
 
   secrets:
   ## If you're providing your own certificates, please use this to add the certificates as secrets
@@ -257,20 +327,205 @@ ingress:
   ##
   ## It is also possible to create and manage the certificates outside of this helm chart
   ## Please see README.md for more information
+  ##
   # - name: testlink.local-tls
-  #   key: |-
-  #     -----BEGIN RSA PRIVATE KEY-----
-  #     ...
-  #     -----END RSA PRIVATE KEY-----
-  #   certificate: |-
-  #     -----BEGIN CERTIFICATE-----
-  #     ...
-  #     -----END CERTIFICATE-----
+  #   key:
+  #   certificate:
+
+  ## Override API Version (automatically detected if not set)
+  ##
+  apiVersion:
+
+  ## Ingress Path
+  ##
+  path: /
+
+  ## Ingress Path type
+  ##
+  pathType: ImplementationSpecific
+
+## Control where client requests go, to the same pod or round-robin
+## Values: ClientIP or None
+## ref: https://kubernetes.io/docs/user-guide/services/
+##
+sessionAffinity: "None"
+
+## Enable persistence using Persistent Volume Claims
+## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+##
+persistence:
+  enabled: true
+  ## TestLink Data Persistent Volume Storage Class
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
+  ##
+  # storageClass: "-"
+
+  ## A manually managed Persistent Volume and Claim
+  ## Requires persistence.enabled: true
+  ## If defined, PVC must be created manually before volume will be bound
+  ##
+  accessMode: ReadWriteOnce
+  size: 8Gi
+
+  ## A manually managed Persistent Volume Claim
+  ## Requires persistence.enabled: true
+  ## If defined, PVC must be created manually before volume will be bound
+  ##
+  # existingClaim:
+
+  ## If defined, the testlink-data volume will mount to the specified hostPath.
+  ## Requires persistence.enabled: true
+  ## Requires persistence.existingClaim: nil|false
+  ## Default: nil.
+  ##
+  hostPath:
+
+## Init containers parameters:
+## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
+##
+volumePermissions:
+  enabled: false
+  image:
+    registry: docker.io
+    repository: bitnami/bitnami-shell
+    tag: "10"
+    pullPolicy: Always
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ##
+    pullSecrets: []
+    ##   - myRegistryKeySecretName
+  ## Init containers' resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    ## We usually recommend not to specify default resources and to leave this as a conscious
+    ## choice for the user. This also increases chances charts run on environments with little
+    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ##
+    limits: {}
+    ##   cpu: 100m
+    ##   memory: 128Mi
+    ##
+    requests: {}
+    ##   cpu: 100m
+    ##   memory: 128Mi
+    ##
+
+## Pod affinity preset
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+##
+podAffinityPreset: ""
+
+## Pod anti-affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+##
+podAntiAffinityPreset: soft
+
+## Node affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+## Allowed values: soft, hard
+##
+nodeAffinityPreset:
+  ## Node affinity type
+  ## Allowed values: soft, hard
+  ##
+  type: ""
+  ## Node label key to match
+  ## E.g.
+  ## key: "kubernetes.io/e2e-az-name"
+  ##
+  key: ""
+  ## Node label values to match
+  ## E.g.
+  ## values:
+  ##   - e2e-az1
+  ##   - e2e-az2
+  ##
+  values: []
 
 ## Affinity for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
+
+## Node labels for pod assignment. Evaluated as a template.
+## ref: https://kubernetes.io/docs/user-guide/node-selection/
+##
+nodeSelector: {}
+
+## Configure resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+##
+resources:
+  requests:
+    memory: 512Mi
+    cpu: 300m
+
+## Configure Pods Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+##
+podSecurityContext:
+  enabled: true
+  fsGroup: 1001
+
+## Configure Container Security Context (only main container)
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+##
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1001
+
+## Configure extra options for liveness and readiness probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+##
+livenessProbe:
+  enabled: true
+  path: "/login.php"
+  initialDelaySeconds: 120
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+readinessProbe:
+  enabled: true
+  path: "/login.php"
+  initialDelaySeconds: 30
+  periodSeconds: 5
+  timeoutSeconds: 3
+  failureThreshold: 6
+  successThreshold: 1
+
+## Custom Liveness probe
+##
+customLivenessProbe: {}
+
+## Custom Readiness probe
+##
+customReadinessProbe: {}
+
+## lifecycleHooks for the container to automate configuration before or after startup.
+##
+lifecycleHooks:
+
+## Pod annotations
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+##
+podAnnotations: {}
+
+## Pod extra labels
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
+podLabels: {}
 
 ## Prometheus Exporter / Metrics
 ##
@@ -279,19 +534,68 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.8.0-debian-10-r51
+    tag: 0.8.0-debian-10-r326
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
     ##
-    # pullSecrets:
+    pullSecrets:
     #   - myRegistryKeySecretName
-     ## Metrics exporter pod Annotation and Labels
-  podAnnotations:
-    prometheus.io/scrape: "true"
-    prometheus.io/port: "9117"
   ## Metrics exporter resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
   # resources: {}
+  ## Metrics exporter pod Annotation and Labels
+  ##
+  podAnnotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9117"
+
+# Add custom certificates and certificate authorities to redmine container
+certificates:
+  customCertificate:
+    certificateSecret: ""
+    chainSecret: {}
+    # name: secret-name
+    # key: secret-key
+    certificateLocation: /etc/ssl/certs/ssl-cert-snakeoil.pem
+    keyLocation: /etc/ssl/private/ssl-cert-snakeoil.key
+    chainLocation: /etc/ssl/certs/mychain.pem
+  customCAs: []
+  ## Override container command
+  ##
+  command:
+  ## Override container args
+  ##
+  args:
+  # - secret: custom-CA
+  # - secret: more-custom-CAs
+  ## An array to add extra env vars
+  ##
+  extraEnvVars: []
+
+  ## ConfigMap with extra environment variables
+  ##
+  extraEnvVarsCM:
+
+  ## Secret with extra environment variables
+  ##
+  extraEnvVarsSecret:
+
+  image:
+    registry: docker.io
+    repository: bitnami/bitnami-shell
+    tag: "10"
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+    # pullPolicy:
+    pullSecrets: []
+    #   - myRegistryKeySecretName
+
+## Array with extra yaml to deploy with the chart. Evaluated as a template
+##
+extraDeploy: []

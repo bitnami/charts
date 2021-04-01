@@ -33,8 +33,8 @@
           "sliderMax": 100,
           "sliderUnit": "Gi",
           "hidden": {
-            "condition": false,
-            "value": "persistence.enabled"
+            "value": false,
+            "path": "persistence/enabled"
           }
         }
       }
@@ -72,7 +72,7 @@
     "ingress": {
       "type": "object",
       "form": true,
-      "title": "Ingress details",
+      "title": "Ingress Configuration",
       "properties": {
         "enabled": {
           "type": "boolean",
@@ -85,9 +85,22 @@
           "form": true,
           "title": "Hostname",
           "hidden": {
-            "condition": false,
-            "value": "ingress.enabled"
+            "value": false,
+            "path": "ingress/enabled"
           }
+        }
+      }
+    },
+    "service": {
+      "type": "object",
+      "form": true,
+      "title": "Service Configuration",
+      "properties": {
+        "type": {
+          "type": "string",
+          "form": true,
+          "title": "Service Type",
+          "description": "Allowed values: \"ClusterIP\", \"NodePort\" and \"LoadBalancer\""
         }
       }
     },

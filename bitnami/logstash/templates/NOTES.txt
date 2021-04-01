@@ -3,48 +3,40 @@
 
 Logstash can be accessed through following DNS names from within your cluster:
 
-    Logstash: {{ include "logstash.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
+    Logstash: {{ include "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
     {{- if .Values.metrics.enabled }}
-    Logstash Prometheus Metrics: {{ include "logstash.fullname" . }}-metrics.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} (port {{ .Values.metrics.service.port }})
+    Logstash Prometheus Metrics: {{ include "common.names.fullname" . }}-metrics.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} (port {{ .Values.metrics.service.port }})
     {{- end }}
-
 
 To access Logstash from outside the cluster execute the following commands:
 
 {{- if .Values.ingress.enabled }}
-{{- $ingressHost := first .Values.ingress.hosts }}
 
   You should be able to access your new Logstash server(s) through:
 
-    {{- range .Values.ingress.hosts }}
-    {{ if .tls }}https{{- else }}http{{ end }}://{{ .name }}
-    {{- end }}
-
-e.g.:
-
-    curl {{ if .tls }}https{{- else }}http{{ end }}://{{ $ingressHost.name }}
+    curl {{ if .Values.ingress.tls }}https{{- else }}http{{ end }}://{{ .Values.ingress.hostname }}
 
 {{- else if contains "NodePort" .Values.service.type }}
 
-    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "logstash.fullname" . }})
+    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "common.names.fullname" . }})
     export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
     echo "http://${NODE_IP}:${NODE_PORT}"
 
 {{- else if contains "LoadBalancer" .Values.service.type }}
 
      NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-           You can watch the status of by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ include "logstash.fullname" . }}'
-    export SERVICE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].port}" services {{ include "logstash.fullname" . }})
-    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "logstash.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+           You can watch the status of by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ include "common.names.fullname" . }}'
+    export SERVICE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].port}" services {{ include "common.names.fullname" . }})
+    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
     echo "http://${SERVICE_IP}:${SERVICE_PORT}"
 
 {{- else if contains "ClusterIP" .Values.service.type }}
 
-    export SERVICE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].port}" services {{ include "logstash.fullname" . }})
-    kubectl port-forward svc/{{ include "logstash.fullname" . }} ${SERVICE_PORT}:${SERVICE_PORT} &
+    export SERVICE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].port}" services {{ include "common.names.fullname" . }})
+    kubectl port-forward svc/{{ include "common.names.fullname" . }} ${SERVICE_PORT}:${SERVICE_PORT} &
     echo "http://127.0.0.1:${SERVICE_PORT}"
 
 {{- end }}
 
-{{ include "logstash.validateValues" . }}
-{{ include "logstash.checkRollingTags" . }}
+{{- include "logstash.validateValues" . }}
+{{- include "logstash.checkRollingTags" . }}

@@ -1,8 +1,17 @@
-apiVersion: v1
-name: tensorflow-resnet
-version: 2.0.14
-appVersion: 2.1.0
+annotations:
+  category: MachineLearning
+apiVersion: v2
+appVersion: 2.4.1
+dependencies:
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 1.x.x
 description: Open-source software library serving the ResNet machine learning model.
+engine: gotpl
+home: https://github.com/bitnami/charts/tree/master/bitnami/tensorflow-resnet
+icon: https://bitnami.com/assets/stacks/tensorflow-inception/img/tensorflow-inception-stack-220x234.png
 keywords:
   - tensorflow
   - serving
@@ -10,12 +19,12 @@ keywords:
   - machine
   - learning
   - library
-home: https://www.tensorflow.org/serving/
-icon: https://bitnami.com/assets/stacks/tensorflow-inception/img/tensorflow-inception-stack-220x234.png
-sources:
-  - https://github.com/bitnami/bitnami-docker-tensorflow-serving
-  - https://github.com/bitnami/bitnami-docker-tensorflow-resnet
 maintainers:
   - email: containers@bitnami.com
     name: Bitnami
-engine: gotpl
+name: tensorflow-resnet
+sources:
+  - https://github.com/bitnami/bitnami-docker-tensorflow-serving
+  - https://github.com/bitnami/bitnami-docker-tensorflow-resnet
+  - https://www.tensorflow.org/serving/
+version: 3.2.2

@@ -1,10 +1,10 @@
-apiVersion: apps/v1
+apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
-  name: {{ include "logstash.fullname" . }}
-  labels: {{- include "logstash.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
 spec:
-  serviceName: {{ include "logstash.fullname" . }}-headless
+  serviceName: {{ printf "%s-headless" (include "common.names.fullname" .) }}
   replicas: {{ .Values.replicaCount }}
   podManagementPolicy: {{ .Values.podManagementPolicy }}
   updateStrategy:
@@ -13,25 +13,33 @@ spec:
     rollingUpdate: null
     {{- end }}
   selector:
-    matchLabels: {{- include "logstash.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
   template:
     metadata:
-      labels: {{- include "logstash.labels" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
       annotations:
         checksum/configuration: {{ include (print $.Template.BasePath "/configuration-cm.yaml") . | sha256sum }}
         {{- if .Values.podAnnotations }}
-        {{- include "logstash.tplValue" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
     spec:
-{{- include "logstash.imagePullSecrets" . | nindent 6 }}
+      {{- include "logstash.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.affinity }}
-      affinity: {{- include "logstash.tplValue" (dict "value" .Values.affinity "context" $) | nindent 8 }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.nodeSelector }}
-      nodeSelector: {{- include "logstash.tplValue" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.tolerations }}
-      tolerations: {{- include "logstash.tplValue" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName | quote }}
@@ -52,12 +60,14 @@ spec:
             - name: LOGSTASH_CONF_FILENAME
               value: {{ .Values.configFileName | quote }}
             {{- end }}
+            - name: LOGSTASH_ENABLE_MULTIPLE_PIPELINES
+              value: {{ ternary "true" "false" .Values.enableMultiplePipelines | quote }}
             - name: LOGSTASH_EXPOSE_API
               value: {{ ternary "yes" "no" .Values.enableMonitoringAPI | quote }}
             - name: LOGSTASH_API_PORT_NUMBER
               value: {{ .Values.monitoringAPIPort | quote }}
             {{- if .Values.extraEnvVars }}
-            {{- include "logstash.tplValue" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
           {{- if .Values.containerPorts }}
           ports: {{ toYaml .Values.containerPorts | nindent 12 }}
@@ -72,12 +82,12 @@ spec:
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
-          {{- if or (.Files.Glob "files/conf/*") .Values.input .Values.filter .Values.output .Values.existingConfiguration }}
+          {{- if or .Values.input .Values.filter .Values.output .Values.existingConfiguration }}
             - name: configurations
               mountPath: /bitnami/logstash/config
           {{- end }}
           {{- if .Values.extraVolumeMounts }}
-            {{- include "logstash.tplValue" ( dict "value" .Values.extraVolumeMounts "context" $ ) | nindent 12 }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumeMounts "context" $ ) | nindent 12 }}
           {{- end }}
         {{- if .Values.metrics.enabled }}
         - name: metrics
@@ -104,11 +114,11 @@ spec:
           {{- end }}
         {{- end }}
       volumes:
-        {{- if or (.Files.Glob "files/conf/*") .Values.input .Values.filter .Values.output .Values.existingConfiguration }}
+        {{- if or .Values.input .Values.filter .Values.output .Values.existingConfiguration }}
         - name: configurations
           configMap:
             name: {{ include "logstash.configmapName" . }}
         {{- end }}
       {{- if .Values.extraVolumes }}
-        {{- include "logstash.tplValue" ( dict "value" .Values.extraVolumes "context" $ ) | nindent 8 }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumes "context" $ ) | nindent 8 }}
       {{- end }}

@@ -1,0 +1,12 @@
+{{- if (include "mongodb.arbiter.createConfigmap" .) }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "mongodb.fullname" . }}-arbiter
+  namespace: {{ include "mongodb.namespace" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: arbiter
+data:
+  mongodb.conf: |-
+    {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.configuration "context" $) | nindent 4 }}
+{{- end }}

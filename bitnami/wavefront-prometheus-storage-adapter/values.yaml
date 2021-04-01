@@ -1,0 +1,416 @@
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry and imagePullSecrets
+##
+## @section Global parameters
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+##
+# global:
+#   imageRegistry: myRegistryName
+#   imagePullSecrets:
+#     - myRegistryKeySecretName
+#   storageClass: myStorageClass
+
+## Override Kubernetes version
+## @param kubeVersion Override Kubernetes version
+##
+kubeVersion:
+
+## String to partially override common.names.fullname template (will maintain the release name)
+## @param nameOverride String to partially override common.names.fullname
+##
+nameOverride:
+
+## String to fully override common.names.fullname template
+## @param fullnameOverride String to fully override common.names.fullname
+##
+fullnameOverride:
+
+## Add labels to all the deployed resources
+## @param commonLabels  Labels to add to all deployed objects
+##
+commonLabels: {}
+
+## Add annotations to all the deployed resources
+## @param commonAnnotations  Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+
+## Kubernetes Cluster Domain
+## @param clusterDomain Kubernetes cluster domain name
+##
+clusterDomain: cluster.local
+
+## Extra objects to deploy (value evaluated as a template)
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
+
+## @section Wavefront Prometheus Storage Adapter deployment parameters
+##
+image:
+  ## @param image.registry Adapter image registry
+  ##
+  registry: docker.io
+  ## @param image.repository Adapter image repository
+  ##
+  repository: bitnami/wavefront-prometheus-storage-adapter
+  ## @param image.tag Adapter image tag (immutabe tags are recommended)
+  ##
+  tag: 1.0.3-debian-10-r14
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  ## @param image.pullPolicy Adapter image pull policy
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ##
+  ## @param image.pullSecrets Adapter image pull secrets
+  ##
+  pullSecrets: []
+  #   - myRegistryKeySecretName
+  ## Enable debug mode
+  ## @param image.debug Enable image debug mode
+  ##
+  debug: false
+
+## Configure extra options for liveness and readiness probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+## @param livenessProbe.enabled Enable livenessProbe
+## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+## @param livenessProbe.periodSeconds Period seconds for livenessProbe
+## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+## @param livenessProbe.failureThreshold Failure threshold for livenessProbe
+## @param livenessProbe.successThreshold Success threshold for livenessProbe
+##
+livenessProbe:
+  enabled: true
+  failureThreshold: 5
+  initialDelaySeconds: 15
+  periodSeconds: 10
+  successThreshold: 1
+  timeoutSeconds: 5
+## @param readinessProbe.enabled Enable readinessProbe
+## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+## @param readinessProbe.periodSeconds Period seconds for readinessProbe
+## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+## @param readinessProbe.failureThreshold Failure threshold for readinessProbe
+## @param readinessProbe.successThreshold Success threshold for readinessProbe
+##
+readinessProbe:
+  enabled: true
+  failureThreshold: 5
+  initialDelaySeconds: 15
+  periodSeconds: 10
+  successThreshold: 1
+  timeoutSeconds: 5
+
+## Command and args for running the container (set to default if not set). Use array form
+## @param command Override default container command (useful when using custom images)
+##
+command: []
+## Args for running the container (set to default if not set). Use array form
+## @param args Override default container args (useful when using custom images)
+##
+args: []
+
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+## @param hostAliases Add deployment host aliases
+##
+hostAliases: []
+
+## wavefront-prometheus-storage-adapter resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+##
+resources:
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param resources.limits  The resources limits for the Adapter container
+  ##
+  limits: {}
+  #   cpu: 200m
+  #   memory: 256Mi
+  ## @param resources.requests  The requested resourcesc for the Adapter container
+  ##
+  requests: {}
+  #   cpu: 200m
+  #   memory: 10Mi
+
+## wavefront-prometheus-storage-adapter containers' Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+## @param containerSecurityContext.enabled Enabled Adapter containers' Security Context
+## @param containerSecurityContext.runAsUser Set Adapter container's Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Set Adapter container's Security Context runAsNonRoot
+##
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1001
+  runAsNonRoot: true
+
+## wavefront-prometheus-storage-adapter pods' Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+## @param podSecurityContext.enabled Enabled Adapter pods' Security Context
+## @param podSecurityContext.fsGroup Set Adapter pod's Security Context fsGroup
+##
+podSecurityContext:
+  enabled: true
+  fsGroup: 1001
+
+## Pod affinity preset
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+##
+podAffinityPreset: ""
+
+## Pod anti-affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+## Allowed values: soft, hard
+##
+podAntiAffinityPreset: soft
+
+## Node affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+## Allowed values: soft, hard
+## @param nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+## @param nodeAffinityPreset.key Node label key to match. Ignored if `affinity` is set
+## @param nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set
+##
+nodeAffinityPreset:
+  ## Node affinity type
+  ## Allowed values: soft, hard
+  ##
+  type: ""
+  ## Node label key to match
+  ## E.g.
+  ## key: "kubernetes.io/e2e-az-name"
+  ##
+  key: ""
+  ## Node label values to match
+  ## E.g.
+  ## values:
+  ##   - e2e-az1
+  ##   - e2e-az2
+  ##
+  values: []
+
+## Affinity for pod assignment. Evaluated as a template.
+## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+## @param affinity  Affinity for pod assignment
+##
+affinity: {}
+
+## Node labels for pod assignment. Evaluated as a template.
+## ref: https://kubernetes.io/docs/user-guide/node-selection/
+## @param nodeSelector  Node labels for pod assignment
+##
+nodeSelector: {}
+
+## Tolerations for pod assignment. Evaluated as a template.
+## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+## @param tolerations  Tolerations for pod assignment
+##
+tolerations: []
+
+## Pod extra labels
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
+## @param podLabels  Extra labels for Adapter pods
+##
+podLabels: {}
+
+## Annotations for server pods.
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+## @param podAnnotations  Annotations for Adapter pods
+##
+podAnnotations: {}
+
+## wavefront-prometheus-storage-adapter pods' priority.
+## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+## @param priorityClassName Adapter pod priority
+##
+priorityClassName: ""
+
+## lifecycleHooks for the wavefront-prometheus-storage-adapter container to automate configuration before or after startup.
+## @param lifecycleHooks Add lifecycle hooks to the Adapter deployment
+##
+lifecycleHooks: {}
+
+## Custom Liveness probes for wavefront-prometheus-storage-adapter
+## @param customLivenessProbe  Override default liveness probe
+##
+customLivenessProbe: {}
+
+## Custom Rediness probes wavefront-prometheus-storage-adapter
+## @param customReadinessProbe  Override default readiness probe
+##
+customReadinessProbe: {}
+
+## Update strategy - only really applicable for deployments with RWO PVs attached
+## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
+## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
+## terminate the single previous pod, so that the new, incoming pod can attach to the PV
+## @param updateStrategy.type Adapter deployment update strategy
+##
+updateStrategy:
+  type: RollingUpdate
+
+## Adapter Container port
+## @param containerPort Adapter container port
+##
+containerPort: 1234
+## Additional environment variables to set
+## Example:
+## extraEnvVars:
+##   - name: FOO
+##     value: "bar"
+## @param extraEnvVars Add extra environment variables to the Adapter container
+##
+extraEnvVars: []
+
+## ConfigMap with extra environment variables
+## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars
+##
+extraEnvVarsCM:
+
+## Secret with extra environment variables
+## @param extraEnvVarsSecret Name of existing Secret containing extra env vars
+##
+extraEnvVarsSecret:
+
+## Extra volumes to add to the deployment
+## @param extraVolumes  Optionally specify extra list of additional volumes for Adapter pods
+##
+extraVolumes: []
+
+## Extra volume mounts to add to the container
+## @param extraVolumeMounts  Optionally specify extra list of additional volumeMounts for Adapter container(s)
+##
+extraVolumeMounts: []
+
+## Add init containers to the wavefront-prometheus-storage-adapter pods.
+## Example:
+## initContainers:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+## @param initContainers  Add additional init containers to the Adapter pods
+##
+initContainers: {}
+
+## Add sidecars to the wavefront-prometheus-storage-adapter pods.
+## Example:
+## sidecars:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+## @param sidecars  Add additional sidecar containers to the Adapter pod
+##
+sidecars: {}
+
+## Use an external wavefront-proxy host
+##
+externalProxy:
+  ## @param externalProxy.host Host of a wavefront-proxy instance (required if wavefront.enabled = false)
+  ##
+  host:
+  ## @param externalProxy.port Host of a wavefront-proxy instance (required if wavefront.enabled = false)
+  ##
+  port: 2878
+
+## Adapter prefix parameter
+## @param adapterPrefix Adapter `prefix` parameter
+##
+adapterPrefix:
+
+## Adapter tags parameter
+## @param adapterTags Adapter `tags` parameter
+##
+adapterTags:
+
+## @section Traffic Exposure Parameters
+## Service parameters
+##
+service:
+  ## @param service.type Adapter service type
+  ##
+  type: ClusterIP
+  ## HTTP Port
+  ## @param service.port Adapter service port
+  ##
+  port: 1234
+  ## loadBalancerIP for the Service (optional, cloud specific)
+  ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+  ## @param service.loadBalancerIP Adapter service LoadBalancer IP
+  ##
+  loadBalancerIP:
+  ## loadBalancerIP source ranges for the Service
+  ## @param service.loadBalancerSourceRanges loadBalancerIP source ranges for the Service
+  ##
+  loadBalancerSourceRanges:
+  ##
+  ## nodePorts:
+  ##   http: <to set explicitly, choose port between 30000-32767>
+  ##   https: <to set explicitly, choose port between 30000-32767>
+  ## @param service.nodePorts.http NodePort for the HTTP endpoint
+  ##
+  nodePorts:
+    http: ""
+  ## Enable client source IP preservation
+  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ## @param service.externalTrafficPolicy External traffic policy for the service
+  ##
+  externalTrafficPolicy: Cluster
+
+## @section Wavefront sub-chart parameters
+## Wavefront chart parameters
+## NOTE: This solution will currently work with wavefront-proxy, reason why we disable the rest of
+## the services by default
+##
+wavefront:
+  ## @param wavefront.enabled Deploy Wavefront chart (necessary if externalProxyHost is not set)
+  ##
+  enabled: true
+
+  ## @param wavefront.wavefront.url Wavefront SAAS service URL
+  ## @param wavefront.wavefront.token Wavefront SAAS token
+  ##
+  wavefront:
+    url: https://YOUR_CLUSTER.wavefront.com
+    token: YOUR_API_TOKEN
+
+  ## @param wavefront.collector.enabled Deploy Wavefront collector (not used by the Adapter pod)
+  ##
+  collector:
+    enabled: false
+  ## @param wavefront.rbac.create Create RBAC rules (not necessary as the Adapter only uses wavefront-proxy)
+  ##
+  rbac:
+    create: false
+  proxy:
+    ## @param wavefront.proxy.enabled Deploy Wavefront Proxy (required if externalProxyHost is not set)
+    ##
+    enabled: true
+    ## @param wavefront.proxy.port Deployed Wavefront Proxy port (required if externalProxyHost is not set)
+    ##
+    port: 2878
+  ## @param wavefront.serviceAccount.create Create Wavefront serivce account (not necessary as the Adapter only uses wavefront-proxy)
+  ##
+  serviceAccount:
+    create: false

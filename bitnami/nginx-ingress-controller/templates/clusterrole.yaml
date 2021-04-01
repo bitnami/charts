@@ -1,9 +1,16 @@
 {{- if and .Values.rbac.create (not .Values.scope.enabled) -}}
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
-  name: {{ template "nginx-ingress.fullname" . }}
-  labels: {{- include "nginx-ingress.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 rules:
   - apiGroups:
       - ""
@@ -16,7 +23,7 @@ rules:
     verbs:
       - list
       - watch
-{{- if and .Values.scope.enabled .Values.scope.namespace }}
+  {{- if and .Values.scope.enabled .Values.scope.namespace }}
   - apiGroups:
       - ""
     resources:
@@ -25,7 +32,7 @@ rules:
       - "{{ .Values.scope.namespace }}"
     verbs:
       - get
-{{- end }}
+  {{- end }}
   - apiGroups:
       - ""
     resources:
@@ -64,4 +71,12 @@ rules:
       - ingresses/status
     verbs:
       - update
+  - apiGroups:
+      - "networking.k8s.io"  # k8s 1.14+
+    resources:
+      - ingressclasses
+    verbs:
+      - get
+      - list
+      - watch
 {{- end -}}

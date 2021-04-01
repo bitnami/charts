@@ -1,0 +1,70 @@
+{{- if .Values.metrics.enabled }}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ include "common.names.fullname" . }}-exporter
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
+    {{- end }}
+    app.kubernetes.io/component: metrics
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: metrics
+  template:
+    metadata:
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.podAnnotations "context" $) | nindent 8 }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app.kubernetes.io/component: metrics
+      {{- if .Values.metrics.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.podLabels "context" $) | nindent 8 }}
+      {{- end }}
+    spec:
+      {{- include "airflow.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.metrics.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if or .Values.nodeSelector .Values.metrics.nodeSelector }}
+      {{- if .Values.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
+      {{- else }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- end }}
+      containers:
+        - image: {{ include "airflow.metrics.image" . | quote }}
+          name: airflow-exporter
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          env:
+            - name: AIRFLOW_PROMETHEUS_DATABASE_BACKEND
+              value: "postgres"
+            - name: AIRFLOW_PROMETHEUS_DATABASE_HOST
+              value: {{ include "airflow.database.host" . }}
+            - name: AIRFLOW_PROMETHEUS_DATABASE_PORT
+              value: {{ include "airflow.database.port" . }}
+            - name: AIRFLOW_PROMETHEUS_DATABASE_USER
+              value: {{ include "airflow.database.user" . }}
+            - name: AIRFLOW_PROMETHEUS_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "airflow.postgresql.secretName" . }}
+                  key: {{ include "airflow.database.existingsecret.key" . }}
+            - name: AIRFLOW_PROMETHEUS_DATABASE_NAME
+              value: {{ include "airflow.database.name" . }}
+          ports:
+            - name: metrics
+              containerPort: 9112
+          {{- if .Values.metrics.resources}}
+          resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
+          {{- end }}
+{{- end }}

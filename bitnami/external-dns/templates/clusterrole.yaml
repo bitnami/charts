@@ -1,4 +1,4 @@
-{{- if .Values.rbac.create }}
+{{- if and .Values.rbac.create .Values.rbac.clusterRole }}
 apiVersion: rbac.authorization.k8s.io/{{ .Values.rbac.apiVersion }}
 kind: ClusterRole
 metadata:
@@ -19,8 +19,18 @@ rules:
   - apiGroups:
       - extensions
       - "networking.k8s.io"
+      - getambassador.io
     resources:
       - ingresses
+      - hosts
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - route.openshift.io
+    resources:
+      - routes
     verbs:
       - get
       - list
@@ -29,6 +39,7 @@ rules:
       - networking.istio.io
     resources:
       - gateways
+      - virtualservices
     verbs:
       - get
       - list
@@ -48,6 +59,24 @@ rules:
     verbs:
       - patch
       - update
+  - apiGroups:
+      - projectcontour.io
+    resources:
+      - httpproxies
+    verbs:
+      - get
+      - watch
+      - list
+  - apiGroups:
+      - gloo.solo.io
+      - gateway.solo.io
+    resources:
+      - proxies
+      - virtualservices
+    verbs:
+      - get
+      - list
+      - watch
   {{- if or .Values.crd.create .Values.crd.apiversion }}
   - apiGroups:
       {{- if .Values.crd.create }}

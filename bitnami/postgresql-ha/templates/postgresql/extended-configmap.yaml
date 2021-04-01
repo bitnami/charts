@@ -1,18 +1,17 @@
-{{- if and (or (.Files.Glob "files/conf.d/*.conf") .Values.postgresql.extendedConf) (not .Values.postgresql.extendedConfCM) }}
+{{- if and .Values.postgresql.extendedConf (not .Values.postgresql.extendedConfCM) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ printf "%s-extended-configuration" (include "postgresql-ha.postgresql" .) }}
-  labels: {{- include "postgresql-ha.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: postgresql
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 data:
-  {{- with .Files.Glob "files/conf.d/*.conf" }}
-  {{- .AsConfig | nindent 2 }}
-  {{- end }}
-  {{- with .Values.postgresql.extendedConf }}
-  override.conf: |
-  {{- range $key, $value := . }}
-    {{ $key | snakecase }}={{ $value }}
-  {{- end }}
-  {{- end }}
+  override.conf: |-
+    {{- include "common.tplvalues.render" ( dict "value" .Values.postgresql.extendedConf "context" $ ) | nindent 4 }}
 {{- end }}

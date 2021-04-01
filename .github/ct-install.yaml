@@ -9,4 +9,9 @@ excluded-charts:
   - kibana
   - kong
   - mariadb-galera
+  - discourse
+  - ejbca
+  - wavefront
+  - harbor
+  - dataplatform-bp1
 remote: origin

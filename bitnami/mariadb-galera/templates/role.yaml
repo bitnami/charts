@@ -1,9 +1,9 @@
 {{- if and .Values.serviceAccount.create .Values.rbac.create }}
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: Role
 metadata:
-  name: {{ template "mariadb-galera.fullname" . }}
-  labels: {{- include "mariadb-galera.labels" . | nindent 4 }}
+  name: {{ template "common.names.fullname" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
 rules:
   - apiGroups:
       - ""

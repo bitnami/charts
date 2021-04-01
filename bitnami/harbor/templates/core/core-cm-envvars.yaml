@@ -2,41 +2,50 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ include "harbor.core" . }}-envvars
-  labels: {{- include "harbor.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    app.kubernetes.io/component: core
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 data:
+  PORT: {{ include "harbor.core.containerPort" . | quote }}
   DATABASE_TYPE: "postgresql"
-  POSTGRESQL_HOST: "{{ template "harbor.database.host" . }}"
-  POSTGRESQL_PORT: "{{ template "harbor.database.port" . }}"
-  POSTGRESQL_USERNAME: "{{ template "harbor.database.username" . }}"
-  POSTGRESQL_DATABASE: "{{ template "harbor.database.coreDatabase" . }}"
-  POSTGRESQL_SSLMODE: "{{ template "harbor.database.sslmode" . }}"
-  EXT_ENDPOINT: "{{ template "harbor.externalUrl" . }}"
-  CORE_URL: "http://{{ template "harbor.core" . }}"
-  JOBSERVICE_URL: "http://{{ template "harbor.fullname" . }}-jobservice"
-  REGISTRY_URL: "http://{{ template "harbor.registry" . }}:5000"
-  TOKEN_SERVICE_URL: "http://{{ template "harbor.core" . }}/service/token"
-  WITH_NOTARY: "{{ .Values.notary.enabled }}"
-  NOTARY_URL: "http://{{ template "harbor.notary-server" . }}:4443"
+  POSTGRESQL_HOST: {{ include "harbor.database.host" . | quote }}
+  POSTGRESQL_PORT: {{ include "harbor.database.port" . | quote }}
+  POSTGRESQL_USERNAME: {{ include "harbor.database.username" . | quote }}
+  POSTGRESQL_DATABASE: {{ include "harbor.database.coreDatabase" . | quote }}
+  POSTGRESQL_SSLMODE: {{ include "harbor.database.sslmode" . | quote }}
+  EXT_ENDPOINT: {{ include "harbor.externalUrl" . | quote }}
+  CORE_URL: {{ include "harbor.core.url" . | quote }}
+  JOBSERVICE_URL: {{ include "harbor.jobservice.url" . | quote }}
+  REGISTRY_URL: {{ include "harbor.registry.url" . | quote }}
+  TOKEN_SERVICE_URL: {{ include "harbor.tokenService.url" . | quote }}
+  WITH_NOTARY: {{ .Values.notary.enabled | quote }}
+  NOTARY_URL: {{ printf "http://%s:4443" (include "harbor.notary-server" .) | quote }}
+  CORE_LOCAL_URL: "{{ ternary "https://127.0.0.1:8443" "http://127.0.0.1:8080" .Values.internalTLS.enabled }}"
   CFG_EXPIRATION: "5"
   ADMIRAL_URL: "NA"
-  WITH_CLAIR: "{{ .Values.clair.enabled }}"
-  CLAIR_DB_HOST: "{{ template "harbor.database.host" . }}"
-  CLAIR_DB_PORT: "{{ template "harbor.database.port" . }}"
-  CLAIR_DB_USERNAME: "{{ template "harbor.database.clairUsername" . }}"
-  CLAIR_DB: "{{ template "harbor.database.clairDatabase" . }}"
-  CLAIR_DB_SSLMODE: "{{ template "harbor.database.sslmode" . }}"
-  CLAIR_URL: "http://{{ template "harbor.clair" . }}:6060"
-  CLAIR_ADAPTER_URL: "http://{{ template "harbor.clair" . }}:8080"
-  REGISTRY_STORAGE_PROVIDER_NAME: "{{ .Values.persistence.imageChartStorage.type }}"
-  WITH_CHARTMUSEUM: "{{ .Values.chartmuseum.enabled }}"
-  CHART_REPOSITORY_URL: "http://{{ template "harbor.chartmuseum" . }}"
-  LOG_LEVEL: "{{ .Values.logLevel }}"
+  WITH_TRIVY: {{ .Values.trivy.enabled | quote }}
+  TRIVY_ADAPTER_URL: {{ include "harbor.trivy.url" . | quote }}
+  REGISTRY_STORAGE_PROVIDER_NAME: {{ .Values.persistence.imageChartStorage.type | quote }}
+  WITH_CHARTMUSEUM: {{ .Values.chartmuseum.enabled | quote }}
+  CHART_REPOSITORY_URL: {{ include "harbor.chartmuseum.url" . | quote }}
+  LOG_LEVEL: {{ .Values.logLevel | quote }}
   CONFIG_PATH: "/etc/core/app.conf"
   SYNC_REGISTRY: "false"
   CHART_CACHE_DRIVER: "redis"
-  PORTAL_URL: "http://{{ template "harbor.portal" . }}"
-  REGISTRYCTL_URL: "http://{{ template "harbor.registry" . }}:8080"
-  CLAIR_HEALTH_CHECK_SERVER_URL: "http://{{ template "harbor.clair" . }}:6061"
-  {{- if .Values.uaaSecretName }}
-  UAA_CA_ROOT: "/etc/core/ca/auth-ca.crt"
+  PORTAL_URL: {{ include "harbor.portal.url" . | quote }}
+  REGISTRY_CONTROLLER_URL: {{ include "harbor.registryCtl.url" . | quote }}
+  REGISTRY_CREDENTIAL_USERNAME: {{ .Values.registry.credentials.username | quote }}
+  PERMITTED_REGISTRY_TYPES_FOR_PROXY_CACHE: "docker-hub,harbor,aws-ecr,azure-acr,quay,google-gcr"
+  {{- if .Values.core.uaaSecretName }}
+  UAA_CA_ROOT: "/etc/core/auth-ca/auth-ca.crt"
+  {{- end }}
+  {{- if has "core" .Values.proxy.components }}
+  HTTP_PROXY: {{ .Values.proxy.httpProxy | quote }}
+  HTTPS_PROXY: {{ .Values.proxy.httpsProxy | quote }}
+  NO_PROXY: {{ include "harbor.noProxy" . | quote }}
   {{- end }}

@@ -1,109 +1,43 @@
-{{/*
-Return the appropriate apiVersion for statefulset.
-*/}}
-{{- define "mariadb.statefulset.apiVersion" -}}
-{{- if semverCompare "<1.14-0" .Capabilities.KubeVersion.GitVersion -}}
-{{- print "apps/v1beta1" -}}
-{{- else -}}
-{{- print "apps/v1" -}}
-{{- end -}}
-{{- end -}}
-
 {{/* vim: set filetype=mustache: */}}
-{{/*
-Expand the name of the chart.
-*/}}
-{{- define "mariadb.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
 
-{{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-If release name contains chart name it will be used as a full name.
-*/}}
-{{- define "mariadb.fullname" -}}
-{{- if .Values.fullnameOverride -}}
-{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
+{{- define "mariadb.primary.fullname" -}}
+{{- if eq .Values.architecture "replication" }}
+{{- printf "%s-%s" (include "common.names.fullname" .) "primary" | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
-{{- $name := default .Chart.Name .Values.nameOverride -}}
-{{- if contains $name .Release.Name -}}
-{{- printf .Release.Name | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
+{{- include "common.names.fullname" . -}}
 {{- end -}}
 {{- end -}}
 
-{{- define "master.fullname" -}}
-{{- if .Values.replication.enabled -}}
-{{- printf "%s-%s" (include "mariadb.fullname" .) "master" | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- include "mariadb.fullname" . -}}
-{{- end -}}
-{{- end -}}
-
-{{- define "slave.fullname" -}}
-{{- printf "%s-%s" (include "mariadb.fullname" .) "slave" | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{- define "mariadb.chart" -}}
-{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{/*
-Create pod labels for mariadb
-*/}}
-{{- define "mariadb.podLabels" -}}
-{{- if .Values.podLabels }}
-{{ toYaml .Values.podLabels }}
-{{- end -}}
+{{- define "mariadb.secondary.fullname" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) "secondary" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
 Return the proper MariaDB image name
 */}}
 {{- define "mariadb.image" -}}
-{{- $registryName := .Values.image.registry -}}
-{{- $repositoryName := .Values.image.repository -}}
-{{- $tag := .Values.image.tag | toString -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-Also, we can't use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-    {{- else -}}
-        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-    {{- end -}}
-{{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-{{- end -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) }}
 {{- end -}}
 
 {{/*
 Return the proper metrics image name
 */}}
 {{- define "mariadb.metrics.image" -}}
-{{- $registryName := .Values.metrics.image.registry -}}
-{{- $repositoryName := .Values.metrics.image.repository -}}
-{{- $tag := .Values.metrics.image.tag | toString -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-Also, we can't use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-    {{- else -}}
-        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-    {{- end -}}
-{{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.metrics.image "global" .Values.global) }}
 {{- end -}}
+
+{{/*
+Return the proper image name (for the init container volume-permissions image)
+*/}}
+{{- define "mariadb.volumePermissions.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.volumePermissions.image "global" .Values.global) }}
+{{- end -}}
+
+{{/*
+Return the proper Docker Image Registry Secret Names
+*/}}
+{{- define "mariadb.imagePullSecrets" -}}
+{{ include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.metrics.image .Values.volumePermissions.image) "global" .Values.global) }}
 {{- end -}}
 
 {{ template "mariadb.initdbScriptsCM" . }}
@@ -114,7 +48,7 @@ Get the initialization scripts ConfigMap name.
 {{- if .Values.initdbScriptsConfigMap -}}
 {{- printf "%s" .Values.initdbScriptsConfigMap -}}
 {{- else -}}
-{{- printf "%s-init-scripts" (include "master.fullname" .) -}}
+{{- printf "%s-init-scripts" (include "mariadb.primary.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
@@ -123,176 +57,94 @@ Create the name of the service account to use
 */}}
 {{- define "mariadb.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create -}}
-    {{ default (include "mariadb.fullname" .) .Values.serviceAccount.name }}
+    {{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
 
 {{/*
-Return the proper Docker Image Registry Secret Names
+Return the configmap with the MariaDB Primary configuration
 */}}
-{{- define "mariadb.imagePullSecrets" -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else logic.
-Also, we can not use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-{{- if .Values.global.imagePullSecrets }}
-imagePullSecrets:
-{{- range .Values.global.imagePullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- else if or .Values.image.pullSecrets .Values.metrics.image.pullSecrets .Values.volumePermissions.image.pullSecrets }}
-imagePullSecrets:
-{{- range .Values.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.metrics.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.volumePermissions.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- end -}}
-{{- else if or .Values.image.pullSecrets .Values.metrics.image.pullSecrets .Values.volumePermissions.image.pullSecrets }}
-imagePullSecrets:
-{{- range .Values.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.metrics.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.volumePermissions.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return the proper test image name
-*/}}
-{{- define "mariadb.tests.testFramework.image" -}}
-{{- $registryName := .Values.tests.testFramework.image.registry -}}
-{{- $repositoryName := .Values.tests.testFramework.image.repository -}}
-{{- $tag := .Values.tests.testFramework.image.tag | toString -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-Also, we can't use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-    {{- else -}}
-        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-    {{- end -}}
+{{- define "mariadb.primary.configmapName" -}}
+{{- if .Values.primary.existingConfigmap -}}
+    {{- printf "%s" (tpl .Values.primary.existingConfigmap $) -}}
 {{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
+    {{- printf "%s" (include "mariadb.primary.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
 {{/*
-Return the proper image name (for the init container volume-permissions image)
+Return true if a configmap object should be created for MariaDB Secondary
 */}}
-{{- define "mariadb.volumePermissions.image" -}}
-{{- $registryName := .Values.volumePermissions.image.registry -}}
-{{- $repositoryName := .Values.volumePermissions.image.repository -}}
-{{- $tag := .Values.volumePermissions.image.tag | toString -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-Also, we can't use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-    {{- else -}}
-        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-    {{- end -}}
+{{- define "mariadb.primary.createConfigmap" -}}
+{{- if and .Values.primary.configuration (not .Values.primary.existingConfigmap) }}
+    {{- true -}}
 {{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
 {{- end -}}
 {{- end -}}
 
 {{/*
-Return  the proper Storage Class for the master
+Return the configmap with the MariaDB Primary configuration
 */}}
-{{- define "mariadb.master.storageClass" -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else logic.
-*/}}
-{{- if .Values.global -}}
-    {{- if .Values.global.storageClass -}}
-        {{- if (eq "-" .Values.global.storageClass) -}}
-            {{- printf "storageClassName: \"\"" -}}
-        {{- else }}
-            {{- printf "storageClassName: %s" .Values.global.storageClass -}}
-        {{- end -}}
-    {{- else -}}
-        {{- if .Values.master.persistence.storageClass -}}
-              {{- if (eq "-" .Values.master.persistence.storageClass) -}}
-                  {{- printf "storageClassName: \"\"" -}}
-              {{- else }}
-                  {{- printf "storageClassName: %s" .Values.master.persistence.storageClass -}}
-              {{- end -}}
-        {{- end -}}
-    {{- end -}}
+{{- define "mariadb.secondary.configmapName" -}}
+{{- if .Values.secondary.existingConfigmap -}}
+    {{- printf "%s" (tpl .Values.secondary.existingConfigmap $) -}}
 {{- else -}}
-    {{- if .Values.master.persistence.storageClass -}}
-        {{- if (eq "-" .Values.master.persistence.storageClass) -}}
-            {{- printf "storageClassName: \"\"" -}}
-        {{- else }}
-            {{- printf "storageClassName: %s" .Values.master.persistence.storageClass -}}
-        {{- end -}}
-    {{- end -}}
+    {{- printf "%s" (include "mariadb.secondary.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
 {{/*
-Return  the proper Storage Class for the slave
+Return true if a configmap object should be created for MariaDB Secondary
 */}}
-{{- define "mariadb.slave.storageClass" -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else logic.
-*/}}
-{{- if .Values.global -}}
-    {{- if .Values.global.storageClass -}}
-        {{- if (eq "-" .Values.global.storageClass) -}}
-            {{- printf "storageClassName: \"\"" -}}
-        {{- else }}
-            {{- printf "storageClassName: %s" .Values.global.storageClass -}}
-        {{- end -}}
-    {{- else -}}
-        {{- if .Values.slave.persistence.storageClass -}}
-              {{- if (eq "-" .Values.slave.persistence.storageClass) -}}
-                  {{- printf "storageClassName: \"\"" -}}
-              {{- else }}
-                  {{- printf "storageClassName: %s" .Values.slave.persistence.storageClass -}}
-              {{- end -}}
-        {{- end -}}
-    {{- end -}}
+{{- define "mariadb.secondary.createConfigmap" -}}
+{{- if and (eq .Values.architecture "replication") .Values.secondary.configuration (not .Values.secondary.existingConfigmap) }}
+    {{- true -}}
 {{- else -}}
-    {{- if .Values.slave.persistence.storageClass -}}
-        {{- if (eq "-" .Values.slave.persistence.storageClass) -}}
-            {{- printf "storageClassName: \"\"" -}}
-        {{- else }}
-            {{- printf "storageClassName: %s" .Values.slave.persistence.storageClass -}}
-        {{- end -}}
-    {{- end -}}
 {{- end -}}
 {{- end -}}
 
 {{/*
-Return the name of the Secret used to store the passwords
+Return the secret with MariaDB credentials
 */}}
 {{- define "mariadb.secretName" -}}
-{{- if .Values.existingSecret -}}
-{{ .Values.existingSecret }}
+    {{- if .Values.auth.existingSecret -}}
+        {{- printf "%s" .Values.auth.existingSecret -}}
+    {{- else -}}
+        {{- printf "%s" (include "common.names.fullname" .) -}}
+    {{- end -}}
+{{- end -}}
+
+{{/*
+Return true if a secret object should be created for MariaDB
+*/}}
+{{- define "mariadb.createSecret" -}}
+{{- if and (not .Values.auth.existingSecret) (not .Values.auth.customPasswordFiles) }}
+    {{- true -}}
 {{- else -}}
-{{ template "mariadb.fullname" . -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Compile all warnings into a single message, and call fail.
+*/}}
+{{- define "mariadb.validateValues" -}}
+{{- $messages := list -}}
+{{- $messages := append $messages (include "mariadb.validateValues.architecture" .) -}}
+{{- $messages := without $messages "" -}}
+{{- $message := join "\n" $messages -}}
+
+{{- if $message -}}
+{{-   printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of MariaDB - must provide a valid architecture */}}
+{{- define "mariadb.validateValues.architecture" -}}
+{{- if and (ne .Values.architecture "standalone") (ne .Values.architecture "replication") -}}
+mariadb: architecture
+    Invalid architecture selected. Valid values are "standalone" and
+    "replication". Please set a valid architecture (--set architecture="xxxx")
 {{- end -}}
 {{- end -}}

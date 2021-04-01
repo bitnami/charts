@@ -2,74 +2,94 @@
   "$schema": "http://json-schema.org/schema#",
   "type": "object",
   "properties": {
-    "usePassword": {
-      "type": "boolean",
-      "title": "Enable password authentication",
-      "form": true
-    },
-    "mongodbRootPassword": {
+    "architecture": {
       "type": "string",
-      "title": "MongoDB admin password",
+      "title": "MongoDB(R) architecture",
       "form": true,
-      "description": "Defaults to a random 10-character alphanumeric string if not set",
-      "hidden": {
-        "condition": false,
-        "value": "usePassword"
-      }
+      "description": "Allowed values: `standalone` or `replicaset`"
     },
-    "mongodbDatabase": {
-      "type": "string",
-      "title": "MongoDB custom database",
-      "description": "Name of the custom database to be created during the 1st initialization of MongoDB",
-      "form": true
-    },
-    "mongodbUsername": {
-      "type": "string",
-      "title": "MongoDB custom user",
-      "description": "Name of the custom user to be created during the 1st initialization of MongoDB. This user only has permissions on the MongoDB custom database",
-      "form": true
-    },
-    "mongodbPassword": {
-      "type": "string",
-      "title": "Password for MongoDB custom user",
-      "form": true,
-      "description": "Defaults to a random 10-character alphanumeric string if not set",
-      "hidden": {
-        "condition": false,
-        "value": "usePassword"
-      }
-    },
-    "replicaSet": {
+    "auth": {
       "type": "object",
-      "title": "Replicaset configuration",
+      "title": "Authentication configuration",
       "form": true,
       "properties": {
         "enabled": {
           "type": "boolean",
-          "form": true,
-          "title": "Enable replicaset configuration"
+          "title": "Enable Authentication",
+          "form": true
         },
-        "replicas": {
-          "type": "object",
-          "title": "Number of replicas",
+        "rootPassword": {
+          "type": "string",
+          "title": "MongoDB(R) admin password",
           "form": true,
+          "description": "Defaults to a random 10-character alphanumeric string if not set",
           "hidden": {
-            "condition": false,
-            "value": "replicaSet.enabled"
-          },
-          "properties": {
-            "secondary": {
-              "type": "integer",
-              "title": "Secondary node replicas",
-              "description": "Number of secondary node replicas to deploy",
-              "form": true
-            },
-            "arbiter": {
-              "type": "integer",
-              "title": "Arbiter node replicas",
-              "description": "Number of arbiter node replicas to deploy",
-              "form": true
-            }
+            "value": false,
+            "path": "auth/enabled"
+          }
+        },
+        "database": {
+          "type": "string",
+          "title": "MongoDB(R) custom database",
+          "description": "Name of the custom database to be created during the 1st initialization of MongoDB(R)",
+          "form": true
+        },
+        "username": {
+          "type": "string",
+          "title": "MongoDB(R) custom user",
+          "description": "Name of the custom user to be created during the 1st initialization of MongoDB(R). This user only has permissions on the MongoDB(R) custom database",
+          "form": true
+        },
+        "password": {
+          "type": "string",
+          "title": "Password for MongoDB(R) custom user",
+          "form": true,
+          "description": "Defaults to a random 10-character alphanumeric string if not set",
+          "hidden": {
+            "value": false,
+            "path": "auth/enabled"
+          }
+        },
+        "replicaSetKey": {
+          "type": "string",
+          "title": "Key used for replica set authentication",
+          "form": true,
+          "description": "Defaults to a random 10-character alphanumeric string if not set",
+          "hidden": {
+            "value": "standalone",
+            "path": "architecture"
+          }
+        }
+      }
+    },
+    "replicaCount": {
+      "type": "integer",
+      "form": true,
+      "title": "Number of MongoDB(R) replicas",
+      "hidden": {
+        "value": "standalone",
+        "path": "architecture"
+      }
+    },
+    "configuration": {
+      "type": "string",
+      "title": "MongoDB(R) Custom Configuration",
+      "form": true,
+      "render": "textArea"
+    },
+    "arbiter": {
+      "type": "object",
+      "title": "Arbiter configuration",
+      "form": true,
+      "properties": {
+        "configuration": {
+          "type": "string",
+          "title": "Arbiter Custom Configuration",
+          "form": true,
+          "render": "textArea",
+          "hidden": {
+            "value": "standalone",
+            "path": "architecture"
           }
         }
       }
@@ -94,8 +114,8 @@
           "sliderMax": 100,
           "sliderUnit": "Gi",
           "hidden": {
-            "condition": false,
-            "value": "persistence.enabled"
+            "value": false,
+            "path": "persistence/enabled"
           }
         }
       }
@@ -103,8 +123,8 @@
     "volumePermissions": {
       "type": "object",
       "hidden": {
-        "condition": false,
-        "value": "persistence.enabled"
+        "value": false,
+        "path": "persistence/enabled"
       },
       "properties": {
         "enabled": {
@@ -135,8 +155,8 @@
               "description": "Create a ServiceMonitor to track metrics using Prometheus Operator",
               "form": true,
               "hidden": {
-                "condition": false,
-                "value": "metrics.enabled"
+                "value": false,
+                "path": "metrics/enabled"
               }
             }
           }

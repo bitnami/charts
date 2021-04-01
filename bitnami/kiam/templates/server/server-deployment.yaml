@@ -1,0 +1,210 @@
+{{- if and .Values.server.enabled (eq .Values.server.resourceType "deployment") }}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: server
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  name: {{ template "common.names.fullname" . }}-server
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.server.replicaCount }}
+  {{- if .Values.server.updateStrategy }}
+  strategy: {{- toYaml .Values.server.updateStrategy | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: server
+  template:
+    metadata:
+      {{- if .Values.server.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.server.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app.kubernetes.io/component: server
+        {{- if .Values.server.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.server.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- include "kiam.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.server.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.server.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ template "kiam.server.serviceAccountName" . }}
+      dnsPolicy: {{ .Values.server.dnsPolicy }}
+      hostNetwork: {{ .Values.server.useHostNetwork }}
+      {{- if .Values.server.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.server.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.server.podAffinityPreset "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.server.podAntiAffinityPreset "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.server.nodeAffinityPreset.type "key" .Values.server.nodeAffinityPreset.key "values" .Values.server.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.server.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.server.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.server.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.server.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.server.priorityClassName }}
+      priorityClassName: {{ .Values.server.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.server.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.server.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.server.initContainers }}
+      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.server.initContainers "context" $) | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: server
+          image: {{ template "kiam.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.server.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.server.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.server.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.server.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.server.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.server.command "context" $) | nindent 12 }}
+          {{- else }}
+          command:
+            - kiam
+            - server
+          {{- end }}
+          {{- if .Values.server.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.server.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            {{- if .Values.server.logJsonOutput }}
+            - --json-log
+            {{- end }}
+            - --level={{ .Values.server.logLevel }}
+            - --bind=0.0.0.0:{{ .Values.server.containerPort }}
+            - --cert=/bitnami/kiam/tls/{{ .Values.server.tlsCerts.certFileName }}
+            - --key=/bitnami/kiam/tls/{{ .Values.server.tlsCerts.keyFileName }}
+            - --ca=/bitnami/kiam/tls/{{ .Values.server.tlsCerts.caFileName }}
+            {{- if .Values.server.roleBaseArn }}
+            - --role-base-arn={{ .Values.server.roleBaseArn }}
+            {{- else }}
+            - --role-base-arn-autodetect
+            {{- end }}
+            {{- if .Values.server.assumeRoleArn }}
+            - --assume-role-arn={{ .Values.server.assumeRoleArn }}
+            {{- end }}
+            - --session-duration={{ .Values.server.sessionDuration }}
+            - --sync={{ .Values.server.cacheSyncInterval }}
+            {{- if .Values.server.metrics.enabled }}
+            - --prometheus-listen-addr=0.0.0.0:{{ .Values.server.metrics.port }}
+            - --prometheus-sync-interval={{ .Values.server.metrics.syncInterval }}
+            {{- end }}
+            {{- range $key, $value := .Values.server.extraArgs }}
+            {{- if $value }}
+            - --{{ $key }}={{ $value }}
+            {{- else }}
+            - --{{ $key }}
+            {{- end }}
+            {{- end }}
+          {{- end }}
+          ports:
+            - name: grpclb
+              containerPort: {{ .Values.server.containerPort }}
+              protocol: TCP
+            {{- if .Values.server.metrics.enabled }}
+            - name: metrics
+              containerPort: {{ .Values.server.metrics.port }}
+              protocol: TCP
+            {{- end }}
+          {{- if .Values.server.extraEnvVars }}
+          env: {{- include "common.tplvalues.render" (dict "value" .Values.server.extraEnvVars "context" $) | nindent 12 }}
+          {{- end }}
+          envFrom:
+            {{- if .Values.server.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.server.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.server.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.server.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- if .Values.server.resources }}
+          resources: {{- toYaml .Values.server.resources | nindent 12 }}
+          {{- end }}
+          {{- if .Values.server.livenessProbe.enabled }}
+          livenessProbe:
+            exec:
+              command:
+                - kiam
+                - health
+                - --cert=/bitnami/kiam/tls/{{ .Values.server.tlsCerts.certFileName }}
+                - --key=/bitnami/kiam/tls/{{ .Values.server.tlsCerts.keyFileName }}
+                - --ca=/bitnami/kiam/tls/{{ .Values.server.tlsCerts.caFileName }}
+                - --server-address=127.0.0.1:{{ .Values.server.containerPort }}
+                - --server-address-refresh=2s
+                - --timeout=5s
+                - --gateway-timeout-creation={{ .Values.server.gatewayTimeoutCreation }}
+            initialDelaySeconds: {{ .Values.server.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.server.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.server.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.server.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.server.livenessProbe.failureThreshold }}
+          {{- else if .Values.server.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.server.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.server.readinessProbe.enabled }}
+          readinessProbe:
+            exec:
+              command:
+                - kiam
+                - health
+                - --cert=/bitnami/kiam/tls/{{ .Values.server.tlsCerts.certFileName }}
+                - --key=/bitnami/kiam/tls/{{ .Values.server.tlsCerts.keyFileName }}
+                - --ca=/bitnami/kiam/tls/{{ .Values.server.tlsCerts.caFileName }}
+                - --server-address=127.0.0.1:{{ .Values.server.containerPort }}
+                - --server-address-refresh=2s
+                - --timeout=5s
+                - --gateway-timeout-creation={{ .Values.server.gatewayTimeoutCreation }}
+            initialDelaySeconds: {{ .Values.server.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.server.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.server.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.server.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.server.readinessProbe.failureThreshold }}
+          {{- else if .Values.server.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.server.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - mountPath: /bitnami/kiam/tls
+              name: tls
+            {{- if .Values.server.sslCertHostPath }}
+            - mountPath: /etc/ssl/certs
+              name: ssl-certs
+              readOnly: true
+            {{- end }}
+            {{- if .Values.server.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.server.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+        {{- if .Values.server.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.server.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: tls
+          secret:
+            {{- if .Values.server.tlsSecret }}
+            secretName: {{ .Values.server.tlsSecret }}
+            {{else}}
+            secretName: {{ template "common.names.fullname" . }}-server
+            {{- end }}
+        {{- if .Values.server.sslCertHostPath }}
+        - name: ssl-certs
+          hostPath:
+            path: {{ .Values.server.sslCertHostPath }}
+        {{- end }}
+        {{- if .Values.server.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.server.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+{{- end }}

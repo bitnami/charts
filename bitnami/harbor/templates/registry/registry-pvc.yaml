@@ -1,6 +1,5 @@
 {{- if .Values.persistence.enabled }}
-{{- $registry := .Values.persistence.persistentVolumeClaim.registry -}}
-{{- if and (not $registry.existingClaim) (eq .Values.persistence.imageChartStorage.type "filesystem") }}
+{{- if and (not .Values.persistence.persistentVolumeClaim.registry.existingClaim) (eq .Values.persistence.imageChartStorage.type "filesystem") }}
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
@@ -9,14 +8,20 @@ metadata:
   annotations:
     helm.sh/resource-policy: keep
   {{- end }}
-  labels: {{- include "harbor.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
     app.kubernetes.io/component: registry
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   accessModes:
-    - {{ $registry.accessMode }}
+    - {{ .Values.persistence.persistentVolumeClaim.registry.accessMode }}
   resources:
     requests:
-      storage: {{ $registry.size }}
-  {{ include "harbor.registry.storageClass" . }}
+      storage: {{ .Values.persistence.persistentVolumeClaim.registry.size }}
+  {{- include "harbor.registry.storageClass" . | nindent 2 }}
 {{- end }}
 {{- end }}

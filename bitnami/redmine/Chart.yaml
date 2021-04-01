@@ -1,8 +1,25 @@
-apiVersion: v1
-name: redmine
-version: 14.1.19
-appVersion: 4.1.1
+annotations:
+  category: ProjectManagement
+apiVersion: v2
+appVersion: 4.2.0
+dependencies:
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 1.x.x
+  - condition: mariadb.enabled
+    name: mariadb
+    repository: https://charts.bitnami.com/bitnami
+    version: 9.x.x
+  - condition: postgresql.enabled
+    name: postgresql
+    repository: https://charts.bitnami.com/bitnami
+    version: 10.x.x
 description: A flexible project management web application.
+engine: gotpl
+home: https://github.com/bitnami/charts/tree/master/bitnami/redmine
+icon: https://bitnami.com/assets/stacks/redmine/img/redmine-stack-220x234.png
 keywords:
   - redmine
   - project management
@@ -12,11 +29,11 @@ keywords:
   - application
   - ruby
   - rails
-home: http://www.redmine.org/
-icon: https://bitnami.com/assets/stacks/redmine/img/redmine-stack-220x234.png
+maintainers:
+  - email: containers@bitnami.com
+    name: Bitnami
+name: redmine
 sources:
   - https://github.com/bitnami/bitnami-docker-redmine
-maintainers:
-  - name: Bitnami
-    email: containers@bitnami.com
-engine: gotpl
+  - http://www.redmine.org/
+version: 15.2.8

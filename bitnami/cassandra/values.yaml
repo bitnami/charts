@@ -17,7 +17,7 @@ image:
   ## Bitnami Cassandra image tag
   ## ref: https://github.com/bitnami/bitnami-docker-cassandra#supported-tags-and-respective-dockerfile-links
   ##
-  tag: 3.11.6-debian-10-r100
+  tag: 3.11.10-debian-10-r51
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -30,7 +30,7 @@ image:
   # pullSecrets:
   #   - myRegistryKeySecretName
   ## Set to true if you would like to see extra information on logs
-  ## It turns BASH debugging in minideb-extras-base
+  ## It turns BASH and/or NAMI debugging in the image
   ##
   debug: false
 
@@ -42,6 +42,128 @@ image:
 ##
 # fullnameOverride:
 
+## Kubernetes Cluster Domain
+##
+clusterDomain: cluster.local
+
+## Common annotations to add to all Cassandra resources (sub-charts are not considered). Evaluated as a template
+##
+commonAnnotations: {}
+
+## Common labels to add to all Cassandra resources (sub-charts are not considered). Evaluated as a template
+##
+commonLabels: {}
+
+## Cassandra pods ServiceAccount
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+##
+serviceAccount:
+  ## Specifies whether a ServiceAccount should be created
+  ##
+  create: true
+  ## The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the cassandra.fullname template
+  ##
+  # name:
+  ## Annotations to add to the service account (evaluated as a template)
+  ##
+  annotations: {}
+
+## Cassandra container ports to open
+## If hostNetwork true: the hostPort is set identical to the containerPort
+##
+containerPorts:
+  intra: 7000
+  tls: 7001
+  jmx: 7199
+  cql: 9042
+  thrift: 9160
+
+## Enable HOST Network
+## If hostNetwork true ->  dnsPolicy is set to ClusterFirstWithHostNet
+##
+hostNetwork: false
+
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
+
+## Service parameters
+##
+service:
+  ## Service type
+  ##
+  type: ClusterIP
+  ## CQL port
+  ##
+  port: 9042
+  ## Thrift Client API port
+  ##
+  thriftPort: 9160
+  ## Metrics port
+  ##
+  metricsPort: 8080
+  ## Specify the nodePort(s) value(s) for the LoadBalancer and NodePort service types.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+  ##
+  nodePorts:
+    cql: ''
+    thrift: ''
+    metrics: ''
+  ## Set the LoadBalancer service type to internal only.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+  ##
+  # loadBalancerIP:
+  ## Provide any additional annotations which may be required. This can be used to
+  ## set the LoadBalancer service type to internal only.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+  ##
+  annotations: {}
+
+## Enable persistence using Persistent Volume Claims
+## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+##
+persistence:
+  ## If true, use a Persistent Volume Claim, If false, use emptyDir
+  ##
+  enabled: true
+    ## Persistent Volume Storage Class
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    # storageClass: "-"
+    ### Storage class to use with CASSANDRA_COMMITLOG_DIR to reduce the concurrence for writing data and commit logs
+    ## ref: https://github.com/bitnami/bitnami-docker-cassandra
+    ## If set to "-", commitStorageClass: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    # commitStorageClass: "-"
+    ## Persistent Volume Claim annotations
+    ##
+  annotations:
+  ## Persistent Volume Access Mode
+  ##
+  accessModes:
+    - ReadWriteOnce
+  ## Persistent Volume size
+  ##
+  size: 8Gi
+  ## Commit Log Persistent Volume size
+  ##
+  # commitLogsize: 2Gi
+  ## The path the volume will be mounted at
+  ##
+  mountPath: /bitnami/cassandra
+  ## The path the volume will be mounted at
+  ##
+  # commitLogMountPath: /bitnami/cassandra/commitlog
+
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
 ##
@@ -49,8 +171,8 @@ volumePermissions:
   enabled: false
   image:
     registry: docker.io
-    repository: bitnami/minideb
-    tag: buster
+    repository: bitnami/bitnami-shell
+    tag: "10"
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -72,60 +194,235 @@ volumePermissions:
     requests: {}
     #   cpu: 100m
     #   memory: 128Mi
+  ## Init container Security Context
+  ## Note: the chown of the data folder is done to securityContext.runAsUser
+  ## and not the below volumePermissions.securityContext.runAsUser
+  ## When runAsUser is set to special value "auto", init container will try to chwon the
+  ## data folder to autodetermined user&group, using commands: `id -u`:`id -G | cut -d" " -f2`
+  ## "auto" is especially useful for OpenShift which has scc with dynamic userids (and 0 is not allowed).
+  ## You may want to use this volumePermissions.securityContext.runAsUser="auto" in combination with
+  ## pod securityContext.enabled=false and shmVolume.chmod.enabled=false
+  ##
+  securityContext:
+    runAsUser: 0
 
-## Service parameters
+## Secret with keystore, keystore password, truststore, truststore password
 ##
-service:
-  ## Service type
-  ##
-  type: ClusterIP
-  ## CQL port
-  ##
-  port: 9042
-  ## Thrift Client API port
-  ##
-  thriftPort: 9160
-  ## Specify the nodePort(s) value(s) for the LoadBalancer and NodePort service types.
-  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
-  ##
-  nodePorts:
-    cql: ""
-    thriftPort: ""
-  ## Set the LoadBalancer service type to internal only.
-  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
-  ##
-  # loadBalancerIP:
-  ## Provide any additional annotations which may be required. This can be used to
-  ## set the LoadBalancer service type to internal only.
-  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
-  ##
-  annotations: {}
+# tlsEncryptionSecretName:
 
-## Enable persistence using Persistent Volume Claims
-## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+## ConfigMap with custom cassandra configuration files. This overrides any other Cassandra configuration set in the chart
 ##
-persistence:
-  ## If true, use a Persistent Volume Claim, If false, use emptyDir
+# existingConfiguration:
+
+## Cluster parameters
+##
+cluster:
+  name: cassandra
+  seedCount: 1
+  numTokens: 256
+  datacenter: dc1
+  rack: rack1
+  enableRPC: true
+  endpointSnitch: SimpleSnitch
+  ## Encryption values. NOTE: They require tlsEncryptionSecretName
   ##
+  internodeEncryption: none
+  clientEncryption: false
+  ## extraSeeds - For an external/second cassandra ring. Seed list will be appended by this.
+  ##
+  # extraSeeds:
+  #   - hostname/IP
+  #   - hostname/IP
+
+## JVM Settings
+##
+jvm:
+  ## Extra JVM options
+  ##
+  extraOpts:
+
+  ## Memory settings: These are calculated automatically unless specified otherwise
+  ## To run on environments with little resources (<= 8GB), tune your heap settings:
+  ## maxHeapSize:
+  ## - calculate 1/2 ram and cap to 1024MB
+  ## - calculate 1/4 ram and cap to 8192MB
+  ## - pick the max
+  ## newHeapSize:
+  ## A good guideline is 100 MB per CPU core.
+  ## - min(100 * num_cores, 1/4 * heap size)
+  ## ref: https://docs.datastax.com/en/archived/cassandra/2.0/cassandra/operations/ops_tune_jvm_c.html
+  ##
+  # maxHeapSize: 4G
+  # newHeapSize: 800M
+
+## Database credentials
+##
+dbUser:
+  user: cassandra
+  forcePassword: false
+  # password:
+
+  ## Use an existing secrets which already stores your password data.
+  ## for backwards compatibility, existingSecret can be a simple string,
+  ## referencing the secret by name.
+  # existingSecret:
+  #   ## Name of the existing secret
+  #   ##
+  #   name: mySecret
+  #   ## Key mapping where <key> is the value which the deployment is expecting and
+  #   ## <value> is the name of the key in the existing secret.
+  #   ##
+  #   keyMapping:
+  #     cassandra-password: myCassandraPasswordKey
+
+## ConfigMap with cql scripts. Useful for creating a keyspace
+## and pre-populating data
+##
+# initDBConfigMap:
+
+## Secret with cql script (with sensitive data). Useful for creating a keyspace
+## and pre-populating data
+##
+# initDBSecret:
+
+## Command and args for running the container (set to default if not set). Use array form
+##
+command: []
+args: []
+
+## An array to add extra env vars
+## For example:
+##
+extraEnvVars: []
+#  - name: FOO
+#    value: BAR
+
+## ConfigMap with extra environment variables
+##
+extraEnvVarsCM:
+
+## Secret with extra environment variables
+##
+extraEnvVarsSecret:
+
+## Extra volumes to add to the deployment
+##
+extraVolumes: []
+
+## Extra volume mounts to add to the container
+##
+extraVolumeMounts: []
+
+## Extra init containers to add to the deployment
+##
+initContainers: []
+
+## Extra sidecar containers to add to the deployment
+##
+sidecars: []
+
+## Number of Cassandra replicas to deploy.
+##
+replicaCount: 1
+
+## updateStrategy for Cassandra statefulset
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+##
+updateStrategy: RollingUpdate
+
+## Partition update strategy
+## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
+##
+# rollingUpdatePartition:
+
+## StatefulSet pod management policy
+##
+podManagementPolicy: OrderedReady
+
+## Cassandra pods' priority.
+## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+##
+# priorityClassName: ""
+
+## Additional pod annotations
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+##
+podAnnotations: {}
+
+## Additional pod labels
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
+podLabels: {}
+
+## Pod affinity preset
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+##
+podAffinityPreset: ""
+
+## Pod anti-affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+##
+podAntiAffinityPreset: soft
+
+## Node affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+## Allowed values: soft, hard
+##
+nodeAffinityPreset:
+  ## Node affinity type
+  ## Allowed values: soft, hard
+  ##
+  type: ""
+  ## Node label key to match
+  ## E.g.
+  ## key: "kubernetes.io/e2e-az-name"
+  ##
+  key: ""
+  ## Node label values to match
+  ## E.g.
+  ## values:
+  ##   - e2e-az1
+  ##   - e2e-az2
+  ##
+  values: []
+
+## Affinity for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
+##
+affinity: {}
+
+## Node labels for pod assignment
+## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+##
+nodeSelector: {}
+
+## Tolerations for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+##
+tolerations: []
+
+## Pod topology spread constraints
+## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+## The value is evaluated as a template
+##
+topologySpreadConstraints: []
+
+## Pod security context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+##
+podSecurityContext:
   enabled: true
-  ## Persistent Volume Storage Class
-  ## If defined, storageClassName: <storageClass>
-  ## If set to "-", storageClassName: "", which disables dynamic provisioning
-  ## If undefined (the default) or set to null, no storageClassName spec is
-  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-  ##   GKE, AWS & OpenStack)
-  ##
-  # storageClass: "-"
-  ## Persistent Volume Claim annotations
-  ##
-  annotations:
-  ## Persistent Volume Access Mode
-  ##
-  accessModes:
-    - ReadWriteOnce
-  ## Persistent Volume size
-  ##
-  size: 8Gi
+  fsGroup: 1001
+
+## Cassandra container security context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+##
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1001
 
 ## Cassandra pods' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -145,66 +442,6 @@ resources:
   #   cpu: 2
   #   memory: 4Gi
 
-## Secret with keystore, keystore password, truststore, truststore password
-##
-# tlsEncryptionSecretName:
-
-## ConfigMap with custom cassandra configuration files. This overrides any other Cassandra configuration set in the chart
-##
-# existingConfiguration:
-
-## Cluster parameters
-##
-cluster:
-  name: cassandra
-  replicaCount: 1
-  seedCount: 1
-  numTokens: 256
-  datacenter: dc1
-  rack: rack1
-  enableRPC: true
-  endpointSnitch: SimpleSnitch
-  ## Enable the creation of the Pod Disruption Budget
-  ##
-  pdbEnabled: true
-  ## Minimum number of cluster nodes that will be running. Needs pdbEnabled=true
-  ##
-  minAvailable: 1
-  ## Maximum number of cluster nodes that may not be running. Needs pdbEnabled=true.
-  ##
-  # maxUnavailable: 1
-  ## Encryption values. NOTE: They require tlsEncryptionSecretName
-  ##
-  internodeEncryption: none
-  clientEncryption: false
-  domain: cluster.local
-
-## JVM Settings
-##
-jvm:
-  ## Extra JVM options
-  ##
-  extraOpts:
-
-  ## Memory settings: These are calculated automatically
-  ## unless specified otherwise
-  ##
-  # maxHeapSize: 4G
-  # newHeapSize: 800M
-
-## Database credentials
-##
-dbUser:
-  user: cassandra
-  forcePassword: false
-  # password:
-  # existingSecret:
-
-## ConfigMap with cql scripts. Useful for creating a keyspace
-## and pre-populating data
-##
-# initDBConfigMap:
-
 ## Cassandra container's liveness and readiness probes
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ##
@@ -223,49 +460,13 @@ readinessProbe:
   successThreshold: 1
   failureThreshold: 5
 
-## Additional pod annotations
-## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+## Custom Liveness probe
 ##
-podAnnotations: {}
+customLivenessProbe: {}
 
-## Additional pod labels
-## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+## Custom Rediness probe
 ##
-podLabels: {}
-
-## Affinity for pod assignment
-## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-##
-affinity: {}
-
-## Node labels for pod assignment. Evaluated as a template.
-## Ref: https://kubernetes.io/docs/user-guide/node-selection/
-##
-nodeSelector: {}
-
-## Tolerations for pod assignment
-## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-##
-tolerations: []
-
-## StatefulSet settings
-##
-statefulset:
-  updateStrategy: OnDelete
-  # rollingUpdatePartition:
-
-## Pod Security Context
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-##
-securityContext:
-  enabled: true
-  fsGroup: 1001
-  runAsUser: 1001
-
-## Container entrypoint and cmd (useful for using different images)
-##
-entrypoint: "/entrypoint.sh"
-cmd: "/run.sh"
+customReadinessProbe: {}
 
 ## Network policies
 ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
@@ -276,11 +477,23 @@ networkPolicy:
   enabled: false
 
   ## The Policy model to apply. When set to false, only pods with the correct
-  ## client label will have network access to the port Redis is listening
-  ## on. When true, Redis will accept connections from any source
+  ## client label will have network access to the port Redis(TM) is listening
+  ## on. When true, Redis(TM) will accept connections from any source
   ## (with the correct destination port).
   ##
   # allowExternal: true
+
+## Cassandra Pod Disruption Budget configuration
+## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+##
+pdb:
+  create: false
+  ## Min number of pods that must still be available after the eviction
+  ##
+  minAvailable: 1
+  ## Max number of pods that can be unavailable after the eviction
+  ##
+  # maxUnavailable: 1
 
 ## Cassandra Prometheus exporter configuration
 ## ref: https://hub.docker.com/r/bitnami/cassandra-exporter/tags/
@@ -291,7 +504,7 @@ metrics:
     registry: docker.io
     pullPolicy: IfNotPresent
     repository: bitnami/cassandra-exporter
-    tag: 2.3.4-debian-10-r84
+    tag: 2.3.4-debian-10-r359
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -316,5 +529,37 @@ metrics:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations:
-    prometheus.io/scrape: "true"
-    prometheus.io/port: "8080"
+    prometheus.io/scrape: 'true'
+    prometheus.io/port: '8080'
+
+  ## Prometheus Operator ServiceMonitor configuration
+  ##
+  serviceMonitor:
+    enabled: false
+    ## Namespace in which Prometheus is running
+    ##
+    # namespace: monitoring
+    ## Interval at which metrics should be scraped.
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ##
+    # interval: 10s
+    ## Timeout after which the scrape is ended
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ##
+    # scrapeTimeout: 10s
+    ## ServiceMonitor selector labels
+    ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+    ##
+    # selector:
+    #   prometheus: my-prometheus
+
+  ## Metrics container ports to open
+  ## If hostNetwork true: the hostPort is set identical to the containerPort
+  ##
+  containerPorts:
+    http: 8080
+    jmx: 5555
+
+## Array with extra yaml to deploy with the chart. Evaluated as a template
+##
+extraDeploy: []

@@ -1,15 +1,17 @@
-{{- if and (or (.Files.Glob "files/pgpool.conf") .Values.pgpool.configuration) (not .Values.pgpool.configurationCM) }}
+{{- if and .Values.pgpool.configuration (not .Values.pgpool.configurationCM) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ printf "%s-configuration" (include "postgresql-ha.pgpool" .) }}
-  labels: {{- include "postgresql-ha.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: pgpool
-data:
-  {{- if (.Files.Glob "files/pgpool.conf") }}
-  {{- (.Files.Glob "files/pgpool.conf").AsConfig | nindent 2 }}
-  {{- else if .Values.pgpool.configuration }}
-  pgpool.conf: |
-  {{- include "postgresql-ha.tplValue" (dict "value" .Values.pgpool.configuration "context" $) | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
+data:
+  pgpool.conf: |-
+    {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.configuration "context" $) | nindent 4 }}
 {{- end }}

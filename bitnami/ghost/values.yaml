@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/ghost
-  tag: 3.16.1-debian-10-r13
+  tag: 3.42.4-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -27,11 +27,29 @@ image:
   # pullSecrets:
   #   - myRegistryKeySecretName
 
-## String to partially override ghost.fullname template (will maintain the release name)
+## Force target Kubernetes version (using Helm capabilites if not set)
+##
+kubeVersion:
+
+## Number of ghost replicas to deploy
+##
+replicaCount: 1
+
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
+
+## Command and args for running the Ghost container (set to default if not set). Use array form
+##
+command: []
+args: []
+
+## String to partially override common.names.fullname template (will maintain the release name)
 ##
 # nameOverride:
 
-## String to fully override ghost.fullname template
+## String to fully override common.names.fullname template
 ##
 # fullnameOverride:
 
@@ -41,8 +59,8 @@ image:
 volumePermissions:
   image:
     registry: docker.io
-    repository: bitnami/minideb
-    tag: buster
+    repository: bitnami/bitnami-shell
+    tag: "10"
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -50,6 +68,23 @@ volumePermissions:
     ##
     # pullSecrets:
     #   - myRegistryKeySecretName
+  ## Init containers' resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    ## We usually recommend not to specify default resources and to leave this as a conscious
+    ## choice for the user. This also increases chances charts run on environments with little
+    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ##
+    limits: {}
+    ##   cpu: 100m
+    ##   memory: 128Mi
+    ##
+    requests: {}
+    ##   cpu: 100m
+    ##   memory: 128Mi
+    ##
 
 ## Ghost protocol, host, port and path to create application URLs
 ## ref: https://github.com/bitnami/bitnami-docker-ghost#configuration
@@ -81,11 +116,12 @@ ghostEmail: user@example.com
 ghostBlogTitle: User's Blog
 
 ## Set to `true` to allow the container to be started with blank passwords
-## ref: https://github.com/bitnami/bitnami-docker-wordpress#environment-variables
+## ref: https://github.com/bitnami/bitnami-docker-ghost#environment-variables
+##
 allowEmptyPassword: true
 
 ## SMTP mail delivery configuration
-## ref: https://github.com/bitnami/bitnami-docker-redmine/#smtp-configuration
+## ref: https://github.com/bitnami/bitnami-docker-ghost/#smtp-configuration
 ##
 # smtpHost:
 # smtpPort:
@@ -128,21 +164,32 @@ readinessProbe:
 ##
 ## External database configuration
 ##
+## All of these values are only used when mariadb.enabled is set to false
+##
 externalDatabase:
-  ## All of these values are only used when mariadb.enabled is set to false
+  ## Use existing secret (ignores previous password)
+  ## must contain key `mariadb-password`
+  ## NOTE: When it's set, the `externalDatabase.password` parameter is ignored
+  # existingSecret:
+
   ## Database host
+  ##
   host: localhost
 
-  ## non-root Username for Wordpress Database
+  ## non-root Username for Ghost Database
+  ##
   user: bn_ghost
 
   ## Database password
+  ##
   password: ""
 
   ## Database name
+  ##
   database: bitnami_ghost
 
   ## Database port number
+  ##
   port: 3306
 
 ##
@@ -152,31 +199,32 @@ externalDatabase:
 ##
 mariadb:
   ## Whether to deploy a mariadb server to satisfy the applications database requirements. To use an external database set this to false and configure the externalDatabase parameters
+  ##
   enabled: true
-  ## Disable MariaDB replication
-  replication:
-    enabled: false
 
-  ## Create a database and a database user
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-user-on-first-run
+  ## MariaDB architecture. Allowed values: standalone or replication
   ##
-  db:
-    name: bitnami_ghost
-    user: bn_ghost
-    ## If the password is not specified, mariadb will generates a random password
+  architecture: standalone
+
+  ## MariaDB Authentication parameters
+  ##
+  auth:
+    ## MariaDB root password
+    ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-the-root-password-on-first-run
     ##
-    # password:
+    rootPassword: ""
+    ## MariaDB custom user and database
+    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-on-first-run
+    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-user-on-first-run
+    ##
+    database: bitnami_ghost
+    username: bn_ghost
+    password: ""
 
-  ## MariaDB admin password
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#setting-the-root-password-on-first-run
-  ##
-  # rootUser:
-  #   password:
-
-  ## Enable persistence using Persistent Volume Claims
-  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
-  ##
-  master:
+  primary:
+    ## Enable persistence using Persistent Volume Claims
+    ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+    ##
     persistence:
       enabled: true
       ## mariadb data Persistent Volume Storage Class
@@ -187,8 +235,15 @@ mariadb:
       ##   GKE, AWS & OpenStack)
       ##
       # storageClass: "-"
-      accessMode: ReadWriteOnce
+      accessModes:
+        - ReadWriteOnce
       size: 8Gi
+      ## Set path in case you want to use local host path volumes (not recommended in production)
+      ##
+      hostPath:
+      ## Use an existing PVC
+      ##
+      existingClaim:
 
 ## Kubernetes configuration
 ## For minikube, set this to NodePort, elsewhere use LoadBalancer
@@ -197,6 +252,7 @@ service:
   type: LoadBalancer
 
   ## HTTP Port
+  ##
   port: 80
 
   ## Extra ports to expose (normally used with the `sidecar` value)
@@ -209,8 +265,12 @@ service:
   ##
   loadBalancerIP:
 
+  # loadBalancerSourceRanges:
+  # - 10.10.10.0/24
+
   ## nodePorts:
   ##   http: <to set explicitly, choose port between 30000-32767>
+  ##
   nodePorts:
     http: ""
 
@@ -223,13 +283,18 @@ service:
   ##
   annotations: {}
 
-## Pod Security Context
+## SecurityContext configuration
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 ##
-securityContext:
+podSecurityContext:
   enabled: true
   fsGroup: 1001
   runAsUser: 1001
+
+containerSecurityContext:
+  enabled: false
+  runAsUser: 1001
+  runAsNonRoot: true
 
 ## Enable persistence using Persistent Volume Claims
 ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
@@ -246,15 +311,34 @@ persistence:
   # storageClass: "-"
   accessMode: ReadWriteOnce
   size: 8Gi
+
+  ## A manually managed Persistent Volume Claim
+  ## Requires persistence.enabled: true
+  ## If defined, PVC must be created manually before volume will be bound
+  ##
+  # existingClaim:
+
+  ## If defined, the ghost-data volume will mount to the specified path.
+  ## Requires persistence.enabled: true
+  ## Requires persistence.existingClaim: nil|false
+  ## Default: nil.
+  ##
   path: /bitnami
 
-## Configure resource requests and limits
+## Ghost containers' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ##
 resources:
-  requests:
-    memory: 512Mi
-    cpu: 300m
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  limits: {}
+  #  cpu: 2
+  #  memory: 1Gi
+  requests: {}
+  #  cpu: 1
+  #  memory: 1Gi
 
 ## Configure the ingress resource that allows you to access the
 ## Ghost installation. Set up the URL
@@ -262,40 +346,68 @@ resources:
 ##
 ingress:
   ## Set to true to enable ingress record generation
+  ##
   enabled: false
 
   ## Set this to true in order to add the corresponding annotations for cert-manager
+  ##
   certManager: false
 
-  ## Ingress annotations. Evaluated as a template.
+  ## Ingress Path type
+  ##
+  pathType: ImplementationSpecific
+
+  ## Override API Version (automatically detected if not set)
+  ##
+  apiVersion:
+
+  ## When the ingress is enabled, a host pointing to this will be created
+  ##
+  hostname: ghost.local
+
+  ## The Path to Ghost. You may need to set this to '/*' in order to use this
+  ## with ALB ingress controllers.
+  ##
+  path: /
+
+  ## Ingress annotations done as key:value pairs
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
   ##
-  ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
   ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+  ##
   annotations: {}
-  #  kubernetes.io/ingress.class: nginx
 
-  ## The list of hostnames to be covered with this ingress record.
-  ## Most likely this will be just one host, but in the event more hosts are needed, this is an array
-  hosts:
-    - name: ghost.local
-      path: /
+  ## Enable TLS configuration for the hostname defined at ingress.hostname parameter
+  ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
+  ## You can use the ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
+  ##
+  tls: false
 
-      ## Set this to true in order to enable TLS on the ingress record
-      tls: false
+  ## The list of additional hostnames to be covered with this ingress record.
+  ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
+  ## extraHosts:
+  ## - name: ghost.local
+  ##   path: /
+  ##
 
-      ## Optionally specify the TLS hosts for the ingress record
-      ## Useful when the Ingress controller supports www-redirection
-      ## If not specified, the above host name will be used
-      # tlsHosts:
-      # - www.ghost.local
-      # - ghost.local
+  ## Any additional arbitrary paths that may need to be added to the ingress under the main host.
+  ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
+  ## extraPaths:
+  ## - path: /*
+  ##   backend:
+  ##     serviceName: ssl-redirect
+  ##     servicePort: use-annotation
+  ##
 
-      ## If TLS is set to true, you must declare what secret will store the key/certificate for TLS
-      tlsSecret: ghost.local-tls
+  ## The tls configuration for additional hostnames to be covered with this ingress record.
+  ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ## extraTls:
+  ## - hosts:
+  ##     - ghost.local
+  ##   secretName: ghost.local-tls
+  ##
 
-  secrets:
   ## If you're providing your own certificates, please use this to add the certificates as secrets
   ## key and certificate should start with -----BEGIN CERTIFICATE----- or
   ## -----BEGIN RSA PRIVATE KEY-----
@@ -305,24 +417,101 @@ ingress:
   ##
   ## It is also possible to create and manage the certificates outside of this helm chart
   ## Please see README.md for more information
-  # - name: ghost.local-tls
-  #   key:
-  #   certificate:
+  ##
+  secrets: []
+  ## - name: ghost.local-tls
+  ##   key:
+  ##   certificate:
+  ##
 
-## Node selector for pod assignment
-## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
+## Pod affinity preset
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
 ##
-nodeSelector: {}
+podAffinityPreset: ""
 
-## Affinity for pod assignment (evaluated as a template)
+## Pod anti-affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+##
+podAntiAffinityPreset: soft
+
+## Node affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+## Allowed values: soft, hard
+##
+nodeAffinityPreset:
+  ## Node affinity type
+  ## Allowed values: soft, hard
+  ##
+  type: ""
+  ## Node label key to match
+  ## E.g.
+  ## key: "kubernetes.io/e2e-az-name"
+  ##
+  key: ""
+  ## Node label values to match
+  ## E.g.
+  ## values:
+  ##   - e2e-az1
+  ##   - e2e-az2
+  ##
+  values: []
+
+## Affinity for pod assignment. Evaluated as a template.
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
 
-## Additional pod annotations
+## Node labels for pod assignment. Evaluated as a template.
+## ref: https://kubernetes.io/docs/user-guide/node-selection/
+##
+nodeSelector: {}
+
+## Tolerations for pod assignment. Evaluated as a template.
+## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+##
+tolerations: []
+
+## Pod extra labels
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
+podLabels: {}
+
+## Annotations for server pods.
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
+
+## lifecycleHooks for the Ghost container to automate configuration before or after startup.
+##
+lifecycleHooks: {}
+
+## Custom Liveness probes for Ghost
+##
+customLivenessProbe: {}
+
+## Custom Rediness probes Ghost
+##
+customReadinessProbe: {}
+
+## Update strategy - only really applicable for deployments with RWO PVs attached
+## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
+## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
+## terminate the single previous pod, so that the new, incoming pod can attach to the PV
+##
+updateStrategy:
+  type: RollingUpdate
+
+## Priority Class Name
+## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+##
+# priorityClassName: ""
+
+## Extra objects to deploy (value evaluated as a template)
+##
+extraDeploy: []
 
 ## Add sidecars to the pod
 ## For example:
@@ -333,7 +522,8 @@ podAnnotations: {}
 ##     ports:
 ##       - name: portname
 ##         containerPort: 1234
-sidecars: []
+##
+sidecars: {}
 
 ## Add init containers to the pod
 ## For example:
@@ -342,7 +532,7 @@ sidecars: []
 ##     image: your-image
 ##     imagePullPolicy: Always
 ##
-initContainers: []
+initContainers: {}
 
 ## Array to add extra volumes
 ##

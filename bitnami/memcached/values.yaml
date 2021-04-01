@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/memcached
-  tag: 1.6.6-debian-10-r0
+  tag: 1.6.9-debian-10-r114
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -31,27 +31,38 @@ image:
   ##
   debug: false
 
-## Extra environment vars to pass.
-## ref: https://github.com/bitnami/bitnami-docker-memcached#configuration
-extraEnv: []
-
-## String to partially override memcached.fullname template (will maintain the release name)
+## String to partially override common.names.fullname template (will maintain the release name)
 ##
 # nameOverride:
 
-## Number of containers to run
-replicaCount: 1
-
-## String to fully override memcached.fullname template
+## String to fully override common.names.fullname template
 ##
 # fullnameOverride:
 
-# Cluster domain
+## Add labels to all the deployed resources
+##
+commonLabels: {}
+
+## Add annotations to all the deployed resources
+##
+commonAnnotations: {}
+
+## Kubernetes Cluster Domain
+##
 clusterDomain: cluster.local
 
-## Memcahed architecture. Allowed values: standalone or high-availability
+## Extra objects to deploy (value evaluated as a template)
+##
+extraDeploy: []
+
+## Memcached architecture. Allowed values: standalone or high-availability
 ##
 architecture: standalone
+
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
 
 ## Memcached admin user
 ## ref: https://github.com/bitnami/bitnami-docker-memcached#creating-the-memcached-admin-user
@@ -62,6 +73,24 @@ architecture: standalone
 ## ref: https://github.com/bitnami/bitnami-docker-memcached#creating-the-memcached-admin-user
 ##
 # memcachedPassword:
+
+## Number of containers to run
+##
+replicaCount: 1
+
+## Command and args for running the container (set to default if not set). Use array form
+##
+command: []
+arguments:
+  - /run.sh
+  # - -m <maxMemoryLimit>
+  # - -I <maxItemSize>
+  # - -vv
+
+## Extra environment vars to pass.
+## ref: https://github.com/bitnami/bitnami-docker-memcached#configuration
+##
+extraEnv: []
 
 ## Service parameters
 ##
@@ -100,6 +129,11 @@ resources:
     memory: 256Mi
     cpu: 250m
 
+## If you want to override the port name (can be usefull when using a service mesh)
+## ref for istio: https://istio.io/latest/docs/ops/configuration/traffic-management/protocol-selection/
+##
+portName: memcache
+
 ## Pod Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 ##
@@ -109,30 +143,88 @@ securityContext:
   runAsUser: 1001
   readOnlyRootFilesystem: false
 
+## Pod extra labels
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
+podLabels: {}
+
 ## Pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
 
-## Affinity for pod assignment
+## Pod affinity preset
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+##
+podAffinityPreset: ""
+
+## Pod anti-affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+## Allowed values: soft, hard
+##
+podAntiAffinityPreset: soft
+
+## Node affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+## Allowed values: soft, hard
+##
+nodeAffinityPreset:
+  ## Node affinity type
+  ## Allowed values: soft, hard
+  ##
+  type: ""
+  ## Node label key to match
+  ## E.g.
+  ## key: "kubernetes.io/e2e-az-name"
+  ##
+  key: ""
+  ## Node label values to match
+  ## E.g.
+  ## values:
+  ##   - e2e-az1
+  ##   - e2e-az2
+  ##
+  values: []
+
+## Affinity for pod assignment. Evaluated as a template.
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+## Note: podAffinityPreset, podAntiAffinityPreset, and nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
 
 ## Node labels for pod assignment. Evaluated as a template.
-## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+## ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
 nodeSelector: {}
 
 ## Tolerations for pod assignment. Evaluated as a template.
-## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
-tolerations: {}
+tolerations: []
+
+## Pod priority
+## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+##
+# priorityClassName: ""
+
+## memcached pods ServiceAccount
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+##
+serviceAccount:
+  ## Specifies whether a ServiceAccount should be created
+  ##
+  create: true
+  ## The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the memcached.serviceAccountName template
+  ##
+  # name:
 
 ## Persistence - used for dumping and restoring states between recreations
 ## Ref: https://github.com/memcached/memcached/wiki/WarmRestart
+##
 persistence:
-  enabled: true
+  enabled: false
   ## Persistent Volume Storage Class
   ## If defined, storageClassName: <storageClass>
   ## If set to "-", storageClassName: "", which disables dynamic provisioning
@@ -152,15 +244,6 @@ persistence:
   ##
   size: 8Gi
 
-## Args for running memcached
-## Ref: https://github.com/memcached/memcached/wiki/ConfiguringServer
-arguments:
-  - /run.sh
-  # - -m <maxMemoryLimit>
-  # - -I <maxItemSize>
-  # - -vv
-
-
 ## Prometheus Exporter / Metrics
 ##
 metrics:
@@ -171,7 +254,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/memcached-exporter
-    tag: 0.6.0-debian-10-r112
+    tag: 0.8.0-debian-10-r105
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -185,6 +268,10 @@ metrics:
   podAnnotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "9150"
+  ## If you want to override the port name (can be usefull when using a service mesh)
+  ## ref for istio: https://istio.io/latest/docs/ops/configuration/traffic-management/protocol-selection/
+  ##
+  portName: metrics
   ## Memcached Prometheus exporter resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##

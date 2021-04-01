@@ -1,0 +1,167 @@
+{{- if .Values.contour.enabled }}
+---
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ include "common.names.fullname" . }}-contour
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: contour
+spec:
+  replicas: {{ .Values.replicaCount }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      # This value of maxSurge means that during a rolling update
+      # the new ReplicaSet will be created first.
+      maxSurge: 50%
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: contour
+  template:
+    metadata:
+      {{- if or .Values.configInline .Values.contour.podAnnotations }}
+      annotations:
+        {{- if .Values.contour.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.contour.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.configInline }}
+        checksum/config: {{ include (print $.Template.BasePath "/contour/configmap.yaml") . | sha256sum }}
+        {{- end }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app.kubernetes.io/component: contour
+    spec:
+      {{- include "common.images.pullSecrets" ( dict "images" (list .Values.contour.image) "global" .Values.global) | nindent 6 }}
+      {{- if .Values.contour.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.contour.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.contour.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.contour.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.contour.podAffinityPreset "component" "contour" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.contour.podAntiAffinityPreset "component" "contour" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.contour.nodeAffinityPreset.type "key" .Values.contour.nodeAffinityPreset.key "values" .Values.contour.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.contour.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.contour.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.contour.tolerations}}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.contour.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.contour.initContainers }}
+      initContainers:
+        {{- include "common.tplvalues.render" ( dict "value" .Values.contour.initContainers "context" $ ) | nindent 6 }}
+      {{- end }}
+      containers:
+        - command:
+            - contour
+          args:
+            - serve
+            - --incluster
+            - --xds-address=0.0.0.0
+            - --xds-port=8001
+            - --envoy-service-http-port={{ .Values.envoy.containerPorts.http }}
+            - --envoy-service-https-port={{ .Values.envoy.containerPorts.https }}
+            - --contour-cafile=/certs/ca.crt
+            - --contour-cert-file=/certs/tls.crt
+            - --contour-key-file=/certs/tls.key
+            - --config-path=/config/contour.yaml
+            {{- if .Values.ingressClass }}
+            - --ingress-class-name={{ .Values.ingressClass }}
+            {{- end }}
+            {{- if .Values.contour.extraArgs }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.contour.extraArgs "context" $) | nindent 12 }}
+            {{- end }}
+          image: {{ include "common.images.image" ( dict "imageRoot" .Values.contour.image "global" .Values.global) }}
+          imagePullPolicy: {{ .Values.contour.image.pullPolicy }}
+          name: contour
+          ports:
+            - containerPort: 8001
+              name: xds
+              protocol: TCP
+            - containerPort: 8000
+              name: metrics
+              protocol: TCP
+        {{- if .Values.contour.livenessProbe.enabled }}
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8000
+            initialDelaySeconds: {{ .Values.contour.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.contour.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.contour.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.contour.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.contour.livenessProbe.failureThreshold }}
+        {{- end }}
+        {{- if .Values.contour.readinessProbe.enabled }}
+          readinessProbe:
+            tcpSocket:
+              port: 8001
+            initialDelaySeconds: {{ .Values.contour.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.contour.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.contour.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.contour.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.contour.readinessProbe.failureThreshold }}
+        {{- end }}
+          resources: {{ toYaml .Values.contour.resources | nindent 12 }}
+          volumeMounts:
+            - name: contourcert
+              mountPath: /certs
+              readOnly: true
+            - name: contour-config
+              mountPath: /config
+              readOnly: true
+            {{- if .Values.contour.extraVolumeMounts }}
+              {{- include "common.tplvalues.render" ( dict "value" .Values.contour.extraVolumeMounts "context" $ ) | nindent 12 }}
+            {{- end }}
+          env:
+            - name: CONTOUR_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.namespace
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.name
+            {{- if .Values.contour.extraEnvVars }}
+              {{- include "common.tplvalues.render" (dict "value" .Values.contour.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.contour.extraEnvVarsConfigMap .Values.contour.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.contour.extraEnvVarsConfigMap }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" ( dict "value" .Values.contour.extraEnvVarsConfigMap "context" $ ) }}
+            {{- end }}
+            {{- if .Values.contour.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" ( dict "value" .Values.contour.extraEnvVarsSecret "context" $ ) }}
+            {{- end }}
+          {{- end }}
+      dnsPolicy: ClusterFirst
+      serviceAccountName: {{ include "contour.contourServiceAccountName" . }}
+      {{- if .Values.contour.securityContext.enabled }}
+      securityContext:
+        runAsUser: {{ .Values.contour.securityContext.runAsUser }}
+        runAsGroup: {{ .Values.contour.securityContext.runAsGroup }}
+        fsGroup: {{ .Values.contour.securityContext.fsGroup }}
+        runAsNonRoot: {{ .Values.contour.securityContext.runAsNonRoot }}
+      {{- end }}
+      volumes:
+        - name: contourcert
+          secret:
+            secretName: {{ include "contour.contour.certs-secret.name" . }}
+        - name: contour-config
+          configMap:
+            name: {{ include "contour.configMapName" . }}
+            defaultMode: 0644
+            items:
+              - key: contour.yaml
+                path: contour.yaml
+        {{- if .Values.contour.extraVolumes }}
+          {{- include "common.tplvalues.render" ( dict "value" .Values.contour.extraVolumes "context" $ ) | nindent 8 }}
+        {{- end }}
+{{- end }}

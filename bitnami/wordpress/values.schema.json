@@ -48,7 +48,7 @@
           "form": true,
           "description": "Whether to deploy a mariadb server to satisfy the applications database requirements. To use an external database switch this off and configure the external database details"
         },
-        "master": {
+        "primary": {
           "type": "object",
           "properties": {
             "persistence": {
@@ -59,8 +59,8 @@
                   "title": "Volume Size",
                   "form": true,
                   "hidden": {
-                    "condition": false,
-                    "value": "mariadb.enabled"
+                    "value": false,
+                    "path": "mariadb/enabled"
                   },
                   "render": "slider",
                   "sliderMin": 1,
@@ -83,38 +83,38 @@
           "type": "string",
           "form": true,
           "title": "Database Host",
-          "hidden": "mariadb.enabled"
+          "hidden": "mariadb/enabled"
         },
         "user": {
           "type": "string",
           "form": true,
           "title": "Database Username",
-          "hidden": "mariadb.enabled"
+          "hidden": "mariadb/enabled"
         },
         "password": {
           "type": "string",
           "form": true,
           "title": "Database Password",
-          "hidden": "mariadb.enabled"
+          "hidden": "mariadb/enabled"
         },
         "database": {
           "type": "string",
           "form": true,
           "title": "Database Name",
-          "hidden": "mariadb.enabled"
+          "hidden": "mariadb/enabled"
         },
         "port": {
           "type": "integer",
           "form": true,
           "title": "Database Port",
-          "hidden": "mariadb.enabled"
+          "hidden": "mariadb/enabled"
         }
       }
     },
     "ingress": {
       "type": "object",
       "form": true,
-      "title": "Ingress Details",
+      "title": "Ingress Configuration",
       "properties": {
         "enabled": {
           "type": "boolean",
@@ -127,8 +127,8 @@
           "form": true,
           "title": "Hostname",
           "hidden": {
-            "condition": false,
-            "value": "ingress.enabled"
+            "value": false,
+            "path": "ingress/enabled"
           }
         },
         "certManager": {
@@ -137,8 +137,8 @@
           "title": "Enable CertManager",
           "description": "This will add the required annotation for CertManager to add certificates.",
           "hidden": {
-            "condition": false,
-            "value": "ingress.enabled"
+            "value": false,
+            "path": "ingress/enabled"
           }
         },
         "tls": {
@@ -146,9 +146,22 @@
           "form": true,
           "title": "Create a TLS secret",
           "hidden": {
-            "condition": false,
-            "value": "ingress.enabled"
+            "value": false,
+            "path": "ingress/enabled"
           }
+        }
+      }
+    },
+    "service": {
+      "type": "object",
+      "form": true,
+      "title": "Service Configuration",
+      "properties": {
+        "type": {
+          "type": "string",
+          "form": true,
+          "title": "Service Type",
+          "description": "Allowed values: \"ClusterIP\", \"NodePort\" and \"LoadBalancer\"" 
         }
       }
     },
@@ -180,6 +193,17 @@
               "sliderUnit": "m"
             }
           }
+        }
+      }
+    },
+    "volumePermissions": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "form": true,
+          "title": "Enable Init Containers",
+          "description": "Use an init container to set required folder permissions on the data volume before mounting it in the final destination"
         }
       }
     },

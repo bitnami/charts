@@ -2,7 +2,13 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ include "harbor.registry" . }}
-  labels: {{- include "harbor.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 data:
   config.yml: |+
     version: 0.1
@@ -11,122 +17,127 @@ data:
       fields:
         service: registry
     storage:
-      {{- $storage := .Values.persistence.imageChartStorage }}
-      {{- $type := $storage.type }}
-      {{- if eq $type "filesystem" }}
+      {{- if eq .Values.persistence.imageChartStorage.type "filesystem" }}
       filesystem:
-        rootdirectory: {{ $storage.filesystem.rootdirectory }}
-        {{- if $storage.filesystem.maxthreads }}
-        maxthreads: {{ $storage.filesystem.maxthreads }}
+        rootdirectory: {{ .Values.persistence.imageChartStorage.filesystem.rootdirectory }}
+        {{- if .Values.persistence.imageChartStorage.filesystem.maxthreads }}
+        maxthreads: {{ .Values.persistence.imageChartStorage.filesystem.maxthreads }}
         {{- end }}
-      {{- else if eq $type "azure" }}
+      {{- else if eq .Values.persistence.imageChartStorage.type "azure" }}
       azure:
-        accountname: {{ $storage.azure.accountname }}
-        container: {{ $storage.azure.container }}
-        {{- if $storage.azure.realm }}
-        realm: {{ $storage.azure.realm }}
+        accountname: {{ .Values.persistence.imageChartStorage.azure.accountname }}
+        container: {{ .Values.persistence.imageChartStorage.azure.container }}
+        {{- if .Values.persistence.imageChartStorage.azure.realm }}
+        realm: {{ .Values.persistence.imageChartStorage.azure.realm }}
         {{- end }}
-      {{- else if eq $type "gcs" }}
+      {{- else if eq .Values.persistence.imageChartStorage.type "gcs" }}
       gcs:
-        bucket: {{ $storage.gcs.bucket }}
+        bucket: {{ .Values.persistence.imageChartStorage.gcs.bucket }}
         keyfile: /etc/registry/gcs-key.json
-        {{- if $storage.gcs.rootdirectory }}
-        rootdirectory: {{ $storage.gcs.rootdirectory }}
+        {{- if .Values.persistence.imageChartStorage.gcs.rootdirectory }}
+        rootdirectory: {{ .Values.persistence.imageChartStorage.gcs.rootdirectory }}
         {{- end }}
-        {{- if $storage.gcs.chunksize }}
-        chunksize: {{ $storage.gcs.chunksize }}
+        {{- if .Values.persistence.imageChartStorage.gcs.chunksize }}
+        chunksize: {{ .Values.persistence.imageChartStorage.gcs.chunksize }}
         {{- end }}
-      {{- else if eq $type "s3" }}
+      {{- else if eq .Values.persistence.imageChartStorage.type "s3" }}
       s3:
-        region: {{ $storage.s3.region }}
-        bucket: {{ $storage.s3.bucket }}
-        {{- if $storage.s3.regionendpoint }}
-        regionendpoint: {{ $storage.s3.regionendpoint }}
+        {{- if .Values.persistence.imageChartStorage.s3.region }}
+        region: {{ .Values.persistence.imageChartStorage.s3.region }}
         {{- end }}
-        {{- if $storage.s3.encrypt }}
-        encrypt: {{ $storage.s3.encrypt }}
+        {{- if .Values.persistence.imageChartStorage.s3.bucket }}
+        bucket: {{ .Values.persistence.imageChartStorage.s3.bucket }}
         {{- end }}
-        {{- if $storage.s3.secure }}
-        secure: {{ $storage.s3.secure }}
+        {{- if .Values.persistence.imageChartStorage.s3.regionendpoint }}
+        regionendpoint: {{ .Values.persistence.imageChartStorage.s3.regionendpoint }}
         {{- end }}
-        {{- if $storage.s3.v4auth }}
-        v4auth: {{ $storage.s3.v4auth }}
+        {{- if .Values.persistence.imageChartStorage.s3.encrypt }}
+        encrypt: {{ .Values.persistence.imageChartStorage.s3.encrypt }}
         {{- end }}
-        {{- if $storage.s3.chunksize }}
-        chunksize: {{ $storage.s3.chunksize }}
+        {{- if .Values.persistence.imageChartStorage.s3.keyid }}
+        keyid: {{ .Values.persistence.imageChartStorage.s3.keyid }}
         {{- end }}
-        {{- if $storage.s3.rootdirectory }}
-        rootdirectory: {{ $storage.s3.rootdirectory }}
+        {{- if .Values.persistence.imageChartStorage.s3.secure }}
+        secure: {{ .Values.persistence.imageChartStorage.s3.secure }}
         {{- end }}
-        {{- if $storage.s3.storageclass }}
-        storageclass: {{ $storage.s3.storageclass }}
+        {{- if .Values.persistence.imageChartStorage.s3.v4auth }}
+        v4auth: {{ .Values.persistence.imageChartStorage.s3.v4auth }}
         {{- end }}
-      {{- else if eq $type "swift" }}
+        {{- if .Values.persistence.imageChartStorage.s3.chunksize }}
+        chunksize: {{ .Values.persistence.imageChartStorage.s3.chunksize }}
+        {{- end }}
+        {{- if .Values.persistence.imageChartStorage.s3.rootdirectory }}
+        rootdirectory: {{ .Values.persistence.imageChartStorage.s3.rootdirectory }}
+        {{- end }}
+        {{- if .Values.persistence.imageChartStorage.s3.storageclass }}
+        storageclass: {{ .Values.persistence.imageChartStorage.s3.storageclass }}
+        {{- end }}
+      {{- else if eq .Values.persistence.imageChartStorage.type "swift" }}
       swift:
-        authurl: {{ $storage.swift.authurl }}
-        username: {{ $storage.swift.username }}
-        container: {{ $storage.swift.container }}
-        {{- if $storage.swift.region }}
-        region: {{ $storage.swift.region }}
+        authurl: {{ .Values.persistence.imageChartStorage.swift.authurl }}
+        username: {{ .Values.persistence.imageChartStorage.swift.username }}
+        container: {{ .Values.persistence.imageChartStorage.swift.container }}
+        {{- if .Values.persistence.imageChartStorage.swift.region }}
+        region: {{ .Values.persistence.imageChartStorage.swift.region }}
         {{- end }}
-        {{- if $storage.swift.tenant }}
-        tenant: {{ $storage.swift.tenant }}
+        {{- if .Values.persistence.imageChartStorage.swift.tenant }}
+        tenant: {{ .Values.persistence.imageChartStorage.swift.tenant }}
         {{- end }}
-        {{- if $storage.swift.tenantid }}
-        tenantid: {{ $storage.swift.tenantid }}
+        {{- if .Values.persistence.imageChartStorage.swift.tenantid }}
+        tenantid: {{ .Values.persistence.imageChartStorage.swift.tenantid }}
         {{- end }}
-        {{- if $storage.swift.domain }}
-        domain: {{ $storage.swift.domain }}
+        {{- if .Values.persistence.imageChartStorage.swift.domain }}
+        domain: {{ .Values.persistence.imageChartStorage.swift.domain }}
         {{- end }}
-        {{- if $storage.swift.domainid }}
-        domainid: {{ $storage.swift.domainid }}
+        {{- if .Values.persistence.imageChartStorage.swift.domainid }}
+        domainid: {{ .Values.persistence.imageChartStorage.swift.domainid }}
         {{- end }}
-        {{- if $storage.swift.trustid }}
-        trustid: {{ $storage.swift.trustid }}
+        {{- if .Values.persistence.imageChartStorage.swift.trustid }}
+        trustid: {{ .Values.persistence.imageChartStorage.swift.trustid }}
         {{- end }}
-        {{- if $storage.swift.insecureskipverify }}
-        insecureskipverify: {{ $storage.swift.insecureskipverify }}
+        {{- if .Values.persistence.imageChartStorage.swift.insecureskipverify }}
+        insecureskipverify: {{ .Values.persistence.imageChartStorage.swift.insecureskipverify }}
         {{- end }}
-        {{- if $storage.swift.chunksize }}
-        chunksize: {{ $storage.swift.chunksize }}
+        {{- if .Values.persistence.imageChartStorage.swift.chunksize }}
+        chunksize: {{ .Values.persistence.imageChartStorage.swift.chunksize }}
         {{- end }}
-        {{- if $storage.swift.prefix }}
-        prefix: {{ $storage.swift.prefix }}
+        {{- if .Values.persistence.imageChartStorage.swift.prefix }}
+        prefix: {{ .Values.persistence.imageChartStorage.swift.prefix }}
         {{- end }}
-        {{- if $storage.swift.authversion }}
-        authversion: {{ $storage.swift.authversion }}
+        {{- if .Values.persistence.imageChartStorage.swift.authversion }}
+        authversion: {{ .Values.persistence.imageChartStorage.swift.authversion }}
         {{- end }}
-        {{- if $storage.swift.endpointtype }}
-        endpointtype: {{ $storage.swift.endpointtype }}
+        {{- if .Values.persistence.imageChartStorage.swift.endpointtype }}
+        endpointtype: {{ .Values.persistence.imageChartStorage.swift.endpointtype }}
         {{- end }}
-        {{- if $storage.swift.tempurlcontainerkey }}
-        tempurlcontainerkey: {{ $storage.swift.tempurlcontainerkey }}
+        {{- if .Values.persistence.imageChartStorage.swift.tempurlcontainerkey }}
+        tempurlcontainerkey: {{ .Values.persistence.imageChartStorage.swift.tempurlcontainerkey }}
         {{- end }}
-        {{- if $storage.swift.tempurlmethods }}
-        tempurlmethods: {{ $storage.swift.tempurlmethods }}
+        {{- if .Values.persistence.imageChartStorage.swift.tempurlmethods }}
+        tempurlmethods: {{ .Values.persistence.imageChartStorage.swift.tempurlmethods }}
         {{- end }}
-      {{- else if eq $type "oss" }}
+      {{- else if eq .Values.persistence.imageChartStorage.type "oss" }}
       oss:
-        accesskeyid: {{ $storage.oss.accesskeyid }}
-        region: {{ $storage.oss.region }}
-        bucket: {{ $storage.oss.bucket }}
-        {{- if $storage.oss.endpoint }}
-        endpoint: {{ $storage.oss.endpoint }}
+        accesskeyid: {{ .Values.persistence.imageChartStorage.oss.accesskeyid }}
+        region: {{ .Values.persistence.imageChartStorage.oss.region }}
+        bucket: {{ .Values.persistence.imageChartStorage.oss.bucket }}
+        {{- if .Values.persistence.imageChartStorage.oss.endpoint }}
+        endpoint: {{ .Values.persistence.imageChartStorage.oss.endpoint }}
         {{- end }}
-        {{- if $storage.oss.internal }}
-        internal: {{ $storage.oss.internal }}
+        {{- if .Values.persistence.imageChartStorage.oss.internal }}
+        internal: {{ .Values.persistence.imageChartStorage.oss.internal }}
         {{- end }}
-        {{- if $storage.oss.encrypt }}
-        encrypt: {{ $storage.oss.encrypt }}
+        {{- if .Values.persistence.imageChartStorage.oss.encrypt }}
+        encrypt: {{ .Values.persistence.imageChartStorage.oss.encrypt }}
         {{- end }}
-        {{- if $storage.oss.secure }}
-        secure: {{ $storage.oss.secure }}
+        {{- if .Values.persistence.imageChartStorage.oss.secure }}
+        secure: {{ .Values.persistence.imageChartStorage.oss.secure }}
         {{- end }}
-        {{- if $storage.oss.chunksize }}
-        chunksize: {{ $storage.oss.chunksize }}
+        {{- if .Values.persistence.imageChartStorage.oss.chunksize }}
+        chunksize: {{ .Values.persistence.imageChartStorage.oss.chunksize }}
         {{- end }}
-        {{- if $storage.oss.rootdirectory }}
-        rootdirectory: {{ $storage.oss.rootdirectory }}
+        {{- if .Values.persistence.imageChartStorage.oss.rootdirectory }}
+        rootdirectory: {{ .Values.persistence.imageChartStorage.oss.rootdirectory }}
         {{- end }}
       {{- end }}
       cache:
@@ -137,25 +148,43 @@ data:
       delete:
         enabled: true
       redirect:
-        disable: {{ $storage.disableredirect }}
+        disable: {{ .Values.persistence.imageChartStorage.disableredirect }}
     redis:
       addr: "{{ template "harbor.redis.host" . }}:{{ template "harbor.redis.port" . }}"
       db: {{ template "harbor.redis.registryDatabaseIndex" . }}
     http:
       relativeurls: {{ .Values.registry.relativeurls }}
-      addr: :5000
+      addr: :{{ include "harbor.registry.containerPort" . }}
+      {{- if .Values.internalTLS.enabled }}
+      tls:
+        certificate: /etc/harbor/ssl/registry/tls.crt
+        key: /etc/harbor/ssl/registry/tls.key
+        minimumtls: tls1.2
+      {{- end }}
       # set via environment variable
       # secret: placeholder
       debug:
         addr: localhost:5001
     auth:
-      token:
-        issuer: harbor-token-issuer
-        realm: "{{ template "harbor.externalUrl" . }}/service/token"
-        rootcertbundle: /etc/registry/root.crt
-        service: harbor-registry
+      htpasswd:
+        realm: harbor-registry-basic-realm
+        path: /etc/registry/passwd
     validation:
       disabled: true
+
+    {{- if .Values.registry.middleware.enabled }}
+    {{- if eq .Values.registry.middleware.type "cloudFront" }}
+    middleware:
+      storage:
+        - name: cloudfront
+          options:
+            baseurl: {{ .Values.registry.middleware.cloudFront.baseurl }}
+            privatekey: /etc/registry/pk.pem
+            keypairid: {{ .Values.registry.middleware.cloudFront.keypairid }}
+            duration: {{ .Values.registry.middleware.cloudFront.duration }}
+            ipfilteredby: {{ .Values.registry.middleware.cloudFront.ipfilteredby }}
+    {{- end }}
+    {{- end }}
     notifications:
       endpoints:
         - name: harbor
@@ -166,6 +195,15 @@ data:
           backoff: 1s
   ctl-config.yml: |+
     ---
+    {{- if .Values.internalTLS.enabled }}
+    protocol: "https"
+    port: 8443
+    https_config:
+      cert: "/etc/harbor/ssl/registry/tls.crt"
+      key: "/etc/harbor/ssl/registry/tls.key"
+    {{- else }}
     protocol: "http"
     port: 8080
+    {{- end }}
     log_level: {{ .Values.logLevel }}
+    registry_config: "/etc/registry/config.yml"

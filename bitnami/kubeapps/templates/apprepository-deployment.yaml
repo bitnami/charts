@@ -1,12 +1,10 @@
-apiVersion: apps/v1
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ template "kubeapps.apprepository.fullname" . }}
   labels:
+    {{- include "kubeapps.extraAppLabels" . | nindent 4 }}
     app: {{ template "kubeapps.apprepository.fullname" . }}
-    chart: {{ template "kubeapps.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
 spec:
   replicas: {{ .Values.apprepository.replicaCount }}
   selector:
@@ -15,20 +13,26 @@ spec:
       release: {{ .Release.Name }}
   template:
     metadata:
+      {{- with .Values.apprepository.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       labels:
         app: {{ template "kubeapps.apprepository.fullname" . }}
         release: {{ .Release.Name }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/name: {{ template "common.names.name" . }}
     spec:
       serviceAccountName: {{ template "kubeapps.apprepository.fullname" . }}
 {{- include "kubeapps.imagePullSecrets" . | indent 6 }}
       {{- if .Values.apprepository.affinity }}
-      affinity: {{- include "kubeapps.tplValue" (dict "value" .Values.apprepository.affinity "context" $) | nindent 8 }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.apprepository.affinity "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.apprepository.nodeSelector }}
-      nodeSelector: {{- include "kubeapps.tplValue" (dict "value" .Values.apprepository.nodeSelector "context" $) | nindent 8 }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.apprepository.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.apprepository.tolerations }}
-      tolerations: {{- include "kubeapps.tplValue" (dict "value" .Values.apprepository.tolerations "context" $) | nindent 8 }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.apprepository.tolerations "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
@@ -37,37 +41,35 @@ spec:
       {{- end }}
       containers:
         - name: controller
-          image: {{ template "kubeapps.image" (list .Values.apprepository.image .Values.global) }}
+          image: {{ include "common.images.image" (dict "imageRoot" .Values.apprepository.image "global" .Values.global) }}
           imagePullPolicy: {{ .Values.apprepository.image.pullPolicy | quote }}
           command:
             - /apprepository-controller
           args:
             - --user-agent-comment=kubeapps/{{ .Chart.AppVersion }}
-            - --repo-sync-image={{ template "kubeapps.image" (list .Values.apprepository.syncImage .Values.global) }}
+            - --repo-sync-image={{ include "common.images.image" (dict "imageRoot" .Values.apprepository.syncImage "global" .Values.global) }}
+           {{- if .Values.global }}
+             {{- if.Values.global.imagePullSecrets }}
+               {{- range $key, $value := .Values.global.imagePullSecrets }}
+            -  --repo-sync-image-pullsecrets={{ $value | quote }}
+               {{- end }}
+             {{- end }}
+           {{- end }}
             - --repo-sync-cmd=/asset-syncer
             - --namespace={{ .Release.Namespace }}
-            {{- if .Values.mongodb.enabled }}
-            - --database-secret-name={{ .Values.mongodb.existingSecret }}
-            - --database-secret-key=mongodb-root-password
-            - --database-type=mongodb
-            - --database-url={{ template "kubeapps.mongodb.fullname" . }}
-            - --database-user=root
-            - --database-name=charts
-            {{- end }}
-            {{- if .Values.postgresql.enabled }}
+            {{- if .Values.postgresql.existingSecret }}
             - --database-secret-name={{ .Values.postgresql.existingSecret }}
+            {{- else }}
+            - --database-secret-name={{ template "kubeapps.postgresql.fullname" . }}
+            {{- end }}
             - --database-secret-key=postgresql-password
-            - --database-type=postgresql
             - --database-url={{ template "kubeapps.postgresql.fullname" . }}:5432
             - --database-user=postgres
             - --database-name=assets
-            {{- end }}
             {{- if .Values.apprepository.crontab }}
             - --crontab={{ .Values.apprepository.crontab }}
             {{- end }}
-            {{- if .Values.featureFlags.reposPerNamespace }}
-            - --repos-per-namespace
-            {{- end }}
+            - --repos-per-namespace={{ .Values.apprepository.watchAllNamespaces}}
           {{- if .Values.apprepository.resources }}
           resources: {{- toYaml .Values.apprepository.resources | nindent 12 }}
           {{- end }}

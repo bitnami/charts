@@ -1,0 +1,47 @@
+{{- if .Values.waitForBackends.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "scdf.fullname" . }}-scripts
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  namespace: {{ .Release.Namespace }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  {{- $mariadbFullname := include "scdf.mariadb.fullname" . }}
+  {{- $rabbitmqFullname := include "scdf.rabbitmq.fullname" . }}
+  {{- $kafkaFullname := include "scdf.kafka.fullname" . }}
+  {{- $releaseNamespace := .Release.Namespace }}
+  wait-for-backends.sh: |-
+    #!/bin/bash
+
+    set -o errexit
+    set -o pipefail
+    set -o nounset
+
+    # Auxiliary functions
+    k8s_wait_for_statefulset() {
+        namespace=${1:?namespace is missing}
+        statefulset=${2:?statefulset name is missing}
+        local -i return_code=0
+
+        echo "Waiting for statefulset ${statefulset} to be successfully rolled out..."
+        kubectl rollout status --namespace "$namespace" statefulset "$statefulset" >/dev/null 2>&1 || return_code=$?
+        echo "Rollout exit code: '${return_code}'"
+        return $return_code
+    }
+    {{- if .Values.mariadb.enabled }}
+    k8s_wait_for_statefulset {{ $releaseNamespace }} {{ $mariadbFullname }}
+    {{- end }}
+    {{- if or .Values.skipper.enabled .Values.server.configuration.streamingEnabled }}
+    {{- if .Values.rabbitmq.enabled }}
+    k8s_wait_for_statefulset {{ $releaseNamespace }} {{ $rabbitmqFullname }}
+    {{- else if .Values.kafka.enabled }}
+    k8s_wait_for_statefulset {{ $releaseNamespace }} {{ $kafkaFullname }}
+    {{- end }}
+    {{- end }}
+{{- end }}

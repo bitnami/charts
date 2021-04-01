@@ -1,93 +1,19 @@
 {{/* vim: set filetype=mustache: */}}
-{{/*
-Expand the name of the chart.
-*/}}
-{{- define "nginx-ingress.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-*/}}
-{{- define "nginx-ingress.fullname" -}}
-{{- if .Values.fullnameOverride -}}
-{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- $name := default .Chart.Name .Values.nameOverride -}}
-{{- if contains $name .Release.Name -}}
-{{- .Release.Name | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Create chart name and version as used by the chart label.
-*/}}
-{{- define "nginx-ingress.chart" -}}
-{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{/*
-Common labels
-*/}}
-{{- define "nginx-ingress.labels" -}}
-app: {{ include "nginx-ingress.name" . }}
-chart: {{ include "nginx-ingress.chart" . }}
-release: {{ .Release.Name }}
-heritage: {{ .Release.Service }}
-{{- end -}}
-
-{{/*
-Labels to use on deploy.spec.selector.matchLabels and svc.spec.selector
-*/}}
-{{- define "nginx-ingress.matchLabels" -}}
-app: {{ include "nginx-ingress.name" . }}
-release: {{ .Release.Name }}
-{{- end -}}
-
-{{/*
-Construct the path for the publish-service.
-
-By convention this will simply use the <namespace>/<controller-name> to match the name of the
-service generated.
-
-Users can provide an override for an explicit service they want bound via `.Values.publishService.pathOverride`
-
-*/}}
-{{- define "nginx-ingress.publishServicePath" -}}
-{{- $defServiceName := printf "%s/%s" .Release.Namespace (include "nginx-ingress.fullname" .) -}}
-{{- $servicePath := default $defServiceName .Values.publishService.pathOverride }}
-{{- print $servicePath | trimSuffix "-" -}}
-{{- end -}}
 
 {{/*
 Create a default fully qualified default backend name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
-{{- define "nginx-ingress.defaultBackend.fullname" -}}
+{{- define "nginx-ingress-controller.defaultBackend.fullname" -}}
 {{- if .Values.fullnameOverride -}}
-{{- printf "%s-%s" .Values.fullnameOverride .Values.defaultBackend.name | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-default-backend" .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
 {{- $name := default .Chart.Name .Values.nameOverride -}}
 {{- if contains $name .Release.Name -}}
-{{- printf "%s-%s" .Release.Name .Values.defaultBackend.name | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-default-backend" .Release.Name | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
-{{- printf "%s-%s-%s" .Release.Name $name .Values.defaultBackend.name | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-%s-default-backend" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Create the name of the service account to use
-*/}}
-{{- define "nginx-ingress.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create -}}
-    {{ default (include "nginx-ingress.fullname" .) .Values.serviceAccount.name }}
-{{- else -}}
-    {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
 
@@ -95,94 +21,52 @@ Create the name of the service account to use
 Return the proper nginx-ingress-controller image name
 */}}
 {{- define "nginx-ingress-controller.image" -}}
-{{- $registryName := .Values.image.registry -}}
-{{- $repositoryName := .Values.image.repository -}}
-{{- $tag := .Values.image.tag | toString -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-Also, we can't use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-    {{- else -}}
-        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-    {{- end -}}
-{{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-{{- end -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) }}
 {{- end -}}
 
 {{/*
 Return the proper defaultBackend image name
 */}}
 {{- define "nginx-ingress-controller.defaultBackend.image" -}}
-{{- $registryName := .Values.defaultBackend.image.registry -}}
-{{- $repositoryName := .Values.defaultBackend.image.repository -}}
-{{- $tag := .Values.defaultBackend.image.tag | toString -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-Also, we can't use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-    {{- else -}}
-        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-    {{- end -}}
-{{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Create chart name and version as used by the chart label.
-*/}}
-{{- define "nginx-ingress-controller.chart" -}}
-{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.defaultBackend.image "global" .Values.global) }}
 {{- end -}}
 
 {{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "nginx-ingress-controller.imagePullSecrets" -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else logic.
-Also, we can not use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-{{- if .Values.global.imagePullSecrets }}
-imagePullSecrets:
-{{- range .Values.global.imagePullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- else if or .Values.image.pullSecrets .Values.defaultBackend.image.pullSecrets }}
-imagePullSecrets:
-{{- range .Values.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.defaultBackend.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.defaultBackend.image) "global" .Values.global) -}}
 {{- end -}}
-{{- else if or .Values.image.pullSecrets .Values.defaultBackend.image.pullSecrets }}
-imagePullSecrets:
-{{- range .Values.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- range .Values.defaultBackend.image.pullSecrets }}
-  - name: {{ . }}
-{{- end }}
+
+{{/*
+Construct the path for the publish-service.
+
+By convention this will simply use the <namespace>/<controller-name> to match the name of the
+service generated.
+Users can provide an override for an explicit service they want bound via `.Values.publishService.pathOverride`
+
+*/}}
+{{- define "nginx-ingress-controller.publishServicePath" -}}
+{{- $defServiceName := printf "%s/%s" .Release.Namespace (include "common.names.fullname" .) -}}
+{{- $servicePath := default $defServiceName .Values.publishService.pathOverride }}
+{{- print $servicePath | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Create the name of the service account to use
+*/}}
+{{- define "nginx-ingress-controller.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create -}}
+    {{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
 
 {{/*
 Return the appropriate apiVersion for PodSecurityPolicy
 */}}
-{{- define "podSecurityPolicy.apiVersion" -}}
+{{- define "nginx-ingress-controller.podSecurityPolicy.apiVersion" -}}
 {{- if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
 {{- print "policy/v1beta1" -}}
 {{- else -}}
@@ -191,14 +75,12 @@ Return the appropriate apiVersion for PodSecurityPolicy
 {{- end -}}
 
 {{/*
-Renders a value that contains template.
-Usage:
-{{ include "nginx-ingress.tplValue" ( dict "value" .Values.path.to.the.Value "context" $) }}
+Return the appropriate apiGroup for PodSecurityPolicy.
 */}}
-{{- define "nginx-ingress.tplValue" -}}
-    {{- if typeIs "string" .value }}
-        {{- tpl .value .context }}
-    {{- else }}
-        {{- tpl (.value | toYaml) .context }}
-    {{- end }}
+{{- define "nginx-ingress-controller.podSecurityPolicy.apiGroup" -}}
+{{- if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
+{{- print "policy" -}}
+{{- else -}}
+{{- print "extensions" -}}
+{{- end -}}
 {{- end -}}

@@ -1,0 +1,60 @@
+{{- if .Values.receive.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "common.names.fullname" . }}-receive
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: receive
+  {{- if .Values.receive.service.annotations }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.receive.service.annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.receive.service.type }}
+  {{- if and .Values.receive.service.clusterIP (eq .Values.receive.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.receive.service.clusterIP }}
+  {{- end }}
+  {{- if ne .Values.receive.service.type "ClusterIP" }}
+  externalTrafficPolicy: {{ .Values.receive.service.externalTrafficPolicy }}
+  {{- end }}
+  {{- if and .Values.receive.service.loadBalancerIP (eq .Values.receive.service.type "LoadBalancer") }}
+  loadBalancerIP: {{ .Values.receive.service.loadBalancerIP }}
+  {{- end }}
+  {{- if and (eq .Values.receive.service.type "LoadBalancer") .Values.receive.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges: {{- toYaml .Values.receive.service.loadBalancerSourceRanges | nindent 4 }}
+  {{- end }}
+  ports:
+    - port: {{ .Values.receive.service.http.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+      {{- if (and (or (eq .Values.receive.service.type "NodePort") (eq .Values.receive.service.type "LoadBalancer")) .Values.receive.service.http.nodePort) }}
+      nodePort: {{ .Values.receive.service.http.nodePort }}
+      {{- else if eq .Values.receive.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    - port: {{ .Values.receive.service.grpc.port }}
+      targetPort: grpc
+      protocol: TCP
+      name: grpc
+      {{- if (and (or (eq .Values.receive.service.type "NodePort") (eq .Values.receive.service.type "LoadBalancer")) .Values.receive.service.grpc.nodePort) }}
+      nodePort: {{ .Values.receive.service.grpc.nodePort }}
+      {{- else if eq .Values.receive.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    - port: {{ .Values.receive.service.remoteWrite.port }}
+      targetPort: remote-write
+      protocol: TCP
+      name: remote-write
+      {{- if (and (or (eq .Values.receive.service.type "NodePort") (eq .Values.receive.service.type "LoadBalancer")) .Values.receive.service.remoteWrite.nodePort) }}
+      nodePort: {{ .Values.receive.service.remoteWrite.nodePort }}
+      {{- else if eq .Values.receive.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+  selector: 
+    {{- if .Values.receive.service.labelSelectorsOverride }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.receive.service.labelSelectorsOverride "context" $) | nindent 4 }}
+    {{- else }}
+    {{- include "common.labels.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: receive
+    {{- end }}
+{{- end }}

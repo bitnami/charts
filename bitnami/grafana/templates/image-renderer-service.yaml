@@ -2,11 +2,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "grafana.fullname" . }}-image-renderer
-  labels: {{- include "grafana.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}-image-renderer
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: image-renderer
   {{- if and .Values.imageRenderer.metrics.enabled .Values.imageRenderer.metrics.annotations }}
-  annotations: {{- include "grafana.tplValue" (dict "value" .Values.imageRenderer.metrics.annotations "context" $) | nindent 4 }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.imageRenderer.metrics.annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   type: ClusterIP
@@ -15,6 +16,6 @@ spec:
       targetPort: http
       protocol: TCP
       name: http
-  selector: {{- include "grafana.matchLabels" . | nindent 4 }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: image-renderer
 {{- end }}

@@ -2,39 +2,138 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ template "redis-cluster.fullname" . }}-cluster-create
-  labels: {{- include "redis-cluster.labels" . | nindent 4 }}
+  name: {{ template "common.names.fullname" . }}-cluster-create
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
   annotations:
     "helm.sh/hook": post-install,post-upgrade
+  {{- if .Values.initJob.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.initJob.annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
-  activeDeadlineSeconds: {{ .Values.cluster.initTimeout }}
+  activeDeadlineSeconds: {{ .Values.initJob.activeDeadlineSeconds }}
   template:
+    metadata:
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        {{- if .Values.commonLabels }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.initJob.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.initJob.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+      annotations:
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.initJob.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.initJob.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
     spec:
+      {{- include "redis-cluster.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.initJob.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.initJob.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.initJob.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.initJob.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.initJob.podAffinityPreset "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.initJob.podAntiAffinityPreset "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.initJob.nodeAffinityPreset.type "key" .Values.initJob.nodeAffinityPreset.key "values" .Values.initJob.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.initJob.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.initJob.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.initJob.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.initJob.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.initJob.priorityClassName }}
+      priorityClassName: {{ .Values.initJob.priorityClassName }}
+      {{- end }}
+      {{- if .Values.podSecurityContext.enabled }}
+      securityContext:
+        fsGroup: {{ .Values.podSecurityContext.fsGroup }}
+        {{- if .Values.podSecurityContext.sysctls }}
+        sysctls:
+          {{- toYaml .Values.podSecurityContext.sysctls | nindent 8 }}
+        {{- end }}
+      {{- end }}
+      serviceAccountName: {{ include "redis-cluster.serviceAccountName" . }}
+      {{- if .Values.initJob.initContainers }}
+      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.initJob.initContainers "context" $) | nindent 8 }}
+      {{- end }}
       containers:
         - name: trigger
-          image: "{{ template "redis-cluster.image" . }}"
+          image: {{ include "redis-cluster.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.containerSecurityContext.enabled }}
           securityContext:
             runAsUser: {{ .Values.containerSecurityContext.runAsUser }}
           {{- end }}
-          {{- if .Values.cluster.externalAccess.enabled }}
+          {{- if .Values.initJob.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.initJob.command "context" $) | nindent 12 }}
+          {{- else }}
           command: ['/bin/bash', '-c']
+          {{- end }}
+          {{- if .Values.initJob.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.initJob.args "context" $) | nindent 12 }}
+          {{- else if .Values.cluster.externalAccess.enabled }}
           args:
             - |
+              # Backwards compatibility change
+              if ! [[ -f /opt/bitnami/redis/etc/redis.conf ]]; then
+                  cp /opt/bitnami/redis/etc/redis-default.conf /opt/bitnami/redis/etc/redis.conf
+              fi
               ips=($(echo "{{ .Values.cluster.externalAccess.service.loadBalancerIP }}" | cut -d [ -f2 | cut -d ] -f 1))
               export REDIS_NODES="${ips[@]}"
-              /entrypoint.sh /run.sh
+              /opt/bitnami/scripts/redis-cluster/entrypoint.sh /opt/bitnami/scripts/redis-cluster/run.sh
+          {{- else }}
+          args:
+            - |
+              # Backwards compatibility change
+              if ! [[ -f /opt/bitnami/redis/etc/redis.conf ]]; then
+                  cp /opt/bitnami/redis/etc/redis-default.conf /opt/bitnami/redis/etc/redis.conf
+              fi
+              /opt/bitnami/scripts/redis-cluster/entrypoint.sh /opt/bitnami/scripts/redis-cluster/run.sh
           {{- end }}
           env:
+            - name: REDIS_TLS_ENABLED
+              value: {{ ternary "yes" "no" .Values.tls.enabled | quote }}
+            {{- if .Values.tls.enabled }}
+            - name:  REDIS_TLS_AUTH_CLIENTS
+              value: {{ ternary "yes" "no" .Values.tls.authClients | quote }}
+            - name:  REDIS_TLS_CERT_FILE
+              value: {{ template "redis-cluster.tlsCert" . }}
+            - name:  REDIS_TLS_KEY_FILE
+              value: {{ template "redis-cluster.tlsCertKey" . }}
+            - name:  REDIS_TLS_CA_FILE
+              value: {{ template "redis-cluster.tlsCACert" . }}
+            {{- if .Values.tls.dhParamsFilename }}
+            - name:  REDIS_TLS_DH_PARAMS_FILE
+              value: {{ template "redis-cluster.tlsDHParams" . }}
+            {{- end }}
+            {{- end }}
             {{- if .Values.cluster.externalAccess.enabled }}
-            - name: REDIS_PORT
-              value: {{ .Values.cluster.externalAccess.service.port | quote }}
+            {{- if .Values.tls.enabled }}
+            - name: REDIS_TLS_PORT
             {{- else }}
             - name: REDIS_PORT
-              value: {{ .Values.redisPort | quote }}
+            {{- end }}
+              value: {{ .Values.cluster.externalAccess.service.port | quote }}
+            {{- else }}
+            {{- if .Values.tls.enabled }}
+            - name: REDIS_TLS_PORT
+            {{- else }}
+            - name: REDIS_PORT
+            {{- end }}
+              value: {{ .Values.redis.port | quote }}
             - name: REDIS_NODES
-              value: "{{ $count := .Values.cluster.nodes | int }}{{ range $i, $v := until $count }}{{ include "redis-cluster.fullname" $ }}-{{ $i }}.{{ template "redis-cluster.fullname" $ }}-headless {{ end }}"
+              value: "{{ $count := .Values.cluster.nodes | int }}{{ range $i, $v := until $count }}{{ include "common.names.fullname" $ }}-{{ $i }}.{{ template "common.names.fullname" $ }}-headless {{ end }}"
             {{- end }}
             {{- if .Values.usePassword }}
             - name: REDISCLI_AUTH
@@ -47,5 +146,44 @@ spec:
               value: "yes"
             - name: REDIS_CLUSTER_REPLICAS
               value: {{ .Values.cluster.replicas | quote }}
+            {{- if .Values.initJob.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.initJob.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.initJob.extraEnvVarsCM .Values.initJob.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.initJob.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.initJob.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.initJob.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.initJob.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- end }}
+          {{- if .Values.initJob.resources }}
+          resources: {{- toYaml .Values.initJob.resources | nindent 12 }}
+          {{- end }}
+          {{- if or .Values.tls.enabled .Values.initJob.extraVolumeMounts }}
+          volumeMounts:
+            {{- if .Values.tls.enabled }}
+            - name: redis-certificates
+              mountPath: /opt/bitnami/redis/certs
+              readOnly: true
+            {{- end }}
+            {{- if .Values.initJob.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.initJob.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+          {{- end }}
       restartPolicy: OnFailure
+      {{- if or .Values.tls.enabled .Values.initJob.extraVolumes }}
+      volumes:
+      {{- if .Values.tls.enabled }}
+        - name: redis-certificates
+          secret:
+            secretName: {{ include "common.tplvalues.render" (dict "value" .Values.tls.certificatesSecret "context" $) }}
+      {{- end }}
+      {{- if .Values.initJob.extraVolumes }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.initJob.extraVolumes "context" $) | nindent 6 }}
+      {{- end }}
+      {{- end }}
 {{- end }}

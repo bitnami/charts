@@ -1,37 +1,47 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ include "kong.fullname" . }}-migrate
+  name: {{ include "common.names.fullname" . }}-migrate
   namespace: {{ .Release.Namespace }}
-  labels: {{- include "kong.labels" . | nindent 4 }}
-  annotations: {{- include "kong.tplValue" ( dict "value" .Values.migration.annotations "context" $ ) | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: server
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.migration.annotations "context" $ ) | nindent 4 }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
 spec:
   template:
     metadata:
-      labels: {{- include "kong.labels" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: migration
       annotations:
       {{- if .Values.migration.podAnnotations }}
-      {{- include "kong.tplValue" (dict "value" .Values.migration.podAnnotations "context" $) | nindent 8 }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.migration.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
     spec:
       {{- include "kong.imagePullSecrets" . | nindent 6 }}
       restartPolicy: OnFailure
       {{- if .Values.podSecurityContext }}
-      securityContext: {{- include "kong.tplValue" (dict "value" .Values.podSecurityContext "context" $) | nindent 8 }}
+      securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.migration.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.migration.hostAliases "context" $) | nindent 8 }}
       {{- end }}
       containers:
         - name: kong-migrate
           image: {{ template "kong.migration.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.migration.command }}
-          command: {{- include "kong.tplValue" (dict "value" .Values.migration.command "context" $) | nindent 12 }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.migration.command "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.migration.args }}
-          args: {{- include "kong.tplValue" (dict "value" .Values.migration.args "context" $) | nindent 12 }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.migration.args "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.containerSecurityContext }}
-          securityContext: {{- include "kong.tplValue" (dict "value" .Values.containerSecurityContext "context" $) | nindent 12 }}
+          securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: KONG_MIGRATE
@@ -77,7 +87,7 @@ spec:
               value: {{ include "kong.cassandra.user" . | quote }}
             {{- end }}
             {{- if .Values.migration.extraEnvVars }}
-            {{- include "kong.tplValue" (dict "value" .Values.migration.extraEnvVars "context" $) | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.migration.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
           {{- if or .Values.migration.extraEnvVarsCM .Values.migration.extraEnvVarsSecret }}
           envFrom:
@@ -92,12 +102,12 @@ spec:
           {{- end }}
           {{- if .Values.migration.extraVolumeMounts }}
           volumeMounts:
-            {{- include "kong.tplValue" (dict "value" .Values.migration.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.migration.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.migration.resources }}
           resources: {{- toYaml .Values.migration.resources | nindent 12 }}
           {{- end }}
       {{- if .Values.extraVolumes }}
       volumes:
-      {{- include "kong.tplValue" (dict "value" .Values.extraVolumes "context" $) | nindent 6 }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 6 }}
       {{- end }}

@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "harbor.trivy" . }}-envvars
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    app.kubernetes.io/component: trivy
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  SCANNER_LOG_LEVEL: {{ .Values.logLevel | quote }}
+  SCANNER_TRIVY_CACHE_DIR: {{ printf "%s/%s" .Values.trivy.cacheDir "trivy" | quote }}
+  SCANNER_TRIVY_REPORTS_DIR: {{ printf "%s/%s" .Values.trivy.cacheDir "reports" | quote }}
+  SCANNER_TRIVY_DEBUG_MODE: {{ .Values.trivy.debugMode | quote }}
+  SCANNER_TRIVY_VULN_TYPE: {{ .Values.trivy.vulnType | quote }}
+  SCANNER_TRIVY_SEVERITY: {{ .Values.trivy.severity | quote }}
+  SCANNER_TRIVY_IGNORE_UNFIXED: {{ .Values.trivy.ignoreUnfixed | quote }}
+  SCANNER_TRIVY_SKIP_UPDATE: {{ .Values.trivy.skipUpdate | quote }}
+  SCANNER_TRIVY_INSECURE: {{ .Values.trivy.insecure | quote }}
+  SCANNER_API_SERVER_ADDR: {{ printf ":%s" (include "harbor.trivy.containerPort" .) | quote }}
+  {{- if .Values.internalTLS.enabled }}
+  INTERNAL_TLS_ENABLED: "true"
+  SCANNER_API_SERVER_TLS_KEY: /etc/harbor/ssl/trivy/tls.key
+  SCANNER_API_SERVER_TLS_CERTIFICATE: /etc/harbor/ssl/trivy/tls.crt
+  {{- end }}
+  {{- if has "trivy" .Values.proxy.components }}
+  HTTP_PROXY: {{ .Values.proxy.httpProxy | quote }}
+  HTTPS_PROXY: {{ .Values.proxy.httpsProxy | quote }}
+  NO_PROXY: {{ include "harbor.noProxy" . | quote }}
+  {{- end }}

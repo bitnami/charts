@@ -2,28 +2,36 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "mxnet.fullname" . }}
-  labels: {{- include "mxnet.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: standalone
 spec:
   replicas: 1
   selector:
-    matchLabels: {{- include "mxnet.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: standalone
   template:
     metadata:
-      labels: {{- include "mxnet.labels" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: standalone
     spec:
-{{- include "mxnet.imagePullSecrets" . | nindent 6 }}
+      {{- include "mxnet.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.affinity }}
-      affinity: {{- include "mxnet.tplValue" (dict "value" .Values.affinity "context" $) | nindent 8 }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.nodeSelector }}
-      nodeSelector: {{- include "mxnet.tplValue" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.tolerations }}
-      tolerations: {{- include "mxnet.tplValue" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
@@ -40,10 +48,14 @@ spec:
             - /bin/sh
             - -c
             - |
+              [[ -f "/opt/bitnami/scripts/git/entrypoint.sh" ]] && source "/opt/bitnami/scripts/git/entrypoint.sh"
               git clone {{ .Values.cloneFilesFromGit.repository }} --branch {{ .Values.cloneFilesFromGit.revision }} /app
           volumeMounts:
             - name: git-cloned-files
               mountPath: /app
+          {{- if .Values.cloneFilesFromGit.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.cloneFilesFromGit.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
         {{- end }}
         {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
         - name: volume-permissions
@@ -64,7 +76,7 @@ spec:
               mountPath: {{ .Values.persistence.mountPath }}
         {{- end }}
         {{- if .Values.initContainers }}
-        {{- include "mxnet.tplValue" ( dict "value" .Values.initContainers "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.initContainers "context" $) | nindent 8 }}
         {{- end }}
       {{- end }}
       containers:
@@ -83,7 +95,7 @@ spec:
             {{- end }}
           ports:
             - name: mxnet
-              containerPort: {{ .Values.schedulerPort }}
+              containerPort: {{ .Values.scheduler.port }}
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             exec:
@@ -124,6 +136,9 @@ spec:
             - name: git-cloned-files
               mountPath: /app
             {{- end }}
+            {{- if .Values.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
             - name: data
               mountPath: {{ .Values.persistence.mountPath }}
             {{- if .Values.existingSecret }}
@@ -131,7 +146,7 @@ spec:
               mountPath: /secrets
             {{- end }}
         {{- if .Values.sidecars }}
-        {{- include "mxnet.tplValue" ( dict "value" .Values.sidecars "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
         {{- if .Values.existingSecret }}
@@ -146,15 +161,18 @@ spec:
         {{- else if .Files.Glob "files/*" }}
         - name: local-files
           configMap:
-            name: {{ include "mxnet.fullname" . }}-files
+            name: {{ include "common.names.fullname" . }}-files
         {{- else if .Values.cloneFilesFromGit.enabled }}
         - name: git-cloned-files
           emptyDir: {}
         {{- end }}
+        {{- if .Values.extraVolumes }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
         - name: data
           {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:
-            claimName: {{ include "mxnet.fullname" . }}
+            claimName: {{ include "common.names.fullname" . }}
           {{- else }}
           emptyDir: {}
           {{- end }}

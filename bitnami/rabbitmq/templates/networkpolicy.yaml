@@ -2,18 +2,12 @@
 kind: NetworkPolicy
 apiVersion: networking.k8s.io/v1
 metadata:
-  name: {{ template "rabbitmq.fullname" . }}
-  namespace: {{ .Release.Namespace }}
-  labels:
-    app: {{ template "rabbitmq.name" . }}
-    chart: {{ template "rabbitmq.chart" . }}
-    release: {{ .Release.Name | quote }}
-    heritage: {{ .Release.Service | quote }}
+  name: {{ include "rabbitmq.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
 spec:
   podSelector:
-    matchLabels:
-      app: {{ template "rabbitmq.name" . }}
-      release: {{ .Release.Name | quote }}
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
   ingress:
     # Allow inbound connections
     - ports:
@@ -29,13 +23,12 @@ spec:
               {{ template "rabbitmq.fullname" . }}-client: "true"
         - podSelector:
             matchLabels:
-              app: {{ template "rabbitmq.name" . }}
-              release: {{ .Release.Name }}
-        {{- with .Values.networkPolicy.additionalRules }}
-{{ toYaml . | indent 8 }}
+              {{- include "common.labels.matchLabels" . | nindent 14 }}
+        {{- if .Values.networkPolicy.additionalRules }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.networkPolicy.additionalRules "context" $) | nindent 8 }}
         {{- end }}
       {{- end }}
     # Allow prometheus scrapes
     - ports:
-        - port: {{ .Values.metrics.port }}
+        - port: {{ .Values.service.metricsPort }}
 {{- end }}

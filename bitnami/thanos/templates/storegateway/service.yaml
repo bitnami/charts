@@ -2,19 +2,22 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "thanos.fullname" . }}-storegateway
-  labels: {{- include "thanos.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}-storegateway
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: storegateway
     {{- if and .Values.metrics.enabled .Values.metrics.serviceMonitor.enabled }}
     prometheus-operator/monitor: 'true'
     {{- end }}
   {{- if .Values.storegateway.service.annotations }}
-  annotations: {{- include "thanos.tplValue" (dict "value" .Values.storegateway.service.annotations "context" $) | nindent 4 }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.service.annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   type: {{ .Values.storegateway.service.type }}
   {{- if and .Values.storegateway.service.clusterIP (eq .Values.storegateway.service.type "ClusterIP") }}
   clusterIP: {{ .Values.storegateway.service.clusterIP }}
+  {{- end }}
+  {{- if ne .Values.storegateway.service.type "ClusterIP" }}
+  externalTrafficPolicy: {{ .Values.storegateway.service.externalTrafficPolicy }}
   {{- end }}
   {{- if and .Values.storegateway.service.loadBalancerIP (eq .Values.storegateway.service.type "LoadBalancer") }}
   loadBalancerIP: {{ .Values.storegateway.service.loadBalancerIP }}
@@ -41,6 +44,11 @@ spec:
       {{- else if eq .Values.storegateway.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-  selector: {{- include "thanos.matchLabels" . | nindent 4 }}
+  selector:
+    {{- if .Values.storegateway.service.labelSelectorsOverride }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.service.labelSelectorsOverride "context" $) | nindent 4 }}
+    {{- else }}
+    {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: storegateway
+    {{- end }}
 {{- end }}

@@ -8,33 +8,28 @@
 #     - myRegistryKeySecretName
 #   storageClass: myStorageClass
 
-## Use an alternate scheduler, e.g. "stork".
-## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
-##
-# schedulerName:
-
 ## Bitnami MariaDB image
 ## ref: https://hub.docker.com/r/bitnami/mariadb/tags/
 ##
 image:
   registry: docker.io
   repository: bitnami/mariadb
-  tag: 10.3.23-debian-10-r25
+  tag: 10.5.9-debian-10-r28
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
-  ## Optionally specify an array of imagePullSecrets.
-  ## Secrets must be manually created in the namespace.
+  ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## Example:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
   ##
-  # pullSecrets:
-  #   - myRegistryKeySecretName
-
+  pullSecrets: []
   ## Set to true if you would like to see extra information on logs
-  ## It turns BASH and NAMI debugging in minideb
-  ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ## It turns BASH and/or NAMI debugging in the image
+  ##
   debug: false
 
 ## String to partially override mariadb.fullname template (will maintain the release name)
@@ -45,178 +40,274 @@ image:
 ##
 # fullnameOverride:
 
-## Additional pod labels
+## Cluster domain
 ##
-# podLabels:
-  # extraLabel: extraValue
+clusterDomain: cluster.local
 
-## Init containers parameters:
-## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
+## Common annotations to add to all MariaDB resources (sub-charts are not considered). Evaluated as a template
 ##
-volumePermissions:
-  enabled: false
-  image:
-    registry: docker.io
-    repository: bitnami/minideb
-    tag: buster
-    pullPolicy: Always
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ##
-    # pullSecrets:
-    #   - myRegistryKeySecretName
-  resources: {}
+commonAnnotations: {}
 
-service:
-  ## Kubernetes service type, ClusterIP and NodePort are supported at present
-  type: ClusterIP
-  # clusterIp:
-  #   master: xx.xx.xx.xx
-  #   slave: xx.xx.xx.xx
-  port: 3306
-  ## Specify the nodePort value for the LoadBalancer and NodePort service types.
-  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
-  ##
-  # nodePort:
-  #   master: 30001
-  #   slave: 30002
-
-## Pods Service Account
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
-serviceAccount:
-  ## Specifies whether a ServiceAccount should be created
-  ##
-  create: false
-  ## The name of the ServiceAccount to use.
-  ## If not set and create is true, a name is generated using the mariadb.fullname template
-  # name:
-
-## Role Based Access
-## Ref: https://kubernetes.io/docs/admin/authorization/rbac/
+## Common labels to add to all MariaDB resources (sub-charts are not considered). Evaluated as a template
 ##
-rbac:
-  create: false
+commonLabels: {}
 
-## Pod Security Context
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+## Use an alternate scheduler, e.g. "stork".
+## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
-securityContext:
-  enabled: true
-  fsGroup: 1001
-  runAsUser: 1001
+# schedulerName:
 
-## Use existing secret (ignores root, db and replication passwords)
+## MariaDB architecture. Allowed values: standalone or replication
 ##
-# existingSecret:
+architecture: standalone
 
-## MariaDB admin credentials
+## MariaDB Authentication parameters
 ##
-rootUser:
-  ## MariaDB admin password
+auth:
+  ## MariaDB root password
   ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-the-root-password-on-first-run
   ##
+  rootPassword: ""
+  ## MariaDB custom user and database
+  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-on-first-run
+  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-user-on-first-run
+  ##
+  database: my_database
+  username: ""
   password: ""
-  ## Option to force users to specify a password. That is required for 'helm upgrade' to work properly.
-  ## If it is not force, a random password will be generated.
-  ##
-  forcePassword: false
-  ## Mount admin password as a file instead of using an environment variable
-  ##
-  injectSecretsAsVolume: false
-
-## Custom user/db credentials
-##
-db:
-  ## MariaDB username and password
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb#creating-a-database-user-on-first-run
-  ##
-  user: ""
-  password: ""
-  ## Database to create
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb#creating-a-database-on-first-run
-  ##
-  name: my_database
-  ## Option to force users to specify a password. That is required for 'helm upgrade' to work properly.
-  ## If it is not force, a random password will be generated.
-  ##
-  forcePassword: false
-  ## Mount user password as a file instead of using an environment variable
-  ##
-  injectSecretsAsVolume: false
-
-## Replication configuration
-##
-replication:
-  ## Enable replication. This enables the creation of replicas of MariaDB. If false, only a
-  ## master deployment would be created
-  ##
-  enabled: true
-  ## MariaDB replication user
+  ## MariaDB replication user and password
   ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-up-a-replication-cluster
   ##
-  user: replicator
-  ## MariaDB replication user password
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-up-a-replication-cluster
+  replicationUser: replicator
+  replicationPassword: ""
+  ## Existing secret with MariaDB credentials
+  ## NOTE: When it's set the previous parameters are ignored.
   ##
-  password: ""
-  ## Option to force users to specify a password. That is required for 'helm upgrade' to work properly.
-  ## If it is not force, a random password will be generated.
+  # existingSecret: name-of-existing-secret
+  ## Force users to specify required passwords
   ##
   forcePassword: false
-  ## Mount replication user password as a file instead of using an environment variable
+  ## Mount credentials as files instead of using an environment variable
   ##
-  injectSecretsAsVolume: false
+  usePasswordFiles: false
+  ## Use custom secret files other than chart provided when usePasswordFiles is set to "true"
+  ## Example:
+  ## customPasswordFiles:
+  ##   root: /vault/secrets/mariadb-root
+  ##   user: /vault/secrets/mariadb-user
+  ##   replicator: /vault/secrets/mariadb-replicator
+  ##
+  customPasswordFiles: {}
 
 ## initdb scripts
 ## Specify dictionary of scripts to be run at first boot
-## Alternatively, you can put your scripts under the files/docker-entrypoint-initdb.d directory
+## Example:
+## initdbScripts:
+##   my_init_script.sh: |
+##      #!/bin/bash
+##      echo "Do something."
 ##
-# initdbScripts:
-#   my_init_script.sh: |
-#      #!/bin/sh
-#      echo "Do something."
-#
-## ConfigMap with scripts to be run at first boot
-## Note: This will override initdbScripts
+initdbScripts: {}
+
+## Existing ConfigMap with custom init scripts
+##
 # initdbScriptsConfigMap:
 
-master:
-  ## Mariadb Master additional pod annotations
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-  # annotations:
-  #   key: value
-  #   another-key: another-value
-
-  ## MariaDB additional command line flags
-  ## Can be used to specify command line flags, for example:
+## Mariadb Primary parameters
+##
+primary:
+  ## Command and args for running the container (set to default if not set). Use array form
   ##
-  ## extraFlags: "--max-connect-errors=1000 --max_connections=155"
+  command: []
+  args: []
 
-  ## Affinity for pod assignment
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
+  ## Configure MariaDB Primary with a custom my.cnf file
+  ## ref: https://mysql.com/kb/en/mysql/configuring-mysql-with-mycnf/#example-of-configuration-file
+  ##
+  configuration: |-
+    [mysqld]
+    skip-name-resolve
+    explicit_defaults_for_timestamp
+    basedir=/opt/bitnami/mariadb
+    plugin_dir=/opt/bitnami/mariadb/plugin
+    port=3306
+    socket=/opt/bitnami/mariadb/tmp/mysql.sock
+    tmpdir=/opt/bitnami/mariadb/tmp
+    max_allowed_packet=16M
+    bind-address=0.0.0.0
+    pid-file=/opt/bitnami/mariadb/tmp/mysqld.pid
+    log-error=/opt/bitnami/mariadb/logs/mysqld.log
+    character-set-server=UTF8
+    collation-server=utf8_general_ci
+
+    [client]
+    port=3306
+    socket=/opt/bitnami/mariadb/tmp/mysql.sock
+    default-character-set=UTF8
+    plugin_dir=/opt/bitnami/mariadb/plugin
+
+    [manager]
+    port=3306
+    socket=/opt/bitnami/mariadb/tmp/mysql.sock
+    pid-file=/opt/bitnami/mariadb/tmp/mysqld.pid
+
+  ## Name of existing ConfigMap with MariaDB Primary configuration.
+  ## NOTE: When it's set the 'configuration' parameter is ignored
+  ##
+  # existingConfiguration:
+
+  ## updateStrategy for Mariadb Primary statefulset
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy: RollingUpdate
+
+  ## Partition update strategy for Mariadb Primary statefulset
+  ## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
+  ##
+  # rollingUpdatePartition:
+
+  ## Mariadb Primary pod annotations
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+
+  ## Mariadb Primary pod affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAffinityPreset: ""
+
+  ## Mariadb Primary pod anti-affinity preset
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAntiAffinityPreset: soft
+
+  ## Mariadb Primary node affinity preset
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ## Allowed values: soft, hard
+  ##
+  nodeAffinityPreset:
+    ## Node affinity type
+    ## Allowed values: soft, hard
+    ##
+    type: ""
+    ## Node label key to match
+    ## E.g.
+    ## key: "kubernetes.io/e2e-az-name"
+    ##
+    key: ""
+    ## Node label values to match
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+
+  ## Affinity for MariaDB primary pods assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
 
-  ## Kept for backwards compatibility. You can now disable it by removing it.
-  ## if you wish to set it through master.affinity.podAntiAffinity instead.
-  ##
-  antiAffinity: soft
-
-  ## Node labels for pod assignment
+  ## Node labels for MariaDB primary pods assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
 
-  ## Tolerations for pod assignment
+  ## Tolerations for MariaDB primary pods assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
 
-  ## updateStrategy for MariaDB Master StatefulSet
-  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
-  updateStrategy:
-    type: RollingUpdate
+  ## Priority class for MariaDB primary pods assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+  ##
+  priorityClassName: ""
+
+  ## MariaDB primary Pod security context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+
+  ## MariaDB primary container security context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+
+  ## MariaDB primary container's resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits: {}
+    #   memory: 256Mi
+    #   cpu: 100m
+    requests: {}
+    #   memory: 256Mi
+    #   cpu: 100m
+
+  ## MariaDB primary container's liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 120
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 3
+    successThreshold: 1
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 3
+    successThreshold: 1
+
+  ## MariaDB primary custom liveness probe
+  ##
+  customLivenessProbe: {}
+
+  ## MariaDB primary custom rediness probe
+  ##
+  customReadinessProbe: {}
+
+  ## MariaDB primary additional command line flags
+  ## Can be used to specify command line flags, for example:
+  ## E.g.
+  ## extraFlags: "--max-connect-errors=1000 --max_connections=155"
+  ##
+  extraFlags: ""
+
+  ## An array to add extra environment variables on MariaDB primary containers
+  ## E.g.
+  ## extraEnvVars:
+  ##  - name: TZ
+  ##    value: "Europe/Paris"
+  ##
+  extraEnvVars: []
+
+  ## ConfigMap with extra env vars for MariaDB primary containers:
+  ##
+  extraEnvVarsCM: ""
+
+  ## Secret with extra env vars for MariaDB primary containers:
+  ##
+  extraEnvVarsSecret: ""
 
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
@@ -225,11 +316,12 @@ master:
     ## If true, use a Persistent Volume Claim, If false, use emptyDir
     ##
     enabled: true
-    # Enable persistence using an existing PVC
+    ## Name of existing PVC to hold MariaDB Primary data
+    ## NOTE: When it's set the rest of persistence parameters are ignored
+    ##
     # existingClaim:
-    # Subdirectory of the volume to mount
+    ## Subdirectory of the volume to mount
     # subPath:
-    mountPath: /bitnami/mariadb
     ## Persistent Volume Storage Class
     ## If defined, storageClassName: <storageClass>
     ## If set to "-", storageClassName: "", which disables dynamic provisioning
@@ -248,36 +340,98 @@ master:
     ## Persistent Volume size
     ##
     size: 8Gi
+    ## selector can be used to match an existing PersistentVolume
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    ##
+    selector: {}
 
-  ## Add extra init Containers (evaluated as a templ
+  ## Extra volumes to add to the MariaDB Primary pod(s)
   ##
-  extraInitContainers: []
+  extraVolumes: []
 
-  ## An array to add extra environment variables
-  ## For example:
-  ## extraEnvVars:
-  ##  - name: TZ
-  ##    value: "Europe/Paris"
+  ## Extra volume mounts to add to the MariaDB Primary container(s)
   ##
-  extraEnvVars:
+  extraVolumeMounts: []
 
-  ## ConfigMap with extra env vars:
+  ## Extra init containers to add to the MariaDB Primary pod(s)
   ##
-  extraEnvVarsCM:
+  initContainers: []
 
-  ## Secret with extra env vars:
+  ## Extra sidecar containers to add to the MariaDB Primary pod(s)
   ##
-  extraEnvVarsSecret:
+  sidecars: []
 
-  ## Configure MySQL with a custom my.cnf file
+  ## MariaDB Primary Service parameters
+  ##
+  service:
+    ## Service type
+    ##
+    type: ClusterIP
+    ## Service port
+    ##
+    port: 3306
+    ## Specify the nodePort value for the LoadBalancer and NodePort service types.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ##
+    nodePort: ""
+    ## Service clusterIP
+    ##
+    # clusterIP: None
+    clusterIP: ""
+    ## Set the LoadBalancer service type to internal only.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+    ##
+    loadBalancerIP: ""
+    ## Load Balancer sources
+    ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## E.g.
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## Provide any additional annotations which may be required
+    ##
+    annotations: {}
+
+  ## MariaDB primary Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+  ##
+  pdb:
+    enabled: false
+    ## Min number of pods that must still be available after the eviction
+    ##
+    minAvailable: 1
+    ## Max number of pods that can be unavailable after the eviction
+    ##
+    # maxUnavailable: 1
+
+## Mariadb Secondary parameters
+##
+secondary:
+  ## Number of Mariadb Secondary replicas to deploy
+  ##
+  replicaCount: 1
+
+  ## Command and args for running the container (set to default if not set). Use array form
+  ##
+  command: []
+  args: []
+
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
+  ## Configure MariaDB Secondary with a custom my.cnf file
   ## ref: https://mysql.com/kb/en/mysql/configuring-mysql-with-mycnf/#example-of-configuration-file
   ##
-  config: |-
+  configuration: |-
     [mysqld]
     skip-name-resolve
     explicit_defaults_for_timestamp
     basedir=/opt/bitnami/mariadb
-    plugin_dir=/opt/bitnami/mariadb/plugin
     port=3306
     socket=/opt/bitnami/mariadb/tmp/mysql.sock
     tmpdir=/opt/bitnami/mariadb/tmp
@@ -292,196 +446,292 @@ master:
     port=3306
     socket=/opt/bitnami/mariadb/tmp/mysql.sock
     default-character-set=UTF8
-    plugin_dir=/opt/bitnami/mariadb/plugin
 
     [manager]
     port=3306
     socket=/opt/bitnami/mariadb/tmp/mysql.sock
     pid-file=/opt/bitnami/mariadb/tmp/mysqld.pid
 
-  ## Configure master resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## Name of existing ConfigMap with MariaDB Secondary configuration.
+  ## NOTE: When it's set the 'configuration' parameter is ignored
   ##
-  resources: {}
-  livenessProbe:
-    enabled: true
-    ##
-    ## Initializing the database could take some time
-    initialDelaySeconds: 120
-    ##
-    ## Default Kubernetes values
-    periodSeconds: 10
-    timeoutSeconds: 1
-    successThreshold: 1
-    failureThreshold: 3
-  readinessProbe:
-    enabled: true
-    initialDelaySeconds: 30
-    ##
-    ## Default Kubernetes values
-    periodSeconds: 10
-    timeoutSeconds: 1
-    successThreshold: 1
-    failureThreshold: 3
+  # existingConfiguration:
 
-  podDisruptionBudget:
-    enabled: false
-    minAvailable: 1
-    # maxUnavailable: 1
-
-  ## Allow customization of the service resource
+  ## updateStrategy for Mariadb Secondary statefulset
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
-  service:
-    ## Add custom annotations to the service
-    ##
-    annotations: {}
-    #   external-dns.alpha.kubernetes.io/hostname: db.example.com
+  updateStrategy: RollingUpdate
 
-slave:
-  replicas: 1
+  ## Partition update strategy for Mariadb Secondary statefulset
+  ## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
+  ##
+  # rollingUpdatePartition:
 
-  ## Mariadb Slave additional pod annotations
+  ## Mariadb Secondary pod annotations
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-  # annotations:
-  #   key: value
-  #   another-key: another-value
-
-  ## MariaDB additional command line flags
-  ## Can be used to specify command line flags, for example:
   ##
-  ## extraFlags: "--max-connect-errors=1000 --max_connections=155"
+  podAnnotations: {}
 
-  ## Affinity for pod assignment
+  ## Mariadb Secondary pod affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAffinityPreset: ""
+
+  ## Mariadb Secondary pod anti-affinity preset
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ##
+  podAntiAffinityPreset: soft
+
+  ## Mariadb Secondary node affinity preset
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ## Allowed values: soft, hard
+  ##
+  nodeAffinityPreset:
+    ## Node affinity type
+    ## Allowed values: soft, hard
+    ##
+    type: ""
+    ## Node label key to match
+    ## E.g.
+    ## key: "kubernetes.io/e2e-az-name"
+    ##
+    key: ""
+    ## Node label values to match
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+
+  ## Affinity for MariaDB secondary pods assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
 
-  ## Kept for backwards compatibility. You can now disable it by removing it.
-  ## if you wish to set it through slave.affinity.podAntiAffinity instead.
-  ##
-  antiAffinity: soft
-
-  ## Node labels for pod assignment
+  ## Node labels for MariaDB secondary pods assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
 
-  ## Tolerations for pod assignment
+  ## Tolerations for MariaDB secondary pods assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
 
-  ## updateStrategy for MariaDB Slave StatefulSet
-  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
-  updateStrategy:
-    type: RollingUpdate
+  ## Priority class for MariaDB secondary pods assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+  ##
+  priorityClassName: ""
 
+  ## MariaDB secondary Pod security context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+
+  ## MariaDB secondary container security context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+
+  ## MariaDB secondary container's resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits: {}
+    #   memory: 256Mi
+    #   cpu: 100m
+    requests: {}
+    #   memory: 256Mi
+    #   cpu: 100m
+
+  ## MariaDB secondary container's liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 120
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 3
+    successThreshold: 1
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 3
+    successThreshold: 1
+
+  ## MariaDB secondary custom liveness probe
+  ##
+  customLivenessProbe: {}
+
+  ## MariaDB secondary custom rediness probe
+  ##
+  customReadinessProbe: {}
+
+  ## MariaDB secondary additional command line flags
+  ## Can be used to specify command line flags, for example:
+  ## E.g.
+  ## extraFlags: "--max-connect-errors=1000 --max_connections=155"
+  ##
+  extraFlags: ""
+
+  ## An array to add extra environment variables on MariaDB secondary containers
+  ## E.g.
+  ## extraEnvVars:
+  ##  - name: TZ
+  ##    value: "Europe/Paris"
+  ##
+  extraEnvVars: []
+
+  ## ConfigMap with extra env vars for MariaDB secondary containers:
+  ##
+  extraEnvVarsCM: ""
+
+  ## Secret with extra env vars for MariaDB secondary containers:
+  ##
+  extraEnvVarsSecret: ""
+
+  ## Enable persistence using Persistent Volume Claims
+  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+  ##
   persistence:
     ## If true, use a Persistent Volume Claim, If false, use emptyDir
     ##
     enabled: true
+    ## Subdirectory of the volume to mount
+    # subPath:
+    ## Persistent Volume Storage Class
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
     # storageClass: "-"
-    annotations:
+    ## Persistent Volume Claim annotations
+    ##
+    annotations: {}
+    ## Persistent Volume Access Mode
+    ##
     accessModes:
       - ReadWriteOnce
     ## Persistent Volume size
     ##
     size: 8Gi
-
-  ## Add extra init containers
-  ##
-  extraInitContainers:
-
-  ## An array to add extra environment variables
-  ## For example:
-  ## extraEnvVars:
-  ##  - name: TZ
-  ##    value: "Europe/Paris"
-  ##
-  extraEnvVars:
-
-  ## ConfigMap with extra env vars:
-  ##
-  extraEnvVarsCM:
-
-  ## Secret with extra env vars:
-  ##
-  extraEnvVarsSecret:
-
-  ## Configure MySQL slave with a custom my.cnf file
-  ## ref: https://mysql.com/kb/en/mysql/configuring-mysql-with-mycnf/#example-of-configuration-file
-  ##
-  config: |-
-    [mysqld]
-    skip-name-resolve
-    explicit_defaults_for_timestamp
-    basedir=/opt/bitnami/mariadb
-    port=3306
-    socket=/opt/bitnami/mariadb/tmp/mysql.sock
-    tmpdir=/opt/bitnami/mariadb/tmp
-    max_allowed_packet=16M
-    bind-address=0.0.0.0
-    pid-file=/opt/bitnami/mariadb/tmp/mysqld.pid
-    log-error=/opt/bitnami/mariadb/logs/mysqld.log
-    character-set-server=UTF8
-    collation-server=utf8_general_ci
-
-    [client]
-    port=3306
-    socket=/opt/bitnami/mariadb/tmp/mysql.sock
-    default-character-set=UTF8
-
-    [manager]
-    port=3306
-    socket=/opt/bitnami/mariadb/tmp/mysql.sock
-    pid-file=/opt/bitnami/mariadb/tmp/mysqld.pid
-
-  ##
-  ## Configure slave resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ##
-  resources: {}
-  livenessProbe:
-    enabled: true
+    ## selector can be used to match an existing PersistentVolume
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
     ##
-    ## Initializing the database could take some time
-    initialDelaySeconds: 120
-    ##
-    ## Default Kubernetes values
-    periodSeconds: 10
-    timeoutSeconds: 1
-    successThreshold: 1
-    failureThreshold: 3
-  readinessProbe:
-    enabled: true
-    initialDelaySeconds: 45
-    ##
-    ## Default Kubernetes values
-    periodSeconds: 10
-    timeoutSeconds: 1
-    successThreshold: 1
-    failureThreshold: 3
+    selector: {}
 
-  podDisruptionBudget:
-    enabled: false
-    minAvailable: 1
-    # maxUnavailable: 1
+  ## Extra volumes to add to the MariaDB Secondary pod(s)
+  ##
+  extraVolumes: []
 
-  ## Allow customization of the service resource
+  ## Extra volume mounts to add to the MariaDB Secondary container(s)
+  ##
+  extraVolumeMounts: []
+
+  ## Extra init containers to add to the MariaDB Secondary pod(s)
+  ##
+  initContainers: []
+
+  ## Extra sidecar containers to add to the MariaDB Secondary pod(s)
+  ##
+  sidecars: []
+
+  ## MariaDB Secondary Service parameters
   ##
   service:
-    ## Add custom annotations to the service
+    ## Service type
+    ##
+    type: ClusterIP
+    ## Service port
+    ##
+    port: 3306
+    ## Specify the nodePort value for the LoadBalancer and NodePort service types.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ##
+    nodePort: ""
+    ## Service clusterIP
+    ##
+    # clusterIP: None
+    clusterIP: ""
+    ## Set the LoadBalancer service type to internal only.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+    ##
+    loadBalancerIP: ""
+    ## Load Balancer sources
+    ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## E.g.
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## Provide any additional annotations which may be required
     ##
     annotations: {}
-    #   external-dns.alpha.kubernetes.io/hostname: rodb.example.com
 
-metrics:
+  ## MariaDB secondary Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+  ##
+  pdb:
+    enabled: false
+    ## Min number of pods that must still be available after the eviction
+    ##
+    minAvailable: 1
+    ## Max number of pods that can be unavailable after the eviction
+    ##
+    # maxUnavailable: 1
+
+## MariaDB pods ServiceAccount
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+##
+serviceAccount:
+  ## Specifies whether a ServiceAccount should be created
+  ##
+  create: true
+  ## The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the mariadb.fullname template
+  ##
+  # name:
+  ## Annotations to add to the service account (evaluated as a template)
+  ##
+  annotations: {}
+
+## Role Based Access
+## ref: https://kubernetes.io/docs/admin/authorization/rbac/
+##
+rbac:
+  ## Specifies whether RBAC rules should be created
+  ##
+  create: false
+
+## Init containers parameters:
+## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
+##
+volumePermissions:
   enabled: false
   image:
     registry: docker.io
-    repository: bitnami/mysqld-exporter
-    tag: 0.12.1-debian-10-r130
-    pullPolicy: IfNotPresent
+    repository: bitnami/bitnami-shell
+    tag: "10"
+    pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -489,58 +739,90 @@ metrics:
     # pullSecrets:
     #   - myRegistryKeySecretName
   resources: {}
+
+## Mysqld Prometheus exporter parameters
+##
+metrics:
+  enabled: false
+  image:
+    registry: docker.io
+    repository: bitnami/mysqld-exporter
+    tag: 0.12.1-debian-10-r389
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ##
+    # pullSecrets:
+    #   - myRegistryKeySecretName
+
   annotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "9104"
 
   ## Extra args to be passed to mysqld_exporter
   ## ref: https://github.com/prometheus/mysqld_exporter/
+  ## E.g.
+  ## - --collect.auto_increment.columns
+  ## - --collect.binlog_size
+  ## - --collect.engine_innodb_status
+  ## - --collect.engine_tokudb_status
+  ## - --collect.global_status
+  ## - --collect.global_variables
+  ## - --collect.info_schema.clientstats
+  ## - --collect.info_schema.innodb_metrics
+  ## - --collect.info_schema.innodb_tablespaces
+  ## - --collect.info_schema.innodb_cmp
+  ## - --collect.info_schema.innodb_cmpmem
+  ## - --collect.info_schema.processlist
+  ## - --collect.info_schema.processlist.min_time
+  ## - --collect.info_schema.query_response_time
+  ## - --collect.info_schema.tables
+  ## - --collect.info_schema.tables.databases
+  ## - --collect.info_schema.tablestats
+  ## - --collect.info_schema.userstats
+  ## - --collect.perf_schema.eventsstatements
+  ## - --collect.perf_schema.eventsstatements.digest_text_limit
+  ## - --collect.perf_schema.eventsstatements.limit
+  ## - --collect.perf_schema.eventsstatements.timelimit
+  ## - --collect.perf_schema.eventswaits
+  ## - --collect.perf_schema.file_events
+  ## - --collect.perf_schema.file_instances
+  ## - --collect.perf_schema.indexiowaits
+  ## - --collect.perf_schema.tableiowaits
+  ## - --collect.perf_schema.tablelocks
+  ## - --collect.perf_schema.replication_group_member_stats
+  ## - --collect.slave_status
+  ## - --collect.slave_hosts
+  ## - --collect.heartbeat
+  ## - --collect.heartbeat.database
+  ## - --collect.heartbeat.table
   ##
   extraArgs:
-    master: []
-    slave: []
-    # - --collect.auto_increment.columns
-    # - --collect.binlog_size
-    # - --collect.engine_innodb_status
-    # - --collect.engine_tokudb_status
-    # - --collect.global_status
-    # - --collect.global_variables
-    # - --collect.info_schema.clientstats
-    # - --collect.info_schema.innodb_metrics
-    # - --collect.info_schema.innodb_tablespaces
-    # - --collect.info_schema.innodb_cmp
-    # - --collect.info_schema.innodb_cmpmem
-    # - --collect.info_schema.processlist
-    # - --collect.info_schema.processlist.min_time
-    # - --collect.info_schema.query_response_time
-    # - --collect.info_schema.tables
-    # - --collect.info_schema.tables.databases
-    # - --collect.info_schema.tablestats
-    # - --collect.info_schema.userstats
-    # - --collect.perf_schema.eventsstatements
-    # - --collect.perf_schema.eventsstatements.digest_text_limit
-    # - --collect.perf_schema.eventsstatements.limit
-    # - --collect.perf_schema.eventsstatements.timelimit
-    # - --collect.perf_schema.eventswaits
-    # - --collect.perf_schema.file_events
-    # - --collect.perf_schema.file_instances
-    # - --collect.perf_schema.indexiowaits
-    # - --collect.perf_schema.tableiowaits
-    # - --collect.perf_schema.tablelocks
-    # - --collect.perf_schema.replication_group_member_stats
-    # - --collect.slave_status
-    # - --collect.slave_hosts
-    # - --collect.heartbeat
-    # - --collect.heartbeat.database
-    # - --collect.heartbeat.table
+    primary: []
+    secondary: []
 
+  ## Mysqld Prometheus exporter resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits: {}
+    #   memory: 256Mi
+    #   cpu: 100m
+    requests: {}
+    #   memory: 256Mi
+    #   cpu: 100m
+
+  ## Mysqld Prometheus exporter liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ##
   livenessProbe:
     enabled: true
-    ##
-    ## Initializing the database could take some time
     initialDelaySeconds: 120
-    ##
-    ## Default Kubernetes values
     periodSeconds: 10
     timeoutSeconds: 1
     successThreshold: 1
@@ -548,36 +830,41 @@ metrics:
   readinessProbe:
     enabled: true
     initialDelaySeconds: 30
-    ##
-    ## Default Kubernetes values
     periodSeconds: 10
     timeoutSeconds: 1
     successThreshold: 1
     failureThreshold: 3
 
-  # Enable this if you're using https://github.com/coreos/prometheus-operator
+  ## Prometheus Service Monitor
+  ## ref: https://github.com/coreos/prometheus-operator
+  ##
   serviceMonitor:
+    ## If the operator is installed in your cluster, set to true to create a Service Monitor Entry
+    ##
     enabled: false
-    ## Specify a namespace if needed
-    # namespace: monitoring
-    # fallback to the prometheus default unless specified
-    # interval: 10s
-    # scrapeTimeout: 10s
-    ## Defaults to what's used if you follow CoreOS [Prometheus Install Instructions](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#tldr)
-    ## [Prometheus Selector Label](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-operator-1)
-    ## [Kube Prometheus Selector Label](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#exporters)
-    selector:
-      prometheus: kube-prometheus
+    ## Specify the namespace in which the serviceMonitor resource will be created
+    ##
+    # namespace: ""
+    ## Specify the interval at which metrics should be scraped
+    ##
+    interval: 30s
+    ## Specify the timeout after which the scrape is ended
+    ##
+    # scrapeTimeout: 30s
+    ## Specify Metric Relabellings to add to the scrape endpoint
+    ##
+    # relabellings:
+    ## Specify honorLabels parameter to add the scrape endpoint
+    ##
+    honorLabels: false
+    ## Specify the release for ServiceMonitor. Sometimes it should be custom for prometheus operator to work
+    ##
+    # release: ""
+    ## Used to pass Labels that are used by the Prometheus installed in your cluster to select Service Monitors to work with
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
+    ##
+    additionalLabels: {}
 
-## Bats Framework (= Bash Automated Testing System) is needed to test if MariaDB is accessible
-## See test-runner.yaml and tests.yaml for details.
-## To run the tests after the deployment, enter "helm test <release-name>".
-tests:
-  enabled: true
-  resources: {}
-  testFramework:
-    image:
-      registry: docker.io
-      repository: dduportal/bats
-      tag: 0.4.0
-    resources: {}
+## Array with extra yaml to deploy with the chart. Evaluated as a template
+##
+extraDeploy: []

@@ -1,41 +1,47 @@
-{{- if or .Values.mariadb.enabled .Values.externalDatabase.host -}}
 
-1. Get the JasperReports URL:
+** Please be patient while the chart is being deployed **
+
+{{- if or .Values.mariadb.enabled .Values.externalDatabase.host -}}
 
 {{- if .Values.ingress.enabled }}
 
-  You should be able to access your new JasperReports installation through
+1. Get the JasperReports URL and associate its hostname to your cluster external IP:
 
-  {{- range .Values.ingress.hosts }}
-  {{ if .tls }}https{{ else }}http{{ end }}://{{ .name }}/jasperserver/
-  {{- end }}
+   export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
+   echo "JasperReports URL: http{{ if .Values.ingress.tls }}s{{ end }}://{{ .Values.ingress.hostname }}"
+   echo "$CLUSTER_IP  {{ .Values.ingress.hostname }}" | sudo tee -a /etc/hosts
 
-{{- else if contains "NodePort" .Values.service.type }}
+{{- else }}
 
-  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "jasperreports.fullname" . }})
+1. Get the JasperReports URL:
+
+{{- if contains "NodePort" .Values.service.type }}
+
+  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "common.names.fullname" . }})
   export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-  echo "JasperReports URL: http://$NODE_IP:$NODE_PORT/"
+  echo "JasperReports URL: http://$NODE_IP:$NODE_PORT"
 
 {{- else if contains "LoadBalancer" .Values.service.type }}
 
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "jasperreports.fullname" . }}'
+        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "common.names.fullname" . }}'
 
-{{- $port:=.Values.service.port | toString }}
-  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "jasperreports.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
-  echo "JasperReports URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.port }}{{ end }}/jasperserver/"
+  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+  {{- $port:=.Values.service.port | toString }}
+  echo "JasperReports URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.port }}{{ end }}/"
 
 {{- else if contains "ClusterIP"  .Values.service.type }}
 
-  echo "JasperReports URL: http://127.0.0.1:8080/jasperserver/"
-  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "jasperreports.fullname" . }} 8080:{{ .Values.service.port }}
+  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "common.names.fullname" . }} 8080:{{ .Values.service.port }} &
+  echo "JasperReports URL: http://127.0.0.1:8080/"
 
+{{- end }}
 {{- end }}
 
 2. Login with the following credentials
 
   echo Username: {{ .Values.jasperreportsUsername }}
-  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "jasperreports.fullname" . }} -o jsonpath="{.data.jasperreports-password}" | base64 --decode)
+  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} -o jsonpath="{.data.jasperreports-password}" | base64 --decode)
 
 {{- else -}}
 
@@ -46,16 +52,19 @@
 This deployment will be incomplete until you configure JasperReports with a resolvable database
 host. To configure JasperReports to use and external database host:
 
-
 1. Complete your JasperReports deployment by running:
 
   helm upgrade {{ .Release.Name }} --set service.type={{ .Values.service.type }},mariadb.enabled=false,externalDatabase.host=YOUR_EXTERNAL_DATABASE_HOST bitnami/jasperreports
 
 {{- end }}
 
-{{- if and (contains "bitnami/" .Values.image.repository) (not (.Values.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
-
-WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
-+info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
-
-{{- end }}
+{{- include "jasperreports.checkRollingTags" . }}
+{{- $passwordValidationErrors := list -}}
+{{- $secretName := include "common.names.fullname" . -}}
+{{- $requiredJasperReportsPassword := dict "valueKey" "jasperreportsPassword" "secret" $secretName "field" "jasperreports-password" "context" $ -}}
+{{- $requiredJasperReportsPasswordError := include "common.validations.values.single.empty" $requiredJasperReportsPassword -}}
+{{- $passwordValidationErrors = append $passwordValidationErrors $requiredJasperReportsPasswordError -}}
+{{- $mariadbSecretName := include "jasperreports.databaseSecretName" . -}}
+{{- $mariadbPasswordValidationErrors := include "common.validations.values.mariadb.passwords" (dict "secret" $mariadbSecretName "subchart" true "context" $) -}}
+{{- $passwordValidationErrors = append $passwordValidationErrors $mariadbPasswordValidationErrors -}}
+{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}

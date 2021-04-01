@@ -1,0 +1,34 @@
+{{- if and .Values.prometheus.serviceMonitor.enabled .Values.envoy.enabled }}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "common.names.fullname" . }}-envoy
+  {{- if .Values.prometheus.serviceMonitor.namespace }}
+  namespace: {{ .Values.prometheus.serviceMonitor.namespace }}
+  {{- else }}
+  namespace: {{ .Release.Namespace }}
+  {{- end }}
+  labels: {{- include "common.labels.standard" . | nindent 4}}
+    app.kubernetes.io/component: envoy
+spec:
+  jobLabel: {{ .Values.prometheus.serviceMonitor.jobLabel | quote }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: envoy
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+  endpoints:
+    - port: metrics
+      path: /stats/prometheus
+      {{- if .Values.prometheus.serviceMonitor.interval }}
+      interval: {{ .Values.prometheus.serviceMonitor.interval }}
+      {{- end }}
+      {{- if .Values.prometheus.serviceMonitor.metricRelabelings }}
+      metricRelabelings: {{ toYaml .Values.prometheus.serviceMonitor.metricRelabelings | nindent 6 }}
+      {{- end }}
+      {{- if .Values.prometheus.serviceMonitor.relabelings }}
+      relabelings: {{ toYaml .Values.prometheus.serviceMonitor.relabelings | nindent 6 }}
+    {{- end }}
+{{- end }}

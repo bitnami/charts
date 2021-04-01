@@ -1,0 +1,33 @@
+{{- if .Values.defaultBackend.enabled }}
+apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
+kind: Ingress
+metadata:
+  name: {{ include "common.names.fullname" . }}-default-backend
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: default-backend
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
+    {{- end }}
+  annotations:
+    {{- if .Values.ingressClass }}
+    kubernetes.io/ingress.class: {{ .Values.ingressClass }}
+    {{- else }}
+    kubernetes.io/ingress.class: contour
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+spec:
+  {{- if semverCompare "<1.19-0" (include "common.capabilities.kubeVersion" .) -}}
+  backend:
+    serviceName: {{ include "common.names.fullname" . }}-default-backend
+    servicePort: http
+  {{- else }}
+  defaultBackend:
+    service:
+      name: {{ include "common.names.fullname" . }}-default-backend
+      port:
+        name: http
+  {{- end }}
+{{- end }}

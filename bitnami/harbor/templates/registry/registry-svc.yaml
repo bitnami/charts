@@ -2,12 +2,18 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "harbor.registry" . }}
-  labels: {{- include "harbor.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   ports:
     - name: registry
-      port: 5000
+      port: {{ include "harbor.registry.servicePort" . }}
     - name: controller
-      port: 8080
-  selector: {{- include "harbor.matchLabels" . | nindent 4 }}
+      port: {{ include "harbor.registryctl.servicePort" . }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: registry

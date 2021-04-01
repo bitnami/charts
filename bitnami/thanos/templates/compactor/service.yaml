@@ -2,16 +2,19 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "thanos.fullname" . }}-compactor
-  labels: {{- include "thanos.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}-compactor
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: compactor
   {{- if .Values.compactor.service.annotations }}
-  annotations: {{- include "thanos.tplValue" (dict "value" .Values.compactor.service.annotations "context" $) | nindent 4 }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.service.annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   type: {{ .Values.compactor.service.type }}
   {{- if and .Values.compactor.service.clusterIP (eq .Values.compactor.service.type "ClusterIP") }}
   clusterIP: {{ .Values.compactor.service.clusterIP }}
+  {{- end }}
+  {{- if ne .Values.compactor.service.type "ClusterIP" }}
+  externalTrafficPolicy: {{ .Values.compactor.service.externalTrafficPolicy }}
   {{- end }}
   {{- if and .Values.compactor.service.loadBalancerIP (eq .Values.compactor.service.type "LoadBalancer") }}
   loadBalancerIP: {{ .Values.compactor.service.loadBalancerIP }}
@@ -28,6 +31,11 @@ spec:
       {{- else if eq .Values.compactor.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-  selector: {{- include "thanos.matchLabels" . | nindent 4 }}
+  selector:
+    {{- if .Values.compactor.service.labelSelectorsOverride }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.compactor.service.labelSelectorsOverride "context" $) | nindent 4 }}
+    {{- else }}
+    {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: compactor
+    {{- end }}
 {{- end }}

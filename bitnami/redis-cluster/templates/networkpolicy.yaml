@@ -2,13 +2,19 @@
 kind: NetworkPolicy
 apiVersion: {{ template "networkPolicy.apiVersion" . }}
 metadata:
-  name: {{ template "redis-cluster.fullname" . }}
-  labels: {{- include "redis-cluster.labels" . | nindent 4 }}
+  name: {{ template "common.names.fullname" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   podSelector:
     matchLabels:
-      app: {{ template "redis-cluster.name" . }}
-      release: {{ .Release.Name }}
+      app.kubernetes.io/name: {{ template "common.names.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
   policyTypes:
     - Ingress
     - Egress
@@ -19,23 +25,23 @@ spec:
         protocol: UDP
     # Allow outbound connections to other cluster pods
     - ports:
-        - port: {{ .Values.redisPort }}
-        - port: {{ .Values.cluster.busPort }}
+        - port: {{ .Values.redis.port }}
+        - port: {{ .Values.redis.busPort }}
       to:
         - podSelector:
-            matchLabels: {{- include "redis-cluster.matchLabels" . | nindent 14 }}
+            matchLabels: {{- include "common.labels.matchLabels" . | nindent 14 }}
   ingress:
     # Allow inbound connections
     - ports:
-        - port: {{ .Values.redisPort }}
-        - port: {{ .Values.cluster.busPort }}
+        - port: {{ .Values.redis.port }}
+        - port: {{ .Values.redis.busPort }}
       {{- if not .Values.networkPolicy.allowExternal }}
       from:
         - podSelector:
             matchLabels:
-              {{ template "redis-cluster.fullname" . }}-client: "true"
+              {{ template "common.names.fullname" . }}-client: "true"
         - podSelector:
-            matchLabels: {{- include "redis-cluster.matchLabels" . | nindent 14 }}
+            matchLabels: {{- include "common.labels.matchLabels" . | nindent 14 }}
       {{- if .Values.networkPolicy.ingressNSMatchLabels }}
       - namespaceSelector:
           matchLabels:

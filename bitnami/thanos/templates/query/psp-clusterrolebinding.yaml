@@ -1,0 +1,16 @@
+{{- $query := (include "thanos.query.values" . | fromYaml) -}}
+{{- if and $query.enabled $query.pspEnabled $query.rbac.create -}}
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
+kind: ClusterRoleBinding
+metadata:
+  name: {{ include "common.names.fullname" . }}-query
+roleRef:
+  kind: ClusterRole
+  name: {{ include "common.names.fullname" . }}-query
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+# Authorize specific service accounts:
+- kind: ServiceAccount
+  name: {{ include "thanos.serviceaccount.name" (dict "component" "query" "context" $) }}
+  namespace: {{ .Release.Namespace }}
+{{- end -}}
