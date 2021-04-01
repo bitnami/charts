@@ -1,0 +1,178 @@
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: hub
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  name: {{ template "common.names.fullname" . }}-hub
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if .Values.hub.updateStrategy }}
+  strategy: {{- toYaml .Values.hub.updateStrategy | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: hub
+  template:
+    metadata:
+      {{- if .Values.hub.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.hub.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app.kubernetes.io/component: hub
+        hub.jupyter.org/network-access-proxy-api: "true"
+        hub.jupyter.org/network-access-proxy-http: "true"
+        hub.jupyter.org/network-access-singleuser: "true"
+        {{- if .Values.hub.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.hub.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+    spec:
+      serviceAccountName: {{ template "jupyterhub.hubServiceAccountName" . }}
+      {{- include "jupyterhub.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.hub.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hub.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.hub.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.hub.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.hub.podAffinityPreset "component" "hub" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.hub.podAntiAffinityPreset "component" "hub" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.hub.nodeAffinityPreset.type "key" .Values.hub.nodeAffinityPreset.key "values" .Values.hub.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.hub.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.hub.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.hub.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.hub.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.hub.priorityClassName }}
+      priorityClassName: {{ .Values.hub.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.hub.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.hub.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.hub.initContainers }}
+      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.hub.initContainers "context" $) | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: hub
+          image: {{ template "jupyterhub.hub.image" . }}
+          imagePullPolicy: {{ .Values.hub.image.pullPolicy }}
+          {{- if .Values.hub.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.hub.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.hub.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.hub.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.hub.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.hub.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.hub.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.hub.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            - jupyterhub
+            - --config
+            - /etc/jupyterhub/jupyterhub_config.py
+            {{- if .Values.hub.image.debug }}
+            - --debug
+            {{- end }}
+            - --upgrade-db
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.hub.containerPort }}
+          env:
+            - name: PYTHONUNBUFFERED
+              value: "1"
+            - name: HELM_RELEASE_NAME
+              value: {{ .Release.Name | quote }}
+            - name: PROXY_API_SERVICE_PORT
+              value: {{ .Values.proxy.service.api.port | quote }}
+            - name: HUB_SERVICE_PORT
+              value: {{ .Values.hub.service.port | quote }}
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: CONFIGPROXY_AUTH_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "jupyterhub.hubSecretName" . }}
+                  key: proxy-token
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "jupyterhub.databaseSecretName" . }}
+                  key: {{ ternary "postgresql-password" "db-password" .Values.postgresql.enabled | quote }}
+            {{- if .Values.hub.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.hub.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.hub.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.hub.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.hub.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.hub.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- if .Values.hub.resources }}
+          resources: {{- toYaml .Values.hub.resources | nindent 12 }}
+          {{- end }}
+          {{- if .Values.hub.livenessProbe.enabled }}
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.hub.baseUrl | trimSuffix "/" }}/hub/health
+              port: http
+            initialDelaySeconds: {{ .Values.hub.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.hub.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.hub.livenessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.hub.livenessProbe.failureThreshold }}
+            successThreshold: {{ .Values.hub.livenessProbe.successThreshold }}
+          {{- else if .Values.hub.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.hub.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.hub.readinessProbe.enabled }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.hub.baseUrl | trimSuffix "/" }}/hub/health
+              port: http
+            initialDelaySeconds: {{ .Values.hub.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.hub.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.hub.readinessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.hub.readinessProbe.failureThreshold }}
+            successThreshold: {{ .Values.hub.readinessProbe.successThreshold }}
+          {{- else if .Values.hub.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.hub.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - mountPath: /etc/jupyterhub/jupyterhub_config.py
+              subPath: jupyterhub_config.py
+              name: config
+            - mountPath: /etc/jupyterhub/z2jh.py
+              subPath: z2jh.py
+              name: config
+            - mountPath: /etc/jupyterhub/secret/
+              name: secret
+          {{- if .Values.hub.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.hub.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.hub.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.hub.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: config
+          configMap:
+            name: {{ include "jupyterhub.hubConfigmapName" . }}
+        - name: secret
+          secret:
+            secretName: {{ include "jupyterhub.hubSecretName" . }}
+        {{- if .Values.hub.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.hub.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}

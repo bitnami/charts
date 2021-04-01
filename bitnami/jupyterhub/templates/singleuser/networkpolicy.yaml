@@ -1,0 +1,56 @@
+{{- if .Values.singleuser.networkPolicy.enabled -}}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: singleuser
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  name: {{ template "common.names.fullname" . }}-singleuser
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  podSelector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+  policyTypes:
+    - Ingress
+    - Egress
+
+  ingress:
+    - ports:
+        - port: notebook-port
+      from:
+        - podSelector:
+            matchLabels:
+              hub.jupyter.org/network-access-singleuser: "true"
+        {{- if .Values.singleuser.networkPolicy.allowInterspaceAccess }}
+          namespaceSelector:
+            matchLabels: {}
+        - namespaceSelector:
+            matchLabels:
+              hub.jupyter.org/network-access-singleuser: "true"
+        {{- end }}
+
+  egress:
+    - ports:
+        - port: http
+      to:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" . | nindent 14 }}
+              app.kubernetes.io/component: hub
+
+    {{- if not .Values.singleuser.networkPolicy.allowCloudMetadataAccess }}
+    - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+            except:
+              - 169.254.169.254/32
+    {{- end }}
+    - ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+{{- end }}

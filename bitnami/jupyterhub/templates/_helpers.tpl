@@ -1,0 +1,139 @@
+{{/*
+Return the proper hub image name
+*/}}
+{{- define "jupyterhub.hub.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.hub.image "global" .Values.global) }}
+{{- end -}}
+
+{{/*
+Return the proper hub image name
+*/}}
+{{- define "jupyterhub.proxy.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.proxy.image "global" .Values.global) }}
+{{- end -}}
+
+{{/*
+Return the proper hub image name
+*/}}
+{{- define "jupyterhub.auxiliary.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.auxiliaryImage "global" .Values.global) }}
+{{- end -}}
+
+{{/*
+Return PostgreSQL postgres user password
+*/}}
+{{- define "jupyterhub.proxyToken" -}}
+{{- if .Values.proxy.secretToken -}}
+    {{- .Values.proxy.secretToken -}}
+{{- else -}}
+    {{- randAlphaNum 32 -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the proper Docker Image Registry Secret Names
+*/}}
+{{- define "jupyterhub.imagePullSecrets" -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.hub.image .Values.proxy.image .Values.auxiliaryImage) "global" .Values.global) -}}
+{{- end -}}
+
+{{/*
+Create the name of the service account to use
+*/}}
+{{- define "jupyterhub.hubServiceAccountName" -}}
+{{- if .Values.hub.serviceAccount.create -}}
+    {{ default (printf "%s-hub" (include "common.names.fullname" .)) .Values.hub.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.hub.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the name of the service account to use
+*/}}
+{{- define "jupyterhub.singleuserServiceAccountName" -}}
+{{- if .Values.singleuser.serviceAccount.create -}}
+    {{ default (printf "%s-singleuser" (include "common.names.fullname" .)) .Values.singleuser.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.singleuser.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create a default fully qualified postgresql name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+*/}}
+{{- define "jupyterhub.postgresql.fullname" -}}
+{{- $name := default "postgresql" .Values.postgresql.nameOverride -}}
+{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Return  the proper Storage Class
+*/}}
+{{- define "jupyterhub.storageClass" -}}
+{{- include "common.storage.class" (dict "persistence" .Values.singleuser.persistence "global" .Values.global) -}}
+{{- end -}}
+
+{{/*
+Get the Postgresql credentials secret.
+*/}}
+{{- define "jupyterhub.databaseSecretName" -}}
+{{- if and (.Values.postgresql.enabled) (not .Values.postgresql.existingSecret) -}}
+    {{- printf "%s" (include "jupyterhub.postgresql.fullname" .) -}}
+{{- else if and (.Values.postgresql.enabled) (.Values.postgresql.existingSecret) -}}
+    {{- printf "%s" .Values.postgresql.existingSecret -}}
+{{- else }}
+    {{- if .Values.externalDatabase.existingSecret -}}
+        {{- printf "%s" .Values.externalDatabase.existingSecret -}}
+    {{- else -}}
+        {{ printf "%s-%s" .Release.Name "externaldb" }}
+    {{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Get the Postgresql credentials secret.
+*/}}
+{{- define "jupyterhub.hubSecretName" -}}
+{{- if .Values.hub.existingSecret -}}
+{{- .Values.hub.existingSecret -}}
+{{- else }}
+{{- printf "%s-hub" (include "common.names.fullname" . ) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Get the Postgresql credentials secret.
+*/}}
+{{- define "jupyterhub.hubConfigmapName" -}}
+{{- if .Values.hub.existingConfigmap -}}
+{{- .Values.hub.existingConfigmap -}}
+{{- else }}
+{{- printf "%s-hub" (include "common.names.fullname" . ) -}}
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of JupyterHub - Database */}}
+{{- define "jupyterhub.validateValues.database" -}}
+{{- if and .Values.postgresql.enabled .Values.externalDatabase.host -}}
+jupyherhub: Database
+    You can only use one database.
+    Please choose installing a PostgreSQL chart (--set postgresql.enabled=true) or
+    using an external database (--set externalDatabase.host)
+{{- end -}}
+{{- end -}}
+
+{{/*
+Compile all warnings into a single message.
+*/}}
+{{- define "jupyterhub.validateValues" -}}
+{{- $messages := list -}}
+{{- $messages := append $messages (include "jupyterhub.validateValues.database" .) -}}
+{{- $messages := without $messages "" -}}
+{{- $message := join "\n" $messages -}}
+
+{{- if $message -}}
+{{-   printf "\nVALUES VALIDATION:\n%s" $message -}}
+{{- end -}}
+{{- end -}}
