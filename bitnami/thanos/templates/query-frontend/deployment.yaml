@@ -76,6 +76,10 @@ spec:
             {{- if .Values.queryFrontend.extraFlags }}
             {{- .Values.queryFrontend.extraFlags | toYaml | nindent 12 }}
             {{- end }}
+          {{- if .Values.queryFrontend.extraEnv }}
+          env:
+            {{- toYaml .Values.queryFrontend.extraEnv | nindent 12 }}
+          {{- end }}
           ports:
             - name: http
               containerPort: 10902

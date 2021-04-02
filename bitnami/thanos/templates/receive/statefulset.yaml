@@ -90,19 +90,22 @@ spec:
             {{- .Values.receive.extraFlags | toYaml | nindent 12 }}
             {{- end }}
           env:
-          - name: NAME
-            valueFrom:
-              fieldRef:
-                fieldPath: metadata.name
-          - name: NAMESPACE
-            valueFrom:
-              fieldRef:
-                fieldPath: metadata.namespace
-          - name: OBJSTORE_CONFIG
-            valueFrom:
-              secretKeyRef:
-                key: objstore.yml
-                name: {{ include "thanos.objstoreSecretName" . }}
+            - name: NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: OBJSTORE_CONFIG
+              valueFrom:
+                secretKeyRef:
+                  key: objstore.yml
+                  name: {{ include "thanos.objstoreSecretName" . }}
+            {{- if .Values.receive.extraEnv }}
+            {{- toYaml .Values.receive.extraEnv | nindent 12 }}
+            {{- end }}
           ports:
             - containerPort: 10901
               name: grpc
