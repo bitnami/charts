@@ -832,6 +832,9 @@ serviceAccount:
   ## If not set and create is true, a name is generated using the kafka.serviceAccountName template
   ##
   # name:
+  # Allows auto mount of ServiceAccountToken on the serviceAccount created
+  # Can be set to false if pods using this serviceAccount do not need to use K8s API
+  automountServiceAccountToken: true
 
 ## Role Based Access
 ## ref: https://kubernetes.io/docs/admin/authorization/rbac/
