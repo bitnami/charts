@@ -379,6 +379,16 @@ readinessProbe:
   timeoutSeconds: 5
   failureThreshold: 6
   successThreshold: 1
+## Slow starting containers can be protected through startup probes
+## Startup probes are available in Kubernetes version 1.16 and above
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-startup-probes
+startupProbe:
+  enabled: false
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 30
 
 ## Custom Liveness probes for MongoDB(R) pods
 ## Ignored when livenessProbe.enabled=true
@@ -389,6 +399,11 @@ customLivenessProbe: {}
 ## Ignored when readinessProbe.enabled=true
 ##
 customReadinessProbe: {}
+
+## Custom Startup probes MongoDB(R) pods
+## Ignored when startupProbe.enabled=true
+##
+customStartupProbe: {}
 
 ## Add init containers to the MongoDB(R) pods.
 ## Example:
