@@ -154,7 +154,7 @@ hub:
       activeServerLimit:
       db:
         type: postgres
-        url: postgresql://postgres@{{ ternary (include "jupyterhub.postgresql.fullname" .) .Values.externalDatabase.host .Values.postgresql.enabled }}:{{ ternary "5432" .Values.externalDatabase.port .Values.postgresql.enabled }}/{{ ternary .Values.postgresql.postgresqlDatabase .Values.externalDatabase.port .Values.postgresql.enabled }}
+        url: postgresql://{{ ternary .Values.postgresql.postgresqlUsername .Values.externalDatabase.host .Values.postgresql.enabled }}@{{ ternary (include "jupyterhub.postgresql.fullname" .) .Values.externalDatabase.host .Values.postgresql.enabled }}:{{ ternary "5432" .Values.externalDatabase.port .Values.postgresql.enabled }}/{{ ternary .Values.postgresql.postgresqlDatabase .Values.externalDatabase.port .Values.postgresql.enabled }}
       services: {}
       allowNamedServers: false
       namedServerLimitPerUser:
@@ -186,7 +186,7 @@ hub:
         {{- include "common.tplvalues.render" ( dict "value" .Values.singleuser.podAnnotations "context" $ ) | nindent 4 }}
         {{- end }}
       extraLabels:
-        hub.jupyter.org/network-access-hub: 'true'
+        hub.jupyter.org/network-access-hub: "true"
         app.kubernetes.io/component: singleuser
         {{- include "common.labels.standard" . | nindent 4 }}
         {{- if .Values.commonLabels }}
@@ -524,6 +524,16 @@ hub:
     ## @param hub.networkPolicy.allowInterspaceAccess Allow communication between pods in different namespaces
     ##
     allowInterspaceAccess: true
+    ## @param hub.networkPolicy.extraIngress Add extra ingress rules to the NetworkPolicy
+    ##
+    extraIngress: []
+
+    ## @param hub.networkPolicy.extraEgress Add extra ingress rules to the NetworkPolicy
+    ##
+    extraEgress: |
+      ## Hub --> Any IP:PORT
+      ##
+      - to:
 
   service:
     ## @param hub.service.type Hub service type
@@ -864,6 +874,17 @@ proxy:
     ## @param proxy.networkPolicy.allowInterspaceAccess Allow communication between pods in different namespaces
     ##
     allowInterspaceAccess: true
+    ## @param proxy.networkPolicy.extraIngress Add extra ingress rules to the NetworkPolicy
+    ##
+    extraIngress: |
+      ## Any IP --> Proxy
+      ##
+      - ports:
+          - port: {{ .Values.proxy.containerPort.http }}
+
+    ## @param proxy.networkPolicy.extraEgress Add extra ingress rules to the NetworkPolicy
+    ##
+    extraEgress:
 
   service:
     api:
@@ -1437,6 +1458,13 @@ singleuser:
     ## @param singleuser.networkPolicy.allowCloudMetadataAccess Allow Single User pods to access Cloud Metada endpoints
     ##
     allowCloudMetadataAccess: false
+    ## @param singleuser.networkPolicy.extraIngress Add extra ingress rules to the NetworkPolicy
+    ##
+    extraIngress:
+
+    ## @param singleuser.networkPolicy.extraEgress Add extra ingress rules to the NetworkPolicy
+    ##
+    extraEgress:
 
 ## @section Auxiliary image parameters
 ##
@@ -1518,9 +1546,21 @@ postgresql:
   ##
   postgresqlPassword: ''
 
+  ## @param postgresql.postgresqlUsername Username to create when deploying the PostgreSQL chart
+  ##
+  postgresqlUsername: bn_jupyterhub
+
   ## @param postgresql.postgresqlDatabase Database to create when deploying the PostgreSQL chart
   ##
-  postgresqlDatabase: jupyterhub
+  postgresqlDatabase: bitnami_jupyterhub
+
+  ## PostgreSQL service
+  ##
+  service:
+    ## @param postgresql.service.port PostgreSQL service port
+    ##
+    port: 5432
+
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
   ##

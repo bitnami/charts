@@ -14,30 +14,20 @@ metadata:
 spec:
   podSelector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: proxy
   policyTypes:
     - Ingress
     - Egress
 
   ingress:
-    - ports:
-        - port: http
 
-    - ports:
-        - port: http
-      from:
-        - podSelector:
-            matchLabels:
-              hub.jupyter.org/network-access-proxy-http: "true"
-        {{- if .Values.proxy.networkPolicy.allowInterspaceAccess }}
-          namespaceSelector:
-            matchLabels: {}
-        - namespaceSelector:
-            matchLabels:
-              hub.jupyter.org/network-access-proxy-http: "true"
-        {{- end }}
+    {{- if .Values.proxy.networkPolicy.extraIngress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.proxy.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
+    {{- end }}
 
+    # Pods with label "hub.jupyter.org/network-access-proxy-api" --> Proxy API
     - ports:
-        - port: api
+        - port: {{ .Values.proxy.containerPort.api }}
       from:
         - podSelector:
             matchLabels:
@@ -51,12 +41,14 @@ spec:
         {{- end }}
 
   egress:
+    # Proxy --> Hub
     - ports:
-        - port: http
+        - port: {{ .Values.hub.containerPort }}
       to:
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" . | nindent 14 }}
               app.kubernetes.io/component: hub
+    # Proxy --> Single User
     - ports:
         - port: {{ .Values.singleuser.containerPort }}
       to:
@@ -64,9 +56,15 @@ spec:
             matchLabels:
                {{- include "common.labels.matchLabels" . | nindent 14 }}
               app.kubernetes.io/component: singleuser
+    ## DNS access
     - ports:
         - protocol: UDP
           port: 53
         - protocol: TCP
           port: 53
+
+    {{- if .Values.proxy.networkPolicy.extraEgress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.proxy.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+    {{- end }}
+
 {{- end }}

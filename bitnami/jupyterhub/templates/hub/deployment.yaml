@@ -56,9 +56,58 @@ spec:
       {{- if .Values.hub.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.hub.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
-      {{- if .Values.hub.initContainers }}
-      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.hub.initContainers "context" $) | nindent 8 }}
-      {{- end }}
+      initContainers:
+        {{- if .Values.postgresql.enabled }}
+        # NOTE: The value postgresql.image is not available unless postgresql.enabled is not set. We could change this to use bitnami-shell if
+        # it had the binary wait-for-port.
+        # This init container is for avoiding CrashLoopback errors in the Hub container because the PostgreSQL container is not ready
+        - name: wait-for-db
+          image: {{ include "common.images.image" (dict "imageRoot" .Values.postgresql.image "global" .Values.global) }}
+          imagePullPolicy: {{ .Values.postgresql.image.pullPolicy  }}
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - |
+              #!/bin/bash
+
+              set -o errexit
+              set -o nounset
+              set -o pipefail
+
+              . /opt/bitnami/scripts/libos.sh
+              . /opt/bitnami/scripts/liblog.sh
+              . /opt/bitnami/scripts/libpostgresql.sh
+
+              check_postgresql_connection() {
+                  echo "SELECT 1" | postgresql_remote_execute "$POSTGRESQL_CLIENT_DATABASE_HOST" "$POSTGRESQL_CLIENT_DATABASE_PORT_NUMBER" "$POSTGRESQL_CLIENT_DATABASE_NAME" "$POSTGRESQL_CLIENT_POSTGRES_USER" "$POSTGRESQL_CLIENT_CREATE_DATABASE_PASSWORD"
+              }
+
+              info "Connecting to the PostgreSQL instance $POSTGRESQL_CLIENT_DATABASE_HOST:$POSTGRESQL_CLIENT_DATABASE_PORT_NUMBER"
+              if ! retry_while "check_postgresql_connection"; then
+                  error "Could not connect to the database server"
+                  return 1
+              else
+                  info "Connected to the PostgreSQL instance"
+              fi
+          env:
+            - name: POSTGRESQL_CLIENT_DATABASE_HOST
+              value: {{ ternary (include "jupyterhub.postgresql.fullname" .) .Values.externalDatabase.host .Values.postgresql.enabled }}
+            - name: POSTGRESQL_CLIENT_DATABASE_NAME
+              value: {{ ternary .Values.postgresql.postgresqlDatabase .Values.externalDatabase.port .Values.postgresql.enabled }}
+            - name: POSTGRESQL_CLIENT_DATABASE_PORT_NUMBER
+              value: {{ ternary "5432" .Values.externalDatabase.port .Values.postgresql.enabled | quote}}
+            - name: POSTGRESQL_CLIENT_CREATE_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "jupyterhub.databaseSecretName" . }}
+                  key: "postgresql-password"
+            - name: POSTGRESQL_CLIENT_POSTGRES_USER
+              value: {{ ternary .Values.postgresql.postgresqlUsername .Values.externalDatabase.host .Values.postgresql.enabled | quote }}
+        {{- end }}
+        {{- if .Values.hub.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.hub.initContainers "context" $) | nindent 8 }}
+        {{- end }}
       containers:
         - name: hub
           image: {{ template "jupyterhub.hub.image" . }}
