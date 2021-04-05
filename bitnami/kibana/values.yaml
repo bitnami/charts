@@ -69,13 +69,6 @@ hostAliases: []
 plugins:
 # - https://github.com/fbaligand/kibana-enhanced-table/releases/download/v1.5.0/enhanced-table-1.5.0_7.3.2.zip
 
-# A list of secrets and their paths to mount inside the pod
-# This is useful for mounting certificates for security and for mounting
-# the X-Pack license
-# secretMounts: 
-# - 
-secretMounts: []
-
 ## Saved objects to import (NDJSON format)
 ##
 savedObjects:

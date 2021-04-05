@@ -77,7 +77,8 @@ sysctlImage:
 
 # Security parameters
 auth:
-  username: user
+  enabled: true
+## The user is elastic
 #  password:
 ## Existing secret 
 ## NOTE: When it's set the previous parameters are ignored.
