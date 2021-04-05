@@ -467,7 +467,55 @@ mariadb 12:13:25.01 INFO  ==> Running mysql_upgrade
 ...
 ```
 
-### 7.0.0
+### To 10.3.0
+
+The [new Owncloud version](https://doc.owncloud.com/server/admin_manual/release_notes.html#changes-in-10-7-0) `10.7.0` is introduced. Upgrading from a previous version requires the DB schema and some plugins to be updated as well, which will **disable user login until correctly applied**. Although the process itself is automatic, it requires manual triggering.
+
+We recommend to perform a backup of your system before this process is started. In order to do so, you may refer to [the official instructions](https://doc.owncloud.com/server/admin_manual/maintenance/backup.html). Bear in mind that the `config` and `data` directories mentioned therein are under the `/bitnami/owncloud` path.
+
+1) Upgrade the chart to the latest version, as usual:
+
+```
+$ helm repo update
+$ helm upgrade MYRELEASE bitnami/owncloud --set owncloudHost=$APP_HOST,owncloudPassword=$APP_PASSWORD,mariadb.auth.rootPassword=$DATABASE_ROOT_PASSWORD,mariadb.auth.password=$APP_DATABASE_PASSWORD,owncloudPassword=$OWNCLOUD_PASSWORD,mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD
+```
+
+2) In order to trigger the upgrade process, follow one of the following two approaches:
+
+    A)  **Web/UI based:**
+      Access the URL `http://YOUR-DOMAIN/index.php/login` and click on the `Start Update` button.
+
+
+    B)  **CLI based:**
+
+    Trigger the process from whithin the pod using the `occ` binary
+
+    ```
+    $ kubectl get pods
+    NAME                             READY   STATUS    RESTARTS   AGE
+    beta-mariadb-0                   1/1     Running   0          15m
+    beta-owncloud-84cddd575b-xds8g   1/1     Running   0          13m
+
+    $ kubectl exec beta-owncloud-84cddd575b-xds8g -- php /opt/bitnami/owncloud/occ upgrade
+
+    ownCloud or one of the apps require upgrade - only a limited number of commands are available
+    You may use your browser or the occ upgrade command to do the upgrade
+    2021-04-05T10:39:32+00:00 Set log level to debug
+    2021-04-05T10:39:32+00:00 Turned on maintenance mode
+    2021-04-05T10:39:32+00:00 Repair step: Upgrade app code from the marketplace
+    2021-04-05T10:39:32+00:00 Repair info: Using market to update existing apps
+    2021-04-05T10:39:32+00:00 Repair info: Attempting to update the following existing compatible apps from market: comments, configreport, dav, federatedfilesharing, federation, files, files_external, files_mediaviewer, files_sharing, files_trashbin, files_versions, firstrunwizard, market, notifications, provisioning_api, systemtags, updatenotification
+    ...
+    2021-04-05T10:39:33+00:00 Starting code integrity check...
+    2021-04-05T10:39:42+00:00 Finished code integrity check
+    2021-04-05T10:39:42+00:00 Update successful
+    2021-04-05T10:39:42+00:00 Turned off maintenance mode
+    2021-04-05T10:39:42+00:00 Reset log level
+    ```
+
+Once the process has completed, reload the page and you should be able to access the site again.
+
+### To 7.0.0
 
 Helm performs a lookup for the object based on its group (apps), version (v1), and kind (Deployment). Also known as its GroupVersionKind, or GVK. Changing the GVK is considered a compatibility breaker from Kubernetes' point of view, so you cannot "upgrade" those objects to the new GVK in-place. Earlier versions of Helm 3 did not perform the lookup correctly which has since been fixed to match the spec.
 
