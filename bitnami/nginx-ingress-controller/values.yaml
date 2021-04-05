@@ -558,6 +558,18 @@ defaultBackend:
   extraArgs: {}
   containerPort: 8080
 
+  ## NGINX backend default server block configuration
+  ## Should be compliant with: https://kubernetes.github.io/ingress-nginx/user-guide/default-backend/
+  ##
+  serverBlockConfig: |-
+    location /healthz {
+      return 200;
+    }
+
+    location / {
+      return 404;
+    }
+
   ## Number of replicas
   ##
   replicaCount: 1

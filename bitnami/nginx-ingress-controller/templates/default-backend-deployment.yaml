@@ -86,4 +86,19 @@ spec:
           {{- if .Values.defaultBackend.resources }}
           resources: {{- toYaml .Values.defaultBackend.resources | nindent 12 }}
           {{- end }}
+          {{- if .Values.defaultBackend.serverBlockConfig -}}
+          volumeMounts:
+            - name: nginx-config-volume
+              mountPath: /opt/bitnami/nginx/conf/bitnami/
+              readOnly: true
+          {{- end }}
+      {{- if .Values.defaultBackend.serverBlockConfig -}}
+      volumes:
+        - name: nginx-config-volume
+          configMap:
+            name: {{ template "nginx-ingress-controller.defaultBackend.fullname" . }}
+            items:
+              - key: defaultBackend.conf
+                path: defaultBackend.conf
+      {{- end }}
 {{- end }}
