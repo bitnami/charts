@@ -30,6 +30,7 @@ spec:
       {{- if .Values.metrics.kafka.schedulerName }}
       schedulerName: {{ .Values.metrics.kafka.schedulerName | quote }}
       {{- end }}
+      serviceAccountName: {{ template "kafka.serviceAccountName" . }}
       containers:
         - name: kafka-exporter
           image: {{ include "kafka.metrics.kafka.image" . }}
@@ -64,7 +65,7 @@ spec:
               {{- end }}
               --web.listen-address=:9308
           {{- if (include "kafka.client.saslAuthentication" .) }}
-          {{- $clientUsers := coalesce .Values.auth.sasl.jaas.clientUsers .Values.auth.jaas.clientUsers -}}
+          {{- $clientUsers := coalesce .Values.auth.sasl.jaas.clientUsers .Values.auth.jaas.clientUsers }}
           env:
             - name: SASL_USERNAME
               value: {{ index $clientUsers 0 | quote }}

@@ -12,9 +12,9 @@
 ## ref: https://hub.docker.com/r/bitnami/kibana/tags/
 ##
 image:
-  registry: 
-  repository: kibana
-  tag: latest
+  registry: docker.io
+  repository: bitnami/kibana
+  tag: 7.10.2-debian-10-r58
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -59,13 +59,6 @@ updateStrategy:
 ##
 # schedulerName:
 
-# A list of secrets and their paths to mount inside the pod
-# This is useful for mounting certificates for security and for mounting
-# the X-Pack license
-# secretMounts: 
-# - 
-secretMounts: []
-
 ## Deployment pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -75,6 +68,13 @@ hostAliases: []
 ##
 plugins:
 # - https://github.com/fbaligand/kibana-enhanced-table/releases/download/v1.5.0/enhanced-table-1.5.0_7.3.2.zip
+
+# A list of secrets and their paths to mount inside the pod
+# This is useful for mounting certificates for security and for mounting
+# the X-Pack license
+# secretMounts: 
+# - 
+secretMounts: []
 
 ## Saved objects to import (NDJSON format)
 ##

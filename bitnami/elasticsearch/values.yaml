@@ -17,9 +17,9 @@ global:
 ## ref: https://hub.docker.com/r/bitnami/elasticsearch/tags/
 ##
 image:
-  registry: 
-  repository: elasticsearch
-  tag: latest
+  registry: docker.io
+  repository: bitnami/elasticsearch
+  tag: 7.10.2-debian-10-r59
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -140,8 +140,7 @@ name: elastic
 ##       allow_mmap: false
 ## ref: https://www.elastic.co/guide/en/elasticsearch/reference/current/settings.html
 ##
-config:
-  xpack.security.enabled: true
+# config:
 
 ## extraVolumes and extraVolumeMounts allows you to mount other volumes
 ## Example Use Case: mount ssl certificates when elasticsearch has tls enabled
@@ -182,16 +181,6 @@ initScriptsSecret:
 ##    value: env_var_value
 ##
 extraEnvVars: []
-  # - name: ELASTICSEARCH_PASSWORD
-  #   valueFrom:
-  #     secretKeyRef:
-  #       name: elastic-config-credentials
-  #       key: password
-  # - name: ELASTICSEARCH_USERNAME
-  #   valueFrom:
-  #     secretKeyRef:
-  #       name: elastic-config-credentials
-  #       key: username
 
 ## Name of a ConfigMap containing extra env vars
 ##

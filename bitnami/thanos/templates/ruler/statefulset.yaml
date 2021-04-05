@@ -113,6 +113,9 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
+            {{- if .Values.ruler.extraEnv }}
+            {{- toYaml .Values.ruler.extraEnv | nindent 12 }}
+            {{- end }}
           ports:
             - name: http
               containerPort: 10902

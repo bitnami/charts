@@ -83,6 +83,7 @@ alibabacloud:
   accessKeyId: ""
   accessKeySecret: ""
   regionId: ""
+  vpcId: ""
 
   ## Use an existing secret with key "alibaba-cloud.json" defined.
   ## This ignores alibabacloud.accessKeyId, and alibabacloud.accessKeySecret

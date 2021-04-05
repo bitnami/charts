@@ -708,6 +708,8 @@ externalAccess:
     ##   - 30002
     ##
     nodePorts: []
+    ## Use worker host ips
+    useHostIPs: false
     ## When service type is NodePort, you can specify the domain used for Kafka advertised listeners.
     ## If not specified, the container will try to get the kubernetes node external IP
     ##
@@ -830,6 +832,9 @@ serviceAccount:
   ## If not set and create is true, a name is generated using the kafka.serviceAccountName template
   ##
   # name:
+  # Allows auto mount of ServiceAccountToken on the serviceAccount created
+  # Can be set to false if pods using this serviceAccount do not need to use K8s API
+  automountServiceAccountToken: true
 
 ## Role Based Access
 ## ref: https://kubernetes.io/docs/admin/authorization/rbac/

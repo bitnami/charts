@@ -3,8 +3,10 @@
 
 Credentials:
 
+{{- if not .Values.loadDefinition.enabled }}
     echo "Username      : {{ .Values.auth.username }}"
     echo "Password      : $(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "rabbitmq.secretPasswordName" . }} -o jsonpath="{.data.rabbitmq-password}" | base64 --decode)"
+{{- end }}
     echo "ErLang Cookie : $(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "rabbitmq.secretErlangName" . }} -o jsonpath="{.data.rabbitmq-erlang-cookie}" | base64 --decode)"
 
 Note that the credentials are saved in persistent volume claims and will not be changed upon upgrade or reinstallation unless the persistent volume claim has been deleted. If this is not the first installation of this chart, the credentials may not be valid.
@@ -127,7 +129,7 @@ Then, open the obtained URL in a browser.
 {{- $requiredPassword := list -}}
 {{- $secretNameRabbitmq := include "rabbitmq.secretPasswordName" . -}}
 
-{{- if not .Values.auth.existingPasswordSecret -}}
+{{- if and (not .Values.auth.existingPasswordSecret) (not .Values.loadDefinition.enabled) -}}
   {{- $requiredRabbitmqPassword := dict "valueKey" "auth.password" "secret" $secretNameRabbitmq "field" "rabbitmq-password" -}}
   {{- $requiredPassword = append $requiredPassword $requiredRabbitmqPassword -}}
 {{- end -}}

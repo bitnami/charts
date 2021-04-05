@@ -18,7 +18,7 @@ kubeVersion:
 image:
   registry: docker.io
   repository: bitnami/thanos
-  tag: 0.18.0-scratch-r5
+  tag: 0.19.0-scratch-r0
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -124,6 +124,19 @@ query:
   ## NOTE: This will override query.sdConfig
   ##
   # existingSDConfigmap:
+
+  ## Extra environment variable(s) to set on query container.
+  ##
+  ## extraEnv:
+  ## - name: VARNAME1
+  ##   value: value1
+  ## - name: VARNAME2
+  ##   valueFrom:
+  ##     secretKeyRef:
+  ##       name: existing-secret
+  ##       key: varname2-key
+  ##
+  extraEnv: []
 
   ## Extra Flags to passed to Thanos Query
   ##
@@ -516,6 +529,19 @@ queryFrontend:
   ##
   hostAliases: []
 
+  ## Extra environment variable(s) to set on query-frontend container.
+  ##
+  ## extraEnv:
+  ## - name: VARNAME1
+  ##   value: value1
+  ## - name: VARNAME2
+  ##   valueFrom:
+  ##     secretKeyRef:
+  ##       name: existing-secret
+  ##       key: varname2-key
+  ##
+  extraEnv: []
+
   extraFlags: []
 
   ## Thanos Query Frontend Cache Configuration
@@ -759,6 +785,11 @@ queryFrontend:
     ## It is also possible to create and manage the certificates outside of this helm chart
     ## Please see README.md for more information
     ##
+
+    ## When specifying cert-manager.io/cluster-issuer: nameOfClusterIssuer annotation, enable tls for ingress
+    ##
+    tls: false
+
     secrets: []
     # - name: thanos.local-tls
     #   key:
@@ -811,6 +842,19 @@ bucketweb:
   ## Timeout to download metadata from remote storage
   ##
   timeout: 5m
+
+  ## Extra environment variable(s) to set on bucketweb container.
+  ##
+  ## extraEnv:
+  ## - name: VARNAME1
+  ##   value: value1
+  ## - name: VARNAME2
+  ##   valueFrom:
+  ##     secretKeyRef:
+  ##       name: existing-secret
+  ##       key: varname2-key
+  ##
+  extraEnv: []
 
   ## Extra Flags to passed to Bucket Web
   ##
@@ -1091,6 +1135,19 @@ compactor:
   ##
   consistencyDelay: 30m
 
+  ## Extra environment variable(s) to set on compactor container.
+  ##
+  ## extraEnv:
+  ## - name: VARNAME1
+  ##   value: value1
+  ## - name: VARNAME2
+  ##   valueFrom:
+  ##     secretKeyRef:
+  ##       name: existing-secret
+  ##       key: varname2-key
+  ##
+  extraEnv: []
+
   ## Extra Flags to passed to Thanos Compactor
   ##
   extraFlags: []
@@ -1296,6 +1353,19 @@ storegateway:
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
+
+  ## Extra environment variable(s) to set on storegateway container.
+  ##
+  ## extraEnv:
+  ## - name: VARNAME1
+  ##   value: value1
+  ## - name: VARNAME2
+  ##   valueFrom:
+  ##     secretKeyRef:
+  ##       name: existing-secret
+  ##       key: varname2-key
+  ##
+  extraEnv: []
 
   ## Extra Flags to passed to Thanos Store Gateway
   ##
@@ -1604,6 +1674,19 @@ ruler:
   ## Used to set the 'ruler_cluster' label
   ##
   # clusterName:
+
+  ## Extra environment variable(s) to set on ruler container.
+  ##
+  ## extraEnv:
+  ## - name: VARNAME1
+  ##   value: value1
+  ## - name: VARNAME2
+  ##   valueFrom:
+  ##     secretKeyRef:
+  ##       name: existing-secret
+  ##       key: varname2-key
+  ##
+  extraEnv: []
 
   ## Extra Flags to passed to Thanos Ruler
   ##
@@ -1937,6 +2020,19 @@ receive:
   # config:
   #   - endpoints:
   #     - "127.0.0.1:10901"
+
+  ## Extra environment variable(s) to set on receive container.
+  ##
+  ## extraEnv:
+  ## - name: VARNAME1
+  ##   value: value1
+  ## - name: VARNAME2
+  ##   valueFrom:
+  ##     secretKeyRef:
+  ##       name: existing-secret
+  ##       key: varname2-key
+  ##
+  extraEnv: []
 
   ## Extra Flags to passed to Thanos Receive
   ##

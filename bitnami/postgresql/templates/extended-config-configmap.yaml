@@ -16,7 +16,11 @@ data:
 {{ with .Values.postgresqlExtendedConf }}
   override.conf: |
 {{- range $key, $value := . }}
-    {{ $key | snakecase }}={{ $value }}
+    {{- if kindIs "string" $value }}
+    {{ $key | snakecase }} = '{{ $value }}'
+    {{- else }}
+    {{ $key | snakecase }} = {{ $value }}
+    {{- end }}
 {{- end }}
 {{- end }}
 {{- end }}
