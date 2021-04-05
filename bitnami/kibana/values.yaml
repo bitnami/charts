@@ -59,6 +59,13 @@ updateStrategy:
 ##
 # schedulerName:
 
+# A list of secrets and their paths to mount inside the pod
+# This is useful for mounting certificates for security and for mounting
+# the X-Pack license
+# secretMounts: 
+# - 
+secretMounts: []
+
 ## Deployment pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
