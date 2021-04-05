@@ -325,6 +325,11 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ## Upgrading
 
+### To 7.12.0
+
+This major version or later are including x-pack plugin installed by default. Follow official documentation to use it.
+And the license change to Elastic License 2.0
+
 ### To 6.2.0
 
 This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
