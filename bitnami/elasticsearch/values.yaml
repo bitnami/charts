@@ -78,10 +78,10 @@ sysctlImage:
 # Security parameters
 auth:
   username: user
-#   password:
-  ## Existing secret 
-  ## NOTE: When it's set the previous parameters are ignored.
-    # existingSecret:
+#  password:
+## Existing secret 
+## NOTE: When it's set the previous parameters are ignored.
+#  existingSecret:
 
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
