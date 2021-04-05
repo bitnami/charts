@@ -215,7 +215,7 @@ spec:
             {{- end }}
             {{- end }}
             {{- if .Values.startFromSnapshot.enabled }}
-            - name: ETCD_INIT_SNAPSHOTS_FILENAME
+            - name: ETCD_INIT_SNAPSHOT_FILENAME
               value: {{ .Values.startFromSnapshot.snapshotFilename | quote }}
             {{- end }}
             {{- if .Values.extraEnvVars }}
