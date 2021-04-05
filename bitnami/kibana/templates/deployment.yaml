@@ -163,6 +163,11 @@ spec:
       {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
       {{- end }}
       volumes:
+        {{- range .Values.secretMounts }}
+        - name: {{ .name }}
+          secret:
+            secretName: {{ .secretName }}
+        {{- end }}
         - name: kibana-data
         {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:

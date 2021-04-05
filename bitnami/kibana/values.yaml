@@ -12,9 +12,9 @@
 ## ref: https://hub.docker.com/r/bitnami/kibana/tags/
 ##
 image:
-  registry: docker.io
-  repository: bitnami/kibana
-  tag: 7.10.2-debian-10-r58
+  registry: 
+  repository: kibana
+  tag: latest
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -58,6 +58,13 @@ updateStrategy:
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
 # schedulerName:
+
+# A list of secrets and their paths to mount inside the pod
+# This is useful for mounting certificates for security and for mounting
+# the X-Pack license
+# secretMounts: 
+# - 
+secretMounts: []
 
 ## Deployment pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/

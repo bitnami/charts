@@ -94,6 +94,16 @@ spec:
               value: "yes"
             - name: ELASTICSEARCH_NODE_TYPE
               value: "ingest"
+            - name: ELASTICSEARCH_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name:  {{ include "elasticsearch.secretName" . }}
+                  key: password
+            - name: ELASTICSEARCH_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name:  {{ include "elasticsearch.secretName" . }}
+                  key: username      
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.extraEnvVars "context" $ ) | nindent 12 }}
             {{- end }}

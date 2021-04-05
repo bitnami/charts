@@ -239,3 +239,14 @@ Return the proper ES curator image name
 {{- define "elasticsearch.curator.image" -}}
 {{ include "common.images.image" (dict "imageRoot" .Values.curator.image "global" .Values.global) }}
 {{- end -}}
+
+{{/*
+Get the secret name
+*/}}
+{{- define "elasticsearch.secretName" -}}
+{{- if .Values.auth.existingSecret -}}
+  {{- printf "%s" .Values.auth.existingSecret -}}
+{{- else -}}
+  {{- printf "%s" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
