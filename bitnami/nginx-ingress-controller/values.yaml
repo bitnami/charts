@@ -609,7 +609,7 @@ defaultBackend:
   livenessProbe:
     enabled: true
     httpGet:
-      path: /
+      path: /healthz
       port: http
       scheme: HTTP
     failureThreshold: 3
@@ -620,7 +620,7 @@ defaultBackend:
   readinessProbe:
     enabled: true
     httpGet:
-      path: /
+      path: /healthz
       port: http
       scheme: HTTP
     failureThreshold: 6
