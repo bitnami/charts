@@ -325,7 +325,7 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ## Upgrading
 
-### To 7.12.0
+### To 8.0.0
 
 This major version or later are including x-pack plugin installed by default. Follow official documentation to use it.
 And the license change to Elastic License 2.0
