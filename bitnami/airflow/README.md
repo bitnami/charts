@@ -238,7 +238,7 @@ affinity configuration                                                          
 | `worker.sidecars`                           | List of sidecar containers to be added to the worker's pods                                                                                                            | `nil`                                                   |
 | `worker.tolerations`                        | Tolerations for worker pod assignment. Supersedes the common 
 tolerations configuration                                                                                       | `nil`                                                   |
-| `worker.updateStrategy`                     | pdate strategy for the statefulset                                                                                                                                     | `"RollingUpdate"`                                       |
+| `worker.updateStrategy`                     | Update strategy for the statefulset                                                                                                                                     | `"RollingUpdate"`                                       |
 
 ### Airflow database parameters
 
