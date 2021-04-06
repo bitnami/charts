@@ -18,7 +18,7 @@ image:
   ## Bitnami Redis(TM) image tag
   ## ref: https://github.com/bitnami/bitnami-docker-redis#supported-tags-and-respective-dockerfile-links
   ##
-  tag: 6.0.12-debian-10-r0
+  tag: 6.2.1-debian-10-r23
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -46,6 +46,13 @@ cluster:
   ##
   init: true
   ## Number of Redis(TM) nodes to be deployed
+  ##
+  ## Note:
+  ## This is total number of nodes including the replicas. Meaning there will be 3 master and 3 replica
+  ## nodes (as replica count is set to 1 by default, there will be 1 replica per master node).
+  ## Hence, nodes = numberOfMasterNodes + numberOfMasterNodes * replicas
+  ##
+  ## The number of master nodes should always be >= 3, otherwise cluster creation will fail
   ##
   nodes: 6
   ## Parameter to be passed as --cluster-replicas to the redis-cli --cluster create
@@ -738,7 +745,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/redis-exporter
-    tag: 1.17.1-debian-10-r9
+    tag: 1.20.0-debian-10-r2
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

@@ -35,6 +35,9 @@ metadata:
   {{- if .Values.internalTLS.enabled }}
     nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
   {{- end }}
+  {{- if .Values.ingress.certManager }}
+    kubernetes.io/tls-acme: "true"
+  {{- end }}
   {{- if .Values.ingress.annotations }}
    {{- toYaml .Values.ingress.annotations | nindent 4 }}
   {{- end }}
@@ -119,7 +122,7 @@ spec:
     {{- else if .Values.service.tls.existingSecret }}
     - secretName: {{ .Values.service.tls.existingSecret }}
     {{- else }}
-    - secretName: {{ include "harbor.ingress" . }}
+    - secretName: {{ include "harbor.ingress-notary" . }}
     {{- end }}
       {{- if .Values.ingress.hosts.notary }}
       hosts:

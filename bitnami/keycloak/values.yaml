@@ -729,6 +729,17 @@ externalDatabase:
   ## Database name
   ##
   database: bitnami_keycloak
+  ## An already existing secret containing credentials info
+  ##
+  # existingSecret: mySecret
+  #
+  ## e.g.
+  ## data:
+  ##   KEYCLOAK_DATABASE_PASSWORD: xxx
+  ##   KEYCLOAK_DATABASE_HOST: xxx
+  ##   KEYCLOAK_DATABASE_PORT: xxx
+  ##   KEYCLOAK_DATABASE_NAME: xxx
+  ##   KEYCLOAK_DATABASE_USER: xxx
 
 ## Configuration for keycloak-config-cli
 ## ref: https://github.com/adorsys/keycloak-config-cli

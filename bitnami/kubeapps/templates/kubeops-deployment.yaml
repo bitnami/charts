@@ -1,8 +1,9 @@
-apiVersion: apps/v1
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ template "kubeapps.kubeops.fullname" . }}
-  labels:{{ include "kubeapps.extraAppLabels" . | nindent 4 }}
+  labels:
+    {{- include "kubeapps.extraAppLabels" . | nindent 4 }}
     app: {{ template "kubeapps.kubeops.fullname" . }}
 spec:
   replicas: {{ .Values.kubeops.replicaCount }}
@@ -12,9 +13,13 @@ spec:
       release: {{ .Release.Name }}
   template:
     metadata:
+      {{- with .Values.kubeops.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       labels:
         app: {{ template "kubeapps.kubeops.fullname" . }}
-        app.kubernetes.io/name: {{ template "kubeapps.name" . }}
+        app.kubernetes.io/name: {{ template "common.names.name" . }}
         release: {{ .Release.Name }}
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
@@ -24,13 +29,13 @@ spec:
       # This is because new releases/upgrades/deletions are synchronous operations
       terminationGracePeriodSeconds: 300
       {{- if .Values.kubeops.affinity }}
-      affinity: {{- include "kubeapps.tplValue" (dict "value" .Values.kubeops.affinity "context" $) | nindent 8 }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.kubeops.affinity "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.kubeops.nodeSelector }}
-      nodeSelector: {{- include "kubeapps.tplValue" (dict "value" .Values.kubeops.nodeSelector "context" $) | nindent 8 }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.kubeops.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.kubeops.tolerations }}
-      tolerations: {{- include "kubeapps.tplValue" (dict "value" .Values.kubeops.tolerations "context" $) | nindent 8 }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.kubeops.tolerations "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
@@ -39,7 +44,7 @@ spec:
       {{- end }}
       containers:
         - name: kubeops
-          image: {{ template "kubeapps.image" (list .Values.kubeops.image .Values.global) }}
+          image: {{ include "common.images.image" (dict "imageRoot" .Values.kubeops.image "global" .Values.global) }}
           imagePullPolicy: {{ .Values.kubeops.image.pullPolicy | quote }}
           command:
             - /kubeops
@@ -51,6 +56,12 @@ spec:
             {{- end }}
             {{- if .Values.pinnipedProxy.enabled }}
             - --pinniped-proxy-url=http://kubeapps-internal-pinniped-proxy.{{ .Release.Namespace }}:{{ .Values.pinnipedProxy.service.port }}
+            {{- end }}
+            {{- if .Values.kubeops.burst }}
+            - --burst={{ .Values.kubeops.burst }}
+            {{- end }}
+            {{- if .Values.kubeops.QPS }}
+            - --qps={{ .Values.kubeops.QPS }}
             {{- end }}
           {{- if .Values.clusters }}
           volumeMounts:
@@ -64,6 +75,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
+            - name: PORT
+              value: {{ .Values.kubeops.service.port | quote }}
+            {{- if .Values.kubeops.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.kubeops.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
           ports:
             - name: http
               containerPort: {{ .Values.kubeops.service.port }}

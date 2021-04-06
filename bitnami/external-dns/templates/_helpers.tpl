@@ -186,6 +186,9 @@ Return the name of the Secret used to store the passwords
   {{- if .Values.alibabacloud.regionId }}
   "regionId": "{{ .Values.alibabacloud.regionId }}",
   {{- end}}
+  {{- if .Values.alibabacloud.vpcId }}
+  "vpcId": "{{ .Values.alibabacloud.vpcId }}",
+  {{- end}}
   {{- if .Values.alibabacloud.accessKeyId }}
   "accessKeyId": "{{ .Values.alibabacloud.accessKeyId }}",
   {{- end}}
@@ -740,5 +743,16 @@ Return the ExternalDNS service account name
     {{ default (include "external-dns.fullname" .) .Values.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the ExternalDNS namespace to be used
+*/}}
+{{- define "external-dns.namespace" -}}
+{{- if and .Values.rbac.create (not .Values.rbac.clusterRole) -}}
+    {{ default .Release.Namespace .Values.namespace }}
+{{- else -}}
+    {{ .Values.namespace }}
 {{- end -}}
 {{- end -}}

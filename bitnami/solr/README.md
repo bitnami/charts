@@ -75,6 +75,7 @@ The following tables lists the configurable parameters of the solr chart and the
 | `image.pullSecrets`                                       | Specify docker-registry secret names as an array             | `nil`                                                     |
 | `podLabels`                                               | Additional labels for pods pod                               | `{}`                                                      |
 | `podAnnotations`                                          | Additional annotations for pods                              | {}                                                        |
+| `podManagementPolicy`                                     | Management Policy for Solr StatefulSet                       | `Parallel`                                                |
 | `podSecurityContext.fsGroup`                              | Group ID for the pods.                                       | `1001`                                                    |
 | `containerSecurityContext.runAsUser`                      | User ID for the containers.                                  | `1001`                                                    |
 | `serviceAccount.create`                                   | Specifies whether a ServiceAccount should be created         | `false`                                                   |

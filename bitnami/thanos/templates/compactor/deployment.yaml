@@ -82,6 +82,7 @@ spec:
           args:
             - compact
             - --log.level={{ .Values.compactor.logLevel }}
+            - --log.format={{ .Values.compactor.logFormat }}
             - --http-address=0.0.0.0:10902
             - --data-dir=/data
             - --retention.resolution-raw={{ .Values.compactor.retentionResolutionRaw }}
@@ -93,6 +94,10 @@ spec:
             {{- .Values.compactor.extraFlags | toYaml | nindent 12 }}
             {{- end }}
             - --wait
+          {{- if .Values.compactor.extraEnv }}
+          env:
+            {{- toYaml .Values.compactor.extraEnv | nindent 12 }}
+          {{- end }}
           ports:
             - name: http
               containerPort: 10902

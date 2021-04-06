@@ -64,7 +64,7 @@ service:
 image:
   registry: docker.io
   repository: bitnami/solr
-  tag: 8.8.1-debian-10-r0
+  tag: 8.8.1-debian-10-r28
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -252,6 +252,11 @@ podLabels: {}
 ##
 podAnnotations: {}
 
+## StatefulSet controller supports relax its ordering guarantees while preserving its uniqueness and identity guarantees. There are two valid pod management policies: OrderedReady and Parallel
+## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#pod-management-policy
+##
+podManagementPolicy: Parallel
+
 ## Solr pods' priority.
 ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
 ##
@@ -434,7 +439,7 @@ exporter:
   image:
     registry: docker.io
     repository: bitnami/solr
-    tag: 8.8.0-debian-10-r15
+    tag: 8.8.1-debian-10-r27
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images

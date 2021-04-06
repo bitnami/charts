@@ -65,7 +65,7 @@ web:
   image:
     registry: docker.io
     repository: bitnami/airflow
-    tag: 2.0.1-debian-10-r4
+    tag: 2.0.1-debian-10-r37
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -210,7 +210,7 @@ scheduler:
   image:
     registry: docker.io
     repository: bitnami/airflow-scheduler
-    tag: 2.0.1-debian-10-r3
+    tag: 2.0.1-debian-10-r35
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -327,7 +327,7 @@ worker:
   image:
     registry: docker.io
     repository: bitnami/airflow-worker
-    tag: 2.0.1-debian-10-r3
+    tag: 2.0.1-debian-10-r34
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -486,6 +486,16 @@ worker:
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
+  ## Affinity for worker pod assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Note: this configuration supersedes the global affinity configuration
+  ##
+  affinity: {}
+  ## Tolerations for worker pod assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ## Note: this configuration supersedes the global tolerations configuration
+  ##
+  tolerations: []
 
 ## Add labels to all the deployed resources
 ##
@@ -542,7 +552,7 @@ git:
   image:
     registry: docker.io
     repository: bitnami/git
-    tag: 2.30.1-debian-10-r3
+    tag: 2.31.0-debian-10-r3
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -602,6 +612,10 @@ git:
     ## Secret with extra environment variables
     ##
     extraEnvVarsSecret:
+    ## Clone init container resource requests and limits
+    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ##
+    resources: {}
   sync:
     ## Interval in seconds to pull the git repository containing the plugins and/or DAG files
     ##
@@ -624,6 +638,10 @@ git:
     ## Secret with extra environment variables
     ##
     extraEnvVarsSecret:
+    ## Sync sidecar container resource requests and limits
+    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ##
+    resources: {}
 
 ## LDAP configuration
 ##
@@ -870,9 +888,12 @@ externalDatabase:
   ## Database password
   ##
   password:
-  ## Name of an existing secret resource containing the DB password in a 'postgresql-password' key
+  ## Name of an existing secret resource containing the DB password
   ##
   existingSecret:
+  ## Name of an existing secret key containing the DB password
+  ##
+  existingSecretPasswordKey:
   ## Database name
   ##
   database: bitnami_airflow
@@ -924,7 +945,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/airflow-exporter
-    tag: 0.20210126.0-debian-10-r16
+    tag: 0.20210126.0-debian-10-r49
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

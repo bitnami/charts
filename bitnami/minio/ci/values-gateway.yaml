@@ -1,0 +1,8 @@
+gateway:
+  enabled: true
+  type: s3
+  auth:
+    s3:
+      serviceEndpoint: https://s3.amazonaws.com
+      accessKey: LoremIpsum
+      secretKey: dolorSitAmet

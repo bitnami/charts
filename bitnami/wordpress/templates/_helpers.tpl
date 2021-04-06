@@ -9,6 +9,14 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
+Create a default fully qualified app name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+*/}}
+{{- define "wordpress.memcached.fullname" -}}
+{{- printf "%s-%s" .Release.Name "memcached" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
 Return the proper WordPress image name
 */}}
 {{- define "wordpress.image" -}}
@@ -103,7 +111,11 @@ Return the MariaDB Secret Name
 */}}
 {{- define "wordpress.databaseSecretName" -}}
 {{- if .Values.mariadb.enabled }}
-    {{- printf "%s" (include "wordpress.mariadb.fullname" .) -}}
+    {{- if .Values.mariadb.auth.existingSecret -}}
+        {{- printf "%s" .Values.mariadb.auth.existingSecret -}}
+    {{- else -}}
+        {{- printf "%s" (include "wordpress.mariadb.fullname" .) -}}
+    {{- end -}}
 {{- else if .Values.externalDatabase.existingSecret -}}
     {{- printf "%s" .Values.externalDatabase.existingSecret -}}
 {{- else -}}

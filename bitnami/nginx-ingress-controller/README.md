@@ -192,7 +192,7 @@ The following tables lists the configurable parameters of the Nginx Ingress Cont
 | `service.clusterIP`                | Controller Internal Cluster Service IP                                                                                                 | `""`           |
 | `service.omitClusterIP`            | To omit the `ClusterIP` from the controller service                                                                                    | `false`        |
 | `service.ports.http`               | Controller Service HTTP port                                                                                                           | `80`           |
-| `service.ports.https`              | Controller Service HTTPS port                                                                                                          | `""`           |
+| `service.ports.https`              | Controller Service HTTPS port                                                                                                          | `443`           |
 | `service.targetPorts.http`         | Map the controller service HTTP port                                                                                                   | `http`         |
 | `service.targetPorts.https`        | Map the controller service HTTPS port                                                                                                  | `https`        |
 | `service.externalTrafficPolicy`    | Enable client source IP preservation                                                                                                   | `Cluster`      |

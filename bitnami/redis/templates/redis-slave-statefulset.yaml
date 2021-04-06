@@ -209,6 +209,9 @@ spec:
               mountPath: /opt/bitnami/redis/certs
               readOnly: true
             {{- end }}
+            {{- if .Values.slave.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.slave.extraVolumeMounts "context" $ ) | nindent 12 }}
+            {{- end }}
         {{- if .Values.metrics.enabled }}
         - name: metrics
           image: {{ template "redis.metrics.image" . }}
@@ -227,20 +230,26 @@ spec:
           env:
             - name: REDIS_ALIAS
               value: {{ template "redis.fullname" . }}
-            {{- if and .Values.usePassword (not .Values.usePasswordFile) }}
+            {{- if .Values.usePassword }}
+            - name: REDIS_USER
+              value: default
+              {{- if (not .Values.usePasswordFile) }}
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ template "redis.secretName" . }}
                   key: {{ template "redis.secretPasswordKey" . }}
+              {{- end }}
             {{- end }}
             {{- if .Values.tls.enabled }}
             - name: REDIS_ADDR
-              value: rediss://localhost:{{ .Values.redisPort }}
+              value: rediss://{{ .Values.metrics.redisTargetHost }}:{{ .Values.redisPort }}
+              {{- if .Values.tls.authClients }}
             - name: REDIS_EXPORTER_TLS_CLIENT_KEY_FILE
               value: {{ template "redis.tlsCertKey" . }}
             - name: REDIS_EXPORTER_TLS_CLIENT_CERT_FILE
               value: {{ template "redis.tlsCert" . }}
+              {{- end }}
             - name: REDIS_EXPORTER_TLS_CA_CERT_FILE
               value: {{ template "redis.tlsCACert" . }}
             {{- end }}
@@ -329,6 +338,9 @@ spec:
         {{- end }}
         - name: redis-tmp-conf
           emptyDir: {}
+        {{- if .Values.slave.extraVolumes }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.slave.extraVolumes "context" $ ) | nindent 8 }}
+        {{- end }}
     {{- if .Values.tls.enabled }}
         - name: redis-certificates
           secret:

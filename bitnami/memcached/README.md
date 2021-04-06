@@ -102,6 +102,7 @@ The following tables lists the configurable parameters of the Memcached chart an
 | `podAnnotations`                         | Pod annotations                                                                           | `{}`                                                         |
 | `podAffinityPreset`                      | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                                                         |
 | `podAntiAffinityPreset`                  | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                                                       |
+| `podLabels`                              | Add additional labels to the pod (evaluated as a template)                                | `nil`                                                        |
 | `nodeAffinityPreset.type`                | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                                                         |
 | `nodeAffinityPreset.key`                 | Node label key to match. Ignored if `affinity` is set.                                    | `""`                                                         |
 | `nodeAffinityPreset.values`              | Node label values to match. Ignored if `affinity` is set.                                 | `[]`                                                         |
@@ -109,6 +110,8 @@ The following tables lists the configurable parameters of the Memcached chart an
 | `nodeSelector`                           | Node labels for pod assignment                                                            | `{}` (evaluated as a template)                               |
 | `tolerations`                            | Tolerations for pod assignment                                                            | `[]` (evaluated as a template)                               |
 | `priorityClassName`                      | Controller priorityClassName                                                              | `nil`                                                        |
+| `serviceAccount.create` | Enable creation of ServiceAccount for memcached pods                                               | `true`                                                  |
+| `serviceAccount.name`   | The name of the service account to use. If not set and `create` is `true`, a name is generated | Generated using the `memcached.serviceAccountName` template |
 | `metrics.enabled`                        | Start a side-car prometheus exporter                                                      | `false`                                                      |
 | `metrics.image.registry`                 | Memcached exporter image registry                                                         | `docker.io`                                                  |
 | `metrics.image.repository`               | Memcached exporter image name                                                             | `bitnami/memcached-exporter`                                 |

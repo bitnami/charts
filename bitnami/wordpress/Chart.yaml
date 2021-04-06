@@ -1,12 +1,16 @@
 annotations:
   category: CMS
 apiVersion: v2
-appVersion: 5.6.2
+appVersion: 5.7.0
 dependencies:
   - condition: mariadb.enabled
     name: mariadb
     repository: https://charts.bitnami.com/bitnami
     version: 9.x.x
+  - condition: memcached.enabled
+    name: memcached
+    repository: https://charts.bitnami.com/bitnami
+    version: 5.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
@@ -31,4 +35,4 @@ name: wordpress
 sources:
   - https://github.com/bitnami/bitnami-docker-wordpress
   - http://www.wordpress.com/
-version: 10.6.10
+version: 10.8.0

@@ -1,7 +1,7 @@
 annotations:
   category: E-Learning
 apiVersion: v2
-appVersion: 3.10.2
+appVersion: 3.10.3
 dependencies:
   - condition: mariadb.enabled
     name: mariadb
@@ -25,4 +25,4 @@ name: moodle
 sources:
   - https://github.com/bitnami/bitnami-docker-moodle
   - http://www.moodle.org/
-version: 11.0.6
+version: 11.0.7

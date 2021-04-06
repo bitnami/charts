@@ -17,7 +17,7 @@ image:
   ## Bitnami Cassandra image tag
   ## ref: https://github.com/bitnami/bitnami-docker-cassandra#supported-tags-and-respective-dockerfile-links
   ##
-  tag: 3.11.10-debian-10-r23
+  tag: 3.11.10-debian-10-r51
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -53,6 +53,21 @@ commonAnnotations: {}
 ## Common labels to add to all Cassandra resources (sub-charts are not considered). Evaluated as a template
 ##
 commonLabels: {}
+
+## Cassandra pods ServiceAccount
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+##
+serviceAccount:
+  ## Specifies whether a ServiceAccount should be created
+  ##
+  create: true
+  ## The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the cassandra.fullname template
+  ##
+  # name:
+  ## Annotations to add to the service account (evaluated as a template)
+  ##
+  annotations: {}
 
 ## Cassandra container ports to open
 ## If hostNetwork true: the hostPort is set identical to the containerPort
@@ -489,7 +504,7 @@ metrics:
     registry: docker.io
     pullPolicy: IfNotPresent
     repository: bitnami/cassandra-exporter
-    tag: 2.3.4-debian-10-r331
+    tag: 2.3.4-debian-10-r359
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/

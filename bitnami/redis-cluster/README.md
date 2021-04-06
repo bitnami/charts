@@ -251,8 +251,8 @@ The following table lists the configurable parameters of the Redis<sup>TM</sup> 
 | Parameter                                       | Description                                                                                                                                       | Default        |
 |-------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|----------------|
 | `cluster.init`                                  | Enable the creation of a job that initializes the Redis<sup>TM</sup> Cluster                                                                      | `true`         |
-| `cluster.nodes`                                 | Number of nodes in the Redis<sup>TM</sup> cluster                                                                                                 | `6`            |
-| `cluster.replicas`                              | Number of replicas for every master in the cluster                                                                                                | `1`            |
+| `cluster.nodes`                                 | Total Number of nodes in the Redis<sup>TM</sup> cluster including `replicas`. See the "Cluster topology" section                                                                                       | `6`            |
+| `cluster.replicas`                              | Number of replicas for every master in the cluster                                                                                              | `1`            |
 | `cluster.externalAccess.enabled`                | Enable access to the Redis<sup>TM</sup> cluster from Outside the Kubernetes Cluster                                                               | `false`        |
 | `cluster.externalAccess.service.type`           | Type for the services used to expose every Pod                                                                                                    | `LoadBalancer` |
 | `cluster.externalAccess.service.port`           | Port for the services used to expose every Pod                                                                                                    | `6379`         |
@@ -338,7 +338,9 @@ To modify the Redis<sup>TM</sup> version used in this chart you can specify a [v
 
 ### Cluster topology
 
-The Helm Chart will deploy by default 3 redis masters and 3 replicas. By default the Redis<sup>TM</sup> Cluster is not accessible from outside the Kubernetes cluster, to access the Redis<sup>TM</sup> Cluster from outside you have to set `cluster.externalAccess.enabled=true` at deployment time. It will create in the first installation only 6 LoadBalancer services, one for each Redis<sup>TM</sup> node, once you have the external IPs of each service you will need to perform an upgrade passing those IPs to the `cluster.externalAccess.service.loadbalancerIP` array.
+To successfully set the cluster up, it will need to have at least 3 master nodes. The total number of nodes is calculated like- `nodes = numOfMasterNodes + numOfMasterNodes * replicas`. Hence, the defaults `cluster.nodes = 6` and `cluster.replicas = 1` means, 3 master and 3 replica nodes will be deployed by the chart.
+
+By default the Redis<sup>TM</sup> Cluster is not accessible from outside the Kubernetes cluster, to access the Redis<sup>TM</sup> Cluster from outside you have to set `cluster.externalAccess.enabled=true` at deployment time. It will create in the first installation only 6 LoadBalancer services, one for each Redis<sup>TM</sup> node, once you have the external IPs of each service you will need to perform an upgrade passing those IPs to the `cluster.externalAccess.service.loadbalancerIP` array.
 
 The replicas will be read-only replicas of the masters. By default only one service is exposed (when not using the external access mode). You will connect your client to the exposed service, regardless you need to read or write. When a write operation arrives to a replica it will redirect the client to the proper master node. For example, using `redis-cli` you will need to provide the `-c` flag for `redis-cli` to follow the redirection automatically.
 
@@ -561,6 +563,10 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 5.0.0
+
+This major version updates the Redis<sup>TM</sup> docker image version used from `6.0` to `6.2`, the new stable version. There are no major changes in the chart and there shouldn't be any breaking changes in it as `6.2` breaking changes center around some command and behaviour changes. For more information, please refer to [Redis<sup>TM</sup> 6.2 release notes](https://raw.githubusercontent.com/redis/redis/6.2/00-RELEASENOTES).
 
 ### To 4.0.0
 

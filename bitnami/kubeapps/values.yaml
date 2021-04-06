@@ -38,6 +38,10 @@ enableIPv6: false
 clusters:
   - name: default
 
+## Force target Kubernetes version (using Helm capabilites if not set)
+##
+kubeVersion: ""
+
 ## The frontend service is the main reverse proxy used to access the Kubeapps UI
 ## To expose Kubeapps externally either configure the ingress object below or
 ## set frontend.service.type=LoadBalancer in the frontend configuration.
@@ -48,6 +52,14 @@ ingress:
   ##
   enabled: false
 
+  ## Override API Version (automatically detected if not set)
+  ##
+  apiVersion: ""
+
+  ## Ingress Path type
+  ##
+  pathType: ImplementationSpecific
+
   ## Set this to true in order to add the corresponding annotations for cert-manager
   ##
   certManager: false
@@ -56,9 +68,15 @@ ingress:
   ##
   hostname: kubeapps.local
 
+  ## The Path to Kubeapps Dashboard. You may need to set this to '/*' in order to use this
+  ## with ALB ingress controllers.
+  ##
+  path: /
+
   ## Enable TLS configuration for the hostname defined at ingress.hostname parameter
   ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
-  ## You can use the ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
+  ## You can use the ingress.secrets parameter to create this TLS secret, relay on cert-manager to create it, or
+  ## let the chart create self-signed certificates for you
   ##
   tls: false
 
@@ -77,16 +95,22 @@ ingress:
 
   ## The list of additional hostnames to be covered with this ingress record.
   ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
+  ## e.g:
   ## extraHosts:
-  ## - name: kubeapps.local
-  ##   path: /
+  ##   - name: kubeapps.local
+  ##     path: /
+  ##
+  extraHosts: []
 
   ## The tls configuration for additional hostnames to be covered with this ingress record.
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ## e.g:
   ## extraTls:
-  ## - hosts:
-  ##     - kubeapps.local
-  ##   secretName: kubeapps.local-tls
+  ##   - hosts:
+  ##       - kubeapps.local
+  ##     secretName: kubeapps.local-tls
+  ##
+  extraTls: []
 
   ## If you're providing your own certificates, please use this to add the certificates as secrets
   ## key and certificate should start with -----BEGIN CERTIFICATE----- or
@@ -94,40 +118,30 @@ ingress:
   ##
   ## name should line up with a tlsSecret set further up
   ## If you're using cert-manager, this is unneeded, as it will create the secret for you if it is not set
-  ##
   ## It is also possible to create and manage the certificates outside of this helm chart
   ## Please see README.md for more information
+  ## e.g:
+  ## secrets:
+  ##   - name: kubeapps.local-tls
+  ##     key:
+  ##     certificate:
   ##
   secrets: []
-  ## - name: kubeapps.local-tls
-  ##   key:
-  ##   certificate:
-
-  ## DEPRECATED: to be removed on 3.0.0
-  ## The list of hostnames to be covered with this ingress record.
-  ## Most likely this will be just one host, but in the event more hosts are needed, this is an array
-  ##
-  # hosts:
-  #   - name: kubeapps.local
-  #     path: /
-  #     ## Set this to true in order to enable TLS on the ingress record
-  #     ##
-  #     tls: false
-  #     ## If TLS is set to true, you must declare what secret will store the key/certificate for TLS
-  #     ##
-  #     tlsSecret: kubeapps.local-tls
 
 ## Frontend paramters
 ##
 frontend:
   replicaCount: 2
+  ## Add additional annotations to the frontend pods
+  ##
+  podAnnotations: {}
   ## Bitnami Nginx image
   ## ref: https://hub.docker.com/r/bitnami/nginx/tags/
   ##
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.19.7-debian-10-r1
+    tag: 1.19.8-debian-10-r14
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -218,6 +232,9 @@ apprepository:
   ## Running a single controller replica to avoid sync job duplication
   ##
   replicaCount: 1
+  ## Add additional annotations to the controllers pods
+  ##
+  podAnnotations: {}
   ## Schedule for syncing apprepositories. Every ten minutes by default
   # crontab: "*/10 * * * *"
   ## Bitnami Kubeapps AppRepository Controller image
@@ -226,7 +243,7 @@ apprepository:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-apprepository-controller
-    tag: 2.2.1-scratch-r0
+    tag: 2.3.1-scratch-r0
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -238,7 +255,7 @@ apprepository:
   syncImage:
     registry: docker.io
     repository: bitnami/kubeapps-asset-syncer
-    tag: 2.2.1-scratch-r0
+    tag: 2.3.1-scratch-r0
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -315,7 +332,7 @@ hooks:
   image:
     registry: docker.io
     repository: bitnami/kubectl
-    tag: 1.18.16-debian-10-r0
+    tag: 1.19.9-debian-10-r7
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -337,10 +354,13 @@ hooks:
 # Kubeops is an interface between the Kubeapps Dashboard and Helm 3/Kubernetes.
 kubeops:
   replicaCount: 2
+  ## Add additional annotations to the kubeops pods
+  ##
+  podAnnotations: {}
   image:
     registry: docker.io
     repository: bitnami/kubeapps-kubeops
-    tag: 2.2.1-scratch-r0
+    tag: 2.3.1-scratch-r0
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -370,21 +390,35 @@ kubeops:
       port: 8080
     initialDelaySeconds: 0
     timeoutSeconds: 5
+  ## Additional environment variables to set
+  ## E.g:
+  ## extraEnvVars:
+  ##   - name: TZ
+  ##     value: Europe/Madrid
+  ##
+  extraEnvVars: []
   nodeSelector: {}
   tolerations: []
   affinity: {}
+  ## Kubeops QPS and Burst configuration (per user request)
+  ## Used when requesting namespaces
+  # QPS: 10
+  # burst: 15
 
 ## Assetsvc is used to serve assets metadata over a REST API.
 ##
 assetsvc:
   replicaCount: 2
+  ## Add additional annotations to the assetsvc pods
+  ##
+  podAnnotations: {}
   ## Bitnami Kubeapps Assetsvc image
   ## ref: https://hub.docker.com/r/bitnami/kubeapps-assetsvc/tags/
   ##
   image:
     registry: docker.io
     repository: bitnami/kubeapps-assetsvc
-    tag: 2.2.1-scratch-r0
+    tag: 2.3.1-scratch-r0
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -443,13 +477,16 @@ assetsvc:
 ##
 dashboard:
   replicaCount: 2
+  ## Add additional annotations to the dashboard pods
+  ##
+  podAnnotations: {}
   ## Bitnami Kubeapps Dashboard image
   ## ref: https://hub.docker.com/r/bitnami/kubeapps-dashboard/tags/
   ##
   image:
     registry: docker.io
     repository: bitnami/kubeapps-dashboard
-    tag: 2.2.1-debian-10-r0
+    tag: 2.3.1-debian-10-r0
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -508,6 +545,10 @@ dashboard:
   ##      background-color: #991700;
   ##    }
   customStyle: ""
+  ## Custom Form components injected into the BasicDeploymentForm
+  ## Read the reference below for a step-by-step integration
+  ## https://github.com/kubeapps/kubeapps/blob/master/docs/developer/custom-form-component-support.md
+  customComponents: ""
   ## Custom translations injected to the Dashboard to customize the strings used in Kubeapps
   ## Ref: https://github.com/kubeapps/kubeapps/blob/master/docs/developer/translate-kubeapps.md
   ## e.g:
@@ -520,19 +561,22 @@ dashboard:
 ## ref: https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
 ##
 postgresql:
+  # Enable PostgreSQL. This should be true
+  enabled: true
   ## Enable replication for high availability
   replication:
     enabled: true
   ## Create a database for Kubeapps on the first run
   postgresqlDatabase: assets
+  ## PostgreSQL password
+  ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#setting-the-root-password-on-first-run
+  ##
+  # postgresqlPassword:
   ## Kubeapps uses PostgreSQL as a cache and persistence is not required
   ##
   persistence:
     enabled: false
     size: 8Gi
-  ## PostgreSQL credentials are handled by kubeapps to facilitate upgrades
-  ##
-  existingSecret: kubeapps-db
   ## Pod Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
@@ -559,14 +603,14 @@ rbac:
 securityContext:
   enabled: false
   runAsUser: 1001
-  # fsGroup: 1001
+  fsGroup: 1001
 
 ## Image used for the tests. The only requirement is to include curl
 ##
 testImage:
   registry: docker.io
   repository: bitnami/nginx
-  tag: 1.19.7-debian-10-r1
+  tag: 1.19.8-debian-10-r14
 
 # Auth Proxy configuration for OIDC support
 # ref: https://github.com/kubeapps/kubeapps/blob/master/docs/user/using-an-OIDC-provider.md
@@ -598,7 +642,7 @@ authProxy:
   image:
     registry: docker.io
     repository: bitnami/oauth2-proxy
-    tag: 7.0.1-debian-10-r5
+    tag: 7.1.0-debian-10-r0
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -668,6 +712,9 @@ pinnipedProxy:
   defaultPinnipedNamespace: pinniped-concierge
   defaultAuthenticatorType: JWTAuthenticator
   defaultAuthenticatorName: jwt-authenticator
+  ## The defaultPinnipedAPISuffix flag is not fully supported yet, 
+  ## please use the default value "pinniped.dev"
+  defaultPinnipedAPISuffix: pinniped.dev
 
   ## OAuth2 Proxy containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/

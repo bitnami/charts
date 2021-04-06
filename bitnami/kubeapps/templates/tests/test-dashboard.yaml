@@ -7,12 +7,17 @@ metadata:
 spec:
   containers:
     - name: {{ .Release.Name }}-dashboard-test
-      image: {{ template "kubeapps.image" (list .Values.testImage .Values.global) }}
+      image: {{ include "common.images.image" (dict "imageRoot" .Values.testImage "global" .Values.global) }}
       env:
         - name: DASHBOARD_HOST
-          value: {{ template "kubeapps.fullname" . }}.{{ .Release.Namespace }}
+          value: {{ template "common.names.fullname" . }}.{{ .Release.Namespace }}
       command:
         - sh
         - -c
         - curl -o /tmp/output $DASHBOARD_HOST && cat /tmp/output && cat /tmp/output | grep 'You need to enable JavaScript to run this app'
+      {{- if .Values.securityContext.enabled }}
+      securityContext:
+        fsGroup: {{ .Values.securityContext.fsGroup }}
+        runAsUser: {{ .Values.securityContext.runAsUser }}
+      {{- end }}
   restartPolicy: Never

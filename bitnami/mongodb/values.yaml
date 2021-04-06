@@ -20,7 +20,7 @@ image:
   ## Bitnami MongoDB(R) image tag
   ## ref: https://hub.docker.com/r/bitnami/mongodb/tags/
   ##
-  tag: 4.4.4-debian-10-r0
+  tag: 4.4.4-debian-10-r41
   ## Specify a imagePullPolicy
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -107,7 +107,7 @@ tls:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.19.6-debian-10-r51
+    tag: 1.19.8-debian-10-r9
     pullPolicy: IfNotPresent
 
 ## Deployment pod host aliases
@@ -141,6 +141,11 @@ directoryPerDB: false
 ##
 systemLogVerbosity: 0
 disableSystemLog: false
+
+## MongoDB(R) server-side JavaScript execution
+## ref: https://docs.mongodb.com/manual/core/server-side-javascript/
+##
+disableJavascript: false
 
 ## MongoDB(R) configuration file for Primary and Secondary nodes. For documentation of all options, see:
 ##   http://docs.mongodb.org/manual/reference/configuration-options/
@@ -374,6 +379,16 @@ readinessProbe:
   timeoutSeconds: 5
   failureThreshold: 6
   successThreshold: 1
+## Slow starting containers can be protected through startup probes
+## Startup probes are available in Kubernetes version 1.16 and above
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-startup-probes
+startupProbe:
+  enabled: false
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 30
 
 ## Custom Liveness probes for MongoDB(R) pods
 ## Ignored when livenessProbe.enabled=true
@@ -384,6 +399,11 @@ customLivenessProbe: {}
 ## Ignored when readinessProbe.enabled=true
 ##
 customReadinessProbe: {}
+
+## Custom Startup probes MongoDB(R) pods
+## Ignored when startupProbe.enabled=true
+##
+customStartupProbe: {}
 
 ## Add init containers to the MongoDB(R) pods.
 ## Example:
@@ -540,7 +560,7 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.18.15-debian-10-r24
+      tag: 1.18.17-debian-10-r0
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1028,7 +1048,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mongodb-exporter
-    tag: 0.11.2-debian-10-r79
+    tag: 0.11.2-debian-10-r114
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

@@ -214,6 +214,9 @@ spec:
             - name: redis-certificates
               mountPath: /opt/bitnami/redis/certs
               readOnly: true
+            {{- end }}            
+            {{- if .Values.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumeMounts "context" $ ) | nindent 12 }}
             {{- end }}
         {{- if and .Values.cluster.enabled .Values.sentinel.enabled }}
         - name: sentinel
@@ -325,6 +328,9 @@ spec:
               mountPath: /opt/bitnami/redis/certs
               readOnly: true
             {{- end }}
+            {{- if .Values.sentinel.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.sentinel.extraVolumeMounts "context" $ ) | nindent 12 }}
+            {{- end }}
           {{- end }}
         {{- if .Values.metrics.enabled }}
         - name: metrics
@@ -344,20 +350,26 @@ spec:
           env:
             - name: REDIS_ALIAS
               value: {{ template "redis.fullname" . }}
-            {{- if and .Values.usePassword (not .Values.usePasswordFile) }}
+            {{- if .Values.usePassword }}
+            - name: REDIS_USER
+              value: default
+              {{- if (not .Values.usePasswordFile) }}
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ template "redis.secretName" . }}
                   key: {{ template "redis.secretPasswordKey" . }}
+              {{- end }}
             {{- end }}
             {{- if .Values.tls.enabled }}
             - name: REDIS_ADDR
-              value: rediss://localhost:{{ .Values.redisPort }}
+              value: rediss://{{ .Values.metrics.redisTargetHost }}:{{ .Values.redisPort }}
+              {{- if .Values.tls.authClients }}
             - name: REDIS_EXPORTER_TLS_CLIENT_KEY_FILE
               value: {{ template "redis.tlsCertKey" . }}
             - name: REDIS_EXPORTER_TLS_CLIENT_CERT_FILE
               value: {{ template "redis.tlsCert" . }}
+              {{- end }}
             - name: REDIS_EXPORTER_TLS_CA_CERT_FILE
               value: {{ template "redis.tlsCACert" . }}
             {{- end }}
@@ -375,7 +387,38 @@ spec:
             - name: metrics
               containerPort: 9121
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
-  {{- end }}
+        {{- end }}
+        {{- if .Values.sentinel.metrics.enabled }}
+        - name: sentinel-metrics
+          image: {{ include "sentinel.metrics.image" . }}
+          imagePullPolicy: {{ .Values.sentinel.metrics.image.pullPolicy | quote }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          command:
+            - redis_sentinel_exporter{{- range $key, $value := .Values.sentinel.metrics.extraArgs }} --{{ $key }}={{ $value }}{{- end }}
+          env:
+            {{- if and .Values.sentinel.usePassword (and .Values.usePassword (not .Values.usePasswordFile)) }}
+            - name: SENTINEL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "redis.secretName" . }}
+                  key: {{ include "redis.secretPasswordKey" . }}
+            {{- end }}
+            {{- if and .Values.sentinel.usePassword .Values.usePassword .Values.usePasswordFile }}
+            - name: SENTINEL_PASSWORD_FILE
+              value: /secrets/redis-password
+            {{- end }}
+          volumeMounts:
+            {{- if and .Values.sentinel.usePassword .Values.usePassword .Values.usePasswordFile }}
+            - name: redis-password
+              mountPath: /secrets/
+            {{- end }}
+          ports:
+            - name: sentinelmetrics
+              containerPort: 9355
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.resources "context" $) | nindent 12 }}
+        {{- end }}
       {{- $needsVolumePermissions := and .Values.volumePermissions.enabled .Values.slave.persistence.enabled .Values.securityContext.enabled .Values.containerSecurityContext.enabled }}
       {{- if or $needsVolumePermissions .Values.sysctlImage.enabled }}
       initContainers:
@@ -450,6 +493,12 @@ spec:
           emptyDir: {}
         - name: tmp
           emptyDir: {}
+        {{- if .Values.extraVolumes }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumes "context" $ ) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.sentinel.extraVolumes }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.sentinel.extraVolumes "context" $ ) | nindent 8 }}
+        {{- end }}
     {{- if .Values.tls.enabled }}
         - name: redis-certificates
           secret:
