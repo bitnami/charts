@@ -452,6 +452,7 @@ Note: This option requires creating RBAC rules on clusters where RBAC policies a
 externalAccess.enabled=true
 externalAccess.service.type=LoadBalancer
 externalAccess.service.port=9094
+externalAccess.autoDiscovery.enabled=true
 externalAccess.service.loadBalancerIPs[0]='external-ip-1'
 externalAccess.service.loadBalancerIPs[1]='external-ip-2'}
 ```
@@ -479,6 +480,7 @@ Note: This option requires creating RBAC rules on clusters where RBAC policies a
 ```console
 externalAccess.enabled=true
 externalAccess.service.type=NodePort
+externalAccess.autoDiscovery.enabled=true
 externalAccess.service.nodePorts[0]='node-port-1'
 externalAccess.service.nodePorts[1]='node-port-2'
 ```
