@@ -60,6 +60,14 @@ git:
 ##
 # fullnameOverride:
 
+## Add labels to all the deployed resources
+##
+commonLabels: {}
+
+## Add annotations to all the deployed resources
+##
+commonAnnotations: {}
+
 ## Number of Apache replicas to deploy
 ##
 replicaCount: 1
@@ -146,6 +154,11 @@ cloneHtdocsFromGit:
 ## Name of a config map with the httpd.conf file contents
 ##
 # httpdConfConfigMap:
+
+## Additional pod labels
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
+podLabels: {}
 
 ## Pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
