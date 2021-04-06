@@ -23,8 +23,8 @@ spec:
   {{- end }}
   ports:
     - port: {{ .Values.monitoring.service.port }}
-      targetPort: tcp-monitoring
-      name: monitoring
+      targetPort: monitoring
+      name: tcp-monitoring
       {{- if and (eq .Values.monitoring.service.type "NodePort") (not (empty .Values.monitoring.service.nodePort)) }}
       nodePort: {{ .Values.monitoring.service.nodePort  }}
       {{- end }}
