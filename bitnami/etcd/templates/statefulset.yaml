@@ -214,6 +214,10 @@ spec:
               value: "/opt/bitnami/etcd/certs/peer/{{ .Values.auth.peer.caFilename | default "ca.crt"}}"
             {{- end }}
             {{- end }}
+            {{- if .Values.startFromSnapshot.enabled }}
+            - name: ETCD_INIT_SNAPSHOT_FILENAME
+              value: {{ .Values.startFromSnapshot.snapshotFilename | quote }}
+            {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
