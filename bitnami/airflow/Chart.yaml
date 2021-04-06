@@ -33,4 +33,3 @@ sources:
   - https://github.com/bitnami/bitnami-docker-airflow
   - https://airflow.apache.org/
 version: 9.0.0
-
