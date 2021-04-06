@@ -328,9 +328,11 @@ Find more information about how to deal with common errors related to Bitnami’
 
 The Kibana container configuration logic was migrated to bash.
 
-From this version onwards, Kibana container components are now licensed under the Elastic License that is not currently accepted as an Open Source license by the Open Source Initiative (OSI).
+From this version onwards, Kibana container components are now licensed under the [Elastic License](https://www.elastic.co/licensing/elastic-license) that is not currently accepted as an Open Source license by the Open Source Initiative (OSI).
 
 Also, from now on, the Helm Chart will include the X-Pack plugin installed by default.
+
+Regular upgrade is compatible from previous versions.
 
 ### To 6.2.0
 
