@@ -121,12 +121,12 @@ wordpressSkipInstall: false
 ##   @ini_set( 'memory_limit', '256M' );
 ##
 wordpressExtraConfigContent:
-## @param wordpressConfiguration The content for your custom wp-config.php file
+## @param wordpressConfiguration The content for your custom wp-config.php file (experimental feature)
 ## NOTE: This will override configuring WordPress based on environment variables (including those set by the chart)
 ## NOTE: Currently only supported when `wordpressSkipInstall=true`
 ##
 wordpressConfiguration:
-## @param existingWordPressConfigurationSecret The name of an existing secret with your custom wp-config.php file
+## @param existingWordPressConfigurationSecret The name of an existing secret with your custom wp-config.php file (experimental feature)
 ## NOTE: When it's set the `wordpressConfiguration` parameter is ignored
 ##
 existingWordPressConfigurationSecret:
