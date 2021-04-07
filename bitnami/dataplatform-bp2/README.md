@@ -85,6 +85,138 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## Parameters
 
+### Global parameters
+
+| Name                      | Description                                     | Value |
+| ------------------------- | ----------------------------------------------- | ----- |
+| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `nil` |
+
+
+### Kafka parameters
+
+| Name                                            | Description                                        | Value                 |
+| ----------------------------------------------- | -------------------------------------------------- | --------------------- |
+| `kafka.enabled`                                 | Enable Kafka subchart                              | `true`                |
+| `kafka.replicaCount`                            | Number of Kafka brokers                            | `3`                   |
+| `kafka.heapOpts`                                | Kafja Java Heap size                               | `-Xmx4096m -Xms4096m` |
+| `kafka.resources.limits`                        | Resource limits for Kafka                          | `{}`                  |
+| `kafka.resources.requests.cpu`                  | CPU capacity request for Kafka nodes               | `250m`                |
+| `kafka.resources.requests.memory`               | Memory capacity request for Kafka nodes            | `5120Mi`              |
+| `kafka.affinity.podAntiAffinity`                | Kafka anti affinity rules                          | `{}`                  |
+| `kafka.affinity.podAffinity`                    | Kafka affinity rules                               | `{}`                  |
+| `kafka.metrics.kafka.enabled`                   | Enable prometheus exporter for Kafka               | `true`                |
+| `kafka.metrics.kafka.resources.limits`          | Resource limits for kafka prometheus exporter      | `{}`                  |
+| `kafka.metrics.kafka.resources.requests.cpu`    | CPU capacity request for Kafka prometheus nodes    | `100m`                |
+| `kafka.metrics.kafka.resources.requests.memory` | Memory capacity request for Kafka prometheus nodes | `128Mi`               |
+| `kafka.metrics.kafka.service.port`              | Kafka Prometheus exporter service port             | `9308`                |
+| `kafka.metrics.jmx.enabled`                     | Enable JMX exporter for Kafka                      | `true`                |
+| `kafka.metrics.jmx.resources.limits`            | Resource limits for kafka prometheus exporter      | `{}`                  |
+| `kafka.metrics.jmx.resources.requests.cpu`      | CPU capacity request for Kafka prometheus nodes    | `100m`                |
+| `kafka.metrics.jmx.resources.requests.memory`   | Memory capacity request for Kafka prometheus nodes | `128Mi`               |
+| `kafka.metrics.jmx.service.port`                | Kafka Prometheus exporter service port             | `5556`                |
+| `kafka.zookeeper.enabled`                       | Enable the Kafka subchart's Zookeeper              | `true`                |
+| `kafka.zookeeper.replicaCount`                  | Number of Zookeeper nodes                          | `3`                   |
+| `kafka.zookeeper.heapSize`                      | HeapSize for Zookeeper                             | `4096`                |
+| `kafka.zookeeper.resources.limits`              | Resource limits for zookeeper                      | `{}`                  |
+| `kafka.zookeeper.resources.requests.cpu`        | CPU capacity request for zookeeper                 | `250m`                |
+| `kafka.zookeeper.resources.requests.memory`     | Memory capacity request for zookeeper              | `5120Mi`              |
+| `kafka.zookeeper.affinity.podAntiAffinity`      | Zookeeper anti affinity rules                      | `{}`                  |
+| `kafka.externalZookeeper.servers`               | Array of external Zookeeper servers                | `[]`                  |
+
+
+### Spark parameters
+
+| Name                                     | Description                           | Value    |
+| ---------------------------------------- | ------------------------------------- | -------- |
+| `spark.enabled`                          | Enable Spark subchart                 | `true`   |
+| `spark.master.webPort`                   | Web port for spark master             | `8080`   |
+| `spark.master.resources.limits`          | Spark master resource limits          | `{}`     |
+| `spark.master.resources.requests.cpu`    | Spark master CPUs                     | `250m`   |
+| `spark.master.resources.requests.memory` | Spark master requested memory         | `5120Mi` |
+| `spark.master.affinity.podAntiAffinity`  | Spark master pod anti affinity rules  | `{}`     |
+| `spark.worker.replicaCount`              | Number of spark workers               | `2`      |
+| `spark.worker.webPort`                   | Web port for spark master             | `8081`   |
+| `spark.worker.resources.limits`          | Spark master resource limits          | `{}`     |
+| `spark.worker.resources.requests.cpu`    | Spark master CPUs                     | `250m`   |
+| `spark.worker.resources.requests.memory` | Spark master requested memory         | `5120Mi` |
+| `spark.worker.affinity.podAntiAffinity`  | Spark master pod anti affinity rules  | `{}`     |
+| `spark.metrics.enabled`                  | Enable Prometheus exporter for Spark  | `true`   |
+| `spark.metrics.masterAnnotations`        | Annotations for Spark master exporter | `{}`     |
+| `spark.metrics.workerAnnotations`        | Annotations for Spark worker exporter | `{}`     |
+
+
+### Elasticsearch parameters
+
+| Name                                                   | Description                                  | Value    |
+| ------------------------------------------------------ | -------------------------------------------- | -------- |
+| `elasticsearch.enabled`                                | Enable Elasticsearch                         | `true`   |
+| `elasticsearch.global.kibanaEnabled`                   | Enable Kibana                                | `true`   |
+| `elasticsearch.master.replicas`                        | Number of Elasticsearch replicas             | `3`      |
+| `elasticsearch.master.heapSize`                        | Heap Size for Elasticsearch master           | `512m`   |
+| `elasticsearch.master.affinity.podAntiAffinity`        | Elasticsearch pod anti affinity              | `{}`     |
+| `elasticsearch.master.resources.limits`                | Elasticsearch master resource limits         | `{}`     |
+| `elasticsearch.master.resources.requests.cpu`          | Elasticsearch master CPUs                    | `250m`   |
+| `elasticsearch.master.resources.requests.memory`       | Elasticsearch master requested memory        | `1048Mi` |
+| `elasticsearch.data.name`                              | Elasticsearch data node name                 | `data`   |
+| `elasticsearch.data.replicas`                          | Number of Elasticsearch replicas             | `2`      |
+| `elasticsearch.data.heapSize`                          | Heap Size for Elasticsearch data node        | `2560m`  |
+| `elasticsearch.data.affinity.podAntiAffinity`          | Elasticsearch pod anti affinity              | `{}`     |
+| `elasticsearch.data.resources.limits`                  | Elasticsearch data node resource limits      | `{}`     |
+| `elasticsearch.data.resources.requests.cpu`            | Elasticsearch data node CPUs                 | `250m`   |
+| `elasticsearch.data.resources.requests.memory`         | Elasticsearch data node requested memory     | `5Gi`    |
+| `elasticsearch.coordinating.replicas`                  | Number of Elasticsearch replicas             | `2`      |
+| `elasticsearch.coordinating.heapSize`                  | Heap Size for Elasticsearch coordinating     | `1024m`  |
+| `elasticsearch.coordinating.affinity.podAntiAffinity`  | Elasticsearch pod anti affinity              | `{}`     |
+| `elasticsearch.coordinating.resources.limits`          | Elasticsearch coordinating resource limits   | `{}`     |
+| `elasticsearch.coordinating.resources.requests.cpu`    | Elasticsearch coordinating CPUs              | `100m`   |
+| `elasticsearch.coordinating.resources.requests.memory` | Elasticsearch coordinating requested memory  | `2Gi`    |
+| `elasticsearch.metrics.enabled`                        | Enable Prometheus exporter for Elasticsearch | `true`   |
+| `elasticsearch.metrics.resources.limits`               | Elasticsearch metrics resource limits        | `{}`     |
+| `elasticsearch.metrics.resources.requests.cpu`         | Elasticsearch metrics CPUs                   | `100m`   |
+| `elasticsearch.metrics.resources.requests.memory`      | Elasticsearch metrics requested memory       | `128Mi`  |
+| `elasticsearch.metrics.service.annotations`            | Elasticsearch metrics service annotations    | `{}`     |
+
+
+### Logstash parameters
+
+| Name                                         | Description                            | Value   |
+| -------------------------------------------- | -------------------------------------- | ------- |
+| `logstash.enabled`                           | Enable Logstash                        | `true`  |
+| `logstash.replicaCount`                      | Number of Logstash replicas            | `2`     |
+| `logstash.affinity.podAntiAffinity`          | Logstash pod anti affinity             | `{}`    |
+| `logstash.resources.limits`                  | Elasticsearch metrics resource limits  | `{}`    |
+| `logstash.resources.requests.cpu`            | Elasticsearch metrics CPUs             | `100m`  |
+| `logstash.resources.requests.memory`         | Elasticsearch metrics requested memory | `128Mi` |
+| `logstash.metrics.enabled`                   | Enable metrics for logstash            | `true`  |
+| `logstash.metrics.resources.limits`          | Elasticsearch metrics resource limits  | `{}`    |
+| `logstash.metrics.resources.requests.cpu`    | Elasticsearch metrics CPUs             | `100m`  |
+| `logstash.metrics.resources.requests.memory` | Elasticsearch metrics requested memory | `128Mi` |
+| `logstash.metrics.service.port`              | Logstash service port                  | `9198`  |
+| `logstash.metrics.service.annotations`       | Logstash service annotations           | `{}`    |
+
+
+### Wavefront parameters
+
+| Name                                                 | Description                                    | Value                                |
+| ---------------------------------------------------- | ---------------------------------------------- | ------------------------------------ |
+| `wavefront.enabled`                                  | Enable Wavefront                               | `false`                              |
+| `wavefront.clusterName`                              | cluster name                                   | `KUBERNETES_CLUSTER_NAME`            |
+| `wavefront.wavefront.url`                            | Wavefront cluster URL                          | `https://YOUR_CLUSTER.wavefront.com` |
+| `wavefront.wavefront.token`                          | Wavefront access token                         | `YOUR_API_TOKEN`                     |
+| `wavefront.wavefront.existingSecret`                 | Wavefront existing secret                      | `nil`                                |
+| `wavefront.collector.resources.limits`               | Elasticsearch metrics resource limits          | `{}`                                 |
+| `wavefront.collector.resources.requests.cpu`         | Elasticsearch metrics CPUs                     | `200m`                               |
+| `wavefront.collector.resources.requests.memory`      | Elasticsearch metrics requested memory         | `10Mi`                               |
+| `wavefront.collector.discovery.enabled`              | Enable wavefront discovery                     | `true`                               |
+| `wavefront.collector.discovery.enableRuntimeConfigs` | Enable runtime configs for wavefront discovery | `true`                               |
+| `wavefront.collector.discovery.config`               | Wavefront discovery config                     | `[]`                                 |
+| `wavefront.proxy.resources.limits`                   | Elasticsearch metrics resource limits          | `{}`                                 |
+| `wavefront.proxy.resources.requests.cpu`             | Elasticsearch metrics CPUs                     | `100m`                               |
+| `wavefront.proxy.resources.requests.memory`          | Elasticsearch metrics requested memory         | `5Gi`                                |
+
+
 The following tables lists the recommended configurations for each application used in the data platform. If you need to configure any other parameters apart from the ones mentioned below, you can refer to the corresponding chart and update the values.yaml accordingly.
 
 ### Global parameters
