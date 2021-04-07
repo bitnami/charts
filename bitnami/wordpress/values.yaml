@@ -229,7 +229,7 @@ schedulerName:
 ## @param serviceAccountName ServiceAccount name
 ##
 serviceAccountName: default
-## @param hostAliases[array] WordPress pod host aliases
+## @param hostAliases [array] WordPress pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
 hostAliases:
@@ -313,7 +313,7 @@ tolerations: {}
 ## WordPress containers' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ## @param resources.limits The resources limits for the WordPress container
-## @param resources.requests[object] The requested resources for the WordPress container
+## @param resources.requests [object] The requested resources for the WordPress container
 ##
 resources:
   limits: {}
@@ -692,7 +692,7 @@ metrics:
     ## @param metrics.service.port Metrics service port
     ##
     port: 9117
-    ## @param metrics.service.annotations[object] Additional custom annotations for Metrics service
+    ## @param metrics.service.annotations [object] Additional custom annotations for Metrics service
     ##
     annotations:
       prometheus.io/scrape: "true"
