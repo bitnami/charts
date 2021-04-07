@@ -4,5 +4,5 @@ Usage:
 {{ include "subcomponent.service.name" ( dict "componentName" "name" "context" $ ) }}
 */}}
 {{- define "subcomponent.service.name" -}}
-{{- printf "%s-%s" .context.Release.Name .componentName -}}
+{{- printf "%s-%s" .context.Release.Name .componentName | trunc 63 -}}
 {{- end -}}
