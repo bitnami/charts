@@ -348,7 +348,7 @@ containerSecurityContext:
 ## Configure extra options for WordPress containers' liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe
-## @skip livenessProbe.httpGet[object]
+## @skip livenessProbe.httpGet
 ## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
 ## @param livenessProbe.periodSeconds Period seconds for livenessProbe
 ## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -377,7 +377,7 @@ livenessProbe:
   failureThreshold: 6
   successThreshold: 1
 ## @param readinessProbe.enabled Enable readinessProbe
-## @skip readinessProbe.httpGet[object]
+## @skip readinessProbe.httpGet
 ## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
 ## @param readinessProbe.periodSeconds Period seconds for readinessProbe
 ## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
