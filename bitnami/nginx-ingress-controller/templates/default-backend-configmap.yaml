@@ -13,5 +13,6 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 data:
-  defaultBackend.conf: {{ toYaml .Values.defaultBackend.serverBlockConfig | indent 2 }}
+  defaultBackend.conf: |-
+    {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.serverBlockConfig "context" $) | nindent 4 }}
 {{- end }}
