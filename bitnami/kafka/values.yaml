@@ -872,6 +872,12 @@ provisioning:
     ##
     debug: false
 
+  # provisioning.numPartitions: Number of partitions for the topic when it does not specify.
+  numPartitions: 1
+
+  # provisioning.replicationFactor: Replication factor for the topic when it does not specify.
+  replicationFactor: 1
+
   ## Use an alternate scheduler, e.g. "stork".
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
