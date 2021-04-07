@@ -77,8 +77,13 @@ spec:
       {{- if .Values.master.spreadConstraints }}
       topologySpreadConstraints: {{- toYaml .Values.master.spreadConstraints | nindent 8 }}
       {{- end }}
-      {{- with .Values.slave.affinity }}
-      affinity: {{- tpl (toYaml .) $ | nindent 8 }}
+      {{- if .Values.slave.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.slave.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.slave.podAffinityPreset "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.slave.podAntiAffinityPreset "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.slave.nodeAffinityPreset.type "key" .Values.slave.nodeAffinityPreset.key "values" .Values.slave.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       containers:
         - name: {{ template "redis.name" . }}
