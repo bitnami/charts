@@ -5,7 +5,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "wordpress.mariadb.fullname" -}}
-{{- printf "%s-%s" .Release.Name "mariadb" | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-mariadb" .Release.Name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
@@ -13,7 +13,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "wordpress.memcached.fullname" -}}
-{{- printf "%s-%s" .Release.Name "memcached" | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-memcached" .Release.Name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
@@ -45,17 +45,30 @@ Return the proper Docker Image Registry Secret Names
 {{- end -}}
 
 {{/*
-Return  the proper Storage Class
-*/}}
-{{- define "wordpress.storageClass" -}}
-{{- include "common.storage.class" (dict "persistence" .Values.persistence "global" .Values.global) -}}
-{{- end -}}
-
-{{/*
 Create chart name and version as used by the chart label.
 */}}
 {{- define "wordpress.customHTAccessCM" -}}
 {{- printf "%s" .Values.customHTAccessCM -}}
+{{- end -}}
+
+{{/*
+Return the WordPress configuration secret
+*/}}
+{{- define "wordpress.configSecretName" -}}
+{{- if .Values.existingWordPressConfigurationSecret -}}
+    {{- printf "%s" (tpl .Values.existingWordPressConfigurationSecret $) -}}
+{{- else -}}
+    {{- printf "%s-configuration" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if a secret object should be created for WordPress configuration
+*/}}
+{{- define "wordpress.createConfigSecret" -}}
+{{- if and .Values.wordpressConfiguration (not .Values.existingWordPressConfigurationSecret) }}
+    {{- true -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
@@ -64,7 +77,7 @@ Return the MariaDB Hostname
 {{- define "wordpress.databaseHost" -}}
 {{- if .Values.mariadb.enabled }}
     {{- if eq .Values.mariadb.architecture "replication" }}
-        {{- printf "%s-%s" (include "wordpress.mariadb.fullname" .) "primary" | trunc 63 | trimSuffix "-" -}}
+        {{- printf "%s-primary" (include "wordpress.mariadb.fullname" .) | trunc 63 | trimSuffix "-" -}}
     {{- else -}}
         {{- printf "%s" (include "wordpress.mariadb.fullname" .) -}}
     {{- end -}}
@@ -119,7 +132,7 @@ Return the MariaDB Secret Name
 {{- else if .Values.externalDatabase.existingSecret -}}
     {{- printf "%s" .Values.externalDatabase.existingSecret -}}
 {{- else -}}
-    {{- printf "%s-%s" (include "common.names.fullname" .) "externaldb" -}}
+    {{- printf "%s-externaldb" (include "common.names.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
@@ -142,5 +155,42 @@ Return the SMTP Secret Name
     {{- printf "%s" .Values.smtpExistingSecret -}}
 {{- else -}}
     {{- printf "%s" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Compile all warnings into a single message.
+*/}}
+{{- define "wordpress.validateValues" -}}
+{{- $messages := list -}}
+{{- $messages := append $messages (include "wordpress.validateValues.configuration" .) -}}
+{{- $messages := append $messages (include "wordpress.validateValues.htaccess" .) -}}
+{{- $messages := without $messages "" -}}
+{{- $message := join "\n" $messages -}}
+{{- if $message -}}
+{{-   printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of WordPress - Custom wp-config.php
+*/}}
+{{- define "wordpress.validateValues.configuration" -}}
+{{- if and (or .Values.wordpressConfiguration .Values.existingWordPressConfigurationSecret) (not .Values.wordpressSkipInstall) -}}
+wordpress: wordpressConfiguration
+    You are trying to use a wp-config.php file. This setup is only supported
+    when skipping wizard installation (--set wordpressSkipInstall=true).
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of WordPress - htaccess configuration
+*/}}
+{{- define "wordpress.validateValues.htaccess" -}}
+{{- if and .Values.customHTAccessCM .Values.allowOverrideNone -}}
+wordpress: customHTAccessCM
+    You are trying to use custom htaccess rules but Apache was configured
+    to prohibit overriding directives with htaccess files. To use this feature,
+    allow overriding Apache directives (--set allowOverrideNone=false).
 {{- end -}}
 {{- end -}}
