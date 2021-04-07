@@ -437,6 +437,14 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ## Upgrading
 
+### To 15.0.0
+
+From this version onwards, Elasticsearch container components are now licensed under the [Elastic License](https://www.elastic.co/licensing/elastic-license) that is not currently accepted as an Open Source license by the Open Source Initiative (OSI).
+
+Also, from now on, the Helm Chart will include the X-Pack plugin installed by default.
+
+Regular upgrade is compatible from previous versions.
+
 ### To 14.0.0
 
 This version standardizes the way of defining Ingress rules in the Kibana subchart. When configuring a single hostname for the Ingress rule, set the `kibana.ingress.hostname` value. When defining more than one, set the `kibana.ingress.extraHosts` array. Apart from this case, no issues are expected to appear when upgrading.

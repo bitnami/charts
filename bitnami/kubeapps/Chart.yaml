@@ -25,4 +25,4 @@ maintainers:
 name: kubeapps
 sources:
   - https://github.com/kubeapps/kubeapps
-version: 6.0.0
+version: 6.0.1

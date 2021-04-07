@@ -258,6 +258,9 @@ serviceAccount:
   ## The name of the ServiceAccount to use.
   ## If not set and create is true, a name is generated using the common.names.fullname template
   # name:
+  # Allows auto mount of ServiceAccountToken on the serviceAccount created
+  # Can be set to false if pods using this serviceAccount do not need to use K8s API
+  automountServiceAccountToken: true
 
 ## Zookeeper Pod Security Context
 ##

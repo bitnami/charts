@@ -88,7 +88,7 @@ spec:
                 {{- else }}
                 - name: REDMINE_MAIL_RECEIVER_DB_POSTGRES
                 {{- end }}
-                value: {{ template "redmine.database.host" . }}
+                  value: {{ template "redmine.database.host" . }}
                 - name: REDMINE_MAIL_RECEIVER_DB_DATABASE
                   value: {{ template "redmine.database.name" . }}
                 - name: REDMINE_MAIL_RECEIVER_DB_USERNAME

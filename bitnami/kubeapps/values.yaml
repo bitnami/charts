@@ -486,7 +486,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-dashboard
-    tag: 2.3.1-debian-10-r0
+    tag: 2.3.1-debian-10-r7
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -698,8 +698,8 @@ pinnipedProxy:
 
   image:
     registry: docker.io
-    repository: kubeapps/pinniped-proxy
-    tag: latest
+    repository: bitnami/kubeapps-pinniped-proxy
+    tag: 2.3.1-debian-10-r7
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##

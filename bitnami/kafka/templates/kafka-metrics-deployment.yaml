@@ -30,6 +30,7 @@ spec:
       {{- if .Values.metrics.kafka.schedulerName }}
       schedulerName: {{ .Values.metrics.kafka.schedulerName | quote }}
       {{- end }}
+      serviceAccountName: {{ template "kafka.serviceAccountName" . }}
       containers:
         - name: kafka-exporter
           image: {{ include "kafka.metrics.kafka.image" . }}
