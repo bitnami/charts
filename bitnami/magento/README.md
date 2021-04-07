@@ -506,6 +506,12 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ## Notable changes
 
+### 18.0.0
+
+Elasticsearch dependency version was bumped to a new major version changing the license of some of its components to the [Elastic License](https://www.elastic.co/licensing/elastic-license) that is not currently accepted as an Open Source license by the Open Source Initiative (OSI). Check [Elasticsearch Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/elasticsearch#to-1500) for more information.
+
+Regular upgrade is compatible from previous versions.
+
 ### 17.0.0
 
 In this major there were three main changes introduced:
