@@ -136,7 +136,7 @@ Return true if a secret object should be created
     {{- true -}}
 {{- else if and (eq .Values.provider "linode") .Values.linode.apiToken (not .Values.linode.secretName) -}}
     {{- true -}}
-{{- else if and (eq .Values.provider "rfc2136") .Values.rfc2136.tsigSecret -}}
+{{- else if and (eq .Values.provider "rfc2136") .Values.rfc2136.tsigSecret (not .Values.rfc2136.secretName) -}}
     {{- true -}}
 {{- else if and (eq .Values.provider "pdns") .Values.pdns.apiKey (not .Values.pdns.secretName) -}}
     {{- true -}}
@@ -176,6 +176,8 @@ Return the name of the Secret used to store the passwords
 {{- .Values.pdns.secretName }}
 {{- else if and (eq .Values.provider "infoblox") .Values.infoblox.secretName }}
 {{- .Values.infoblox.secretName }}
+{{- else if and (eq .Values.provider "rfc2136") .Values.rfc2136.secretName }}
+{{- .Values.rfc2136.secretName }}
 {{- else -}}
 {{- template "external-dns.fullname" . }}
 {{- end -}}
