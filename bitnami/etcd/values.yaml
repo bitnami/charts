@@ -448,6 +448,26 @@ service:
   ##
   annotations: {}
 
+## Service account configuration
+##
+serviceAccount:
+  ## If true, create service account. If false, use service account defined by name.
+  ##
+  create: false
+  ## Name of service account to use or create.
+  ##
+  name: ""
+  ## Whether to auto mount the service account token
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/#use-the-default-service-account-to-access-the-api-server
+  ##
+  automountServiceAccountToken: true
+  ## Additional annotations to be included on the service account
+  ##
+  annotations: {}
+  ## Additional labels to be included on the service account
+  ##
+  labels: {}
+
 ## Enable persistence using Persistent Volume Claims
 ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
