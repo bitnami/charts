@@ -206,15 +206,15 @@ The command removes all the Kubernetes components associated with the chart and 
 | `wavefront.wavefront.url`                            | Tanzu Observability cluster URL                          | `https://YOUR_CLUSTER.wavefront.com` |
 | `wavefront.wavefront.token`                          | Tanzu Observability access token                         | `YOUR_API_TOKEN`                     |
 | `wavefront.wavefront.existingSecret`                 | Tanzu Observability existing secret                      | `nil`                                |
-| `wavefront.collector.resources.limits`               | Elasticsearch metrics resource limits          | `{}`                                 |
-| `wavefront.collector.resources.requests.cpu`         | Elasticsearch metrics CPUs                     | `200m`                               |
-| `wavefront.collector.resources.requests.memory`      | Elasticsearch metrics requested memory         | `10Mi`                               |
-| `wavefront.collector.discovery.enabled`              | Enable Tanzu Observability discovery                     | `true`                               |
-| `wavefront.collector.discovery.enableRuntimeConfigs` | Enable runtime configs for Tanzu Observability discovery | `true`                               |
-| `wavefront.collector.discovery.config`               | Tanzu Observability discovery config                     | `[]`                                 |
-| `wavefront.proxy.resources.limits`                   | Elasticsearch metrics resource limits          | `{}`                                 |
-| `wavefront.proxy.resources.requests.cpu`             | Elasticsearch metrics CPUs                     | `100m`                               |
-| `wavefront.proxy.resources.requests.memory`          | Elasticsearch metrics requested memory         | `5Gi`                                |
+| `wavefront.collector.resources.limits`               | Wavefront metrics resource limits          | `{}`                                 |
+| `wavefront.collector.resources.requests.cpu`         | Wavefront metrics CPUs                     | `200m`                               |
+| `wavefront.collector.resources.requests.memory`      | Wavefront metrics requested memory         | `10Mi`                               |
+| `wavefront.collector.discovery.enabled`              | Enable Wavefront discovery                     | `true`                               |
+| `wavefront.collector.discovery.enableRuntimeConfigs` | Enable runtime configs for Wavefront discovery | `true`                               |
+| `wavefront.collector.discovery.config`               | Wavefront discovery config                     | `[]`                                 |
+| `wavefront.proxy.resources.limits`                   | Wavefront metrics resource limits          | `{}`                                 |
+| `wavefront.proxy.resources.requests.cpu`             | Wavefront metrics CPUs                     | `100m`                               |
+| `wavefront.proxy.resources.requests.memory`          | Wavefront metrics requested memory         | `5Gi`                                |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
