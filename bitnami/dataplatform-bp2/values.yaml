@@ -24,7 +24,7 @@ kafka:
   enabled: true
   ## @param kafka.replicaCount Number of Kafka brokers
   replicaCount: 3
-  ## @param kafka.heapOpts Kafja Java Heap size
+  ## @param kafka.heapOpts Kafka Java Heap size
   heapOpts: -Xmx4096m -Xms4096m
   ## Recommended values for cpu and memory requests
   ##
@@ -68,7 +68,7 @@ kafka:
     ##
     kafka:
       ## @param kafka.metrics.kafka.enabled Enable prometheus exporter for Kafka
-      enabled: true
+      enabled: false
       ## Prometheus Kafka Exporter' resource requests and limits
       ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
       ##
@@ -92,7 +92,7 @@ kafka:
     ##
     jmx:
       ## @param kafka.metrics.jmx.enabled Enable JMX exporter for Kafka
-      enabled: true
+      enabled: false
       ## Prometheus JMX Exporter' resource requests and limits
       ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
       ##
@@ -230,7 +230,7 @@ spark:
   ## @param spark.metrics.masterAnnotations [object] Annotations for Spark master exporter
   ## @param spark.metrics.workerAnnotations [object] Annotations for Spark worker exporter
   metrics:
-    enabled: true
+    enabled: false
     ## Annotations for the Prometheus metrics on master nodes
     ##
     masterAnnotations:
@@ -396,7 +396,7 @@ elasticsearch:
   ## @param elasticsearch.metrics.resources.requests.memory Elasticsearch metrics requested memory
   ## @param elasticsearch.metrics.service.annotations [object] Elasticsearch metrics service annotations
   metrics:
-    enabled: true
+    enabled: false
     ## Elasticsearch Prometheus exporter resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
     ##
@@ -460,7 +460,7 @@ logstash:
   ##
   ## @param logstash.metrics.enabled Enable metrics for logstash
   metrics:
-    enabled: true
+    enabled: false
     ## Logstash Prometheus Exporter containers' resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
     ##
@@ -486,10 +486,10 @@ logstash:
         prometheus.io/port: "9198"
         prometheus.io/path: "/metrics"
 
-## @section Wavefront parameters
+## @section Tanzu Observability (Wavefront) parameters
 ##
 wavefront:
-  ## @param wavefront.enabled Enable Wavefront
+  ## @param wavefront.enabled Enable Tanzu Observability Framework
   enabled: false
   ## This is a unique name for the cluster (required)
   ## All metrics will receive a `cluster` tag with this value
@@ -498,9 +498,9 @@ wavefront:
   clusterName: KUBERNETES_CLUSTER_NAME
   ## Wavefront URL (cluster) and API Token (required)
   ##
-  ## @param wavefront.wavefront.url Wavefront cluster URL
-  ## @param wavefront.wavefront.token Wavefront access token
-  ## @param wavefront.wavefront.existingSecret Wavefront existing secret
+  ## @param wavefront.wavefront.url Tanzu Observability cluster URL
+  ## @param wavefront.wavefront.token Tanzu Observability access token
+  ## @param wavefront.wavefront.existingSecret Tanzu Observability existing secret
   wavefront:
     url: https://YOUR_CLUSTER.wavefront.com
     token: YOUR_API_TOKEN
@@ -511,9 +511,9 @@ wavefront:
   ## It will capture Kubernetes resources metrics available from the kubelets,
   ## as well as auto-discovery capabilities.
   ##
-  ## @param wavefront.collector.resources.limits Elasticsearch metrics resource limits
-  ## @param wavefront.collector.resources.requests.cpu Elasticsearch metrics CPUs
-  ## @param wavefront.collector.resources.requests.memory Elasticsearch metrics requested memory
+  ## @param wavefront.collector.resources.limits Wavefront collector metrics resource limits
+  ## @param wavefront.collector.resources.requests.cpu Wavefront metrics CPUs
+  ## @param wavefront.collector.resources.requests.memory Wavefront metrics requested memory
   ## @param wavefront.collector.discovery.enabled Enable wavefront discovery
   ## @param wavefront.collector.discovery.enableRuntimeConfigs Enable runtime configs for wavefront discovery
   ## @param wavefront.collector.discovery.config [array] Wavefront discovery config
