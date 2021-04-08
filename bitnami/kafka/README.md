@@ -225,6 +225,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 |-------------------------|------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `serviceAccount.create` | Enable creation of ServiceAccount for Kafka pods                                               | `true`                                                  |
 | `serviceAccount.name`   | The name of the service account to use. If not set and `create` is `true`, a name is generated | Generated using the `kafka.serviceAccountName` template |
+ `serviceAccount.automountServiceAccountToken` | Enable/Disable automountServiceAccountToken  for Service Account                                             | `true`                                                  |
 | `rbac.create`           | Whether to create & use RBAC resources or not                                                  | `false`                                                 |
 
 ### Volume Permissions parameters

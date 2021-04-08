@@ -1,7 +1,7 @@
 annotations:
   category: Analytics
 apiVersion: v2
-appVersion: 7.10.2
+appVersion: 7.12.0
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -11,7 +11,7 @@ dependencies:
   - condition: global.kibanaEnabled
     name: kibana
     repository: https://charts.bitnami.com/bitnami
-    version: 7.x.x
+    version: 8.x.x
 description: A highly scalable open-source full-text search and analytics engine
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/elasticsearch
@@ -25,4 +25,4 @@ name: elasticsearch
 sources:
   - https://github.com/bitnami/bitnami-docker-elasticsearch
   - https://www.elastic.co/products/elasticsearch
-version: 14.5.3
+version: 15.1.0
