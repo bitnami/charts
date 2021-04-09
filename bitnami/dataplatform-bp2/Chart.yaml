@@ -14,7 +14,7 @@ dependencies:
   - condition: elasticsearch.enabled
     name: elasticsearch
     repository: https://charts.bitnami.com/bitnami
-    version: 14.x.x
+    version: 15.x.x
   - condition: logstash.enabled
     name: logstash
     repository: https://charts.bitnami.com/bitnami
@@ -58,4 +58,4 @@ sources:
   - https://www.elastic.co/products/logstash
   - https://zookeeper.apache.org/
   - https://github.com/bitnami/bitnami-docker-zookeeper
-version: 0.2.0
+version: 0.3.0
