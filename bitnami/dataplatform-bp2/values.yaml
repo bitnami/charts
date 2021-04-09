@@ -512,8 +512,8 @@ wavefront:
   ## as well as auto-discovery capabilities.
   ##
   ## @param wavefront.collector.resources.limits Wavefront collector metrics resource limits
-  ## @param wavefront.collector.resources.requests.cpu Wavefront metrics CPUs
-  ## @param wavefront.collector.resources.requests.memory Wavefront metrics requested memory
+  ## @param wavefront.collector.resources.requests.cpu Wavefront collector metrics CPUs
+  ## @param wavefront.collector.resources.requests.memory Wavefront collector metrics requested memory
   ## @param wavefront.collector.discovery.enabled Enable wavefront discovery
   ## @param wavefront.collector.discovery.enableRuntimeConfigs Enable runtime configs for wavefront discovery
   ## @param wavefront.collector.discovery.config [array] Wavefront discovery config
@@ -610,9 +610,9 @@ wavefront:
     ## Wavefront Proxy resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
     ##
-    ## @param wavefront.proxy.resources.limits Elasticsearch metrics resource limits
-    ## @param wavefront.proxy.resources.requests.cpu Elasticsearch metrics CPUs
-    ## @param wavefront.proxy.resources.requests.memory Elasticsearch metrics requested memory
+    ## @param wavefront.proxy.resources.limits Wavefront Proxy metrics resource limits
+    ## @param wavefront.proxy.resources.requests.cpu Wavefront Proxy metrics CPUs
+    ## @param wavefront.proxy.resources.requests.memory Wavefront Proxy metrics requested memory
     resources:
       limits: {}
       requests:
