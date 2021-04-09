@@ -78,6 +78,9 @@ auth:
   # username: username
   # password: password
   # database: database
+  ## By default custom user role is readWrite to database configured above
+  # userRole: readWrite
+  #credentialFilePath: /tmp/credentialFile
   ## Key used for replica set authentication
   ## Ignored when mongodb.architecture=standalone
   ##

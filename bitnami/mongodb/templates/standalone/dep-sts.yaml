@@ -165,15 +165,22 @@ spec:
           {{- if .Values.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
           {{- end }}
+          command:
+            - /scripts/setup.sh          
           {{- if .Values.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.image.debug | quote }}
+            {{- if (and .Values.auth.enabled (not .Values.auth.credentialFilePath)) }}  
             {{- if .Values.auth.username }}
             - name: MONGODB_USERNAME
               value: {{ .Values.auth.username | quote }}
+            {{- end }}
+            {{- if .Values.auth.userRole }}
+            - name: MONGODB_USER_ROLE
+              value: {{ .Values.auth.userRole | quote }}
             {{- end }}
             {{- if .Values.auth.database }}
             - name: MONGODB_DATABASE
@@ -192,6 +199,11 @@ spec:
                 secretKeyRef:
                   name: {{ include "mongodb.secretName" . }}
                   key: mongodb-root-password
+            {{- end }}
+            {{- end }}
+            {{- if .Values.auth.credentialFilePath }}
+            - name: MONGODB_CREDENTIAL_FILE
+              value: {{ .Values.auth.credentialFilePath | quote }}
             {{- end }}
             - name: ALLOW_EMPTY_PASSWORD
               value: {{ ternary "no" "yes" .Values.auth.enabled | quote }}
@@ -278,6 +290,9 @@ spec:
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: scripts
+              mountPath: /scripts/setup.sh
+              subPath: setup.sh          
             - name: datadir
               mountPath: {{ .Values.persistence.mountPath }}
               subPath: {{ .Values.persistence.subPath }}
@@ -356,6 +371,10 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: scripts
+          configMap:
+            name: {{ include "mongodb.fullname" . }}-scripts
+            defaultMode: 0755       
         {{- if or .Values.initdbScriptsConfigMap .Values.initdbScripts }}
         - name: custom-init-scripts
           configMap:

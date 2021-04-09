@@ -131,6 +131,8 @@ spec:
           {{- if .Values.arbiter.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.command "context" $) | nindent 12 }}
           {{- end }}
+          command:
+            - /scripts/setup-arbiter.sh
           {{- if .Values.arbiter.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.args "context" $) | nindent 12 }}
           {{- end }}
@@ -155,17 +157,23 @@ spec:
               value: {{ .Values.replicaSetName | quote }}
             - name: MONGODB_ADVERTISED_HOSTNAME
               value: "$(MY_POD_NAME).$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.{{ .Values.clusterDomain }}"
-            {{- if .Values.auth.enabled }}
+            {{- if (and .Values.auth.enabled (not .Values.auth.credentialFilePath)) }}
             - name: MONGODB_INITIAL_PRIMARY_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "mongodb.secretName" . }}
                   key: mongodb-root-password
+            {{- end }}
+            {{- if .Values.auth.enabled }}
             - name: MONGODB_REPLICA_SET_KEY
               valueFrom:
                 secretKeyRef:
                   name: {{ include "mongodb.secretName" . }}
                   key: mongodb-replica-set-key
+            {{- end }}
+            {{- if .Values.auth.credentialFilePath }}
+            - name: MONGODB_CREDENTIAL_FILE
+              value: {{ .Values.auth.credentialFilePath | quote }}
             {{- end }}
             - name: ALLOW_EMPTY_PASSWORD
               value: {{ ternary "no" "yes" .Values.auth.enabled | quote }}
@@ -225,8 +233,10 @@ spec:
           {{- if .Values.arbiter.resources }}
           resources: {{- toYaml .Values.arbiter.resources | nindent 12 }}
           {{- end }}
-          {{- if or .Values.arbiter.configuration .Values.arbiter.existingConfigmap .Values.arbiter.extraVolumeMounts .Values.tls.enabled }}
           volumeMounts:
+            - name: scripts
+              mountPath: /scripts/setup-arbiter.sh
+              subPath: setup-arbiter.sh          
             {{- if or .Values.arbiter.configuration .Values.arbiter.existingConfigmap }}
             - name: config
               mountPath: /opt/bitnami/mongodb/conf/mongodb.conf
@@ -239,12 +249,14 @@ spec:
             {{- if .Values.arbiter.extraVolumeMounts }}
             {{- toYaml .Values.arbiter.extraVolumeMounts | nindent 12 }}
             {{- end }}
-          {{- end }}
         {{- if .Values.arbiter.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.sidecars "context" $) | nindent 8 }}
         {{- end }}
-      {{- if or .Values.arbiter.configuration .Values.arbiter.existingConfigmap .Values.arbiter.extraVolumes .Values.tls.enabled }}
       volumes:
+        - name: scripts
+          configMap:
+            name: {{ include "mongodb.fullname" . }}-scripts
+            defaultMode: 075        
         {{- if or .Values.arbiter.configuration .Values.arbiter.existingConfigmap }}
         - name: config
           configMap:
@@ -267,5 +279,4 @@ spec:
         {{- if .Values.arbiter.extraVolumes }}
         {{- toYaml .Values.arbiter.extraVolumes | nindent 8 }}
         {{- end }}
-      {{- end }}
 {{- end }}

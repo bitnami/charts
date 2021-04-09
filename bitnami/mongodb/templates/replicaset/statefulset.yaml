@@ -225,10 +225,15 @@ spec:
             - name: MONGODB_ADVERTISED_HOSTNAME
               value: "$(MY_POD_NAME).$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.{{ .Values.clusterDomain }}"
             {{- end }}
+            {{- if (and .Values.auth.enabled (not .Values.auth.credentialFilePath)) }}
             {{- if .Values.auth.username }}
             - name: MONGODB_USERNAME
               value: {{ .Values.auth.username | quote }}
             {{- end }}
+            {{- if .Values.auth.userRole }}
+            - name: MONGODB_USER_ROLE
+              value: {{ .Values.auth.userRole | quote }}
+            {{- end }}   
             {{- if .Values.auth.database }}
             - name: MONGODB_DATABASE
               value: {{ .Values.auth.database | quote }}
@@ -246,12 +251,19 @@ spec:
                 secretKeyRef:
                   name: {{ include "mongodb.secretName" . }}
                   key: mongodb-root-password
+            {{- end }}
+            {{- end }}
+            {{- if .Values.auth.enabled }}
             - name: MONGODB_REPLICA_SET_KEY
               valueFrom:
                 secretKeyRef:
                   name: {{ include "mongodb.secretName" . }}
                   key: mongodb-replica-set-key
-            {{- end }}
+            {{- end}}      
+            {{- if .Values.auth.credentialFilePath }}
+            - name: MONGODB_CREDENTIAL_FILE
+              value: {{ .Values.auth.credentialFilePath | quote }}
+            {{- end }} 
             - name: ALLOW_EMPTY_PASSWORD
               value: {{ ternary "no" "yes" .Values.auth.enabled | quote }}
             - name: MONGODB_SYSTEM_LOG_VERBOSITY
