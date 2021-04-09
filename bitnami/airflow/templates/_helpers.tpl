@@ -302,10 +302,8 @@ Add environment variables to configure airflow common values
 {{- if .Values.web.image.debug }}
 - name: BASH_DEBUG
   value: "1"
-- name: NAMI_DEBUG
+- name: BITNAMI_DEBUG
   value: "1"
-- name: NAMI_LOG_LEVEL
-  value: "trace8"
 {{- end }}
 {{- end -}}
 

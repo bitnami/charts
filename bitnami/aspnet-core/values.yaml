@@ -17,7 +17,7 @@ kubeVersion:
 image:
   registry: docker.io
   repository: bitnami/aspnet-core
-  tag: 3.1.9-debian-10-r135
+  tag: 3.1.9-debian-10-r156
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -62,7 +62,7 @@ appFromExternalRepo:
     image:
       registry: docker.io
       repository: bitnami/git
-      tag: 2.31.0-debian-10-r2
+      tag: 2.31.1-debian-10-r10
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -95,7 +95,7 @@ appFromExternalRepo:
     image:
       registry: docker.io
       repository: bitnami/dotnet-sdk
-      tag: 3.1.407-debian-10-r5
+      tag: 3.1.407-debian-10-r26
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images

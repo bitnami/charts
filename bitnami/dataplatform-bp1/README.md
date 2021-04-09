@@ -16,7 +16,7 @@ Helm chart blueprint for this data platform deployment, covering:
 -   Pod placement rules – Affinity rules to ensure placement diversity to prevent single point of failures and optimize load distribution
 -   Pod resource sizing rules – Optimized Pod and JVM sizing settings for optimal performance and efficient resource usage
 -   Default settings to ensure Pod access security
--   Optional Wavefront Observability framework configuration 
+-   Optional [Tanzu Observability](https://docs.wavefront.com/kubernetes.html) framework configuration 
 
 In addition to the Pod resource optimizations, this blueprint is validated and tested to provide Kubernetes node count and sizing recommendations [(see Kubernetes Cluster Requirements)](#kubernetes-cluster-requirements) to facilitate cloud platform capacity planning. The goal is optimize the number of required Kubernetes nodes in order to optimize server resource usage and, at the same time, ensuring runtime and resource diversity.
 
@@ -41,7 +41,7 @@ The "Small" size data platform in default configuration deploys the following:
 3. Solr with 2 nodes using the zookeeper deployed above
 4. Spark with 1 Master and 2 worker nodes
 
-The data platform can be optionally deployed with the wavefront observability framework. In that case, the wavefront collectors will be set up as a DaemonSet to collect the Kubernetes cluster metrics to enable runtime feed into the Tanzu Observability service. It will also be pre-configured to scrape the metrics from the Prometheus endpoint that each application (Kafka/Spark/Solr) emits the metrics to.
+The data platform can be optionally deployed with the Tanzu observability framework. In that case, the wavefront collectors will be set up as a DaemonSet to collect the Kubernetes cluster metrics to enable runtime feed into the Tanzu Observability service. It will also be pre-configured to scrape the metrics from the Prometheus endpoint that each application (Kafka/Spark/Solr) emits the metrics to.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
@@ -169,7 +169,7 @@ Parameters below are set as per the recommended values, they can be overwritten 
 | `spark.metrics.workerAnnotations`       | Annotations for enabling prometheus to access the metrics endpoint of the worker nodes   | `{prometheus.io/scrape: "true", prometheus.io/path: "/metrics/", prometheus.io/port: "8081"}` |
 | `spark.metrics.resources.requests` | The requested resources for the metrics exporter container  | Spark exporter container resource requests for optimal resource usage size|
 
-### Wavefront chart parameters
+### Tanzu Observability (Wavefront) chart parameters
 
 | Parameter                                  | Description                                                                                                            | Default                                                 |
 |--------------------------------------------|------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
@@ -196,7 +196,7 @@ $ helm install my-release \
 
 The above command deploys the data platform with Kafka with 3 nodes (replicas).
 
-In case you need to deploy the data platform with Wavefront Observability Framework for all the applications (Kafka/Spark/Solr) in the data platform, you can specify the 'enabled' parameter using the `--set <component>.metrics.enabled=true` argument to `helm install`. For Solr, the parameter is `solr.exporter.enabled=true` For Example,
+In case you need to deploy the data platform with [Tanzu Observability](https://docs.wavefront.com/kubernetes.html) Framework for all the applications (Kafka/Spark/Solr) in the data platform, you can specify the 'enabled' parameter using the `--set <component>.metrics.enabled=true` argument to `helm install`. For Solr, the parameter is `solr.exporter.enabled=true` For Example,
 
 ```console
 $ helm install my-release bitnami/dataplatform-bp1 \
