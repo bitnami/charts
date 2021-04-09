@@ -449,7 +449,7 @@ spec:
                   key: infoblox_wapi_password
             {{- end }}
             {{- end }}
-            {{- if and .Values.rfc2136.tsigSecret }}
+            {{- if or .Values.rfc2136.tsigSecret .Values.rfc2136.secretName }}
             # RFC 2136 environment variables
             - name: EXTERNAL_DNS_RFC2136_TSIG_SECRET
               valueFrom:
