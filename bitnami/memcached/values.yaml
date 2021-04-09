@@ -219,6 +219,9 @@ serviceAccount:
   ## If not set and create is true, a name is generated using the memcached.serviceAccountName template
   ##
   # name:
+  ## Enable/disable auto mounting of the service account token
+  ##
+  automountServiceAccountToken: true
 
 ## Persistence - used for dumping and restoring states between recreations
 ## Ref: https://github.com/memcached/memcached/wiki/WarmRestart
