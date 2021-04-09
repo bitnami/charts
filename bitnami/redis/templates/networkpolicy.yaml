@@ -74,6 +74,6 @@ spec:
     {{- if .Values.sentinel.metrics.enabled }}
     # Allow prometheus scrapes for sentinel metrics
     - ports:
-        - port: 9355
+        - port: {{ .Values.sentinel.metrics.service.port }}
     {{- end }}
 {{- end }}
