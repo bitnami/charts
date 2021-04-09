@@ -25,4 +25,4 @@ name: redis
 sources:
   - https://github.com/bitnami/bitnami-docker-redis
   - http://redis.io/
-version: 13.0.0
+version: 13.0.1
