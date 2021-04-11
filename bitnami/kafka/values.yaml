@@ -399,13 +399,13 @@ auth:
 ## When it's set to an empty array, the listeners will be configured
 ## based on the authentication protocols (auth.clientProtocol and auth.interBrokerProtocol parameters)
 ##
-listeners: []
+listeners: ""
 
 ## The address(es) (hostname:port) the brokers will advertise to producers and consumers.
 ## When it's set to an empty array, the advertised listeners will be configured
 ## based on the authentication protocols (auth.clientProtocol and auth.interBrokerProtocol parameters)
 ##
-advertisedListeners: []
+advertisedListeners: ""
 
 ## The listener->protocol mapping
 ## When it's nil, the listeners will be configured
