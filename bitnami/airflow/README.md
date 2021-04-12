@@ -533,6 +533,12 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ## Notable changes
 
+### To 10.0.0
+
+This major updates the Redis<sup>TM</sup> subchart to it newest major, 13.0.0. For more information on this subchart's major please refer to [Redis<sup>TM</sup> upgrade notes.](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1300)
+
+Regular upgrade is compatible from previous versions.
+
 ### 7.0.0
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
@@ -629,14 +635,14 @@ $ kubectl delete pod airflow-postgresql-0
 - https://helm.sh/docs/topics/v2_v3_migration/
 - https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
 
-### 6.5.0
+### To 6.5.0
 
 This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
 
-### 6.0.0
+### To 6.0.0
 
 This release adds support for LDAP authentication.
 
-### 1.0.0
+### To 1.0.0
 
 This release updates the PostgreSQL chart dependency to use PostgreSQL 11.x. You need to migrate the existing PostgreSQL data to this version before upgrading to this release. For more information follow [this link](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#500).

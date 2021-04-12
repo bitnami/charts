@@ -438,6 +438,12 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ## Upgrading
 
+### To 3.0.0
+
+This major updates the Redis<sup>TM</sup> subchart to it newest major, 13.0.0. For more information on this subchart's major please refer to [Redis<sup>TM</sup> upgrade notes.](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1300)
+
+Regular upgrade is compatible from previous versions.
+
 ### To 2.0.0
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
