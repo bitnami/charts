@@ -230,7 +230,7 @@ hub:
         extraVolumeMounts: {{- include "common.tplvalues.render" ( dict "value" .Values.singleuser.extraVolumeMounts "context" $ ) | nindent 4 }}
         {{- end }}
         capacity: {{ .Values.singleuser.persistence.size }}
-        homeMountPath: /home/jovyan
+        homeMountPath: {{ .Values.singleuser.notebookDir }}
         dynamic:
           storageClass: {{ include "jupyterhub.storageClass" . }}
           pvcNameTemplate: {{ include "common.names.fullname" . }}-claim-{username}{servername}
@@ -576,10 +576,10 @@ proxy:
     registry: docker.io
     ## @param proxy.image.repository Proxy image repository
     ##
-    repository: jupyterhub/configurable-http-proxy
+    repository: bitnami/configurable-http-proxy
     ## @param proxy.image.tag Proxy image tag (immutabe tags are recommended)
     ##
-    tag: 4.2.2
+    tag: 4.3.1-debian-10-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -701,7 +701,7 @@ proxy:
   ##
   containerSecurityContext:
     enabled: true
-    runAsUser: 1000
+    runAsUser: 1001
     runAsNonRoot: true
 
   ## proxy pods' Security Context
@@ -1261,10 +1261,10 @@ singleuser:
     registry: docker.io
     ## @param singleuser.image.repository Single User image repository
     ##
-    repository: jupyterhub/k8s-singleuser-sample
+    repository: javsalgar/jupyterhub-singleuser-base
     ## @param singleuser.image.tag Single User image tag (immutabe tags are recommended)
     ##
-    tag: 0.11.1
+    tag: test
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1297,6 +1297,10 @@ singleuser:
   ##
   containerPort: 8888
 
+  ## @param singleuser.notebookDir Notebook directory (it will be the same as the PVC volume mount)
+  ##
+  notebookDir: /opt/bitnami/jupyterhub-singleuser
+
   ## singleuser resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -1319,7 +1323,7 @@ singleuser:
   ##
   containerSecurityContext:
     enabled: true
-    runAsUser: 1000
+    runAsUser: 1001
 
   ## singleuser pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod

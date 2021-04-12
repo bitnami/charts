@@ -108,6 +108,9 @@ data:
     # variables are set by Kubernetes for Services.
     c.JupyterHub.hub_connect_url = f"http://{{ template "common.names.fullname" . }}-hub:{os.environ['HUB_SERVICE_PORT']}"
 
+    c.KubeSpawner.port = {{ .Values.singleuser.containerPort }}
+    c.KubeSpawner.notebook_dir = "{{ .Values.singleuser.notebookDir }}"
+
     # implement common labels
     # this duplicates the jupyterhub.commonLabels helper
     common_labels = c.KubeSpawner.common_labels = {}
