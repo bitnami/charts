@@ -130,6 +130,10 @@ wordpressConfiguration:
 ## NOTE: When it's set the `wordpressConfiguration` parameter is ignored
 ##
 existingWordPressConfigurationSecret:
+## @param wordpressConfigureCache Enable W3 Total Cache plugin and configure cache settings
+## NOTE: useful if you deploy Memcached for caching database queries or you use an external cache server
+##
+wordpressConfigureCache: false
 ## @param customPostInitScripts Custom post-init.d user scripts
 ## ref: https://github.com/bitnami/bitnami-docker-wordpress/tree/master/5/debian-10/rootfs/post-init.d
 ## NOTE: supported formats are `.sh`, `.sql` or `.php`
@@ -559,7 +563,7 @@ persistence:
   ## If undefined (the default) or set to null, no storageClassName spec is set, choosing the default provisioner
   ##
   storageClass:
-  ## @param persistence.accessModes[0] Persistent Volume access modes
+  ## @param persistence.accessModes [array] Persistent Volume access modes
   ##
   accessModes:
     - ReadWriteOnce
@@ -757,7 +761,7 @@ mariadb:
     ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
     ## @param mariadb.primary.persistence.enabled Enable persistence on MariaDB using PVC(s)
     ## @param mariadb.primary.persistence.storageClass Persistent Volume storage class
-    ## @param mariadb.primary.persistence.accessModes[0] Persistent Volume access modes
+    ## @param mariadb.primary.persistence.accessModes [array] Persistent Volume access modes
     ## @param mariadb.primary.persistence.size Persistent Volume size
     ##
     persistence:
@@ -803,3 +807,13 @@ memcached:
     ## @param memcached.service.port Memcached service port
     ##
     port: 11211
+## External Memcached Configuration
+## All of these values are only used if `memcached.enabled=false`
+##
+externalCache:
+  ## @param externalCache.host External cache server host
+  ##
+  host: localhost
+  ## @param externalCache.port External cache server port
+  ##
+  port: 11211

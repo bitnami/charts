@@ -137,6 +137,30 @@ Return the MariaDB Secret Name
 {{- end -}}
 
 {{/*
+Return the Memcached Hostname
+*/}}
+{{- define "wordpress.cacheHost" -}}
+{{- if .Values.memcached.enabled }}
+    {{- $releaseNamespace := .Release.Namespace }}
+    {{- $clusterDomain := .Values.clusterDomain }}
+    {{- printf "%s.%s.svc.%s" (include "wordpress.memcached.fullname" .) $releaseNamespace $clusterDomain -}}
+{{- else -}}
+    {{- printf "%s" .Values.externalCache.host -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the Memcached Port
+*/}}
+{{- define "wordpress.cachePort" -}}
+{{- if .Values.memcached.enabled }}
+    {{- printf "11211" -}}
+{{- else -}}
+    {{- printf "%d" (.Values.externalCache.port | int ) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the WordPress Secret Name
 */}}
 {{- define "wordpress.secretName" -}}
@@ -165,6 +189,8 @@ Compile all warnings into a single message.
 {{- $messages := list -}}
 {{- $messages := append $messages (include "wordpress.validateValues.configuration" .) -}}
 {{- $messages := append $messages (include "wordpress.validateValues.htaccess" .) -}}
+{{- $messages := append $messages (include "wordpress.validateValues.database" .) -}}
+{{- $messages := append $messages (include "wordpress.validateValues.cache" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 {{- if $message -}}
@@ -192,5 +218,33 @@ wordpress: customHTAccessCM
     You are trying to use custom htaccess rules but Apache was configured
     to prohibit overriding directives with htaccess files. To use this feature,
     allow overriding Apache directives (--set allowOverrideNone=false).
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of WordPress - Database */}}
+{{- define "wordpress.validateValues.database" -}}
+{{- if and (not .Values.mariadb.enabled) (or (empty .Values.externalDatabase.host) (empty .Values.externalDatabase.port) (empty .Values.externalDatabase.database)) -}}
+wordpress: database
+   You disable the MariaDB installation but you did not provide the required parameters
+   to use an external database. To use an external database, please ensure you provide
+   (at least) the following values:
+
+       externalDatabase.host=DB_SERVER_HOST
+       externalDatabase.database=DB_NAME
+       externalDatabase.port=DB_SERVER_PORT
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of WordPress - Cache */}}
+{{- define "wordpress.validateValues.cache" -}}
+{{- if and .Values.wordpressConfigureCache (not .Values.memcached.enabled) (or (empty .Values.externalCache.host) (empty .Values.externalCache.port)) -}}
+wordpress: cache
+   You enabled cache via W3 Total Cache without but you did not enable the Memcached
+   installation nor you did provided the required parameters to use an external cache server.
+   Please enable the Memcached installation (--set memcached.enabled=true) or
+   provide the external cache server values:
+
+       externalCache.host=CACHE_SERVER_HOST
+       externalCache.port=CACHE_SERVER_PORT
 {{- end -}}
 {{- end -}}
