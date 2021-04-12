@@ -54,24 +54,42 @@
         }
       }
     },      
-    "solr": {
+    "elasticsearch": {
       "type": "object",
-      "title": "Solr Metrics Details",
+      "title": "Elasticsearch Metrics Details",
       "form": true,
       "properties": {
-        "exporter": {
+        "metrics": {
           "type": "object",
           "properties": {
             "enabled": {
               "type": "boolean",
               "form": true,
-              "title": "Enable metrics for Solr",
-              "description": "Whether to enable metrics for Solr. Switch this off in case Solr metrics are not needed"
+              "title": "Enable metrics for Elasticsearch",
+              "description": "Whether to enable metrics for Elasticsearch. Switch this off in case Elasticsearch metrics are not needed"
             }
           }
         }
       }
-    },    
+    },   
+    "logstash": {
+        "type": "object",
+        "title": "Logstash Metrics Details",
+        "form": true,
+        "properties": {
+          "metrics": {
+            "type": "object",
+            "properties": {
+              "enabled": {
+                "type": "boolean",
+                "form": true,
+                "title": "Enable metrics for Logstash",
+                "description": "Whether to enable metrics for Logstash. Switch this off in case Logstash metrics are not needed"
+              }
+            }
+          }
+        }
+      },       
       "wavefront": {
         "type": "object",
         "title": "Tanzu Observability Details",

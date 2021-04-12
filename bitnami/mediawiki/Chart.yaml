@@ -1,7 +1,7 @@
 annotations:
   category: Wiki
 apiVersion: v2
-appVersion: 1.35.1
+appVersion: 1.35.2
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -32,4 +32,4 @@ name: mediawiki
 sources:
   - https://github.com/bitnami/bitnami-docker-mediawiki
   - http://www.mediawiki.org/
-version: 12.2.2
+version: 12.2.4

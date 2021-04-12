@@ -112,6 +112,7 @@ The following tables lists the configurable parameters of the Memcached chart an
 | `priorityClassName`                      | Controller priorityClassName                                                              | `nil`                                                        |
 | `serviceAccount.create` | Enable creation of ServiceAccount for memcached pods                                               | `true`                                                  |
 | `serviceAccount.name`   | The name of the service account to use. If not set and `create` is `true`, a name is generated | Generated using the `memcached.serviceAccountName` template |
+| `serviceAccount.automountServiceAccountToken`   | Enable/disable auto mounting of the service account token | `true` |
 | `metrics.enabled`                        | Start a side-car prometheus exporter                                                      | `false`                                                      |
 | `metrics.image.registry`                 | Memcached exporter image registry                                                         | `docker.io`                                                  |
 | `metrics.image.repository`               | Memcached exporter image name                                                             | `bitnami/memcached-exporter`                                 |

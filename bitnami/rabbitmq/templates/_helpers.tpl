@@ -43,7 +43,7 @@ Return podAnnotations
 {{- if .Values.podAnnotations }}
 {{ include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) }}
 {{- end }}
-{{- if .Values.metrics.enabled }}
+{{- if and .Values.metrics.enabled .Values.metrics.podAnnotations }}
 {{ include "common.tplvalues.render" (dict "value" .Values.metrics.podAnnotations "context" $) }}
 {{- end }}
 {{- end -}}

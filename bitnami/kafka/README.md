@@ -295,15 +295,17 @@ The following tables lists the configurable parameters of the Kafka chart and th
 
 ### Kafka provisioning parameters
 
-| Parameter                    | Description                                                           | Default                        |
-|------------------------------|-----------------------------------------------------------------------|--------------------------------|
-| `provisioning.enabled`       | Enable kafka provisioning Job                                         | `false`                        |
-| `provisioning.image`         | Kafka provisioning Job image                                          | `Check values.yaml file`       |
-| `provisioning.resources`     | Kafka provisioning Job resources                                      | `Check values.yaml file`       |
-| `provisioning.topics`        | Kafka provisioning topics                                             | `[]`                           |
-| `provisioning.schedulerName` | Name of the k8s scheduler (other than default) for kafka provisioning | `nil`                          |
-| `provisioning.command`       | Override provisioning container command                               | `[]` (evaluated as a template) |
-| `provisioning.args`          | Override provisioning container arguments                             | `[]` (evaluated as a template) |
+| Parameter                        | Description                                                           | Default                        |
+|----------------------------------|-----------------------------------------------------------------------|--------------------------------|
+| `provisioning.enabled`           | Enable kafka provisioning Job                                         | `false`                        |
+| `provisioning.image`             | Kafka provisioning Job image                                          | `Check values.yaml file`       |
+| `provisioning.numPartitions`     | Default number of partitions for topics when unspecified.             | 1                              |
+| `provisioning.replicationFactor` | Default replication factor for topics when unspecified.               | 1                              |
+| `provisioning.resources`         | Kafka provisioning Job resources                                      | `Check values.yaml file`       |
+| `provisioning.topics`            | Kafka provisioning topics                                             | `[]`                           |
+| `provisioning.schedulerName`     | Name of the k8s scheduler (other than default) for kafka provisioning | `nil`                          |
+| `provisioning.command`           | Override provisioning container command                               | `[]` (evaluated as a template) |
+| `provisioning.args`              | Override provisioning container arguments                             | `[]` (evaluated as a template) |
 
 ### Zookeeper chart parameters
 

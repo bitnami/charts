@@ -348,6 +348,10 @@ rfc2136:
   port: 53
   zone: ""
   tsigSecret: ""
+  ## Use an existing secret with key "rfc2136_tsig_secret" defined.
+  ## This ignores rfc2136.tsigSecret
+  ##
+  # secretName:
   tsigSecretAlg: hmac-sha256
   tsigKeyname: externaldns-key
   tsigAxfr: true
