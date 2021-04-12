@@ -25,6 +25,7 @@ spec:
           annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.disasterRecovery.cronjob.podAnnotations "context" $) | nindent 12 }}
           {{- end }}
         spec:
+          {{- include "etcd.imagePullSecrets" . | nindent 10 }}
           restartPolicy: OnFailure
           {{- if .Values.podSecurityContext.enabled }}
           securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 12 }}
@@ -39,42 +40,42 @@ spec:
               command:
                 - /opt/bitnami/scripts/etcd/snapshot.sh
               env:
-              - name: BITNAMI_DEBUG
-                value: {{ ternary "true" "false" .Values.image.debug | quote }}
-              - name: ETCDCTL_API
-                value: "3"
-              - name: ETCD_ON_K8S
-                value: "yes"
-              {{- $releaseNamespace := .Release.Namespace }}
-              {{- $etcdFullname := include "common.names.fullname" . }}
-              {{- $etcdHeadlessServiceName := printf "%s-%s" $etcdFullname "headless" }}
-              {{- $clusterDomain := .Values.clusterDomain }}
-              - name: ETCD_CLUSTER_DOMAIN
-                value: {{ printf "%s.%s.svc.%s" $etcdHeadlessServiceName $releaseNamespace $clusterDomain | quote }}
-              - name: ETCD_SNAPSHOT_HISTORY_LIMIT
-                value: {{ .Values.disasterRecovery.cronjob.snapshotHistoryLimit | quote }}
-              {{- if .Values.auth.client.secureTransport }}
-              - name: ETCD_CERT_FILE
-                value: "/opt/bitnami/etcd/certs/client/{{ .Values.auth.client.certFilename }}"
-              - name: ETCD_KEY_FILE
-                value: "/opt/bitnami/etcd/certs/client/{{ .Values.auth.client.certKeyFilename }}"
-              {{- if .Values.auth.client.enableAuthentication }}
-              - name: ETCD_CLIENT_CERT_AUTH
-                value: "true"
-              - name: ETCD_TRUSTED_CA_FILE
-                value: "/opt/bitnami/etcd/certs/client/{{ .Values.auth.client.caFilename | default "ca.crt"}}"
-              {{- else if .Values.auth.client.caFilename }}
-              - name: ETCD_TRUSTED_CA_FILE
-                value: "/opt/bitnami/etcd/certs/client/{{ .Values.auth.client.caFilename | default "ca.crt"}}"
-              {{- end }}
-              {{- end }}
-              {{- if .Values.auth.rbac.enabled }}
-              - name: ETCD_ROOT_PASSWORD
-                valueFrom:
-                  secretKeyRef:
-                    name: {{ include "etcd.secretName" . }}
-                    key: etcd-root-password
-              {{- end }}
+                - name: BITNAMI_DEBUG
+                  value: {{ ternary "true" "false" .Values.image.debug | quote }}
+                - name: ETCDCTL_API
+                  value: "3"
+                - name: ETCD_ON_K8S
+                  value: "yes"
+                {{- $releaseNamespace := .Release.Namespace }}
+                {{- $etcdFullname := include "common.names.fullname" . }}
+                {{- $etcdHeadlessServiceName := printf "%s-%s" $etcdFullname "headless" }}
+                {{- $clusterDomain := .Values.clusterDomain }}
+                - name: ETCD_CLUSTER_DOMAIN
+                  value: {{ printf "%s.%s.svc.%s" $etcdHeadlessServiceName $releaseNamespace $clusterDomain | quote }}
+                - name: ETCD_SNAPSHOT_HISTORY_LIMIT
+                  value: {{ .Values.disasterRecovery.cronjob.snapshotHistoryLimit | quote }}
+                {{- if .Values.auth.client.secureTransport }}
+                - name: ETCD_CERT_FILE
+                  value: "/opt/bitnami/etcd/certs/client/{{ .Values.auth.client.certFilename }}"
+                - name: ETCD_KEY_FILE
+                  value: "/opt/bitnami/etcd/certs/client/{{ .Values.auth.client.certKeyFilename }}"
+                {{- if .Values.auth.client.enableAuthentication }}
+                - name: ETCD_CLIENT_CERT_AUTH
+                  value: "true"
+                - name: ETCD_TRUSTED_CA_FILE
+                  value: "/opt/bitnami/etcd/certs/client/{{ .Values.auth.client.caFilename | default "ca.crt"}}"
+                {{- else if .Values.auth.client.caFilename }}
+                - name: ETCD_TRUSTED_CA_FILE
+                  value: "/opt/bitnami/etcd/certs/client/{{ .Values.auth.client.caFilename | default "ca.crt"}}"
+                {{- end }}
+                {{- end }}
+                {{- if .Values.auth.rbac.enabled }}
+                - name: ETCD_ROOT_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ include "etcd.secretName" . }}
+                      key: etcd-root-password
+                {{- end }}
               {{- if .Values.disasterRecovery.cronjob.resources }}
               resources: {{- toYaml .Values.disasterRecovery.cronjob.resources | nindent 16 }}
               {{- end }}

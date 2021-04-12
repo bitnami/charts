@@ -515,12 +515,21 @@ envoy:
   ## Use hostPorts
   ##
   useHostPort: true
+  ## Use hostIPs
+  ##
+  useHostIP: false
 
   ## HTTP and HTTPS ports
   ##
   hostPorts:
     http: 80
     https: 443
+
+  ## HTTP and HTTPS IPs
+  ##
+  hostIPs:
+    http: 127.0.0.1
+    https: 127.0.0.1
 
   ## Configures the ports the Envoy proxy listens on
   ##

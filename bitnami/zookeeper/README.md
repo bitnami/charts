@@ -143,6 +143,7 @@ The following tables lists the configurable parameters of the ZooKeeper chart an
 | `service.publishNotReadyAddresses`       | If the ZooKeeper headless service should publish DNS records for not ready pods                    | `true`                                               |
 | `serviceAccount.create`                  | Enable creation of ServiceAccount for zookeeper pod                                                | `false`                                              |
 | `serviceAccount.name`                    | The name of the service account to use. If not set and `create` is `true`, a name is generated     | Generated using the `common.names.fullname` template |
+`serviceAccount.automountServiceAccountToken` | Enable/Disable automountServiceAccountToken  for Service Account                                             | `true`                                                  |
 | `service.tls.client_enable`              | Enable tls for client connections                                                                  | `false`                                              |
 | `service.tls.quorum_enable`              | Enable tls for quorum protocol                                                                     | `false`                                              |
 | `service.tls.disable_base_client_port`   | Remove client port from service definitions.                                                       | `false`                                              |

@@ -218,6 +218,16 @@ The following tables lists the configurable parameters of the etcd chart and the
 | `disasterRecovery.pvc.size`                     | PVC Storage Request                                                                   | `2Gi`                                                       |
 | `disasterRecovery.pvc.storageClassName`         | Storage Class for snapshots volume                                                    | `nfs`                                                       |
 
+### Service account parameters
+
+| Parameter                                     | Description                                           | Default   |
+|-----------------------------------------------|-------------------------------------------------------|-----------|
+| `serviceAccount.create`                       | Enable/disable service account creation               | `false`   |
+| `serviceAccount.name`                         | Name of the service account to create or use          | `default` |
+| `serviceAccount.automountServiceAccountToken` | Enable/disable auto mounting of service account token | `true`    |
+| `serviceAccount.labels`                       | Additional labels to include on service account       | `{}`      |
+| `serviceAccount.annotations`                  | Additional annotations to include on service account  | `{}`      |
+
 ### Other parameters
 
 | Parameter                  | Description                                                    | Default |

@@ -96,7 +96,7 @@ The following tables lists the configurable parameters of the Airflow chart and 
 | `auth.username`          | Username to access web UI                                                                                            | `user`             |
 | `configurationConfigMap` | Name of an existing config map containing the Airflow config file                                                    | `nil`              |
 | `dagsConfigMap`          | Name of an existing config map containing all the DAGs files you want to load in Airflow.                            | `nil`              |
-| `executor`               | Airflow executor, it should be one of `SequentialExecutor`, `Local Executor`, `CeleryExecutor`, `KubernetesExecutor` | `"CeleryExecutor"` |
+| `executor`               | Airflow executor, it should be one of `SequentialExecutor`, `LocalExecutor`, `CeleryExecutor`, `KubernetesExecutor` | `"CeleryExecutor"` |
 | `loadExamples`           | Switch to load some Airflow examples                                                                                 | `false`            |
 
 ## Airflow web parameters
@@ -238,7 +238,7 @@ affinity configuration                                                          
 | `worker.sidecars`                           | List of sidecar containers to be added to the worker's pods                                                                                                            | `nil`                                                   |
 | `worker.tolerations`                        | Tolerations for worker pod assignment. Supersedes the common 
 tolerations configuration                                                                                       | `nil`                                                   |
-| `worker.updateStrategy`                     | pdate strategy for the statefulset                                                                                                                                     | `"RollingUpdate"`                                       |
+| `worker.updateStrategy`                     | Update strategy for the statefulset                                                                                                                                     | `"RollingUpdate"`                                       |
 
 ### Airflow database parameters
 

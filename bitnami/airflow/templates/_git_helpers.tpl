@@ -87,22 +87,25 @@ Returns the init container that will clone repositories files from a given list 
 {{- else }}
   command:
     - /bin/bash
+{{- end }}
+{{- if .Values.git.clone.args }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.git.clone.args "context" $) | nindent 4 }}
+{{- else }}
+  args:
     - -ec
     - |
-        [[ -f "/opt/bitnami/scripts/git/entrypoint.sh" ]] && source "/opt/bitnami/scripts/git/entrypoint.sh"
+      . /opt/bitnami/scripts/libfs.sh
+      [[ -f "/opt/bitnami/scripts/git/entrypoint.sh" ]] && . /opt/bitnami/scripts/git/entrypoint.sh
     {{- if .Values.git.dags.enabled }}
       {{- range .Values.git.dags.repositories }}
-        git clone {{ .repository }} --branch {{ .branch }} /dags_{{ include "airflow.git.repository.name" . }}
+      is_mounted_dir_empty "/dags_{{ include "airflow.git.repository.name" . }}" && git clone {{ .repository }} --branch {{ .branch }} /dags_{{ include "airflow.git.repository.name" . }}
       {{- end }}
     {{- end }}
     {{- if .Values.git.plugins.enabled }}
       {{- range .Values.git.plugins.repositories }}
-        git clone {{ .repository }} --branch {{ .branch }} /plugins_{{ include "airflow.git.repository.name" . }}
+      is_mounted_dir_empty "/plugins_{{ include "airflow.git.repository.name" . }}" && git clone {{ .repository }} --branch {{ .branch }} /plugins_{{ include "airflow.git.repository.name" . }}
       {{- end }}
     {{- end }}
-{{- end }}
-{{- if .Values.git.clone.args }}
-  args: {{- include "common.tplvalues.render" (dict "value" .Values.git.clone.args "context" $) | nindent 4 }}
 {{- end }}
   volumeMounts:
     {{- include "airflow.git.volumeMounts" . | trim | nindent 4 }}
@@ -145,9 +148,14 @@ Returns the a container that will pull and sync repositories files from a given 
 {{- else }}
   command:
     - /bin/bash
+{{- end }}
+{{- if .Values.git.sync.args }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.git.sync.args "context" $) | nindent 4 }}
+{{- else }}
+  args:
     - -ec
     - |
-      [[ -f "/opt/bitnami/scripts/git/entrypoint.sh" ]] && source "/opt/bitnami/scripts/git/entrypoint.sh"
+      [[ -f "/opt/bitnami/scripts/git/entrypoint.sh" ]] && . /opt/bitnami/scripts/git/entrypoint.sh
       while true; do
       {{- if .Values.git.dags.enabled }}
         {{- range .Values.git.dags.repositories }}
@@ -161,9 +169,6 @@ Returns the a container that will pull and sync repositories files from a given 
       {{- end }}
           sleep {{ default "60" .Values.git.sync.interval }}
       done
-{{- end }}
-{{- if .Values.git.sync.args }}
-  args: {{- include "common.tplvalues.render" (dict "value" .Values.git.sync.args "context" $) | nindent 4 }}
 {{- end }}
   volumeMounts:
     {{- include "airflow.git.volumeMounts" . | trim | nindent 4 }}

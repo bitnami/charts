@@ -150,8 +150,10 @@ The following tables lists the configurable parameters of the MongoDB&reg; chart
 | `resources.requests`        | The requested resources for MongoDB&reg; containers                                                    | `{}`                           |
 | `livenessProbe`             | Liveness probe configuration for MongoDB&reg;                                                          | Check `values.yaml` file       |
 | `readinessProbe`            | Readiness probe configuration for MongoDB&reg;                                                         | Check `values.yaml` file       |
+| `startupProbe`              | Startup probe configuration for MongoDB&reg;                                                           | Check `values.yaml` file       |
 | `customLivenessProbe`       | Override default liveness probe for MongoDB&reg; containers                                            | `nil`                          |
 | `customReadinessProbe`      | Override default readiness probe for MongoDB&reg; containers                                           | `nil`                          |
+| `customStartupProbe`        | Override default startup probe for MongoDB&reg; containers                                             | `nil`                          |
 | `pdb.create`                | Enable/disable a Pod Disruption Budget creation for MongoDB&reg; pod(s)                                | `false`                        |
 | `pdb.minAvailable`          | Minimum number/percentage of MongoDB&reg; pods that should remain scheduled                            | `1`                            |
 | `pdb.maxUnavailable`        | Maximum number/percentage of MongoDB&reg; pods that may be made unavailable                            | `nil`                          |

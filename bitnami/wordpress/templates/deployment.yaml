@@ -2,6 +2,7 @@ apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "common.names.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -24,13 +25,16 @@ spec:
         {{- if .Values.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
         {{- end }}
-      {{- if or .Values.podAnnotations .Values.metrics.enabled }}
+      {{- if or .Values.podAnnotations .Values.metrics.enabled (include "wordpress.createConfigSecret" .) }}
       annotations:
         {{- if .Values.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
         {{- if .Values.metrics.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.metrics.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if (include "wordpress.createConfigSecret" .) }}
+        checksum/config-secret: {{ include (print $.Template.BasePath "/config-secret.yaml") . | sha256sum }}
         {{- end }}
       {{- end }}
     spec:
@@ -147,6 +151,8 @@ spec:
               value: {{ .Values.wordpressBlogName | quote }}
             - name: WORDPRESS_SKIP_INSTALL
               value: {{ ternary "yes" "no" .Values.wordpressSkipInstall | quote }}
+            - name: WORDPRESS_READ_ONLY_CONFIG
+              value: {{ ternary "yes" "no" (or (not (empty .Values.wordpressConfiguration)) (not (empty .Values.existingWordPressConfigurationSecret))) | quote }}
             - name: WORDPRESS_TABLE_PREFIX
               value: {{ .Values.wordpressTablePrefix | quote }}
             - name: WORDPRESS_SCHEME
@@ -210,11 +216,16 @@ spec:
             - mountPath: /bitnami/wordpress
               name: wordpress-data
               subPath: wordpress
+            {{- if or .Values.wordpressConfiguration .Values.existingWordPressConfigurationSecret }}
+            - name: wordpress-config
+              mountPath: /opt/bitnami/wordpress/wp-config.php
+              subPath: wp-config.php
+            {{- end }}
             {{- if and .Values.allowOverrideNone .Values.customHTAccessCM }}
             - mountPath: /htaccess
               name: custom-htaccess
             {{- end }}
-            {{- if or .Values.customPostInitScripts .Values.memcached.enabled }}
+            {{- if or .Values.customPostInitScripts .Values.wordpressConfigureCache }}
             - mountPath: /docker-entrypoint-init.d
               name: custom-postinit
             {{- end }}
@@ -252,6 +263,12 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        {{- if or .Values.wordpressConfiguration .Values.existingWordPressConfigurationSecret }}
+        - name: wordpress-config
+          secret:
+            secretName: {{ include "wordpress.configSecretName" . }}
+            defaultMode: 0644
+        {{- end }}
         {{- if and .Values.allowOverrideNone .Values.customHTAccessCM }}
         - name: custom-htaccess
           configMap:
@@ -260,7 +277,7 @@ spec:
               - key: wordpress-htaccess.conf
                 path: wordpress-htaccess.conf
         {{- end }}
-        {{- if or .Values.customPostInitScripts .Values.memcached.enabled }}
+        {{- if or .Values.customPostInitScripts .Values.wordpressConfigureCache }}
         - name: custom-postinit
           configMap:
             name: {{ printf "%s-postinit" (include "common.names.fullname" .) }}

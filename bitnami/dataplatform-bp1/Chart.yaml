@@ -41,6 +41,7 @@ keywords:
   - wavefront
   - observability
   - apache
+  - tanzuobservability
 maintainers:
   - email: containers@bitnami.com
     name: Bitnami
@@ -58,4 +59,4 @@ sources:
   - https://github.com/bitnami/bitnami-docker-wavefront-proxy
   - https://github.com/wavefrontHQ/wavefront-collector-for-kubernetes
   - https://github.com/wavefrontHQ/wavefront-proxy
-version: 1.0.0
+version: 1.0.1
