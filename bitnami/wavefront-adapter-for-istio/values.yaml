@@ -13,7 +13,7 @@ global:
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   imagePullSecrets: []
-  storageClass: myStorageClass
+  storageClass:
 
 ## Override Kubernetes version
 ## @param kubeVersion Override Kubernetes version
