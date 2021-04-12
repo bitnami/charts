@@ -539,7 +539,7 @@ This major updates the Redis<sup>TM</sup> subchart to it newest major, 13.0.0. F
 
 Regular upgrade is compatible from previous versions.
 
-### 7.0.0
+### To 7.0.0
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
