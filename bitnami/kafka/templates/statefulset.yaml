@@ -190,7 +190,7 @@ spec:
             {{- end }}
             - name: KAFKA_CFG_LISTENERS
               {{- if .Values.listeners }}
-              value: {{ .Values.listeners }}
+              value: {{ include "kafka.listeners" . }}
               {{- else if .Values.externalAccess.enabled }}
               value: "INTERNAL://:{{ $interBrokerPort }},CLIENT://:9092,EXTERNAL://:9094"
               {{- else }}
@@ -210,7 +210,7 @@ spec:
             {{- else }}
             - name: KAFKA_CFG_ADVERTISED_LISTENERS
               {{- if .Values.advertisedListeners }}
-              value: {{ .Values.advertisedListeners }}
+              value: {{ include "kafka.advertisedListeners" . }}
               {{- else }}
               value: "INTERNAL://$(MY_POD_NAME).{{ $fullname }}-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $interBrokerPort }},CLIENT://$(MY_POD_NAME).{{ $fullname }}-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $clientPort }}"
               {{- end }}
