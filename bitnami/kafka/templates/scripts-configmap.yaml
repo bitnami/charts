@@ -107,7 +107,7 @@ data:
 
     # Configure Kafka advertised listeners
     {{- if .Values.advertisedListeners }}
-    export KAFKA_CFG_ADVERTISED_LISTENERS={{- join "," .Values.advertisedListeners }}
+    export KAFKA_CFG_ADVERTISED_LISTENERS={{ join "," .Values.advertisedListeners }}
     {{- else }}
     export KAFKA_CFG_ADVERTISED_LISTENERS="INTERNAL://${MY_POD_NAME}.{{ $fullname }}-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $interBrokerPort }},CLIENT://${MY_POD_NAME}.{{ $fullname }}-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $clientPort }},EXTERNAL://${EXTERNAL_ACCESS_IP}:${EXTERNAL_ACCESS_PORT}"
     {{- end }}
