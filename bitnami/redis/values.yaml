@@ -95,7 +95,7 @@ auth:
   ## Defaults to a random 10-character alphanumeric string if not set
   ##
   password: ""
-  ## @param auth.existingSecret The name of an existing secret with Redis(TM) credentials 
+  ## @param auth.existingSecret The name of an existing secret with Redis(TM) credentials
   ## NOTE: When it's set, the previous `auth.password` parameter is ignored
   ##
   existingSecret:
@@ -120,7 +120,7 @@ existingConfigmap:
 
 ## @section Redis(TM) master configuration parameters
 
-master:  
+master:
   ## @param master.configuration Configuration for Redis(TM) master nodes
   ## ref: https://redis.io/topics/config
   ##
@@ -855,7 +855,7 @@ networkPolicy:
   ##
   enabled: false
   ## @param networkPolicy.allowExternal Don't require client label for connections
-  ## When set to false, only pods with the correct client label will have network access to the ports 
+  ## When set to false, only pods with the correct client label will have network access to the ports
   ## Redis(TM) is listening on. When true, Redis(TM) will accept connections from any source
   ## (with the correct destination port).
   ##
