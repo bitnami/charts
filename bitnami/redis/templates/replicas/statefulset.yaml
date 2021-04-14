@@ -103,8 +103,8 @@ spec:
               value: {{ .Values.master.service.port | quote }}
             - name: ALLOW_EMPTY_PASSWORD
               value: {{ ternary "no" "yes" .Values.auth.enabled | quote }}
-            {{- if .Values.usePassword }}
-            {{- if .Values.usePasswordFile }}
+            {{- if .Values.auth.enabled }}
+            {{- if .Values.auth.usePasswordFiles }}
             - name: REDIS_PASSWORD_FILE
               value: "/opt/bitnami/redis/secrets/redis-password"
             - name: REDIS_MASTER_PASSWORD_FILE
@@ -198,7 +198,7 @@ spec:
               mountPath: /opt/bitnami/scripts/start-scripts
             - name: health
               mountPath: /health
-            {{- if .Values.usePasswordFile }}
+            {{- if .Values.auth.usePasswordFiles }}
             - name: redis-password
               mountPath: /opt/bitnami/redis/secrets/
             {{- end }}
@@ -234,10 +234,10 @@ spec:
           env:
             - name: REDIS_ALIAS
               value: {{ template "common.names.fullname" . }}
-            {{- if .Values.usePassword }}
+            {{- if .Values.auth.enabled }}
             - name: REDIS_USER
               value: default
-            {{- if (not .Values.usePasswordFile) }}
+            {{- if (not .Values.auth.usePasswordFiles) }}
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -264,7 +264,7 @@ spec:
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
-            {{- if .Values.usePasswordFile }}
+            {{- if .Values.auth.usePasswordFiles }}
             - name: redis-password
               mountPath: /secrets/
             {{- end }}
@@ -338,7 +338,7 @@ spec:
           configMap:
             name: {{ printf "%s-health" (include "common.names.fullname" .) }}
             defaultMode: 0755
-        {{- if .Values.usePasswordFile }}
+        {{- if .Values.auth.usePasswordFiles }}
         - name: redis-password
           secret:
             secretName: {{ template "redis.secretName" . }}

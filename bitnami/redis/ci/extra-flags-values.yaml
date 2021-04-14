@@ -9,4 +9,4 @@ replica:
   persistence:
     enabled: false
 auth:
-  usePassword: false
+  enabled: false

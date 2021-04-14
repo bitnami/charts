@@ -1,18 +1,18 @@
 ** Please be patient while the chart is being deployed **
 
 {{- if contains .Values.master.service.type "LoadBalancer" }}
-{{- if not .Values.usePassword }}
+{{- if not .Values.auth.enabled }}
 {{ if and (not .Values.networkPolicy.enabled) (.Values.networkPolicy.allowExternal) }}
 
 -------------------------------------------------------------------------------
  WARNING
 
-    By specifying "master.service.type=LoadBalancer" and "usePassword=false" you have
+    By specifying "master.service.type=LoadBalancer" and "auth.enabled=false" you have
     most likely exposed the Redis(TM) service externally without any authentication
     mechanism.
 
     For security reasons, we strongly suggest that you switch to "ClusterIP" or
-    "NodePort". As alternative, you can also switch to "usePassword=true"
+    "NodePort". As alternative, you can also switch to "auth.enabled=true"
     providing a valid password on "password" parameter.
 
 -------------------------------------------------------------------------------
@@ -45,7 +45,7 @@ Redis(TM) can be accessed via port {{ .Values.master.service.port }} on the foll
 
 {{- end }}
 
-{{ if .Values.usePassword }}
+{{ if .Values.auth.enabled }}
 
 To get your password run:
 
@@ -79,14 +79,14 @@ To connect to your Redis(TM) server:
 
 {{- if eq .Values.architecture "replication" }}
    {{- if .Values.sentinel.enabled }}
-   redis-cli -h {{ template "common.names.fullname" . }} -p {{ .Values.sentinel.service.port }}{{ if .Values.usePassword }} -a $REDIS_PASSWORD{{ end }}{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }} # Read only operations
-   redis-cli -h {{ template "common.names.fullname" . }} -p {{ .Values.sentinel.service.sentinelPort }}{{ if .Values.usePassword }} -a $REDIS_PASSWORD{{ end }}{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }} # Sentinel access
+   redis-cli -h {{ template "common.names.fullname" . }} -p {{ .Values.sentinel.service.port }}{{ if .Values.auth.enabled }} -a $REDIS_PASSWORD{{ end }}{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }} # Read only operations
+   redis-cli -h {{ template "common.names.fullname" . }} -p {{ .Values.sentinel.service.sentinelPort }}{{ if .Values.auth.enabled }} -a $REDIS_PASSWORD{{ end }}{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }} # Sentinel access
    {{- else }}
-   redis-cli -h {{ printf "%s-master" (include "common.names.fullname" .) }}{{ if .Values.usePassword }} -a $REDIS_PASSWORD{{ end }}{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
-   redis-cli -h {{ printf "%s-replicas" (include "common.names.fullname" .) }}{{ if .Values.usePassword }} -a $REDIS_PASSWORD{{ end }}{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
+   redis-cli -h {{ printf "%s-master" (include "common.names.fullname" .) }}{{ if .Values.auth.enabled }} -a $REDIS_PASSWORD{{ end }}{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
+   redis-cli -h {{ printf "%s-replicas" (include "common.names.fullname" .) }}{{ if .Values.auth.enabled }} -a $REDIS_PASSWORD{{ end }}{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
    {{- end }}
 {{- else }}
-   redis-cli -h {{ template "common.names.fullname" . }}-master{{ if .Values.usePassword }} -a $REDIS_PASSWORD{{ end }}{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
+   redis-cli -h {{ template "common.names.fullname" . }}-master{{ if .Values.auth.enabled }} -a $REDIS_PASSWORD{{ end }}{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
 {{- end }}
 
 {{- if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}
@@ -102,7 +102,7 @@ To connect to your database from outside the cluster execute the following comma
 
     export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
     export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "common.names.fullname" . }})
-    redis-cli -h $NODE_IP -p $NODE_PORT {{- if .Values.usePassword }} -a $REDIS_PASSWORD{{ end }}{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
+    redis-cli -h $NODE_IP -p $NODE_PORT {{- if .Values.auth.enabled }} -a $REDIS_PASSWORD{{ end }}{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
 
 {{- else if contains "LoadBalancer" .Values.sentinel.service.type }}
 
@@ -110,12 +110,12 @@ To connect to your database from outside the cluster execute the following comma
         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "common.names.fullname" . }}'
 
     export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
-    redis-cli -h $SERVICE_IP -p {{ .Values.sentinel.service.port }} {{- if .Values.usePassword }} -a $REDIS_PASSWORD{{ end }}{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
+    redis-cli -h $SERVICE_IP -p {{ .Values.sentinel.service.port }} {{- if .Values.auth.enabled }} -a $REDIS_PASSWORD{{ end }}{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
 
 {{- else if contains "ClusterIP" .Values.sentinel.service.type }}
 
     kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "common.names.fullname" . }} {{ .Values.sentinel.service.port }}:{{ .Values.sentinel.service.port }} &
-    redis-cli -h 127.0.0.1 -p {{ .Values.sentinel.service.port }} {{- if .Values.usePassword }} -a $REDIS_PASSWORD{{ end }}{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
+    redis-cli -h 127.0.0.1 -p {{ .Values.sentinel.service.port }} {{- if .Values.auth.enabled }} -a $REDIS_PASSWORD{{ end }}{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
 
 {{- end }}
 {{- else }}
@@ -123,7 +123,7 @@ To connect to your database from outside the cluster execute the following comma
 
     export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
     export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ printf "%s-master" (include "common.names.fullname" .) }})
-    redis-cli -h $NODE_IP -p $NODE_PORT {{- if .Values.usePassword }} -a $REDIS_PASSWORD{{ end }}{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
+    redis-cli -h $NODE_IP -p $NODE_PORT {{- if .Values.auth.enabled }} -a $REDIS_PASSWORD{{ end }}{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
 
 {{- else if contains "LoadBalancer" .Values.master.service.type }}
 
@@ -131,12 +131,12 @@ To connect to your database from outside the cluster execute the following comma
         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "common.names.fullname" . }}'
 
     export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ printf "%s-master" (include "common.names.fullname" .) }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
-    redis-cli -h $SERVICE_IP -p {{ .Values.master.service.port }} {{- if .Values.usePassword }} -a $REDIS_PASSWORD{{ end }}{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
+    redis-cli -h $SERVICE_IP -p {{ .Values.master.service.port }} {{- if .Values.auth.enabled }} -a $REDIS_PASSWORD{{ end }}{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
 
 {{- else if contains "ClusterIP" .Values.master.service.type }}
 
     kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ printf "%s-master" (include "common.names.fullname" .) }} {{ .Values.master.service.port }}:{{ .Values.master.service.port }} &
-    redis-cli -h 127.0.0.1 -p {{ .Values.master.service.port }} {{- if .Values.usePassword }} -a $REDIS_PASSWORD{{ end }}{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
+    redis-cli -h 127.0.0.1 -p {{ .Values.master.service.port }} {{- if .Values.auth.enabled }} -a $REDIS_PASSWORD{{ end }}{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
 
 {{- end }}
 {{- end }}

@@ -486,8 +486,8 @@ To use a password file for Redis<sup>TM</sup> you need to create a secret contai
 And then deploy the Helm Chart using the secret name as parameter:
 
 ```console
-auth.usePassword=true
-auth.usePasswordFile=true
+auth.enabled=true
+auth.usePasswordFiles=true
 auth.existingSecret=redis-password-file
 sentinels.enabled=true
 metrics.enabled=true

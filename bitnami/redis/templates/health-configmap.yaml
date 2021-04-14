@@ -13,7 +13,7 @@ metadata:
 data:
   ping_readiness_local.sh: |-
     #!/bin/bash
-{{- if .Values.usePasswordFile }}
+{{- if .Values.usePasswordFiles }}
     password_aux=`cat ${REDIS_PASSWORD_FILE}`
     export REDIS_PASSWORD=$password_aux
 {{- end }}
@@ -41,7 +41,7 @@ data:
     fi
   ping_liveness_local.sh: |-
     #!/bin/bash
-{{- if .Values.usePasswordFile }}
+{{- if .Values.usePasswordFiles }}
     password_aux=`cat ${REDIS_PASSWORD_FILE}`
     export REDIS_PASSWORD=$password_aux
 {{- end }}
@@ -70,7 +70,7 @@ data:
 {{- if .Values.sentinel.enabled }}
   ping_sentinel.sh: |-
     #!/bin/bash
-{{- if .Values.usePasswordFile }}
+{{- if .Values.usePasswordFiles }}
     password_aux=`cat ${REDIS_PASSWORD_FILE}`
     export REDIS_PASSWORD=$password_aux
 {{- end }}
@@ -114,7 +114,7 @@ data:
 {{- end }}
   ping_readiness_master.sh: |-
     #!/bin/bash
-{{- if .Values.usePasswordFile }}
+{{- if .Values.usePasswordFiles }}
     password_aux=`cat ${REDIS_MASTER_PASSWORD_FILE}`
     export REDIS_MASTER_PASSWORD=$password_aux
 {{- end }}
@@ -140,7 +140,7 @@ data:
     fi
   ping_liveness_master.sh: |-
     #!/bin/bash
-{{- if .Values.usePasswordFile }}
+{{- if .Values.usePasswordFiles }}
     password_aux=`cat ${REDIS_MASTER_PASSWORD_FILE}`
     export REDIS_MASTER_PASSWORD=$password_aux
 {{- end }}
