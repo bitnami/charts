@@ -441,6 +441,9 @@ sidecars: {}
 ##
 extraVolumeMounts: []
 extraVolumes: []
+#  - name: master-old-db
+#    gcePersistentDisk:
+#      pdName: master-old-db
 
 ## MongoDB(R) Pod Disruption Budget configuration
 ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
@@ -474,6 +477,10 @@ persistence:
   # storageClass: "-"
   ## PV Access Mode
   ##
+  dataSource: {}
+#    name: datadir-test-mongodb-1
+#    kind: VolumeSnapshot
+#    apiGroup: snapshot.storage.k8s.io
   accessModes:
     - ReadWriteOnce
   ## PVC size
@@ -938,7 +945,14 @@ rbac:
   ## binding MongoDB(R) ServiceAccount to a role
   ## that allows MongoDB(R) pods querying the K8s API
   ##
-  create: false
+  create: true
+
+volumeSnapshot:
+  # note : if you are using replicaSet, you should at least have two nodes
+  enabled: true
+  cron: "0 0 1 1 1"
+  image: mrelite/kubectlmongoshell:v1.0
+  volumeSnapshotClass: snapshot-class
 
 ## PodSecurityPolicy configuration
 ## Be sure to also set rbac.create to true, otherwise Role and RoleBinding
