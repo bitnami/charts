@@ -3,7 +3,7 @@ master:
     - --maxmemory-policy allkeys-lru
   persistence:
     enabled: false
-replicas:
+replica:
   extraFlags:
     - --maxmemory-policy allkeys-lru
   persistence:

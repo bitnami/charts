@@ -63,7 +63,7 @@
         }
       }
     },
-    "replicas": {
+    "replica": {
       "type": "object",
       "title": "Redis replicas settings",
       "form": true,
@@ -98,7 +98,7 @@
               "sliderUnit": "Gi",
               "hidden": {
                 "value": false,
-                "path": "replicas/persistence/enabled"
+                "path": "replica/persistence/enabled"
               }
             }
           }

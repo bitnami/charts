@@ -32,7 +32,7 @@ data:
   replica.conf: |-
     dir {{ .Values.replica.persistence.path }}
     slave-read-only yes
-    # User-supplied replicas configuration:
+    # User-supplied replica configuration:
     {{- if .Values.replica.configuration }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.replica.configuration "context" $ ) | nindent 4 }}
     {{- end }}
@@ -41,7 +41,7 @@ data:
     rename-command {{ . }} ""
     {{- end }}
     {{- end }}
-    # End of replicas configuration
+    # End of replica configuration
   {{- if .Values.sentinel.enabled }}
   sentinel.conf: |-
     dir "/tmp"
