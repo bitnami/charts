@@ -57,7 +57,7 @@ To connect to your Redis(TM) server:
 
 1. Run a Redis(TM) pod that you can use as a client:
 
-   kubectl run --namespace {{ .Release.Namespace }} redis-client --restart='Never' --env REDIS_PASSWORD=$REDIS_PASSWORD --image {{ template "redis.image" . }} --command -- sleep infinity
+   kubectl run --namespace {{ .Release.Namespace }} redis-client --restart='Never' {{ if .Values.auth.enabled }} --env REDIS_PASSWORD=$REDIS_PASSWORD {{ end }} --image {{ template "redis.image" . }} --command -- sleep infinity
 
 {{- if .Values.tls.enabled }}
 

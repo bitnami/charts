@@ -420,7 +420,7 @@ spec:
               value: /secrets/redis-password
             {{- end }}
           ports:
-            - name: sentinel-metrics
+            - name: sentinelmetrics
               containerPort: 9355
           {{- if .Values.metrics.sentinel.resources }}
           resources: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.sentinel.resources "context" $) | nindent 12 }}

@@ -27,9 +27,9 @@ spec:
   loadBalancerIP: {{ .Values.metrics.sentinel.service.loadBalancerIP }}
   {{- end }}
   ports:
-    - port: {{ .Values.metrics.sentinel.service.port }}
-      targetPort: sentinel-metrics
+    - name: metrics
+      port: {{ .Values.metrics.sentinel.service.port }}
       protocol: TCP
-      name: metrics
+      targetPort: sentinelmetrics
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
 {{- end }}
