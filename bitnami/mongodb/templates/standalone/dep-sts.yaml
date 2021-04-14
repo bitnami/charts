@@ -173,7 +173,7 @@ spec:
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.image.debug | quote }}
-            {{- if (and .Values.auth.enabled (not .Values.auth.credentialFilePath)) }}  
+            {{- if (and .Values.auth.enabled (not .Values.auth.vaultCredentials)) }}  
             {{- if .Values.auth.username }}
             - name: MONGODB_USERNAME
               value: {{ .Values.auth.username | quote }}
@@ -201,9 +201,9 @@ spec:
                   key: mongodb-root-password
             {{- end }}
             {{- end }}
-            {{- if .Values.auth.credentialFilePath }}
-            - name: MONGODB_CREDENTIAL_FILE
-              value: {{ .Values.auth.credentialFilePath | quote }}
+            {{- if .Values.auth.vaultCredentials }}
+            - name: VAULT_CREDENTIAL_FILE
+              value: {{ .Values.auth.vaultCredentials | quote }}
             {{- end }}
             - name: ALLOW_EMPTY_PASSWORD
               value: {{ ternary "no" "yes" .Values.auth.enabled | quote }}

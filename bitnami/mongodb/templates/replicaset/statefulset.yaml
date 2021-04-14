@@ -225,7 +225,7 @@ spec:
             - name: MONGODB_ADVERTISED_HOSTNAME
               value: "$(MY_POD_NAME).$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.{{ .Values.clusterDomain }}"
             {{- end }}
-            {{- if (and .Values.auth.enabled (not .Values.auth.credentialFilePath)) }}
+            {{- if (and .Values.auth.enabled (not .Values.auth.vaultCredentials)) }}
             {{- if .Values.auth.username }}
             - name: MONGODB_USERNAME
               value: {{ .Values.auth.username | quote }}
@@ -260,9 +260,9 @@ spec:
                   name: {{ include "mongodb.secretName" . }}
                   key: mongodb-replica-set-key
             {{- end}}      
-            {{- if .Values.auth.credentialFilePath }}
-            - name: MONGODB_CREDENTIAL_FILE
-              value: {{ .Values.auth.credentialFilePath | quote }}
+            {{- if .Values.auth.vaultCredentials }}
+            - name: VAULT_CREDENTIAL_FILE
+              value: {{ .Values.auth.vaultCredentials | quote }}
             {{- end }} 
             - name: ALLOW_EMPTY_PASSWORD
               value: {{ ternary "no" "yes" .Values.auth.enabled | quote }}

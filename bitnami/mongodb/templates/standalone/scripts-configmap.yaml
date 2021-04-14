@@ -11,16 +11,15 @@ data:
   {{- $releaseNamespace := include "mongodb.namespace" . }} 
   setup.sh: |-
     #!/bin/bash
-    if [[ -n "$MONGODB_CREDENTIAL_FILE" ]] && [[ -f "$MONGODB_CREDENTIAL_FILE" ]]; then
+    if [[ -n "$VAULT_CREDENTIAL_FILE" ]] && [[ -f "$VAULT_CREDENTIAL_FILE" ]]; then
         while read -r line; do
         line=$(echo "$line" | sed 's/: /=/g')
         declare $line; 
-        done < "$MONGODB_CREDENTIAL_FILE"
+        done < "$VAULT_CREDENTIAL_FILE"
         export MONGODB_ROOT_PASSWORD="$MONGODB_ROOT_PASSWORD"
         export MONGODB_USERNAME="$MONGODB_USERNAME"
         export MONGODB_PASSWORD="$MONGODB_PASSWORD"
         export MONGODB_DATABASE="$MONGODB_DATABASE"
-        export ALLOW_EMPTY_PASSWORD="$ALLOW_EMPTY_PASSWORD"
         export MONGODB_USER_ROLE="${MONGODB_USER_ROLE:-readWrite}"
     fi
     exec /opt/bitnami/scripts/mongodb/entrypoint.sh /opt/bitnami/scripts/mongodb/run.sh

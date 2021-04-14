@@ -468,6 +468,15 @@ $ helm upgrade my-release bitnami/mongodb --set auth.rootPassword=[PASSWORD] (--
 ```
 
 > Note: you need to substitute the placeholders [PASSWORD] and [REPLICASETKEY] with the values obtained in the installation notes.
+## Reading credentials from Vault File
+Vault can be mounted as a file system to the POD. If authentication is enabled and vault credential path is set then the credentials will be read from this file.
+Format of vault file is expected as below.
+
+MONGODB_DATABASE: database 
+MONGODB_PASSWORD: password
+MONGODB_ROOT_PASSWORD: rootpassword
+MONGODB_USERNAME: username
+MONGODB_USER_ROLE: userrole
 
 ### To 10.0.0
 
