@@ -18,3 +18,4 @@ jobs:
           days-before-close: 5
           exempt-issue-labels: 'on-hold'
           exempt-pr-labels: 'on-hold'
+          operations-per-run: 500
