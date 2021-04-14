@@ -34,5 +34,5 @@ maintainers:
 name: wordpress
 sources:
   - https://github.com/bitnami/bitnami-docker-wordpress
-  - http://www.wordpress.com/
-version: 10.10.1
+  - https://wordpress.org/
+version: 10.10.2
