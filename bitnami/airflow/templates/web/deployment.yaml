@@ -174,9 +174,9 @@ spec:
               port: http
           {{- end }}
             {{ omit .Values.web.readinessProbe "enabled" | toYaml | nindent 12 }}
-        {{- else if .Values.web.customRedinessProbe }}
+        {{- else if .Values.web.customReadinessProbe }}
           readinessProbe:
-            {{- include "common.tplvalues.render" (dict "value" .Values.web.customRedinessProbe "context" $) | trim | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.web.customReadinessProbe "context" $) | trim | nindent 12 }}
         {{- end }}
           volumeMounts:
           {{- if .Files.Glob "files/dags/*.py" }}
