@@ -1003,6 +1003,18 @@ metrics:
     ##
     tolerations: []
 
+    ## Add init containers to the Kafka exporter pods.
+    ## Example:
+    ## initContainers:
+    ##   - name: your-image-name
+    ##     image: your-image
+    ##     imagePullPolicy: Always
+    ##     ports:
+    ##       - name: portname
+    ##         containerPort: 1234
+    ##
+    initContainers: {}
+
     ## Service configuration
     ##
     service:
