@@ -1,53 +1,59 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ template "redis.fullname" . }}
+  name: {{ template "common.names.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
-  labels:
-    app: {{ template "redis.name" . }}
-    chart: {{ template "redis.chart" . }}
-    heritage: {{ .Release.Service }}
-    release: {{ .Release.Name }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 data:
   redis.conf: |-
-{{- if .Values.configmap }}
-    # User-supplied configuration:
-{{- tpl .Values.configmap . | nindent 4 }}
-{{- end }}
+    # User-supplied common configuration:
+    {{- if .Values.commonConfiguration }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonConfiguration "context" $ ) | nindent 4 }}
+    {{- end }}
+    # End of common configuration
   master.conf: |-
     dir {{ .Values.master.persistence.path }}
-{{- if .Values.master.configmap }}
     # User-supplied master configuration:
-{{- tpl .Values.master.configmap . | nindent 4 }}
-{{- end }}
-{{- if .Values.master.disableCommands }}
-{{- range .Values.master.disableCommands }}
+    {{- if .Values.master.configuration }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.master.configuration "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.master.disableCommands }}
+    {{- range .Values.master.disableCommands }}
     rename-command {{ . }} ""
-{{- end }}
-{{- end }}
+    {{- end }}
+    {{- end }}
+    # End of master configuration
   replica.conf: |-
-    dir {{ .Values.slave.persistence.path }}
+    dir {{ .Values.replica.persistence.path }}
     slave-read-only yes
-{{- if .Values.slave.configmap }}
-    # User-supplied slave configuration:
-{{- tpl .Values.slave.configmap . | nindent 4 }}
-{{- end }}
-{{- if .Values.slave.disableCommands }}
-{{- range .Values.slave.disableCommands }}
+    # User-supplied replicas configuration:
+    {{- if .Values.replica.configuration }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.replica.configuration "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.replica.disableCommands }}
+    {{- range .Values.replica.disableCommands }}
     rename-command {{ . }} ""
-{{- end }}
-{{- end }}
-{{- if .Values.sentinel.enabled }}
+    {{- end }}
+    {{- end }}
+    # End of replicas configuration
+  {{- if .Values.sentinel.enabled }}
   sentinel.conf: |-
     dir "/tmp"
     bind 0.0.0.0
     port {{ .Values.sentinel.port }}
-    sentinel monitor {{ .Values.sentinel.masterSet }} {{ template "redis.fullname" . }}-node-0.{{ template "redis.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} {{ .Values.redisPort }} {{ .Values.sentinel.quorum }}
+    sentinel monitor {{ .Values.sentinel.masterSet }} {{ template "common.names.fullname" . }}-node-0.{{ template "common.names.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} {{ .Values.sentinel.service.port }} {{ .Values.sentinel.quorum }}
     sentinel down-after-milliseconds {{ .Values.sentinel.masterSet }} {{ .Values.sentinel.downAfterMilliseconds }}
     sentinel failover-timeout {{ .Values.sentinel.masterSet }} {{ .Values.sentinel.failoverTimeout }}
     sentinel parallel-syncs {{ .Values.sentinel.masterSet }} {{ .Values.sentinel.parallelSyncs }}
-{{- if .Values.sentinel.configmap }}
     # User-supplied sentinel configuration:
-{{- tpl .Values.sentinel.configmap . | nindent 4 }}
-{{- end }}
-{{- end }}
+    {{- if .Values.sentinel.configuration }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.sentinel.configuration "context" $ ) | nindent 4 }}
+    {{- end }}
+    # End of sentinel configuration
+  {{- end }}

@@ -1,6 +1,6 @@
-{{- if and .Values.auth.enabled (not .Values.auth.existingSecret) -}}
-apiVersion: v1
-kind: Secret
+{{- if .Values.rbac.create }}
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
+kind: RoleBinding
 metadata:
   name: {{ template "common.names.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
@@ -11,7 +11,11 @@ metadata:
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
-type: Opaque
-data:
-  redis-password: {{ include "redis.password" . | b64enc | quote }}
-{{- end -}}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ template "common.names.fullname" . }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ template "redis.serviceAccountName" . }}
+{{- end }}

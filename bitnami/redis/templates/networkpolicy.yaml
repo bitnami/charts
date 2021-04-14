@@ -2,19 +2,19 @@
 kind: NetworkPolicy
 apiVersion: {{ template "networkPolicy.apiVersion" . }}
 metadata:
-  name: {{ template "redis.fullname" . }}
+  name: {{ template "common.names.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
-  labels:
-    app: {{ template "redis.name" . }}
-    chart: {{ template "redis.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   podSelector:
-    matchLabels:
-      app: {{ template "redis.name" . }}
-      release: {{ .Release.Name }}
-  {{- if .Values.cluster.enabled }}
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+  {{- if eq .Values.architecture "replication" }}
   policyTypes:
     - Ingress
     - Egress
@@ -25,32 +25,28 @@ spec:
           protocol: UDP
     # Allow outbound connections to other cluster pods
     - ports:
-        - port: {{ .Values.redisPort }}
+        - port: {{ .Values.master.containerPort }}
         {{- if .Values.sentinel.enabled }}
-        - port: {{ .Values.sentinel.port }}
+        - port: {{ .Values.sentinel.containerPort }}
         {{- end }}
       to:
         - podSelector:
-            matchLabels:
-              app: {{ template "redis.name" . }}
-              release: {{ .Release.Name }}
+            matchLabels: {{- include "common.labels.matchLabels" . | nindent 14 }}
   {{- end }}
   ingress:
     # Allow inbound connections
     - ports:
-        - port: {{ .Values.redisPort }}
+        - port: {{ .Values.master.containerPort }}
         {{- if .Values.sentinel.enabled }}
-        - port: {{ .Values.sentinel.port }}
+        - port: {{ .Values.sentinel.containerPort }}
         {{- end }}
       {{- if not .Values.networkPolicy.allowExternal }}
       from:
         - podSelector:
             matchLabels:
-              {{ template "redis.fullname" . }}-client: "true"
+              {{ template "common.names.fullname" . }}-client: "true"
         - podSelector:
-            matchLabels:
-              app: {{ template "redis.name" . }}
-              release: {{ .Release.Name }}
+            matchLabels: {{- include "common.labels.matchLabels" . | nindent 14 }}
         {{- if .Values.networkPolicy.ingressNSMatchLabels }}
         - namespaceSelector:
             matchLabels:
