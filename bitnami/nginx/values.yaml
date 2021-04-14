@@ -236,6 +236,13 @@ tolerations: {}
 podSecurityContext:
   enabled: false
   fsGroup: 1001
+  ## sysctl settings
+  ## Example:
+  ## sysctls:
+  ## - name: net.core.somaxconn
+  ##   value: "10000"
+  ##
+  sysctls: {}
 
 ## NGINX Core containers' Security Context (only main container).
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
@@ -244,13 +251,6 @@ containerSecurityContext:
   enabled: false
   runAsUser: 1001
   runAsNonRoot: true
-  ## sysctl settings
-  ## Example:
-  ## sysctls:
-  ## - name: net.core.somaxconn
-  ##   value: "10000"
-  ##
-  sysctls: {}
 
 ## Configures the ports NGINX listens on
 ##
