@@ -377,13 +377,3 @@ kafka: auth.tls.existingSecret
     when TLS encryption in enabled and TLS format is "PEM"
 {{- end -}}
 {{- end -}}
-
-{{/* Make string from list of advertisedListeners */}}
-{{- define "kafka.advertisedListeners" -}}
-{{- join "," .Values.advertisedListeners }}
-{{- end -}}
-
-{{/* Make string from list of listeners */}}
-{{- define "kafka.listeners" -}}
-{{- join "," .Values.listeners }}
-{{- end -}}
