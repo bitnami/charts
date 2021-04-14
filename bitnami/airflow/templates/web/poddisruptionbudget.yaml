@@ -1,4 +1,4 @@
-{{- if and .Values.web.podDisruptionBudget.enabled (eq .Values.executor "CeleryExecutor") }}
+{{- if and .Values.web.podDisruptionBudget.enabled (or (eq .Values.executor "CeleryExecutor") (eq .Values.executor "CeleryKubernetesExecutor")) }}
 kind: PodDisruptionBudget
 apiVersion: policy/v1beta1
 metadata:

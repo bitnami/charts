@@ -20,7 +20,7 @@ nameOverride:
 fullnameOverride:
 ## Airflow executor
 ## ref: http://airflow.apache.org/docs/stable/executor/index.html
-## valid values: ['SequentialExecutor', 'LocalExecutor', 'CeleryExecutor', 'KubernetesExecutor']
+## valid values: ['SequentialExecutor', 'LocalExecutor', 'CeleryExecutor', 'KubernetesExecutor', 'CeleryKubernetesExecutor']
 ##
 executor: 'CeleryExecutor'
 ## Name of an existing config map containing the Airflow config file

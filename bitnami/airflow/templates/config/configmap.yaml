@@ -1,4 +1,4 @@
-{{- $kube := eq .Values.executor "KubernetesExecutor" -}}
+{{- $kube := or (eq .Values.executor "KubernetesExecutor") (eq .Values.executor "CeleryKubernetesExecutor") -}}
 {{- if or .Values.config $kube }}
 apiVersion: v1
 kind: ConfigMap
