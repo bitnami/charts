@@ -490,6 +490,10 @@ rbac.create=true
 serviceaccount.create=true
 ```
 
+### CeleryKubernetesExecutor
+
+The CeleryKubernetesExecutor is introduced in Airflow 2.0 and is a combination of both the Celery and the Kubernetes executors. Tasks will be executed using Celery by default, but those tasks that require it can be executed in a Kubernetes pod using the 'kubernetes' queue.
+
 #### LocalExecutor
 
 Local executor runs tasks by spawning processes in the Scheduler pods. To enable `LocalExecutor` set the following parameters.
