@@ -429,9 +429,12 @@ registry: "txt"
 ## TXT Registry Identifier
 ##
 txtOwnerId: ""
-## Prefix to create a TXT record with a name following the pattern prefix.<CNAME record>
+## Prefix to create a TXT record with a name following the pattern prefix.<CNAME record> (Mutual exclusive with txt-suffix)
 ##
 # txtPrefix: ""
+## Suffix to create a TXT record with a name following the pattern <CNAME record>.suffix (Mutual exclusive with txt-prefix)
+##
+# txtSuffix: ""
 
 ## Extra Arguments to passed to external-dns
 ##
