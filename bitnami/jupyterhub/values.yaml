@@ -295,7 +295,7 @@ hub:
     minAvailable:
     ## @param hub.pdb.maxAvailable Set maximum available hub instances
     ##
-    minAvailable:
+    maxc Available:
 
   ## @param hub.priorityClassName Hub pod priority class name
   ##
