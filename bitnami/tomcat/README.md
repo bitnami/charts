@@ -95,7 +95,7 @@ The following tables lists the configurable parameters of the Tomcat chart and t
 |-----------------------------|-------------------------------------------------------------------------------------------|---------------------------------------------|
 | `replicaCount`              | Specify number of Tomcat replicas                                                         | `1`                                         |
 | `containerPort`             | HTTP port to expose at container level                                                    | `8080`                                      |
-| `containerExtraPorts`       | Extra HTTP ports to expose at container level                                                    | `{}`                                      |
+| `containerExtraPorts`       | Extra ports to expose at container level                                               | `{}`                                      |
 | `podSecurityContext`        | Tomcat pods' Security Context                                                             | Check `values.yaml` file                    |
 | `containerSecurityContext`  | Tomcat containers' Security Context                                                       | Check `values.yaml` file                    |
 | `resources.limits`          | The resources limits for the Tomcat container                                             | `{}`                                        |
