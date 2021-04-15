@@ -256,6 +256,13 @@ extraConfiguration: |-
   #disk_free_limit.absolute = 50MB
   #load_definitions = /app/load_definition.json
 
+## Extra certificates to be mounted in container spec, if adding extra certificates through extraConfiguration
+## E.g:
+## extraCertificates:
+## - key: cert_name_in_secret
+##   path: cert_name_in_container
+extraCertificates: []
+
 ## Configuration file content: advanced configuration
 ## Use this as additional configuration in classic config format (Erlang term configuration format)
 ##

@@ -320,6 +320,9 @@ spec:
                 path: server_certificate.pem
               - key: tls.key
                 path: server_key.pem
+              {{- if .Values.extraCertificates }}
+              {{- include "common.tplvalues.render" (dict "value" .Values.extraCertificates "context" $) | nindent 14 }}
+              {{- end }}
         {{- end }}
         - name: configuration
           configMap:
