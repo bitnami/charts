@@ -67,6 +67,15 @@ monitoringAPIPort: 9600
 ##
 # extraEnvVars:
 
+## An array to add secrets or configmaps to environment if any
+## For example:
+## envFrom:
+## - secretRef:
+##     name: x.y.z
+## - configMapRef:
+##     name: x.y.z
+## envFrom:
+
 ## Input Plugins configuration
 ## ref: https://www.elastic.co/guide/en/logstash/current/input-plugins.html
 ##

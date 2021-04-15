@@ -69,6 +69,10 @@ spec:
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
+          {{- if .Values.envFrom }}
+          envFrom:
+          {{ toYaml .Values.envFrom | nindent 12 }}
+          {{- end }}
           {{- if .Values.containerPorts }}
           ports: {{ toYaml .Values.containerPorts | nindent 12 }}
           {{- end }}
