@@ -340,24 +340,28 @@ Refer to the chart documentation for [more information and configuration example
 
 ### Configure LDAP support
 
-LDAP support can be enabled in the chart by specifying the `ldap.*` parameters while creating a release. The following parameters should be configured to properly enable the LDAP support in the chart.
-
-- `ldap.enabled`: Enable LDAP support. Defaults to `false`.
-- `ldap.servers`: List of LDAP servers hostnames. No defaults.
-- `ldap.port`: LDAP servers port. `389`.
-- `ldap.user_dn_pattern`: Pattern used to translate the provided username into a value to be used for the LDAP bind. Defaults to `cn=${username},dc=example,dc=org`.
-- `ldap.tls.enabled`: Enable TLS for LDAP connections. Defaults to `false`.
-
-Refer to the chart documentation for [more information and a configuration example](https://docs.bitnami.com/kubernetes/infrastructure/rabbitmq/configuration/configure-ldap/).
+LDAP support can be enabled in the chart by specifying the `ldap.*` parameters while creating a release. Refer to the chart documentation for [more information and a configuration example](https://docs.bitnami.com/kubernetes/infrastructure/rabbitmq/configuration/configure-ldap/).
 
 ### Configure memory high watermark
 
 It is possible to configure a memory high watermark on RabbitMQ to define [memory thresholds](https://www.rabbitmq.com/memory.html#threshold) using the `memoryHighWatermark.*` parameters. To do so, you have two alternatives:
 
-* Set an absolute limit of RAM to be used on each RabbitMQ node.
-* Set a relative limit of RAM to be used on each RabbitMQ node. To enable this feature, you must define the memory limits at pod level too.
+* Set an absolute limit of RAM to be used on each RabbitMQ node, as shown in the configuration example below:
 
-Refer to the chart documentation for [more information and configuration examples of defining a memory high watermark](https://docs.bitnami.com/kubernetes/infrastructure/rabbitmq/configuration/configure-memory/).
+```
+memoryHighWatermark.enabled="true"
+memoryHighWatermark.type="absolute"
+memoryHighWatermark.value="512MB"
+```
+
+* Set a relative limit of RAM to be used on each RabbitMQ node. To enable this feature,  define the memory limits at pod level too. An example configuration is shown below:
+
+```
+memoryHighWatermark.enabled="true"
+memoryHighWatermark.type="relative"
+memoryHighWatermark.value="0.4"
+resources.limits.memory="2Gi"
+```
 
 ### Add extra environment variables
 
