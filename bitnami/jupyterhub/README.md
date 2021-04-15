@@ -21,6 +21,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 - Kubernetes 1.12+
 - Helm 3.1.0
+- PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
 
