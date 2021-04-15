@@ -12,7 +12,7 @@ metadata:
   {{- if or .Values.metrics.sentinel.service.annotations .Values.commonAnnotations }}
   annotations:
     {{- if .Values.metrics.sentinel.service.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.sentinel.metrics.service.annotations "context" $ ) | nindent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.sentinel.service.annotations "context" $ ) | nindent 4 }}
     {{- end }}
     {{- if .Values.commonAnnotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
@@ -25,6 +25,9 @@ spec:
   {{- end }}
   {{- if and (eq .Values.metrics.sentinel.service.type "LoadBalancer") .Values.metrics.sentinel.service.loadBalancerIP }}
   loadBalancerIP: {{ .Values.metrics.sentinel.service.loadBalancerIP }}
+  {{- end }}
+  {{- if and (eq .Values.metrics.sentinel.service.type "LoadBalancer") .Values.metrics.sentinel.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges: {{- toYaml .Values.metrics.sentinel.service.loadBalancerSourceRanges | nindent 4 }}
   {{- end }}
   ports:
     - name: metrics

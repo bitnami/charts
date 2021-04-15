@@ -1,7 +1,8 @@
+{{- if (include "redis.createConfigmap" .) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ template "common.names.fullname" . }}
+  name: {{ printf "%s-configuration" (include "common.names.fullname" .) }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
@@ -57,3 +58,4 @@ data:
     {{- end }}
     # End of sentinel configuration
   {{- end }}
+{{- end }}

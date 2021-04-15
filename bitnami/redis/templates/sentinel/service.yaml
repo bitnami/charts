@@ -9,9 +9,6 @@ metadata:
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-    {{- if .Values.sentinel.service.labels }}
-    {{- toYaml .Values.sentinel.service.labels | nindent 4 }}
-    {{- end }}
   {{- if or .Values.sentinel.service.annotations .Values.commonAnnotations }}
   annotations:
     {{- if .Values.sentinel.service.annotations }}
@@ -31,6 +28,9 @@ spec:
   {{- end }}
   {{- if and (eq .Values.sentinel.service.type "LoadBalancer") .Values.sentinel.service.loadBalancerSourceRanges }}
   loadBalancerSourceRanges: {{- toYaml .Values.sentinel.service.loadBalancerSourceRanges | nindent 4 }}
+  {{- end }}
+  {{- if and (eq .Values.sentinel.service.type "ClusterIP") .Values.sentinel.service.clusterIP }}
+  clusterIP: {{ .Values.sentinel.service.clusterIP }}
   {{- end }}
   ports:
     - name: tcp-redis

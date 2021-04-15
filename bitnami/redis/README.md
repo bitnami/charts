@@ -144,8 +144,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `master.containerSecurityContext.runAsUser` | Set Redis(TM) master containers' Security Context runAsUser                                      | `1001`          |
 | `master.schedulerName`                      | Alternate scheduler for Redis(TM) master pods                                                    | `nil`           |
 | `master.updateStrategy.type`                | Redis(TM) master statefulset strategy type                                                       | `RollingUpdate` |
-| `master.updateStrategy.rollingUpdate`       | Redis(TM) master statefulset rolling update configuration parameters                             | `{}`            |
 | `master.priorityClassName`                  | Redis(TM) master pods' priorityClassName                                                         | `""`            |
+| `master.hostAliases`                        | Redis(TM) master pods host aliases                                                               | `[]`            |
 | `master.podLabels`                          | Extra labels for Redis(TM) master pods                                                           | `{}`            |
 | `master.podAnnotations`                     | Annotations for Redis(TM) master pods                                                            | `{}`            |
 | `master.shareProcessNamespace`              | Share a single process namespace between all of the containers in Redis(TM) master pods          | `false`         |
@@ -157,6 +157,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `master.affinity`                           | Affinity for Redis(TM) master pods assignment                                                    | `{}`            |
 | `master.nodeSelector`                       | Node labels for Redis(TM) master pods assignment                                                 | `{}`            |
 | `master.tolerations`                        | Tolerations for Redis(TM) master pods assignment                                                 | `[]`            |
+| `master.spreadConstraints`                  | Spread Constraints for Redis(TM) master pod assignment                                           | `{}`            |
 | `master.extraVolumes`                       | Optionally specify extra list of additional volumes for the Redis(TM) master pod(s)              | `[]`            |
 | `master.extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for the Redis(TM) master container(s)   | `[]`            |
 | `master.sidecars`                           | Add additional sidecar containers to the Redis(TM) master pod(s)                                 | `{}`            |
@@ -182,74 +183,75 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Redis(TM) replicas configuration parameters
 
-| Name                                          | Description                                                                                        | Value           |
-| --------------------------------------------- | -------------------------------------------------------------------------------------------------- | --------------- |
-| `replicas.replicaCount`                       | Number of Redis(TM) replicas to deploy                                                             | `3`             |
-| `replicas.configuration`                      | Configuration for Redis(TM) replicas nodes                                                         | `nil`           |
-| `replicas.disableCommands`                    | Array with Redis(TM) commands to disable on replicas nodes                                         | `[]`            |
-| `replicas.command`                            | Override default container command (useful when using custom images)                               | `[]`            |
-| `replicas.args`                               | Override default container args (useful when using custom images)                                  | `[]`            |
-| `replicas.preExecCmds`                        | Additional commands to run prior to starting Redis(TM) replicas                                    | `[]`            |
-| `replicas.extraFlags`                         | Array with additional command line flags for Redis(TM) replicas                                    | `[]`            |
-| `replicas.extraEnvVars`                       | Array with extra environment variables to add to Redis(TM) replicas nodes                          | `[]`            |
-| `replicas.extraEnvVarsCM`                     | Name of existing ConfigMap containing extra env vars for Redis(TM) replicas nodes                  | `nil`           |
-| `replicas.extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for Redis(TM) replicas nodes                     | `nil`           |
-| `replicas.containerPort`                      | Container port to open on Redis(TM) replicas nodes                                                 | `6379`          |
-| `replicas.livenessProbe.enabled`              | Enable livenessProbe on Redis(TM) replicas nodes                                                   | `true`          |
-| `replicas.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                            | `5`             |
-| `replicas.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                   | `5`             |
-| `replicas.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                  | `5`             |
-| `replicas.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                | `5`             |
-| `replicas.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                | `1`             |
-| `replicas.readinessProbe.enabled`             | Enable readinessProbe on Redis(TM) replicas nodes                                                  | `true`          |
-| `replicas.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                           | `5`             |
-| `replicas.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                  | `5`             |
-| `replicas.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                 | `1`             |
-| `replicas.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                               | `5`             |
-| `replicas.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                               | `1`             |
-| `replicas.customLivenessProbe`                | Custom livenessProbe that overrides the default one                                                | `{}`            |
-| `replicas.customReadinessProbe`               | Custom readinessProbe that overrides the default one                                               | `{}`            |
-| `replicas.resources.limits`                   | The resources limits for the Redis(TM) replicas containers                                         | `{}`            |
-| `replicas.resources.requests`                 | The requested resources for the Redis(TM) replicas containers                                      | `{}`            |
-| `replicas.podSecurityContext.enabled`         | Enabled Redis(TM) replicas pods' Security Context                                                  | `true`          |
-| `replicas.podSecurityContext.fsGroup`         | Set Redis(TM) replicas pod's Security Context fsGroup                                              | `1001`          |
-| `replicas.containerSecurityContext.enabled`   | Enabled Redis(TM) replicas containers' Security Context                                            | `true`          |
-| `replicas.containerSecurityContext.runAsUser` | Set Redis(TM) replicas containers' Security Context runAsUser                                      | `1001`          |
-| `replicas.schedulerName`                      | Alternate scheduler for Redis(TM) replicas pods                                                    | `nil`           |
-| `replicas.updateStrategy.type`                | Redis(TM) replicas statefulset strategy type                                                       | `RollingUpdate` |
-| `replicas.updateStrategy.rollingUpdate`       | Redis(TM) replicas statefulset rolling update configuration parameters                             | `{}`            |
-| `replicas.priorityClassName`                  | Redis(TM) replicas pods' priorityClassName                                                         | `""`            |
-| `replicas.podLabels`                          | Extra labels for Redis(TM) replicas pods                                                           | `{}`            |
-| `replicas.podAnnotations`                     | Annotations for Redis(TM) replicas pods                                                            | `{}`            |
-| `replicas.shareProcessNamespace`              | Share a single process namespace between all of the containers in Redis(TM) replicas pods          | `false`         |
-| `replicas.podAffinityPreset`                  | Pod affinity preset. Ignored if `replicas.affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
-| `replicas.podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `replicas.affinity` is set. Allowed values: `soft` or `hard`  | `soft`          |
-| `replicas.nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `replicas.affinity` is set. Allowed values: `soft` or `hard` | `""`            |
-| `replicas.nodeAffinityPreset.key`             | Node label key to match. Ignored if `replicas.affinity` is set                                     | `""`            |
-| `replicas.nodeAffinityPreset.values`          | Node label values to match. Ignored if `replicas.affinity` is set                                  | `[]`            |
-| `replicas.affinity`                           | Affinity for Redis(TM) replicas pods assignment                                                    | `{}`            |
-| `replicas.nodeSelector`                       | Node labels for Redis(TM) replicas pods assignment                                                 | `{}`            |
-| `replicas.tolerations`                        | Tolerations for Redis(TM) replicas pods assignment                                                 | `[]`            |
-| `replicas.extraVolumes`                       | Optionally specify extra list of additional volumes for the Redis(TM) replicas pod(s)              | `[]`            |
-| `replicas.extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for the Redis(TM) replicas container(s)   | `[]`            |
-| `replicas.sidecars`                           | Add additional sidecar containers to the Redis(TM) replicas pod(s)                                 | `{}`            |
-| `replicas.initContainers`                     | Add additional init containers to the Redis(TM) replicas pod(s)                                    | `{}`            |
-| `replicas.persistence.enabled`                | Enable persistence on Redis(TM) replicas nodes using Persistent Volume Claims                      | `true`          |
-| `replicas.persistence.path`                   | The path the volume will be mounted at on Redis(TM) replicas containers                            | `/data`         |
-| `replicas.persistence.subPath`                | The subdirectory of the volume to mount on Redis(TM) replicas containers                           | `""`            |
-| `replicas.persistence.storageClass`           | Persistent Volume storage class                                                                    | `nil`           |
-| `replicas.persistence.accessModes`            | Persistent Volume access modes                                                                     | `[]`            |
-| `replicas.persistence.size`                   | Persistent Volume size                                                                             | `8Gi`           |
-| `replicas.persistence.annotations`            | Additional custom annotations for the PVC                                                          | `{}`            |
-| `replicas.persistence.selector`               | Additional labels to match for the PVC                                                             | `{}`            |
-| `replicas.service.type`                       | Redis(TM) replicas service type                                                                    | `ClusterIP`     |
-| `replicas.service.port`                       | Redis(TM) replicas service port                                                                    | `6379`          |
-| `replicas.service.nodePort`                   | Node port for Redis(TM) replicas                                                                   | `nil`           |
-| `replicas.service.externalTrafficPolicy`      | Redis(TM) replicas service external traffic policy                                                 | `Cluster`       |
-| `replicas.service.clusterIP`                  | Redis(TM) replicas service Cluster IP                                                              | `nil`           |
-| `replicas.service.loadBalancerIP`             | Redis(TM) replicas service Load Balancer IP                                                        | `nil`           |
-| `replicas.service.loadBalancerSourceRanges`   | Redis(TM) replicas service Load Balancer sources                                                   | `[]`            |
-| `replicas.service.annotations`                | Additional custom annotations for Redis(TM) replicas service                                       | `{}`            |
+| Name                                         | Description                                                                                        | Value           |
+| -------------------------------------------- | -------------------------------------------------------------------------------------------------- | --------------- |
+| `replica.replicaCount`                       | Number of Redis(TM) replicas to deploy                                                             | `3`             |
+| `replica.configuration`                      | Configuration for Redis(TM) replicas nodes                                                         | `nil`           |
+| `replica.disableCommands`                    | Array with Redis(TM) commands to disable on replicas nodes                                         | `[]`            |
+| `replica.command`                            | Override default container command (useful when using custom images)                               | `[]`            |
+| `replica.args`                               | Override default container args (useful when using custom images)                                  | `[]`            |
+| `replica.preExecCmds`                        | Additional commands to run prior to starting Redis(TM) replicas                                    | `[]`            |
+| `replica.extraFlags`                         | Array with additional command line flags for Redis(TM) replicas                                    | `[]`            |
+| `replica.extraEnvVars`                       | Array with extra environment variables to add to Redis(TM) replicas nodes                          | `[]`            |
+| `replica.extraEnvVarsCM`                     | Name of existing ConfigMap containing extra env vars for Redis(TM) replicas nodes                  | `nil`           |
+| `replica.extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for Redis(TM) replicas nodes                     | `nil`           |
+| `replica.containerPort`                      | Container port to open on Redis(TM) replicas nodes                                                 | `6379`          |
+| `replica.livenessProbe.enabled`              | Enable livenessProbe on Redis(TM) replicas nodes                                                   | `true`          |
+| `replica.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                            | `5`             |
+| `replica.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                   | `5`             |
+| `replica.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                  | `5`             |
+| `replica.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                | `5`             |
+| `replica.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                | `1`             |
+| `replica.readinessProbe.enabled`             | Enable readinessProbe on Redis(TM) replicas nodes                                                  | `true`          |
+| `replica.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                           | `5`             |
+| `replica.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                  | `5`             |
+| `replica.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                 | `1`             |
+| `replica.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                               | `5`             |
+| `replica.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                               | `1`             |
+| `replica.customLivenessProbe`                | Custom livenessProbe that overrides the default one                                                | `{}`            |
+| `replica.customReadinessProbe`               | Custom readinessProbe that overrides the default one                                               | `{}`            |
+| `replica.resources.limits`                   | The resources limits for the Redis(TM) replicas containers                                         | `{}`            |
+| `replica.resources.requests`                 | The requested resources for the Redis(TM) replicas containers                                      | `{}`            |
+| `replica.podSecurityContext.enabled`         | Enabled Redis(TM) replicas pods' Security Context                                                  | `true`          |
+| `replica.podSecurityContext.fsGroup`         | Set Redis(TM) replicas pod's Security Context fsGroup                                              | `1001`          |
+| `replica.containerSecurityContext.enabled`   | Enabled Redis(TM) replicas containers' Security Context                                            | `true`          |
+| `replica.containerSecurityContext.runAsUser` | Set Redis(TM) replicas containers' Security Context runAsUser                                      | `1001`          |
+| `replica.schedulerName`                      | Alternate scheduler for Redis(TM) replicas pods                                                    | `nil`           |
+| `replica.updateStrategy.type`                | Redis(TM) replicas statefulset strategy type                                                       | `RollingUpdate` |
+| `replica.priorityClassName`                  | Redis(TM) replicas pods' priorityClassName                                                         | `""`            |
+| `replica.hostAliases`                        | Redis(TM) replicas pods host aliases                                                               | `[]`            |
+| `replica.podLabels`                          | Extra labels for Redis(TM) replicas pods                                                           | `{}`            |
+| `replica.podAnnotations`                     | Annotations for Redis(TM) replicas pods                                                            | `{}`            |
+| `replica.shareProcessNamespace`              | Share a single process namespace between all of the containers in Redis(TM) replicas pods          | `false`         |
+| `replica.podAffinityPreset`                  | Pod affinity preset. Ignored if `replicas.affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
+| `replica.podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `replicas.affinity` is set. Allowed values: `soft` or `hard`  | `soft`          |
+| `replica.nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `replicas.affinity` is set. Allowed values: `soft` or `hard` | `""`            |
+| `replica.nodeAffinityPreset.key`             | Node label key to match. Ignored if `replicas.affinity` is set                                     | `""`            |
+| `replica.nodeAffinityPreset.values`          | Node label values to match. Ignored if `replicas.affinity` is set                                  | `[]`            |
+| `replica.affinity`                           | Affinity for Redis(TM) replicas pods assignment                                                    | `{}`            |
+| `replica.nodeSelector`                       | Node labels for Redis(TM) replicas pods assignment                                                 | `{}`            |
+| `replica.tolerations`                        | Tolerations for Redis(TM) replicas pods assignment                                                 | `[]`            |
+| `replica.spreadConstraints`                  | Spread Constraints for Redis(TM) replicas pod assignment                                           | `{}`            |
+| `replica.extraVolumes`                       | Optionally specify extra list of additional volumes for the Redis(TM) replicas pod(s)              | `[]`            |
+| `replica.extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for the Redis(TM) replicas container(s)   | `[]`            |
+| `replica.sidecars`                           | Add additional sidecar containers to the Redis(TM) replicas pod(s)                                 | `{}`            |
+| `replica.initContainers`                     | Add additional init containers to the Redis(TM) replicas pod(s)                                    | `{}`            |
+| `replica.persistence.enabled`                | Enable persistence on Redis(TM) replicas nodes using Persistent Volume Claims                      | `true`          |
+| `replica.persistence.path`                   | The path the volume will be mounted at on Redis(TM) replicas containers                            | `/data`         |
+| `replica.persistence.subPath`                | The subdirectory of the volume to mount on Redis(TM) replicas containers                           | `""`            |
+| `replica.persistence.storageClass`           | Persistent Volume storage class                                                                    | `nil`           |
+| `replica.persistence.accessModes`            | Persistent Volume access modes                                                                     | `[]`            |
+| `replica.persistence.size`                   | Persistent Volume size                                                                             | `8Gi`           |
+| `replica.persistence.annotations`            | Additional custom annotations for the PVC                                                          | `{}`            |
+| `replica.persistence.selector`               | Additional labels to match for the PVC                                                             | `{}`            |
+| `replica.service.type`                       | Redis(TM) replicas service type                                                                    | `ClusterIP`     |
+| `replica.service.port`                       | Redis(TM) replicas service port                                                                    | `6379`          |
+| `replica.service.nodePort`                   | Node port for Redis(TM) replicas                                                                   | `nil`           |
+| `replica.service.externalTrafficPolicy`      | Redis(TM) replicas service external traffic policy                                                 | `Cluster`       |
+| `replica.service.clusterIP`                  | Redis(TM) replicas service Cluster IP                                                              | `nil`           |
+| `replica.service.loadBalancerIP`             | Redis(TM) replicas service Load Balancer IP                                                        | `nil`           |
+| `replica.service.loadBalancerSourceRanges`   | Redis(TM) replicas service Load Balancer sources                                                   | `[]`            |
+| `replica.service.annotations`                | Additional custom annotations for Redis(TM) replicas service                                       | `{}`            |
 
 
 ### Redis(TM) Sentinel configuration parameters
@@ -265,14 +267,15 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sentinel.image.debug`                        | Enable image debug mode                                                                          | `false`                  |
 | `sentinel.masterSet`                          | Master set name                                                                                  | `mymaster`               |
 | `sentinel.quorum`                             | Sentinel Quorum                                                                                  | `2`                      |
-| `sentinel.initialCheckTimeout`                | Timeout for querying the Redis(TM) Sentinel service for the active Sentinel list                 | `5`                      |
 | `sentinel.downAfterMilliseconds`              | Timeout for detecting a Redis(TM) node is down                                                   | `60000`                  |
 | `sentinel.failoverTimeout`                    | Timeout for performing a election failover                                                       | `18000`                  |
+| `sentinel.cleanDelaySeconds`                  | Delay seconds when cleaning nodes IPs                                                            | `5`                      |
 | `sentinel.parallelSyncs`                      | Number of replicas that can be reconfigured in parallel to use the new master after a failover   | `1`                      |
 | `sentinel.staticID`                           | Enable static Sentinel IDs for each replica                                                      | `false`                  |
 | `sentinel.configuration`                      | Configuration for Redis(TM) Sentinel nodes                                                       | `nil`                    |
 | `sentinel.command`                            | Override default container command (useful when using custom images)                             | `[]`                     |
 | `sentinel.args`                               | Override default container args (useful when using custom images)                                | `[]`                     |
+| `sentinel.preExecCmds`                        | Additional commands to run prior to starting Redis(TM) Sentinel                                  | `[]`                     |
 | `sentinel.containerPort`                      | Container port to open on Redis(TM) Sentinel nodes                                               | `26379`                  |
 | `sentinel.livenessProbe.enabled`              | Enable livenessProbe on Redis(TM) Sentinel nodes                                                 | `true`                   |
 | `sentinel.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                          | `5`                      |
@@ -335,56 +338,56 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Metrics Parameters
 
-| Name                                                  | Description                                                                           | Value                             |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------- | --------------------------------- |
-| `metrics.enabled`                                     | Start a sidecar prometheus exporter to expose Redis(TM) metrics                       | `false`                           |
-| `metrics.image.registry`                              | Redis(TM) Exporter image registry                                                     | `docker.io`                       |
-| `metrics.image.repository`                            | Redis(TM) Exporter image repository                                                   | `bitnami/redis-exporter`          |
-| `metrics.image.tag`                                   | Redis(TM) Redis(TM) Exporter image tag (immutable tags are recommended)               | `1.20.0-debian-10-r16`            |
-| `metrics.image.pullPolicy`                            | Redis(TM) Exporter image pull policy                                                  | `IfNotPresent`                    |
-| `metrics.image.pullSecrets`                           | Redis(TM) Exporter image pull secrets                                                 | `[]`                              |
-| `metrics.redisTargetHost`                             | A way to specify an alternative Redis(TM) hostname                                    | `localhost`                       |
-| `metrics.extraArgs`                                   | Extra arguments for Redis(TM) exporter, for example:                                  | `{}`                              |
-| `metrics.containerSecurityContext.enabled`            | Enabled Redis(TM) exporter containers' Security Context                               | `true`                            |
-| `metrics.containerSecurityContext.runAsUser`          | Set Redis(TM) exporter containers' Security Context runAsUser                         | `1001`                            |
-| `metrics.resources.limits`                            | The resources limits for the Redis(TM) exporter container                             | `{}`                              |
-| `metrics.resources.requests`                          | The requested resources for the Redis(TM) exporter container                          | `{}`                              |
-| `metrics.podLabels`                                   | Extra labels for Redis(TM) exporter pods                                              | `{}`                              |
-| `metrics.podAnnotations`                              | Annotations for Redis(TM) exporter pods                                               | `{}`                              |
-| `metrics.priorityClassName`                           | Redis(TM) exporter pods' priorityClassName                                            | `""`                              |
-| `metrics.service.type`                                | Redis(TM) exporter service type                                                       | `ClusterIP`                       |
-| `metrics.service.port`                                | Redis(TM) exporter service port                                                       | `9121`                            |
-| `metrics.service.externalTrafficPolicy`               | Redis(TM) exporter service external traffic policy                                    | `Cluster`                         |
-| `metrics.service.loadBalancerIP`                      | Redis(TM) exporter service Load Balancer IP                                           | `""`                              |
-| `metrics.service.loadBalancerSourceRanges`            | Redis(TM) exporter service Load Balancer sources                                      | `[]`                              |
-| `metrics.service.annotations`                         | Additional custom annotations for Redis(TM) exporter service                          | `{}`                              |
-| `metrics.sentinel.enabled`                            | Start a sidecar prometheus exporter to expose Redis(TM) Sentinel metrics              | `false`                           |
-| `metrics.sentinel.image.registry`                     | Redis(TM) Sentinel Exporter image registry                                            | `docker.io`                       |
-| `metrics.sentinel.image.repository`                   | Redis(TM) Sentinel Exporter image repository                                          | `bitnami/redis-sentinel-exporter` |
-| `metrics.sentinel.image.tag`                          | Redis(TM) Redis(TM) Sentinel Exporter image tag (immutable tags are recommended)      | `1.7.1-debian-10-r109`            |
-| `metrics.sentinel.image.pullPolicy`                   | Redis(TM) Sentinel Exporter image pull policy                                         | `IfNotPresent`                    |
-| `metrics.sentinel.image.pullSecrets`                  | Redis(TM) Sentinel Exporter image pull secrets                                        | `[]`                              |
-| `metrics.sentinel.extraArgs`                          | Extra arguments for Redis(TM) Sentinel exporter, for example:                         | `{}`                              |
-| `metrics.sentinel.containerSecurityContext.enabled`   | Enabled Redis(TM) Sentinel exporter containers' Security Context                      | `true`                            |
-| `metrics.sentinel.containerSecurityContext.runAsUser` | Set Redis(TM) Sentinel exporter containers' Security Context runAsUser                | `1001`                            |
-| `metrics.sentinel.resources.limits`                   | The resources limits for the Redis(TM) Sentinel exporter container                    | `{}`                              |
-| `metrics.sentinel.resources.requests`                 | The requested resources for the Redis(TM) Sentinel exporter container                 | `{}`                              |
-| `metrics.sentinel.service.type`                       | Redis(TM) Sentinel exporter service type                                              | `ClusterIP`                       |
-| `metrics.sentinel.service.port`                       | Redis(TM) Sentinel exporter service port                                              | `9355`                            |
-| `metrics.sentinel.service.externalTrafficPolicy`      | Redis(TM) Sentinel exporter service external traffic policy                           | `Cluster`                         |
-| `metrics.sentinel.service.loadBalancerIP`             | Redis(TM) Sentinel exporter service Load Balancer IP                                  | `""`                              |
-| `metrics.sentinel.service.loadBalancerSourceRanges`   | Redis(TM) Sentinel exporter service Load Balancer sources                             | `[]`                              |
-| `metrics.sentinel.service.annotations`                | Additional custom annotations for Redis(TM) Sentinel exporter service                 | `{}`                              |
-| `metrics.serviceMonitor.enabled`                      | Create ServiceMonitor resource(s) for scraping metrics using PrometheusOperator       | `false`                           |
-| `metrics.serviceMonitor.namespace`                    | The namespace in which the ServiceMonitor will be created                             | `nil`                             |
-| `metrics.serviceMonitor.interval`                     | The interval at which metrics should be scraped                                       | `30s`                             |
-| `metrics.serviceMonitor.scrapeTimeout`                | The timeout after which the scrape is ended                                           | `nil`                             |
-| `metrics.serviceMonitor.relabellings`                 | Metrics relabellings to add to the scrape endpoint                                    | `[]`                              |
-| `metrics.serviceMonitor.selector`                     | Prometheus Selector Labels                                                            | `{}`                              |
-| `metrics.prometheusRule.enabled`                      | Create a custom prometheusRule Resource for scraping metrics using PrometheusOperator | `false`                           |
-| `metrics.prometheusRule.namespace`                    | The namespace in which the prometheusRule will be created                             | `nil`                             |
-| `metrics.prometheusRule.additionalLabels`             | Additional labels for the prometheusRule                                              | `{}`                              |
-| `metrics.prometheusRule.rules`                        | Custom Prometheus rules                                                               | `[]`                              |
+| Name                                                  | Description                                                                                      | Value                             |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------ | --------------------------------- |
+| `metrics.enabled`                                     | Start a sidecar prometheus exporter to expose Redis(TM) metrics                                  | `false`                           |
+| `metrics.image.registry`                              | Redis(TM) Exporter image registry                                                                | `docker.io`                       |
+| `metrics.image.repository`                            | Redis(TM) Exporter image repository                                                              | `bitnami/redis-exporter`          |
+| `metrics.image.tag`                                   | Redis(TM) Redis(TM) Exporter image tag (immutable tags are recommended)                          | `1.20.0-debian-10-r16`            |
+| `metrics.image.pullPolicy`                            | Redis(TM) Exporter image pull policy                                                             | `IfNotPresent`                    |
+| `metrics.image.pullSecrets`                           | Redis(TM) Exporter image pull secrets                                                            | `[]`                              |
+| `metrics.redisTargetHost`                             | A way to specify an alternative Redis(TM) hostname                                               | `localhost`                       |
+| `metrics.extraArgs`                                   | Extra arguments for Redis(TM) exporter, for example:                                             | `{}`                              |
+| `metrics.containerSecurityContext.enabled`            | Enabled Redis(TM) exporter containers' Security Context                                          | `true`                            |
+| `metrics.containerSecurityContext.runAsUser`          | Set Redis(TM) exporter containers' Security Context runAsUser                                    | `1001`                            |
+| `metrics.resources.limits`                            | The resources limits for the Redis(TM) exporter container                                        | `{}`                              |
+| `metrics.resources.requests`                          | The requested resources for the Redis(TM) exporter container                                     | `{}`                              |
+| `metrics.podLabels`                                   | Extra labels for Redis(TM) exporter pods                                                         | `{}`                              |
+| `metrics.podAnnotations`                              | Annotations for Redis(TM) exporter pods                                                          | `{}`                              |
+| `metrics.service.type`                                | Redis(TM) exporter service type                                                                  | `ClusterIP`                       |
+| `metrics.service.port`                                | Redis(TM) exporter service port                                                                  | `9121`                            |
+| `metrics.service.externalTrafficPolicy`               | Redis(TM) exporter service external traffic policy                                               | `Cluster`                         |
+| `metrics.service.loadBalancerIP`                      | Redis(TM) exporter service Load Balancer IP                                                      | `""`                              |
+| `metrics.service.loadBalancerSourceRanges`            | Redis(TM) exporter service Load Balancer sources                                                 | `[]`                              |
+| `metrics.service.annotations`                         | Additional custom annotations for Redis(TM) exporter service                                     | `{}`                              |
+| `metrics.sentinel.enabled`                            | Start a sidecar prometheus exporter to expose Redis(TM) Sentinel metrics                         | `false`                           |
+| `metrics.sentinel.image.registry`                     | Redis(TM) Sentinel Exporter image registry                                                       | `docker.io`                       |
+| `metrics.sentinel.image.repository`                   | Redis(TM) Sentinel Exporter image repository                                                     | `bitnami/redis-sentinel-exporter` |
+| `metrics.sentinel.image.tag`                          | Redis(TM) Redis(TM) Sentinel Exporter image tag (immutable tags are recommended)                 | `1.7.1-debian-10-r109`            |
+| `metrics.sentinel.image.pullPolicy`                   | Redis(TM) Sentinel Exporter image pull policy                                                    | `IfNotPresent`                    |
+| `metrics.sentinel.image.pullSecrets`                  | Redis(TM) Sentinel Exporter image pull secrets                                                   | `[]`                              |
+| `metrics.sentinel.extraArgs`                          | Extra arguments for Redis(TM) Sentinel exporter, for example:                                    | `{}`                              |
+| `metrics.sentinel.containerSecurityContext.enabled`   | Enabled Redis(TM) Sentinel exporter containers' Security Context                                 | `true`                            |
+| `metrics.sentinel.containerSecurityContext.runAsUser` | Set Redis(TM) Sentinel exporter containers' Security Context runAsUser                           | `1001`                            |
+| `metrics.sentinel.resources.limits`                   | The resources limits for the Redis(TM) Sentinel exporter container                               | `{}`                              |
+| `metrics.sentinel.resources.requests`                 | The requested resources for the Redis(TM) Sentinel exporter container                            | `{}`                              |
+| `metrics.sentinel.service.type`                       | Redis(TM) Sentinel exporter service type                                                         | `ClusterIP`                       |
+| `metrics.sentinel.service.port`                       | Redis(TM) Sentinel exporter service port                                                         | `9355`                            |
+| `metrics.sentinel.service.externalTrafficPolicy`      | Redis(TM) Sentinel exporter service external traffic policy                                      | `Cluster`                         |
+| `metrics.sentinel.service.loadBalancerIP`             | Redis(TM) Sentinel exporter service Load Balancer IP                                             | `""`                              |
+| `metrics.sentinel.service.loadBalancerSourceRanges`   | Redis(TM) Sentinel exporter service Load Balancer sources                                        | `[]`                              |
+| `metrics.sentinel.service.annotations`                | Additional custom annotations for Redis(TM) Sentinel exporter service                            | `{}`                              |
+| `metrics.serviceMonitor.enabled`                      | Create ServiceMonitor resource(s) for scraping metrics using PrometheusOperator                  | `false`                           |
+| `metrics.serviceMonitor.namespace`                    | The namespace in which the ServiceMonitor will be created                                        | `nil`                             |
+| `metrics.serviceMonitor.interval`                     | The interval at which metrics should be scraped                                                  | `30s`                             |
+| `metrics.serviceMonitor.scrapeTimeout`                | The timeout after which the scrape is ended                                                      | `nil`                             |
+| `metrics.serviceMonitor.relabellings`                 | Metrics relabellings to add to the scrape endpoint                                               | `[]`                              |
+| `metrics.serviceMonitor.honorLabels`                  | Specify honorLabels parameter to add the scrape endpoint                                         | `false`                           |
+| `metrics.serviceMonitor.additionalLabels`             | Additional labels that can be used so ServiceMonitor resource(s) can be discovered by Prometheus | `{}`                              |
+| `metrics.prometheusRule.enabled`                      | Create a custom prometheusRule Resource for scraping metrics using PrometheusOperator            | `false`                           |
+| `metrics.prometheusRule.namespace`                    | The namespace in which the prometheusRule will be created                                        | `nil`                             |
+| `metrics.prometheusRule.additionalLabels`             | Additional labels for the prometheusRule                                                         | `{}`                              |
+| `metrics.prometheusRule.rules`                        | Custom Prometheus rules                                                                          | `[]`                              |
 
 
 ### Init Container Parameters

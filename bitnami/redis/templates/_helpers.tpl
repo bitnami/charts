@@ -124,11 +124,31 @@ Create the name of the service account to use
 {{- end -}}
 
 {{/*
+Return the configuration configmap name
+*/}}
+{{- define "redis.configmapName" -}}
+{{- if .Values.existingConfigmap -}}
+    {{- printf "%s" (tpl .Values.existingConfigmap $) -}}
+{{- else -}}
+    {{- printf "%s-configuration" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if a configmap object should be created
+*/}}
+{{- define "redis.createConfigmap" -}}
+{{- if empty .Values.existingConfigmap }}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Get the password secret.
 */}}
 {{- define "redis.secretName" -}}
-{{- if .Values.existingSecret -}}
-{{- printf "%s" .Values.existingSecret -}}
+{{- if .Values.auth.existingSecret -}}
+{{- printf "%s" .Values.auth.existingSecret -}}
 {{- else -}}
 {{- printf "%s" (include "common.names.fullname" .) -}}
 {{- end -}}
@@ -138,8 +158,8 @@ Get the password secret.
 Get the password key to be retrieved from Redis(TM) secret.
 */}}
 {{- define "redis.secretPasswordKey" -}}
-{{- if and .Values.existingSecret .Values.existingSecretPasswordKey -}}
-{{- printf "%s" .Values.existingSecretPasswordKey -}}
+{{- if and .Values.auth.existingSecret .Values.auth.existingSecretPasswordKey -}}
+{{- printf "%s" .Values.auth.existingSecretPasswordKey -}}
 {{- else -}}
 {{- printf "redis-password" -}}
 {{- end -}}
@@ -151,8 +171,8 @@ Return Redis(TM) password
 {{- define "redis.password" -}}
 {{- if not (empty .Values.global.redis.password) }}
     {{- .Values.global.redis.password -}}
-{{- else if not (empty .Values.password) -}}
-    {{- .Values.password -}}
+{{- else if not (empty .Values.auth.password) -}}
+    {{- .Values.auth.password -}}
 {{- else -}}
     {{- randAlphaNum 10 -}}
 {{- end -}}

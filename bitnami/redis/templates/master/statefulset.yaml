@@ -31,8 +31,10 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.podLabels "context" $ ) | nindent 8 }}
         {{- end }}
       annotations:
-        checksum/health: {{ include (print $.Template.BasePath "/health-configmap.yaml") . | sha256sum }}
+        {{- if (include "redis.createConfigmap" .) }}
         checksum/configmap: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        {{- end }}
+        checksum/health: {{ include (print $.Template.BasePath "/health-configmap.yaml") . | sha256sum }}
         checksum/scripts: {{ include (print $.Template.BasePath "/scripts-configmap.yaml") . | sha256sum }}
         checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
         {{- if .Values.master.podAnnotations }}
@@ -67,6 +69,9 @@ spec:
       {{- if .Values.master.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.master.tolerations "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.master.spreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.master.spreadConstraints "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.master.shareProcessNamespace }}
       shareProcessNamespace: {{ .Values.master.shareProcessNamespace }}
       {{- end }}
@@ -94,6 +99,8 @@ spec:
             - /opt/bitnami/scripts/start-scripts/start-master.sh
           {{- end }}
           env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" .Values.image.debug | quote }}
             - name: REDIS_REPLICATION_MODE
               value: master
             - name: ALLOW_EMPTY_PASSWORD
@@ -340,7 +347,7 @@ spec:
         {{- end }}
         - name: config
           configMap:
-            name: {{ template "common.names.fullname" . }}
+            name: {{ include "redis.configmapName" . }}
         {{- if .Values.sysctl.mountHostSys }}
         - name: host-sys
           hostPath:
@@ -365,7 +372,7 @@ spec:
   {{- else if .Values.master.persistence.existingClaim }}
         - name: redis-data
           persistentVolumeClaim:
-            claimName: {{ include "redis.tplValue" (dict "value" .Values.master.persistence.existingClaim "context" $) }}
+            claimName: {{ printf "%s" (tpl .Values.master.persistence.existingClaim .) }}
   {{- else }}
   volumeClaimTemplates:
     - metadata:

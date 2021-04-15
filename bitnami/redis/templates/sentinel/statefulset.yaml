@@ -32,8 +32,10 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.podLabels "context" $ ) | nindent 8 }}
         {{- end }}
       annotations:
-        checksum/health: {{ include (print $.Template.BasePath "/health-configmap.yaml") . | sha256sum }}
+        {{- if (include "redis.createConfigmap" .) }}
         checksum/configmap: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        {{- end }}
+        checksum/health: {{ include (print $.Template.BasePath "/health-configmap.yaml") . | sha256sum }}
         checksum/scripts: {{ include (print $.Template.BasePath "/scripts-configmap.yaml") . | sha256sum }}
         checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
         {{- if .Values.replica.podAnnotations }}
@@ -68,6 +70,9 @@ spec:
       {{- if .Values.replica.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.replica.tolerations "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.replica.spreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.replica.spreadConstraints "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.replica.shareProcessNamespace }}
       shareProcessNamespace: {{ .Values.replica.shareProcessNamespace }}
       {{- end }}
@@ -95,6 +100,8 @@ spec:
             - /opt/bitnami/scripts/start-scripts/start-node.sh
           {{- end }}
           env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" .Values.image.debug | quote }}
             - name: REDIS_MASTER_PORT_NUMBER
               value: {{ .Values.replica.containerPort | quote }}
             - name: ALLOW_EMPTY_PASSWORD
@@ -142,7 +149,7 @@ spec:
             - name: REDIS_DATA_DIR
               value: {{ .Values.replica.persistence.path }}
             {{- if .Values.replica.extraEnvVars }}
-            {{- include "redis.tplValue" (dict "value" .Values.replica.extraEnvVars "context" $) | nindent 12 }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.replica.extraEnvVars "context" $ ) | nindent 12 }}
             {{- end }}
           {{- if or .Values.replica.extraEnvVarsCM .Values.replica.extraEnvVarsSecret }}
           envFrom:
@@ -237,6 +244,8 @@ spec:
             - /opt/bitnami/scripts/start-scripts/start-sentinel.sh
           {{- end }}
           env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" .Values.sentinel.image.debug | quote }}
             {{- if .Values.auth.enabled }}
             {{- if .Values.auth.usePasswordFiles }}
             - name: REDIS_PASSWORD_FILE
@@ -267,7 +276,7 @@ spec:
               value: {{ template "redis.tlsCACert" . }}
             {{- if .Values.tls.dhParamsFilename }}
             - name:  REDIS_SENTINEL_TLS_DH_PARAMS_FILE
-              value: {{ template "redis.dhParams" . }}
+              value: {{ template "redis.tls.dhParamsFilename" . }}
             {{- end }}
             {{- else }}
             - name: REDIS_SENTINEL_PORT
@@ -505,7 +514,7 @@ spec:
         {{- end }}
         - name: config
           configMap:
-            name: {{ template "common.names.fullname" . }}
+            name: {{ include "redis.configmapName" . }}
         {{- if .Values.sysctl.mountHostSys }}
         - name: host-sys
           hostPath:

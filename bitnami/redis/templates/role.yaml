@@ -21,7 +21,7 @@ rules:
       - 'use'
     resourceNames: [{{ template "common.names.fullname" . }}]
   {{- end }}
-  {{- if .Values.rbac.role.rules }}
-  {{- include "common.tplvalues.render" ( dict "value" .Values.rbac.role.rules "context" $ ) | nindent 2 }}
+  {{- if .Values.rbac.rules }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.rbac.rules "context" $ ) | nindent 2 }}
   {{- end }}
 {{- end }}

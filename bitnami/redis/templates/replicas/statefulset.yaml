@@ -32,8 +32,10 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.podLabels "context" $ ) | nindent 8 }}
         {{- end }}
       annotations:
-        checksum/health: {{ include (print $.Template.BasePath "/health-configmap.yaml") . | sha256sum }}
+        {{- if (include "redis.createConfigmap" .) }}
         checksum/configmap: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        {{- end }}
+        checksum/health: {{ include (print $.Template.BasePath "/health-configmap.yaml") . | sha256sum }}
         checksum/scripts: {{ include (print $.Template.BasePath "/scripts-configmap.yaml") . | sha256sum }}
         checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
         {{- if .Values.replica.podAnnotations }}
@@ -68,6 +70,9 @@ spec:
       {{- if .Values.replica.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.replica.tolerations "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.replica.spreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.replica.spreadConstraints "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.replica.shareProcessNamespace }}
       shareProcessNamespace: {{ .Values.replica.shareProcessNamespace }}
       {{- end }}
@@ -95,6 +100,8 @@ spec:
             - /opt/bitnami/scripts/start-scripts/start-replica.sh
           {{- end }}
           env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" .Values.image.debug | quote }}
             - name: REDIS_REPLICATION_MODE
               value: slave
             - name: REDIS_MASTER_HOST
@@ -348,7 +355,7 @@ spec:
         {{- end }}
         - name: config
           configMap:
-            name: {{ template "common.names.fullname" . }}
+            name: {{ include "redis.configmapName" . }}
         {{- if .Values.sysctl.mountHostSys }}
         - name: host-sys
           hostPath:

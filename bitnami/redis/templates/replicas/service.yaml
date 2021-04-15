@@ -9,9 +9,6 @@ metadata:
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-    {{- if .Values.replica.service.labels -}}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.replica.service.labels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if or .Values.replica.service.annotations .Values.commonAnnotations }}
   annotations:
     {{- if .Values.replica.service.annotations }}
@@ -31,6 +28,9 @@ spec:
   {{- end }}
   {{- if and (eq .Values.replica.service.type "LoadBalancer") .Values.replica.service.loadBalancerSourceRanges }}
   loadBalancerSourceRanges: {{- toYaml .Values.replica.service.loadBalancerSourceRanges | nindent 4 }}
+  {{- end }}
+  {{- if and (eq .Values.replica.service.type "ClusterIP") .Values.replica.service.clusterIP }}
+  clusterIP: {{ .Values.replica.service.clusterIP }}
   {{- end }}
   ports:
     - name: tcp-redis
