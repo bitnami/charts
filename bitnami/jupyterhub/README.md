@@ -32,7 +32,7 @@ $ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install my-release bitnami/jupyterhub
 ```
 
-These commands deploy jupyterhub on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
+These commands deploy JupyterHub on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
