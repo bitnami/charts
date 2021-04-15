@@ -19,12 +19,10 @@ spec:
   policyTypes:
     - Ingress
     - Egress
-
   ingress:
     {{- if .Values.singleuser.networkPolicy.extraIngress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.singleuser.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
     {{- end }}
-
     # Pods with label "hub.jupyter.org/network-access-singleuser" --> Single User
     - ports:
         - port: {{ .Values.singleuser.containerPort }}
@@ -39,7 +37,6 @@ spec:
             matchLabels:
               hub.jupyter.org/network-access-singleuser: "true"
         {{- end }}
-
   egress:
     # Single User --> Hub
     - ports:
@@ -48,7 +45,6 @@ spec:
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" . | nindent 14 }}
               app.kubernetes.io/component: hub
-
     {{- if not .Values.singleuser.networkPolicy.allowCloudMetadataAccess }}
     ## Limit access to the Cloud Metadata API
     - to:
@@ -57,23 +53,19 @@ spec:
             except:
               - 169.254.169.254/32
     {{- end }}
-
     ## DNS access
     - ports:
         - protocol: UDP
           port: 53
         - protocol: TCP
           port: 53
-
     ## PostgreSQL access
     - ports:
         - protocol: UDP
           port: {{ .Values.postgresql.service.port }}
         - protocol: TCP
           port: {{ .Values.postgresql.service.port }}
-
     {{- if .Values.singleuser.networkPolicy.extraEgress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.singleuser.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
     {{- end }}
-
 {{- end }}

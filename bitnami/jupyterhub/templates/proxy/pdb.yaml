@@ -1,4 +1,4 @@
-{{- if .Values.proxy.pdb.enabled -}}
+{{- if .Values.proxy.pdb.create -}}
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
@@ -11,6 +11,7 @@ metadata:
   namespace: {{ .Release.Namespace | quote }}
 spec:
   minAvailable: {{ .Values.proxy.pdb.minAvailable }}
+  maxAvailable: {{ .Values.proxy.pdb.maxAvailable }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: proxy

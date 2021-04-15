@@ -287,10 +287,13 @@ hub:
   args: []
 
   pdb:
-    ## @param hub.pdb.enabled Deploy Hub PodDisruptionBudget
+    ## @param hub.pdb.create Deploy Hub PodDisruptionBudget
     ##
-    enabled: false
+    create: false
     ## @param hub.pdb.minAvailable Set minimum available hub instances
+    ##
+    minAvailable:
+    ## @param hub.pdb.maxAvailable Set maximum available hub instances
     ##
     minAvailable:
 
@@ -653,12 +656,15 @@ proxy:
   ## PodDisruptionBudget settings
   ##
   pdb:
-    ## @param proxy.pdb.enabled Deploy Proxy PodDisruptionBudget
+    ## @param proxy.pdb.create Deploy Proxy PodDisruptionBudget
     ##
-    enabled: false
+    create: false
     ## @param proxy.pdb.minAvailable Set minimum available proxy instances
     ##
     minAvailable:
+    ## @param proxy.pdb.maxAvailable Set maximum available proxy instances
+    ##
+    maxAvailable:
 
   ## Container ports
   ##

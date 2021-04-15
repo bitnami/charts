@@ -39,17 +39,6 @@ Return the proper hub image name
 {{- end -}}
 
 {{/*
-Return PostgreSQL postgres user password
-*/}}
-{{- define "jupyterhub.proxyToken" -}}
-{{- if .Values.proxy.secretToken -}}
-    {{- .Values.proxy.secretToken -}}
-{{- else -}}
-    {{- randAlphaNum 32 -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "jupyterhub.imagePullSecrets" -}}

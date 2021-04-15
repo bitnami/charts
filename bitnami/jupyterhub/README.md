@@ -100,7 +100,7 @@ For more information, check the official [JupyterHub documentation](https://gith
 ### Global parameters
 
 | Name                      | Description                                        | Value |
-| ------------------------- | -------------------------------------------------- | ----- |
+|---------------------------|----------------------------------------------------|-------|
 | `global.imageRegistry`    | Global Docker image registry                       | `nil` |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array    | `[]`  |
 | `kubeVersion`             | Override Kubernetes version                        | `nil` |
@@ -110,11 +110,10 @@ For more information, check the official [JupyterHub documentation](https://gith
 | `commonAnnotations`       | Annotations to add to all deployed objects         | `{}`  |
 | `extraDeploy`             | Array of extra objects to deploy with the release  | `[]`  |
 
-
 ### Hub deployment parameters
 
 | Name                                        | Description                                                                               | Value                |
-| ------------------------------------------- | ----------------------------------------------------------------------------------------- | -------------------- |
+|---------------------------------------------|-------------------------------------------------------------------------------------------|----------------------|
 | `hub.image.registry`                        | Hub image registry                                                                        | `docker.io`          |
 | `hub.image.repository`                      | Hub image repository                                                                      | `jupyterhub/k8s-hub` |
 | `hub.image.tag`                             | Hub image tag (immutabe tags are recommended)                                             | `0.11.1`             |
@@ -141,7 +140,7 @@ For more information, check the official [JupyterHub documentation](https://gith
 | `hub.existingSecret`                        | Secret with hub configuration (replaces the hub.configuration value) and proxy token      | `nil`                |
 | `hub.command`                               | Override Hub default command                                                              | `[]`                 |
 | `hub.args`                                  | Override Hub default args                                                                 | `[]`                 |
-| `hub.pdb.enabled`                           | Deploy Hub PodDisruptionBudget                                                            | `false`              |
+| `hub.pdb.create`                            | Deploy Hub PodDisruptionBudget                                                            | `false`              |
 | `hub.pdb.minAvailable`                      | Set minimum available hub instances                                                       | `nil`                |
 | `hub.priorityClassName`                     | Hub pod priority class name                                                               | `nil`                |
 | `hub.hostAliases`                           | Add deployment host aliases                                                               | `[]`                 |
@@ -174,24 +173,22 @@ For more information, check the official [JupyterHub documentation](https://gith
 | `hub.initContainers`                        | Add additional init containers to the Hub pods                                            | `{}`                 |
 | `hub.sidecars`                              | Add additional sidecar containers to the Hub pod                                          | `{}`                 |
 
-
 ### Hub RBAC parameters
 
 | Name                        | Description                                   | Value  |
-| --------------------------- | --------------------------------------------- | ------ |
+|-----------------------------|-----------------------------------------------|--------|
 | `hub.serviceAccount.create` | Create Hub service account                    | `true` |
 | `hub.serviceAccount.name`   | Override Hub service account name             | `nil`  |
 | `hub.rbac.create`           | Create RBAC rules for the Hub service account | `true` |
 
-
 ### Hub Traffic Exposure Parameters
 
-| Name                                      | Description                                              | Value                              |
-| ----------------------------------------- | -------------------------------------------------------- | ---------------------------------- |
-| `hub.networkPolicy.enabled`               | Deploy Hub network policies                              | `true`                             |
-| `hub.networkPolicy.allowInterspaceAccess` | Allow communication between pods in different namespaces | `true`                             |
-| `hub.networkPolicy.extraIngress`          | Add extra ingress rules to the NetworkPolicy             | `[]`                               |
-| `hub.networkPolicy.extraEgress`           | Add extra ingress rules to the NetworkPolicy             | `## Hub --> Any IP:PORT
+| Name                                      | Description                                              | Value                   |
+|-------------------------------------------|----------------------------------------------------------|-------------------------|
+| `hub.networkPolicy.enabled`               | Deploy Hub network policies                              | `true`                  |
+| `hub.networkPolicy.allowInterspaceAccess` | Allow communication between pods in different namespaces | `true`                  |
+| `hub.networkPolicy.extraIngress`          | Add extra ingress rules to the NetworkPolicy             | `[]`                    |
+| `hub.networkPolicy.extraEgress`           | Add extra ingress rules to the NetworkPolicy             | `## Hub --> Any IP:PORT |
 ##
 - to:
 ` |
@@ -202,11 +199,10 @@ For more information, check the official [JupyterHub documentation](https://gith
 | `hub.service.nodePorts.http`              | NodePort for the HTTP endpoint                           | `""`                               |
 | `hub.service.externalTrafficPolicy`       | External traffic policy for the service                  | `Cluster`                          |
 
-
 ### Proxy deployment parameters
 
 | Name                                          | Description                                                                               | Value                             |
-| --------------------------------------------- | ----------------------------------------------------------------------------------------- | --------------------------------- |
+|-----------------------------------------------|-------------------------------------------------------------------------------------------|-----------------------------------|
 | `proxy.image.registry`                        | Proxy image registry                                                                      | `docker.io`                       |
 | `proxy.image.repository`                      | Proxy image repository                                                                    | `bitnami/configurable-http-proxy` |
 | `proxy.image.tag`                             | Proxy image tag (immutabe tags are recommended)                                           | `4.3.1-debian-10-r0`              |
@@ -229,7 +225,7 @@ For more information, check the official [JupyterHub documentation](https://gith
 | `proxy.args`                                  | Override Proxy default args                                                               | `[]`                              |
 | `proxy.secretToken`                           | Proxy secret token (used for communication with the Hub)                                  | `nil`                             |
 | `proxy.hostAliases`                           | Add deployment host aliases                                                               | `[]`                              |
-| `proxy.pdb.enabled`                           | Deploy Proxy PodDisruptionBudget                                                          | `false`                           |
+| `proxy.pdb.create`                            | Deploy Proxy PodDisruptionBudget                                                          | `false`                           |
 | `proxy.pdb.minAvailable`                      | Set minimum available proxy instances                                                     | `nil`                             |
 | `proxy.containerPort.api`                     | Proxy api container port                                                                  | `8001`                            |
 | `proxy.containerPort.http`                    | Proxy http container port                                                                 | `8000`                            |
@@ -263,14 +259,13 @@ For more information, check the official [JupyterHub documentation](https://gith
 | `proxy.initContainers`                        | Add additional init containers to the Proxy pods                                          | `{}`                              |
 | `proxy.sidecars`                              | Add additional sidecar containers to the Proxy pod                                        | `{}`                              |
 
-
 ### Proxy Traffic Exposure Parameters
 
-| Name                                            | Description                                                                         | Value                                                                                 |
-| ----------------------------------------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
-| `proxy.networkPolicy.enabled`                   | Deploy Proxy network policies                                                       | `true`                                                                                |
-| `proxy.networkPolicy.allowInterspaceAccess`     | Allow communication between pods in different namespaces                            | `true`                                                                                |
-| `proxy.networkPolicy.extraIngress`              | Add extra ingress rules to the NetworkPolicy                                        | `## Any IP --> Proxy
+| Name                                        | Description                                              | Value                |
+|---------------------------------------------|----------------------------------------------------------|----------------------|
+| `proxy.networkPolicy.enabled`               | Deploy Proxy network policies                            | `true`               |
+| `proxy.networkPolicy.allowInterspaceAccess` | Allow communication between pods in different namespaces | `true`               |
+| `proxy.networkPolicy.extraIngress`          | Add extra ingress rules to the NetworkPolicy             | `## Any IP --> Proxy |
 ##
 - ports:
     - port: {{ .Values.proxy.containerPort.http }}
@@ -300,11 +295,10 @@ For more information, check the official [JupyterHub documentation](https://gith
 | `proxy.ingress.extraPaths`                      | Add extra paths to the ingress rule                                                 | `[]`                                                                                  |
 | `proxy.ingress.secrets`                         | Add extra secrets for the tls configuration                                         | `[]`                                                                                  |
 
-
 ### Image puller deployment parameters
 
 | Name                                                | Description                                                                               | Value           |
-| --------------------------------------------------- | ----------------------------------------------------------------------------------------- | --------------- |
+|-----------------------------------------------------|-------------------------------------------------------------------------------------------|-----------------|
 | `imagePuller.enabled`                               | Deploy ImagePuller daemonset                                                              | `true`          |
 | `imagePuller.command`                               | Override ImagePuller default command                                                      | `[]`            |
 | `imagePuller.args`                                  | Override ImagePuller default args                                                         | `[]`            |
@@ -339,11 +333,10 @@ For more information, check the official [JupyterHub documentation](https://gith
 | `imagePuller.initContainers`                        | Add additional init containers to the ImagePuller pods                                    | `{}`            |
 | `imagePuller.sidecars`                              | Add additional sidecar containers to the ImagePuller pod                                  | `{}`            |
 
-
 ### Singleuser deployment parameters
 
 | Name                                            | Description                                                                           | Value                                |
-| ----------------------------------------------- | ------------------------------------------------------------------------------------- | ------------------------------------ |
+|-------------------------------------------------|---------------------------------------------------------------------------------------|--------------------------------------|
 | `singleuser.image.registry`                     | Single User image registry                                                            | `docker.io`                          |
 | `singleuser.image.repository`                   | Single User image repository                                                          | `bitnami/jupyter-base-notebook`      |
 | `singleuser.image.tag`                          | Single User image tag (immutabe tags are recommended)                                 | `1.3.0-debian-10-r2`                 |
@@ -370,51 +363,46 @@ For more information, check the official [JupyterHub documentation](https://gith
 | `singleuser.initContainers`                     | Add additional init containers to the Single User pods                                | `{}`                                 |
 | `singleuser.sidecars`                           | Add additional sidecar containers to the Single User pod                              | `{}`                                 |
 
-
 ### Single User RBAC parameters
 
 | Name                               | Description                               | Value  |
-| ---------------------------------- | ----------------------------------------- | ------ |
+|------------------------------------|-------------------------------------------|--------|
 | `singleuser.serviceAccount.create` | Create Single User service account        | `true` |
 | `singleuser.serviceAccount.name`   | Override Single User service account name | `nil`  |
-
 
 ### Single User Persistence parameters
 
 | Name                                    | Description                                                | Value       |
-| --------------------------------------- | ---------------------------------------------------------- | ----------- |
+|-----------------------------------------|------------------------------------------------------------|-------------|
 | `singleuser.persistence.enabled`        | Enable persistent volume creation on Single User instances | `true`      |
 | `singleuser.persistence.storageClass`   | Persistent Volumes storage class                           | `""`        |
 | `singleuser.persistence.accessModes[0]` | Persistent Volumes access modes                            | `undefined` |
 | `singleuser.persistence.size`           | Persistent Volumes size                                    | `10Gi`      |
 
-
 ### Traffic exposure parameters
 
 | Name                                                | Description                                              | Value   |
-| --------------------------------------------------- | -------------------------------------------------------- | ------- |
+|-----------------------------------------------------|----------------------------------------------------------|---------|
 | `singleuser.networkPolicy.enabled`                  | Deploy Single User network policies                      | `true`  |
 | `singleuser.networkPolicy.allowInterspaceAccess`    | Allow communication between pods in different namespaces | `true`  |
 | `singleuser.networkPolicy.allowCloudMetadataAccess` | Allow Single User pods to access Cloud Metada endpoints  | `false` |
 | `singleuser.networkPolicy.extraIngress`             | Add extra ingress rules to the NetworkPolicy             | `nil`   |
 | `singleuser.networkPolicy.extraEgress`              | Add extra ingress rules to the NetworkPolicy             | `nil`   |
 
-
 ### Auxiliary image parameters
 
 | Name                         | Description                                         | Value                   |
-| ---------------------------- | --------------------------------------------------- | ----------------------- |
+|------------------------------|-----------------------------------------------------|-------------------------|
 | `auxiliaryImage.registry`    | Auxiliary image registry                            | `docker.io`             |
 | `auxiliaryImage.repository`  | Auxiliary image repository                          | `bitnami/bitnami-shell` |
 | `auxiliaryImage.tag`         | Auxiliary image tag (immutabe tags are recommended) | `10`                    |
 | `auxiliaryImage.pullPolicy`  | Auxiliary image pull policy                         | `Always`                |
 | `auxiliaryImage.pullSecrets` | Auxiliary image pull secrets                        | `[]`                    |
 
-
 ### External Database settings
 
 | Name                              | Description                                                                                                     | Value        |
-| --------------------------------- | --------------------------------------------------------------------------------------------------------------- | ------------ |
+|-----------------------------------|-----------------------------------------------------------------------------------------------------------------|--------------|
 | `externalDatabase.host`           | Host of an external PostgreSQL instance to connect (only if postgresql.enabled=false)                           | `nil`        |
 | `externalDatabase.user`           | User of an external PostgreSQL instance to connect (only if postgresql.enabled=false)                           | `postgres`   |
 | `externalDatabase.password`       | Password of an external PostgreSQL instance to connect (only if postgresql.enabled=false)                       | `""`         |
@@ -422,11 +410,10 @@ For more information, check the official [JupyterHub documentation](https://gith
 | `externalDatabase.database`       | Database inside an external PostgreSQL to connect (only if postgresql.enabled=false)                            | `jupyterhub` |
 | `externalDatabase.port`           | Port of an external PostgreSQL to connect (only if postgresql.enabled=false)                                    | `5432`       |
 
-
 ### PostgreSQL subchart settings
 
 | Name                                   | Description                                                                        | Value                |
-| -------------------------------------- | ---------------------------------------------------------------------------------- | -------------------- |
+|----------------------------------------|------------------------------------------------------------------------------------|----------------------|
 | `postgresql.enabled`                   | Deploy PostgreSQL subchart                                                         | `true`               |
 | `postgresql.nameOverride`              | Override name of the PostgreSQL chart                                              | `nil`                |
 | `postgresql.existingSecret`            | Existing secret containing the password of the PostgreSQL chart                    | `nil`                |
@@ -440,7 +427,6 @@ For more information, check the official [JupyterHub documentation](https://gith
 | `postgresql.persistence.accessMode`    | Access mode of the created PVCs                                                    | `ReadWriteOnce`      |
 | `postgresql.persistence.size`          | Size of the created PVCs                                                           | `8Gi`                |
 
-
 - to:
 ` |
 | `hub.service.type`                        | Hub service type                                         | `ClusterIP`                        |
@@ -450,11 +436,10 @@ For more information, check the official [JupyterHub documentation](https://gith
 | `hub.service.nodePorts.http`              | NodePort for the HTTP endpoint                           | `""`                               |
 | `hub.service.externalTrafficPolicy`       | External traffic policy for the service                  | `Cluster`                          |
 
-
 ### Proxy deployment parameters
 
 | Name                                          | Description                                                                               | Value                             |
-| --------------------------------------------- | ----------------------------------------------------------------------------------------- | --------------------------------- |
+|-----------------------------------------------|-------------------------------------------------------------------------------------------|-----------------------------------|
 | `proxy.image.registry`                        | Proxy image registry                                                                      | `docker.io`                       |
 | `proxy.image.repository`                      | Proxy image repository                                                                    | `bitnami/configurable-http-proxy` |
 | `proxy.image.tag`                             | Proxy image tag (immutabe tags are recommended)                                           | `4.3.1-debian-10-r0`              |
@@ -477,7 +462,7 @@ For more information, check the official [JupyterHub documentation](https://gith
 | `proxy.args`                                  | Override Proxy default args                                                               | `[]`                              |
 | `proxy.secretToken`                           | Proxy secret token (used for communication with the Hub)                                  | `nil`                             |
 | `proxy.hostAliases`                           | Add deployment host aliases                                                               | `[]`                              |
-| `proxy.pdb.enabled`                           | Deploy Proxy PodDisruptionBudget                                                          | `false`                           |
+| `proxy.pdb.create`                            | Deploy Proxy PodDisruptionBudget                                                          | `false`                           |
 | `proxy.pdb.minAvailable`                      | Set minimum available proxy instances                                                     | `nil`                             |
 | `proxy.containerPort.api`                     | Proxy api container port                                                                  | `8001`                            |
 | `proxy.containerPort.http`                    | Proxy http container port                                                                 | `8000`                            |
@@ -511,14 +496,13 @@ For more information, check the official [JupyterHub documentation](https://gith
 | `proxy.initContainers`                        | Add additional init containers to the Proxy pods                                          | `{}`                              |
 | `proxy.sidecars`                              | Add additional sidecar containers to the Proxy pod                                        | `{}`                              |
 
-
 ### Proxy Traffic Exposure Parameters
 
-| Name                                            | Description                                                                         | Value                                                                                 |
-| ----------------------------------------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
-| `proxy.networkPolicy.enabled`                   | Deploy Proxy network policies                                                       | `true`                                                                                |
-| `proxy.networkPolicy.allowInterspaceAccess`     | Allow communication between pods in different namespaces                            | `true`                                                                                |
-| `proxy.networkPolicy.extraIngress`              | Add extra ingress rules to the NetworkPolicy                                        | `## Any IP --> Proxy
+| Name                                        | Description                                              | Value                |
+|---------------------------------------------|----------------------------------------------------------|----------------------|
+| `proxy.networkPolicy.enabled`               | Deploy Proxy network policies                            | `true`               |
+| `proxy.networkPolicy.allowInterspaceAccess` | Allow communication between pods in different namespaces | `true`               |
+| `proxy.networkPolicy.extraIngress`          | Add extra ingress rules to the NetworkPolicy             | `## Any IP --> Proxy |
 ##
 - ports:
     - port: {{ .Values.proxy.containerPort.http }}
@@ -548,11 +532,10 @@ For more information, check the official [JupyterHub documentation](https://gith
 | `proxy.ingress.extraPaths`                      | Add extra paths to the ingress rule                                                 | `[]`                                                                                  |
 | `proxy.ingress.secrets`                         | Add extra secrets for the tls configuration                                         | `[]`                                                                                  |
 
-
 ### Image puller deployment parameters
 
 | Name                                                | Description                                                                               | Value           |
-| --------------------------------------------------- | ----------------------------------------------------------------------------------------- | --------------- |
+|-----------------------------------------------------|-------------------------------------------------------------------------------------------|-----------------|
 | `imagePuller.enabled`                               | Deploy ImagePuller daemonset                                                              | `true`          |
 | `imagePuller.command`                               | Override ImagePuller default command                                                      | `[]`            |
 | `imagePuller.args`                                  | Override ImagePuller default args                                                         | `[]`            |
@@ -587,11 +570,10 @@ For more information, check the official [JupyterHub documentation](https://gith
 | `imagePuller.initContainers`                        | Add additional init containers to the ImagePuller pods                                    | `{}`            |
 | `imagePuller.sidecars`                              | Add additional sidecar containers to the ImagePuller pod                                  | `{}`            |
 
-
 ### Singleuser deployment parameters
 
 | Name                                            | Description                                                                           | Value                                  |
-| ----------------------------------------------- | ------------------------------------------------------------------------------------- | -------------------------------------- |
+|-------------------------------------------------|---------------------------------------------------------------------------------------|----------------------------------------|
 | `singleuser.image.registry`                     | Single User image registry                                                            | `docker.io`                            |
 | `singleuser.image.repository`                   | Single User image repository                                                          | `javsalgar/jupyterhub-singleuser-base` |
 | `singleuser.image.tag`                          | Single User image tag (immutabe tags are recommended)                                 | `test`                                 |
@@ -618,51 +600,46 @@ For more information, check the official [JupyterHub documentation](https://gith
 | `singleuser.initContainers`                     | Add additional init containers to the Single User pods                                | `{}`                                   |
 | `singleuser.sidecars`                           | Add additional sidecar containers to the Single User pod                              | `{}`                                   |
 
-
 ### Single User RBAC parameters
 
 | Name                               | Description                               | Value  |
-| ---------------------------------- | ----------------------------------------- | ------ |
+|------------------------------------|-------------------------------------------|--------|
 | `singleuser.serviceAccount.create` | Create Single User service account        | `true` |
 | `singleuser.serviceAccount.name`   | Override Single User service account name | `nil`  |
-
 
 ### Single User Persistence parameters
 
 | Name                                    | Description                                                | Value       |
-| --------------------------------------- | ---------------------------------------------------------- | ----------- |
+|-----------------------------------------|------------------------------------------------------------|-------------|
 | `singleuser.persistence.enabled`        | Enable persistent volume creation on Single User instances | `true`      |
 | `singleuser.persistence.storageClass`   | Persistent Volumes storage class                           | `""`        |
 | `singleuser.persistence.accessModes[0]` | Persistent Volumes access modes                            | `undefined` |
 | `singleuser.persistence.size`           | Persistent Volumes size                                    | `10Gi`      |
 
-
 ### Traffic exposure parameters
 
 | Name                                                | Description                                              | Value   |
-| --------------------------------------------------- | -------------------------------------------------------- | ------- |
+|-----------------------------------------------------|----------------------------------------------------------|---------|
 | `singleuser.networkPolicy.enabled`                  | Deploy Single User network policies                      | `true`  |
 | `singleuser.networkPolicy.allowInterspaceAccess`    | Allow communication between pods in different namespaces | `true`  |
 | `singleuser.networkPolicy.allowCloudMetadataAccess` | Allow Single User pods to access Cloud Metada endpoints  | `false` |
 | `singleuser.networkPolicy.extraIngress`             | Add extra ingress rules to the NetworkPolicy             | `nil`   |
 | `singleuser.networkPolicy.extraEgress`              | Add extra ingress rules to the NetworkPolicy             | `nil`   |
 
-
 ### Auxiliary image parameters
 
 | Name                         | Description                                         | Value                   |
-| ---------------------------- | --------------------------------------------------- | ----------------------- |
+|------------------------------|-----------------------------------------------------|-------------------------|
 | `auxiliaryImage.registry`    | Auxiliary image registry                            | `docker.io`             |
 | `auxiliaryImage.repository`  | Auxiliary image repository                          | `bitnami/bitnami-shell` |
 | `auxiliaryImage.tag`         | Auxiliary image tag (immutabe tags are recommended) | `10`                    |
 | `auxiliaryImage.pullPolicy`  | Auxiliary image pull policy                         | `Always`                |
 | `auxiliaryImage.pullSecrets` | Auxiliary image pull secrets                        | `[]`                    |
 
-
 ### External Database settings
 
 | Name                              | Description                                                                                                     | Value        |
-| --------------------------------- | --------------------------------------------------------------------------------------------------------------- | ------------ |
+|-----------------------------------|-----------------------------------------------------------------------------------------------------------------|--------------|
 | `externalDatabase.host`           | Host of an external PostgreSQL instance to connect (only if postgresql.enabled=false)                           | `nil`        |
 | `externalDatabase.user`           | User of an external PostgreSQL instance to connect (only if postgresql.enabled=false)                           | `postgres`   |
 | `externalDatabase.password`       | Password of an external PostgreSQL instance to connect (only if postgresql.enabled=false)                       | `""`         |
@@ -670,11 +647,10 @@ For more information, check the official [JupyterHub documentation](https://gith
 | `externalDatabase.database`       | Database inside an external PostgreSQL to connect (only if postgresql.enabled=false)                            | `jupyterhub` |
 | `externalDatabase.port`           | Port of an external PostgreSQL to connect (only if postgresql.enabled=false)                                    | `5432`       |
 
-
 ### PostgreSQL subchart settings
 
 | Name                                   | Description                                                                        | Value                |
-| -------------------------------------- | ---------------------------------------------------------------------------------- | -------------------- |
+|----------------------------------------|------------------------------------------------------------------------------------|----------------------|
 | `postgresql.enabled`                   | Deploy PostgreSQL subchart                                                         | `true`               |
 | `postgresql.nameOverride`              | Override name of the PostgreSQL chart                                              | `nil`                |
 | `postgresql.existingSecret`            | Existing secret containing the password of the PostgreSQL chart                    | `nil`                |
@@ -687,7 +663,6 @@ For more information, check the official [JupyterHub documentation](https://gith
 | `postgresql.persistence.storageClass`  | storageClass of the created PVCs                                                   | `nil`                |
 | `postgresql.persistence.accessMode`    | Access mode of the created PVCs                                                    | `ReadWriteOnce`      |
 | `postgresql.persistence.size`          | Size of the created PVCs                                                           | `8Gi`                |
-
 
 - to:
 ` |
@@ -724,7 +699,7 @@ For more information, check the official [JupyterHub documentation](https://gith
 | `proxy.args`                                  | Override Proxy default args                                                               | `[]`                                 |
 | `proxy.secretToken`                           | Proxy secret token (used for communication with the Hub)                                  | `nil`                                |
 | `proxy.hostAliases`                           | Add deployment host aliases                                                               | `[]`                                 |
-| `proxy.pdb.enabled`                           | Deploy Proxy PodDisruptionBudget                                                          | `false`                              |
+| `proxy.pdb.create`                            | Deploy Proxy PodDisruptionBudget                                                          | `false`                              |
 | `proxy.pdb.minAvailable`                      | Set minimum available proxy instances                                                     | `nil`                                |
 | `proxy.containerPort.api`                     | Proxy api container port                                                                  | `8001`                               |
 | `proxy.containerPort.http`                    | Proxy http container port                                                                 | `8000`                               |
@@ -960,7 +935,7 @@ For more information, check the official [JupyterHub documentation](https://gith
 | `proxy.args`                                  | Override Proxy default args                                                               | `[]`                                 |
 | `proxy.secretToken`                           | Proxy secret token (used for communication with the Hub)                                  | `nil`                                |
 | `proxy.hostAliases`                           | Add deployment host aliases                                                               | `[]`                                 |
-| `proxy.pdb.enabled`                           | Deploy Proxy PodDisruptionBudget                                                          | `false`                              |
+| `proxy.pdb.create`                            | Deploy Proxy PodDisruptionBudget                                                          | `false`                              |
 | `proxy.pdb.minAvailable`                      | Set minimum available proxy instances                                                     | `nil`                                |
 | `proxy.containerPort.api`                     | Proxy api container port                                                                  | `8001`                               |
 | `proxy.containerPort.http`                    | Proxy http container port                                                                 | `8000`                               |

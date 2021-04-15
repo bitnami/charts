@@ -19,13 +19,10 @@ spec:
   policyTypes:
     - Ingress
     - Egress
-
   ingress:
-
     {{- if .Values.proxy.networkPolicy.extraIngress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.proxy.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
     {{- end }}
-
     # Pods with label "hub.jupyter.org/network-access-proxy-api" --> Proxy API
     - ports:
         - port: {{ .Values.proxy.containerPort.api }}
@@ -40,7 +37,6 @@ spec:
             matchLabels:
               hub.jupyter.org/network-access-proxy-api: "true"
         {{- end }}
-
   egress:
     # Proxy --> Hub
     - ports:
@@ -63,9 +59,7 @@ spec:
           port: 53
         - protocol: TCP
           port: 53
-
     {{- if .Values.proxy.networkPolicy.extraEgress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.proxy.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
     {{- end }}
-
 {{- end }}
