@@ -19,9 +19,16 @@ spec:
       app.kubernetes.io/component: hub
   template:
     metadata:
-      {{- if .Values.hub.podAnnotations }}
-      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.hub.podAnnotations "context" $) | nindent 8 }}
-      {{- end }}
+      annotations:
+        {{- if .Values.hub.podAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.hub.podAnnotations "context" $ ) | nindent 4 }}
+        {{- end }}
+        {{- if not .Values.hub.existingConfigmap }}
+        checksum/hub-config: {{ include (print $.Template.BasePath "/hub/configmap.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if not .Values.hub.existingSecret }}
+        checksum/hub-secret: {{ include (print $.Template.BasePath "/hub/secret.yaml") . | sha256sum }}
+        {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: hub
         hub.jupyter.org/network-access-proxy-api: "true"
