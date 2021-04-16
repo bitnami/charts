@@ -82,6 +82,9 @@ spec:
         - name: redis
           image: {{ template "redis.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.master.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.master.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.master.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.master.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}

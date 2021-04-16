@@ -304,6 +304,9 @@ master:
   ##     whenUnsatisfiable: DoNotSchedule
   ##
   spreadConstraints: {}
+  ## @param master.lifecycleHooks for the Redis(TM) master container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
   ## @param master.extraVolumes Optionally specify extra list of additional volumes for the Redis(TM) master pod(s)
   ##
   extraVolumes: []
@@ -551,25 +554,25 @@ replica:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/share-process-namespace/
   ##
   shareProcessNamespace: false
-  ## @param replica.podAffinityPreset Pod affinity preset. Ignored if `replicas.affinity` is set. Allowed values: `soft` or `hard`
+  ## @param replica.podAffinityPreset Pod affinity preset. Ignored if `replica.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAffinityPreset: ""
-  ## @param replica.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `replicas.affinity` is set. Allowed values: `soft` or `hard`
+  ## @param replica.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `replica.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAntiAffinityPreset: soft
-  ## Node replicas.affinity preset
+  ## Node affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
   ##
   nodeAffinityPreset:
-    ## @param replica.nodeAffinityPreset.type Node affinity preset type. Ignored if `replicas.affinity` is set. Allowed values: `soft` or `hard`
+    ## @param replica.nodeAffinityPreset.type Node affinity preset type. Ignored if `replica.affinity` is set. Allowed values: `soft` or `hard`
     ##
     type: ""
-    ## @param replica.nodeAffinityPreset.key Node label key to match. Ignored if `replicas.affinity` is set
+    ## @param replica.nodeAffinityPreset.key Node label key to match. Ignored if `replica.affinity` is set
     ##
     key: ""
-    ## @param replica.nodeAffinityPreset.values Node label values to match. Ignored if `replicas.affinity` is set
+    ## @param replica.nodeAffinityPreset.values Node label values to match. Ignored if `replica.affinity` is set
     ## E.g.
     ## values:
     ##   - e2e-az1
@@ -578,7 +581,7 @@ replica:
     values: []
   ## @param replica.affinity Affinity for Redis(TM) replicas pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ## NOTE: `replicas.podAffinityPreset`, `replicas.podAntiAffinityPreset`, and `replicas.nodeAffinityPreset` will be ignored when it's set
+  ## NOTE: `replica.podAffinityPreset`, `replica.podAntiAffinityPreset`, and `replica.nodeAffinityPreset` will be ignored when it's set
   ##
   affinity: {}
   ## @param replica.nodeSelector Node labels for Redis(TM) replicas pods assignment
@@ -598,6 +601,9 @@ replica:
   ##     whenUnsatisfiable: DoNotSchedule
   ##
   spreadConstraints: {}
+  ## @param replica.lifecycleHooks for the Redis(TM) replica container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
   ## @param replica.extraVolumes Optionally specify extra list of additional volumes for the Redis(TM) replicas pod(s)
   ##
   extraVolumes: []
@@ -826,6 +832,9 @@ sentinel:
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
+  ## @param sentinel.lifecycleHooks for the Redis(TM) sentinel container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
   ## @param sentinel.extraVolumes Optionally specify extra list of additional volumes for the Redis(TM) Sentinel
   ##
   extraVolumes: []

@@ -13,10 +13,8 @@ metadata:
 data:
   ping_readiness_local.sh: |-
     #!/bin/bash
-{{- if .Values.usePasswordFiles }}
-    password_aux=`cat ${REDIS_PASSWORD_FILE}`
-    export REDIS_PASSWORD=$password_aux
-{{- end }}
+
+    [[ -f $REDIS_PASSWORD_FILE ]] && export REDIS_PASSWORD="$(< "${REDIS_PASSWORD_FILE}")"
     export REDISCLI_AUTH="$REDIS_PASSWORD"
     response=$(
       timeout -s 3 $1 \
@@ -41,10 +39,8 @@ data:
     fi
   ping_liveness_local.sh: |-
     #!/bin/bash
-{{- if .Values.usePasswordFiles }}
-    password_aux=`cat ${REDIS_PASSWORD_FILE}`
-    export REDIS_PASSWORD=$password_aux
-{{- end }}
+
+    [[ -f $REDIS_PASSWORD_FILE ]] && export REDIS_PASSWORD="$(< "${REDIS_PASSWORD_FILE}")"
     export REDISCLI_AUTH="$REDIS_PASSWORD"
     response=$(
       timeout -s 3 $1 \
@@ -70,10 +66,8 @@ data:
 {{- if .Values.sentinel.enabled }}
   ping_sentinel.sh: |-
     #!/bin/bash
-{{- if .Values.usePasswordFiles }}
-    password_aux=`cat ${REDIS_PASSWORD_FILE}`
-    export REDIS_PASSWORD=$password_aux
-{{- end }}
+
+    [[ -f $REDIS_PASSWORD_FILE ]] && export REDIS_PASSWORD="$(< "${REDIS_PASSWORD_FILE}")"
     export REDISCLI_AUTH="$REDIS_PASSWORD"
     response=$(
       timeout -s 3 $1 \
@@ -114,10 +108,8 @@ data:
 {{- end }}
   ping_readiness_master.sh: |-
     #!/bin/bash
-{{- if .Values.usePasswordFiles }}
-    password_aux=`cat ${REDIS_MASTER_PASSWORD_FILE}`
-    export REDIS_MASTER_PASSWORD=$password_aux
-{{- end }}
+
+    [[ -f $REDIS_MASTER_PASSWORD_FILE ]] && export REDIS_MASTER_PASSWORD="$(< "${REDIS_MASTER_PASSWORD_FILE}")"
     export REDISCLI_AUTH="$REDIS_MASTER_PASSWORD"
     response=$(
       timeout -s 3 $1 \
@@ -140,10 +132,8 @@ data:
     fi
   ping_liveness_master.sh: |-
     #!/bin/bash
-{{- if .Values.usePasswordFiles }}
-    password_aux=`cat ${REDIS_MASTER_PASSWORD_FILE}`
-    export REDIS_MASTER_PASSWORD=$password_aux
-{{- end }}
+
+    [[ -f $REDIS_MASTER_PASSWORD_FILE ]] && export REDIS_MASTER_PASSWORD="$(< "${REDIS_MASTER_PASSWORD_FILE}")"
     export REDISCLI_AUTH="$REDIS_MASTER_PASSWORD"
     response=$(
       timeout -s 3 $1 \
