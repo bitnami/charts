@@ -14,11 +14,12 @@ metadata:
 spec:
   podSelector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
-  {{- if eq .Values.architecture "replication" }}
   policyTypes:
     - Ingress
+  {{- if or (eq .Values.architecture "replication") .Values.networkPolicy.extraEgress }}
     - Egress
   egress:
+    {{- if eq .Values.architecture "replication" }}
     # Allow dns resolution
     - ports:
         - port: 53
@@ -32,6 +33,10 @@ spec:
       to:
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" . | nindent 14 }}
+    {{- end }}
+    {{- if .Values.networkPolicy.extraEgress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+    {{- end }}
   {{- end }}
   ingress:
     # Allow inbound connections
@@ -61,9 +66,6 @@ spec:
               {{- end }}
           {{- end }}
         {{- end }}
-        {{- if .Values.networkPolicy.additionalRules }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.networkPolicy.additionalRules "context" $) | nindent 8 }}
-        {{- end }}
       {{- end }}
     {{- if .Values.metrics.enabled }}
     # Allow prometheus scrapes for metrics
@@ -73,6 +75,9 @@ spec:
     {{- if .Values.metrics.sentinel.enabled }}
     # Allow prometheus scrapes for sentinel metrics
     - ports:
-        - port: {{ .Values.metrics.sentinel.service.port }}
+        - port: 9355
+    {{- end }}
+    {{- if .Values.networkPolicy.extraIngress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
     {{- end }}
 {{- end }}

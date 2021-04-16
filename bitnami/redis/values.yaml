@@ -898,18 +898,40 @@ networkPolicy:
   ## (with the correct destination port).
   ##
   allowExternal: true
-  ## @param networkPolicy.additionalRules Additional NetworkPolicy Ingress "from" rules to set
+  ## @param networkPolicy.extraIngress Add extra ingress rules to the NetworkPolicy
   ## e.g:
-  ## additionalRules:
-  ##   - matchLabels:
-  ##       - role: frontend
-  ##   - matchExpressions:
-  ##       - key: role
-  ##         operator: In
-  ##         values:
-  ##           - frontend
+  ## extraIngress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     from:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
   ##
-  additionalRules: {}
+  extraIngress: []
+  ## @param networkPolicy.extraEgress Add extra ingress rules to the NetworkPolicy
+  ## e.g:
+  ## extraEgress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     to:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
+  ##
+  extraEgress: []
   ## @param networkPolicy.ingressNSMatchLabels Labels to match to allow traffic from other namespaces
   ## @param networkPolicy.ingressNSPodMatchLabels Pod labels to match to allow traffic from other namespaces
   ##

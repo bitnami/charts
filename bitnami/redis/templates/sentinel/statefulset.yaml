@@ -551,7 +551,7 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: redis-data
-        labels: {{- include "common.labels.standard" . | nindent 10 }}
+        labels: {{- include "common.labels.matchLabels" . | nindent 10 }}
           app.kubernetes.io/component: node
         {{- if .Values.replica.persistence.annotations }}
         annotations: {{- toYaml .Values.replica.persistence.annotations | nindent 10 }}

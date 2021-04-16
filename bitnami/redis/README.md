@@ -318,7 +318,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | ------------------------------------------------------------------- | ------- |
 | `networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                          | `false` |
 | `networkPolicy.allowExternal`           | Don't require client label for connections                          | `true`  |
-| `networkPolicy.additionalRules`         | Additional NetworkPolicy Ingress "from" rules to set                | `{}`    |
+| `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                        | `[]`    |
+| `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                        | `[]`    |
 | `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces              | `{}`    |
 | `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces          | `{}`    |
 | `podSecurityPolicy.create`              | Specifies whether a PodSecurityPolicy should be created             | `false` |
