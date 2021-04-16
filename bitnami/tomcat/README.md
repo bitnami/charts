@@ -116,10 +116,12 @@ The following tables lists the configurable parameters of the Tomcat chart and t
 | `podLabels`                 | Extra labels for Tomcat pods                                                              | `{}` (evaluated as a template)              |
 | `podAnnotations`            | Annotations for Tomcat pods                                                               | `{}` (evaluated as a template)              |
 | `extraVolumeMounts`         | Optionally specify extra list of additional volumeMounts for Tomcat container(s)          | `[]`                                        |
-| `extraVolumes`              | Optionally specify extra list of additional volumes for Tomcat pods                       | `[]`                                        |
+| `extraVolumes`              | Optionally specify extra list of additional volumes for Tomcat pods in Deployment                      | `[]`                                        |
+| `extraVolumeClaimTemplates` | Optionally specify extra list of additional volume claim templates for Tomcat pods in StatefulSet      | `[]`                                        |
 | `initContainers`            | Add additional init containers to the Tomcat pods                                         | `{}` (evaluated as a template)              |
 | `sidecars`                  | Add additional sidecar containers to the Tomcat pods                                      | `{}` (evaluated as a template)              |
-| `persistence.enabled`       | Enable persistence using PVC                                                              | `true`                                      |
+| `persistence.enabled`       | Enable persistence                                                              | `true`                                      |
+| `persistence.type`          | Use Deployment or StatefulSet                                                              | `pvc`                                      |
 | `persistence.storageClass`  | PVC Storage Class for Tomcat volume                                                       | `nil` (uses alpha storage class annotation) |
 | `persistence.existingClaim` | An Existing PVC name for Tomcat volume                                                    | `nil` (uses alpha storage class annotation) |
 | `persistence.accessMode`    | PVC Access Mode for Tomcat volume                                                         | `ReadWriteOnce`                             |
