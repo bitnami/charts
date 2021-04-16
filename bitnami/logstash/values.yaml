@@ -67,6 +67,11 @@ monitoringAPIPort: 9600
 ##
 # extraEnvVars:
 
+## To add secrets or configmaps to environment
+## extraEnvVarsSecret: "x"
+## extraEnvVarsCM: "y"
+
+
 ## Input Plugins configuration
 ## ref: https://www.elastic.co/guide/en/logstash/current/input-plugins.html
 ##
