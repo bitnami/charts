@@ -67,8 +67,8 @@ The following tables lists the configurable parameters of the Logstash chart and
 | `enableMonitoringAPI`                      | Whether to enable the Logstash Monitoring API or not  Kubernetes cluster domain                                      | `true`                                                  |
 | `monitoringAPIPort`                        | Logstash Monitoring API Port                                                                                         | `9600`                                                  |
 | `extraEnvVars`                             | Array containing extra env vars to configure Logstash                                                                | `nil`                                                   |
-| `envFrom.secretRef.name`                   | Kubernetes Secrets name                                                                                             | `nil`                                                   |
-| `envFrom.configMapRef.name`                | Kubernetes Configmap name                                                                                           | `nil`                                                   |
+| `extraEnvVarsSecret`                       | Kubernetes Secrets name                                                                                             | `nil`                                                   |
+| `extraEnvVarsCM`                           | Kubernetes Configmap name                                                                                           | `nil`                                                   |
 | `input`                                    | Input Plugins configuration                                                                                          | `Check values.yaml file`                                |
 | `filter`                                   | Filter Plugins configuration                                                                                         | `nil`                                                   |
 | `output`                                   | Output Plugins configuration                                                                                         | `Check values.yaml file`                                |
@@ -273,14 +273,11 @@ $ kubectl logs -f logstash-0
 ```
 ### Adding extra environment variables
 
-In case you want to add extra environment variables from an external configmap or secrets, you can use the `envFrom` property.
+In case you want to add extra environment variables from an external configmap or secrets, you can use the `extraEnvVarsCM` and `extraEnvVarsSecret` properties. Be aware that the secret and configmap should be already available in the namespace.
 
 ```yaml
-envFrom:
-- secretRef:
-    name: logstash-secrets
-- configMapRef:
-    name: logstash-configmap
+extraEnvVarsSecret: logstash-secrets
+extraEnvVarsCM: logstash-configmap
 ```
 
 ### Adding extra environment variables
