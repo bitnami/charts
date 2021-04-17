@@ -1,7 +1,7 @@
 dependencies:
 - name: kafka
   repository: https://charts.bitnami.com/bitnami
-  version: 12.16.0
+  version: 12.16.1
 - name: spark
   repository: https://charts.bitnami.com/bitnami
   version: 5.4.0
@@ -13,9 +13,9 @@ dependencies:
   version: 3.2.3
 - name: wavefront
   repository: https://charts.bitnami.com/bitnami
-  version: 2.0.2
+  version: 2.0.3
 - name: common
   repository: https://charts.bitnami.com/bitnami
   version: 1.4.2
-digest: sha256:6f0a009d6bea3ca2c161ea4af350b3d57d528954863d35a8fa5a53e74be6fb72
-generated: "2021-04-05T13:17:35.435686+05:30"
+digest: sha256:98597aad28e98766bd71993029db6843b0a7e6ec00cded684a479062845cc07f
+generated: "2021-04-08T16:18:55.647856+05:30"

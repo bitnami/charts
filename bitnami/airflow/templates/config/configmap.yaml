@@ -47,7 +47,8 @@ data:
             - "/bin/bash"
             - "-ce"
             - |
-                . /opt/bitnami/scripts/libairflow.sh
+                . /opt/bitnami/scripts/airflow-worker-env.sh
+                . /opt/bitnami/scripts/libairflowworker.sh
 
                 airflow_generate_config # Generate the config file
                 cp /opt/bitnami/airflow/airflow.cfg /opt/bitnami/airflow/k8s-executor-config/airflow.cfg

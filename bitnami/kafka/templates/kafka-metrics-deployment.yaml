@@ -31,6 +31,9 @@ spec:
       schedulerName: {{ .Values.metrics.kafka.schedulerName | quote }}
       {{- end }}
       serviceAccountName: {{ template "kafka.serviceAccountName" . }}
+      {{- if .Values.metrics.kafka.initContainers }}
+      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.kafka.initContainers "context" $) | nindent 8 }}
+      {{- end }}
       containers:
         - name: kafka-exporter
           image: {{ include "kafka.metrics.kafka.image" . }}
