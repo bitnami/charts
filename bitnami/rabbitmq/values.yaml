@@ -138,6 +138,7 @@ extraPlugins: 'rabbitmq_auth_backend_ldap'
 ## Clustering settings
 ##
 clustering:
+  enabled: true
   addressType: hostname
   ## Rebalance master for queues in cluster when new replica is created
   ## ref: https://www.rabbitmq.com/rabbitmq-queues.8.html#rebalance
@@ -204,6 +205,7 @@ configuration: |-
   default_user = {{ .Values.auth.username }}
   default_pass = CHANGEME
   {{- end }}
+  {{- if .Values.clustering.enabled }}
   ## Clustering
   ##
   cluster_formation.peer_discovery_backend  = rabbit_peer_discovery_k8s
@@ -211,6 +213,7 @@ configuration: |-
   cluster_formation.node_cleanup.interval = 10
   cluster_formation.node_cleanup.only_log_warning = true
   cluster_partition_handling = autoheal
+  {{- end }}
   # queue master locator
   queue_master_locator = min-masters
   # enable guest user
