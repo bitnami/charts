@@ -127,3 +127,22 @@ Params:
   {{- true -}}
 {{- end -}}
 {{- end -}}
+
+
+{{/*
+ Return the proper line to set the secret name based on the K8s version
+
+Usage:
+{{ include "common.secrets.secretName" (dict "secret" "secret-name" "context" $) }}
+
+Params:
+   - secret - String - Required - Name of the 'Secret' resource where the password is stored.
+   - context - Context - Required - Parent context.
+*/}}
+{{- define "common.secrets.secretName -}}
+{{- if semverCompare "<1.19-0" (include "common.capabilities.kubeVersion" $ -}}
+  {{- printf "name: %s" .secret -}}
+{{- else -}}
+  {{- printf "secretName: %s" .secret -}}
+{{- end -}}
+{{- end -}}
