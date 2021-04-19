@@ -255,7 +255,6 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `metrics.serviceMonitor.relabellings`     | Specify Metric Relabellings to add to the scrape endpoint                              | `nil`                                                        |
 | `metrics.serviceMonitor.honorLabels`      | honorLabels chooses the metric's labels on collisions with target labels.              | `false`                                                      |
 | `metrics.serviceMonitor.additionalLabels` | Used to pass Labels that are required by the Installed Prometheus Operator             | `{}`                                                         |
-| `metrics.serviceMonitor.release`          | Used to pass Labels release that sometimes should be custom for Prometheus Operator    | `nil`                                                        |
 | `metrics.prometheusRule.enabled`          | Set this to true to create prometheusRules for Prometheus operator                     | `false`                                                      |
 | `metrics.prometheusRule.additionalLabels` | Additional labels that can be used so prometheusRules will be discovered by Prometheus | `{}`                                                         |
 | `metrics.prometheusRule.namespace`        | namespace where prometheusRules resource should be created                             | `monitoring`                                                 |
