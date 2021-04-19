@@ -116,9 +116,9 @@ Get the Postgresql credentials secret.
 */}}
 {{- define "jupyterhub.hubConfigmapName" -}}
 {{- if .Values.hub.existingConfigmap -}}
-{{- .Values.hub.existingConfigmap -}}
+    {{- .Values.hub.existingConfigmap -}}
 {{- else }}
-{{- printf "%s-hub" (include "common.names.fullname" . ) -}}
+    {{- printf "%s-hub" (include "common.names.fullname" . ) -}}
 {{- end -}}
 {{- end -}}
 
