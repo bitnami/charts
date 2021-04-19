@@ -312,9 +312,9 @@ data:
 
     if [[ "$REDIS_MASTER_HOST" == "$(hostname -i)" ]]; then
       if is_boolean_yes "$REDIS_SENTINEL_TLS_ENABLED"; then
-        redis-cli {{- if .Values.usePassword }} -a "$REDIS_PASSWORD" {{- end }} -h "$REDIS_SERVICE" -p {{ .Values.sentinel.port }} --tls --cert "$REDIS_SENTINEL_TLS_CERT_FILE" --key "$REDIS_SENTINEL_TLS_KEY_FILE" --cacert "$REDIS_SENTINEL_TLS_CA_FILE" sentinel failover mymaster
+        redis-cli {{- if .Values.usePassword }} -a "$REDIS_PASSWORD" {{- end }} -h "$REDIS_SERVICE" -p {{ .Values.sentinel.port }} --tls --cert "$REDIS_SENTINEL_TLS_CERT_FILE" --key "$REDIS_SENTINEL_TLS_KEY_FILE" --cacert "$REDIS_SENTINEL_TLS_CA_FILE" sentinel failover {{ .Values.sentinel.masterSet }}
       else
-        redis-cli {{- if .Values.usePassword }} -a "$REDIS_PASSWORD" {{- end }} -h "$REDIS_SERVICE" -p {{ .Values.sentinel.port }} sentinel failover mymaster
+        redis-cli {{- if .Values.usePassword }} -a "$REDIS_PASSWORD" {{- end }} -h "$REDIS_SERVICE" -p {{ .Values.sentinel.port }} sentinel failover {{ .Values.sentinel.masterSet }}
       fi
     fi
 {{- else }}
