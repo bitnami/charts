@@ -113,11 +113,11 @@ containers:
 {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) | nindent 2 }}
 {{- end }}
 volumes:
-{{- if and .Values.persistence.enabled (eq .Values.persistence.type "pvc") }}
+{{- if and .Values.persistence.enabled (eq .Values.deployment.type "deployment") }}
   - name: data
     persistentVolumeClaim:
       claimName: {{ template "tomcat.pvc" . }}
-{{- else if and .Values.persistence.enabled (eq .Values.persistence.type "statefulset") }}
+{{- else if and .Values.persistence.enabled (eq .Values.deployment.type "statefulset") }}
 # nothing
 {{- else }}
   - name: data

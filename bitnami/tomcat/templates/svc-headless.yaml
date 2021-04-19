@@ -1,4 +1,4 @@
-{{- if and .Values.persistence.enabled (not .Values.persistence.existingClaim) (eq .Values.persistence.type "statefulset") }}
+{{- if and .Values.persistence.enabled (not .Values.persistence.existingClaim) (eq .Values.deployment.type "statefulset") }}
 apiVersion: v1
 kind: Service
 metadata:

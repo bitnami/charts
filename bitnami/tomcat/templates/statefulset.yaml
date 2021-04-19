@@ -1,4 +1,4 @@
-{{- if and .Values.persistence.enabled (not .Values.persistence.existingClaim) (eq .Values.persistence.type "statefulset")}}
+{{- if and .Values.persistence.enabled (not .Values.persistence.existingClaim) (eq .Values.deployment.type "statefulset")}}
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:

@@ -1,4 +1,4 @@
-{{ if (or (not .Values.persistence.enabled) (eq .Values.persistence.type "pvc")) }}
+{{ if (or (not .Values.persistence.enabled) (eq .Values.deployment.type "deployment")) }}
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:

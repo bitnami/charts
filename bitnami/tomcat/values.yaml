@@ -105,6 +105,13 @@ extraEnvVarsSecret:
 ##
 replicaCount: 1
 
+## Deployment
+##
+deployment:
+  ## Deployment type: deployment or statefulset
+  ##
+  type: deployment
+
 ## Strategy to use to update Pods
 ##
 updateStrategy:
@@ -290,8 +297,6 @@ persistence:
   ## If true, use a Persistent Volume Claim, If false, use emptyDir
   ##
   enabled: true
-  ## Type pvc or statefulset
-  type: pvc
   ## Persistent Volume Storage Class
   ## If defined, storageClassName: <storageClass>
   ## If set to "-", storageClassName: "", which disables dynamic provisioning
