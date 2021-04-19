@@ -8,7 +8,7 @@
 
    export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
    export HOSTNAME=$(kubectl get ingress --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} -o jsonpath='{.spec.rules[0].host}')
-   echo "JupyterHub URL: http://$HOSTNAME/"
+   echo "JupyterHub URL: http{{ if .Values.ingress.tls }}s{{ end }}://$HOSTNAME/"
    echo "$CLUSTER_IP  $HOSTNAME" | sudo tee -a /etc/hosts
 
 {{- else }}
