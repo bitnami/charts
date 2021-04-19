@@ -1,35 +1,38 @@
-{{- if and .Values.sentinel.enabled .Values.sentinel.metrics.enabled }}
+{{- if and .Values.sentinel.enabled .Values.metrics.sentinel.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "redis.fullname" . }}-sentinel-metrics
+  name: {{ printf "%s-sentinel-metrics" (include "common.names.fullname" .) }}
   namespace: {{ .Release.Namespace | quote }}
-  labels:
-    app: {{ include "redis.name" . }}
-    chart: {{ include "redis.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
-    app.kubernetes.io/component: "sentinel-metrics"
-    {{- if .Values.sentinel.metrics.service.labels -}}
-    {{- include "common.tplvalues.render" (dict "value" .Values.sentinel.metrics.service.labels "context" $) | nindent 4 }}
-    {{- end -}}
-  {{- if .Values.sentinel.metrics.service.annotations }}
-  annotations: {{- toYaml .Values.sentinel.metrics.service.annotations | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: sentinel-metrics
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if or .Values.metrics.sentinel.service.annotations .Values.commonAnnotations }}
+  annotations:
+    {{- if .Values.metrics.sentinel.service.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.sentinel.service.annotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
   {{- end }}
 spec:
-  type: {{ .Values.sentinel.metrics.service.type }}
-  {{- if eq .Values.sentinel.metrics.service.type "LoadBalancer" }}
-  externalTrafficPolicy: {{ .Values.sentinel.metrics.service.externalTrafficPolicy }}
+  type: {{ .Values.metrics.sentinel.service.type }}
+  {{- if eq .Values.metrics.sentinel.service.type "LoadBalancer" }}
+  externalTrafficPolicy: {{ .Values.metrics.sentinel.service.externalTrafficPolicy }}
   {{- end }}
-  {{- if and (eq .Values.sentinel.metrics.service.type "LoadBalancer") .Values.sentinel.metrics.service.loadBalancerIP }}
-  loadBalancerIP: {{ .Values.sentinel.metrics.service.loadBalancerIP }}
+  {{- if and (eq .Values.metrics.sentinel.service.type "LoadBalancer") .Values.metrics.sentinel.service.loadBalancerIP }}
+  loadBalancerIP: {{ .Values.metrics.sentinel.service.loadBalancerIP }}
+  {{- end }}
+  {{- if and (eq .Values.metrics.sentinel.service.type "LoadBalancer") .Values.metrics.sentinel.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges: {{- toYaml .Values.metrics.sentinel.service.loadBalancerSourceRanges | nindent 4 }}
   {{- end }}
   ports:
-    - port: {{ .Values.sentinel.metrics.service.port }}
-      targetPort: sentinelmetrics
+    - name: tcp-metrics
+      port: {{ .Values.metrics.sentinel.service.port }}
       protocol: TCP
-      name: sentinelmetrics
-  selector:
-    app: {{ include "redis.name" . }}
-    release: {{ .Release.Name }}
+      targetPort: sentinelmetrics
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
 {{- end }}

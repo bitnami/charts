@@ -1,13 +1,15 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "redis.fullname" . }}-headless
+  name: {{ printf "%s-headless" (include "common.names.fullname" .) }}
   namespace: {{ .Release.Namespace | quote }}
-  labels:
-    app: {{ template "redis.name" . }}
-    chart: {{ template "redis.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   type: ClusterIP
   clusterIP: None
@@ -16,13 +18,11 @@ spec:
   {{- end }}
   ports:
     - name: tcp-redis
-      port: {{ .Values.redisPort }}
+      port: {{ if .Values.sentinel.enabled }}{{ .Values.sentinel.service.port }}{{ else }}{{ .Values.master.service.port }}{{ end }}
       targetPort: redis
-  {{- if .Values.sentinel.enabled }}
+    {{- if .Values.sentinel.enabled }}
     - name: tcp-sentinel
-      port: {{ .Values.sentinel.port }}
-      targetPort: redis-sentinel
-  {{- end }}
-  selector:
-    app: {{ template "redis.name" . }}
-    release: {{ .Release.Name }}
+      port: {{ .Values.sentinel.service.sentinelPort }}
+      targetPort: sentinel
+    {{- end }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
