@@ -103,6 +103,9 @@ spec:
           {{- if .Values.imagePuller.resources }}
           resources: {{- toYaml .Values.imagePuller.resources | nindent 12 }}
           {{- end }}
+          {{- if .Values.imagePuller.customStartupProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.imagePuller.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.imagePuller.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.imagePuller.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}

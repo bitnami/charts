@@ -77,13 +77,6 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
-Return  the proper Storage Class
-*/}}
-{{- define "jupyterhub.storageClass" -}}
-{{- include "common.storage.class" (dict "persistence" .Values.singleuser.persistence "global" .Values.global) -}}
-{{- end -}}
-
-{{/*
 Get the Postgresql credentials secret.
 */}}
 {{- define "jupyterhub.databaseSecretName" -}}
@@ -127,6 +120,12 @@ Get the Postgresql credentials secret.
 {{- if and .Values.postgresql.enabled .Values.externalDatabase.host -}}
 jupyherhub: Database
     You can only use one database.
+    Please choose installing a PostgreSQL chart (--set postgresql.enabled=true) or
+    using an external database (--set externalDatabase.host)
+{{- end -}}
+{{- if and (not .Values.postgresql.enabled) (not .Values.externalDatabase.host) -}}
+jupyherhub: NoDatabase
+    You did not set any database.
     Please choose installing a PostgreSQL chart (--set postgresql.enabled=true) or
     using an external database (--set externalDatabase.host)
 {{- end -}}

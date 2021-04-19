@@ -128,12 +128,14 @@ spec:
           {{- end }}
           {{- if .Values.hub.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.hub.command "context" $) | nindent 12 }}
+          {{- else }}
+          command:
+            - jupyterhub
           {{- end }}
           {{- if .Values.hub.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.hub.args "context" $) | nindent 12 }}
           {{- else }}
           args:
-            - jupyterhub
             - --config
             - /etc/jupyterhub/jupyterhub_config.py
             {{- if .Values.hub.image.debug }}
@@ -181,6 +183,19 @@ spec:
             {{- end }}
           {{- if .Values.hub.resources }}
           resources: {{- toYaml .Values.hub.resources | nindent 12 }}
+          {{- end }}
+          {{- if .Values.hub.startupProbe.enabled }}
+          startupProbe:
+            httpGet:
+              path: {{ .Values.hub.baseUrl | trimSuffix "/" }}/hub/health
+              port: http
+            initialDelaySeconds: {{ .Values.hub.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.hub.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.hub.startupProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.hub.startupProbe.failureThreshold }}
+            successThreshold: {{ .Values.hub.startupProbe.successThreshold }}
+          {{- else if .Values.hub.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.hub.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.hub.livenessProbe.enabled }}
           livenessProbe:

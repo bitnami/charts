@@ -11,7 +11,7 @@ metadata:
   namespace: {{ .Release.Namespace | quote }}
 spec:
   minAvailable: {{ .Values.proxy.pdb.minAvailable }}
-  maxAvailable: {{ .Values.proxy.pdb.maxAvailable }}
+  maxUnavailable: {{ .Values.proxy.pdb.maxUnavailable }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: proxy

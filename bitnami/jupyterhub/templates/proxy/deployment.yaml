@@ -115,6 +115,19 @@ spec:
           {{- if .Values.proxy.resources }}
           resources: {{- toYaml .Values.proxy.resources | nindent 12 }}
           {{- end }}
+          {{- if .Values.proxy.startupProbe.enabled }}
+          startupProbe:
+            httpGet:
+              path: /_chp_healthz
+              port: http
+            initialDelaySeconds: {{ .Values.proxy.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.proxy.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.proxy.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.proxy.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.proxy.startupProbe.failureThreshold }}
+          {{- else if .Values.proxy.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.proxy.livenessProbe.enabled }}
           livenessProbe:
             httpGet:

@@ -11,6 +11,7 @@ global:
 #     - myRegistryKeySecretName
 #   storageClass: myStorageClass
 
+## @section Common parameters
 ## Override Kubernetes version
 ## @param kubeVersion Override Kubernetes version
 ##
@@ -51,10 +52,10 @@ hub:
     registry: docker.io
     ## @param hub.image.repository Hub image repository
     ##
-    repository: jupyterhub/k8s-hub
+    repository: bitnami/jupyterhub
     ## @param hub.image.tag Hub image tag (immutabe tags are recommended)
     ##
-    tag: 0.11.1
+    tag: 1.3.0-debian-10-r2
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -71,6 +72,24 @@ hub:
     ## @param hub.image.pullSecrets Hub image pull secrets
     ##
     pullSecrets: []
+
+  ## Configure extra options for startup probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-startup-readiness-probes/#configure-probes
+  ##
+  ## @param hub.startupProbe.enabled Enable startupProbe
+  ## @param hub.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param hub.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param hub.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param hub.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param hub.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    failureThreshold: 30
+    timeoutSeconds: 3
+    successThreshold: 1
 
   ## Configure extra options for liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
@@ -139,6 +158,7 @@ hub:
         JupyterHub:
           admin_access: true
           authenticator_class: dummy
+          cookie_secret_file: /tmp/jupyterhub_cookie_secret
           DummyAuthenticator:
           {{- if .Values.hub.password }}
             password: {{ .Values.hub.password | quote }}
@@ -154,7 +174,7 @@ hub:
       activeServerLimit:
       db:
         type: postgres
-        url: postgresql://{{ ternary .Values.postgresql.postgresqlUsername .Values.externalDatabase.host .Values.postgresql.enabled }}@{{ ternary (include "jupyterhub.postgresql.fullname" .) .Values.externalDatabase.host .Values.postgresql.enabled }}:{{ ternary "5432" .Values.externalDatabase.port .Values.postgresql.enabled }}/{{ ternary .Values.postgresql.postgresqlDatabase .Values.externalDatabase.port .Values.postgresql.enabled }}
+        url: postgresql://{{ ternary .Values.postgresql.postgresqlUsername .Values.externalDatabase.user .Values.postgresql.enabled }}@{{ ternary (include "jupyterhub.postgresql.fullname" .) .Values.externalDatabase.host .Values.postgresql.enabled }}:{{ ternary "5432" .Values.externalDatabase.port .Values.postgresql.enabled }}/{{ ternary .Values.postgresql.postgresqlDatabase .Values.externalDatabase.database .Values.postgresql.enabled }}
       services: {}
       allowNamedServers: false
       namedServerLimitPerUser:
@@ -232,7 +252,7 @@ hub:
         capacity: {{ .Values.singleuser.persistence.size }}
         homeMountPath: {{ .Values.singleuser.notebookDir }}
         dynamic:
-          storageClass: {{ include "jupyterhub.storageClass" . }}
+          storageClass: {{ include "common.storage.class" (dict "persistence" .Values.singleuser.persistence "global" .Values.global) }}
           pvcNameTemplate: {{ include "common.names.fullname" . }}-claim-{username}{servername}
           volumeNameTemplate: {{ include "common.names.fullname" . }}-volume-{username}{servername}
           storageAccessModes: {{- include "common.tplvalues.render" ( dict "value" .Values.singleuser.persistence.accessModes "context" $ ) | nindent 8 }}
@@ -293,9 +313,9 @@ hub:
     ## @param hub.pdb.minAvailable Set minimum available hub instances
     ##
     minAvailable:
-    ## @param hub.pdb.maxAvailable Set maximum available hub instances
+    ## @param hub.pdb.maxUnavailable Set maximum available hub instances
     ##
-    maxc Available:
+    maxUnavailable:
 
   ## @param hub.priorityClassName Hub pod priority class name
   ##
@@ -420,6 +440,11 @@ hub:
   ##
   lifecycleHooks: {}
 
+  ## Custom Startup probes for hub
+  ## @param hub.customStartupProbe  Override default startup probe
+  ##
+  customStartupProbe: {}
+
   ## Custom Liveness probes for hub
   ## @param hub.customLivenessProbe  Override default liveness probe
   ##
@@ -531,7 +556,7 @@ hub:
     ##
     extraIngress: []
 
-    ## @param hub.networkPolicy.extraEgress Add extra ingress rules to the NetworkPolicy
+    ## @param hub.networkPolicy.extraEgress [object] Add extra ingress rules to the NetworkPolicy
     ##
     extraEgress: |
       ## Hub --> Any IP:PORT
@@ -602,6 +627,25 @@ proxy:
     ## @param proxy.image.debug Activate verbose output
     ##
     debug: false
+
+  ## Configure extra options for startup probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-startup-readiness-probes/#configure-probes
+  ##
+  ## @param proxy.startupProbe.enabled Enable startupProbe
+  ## @param proxy.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param proxy.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param proxy.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param proxy.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param proxy.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    failureThreshold: 30
+    timeoutSeconds: 3
+    successThreshold: 1
+
   ## Configure extra options for liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ##
@@ -662,9 +706,9 @@ proxy:
     ## @param proxy.pdb.minAvailable Set minimum available proxy instances
     ##
     minAvailable:
-    ## @param proxy.pdb.maxAvailable Set maximum available proxy instances
+    ## @param proxy.pdb.maxUnavailable Set maximum available proxy instances
     ##
-    maxAvailable:
+    maxUnavailable:
 
   ## Container ports
   ##
@@ -793,6 +837,11 @@ proxy:
   ##
   lifecycleHooks: {}
 
+  ## Custom Startup probes for proxy
+  ## @param proxy.customStartupProbe  Override default startup probe
+  ##
+  customStartupProbe: {}
+
   ## Custom Liveness probes for proxy
   ## @param proxy.customLivenessProbe  Override default liveness probe
   ##
@@ -880,7 +929,7 @@ proxy:
     ## @param proxy.networkPolicy.allowInterspaceAccess Allow communication between pods in different namespaces
     ##
     allowInterspaceAccess: true
-    ## @param proxy.networkPolicy.extraIngress Add extra ingress rules to the NetworkPolicy
+    ## @param proxy.networkPolicy.extraIngress [object] Add extra ingress rules to the NetworkPolicy
     ##
     extraIngress: |
       ## Any IP --> Proxy
@@ -1180,6 +1229,11 @@ imagePuller:
   ## @param imagePuller.lifecycleHooks Add lifecycle hooks to the ImagePuller deployment
   ##
   lifecycleHooks: {}
+
+  ## Custom Startup probes for imagePuller
+  ## @param imagePuller.customStartupProbe  Override default startup probe
+  ##
+  customStartupProbe: {}
 
   ## Custom Liveness probes for imagePuller
   ## @param imagePuller.customLivenessProbe  Override default liveness probe
