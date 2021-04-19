@@ -988,4 +988,5 @@ tls:
   enabled: false
   certificate: |-
   key: |-
+  caCertificate: |-
   # existingSecret: name-of-existing-secret-to-certificates
