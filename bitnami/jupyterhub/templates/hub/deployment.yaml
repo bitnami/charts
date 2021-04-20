@@ -24,10 +24,10 @@ spec:
         {{- if .Values.hub.podAnnotations }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.hub.podAnnotations "context" $ ) | nindent 4 }}
         {{- end }}
-        {{- if not .Values.hub.existingConfigmap }}
+        {{- if empty .Values.hub.existingConfigmap }}
         checksum/hub-config: {{ include (print $.Template.BasePath "/hub/configmap.yaml") . | sha256sum }}
         {{- end }}
-        {{- if not .Values.hub.existingSecret }}
+        {{- if empty .Values.hub.existingSecret }}
         checksum/hub-secret: {{ include (print $.Template.BasePath "/hub/secret.yaml") . | sha256sum }}
         {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
