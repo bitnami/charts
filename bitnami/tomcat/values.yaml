@@ -105,6 +105,13 @@ extraEnvVarsSecret:
 ##
 replicaCount: 1
 
+## Deployment
+##
+deployment:
+  ## Deployment type: deployment or statefulset
+  ##
+  type: deployment
+
 ## Strategy to use to update Pods
 ##
 updateStrategy:
@@ -116,6 +123,15 @@ updateStrategy:
 ## Tomcat container port to open
 ##
 containerPort: 8080
+
+## Tomcat container extra ports to open
+##
+## Example:
+## containerExtraPorts:
+##  - name: ajp
+##    containerPort: 8081
+##
+containerExtraPorts: {}
 
 ## Tomcat pods' Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
@@ -241,6 +257,10 @@ tolerations: []
 ## Extra volumes to add to the deployment
 ##
 extraVolumes: []
+
+## Extra volume claim templates to add to the statefulset
+##
+extraVolumeClaimTemplates: []
 
 ## Extra volume mounts to add to the container
 ##
