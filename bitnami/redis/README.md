@@ -71,16 +71,16 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                | Description                                        | Value           |
-| ------------------- | -------------------------------------------------- | --------------- |
-| `kubeVersion`       | Override Kubernetes version                        | `nil`           |
-| `nameOverride`      | String to partially override common.names.fullname | `nil`           |
-| `fullnameOverride`  | String to fully override common.names.fullname     | `nil`           |
-| `commonLabels`      | Labels to add to all deployed objects              | `{}`            |
-| `commonAnnotations` | Annotations to add to all deployed objects         | `{}`            |
-| `clusterDomain`     | Kubernetes cluster domain name                     | `cluster.local` |
-| `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`            |
-
+| Name                            | Description                                        | Value           |
+|---------------------------------|----------------------------------------------------|-----------------|
+| `kubeVersion`                   | Override Kubernetes version                        | `nil`           |
+| `nameOverride`                  | String to partially override common.names.fullname | `nil`           |
+| `fullnameOverride`              | String to fully override common.names.fullname     | `nil`           |
+| `commonLabels`                  | Labels to add to all deployed objects              | `{}`            |
+| `commonAnnotations`             | Annotations to add to all deployed objects         | `{}`            |
+| `clusterDomain`                 | Kubernetes cluster domain name                     | `cluster.local` |
+| `extraDeploy`                   | Array of extra objects to deploy with the release  | `[]`            |
+| `terminationGracePeriodSeconds` | Define termination grace period for all pods       | `30`            |
 
 ### Redis(TM) Image parameters
 

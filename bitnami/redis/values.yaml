@@ -42,6 +42,9 @@ clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
+## @param terminationGracePeriodSeconds Integer setting the termination grace period for all pods in seconds
+##
+terminationGracePeriodSeconds: 30
 
 ## @section Redis(TM) Image parameters
 
