@@ -93,7 +93,7 @@ The following tables lists the configurable parameters of the Tomcat chart and t
 
 | Parameter                   | Description                                                                               | Default                                     |
 |-----------------------------|-------------------------------------------------------------------------------------------|---------------------------------------------|
-| `deployment.type`           | Use Deployment or StatefulSet                                                              | `pvc`                                      |
+| `deployment.type`           | Use Deployment or StatefulSet                                                              | `deployment`                                      |
 | `replicaCount`              | Specify number of Tomcat replicas                                                         | `1`                                         |
 | `containerPort`             | HTTP port to expose at container level                                                    | `8080`                                      |
 | `containerExtraPorts`       | Extra ports to expose at container level                                               | `{}`                                      |
