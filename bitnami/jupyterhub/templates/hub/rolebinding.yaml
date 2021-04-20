@@ -7,7 +7,7 @@ metadata:
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-  name: {{ printf "%s-hub" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  name: {{ include "jupyterhub.hub.name" . }}
   namespace: {{ .Release.Namespace | quote }}
 subjects:
   - kind: ServiceAccount

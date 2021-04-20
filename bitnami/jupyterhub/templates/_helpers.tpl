@@ -6,6 +6,20 @@ Return the proper hub image name
 {{- end -}}
 
 {{/*
+Return the proper hub image name
+*/}}
+{{- define "jupyterhub.hub.name" -}}
+{{- printf "%s-hub" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Return the proper hub image name
+*/}}
+{{- define "jupyterhub.proxy.name" -}}
+{{- printf "%s-proxy" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
 Return the proper singleuser image name (to be set in the hub.configuration part). We cannot use common.images.image because of the tag
 {{ include "jupyterhub.hubconfiguration.imageEntry" ( dict "imageRoot" .Values.path.to.the.image "global" $) }}
 */}}
