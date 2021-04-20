@@ -190,34 +190,6 @@ The following table lists the configurable parameters of the Redis<sup>TM</sup> 
 | `redis.sidecars`                           | Attach additional containers to the pod (evaluated as a template)                                                  | `nil`                            |
 | `redis.resources`                          | Redis<sup>TM</sup> CPU/Memory resource requests/limits                                                             | `{Memory: "256Mi", CPU: "100m"}` |
 
-#### Cluster initialization job parameters
-
-| Parameter                           | Description                                                                                                | Default                        |
-|-------------------------------------|------------------------------------------------------------------------------------------------------------|--------------------------------|
-| `initJob.activeDeadlineSeconds`     | Maximum time (in seconds) to wait for the cluster initialization job to succeed                            | `600`                          |
-| `initJob.command`                   | Entrypoint string.                                                                                         | `nil`                          |
-| `initJob.args`                      | Arguments for the provided command if needed                                                               | `nil`                          |
-| `initJob.annotations`               | Job annotations                                                                                            | `nil`                          |
-| `initJob.hostAliases`               | Add deployment host aliases                                                                                | `[]`                           |
-| `initJob.podAnnotations`            | Job pod annotations                                                                                        | `nil`                          |
-| `initJob.extraEnvVars`              | Array containing extra env vars to be added to all pods (evaluated as a template)                          | `[]`                           |
-| `initJob.extraEnvVarsCM`            | ConfigMap containing extra env vars to be added to all pods (evaluated as a template)                      | `nil`                          |
-| `initJob.extraEnvVarsSecret`        | Secret containing extra env vars to be added to all pods (evaluated as a template)                         | `nil`                          |
-| `initJob.initContainers`            | Init containers to add to the cronjob container                                                            | `{}`                           |
-| `initJob.extraVolumes`              | Array of extra volumes to be added to all pods (evaluated as a template)                                   | `[]`                           |
-| `initJob.extraVolumeMounts`         | Array of extra volume mounts to be added to all pods (evaluated as a template)                             | `[]`                           |
-| `initJob.podLabels`                 | Additional labels                                                                                          | `{}`                           |
-| `initJob.podAffinityPreset`         | Init job pod affinity preset. Ignored if `initJob.affinity` is set. Allowed values: `soft` or `hard`       | `""`                           |
-| `initJob.podAntiAffinityPreset`     | Init job pod anti-affinity preset. Ignored if `initJob.affinity` is set. Allowed values: `soft` or `hard`  | `soft`                         |
-| `initJob.nodeAffinityPreset.type`   | Init job node affinity preset type. Ignored if `initJob.affinity` is set. Allowed values: `soft` or `hard` | `""`                           |
-| `initJob.nodeAffinityPreset.key`    | Init job node label key to match Ignored if `initJob.affinity` is set.                                     | `""`                           |
-| `initJob.nodeAffinityPreset.values` | Init job node label values to match. Ignored if `initJob.affinity` is set.                                 | `[]`                           |
-| `initJob.affinity`                  | Affinity for init job pods assignment                                                                      | `{}` (evaluated as a template) |
-| `initJob.nodeSelector`              | Node labels for init job pods assignment                                                                   | `{}` (evaluated as a template) |
-| `initJob.tolerations`               | Tolerations for init job pods assignment                                                                   | `[]` (evaluated as a template) |
-| `initJob.resources`                 | Redis<sup>TM</sup> CPU/Memory resource requests/limits                                                     | `nil`                          |
-| `initJob.priorityClassName`         | Priority class name                                                                                        | `nil`                          |
-
 #### Cluster update job parameters
 
 | Parameter                             | Description                                                                                                    | Default                        |
@@ -563,6 +535,12 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 6.0.0
+
+The cluster initialization job have been removed. Instead, the pod with index 0 from the statefulset will handle the initialization of the cluster.
+
+As consequence, the `initJob` configuration section have been removed.
 
 ### To 5.0.0
 
