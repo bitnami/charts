@@ -1,6 +1,6 @@
-{{ if (or (not .Values.persistence.enabled) (eq .Values.deployment.type "deployment")) }}
-apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
-kind: Deployment
+{{- if and .Values.persistence.enabled (not .Values.persistence.existingClaim) (eq .Values.deployment.type "statefulset")}}
+apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
+kind: StatefulSet
 metadata:
   name: {{ template "common.names.fullname" . }}
   namespace: {{ .Release.Namespace }}
@@ -15,7 +15,8 @@ spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
-  strategy: {{- include "common.tplvalues.render" (dict "value" .Values.updateStrategy "context" $ ) | nindent 4 }}
+  updateStrategy: {{- include "common.tplvalues.render" (dict "value" .Values.updateStrategy "context" $ ) | nindent 4 }}
+  serviceName: {{ template "common.names.fullname" . }}-headless
   template:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
@@ -26,4 +27,20 @@ spec:
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
     spec: {{- include "tomcat.pod" . | nindent 6 }}
+  {{- if and .Values.persistence.enabled }}
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes: {{ .Values.persistence.accessModes }}
+      storageClassName: {{ .Values.persistence.storageClassName }}
+      resources:
+        requests:
+          storage: {{ .Values.persistence.size }}
+      selector:
+        matchLabels: {{- include "common.labels.matchLabels" . | nindent 10 }}
+  {{- if .Values.extraVolumeClaimTemplates }}
+  {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeClaimTemplates "context" $) | nindent 2 }}
+  {{- end }}
+  {{- end }}
 {{- end }}
