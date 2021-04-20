@@ -1,7 +1,7 @@
 annotations:
   category: Wiki
 apiVersion: v2
-appVersion: 1.35.2
+appVersion: 1.35.3
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
