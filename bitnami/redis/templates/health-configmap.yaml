@@ -1,20 +1,20 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ template "redis.fullname" . }}-health
+  name: {{ printf "%s-health" (include "common.names.fullname" .) }}
   namespace: {{ .Release.Namespace | quote }}
-  labels:
-    app: {{ template "redis.name" . }}
-    chart: {{ template "redis.chart" . }}
-    heritage: {{ .Release.Service }}
-    release: {{ .Release.Name }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 data:
   ping_readiness_local.sh: |-
     #!/bin/bash
-{{- if .Values.usePasswordFile }}
-    password_aux=`cat ${REDIS_PASSWORD_FILE}`
-    export REDIS_PASSWORD=$password_aux
-{{- end }}
+
+    [[ -f $REDIS_PASSWORD_FILE ]] && export REDIS_PASSWORD="$(< "${REDIS_PASSWORD_FILE}")"
     export REDISCLI_AUTH="$REDIS_PASSWORD"
     response=$(
       timeout -s 3 $1 \
@@ -39,10 +39,8 @@ data:
     fi
   ping_liveness_local.sh: |-
     #!/bin/bash
-{{- if .Values.usePasswordFile }}
-    password_aux=`cat ${REDIS_PASSWORD_FILE}`
-    export REDIS_PASSWORD=$password_aux
-{{- end }}
+
+    [[ -f $REDIS_PASSWORD_FILE ]] && export REDIS_PASSWORD="$(< "${REDIS_PASSWORD_FILE}")"
     export REDISCLI_AUTH="$REDIS_PASSWORD"
     response=$(
       timeout -s 3 $1 \
@@ -68,10 +66,8 @@ data:
 {{- if .Values.sentinel.enabled }}
   ping_sentinel.sh: |-
     #!/bin/bash
-{{- if .Values.usePasswordFile }}
-    password_aux=`cat ${REDIS_PASSWORD_FILE}`
-    export REDIS_PASSWORD=$password_aux
-{{- end }}
+
+    [[ -f $REDIS_PASSWORD_FILE ]] && export REDIS_PASSWORD="$(< "${REDIS_PASSWORD_FILE}")"
     export REDISCLI_AUTH="$REDIS_PASSWORD"
     response=$(
       timeout -s 3 $1 \
@@ -112,10 +108,8 @@ data:
 {{- end }}
   ping_readiness_master.sh: |-
     #!/bin/bash
-{{- if .Values.usePasswordFile }}
-    password_aux=`cat ${REDIS_MASTER_PASSWORD_FILE}`
-    export REDIS_MASTER_PASSWORD=$password_aux
-{{- end }}
+
+    [[ -f $REDIS_MASTER_PASSWORD_FILE ]] && export REDIS_MASTER_PASSWORD="$(< "${REDIS_MASTER_PASSWORD_FILE}")"
     export REDISCLI_AUTH="$REDIS_MASTER_PASSWORD"
     response=$(
       timeout -s 3 $1 \
@@ -138,10 +132,8 @@ data:
     fi
   ping_liveness_master.sh: |-
     #!/bin/bash
-{{- if .Values.usePasswordFile }}
-    password_aux=`cat ${REDIS_MASTER_PASSWORD_FILE}`
-    export REDIS_MASTER_PASSWORD=$password_aux
-{{- end }}
+
+    [[ -f $REDIS_MASTER_PASSWORD_FILE ]] && export REDIS_MASTER_PASSWORD="$(< "${REDIS_MASTER_PASSWORD_FILE}")"
     export REDISCLI_AUTH="$REDIS_MASTER_PASSWORD"
     response=$(
       timeout -s 3 $1 \

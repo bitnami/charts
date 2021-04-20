@@ -39,6 +39,11 @@ spec:
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- end }}
+      {{- if .Values.metrics.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.tolerations "context" $) | nindent 8 }}
+      {{- else if .Values.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
+      {{- end }}
       containers:
         - image: {{ include "airflow.metrics.image" . | quote }}
           name: airflow-exporter

@@ -18,7 +18,7 @@ kubeVersion:
 image:
   registry: docker.io
   repository: bitnami/tomcat
-  tag: 10.0.5-debian-10-r0
+  tag: 10.0.5-debian-10-r12
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -104,6 +104,13 @@ extraEnvVarsSecret:
 ## Number of Tomcat replicas
 ##
 replicaCount: 1
+
+## Deployment
+##
+deployment:
+  ## Deployment type: deployment or statefulset
+  ##
+  type: deployment
 
 ## Strategy to use to update Pods
 ##
@@ -250,6 +257,10 @@ tolerations: []
 ## Extra volumes to add to the deployment
 ##
 extraVolumes: []
+
+## Extra volume claim templates to add to the statefulset
+##
+extraVolumeClaimTemplates: []
 
 ## Extra volume mounts to add to the container
 ##
