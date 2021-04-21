@@ -296,13 +296,13 @@ initJob:
   hostAliases: []
 
   ## Job annotations
-  ## IMPORTANT: When using Istio set as the following (https://github.com/istio/istio/issues/11045):
-  ## annotations:
-  ##   sidecar.istio.io/inject: "false"
   ##
   annotations: {}
 
   ## Pod annotations
+  ## IMPORTANT: When using Istio set as the following (https://github.com/istio/istio/issues/11045):
+  ## podAnnotations:
+  ##   sidecar.istio.io/inject: "false"
   ##
   podAnnotations: {}
 
