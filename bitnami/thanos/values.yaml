@@ -138,6 +138,14 @@ query:
   ##
   extraEnv: []
 
+  ## Extra volumes to add to Thanos Query
+  ##
+  extraVolumes: []
+
+  ## Extra volume mounts to add to the query container
+  ##
+  extraVolumeMounts: []
+
   ## Extra Flags to passed to Thanos Query
   ##
   extraFlags: []
@@ -542,6 +550,16 @@ queryFrontend:
   ##
   extraEnv: []
 
+  ## Extra volumes to add to the Query Frontend
+  ##
+  extraVolumes: []
+
+  ## Extra volume mounts to add to the query-frontend container
+  ##
+  extraVolumeMounts: []
+
+  ## Extra Flags to passed to Thanos Query Frontend
+  ##
   extraFlags: []
 
   ## Thanos Query Frontend Cache Configuration
@@ -856,6 +874,14 @@ bucketweb:
   ##
   extraEnv: []
 
+  ## Extra volumes to add to Bucket Web
+  ##
+  extraVolumes: []
+
+  ## Extra volume mounts to add to the bucketweb container
+  ##
+  extraVolumeMounts: []
+
   ## Extra Flags to passed to Bucket Web
   ##
   extraFlags: []
@@ -1148,6 +1174,14 @@ compactor:
   ##
   extraEnv: []
 
+  ## Extra volumes to add to Thanos Compactor
+  ##
+  extraVolumes: []
+
+  ## Extra volume mounts to add to the compactor container
+  ##
+  extraVolumeMounts: []
+
   ## Extra Flags to passed to Thanos Compactor
   ##
   extraFlags: []
@@ -1366,6 +1400,14 @@ storegateway:
   ##       key: varname2-key
   ##
   extraEnv: []
+
+  ## Extra volumes to add to Thanos Store Gateway
+  ##
+  extraVolumes: []
+
+  ## Extra volume mounts to add to the storegateway container
+  ##
+  extraVolumeMounts: []
 
   ## Extra Flags to passed to Thanos Store Gateway
   ##
@@ -1687,6 +1729,14 @@ ruler:
   ##       key: varname2-key
   ##
   extraEnv: []
+
+  ## Extra volumes to add to Thanos Ruler
+  ##
+  extraVolumes: []
+
+  ## Extra volume mounts to add to the ruler container
+  ##
+  extraVolumeMounts: []
 
   ## Extra Flags to passed to Thanos Ruler
   ##
@@ -2033,6 +2083,14 @@ receive:
   ##       key: varname2-key
   ##
   extraEnv: []
+
+  ## Extra volumes to add to Thanos Receive
+  ##
+  extraVolumes: []
+
+  ## Extra volume mounts to add to the receive container
+  ##
+  extraVolumeMounts: []
 
   ## Extra Flags to passed to Thanos Receive
   ##

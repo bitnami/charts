@@ -139,6 +139,9 @@ spec:
               mountPath: /conf/objstore
             - name: data
               mountPath: /data
+            {{- if .Values.ruler.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.ruler.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
       volumes:
         - name: ruler-config
           configMap:
@@ -149,6 +152,9 @@ spec:
             {{- if .Values.existingObjstoreSecretItems }}
             items: {{- toYaml .Values.existingObjstoreSecretItems | nindent 14 }}
             {{- end }}
+        {{- if .Values.ruler.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.ruler.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
   {{- if and .Values.ruler.persistence.enabled .Values.ruler.persistence.existingClaim }}
         - name: data
           persistentVolumeClaim:

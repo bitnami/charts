@@ -154,6 +154,9 @@ spec:
             - name: tls-client
               mountPath: /tls/client
       {{- end }}
+            {{- if .Values.query.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.query.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
       volumes:
       {{- if or (include "thanos.query.createSDConfigmap" .) $query.existingSDConfigmap }}
         - name: sd-config
@@ -170,4 +173,8 @@ spec:
           secret:
             secretName: {{ include "common.secrets.name" (dict "existingSecret" .Values.query.grpcTLS.client.existingSecret "defaultNameSuffix" "query-tls-client" "context" $) }}
       {{- end }}
+        {{- if .Values.query.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.query.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+
 {{- end }}
