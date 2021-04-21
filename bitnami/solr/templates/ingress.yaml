@@ -9,7 +9,9 @@ metadata:
   {{- end }}
   annotations:
     {{- if .Values.ingress.certManager }}
+      {{- if not .Values.ingress.existingSecretName }}
     kubernetes.io/tls-acme: "true"
+      {{- end }}
     {{- end }}
     {{- if .Values.ingress.annotations }}
     {{- include "common.tplvalues.render" (dict "value" .Values.ingress.annotations "context" $) | nindent 4 }}
@@ -48,7 +50,11 @@ spec:
     {{- if .Values.ingress.tls }}
     - hosts:
         - {{ .Values.ingress.hostname }}
+      {{- if .Values.ingress.existingSecretName }}
+      secretName: {{ .Values.ingress.existingSecretName }}
+      {{- else }}
       secretName: {{ printf "%s-tls" .Values.ingress.hostname }}
+      {{- end }}
     {{- end }}
     {{- if .Values.ingress.extraTls }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.ingress.extraTls "context" $ ) | nindent 4 }}
