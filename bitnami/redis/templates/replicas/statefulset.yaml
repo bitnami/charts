@@ -214,6 +214,7 @@ spec:
             {{- end }}
             - name: redis-data
               mountPath: /data
+              subPath: {{ .Values.replica.persistence.subPath }}
             - name: config
               mountPath: /opt/bitnami/redis/mounted-etc
             - name: redis-tmp-conf
