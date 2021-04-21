@@ -335,6 +335,13 @@ service:
   ##
   type: ClusterIP
 
+  ## externalTrafficPolicy for the service
+  ## default to "Cluster"
+  ## set to "Local" in order to preserve the client source IP (only on service of type LoadBalancer or NodePort)
+  ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/
+  ##
+  externalTrafficPolicy:
+
   ## kong proxy HTTP service port
   ##
   proxyHttpPort: 80
