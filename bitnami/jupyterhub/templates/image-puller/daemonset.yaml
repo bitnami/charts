@@ -55,8 +55,8 @@ spec:
       securityContext: {{- omit .Values.imagePuller.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       initContainers:
-      {{- range (list .Values.singleuser.image .Values.auxiliaryImage) }}
-        - name: pull-{{ .repository | replace "/" "-" }}
+      {{- range $index, $image := (list .Values.singleuser.image .Values.auxiliaryImage) }}
+        - name: pull-{{ $index }}
           image: {{ include "common.images.image" (dict "imageRoot" . "global" $.Values.global) }}
           imagePullPolicy: {{ .pullPolicy }}
           command:
