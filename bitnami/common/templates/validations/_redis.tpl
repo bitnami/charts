@@ -10,17 +10,21 @@ Params:
   - subchart - Boolean - Optional. Whether redis is used as subchart or not. Default: false
 */}}
 {{- define "common.validations.values.redis.passwords" -}}
-  {{- $existingSecret := include "common.redis.values.existingSecret" . -}}
   {{- $enabled := include "common.redis.values.enabled" . -}}
   {{- $valueKeyPrefix := include "common.redis.values.keys.prefix" . -}}
-  {{- $valueKeyRedisPassword := printf "%s%s" $valueKeyPrefix "password" -}}
-  {{- $valueKeyRedisUsePassword := printf "%s%s" $valueKeyPrefix "usePassword" -}}
+  {{- $standarizedVersion := include "common.redis.values.standarized.version" . }}
 
-  {{- if and (not $existingSecret) (eq $enabled "true") -}}
+  {{- $existingSecret := (printf "%s%s" $valueKeyPrefix "auth.existingSecret") (printf "%s%s" $valueKeyPrefix "existingSecret") $standarizedVersion }}
+  {{- $existingSecretValue := include "common.utils.getValueFromKey" (dict "key" $existingSecret "context" .context) }}
+
+  {{- $valueKeyRedisPassword := (printf "%s%s" $valueKeyPrefix "auth.password") (printf "%s%s" $valueKeyPrefix "password") $standarizedVersion }}
+  {{- $valueKeyRedisUseAuth := (printf "%s%s" $valueKeyPrefix "auth.enabled") (printf "%s%s" $valueKeyPrefix "usePassword") $standarizedVersion }}
+
+  {{- if and (not $existingSecretValue) (eq $enabled "true") -}}
     {{- $requiredPasswords := list -}}
 
-    {{- $usePassword := include "common.utils.getValueFromKey" (dict "key" $valueKeyRedisUsePassword "context" .context) -}}
-    {{- if eq $usePassword "true" -}}
+    {{- $useAuth := include "common.utils.getValueFromKey" (dict "key" $valueKeyRedisUseAuth "context" .context) -}}
+    {{- if eq $useAuth "true" -}}
       {{- $requiredRedisPassword := dict "valueKey" $valueKeyRedisPassword "secret" .secret "field" "redis-password" -}}
       {{- $requiredPasswords = append $requiredPasswords $requiredRedisPassword -}}
     {{- end -}}
@@ -69,4 +73,20 @@ Params:
 */}}
 {{- define "common.redis.values.keys.prefix" -}}
   {{- if .subchart -}}redis.{{- else -}}{{- end -}}
+{{- end -}}
+
+{{/*
+Checks whether the redis chart's includes the standarizations (version >= 14)
+
+Usage:
+{{ include "common.redis.values.standarized.version" (dict "context" $) }}
+*/}}
+{{- define "common.redis.values.standarized.version" -}}
+
+  {{- $standarizedAuth := printf "%s.%s" (include "common.redis.values.keys.prefix" .) "auth" -}}
+  {{- $standarizedAuthValues := include "common.utils.getValueFromKey" (dict "key" $standarizedAuth "context" .context) }}
+
+  {{- if $standarizedAuthValues -}}
+    {{- true -}}
+  {{- end -}}
 {{- end -}}
