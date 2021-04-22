@@ -281,7 +281,7 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ### To 10.0.0
 
-Due to recent changes in the container image (see [Notable changes](https://github.com/bitnami/bitnami-docker-apache#notable-changes)), we decided to preemptively bump the major version of the chart.
+Due to recent changes in the container image (see [Notable changes](https://github.com/bitnami/bitnami-docker-apache#notable-changes)), the major version of the chart has been bumped preemptively.
 
 Upgrading from version `9.x.x` should be possible without any extra required step, but it's highly recommended to backup your custom web apps data before upgrading.
 
