@@ -1,19 +1,55 @@
+## @section Global parameters
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
-## Current available global Docker image parameters: imageRegistry and imagePullSecrets
-##
-# global:
-#   imageRegistry: myRegistryName
-#   imagePullSecrets:
-#     - myRegistryKeySecretName
-#   storageClass: myStorageClass
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
 
-## Force target Kubernetes version (using Helm capabilites if not set)
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.storageClass Global StorageClass for Persistent Volume(s)
+##
+global:
+  imageRegistry:
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+  storageClass:
+
+## @section Common parameters
+
+## @param kubeVersion Override Kubernetes version
 ##
 kubeVersion:
+## @param nameOverride String to partially override common.names.fullname
+##
+nameOverride:
+## @param fullnameOverride String to fully override common.names.fullname
+##
+fullnameOverride:
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+## @param clusterDomain Kubernetes cluster domain name
+##
+clusterDomain: cluster.local
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
 
-## Bitnami WildFly image version
-## ref: https://hub.docker.com/r/bitnami/wildfly/tags/
+## @section WildFly Image parameters
+
+## Bitnami WildFly image
+## ref: https://hub.docker.com/r/bitnami/redis/tags/
+## @param image.registry WildFly image registry
+## @param image.repository WildFly image repository
+## @param image.tag WildFly image tag (immutable tags are recommended)
+## @param image.pullPolicy WildFly image pull policy
+## @param image.pullSecrets WildFly image pull secrets
+## @param image.debug Enable image debug mode
 ##
 image:
   registry: docker.io
@@ -27,124 +63,188 @@ image:
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-  ## Example:
+  ## e.g:
   ## pullSecrets:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
-  ## Set to true if you would like to see extra information on logs
+  ## Enable debug mode
   ##
   debug: false
 
-## String to partially override common.names.fullname template (will maintain the release name)
-##
-# nameOverride:
+## @section WildFly Configuration parameters
+## WildFly settings based on environment variables
+## ref: https://github.com/bitnami/bitnami-docker-wildfly#configuration
 
-## String to fully override common.names.fullname template
-##
-# fullnameOverride:
-
-## Add labels to all the deployed resources
-##
-commonLabels: {}
-
-## Add annotations to all the deployed resources
-##
-commonAnnotations: {}
-
-## Kubernetes Cluster Domain
-##
-clusterDomain: cluster.local
-
-## Deployment pod host aliases
-## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
-##
-hostAliases: []
-
-## Extra objects to deploy (value evaluated as a template)
-##
-extraDeploy: []
-
-## Admin user
-## ref: https://github.com/bitnami/bitnami-docker-wildfly#creating-a-custom-user
+## @param wildflyUsername WildFly username
 ##
 wildflyUsername: user
-
-## Admin password
-## ref: https://github.com/bitnami/bitnami-docker-wildfly#creating-a-custom-user
+## @param wildflyPassword WildFly user password
+## Defaults to a random 10-character alphanumeric string if not set
 ##
-# wildflyPassword:
-
-## Command and args for running the container (set to default if not set). Use array form
+wildflyPassword: ""
+## @param command Override default container command (useful when using custom images)
 ##
 command: []
+## @param args Override default container args (useful when using custom images)
+##
 args: []
-
-## Additional environment variables to set
-## Example:
+## @param extraEnvVars Array with extra environment variables to add to the WildFly container
+## e.g:
 ## extraEnvVars:
 ##   - name: FOO
 ##     value: "bar"
 ##
 extraEnvVars: []
-
-## ConfigMap with extra environment variables
+## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars
 ##
 extraEnvVarsCM:
-
-## Secret with extra environment variables
+## @param extraEnvVarsSecret Name of existing Secret containing extra env vars
 ##
 extraEnvVarsSecret:
 
-## Number of Wildfly replicas
+## @section WildFly deployment parameters
+
+## @param replicaCount Number of Wildfly replicas to deploy
 ##
 replicaCount: 1
-
-## Strategy to use to update Pods
+## @param updateStrategy.type WildFly deployment strategy type
+## @param updateStrategy.rollingUpdate WildFly deployment rolling update configuration parameters
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+## NOTE: Set it to `Recreate` if you use a PV that cannot be mounted on multiple pods
+## e.g:
+## updateStrategy:
+##  type: RollingUpdate
+##  rollingUpdate:
+##    maxSurge: 25%
+##    maxUnavailable: 25%
 ##
 updateStrategy:
-  ## StrategyType
-  ## Can be set to RollingUpdate or OnDelete
-  ##
   type: RollingUpdate
-
-## Wildfly container ports to open
+  rollingUpdate: {}
+## @param hostAliases [array] WildFly pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
+## @param extraVolumes Optionally specify extra list of additional volumes for WildFly pods
+##
+extraVolumes: []
+## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for WildFly container(s)
+##
+extraVolumeMounts: []
+## @param sidecars Add additional sidecar containers to the WildFly pod
+## e.g:
+## sidecars:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+sidecars: {}
+## @param initContainers Add additional init containers to the WildFly pods
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+## e.g:
+## initContainers:
+##  - name: your-image-name
+##    image: your-image
+##    imagePullPolicy: Always
+##    ports:
+##      - name: portname
+##        containerPort: 1234
+##
+initContainers: {}
+## @param podLabels Extra labels for WildFly pods
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
+podLabels: {}
+## @param podAnnotations Annotations for WildFly pods
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+##
+podAnnotations: {}
+## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+##
+podAffinityPreset: ""
+## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+##
+podAntiAffinityPreset: soft
+## Node affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+##
+nodeAffinityPreset:
+  ## @param nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ##
+  type: ""
+  ## @param nodeAffinityPreset.key Node label key to match. Ignored if `affinity` is set
+  ##
+  key: ""
+  ## @param nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set
+  ## E.g.
+  ## values:
+  ##   - e2e-az1
+  ##   - e2e-az2
+  ##
+  values: []
+## @param affinity Affinity for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+## NOTE: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
+##
+affinity: {}
+## @param nodeSelector Node labels for pod assignment
+## ref: https://kubernetes.io/docs/user-guide/node-selection/
+##
+nodeSelector: {}
+## @param tolerations Tolerations for pod assignment
+## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+##
+tolerations: {}
+## WildFly containers' resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## @param resources.limits The resources limits for the WildFly container
+## @param resources.requests [object] The requested resources for the WildFly container
+##
+resources:
+  limits: {}
+  requests:
+    memory: 512Mi
+    cpu: 300m
+## Container ports
+## @param containerPorts.http WildFly HTTP container port
+## @param containerPorts.mgmt WildFly HTTPS container port
 ##
 containerPorts:
   http: 8080
   mgmt: 9990
-
-## Wildfly pods' Security Context
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+## Configure Pods Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+## @param podSecurityContext.enabled Enabled WildFly pods' Security Context
+## @param podSecurityContext.fsGroup Set WildFly pod's Security Context fsGroup
 ##
 podSecurityContext:
   enabled: true
   fsGroup: 1001
-
-## Wildfly containers' SecurityContext
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+## Configure Container Security Context (only main container)
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+## @param containerSecurityContext.enabled Enabled WildFly containers' Security Context
+## @param containerSecurityContext.runAsUser Set WildFly container's Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Set WildFly container's Security Context runAsNonRoot
 ##
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
-
-## Wildfly containers' resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-##
-resources:
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  limits: {}
-  #   cpu: 500m
-  #   memory: 1Gi
-  requests:
-    cpu: 300m
-    memory: 512Mi
-
-## Liveness and Readiness probes
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
+  runAsNonRoot: true
+## Configure extra options for WildFly containers' liveness and readiness probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+## @param livenessProbe.enabled Enable livenessProbe
+## @skip livenessProbe.httpGet
+## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+## @param livenessProbe.periodSeconds Period seconds for livenessProbe
+## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+## @param livenessProbe.failureThreshold Failure threshold for livenessProbe
+## @param livenessProbe.successThreshold Success threshold for livenessProbe
 ##
 livenessProbe:
   enabled: true
@@ -156,6 +256,14 @@ livenessProbe:
   timeoutSeconds: 5
   failureThreshold: 6
   successThreshold: 1
+## @param readinessProbe.enabled Enable readinessProbe
+## @skip readinessProbe.httpGet
+## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+## @param readinessProbe.periodSeconds Period seconds for readinessProbe
+## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+## @param readinessProbe.failureThreshold Failure threshold for readinessProbe
+## @param readinessProbe.successThreshold Success threshold for readinessProbe
+##
 readinessProbe:
   enabled: true
   httpGet:
@@ -166,248 +274,180 @@ readinessProbe:
   timeoutSeconds: 3
   failureThreshold: 3
   successThreshold: 1
-
-## Custom Liveness probes for Wildfly
+## @param customLivenessProbe Custom livenessProbe that overrides the default one
 ##
 customLivenessProbe: {}
-
-## Custom Rediness probes Wildfly
-##
+## @param customReadinessProbe Custom readinessProbe that overrides the default one
+#
 customReadinessProbe: {}
 
-## Additional pod labels
-## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-##
-podLabels: {}
+## @section Traffic Exposure Parameters
 
-## Additional pod annotations
-## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-##
-podAnnotations: {}
-
-## Pod affinity preset
-## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-## Allowed values: soft, hard
-##
-podAffinityPreset: ""
-
-## Pod anti-affinity preset
-## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-## Allowed values: soft, hard
-##
-podAntiAffinityPreset: soft
-
-## Node affinity preset
-## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-## Allowed values: soft, hard
-##
-nodeAffinityPreset:
-  ## Node affinity type
-  ## Allowed values: soft, hard
-  ##
-  type: ""
-  ## Node label key to match
-  ## E.g.
-  ## key: "kubernetes.io/e2e-az-name"
-  ##
-  key: ""
-  ## Node label values to match
-  ## E.g.
-  ## values:
-  ##   - e2e-az1
-  ##   - e2e-az2
-  ##
-  values: []
-
-## Affinity for pod assignment. Evaluated as a template.
-## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-## Note: podAffinityPreset, podAntiAffinityPreset, and nodeAffinityPreset will be ignored when it's set
-##
-affinity: {}
-
-## Node labels for pod assignment. Evaluated as a template.
-## ref: https://kubernetes.io/docs/user-guide/node-selection/
-##
-nodeSelector: {}
-
-## Tolerations for pod assignment. Evaluated as a template.
-## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-##
-tolerations: []
-
-## Extra volumes to add to the deployment
-##
-extraVolumes: []
-
-## Extra volume mounts to add to the container
-##
-extraVolumeMounts: []
-
-## Add init containers to the Wildfly pods.
-## Example:
-## initContainers:
-##   - name: your-image-name
-##     image: your-image
-##     imagePullPolicy: Always
-##     ports:
-##       - name: portname
-##         containerPort: 1234
-##
-initContainers: {}
-
-## Add sidecars to the Wildfly pods.
-## Example:
-## sidecars:
-##   - name: your-image-name
-##     image: your-image
-##     imagePullPolicy: Always
-##     ports:
-##       - name: portname
-##         containerPort: 1234
-##
-sidecars: {}
-
-## Enable persistence using Persistent Volume Claims
-## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
-##
-persistence:
-  ## If true, use a Persistent Volume Claim, If false, use emptyDir
-  ##
-  enabled: true
-  ## Persistent Volume Storage Class
-  ## If defined, storageClassName: <storageClass>
-  ## If set to "-", storageClassName: "", which disables dynamic provisioning
-  ## If undefined (the default) or set to null, no storageClassName spec is
-  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-  ##   GKE, AWS & OpenStack)
-  ##
-  # storageClass: "-"
-  ## Persistent Volume Claim annotations
-  ##
-  annotations:
-  ## Persistent Volume Access Mode
-  ##
-  accessModes:
-    - ReadWriteOnce
-  ## Persistent Volume size
-  ##
-  size: 8Gi
-
-## Service parameters
+## WildFly service parameters
 ##
 service:
-  ## Service type
+  ## @param service.type WildFly service type
   ##
   type: LoadBalancer
-  ## HTTP port
+  ## @param service.port WildFly service HTTP port
   ##
   port: 80
-  # Management Port
+  ## @param service.mgmtPort WildFly service management console port
   ##
-  mgmtPort: 9990
-  ## Specify the nodePort(s) value(s) for the LoadBalancer and NodePort service types.
-  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+  mgmtPort: 443
+  ## Node ports to expose
+  ## @param service.nodePorts.http Node port for HTTP
+  ## @param service.nodePorts.mgmt Node port for Management console
+  ## NOTE: choose port between <30000-32767>
   ##
   nodePorts:
-    http: ""
-    mgmt: ""
-  ## Set the LoadBalancer service type to internal only.
-  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+    http:
+    mgmt:
+  ## @param service.clusterIP WildFly service Cluster IP
+  ## e.g.:
+  ## clusterIP: None
   ##
-  # loadBalancerIP:
-  ## Enable client source IP preservation
+  clusterIP:
+  ## @param service.loadBalancerIP WildFly service Load Balancer IP
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+  ##
+  loadBalancerIP:
+  ## @param service.loadBalancerSourceRanges WildFly service Load Balancer sources
+  ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+  ## e.g:
+  ## loadBalancerSourceRanges:
+  ##   - 10.10.10.0/24
+  ##
+  loadBalancerSourceRanges: []
+  ## @param service.externalTrafficPolicy WildFly service external traffic policy
   ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: Cluster
-  ## Provide any additional annotations which may be required. This can be used to
-  ## set the LoadBalancer service type to internal only.
-  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+  ## @param service.annotations Additional custom annotations for WildFly service
   ##
   annotations: {}
-
-## Ingress configuratiom
+  ## @param service.extraPorts Extra port to expose on WildFly service
+  ##
+  extraPorts: []
+## Configure the ingress resource that allows you to access the WildFly installation
+## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ##
 ingress:
-  ## Set to true to enable ingress record generation
+  ## @param ingress.enabled Enable ingress record generation for WildFly
   ##
   enabled: false
-
-  ## Set this to true in order to add the corresponding annotations for cert-manager
+  ## @param ingress.certManager Add the corresponding annotations for cert-manager integration
   ##
   certManager: false
-
-  ## When the ingress is enabled, a host pointing to this will be created
+  ## @param ingress.pathType Ingress path type
+  ##
+  pathType: ImplementationSpecific
+  ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
+  ##
+  apiVersion:
+  ## @param ingress.hostname Default host for the ingress record
   ##
   hostname: wildfly.local
-
-  ## Ingress annotations done as key:value pairs
-  ## For a full list of possible ingress annotations, please see
-  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ## @param ingress.path Default path for the ingress record
+  ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
   ##
-  ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+  path: /
+  ## @param ingress.annotations Additional custom annotations for the ingress record
+  ## NOTE: If `ingress.certManager=true`, annotation `kubernetes.io/tls-acme: "true"` will automatically be added
   ##
   annotations: {}
-
-  ## Enable TLS configuration for the hostname defined at ingress.hostname parameter
-  ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
-  ## You can use the ingress.secrets parameter to create this TLS secret, relay on cert-manager to create it, or
-  ## let the chart create self-signed certificates for you
+  ## @param ingress.tls Enable TLS configuration for the host defined at `ingress.hostname` parameter
+  ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
+  ## You can:
+  ##   - Use the `ingress.secrets` parameter to create this TLS secret
+  ##   - Relay on cert-manager to create it by setting `ingress.certManager=true`
+  ##   - Relay on Helm to create self-signed certificates by setting `ingress.tls=true` and `ingress.certManager=false`
   ##
   tls: false
-
-  ## The list of additional hostnames to be covered with this ingress record.
-  ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
-  ## Example:
+  ## @param ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
+  ## e.g:
   ## extraHosts:
   ##   - name: wildfly.local
   ##     path: /
   ##
   extraHosts: []
-
-  ## The tls configuration for additional hostnames to be covered with this ingress record.
-  ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
-  ## Example:
+  ## @param ingress.extraPaths An array with additional arbitrary paths that may need to be added to the ingress under the main host
+  ## e.g:
+  ## extraPaths:
+  ## - path: /*
+  ##   backend:
+  ##     serviceName: ssl-redirect
+  ##     servicePort: use-annotation
+  ##
+  extraPaths: []
+  ## @param ingress.extraTls TLS configuration for additional hostname(s) to be covered with this ingress record
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ## e.g:
   ## extraTls:
   ## - hosts:
   ##     - wildfly.local
   ##   secretName: wildfly.local-tls
   ##
   extraTls: []
-
-  ## If you're providing your own certificates, please use this to add the certificates as secrets
-  ## key and certificate should start with -----BEGIN CERTIFICATE----- or -----BEGIN RSA PRIVATE KEY-----
-  ## name should line up with a secretName set further up
-  ##
-  ## If it is not set and you're using cert-manager, this is unneeded, as it will create the secret for you
-  ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created
+  ## @param ingress.secrets Custom TLS certificates as secrets
+  ## NOTE: 'key' and 'certificate' are expected in PEM format
+  ## NOTE: 'name' should line up with a 'secretName' set further up
+  ## If it is not set and you're using cert-manager, this is unneeded, as it will create a secret for you with valid certificates
+  ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created valid for 365 days
   ## It is also possible to create and manage the certificates outside of this helm chart
   ## Please see README.md for more information
-  ##
-  ## Example
+  ## e.g:
   ## secrets:
   ##   - name: wildfly.local-tls
-  ##     key: ""
-  ##     certificate: ""
+  ##     key: |-
+  ##       -----BEGIN RSA PRIVATE KEY-----
+  ##       ...
+  ##       -----END RSA PRIVATE KEY-----
+  ##     certificate: |-
+  ##       -----BEGIN CERTIFICATE-----
+  ##       ...
+  ##       -----END CERTIFICATE-----
   ##
   secrets: []
 
-  ## Override API Version (automatically detected if not set)
-  ##
-  apiVersion:
+## @section Persistence Parameters
 
-  ## Ingress Path
+## Persistence Parameters
+## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+##
+persistence:
+  ## @param persistence.enabled Enable persistence using Persistent Volume Claims
   ##
-  path: /
-
-  ## Ingress Path type
+  enabled: true
+  ## @param persistence.storageClass Persistent Volume storage class
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is set, choosing the default provisioner
   ##
-  pathType: ImplementationSpecific
-
-## Init containers parameters:
-## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
+  storageClass:
+  ## @param persistence.accessModes [array] Persistent Volume access modes
+  ##
+  accessModes:
+    - ReadWriteOnce
+  ## @param persistence.size Persistent Volume size
+  ##
+  size: 8Gi
+## 'volumePermissions' init container parameters
+## Changes the owner and group of the persistent volume mount point to runAsUser:fsGroup values
+##   based on the podSecurityContext/containerSecurityContext parameters
 ##
 volumePermissions:
+  ## @param volumePermissions.enabled Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`
+  ##
   enabled: false
+  ## Bitnami Shell image
+  ## ref: https://hub.docker.com/r/bitnami/bitnami-shell/tags/
+  ## @param volumePermissions.image.registry Bitnami Shell image registry
+  ## @param volumePermissions.image.repository Bitnami Shell image repository
+  ## @param volumePermissions.image.tag Bitnami Shell image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.pullPolicy Bitnami Shell image pull policy
+  ## @param volumePermissions.image.pullSecrets Bitnami Shell image pull secrets
+  ##
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
@@ -416,23 +456,25 @@ volumePermissions:
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ## Example:
+    ## e.g:
     ## pullSecrets:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-
-  ## Init container' resource requests and limits
+  ## Init container's resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param volumePermissions.resources.limits The resources limits for the init container
+  ## @param volumePermissions.resources.requests The requested resources for the init container
   ##
   resources:
-    # We usually recommend not to specify default resources and to leave this as a conscious
-    # choice for the user. This also increases chances charts run on environments with little
-    # resources, such as Minikube. If you do want to specify resources, uncomment the following
-    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
     limits: {}
-    #   cpu: 100m
-    #   memory: 128Mi
     requests: {}
-    #   cpu: 100m
-    #   memory: 128Mi
+  ## Init container Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param volumePermissions.securityContext.runAsUser Set init container's Security Context runAsUser
+  ## NOTE: when runAsUser is set to special value "auto", init container will try to chown the
+  ##   data folder to auto-determined user&group, using commands: `id -u`:`id -G | cut -d" " -f2`
+  ##   "auto" is especially useful for OpenShift which has scc with dynamic user ids (and 0 is not allowed)
+  ##
+  securityContext:
+    runAsUser: 0

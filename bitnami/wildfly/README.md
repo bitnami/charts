@@ -47,123 +47,141 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## Parameters
 
-The following tables lists the configurable parameters of the WildFly chart and their default values per section/component:
-
 ### Global parameters
 
-| Parameter                 | Description                                     | Default                                                 |
-|---------------------------|-------------------------------------------------|---------------------------------------------------------|
-| `global.imageRegistry`    | Global Docker image registry                    | `nil`                                                   |
-| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]` (does not add image pull secrets to deployed pods) |
-| `global.storageClass`     | Global storage class for dynamic provisioning   | `nil`                                                   |
+| Name                      | Description                                     | Value |
+| ------------------------- | ----------------------------------------------- | ----- |
+| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `nil` |
+
 
 ### Common parameters
 
-| Parameter           | Description                                                          | Default                        |
-|---------------------|----------------------------------------------------------------------|--------------------------------|
-| `nameOverride`      | String to partially override common.names.fullname                   | `nil`                          |
-| `fullnameOverride`  | String to fully override common.names.fullname                       | `nil`                          |
-| `commonLabels`      | Labels to add to all deployed objects                                | `{}`                           |
-| `commonAnnotations` | Annotations to add to all deployed objects                           | `{}`                           |
-| `clusterDomain`     | Default Kubernetes cluster domain                                    | `cluster.local`                |
-| `extraDeploy`       | Array of extra objects to deploy with the release                    | `[]` (evaluated as a template) |
-| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set) | `nil`                          |
+| Name                | Description                                        | Value           |
+| ------------------- | -------------------------------------------------- | --------------- |
+| `kubeVersion`       | Override Kubernetes version                        | `nil`           |
+| `nameOverride`      | String to partially override common.names.fullname | `nil`           |
+| `fullnameOverride`  | String to fully override common.names.fullname     | `nil`           |
+| `commonLabels`      | Labels to add to all deployed objects              | `{}`            |
+| `commonAnnotations` | Annotations to add to all deployed objects         | `{}`            |
+| `clusterDomain`     | Kubernetes cluster domain name                     | `cluster.local` |
+| `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`            |
 
-### Wildfly parameters
+### WildFly Image parameters
 
-| Parameter            | Description                                                          | Default                                                 |
-|----------------------|----------------------------------------------------------------------|---------------------------------------------------------|
-| `image.registry`     | Wildfly image registry                                               | `docker.io`                                             |
-| `image.repository`   | Wildfly image name                                                   | `bitnami/wildfly`                                       |
-| `image.tag`          | Wildfly image tag                                                    | `{TAG_NAME}`                                            |
-| `image.pullPolicy`   | Wildfly image pull policy                                            | `IfNotPresent`                                          |
-| `image.pullSecrets`  | Specify docker-registry secret names as an array                     | `[]` (does not add image pull secrets to deployed pods) |
-| `image.debug`        | Specify if debug logs should be enabled                              | `false`                                                 |
-| `hostAliases`        | Add deployment host aliases                                          | `[]`                                                    |
-| `wildflyUsername`    | WildFly admin user                                                   | `user`                                                  |
-| `wildflyPassword`    | WildFly admin password                                               | _random 10 character alphanumeric string_               |
-| `command`            | Override default container command (useful when using custom images) | `nil`                                                   |
-| `args`               | Override default container args (useful when using custom images)    | `nil`                                                   |
-| `extraEnvVars`       | Extra environment variables to be set on Wildfly container           | `{}`                                                    |
-| `extraEnvVarsCM`     | Name of existing ConfigMap containing extra env vars                 | `nil`                                                   |
-| `extraEnvVarsSecret` | Name of existing Secret containing extra env vars                    | `nil`                                                   |
+| Name                | Description                                        | Value                 |
+| ------------------- | -------------------------------------------------- | --------------------- |
+| `image.registry`    | WildFly image registry                             | `docker.io`           |
+| `image.repository`  | WildFly image repository                           | `bitnami/wildfly`     |
+| `image.tag`         | WildFly image tag (immutable tags are recommended) | `23.0.1-debian-10-r0` |
+| `image.pullPolicy`  | WildFly image pull policy                          | `IfNotPresent`        |
+| `image.pullSecrets` | WildFly image pull secrets                         | `[]`                  |
+| `image.debug`       | Enable image debug mode                            | `false`               |
 
-### Wildfly deployment parameters
+### WildFly Configuration parameters
 
-| Parameter                   | Description                                                                               | Default                                     |
-|-----------------------------|-------------------------------------------------------------------------------------------|---------------------------------------------|
-| `replicaCount`              | Specify number of Wildfly replicas                                                        | `1`                                         |
-| `containerPorts.http`       | HTTP port to expose at container level                                                    | `8080`                                      |
-| `containerPorts.mgmt`       | Management port to expose at container level                                              | `9990`                                      |
-| `podSecurityContext`        | Wildfly pods' Security Context                                                            | Check `values.yaml` file                    |
-| `containerSecurityContext`  | Wildfly containers' Security Context                                                      | Check `values.yaml` file                    |
-| `resources.limits`          | The resources limits for the Wildfly container                                            | `{}`                                        |
-| `resources.requests`        | The requested resources for the Wildfly container                                         | `{"memory": "512Mi", "cpu": "300m"}`        |
-| `livenessProbe`             | Liveness probe configuration for Wildfly                                                  | Check `values.yaml` file                    |
-| `readinessProbe`            | Readiness probe configuration for Wildfly                                                 | Check `values.yaml` file                    |
-| `customLivenessProbe`       | Override default liveness probe                                                           | `nil`                                       |
-| `customReadinessProbe`      | Override default readiness probe                                                          | `nil`                                       |
-| `updateStrategy`            | Strategy to use to update Pods                                                            | Check `values.yaml` file                    |
-| `podAffinityPreset`         | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                                        |
-| `podAntiAffinityPreset`     | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                                      |
-| `nodeAffinityPreset.type`   | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                                        |
-| `nodeAffinityPreset.key`    | Node label key to match. Ignored if `affinity` is set.                                    | `""`                                        |
-| `nodeAffinityPreset.values` | Node label values to match. Ignored if `affinity` is set.                                 | `[]`                                        |
-| `affinity`                  | Affinity for pod assignment                                                               | `{}` (evaluated as a template)              |
-| `nodeSelector`              | Node labels for pod assignment                                                            | `{}` (evaluated as a template)              |
-| `tolerations`               | Tolerations for pod assignment                                                            | `[]` (evaluated as a template)              |
-| `podLabels`                 | Extra labels for Wildfly pods                                                             | `{}` (evaluated as a template)              |
-| `podAnnotations`            | Annotations for Wildfly pods                                                              | `{}` (evaluated as a template)              |
-| `extraVolumeMounts`         | Optionally specify extra list of additional volumeMounts for Wildfly container(s)         | `[]`                                        |
-| `extraVolumes`              | Optionally specify extra list of additional volumes for Wildfly pods                      | `[]`                                        |
-| `initContainers`            | Add additional init containers to the Wildfly pods                                        | `{}` (evaluated as a template)              |
-| `sidecars`                  | Add additional sidecar containers to the Wildfly pods                                     | `{}` (evaluated as a template)              |
-| `persistence.enabled`       | Enable persistence using PVC                                                              | `true`                                      |
-| `persistence.storageClass`  | PVC Storage Class for Wildfly volume                                                      | `nil` (uses alpha storage class annotation) |
-| `persistence.existingClaim` | An Existing PVC name for Wildfly volume                                                   | `nil` (uses alpha storage class annotation) |
-| `persistence.accessMode`    | PVC Access Mode for Wildfly volume                                                        | `ReadWriteOnce`                             |
-| `persistence.size`          | PVC Storage Request for Wildfly volume                                                    | `8Gi`                                       |
+| Name                 | Description                                                            | Value  |
+| -------------------- | ---------------------------------------------------------------------- | ------ |
+| `wildflyUsername`    | WildFly username                                                       | `user` |
+| `wildflyPassword`    | WildFly user password                                                  | `""`   |
+| `command`            | Override default container command (useful when using custom images)   | `[]`   |
+| `args`               | Override default container args (useful when using custom images)      | `[]`   |
+| `extraEnvVars`       | Array with extra environment variables to add to the WildFly container | `[]`   |
+| `extraEnvVarsCM`     | Name of existing ConfigMap containing extra env vars                   | `nil`  |
+| `extraEnvVarsSecret` | Name of existing Secret containing extra env vars                      | `nil`  |
 
-### Exposure parameters
+### WildFly deployment parameters
 
-| Parameter                        | Description                                                                       | Default                        |
-|----------------------------------|-----------------------------------------------------------------------------------|--------------------------------|
-| `service.type`                   | Kubernetes Service type                                                           | `LoadBalancer`                 |
-| `service.port`                   | Service HTTP port                                                                 | `80`                           |
-| `service.mgmtPort`               | Service Management port                                                           | `9990`                         |
-| `service.nodePorts.http`         | Kubernetes http node port                                                         | `""`                           |
-| `service.nodePorts.mgmt`         | Kubernetes management node port                                                   | `""`                           |
-| `service.loadBalancerIP`         | Kubernetes LoadBalancerIP to request                                              | `nil`                          |
-| `service.externalTrafficPolicy`  | Enable client source IP preservation                                              | `Cluster`                      |
-| `service.annotations`            | Annotations for Wildfly service                                                   | `{}` (evaluated as a template) |
-| `ingress.enabled`                | Enable ingress controller resource                                                | `false`                        |
-| `ingress.apiVersion`             | Force Ingress API version (automatically detected if not set)                     | ``                             |
-| `ingress.path`                   | Ingress path                                                                      | `/`                            |
-| `ingress.pathType`               | Ingress path type                                                                 | `ImplementationSpecific`       |
-| `ingress.certManager`            | Add annotations for cert-manager                                                  | `false`                        |
-| `ingress.hostname`               | Default host for the ingress resource                                             | `wildfly.local`                |
-| `ingress.tls`                    | Enable TLS configuration for the hostname defined at `ingress.hostname` parameter | `false`                        |
-| `ingress.annotations`            | Ingress annotations                                                               | `{}` (evaluated as a template) |
-| `ingress.extraHosts[0].name`     | Additional hostnames to be covered                                                | `nil`                          |
-| `ingress.extraHosts[0].path`     | Additional hostnames to be covered                                                | `nil`                          |
-| `ingress.extraTls[0].hosts[0]`   | TLS configuration for additional hostnames to be covered                          | `nil`                          |
-| `ingress.extraTls[0].secretName` | TLS configuration for additional hostnames to be covered                          | `nil`                          |
-| `ingress.secrets[0].name`        | TLS Secret Name                                                                   | `nil`                          |
-| `ingress.secrets[0].certificate` | TLS Secret Certificate                                                            | `nil`                          |
-| `ingress.secrets[0].key`         | TLS Secret Key                                                                    | `nil`                          |
+| Name                                    | Description                                                                               | Value           |
+| --------------------------------------- | ----------------------------------------------------------------------------------------- | --------------- |
+| `replicaCount`                          | Number of Wildfly replicas to deploy                                                      | `1`             |
+| `updateStrategy.type`                   | WildFly deployment strategy type                                                          | `RollingUpdate` |
+| `updateStrategy.rollingUpdate`          | WildFly deployment rolling update configuration parameters                                | `{}`            |
+| `hostAliases`                           | WildFly pod host aliases                                                                  | `[]`            |
+| `extraVolumes`                          | Optionally specify extra list of additional volumes for WildFly pods                      | `[]`            |
+| `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for WildFly container(s)         | `[]`            |
+| `sidecars`                              | Add additional sidecar containers to the WildFly pod                                      | `{}`            |
+| `initContainers`                        | Add additional init containers to the WildFly pods                                        | `{}`            |
+| `podLabels`                             | Extra labels for WildFly pods                                                             | `{}`            |
+| `podAnnotations`                        | Annotations for WildFly pods                                                              | `{}`            |
+| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
+| `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`          |
+| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`            |
+| `nodeAffinityPreset.key`                | Node label key to match. Ignored if `affinity` is set                                     | `""`            |
+| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set                                  | `[]`            |
+| `affinity`                              | Affinity for pod assignment                                                               | `{}`            |
+| `nodeSelector`                          | Node labels for pod assignment                                                            | `{}`            |
+| `tolerations`                           | Tolerations for pod assignment                                                            | `{}`            |
+| `resources.limits`                      | The resources limits for the WildFly container                                            | `{}`            |
+| `resources.requests`                    | The requested resources for the WildFly container                                         | `{}`            |
+| `containerPorts.http`                   | WildFly HTTP container port                                                               | `8080`          |
+| `containerPorts.mgmt`                   | WildFly HTTPS container port                                                              | `9990`          |
+| `podSecurityContext.enabled`            | Enabled WildFly pods' Security Context                                                    | `true`          |
+| `podSecurityContext.fsGroup`            | Set WildFly pod's Security Context fsGroup                                                | `1001`          |
+| `containerSecurityContext.enabled`      | Enabled WildFly containers' Security Context                                              | `true`          |
+| `containerSecurityContext.runAsUser`    | Set WildFly container's Security Context runAsUser                                        | `1001`          |
+| `containerSecurityContext.runAsNonRoot` | Set WildFly container's Security Context runAsNonRoot                                     | `true`          |
+| `livenessProbe.enabled`                 | Enable livenessProbe                                                                      | `true`          |
+| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                   | `120`           |
+| `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                          | `10`            |
+| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                         | `5`             |
+| `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                       | `6`             |
+| `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                       | `1`             |
+| `readinessProbe.enabled`                | Enable readinessProbe                                                                     | `true`          |
+| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                  | `30`            |
+| `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                         | `5`             |
+| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                        | `3`             |
+| `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                      | `3`             |
+| `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                      | `1`             |
+| `customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                       | `{}`            |
+| `customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                      | `{}`            |
 
-### Volume Permissions parameters
+### Traffic Exposure Parameters
 
-| Parameter                              | Description                                                                 | Default                                                 |
-|----------------------------------------|-----------------------------------------------------------------------------|---------------------------------------------------------|
-| `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory | `false`                                                 |
-| `volumePermissions.image.registry`     | Init container volume-permissions image registry                            | `docker.io`                                             |
-| `volumePermissions.image.repository`   | Init container volume-permissions image name                                | `bitnami/bitnami-shell`                                 |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                 | `"10"`                                                  |
-| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                         | `Always`                                                |
-| `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                            | `[]` (does not add image pull secrets to deployed pods) |
-| `volumePermissions.resources.limits`   | Init container volume-permissions resource  limits                          | `{}`                                                    |
-| `volumePermissions.resources.requests` | Init container volume-permissions resource  requests                        | `{}`                                                    |
+| Name                               | Description                                                                                           | Value                    |
+| ---------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                     | WildFly service type                                                                                  | `LoadBalancer`           |
+| `service.port`                     | WildFly service HTTP port                                                                             | `80`                     |
+| `service.mgmtPort`                 | WildFly service management console port                                                               | `443`                    |
+| `service.nodePorts.http`           | Node port for HTTP                                                                                    | `nil`                    |
+| `service.nodePorts.mgmt`           | Node port for Management console                                                                      | `nil`                    |
+| `service.clusterIP`                | WildFly service Cluster IP                                                                            | `nil`                    |
+| `service.loadBalancerIP`           | WildFly service Load Balancer IP                                                                      | `nil`                    |
+| `service.loadBalancerSourceRanges` | WildFly service Load Balancer sources                                                                 | `[]`                     |
+| `service.externalTrafficPolicy`    | WildFly service external traffic policy                                                               | `Cluster`                |
+| `service.annotations`              | Additional custom annotations for WildFly service                                                     | `{}`                     |
+| `service.extraPorts`               | Extra port to expose on WildFly service                                                               | `[]`                     |
+| `ingress.enabled`                  | Enable ingress record generation for WildFly                                                          | `false`                  |
+| `ingress.certManager`              | Add the corresponding annotations for cert-manager integration                                        | `false`                  |
+| `ingress.pathType`                 | Ingress path type                                                                                     | `ImplementationSpecific` |
+| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                         | `nil`                    |
+| `ingress.hostname`                 | Default host for the ingress record                                                                   | `wildfly.local`          |
+| `ingress.path`                     | Default path for the ingress record                                                                   | `/`                      |
+| `ingress.annotations`              | Additional custom annotations for the ingress record                                                  | `{}`                     |
+| `ingress.tls`                      | Enable TLS configuration for the host defined at `ingress.hostname` parameter                         | `false`                  |
+| `ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                            | `[]`                     |
+| `ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host | `[]`                     |
+| `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                   | `[]`                     |
+| `ingress.secrets`                  | Custom TLS certificates as secrets                                                                    | `[]`                     |
+
+### Persistence Parameters
+
+| Name                                          | Description                                                                                     | Value                   |
+| --------------------------------------------- | ----------------------------------------------------------------------------------------------- | ----------------------- |
+| `persistence.enabled`                         | Enable persistence using Persistent Volume Claims                                               | `true`                  |
+| `persistence.storageClass`                    | Persistent Volume storage class                                                                 | `nil`                   |
+| `persistence.accessModes`                     | Persistent Volume access modes                                                                  | `[]`                    |
+| `persistence.size`                            | Persistent Volume size                                                                          | `8Gi`                   |
+| `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
+| `volumePermissions.image.registry`            | Bitnami Shell image registry                                                                    | `docker.io`             |
+| `volumePermissions.image.repository`          | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
+| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `10`                    |
+| `volumePermissions.image.pullPolicy`          | Bitnami Shell image pull policy                                                                 | `Always`                |
+| `volumePermissions.image.pullSecrets`         | Bitnami Shell image pull secrets                                                                | `[]`                    |
+| `volumePermissions.resources.limits`          | The resources limits for the init container                                                     | `{}`                    |
+| `volumePermissions.resources.requests`        | The requested resources for the init container                                                  | `{}`                    |
+| `volumePermissions.securityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`                     |
 
 The above parameters map to the env variables defined in [bitnami/wildfly](http://github.com/bitnami/bitnami-docker-wildfly). For more information please refer to the [bitnami/wildfly](http://github.com/bitnami/bitnami-docker-wildfly) image documentation.
 
@@ -260,6 +278,12 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 10.0.0
+
+Due to recent changes in the container image (see [Notable changes](https://github.com/bitnami/bitnami-docker-apache#notable-changes)), we decided to preemptively bump the major version of the chart.
+
+Upgrading from version `9.x.x` should be possible without any extra required step, but it's highly recommended to backup your custom web apps data before upgrading.
 
 ### To 7.0.0
 
