@@ -124,6 +124,7 @@ The following tables list the configurable parameters of the kong chart and thei
 | Parameter                        | Description                                                      | Default                        |
 |----------------------------------|------------------------------------------------------------------|--------------------------------|
 | `service.type`                   | Kubernetes Service type                                          | `ClusterIP`                    |
+| `service.externalTrafficPolicy`  | external traffic policy managing client source IP preservation   | `Cluster`                      |
 | `service.exposeAdmin`            | Add the Kong Admin ports to the service                          | `false`                        |
 | `service.proxyHttpPort`          | kong proxy HTTP service port port                                | `80`                           |
 | `service.proxyHttpsPort`         | kong proxy HTTPS service port port                               | `443`                          |
