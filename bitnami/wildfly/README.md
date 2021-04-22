@@ -97,7 +97,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | ----------------------------------------------------------------------------------------- | --------------- |
 | `replicaCount`                          | Number of Wildfly replicas to deploy                                                      | `1`             |
 | `updateStrategy.type`                   | WildFly deployment strategy type                                                          | `RollingUpdate` |
-| `updateStrategy.rollingUpdate`          | WildFly deployment rolling update configuration parameters                                | `{}`            |
 | `hostAliases`                           | WildFly pod host aliases                                                                  | `[]`            |
 | `extraVolumes`                          | Optionally specify extra list of additional volumes for WildFly pods                      | `[]`            |
 | `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for WildFly container(s)         | `[]`            |

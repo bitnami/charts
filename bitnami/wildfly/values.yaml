@@ -109,7 +109,6 @@ extraEnvVarsSecret:
 ##
 replicaCount: 1
 ## @param updateStrategy.type WildFly deployment strategy type
-## @param updateStrategy.rollingUpdate WildFly deployment rolling update configuration parameters
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
 ## NOTE: Set it to `Recreate` if you use a PV that cannot be mounted on multiple pods
 ## e.g:
@@ -121,7 +120,6 @@ replicaCount: 1
 ##
 updateStrategy:
   type: RollingUpdate
-  rollingUpdate: {}
 ## @param hostAliases [array] WildFly pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
