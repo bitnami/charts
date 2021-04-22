@@ -27,8 +27,9 @@ spec:
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
     spec: {{- include "tomcat.pod" . | nindent 6 }}
-  {{- if and .Values.persistence.enabled }}
+  {{- if or .Values.persistence.enabled .Values.extraVolumeClaimTemplates }}
   volumeClaimTemplates:
+  {{- if and .Values.persistence.enabled }}
   - metadata:
       name: data
     spec:
@@ -39,6 +40,7 @@ spec:
           storage: {{ .Values.persistence.size }}
       selector:
         matchLabels: {{- include "common.labels.matchLabels" . | nindent 10 }}
+  {{- end }}
   {{- if .Values.extraVolumeClaimTemplates }}
   {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeClaimTemplates "context" $) | nindent 2 }}
   {{- end }}
