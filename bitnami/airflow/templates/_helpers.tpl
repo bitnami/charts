@@ -123,14 +123,14 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 Get the Redis(TM) credentials secret.
 */}}
 {{- define "airflow.redis.secretName" -}}
-{{- if and (.Values.redis.enabled) (not .Values.redis.existingSecret) -}}
+{{- if and (.Values.redis.enabled) (not .Values.redis.auth.existingSecret) -}}
     {{/* Create a include for the redis secret
     We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
     */}}
     {{- $name := default "redis" .Values.redis.nameOverride -}}
     {{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
-{{- else if and (.Values.redis.enabled) ( .Values.redis.existingSecret) -}}
-    {{- printf "%s" .Values.redis.existingSecret -}}
+{{- else if and (.Values.redis.enabled) ( .Values.redis.auth.existingSecret) -}}
+    {{- printf "%s" .Values.redis.auth.existingSecret -}}
 {{- else }}
     {{- if .Values.externalRedis.existingSecret -}}
         {{- printf "%s" .Values.externalRedis.existingSecret -}}

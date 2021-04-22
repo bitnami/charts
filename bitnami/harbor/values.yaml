@@ -2637,15 +2637,30 @@ redis:
   nameOverride:
   ## image:
   ##   tag:
-  ## password: ""
+
+  ## Use password authentication
   ##
-  usePassword: false
-  cluster:
+  auth:
     enabled: false
+    ## Redis(TM) password (both master and replica)
+    ## Defaults to a random 10-character alphanumeric string if not set and auth.enabled is true.
+    ## It should always be set using the password value or in the existingSecret to avoid issues
+    ## with Harbor.
+    ## The password value is ignored if existingSecret is set
+    # password:
+
+  ##
+  ## Cluster settings
+  ##
+  architecture: standalone
+
+  ##
+  ## Redis(TM) Master parameters
+  ##
   master:
     persistence:
       enabled: true
-  slave:
+  replica:
     persistence:
       enabled: true
 

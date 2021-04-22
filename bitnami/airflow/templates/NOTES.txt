@@ -54,7 +54,7 @@ host. To configure Airflow with the URL of your service:
     --set auth.password=$AIRFLOW_PASSWORD \
     --set auth.fernetKey=$AIRFLOW_FERNETKEY \
     --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD \
-    --set redis.password=$REDIS_PASSWORD
+    --set redis.auth.password=$REDIS_PASSWORD
 
 {{- else -}}
 

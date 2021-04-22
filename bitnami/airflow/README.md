@@ -243,7 +243,7 @@ tolerations configuration                                                       
 ### Airflow database parameters
 
 | Parameter                                    | Description                                                                                                                                                                                                                    | Default           |
-| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------- |
+|----------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------|
 | `externalDatabase.database`                  | External PostgreSQL database name                                                                                                                                                                                              | `nil`             |
 | `externalDatabase.existingSecret`            | Name of an existing secret resource containing the PostgreSQL password                                                                                                                                                         | `nil`             |
 | `externalDatabase.existingSecretPasswordKey` | Name of an existing secret key containing the PostgreSQL password                                                                                                                                                              | `nil`             |
@@ -261,9 +261,9 @@ tolerations configuration                                                       
 | `postgresql.postgresqlDatabase`              | Airflow Postgresql database                                                                                                                                                                                                    | `bitnami_airflow` |
 | `postgresql.postgresqlPassword`              | Airflow Postgresql password                                                                                                                                                                                                    | `nil`             |
 | `postgresql.postgresqlUsername`              | Airflow Postgresql username                                                                                                                                                                                                    | `bn_airflow`      |
-| `redis.cluster.enabled`                      | Switch to enable a clustered redis                                                                                                                                                                                             | `false`           |
+| `redis.architecture`                         | Redis<sup>TM</sup> architecture. Allowed values: `standalone` or `replication`                                                                                                                                                 | `standalone`      |
 | `redis.enabled`                              | Switch to enable or disable the Redis<sup>TM</sup> helm chart                                                                                                                                                                  | `true`            |
-| `redis.existingSecret`                       | Name of an existing secret containing the Redis<sup>TM</sup> password ('redis-password' key) . This secret is used in case of redis.enabled=true and we would like to specify password for newly created redis instance        | `nil`             |
+| `redis.auth.existingSecret`                  | Name of an existing secret containing the Redis<sup>TM</sup> password ('redis-password' key) . This secret is used in case of redis.enabled=true and we would like to specify password for newly created redis instance        | `nil`             |
 
 ### Airflow exposing parameters
 
@@ -535,9 +535,7 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ### To 10.0.0
 
-This major updates the Redis<sup>TM</sup> subchart to it newest major, 13.0.0. For more information on this subchart's major please refer to [Redis<sup>TM</sup> upgrade notes.](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1300)
-
-Regular upgrade is compatible from previous versions.
+This major updates the Redis<sup>TM</sup> subchart to it newest major, 14.0.0, which contains breaking changes. For more information on this subchart's major and the steps needed to migrate your data from your previous release, please refer to [Redis<sup>TM</sup> upgrade notes.](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1400).
 
 ### To 7.0.0
 
