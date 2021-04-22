@@ -42,9 +42,6 @@ clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
-## @param terminationGracePeriodSeconds Integer setting the termination grace period for all pods in seconds
-##
-terminationGracePeriodSeconds: 30
 
 ## @section Redis(TM) Image parameters
 
@@ -414,6 +411,9 @@ master:
     ## @param master.service.annotations Additional custom annotations for Redis(TM) master service
     ##
     annotations: {}
+  ## @param master.terminationGracePeriodSeconds Integer setting the termination grace period for the redis-master pods
+  ##
+  terminationGracePeriodSeconds: 30
 
 ## @section Redis(TM) replicas configuration parameters
 
@@ -707,6 +707,9 @@ replica:
     ## @param replica.service.annotations Additional custom annotations for Redis(TM) replicas service
     ##
     annotations: {}
+  ## @param replica.terminationGracePeriodSeconds Integer setting the termination grace period for the redis-replicas pods
+  ##
+  terminationGracePeriodSeconds: 30
 
 ## @section Redis(TM) Sentinel configuration parameters
 
@@ -885,6 +888,9 @@ sentinel:
     ## @param sentinel.service.annotations Additional custom annotations for Redis(TM) Sentinel service
     ##
     annotations: {}
+  ## @param sentinel.terminationGracePeriodSeconds Integer setting the termination grace period for the redis-node pods
+  ##
+  terminationGracePeriodSeconds: 30
 
 ## @section Other Parameters
 

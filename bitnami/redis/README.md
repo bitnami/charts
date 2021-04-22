@@ -71,16 +71,16 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                            | Description                                        | Value           |
-|---------------------------------|----------------------------------------------------|-----------------|
-| `kubeVersion`                   | Override Kubernetes version                        | `nil`           |
-| `nameOverride`                  | String to partially override common.names.fullname | `nil`           |
-| `fullnameOverride`              | String to fully override common.names.fullname     | `nil`           |
-| `commonLabels`                  | Labels to add to all deployed objects              | `{}`            |
-| `commonAnnotations`             | Annotations to add to all deployed objects         | `{}`            |
-| `clusterDomain`                 | Kubernetes cluster domain name                     | `cluster.local` |
-| `extraDeploy`                   | Array of extra objects to deploy with the release  | `[]`            |
-| `terminationGracePeriodSeconds` | Define termination grace period for all pods       | `30`            |
+| Name                | Description                                        | Value           |
+| ------------------- | -------------------------------------------------- | --------------- |
+| `kubeVersion`       | Override Kubernetes version                        | `nil`           |
+| `nameOverride`      | String to partially override common.names.fullname | `nil`           |
+| `fullnameOverride`  | String to fully override common.names.fullname     | `nil`           |
+| `commonLabels`      | Labels to add to all deployed objects              | `{}`            |
+| `commonAnnotations` | Annotations to add to all deployed objects         | `{}`            |
+| `clusterDomain`     | Kubernetes cluster domain name                     | `cluster.local` |
+| `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`            |
+
 
 ### Redis(TM) Image parameters
 
@@ -180,6 +180,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `master.service.loadBalancerIP`             | Redis(TM) master service Load Balancer IP                                                        | `nil`           |
 | `master.service.loadBalancerSourceRanges`   | Redis(TM) master service Load Balancer sources                                                   | `[]`            |
 | `master.service.annotations`                | Additional custom annotations for Redis(TM) master service                                       | `{}`            |
+| `master.terminationGracePeriodSeconds`      | Integer setting the termination grace period for the redis-master pods                           | `30`            |
 
 
 ### Redis(TM) replicas configuration parameters
@@ -254,6 +255,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replica.service.loadBalancerIP`             | Redis(TM) replicas service Load Balancer IP                                                       | `nil`           |
 | `replica.service.loadBalancerSourceRanges`   | Redis(TM) replicas service Load Balancer sources                                                  | `[]`            |
 | `replica.service.annotations`                | Additional custom annotations for Redis(TM) replicas service                                      | `{}`            |
+| `replica.terminationGracePeriodSeconds`      | Integer setting the termination grace period for the redis-replicas pods                          | `30`            |
 
 
 ### Redis(TM) Sentinel configuration parameters
@@ -310,6 +312,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sentinel.service.loadBalancerIP`             | Redis(TM) Sentinel service Load Balancer IP                                                      | `nil`                    |
 | `sentinel.service.loadBalancerSourceRanges`   | Redis(TM) Sentinel service Load Balancer sources                                                 | `[]`                     |
 | `sentinel.service.annotations`                | Additional custom annotations for Redis(TM) Sentinel service                                     | `{}`                     |
+| `sentinel.terminationGracePeriodSeconds`      | Integer setting the termination grace period for the redis-node pods                             | `30`                     |
 
 
 ### Other Parameters

@@ -79,7 +79,7 @@ spec:
       {{- if .Values.replica.schedulerName }}
       schedulerName: {{ .Values.replica.schedulerName | quote }}
       {{- end }}
-      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.sentinel.terminationGracePeriodSeconds }}
       containers:
         - name: redis
           image: {{ template "redis.image" . }}
