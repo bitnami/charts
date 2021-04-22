@@ -2,7 +2,7 @@
 Pod Spec
 */}}
 {{- define "tomcat.pod" -}}
-{{- include "tomcat.imagePullSecrets" . | nindent 6 }}
+{{- include "tomcat.imagePullSecrets" . }}
 {{- if .Values.hostAliases }}
 hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 2 }}
 {{- end }}
