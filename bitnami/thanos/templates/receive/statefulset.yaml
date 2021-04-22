@@ -130,10 +130,16 @@ spec:
               mountPath: /var/lib/thanos-receive
             - name: data
               mountPath: /var/thanos/receive
+            {{- if .Values.receive.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.receive.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
       volumes:
         - name: hashring-config
           configMap:
             name: {{ include "common.names.fullname" . }}-receive
+        {{- if .Values.receive.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.receive.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
   {{- if and .Values.receive.persistence.enabled .Values.receive.persistence.existingClaim }}
         - name: data
           persistentVolumeClaim:
