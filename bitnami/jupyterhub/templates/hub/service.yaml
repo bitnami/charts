@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: hub
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  name: {{ include "jupyterhub.hub.name" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.hub.service.type }}
+  {{- if (or (eq .Values.hub.service.type "LoadBalancer") (eq .Values.hub.service.type "NodePort")) }}
+  externalTrafficPolicy: {{ .Values.hub.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{ if eq .Values.hub.service.type "LoadBalancer" }}
+  loadBalancerSourceRanges: {{ .Values.hub.service.loadBalancerSourceRanges }}
+  {{ end }}
+  {{- if (and (eq .Values.hub.service.type "LoadBalancer") (not (empty .Values.hub.service.loadBalancerIP))) }}
+  loadBalancerIP: {{ .Values.hub.service.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - name: http
+      port: {{ .Values.hub.service.port }}
+      targetPort: http
+      protocol: TCP
+      {{- if (and (or (eq .Values.hub.service.type "NodePort") (eq .Values.hub.service.type "LoadBalancer")) (not (empty .Values.hub.service.nodePorts.http))) }}
+      nodePort: {{ .Values.hub.service.nodePorts.http }}
+      {{- else if eq .Values.hub.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: hub
