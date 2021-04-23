@@ -179,6 +179,7 @@ The following tables lists the configurable parameters of the solr chart and the
 | `ingress.pathType`               | Path type for the ingress resource                       | `ImplementationSpecific`       |
 | `ingress.path`                   | Default path for the ingress resource                    | `/`                            |
 | `ingress.tls`                    | Create TLS Secret                                        | `false`                        |
+| `ingress.existingSecret`         | The name of an existing Secret to use for the ingress object | `nil`                          |
 | `ingress.annotations`            | Ingress annotations                                      | `[]` (evaluated as a template) |
 | `ingress.extraHosts[0].name`     | Additional hostnames to be covered                       | `nil`                          |
 | `ingress.extraHosts[0].path`     | Additional hostnames to be covered                       | `nil`                          |
