@@ -57,7 +57,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/redis
-  tag: 6.2.2-debian-10-r0
+  tag: 6.2.2-debian-10-r3
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -411,6 +411,9 @@ master:
     ## @param master.service.annotations Additional custom annotations for Redis(TM) master service
     ##
     annotations: {}
+  ## @param master.terminationGracePeriodSeconds Integer setting the termination grace period for the redis-master pods
+  ##
+  terminationGracePeriodSeconds: 30
 
 ## @section Redis(TM) replicas configuration parameters
 
@@ -704,6 +707,9 @@ replica:
     ## @param replica.service.annotations Additional custom annotations for Redis(TM) replicas service
     ##
     annotations: {}
+  ## @param replica.terminationGracePeriodSeconds Integer setting the termination grace period for the redis-replicas pods
+  ##
+  terminationGracePeriodSeconds: 30
 
 ## @section Redis(TM) Sentinel configuration parameters
 
@@ -725,7 +731,7 @@ sentinel:
   image:
     registry: docker.io
     repository: bitnami/redis-sentinel
-    tag: 6.2.1-debian-10-r46
+    tag: 6.2.2-debian-10-r2
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -882,6 +888,9 @@ sentinel:
     ## @param sentinel.service.annotations Additional custom annotations for Redis(TM) Sentinel service
     ##
     annotations: {}
+  ## @param sentinel.terminationGracePeriodSeconds Integer setting the termination grace period for the redis-node pods
+  ##
+  terminationGracePeriodSeconds: 30
 
 ## @section Other Parameters
 
@@ -1030,7 +1039,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/redis-exporter
-    tag: 1.20.0-debian-10-r27
+    tag: 1.22.0-debian-10-r0
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1120,7 +1129,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/redis-sentinel-exporter
-      tag: 1.7.1-debian-10-r119
+      tag: 1.7.1-debian-10-r122
       pullPolicy: IfNotPresent
       ## Optionally specify an array of imagePullSecrets.
       ## Secrets must be manually created in the namespace.

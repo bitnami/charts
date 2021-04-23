@@ -79,6 +79,7 @@ spec:
       {{- if .Values.replica.schedulerName }}
       schedulerName: {{ .Values.replica.schedulerName | quote }}
       {{- end }}
+      terminationGracePeriodSeconds: {{ .Values.sentinel.terminationGracePeriodSeconds }}
       containers:
         - name: redis
           image: {{ template "redis.image" . }}
@@ -227,6 +228,13 @@ spec:
             {{- if .Values.replica.extraVolumeMounts }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.replica.extraVolumeMounts "context" $ ) | nindent 12 }}
             {{- end }}
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - /bin/bash
+                  - -c
+                  - /opt/bitnami/scripts/start-scripts/prestop-redis.sh
         - name: sentinel
           image: {{ template "redis.sentinel.image" . }}
           imagePullPolicy: {{ .Values.sentinel.image.pullPolicy | quote }}
