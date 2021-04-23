@@ -473,7 +473,7 @@ When installing the chart with `architecture=standalone`, it will deploy a stand
 
 #### Master-Replicas with Sentinel
 
-When installing the chart with `architecture=architecture` and `sentinel.enabled=true`, it will deploy a Redis<sup>TM</sup> master StatefulSet (only one master allowed) and a Redis<sup>TM</sup> replicas StatefulSet. In this case, the pods will contain an extra container with Redis<sup>TM</sup> Sentinel. This container will form a cluster of Redis<sup>TM</sup> Sentinel nodes, which will promote a new master in case the actual one fails. In addition to this, only one service is exposed:
+When installing the chart with `architecture=replication` and `sentinel.enabled=true`, it will deploy a Redis<sup>TM</sup> master StatefulSet (only one master allowed) and a Redis<sup>TM</sup> replicas StatefulSet. In this case, the pods will contain an extra container with Redis<sup>TM</sup> Sentinel. This container will form a cluster of Redis<sup>TM</sup> Sentinel nodes, which will promote a new master in case the actual one fails. In addition to this, only one service is exposed:
 
 - Redis<sup>TM</sup> service: Exposes port 6379 for Redis<sup>TM</sup> read-only operations and port 26379 for accessing Redis<sup>TM</sup> Sentinel.
 
