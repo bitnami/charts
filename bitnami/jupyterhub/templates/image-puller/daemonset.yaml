@@ -63,6 +63,9 @@ spec:
             - /bin/sh
             - -c
             - echo "Pulling complete"
+          {{- if $.Values.imagePuller.containerSecurityContext.enabled }}
+          securityContext: {{- omit $.Values.imagePuller.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
       {{- end }}
       {{- if .Values.imagePuller.initContainers }}
       {{- include "common.tplvalues.render" (dict "value" .Values.imagePuller.initContainers "context" $) | nindent 8 }}
