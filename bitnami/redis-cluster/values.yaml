@@ -18,7 +18,7 @@ image:
   ## Bitnami Redis(TM) image tag
   ## ref: https://github.com/bitnami/bitnami-docker-redis#supported-tags-and-respective-dockerfile-links
   ##
-  tag: 6.2.2-debian-10-r0
+  tag: 6.2.2-debian-10-r4
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -42,7 +42,7 @@ fullnameOverride:
 ## Redis(TM) Cluster settings
 ##
 cluster:
-  ## Enable the creation of a Job that will execute the proper command to create the Redis(TM) Cluster.
+  ## Enable the initialization of the Redis(TM) Cluster.
   ##
   init: true
   ## Number of Redis(TM) nodes to be deployed
@@ -275,140 +275,6 @@ redis:
   ## The busPort should be obtained adding 10000 to the redisPort. By default: 10000 + 6379 = 16379
   ##
   busPort: 16379
-
-## Cluster init job settings
-##
-initJob:
-  ## Number of seconds the Job to create the cluster will be waiting for the Nodes to be ready.
-  ##
-  activeDeadlineSeconds: 600
-  ## Container command (using container default if not set)
-  ##
-  command:
-
-  ## Container args (using container default if not set)
-  ##
-  args:
-
-  ## Deployment pod host aliases
-  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
-  ##
-  hostAliases: []
-
-  ## Job annotations
-  ##
-  annotations: {}
-
-  ## Pod annotations
-  ## IMPORTANT: When using Istio set as the following (https://github.com/istio/istio/issues/11045):
-  ## podAnnotations:
-  ##   sidecar.istio.io/inject: "false"
-  ##
-  podAnnotations: {}
-
-  ## An array to add extra env vars
-  ## For example:
-  ##
-  extraEnvVars: []
-  #  - name: BEARER_AUTH
-  #    value: true
-
-  ## ConfigMap with extra environment variables
-  ##
-  extraEnvVarsCM:
-
-  ## Secret with extra environment variables
-  ##
-  extraEnvVarsSecret:
-
-  ## Extra volumes to add to the deployment
-  ##
-  extraVolumes: []
-
-  ## Extra volume mounts to add to the container
-  ##
-  extraVolumeMounts: []
-
-  ## Extra init containers to add to the deployment
-  ##
-  initContainers: []
-
-  ## Init job pod affinity preset
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
-  ##
-  podAffinityPreset: ""
-
-  ## Init job pod anti-affinity preset
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
-  ##
-  podAntiAffinityPreset: soft
-
-  ## Init job node affinity preset
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ## Allowed values: soft, hard
-  ##
-  nodeAffinityPreset:
-    ## Node affinity type
-    ## Allowed values: soft, hard
-    ##
-    type: ""
-    ## Node label key to match
-    ## E.g.
-    ## key: "kubernetes.io/e2e-az-name"
-    ##
-    key: ""
-    ## Node label values to match
-    ## E.g.
-    ## values:
-    ##   - e2e-az1
-    ##   - e2e-az2
-    ##
-    values: []
-
-  ## Affinity for init job pods assignment
-  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ## Note: initJob.podAffinityPreset, initJob.podAntiAffinityPreset, and initJob.nodeAffinityPreset will be ignored when it's set
-  ##
-  affinity: {}
-
-  ## Node labels for init job pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
-  ##
-  nodeSelector: {}
-
-  ## Tolerations for init job pods assignment
-  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-  ##
-  tolerations: []
-
-  ## Pod extra labels
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-  ##
-  podLabels: {}
-
-  ## Priority class name
-  ##
-  priorityClassName:
-
-  ## Container resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ##
-  resources:
-    ## We usually recommend not to specify default resources and to leave this as a conscious
-    ## choice for the user. This also increases chances charts run on environments with little
-    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
-    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    ##
-    limits: {}
-    ##   cpu: 500m
-    ##   memory: 1Gi
-    ##
-    requests: {}
-    ##   cpu: 250m
-    ##   memory: 256Mi
-    ##
 
 ## Cluster update job settings
 ##
@@ -745,7 +611,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/redis-exporter
-    tag: 1.20.0-debian-10-r27
+    tag: 1.22.0-debian-10-r0
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
