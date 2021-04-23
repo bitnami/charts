@@ -43,7 +43,7 @@ initContainers:
     mountPath: /bitnami/tomcat
 {{- end }}
 {{- if .Values.initContainers }}
-{{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 2 }}
+{{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) }}
 {{- end }}
 containers:
 - name: tomcat
@@ -70,9 +70,9 @@ containers:
         key: tomcat-password
   - name: TOMCAT_ALLOW_REMOTE_MANAGEMENT
     value: {{ .Values.tomcatAllowRemoteManagement | quote }}
-    {{- if .Values.extraEnvVars }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 4 }}
-    {{- end }}
+  {{- if .Values.extraEnvVars }}
+  {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 2 }}
+  {{- end }}
   {{- if or .Values.extraEnvVarsCM .Values.extraEnvVarsSecret }}
   envFrom:
   {{- if .Values.extraEnvVarsCM }}
@@ -88,7 +88,7 @@ containers:
   - name: http
     containerPort: {{ .Values.containerPort }}
   {{- if .Values.containerExtraPorts }}
-  {{- include "common.tplvalues.render" (dict "value" .Values.containerExtraPorts "context" $) | nindent 4 }}
+  {{- include "common.tplvalues.render" (dict "value" .Values.containerExtraPorts "context" $) | nindent 2 }}
   {{- end }}
   {{- if .Values.livenessProbe.enabled }}
   livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.livenessProbe "enabled") "context" $) | nindent 4 }}
@@ -107,23 +107,23 @@ containers:
   - name: data
     mountPath: /bitnami/tomcat
   {{- if .Values.extraVolumeMounts }}
-  {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 4 }}
+  {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 2 }}
   {{- end }}
 {{- if .Values.sidecars }}
-{{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) | nindent 2 }}
+{{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) }}
 {{- end }}
 volumes:
 {{- if and .Values.persistence.enabled (eq .Values.deployment.type "deployment") }}
-  - name: data
-    persistentVolumeClaim:
-      claimName: {{ template "tomcat.pvc" . }}
+- name: data
+  persistentVolumeClaim:
+    claimName: {{ template "tomcat.pvc" . }}
 {{- else if and .Values.persistence.enabled (eq .Values.deployment.type "statefulset") }}
 # nothing
 {{- else }}
-  - name: data
-    emptyDir: {}
-{{- end -}}
+- name: data
+  emptyDir: {}
+{{- end }}
 {{- if .Values.extraVolumes }}
-{{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 2 }}
+{{ include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) }}
 {{- end }}
 {{- end -}}
