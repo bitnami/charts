@@ -126,6 +126,7 @@ The following tables lists the configurable parameters of the Tomcat chart and t
 | `persistence.existingClaim` | An Existing PVC name for Tomcat volume                                                    | `nil` (uses alpha storage class annotation) |
 | `persistence.accessMode`    | PVC Access Mode for Tomcat volume                                                         | `ReadWriteOnce`                             |
 | `persistence.size`          | PVC Storage Request for Tomcat volume                                                     | `8Gi`                                       |
+| `persistence.selectorLabels`| Selector labels to use in volume claim template for Tomcat volume (Applicable when deployment.type is statefulset)                       | `nil` |
 
 ### Exposure parameters
 

@@ -318,6 +318,10 @@ persistence:
   ## Name of an existing PVC
   ##
   existingClaim:
+  ## Selector labels to use in volume claim template in statefulset
+  ## Applicable when deployment.type is statefulset
+  ##
+  selectorLabels:
 
 ## Service parameters
 ##

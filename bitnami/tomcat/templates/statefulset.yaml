@@ -39,8 +39,10 @@ spec:
         requests:
           storage: {{ .Values.persistence.size | quote }}
       {{- include "common.storage.class" (dict "persistence" .Values.persistence "global" .Values.global) | nindent 6 }}
+      {{- with .Values.persistence.selectorLabels }}
       selector:
-        matchLabels: {{- include "common.labels.matchLabels" . | nindent 10 }}
+        matchLabels: {{- toYaml . | indent 10 }}
+      {{- end }}
   {{- if .Values.extraVolumeClaimTemplates }}
   {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeClaimTemplates "context" $) | nindent 2 }}
   {{- end }}
