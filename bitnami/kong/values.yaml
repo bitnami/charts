@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/kong
-  tag: 2.3.3-debian-10-r21
+  tag: 2.3.3-debian-10-r43
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -162,7 +162,7 @@ ingressController:
   image:
     registry: docker.io
     repository: bitnami/kong-ingress-controller
-    tag: 1.2.0-debian-10-r6
+    tag: 1.2.0-debian-10-r27
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -334,6 +334,13 @@ service:
   ## K8s service type
   ##
   type: ClusterIP
+
+  ## externalTrafficPolicy for the service
+  ## default to "Cluster"
+  ## set to "Local" in order to preserve the client source IP (only on service of type LoadBalancer or NodePort)
+  ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/
+  ##
+  externalTrafficPolicy:
 
   ## kong proxy HTTP service port
   ##

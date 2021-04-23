@@ -1082,6 +1082,15 @@ metrics:
     # pullSecrets:
     #   - myRegistryKeySecretName
 
+  ## Extra arguments for the exporter
+  ## ref: https://github.com/justwatchcom/elasticsearch_exporter
+  ## e.g
+  ## extraArgs:
+  ##   - --es.snapshots
+  ##   - --es.indices
+  ##
+  extraArgs: []
+
   ## Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##

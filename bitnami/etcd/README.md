@@ -218,6 +218,16 @@ The following tables lists the configurable parameters of the etcd chart and the
 | `disasterRecovery.pvc.size`                     | PVC Storage Request                                                                   | `2Gi`                                                       |
 | `disasterRecovery.pvc.storageClassName`         | Storage Class for snapshots volume                                                    | `nfs`                                                       |
 
+### Service account parameters
+
+| Parameter                                     | Description                                           | Default   |
+|-----------------------------------------------|-------------------------------------------------------|-----------|
+| `serviceAccount.create`                       | Enable/disable service account creation               | `false`   |
+| `serviceAccount.name`                         | Name of the service account to create or use          | `default` |
+| `serviceAccount.automountServiceAccountToken` | Enable/disable auto mounting of service account token | `true`    |
+| `serviceAccount.labels`                       | Additional labels to include on service account       | `{}`      |
+| `serviceAccount.annotations`                  | Additional annotations to include on service account  | `{}`      |
+
 ### Other parameters
 
 | Parameter                  | Description                                                    | Default |
@@ -271,11 +281,12 @@ The [Bitnami etcd](https://github.com/bitnami/bitnami-docker-etcd) image stores 
 
 The chart mounts a [Persistent Volume](https://kubernetes.io/docs/user-guide/persistent-volumes/) volume at this location. The volume is created using dynamic volume provisioning by default. An existing PersistentVolumeClaim can also be defined for this purpose.
 
-[Learn more about persistence in the chart documentation](https://docs.bitnami.com/kubernetes/infrastructure/etcd/configuration/understand-chart-persistence/).
+If you encounter errors when working with persistent volumes, refer to our [troubleshooting guide for persistent volumes](https://docs.bitnami.com/kubernetes/faq/troubleshooting/troubleshooting-persistence-volumes/).
+
 
 ### Backup and restore the etcd keyspace
 
-The Bitnami etcd chart provides mechanisms to bootstrap the etcd cluster restoring an existing snapshot before initializing. 
+The Bitnami etcd chart provides mechanisms to bootstrap the etcd cluster restoring an existing snapshot before initializing.
 
 [Learn more about backup/restore features in the chart documentation](https://docs.bitnami.com/kubernetes/infrastructure/etcd/administration/backup-restore/).
 
@@ -305,8 +316,8 @@ extraEnvVars:
 
 Since etcd keeps an exact history of its keyspace, this history should be periodically compacted to avoid performance degradation and eventual storage space exhaustion. Compacting the keyspace history drops all information about keys superseded prior to a given keyspace revision. The space used by these keys then becomes available for additional writes to the keyspace.
 
-`autoCompactionMode`, by default periodic. Valid values: ‘periodic’, ‘revision’. 
-- 'periodic' for duration based retention, defaulting to hours if no time unit is provided (e.g. ‘5m’). 
+`autoCompactionMode`, by default periodic. Valid values: ‘periodic’, ‘revision’.
+- 'periodic' for duration based retention, defaulting to hours if no time unit is provided (e.g. ‘5m’).
 - 'revision' for revision number based retention.
 `autoCompactionRetention` for mvcc key value store in hour, by default 0, means disabled.
 

@@ -68,8 +68,8 @@ spec:
                 --create \
                 --if-not-exists \
                 --bootstrap-server {{ $bootstrapServer }} \
-                --replication-factor {{ $topic.replicationFactor }} \
-                --partitions {{ $topic.partitions }} \
+                --replication-factor {{ $topic.replicationFactor | default $.Values.provisioning.replicationFactor }} \
+                --partitions {{ $topic.partitions | default $.Values.provisioning.numPartitions }} \
                 {{- range $name, $value := $topic.config }}
                 --config {{ $name }}={{ $value }} \
                 {{- end }}

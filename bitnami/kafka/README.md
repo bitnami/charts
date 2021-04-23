@@ -264,6 +264,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `metrics.kafka.nodeSelector`           | Node labels for Kafka Exporter pod assignment                                                                                    | `{}`                                                    |
 | `metrics.kafka.tolerations`            | Tolerations for Kafka Exporter pod assignment                                                                                    | `[]`                                                    |
 | `metrics.kafka.schedulerName`          | Name of the k8s scheduler (other than default) for Kafka Exporter                                                                | `nil`                                                   |
+| `metrics.kafka.initContainers`         | Add init containers to the Kafka exporter pods                                                                                   | `{}`                                                    |
 | `metrics.kafka.service.type`           | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`) for Kafka Exporter                                           | `ClusterIP`                                             |
 | `metrics.kafka.service.port`           | Kafka Exporter Prometheus port                                                                                                   | `9308`                                                  |
 | `metrics.kafka.service.nodePort`       | Kubernetes HTTP node port                                                                                                        | `""`                                                    |
@@ -295,15 +296,17 @@ The following tables lists the configurable parameters of the Kafka chart and th
 
 ### Kafka provisioning parameters
 
-| Parameter                    | Description                                                           | Default                        |
-|------------------------------|-----------------------------------------------------------------------|--------------------------------|
-| `provisioning.enabled`       | Enable kafka provisioning Job                                         | `false`                        |
-| `provisioning.image`         | Kafka provisioning Job image                                          | `Check values.yaml file`       |
-| `provisioning.resources`     | Kafka provisioning Job resources                                      | `Check values.yaml file`       |
-| `provisioning.topics`        | Kafka provisioning topics                                             | `[]`                           |
-| `provisioning.schedulerName` | Name of the k8s scheduler (other than default) for kafka provisioning | `nil`                          |
-| `provisioning.command`       | Override provisioning container command                               | `[]` (evaluated as a template) |
-| `provisioning.args`          | Override provisioning container arguments                             | `[]` (evaluated as a template) |
+| Parameter                        | Description                                                           | Default                        |
+|----------------------------------|-----------------------------------------------------------------------|--------------------------------|
+| `provisioning.enabled`           | Enable kafka provisioning Job                                         | `false`                        |
+| `provisioning.image`             | Kafka provisioning Job image                                          | `Check values.yaml file`       |
+| `provisioning.numPartitions`     | Default number of partitions for topics when unspecified.             | 1                              |
+| `provisioning.replicationFactor` | Default replication factor for topics when unspecified.               | 1                              |
+| `provisioning.resources`         | Kafka provisioning Job resources                                      | `Check values.yaml file`       |
+| `provisioning.topics`            | Kafka provisioning topics                                             | `[]`                           |
+| `provisioning.schedulerName`     | Name of the k8s scheduler (other than default) for kafka provisioning | `nil`                          |
+| `provisioning.command`           | Override provisioning container command                               | `[]` (evaluated as a template) |
+| `provisioning.args`              | Override provisioning container arguments                             | `[]` (evaluated as a template) |
 
 ### Zookeeper chart parameters
 

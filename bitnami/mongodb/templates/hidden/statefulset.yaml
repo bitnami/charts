@@ -119,7 +119,7 @@ spec:
             - |
               /bin/bash <<'EOF'
               my_hostname=$(hostname)
-              svc=$(echo -n "$my_hostname" | sed s/-[0-9]*$//)-headless
+              svc=$(echo -n "$my_hostname" | sed s/-[0-9]*$//)-hidden-headless
               cp /certs/CAs/* /certs/
               cat >/certs/openssl.cnf <<EOL
               [req]
@@ -214,6 +214,8 @@ spec:
                   fieldPath: metadata.namespace
             - name: K8S_SERVICE_NAME
               value: "{{ include "mongodb.fullname" . }}-headless"
+            - name: K8S_HIDDEN_NODE_SERVICE_NAME
+              value: "{{ include "mongodb.fullname" . }}-hidden-headless"
             - name: MONGODB_REPLICA_SET_MODE
               value: "hidden"
             - name: MONGODB_INITIAL_PRIMARY_HOST
@@ -222,7 +224,7 @@ spec:
               value: {{ .Values.replicaSetName | quote }}
             {{- if and .Values.replicaSetHostnames (not .Values.externalAccess.hidden.enabled) }}
             - name: MONGODB_ADVERTISED_HOSTNAME
-              value: "$(MY_POD_NAME).$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.{{ .Values.clusterDomain }}"
+              value: "$(MY_POD_NAME).$(K8S_HIDDEN_NODE_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.{{ .Values.clusterDomain }}"
             {{- end }}
             {{- if .Values.auth.username }}
             - name: MONGODB_USERNAME
@@ -263,13 +265,13 @@ spec:
               value: {{ ternary "yes" "no" .Values.enableIPv6 | quote }}
             - name: MONGODB_ENABLE_DIRECTORY_PER_DB
               value: {{ ternary "yes" "no" .Values.directoryPerDB | quote }}
+            {{- $extraFlags := .Values.hidden.extraFlags | join " " -}}
             {{- if .Values.tls.enabled }}
-            - name: MONGODB_EXTRA_FLAGS
-              value: --tlsMode=requireTLS --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert
+              {{- $extraFlags = printf "%s %s" "--tlsMode=requireTLS --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert" $extraFlags  }}
             {{- end }}
-            {{- if .Values.hidden.extraFlags }}
+            {{- if ne $extraFlags ""}}
             - name: MONGODB_EXTRA_FLAGS
-              value: {{ .Values.hidden.extraFlags | join " " | quote }}
+              value: {{ $extraFlags | quote }}
             {{- end }}
             {{- if .Values.tls.enabled }}
             - name: MONGODB_CLIENT_EXTRA_FLAGS

@@ -7,8 +7,8 @@ metadata:
     app.kubernetes.io/component: receive
 spec:
   scaleTargetRef:
-    apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
-    kind: Deployment
+    apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
+    kind: StatefulSet
     name: {{ include "common.names.fullname" . }}-receive
   minReplicas: {{ .Values.receive.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.receive.autoscaling.maxReplicas }}

@@ -1,0 +1,619 @@
+## @section Global parameters
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry and imagePullSecrets
+##
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.storageClass Global StorageClass for Persistent Volume(s)
+##
+global:
+  imageRegistry:
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+  storageClass:
+
+## @section Kafka parameters
+
+kafka:
+  ## @param kafka.enabled Enable Kafka subchart
+  enabled: true
+  ## @param kafka.replicaCount Number of Kafka brokers
+  replicaCount: 3
+  ## @param kafka.heapOpts Kafka Java Heap size
+  heapOpts: -Xmx4096m -Xms4096m
+  ## Recommended values for cpu and memory requests
+  ##
+  ## @param kafka.resources.limits Resource limits for Kafka
+  ## @param kafka.resources.requests.cpu CPU capacity request for Kafka nodes
+  ## @param kafka.resources.requests.memory Memory capacity request for Kafka nodes
+  resources:
+    limits: {}
+    requests:
+      cpu: 250m
+      memory: 5120Mi
+  ## Anti Affinity rules set for resiliency and Affinity rules set for optimal performance
+  ##
+  ## @param kafka.affinity.podAntiAffinity [object] Kafka anti affinity rules
+  ## @param kafka.affinity.podAffinity [object] Kafka affinity rules
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchExpressions:
+              - key: app.kubernetes.io/component
+                operator: In
+                values:
+                  - kafka
+          topologyKey: "kubernetes.io/hostname"
+    podAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 50
+          podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+                - key: app.kubernetes.io/name
+                  operator: In
+                  values:
+                    - zookeeper
+            topologyKey: "kubernetes.io/hostname"
+  ## Prometheus Exporters / Metrics
+  ##
+  metrics:
+    ## Prometheus Kafka Exporter: exposes complimentary metrics to JMX Exporter
+    ##
+    kafka:
+      ## @param kafka.metrics.kafka.enabled Enable prometheus exporter for Kafka
+      enabled: false
+      ## Prometheus Kafka Exporter' resource requests and limits
+      ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+      ##
+      ## @param kafka.metrics.kafka.resources.limits Resource limits for kafka prometheus exporter
+      ## @param kafka.metrics.kafka.resources.requests.cpu CPU capacity request for Kafka prometheus nodes
+      ## @param kafka.metrics.kafka.resources.requests.memory Memory capacity request for Kafka prometheus nodes
+      resources:
+        limits: {}
+        requests:
+          cpu: 100m
+          memory: 128Mi
+      ## Service configuration
+      ##
+      ## @param kafka.metrics.kafka.service.port Kafka Prometheus exporter service port
+      service:
+        ## Kafka Exporter Prometheus port to be used in wavefront configuration
+        ##
+        port: 9308
+
+    ## Prometheus JMX Exporter: exposes the majority of Kafkas metrics
+    ##
+    jmx:
+      ## @param kafka.metrics.jmx.enabled Enable JMX exporter for Kafka
+      enabled: false
+      ## Prometheus JMX Exporter' resource requests and limits
+      ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+      ##
+      ## @param kafka.metrics.jmx.resources.limits Resource limits for kafka prometheus exporter
+      ## @param kafka.metrics.jmx.resources.requests.cpu CPU capacity request for Kafka prometheus nodes
+      ## @param kafka.metrics.jmx.resources.requests.memory Memory capacity request for Kafka prometheus nodes
+      resources:
+        limits: {}
+        requests:
+          cpu: 100m
+          memory: 128Mi
+      ## Service configuration
+      ##
+      ## @param kafka.metrics.jmx.service.port Kafka Prometheus exporter service port
+      service:
+        ## JMX Exporter Prometheus port
+        ##
+        port: 5556
+  ## Zookeeper parameters
+  zookeeper:
+    ## @param kafka.zookeeper.enabled Enable the Kafka subchart's Zookeeper
+    enabled: true
+    ## @param kafka.zookeeper.replicaCount Number of Zookeeper nodes
+    replicaCount: 3
+    ## Size in MB for the Java Heap options (Xmx and XMs). This env var is ignored if Xmx an Xms are configured via JVMFLAGS
+    ##
+    ## @param kafka.zookeeper.heapSize HeapSize for Zookeeper
+    heapSize: 4096
+    ## Recommended values for cpu and memory requests
+    ##
+    ## @param kafka.zookeeper.resources.limits Resource limits for zookeeper
+    ## @param kafka.zookeeper.resources.requests.cpu CPU capacity request for zookeeper
+    ## @param kafka.zookeeper.resources.requests.memory Memory capacity request for zookeeper
+    resources:
+      limits: {}
+      requests:
+        cpu: 250m
+        memory: 5120Mi
+    ## Anti Affinity rules set for resiliency
+    ##
+    ## @param kafka.zookeeper.affinity.podAntiAffinity [object] Zookeeper anti affinity rules
+    affinity:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+                - key: app.kubernetes.io/name
+                  operator: In
+                  values:
+                    - zookeeper
+            topologyKey: "kubernetes.io/hostname"
+  ## This value is only used when zookeeper.enabled is set to false.
+  ##
+  externalZookeeper:
+    ## Server or list of external zookeeper servers to use. This is set to the zookeeper deployed as part of this chart
+    ##
+    ## @param kafka.externalZookeeper.servers Array of external Zookeeper servers
+    servers: []
+
+## @section Spark parameters
+##
+spark:
+  ## @param spark.enabled Enable Spark subchart
+  enabled: true
+  ## Spark master specific configuration
+  ##
+  ## @param spark.master.webPort Web port for spark master
+  ## @param spark.master.resources.limits Spark master resource limits
+  ## @param spark.master.resources.requests.cpu Spark master CPUs
+  ## @param spark.master.resources.requests.memory Spark master requested memory
+  ## @param spark.master.affinity.podAntiAffinity [object] Spark master pod anti affinity rules
+  master:
+    ## Spark container ports
+    ##
+    webPort: 8080
+    resources:
+      ## Recommended values for cpu and memory requests
+      ##
+      limits: {}
+      requests:
+        cpu: 250m
+        memory: 5120Mi
+    ## Anti affinity rules set for resiliency
+    ##
+    affinity:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+                - key: app.kubernetes.io/component
+                  operator: In
+                  values:
+                    - worker
+            topologyKey: "kubernetes.io/hostname"
+  ## Spark worker specific configuration
+  ##
+  ## @param spark.worker.replicaCount Number of spark workers
+  ## @param spark.worker.webPort Web port for spark master
+  ## @param spark.worker.resources.limits Spark master resource limits
+  ## @param spark.worker.resources.requests.cpu Spark master CPUs
+  ## @param spark.worker.resources.requests.memory Spark master requested memory
+  ## @param spark.worker.affinity.podAntiAffinity [object] Spark master pod anti affinity rules
+  worker:
+    replicaCount: 2
+    ## Spark container ports
+    ##
+    webPort: 8081
+    resources:
+      ## Recommended values for cpu and memory requests
+      ##
+      limits: {}
+      requests:
+        cpu: 250m
+        memory: 5120Mi
+    ## Anti affinity rules set for resiliency
+    ##
+    affinity:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+                - key: app.kubernetes.io/component
+                  operator: In
+                  values:
+                    - worker
+                    - master
+                - key: app.kubernetes.io/name
+                  operator: In
+                  values:
+                    - spark
+            topologyKey: "kubernetes.io/hostname"
+  ## Metrics configuration
+  ##
+  ## @param spark.metrics.enabled Enable Prometheus exporter for Spark
+  ## @param spark.metrics.masterAnnotations [object] Annotations for Spark master exporter
+  ## @param spark.metrics.workerAnnotations [object] Annotations for Spark worker exporter
+  metrics:
+    enabled: false
+    ## Annotations for the Prometheus metrics on master nodes
+    ##
+    masterAnnotations:
+      prometheus.io/scrape: 'true'
+      prometheus.io/path: '/metrics/'
+      prometheus.io/port: '8080'
+    ## Annotations for the Prometheus metrics on worker nodes
+    ##
+    workerAnnotations:
+      prometheus.io/scrape: 'true'
+      prometheus.io/path: '/metrics/'
+      prometheus.io/port: '8081'
+
+## @section Elasticsearch parameters
+##
+elasticsearch:
+  ## @param elasticsearch.enabled Enable Elasticsearch
+  enabled: true
+  ## @param elasticsearch.global.kibanaEnabled Enable Kibana
+  global:
+    kibanaEnabled: true
+  ## Elasticsearch master-eligible node parameters
+  ##
+  ## @param elasticsearch.master.replicas Number of Elasticsearch replicas
+  ## @param elasticsearch.master.heapSize Heap Size for Elasticsearch master
+  ## @param elasticsearch.master.affinity.podAntiAffinity [object] Elasticsearch pod anti affinity
+  ## @param elasticsearch.master.resources.limits Elasticsearch master resource limits
+  ## @param elasticsearch.master.resources.requests.cpu Elasticsearch master CPUs
+  ## @param elasticsearch.master.resources.requests.memory Elasticsearch master requested memory
+  master:
+    ## Number of master-eligible node(s) replicas to deploy
+    ##
+    replicas: 3
+    heapSize: 512m
+
+    ## Affinity for pod assignment
+    ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+    ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
+    ##
+    affinity:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+                - key: app.kubernetes.io/component
+                  operator: In
+                  values:
+                    - master
+                - key: app.kubernetes.io/name
+                  operator: In
+                  values:
+                    - elasticsearch
+            topologyKey: "kubernetes.io/hostname"
+
+    ## Elasticsearch master-eligible container's resource requests and limits
+    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ##
+    resources:
+      ## We usually recommend not to specify default resources and to leave this as a conscious
+      ## choice for the user. This also increases chances charts run on environments with little
+      ## resources, such as Minikube.
+      ##
+      limits: {}
+      requests:
+        cpu: 250m
+        memory: 1048Mi
+  ## Elasticsearch data node parameters
+  ##
+  ## @param elasticsearch.data.name Elasticsearch data node name
+  ## @param elasticsearch.data.replicas Number of Elasticsearch replicas
+  ## @param elasticsearch.data.heapSize Heap Size for Elasticsearch data node
+  ## @param elasticsearch.data.affinity.podAntiAffinity [object] Elasticsearch pod anti affinity
+  ## @param elasticsearch.data.resources.limits Elasticsearch data node resource limits
+  ## @param elasticsearch.data.resources.requests.cpu Elasticsearch data node CPUs
+  ## @param elasticsearch.data.resources.requests.memory Elasticsearch data node requested memory
+  data:
+    name: data
+    ## Number of data node(s) replicas to deploy
+    ##
+    replicas: 2
+    heapSize: 2560m
+
+    ## Affinity for pod assignment
+    ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+    ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
+    ##
+    affinity:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+                - key: app.kubernetes.io/component
+                  operator: In
+                  values:
+                    - data
+                - key: app.kubernetes.io/name
+                  operator: In
+                  values:
+                    - elasticsearch
+            topologyKey: "kubernetes.io/hostname"
+
+    ## Elasticsearch data container's resource requests and limits
+    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ##
+    resources:
+      limits: {}
+      requests:
+        cpu: 250m
+        memory: 5Gi
+
+  ## Elasticsearch coordinating-only node parameters
+  ##
+  ## @param elasticsearch.coordinating.replicas Number of Elasticsearch replicas
+  ## @param elasticsearch.coordinating.heapSize Heap Size for Elasticsearch coordinating
+  ## @param elasticsearch.coordinating.affinity.podAntiAffinity [object] Elasticsearch pod anti affinity
+  ## @param elasticsearch.coordinating.resources.limits Elasticsearch coordinating resource limits
+  ## @param elasticsearch.coordinating.resources.requests.cpu Elasticsearch coordinating CPUs
+  ## @param elasticsearch.coordinating.resources.requests.memory Elasticsearch coordinating requested memory
+  coordinating:
+    ## Number of coordinating-only node(s) replicas to deploy
+    ##
+    replicas: 2
+    heapSize: 1024m
+
+    ## Affinity for pod assignment
+    ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+    ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
+    ##
+    affinity:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+                - key: app.kubernetes.io/component
+                  operator: In
+                  values:
+                    - coordinating-only
+                - key: app.kubernetes.io/name
+                  operator: In
+                  values:
+                    - elasticsearch
+            topologyKey: "kubernetes.io/hostname"
+
+    ## Elasticsearch coordinating-only container's resource requests and limits
+    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ##
+    resources:
+      ## We usually recommend not to specify default resources and to leave this as a conscious
+      ## choice for the user. This also increases chances charts run on environments with little
+      ## resources, such as Minikube.
+      ##
+      limits: {}
+      requests:
+        cpu: 100m
+        memory: 2Gi
+
+  ## Elasticsearch Prometheus exporter configuration
+  ## ref: https://hub.docker.com/r/bitnami/elasticsearch-exporter/tags/
+  ##
+  ## @param elasticsearch.metrics.enabled Enable Prometheus exporter for Elasticsearch
+  ## @param elasticsearch.metrics.resources.limits Elasticsearch metrics resource limits
+  ## @param elasticsearch.metrics.resources.requests.cpu Elasticsearch metrics CPUs
+  ## @param elasticsearch.metrics.resources.requests.memory Elasticsearch metrics requested memory
+  ## @param elasticsearch.metrics.service.annotations [object] Elasticsearch metrics service annotations
+  metrics:
+    enabled: false
+    ## Elasticsearch Prometheus exporter resource requests and limits
+    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ##
+    resources:
+      # We usually recommend not to specify default resources and to leave this as a conscious
+      # choice for the user. This also increases chances charts run on environments with little
+      # resources, such as Minikube. If you do want to specify resources, uncomment the following
+      # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+      limits: {}
+      requests:
+        cpu: 100m
+        memory: 128Mi
+    service:
+      ## Provide any additional annotations which may be required. This can be used to
+      ## set the LoadBalancer service type to internal only.
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+      ##
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9114"
+
+## @section Logstash parameters
+##
+logstash:
+  ## @param logstash.enabled Enable Logstash
+  enabled: true
+  ## Number of Logstash replicas to deploy
+  ##
+  ## @param logstash.replicaCount Number of Logstash replicas
+  replicaCount: 2
+
+  ## Affinity for pod assignment. Evaluated as a template.
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Note: podAffinityPreset, podAntiAffinityPreset, and nodeAffinityPreset will be ignored when it's set
+  ##
+  ## @param logstash.affinity.podAntiAffinity [object] Logstash pod anti affinity
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchExpressions:
+              - key: app.kubernetes.io/name
+                operator: In
+                values:
+                  - logstash
+          topologyKey: "kubernetes.io/hostname"
+
+  ## Logstash containers' resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  ## @param logstash.resources.limits Elasticsearch metrics resource limits
+  ## @param logstash.resources.requests.cpu Elasticsearch metrics CPUs
+  ## @param logstash.resources.requests.memory Elasticsearch metrics requested memory
+  resources:
+    limits: {}
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+  ## Prometheus metrics
+  ##
+  ## @param logstash.metrics.enabled Enable metrics for logstash
+  metrics:
+    enabled: false
+    ## Logstash Prometheus Exporter containers' resource requests and limits
+    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ##
+    ## @param logstash.metrics.resources.limits Elasticsearch metrics resource limits
+    ## @param logstash.metrics.resources.requests.cpu Elasticsearch metrics CPUs
+    ## @param logstash.metrics.resources.requests.memory Elasticsearch metrics requested memory
+    resources:
+      limits: {}
+      requests:
+        cpu: 100m
+        memory: 128Mi
+
+    ## @param logstash.metrics.service.port Logstash service port
+    ## @param logstash.metrics.service.annotations [object] Logstash service annotations
+    service:
+      ## Logstash Prometheus port
+      ##
+      port: 9198
+      ## Annotations for the Prometheus metrics service
+      ##
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9198"
+        prometheus.io/path: "/metrics"
+
+## @section Tanzu Observability (Wavefront) parameters
+##
+wavefront:
+  ## @param wavefront.enabled Enable Tanzu Observability Framework
+  enabled: false
+  ## This is a unique name for the cluster (required)
+  ## All metrics will receive a `cluster` tag with this value
+  ##
+  ## @param wavefront.clusterName cluster name
+  clusterName: KUBERNETES_CLUSTER_NAME
+  ## Wavefront URL (cluster) and API Token (required)
+  ##
+  ## @param wavefront.wavefront.url Tanzu Observability cluster URL
+  ## @param wavefront.wavefront.token Tanzu Observability access token
+  ## @param wavefront.wavefront.existingSecret Tanzu Observability existing secret
+  wavefront:
+    url: https://YOUR_CLUSTER.wavefront.com
+    token: YOUR_API_TOKEN
+    ## Name of an existing secret containing the token
+    ##
+    existingSecret:
+  ## Wavefront Collector is responsible to get all Kubernetes metrics from your cluster.
+  ## It will capture Kubernetes resources metrics available from the kubelets,
+  ## as well as auto-discovery capabilities.
+  ##
+  ## @param wavefront.collector.resources.limits Wavefront collector metrics resource limits
+  ## @param wavefront.collector.resources.requests.cpu Wavefront collector metrics CPUs
+  ## @param wavefront.collector.resources.requests.memory Wavefront collector metrics requested memory
+  ## @param wavefront.collector.discovery.enabled Enable wavefront discovery
+  ## @param wavefront.collector.discovery.enableRuntimeConfigs Enable runtime configs for wavefront discovery
+  ## @param wavefront.collector.discovery.config [array] Wavefront discovery config
+  collector:
+    ## Rules based discovery configuration
+    ## Ref: https://github.com/wavefrontHQ/wavefront-kubernetes-collector/blob/master/docs/discovery.md
+    ##
+    resources:
+      limits: {}
+      requests:
+        cpu: 200m
+        memory: 10Mi
+    discovery:
+      enabled: true
+      ## Whether to enable runtime discovery configurations
+      ## Ref: https://github.com/wavefrontHQ/wavefront-collector-for-kubernetes/blob/master/docs/discovery.md#runtime-configurations
+      ##
+      enableRuntimeConfigs: true
+      ## Can be used to add additional discovery rules
+      ##
+      config:
+        ## auto-discover kafka-exporter
+        ##
+        - name: kafka-discovery
+          type: prometheus
+          selectors:
+            images:
+              - '*bitnami/kafka-exporter*'
+          port: 9308
+          path: /metrics
+          scheme: http
+          prefix: kube.kafka.
+
+        ## auto-discover jmx exporter
+        ##
+        - name: kafka-jmx-discovery
+          type: prometheus
+          selectors:
+            images:
+              - '*bitnami/jmx-exporter*'
+          port: 5556
+          path: /metrics
+          scheme: http
+          prefix: kube.kafkajmx.
+
+        ## auto-discover elasticsearch
+        ##
+        - name: elasticsearch-discovery
+          type: prometheus
+          selectors:
+            images:
+              - '*bitnami/elasticsearch-exporter*'
+          port: 9114
+          path: /metrics
+          scheme: http
+          prefix: kube.elasticsearch.
+
+        ## auto-discover logstash
+        ##
+        - name: logstash-discovery
+          type: prometheus
+          selectors:
+            images:
+              - '*bitnami/logstash-exporter*'
+          port: 9198
+          path: /metrics
+          scheme: http
+          prefix: kube.logstash.
+
+        ## auto-discover spark
+        ##
+        - name: spark-worker-discovery
+          type: prometheus
+          selectors:
+            images:
+              - '*bitnami/spark*'
+          port: 8081
+          path: /metrics/
+          scheme: http
+          prefix: kube.spark.
+
+        ## auto-discover spark
+        ##
+        - name: spark-master-discovery
+          type: prometheus
+          selectors:
+            images:
+              - '*bitnami/spark*'
+          port: 8080
+          path: /metrics/
+          scheme: http
+          prefix: kube.spark.
+  proxy:
+    ## Wavefront Proxy resource requests and limits
+    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ##
+    ## @param wavefront.proxy.resources.limits Wavefront Proxy metrics resource limits
+    ## @param wavefront.proxy.resources.requests.cpu Wavefront Proxy metrics CPUs
+    ## @param wavefront.proxy.resources.requests.memory Wavefront Proxy metrics requested memory
+    resources:
+      limits: {}
+      requests:
+        cpu: 100m
+        memory: 5Gi
