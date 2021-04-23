@@ -41,7 +41,7 @@ spec:
       {{- include "common.storage.class" (dict "persistence" .Values.persistence "global" .Values.global) | nindent 6 }}
       {{- with .Values.persistence.selectorLabels }}
       selector:
-        matchLabels: {{- toYaml . | indent 10 }}
+        matchLabels: {{- toYaml . | nindent 10 }}
       {{- end }}
   {{- if .Values.extraVolumeClaimTemplates }}
   {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeClaimTemplates "context" $) | nindent 2 }}
