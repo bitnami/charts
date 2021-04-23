@@ -25,6 +25,7 @@ spec:
           annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.disasterRecovery.cronjob.podAnnotations "context" $) | nindent 12 }}
           {{- end }}
         spec:
+          {{- include "etcd.imagePullSecrets" . | nindent 10 }}
           restartPolicy: OnFailure
           {{- if .Values.podSecurityContext.enabled }}
           securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 12 }}

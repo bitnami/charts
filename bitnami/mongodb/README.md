@@ -429,7 +429,7 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 If additional containers are needed in the same pod (such as additional metrics or logging exporters), they can be defined using the `sidecars` config parameter. Similarly, extra init containers can be added using the `initContainers` parameter.
 
-Refer to the chart documentation for more information on, and examples of, configuring and using [sidecars](https://docs.bitnami.com/kubernetes/infrastructure/mongodb/configuration/configure-use-sidecars/) and [init containers](https://docs.bitnami.com/kubernetes/infrastructure/mongodb/configuration/configure-use-init-containers/).
+Refer to the chart documentation for more information on, and examples of, configuring and using [sidecars and init containers](https://docs.bitnami.com/kubernetes/infrastructure/mongodb/configuration/configure-sidecar-init-containers/).
 
 ## Persistence
 
@@ -437,7 +437,8 @@ The [Bitnami MongoDB&reg;](https://github.com/bitnami/bitnami-docker-mongodb) im
 
 The chart mounts a [Persistent Volume](http://kubernetes.io/docs/user-guide/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning.
 
-[Learn more about persistence in the chart documentation](https://docs.bitnami.com/kubernetes/infrastructure/mongodb/configuration/understand-chart-persistence/).
+If you encounter errors when working with persistent volumes, refer to our [troubleshooting guide for persistent volumes](https://docs.bitnami.com/kubernetes/faq/troubleshooting/troubleshooting-persistence-volumes/).
+
 
 ## Use custom Prometheus rules
 

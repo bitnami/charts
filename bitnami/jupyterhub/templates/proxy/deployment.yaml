@@ -1,0 +1,166 @@
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: proxy
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  name: {{ include "jupyterhub.proxy.name" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if .Values.proxy.updateStrategy }}
+  strategy: {{- toYaml .Values.proxy.updateStrategy | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: proxy
+  template:
+    metadata:
+      {{- if .Values.proxy.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.podAnnotations "context" $) | nindent 8 }}
+        checksum/hub-secret: {{ include (print $.Template.BasePath "/hub/secret.yaml") . | sha256sum }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app.kubernetes.io/component: proxy
+        hub.jupyter.org/network-access-hub: "true"
+        hub.jupyter.org/network-access-singleuser: "true"
+        {{- if .Values.proxy.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.proxy.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- include "jupyterhub.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.proxy.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.proxy.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.proxy.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.proxy.podAffinityPreset "component" "proxy" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.proxy.podAntiAffinityPreset "component" "proxy" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.proxy.nodeAffinityPreset.type "key" .Values.proxy.nodeAffinityPreset.key "values" .Values.proxy.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.proxy.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.proxy.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.proxy.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.proxy.priorityClassName }}
+      priorityClassName: {{ .Values.proxy.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.proxy.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.proxy.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.proxy.initContainers }}
+      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.initContainers "context" $) | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: proxy
+          image: {{ template "jupyterhub.proxy.image" . }}
+          imagePullPolicy: {{ .Values.proxy.image.pullPolicy }}
+          {{- if .Values.proxy.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.proxy.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.proxy.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.proxy.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.proxy.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            - configurable-http-proxy
+            - "--ip=::"
+            - "--api-ip=::"
+            - --api-port={{ .Values.proxy.containerPort.api }}
+            - --default-target=http://{{ template "common.names.fullname" . }}-hub:{{ .Values.hub.service.port }}
+            - --error-target=http://{{ template "common.names.fullname" . }}-hub:{{ .Values.hub.service.port }}/hub/error
+            - --port={{ .Values.proxy.containerPort.http }}
+            {{- if .Values.proxy.image.debug }}
+            - --log-level=debug
+            {{- end }}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.proxy.containerPort.http }}
+              protocol: TCP
+            - name: api
+              containerPort: {{ .Values.proxy.containerPort.api }}
+              protocol: TCP
+          env:
+            - name: CONFIGPROXY_AUTH_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "jupyterhub.hubSecretName" . }}
+                  key: proxy-token
+            {{- if .Values.proxy.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.proxy.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.proxy.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.proxy.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.proxy.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.proxy.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- if .Values.proxy.resources }}
+          resources: {{- toYaml .Values.proxy.resources | nindent 12 }}
+          {{- end }}
+          {{- if .Values.proxy.startupProbe.enabled }}
+          startupProbe:
+            httpGet:
+              path: /_chp_healthz
+              port: http
+            initialDelaySeconds: {{ .Values.proxy.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.proxy.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.proxy.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.proxy.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.proxy.startupProbe.failureThreshold }}
+          {{- else if .Values.proxy.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.proxy.livenessProbe.enabled }}
+          livenessProbe:
+            httpGet:
+              path: /_chp_healthz
+              port: http
+            initialDelaySeconds: {{ .Values.proxy.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.proxy.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.proxy.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.proxy.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.proxy.livenessProbe.failureThreshold }}
+          {{- else if .Values.proxy.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.proxy.readinessProbe.enabled }}
+          readinessProbe:
+            httpGet:
+              path: /_chp_healthz
+              port: http
+            initialDelaySeconds: {{ .Values.proxy.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.proxy.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.proxy.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.proxy.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.proxy.readinessProbe.failureThreshold }}
+          {{- else if .Values.proxy.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+          {{- if .Values.proxy.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.proxy.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.proxy.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.proxy.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      {{- if .Values.proxy.extraVolumes }}
+      volumes: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.extraVolumes "context" $) | nindent 8 }}
+      {{- end }}

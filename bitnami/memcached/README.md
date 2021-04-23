@@ -109,6 +109,7 @@ The following tables lists the configurable parameters of the Memcached chart an
 | `affinity`                               | Affinity for pod assignment                                                               | `{}` (evaluated as a template)                               |
 | `nodeSelector`                           | Node labels for pod assignment                                                            | `{}` (evaluated as a template)                               |
 | `tolerations`                            | Tolerations for pod assignment                                                            | `[]` (evaluated as a template)                               |
+| `topologySpreadConstraints`              | Topology Spread Constraints for pod assignment                                            | `{}` (evaluated as a template)                               |
 | `priorityClassName`                      | Controller priorityClassName                                                              | `nil`                                                        |
 | `serviceAccount.create` | Enable creation of ServiceAccount for memcached pods                                               | `true`                                                  |
 | `serviceAccount.name`   | The name of the service account to use. If not set and `create` is `true`, a name is generated | Generated using the `memcached.serviceAccountName` template |

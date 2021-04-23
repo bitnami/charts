@@ -93,8 +93,10 @@ The following tables lists the configurable parameters of the Tomcat chart and t
 
 | Parameter                   | Description                                                                               | Default                                     |
 |-----------------------------|-------------------------------------------------------------------------------------------|---------------------------------------------|
+| `deployment.type`           | Use Deployment or StatefulSet                                                              | `deployment`                                      |
 | `replicaCount`              | Specify number of Tomcat replicas                                                         | `1`                                         |
 | `containerPort`             | HTTP port to expose at container level                                                    | `8080`                                      |
+| `containerExtraPorts`       | Extra ports to expose at container level                                               | `{}`                                      |
 | `podSecurityContext`        | Tomcat pods' Security Context                                                             | Check `values.yaml` file                    |
 | `containerSecurityContext`  | Tomcat containers' Security Context                                                       | Check `values.yaml` file                    |
 | `resources.limits`          | The resources limits for the Tomcat container                                             | `{}`                                        |
@@ -115,10 +117,11 @@ The following tables lists the configurable parameters of the Tomcat chart and t
 | `podLabels`                 | Extra labels for Tomcat pods                                                              | `{}` (evaluated as a template)              |
 | `podAnnotations`            | Annotations for Tomcat pods                                                               | `{}` (evaluated as a template)              |
 | `extraVolumeMounts`         | Optionally specify extra list of additional volumeMounts for Tomcat container(s)          | `[]`                                        |
-| `extraVolumes`              | Optionally specify extra list of additional volumes for Tomcat pods                       | `[]`                                        |
+| `extraVolumes`              | Optionally specify extra list of additional volumes for Tomcat pods in Deployment                      | `[]`                                        |
+| `extraVolumeClaimTemplates` | Optionally specify extra list of additional volume claim templates for Tomcat pods in StatefulSet      | `[]`                                        |
 | `initContainers`            | Add additional init containers to the Tomcat pods                                         | `{}` (evaluated as a template)              |
 | `sidecars`                  | Add additional sidecar containers to the Tomcat pods                                      | `{}` (evaluated as a template)              |
-| `persistence.enabled`       | Enable persistence using PVC                                                              | `true`                                      |
+| `persistence.enabled`       | Enable persistence                                                              | `true`                                      |
 | `persistence.storageClass`  | PVC Storage Class for Tomcat volume                                                       | `nil` (uses alpha storage class annotation) |
 | `persistence.existingClaim` | An Existing PVC name for Tomcat volume                                                    | `nil` (uses alpha storage class annotation) |
 | `persistence.accessMode`    | PVC Access Mode for Tomcat volume                                                         | `ReadWriteOnce`                             |

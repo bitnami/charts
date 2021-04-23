@@ -106,6 +106,9 @@ spec:
             {{- if .Values.txtPrefix }}
             - --txt-prefix={{ .Values.txtPrefix }}
             {{- end }}
+            {{- if .Values.txtSuffix }}
+            - --txt-suffix={{ .Values.txtSuffix }}
+            {{- end }}
             {{- end }}
             {{- if .Values.annotationFilter }}
             - --annotation-filter={{ .Values.annotationFilter }}

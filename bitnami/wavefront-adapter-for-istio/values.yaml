@@ -5,12 +5,15 @@
 ## @section Global parameters
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
   imageRegistry:
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
   imagePullSecrets: []
-#     - myRegistryKeySecretName
-#   storageClass: myStorageClass
+  storageClass:
 
 ## Override Kubernetes version
 ## @param kubeVersion Override Kubernetes version

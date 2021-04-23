@@ -203,6 +203,11 @@ nodeSelector: {}
 ##
 tolerations: []
 
+## Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+##
+topologySpreadConstraints: {}
+
 ## Pod priority
 ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
 ##

@@ -150,3 +150,14 @@ etcd: disasterRecovery
     Please enable persistence (--set persistence.enabled=true)
 {{- end -}}
 {{- end -}}
+
+{{/*
+ Create the name of the service account to use
+ */}}
+{{- define "etcd.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create -}}
+{{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
+{{- else -}}
+{{ default "default" .Values.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
