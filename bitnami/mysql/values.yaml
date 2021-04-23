@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/mysql
-  tag: 8.0.23-debian-10-r84
+  tag: 8.0.24-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -135,7 +135,7 @@ primary:
     skip-name-resolve
     explicit_defaults_for_timestamp
     basedir=/opt/bitnami/mysql
-    plugin_dir=/opt/bitnami/mysql/plugin
+    plugin_dir=/opt/bitnami/mysql/lib/plugin
     port=3306
     socket=/opt/bitnami/mysql/tmp/mysql.sock
     datadir=/bitnami/mysql/data
@@ -151,7 +151,7 @@ primary:
     port=3306
     socket=/opt/bitnami/mysql/tmp/mysql.sock
     default-character-set=UTF8
-    plugin_dir=/opt/bitnami/mysql/plugin
+    plugin_dir=/opt/bitnami/mysql/lib/plugin
 
     [manager]
     port=3306
@@ -753,7 +753,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mysqld-exporter
-    tag: 0.12.1-debian-10-r413
+    tag: 0.12.1-debian-10-r414
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

@@ -96,6 +96,9 @@ spec:
           volumeMounts:
             - name: objstore-config
               mountPath: /conf
+            {{- if .Values.bucketweb.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.bucketweb.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
       volumes:
         - name: objstore-config
           secret:
@@ -103,4 +106,7 @@ spec:
             {{- if .Values.existingObjstoreSecretItems }}
             items: {{- toYaml .Values.existingObjstoreSecretItems | nindent 14 }}
             {{- end }}
+        {{- if .Values.bucketweb.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.bucketweb.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
 {{- end }}

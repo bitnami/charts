@@ -63,6 +63,7 @@ auth:
   user: nats_client
   # password:
   # token:
+  timeout: 1
 
 ## Cluster Authentication
 ## ref: https://github.com/nats-io/gnatsd#authentication

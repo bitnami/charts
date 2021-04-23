@@ -1,7 +1,7 @@
 annotations:
   category: Database
 apiVersion: v2
-appVersion: 6.2.1
+appVersion: 6.2.2
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -24,3 +24,4 @@ sources:
   - https://github.com/bitnami/bitnami-docker-redis
   - http://redis.io/
 version: 6.0.0
+

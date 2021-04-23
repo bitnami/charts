@@ -142,6 +142,9 @@ spec:
             - name: tls-server
               mountPath: /certs
             {{- end }}
+            {{- if .Values.storegateway.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
       volumes:
         - name: objstore-config
           secret:
@@ -149,6 +152,9 @@ spec:
             {{- if .Values.existingObjstoreSecretItems }}
             items: {{- toYaml .Values.existingObjstoreSecretItems | nindent 14 }}
             {{- end }}
+        {{- if .Values.storegateway.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
         {{- if or .Values.storegateway.config .Values.storegateway.existingConfigmap }}
         - name: cache-config
           configMap:
