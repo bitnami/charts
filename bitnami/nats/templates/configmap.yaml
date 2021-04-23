@@ -26,7 +26,7 @@ data:
       {{- else if .Values.auth.token }}
       token: {{ .Values.auth.token | quote }}
       {{- end }}
-      timeout:  1
+      timeout:  {{ int .Values.auth.timeout }}
     }
     {{- end }}
 
