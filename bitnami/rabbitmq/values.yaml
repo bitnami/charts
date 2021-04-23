@@ -842,6 +842,12 @@ metrics:
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
     ##
     additionalLabels: {}
+    ## Used to keep given pod's labels in target
+    targetLabels:
+    # - app.kubernetes.io/name
+    ## Used to keep given service's labels in target
+    podTargetLabels:
+    # - app.kubernetes.io/name
 
   ## Custom PrometheusRule to be defined
   ## The value is evaluated as a template, so, for example, the value can depend on .Release or .Chart
