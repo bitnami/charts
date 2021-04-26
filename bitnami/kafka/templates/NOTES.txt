@@ -4,7 +4,7 @@
 {{- $fullname := include "kafka.fullname" . -}}
 {{- $clientProtocol := include "kafka.listenerType" (dict "protocol" .Values.auth.clientProtocol) -}}
 {{- $saslMechanisms := coalesce .Values.auth.sasl.mechanisms .Values.auth.saslMechanisms -}}
-{{- $tlsEndpointIdentificationAlgorithm := coalesce .Values.auth.tls.endpointIdentificationAlgorithm .Values.auth.tlsEndpointIdentificationAlgorithm -}}
+{{- $tlsEndpointIdentificationAlgorithm := default "" (coalesce .Values.auth.tls.endpointIdentificationAlgorithm .Values.auth.tlsEndpointIdentificationAlgorithm) -}}
 {{- $tlsPassword := coalesce .Values.auth.tls.password .Values.auth.jksPassword -}}
 {{- $servicePort := int .Values.service.port -}}
 {{- $loadBalancerIPListLength := len .Values.externalAccess.service.loadBalancerIPs -}}
