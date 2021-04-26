@@ -272,7 +272,7 @@ spec:
             - name: postgresql
               containerPort: 5432
               protocol: TCP
-          {{- if and .Values.pgpool.livenessProbe.enabled (not .Values.ldap.enabled) }}
+          {{- if .Values.pgpool.livenessProbe.enabled }}
           livenessProbe:
             exec:
               command:
@@ -285,7 +285,7 @@ spec:
           {{- else if .Values.pgpool.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if and .Values.pgpool.readinessProbe.enabled (not .Values.ldap.enabled) }}
+          {{- if .Values.pgpool.readinessProbe.enabled }}
           readinessProbe:
             exec:
               command:
@@ -300,7 +300,7 @@ spec:
           {{- else if .Values.pgpool.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if and .Values.pgpool.startupProbe.enabled (not .Values.ldap.enabled) }}
+          {{- if .Values.pgpool.startupProbe.enabled }}
           startupProbe:
             exec:
               command:
