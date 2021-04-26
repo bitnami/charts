@@ -76,11 +76,11 @@ image:
 extraArgs: {}
 
 ## Comma-separated list of namespaces to be enabled. Defaults to all namespaces
-# namespace: ""
+# namespaces: ""
 
-## Collectors to be enabled
+## Resources to be enabled
 ##
-collectors:
+resources:
   certificatesigningrequests: true
   configmaps: true
   cronjobs: true
