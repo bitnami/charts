@@ -34,22 +34,6 @@ Params:
 {{- end -}}
 
 {{/*
-Redis Auxiliary function to get the right value for existingSecret.
-
-Usage:
-{{ include "common.redis.values.existingSecret" (dict "context" $) }}
-Params:
-  - subchart - Boolean - Optional. Whether Redis(TM) is used as subchart or not. Default: false
-*/}}
-{{- define "common.redis.values.existingSecret" -}}
-  {{- if .subchart -}}
-    {{- .context.Values.redis.existingSecret | quote -}}
-  {{- else -}}
-    {{- .context.Values.existingSecret | quote -}}
-  {{- end -}}
-{{- end -}}
-
-{{/*
 Auxiliary function to get the right value for enabled redis.
 
 Usage:
