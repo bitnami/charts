@@ -252,7 +252,7 @@ hub:
         capacity: {{ .Values.singleuser.persistence.size }}
         homeMountPath: {{ .Values.singleuser.notebookDir }}
         dynamic:
-          storageClass: {{ include "common.storage.class" (dict "persistence" .Values.singleuser.persistence "global" .Values.global) }}
+          {{ include "common.storage.class" (dict "persistence" .Values.singleuser.persistence "global" .Values.global) }}
           pvcNameTemplate: {{ include "common.names.fullname" . }}-claim-{username}{servername}
           volumeNameTemplate: {{ include "common.names.fullname" . }}-volume-{username}{servername}
           storageAccessModes: {{- include "common.tplvalues.render" ( dict "value" .Values.singleuser.persistence.accessModes "context" $ ) | nindent 8 }}
