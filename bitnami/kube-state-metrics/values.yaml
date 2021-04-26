@@ -56,8 +56,8 @@ serviceAccount:
 ##
 image:
   registry: docker.io
-  repository: bitnami/kube-state-metrics
-  tag: 1.9.8-debian-10-r57
+  repository: frapazgal/ksm_test
+  tag: latest
 
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
