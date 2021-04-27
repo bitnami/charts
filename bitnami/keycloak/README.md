@@ -448,7 +448,7 @@ To use a single existing secret `existingSecret` can be configured at values.yam
         management-password: myManagementPasswordKey
         database-password: myDatabasePasswordKey
         tls-keystore-password: myTlsKeystorePasswordKey
-        tls-truestore-password: myTlsTruestorePasswordKey
+        tls-truststore-password: myTlsTruststorePasswordKey
 ```
 
 The keyMapping links the passwords in the chart with the passwords stored in the existing Secret.
