@@ -1,0 +1,40 @@
+{{- if and .Values.prometheus.enabled .Values.prometheus.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ template "common.names.fullname" . }}
+  {{- if .Values.prometheus.serviceMonitor.namespace }}
+  namespace: {{ .Values.prometheus.serviceMonitor.namespace }}
+  {{- else }}
+  namespace: {{ .Release.Namespace | quote }}
+  {{- end }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.prometheus.serviceMonitor.additionalLabels }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.serviceMonitor.additionalLabels "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  jobLabel: {{ template "common.names.fullname" . }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: controller
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+  endpoints:
+  - targetPort: {{ .Values.prometheus.serviceMonitor.targetPort }}
+    {{- if .Values.prometheus.serviceMonitor.path }}
+    path: {{ .Values.prometheus.serviceMonitor.path }}
+    {{- end }}
+    {{- if .Values.prometheus.serviceMonitor.interval }}
+    interval: {{ .Values.prometheus.serviceMonitor.interval }}
+    {{- end }}
+    {{- if .Values.prometheus.serviceMonitor.scrapeTimeout }}
+    scrapeTimeout: {{ .Values.prometheus.serviceMonitor.scrapeTimeout }}
+    {{- end }}
+{{- end }}
