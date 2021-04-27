@@ -496,11 +496,11 @@ To use a password file for Redis<sup>TM</sup> you need to create a secret contai
 And then deploy the Helm Chart using the secret name as parameter:
 
 ```console
-auth.enabled=true
-auth.usePasswordFiles=true
-auth.existingSecret=redis-password-file
-sentinels.enabled=true
-metrics.enabled=true
+auth.enabled: true
+auth.usePasswordFiles: true
+auth.existingSecret: "redis-password-file"
+sentinels.enabled: true
+metrics.enabled: true
 ```
 
 ### Securing traffic using TLS
@@ -524,11 +524,11 @@ kubectl create secret generic certificates-tls-secret --from-file=./cert.pem --f
 Then, use the following parameters:
 
 ```console
-tls.enabled="true"
-tls.certificatesSecret="certificates-tls-secret"
-tls.certFilename="cert.pem"
-tls.certKeyFilename="cert.key"
-tls.certCAFilename="ca.pem"
+tls.enabled: true
+tls.certificatesSecret: "certificates-tls-secret"
+tls.certFilename: "cert.pem"
+tls.certKeyFilename: "cert.key"
+tls.certCAFilename: "ca.pem"
 ```
 
 ### Metrics
