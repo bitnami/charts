@@ -329,3 +329,26 @@ metrics:
     ##
     # selector:
     #   prometheus: my-prometheus
+
+    ## MetricRelabelConfigs to apply to samples before ingestion
+    ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs
+    ##
+    # metricRelabelings:
+    # - sourceLabels: [__meta_kubernetes_pod_label_app_kubernetes_io_instance]
+    #   separator: ;
+    #   regex: ^(.*)$
+    #   targetLabel: pod_name
+    #   replacement: $1
+    #   action: replace
+
+
+    ## RelabelConfigs to apply to samples before scraping
+    ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+    ##
+    # relabelings:
+    # - sourceLabels: [__meta_kubernetes_pod_label_app_kubernetes_io_instance]
+    #   separator: ;
+    #   regex: ^(.*)$
+    #   targetLabel: pod_name
+    #   replacement: $1
+    #   action: replace
