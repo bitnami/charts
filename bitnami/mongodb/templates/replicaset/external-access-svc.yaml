@@ -34,8 +34,6 @@ spec:
       port: {{ $root.Values.externalAccess.service.port }}
       {{- if not (empty $root.Values.externalAccess.service.nodePorts) }}
       nodePort: {{ index $root.Values.externalAccess.service.nodePorts $i }}
-      {{- else }}
-      nodePort: null
       {{- end }}
       targetPort: mongodb
   selector: {{- include "common.labels.matchLabels" $ | nindent 4 }}
