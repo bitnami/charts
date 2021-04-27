@@ -43,6 +43,10 @@ kubeVersion:
 ##
 clusterDomain: cluster.local
 
+## Extra objects to deploy (value evaluated as a template)
+##
+extraDeploy: []
+
 ## Forwarder parameters
 ##
 forwarder:
