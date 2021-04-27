@@ -91,38 +91,38 @@ spec:
               if ! [[ -f /opt/bitnami/redis/etc/redis.conf ]]; then
                   cp /opt/bitnami/redis/etc/redis-default.conf /opt/bitnami/redis/etc/redis.conf
               fi
-              previousNodeIp=""
-              firstNodeIp=$(wait_for_dns_lookup {{ template "common.names.fullname" . }}-0.{{ template "common.names.fullname" . }}-headless 120 5)
+              previous_node_ip=""
+              first_node_ip=$(wait_for_dns_lookup {{ template "common.names.fullname" . }}-0.{{ template "common.names.fullname" . }}-headless 120 5)
               {{- if .Values.cluster.externalAccess.enabled }}
               newNodeCounter=0
-              for nodeIp in $(echo "{{ .Values.cluster.update.newExternalIPs }}" | cut -d [ -f2 | cut -d ] -f 1 ); do
+              for node_ip in $(echo "{{ .Values.cluster.update.newExternalIPs }}" | cut -d [ -f2 | cut -d ] -f 1 ); do
                 {{- if .Values.tls.enabled }}
-                while [[ $(redis-cli -h "$nodeIp" -p "$REDIS_TLS_PORT" --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} ping) != 'PONG' ]]; do
+                while [[ $(redis-cli -h "$node_ip" -p "$REDIS_TLS_PORT" --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} ping) != 'PONG' ]]; do
                 {{- else }}
-                while [[ $(redis-cli -h "$nodeIp" -p "$REDIS_PORT" ping) != 'PONG' ]]; do
+                while [[ $(redis-cli -h "$node_ip" -p "$REDIS_PORT" ping) != 'PONG' ]]; do
                 {{- end }}
-                  echo "Node $nodeIp not ready, waiting for all the nodes to be ready..."
+                  echo "Node $node_ip not ready, waiting for all the nodes to be ready..."
                   sleep 5
                 done
                 slave=()
                 if (( $REDIS_CLUSTER_REPLICAS >= 1 )) && (( newNodeCounter % (( $REDIS_CLUSTER_REPLICAS + 1 )) )); then
                   slave+=("--cluster-slave")
-                  [ -z previousNodeIp ] && previousNodeIp=$firstNodeIp
-                  if [ -z "$REDISCLI_AUTH" ]; then
-                    masterID=$(redis-cli -c -h $previousNodeIp cluster myid)
+                  [[ -z "$previous_node_ip" ]] && previous_node_ip=$first_node_ip
+                  if [[ -z "$REDISCLI_AUTH" ]]; then
+                    master_id=$(redis-cli -c -h $previous_node_ip cluster myid)
                   else
-                    masterID=$(redis-cli -c -h $previousNodeIp -a $REDISCLI_AUTH cluster myid)
+                    master_id=$(redis-cli -c -h $previous_node_ip -a $REDISCLI_AUTH cluster myid)
                   fi
-                  slave+=("--cluster-master-id $masterID")
-                  echo "Adding Node ${newNodeCounter} ip: ${nodeIp} as slave of ${masterID}"
+                  slave+=("--cluster-master-id $master_id")
+                  echo "Adding Node ${newNodeCounter} ip: ${node_ip} as slave of ${master_id}"
                 else
-                  previousNodeIp=$nodeIp
-                  echo "Adding Node ${newNodeCounter} ip: ${nodeIp} as master"
+                  previous_node_ip=$node_ip
+                  echo "Adding Node ${newNodeCounter} ip: ${node_ip} as master"
                 fi
                 {{- if .Values.tls.enabled }}
-                while ! redis-cli --cluster --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} add-node "${nodeIp}:${REDIS_TLS_PORT}" "{{ index .Values.cluster.externalAccess.service.loadBalancerIP 0 }}:${REDIS_TLS_PORT}" ${slave[@]}; do
+                while ! redis-cli --cluster --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} add-node "${node_ip}:${REDIS_TLS_PORT}" "{{ index .Values.cluster.externalAccess.service.loadBalancerIP 0 }}:${REDIS_TLS_PORT}" ${slave[@]}; do
                 {{- else }}
-                while ! redis-cli --cluster add-node "${nodeIp}:${REDIS_PORT}" "{{ index .Values.cluster.externalAccess.service.loadBalancerIP 0 }}:${REDIS_PORT}" ${slave[@]}; do
+                while ! redis-cli --cluster add-node "${node_ip}:${REDIS_PORT}" "{{ index .Values.cluster.externalAccess.service.loadBalancerIP 0 }}:${REDIS_PORT}" ${slave[@]}; do
                 {{- end }}
                   echo "Add-node ${new_node_index} ${new_node_ip} failed, retrying"
                   sleep 5
@@ -130,40 +130,49 @@ spec:
                 ((newNodeCounter += 1))
               done
               {{- else }}
+              previous_node_index=""
               for node in $(seq $((1+{{ .Values.cluster.update.currentNumberOfNodes }})) {{ .Values.cluster.nodes }}); do
                 new_node_index="$(($node - 1))"
-                new_node_ip=$(wait_for_dns_lookup {{ template "common.names.fullname" . }}-"$new_node_index".{{ template "common.names.fullname" . }}-headless 120 5)
+                new_node_ip=$(wait_for_dns_lookup "{{ template "common.names.fullname" . }}-${new_node_index}.{{ template "common.names.fullname" . }}-headless" 120 5)
                 {{- if .Values.tls.enabled }}
                 while [[ $(redis-cli -h "$new_node_ip" -p "$REDIS_TLS_PORT" --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} ping) != 'PONG' ]]; do
                 {{- else }}
                 while [[ $(redis-cli -h "$new_node_ip" -p "$REDIS_PORT" ping) != 'PONG' ]]; do
                 {{- end }}
                   echo "Node $new_node_ip not ready, waiting for all the nodes to be ready..."
+                  new_node_ip=$(wait_for_dns_lookup "{{ template "common.names.fullname" . }}-${new_node_index}.{{ template "common.names.fullname" . }}-headless" 120 5)
                   sleep 5
                 done
                 slave=()
                 if (( $REDIS_CLUSTER_REPLICAS >= 1 )) && (( new_node_index % (( $REDIS_CLUSTER_REPLICAS + 1 )) )); then
                   slave+=("--cluster-slave")
-                  [ -z previousNodeIp ] && previousNodeIp=$firstNodeIp
-                  if [ -z "$REDISCLI_AUTH" ]; then
-                    masterID=$(redis-cli -c -h $previousNodeIp cluster myid)
-                  else
-                    masterID=$(redis-cli -c -h $previousNodeIp -a $REDISCLI_AUTH cluster myid)
+                  if [[ -z "$previous_node_index" ]]; then
+                    previous_node_index=0
                   fi
-                  slave+=("--cluster-master-id $masterID")
-                  echo "Adding Node $new_node_index ${new_node_ip} as slave of ${masterID}"
+                  master_id=""
+                  while [[ -z "$master_id" ]]; do
+                    previous_node_ip=$(wait_for_dns_lookup "{{ template "common.names.fullname" . }}-${previous_node_index}.{{ template "common.names.fullname" . }}-headless" 120 5)
+                    if [[ -z "$REDISCLI_AUTH" ]]; then
+                      master_id=$(redis-cli -c -h $previous_node_ip cluster myid)
+                    else
+                      master_id=$(redis-cli -c -h $previous_node_ip -a $REDISCLI_AUTH cluster myid)
+                    fi
+                  done
+                  slave+=("--cluster-master-id $master_id")
+                  echo "Adding Node $new_node_index ${new_node_ip} as slave of ${master_id}"
                 else
-                  previousNodeIp=$new_node_ip
+                  previous_node_index=$new_node_index
                   echo "Adding Node $new_node_index ${new_node_ip} as master"
                 fi
                 {{- if .Values.tls.enabled }}
-                while ! redis-cli --cluster add-node --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} "${new_node_ip}:${REDIS_TLS_PORT}" "${firstNodeIp}:${REDIS_TLS_PORT}" ${slave[@]}; do
+                while ! redis-cli --cluster add-node --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} "${new_node_ip}:${REDIS_TLS_PORT}" "${first_node_ip}:${REDIS_TLS_PORT}" ${slave[@]}; do
                 {{- else }}
-                while ! redis-cli --cluster add-node "${new_node_ip}:${REDIS_PORT}" "${firstNodeIp}:${REDIS_PORT}" ${slave[@]}; do
+                while ! redis-cli --cluster add-node "${new_node_ip}:${REDIS_PORT}" "${first_node_ip}:${REDIS_PORT}" ${slave[@]}; do
                 {{- end }}
                   echo "Add-node ${new_node_index} ${new_node_ip} failed, retrying"
                   sleep 5
-                  firstNodeIp=$(wait_for_dns_lookup {{ template "common.names.fullname" . }}-0.{{ template "common.names.fullname" . }}-headless 120 5)
+                  first_node_ip=$(wait_for_dns_lookup "{{ template "common.names.fullname" . }}-0.{{ template "common.names.fullname" . }}-headless" 120 5)
+                  new_node_ip=$(wait_for_dns_lookup "{{ template "common.names.fullname" . }}-${new_node_index}.{{ template "common.names.fullname" . }}-headless" 120 5)
                 done
               done
               {{- end }}
