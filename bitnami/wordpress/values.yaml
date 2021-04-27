@@ -174,13 +174,13 @@ allowEmptyPassword: true
 ##
 allowOverrideNone: false
 ## @param htaccessPersistenceEnabled Persist custom changes on htaccess files
-## If `allowOverrideNone` is `true`, it will persist `/opt/bitnami/wordpress/wordpress-htaccess.conf`
-## If `allowOverrideNone` is `false`, it will persist `/opt/bitnami/wordpress/.htaccess`
+## If `allowOverrideNone` is `false`, it will persist `/opt/bitnami/wordpress/wordpress-htaccess.conf`
+## If `allowOverrideNone` is `true`, it will persist `/opt/bitnami/wordpress/.htaccess`
 ##
 htaccessPersistenceEnabled: false
 ## @param customHTAccessCM The name of an existing ConfigMap with custom htaccess rules
 ## NOTE: Must contain key `wordpress-htaccess.conf` with the file content
-## NOTE: Requires setting `allowOverrideNone=true`
+## NOTE: Requires setting `allowOverrideNone=false`
 ##
 customHTAccessCM:
 ## @param command Override default container command (useful when using custom images)
