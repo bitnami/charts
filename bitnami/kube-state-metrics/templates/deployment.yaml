@@ -53,88 +53,88 @@ spec:
           image: {{ template "kube-state-metrics.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           args:
-            {{- if .Values.resources.certificatesigningrequests }}
+            {{- if .Values.kubeResources.certificatesigningrequests }}
             - --resources=certificatesigningrequests
             {{- end }}
-            {{- if .Values.resources.configmaps }}
+            {{- if .Values.kubeResources.configmaps }}
             - --resources=configmaps
             {{- end }}
-            {{- if .Values.resources.cronjobs }}
+            {{- if .Values.kubeResources.cronjobs }}
             - --resources=cronjobs
             {{- end }}
-            {{- if .Values.resources.daemonsets }}
+            {{- if .Values.kubeResources.daemonsets }}
             - --resources=daemonsets
             {{- end }}
-            {{- if .Values.resources.deployments }}
+            {{- if .Values.kubeResources.deployments }}
             - --resources=deployments
             {{- end }}
-            {{- if .Values.resources.endpoints }}
+            {{- if .Values.kubeResources.endpoints }}
             - --resources=endpoints
             {{- end }}
-            {{- if .Values.resources.horizontalpodautoscalers }}
+            {{- if .Values.kubeResources.horizontalpodautoscalers }}
             - --resources=horizontalpodautoscalers
             {{- end }}
-            {{- if .Values.resources.ingresses }}
+            {{- if .Values.kubeResources.ingresses }}
             - --resources=ingresses
             {{- end }}
-            {{- if .Values.resources.jobs }}
+            {{- if .Values.kubeResources.jobs }}
             - --resources=jobs
             {{- end }}
-            {{- if .Values.resources.limitranges }}
+            {{- if .Values.kubeResources.limitranges }}
             - --resources=limitranges
             {{- end }}
-            {{- if .Values.resources.mutatingwebhookconfigurations }}
+            {{- if .Values.kubeResources.mutatingwebhookconfigurations }}
             - --resources=mutatingwebhookconfigurations
             {{- end }}
-            {{- if .Values.resources.namespaces }}
+            {{- if .Values.kubeResources.namespaces }}
             - --resources=namespaces
             {{- end }}
-            {{- if .Values.resources.networkpolicies }}
+            {{- if .Values.kubeResources.networkpolicies }}
             - --resources=networkpolicies
             {{- end }}
-            {{- if .Values.resources.nodes }}
+            {{- if .Values.kubeResources.nodes }}
             - --resources=nodes
             {{- end }}
-            {{- if .Values.resources.persistentvolumeclaims }}
+            {{- if .Values.kubeResources.persistentvolumeclaims }}
             - --resources=persistentvolumeclaims
             {{- end }}
-            {{- if .Values.resources.persistentvolumes }}
+            {{- if .Values.kubeResources.persistentvolumes }}
             - --resources=persistentvolumes
             {{- end }}
-            {{- if .Values.resources.poddisruptionbudgets }}
+            {{- if .Values.kubeResources.poddisruptionbudgets }}
             - --resources=poddisruptionbudgets
             {{- end }}
-            {{- if .Values.resources.pods }}
+            {{- if .Values.kubeResources.pods }}
             - --resources=pods
             {{- end }}
-            {{- if .Values.resources.replicasets }}
+            {{- if .Values.kubeResources.replicasets }}
             - --resources=replicasets
             {{- end }}
-            {{- if .Values.resources.replicationcontrollers }}
+            {{- if .Values.kubeResources.replicationcontrollers }}
             - --resources=replicationcontrollers
             {{- end }}
-            {{- if .Values.resources.resourcequotas }}
+            {{- if .Values.kubeResources.resourcequotas }}
             - --resources=resourcequotas
             {{- end }}
-            {{- if .Values.resources.secrets }}
+            {{- if .Values.kubeResources.secrets }}
             - --resources=secrets
             {{- end }}
-            {{- if .Values.resources.services }}
+            {{- if .Values.kubeResources.services }}
             - --resources=services
             {{- end }}
-            {{- if .Values.resources.statefulsets }}
+            {{- if .Values.kubeResources.statefulsets }}
             - --resources=statefulsets
             {{- end }}
-            {{- if .Values.resources.storageclasses }}
+            {{- if .Values.kubeResources.storageclasses }}
             - --resources=storageclasses
             {{- end }}
-            {{- if .Values.resources.verticalpodautoscalers }}
+            {{- if .Values.kubeResources.verticalpodautoscalers }}
             - --resources=verticalpodautoscalers
             {{- end }}
-            {{- if .Values.resources.validatingwebhookconfigurations }}
+            {{- if .Values.kubeResources.validatingwebhookconfigurations }}
             - --resources=validatingwebhookconfigurations
             {{- end }}
-            {{- if .Values.resources.volumeattachments }}
+            {{- if .Values.kubeResources.volumeattachments }}
             - --resources=volumeattachments
             {{- end }}
             {{- if .Values.namespace }}

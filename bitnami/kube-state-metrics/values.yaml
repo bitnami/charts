@@ -78,9 +78,9 @@ extraArgs: {}
 ## Comma-separated list of namespaces to be enabled. Defaults to all namespaces
 # namespaces: ""
 
-## Resources to be enabled
+## kube-state-metrics resources to be enabled
 ##
-resources:
+kubeResources:
   certificatesigningrequests: true
   configmaps: true
   cronjobs: true
