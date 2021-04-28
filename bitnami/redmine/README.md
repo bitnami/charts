@@ -332,6 +332,14 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 Redmine writes uploaded files to a persistent volume. By default that volume cannot be shared between pods (RWO). In such a configuration the `replicas` option must be set to `1`. If the persistent volume supports more than one writer (RWX), ie NFS, `replicas` can be greater than `1`.
 
+> **Important**: When running more than one instance of Redmine they must share the same `secret_key_base` to have sessions working acreoss all instances.
+> This can be achieved by setting
+> ```
+>   extraEnvVars:
+>    - name: SECRET_KEY_BASE
+>      value: someredminesecretkeybase
+> ```
+
 ### Deploying to a sub-URI
 
 (adapted from https://github.com/bitnami/bitnami-docker-redmine)

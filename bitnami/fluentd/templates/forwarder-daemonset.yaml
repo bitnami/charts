@@ -151,6 +151,8 @@ spec:
                 path: tls.crt
               - key: tls.key
                 path: tls.key
+              - key: rootCA.crt
+                path: rootCA.crt  
         {{- end }}
         - name: fluentd-config
           configMap:

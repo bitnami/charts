@@ -204,3 +204,14 @@ Returns a JSON list of cluster names only (without sensitive tokens etc.)
     {{- end }}
     {{- $sanitizedClusters | toJson }}
 {{- end -}}
+
+{{/*
+Return the Postgresql secret name
+*/}}
+{{- define "kubeapps.postgresql.secretName" -}}
+  {{- if .Values.postgresql.existingSecret }}
+      {{- printf "%s" .Values.postgresql.existingSecret -}}
+  {{- else -}}
+      {{- printf "%s" (include "kubeapps.postgresql.fullname" .) -}}
+  {{- end -}}
+{{- end -}}

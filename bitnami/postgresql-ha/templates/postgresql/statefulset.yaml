@@ -255,6 +255,12 @@ spec:
                   name: {{ include "postgresql-ha.postgresqlSecretName" . }}
                   key: repmgr-password
             {{- end }}
+            {{- if .Values.postgresql.repmgrUsePassfile }}
+            - name: REPMGR_USE_PASSFILE
+              value: {{ ternary "true" "false" .Values.postgresql.repmgrUsePassfile | quote }}
+            - name: REPMGR_PASSFILE_PATH
+              value: {{ default "/opt/bitnami/repmgr/conf/.pgpass" .Values.postgresql.repmgrPassfilePath }}
+            {{- end }}
             {{- if (include "postgresql-ha.repmgrDatabase" .) }}
             - name: REPMGR_DATABASE
               value: {{ (include "postgresql-ha.repmgrDatabase" .) | quote }}

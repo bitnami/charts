@@ -15,7 +15,11 @@ data:
 {{- else if .Values.postgresqlConfiguration }}
   postgresql.conf: |
 {{- range $key, $value := default dict .Values.postgresqlConfiguration }}
-    {{ $key | snakecase }}={{ $value }}
+    {{- if kindIs "string" $value }}
+    {{ $key | snakecase }} = '{{ $value }}'
+    {{- else }}
+    {{ $key | snakecase }} = {{ $value }}
+    {{- end }}
 {{- end }}
 {{- end }}
 {{- if (.Files.Glob "files/pg_hba.conf") }}

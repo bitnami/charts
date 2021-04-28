@@ -85,6 +85,9 @@ spec:
       {{- if .Values.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      {{- end }}
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName }}
       {{- end }}
@@ -187,7 +190,7 @@ spec:
             {{- end }}
             - name: KAFKA_CFG_LISTENERS
               {{- if .Values.listeners }}
-              value: {{ .Values.listeners }}
+              value: {{ join "," .Values.listeners }}
               {{- else if .Values.externalAccess.enabled }}
               value: "INTERNAL://:{{ $interBrokerPort }},CLIENT://:9092,EXTERNAL://:9094"
               {{- else }}
@@ -197,17 +200,17 @@ spec:
             {{- if .Values.externalAccess.autoDiscovery.enabled }}
             - name: SHARED_FILE
               value: "/shared/info.txt"
+            {{- end }}
             {{- if eq .Values.externalAccess.service.type "NodePort" }}
             - name: HOST_IP
               valueFrom:
                 fieldRef:
                   fieldPath: status.hostIP
             {{- end }}
-            {{- end }}
             {{- else }}
             - name: KAFKA_CFG_ADVERTISED_LISTENERS
               {{- if .Values.advertisedListeners }}
-              value: {{ .Values.advertisedListeners }}
+              value: {{ join "," .Values.advertisedListeners }}
               {{- else }}
               value: "INTERNAL://$(MY_POD_NAME).{{ $fullname }}-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $interBrokerPort }},CLIENT://$(MY_POD_NAME).{{ $fullname }}-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $clientPort }}"
               {{- end }}
@@ -236,7 +239,7 @@ spec:
                   key: inter-broker-password
             {{- end }}
             {{- end }}
-            {{- if (coalesce .Values.auth.sasl.jaas.zookeeperUser .Values.auth.jaas.zookeeperUser) }}
+            {{- if and .Values.zookeeper.auth.enabled (coalesce .Values.auth.sasl.jaas.zookeeperUser .Values.auth.jaas.zookeeperUser) }}
             - name: KAFKA_ZOOKEEPER_PROTOCOL
               value: "SASL"
             - name: KAFKA_ZOOKEEPER_USER
@@ -251,7 +254,7 @@ spec:
             - name: KAFKA_CFG_TLS_TYPE
               value: {{ upper .Values.auth.tls.type | quote }}
             - name: KAFKA_CFG_SSL_ENDPOINT_IDENTIFICATION_ALGORITHM
-              value: {{ coalesce .Values.auth.tls.endpointIdentificationAlgorithm .Values.auth.tlsEndpointIdentificationAlgorithm | quote }}
+              value: {{ default "" (coalesce .Values.auth.tls.endpointIdentificationAlgorithm .Values.auth.tlsEndpointIdentificationAlgorithm) | quote }}
             - name: KAFKA_CFG_TLS_CLIENT_AUTH
               value: {{ ternary "required" "none" (eq .Values.auth.clientProtocol "mtls") | quote }}
             {{- $tlsPassword := coalesce .Values.auth.tls.password .Values.auth.jksPassword }}

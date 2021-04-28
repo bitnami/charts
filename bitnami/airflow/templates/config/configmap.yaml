@@ -47,9 +47,10 @@ data:
             - "/bin/bash"
             - "-ce"
             - |
-                . /opt/bitnami/base/helpers
+                . /opt/bitnami/scripts/airflow-worker-env.sh
+                . /opt/bitnami/scripts/libairflowworker.sh
 
-                nami_initialize airflow-worker
+                airflow_generate_config # Generate the config file
                 cp /opt/bitnami/airflow/airflow.cfg /opt/bitnami/airflow/k8s-executor-config/airflow.cfg
 
           env:
@@ -169,8 +170,12 @@ data:
       {{- if .Values.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
-      {{- if .Values.affinity }}
+      {{- if or .Values.affinity .Values.worker.affinity }}
+      {{- if .Values.worker.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.worker.affinity "context" $) | nindent 8 }}
+      {{- else }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
+      {{- end }}
       {{- else }}
       affinity:
         podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "component" "worker" "context" $) | nindent 10 }}
@@ -184,8 +189,12 @@ data:
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.worker.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- end }}
-      {{- if .Values.tolerations }}
+      {{- if or .Values.tolerations .Values.worker.tolerations }}
+      {{- if .Values.worker.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.worker.tolerations "context" $) | nindent 8 }}
+      {{- else }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
+      {{- end }}
       {{- end }}
       serviceAccountName: {{ include "airflow.serviceAccountName" . }}
       volumes:

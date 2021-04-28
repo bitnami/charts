@@ -1,0 +1,70 @@
+{{- if .Values.hub.networkPolicy.enabled -}}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: hub
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  name: {{ include "jupyterhub.hub.name" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  podSelector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: hub
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    {{- if .Values.hub.networkPolicy.extraIngress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.hub.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
+    {{- end }}
+    # Pods with label "hub.jupyter.org/network-access-hub" --> Hub
+    - ports:
+        - port: {{ .Values.hub.containerPort }}
+      from:
+        - podSelector:
+            matchLabels:
+              hub.jupyter.org/network-access-hub: "true"
+        {{- if .Values.hub.networkPolicy.allowInterspaceAccess }}
+          namespaceSelector:
+            matchLabels: {}
+        - namespaceSelector:
+            matchLabels:
+              hub.jupyter.org/network-access-hub: "true"
+        {{- end }}
+  egress:
+    # Hub --> Proxy API
+    - ports:
+        - port: {{ .Values.proxy.containerPort.api }}
+      to:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" . | nindent 14 }}
+              app.kubernetes.io/component: proxy
+    # Hub --> Single User
+    - ports:
+        - port: {{ .Values.singleuser.containerPort }}
+      to:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" . | nindent 14 }}
+              app.kubernetes.io/component: singleuser
+    ## DNS access
+    - ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+    ## PostgreSQL access
+    - ports:
+        - protocol: UDP
+          port: {{ .Values.postgresql.service.port }}
+        - protocol: TCP
+          port: {{ .Values.postgresql.service.port }}
+    {{- if .Values.hub.networkPolicy.extraEgress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.hub.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+    {{- end }}
+{{- end }}

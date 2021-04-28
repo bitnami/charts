@@ -13,6 +13,9 @@ spec:
   {{- if and .Values.bucketweb.service.clusterIP (eq .Values.bucketweb.service.type "ClusterIP") }}
   clusterIP: {{ .Values.bucketweb.service.clusterIP }}
   {{- end }}
+  {{- if ne .Values.bucketweb.service.type "ClusterIP" }}
+  externalTrafficPolicy: {{ .Values.bucketweb.service.externalTrafficPolicy }}
+  {{- end }}
   {{- if and .Values.bucketweb.service.loadBalancerIP (eq .Values.bucketweb.service.type "LoadBalancer") }}
   loadBalancerIP: {{ .Values.bucketweb.service.loadBalancerIP }}
   {{- end }}

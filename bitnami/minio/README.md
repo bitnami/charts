@@ -221,6 +221,7 @@ The following table lists the configurable parameters of the MinIO&reg; chart an
 |-------------------------------------------|-------------------------------------------------------------------------------------|--------------------------------------------------------------|
 | `metrics.prometheusAuthType`              | Authentication mode for Prometheus (`jwt` or `public`)                              | `public`                                                     |
 | `metrics.serviceMonitor.enabled`          | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator        | `false`                                                      |
+| `metrics.serviceMonitor.path`             | HTTP path to scrape for metrics                                                     | `/minio/v2/metrics/cluster`                                  |
 | `metrics.serviceMonitor.namespace`        | Namespace which Prometheus is running in                                            | `nil`                                                        |
 | `metrics.serviceMonitor.interval`         | Interval at which metrics should be scraped                                         | `30s`                                                        |
 | `metrics.serviceMonitor.scrapeTimeout`    | Specify the timeout after which the scrape is ended                                 | `nil`                                                        |
@@ -303,13 +304,13 @@ statefulset.drivesPerNode=2
 
 ### Prometheus exporter
 
-MinIO&reg; exports Prometheus metrics at `/minio/prometheus/metrics`. To allow Prometheus collecting your MinIO&reg; metrics, modify the `values.yaml` adding the corresponding annotations:
+MinIO&reg; exports Prometheus metrics at `/minio/v2/metrics/cluster`. To allow Prometheus collecting your MinIO&reg; metrics, modify the `values.yaml` adding the corresponding annotations:
 
 ```diff
 - podAnnotations: {}
 + podAnnotations:
 +   prometheus.io/scrape: "true"
-+   prometheus.io/path: "/minio/prometheus/metrics"
++   prometheus.io/path: "/minio/v2/metrics/cluster"
 +   prometheus.io/port: "9000"
 ```
 

@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/kafka
-  tag: 2.7.0-debian-10-r90
+  tag: 2.8.0-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -215,7 +215,7 @@ zookeeperConnectionTimeoutMs: 6000
 ##
 command:
   - /scripts/setup.sh
-args:
+args: []
 
 ## All the parameters from the configuration file can be overwritten by using environment variables with this format: KAFKA_CFG_{KEY}
 ## ref: https://github.com/bitnami/bitnami-docker-kafka#configuration
@@ -506,6 +506,11 @@ nodeSelector: {}
 ##
 tolerations: []
 
+## Configure the grace time period for sig term
+## ref: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#hook-handler-execution
+##
+# terminationGracePeriodSeconds: 30
+
 ## Kafka pods' Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ##
@@ -644,7 +649,7 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.17.17-debian-10-r60
+      tag: 1.17.17-debian-10-r90
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -703,6 +708,8 @@ externalAccess:
     ##   - 30002
     ##
     nodePorts: []
+    ## Use worker host ips
+    useHostIPs: false
     ## When service type is NodePort, you can specify the domain used for Kafka advertised listeners.
     ## If not specified, the container will try to get the kubernetes node external IP
     ##
@@ -825,6 +832,9 @@ serviceAccount:
   ## If not set and create is true, a name is generated using the kafka.serviceAccountName template
   ##
   # name:
+  # Allows auto mount of ServiceAccountToken on the serviceAccount created
+  # Can be set to false if pods using this serviceAccount do not need to use K8s API
+  automountServiceAccountToken: true
 
 ## Role Based Access
 ## ref: https://kubernetes.io/docs/admin/authorization/rbac/
@@ -844,7 +854,7 @@ provisioning:
   image:
     registry: docker.io
     repository: bitnami/kafka
-    tag: 2.7.0-debian-10-r89
+    tag: 2.7.0-debian-10-r124
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -862,6 +872,12 @@ provisioning:
     ##
     debug: false
 
+  # provisioning.numPartitions: Number of partitions for the topic when it does not specify.
+  numPartitions: 1
+
+  # provisioning.replicationFactor: Replication factor for the topic when it does not specify.
+  replicationFactor: 1
+
   ## Use an alternate scheduler, e.g. "stork".
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
@@ -878,6 +894,11 @@ provisioning:
     requests: {}
     #   cpu: 250m
     #   memory: 256Mi
+
+  ## Command and args for running the container (set to default if not set). Use array form
+  ##
+  command: []
+  args: []
 
   topics: []
   # - name: topic-name
@@ -902,7 +923,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/kafka-exporter
-      tag: 1.2.0-debian-10-r397
+      tag: 1.3.0-debian-10-r0
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -982,6 +1003,18 @@ metrics:
     ##
     tolerations: []
 
+    ## Add init containers to the Kafka exporter pods.
+    ## Example:
+    ## initContainers:
+    ##   - name: your-image-name
+    ##     image: your-image
+    ##     imagePullPolicy: Always
+    ##     ports:
+    ##       - name: portname
+    ##         containerPort: 1234
+    ##
+    initContainers: {}
+
     ## Service configuration
     ##
     service:
@@ -1028,7 +1061,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/jmx-exporter
-      tag: 0.15.0-debian-10-r50
+      tag: 0.15.0-debian-10-r81
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images

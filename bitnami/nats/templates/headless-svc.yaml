@@ -14,10 +14,10 @@ spec:
   type: ClusterIP
   clusterIP: None
   ports:
-    - name: client
+    - name: tcp-client
       port: {{ .Values.client.service.port }}
       targetPort: client
-    - name: cluster
+    - name: tcp-cluster
       port: {{ .Values.cluster.service.port }}
       targetPort: cluster
   selector: {{ include "common.labels.matchLabels" . | nindent 4 }}

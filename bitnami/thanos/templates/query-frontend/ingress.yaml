@@ -35,7 +35,7 @@ spec:
     {{- end }}
   {{- if or .Values.queryFrontend.ingress.tls .Values.queryFrontend.ingress.extraTls .Values.queryFrontend.ingress.hosts }}
   tls:
-    {{- if .Values.queryFrontend.ingress.secrets }}
+    {{- if or .Values.queryFrontend.ingress.secrets .Values.queryFrontend.ingress.tls }}
     - hosts:
         - {{ .Values.queryFrontend.ingress.hostname }}
       secretName: {{ printf "%s-tls" .Values.queryFrontend.ingress.hostname }}

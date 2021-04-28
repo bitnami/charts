@@ -16,6 +16,9 @@ spec:
   {{- if and .Values.ruler.service.clusterIP (eq .Values.ruler.service.type "ClusterIP") }}
   clusterIP: {{ .Values.ruler.service.clusterIP }}
   {{- end }}
+  {{- if ne .Values.ruler.service.type "ClusterIP" }}
+  externalTrafficPolicy: {{ .Values.ruler.service.externalTrafficPolicy }}
+  {{- end }}
   {{- if and .Values.ruler.service.loadBalancerIP (eq .Values.ruler.service.type "LoadBalancer") }}
   loadBalancerIP: {{ .Values.ruler.service.loadBalancerIP }}
   {{- end }}

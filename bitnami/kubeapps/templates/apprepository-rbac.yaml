@@ -12,6 +12,7 @@ rules:
       - events
     verbs:
       - create
+      - patch
   - apiGroups:
       - batch
     resources:

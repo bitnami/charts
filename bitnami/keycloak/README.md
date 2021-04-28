@@ -272,6 +272,7 @@ The following tables lists the configurable parameters of the Keycloak chart and
 | `externalDatabase.user`          | PostgreSQL username (when using an external db)                              | `bn_keycloak`      |
 | `externalDatabase.password`      | Password for the above username (when using an external db)                  | `""`               |
 | `externalDatabase.database`      | Name of the existing database (when using an external db)                    | `bitnami_keycloak` |
+| `externalDatabase.existingSecret`| Use an existing secret file with the external PostgreSQL credentials         | `nil`              |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -427,19 +428,19 @@ This chart provides several ways to manage passwords:
 
 In the first case, a new Secret including all the passwords will be created during the chart installation. When upgrading it is necessary to provide the secrets using the `--set` option as shown below:
 For example:
-\```console
+```console
   $ helm upgrade keycloak bitnami/keycloak \
       --set auth.adminPassword=$KEYCLOAK_ADMIN_PASSWORD \
       --set auth.managementPassword=$KEYCLOAK_MANAGEMENT_PASSWORD \
       --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD \
       --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC
-\```
+```
 
 When installing using an existing secret, passwords can be stored in single secret or separeted into differect secrets.
 
 To use a single existing secret `existingSecret` can be configured at values.yaml:
 
-\```yaml
+```yaml
     existingSecret:
       name: mySecret
       keyMapping:
@@ -447,14 +448,14 @@ To use a single existing secret `existingSecret` can be configured at values.yam
         management-password: myManagementPasswordKey
         database-password: myDatabasePasswordKey
         tls-keystore-password: myTlsKeystorePasswordKey
-        tls-truestore-password: myTlsTruestorePasswordKey
-\```
+        tls-truststore-password: myTlsTruststorePasswordKey
+```
 
 The keyMapping links the passwords in the chart with the passwords stored in the existing Secret.
 
 Configuring multiple existing secrets can be done by using `auth.existingSecretPerPassword` instead:
 
-\```yaml
+```yaml
       existingSecretPerPassword:
         keyMapping:
           adminPassword: KEYCLOAK_ADMIN_PASSWORD
@@ -472,7 +473,7 @@ Configuring multiple existing secrets can be done by using `auth.existingSecretP
           name: mySecret
         tlsTruststorePassword:
           name: mySecret
-\```
+```
 
 Additionally to the key mapping, a different Secret name can be configured per password.
 

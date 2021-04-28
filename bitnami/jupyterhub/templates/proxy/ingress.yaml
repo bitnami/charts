@@ -1,0 +1,61 @@
+{{- if .Values.proxy.ingress.enabled }}
+apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
+kind: Ingress
+metadata:
+  name: {{ include "common.names.fullname" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    app.kubernetes.io/component: proxy
+  namespace: {{ .Release.Namespace | quote }}
+  annotations:
+    {{- if .Values.proxy.ingress.certManager }}
+    kubernetes.io/tls-acme: "true"
+    {{- end }}
+    {{- if .Values.proxy.ingress.annotations }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.proxy.ingress.annotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+spec:
+  rules:
+    {{- if .Values.proxy.ingress.hostname }}
+    - host: {{ .Values.proxy.ingress.hostname | quote }}
+      http:
+        paths:
+          {{- if .Values.proxy.ingress.extraPaths }}
+          {{- toYaml .Values.proxy.ingress.extraPaths | nindent 10 }}
+          {{- end }}
+          - path: {{ .Values.proxy.ingress.path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+            pathType: {{ .Values.proxy.ingress.pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (printf "%s-proxy-public" (include "common.names.fullname" . )) "servicePort" "http" "context" $)  | nindent 14 }}
+    {{- end }}
+    {{- range .Values.proxy.ingress.extraHosts }}
+    - host: {{ .name | quote }}
+      http:
+        paths:
+          - path: {{ default "/" .path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
+            pathType: {{ default "ImplementationSpecific" .pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" $) "servicePort" "http" "context" $) | nindent 14 }}
+    {{- end }}
+  {{- if or .Values.proxy.ingress.tls .Values.proxy.ingress.extraTls }}
+  tls:
+    {{- if .Values.proxy.ingress.tls }}
+    - hosts:
+        - {{ .Values.proxy.ingress.hostname | quote }}
+        {{- range .Values.proxy.ingress.extraHosts }}
+        - {{ .name | quote }}
+        {{- end }}
+      secretName: {{ printf "%s-tls" .Values.proxy.ingress.hostname }}
+    {{- end }}
+    {{- if .Values.proxy.ingress.extraTls }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.proxy.ingress.extraTls "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+{{- end }}

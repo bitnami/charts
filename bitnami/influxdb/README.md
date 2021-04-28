@@ -144,6 +144,8 @@ The following tables lists the configurable parameters of the InfluxDB<sup>TM</s
 | `influxdb.service.loadBalancerIP`           | loadBalancerIP if service type is `LoadBalancer`                                                                                                                                                                                                                     | `nil`                                                   |
 | `influxdb.service.loadBalancerSourceRanges` | Address that are allowed when service is LoadBalancer                                                                                                                                                                                                                | `[]`                                                    |
 | `influxdb.service.clusterIP`                | Static clusterIP or None for headless services                                                                                                                                                                                                                       | `nil`                                                   |
+| `influxdb.service.sessionAffinity`          | Session affinity for the InfluxDB<sup>TM</sup> service                                                                                                                                                                                                               | `nil`                                                   |
+| `influxdb.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                                                                                                                                                          | `{}`                                                    |
 
 ### InfluxDB Relay<sup>TM</sup> parameters
 
@@ -183,6 +185,19 @@ The following tables lists the configurable parameters of the InfluxDB<sup>TM</s
 | `relay.service.loadBalancerIP`           | loadBalancerIP if service type is `LoadBalancer`                                                                             | `nil`                                                   |
 | `relay.service.loadBalancerSourceRanges` | Address that are allowed when service is LoadBalancer                                                                        | `[]`                                                    |
 | `relay.service.clusterIP`                | Static clusterIP or None for headless services                                                                               | `nil`                                                   |
+
+### InfluxDB Collectd<sup>TM</sup> parameters
+
+| Parameter                                   | Description                                                                                                                  | Default                                                 |
+| ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+| `collectd.enabled`                          | InfluxDB Collectd<sup>TM</sup> service enable                                                                                | `false`                                                 |
+| `collectd.service.type`                     | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)                                                          | `ClusterIP`                                             |
+| `collectd.service.port`                     | InfluxDB Collectd<sup>TM</sup> UDP port (should match with corresponding port in influxdb.conf)                              | `25826`                                                 |
+| `collectd.service.nodePort`                 | Kubernetes HTTP node port                                                                                                    | `""`                                                    |
+| `collectd.service.annotations`              | Annotations for InfluxDB Collectd<sup>TM</sup> service                                                                       | `{}`                                                    |
+| `collectd.service.loadBalancerIP`           | loadBalancerIP if service type is `LoadBalancer`                                                                             | `nil`                                                   |
+| `collectd.service.loadBalancerSourceRanges` | Address that are allowed when service is LoadBalancer                                                                        | `[]`                                                    |
+| `collectd.service.clusterIP`                | Static clusterIP or None for headless services                                                                               | `nil`                                                   |
 
 ### Exposing parameters
 
@@ -364,6 +379,8 @@ The high availability install a statefulset with N InfluxDB<sup>TM</sup> servers
       |                                   ▲
       └───────────────────────────────────┘
 ```
+
+When using the high-availability architecture, it is recommended to configure sticky sessions using `--set influxdb.service.sessionAffinity="ClientIP"` or configuring the IngressController accordingly.
 
 ### Configure the way how to expose InfluxDB<sup>TM</sup>
 

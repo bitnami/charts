@@ -58,6 +58,10 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Parameter           | Description                                                          | Default                        |
 |---------------------|----------------------------------------------------------------------|--------------------------------|
+| `nameOverride`      | String to partially override common.names.fullname                   | `nil`                          |
+| `fullnameOverride`  | String to fully override common.names.fullname                       | `nil`                          |
+| `commonLabels`      | Labels to add to all deployed objects                                | `{}`                           |
+| `commonAnnotations` | Annotations to add to all deployed objects                           | `{}`                           |
 | `extraDeploy`       | Array of extra objects to deploy with the release                    | `[]` (evaluated as a template) |
 | `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set) | `nil`                          |
 
@@ -89,6 +93,7 @@ The following tables lists the configurable parameters of the Apache chart and t
 | `cloneHtdocsFromGit.interval`          | Interval for sidecar container pull from the repository                                   | `60`                                                         |
 | `cloneHtdocsFromGit.resources`         | Init container git resource requests/limit                                                | `{}`                                                         |
 | `cloneHtdocsFromGit.extraVolumeMounts` | Add extra volume mounts for the GIT containers                                            | `[]`                                                         |
+| `podLabels`                            | Extra labels for Apache pods                                                              | `{}` (evaluated as a template)                               |
 | `podAnnotations`                       | Pod annotations                                                                           | `{}` (evaluated as a template)                               |
 | `podAffinityPreset`                    | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                                                         |
 | `podAntiAffinityPreset`                | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                                                       |

@@ -18,7 +18,7 @@ kubeVersion:
 image:
   registry: docker.io
   repository: bitnami/thanos
-  tag: 0.18.0-scratch-r3
+  tag: 0.19.0-scratch-r0
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -124,6 +124,27 @@ query:
   ## NOTE: This will override query.sdConfig
   ##
   # existingSDConfigmap:
+
+  ## Extra environment variable(s) to set on query container.
+  ##
+  ## extraEnv:
+  ## - name: VARNAME1
+  ##   value: value1
+  ## - name: VARNAME2
+  ##   valueFrom:
+  ##     secretKeyRef:
+  ##       name: existing-secret
+  ##       key: varname2-key
+  ##
+  extraEnv: []
+
+  ## Extra volumes to add to Thanos Query
+  ##
+  extraVolumes: []
+
+  ## Extra volume mounts to add to the query container
+  ##
+  extraVolumeMounts: []
 
   ## Extra Flags to passed to Thanos Query
   ##
@@ -331,6 +352,9 @@ query:
     ##
     # loadBalancerSourceRanges:
     # - 10.10.10.0/24
+    ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints
+    ##
+    externalTrafficPolicy: Cluster
     ## Provide any additional annotations which may be required
     ##
     annotations: {}
@@ -513,6 +537,29 @@ queryFrontend:
   ##
   hostAliases: []
 
+  ## Extra environment variable(s) to set on query-frontend container.
+  ##
+  ## extraEnv:
+  ## - name: VARNAME1
+  ##   value: value1
+  ## - name: VARNAME2
+  ##   valueFrom:
+  ##     secretKeyRef:
+  ##       name: existing-secret
+  ##       key: varname2-key
+  ##
+  extraEnv: []
+
+  ## Extra volumes to add to the Query Frontend
+  ##
+  extraVolumes: []
+
+  ## Extra volume mounts to add to the query-frontend container
+  ##
+  extraVolumeMounts: []
+
+  ## Extra Flags to passed to Thanos Query Frontend
+  ##
   extraFlags: []
 
   ## Thanos Query Frontend Cache Configuration
@@ -677,6 +724,9 @@ queryFrontend:
     ##
     # loadBalancerSourceRanges:
     # - 10.10.10.0/24
+    ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints
+    ##
+    externalTrafficPolicy: Cluster
     ## Provide any additional annotations which may be required
     ##
     annotations: {}
@@ -753,6 +803,11 @@ queryFrontend:
     ## It is also possible to create and manage the certificates outside of this helm chart
     ## Please see README.md for more information
     ##
+
+    ## When specifying cert-manager.io/cluster-issuer: nameOfClusterIssuer annotation, enable tls for ingress
+    ##
+    tls: false
+
     secrets: []
     # - name: thanos.local-tls
     #   key:
@@ -805,6 +860,27 @@ bucketweb:
   ## Timeout to download metadata from remote storage
   ##
   timeout: 5m
+
+  ## Extra environment variable(s) to set on bucketweb container.
+  ##
+  ## extraEnv:
+  ## - name: VARNAME1
+  ##   value: value1
+  ## - name: VARNAME2
+  ##   valueFrom:
+  ##     secretKeyRef:
+  ##       name: existing-secret
+  ##       key: varname2-key
+  ##
+  extraEnv: []
+
+  ## Extra volumes to add to Bucket Web
+  ##
+  extraVolumes: []
+
+  ## Extra volume mounts to add to the bucketweb container
+  ##
+  extraVolumeMounts: []
 
   ## Extra Flags to passed to Bucket Web
   ##
@@ -954,6 +1030,9 @@ bucketweb:
     ##
     # loadBalancerSourceRanges:
     # - 10.10.10.0/24
+    ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints
+    ##
+    externalTrafficPolicy: Cluster
     ## Provide any additional annotations which may be required
     ##
     annotations: {}
@@ -1081,6 +1160,27 @@ compactor:
   ## before they are being processed
   ##
   consistencyDelay: 30m
+
+  ## Extra environment variable(s) to set on compactor container.
+  ##
+  ## extraEnv:
+  ## - name: VARNAME1
+  ##   value: value1
+  ## - name: VARNAME2
+  ##   valueFrom:
+  ##     secretKeyRef:
+  ##       name: existing-secret
+  ##       key: varname2-key
+  ##
+  extraEnv: []
+
+  ## Extra volumes to add to Thanos Compactor
+  ##
+  extraVolumes: []
+
+  ## Extra volume mounts to add to the compactor container
+  ##
+  extraVolumeMounts: []
 
   ## Extra Flags to passed to Thanos Compactor
   ##
@@ -1226,6 +1326,9 @@ compactor:
     ##
     # loadBalancerSourceRanges:
     # - 10.10.10.0/24
+    ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints
+    ##
+    externalTrafficPolicy: Cluster
     ## Provide any additional annotations which may be required
     ##
     annotations: {}
@@ -1284,6 +1387,27 @@ storegateway:
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
+
+  ## Extra environment variable(s) to set on storegateway container.
+  ##
+  ## extraEnv:
+  ## - name: VARNAME1
+  ##   value: value1
+  ## - name: VARNAME2
+  ##   valueFrom:
+  ##     secretKeyRef:
+  ##       name: existing-secret
+  ##       key: varname2-key
+  ##
+  extraEnv: []
+
+  ## Extra volumes to add to Thanos Store Gateway
+  ##
+  extraVolumes: []
+
+  ## Extra volume mounts to add to the storegateway container
+  ##
+  extraVolumeMounts: []
 
   ## Extra Flags to passed to Thanos Store Gateway
   ##
@@ -1485,6 +1609,9 @@ storegateway:
     ##
     # loadBalancerSourceRanges:
     # - 10.10.10.0/24
+    ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints
+    ##
+    externalTrafficPolicy: Cluster
     ## Provide any additional annotations which may be required
     ##
     annotations: {}
@@ -1589,6 +1716,27 @@ ruler:
   ## Used to set the 'ruler_cluster' label
   ##
   # clusterName:
+
+  ## Extra environment variable(s) to set on ruler container.
+  ##
+  ## extraEnv:
+  ## - name: VARNAME1
+  ##   value: value1
+  ## - name: VARNAME2
+  ##   valueFrom:
+  ##     secretKeyRef:
+  ##       name: existing-secret
+  ##       key: varname2-key
+  ##
+  extraEnv: []
+
+  ## Extra volumes to add to Thanos Ruler
+  ##
+  extraVolumes: []
+
+  ## Extra volume mounts to add to the ruler container
+  ##
+  extraVolumeMounts: []
 
   ## Extra Flags to passed to Thanos Ruler
   ##
@@ -1761,6 +1909,9 @@ ruler:
     ##
     # loadBalancerSourceRanges:
     # - 10.10.10.0/24
+    ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints
+    ##
+    externalTrafficPolicy: Cluster
     ## Provide any additional annotations which may be required
     ##
     annotations: {}
@@ -1919,6 +2070,27 @@ receive:
   # config:
   #   - endpoints:
   #     - "127.0.0.1:10901"
+
+  ## Extra environment variable(s) to set on receive container.
+  ##
+  ## extraEnv:
+  ## - name: VARNAME1
+  ##   value: value1
+  ## - name: VARNAME2
+  ##   valueFrom:
+  ##     secretKeyRef:
+  ##       name: existing-secret
+  ##       key: varname2-key
+  ##
+  extraEnv: []
+
+  ## Extra volumes to add to Thanos Receive
+  ##
+  extraVolumes: []
+
+  ## Extra volume mounts to add to the receive container
+  ##
+  extraVolumeMounts: []
 
   ## Extra Flags to passed to Thanos Receive
   ##
@@ -2110,6 +2282,9 @@ receive:
     ##
     # loadBalancerSourceRanges:
     # - 10.10.10.0/24
+    ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints
+    ##
+    externalTrafficPolicy: Cluster
     ## Provide any additional annotations which may be required
     ##
     annotations: {}

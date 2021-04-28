@@ -75,6 +75,7 @@ The following tables lists the configurable parameters of the solr chart and the
 | `image.pullSecrets`                                       | Specify docker-registry secret names as an array             | `nil`                                                     |
 | `podLabels`                                               | Additional labels for pods pod                               | `{}`                                                      |
 | `podAnnotations`                                          | Additional annotations for pods                              | {}                                                        |
+| `podManagementPolicy`                                     | Management Policy for Solr StatefulSet                       | `Parallel`                                                |
 | `podSecurityContext.fsGroup`                              | Group ID for the pods.                                       | `1001`                                                    |
 | `containerSecurityContext.runAsUser`                      | User ID for the containers.                                  | `1001`                                                    |
 | `serviceAccount.create`                                   | Specifies whether a ServiceAccount should be created         | `false`                                                   |
@@ -178,6 +179,7 @@ The following tables lists the configurable parameters of the solr chart and the
 | `ingress.pathType`               | Path type for the ingress resource                       | `ImplementationSpecific`       |
 | `ingress.path`                   | Default path for the ingress resource                    | `/`                            |
 | `ingress.tls`                    | Create TLS Secret                                        | `false`                        |
+| `ingress.existingSecret`         | The name of an existing Secret to use for the ingress object | `nil`                          |
 | `ingress.annotations`            | Ingress annotations                                      | `[]` (evaluated as a template) |
 | `ingress.extraHosts[0].name`     | Additional hostnames to be covered                       | `nil`                          |
 | `ingress.extraHosts[0].path`     | Additional hostnames to be covered                       | `nil`                          |

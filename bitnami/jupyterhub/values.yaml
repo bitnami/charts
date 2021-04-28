@@ -1,0 +1,1656 @@
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry and imagePullSecrets
+## @section Global parameters
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+##
+# global:
+#   imageRegistry:
+#   imagePullSecrets: []
+#     - myRegistryKeySecretName
+#   storageClass: myStorageClass
+
+## @section Common parameters
+## Override Kubernetes version
+## @param kubeVersion Override Kubernetes version
+##
+kubeVersion:
+
+## String to partially override common.names.fullname template (will maintain the release name)
+## @param nameOverride String to partially override common.names.fullname
+##
+nameOverride:
+
+## String to fully override common.names.fullname template
+## @param fullnameOverride String to fully override common.names.fullname
+##
+fullnameOverride:
+
+## Add labels to all the deployed resources
+## @param commonLabels  Labels to add to all deployed objects
+##
+commonLabels: {}
+
+## Add annotations to all the deployed resources
+## @param commonAnnotations  Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+
+## Extra objects to deploy (value evaluated as a template)
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
+
+## @section Hub deployment parameters
+## Hub deployment parameters
+##
+hub:
+  image:
+    ## @param hub.image.registry Hub image registry
+    ##
+    registry: docker.io
+    ## @param hub.image.repository Hub image repository
+    ##
+    repository: bitnami/jupyterhub
+    ## @param hub.image.tag Hub image tag (immutabe tags are recommended)
+    ##
+    tag: 1.4.0-debian-10-r1
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    ## @param hub.image.pullPolicy Hub image pull policy
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##  - myRegistryKeySecretName
+    ## @param hub.image.pullSecrets Hub image pull secrets
+    ##
+    pullSecrets: []
+
+  ## Configure extra options for startup probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-startup-readiness-probes/#configure-probes
+  ##
+  ## @param hub.startupProbe.enabled Enable startupProbe
+  ## @param hub.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param hub.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param hub.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param hub.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param hub.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    failureThreshold: 30
+    timeoutSeconds: 3
+    successThreshold: 1
+
+  ## Configure extra options for liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ##
+  ## @param hub.livenessProbe.enabled Enable livenessProbe
+  ## @param hub.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param hub.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param hub.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param hub.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param hub.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    failureThreshold: 30
+    timeoutSeconds: 3
+    successThreshold: 1
+
+  ## @param hub.readinessProbe.enabled Enable readinessProbe
+  ## @param hub.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param hub.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param hub.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param hub.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param hub.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    failureThreshold: 30
+    timeoutSeconds: 3
+    successThreshold: 1
+
+  ## Hub base URL
+  ## @param hub.baseUrl Hub base URL
+  ##
+  baseUrl: /
+
+  ## Hub admin user
+  ## @param hub.adminUser Hub Dummy authenticator admin user
+  ##
+  adminUser: user
+
+  ## Hub Dummy authenticator password
+  ## @param hub.password Hub Dummy authenticator password
+  ##
+  password:
+
+  ## Configuration file passed to the hub. This will be used by the jupyterhub_config.py file
+  ## This configuration uses the values for the `singleuser` section. In the upstream chart the
+  ## values.yaml file is mounted in the hub container. This is chart, we tried to separate both
+  ## configuration so we could follow the Bitnami value standards
+  ## @param hub.configuration [object] Hub configuration file (to be used by jupyterhub_config.py)
+  ##
+  configuration: |
+    Chart:
+      Name: {{ .Chart.Name }}
+      Version: {{ .Chart.Version }}
+    Release:
+      Name: {{ .Release.Name }}
+      Namespace: {{ .Release.Namespace }}
+      Service: {{ .Release.Service }}
+    hub:
+      config:
+        JupyterHub:
+          admin_access: true
+          authenticator_class: dummy
+          cookie_secret_file: /tmp/jupyterhub_cookie_secret
+          DummyAuthenticator:
+          {{- if .Values.hub.password }}
+            password: {{ .Values.hub.password | quote }}
+          {{- else }}
+            password: {{ randAlphaNum 10 | quote }}
+          {{- end }}
+          Authenticator:
+            admin_users:
+              - {{ .Values.hub.adminUser }}
+      cookieSecret:
+      concurrentSpawnLimit: 64
+      consecutiveFailureLimit: 5
+      activeServerLimit:
+      db:
+        type: postgres
+        url: postgresql://{{ ternary .Values.postgresql.postgresqlUsername .Values.externalDatabase.user .Values.postgresql.enabled }}@{{ ternary (include "jupyterhub.postgresql.fullname" .) .Values.externalDatabase.host .Values.postgresql.enabled }}:{{ ternary "5432" .Values.externalDatabase.port .Values.postgresql.enabled }}/{{ ternary .Values.postgresql.postgresqlDatabase .Values.externalDatabase.database .Values.postgresql.enabled }}
+      services: {}
+      allowNamedServers: false
+      namedServerLimitPerUser:
+      authenticatePrometheus:
+      redirectToServer:
+      shutdownOnLogout:
+    singleuser:
+      podNameTemplate: {{ include "common.names.fullname" . }}-jupyter-{username}
+      {{- if .Values.singleuser.tolerations }}
+      extraTolerations: {{- include "common.tplvalues.render" ( dict "value" .Values.singleuser.tolerations "context" $) | nindent 4 }}
+      {{- end }}
+      {{- if .Values.singleuser.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.singleuser.nodeSelector "context" $) | nindent 4 }}
+      {{- end }}
+      networkTools:
+        image:
+          name: {{ include "jupyterhub.hubconfiguration.imageEntry" ( dict "imageRoot" .Values.auxiliaryImage "global" $) }}
+          tag: {{ .Values.auxiliaryImage.tag }}
+          pullPolicy: {{ .Values.auxiliaryImage.pullPolicy }}
+          pullSecrets: {{- include "jupyterhub.imagePullSecrets" . | nindent 8 }}
+      cloudMetadata:
+        blockWithIptables: false
+      events: true
+      extraAnnotations:
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+        {{- end }}
+        {{- if .Values.singleuser.podAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.singleuser.podAnnotations "context" $ ) | nindent 4 }}
+        {{- end }}
+      extraLabels:
+        hub.jupyter.org/network-access-hub: "true"
+        app.kubernetes.io/component: singleuser
+        {{- include "common.labels.standard" . | nindent 4 }}
+        {{- if .Values.commonLabels }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+        {{- end }}
+        {{- if .Values.singleuser.podLabels }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+        {{- end }}
+      {{- if .Values.singleuser.extraEnvVars }}
+      extraEnv: {{- include "common.tplvalues.render" ( dict "value" .Values.singleuser.extraEnvVars "context" $ ) | nindent 4 }}
+      {{- end }}
+      {{- if .Values.singleuser.lifecycleHooks }}
+      lifecycleHooks: {{- include "common.tplvalues.render" ( dict "value" .Values.singleuser.lifecycleHooks "context" $ ) | nindent 4 }}
+      {{- end }}
+      {{- if .Values.singleuser.initContainers }}
+      initContainers: {{- include "common.tplvalues.render" ( dict "value" .Values.singleuser.initContainers "context" $ ) | nindent 4 }}
+      {{- end }}
+      {{- if .Values.singleuser.sidecars }}
+      extraContainers: {{- include "common.tplvalues.render" ( dict "value" .Values.singleuser.sidecars "context" $ ) | nindent 4 }}
+      {{- end }}
+      {{- if .Values.singleuser.containerSecurityContext.enabled }}
+      uid: {{ .Values.singleuser.containerSecurityContext.runAsUser }}
+      {{- end }}
+      {{- if .Values.singleuser.podSecurityContext.enabled }}
+      fsGid: {{ .Values.singleuser.podSecurityContext.fsGroup }}
+      {{- end }}
+      serviceAccountName: {{ template "jupyterhub.singleuserServiceAccountName" . }}
+      storage:
+        {{- if .Values.singleuser.persistence.enabled }}
+        type: dynamic
+        {{- else }}
+        type: none
+        {{- end }}
+        extraLabels:
+          app.kubernetes.io/component: singleuser
+          {{- include "common.labels.standard" . | nindent 6 }}
+        {{- if .Values.singleuser.extraVolumes }}
+        extraVolumes: {{- include "common.tplvalues.render" ( dict "value" .Values.singleuser.extraVolumes "context" $ ) | nindent 4 }}
+        {{- end }}
+        {{- if .Values.singleuser.extraVolumeMounts }}
+        extraVolumeMounts: {{- include "common.tplvalues.render" ( dict "value" .Values.singleuser.extraVolumeMounts "context" $ ) | nindent 4 }}
+        {{- end }}
+        capacity: {{ .Values.singleuser.persistence.size }}
+        homeMountPath: {{ .Values.singleuser.notebookDir }}
+        dynamic:
+          {{ include "common.storage.class" (dict "persistence" .Values.singleuser.persistence "global" .Values.global) }}
+          pvcNameTemplate: {{ include "common.names.fullname" . }}-claim-{username}{servername}
+          volumeNameTemplate: {{ include "common.names.fullname" . }}-volume-{username}{servername}
+          storageAccessModes: {{- include "common.tplvalues.render" ( dict "value" .Values.singleuser.persistence.accessModes "context" $ ) | nindent 8 }}
+      image:
+        name: {{ include "jupyterhub.hubconfiguration.imageEntry" ( dict "imageRoot" .Values.singleuser.image "global" $) }}
+        tag: {{ .Values.singleuser.image.tag }}
+        pullPolicy: {{ .Values.singleuser.image.pullPolicy }}
+        pullSecrets: {{- include "jupyterhub.imagePullSecrets" . | nindent 8 }}
+      startTimeout: 300
+      {{- /* We need to replace the Kubernetes memory/cpu terminology (e.g. 10Gi, 10Mi) with one compatible with Python (10G, 10M) */}}
+      cpu:
+        limit: {{ regexReplaceAll "([A-Za-z])i" (default "" .Values.singleuser.resources.limits.cpu)  "${1}"}}
+        guarantee: {{ regexReplaceAll "([A-Za-z])i" (default "" .Values.singleuser.resources.requests.cpu) "${1}" }}
+      memory:
+        limit: {{ regexReplaceAll "([A-Za-z])i" (default "" .Values.singleuser.resources.limits.memory) "${1}" }}
+        guarantee: {{ regexReplaceAll "([A-Za-z])i" (default "" .Values.singleuser.resources.requests.memory) "${1}" }}
+      {{- if .Values.singleuser.command }}
+      cmd: {{- include "common.tplvalues.render" (dict "value" .Values.singleuser.command "context" $) | nindent 12 }}
+      {{- else }}
+      cmd: jupyterhub-singleuser
+      {{- end }}
+      defaultUrl:
+    cull:
+      enabled: true
+      users: false
+      removeNamedServers: false
+      timeout: 3600
+      every: 600
+      concurrency: 10
+      maxAge: 0
+
+  ## Hub Container port
+  ## @param hub.containerPort Hub container port
+  ##
+  containerPort: 8081
+
+  ## ConfigMap with hub init scripts
+  ## @param hub.existingConfigmap Configmap with Hub init scripts (replaces the scripts in templates/hub/configmap.yml)
+  ##
+  existingConfigmap:
+
+  ## Secret with hub configuration
+  ## @param hub.existingSecret Secret with hub configuration (replaces the hub.configuration value) and proxy token
+  ##
+  existingSecret:
+
+  ## Command and args for running the container (set to default if not set). Use array form
+  ## @param hub.command Override Hub default command
+  ## @param hub.args Override Hub default args
+  ##
+  command: []
+  args: []
+
+  pdb:
+    ## @param hub.pdb.create Deploy Hub PodDisruptionBudget
+    ##
+    create: false
+    ## @param hub.pdb.minAvailable Set minimum available hub instances
+    ##
+    minAvailable:
+    ## @param hub.pdb.maxUnavailable Set maximum available hub instances
+    ##
+    maxUnavailable:
+
+  ## @param hub.priorityClassName Hub pod priority class name
+  ##
+  priorityClassName:
+
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ## @param hub.hostAliases Add deployment host aliases
+  ##
+  hostAliases: []
+
+  ## hub resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## @param hub.resources.limits  The resources limits for the Hub container
+    ##
+    limits: {}
+    #   cpu: 200m
+    #   memory: 256Mi
+    ## @param hub.resources.requests  The requested resources for the Hub container
+    ##
+    requests: {}
+    #   cpu: 200m
+    #   memory: 10Mi
+
+  ## hub containers' Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param hub.containerSecurityContext.enabled Enabled Hub containers' Security Context
+  ## @param hub.containerSecurityContext.runAsUser Set Hub container's Security Context runAsUser
+  ## @param hub.containerSecurityContext.runAsNonRoot Set Hub container's Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1000
+    runAsNonRoot: true
+
+  ## hub pods' Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param hub.podSecurityContext.enabled Enabled Hub pods' Security Context
+  ## @param hub.podSecurityContext.fsGroup Set Hub pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+
+  ## Pod affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ## @param hub.podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ##
+  podAffinityPreset: ""
+
+  ## Pod anti-affinity preset
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ## @param hub.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ##
+  podAntiAffinityPreset: soft
+
+  ## Node affinity preset
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ## Allowed values: soft, hard
+  ## @param hub.nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ## @param hub.nodeAffinityPreset.key Node label key to match. Ignored if `affinity` is set
+  ## @param hub.nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set
+  ##
+  nodeAffinityPreset:
+    ## Node affinity type
+    ## Allowed values: soft, hard
+    ##
+    type: ""
+    ## Node label key to match
+    ## E.g.
+    ## key: "kubernetes.io/e2e-az-name"
+    ##
+    key: ""
+    ## Node label values to match
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+
+  ## Affinity for pod assignment. Evaluated as a template.
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## @param hub.affinity  Affinity for pod assignment
+  ##
+  affinity: {}
+
+  ## Node labels for pod assignment. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## @param hub.nodeSelector  Node labels for pod assignment
+  ##
+  nodeSelector: {}
+
+  ## Tolerations for pod assignment. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ## @param hub.tolerations  Tolerations for pod assignment
+  ##
+  tolerations: []
+
+  ## Pod extra labels
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ## @param hub.podLabels  Extra labels for Hub pods
+  ##
+  podLabels: {}
+
+  ## Annotations for server pods.
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ## @param hub.podAnnotations  Annotations for Hub pods
+  ##
+  podAnnotations: {}
+
+  ## lifecycleHooks for the hub container to automate configuration before or after startup.
+  ## @param hub.lifecycleHooks Add lifecycle hooks to the Hub deployment
+  ##
+  lifecycleHooks: {}
+
+  ## Custom Startup probes for hub
+  ## @param hub.customStartupProbe  Override default startup probe
+  ##
+  customStartupProbe: {}
+
+  ## Custom Liveness probes for hub
+  ## @param hub.customLivenessProbe  Override default liveness probe
+  ##
+  customLivenessProbe: {}
+
+  ## Custom Rediness probes hub
+  ## @param hub.customReadinessProbe  Override default readiness probe
+  ##
+  customReadinessProbe: {}
+
+  ## Update strategy - only really applicable for deployments with RWO PVs attached
+  ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
+  ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
+  ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
+  ## @param hub.updateStrategy.type Hub deployment update strategy
+  ##
+  updateStrategy:
+    type: RollingUpdate
+
+  ## Additional environment variables to set
+  ## Example:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ## @param hub.extraEnvVars Add extra environment variables to the Hub container
+  ##
+  extraEnvVars: []
+
+  ## ConfigMap with extra environment variables
+  ## @param hub.extraEnvVarsCM Name of existing ConfigMap containing extra env vars
+  ##
+  extraEnvVarsCM:
+
+  ## Secret with extra environment variables
+  ## @param hub.extraEnvVarsSecret Name of existing Secret containing extra env vars
+  ##
+  extraEnvVarsSecret:
+
+  ## Extra volumes to add to the deployment
+  ## @param hub.extraVolumes  Optionally specify extra list of additional volumes for Hub pods
+  ##
+  extraVolumes: []
+
+  ## Extra volume mounts to add to the container
+  ## @param hub.extraVolumeMounts  Optionally specify extra list of additional volumeMounts for Hub container(s)
+  ##
+  extraVolumeMounts: []
+
+  ## Add init containers to the hub pods.
+  ## Example:
+  ## initContainers:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ## @param hub.initContainers  Add additional init containers to the Hub pods
+  ##
+  initContainers: {}
+
+  ## Add sidecars to the hub pods.
+  ## Example:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ## @param hub.sidecars  Add additional sidecar containers to the Hub pod
+  ##
+  sidecars: {}
+
+  ## @section Hub RBAC parameters
+  ## Specifies whether a ServiceAccount should be created
+  ##
+  serviceAccount:
+    ## @param hub.serviceAccount.create Create Hub service account
+    ##
+    create: true
+    ## The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the fullname template
+    ##
+    ## @param hub.serviceAccount.name Override Hub service account name
+    ##
+    name:
+
+  ## Specifies whether RBAC resources should be created
+  ##
+  rbac:
+    ## @param hub.rbac.create Create RBAC rules for the Hub service account
+    ##
+    create: true
+
+  ## @section Hub Traffic Exposure Parameters
+  ##
+
+  ## Network policy
+  ##
+  networkPolicy:
+    ## @param hub.networkPolicy.enabled Deploy Hub network policies
+    ##
+    enabled: true
+    ## @param hub.networkPolicy.allowInterspaceAccess Allow communication between pods in different namespaces
+    ##
+    allowInterspaceAccess: true
+    ## @param hub.networkPolicy.extraIngress Add extra ingress rules to the NetworkPolicy
+    ##
+    extraIngress: []
+
+    ## @param hub.networkPolicy.extraEgress [object] Add extra ingress rules to the NetworkPolicy
+    ##
+    extraEgress: |
+      ## Hub --> Any IP:PORT
+      ##
+      - to:
+
+  service:
+    ## @param hub.service.type Hub service type
+    ##
+    type: ClusterIP
+    ## @param hub.service.port Hub service port
+    # HTTP Port
+    port: 8081
+    ## loadBalancerIP for the Hub Service (optional, cloud specific)
+    ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+    ## @param hub.service.loadBalancerIP Hub service LoadBalancer IP
+    ##
+    loadBalancerIP:
+    ## loadBalancerIP source ranges for the Service
+    ## @param hub.service.loadBalancerSourceRanges loadBalancerIP source ranges for the Service
+    ##
+    loadBalancerSourceRanges: []
+    ##
+    ## nodePorts:
+    ##   http: <to set explicitly, choose port between 30000-32767>
+    ##   https: <to set explicitly, choose port between 30000-32767>
+    ##
+    ## @param hub.service.nodePorts.http NodePort for the HTTP endpoint
+    ##
+    nodePorts:
+      http: ""
+    ## Enable client source IP preservation
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ## @param hub.service.externalTrafficPolicy External traffic policy for the service
+    ##
+    externalTrafficPolicy: Cluster
+
+## @section Proxy deployment parameters
+## Proxy deployment parameters
+##
+proxy:
+  image:
+    ## @param proxy.image.registry Proxy image registry
+    ##
+    registry: docker.io
+    ## @param proxy.image.repository Proxy image repository
+    ##
+    repository: bitnami/configurable-http-proxy
+    ## @param proxy.image.tag Proxy image tag (immutabe tags are recommended)
+    ##
+    tag: 4.3.2-debian-10-r10
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    ## @param proxy.image.pullPolicy Proxy image pull policy
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ##
+    # pullSecrets:
+    #   - myRegistryKeySecretName
+    ## @param proxy.image.pullSecrets Proxy image pull secrets
+    ##
+    pullSecrets: []
+    ## @param proxy.image.debug Activate verbose output
+    ##
+    debug: false
+
+  ## Configure extra options for startup probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-startup-readiness-probes/#configure-probes
+  ##
+  ## @param proxy.startupProbe.enabled Enable startupProbe
+  ## @param proxy.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param proxy.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param proxy.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param proxy.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param proxy.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    failureThreshold: 30
+    timeoutSeconds: 3
+    successThreshold: 1
+
+  ## Configure extra options for liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ##
+  ## @param proxy.livenessProbe.enabled Enable livenessProbe
+  ## @param proxy.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param proxy.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param proxy.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param proxy.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param proxy.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    failureThreshold: 30
+    timeoutSeconds: 3
+    successThreshold: 1
+
+  ## @param proxy.readinessProbe.enabled Enable readinessProbe
+  ## @param proxy.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param proxy.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param proxy.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param proxy.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param proxy.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    failureThreshold: 30
+    timeoutSeconds: 3
+    successThreshold: 1
+
+  ## Command and args for running the container (set to default if not set). Use array form
+  ##
+  ## @param proxy.command Override Proxy default command
+  ## @param proxy.args Override Proxy default args
+  ##
+  command: []
+  args: []
+
+  ## @param proxy.secretToken Proxy secret token (used for communication with the Hub)
+  ##
+  secretToken:
+
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ## @param proxy.hostAliases Add deployment host aliases
+  ##
+  hostAliases: []
+
+  ## PodDisruptionBudget settings
+  ##
+  pdb:
+    ## @param proxy.pdb.create Deploy Proxy PodDisruptionBudget
+    ##
+    create: false
+    ## @param proxy.pdb.minAvailable Set minimum available proxy instances
+    ##
+    minAvailable:
+    ## @param proxy.pdb.maxUnavailable Set maximum available proxy instances
+    ##
+    maxUnavailable:
+
+  ## Container ports
+  ##
+  containerPort:
+    ## @param proxy.containerPort.api Proxy api container port
+    ##
+    api: 8001
+    ## @param proxy.containerPort.http Proxy http container port
+    ##
+    http: 8000
+
+  ## @param proxy.priorityClassName Proxy pod priority class name
+  ##
+  priorityClassName:
+
+  ## proxy resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## @param proxy.resources.limits  The resources limits for the Proxy container
+    ##
+    limits: {}
+    #   cpu: 200m
+    #   memory: 256Mi
+    ## @param proxy.resources.requests  The requested resources for the Proxy container
+    ##
+    requests: {}
+    #   cpu: 200m
+    #   memory: 10Mi
+
+  ## proxy containers' Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param proxy.containerSecurityContext.enabled Enabled Proxy containers' Security Context
+  ## @param proxy.containerSecurityContext.runAsUser Set Proxy container's Security Context runAsUser
+  ## @param proxy.containerSecurityContext.runAsNonRoot Set Proxy container's Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+
+  ## proxy pods' Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param proxy.podSecurityContext.enabled Enabled Proxy pods' Security Context
+  ## @param proxy.podSecurityContext.fsGroup Set Proxy pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+
+  ## Pod affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ## @param proxy.podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ##
+  podAffinityPreset: ""
+
+  ## Pod anti-affinity preset
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ## @param proxy.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ##
+  podAntiAffinityPreset: soft
+
+  ## Node affinity preset
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ## Allowed values: soft, hard
+  ## @param proxy.nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ## @param proxy.nodeAffinityPreset.key Node label key to match. Ignored if `affinity` is set
+  ## @param proxy.nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set
+  ##
+  nodeAffinityPreset:
+    ## Node affinity type
+    ## Allowed values: soft, hard
+    ##
+    type: ""
+    ## Node label key to match
+    ## E.g.
+    ## key: "kubernetes.io/e2e-az-name"
+    ##
+    key: ""
+    ## Node label values to match
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+
+  ## Affinity for pod assignment. Evaluated as a template.
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## @param proxy.affinity  Affinity for pod assignment
+  ##
+  affinity: {}
+
+  ## Node labels for pod assignment. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## @param proxy.nodeSelector  Node labels for pod assignment
+  ##
+  nodeSelector: {}
+
+  ## Tolerations for pod assignment. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ## @param proxy.tolerations  Tolerations for pod assignment
+  ##
+  tolerations: []
+
+  ## Pod extra labels
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ## @param proxy.podLabels  Extra labels for Proxy pods
+  ##
+  podLabels: {}
+
+  ## Annotations for server pods.
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ## @param proxy.podAnnotations  Annotations for Proxy pods
+  ##
+  podAnnotations: {}
+
+  ## lifecycleHooks for the proxy container to automate configuration before or after startup.
+  ## @param proxy.lifecycleHooks Add lifecycle hooks to the Proxy deployment
+  ##
+  lifecycleHooks: {}
+
+  ## Custom Startup probes for proxy
+  ## @param proxy.customStartupProbe  Override default startup probe
+  ##
+  customStartupProbe: {}
+
+  ## Custom Liveness probes for proxy
+  ## @param proxy.customLivenessProbe  Override default liveness probe
+  ##
+  customLivenessProbe: {}
+
+  ## Custom Rediness probes proxy
+  ## @param proxy.customReadinessProbe  Override default readiness probe
+  ##
+  customReadinessProbe: {}
+
+  ## Update strategy - only really applicable for deployments with RWO PVs attached
+  ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
+  ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
+  ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
+  ## @param proxy.updateStrategy.type Proxy deployment update strategy
+  ##
+  updateStrategy:
+    type: RollingUpdate
+
+  ## Additional environment variables to set
+  ## Example:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  ## @param proxy.extraEnvVars Add extra environment variables to the Proxy container
+  ##
+  extraEnvVars: []
+
+  ## ConfigMap with extra environment variables
+  ## @param proxy.extraEnvVarsCM Name of existing ConfigMap containing extra env vars
+  ##
+  extraEnvVarsCM:
+
+  ## Secret with extra environment variables
+  ## @param proxy.extraEnvVarsSecret Name of existing Secret containing extra env vars
+  ##
+  extraEnvVarsSecret:
+
+  ## Extra volumes to add to the deployment
+  ## @param proxy.extraVolumes  Optionally specify extra list of additional volumes for Proxy pods
+  ##
+  extraVolumes: []
+
+  ## Extra volume mounts to add to the container
+  ## @param proxy.extraVolumeMounts  Optionally specify extra list of additional volumeMounts for Proxy container(s)
+  ##
+  extraVolumeMounts: []
+
+  ## Add init containers to the proxy pods.
+  ## Example:
+  ## initContainers:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ## @param proxy.initContainers  Add additional init containers to the Proxy pods
+  ##
+  initContainers: {}
+
+  ## Add sidecars to the proxy pods.
+  ## Example:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ## @param proxy.sidecars  Add additional sidecar containers to the Proxy pod
+  ##
+  sidecars: {}
+
+  ## @section Proxy Traffic Exposure Parameters
+  ##
+
+  ## Network policy
+  ##
+  networkPolicy:
+    ## @param proxy.networkPolicy.enabled Deploy Proxy network policies
+    ##
+    enabled: true
+    ## @param proxy.networkPolicy.allowInterspaceAccess Allow communication between pods in different namespaces
+    ##
+    allowInterspaceAccess: true
+    ## @param proxy.networkPolicy.extraIngress [object] Add extra ingress rules to the NetworkPolicy
+    ##
+    extraIngress: |
+      ## Any IP --> Proxy
+      ##
+      - ports:
+          - port: {{ .Values.proxy.containerPort.http }}
+
+    ## @param proxy.networkPolicy.extraEgress Add extra ingress rules to the NetworkPolicy
+    ##
+    extraEgress:
+
+  service:
+    api:
+      ## @param proxy.service.api.type API service type
+      ##
+      type: ClusterIP
+      # HTTP Port
+      ## @param proxy.service.api.port API service port
+      ##
+      port: 8001
+      ## loadBalancerIP for the Service (optional, cloud specific)
+      ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+      ## @param proxy.service.api.loadBalancerIP API service LoadBalancer IP
+      ##
+      loadBalancerIP:
+      ## loadBalancerIP source ranges for the Service
+      ## @param proxy.service.api.loadBalancerSourceRanges loadBalancerIP source ranges for the Service
+      ##
+      loadBalancerSourceRanges: []
+      ##
+      ## nodePorts:
+      ##   http: <to set explicitly, choose port between 30000-32767>
+      ##   https: <to set explicitly, choose port between 30000-32767>
+      ## @param proxy.service.api.nodePorts.http NodePort for the HTTP endpoint
+      ##
+      nodePorts:
+        http: ""
+      ## Enable client source IP preservation
+      ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+      ## @param proxy.service.api.externalTrafficPolicy External traffic policy for the service
+      ##
+      externalTrafficPolicy: Cluster
+
+    public:
+      ## @param proxy.service.public.type Public service type
+      ##
+      type: LoadBalancer
+      # HTTP Port
+      ## @param proxy.service.public.port Public service port
+      ##
+      port: 80
+      ## loadBalancerIP for the Service (optional, cloud specific)
+      ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+      ## @param proxy.service.public.loadBalancerIP Public service LoadBalancer IP
+      ##
+      loadBalancerIP:
+      ## loadBalancerIP source ranges for the Service
+      ## @param proxy.service.public.loadBalancerSourceRanges loadBalancerIP source ranges for the Service
+      ##
+      loadBalancerSourceRanges: []
+      ##
+      ## nodePorts:
+      ##   http: <to set explicitly, choose port between 30000-32767>
+      ##   https: <to set explicitly, choose port between 30000-32767>
+      ## @param proxy.service.public.nodePorts.http NodePort for the HTTP endpoint
+      ##
+      nodePorts:
+        http: ""
+      ## Enable client source IP preservation
+      ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+      ## @param proxy.service.public.externalTrafficPolicy External traffic policy for the service
+      ##
+      externalTrafficPolicy: Cluster
+
+  ## Configure the ingress resource that allows you to access to your JupyterHub instance
+  ##
+  ingress:
+    ## Set to true to enable ingress record generation
+    ## @param proxy.ingress.enabled Enable ingress for the Public service
+    ##
+    enabled: false
+
+    ## Ingress Path
+    ## @param proxy.ingress.path Path to the Proxy pod.
+    ##
+    path: /
+
+    ## Ingress Path type
+    ## @param proxy.ingress.pathType Ingress path type
+    ##
+    pathType: ImplementationSpecific
+
+    ## Set this to true in order to add the corresponding annotations for cert-manager
+    ## @param proxy.ingress.certManager Add cert-manager annotations to the Ingress object
+    ##
+    certManager: false
+
+    ## When the ingress is enabled, a host pointing to this will be created
+    ## @param proxy.ingress.hostname Set ingress rule hostname
+    ##
+    hostname: jupyterhub.local
+
+    ## Ingress annotations done as key:value pairs
+    ## For a full list of possible ingress annotations, please see
+    ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+    ##
+    ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+    ## @param proxy.ingress.annotations Add annotations to the Ingress object
+    ##
+    annotations: {}
+
+    ## Enable TLS configuration for the hostname defined at ingress.hostname parameter
+    ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
+    ## You can use the ingress.secrets parameter to create this TLS secret, relay on cert-manager to create it, or
+    ## let the chart create self-signed certificates for you
+    ## @param proxy.ingress.tls Enable ingress tls configuration for the hostname defined at proxy.ingress.hostname
+    ##
+    tls: false
+
+    ## The list of additional hostnames to be covered with this ingress record.
+    ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
+    ## extraHosts:
+    ## - name: aspnet-core.local
+    ##   path: /
+    ## @param proxy.ingress.extraHosts Add extra hosts to the ingress rule
+    ##
+    extraHosts: []
+
+    ## The tls configuration for additional hostnames to be covered with this ingress record.
+    ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+    ## extraTls:
+    ## - hosts:
+    ##     - aspnet-core.local
+    ##   secretName: aspnet-core.local-tls
+    ## @param proxy.ingress.extraTls Add extra tls configuration for additional hostnames
+    ##
+    extraTls: []
+
+    ## Any additional arbitrary paths that may need to be added to the ingress under the main host.
+    ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
+    ## @param proxy.ingress.extraPaths Add extra paths to the ingress rule
+    ##
+    extraPaths: []
+
+    ## If you're providing your own certificates, please use this to add the certificates as secrets
+    ## key and certificate should start with -----BEGIN CERTIFICATE----- or -----BEGIN RSA PRIVATE KEY-----
+    ## name should line up with a secretName set further up
+    ##
+    ## If it is not set and you're using cert-manager, this is unneeded, as it will create the secret for you
+    ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created
+    ## It is also possible to create and manage the certificates outside of this helm chart
+    ## Please see README.md for more information
+    ## @param proxy.ingress.secrets Add extra secrets for the tls configuration
+    ##
+    secrets: []
+    ## - name: aspnet-core.local-tls
+    ##   key:
+    ##   certificate:
+    ##
+
+## @section Image puller deployment parameters
+## Image Puller deployment parameters
+##
+imagePuller:
+  ## @param imagePuller.enabled Deploy ImagePuller daemonset
+  ##
+  enabled: true
+
+  ## Command and args for running the container (set to default if not set). Use array form
+  ## @param imagePuller.command Override ImagePuller default command
+  ## @param imagePuller.args Override ImagePuller default args
+  ##
+  command: []
+  args: []
+
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ## @param imagePuller.hostAliases Add deployment host aliases
+  ##
+  hostAliases: []
+
+  ## imagePuller resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## @param imagePuller.resources.limits  The resources limits for the ImagePuller container
+    ##
+    limits: {}
+    #   cpu: 200m
+    #   memory: 256Mi
+    ## @param imagePuller.resources.requests  The resources request for the ImagePuller container
+    ##
+    requests: {}
+    #   cpu: 200m
+    #   memory: 10Mi
+
+  ## imagePuller containers' Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param imagePuller.containerSecurityContext.enabled Enabled ImagePuller containers' Security Context
+  ## @param imagePuller.containerSecurityContext.runAsUser Set ImagePuller container's Security Context runAsUser
+  ## @param imagePuller.containerSecurityContext.runAsNonRoot Set ImagePuller container's Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+
+  ## imagePuller pods' Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param imagePuller.podSecurityContext.enabled Enabled ImagePuller pods' Security Context
+  ## @param imagePuller.podSecurityContext.fsGroup Set ImagePuller pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+
+  ## Pod affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ## @param imagePuller.podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ##
+  podAffinityPreset: ""
+
+  ## Pod anti-affinity preset
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ## Allowed values: soft, hard
+  ## @param imagePuller.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ##
+  podAntiAffinityPreset: soft
+
+  ## Node affinity preset
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ## Allowed values: soft, hard
+  ## @param imagePuller.nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ## @param imagePuller.nodeAffinityPreset.key Node label key to match. Ignored if `affinity` is set
+  ## @param imagePuller.nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set
+  ##
+  nodeAffinityPreset:
+    ## Node affinity type
+    ## Allowed values: soft, hard
+    ##
+    type: ""
+    ## Node label key to match
+    ## E.g.
+    ## key: "kubernetes.io/e2e-az-name"
+    ##
+    key: ""
+    ## Node label values to match
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+
+  ## Affinity for pod assignment. Evaluated as a template.
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## @param imagePuller.affinity  Affinity for pod assignment
+  ##
+  affinity: {}
+
+  ## Node labels for pod assignment. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## @param imagePuller.nodeSelector  Node labels for pod assignment
+  ##
+  nodeSelector: {}
+
+  ## Tolerations for pod assignment. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ## @param imagePuller.tolerations  Tolerations for pod assignment
+  ##
+  tolerations: []
+
+  ## Pod extra labels
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ## @param imagePuller.podLabels  Extra labels for ImagePuller pods
+  ##
+  podLabels: {}
+
+  ## Annotations for server pods.
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ## @param imagePuller.podAnnotations  Annotations for ImagePuller pods
+  ##
+  podAnnotations: {}
+
+  ## imagePuller pods' priority.
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+  ## @param imagePuller.priorityClassName ImagePuller pod priority class name
+  ##
+  priorityClassName: ""
+
+  ## lifecycleHooks for the imagePuller container to automate configuration before or after startup.
+  ## @param imagePuller.lifecycleHooks Add lifecycle hooks to the ImagePuller deployment
+  ##
+  lifecycleHooks: {}
+
+  ## Custom Startup probes for imagePuller
+  ## @param imagePuller.customStartupProbe  Override default startup probe
+  ##
+  customStartupProbe: {}
+
+  ## Custom Liveness probes for imagePuller
+  ## @param imagePuller.customLivenessProbe  Override default liveness probe
+  ##
+  customLivenessProbe: {}
+
+  ## Custom Rediness probes imagePuller
+  ## @param imagePuller.customReadinessProbe  Override default readiness probe
+  ##
+  customReadinessProbe: {}
+
+  ## Update strategy - only really applicable for deployments with RWO PVs attached
+  ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
+  ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
+  ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
+  ## @param imagePuller.updateStrategy.type ImagePuller deployment update strategy
+  ##
+  updateStrategy:
+    type: RollingUpdate
+
+  ## Additional environment variables to set
+  ## Example:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ## @param imagePuller.extraEnvVars Add extra environment variables to the ImagePuller container
+  ##
+  extraEnvVars: []
+
+  ## ConfigMap with extra environment variables
+  ## @param imagePuller.extraEnvVarsCM Name of existing ConfigMap containing extra env vars
+  ##
+  extraEnvVarsCM:
+
+  ## Secret with extra environment variables
+  ## @param imagePuller.extraEnvVarsSecret Name of existing Secret containing extra env vars
+  ##
+  extraEnvVarsSecret:
+
+  ## Extra volumes to add to the deployment
+  ## @param imagePuller.extraVolumes  Optionally specify extra list of additional volumes for ImagePuller pods
+  ##
+  extraVolumes: []
+
+  ## Extra volume mounts to add to the container
+  ## @param imagePuller.extraVolumeMounts  Optionally specify extra list of additional volumeMounts for ImagePuller container(s)
+  ##
+  extraVolumeMounts: []
+
+  ## Add init containers to the imagePuller pods.
+  ## Example:
+  ## initContainers:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ## @param imagePuller.initContainers  Add additional init containers to the ImagePuller pods
+  ##
+  initContainers: {}
+
+  ## Add sidecars to the imagePuller pods.
+  ## Example:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ## @param imagePuller.sidecars  Add additional sidecar containers to the ImagePuller pod
+  ##
+  sidecars: {}
+
+## @section Singleuser deployment parameters
+## Singleuser deployment parameters
+## NOTE: The values in this section are used for generating the hub.configuration value. In case you provide
+## a custom hub.configuration or a configmap, these will be ignored.
+##
+singleuser:
+  image:
+    ## @param singleuser.image.registry Single User image registry
+    ##
+    registry: docker.io
+    ## @param singleuser.image.repository Single User image repository
+    ##
+    repository: bitnami/jupyter-base-notebook
+    ## @param singleuser.image.tag Single User image tag (immutabe tags are recommended)
+    ##
+    tag: 1.3.0-debian-10-r13
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    ## @param singleuser.image.pullPolicy Single User image pull policy
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ##
+    # pullSecrets:
+    #   - myRegistryKeySecretName
+    ## @param singleuser.image.pullSecrets Single User image pull secrets
+    ##
+    pullSecrets: []
+
+  ## Command for running the container (set to default if not set). Use array form
+  ## @param singleuser.command Override Single User default command
+  ##
+  command: []
+
+  ## Tolerations for pod assignment. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ## @param singleuser.tolerations  Tolerations for pod assignment
+  ##
+  tolerations: []
+
+  ## @param singleuser.containerPort Single User container port
+  ##
+  containerPort: 8888
+
+  ## @param singleuser.notebookDir Notebook directory (it will be the same as the PVC volume mount)
+  ##
+  notebookDir: /opt/bitnami/jupyterhub-singleuser
+
+  ## singleuser resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## @param singleuser.resources.limits  The resources limits for the Single User container
+    ##
+    limits: {}
+    ## @param singleuser.resources.requests  The requested resources for the Single User container
+    ##
+    requests: {}
+
+  ## singleuser containers' Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param singleuser.containerSecurityContext.enabled Enabled Single User containers' Security Context
+  ## @param singleuser.containerSecurityContext.runAsUser Set Single User container's Security Context runAsUser
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+
+  ## singleuser pods' Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param singleuser.podSecurityContext.enabled Enabled Single User pods' Security Context
+  ## @param singleuser.podSecurityContext.fsGroup Set Single User pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+
+  ## Node labels for pod assignment. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## @param singleuser.nodeSelector  Node labels for pod assignment
+  ##
+  nodeSelector: {}
+
+  ## Pod extra labels
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ## @param singleuser.podLabels  Extra labels for Single User pods
+  ##
+  podLabels: {}
+
+  ## Annotations for server pods.
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ## @param singleuser.podAnnotations  Annotations for Single User pods
+  ##
+  podAnnotations: {}
+
+  ## singleuser pods' priority.
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+  ## @param singleuser.priorityClassName Single User pod priority class name
+  ##
+  priorityClassName:
+
+  ## lifecycleHooks for the singleuser container to automate configuration before or after startup.
+  ## @param singleuser.lifecycleHooks Add lifecycle hooks to the Single User deployment
+  ##
+  lifecycleHooks: {}
+
+  ## Additional environment variables to set
+  ## Example:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ## @param singleuser.extraEnvVars Add extra environment variables to the Single User container
+  ##
+  extraEnvVars: []
+
+  ## Extra volumes to add to the deployment
+  ## @param singleuser.extraVolumes  Optionally specify extra list of additional volumes for Single User pods
+  ##
+  extraVolumes: []
+
+  ## Extra volume mounts to add to the container
+  ## @param singleuser.extraVolumeMounts  Optionally specify extra list of additional volumeMounts for Single User container(s)
+  ##
+  extraVolumeMounts: []
+
+  ## Add init containers to the singleuser pods.
+  ## Example:
+  ## initContainers:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ## @param singleuser.initContainers  Add additional init containers to the Single User pods
+  ##
+  initContainers: {}
+
+  ## Add sidecars to the singleuser pods.
+  ## Example:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ## @param singleuser.sidecars  Add additional sidecar containers to the Single User pod
+  ##
+  sidecars: {}
+
+  ## @section Single User RBAC parameters
+  ## Specifies whether a ServiceAccount should be created
+  ##
+  serviceAccount:
+    ## @param singleuser.serviceAccount.create Create Single User service account
+    ##
+    create: true
+    ## The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the fullname template
+    ## @param singleuser.serviceAccount.name Override Single User service account name
+    ##
+    name:
+
+  ## @section Single User Persistence parameters
+  ## Enable persistence using Persistent Volume Claims
+  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+  ##
+  persistence:
+    ## If true, use a Persistent Volume Claim, If false, use emptyDir
+    ## @param singleuser.persistence.enabled Enable persistent volume creation on Single User instances
+    ##
+    enabled: true
+    ## Single User data Persistent Volume Storage Class
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ## @param singleuser.persistence.storageClass Persistent Volumes storage class
+    ##
+    storageClass: ""
+    ## Persistent Volume Access Modes
+    ## @param singleuser.persistence.accessModes[0] Persistent Volumes access modes
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## Persistent Volume size
+    ## @param singleuser.persistence.size Persistent Volumes size
+    ##
+    size: 10Gi
+
+  ## @section Traffic exposure parameters
+  ## Network policy
+  ##
+  networkPolicy:
+    ## @param singleuser.networkPolicy.enabled Deploy Single User network policies
+    ##
+    enabled: true
+    ## @param singleuser.networkPolicy.allowInterspaceAccess Allow communication between pods in different namespaces
+    ##
+    allowInterspaceAccess: true
+    ## @param singleuser.networkPolicy.allowCloudMetadataAccess Allow Single User pods to access Cloud Metada endpoints
+    ##
+    allowCloudMetadataAccess: false
+    ## @param singleuser.networkPolicy.extraIngress Add extra ingress rules to the NetworkPolicy
+    ##
+    extraIngress:
+
+    ## @param singleuser.networkPolicy.extraEgress Add extra ingress rules to the NetworkPolicy
+    ##
+    extraEgress:
+
+## @section Auxiliary image parameters
+##
+auxiliaryImage:
+  ## @param auxiliaryImage.registry Auxiliary image registry
+  ##
+  registry: docker.io
+  ## @param auxiliaryImage.repository Auxiliary image repository
+  ##
+  repository: bitnami/bitnami-shell
+  ## @param auxiliaryImage.tag Auxiliary image tag (immutabe tags are recommended)
+  ##
+  tag: "10"
+  ## @param auxiliaryImage.pullPolicy Auxiliary image pull policy
+  ##
+  pullPolicy: Always
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ##
+  ## @param auxiliaryImage.pullSecrets Auxiliary image pull secrets
+  ##
+  pullSecrets: []
+  ##   - myRegistryKeySecretName
+  ##
+
+## @section External Database settings
+##
+
+##
+## External Database Configuration
+##
+## All of these values are only used when postgresql.enabled is set to false
+##
+externalDatabase:
+  ## Database host
+  ## @param externalDatabase.host Host of an external PostgreSQL instance to connect (only if postgresql.enabled=false)
+  ##
+  host:
+  ## @param externalDatabase.user User of an external PostgreSQL instance to connect (only if postgresql.enabled=false)
+  ##
+  user: postgres
+  ## Database password
+  ## @param externalDatabase.password Password of an external PostgreSQL instance to connect (only if postgresql.enabled=false)
+  ##
+  password: ""
+  ## Name of an existing secret resource containing the DB password in a 'postgresql-password' key
+  ## @param externalDatabase.existingSecret Secret containing the password of an external PostgreSQL instance to connect (only if postgresql.enabled=false)
+  ##
+  existingSecret: ""
+  ## Name of the database
+  ## @param externalDatabase.database Database inside an external PostgreSQL to connect (only if postgresql.enabled=false)
+  ##
+  database: jupyterhub
+
+  ## Database port number
+  ## @param externalDatabase.port Port of an external PostgreSQL to connect (only if postgresql.enabled=false)
+  ##
+  port: 5432
+
+## @section PostgreSQL subchart settings
+## PostgreSQL chart configuration
+##
+## https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
+##
+postgresql:
+  ## @param postgresql.enabled Deploy PostgreSQL subchart
+  ##
+  enabled: true
+  ## @param postgresql.nameOverride Override name of the PostgreSQL chart
+  ##
+  nameOverride:
+  ## @param postgresql.existingSecret Existing secret containing the password of the PostgreSQL chart
+  ##
+  existingSecret:
+  ## PostgreSQL password
+  ## ref: https://hub.docker.com/_/postgres/
+  ## @param postgresql.postgresqlPassword Password for the postgres user of the PostgreSQL chart (auto-generated if not set)
+  ##
+  postgresqlPassword: ''
+
+  ## @param postgresql.postgresqlUsername Username to create when deploying the PostgreSQL chart
+  ##
+  postgresqlUsername: bn_jupyterhub
+
+  ## @param postgresql.postgresqlDatabase Database to create when deploying the PostgreSQL chart
+  ##
+  postgresqlDatabase: bitnami_jupyterhub
+
+  ## PostgreSQL service
+  ##
+  service:
+    ## @param postgresql.service.port PostgreSQL service port
+    ##
+    port: 5432
+
+  ## Enable persistence using Persistent Volume Claims
+  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+  ##
+  persistence:
+    ## @param postgresql.persistence.enabled Use PVCs when deploying the PostgreSQL chart
+    ##
+    enabled: true
+    ## If you want to reuse an existing claim, you can pass the name of the PVC using
+    ## the existingClaim variable
+    ## @param postgresql.persistence.existingClaim Use an existing PVC when deploying the PostgreSQL chart
+    ##
+    existingClaim:
+
+    ## postgresql data Persistent Volume Storage Class
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    ## @param postgresql.persistence.storageClass storageClass of the created PVCs
+    ##
+    storageClass:
+    ## @param postgresql.persistence.accessMode Access mode of the created PVCs
+    ##
+    accessMode: ReadWriteOnce
+    ## @param postgresql.persistence.size Size of the created PVCs
+    ##
+    size: 8Gi

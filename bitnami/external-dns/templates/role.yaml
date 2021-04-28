@@ -3,7 +3,7 @@ apiVersion: rbac.authorization.k8s.io/{{ .Values.rbac.apiVersion }}
 kind: Role
 metadata:
   name: {{ template "external-dns.fullname" . }}
-  namespace: {{ .Values.namespace }}
+  namespace: {{ template "external-dns.namespace" . }}
   labels: {{ include "external-dns.labels" . | nindent 4 }}
 rules:
   - apiGroups:

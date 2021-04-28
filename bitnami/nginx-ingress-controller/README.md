@@ -157,6 +157,7 @@ The following tables lists the configurable parameters of the Nginx Ingress Cont
 | `defaultBackend.image.pullSecrets`         | Specify docker-registry secret names as an array                                          | `[]` (does not add image pull secrets to deployed pods) |
 | `defaultBackend.extraArgs`                 | Additional command line arguments to pass to NGINX container                              | `{}`                                                    |
 | `defaultBackend.containerPort`             | HTTP container port number                                                                | `8080`                                                  |
+| `defaultBackend.serverBlockConfig`         | NGINX backend default server block configuration                                          | Check `values.yaml` file                                |
 | `defaultBackend.replicaCount`              | Desired number of default backend pods                                                    | `1`                                                     |
 | `defaultBackend.podSecurityContext`        | Default backend pods' Security Context                                                    | Check `values.yaml` file                                |
 | `defaultBackend.containerSecurityContext`  | Default backend containers' Security Context                                              | Check `values.yaml` file                                |
