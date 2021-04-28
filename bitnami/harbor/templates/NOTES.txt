@@ -56,22 +56,22 @@ https://goharbor.io/docs/latest/administration/vulnerability-scanning/pluggable-
 {{ include "harbor.validateValues" . }}
 {{ include "harbor.checkRollingTags" . }}
 
-{{- $passwordErrors := list -}}
+{{- $passwordValidationErrors := list -}}
 
 {{- $harborSecretName := printf "%s-envvars" (include "harbor.core" .) -}}
 {{- $requiredAdminPassword := dict "valueKey" "harborAdminPassword" "secret" $harborSecretName "field" "HARBOR_ADMIN_PASSWORD" -}}
 {{- $requiredHarborErrors := include "common.validations.values.multiple.empty" (dict "required" (list $requiredAdminPassword) "context" $) -}}
-{{- $passwordErrors = append $passwordErrors $requiredHarborErrors -}}
+{{- $passwordValidationErrors = append $passwordValidationErrors $requiredHarborErrors -}}
 
 {{- $postgresqlSecretName := include "harbor.postgresql.fullname" . -}}
 {{- $postgresqlPasswordValidationErrors := include "common.validations.values.postgresql.passwords" (dict "secret" $postgresqlSecretName "subchart" true "context" $) -}}
-{{- $passwordErrors = append $passwordErrors $postgresqlPasswordValidationErrors -}}
+{{- $passwordValidationErrors = append $passwordValidationErrors $postgresqlPasswordValidationErrors -}}
 
-{{- if .Values.redis.usePassword -}}
-  {{- $redisSecretName := printf "%s-%s" .Release.Name "redis" -}}
-  {{- $requiredRedisPassword := dict "valueKey" "redis.password" "secret" $redisSecretName "field" "redis-password" -}}
-  {{- $redisPasswordValidationErrors := include "common.validations.values.multiple.empty" (dict "required" (list $requiredRedisPassword) "context" $) -}}
-  {{- $passwordErrors = append $passwordErrors $redisPasswordValidationErrors -}}
+{{- if .Values.redis.auth.enabled -}}
+{{- $redisSecretName := printf "%s-%s" .Release.Name "redis" -}}
+{{- $requiredRedisPassword := dict "valueKey" "redis.auth.password" "secret" $redisSecretName "field" "redis-password" -}}
+{{- $redisPasswordValidationErrors := include "common.validations.values.multiple.empty" (dict "required" (list $requiredRedisPassword) "context" $) -}}
+{{- $passwordValidationErrors = append $passwordValidationErrors $redisPasswordValidationErrors -}}
 {{- end -}}
 
-{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordErrors "context" $) -}}
+{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}

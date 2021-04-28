@@ -93,7 +93,7 @@ spec:
                 secretKeyRef:
                   name: {{ include "discourse.postgresql.secretName" . }}
                   key: postgresql-postgres-password
-            {{- if (include "discourse.redis.usePassword" .) }}
+            {{- if (include "discourse.redis.auth.enabled" .) }}
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -179,7 +179,7 @@ spec:
                 secretKeyRef:
                   name: {{ include "discourse.postgresql.secretName" . }}
                   key: postgresql-password
-            {{- if (include "discourse.redis.usePassword" .) }}
+            {{- if (include "discourse.redis.auth.enabled" .) }}
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:

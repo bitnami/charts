@@ -908,14 +908,25 @@ externalDatabase:
 ##
 redis:
   enabled: true
+  ## Use password authentication
+  ##
+  auth:
+    enabled: true
+    ## Redis(TM) password (both master and slave)
+    ## Defaults to a random 10-character alphanumeric string if not set and auth.enabled is true.
+    ## It should always be set using the password value or in the existingSecret to avoid issues
+    ## with Airflow.
+    ## The password value is ignored if existingSecret is set
+    # password:
+    ##
+    ## Name of existing secret object containing the password
+    ##
+    existingSecret:
+
+  ##
   ## Cluster settings
   ##
-  cluster:
-    enabled: false
-  ## In case of redis.enabled = true, allow the usage of existing secrets for redis
-  ##
-  existingSecret:
-  # password: ""
+  architecture: standalone
 
 externalRedis:
   ## All of these values are only used when redis.enabled is set to false

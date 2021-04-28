@@ -724,27 +724,27 @@ The following tables list the configurable parameters of the Harbor chart and th
 
 ### Redis<sup>TM</sup> Parameters
 
-| Parameter                                 | Description                                                                                                | Default     |
-|-------------------------------------------|------------------------------------------------------------------------------------------------------------|-------------|
-| `redis.enabled`                           | If external redis is used, set it to `false`                                                               | `true`      |
-| `redis.nameOverride`                      | String to partially override common.names.fullname template with a string (will prepend the release name)  | `nil`       |
-| `redis.password`                          | Redis<sup>TM</sup> password                                                                                | `nil`       |
-| `redis.usePassword`                       | Use redis password                                                                                         | `false`     |
-| `redis.cluster.enabled`                   | Enable cluster redis                                                                                       | `false`     |
-| `redis.master.persistence.enabled`        | Enable persistence for master Redis<sup>TM</sup>                                                           | `true`      |
-| `redis.slave.persistence.enabled`         | Enable persistence for slave Redis<sup>TM</sup>                                                            | `true`      |
-| `externalRedis.host`                      | Host of the external redis                                                                                 | `localhost` |
-| `externalRedis.port`                      | Port of the external redis                                                                                 | `6379`      |
-| `externalRedis.sentinel.enabled`          | If external redis with sentinal is used, set it to `true`                                                  | `false`     |
-| `externalRedis.sentinel.masterSet`        | Name of sentinel masterSet if sentinel is used                                                             | `mymaster`  |
-| `externalRedis.sentinel.hosts`            | Sentinel hosts and ports in the format <host_sentinal1>:<port_sentinel1>,<host_sentinal2>:<port_sentinel2> | `nil`       |
-| `externalRedis.password`                  | Password for the external redis                                                                            | `nil`       |
-| `externalRedis.coreDatabaseIndex`         | Index for core database                                                                                    | `0`         |
-| `externalRedis.jobserviceDatabaseIndex`   | Index for jobservice database                                                                              | `1`         |
-| `externalRedis.registryDatabaseIndex`     | Index for registry database                                                                                | `2`         |
-| `externalRedis.chartmuseumDatabaseIndex`  | Index for chartmuseum database                                                                             | `3`         |
-| `externalRedis.clairAdapterDatabaseIndex` | Index for chartmuseum database                                                                             | `3`         |
-| `externalRedis.trivyAdapterDatabaseIndex` | Index for chartmuseum database                                                                             | `3`         |
+| Parameter                                 | Description                                                                                                | Default      |
+|-------------------------------------------|------------------------------------------------------------------------------------------------------------|--------------|
+| `redis.enabled`                           | If external redis is used, set it to `false`                                                               | `true`       |
+| `redis.nameOverride`                      | String to partially override common.names.fullname template with a string (will prepend the release name)  | `nil`        |
+| `redis.auth.password`                     | Redis<sup>TM</sup> password                                                                                | `nil`        |
+| `redis.auth.enabled`                      | Use redis password                                                                                         | `false`      |
+| `redis.architecture`                      | Redis<sup>TM</sup> architecture. Allowed values: `standalone` or `replication`                             | `standalone` |
+| `redis.master.persistence.enabled`        | Enable persistence for master Redis<sup>TM</sup>                                                           | `true`       |
+| `redis.replica.persistence.enabled`       | Enable persistence for replica Redis<sup>TM</sup>                                                          | `true`       |
+| `externalRedis.host`                      | Host of the external redis                                                                                 | `localhost`  |
+| `externalRedis.port`                      | Port of the external redis                                                                                 | `6379`       |
+| `externalRedis.sentinel.enabled`          | If external redis with sentinal is used, set it to `true`                                                  | `false`      |
+| `externalRedis.sentinel.masterSet`        | Name of sentinel masterSet if sentinel is used                                                             | `mymaster`   |
+| `externalRedis.sentinel.hosts`            | Sentinel hosts and ports in the format <host_sentinal1>:<port_sentinel1>,<host_sentinal2>:<port_sentinel2> | `nil`        |
+| `externalRedis.password`                  | Password for the external redis                                                                            | `nil`        |
+| `externalRedis.coreDatabaseIndex`         | Index for core database                                                                                    | `0`          |
+| `externalRedis.jobserviceDatabaseIndex`   | Index for jobservice database                                                                              | `1`          |
+| `externalRedis.registryDatabaseIndex`     | Index for registry database                                                                                | `2`          |
+| `externalRedis.chartmuseumDatabaseIndex`  | Index for chartmuseum database                                                                             | `3`          |
+| `externalRedis.clairAdapterDatabaseIndex` | Index for chartmuseum database                                                                             | `3`          |
+| `externalRedis.trivyAdapterDatabaseIndex` | Index for chartmuseum database                                                                             | `3`          |
 
 [resources]: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
 
@@ -874,6 +874,10 @@ Find more information about how to deal with common errors related to Bitnami’
 ## Upgrading
 
 > NOTE: In you are upgrading an installation that contains a high amount of data, it is recommended to disable the liveness/readiness probes as the migration can take a substantial amount of time.
+
+### To 10.0.0
+
+This major updates the Redis<sup>TM</sup> subchart to it newest major, 14.0.0, which contains breaking changes. For more information on this subchart's major and the steps needed to migrate your data from your previous release, please refer to [Redis<sup>TM</sup> upgrade notes.](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1400).
 
 ### To 9.7.0
 
