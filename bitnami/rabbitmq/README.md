@@ -191,12 +191,12 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `service.annotationsHeadless`      | Headless service annotations different from regular service                       | `{}` (evaluated as a template) |
 | `ingress.enabled`                  | Enable ingress resource for Management console                                    | `false`                        |
 | `ingress.path`                     | Path for the default host                                                         | `/`                            |
-| `ingress.certManager`              | Add annotations for cert-manager                                                  | `false`                        |
 | `ingress.hostname`                 | Default host for the ingress resource                                             | `rabbitmq.local`               |
 | `ingress.pathType`                 | Ingress path type                                                                 | `ImplementationSpecific`       |
 | `ingress.annotations`              | Ingress annotations                                                               | `[]`                           |
 | `ingress.tls`                      | Enable TLS configuration for the hostname defined at `ingress.hostname` parameter | `false`                        |
-| `ingress.existingSecret`           | Existing secret for the Ingress TLS certificate                                   | `nil`                          |
+| `ingress.certManager`              | Add annotations for cert-manager to generate a TLS secret for the ingress record  | `false`                        |
+| `ingress.selfSigned`               | Create a TLS secret for the ingress record using self-signed certificates         | `false`                        |
 | `ingress.extraHosts[0].name`       | Additional hostnames to be covered                                                | `nil`                          |
 | `ingress.extraHosts[0].path`       | Additional hostnames to be covered                                                | `nil`                          |
 | `ingress.extraTls[0].hosts[0]`     | TLS configuration for additional hostnames to be covered                          | `nil`                          |
