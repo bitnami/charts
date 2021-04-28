@@ -192,6 +192,8 @@ This version updates kube-state-metrics to its new major, 2.0.0. There have been
   - `.Values.namespace` -> `.Values.namespaces`
   - `.Values.collectors` -> `.Values.kubeResources`
 
+For more information, please refer to [kube-state-metrics 2 release notes](https://kubernetes.io/blog/2021/04/13/kube-state-metrics-v-2-0/).
+
 ### To 1.1.0
 
 This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
