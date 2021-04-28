@@ -722,7 +722,7 @@ pinnipedProxy:
   defaultPinnipedNamespace: pinniped-concierge
   defaultAuthenticatorType: JWTAuthenticator
   defaultAuthenticatorName: jwt-authenticator
-  ## The defaultPinnipedAPISuffix flag is not fully supported yet, 
+  ## The defaultPinnipedAPISuffix flag is not fully supported yet,
   ## please use the default value "pinniped.dev"
   defaultPinnipedAPISuffix: pinniped.dev
 
