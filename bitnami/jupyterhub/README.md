@@ -435,7 +435,7 @@ For more information, including how to provide a secret or a custom ConfigMap, r
 
 ### Restrict traffic using NetworkPolicies
 
-The Bitnami JupyterHub chart enables NetworkPolicies by default. These restrict the communication between the three main components: the Proxy, the Hub and the Single User instances. There are two elements that were left open on purpose:
+The Bitnami JupyterHub chart enables NetworkPolicies by default. This restricts the communication between the three main components: the Proxy, the Hub and the Single User instances. There are two elements that were left open on purpose:
 
 - Ingress access to the Proxy instance HTTP port: by default, it is open to any IP, as it is the entry point to the JupyterHub instance. This behavior can be changed by tweaking the `proxy.networkPolicy.extraIngress` value.
 - Hub egress access: As the Hub requires access to the Kubernetes API, the Hub can access to any IP by default (depending on the Kubernetes platform, the Service IP ranges can vary and so there is no easy way to detect the Kubernetes API internal IP). This behavior can be changed by tweaking the `hub.networkPolicy.extraEgress` value.
