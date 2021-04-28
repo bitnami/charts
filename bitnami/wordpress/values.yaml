@@ -131,6 +131,13 @@ existingWordPressConfigurationSecret:
 ## NOTE: useful if you deploy Memcached for caching database queries or you use an external cache server
 ##
 wordpressConfigureCache: false
+## @param apacheConfiguration The content for your custom httpd.conf file (experimental feature)
+##
+apacheConfiguration:
+## @param existingApacheConfigurationConfigMap The name of an existing secret with your custom wp-config.php file (experimental feature)
+## NOTE: When it's set the `apacheConfiguration` parameter is ignored
+##
+existingApacheConfigurationConfigMap:
 ## @param customPostInitScripts Custom post-init.d user scripts
 ## ref: https://github.com/bitnami/bitnami-docker-wordpress/tree/master/5/debian-10/rootfs/post-init.d
 ## NOTE: supported formats are `.sh`, `.sql` or `.php`
