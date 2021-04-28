@@ -221,7 +221,7 @@ spec:
               mountPath: /opt/bitnami/wordpress/wp-config.php
               subPath: wp-config.php
             {{- end }}
-            {{- if and .Values.allowOverrideNone .Values.customHTAccessCM }}
+            {{- if and (not .Values.allowOverrideNone) .Values.customHTAccessCM }}
             - mountPath: /htaccess
               name: custom-htaccess
             {{- end }}
@@ -269,7 +269,7 @@ spec:
             secretName: {{ include "wordpress.configSecretName" . }}
             defaultMode: 0644
         {{- end }}
-        {{- if and .Values.allowOverrideNone .Values.customHTAccessCM }}
+        {{- if and (not .Values.allowOverrideNone) .Values.customHTAccessCM }}
         - name: custom-htaccess
           configMap:
             name: {{ template "wordpress.customHTAccessCM" . }}
