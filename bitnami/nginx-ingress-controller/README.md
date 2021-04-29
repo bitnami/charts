@@ -212,7 +212,7 @@ The following tables lists the configurable parameters of the Nginx Ingress Cont
 | `serviceAccount.create`      | Enable the creation of a ServiceAccount for Controller pods | `true`                                               |
 | `serviceAccount.name`        | Name of the created ServiceAccount                          | Generated using the `common.names.fullname` template |
 | `serviceAccount.annotations` | Annotations for service account.                            | `{}`                                                 |
-| `rbac.create`                | Weather to create & use RBAC resources or not               | `false`                                              |
+| `rbac.create`                | Whether to create & use RBAC resources or not               | `false`                                              |
 
 ### Other parameters
 

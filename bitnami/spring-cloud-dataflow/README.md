@@ -238,7 +238,7 @@ The following tables lists the configurable parameters of the Spring Cloud Data 
 |-------------------------|-------------------------------------------------------------------------------------|------------------------------------------------------|
 | `serviceAccount.create` | Enable the creation of a ServiceAccount for Dataflow server and Skipper server pods | `true`                                               |
 | `serviceAccount.name`   | Name of the created serviceAccount                                                  | Generated using the `common.names.fullname` template |
-| `rbac.create`           | Weather to create & use RBAC resources or not                                       | `true`                                               |
+| `rbac.create`           | Whether to create & use RBAC resources or not                                       | `true`                                               |
 
 ### Metrics parameters
 
