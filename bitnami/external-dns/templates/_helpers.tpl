@@ -737,7 +737,7 @@ external-dns: scaleway.scwDefaultOrganizationId
 {{- end -}}
 {{- end -}}
 
-{/*
+{{/*
 Return the ExternalDNS service account name
 */}}
 {{- define "external-dns.serviceAccountName" -}}
