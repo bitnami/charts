@@ -1329,6 +1329,14 @@ alertmanager:
   ##
   portName: web
 
+  ## AlertmanagerConfigs to be selected for to merge and configure Alertmanager with. This defaults to {}
+  ##
+  configNamespaceSelector: {}
+
+  ## Namespaces to be selected for AlertmanagerConfig discovery. If nil, only check own namespace. This defaults to {}
+  ##
+  configSelector: {}
+
 ## Exporters
 ##
 exporters:
