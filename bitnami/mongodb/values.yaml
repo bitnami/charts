@@ -147,6 +147,11 @@ disableSystemLog: false
 ##
 disableJavascript: false
 
+## MongoDB(R) Journaling
+## ref: https://docs.mongodb.com/manual/reference/configuration-options/#mongodb-setting-storage.journal.enabled
+##
+enableJournal: true
+
 ## MongoDB(R) configuration file for Primary and Secondary nodes. For documentation of all options, see:
 ##   http://docs.mongodb.org/manual/reference/configuration-options/
 ## Example:
