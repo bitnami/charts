@@ -252,6 +252,7 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `metrics.serviceMonitor.namespace`        | Namespace which Prometheus is running in                                               | `monitoring`                                                 |
 | `metrics.serviceMonitor.interval`         | Interval at which metrics should be scraped                                            | `30s`                                                        |
 | `metrics.serviceMonitor.scrapeTimeout`    | Specify the timeout after which the scrape is ended                                    | `nil`                                                        |
+| `metrics.serviceMonitor.path`             | define the path used by ServiceMonitor to scrap metrics                                | `nil`                                                        |
 | `metrics.serviceMonitor.relabellings`     | Specify Metric Relabellings to add to the scrape endpoint                              | `nil`                                                        |
 | `metrics.serviceMonitor.honorLabels`      | honorLabels chooses the metric's labels on collisions with target labels.              | `false`                                                      |
 | `metrics.serviceMonitor.targetLabels`     | Used to keep given service's labels in  target                                         | `[]`                                                         |

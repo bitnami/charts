@@ -863,6 +863,9 @@ metrics:
     ## Used to keep given service's labels in target
     podTargetLabels:
     # - app.kubernetes.io/name
+    ## define the path used by ServiceMonitor to scrap metrics
+    ## could be /metrics for aggragated metrics or /metrics/per-object for more details
+    # path: /metrics
 
   ## Custom PrometheusRule to be defined
   ## The value is evaluated as a template, so, for example, the value can depend on .Release or .Chart

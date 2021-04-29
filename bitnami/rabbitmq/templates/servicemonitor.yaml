@@ -27,6 +27,9 @@ spec:
       {{- if .Values.metrics.serviceMonitor.relabellings }}
       metricRelabelings: {{- toYaml .Values.metrics.serviceMonitor.relabellings | nindent 6 }}
       {{- end }}
+      {{- if .Values.metrics.serviceMonitor.path }}
+      path: {{ .Values.metrics.serviceMonitor.path }}
+      {{- end }}
   namespaceSelector:
     matchNames:
       - {{ .Release.Namespace | quote }}
