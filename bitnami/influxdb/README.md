@@ -73,7 +73,7 @@ The following tables lists the configurable parameters of the InfluxDB<sup>TM</s
 | `persistence.enabled`         | Enable data persistence                                                                               | `true`                         |
 | `persistence.existingClaim`   | Use a existing PVC which must be created manually before bound                                        | `nil`                          |
 | `persistence.storageClass`    | Specify the `storageClass` used to provision the volume                                               | `nil`                          |
-| `persistence.accessMode`      | Access mode of data volume                                                                            | `ReadWriteOnce`                |
+| `persistence.accessModes`     | Access mode of data volume                                                                            | `["ReadWriteOnce"]`            |
 | `persistence.size`            | Size of data volume                                                                                   | `8Gi`                          |
 
 ### InfluxDB<sup>TM</sup> parameters
