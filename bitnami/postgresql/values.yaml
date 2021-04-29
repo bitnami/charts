@@ -375,6 +375,8 @@ shmVolume:
   ##
   chmod:
     enabled: true
+  ## Set this to enable a size limit on the shm tmpfs. Note that the size of the tmpfs counts against container's memory limit
+  # sizeLimit: 1Gi
 
 ## PostgreSQL data Persistent Volume Storage Class
 ## If defined, storageClassName: <storageClass>
