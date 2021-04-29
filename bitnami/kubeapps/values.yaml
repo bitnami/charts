@@ -144,7 +144,7 @@ frontend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.19.8-debian-10-r14
+    tag: 1.19.10-debian-10-r11
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -246,7 +246,7 @@ apprepository:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-apprepository-controller
-    tag: 2.3.1-scratch-r0
+    tag: 2.3.2-scratch-r0
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -258,7 +258,7 @@ apprepository:
   syncImage:
     registry: docker.io
     repository: bitnami/kubeapps-asset-syncer
-    tag: 2.3.1-scratch-r0
+    tag: 2.3.2-scratch-r0
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -335,7 +335,7 @@ hooks:
   image:
     registry: docker.io
     repository: bitnami/kubectl
-    tag: 1.19.9-debian-10-r7
+    tag: 1.19.10-debian-10-r9
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -363,7 +363,7 @@ kubeops:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-kubeops
-    tag: 2.3.1-scratch-r0
+    tag: 2.3.2-scratch-r0
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -428,7 +428,7 @@ assetsvc:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-assetsvc
-    tag: 2.3.1-scratch-r0
+    tag: 2.3.2-scratch-r0
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -496,7 +496,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-dashboard
-    tag: 2.3.1-debian-10-r7
+    tag: 2.3.2-debian-10-r0
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -620,7 +620,7 @@ securityContext:
 testImage:
   registry: docker.io
   repository: bitnami/nginx
-  tag: 1.19.8-debian-10-r14
+  tag: 1.19.10-debian-10-r11
 
 # Auth Proxy configuration for OIDC support
 # ref: https://github.com/kubeapps/kubeapps/blob/master/docs/user/using-an-OIDC-provider.md
@@ -652,7 +652,7 @@ authProxy:
   image:
     registry: docker.io
     repository: bitnami/oauth2-proxy
-    tag: 7.1.0-debian-10-r0
+    tag: 7.1.2-debian-10-r22
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -709,7 +709,7 @@ pinnipedProxy:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-pinniped-proxy
-    tag: 2.3.1-debian-10-r7
+    tag: 2.3.2-debian-10-r0
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
