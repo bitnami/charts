@@ -76,6 +76,10 @@ commonAnnotations: {}
 ##
 commonLabels: {}
 
+## Use a daemonset instead of a deployment
+##
+useDaemonset: false
+
 kong:
   ## Command and args for running the container (set to default if not set). Use array form
   ##
