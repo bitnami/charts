@@ -37,6 +37,9 @@ enableIPv6: false
 #   serviceToken: ...
 clusters:
   - name: default
+    # isKubeappsCluster is an optional parameter that allows defining the cluster in which Kubeapps is installed;
+    # this param is useful when every cluster is using an apiServiceURL (e.g., when using the Pinniped Impersonation Proxy) as the chart cannot infer the cluster on which Kubeapps is installed in that case.
+    # isKubeappsCluster: true
 
 ## Force target Kubernetes version (using Helm capabilites if not set)
 ##
@@ -404,6 +407,13 @@ kubeops:
   ## Used when requesting namespaces
   # QPS: 10
   # burst: 15
+  ## Kubeops additional header parameters for trusted namespaces.
+  ## - namespaceHeaderName -  header field name, it can be injected by autorization proxy.
+  ## - namespaceHeaderPattern - regular expression that matches only single item from the header list.
+  ##     The first capturing group must match the namespace.
+  ## example: X-Consumer-Groups: namespace:ns1:read, namespace:ns2:write
+  # namespaceHeaderName: X-Consumer-Groups
+  # namespaceHeaderPattern: namespace:^([\w-]+):\w+$
 
 ## Assetsvc is used to serve assets metadata over a REST API.
 ##
@@ -712,7 +722,7 @@ pinnipedProxy:
   defaultPinnipedNamespace: pinniped-concierge
   defaultAuthenticatorType: JWTAuthenticator
   defaultAuthenticatorName: jwt-authenticator
-  ## The defaultPinnipedAPISuffix flag is not fully supported yet, 
+  ## The defaultPinnipedAPISuffix flag is not fully supported yet,
   ## please use the default value "pinniped.dev"
   defaultPinnipedAPISuffix: pinniped.dev
 
