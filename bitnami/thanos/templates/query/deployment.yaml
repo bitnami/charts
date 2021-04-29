@@ -61,6 +61,9 @@ spec:
         fsGroup: {{ $query.securityContext.fsGroup }}
       {{- end }}
       containers:
+        {{- if $query.extraContainers }}
+      {{ toYaml $query.extraContainers | nindent 8 }}
+        {{- end }}         
         - name: query
           image: {{ include "thanos.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}

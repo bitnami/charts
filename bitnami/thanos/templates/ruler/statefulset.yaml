@@ -76,6 +76,9 @@ spec:
               mountPath: /data
       {{- end }}
       containers:
+        {{- if .Values.ruler.extraContainers }}
+      {{ toYaml .Values.ruler.extraContainers | nindent 8 }}
+        {{- end }}         
         - name: ruler
           image: {{ include "thanos.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
