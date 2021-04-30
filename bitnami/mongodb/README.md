@@ -105,6 +105,7 @@ The following tables lists the configurable parameters of the MongoDB&reg; chart
 | `systemLogVerbosity`     | MongoDB&reg; system log verbosity level                                                                                       | `0`                                            |
 | `disableSystemLog`       | Switch to enable/disable MongoDB&reg; system log                                                                              | `false`                                        |
 | `disableJavascript`      | Switch to enable/disable MongoDB&reg; server-side JavaScript execution                                                        | `false`                                        |
+| `enableJournal`          | Switch to enable/disable MongoDB&reg; Journaling                                                                              | `true`                                         |
 | `configuration`          | MongoDB&reg; configuration file to be used                                                                                    | `{}`                                           |
 | `existingConfigmap`      | Name of existing ConfigMap with MongoDB&reg; configuration                                                                    | `nil`                                          |
 | `initdbScripts`          | Dictionary of initdb scripts                                                                                                  | `nil`                                          |
