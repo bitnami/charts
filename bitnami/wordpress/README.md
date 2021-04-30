@@ -139,7 +139,7 @@ The following table lists the configurable parameters of the WordPress chart and
 | `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set                                  | `[]`            |
 | `affinity`                              | Affinity for pod assignment                                                               | `{}`            |
 | `nodeSelector`                          | Node labels for pod assignment                                                            | `{}`            |
-| `tolerations`                           | Tolerations for pod assignment                                                            | `{}`            |
+| `tolerations`                           | Tolerations for pod assignment                                                            | `[]`            |
 | `resources.limits`                      | The resources limits for the WordPress container                                          | `{}`            |
 | `resources.requests`                    | The requested resources for the WordPress container                                       | `{}`            |
 | `containerPorts.http`                   | WordPress HTTP container port                                                             | `8080`          |
