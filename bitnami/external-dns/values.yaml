@@ -334,6 +334,14 @@ ovh:
   applicationKey: ""
   applicationSecret: ""
 
+  ## Use an existing secret with following keys:
+  ##  - ovh_consumer_key
+  ##  - ovh_application_key
+  ##  - ovh_application_secret
+  ## This ignores consumerKey, applicationKey & applicationSecret
+  ##
+  # secretName:
+
 ## Scaleway configuration to be set via arguments/env. variables
 ##
 scaleway:

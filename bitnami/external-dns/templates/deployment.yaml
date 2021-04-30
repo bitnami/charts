@@ -383,21 +383,21 @@ spec:
             {{- end }}
             {{- if eq .Values.provider "ovh" }}
             # OVH environment variables
-            {{- if .Values.ovh.consumerKey }}
+            {{- if or (.Values.ovh.consumerKey) (.Values.ovh.secretName) }}
             - name: OVH_CONSUMER_KEY
               valueFrom:
                 secretKeyRef:
                   name: {{ template "external-dns.secretName" . }}
                   key: ovh_consumer_key
             {{- end }}
-            {{- if .Values.ovh.applicationKey }}
+            {{- if or (.Values.ovh.applicationKey) (.Values.ovh.secretName) }}
             - name: OVH_APPLICATION_KEY
               valueFrom:
                 secretKeyRef:
                   name: {{ template "external-dns.secretName" . }}
                   key: ovh_application_key
             {{- end }}
-            {{- if .Values.ovh.applicationSecret }}
+            {{- if or (.Values.ovh.applicationSecret) (.Values.ovh.secretName) }}
             - name: OVH_APPLICATION_SECRET
               valueFrom:
                 secretKeyRef:
