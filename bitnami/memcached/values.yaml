@@ -92,6 +92,20 @@ arguments:
 ##
 extraEnv: []
 
+## Pod disruption budget configuration
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions/
+##
+podDisruptionBudget:
+  ## Specifies whether a Pod disruption budget should be created
+  ##
+  create: false
+  ## Minimum number of pods that need to be available
+  ##
+  # minAvailable: 1
+  ## Maximum number of pods that can be unavailable.
+  ##
+  maxUnavailable: 1
+
 ## Service parameters
 ##
 ##
