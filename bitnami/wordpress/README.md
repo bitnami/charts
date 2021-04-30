@@ -99,6 +99,8 @@ The following table lists the configurable parameters of the WordPress chart and
 | `wordpressConfiguration`               | The content for your custom wp-config.php file (experimental feature)                     | `nil`              |
 | `existingWordPressConfigurationSecret` | The name of an existing secret with your custom wp-config.php file (experimental feature) | `nil`              |
 | `wordpressConfigureCache`              | Enable W3 Total Cache plugin and configure cache settings                                 | `false`            |
+| `wordpressAutoUpdateLevel`             | Level of auto-updates to allow. Allowed values: `major`, `minor` or `none`.               | `none`             |
+| `wordpressPlugins`                     | Plugins to install and activate, comma-separated. Can also be set to `all` or `none`.     | `none`             |
 | `customPostInitScripts`                | Custom post-init.d user scripts                                                           | `{}`               |
 | `smtpHost`                             | SMTP server host                                                                          | `""`               |
 | `smtpPort`                             | SMTP server port                                                                          | `""`               |
@@ -115,6 +117,15 @@ The following table lists the configurable parameters of the WordPress chart and
 | `extraEnvVars`                         | Array with extra environment variables to add to the WordPress container                  | `[]`               |
 | `extraEnvVarsCM`                       | Name of existing ConfigMap containing extra env vars                                      | `nil`              |
 | `extraEnvVarsSecret`                   | Name of existing Secret containing extra env vars                                         | `nil`              |
+
+### WordPress Multisite Configuration parameters
+
+| Name                            | Description                                                                                                                        | Value              |
+| ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
+| `multisite.enable`              | Whether to enable WordPress Multisite configuration.                                                                               | `false`            |
+| `multisite.host`                | WordPress Multisite hostname/address. This value is mandatory when enabling Multisite mode.                                        | `""`               |
+| `multisite.networkType`         | WordPress Multisite network type to enable. Allowed values: `subfolder`, `subdirectory` or `subdomain`.                            | `subdomain`        |
+| `multisite.enableXipIoRedirect` | Whether to enable IP address redirection to xip.io wildcard DNS. Useful when running on an IP address with subdomain network type. | `false`            |
 
 ### WordPress deployment parameters
 
@@ -399,7 +410,25 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
+## Notable changes
+
+### 11.0.0
+
+The [Bitnami WordPress](https://github.com/bitnami/bitnami-docker-wordpress) image was refactored and now the source code is published in GitHub in the [`rootfs`](https://github.com/bitnami/bitnami-docker-wordpress/tree/master/5/debian-10/rootfs) folder of the container image.
+
+In addition, several new features have been implemented:
+
+- Multisite mode is now supported via `multisite.*` options.
+- Plugins can be installed and activated on the first deployment via the `wordpressPlugins` option.
+- Added support for limiting auto-updates to WordPress core via the `wordpressAutoUpdateLevel` option. In addition, auto-updates have been disabled by default. To update WordPress core, we recommend to swap the container image version for your deployment instead of using the built-in update functionality.
+
 ## Upgrading
+
+### To 11.0.0
+
+The [Bitnami WordPress](https://github.com/bitnami/bitnami-docker-wordpress) image was refactored and now the source code is published in GitHub in the [`rootfs`](https://github.com/bitnami/bitnami-docker-wordpress/tree/master/5/debian-10/rootfs) folder of the container image.
+
+Compatibility is not guaranteed due to the amount of involved changes, however no breaking changes are expected.
 
 ### To 10.0.0
 

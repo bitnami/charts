@@ -131,6 +131,13 @@ existingWordPressConfigurationSecret:
 ## NOTE: useful if you deploy Memcached for caching database queries or you use an external cache server
 ##
 wordpressConfigureCache: false
+## @param wordpressAutoUpdateLevel Level of auto-updates to allow. Allowed values: `major`, `minor` or `none`.
+##
+wordpressAutoUpdateLevel: none
+## @param wordpressPlugins Plugins to install and activate, comma-separated. Can also be set to `all` or `none`.
+## NOTE: If set to all, only plugins that are already installed will be activated, and if set to none, no plugins will be activated
+##
+wordpressPlugins: none
 ## @param customPostInitScripts Custom post-init.d user scripts
 ## ref: https://github.com/bitnami/bitnami-docker-wordpress/tree/master/5/debian-10/rootfs/post-init.d
 ## NOTE: supported formats are `.sh`, `.sql` or `.php`
@@ -202,6 +209,20 @@ extraEnvVarsCM:
 ## @param extraEnvVarsSecret Name of existing Secret containing extra env vars
 ##
 extraEnvVarsSecret:
+
+## @section WordPress Multisite Configuration parameters
+## ref: https://github.com/bitnami/bitnami-docker-wordpress#multisite-configuration
+
+## @param multisite.enable Whether to enable WordPress Multisite configuration.
+## @param multisite.host WordPress Multisite hostname/address. This value is mandatory when enabling Multisite mode.
+## @param multisite.networkType WordPress Multisite network type to enable. Allowed values: `subfolder`, `subdirectory` or `subdomain`.
+## @param Whether to enable IP address redirection to xip.io wildcard DNS. Useful when running on an IP address with subdomain network type.
+##
+multisite:
+  enable: false
+  host: ""
+  networkType: subdomain
+  enableXipIoRedirect: false
 
 ## @section WordPress deployment parameters
 
