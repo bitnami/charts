@@ -35,3 +35,4 @@ sources:
   - https://github.com/bitnami/bitnami-docker-kong
   - https://konghq.com/
 version: 3.6.0
+
