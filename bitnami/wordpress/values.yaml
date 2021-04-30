@@ -107,7 +107,7 @@ wordpressTablePrefix: wp_
 ##
 wordpressScheme: http
 ## @param wordpressSkipInstall Skip wizard installation
-## NOTE: useful if you use an external database that already contains WordPress data)
+## NOTE: useful if you use an external database that already contains WordPress data
 ## ref: https://github.com/bitnami/bitnami-docker-wordpress#connect-wordpress-docker-container-to-an-existing-database
 ##
 wordpressSkipInstall: false
