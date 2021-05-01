@@ -335,6 +335,12 @@ service:
   ##
   type: ClusterIP
 
+  ## clusterIP for the service (optional)
+  ## This is the internal IP address of the service and is usually assigned randomly.
+  ## ref: https://kubernetes.io/docs/reference/kubernetes-api/service-resources/service-v1/#ServiceSpec
+  ##
+  clusterIP:
+
   ## externalTrafficPolicy for the service
   ## default to "Cluster"
   ## set to "Local" in order to preserve the client source IP (only on service of type LoadBalancer or NodePort)
@@ -367,7 +373,7 @@ service:
   # adminHttpNodePort:
   # adminHttpsNodePort:
 
-  ## loadBalancerIP for the PrestaShop Service (optional, cloud specific)
+  ## loadBalancerIP for the Kong Service (optional, cloud specific)
   ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
   ##
   loadBalancerIP:
