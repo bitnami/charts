@@ -499,6 +499,9 @@ spec:
             {{- if .Values.persistence.volumeClaimTemplates.requests }}
             {{- include "common.tplvalues.render" (dict "value" .Values.persistence.volumeClaimTemplates.requests "context" $) | nindent 12 }}
             {{- end }}
+        {{- if .Values.persistence.volumeClaimTemplates.dataSource }}
+        dataSource: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.volumeClaimTemplates.dataSource "context" $) | nindent 10 }}
+        {{- end }}
         {{- if .Values.persistence.volumeClaimTemplates.selector }}
         selector: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.volumeClaimTemplates.selector "context" $) | nindent 10 }}
         {{- end }}
