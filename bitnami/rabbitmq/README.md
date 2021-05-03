@@ -226,7 +226,7 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 |-------------------------|-----------------------------------------------------|--------------------------------------------------|
 | `serviceAccount.create` | Enable creation of ServiceAccount for RabbitMQ pods | `true`                                           |
 | `serviceAccount.name`   | Name of the created serviceAccount                  | Generated using the `rabbitmq.fullname` template |
-| `rbac.create`           | Weather to create & use RBAC resources or not       | `true`                                           |
+| `rbac.create`           | Whether to create & use RBAC resources or not       | `true`                                           |
 
 ### Volume Permissions parameters
 

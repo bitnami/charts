@@ -142,7 +142,7 @@ Return true if a secret object should be created
     {{- true -}}
 {{- else if and (eq .Values.provider "transip") .Values.transip.apiKey -}}
     {{- true -}}
-{{- else if and (eq .Values.provider "ovh") .Values.ovh.consumerKey -}}
+{{- else if and (eq .Values.provider "ovh") .Values.ovh.consumerKey (not .Values.ovh.secretName) -}}
     {{- true -}}
 {{- else if and (eq .Values.provider "scaleway") .Values.scaleway.scwAccessKey -}}
     {{- true -}}
@@ -172,6 +172,8 @@ Return the name of the Secret used to store the passwords
 {{- .Values.hetzner.secretName -}}
 {{- else if and (eq .Values.provider "linode") .Values.linode.secretName }}
 {{- .Values.linode.secretName }}
+{{- else if and (eq .Values.provider "ovh") .Values.ovh.secretName }}
+{{- .Values.ovh.secretName }}
 {{- else if and (eq .Values.provider "pdns") .Values.pdns.secretName }}
 {{- .Values.pdns.secretName }}
 {{- else if and (eq .Values.provider "infoblox") .Values.infoblox.secretName }}
@@ -670,7 +672,7 @@ Validate values of External DNS:
 - must provide the OVH consumer key when provider is "ovh"
 */}}
 {{- define "external-dns.validateValues.ovh.consumerKey" -}}
-{{- if and (eq .Values.provider "ovh") (not .Values.ovh.consumerKey) -}}
+{{- if and (eq .Values.provider "ovh") (not .Values.ovh.consumerKey) (not .Values.ovh.secretName) -}}
 external-dns: ovh.consumerKey
     You must provide the OVH consumer key when provider="ovh".
     Please set the consumerKey parameter (--set ovh.consumerKey="xxxx")
@@ -682,7 +684,7 @@ Validate values of External DNS:
 - must provide the OVH application key when provider is "ovh"
 */}}
 {{- define "external-dns.validateValues.ovh.applicationKey" -}}
-{{- if and (eq .Values.provider "ovh") (not .Values.ovh.applicationKey) -}}
+{{- if and (eq .Values.provider "ovh") (not .Values.ovh.applicationKey) (not .Values.ovh.secretName) -}}
 external-dns: ovh.applicationKey
     You must provide the OVH appliciation key when provider="ovh".
     Please set the applicationKey parameter (--set ovh.applicationKey="xxxx")
@@ -694,7 +696,7 @@ Validate values of External DNS:
 - must provide the OVH application secret when provider is "ovh"
 */}}
 {{- define "external-dns.validateValues.ovh.applicationSecret" -}}
-{{- if and (eq .Values.provider "ovh") (not .Values.ovh.applicationSecret) -}}
+{{- if and (eq .Values.provider "ovh") (not .Values.ovh.applicationSecret) (not .Values.ovh.secretName) -}}
 external-dns: ovh.applicationSecret
     You must provide the OVH appliciation secret key when provider="ovh".
     Please set the applicationSecret parameter (--set ovh.applicationSecret="xxxx")
@@ -737,7 +739,7 @@ external-dns: scaleway.scwDefaultOrganizationId
 {{- end -}}
 {{- end -}}
 
-{/*
+{{/*
 Return the ExternalDNS service account name
 */}}
 {{- define "external-dns.serviceAccountName" -}}

@@ -82,6 +82,9 @@ The following tables lists the configurable parameters of the Memcached chart an
 | `hostAliases`                            | Add deployment host aliases                                                               | `[]`                                                         |
 | `memcachedUsername`                      | Memcached admin user                                                                      | `nil`                                                        |
 | `memcachedPassword`                      | Memcached admin password                                                                  | `nil`                                                        |
+| `podDisruptionBudget.create`             | Whether to create a pod disruption budget                                                 | `false`                                                      |
+| `podDisruptionBudget.minAvailable`       | Minimum number of pods that need to be available                                          | `nil`                                                        |
+| `podDisruptionBudget.maxUnavailable`     | Maximum number of pods that can be unavailable                                            | `1`                                                          |
 | `service.type`                           | Kubernetes service type for Memcached                                                     | `ClusterIP`                                                  |
 | `service.port`                           | Memcached service port                                                                    | `11211`                                                      |
 | `service.clusterIP`                      | Specific cluster IP when service type is cluster IP. Use `None` for headless service      | `nil`                                                        |
@@ -126,6 +129,13 @@ The following tables lists the configurable parameters of the Memcached chart an
 | `metrics.service.type`                   | Kubernetes service type for Prometheus metrics                                            | `ClusterIP`                                                  |
 | `metrics.service.port`                   | Prometheus metrics service port                                                           | `9150`                                                       |
 | `metrics.service.annotations`            | Prometheus exporter svc annotations                                                       | `{prometheus.io/scrape: "true", prometheus.io/port: "9150"}` |
+| `metrics.serviceMonitor.enabled`         | Create ServiceMonitor resource(s) for scraping metrics using PrometheusOperator           | `false`                                                      |
+| `metrics.serviceMonitor.namespace`       | The namespace in which the ServiceMonitor will be created                                 | `nil`                                                        |
+| `metrics.serviceMonitor.interval`        | The interval at which metrics should be scraped                                           | `nil`                                                        |
+| `metrics.serviceMonitor.scrapeTimeout`   | The timeout after which the scrape is ended                                               | `nil`                                                        |
+| `metrics.serviceMonitor.selector`        | Additional labels for ServiceMonitor resource                                             | `nil`                                                        |
+| `metrics.serviceMonitor.metricRelabelings` | Metrics relabelings to add to the scrape endpoint, applied before ingestion             | `nil`                                                        |
+| `metrics.serviceMonitor.relabelings`     | Metrics relabelings to add to the scrape endpoint, applied before scraping                | `nil`                                                        |
 
 The above parameters map to the env variables defined in [bitnami/memcached](http://github.com/bitnami/bitnami-docker-memcached). For more information please refer to the [bitnami/memcached](http://github.com/bitnami/bitnami-docker-memcached) image documentation.
 

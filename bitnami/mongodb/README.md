@@ -105,6 +105,7 @@ The following tables lists the configurable parameters of the MongoDB&reg; chart
 | `systemLogVerbosity`     | MongoDB&reg; system log verbosity level                                                                                       | `0`                                            |
 | `disableSystemLog`       | Switch to enable/disable MongoDB&reg; system log                                                                              | `false`                                        |
 | `disableJavascript`      | Switch to enable/disable MongoDB&reg; server-side JavaScript execution                                                        | `false`                                        |
+| `enableJournal`          | Switch to enable/disable MongoDB&reg; Journaling                                                                              | `true`                                         |
 | `configuration`          | MongoDB&reg; configuration file to be used                                                                                    | `{}`                                           |
 | `existingConfigmap`      | Name of existing ConfigMap with MongoDB&reg; configuration                                                                    | `nil`                                          |
 | `initdbScripts`          | Dictionary of initdb scripts                                                                                                  | `nil`                                          |
@@ -222,7 +223,7 @@ The following tables lists the configurable parameters of the MongoDB&reg; chart
 | `serviceAccount.create`                      | Enable creation of ServiceAccount for MongoDB&reg; pods                                              | `true`                                          |
 | `serviceAccount.name`                        | Name of the created serviceAccount                                                                   | Generated using the `mongodb.fullname` template |
 | `serviceAccount.annotations`                 | Additional Service Account annotations                                                               | `{}`                                            |
-| `rbac.create`                                | Weather to create & use RBAC resources or not                                                        | `false`                                         |
+| `rbac.create`                                | Whether to create & use RBAC resources or not                                                        | `false`                                         |
 | `podSecurityPolicy.create`                   | Whether to create & use PSP resource or not (Note: `rbac.create` needs to be `true`)                 | `false`                                         |
 | `podSecurityPolicy.allowPrivilegeEscalation` | Enable privilege escalation                                                                          | `false`                                         |
 | `podSecurityPolicy.privileged`               | Allow privileged                                                                                     | `false`                                         |

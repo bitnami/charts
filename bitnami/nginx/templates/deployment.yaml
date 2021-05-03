@@ -59,12 +59,19 @@ spec:
         - name: git-clone-repository
           image: {{ include "nginx.cloneStaticSiteFromGit.image" . }}
           imagePullPolicy: {{ .Values.cloneStaticSiteFromGit.image.pullPolicy | quote }}
+          {{- if .Values.cloneStaticSiteFromGit.gitClone.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.cloneStaticSiteFromGit.gitClone.command "context" $) | nindent 12 }}
+          {{- else}}
           command:
             - /bin/bash
             - -ec
             - |
               [[ -f "/opt/bitnami/scripts/git/entrypoint.sh" ]] && source "/opt/bitnami/scripts/git/entrypoint.sh"
               git clone {{ .Values.cloneStaticSiteFromGit.repository }} --branch {{ .Values.cloneStaticSiteFromGit.branch }} /app
+          {{- end}}
+          {{- if .Values.cloneStaticSiteFromGit.gitClone.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.cloneStaticSiteFromGit.gitClone.args "context" $) | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: staticsite
               mountPath: /app
@@ -79,6 +86,9 @@ spec:
         - name: git-repo-syncer
           image: {{ include "nginx.cloneStaticSiteFromGit.image" . }}
           imagePullPolicy: {{ .Values.cloneStaticSiteFromGit.image.pullPolicy | quote }}
+          {{- if .Values.cloneStaticSiteFromGit.gitSync.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.cloneStaticSiteFromGit.gitSync.command "context" $) | nindent 12 }}
+          {{- else}}
           command:
             - /bin/bash
             - -ec
@@ -88,6 +98,10 @@ spec:
                   cd /app && git pull origin {{ .Values.cloneStaticSiteFromGit.branch }}
                   sleep {{ .Values.cloneStaticSiteFromGit.interval }}
               done
+          {{- end}}
+          {{- if .Values.cloneStaticSiteFromGit.gitSync.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.cloneStaticSiteFromGit.gitSync.args "context" $) | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: staticsite
               mountPath: /app
