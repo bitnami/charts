@@ -117,6 +117,24 @@ cloneStaticSiteFromGit:
   ## Interval for sidecar container pull from the repository
   ##
   interval: 60
+  ## Additional configuration for git-clone-repository initContainer
+  ##
+  gitClone:
+    ## Override container command
+    ##
+    command: []
+    ## Override container args
+    ##
+    args:
+  ## Additional configuration for the git-repo-syncer container
+  ##
+  gitSync:
+    ## Override container command
+    ##
+    command: []
+    ## Override container args
+    ##
+    args: []
 
   ## Additional environment variables to set for the in the containers that clone static site from git
   ## E.g:
