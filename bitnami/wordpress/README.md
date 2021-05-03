@@ -125,7 +125,7 @@ The following table lists the configurable parameters of the WordPress chart and
 | `multisite.enable`              | Whether to enable WordPress Multisite configuration.                                                                               | `false`            |
 | `multisite.host`                | WordPress Multisite hostname/address. This value is mandatory when enabling Multisite mode.                                        | `""`               |
 | `multisite.networkType`         | WordPress Multisite network type to enable. Allowed values: `subfolder`, `subdirectory` or `subdomain`.                            | `subdomain`        |
-| `multisite.enableXipIoRedirect` | Whether to enable IP address redirection to xip.io wildcard DNS. Useful when running on an IP address with subdomain network type. | `false`            |
+| `multisite.enableNipIoRedirect` | Whether to enable IP address redirection to nip.io wildcard DNS. Useful when running on an IP address with subdomain network type. | `false`            |
 
 ### WordPress deployment parameters
 

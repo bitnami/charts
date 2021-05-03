@@ -216,13 +216,13 @@ extraEnvVarsSecret:
 ## @param multisite.enable Whether to enable WordPress Multisite configuration.
 ## @param multisite.host WordPress Multisite hostname/address. This value is mandatory when enabling Multisite mode.
 ## @param multisite.networkType WordPress Multisite network type to enable. Allowed values: `subfolder`, `subdirectory` or `subdomain`.
-## @param multisite.enableXipIoRedirect Whether to enable IP address redirection to xip.io wildcard DNS. Useful when running on an IP address with subdomain network type.
+## @param multisite.enableNipIoRedirect Whether to enable IP address redirection to nip.io wildcard DNS. Useful when running on an IP address with subdomain network type.
 ##
 multisite:
   enable: false
   host: ""
   networkType: subdomain
-  enableXipIoRedirect: false
+  enableNipIoRedirect: false
 
 ## @section WordPress deployment parameters
 

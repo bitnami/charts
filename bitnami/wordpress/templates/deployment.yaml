@@ -172,8 +172,8 @@ spec:
               value: {{ .Values.service.httpsPort | quote }}
             - name: WORDPRESS_MULTISITE_NETWORK_TYPE
               value: {{ .Values.multisite.networkType | quote }}
-            - name: WORDPRESS_MULTISITE_ENABLE_XIP_IO_REDIRECTION
-              value: {{ ternary "yes" "no" .Values.multisite.enableXipIoRedirect | quote }}
+            - name: WORDPRESS_MULTISITE_ENABLE_NIP_IO_REDIRECTION
+              value: {{ ternary "yes" "no" .Values.multisite.enableNipIoRedirect | quote }}
             {{- end }}
             {{- if .Values.smtpHost }}
             - name: SMTP_HOST
