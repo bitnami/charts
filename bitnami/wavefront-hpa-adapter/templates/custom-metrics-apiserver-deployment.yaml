@@ -72,7 +72,7 @@ spec:
           command: {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
           {{- else }}
           command:
-            - wavefront-adapter
+            - /wavefront-adapter
           {{- end }}
           {{- if .Values.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
@@ -136,10 +136,16 @@ spec:
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - mountPath: /tmp
+              name: temp-vol
           {{- if .Values.adapterRules }}
             - mountPath: /bitnami/wavefront-hpa-adapter/conf
               name: config
               readOnly: true
+          {{- end }}
+          {{- if .Values.adapterSSLCertsSecret }}
+            - name: ssl-cert-dirs
+              mountPath: {{ .Values.adapterSSLCertDir }}
           {{- end }}
           {{- if .Values.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
@@ -148,6 +154,14 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+      {{- if .Values.adapterSSLCertsSecret }}
+        - name: ssl-cert-dirs
+          secret:
+            secretName: {{ .Values.adapterSSLCertsSecret }}
+      {{- else }}
+      {{- end }}
+        - name: temp-vol
+          emptyDir: {}
       {{- if .Values.adapterRules }}
         - name: config
           configMap:
