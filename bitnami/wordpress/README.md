@@ -81,40 +81,41 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### WordPress Configuration parameters
 
-| Name                                   | Description                                                                               | Value              |
-| -------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------ |
-| `wordpressUsername`                    | WordPress username                                                                        | `user`             |
-| `wordpressPassword`                    | WordPress user password                                                                   | `""`               |
-| `existingSecret`                       | Name of existing secret containing WordPress credentials                                  | `nil`              |
-| `wordpressEmail`                       | WordPress user email                                                                      | `user@example.com` |
-| `wordpressFirstName`                   | WordPress user first name                                                                 | `FirstName`        |
-| `wordpressLastName`                    | WordPress user last name                                                                  | `LastName`         |
-| `wordpressBlogName`                    | Blog name                                                                                 | `User's Blog!`     |
-| `wordpressTablePrefix`                 | Prefix to use for WordPress database tables                                               | `wp_`              |
-| `wordpressScheme`                      | Scheme to use to generate WordPress URLs                                                  | `http`             |
-| `wordpressSkipInstall`                 | Skip wizard installation                                                                  | `false`            |
-| `wordpressExtraConfigContent`          | Add extra content to the default wp-config.php file                                       | `nil`              |
-| `wordpressConfiguration`               | The content for your custom wp-config.php file (experimental feature)                     | `nil`              |
-| `existingWordPressConfigurationSecret` | The name of an existing secret with your custom wp-config.php file (experimental feature) | `nil`              |
-| `wordpressConfigureCache`              | Enable W3 Total Cache plugin and configure cache settings                                 | `false`            |
-| `apacheConfiguration`                  | The content for your custom httpd.conf file (experimental feature)                        | `nil`              |
-| `existingApacheConfigurationConfigMap` | The name of an existing secret with your custom wp-config.php file (experimental feature) | `nil`              |
-| `customPostInitScripts`                | Custom post-init.d user scripts                                                           | `{}`               |
-| `smtpHost`                             | SMTP server host                                                                          | `""`               |
-| `smtpPort`                             | SMTP server port                                                                          | `""`               |
-| `smtpUser`                             | SMTP username                                                                             | `""`               |
-| `smtpPassword`                         | SMTP user password                                                                        | `""`               |
-| `smtpProtocol`                         | SMTP protocol                                                                             | `""`               |
-| `smtpExistingSecret`                   | The name of an existing secret with SMTP credentials                                      | `nil`              |
-| `allowEmptyPassword`                   | Allow the container to be started with blank passwords                                    | `true`             |
-| `allowOverrideNone`                    | Configure Apache to prohibit overriding directives with htaccess files                    | `false`            |
-| `htaccessPersistenceEnabled`           | Persist custom changes on htaccess files                                                  | `false`            |
-| `customHTAccessCM`                     | The name of an existing ConfigMap with custom htaccess rules                              | `nil`              |
-| `command`                              | Override default container command (useful when using custom images)                      | `[]`               |
-| `args`                                 | Override default container args (useful when using custom images)                         | `[]`               |
-| `extraEnvVars`                         | Array with extra environment variables to add to the WordPress container                  | `[]`               |
-| `extraEnvVarsCM`                       | Name of existing ConfigMap containing extra env vars                                      | `nil`              |
-| `extraEnvVarsSecret`                   | Name of existing Secret containing extra env vars                                         | `nil`              |
+| Name                                   | Description                                                                           | Value              |
+| -------------------------------------- | ------------------------------------------------------------------------------------- | ------------------ |
+| `wordpressUsername`                    | WordPress username                                                                    | `user`             |
+| `wordpressPassword`                    | WordPress user password                                                               | `""`               |
+| `existingSecret`                       | Name of existing secret containing WordPress credentials                              | `nil`              |
+| `wordpressEmail`                       | WordPress user email                                                                  | `user@example.com` |
+| `wordpressFirstName`                   | WordPress user first name                                                             | `FirstName`        |
+| `wordpressLastName`                    | WordPress user last name                                                              | `LastName`         |
+| `wordpressBlogName`                    | Blog name                                                                             | `User's Blog!`     |
+| `wordpressTablePrefix`                 | Prefix to use for WordPress database tables                                           | `wp_`              |
+| `wordpressScheme`                      | Scheme to use to generate WordPress URLs                                              | `http`             |
+| `wordpressSkipInstall`                 | Skip wizard installation                                                              | `false`            |
+| `wordpressExtraConfigContent`          | Add extra content to the default wp-config.php file                                   | `nil`              |
+| `wordpressConfiguration`               | The content for your custom wp-config.php file (advanced feature)                     | `nil`              |
+| `existingWordPressConfigurationSecret` | The name of an existing secret with your custom wp-config.php file (advanced feature) | `nil`              |
+| `wordpressConfigureCache`              | Enable W3 Total Cache plugin and configure cache settings                             | `false`            |
+| `apacheConfiguration`                  | The content for your custom httpd.conf file (advanced feature)                        | `nil`              |
+| `existingApacheConfigurationConfigMap` | The name of an existing secret with your custom wp-config.php file (advanced feature) | `nil`              |
+| `customPostInitScripts`                | Custom post-init.d user scripts                                                       | `{}`               |
+| `smtpHost`                             | SMTP server host                                                                      | `""`               |
+| `smtpPort`                             | SMTP server port                                                                      | `""`               |
+| `smtpUser`                             | SMTP username                                                                         | `""`               |
+| `smtpPassword`                         | SMTP user password                                                                    | `""`               |
+| `smtpProtocol`                         | SMTP protocol                                                                         | `""`               |
+| `smtpExistingSecret`                   | The name of an existing secret with SMTP credentials                                  | `nil`              |
+| `allowEmptyPassword`                   | Allow the container to be started with blank passwords                                | `true`             |
+| `allowOverrideNone`                    | Configure Apache to prohibit overriding directives with htaccess files                | `false`            |
+| `htaccessPersistenceEnabled`           | Persist custom changes on htaccess files                                              | `false`            |
+| `customHTAccessCM`                     | The name of an existing ConfigMap with custom htaccess rules                          | `nil`              |
+| `command`                              | Override default container command (useful when using custom images)                  | `[]`               |
+| `args`                                 | Override default container args (useful when using custom images)                     | `[]`               |
+| `extraEnvVars`                         | Array with extra environment variables to add to the WordPress container              | `[]`               |
+| `extraEnvVarsCM`                       | Name of existing ConfigMap containing extra env vars                                  | `nil`              |
+| `extraEnvVarsSecret`                   | Name of existing Secret containing extra env vars                                     | `nil`              |
+
 
 ### WordPress deployment parameters
 
@@ -248,6 +249,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.relabellings`     | Metrics relabellings to add to the scrape endpoint                           | `nil`                     |
 | `metrics.serviceMonitor.honorLabels`      | Labels to honor to add to the scrape endpoint                                | `false`                   |
 | `metrics.serviceMonitor.additionalLabels` | Additional custom labels for the ServiceMonitor                              | `{}`                      |
+
 
 ### Database Parameters
 
