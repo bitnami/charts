@@ -77,7 +77,7 @@ spec:
       {{- end }}
       containers:
         {{- if .Values.ruler.extraContainers }}
-      {{ toYaml .Values.ruler.extraContainers | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.ruler.extraContainers  "context" $) | nindent 8 }}
         {{- end }}         
         - name: ruler
           image: {{ include "thanos.image" . }}

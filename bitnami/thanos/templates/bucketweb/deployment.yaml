@@ -57,7 +57,7 @@ spec:
       {{- end }}
       containers:
         {{- if .Values.bucketweb.extraContainers }}
-      {{ toYaml .Values.bucketweb.extraContainers | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.bucketweb.extraContainers "context" $) | nindent 8 }}
         {{- end }}      
         - name: bucketweb
           image: {{ include "thanos.image" . }}

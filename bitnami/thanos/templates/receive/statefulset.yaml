@@ -61,7 +61,7 @@ spec:
       {{- end }}
       containers:
         {{- if .Values.receive.extraContainers }}
-      {{ toYaml .Values.receive.extraContainers | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.receive.extraContainers "context" $) | nindent 8 }}
         {{- end }}         
         - name: receive
           image: {{ include "thanos.image" . }}
