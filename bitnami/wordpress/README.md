@@ -422,6 +422,8 @@ In addition, several new features have been implemented:
 - Plugins can be installed and activated on the first deployment via the `wordpressPlugins` option.
 - Added support for limiting auto-updates to WordPress core via the `wordpressAutoUpdateLevel` option. In addition, auto-updates have been disabled by default. To update WordPress core, we recommend to swap the container image version for your deployment instead of using the built-in update functionality.
 
+To enable the new features, it is not possible to do it by upgrading an existing deployment. Instead, it is necessary to perform a fresh deploy.
+
 ## Upgrading
 
 ### To 11.0.0
