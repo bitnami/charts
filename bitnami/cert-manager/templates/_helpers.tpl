@@ -116,6 +116,10 @@ is true or default otherwise.
     {{- end -}}
 {{- end -}}
 
+{{- define "certManager.webhook.caRef" -}}
+{{ .Release.Namespace}}/{{ template "certManager.webhook.fullname" . }}-ca
+{{- end -}}
+
 {{/*
 Compile all warnings into a single message.
 */}}

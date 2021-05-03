@@ -25,6 +25,9 @@ global:
   leaderElection:
     namespace: "kube-system"
 
+## Flag to install crds
+installCRDs: false
+
 ## Number of replicas (requires ReadWriteMany PVC support)
 ##
 replicaCount: 1
