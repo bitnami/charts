@@ -28,3 +28,4 @@ sources:
   - https://github.com/bitnami/bitnami-docker-postgresql
   - https://www.postgresql.org/
 version: 7.2.0
+
