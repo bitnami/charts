@@ -358,7 +358,7 @@ query:
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
       ##
       # nodePort:
-    targetPort: http      
+    targetPort: http
     ## GRPC Port
     ##
     grpc:
@@ -761,7 +761,7 @@ queryFrontend:
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
       ##
       # nodePort:
-    targetPort: http      
+    targetPort: http
     ##
     ## Set the LoadBalancer service type to internal only.
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -1987,7 +1987,7 @@ ruler:
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
       ##
       # nodePort:
-    targetPort: http      
+    targetPort: http
     ## GRPC Port
     ##
     grpc:
@@ -2376,7 +2376,7 @@ receive:
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
       ##
       # nodePort:
-    targetPort: http      
+    targetPort: http
     ## GRPC Port
     ##
     grpc:
