@@ -91,6 +91,7 @@ The following tables lists the configurable parameters of the MongoDB&reg; chart
 | `architecture`           | MongoDB&reg; architecture (`standalone` or `replicaset`)                                                                      | `standalone`                                   |
 | `hostAliases`            | Add deployment host aliases                                                                                                   | `[]`                                           |
 | `useStatefulSet`         | Set to true to use a StatefulSet instead of a Deployment (only when `architecture=standalone`)                                | `false`                                        |
+| `commonAnnotations`      | Annotations to be added to all Mongo resources                                                                                     | `{}`                                                    |
 | `auth.enabled`           | Enable authentication                                                                                                         | `true`                                         |
 | `auth.rootPassword`      | MongoDB&reg; admin password                                                                                                   | _random 10 character long alphanumeric string_ |
 | `auth.username`          | MongoDB&reg; custom user (mandatory if `auth.database` is set)                                                                | `nil`                                          |
