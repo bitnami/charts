@@ -93,17 +93,6 @@ Get the TLS secret.
 {{- end -}}
 
 {{/*
-Get the Ingress TLS secret.
-*/}}
-{{- define "rabbitmq.ingressSecretTLSName" -}}
-    {{- if .Values.ingress.existingSecret -}}
-        {{- printf "%s" .Values.ingress.existingSecret -}}
-    {{- else -}}
-        {{- printf "%s-tls" .Values.ingress.hostname -}}
-    {{- end -}}
-{{- end -}}
-
-{{/*
 Return the proper RabbitMQ plugin list
 */}}
 {{- define "rabbitmq.plugins" -}}
@@ -160,6 +149,7 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := list -}}
 {{- $messages := append $messages (include "rabbitmq.validateValues.ldap" .) -}}
 {{- $messages := append $messages (include "rabbitmq.validateValues.memoryHighWatermark" .) -}}
+{{- $messages := append $messages (include "rabbitmq.validateValues.ingress.tls" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -213,5 +203,21 @@ rabbitmq: memoryHighWatermark
       --set memoryHighWatermark.enabled=true \
       --set memoryHighWatermark.type="absolute" \
       --set memoryHighWatermark.value="512MB"
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of rabbitmq - TLS configuration for Ingress
+*/}}
+{{- define "rabbitmq.validateValues.ingress.tls" -}}
+{{- if and .Values.ingress.enabled .Values.ingress.tls (not .Values.ingress.certManager) (not .Values.ingress.selfSigned) (empty .Values.ingress.extraTls) }}
+rabbitmq: ingress.tls
+    You enabled the TLS configuration for the default ingress hostname but
+    you did not enable any of the available mechanisms to create the TLS secret
+    to be used by the Ingress Controller.
+    Please use any of these alternatives:
+      - Use the `ingress.extraTls` and `ingress.secrets` parameters to provide your custom TLS certificates.
+      - Relay on cert-manager to create it by setting `ingress.certManager=true`
+      - Relay on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
 {{- end -}}
 {{- end -}}
