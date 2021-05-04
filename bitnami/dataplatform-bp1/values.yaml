@@ -79,6 +79,10 @@ kafka:
                   operator: In
                   values:
                     - zookeeper
+                - key: app.kubernetes.io/instance
+                  operator: In
+                  values:
+                    - '{{ .Release.Name }}'    
             topologyKey: "kubernetes.io/hostname"
   ## Prometheus Exporters / Metrics
   ##
@@ -158,6 +162,10 @@ spark:
                   operator: In
                   values:
                     - worker
+                - key: app.kubernetes.io/instance
+                  operator: In
+                  values:
+                    - '{{ .Release.Name }}'    
             topologyKey: "kubernetes.io/hostname"
   ## Spark worker specific configuration
   ##
@@ -178,6 +186,10 @@ spark:
                   values:
                     - worker
                     - master
+                - key: app.kubernetes.io/instance
+                  operator: In
+                  values:
+                    - '{{ .Release.Name }}'    
             topologyKey: "kubernetes.io/hostname"
     resources:
       ## Recommended values for cpu and memory requests
@@ -228,6 +240,10 @@ solr:
                 operator: In
                 values:
                   - solr
+              - key: app.kubernetes.io/instance
+                operator: In
+                values:
+                  - '{{ .Release.Name }}'    
           topologyKey: "kubernetes.io/hostname"
   resources:
     ## Recommended values for cpu and memory requests
@@ -254,6 +270,10 @@ solr:
                     operator: In
                     values:
                       - solr
+                  - key: app.kubernetes.io/instance
+                    operator: In
+                    values:
+                      - '{{ .Release.Name }}'    
               topologyKey: "kubernetes.io/hostname"
     resources:
       limits: {}
