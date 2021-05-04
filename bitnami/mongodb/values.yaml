@@ -48,6 +48,11 @@ image:
 ##
 clusterDomain: cluster.local
 
+## Common annotations to add to all Mongo resources (sub-charts are not considered). Evaluated as a template
+##
+commonAnnotations: {}
+
+
 ## Use an alternate scheduler, e.g. "stork".
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
@@ -387,6 +392,7 @@ readinessProbe:
 ## Slow starting containers can be protected through startup probes
 ## Startup probes are available in Kubernetes version 1.16 and above
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-startup-probes
+##
 startupProbe:
   enabled: false
   initialDelaySeconds: 5
@@ -505,7 +511,11 @@ persistence:
     ## Override the requests attribute
     ## Sometime cloud providers use additional requests attributes to provision custom storage instance
     ## See https://cloud.ibm.com/docs/containers?topic=containers-file_storage#file_dynamic_statefulset
+    ##
     requests:
+    ## Set volumeClaimTemplate dataSource
+    ##
+    dataSource:
 
 ## Service parameters
 ##
@@ -1436,3 +1446,6 @@ hidden:
       ## See https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#labelselector-v1-meta for more details
       ##
       selector:
+      ## Set volumeClaimTemplate dataSource
+      ##
+      dataSource:
