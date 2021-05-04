@@ -42,7 +42,7 @@ Returns the volume mounts that will be used by the main container
 {{- if .Values.git.plugins.enabled }}
   {{- range .Values.git.plugins.repositories }}
 - name: git-cloned-plugins-files-{{ include "airflow.git.repository.name" . }}
-  mountPath: /opt/bitnami/airflow/git_{{ include "airflow.git.repository.name" . }}
+  mountPath: /opt/bitnami/airflow/plugins/git_{{ include "airflow.git.repository.name" . }}
     {{- if .path }}
   subPath: {{ .path }}
     {{- end }}
