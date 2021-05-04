@@ -478,6 +478,12 @@ spec:
         resources:
           requests:
             storage: {{ .Values.hidden.persistence.size | quote }}
+            {{- if .Values.hidden.persistence.volumeClaimTemplates.requests }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.hidden.persistence.volumeClaimTemplates.requests "context" $) | nindent 12 }}
+            {{- end }}
+        {{- if .Values.hidden.persistence.volumeClaimTemplates.dataSource }}
+        dataSource: {{- include "common.tplvalues.render" (dict "value" .Values.hidden.persistence.volumeClaimTemplates.dataSource "context" $) | nindent 10 }}
+        {{- end }}
         {{- if .Values.hidden.persistence.volumeClaimTemplates.selector }}
         selector: {{- include "common.tplvalues.render" (dict "value" .Values.hidden.persistence.volumeClaimTemplates.selector "context" $) | nindent 10 }}
         {{- end }}
