@@ -118,12 +118,12 @@ wordpressSkipInstall: false
 ##   @ini_set( 'memory_limit', '256M' );
 ##
 wordpressExtraConfigContent:
-## @param wordpressConfiguration The content for your custom wp-config.php file (experimental feature)
+## @param wordpressConfiguration The content for your custom wp-config.php file (advanced feature)
 ## NOTE: This will override configuring WordPress based on environment variables (including those set by the chart)
 ## NOTE: Currently only supported when `wordpressSkipInstall=true`
 ##
 wordpressConfiguration:
-## @param existingWordPressConfigurationSecret The name of an existing secret with your custom wp-config.php file (experimental feature)
+## @param existingWordPressConfigurationSecret The name of an existing secret with your custom wp-config.php file (advanced feature)
 ## NOTE: When it's set the `wordpressConfiguration` parameter is ignored
 ##
 existingWordPressConfigurationSecret:
@@ -131,6 +131,13 @@ existingWordPressConfigurationSecret:
 ## NOTE: useful if you deploy Memcached for caching database queries or you use an external cache server
 ##
 wordpressConfigureCache: false
+## @param apacheConfiguration The content for your custom httpd.conf file (advanced feature)
+##
+apacheConfiguration:
+## @param existingApacheConfigurationConfigMap The name of an existing secret with your custom wp-config.php file (advanced feature)
+## NOTE: When it's set the `apacheConfiguration` parameter is ignored
+##
+existingApacheConfigurationConfigMap:
 ## @param customPostInitScripts Custom post-init.d user scripts
 ## ref: https://github.com/bitnami/bitnami-docker-wordpress/tree/master/5/debian-10/rootfs/post-init.d
 ## NOTE: supported formats are `.sh`, `.sql` or `.php`
