@@ -101,6 +101,7 @@ data:
         {{- if .Values.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
         {{- end }}
+          resources: { { - toYaml .Values.worker.resources | nindent 12 } }
           env:
             - name: AIRFLOW__CORE__EXECUTOR
               value: LocalExecutor
