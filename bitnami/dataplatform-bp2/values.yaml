@@ -48,6 +48,10 @@ kafka:
                 operator: In
                 values:
                   - kafka
+              - key: app.kubernetes.io/instance
+                operator: In
+                values:
+                  - '{{ .Release.Name }}'    
           topologyKey: "kubernetes.io/hostname"
     podAffinity:
       preferredDuringSchedulingIgnoredDuringExecution:
@@ -142,6 +146,10 @@ kafka:
                   operator: In
                   values:
                     - zookeeper
+                - key: app.kubernetes.io/instance
+                  operator: In
+                  values:
+                    - '{{ .Release.Name }}'    
             topologyKey: "kubernetes.io/hostname"
   ## This value is only used when zookeeper.enabled is set to false.
   ##

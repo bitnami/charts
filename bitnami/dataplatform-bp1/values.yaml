@@ -32,6 +32,10 @@ zookeeper:
                 operator: In
                 values:
                   - zookeeper
+              - key: app.kubernetes.io/instance
+                operator: In
+                values:
+                  - '{{ .Release.Name }}'  
           topologyKey: "kubernetes.io/hostname"
 
 ## Kafka Subchart parameters
@@ -60,6 +64,10 @@ kafka:
                 operator: In
                 values:
                   - kafka
+              - key: app.kubernetes.io/instance
+                operator: In
+                values:
+                  - '{{ .Release.Name }}'         
           topologyKey: "kubernetes.io/hostname"
     podAffinity:
       preferredDuringSchedulingIgnoredDuringExecution:
