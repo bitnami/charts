@@ -42,7 +42,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/prometheus-operator
-    tag: 0.47.0-debian-10-r0
+    tag: 0.47.1-debian-10-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -270,7 +270,7 @@ prometheus:
   image:
     registry: docker.io
     repository: bitnami/prometheus
-    tag: 2.26.0-debian-10-r8
+    tag: 2.26.0-debian-10-r23
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -958,7 +958,7 @@ alertmanager:
   image:
     registry: docker.io
     repository: bitnami/alertmanager
-    tag: 0.21.0-debian-10-r279
+    tag: 0.21.0-debian-10-r294
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -1328,6 +1328,14 @@ alertmanager:
   ## Port name used for the pods and governing service. This defaults to web
   ##
   portName: web
+
+  ## AlertmanagerConfigs to be selected for to merge and configure Alertmanager with. This defaults to {}
+  ##
+  configNamespaceSelector: {}
+
+  ## Namespaces to be selected for AlertmanagerConfig discovery. If nil, only check own namespace. This defaults to {}
+  ##
+  configSelector: {}
 
 ## Exporters
 ##

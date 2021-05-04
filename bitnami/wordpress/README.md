@@ -48,8 +48,6 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## Parameters
 
-The following table lists the configurable parameters of the WordPress chart and their default values per section/component:
-
 ### Global parameters
 
 | Name                      | Description                                     | Value |
@@ -76,45 +74,48 @@ The following table lists the configurable parameters of the WordPress chart and
 | ------------------- | ---------------------------------------------------- | --------------------- |
 | `image.registry`    | WordPress image registry                             | `docker.io`           |
 | `image.repository`  | WordPress image repository                           | `bitnami/wordpress`   |
-| `image.tag`         | WordPress image tag (immutable tags are recommended) | `5.7.0-debian-10-r11` |
+| `image.tag`         | WordPress image tag (immutable tags are recommended) | `5.7.1-debian-10-r11` |
 | `image.pullPolicy`  | WordPress image pull policy                          | `IfNotPresent`        |
 | `image.pullSecrets` | WordPress image pull secrets                         | `[]`                  |
 | `image.debug`       | Enable image debug mode                              | `false`               |
 
 ### WordPress Configuration parameters
 
-| Name                                   | Description                                                                               | Value              |
-| -------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------ |
-| `wordpressUsername`                    | WordPress username                                                                        | `user`             |
-| `wordpressPassword`                    | WordPress user password                                                                   | `""`               |
-| `existingSecret`                       | Name of existing secret containing WordPress credentials                                  | `nil`              |
-| `wordpressEmail`                       | WordPress user email                                                                      | `user@example.com` |
-| `wordpressFirstName`                   | WordPress user first name                                                                 | `FirstName`        |
-| `wordpressLastName`                    | WordPress user last name                                                                  | `LastName`         |
-| `wordpressBlogName`                    | Blog name                                                                                 | `User's Blog!`     |
-| `wordpressTablePrefix`                 | Prefix to use for WordPress database tables                                               | `wp_`              |
-| `wordpressScheme`                      | Scheme to use to generate WordPress URLs                                                  | `http`             |
-| `wordpressSkipInstall`                 | Skip wizard installation                                                                  | `false`            |
-| `wordpressExtraConfigContent`          | Add extra content to the default wp-config.php file                                       | `nil`              |
-| `wordpressConfiguration`               | The content for your custom wp-config.php file (experimental feature)                     | `nil`              |
-| `existingWordPressConfigurationSecret` | The name of an existing secret with your custom wp-config.php file (experimental feature) | `nil`              |
-| `wordpressConfigureCache`              | Enable W3 Total Cache plugin and configure cache settings                                 | `false`            |
-| `customPostInitScripts`                | Custom post-init.d user scripts                                                           | `{}`               |
-| `smtpHost`                             | SMTP server host                                                                          | `""`               |
-| `smtpPort`                             | SMTP server port                                                                          | `""`               |
-| `smtpUser`                             | SMTP username                                                                             | `""`               |
-| `smtpPassword`                         | SMTP user password                                                                        | `""`               |
-| `smtpProtocol`                         | SMTP protocol                                                                             | `""`               |
-| `smtpExistingSecret`                   | The name of an existing secret with SMTP credentials                                      | `nil`              |
-| `allowEmptyPassword`                   | Allow the container to be started with blank passwords                                    | `true`             |
-| `allowOverrideNone`                    | Configure Apache to prohibit overriding directives with htaccess files                    | `false`            |
-| `htaccessPersistenceEnabled`           | Persist custom changes on htaccess files                                                  | `false`            |
-| `customHTAccessCM`                     | The name of an existing ConfigMap with custom htaccess rules                              | `nil`              |
-| `command`                              | Override default container command (useful when using custom images)                      | `[]`               |
-| `args`                                 | Override default container args (useful when using custom images)                         | `[]`               |
-| `extraEnvVars`                         | Array with extra environment variables to add to the WordPress container                  | `[]`               |
-| `extraEnvVarsCM`                       | Name of existing ConfigMap containing extra env vars                                      | `nil`              |
-| `extraEnvVarsSecret`                   | Name of existing Secret containing extra env vars                                         | `nil`              |
+| Name                                   | Description                                                                           | Value              |
+| -------------------------------------- | ------------------------------------------------------------------------------------- | ------------------ |
+| `wordpressUsername`                    | WordPress username                                                                    | `user`             |
+| `wordpressPassword`                    | WordPress user password                                                               | `""`               |
+| `existingSecret`                       | Name of existing secret containing WordPress credentials                              | `nil`              |
+| `wordpressEmail`                       | WordPress user email                                                                  | `user@example.com` |
+| `wordpressFirstName`                   | WordPress user first name                                                             | `FirstName`        |
+| `wordpressLastName`                    | WordPress user last name                                                              | `LastName`         |
+| `wordpressBlogName`                    | Blog name                                                                             | `User's Blog!`     |
+| `wordpressTablePrefix`                 | Prefix to use for WordPress database tables                                           | `wp_`              |
+| `wordpressScheme`                      | Scheme to use to generate WordPress URLs                                              | `http`             |
+| `wordpressSkipInstall`                 | Skip wizard installation                                                              | `false`            |
+| `wordpressExtraConfigContent`          | Add extra content to the default wp-config.php file                                   | `nil`              |
+| `wordpressConfiguration`               | The content for your custom wp-config.php file (advanced feature)                     | `nil`              |
+| `existingWordPressConfigurationSecret` | The name of an existing secret with your custom wp-config.php file (advanced feature) | `nil`              |
+| `wordpressConfigureCache`              | Enable W3 Total Cache plugin and configure cache settings                             | `false`            |
+| `apacheConfiguration`                  | The content for your custom httpd.conf file (advanced feature)                        | `nil`              |
+| `existingApacheConfigurationConfigMap` | The name of an existing secret with your custom wp-config.php file (advanced feature) | `nil`              |
+| `customPostInitScripts`                | Custom post-init.d user scripts                                                       | `{}`               |
+| `smtpHost`                             | SMTP server host                                                                      | `""`               |
+| `smtpPort`                             | SMTP server port                                                                      | `""`               |
+| `smtpUser`                             | SMTP username                                                                         | `""`               |
+| `smtpPassword`                         | SMTP user password                                                                    | `""`               |
+| `smtpProtocol`                         | SMTP protocol                                                                         | `""`               |
+| `smtpExistingSecret`                   | The name of an existing secret with SMTP credentials                                  | `nil`              |
+| `allowEmptyPassword`                   | Allow the container to be started with blank passwords                                | `true`             |
+| `allowOverrideNone`                    | Configure Apache to prohibit overriding directives with htaccess files                | `false`            |
+| `htaccessPersistenceEnabled`           | Persist custom changes on htaccess files                                              | `false`            |
+| `customHTAccessCM`                     | The name of an existing ConfigMap with custom htaccess rules                          | `nil`              |
+| `command`                              | Override default container command (useful when using custom images)                  | `[]`               |
+| `args`                                 | Override default container args (useful when using custom images)                     | `[]`               |
+| `extraEnvVars`                         | Array with extra environment variables to add to the WordPress container              | `[]`               |
+| `extraEnvVarsCM`                       | Name of existing ConfigMap containing extra env vars                                  | `nil`              |
+| `extraEnvVarsSecret`                   | Name of existing Secret containing extra env vars                                     | `nil`              |
+
 
 ### WordPress deployment parameters
 
@@ -139,7 +140,7 @@ The following table lists the configurable parameters of the WordPress chart and
 | `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set                                  | `[]`            |
 | `affinity`                              | Affinity for pod assignment                                                               | `{}`            |
 | `nodeSelector`                          | Node labels for pod assignment                                                            | `{}`            |
-| `tolerations`                           | Tolerations for pod assignment                                                            | `{}`            |
+| `tolerations`                           | Tolerations for pod assignment                                                            | `[]`            |
 | `resources.limits`                      | The resources limits for the WordPress container                                          | `{}`            |
 | `resources.requests`                    | The requested resources for the WordPress container                                       | `{}`            |
 | `containerPorts.http`                   | WordPress HTTP container port                                                             | `8080`          |
@@ -234,7 +235,7 @@ The following table lists the configurable parameters of the WordPress chart and
 | `metrics.enabled`                         | Start a sidecar prometheus exporter to expose metrics                        | `false`                   |
 | `metrics.image.registry`                  | Apache Exporter image registry                                               | `docker.io`               |
 | `metrics.image.repository`                | Apache Exporter image repository                                             | `bitnami/apache-exporter` |
-| `metrics.image.tag`                       | Apache Exporter image tag (immutable tags are recommended)                   | `0.8.0-debian-10-r334`    |
+| `metrics.image.tag`                       | Apache Exporter image tag (immutable tags are recommended)                   | `0.8.0-debian-10-r364`    |
 | `metrics.image.pullPolicy`                | Apache Exporter image pull policy                                            | `IfNotPresent`            |
 | `metrics.image.pullSecrets`               | Apache Exporter image pull secrets                                           | `[]`                      |
 | `metrics.resources.limits`                | The resources limits for the Prometheus exporter container                   | `{}`                      |
@@ -249,30 +250,31 @@ The following table lists the configurable parameters of the WordPress chart and
 | `metrics.serviceMonitor.honorLabels`      | Labels to honor to add to the scrape endpoint                                | `false`                   |
 | `metrics.serviceMonitor.additionalLabels` | Additional custom labels for the ServiceMonitor                              | `{}`                      |
 
+
 ### Database Parameters
 
-| Name                                         | Description                                                               | Value               |
-| -------------------------------------------- | ------------------------------------------------------------------------- | ------------------- |
-| `mariadb.enabled`                            | Deploy a MariaDB server to satisfy the applications database requirements | `true`              |
-| `mariadb.architecture`                       | MariaDB architecture. Allowed values: `standalone` or `replication`       | `standalone`        |
-| `mariadb.auth.rootPassword`                  | MariaDB root password                                                     | `""`                |
-| `mariadb.auth.database`                      | MariaDB custom database                                                   | `bitnami_wordpress` |
-| `mariadb.auth.username`                      | MariaDB custom user name                                                  | `bn_wordpress`      |
-| `mariadb.auth.password`                      | MariaDB custom user password                                              | `""`                |
-| `mariadb.primary.persistence.enabled`        | Enable persistence on MariaDB using PVC(s)                                | `true`              |
-| `mariadb.primary.persistence.storageClass`   | Persistent Volume storage class                                           | `nil`               |
-| `mariadb.primary.accessModes`                | Persistent Volume access modes                                            | `[ReadWriteOnce]`   |
-| `mariadb.primary.persistence.size`           | Persistent Volume size                                                    | `8Gi`               |
-| `externalDatabase.host`                      | External Database server host                                             | `localhost`         |
-| `externalDatabase.port`                      | External Database server port                                             | `3306`              |
-| `externalDatabase.user`                      | External Database username                                                | `bn_wordpress`      |
-| `externalDatabase.password`                  | External Database user password                                           | `""`                |
-| `externalDatabase.database`                  | External Database database name                                           | `bitnami_wordpress` |
-| `externalDatabase.existingSecret`            | The name of an existing secret with database credentials                  | `nil`               |
-| `memcached.enabled`                          | Deploy a Memcached server for caching database queries                    | `false`             |
-| `memcached.service.port`                     | Memcached service port                                                    | `11211`             |
-| `externalCache.host`                         | External cache server host                                                | `localhost`         |
-| `externalCache.port`                         | External cache server port                                                | `11211`             |
+| Name                                       | Description                                                               | Value               |
+| ------------------------------------------ | ------------------------------------------------------------------------- | ------------------- |
+| `mariadb.enabled`                          | Deploy a MariaDB server to satisfy the applications database requirements | `true`              |
+| `mariadb.architecture`                     | MariaDB architecture. Allowed values: `standalone` or `replication`       | `standalone`        |
+| `mariadb.auth.rootPassword`                | MariaDB root password                                                     | `""`                |
+| `mariadb.auth.database`                    | MariaDB custom database                                                   | `bitnami_wordpress` |
+| `mariadb.auth.username`                    | MariaDB custom user name                                                  | `bn_wordpress`      |
+| `mariadb.auth.password`                    | MariaDB custom user password                                              | `""`                |
+| `mariadb.primary.persistence.enabled`      | Enable persistence on MariaDB using PVC(s)                                | `true`              |
+| `mariadb.primary.persistence.storageClass` | Persistent Volume storage class                                           | `nil`               |
+| `mariadb.primary.persistence.accessModes`  | Persistent Volume access modes                                            | `[ReadWriteOnce]`   |
+| `mariadb.primary.persistence.size`         | Persistent Volume size                                                    | `8Gi`               |
+| `externalDatabase.host`                    | External Database server host                                             | `localhost`         |
+| `externalDatabase.port`                    | External Database server port                                             | `3306`              |
+| `externalDatabase.user`                    | External Database username                                                | `bn_wordpress`      |
+| `externalDatabase.password`                | External Database user password                                           | `""`                |
+| `externalDatabase.database`                | External Database database name                                           | `bitnami_wordpress` |
+| `externalDatabase.existingSecret`          | The name of an existing secret with database credentials                  | `nil`               |
+| `memcached.enabled`                        | Deploy a Memcached server for caching database queries                    | `false`             |
+| `memcached.service.port`                   | Memcached service port                                                    | `11211`             |
+| `externalCache.host`                       | External cache server host                                                | `localhost`         |
+| `externalCache.port`                       | External cache server port                                                | `11211`             |
 
 The above parameters map to the env variables defined in [bitnami/wordpress](http://github.com/bitnami/bitnami-docker-wordpress). For more information please refer to the [bitnami/wordpress](http://github.com/bitnami/bitnami-docker-wordpress) image documentation.
 

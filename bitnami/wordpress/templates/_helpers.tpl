@@ -58,7 +58,7 @@ Return the WordPress configuration secret
 {{- if .Values.existingWordPressConfigurationSecret -}}
     {{- printf "%s" (tpl .Values.existingWordPressConfigurationSecret $) -}}
 {{- else -}}
-    {{- printf "%s-configuration" (include "common.names.fullname" .) -}}
+    {{- printf "%s-configuration" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 {{- end -}}
 
@@ -67,6 +67,26 @@ Return true if a secret object should be created for WordPress configuration
 */}}
 {{- define "wordpress.createConfigSecret" -}}
 {{- if and .Values.wordpressConfiguration (not .Values.existingWordPressConfigurationSecret) }}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the WordPress Apache configuration configmap
+*/}}
+{{- define "wordpress.apache.configmapName" -}}
+{{- if .Values.existingApacheConfigurationConfigMap -}}
+    {{- printf "%s" (tpl .Values.existingApacheConfigurationConfigMap $) -}}
+{{- else -}}
+    {{- printf "%s-apache-configuration" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if a secret object should be created for Apache configuration
+*/}}
+{{- define "wordpress.apache.createConfigmap" -}}
+{{- if and .Values.apacheConfiguration (not .Values.existingApacheConfigurationConfigMap) }}
     {{- true -}}
 {{- end -}}
 {{- end -}}

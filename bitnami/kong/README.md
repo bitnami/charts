@@ -135,6 +135,7 @@ The following tables list the configurable parameters of the kong chart and thei
 | `service.adminHttpNodePort`      | Port to bind to for NodePort service type (admin HTTP)           | `nil`                          |
 | `service.aminHttpsNodePort`      | Port to bind to for NodePort service type (proxy HTTP)           | `nil`                          |
 | `service.annotations`            | Annotations for kong service                                     | `{}`                           |
+| `service.clusterIP`              | Cluster internal IP of the service                               | `nil`                          |
 | `service.loadBalancerIP`         | loadBalancerIP if kong service type is `LoadBalancer`            | `nil`                          |
 | `ingress.enabled`                | Enable ingress controller resource                               | `false`                        |
 | `ingress.certManager`            | Add annotations for cert-manager                                 | `false`                        |
