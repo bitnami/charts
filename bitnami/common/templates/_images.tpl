@@ -27,7 +27,7 @@ Return the proper Docker Image Registry Secret Names
   {{- $pullSecrets := list }}
   {{- $context := .context }}
 
-  {{- if .$context.Values.global }}
+  {{- if $context.Values.global }}
     {{- range $context.Values.global.imagePullSecrets -}}
       {{- $pullSecrets = append $pullSecrets (include "common.tplvalues.render" (dict "value" . "context" $context)) -}}
     {{- end -}}
