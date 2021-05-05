@@ -22,6 +22,27 @@ Return the proper Docker Image Registry Secret Names
 {{- end -}}
 
 {{/*
+Return the secret with MariaDB credentials
+*/}}
+{{- define "mariadb-galera.secretName" -}}
+    {{- if .Values.existingSecret -}}
+        {{- printf "%s" .Values.existingSecret -}}
+    {{- else -}}
+        {{- printf "%s" (include "common.names.fullname" .) -}}
+    {{- end -}}
+{{- end -}}
+
+{{/*
+Return true if a secret object should be created for MariaDB
+*/}}
+{{- define "mariadb-galera.createSecret" -}}
+{{- if and (not .Values.existingSecret) (not .Values.customPasswordFiles) }}
+    {{- true -}}
+{{- else -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Get the configuration ConfigMap name.
 */}}
 {{- define "mariadb-galera.configurationCM" -}}

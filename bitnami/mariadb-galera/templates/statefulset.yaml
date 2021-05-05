@@ -89,41 +89,44 @@ spec:
               value: "gcomm://{{ template "common.names.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
             - name: MARIADB_ROOT_USER
               value: {{ .Values.rootUser.user | quote }}
+            {{- if .Values.usePasswordFiles }}
+            - name: MARIADB_ROOT_PASSWORD_FILE
+              value: {{ default "/opt/bitnami/mariadb/secrets/mariadb-root-password" .Values.customPasswordFiles.root | quote }}
+            {{- else }}
             - name: MARIADB_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  {{- if .Values.existingSecret }}
-                  name: {{ .Values.existingSecret }}
-                  {{- else }}
-                  name: {{ template "common.names.fullname" . }}
-                  {{- end }}
+                  name: {{ template "mariadb-galera.secretName" . }}
                   key: mariadb-root-password
+            {{- end }}
             {{- if .Values.db.user }}
             - name: MARIADB_USER
               value: {{ .Values.db.user | quote }}
+            {{- if .Values.usePasswordFiles }}
+            - name: MARIADB_PASSWORD_FILE
+              value: {{ default "/opt/bitnami/mariadb/secrets/mariadb-password" .Values.customPasswordFiles.user | quote }}
+            {{- else }}
             - name: MARIADB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  {{- if .Values.existingSecret }}
-                  name: {{ .Values.existingSecret }}
-                  {{- else }}
-                  name: {{ template "common.names.fullname" . }}
-                  {{- end }}
+                  name: {{ template "mariadb-galera.secretName" . }}
                   key: mariadb-password
+            {{- end }}
             {{- end }}
             - name: MARIADB_DATABASE
               value: {{ .Values.db.name | quote }}
             - name: MARIADB_GALERA_MARIABACKUP_USER
-              value: {{ .Values.galera.mariabackup.user }}
+              value: {{ .Values.galera.mariabackup.user | quote }}
+            {{- if .Values.usePasswordFiles }}
+            - name: MARIADB_GALERA_MARIABACKUP_PASSWORD_FILE
+              value: {{ default "/opt/bitnami/mariadb/secrets/mariadb-galera-mariabackup-password" .Values.customPasswordFiles.mariabackup | quote }}
+            {{- else }}
             - name: MARIADB_GALERA_MARIABACKUP_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  {{- if .Values.existingSecret }}
-                  name: {{ .Values.existingSecret }}
-                  {{- else }}
-                  name: {{ template "common.names.fullname" . }}
-                  {{- end }}
+                  name: {{ template "mariadb-galera.secretName" . }}
                   key: mariadb-galera-mariabackup-password
+            {{- end }}
             - name: MARIADB_ENABLE_LDAP
               value: {{ ternary "yes" "no" .Values.ldap.enabled | quote }}
             {{- if .Values.ldap.enabled }}
@@ -223,7 +226,11 @@ spec:
                 - bash
                 - -ec
                 - |
-                  exec mysqladmin status -u$MARIADB_ROOT_USER -p$MARIADB_ROOT_PASSWORD
+                  password_aux="${MARIADB_ROOT_PASSWORD:-}"
+                  if [[ -f "${MARIADB_ROOT_PASSWORD_FILE:-}" ]]; then
+                      password_aux=$(cat "$MARIADB_ROOT_PASSWORD_FILE")
+                  fi
+                  exec mysqladmin status -u"${MARIADB_ROOT_USER}" -p"${password_aux}"
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
@@ -237,7 +244,11 @@ spec:
                 - bash
                 - -ec
                 - |
-                  exec mysqladmin status -u$MARIADB_ROOT_USER -p$MARIADB_ROOT_PASSWORD
+                  password_aux="${MARIADB_ROOT_PASSWORD:-}"
+                  if [[ -f "${MARIADB_ROOT_PASSWORD_FILE:-}" ]]; then
+                      password_aux=$(cat "$MARIADB_ROOT_PASSWORD_FILE")
+                  fi
+                  exec mysqladmin status -u"${MARIADB_ROOT_USER}" -p"${password_aux}"
             initialDelaySeconds: {{ .Values.startupProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.startupProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.startupProbe.timeoutSeconds }}
@@ -264,13 +275,17 @@ spec:
               mountPath: /opt/bitnami/mariadb/conf/my.cnf
               subPath: my.cnf
             {{- end }}
-            {{- if .Values.extraVolumeMounts }}
-            {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
-            {{- end }}
             {{- if .Values.tls.enabled }}
             - name: mariadb-galera-certificates
               mountPath: /bitnami/mariadb/certs/
               readOnly: true
+            {{- end }}
+            {{- if and .Values.usePasswordFiles (not .Values.customPasswordFiles) }}
+            - name: mariadb-galera-credentials
+              mountPath: /opt/bitnami/mariadb/secrets/
+            {{- end }}
+            {{- if .Values.extraVolumeMounts }}
+            {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
             {{- end }}
         {{- if .Values.metrics.enabled }}
         - name: metrics
@@ -281,20 +296,25 @@ spec:
               value: {{ default "" (join " " .Values.metrics.extraFlags) | quote }}
             - name: MARIADB_ROOT_USER
               value: {{ .Values.rootUser.user | quote }}
+            {{- if .Values.usePasswordFiles }}
+            - name: MARIADB_ROOT_PASSWORD_FILE
+              value: {{ default "/opt/bitnami/mysqld-exporter/secrets/mariadb-root-password" .Values.customPasswordFiles.root }}
+            {{- else }}
             - name: MARIADB_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  {{- if .Values.existingSecret }}
-                  name: {{ .Values.existingSecret }}
-                  {{- else }}
-                  name: {{ template "common.names.fullname" . }}
-                  {{- end }}
+                  name: {{ template "mariadb-galera.secretName" . }}
                   key: mariadb-root-password
+            {{- end }}
           command:
-            - sh
-            - -c
+            - /bin/bash
+            - -ec
             - |
-              DATA_SOURCE_NAME="$MARIADB_ROOT_USER:$MARIADB_ROOT_PASSWORD@(localhost:3306)/" /bin/mysqld_exporter $MARIADB_METRICS_EXTRA_FLAGS
+              password_aux="${MARIADB_ROOT_PASSWORD:-}"
+              if [[ -f "${MARIADB_ROOT_PASSWORD_FILE:-}" ]]; then
+                  password_aux=$(cat "$MARIADB_ROOT_PASSWORD_FILE")
+              fi
+              DATA_SOURCE_NAME="${MARIADB_ROOT_USER}:${password_aux}@(localhost:3306)/" /bin/mysqld_exporter $MARIADB_METRICS_EXTRA_FLAGS
           ports:
             - name: metrics
               containerPort: 9104
@@ -313,6 +333,11 @@ spec:
           {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
           {{- end }}
+          {{- if and .Values.usePasswordFiles (not .Values.customPasswordFiles) }}
+          volumeMounts:
+            - name: mariadb-galera-credentials
+              mountPath: /opt/bitnami/mysqld-exporter/secrets/
+          {{- end }}
         {{- end }}
         {{- if .Values.extraContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraContainers "context" $) | nindent 8 }}
@@ -320,6 +345,18 @@ spec:
       volumes:
         - name: previous-boot
           emptyDir: {}
+        {{- if and .Values.usePasswordFiles (not .Values.customPasswordFiles) }}
+        - name: mariadb-galera-credentials
+          secret:
+            secretName: {{ template "mariadb-galera.secretName" . }}
+            items:
+              - key: mariadb-root-password
+                path: mariadb-root-password
+              - key: mariadb-password
+                path: mariadb-password
+              - key: mariadb-galera-mariabackup-password
+                path: mariadb-galera-mariabackup-password
+        {{- end }}
         {{- if .Values.tls.enabled }}
         - name: mariadb-galera-certificates
           secret:

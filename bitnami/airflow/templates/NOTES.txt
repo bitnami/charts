@@ -48,7 +48,7 @@ host. To configure Airflow with the URL of your service:
 
 2. Complete your Airflow deployment by running:
 
-  helm upgrade {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
+  helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
     --set service.type={{ .Values.service.type }} \
     --set web.baseUrl=http://$AIRFLOW_HOST:$AIRFLOW_PORT \
     --set auth.password=$AIRFLOW_PASSWORD \

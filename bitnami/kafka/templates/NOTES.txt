@@ -30,7 +30,7 @@ IPs for Kafka brokers. To complete your deployment follow the steps below:
 
 3. Upgrade you chart:
 
-    helm upgrade {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
+    helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
       --set replicaCount={{ $replicaCount }} \
       --set externalAccess.enabled=true \
       {{- range $i, $e := until $replicaCount }}
@@ -82,7 +82,7 @@ org.apache.kafka.common.security.scram.ScramLoginModule required
 org.apache.kafka.common.security.plain.PlainLoginModule required
 {{- end }}
 username="{{ index (coalesce .Values.auth.sasl.jaas.clientUsers .Values.auth.jaas.clientUsers) 0 }}"
-password="$(kubectl get secret {{ $fullname }}-jaas -n {{ $releaseNamespace }} -o jsonpath='{.data.client-passwords}' | base64 --decode | cut -d , -f 1)";
+password="$(kubectl get secret {{ $fullname }}-jaas --namespace {{ $releaseNamespace }} -o jsonpath='{.data.client-passwords}' | base64 --decode | cut -d , -f 1)";
 };
 
     - client.properties:

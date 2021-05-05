@@ -32,7 +32,7 @@ host. To configure Ghost with the URL of your service:
 
 2. Complete your Ghost deployment by running:
 
-  helm upgrade {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
+  helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
     --set service.type={{ .Values.service.type }},ghostHost=$APP_HOST,ghostPassword=$GHOST_PASSWORD{{ if .Values.mariadb.auth.rootPassword }},mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD{{ end }},mariadb.auth.password=$MARIADB_PASSWORD{{- if .Values.global }}{{- if .Values.global.imagePullSecrets }},global.imagePullSecrets={{ .Values.global.imagePullSecrets }}{{- end }}{{- end }}
 {{- else -}}
 1. Get the Ghost URL by running:

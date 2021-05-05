@@ -24,7 +24,7 @@ spec:
   {{- end }}
   ports:
     - port: {{ .Values.receive.service.http.port }}
-      targetPort: http
+      targetPort: {{ .Values.receive.service.targetPort | default "http" }}
       protocol: TCP
       name: http
       {{- if (and (or (eq .Values.receive.service.type "NodePort") (eq .Values.receive.service.type "LoadBalancer")) .Values.receive.service.http.nodePort) }}

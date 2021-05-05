@@ -31,7 +31,7 @@ This deployment will be incomplete until you configure Discourse with a resolvab
 
 {{- if .Values.postgresql.enabled }}
 
-  helm upgrade {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
+  helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
     --set discourse.host=$DISCOURSE_HOST \
     --set discourse.password=$DISCOURSE_PASSWORD \
     {{- if .Values.global }}{{- if .Values.global.imagePullSecrets }}
@@ -46,7 +46,7 @@ This deployment will be incomplete until you configure Discourse with a resolvab
 
   ## PLEASE UPDATE THE EXTERNAL DATABASE CONNECTION PARAMETERS IN THE FOLLOWING COMMAND AS NEEDED ##
 
-  helm upgrade {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
+  helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
     --set discourse.host=$DISCOURSE_HOST \
     --set discourse.password=$DISCOURSE_PASSWORD \
     --set service.type={{ .Values.service.type }} \
@@ -116,7 +116,7 @@ This deployment will be incomplete until you configure Discourse with a resolvab
 
   ## PLEASE UPDATE THE EXTERNAL DATABASE CONNECTION PARAMETERS IN THE FOLLOWING COMMAND AS NEEDED ##
 
-  helm upgrade {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
+  helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
     --set discourse.host=$DISCOURSE_HOST \
     --set discourse.password=$DISCOURSE_PASSWORD \
     --set postgresql.enabled=false \
