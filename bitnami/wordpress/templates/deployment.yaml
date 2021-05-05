@@ -160,7 +160,7 @@ spec:
             - name: WORDPRESS_AUTO_UPDATE_LEVEL
               value: {{ .Values.wordpressAutoUpdateLevel | quote }}
             - name: WORDPRESS_PLUGINS
-              value: {{ .Values.wordpressPlugins | quote }}
+              value: {{ join "," .Values.wordpressPlugins | quote }}
             {{- if .Values.multisite.enable }}
             - name: WORDPRESS_ENABLE_MULTISITE
               value: "yes"
