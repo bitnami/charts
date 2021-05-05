@@ -167,6 +167,19 @@ rootUser:
 ##
 # existingSecret:
 
+## Mount credentials as files instead of using an environment variable
+##
+usePasswordFiles: false
+
+## Use custom secret files other than chart provided when usePasswordFiles is set to "true"
+## Example:
+## customPasswordFiles:
+##   root: /vault/secrets/mariadb-root
+##   user: /vault/secrets/mariadb-user
+##   mariabackup: /vault/secrets/mariadb-galera-mariabackup
+##
+customPasswordFiles: {}
+
 ## Custom db configuration
 ##
 db:
