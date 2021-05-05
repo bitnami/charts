@@ -56,6 +56,9 @@ spec:
         fsGroup: {{ .Values.bucketweb.securityContext.fsGroup }}
       {{- end }}
       containers:
+        {{- if .Values.bucketweb.extraContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.bucketweb.extraContainers "context" $) | nindent 8 }}
+        {{- end }}      
         - name: bucketweb
           image: {{ include "thanos.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
