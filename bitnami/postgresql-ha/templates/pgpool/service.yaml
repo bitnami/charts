@@ -33,6 +33,7 @@ spec:
   {{- if and (eq .Values.service.type "ClusterIP") .Values.service.clusterIP }}
   clusterIP: {{ .Values.service.clusterIP }}
   {{- end }}
+  sessionAffinity: {{ default "None" .Values.service.sessionAffinity }}
   ports:
     - name: postgresql
       port: {{ .Values.service.port }}

@@ -9,8 +9,14 @@ metadata:
     {{- if .Values.labels }}
     {{- include "common.tplvalues.render" (dict "value" .Values.labels "context" $) | nindent 4 }}
     {{- end }}
-  {{- if .Values.annotations }}
-  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.annotations "context" $) | nindent 4 }}
+  {{- if or .Values.annotations .Values.commonAnnotations }}
+  annotations:
+    {{- if .Values.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.annotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
   {{- end }}
 spec:
   {{- if .Values.useStatefulSet }}
@@ -201,6 +207,8 @@ spec:
               value: {{ ternary "yes" "no" .Values.disableSystemLog | quote }}
             - name: MONGODB_DISABLE_JAVASCRIPT
               value: {{ ternary "yes" "no" .Values.disableJavascript | quote }}
+            - name: MONGODB_ENABLE_JOURNAL
+              value: {{ ternary "yes" "no" .Values.enableJournal | quote  }}
             - name: MONGODB_ENABLE_IPV6
               value: {{ ternary "yes" "no" .Values.enableIPv6 | quote }}
             - name: MONGODB_ENABLE_DIRECTORY_PER_DB

@@ -125,6 +125,29 @@ query:
   ##
   # existingSDConfigmap:
 
+  ## Optional additional containers (sidecar)
+  ##
+  extraContainers: []
+  ## Example:
+  ## - name: oAuth2-proxy
+  ##   args:
+  ##     - -https-address=:9092
+  ##     - -upstream=http://localhost:9091
+  ##     - -skip-auth-regex=^/metrics
+  ##   image: openshift/oauth-proxy:v1.1.0
+  ##   ports:
+  ##       - containerPort: 9092
+  ##         name: proxy
+  ##   resources:
+  ##       limits:
+  ##         memory: 16Mi
+  ##       requests:
+  ##         memory: 4Mi
+  ##         cpu: 20m
+  ##   volumeMounts:
+  ##     - mountPath: /secrets/proxy-tls
+  ##       name: secret-proxy-tls
+
   ## Extra environment variable(s) to set on query container.
   ##
   ## extraEnv:
@@ -335,6 +358,7 @@ query:
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
       ##
       # nodePort:
+    targetPort: http
     ## GRPC Port
     ##
     grpc:
@@ -537,6 +561,29 @@ queryFrontend:
   ##
   hostAliases: []
 
+  ## Optional additional containers (sidecar)
+  ##
+  extraContainers: []
+  ## Example:
+  ## - name: oAuth2-proxy
+  ##   args:
+  ##     - -https-address=:9092
+  ##     - -upstream=http://localhost:9091
+  ##     - -skip-auth-regex=^/metrics
+  ##   image: openshift/oauth-proxy:v1.1.0
+  ##   ports:
+  ##       - containerPort: 9092
+  ##         name: proxy
+  ##   resources:
+  ##       limits:
+  ##         memory: 16Mi
+  ##       requests:
+  ##         memory: 4Mi
+  ##         cpu: 20m
+  ##   volumeMounts:
+  ##     - mountPath: /secrets/proxy-tls
+  ##       name: secret-proxy-tls
+
   ## Extra environment variable(s) to set on query-frontend container.
   ##
   ## extraEnv:
@@ -714,6 +761,7 @@ queryFrontend:
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
       ##
       # nodePort:
+    targetPort: http
     ##
     ## Set the LoadBalancer service type to internal only.
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -860,6 +908,29 @@ bucketweb:
   ## Timeout to download metadata from remote storage
   ##
   timeout: 5m
+
+  ## Optional additional containers (sidecar)
+  ##
+  extraContainers: []
+  ## Example:
+  ## - name: oAuth2-proxy
+  ##   args:
+  ##     - -https-address=:9092
+  ##     - -upstream=http://localhost:9091
+  ##     - -skip-auth-regex=^/metrics
+  ##   image: openshift/oauth-proxy:v1.1.0
+  ##   ports:
+  ##       - containerPort: 9092
+  ##         name: proxy
+  ##   resources:
+  ##       limits:
+  ##         memory: 16Mi
+  ##       requests:
+  ##         memory: 4Mi
+  ##         cpu: 20m
+  ##   volumeMounts:
+  ##     - mountPath: /secrets/proxy-tls
+  ##       name: secret-proxy-tls
 
   ## Extra environment variable(s) to set on bucketweb container.
   ##
@@ -1021,6 +1092,7 @@ bucketweb:
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
       ##
       # nodePort:
+    targetPort: http
     ## Set the LoadBalancer service type to internal only.
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
@@ -1717,6 +1789,29 @@ ruler:
   ##
   # clusterName:
 
+  ## Optional additional containers (sidecar)
+  ##
+  extraContainers: []
+  ## Example:
+  ## - name: oAuth2-proxy
+  ##   args:
+  ##     - -https-address=:9092
+  ##     - -upstream=http://localhost:9091
+  ##     - -skip-auth-regex=^/metrics
+  ##   image: openshift/oauth-proxy:v1.1.0
+  ##   ports:
+  ##       - containerPort: 9092
+  ##         name: proxy
+  ##   resources:
+  ##       limits:
+  ##         memory: 16Mi
+  ##       requests:
+  ##         memory: 4Mi
+  ##         cpu: 20m
+  ##   volumeMounts:
+  ##     - mountPath: /secrets/proxy-tls
+  ##       name: secret-proxy-tls
+
   ## Extra environment variable(s) to set on ruler container.
   ##
   ## extraEnv:
@@ -1892,6 +1987,7 @@ ruler:
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
       ##
       # nodePort:
+    targetPort: http
     ## GRPC Port
     ##
     grpc:
@@ -2070,6 +2166,29 @@ receive:
   # config:
   #   - endpoints:
   #     - "127.0.0.1:10901"
+
+  ## Optional additional containers (sidecar)
+  ##
+  extraContainers: []
+  ## Example:
+  ## - name: oAuth2-proxy
+  ##   args:
+  ##     - -https-address=:9092
+  ##     - -upstream=http://localhost:9091
+  ##     - -skip-auth-regex=^/metrics
+  ##   image: openshift/oauth-proxy:v1.1.0
+  ##   ports:
+  ##       - containerPort: 9092
+  ##         name: proxy
+  ##   resources:
+  ##       limits:
+  ##         memory: 16Mi
+  ##       requests:
+  ##         memory: 4Mi
+  ##         cpu: 20m
+  ##   volumeMounts:
+  ##     - mountPath: /secrets/proxy-tls
+  ##       name: secret-proxy-tls
 
   ## Extra environment variable(s) to set on receive container.
   ##
@@ -2257,6 +2376,7 @@ receive:
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
       ##
       # nodePort:
+    targetPort: http
     ## GRPC Port
     ##
     grpc:

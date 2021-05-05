@@ -20,7 +20,7 @@ image:
   ## Bitnami MongoDB(R) image tag
   ## ref: https://hub.docker.com/r/bitnami/mongodb/tags/
   ##
-  tag: 4.4.5-debian-10-r0
+  tag: 4.4.5-debian-10-r21
   ## Specify a imagePullPolicy
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -47,6 +47,11 @@ image:
 ## Kubernetes Cluster Domain
 ##
 clusterDomain: cluster.local
+
+## Common annotations to add to all Mongo resources (sub-charts are not considered). Evaluated as a template
+##
+commonAnnotations: {}
+
 
 ## Use an alternate scheduler, e.g. "stork".
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
@@ -107,7 +112,7 @@ tls:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.19.9-debian-10-r6
+    tag: 1.19.10-debian-10-r14
     pullPolicy: IfNotPresent
 
 ## Deployment pod host aliases
@@ -146,6 +151,11 @@ disableSystemLog: false
 ## ref: https://docs.mongodb.com/manual/core/server-side-javascript/
 ##
 disableJavascript: false
+
+## MongoDB(R) Journaling
+## ref: https://docs.mongodb.com/manual/reference/configuration-options/#mongodb-setting-storage.journal.enabled
+##
+enableJournal: true
 
 ## MongoDB(R) configuration file for Primary and Secondary nodes. For documentation of all options, see:
 ##   http://docs.mongodb.org/manual/reference/configuration-options/
@@ -382,6 +392,7 @@ readinessProbe:
 ## Slow starting containers can be protected through startup probes
 ## Startup probes are available in Kubernetes version 1.16 and above
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-startup-probes
+##
 startupProbe:
   enabled: false
   initialDelaySeconds: 5
@@ -500,7 +511,11 @@ persistence:
     ## Override the requests attribute
     ## Sometime cloud providers use additional requests attributes to provision custom storage instance
     ## See https://cloud.ibm.com/docs/containers?topic=containers-file_storage#file_dynamic_statefulset
+    ##
     requests:
+    ## Set volumeClaimTemplate dataSource
+    ##
+    dataSource:
 
 ## Service parameters
 ##
@@ -560,7 +575,7 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.18.17-debian-10-r18
+      tag: 1.18.18-debian-10-r12
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1048,7 +1063,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mongodb-exporter
-    tag: 0.11.2-debian-10-r131
+    tag: 0.11.2-debian-10-r152
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1431,3 +1446,6 @@ hidden:
       ## See https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#labelselector-v1-meta for more details
       ##
       selector:
+      ## Set volumeClaimTemplate dataSource
+      ##
+      dataSource:

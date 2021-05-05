@@ -142,6 +142,10 @@ The following tables lists the configurable parameters of the NGINX chart and th
 | `cloneStaticSiteFromGit.interval`          | Interval for sidecar container pull from the GIT repository | `60`                                                    |
 | `cloneStaticSiteFromGit.extraEnvVars`      | Extra environment variables to be set on GIT containers     | `[]`                                                    |
 | `cloneStaticSiteFromGit.extraVolumeMounts` | Add extra volume mounts for the GIT containers              | `[]`                                                    |
+| `cloneStaticSiteFromGit.gitClone.command`  | Override default container command for git-clone-repository | `[]`                                                    |
+| `cloneStaticSiteFromGit.gitClone.args`     | Override default container args for git-clone-repository    | `[]`                                                    |
+| `cloneStaticSiteFromGit.gitSync.command`   | Override default container command for git-repo-syncer      | `[]`                                                    |
+| `cloneStaticSiteFromGit.gitSync.args`      | Override default container args for git-repo-syncer         | `[]`                                                    |
 | `serverBlock`                              | Custom NGINX server block                                   | `nil`                                                   |
 | `existingServerBlockConfigmap`             | Name of existing PVC with custom NGINX server block         | `nil`                                                   |
 | `staticSiteConfigmap`                      | Name of existing ConfigMap with the server static content   | `nil`                                                   |

@@ -82,6 +82,9 @@ The following tables lists the configurable parameters of the Memcached chart an
 | `hostAliases`                            | Add deployment host aliases                                                               | `[]`                                                         |
 | `memcachedUsername`                      | Memcached admin user                                                                      | `nil`                                                        |
 | `memcachedPassword`                      | Memcached admin password                                                                  | `nil`                                                        |
+| `podDisruptionBudget.create`             | Whether to create a pod disruption budget                                                 | `false`                                                      |
+| `podDisruptionBudget.minAvailable`       | Minimum number of pods that need to be available                                          | `nil`                                                        |
+| `podDisruptionBudget.maxUnavailable`     | Maximum number of pods that can be unavailable                                            | `1`                                                          |
 | `service.type`                           | Kubernetes service type for Memcached                                                     | `ClusterIP`                                                  |
 | `service.port`                           | Memcached service port                                                                    | `11211`                                                      |
 | `service.clusterIP`                      | Specific cluster IP when service type is cluster IP. Use `None` for headless service      | `nil`                                                        |

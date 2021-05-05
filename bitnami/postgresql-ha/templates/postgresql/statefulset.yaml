@@ -70,7 +70,7 @@ spec:
       serviceAccountName: {{ default (include "common.names.fullname" . ) .Values.serviceAccount.name}}
       {{- end }}
       initContainers:
-      {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
+      {{- if and .Values.persistence.enabled (or (or (not (empty .Values.postgresql.extendedConf)) (not (empty .Values.postgresql.extendedConfCM)) ) .Values.volumePermissions.enabled) }}
         - name: init-chmod-data
           image: {{ include "postgresql-ha.volumePermissionsImage" . }}
           imagePullPolicy: {{ .Values.volumePermissionsImage.pullPolicy | quote }}
