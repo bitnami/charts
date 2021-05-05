@@ -30,7 +30,7 @@ host. To configure ownCloud with the URL of your service:
 
 {{- if .Values.mariadb.enabled }}
 
-  helm upgrade {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
+  helm upgrade -n {{ .Release.Namespace }} {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
     --set owncloudHost=$APP_HOST,owncloudPassword=$APP_PASSWORD,mariadb.auth.rootPassword=$DATABASE_ROOT_PASSWORD,mariadb.auth.password=$APP_DATABASE_PASSWORD{{- if .Values.global }}{{- if .Values.global.imagePullSecrets }},global.imagePullSecrets={{ .Values.global.imagePullSecrets }}{{- end }}{{- end }}
 {{- else }}
 
