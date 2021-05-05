@@ -65,6 +65,7 @@ data:
 {{- .Values.dashboard.customComponents | nindent 4 }}
   custom_locale.json: |-
 {{- .Values.dashboard.customLocale | toJson | nindent 4 }}
+  # TODO
   config.json: |-
     {
       "kubeappsCluster": "{{ template "kubeapps.kubeappsCluster" . -}}",

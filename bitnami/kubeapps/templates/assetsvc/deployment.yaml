@@ -66,7 +66,7 @@ spec:
           args:
             - --database-user=postgres
             - --database-name=assets
-            - --database-url={{ template "kubeapps.postgresql.fullname" . }}-headless:{{ default "5432" .Values.postgresql.service.port }}
+            - --database-url={{ template "kubeapps.postgresql.fullname" . }}-headless:5432
           env:
             - name: DB_PASSWORD
               valueFrom:
