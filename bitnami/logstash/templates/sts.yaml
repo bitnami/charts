@@ -49,6 +49,9 @@ spec:
         runAsUser: {{ .Values.securityContext.runAsUser }}
         fsGroup: {{ .Values.securityContext.fsGroup }}
       {{- end }}
+      {{- if .Values.initContainers }}
+      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" .) | nindent 8 }}
+      {{- end }}
       containers:
         - name: logstash
           image: {{ include "logstash.image" . }}
@@ -97,6 +100,9 @@ spec:
           {{- end }}
           {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumeMounts "context" $ ) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.lifecycle }}
+          lifecycle: {{- toYaml .Values.lifecycle | nindent 12 }}
           {{- end }}
         {{- if .Values.metrics.enabled }}
         - name: metrics
