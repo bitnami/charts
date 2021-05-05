@@ -1,5 +1,9 @@
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+{{- if .Values.useDaemonset }}
+kind: DaemonSet
+{{- else }}
 kind: Deployment
+{{- end }}
 metadata:
   name: {{ include "common.names.fullname" . }}
   namespace: {{ .Release.Namespace }}
@@ -12,12 +16,18 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  {{- if not .Values.useDaemonset }}
   replicas: {{ .Values.replicaCount }}
+  {{- end }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: server
   {{- if .Values.updateStrategy }}
+  {{- if .Values.useDaemonset }}
+  updateStrategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
+  {{- else }}
   strategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
+  {{- end }}
   {{- end }}
   template:
     metadata:
