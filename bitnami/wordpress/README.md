@@ -98,7 +98,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `existingWordPressConfigurationSecret` | The name of an existing secret with your custom wp-config.php file (experimental feature) | `nil`              |
 | `wordpressConfigureCache`              | Enable W3 Total Cache plugin and configure cache settings                                 | `false`            |
 | `wordpressAutoUpdateLevel`             | Level of auto-updates to allow. Allowed values: `major`, `minor` or `none`.               | `none`             |
-| `wordpressPlugins`                     | Plugins to install and activate, comma-separated. Can also be set to `all` or `none`.     | `none`             |
+| `wordpressPlugins`                     | Array of plugins to install and activate. Can be specified as `all` or `none`.            | `none`             |
 | `apacheConfiguration`                  | The content for your custom httpd.conf file (advanced feature)                            | `nil`              |
 | `existingApacheConfigurationConfigMap` | The name of an existing secret with your custom wp-config.php file (advanced feature)     | `nil`              |
 | `customPostInitScripts`                | Custom post-init.d user scripts                                                           | `{}`               |

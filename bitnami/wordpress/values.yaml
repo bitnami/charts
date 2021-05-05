@@ -134,7 +134,7 @@ wordpressConfigureCache: false
 ## @param wordpressAutoUpdateLevel Level of auto-updates to allow. Allowed values: `major`, `minor` or `none`.
 ##
 wordpressAutoUpdateLevel: none
-## @param wordpressPlugins Plugins to install and activate, comma-separated. Can also be set to `all` or `none`.
+## @param wordpressPlugins Array of plugins to install and activate. Can be specified as `all` or `none`.
 ## NOTE: If set to all, only plugins that are already installed will be activated, and if set to none, no plugins will be activated
 ##
 wordpressPlugins: none
