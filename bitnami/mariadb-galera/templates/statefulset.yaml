@@ -91,7 +91,7 @@ spec:
               value: {{ .Values.rootUser.user | quote }}
             {{- if .Values.usePasswordFiles }}
             - name: MARIADB_ROOT_PASSWORD_FILE
-              value: {{ default "/opt/bitnami/mariadb/secrets/mariadb-root-password" .Values.customPasswordFiles.root }}
+              value: {{ default "/opt/bitnami/mariadb/secrets/mariadb-root-password" .Values.customPasswordFiles.root | quote }}
             {{- else }}
             - name: MARIADB_ROOT_PASSWORD
               valueFrom:
@@ -104,7 +104,7 @@ spec:
               value: {{ .Values.db.user | quote }}
             {{- if .Values.usePasswordFiles }}
             - name: MARIADB_PASSWORD_FILE
-              value: {{ default "/opt/bitnami/mariadb/secrets/mariadb-password" .Values.customPasswordFiles.user }}
+              value: {{ default "/opt/bitnami/mariadb/secrets/mariadb-password" .Values.customPasswordFiles.user | quote }}
             {{- else }}
             - name: MARIADB_PASSWORD
               valueFrom:
@@ -116,10 +116,10 @@ spec:
             - name: MARIADB_DATABASE
               value: {{ .Values.db.name | quote }}
             - name: MARIADB_GALERA_MARIABACKUP_USER
-              value: {{ .Values.galera.mariabackup.user }}
+              value: {{ .Values.galera.mariabackup.user | quote }}
             {{- if .Values.usePasswordFiles }}
             - name: MARIADB_GALERA_MARIABACKUP_PASSWORD_FILE
-              value: {{ default "/opt/bitnami/mariadb/secrets/mariadb-galera-mariabackup-password" .Values.customPasswordFiles.mariabackup }}
+              value: {{ default "/opt/bitnami/mariadb/secrets/mariadb-galera-mariabackup-password" .Values.customPasswordFiles.mariabackup | quote }}
             {{- else }}
             - name: MARIADB_GALERA_MARIABACKUP_PASSWORD
               valueFrom:
@@ -226,7 +226,11 @@ spec:
                 - bash
                 - -ec
                 - |
-                  exec mysqladmin status -u$MARIADB_ROOT_USER -p$MARIADB_ROOT_PASSWORD
+                  password_aux="${MARIADB_ROOT_PASSWORD:-}"
+                  if [[ -f "${MARIADB_ROOT_PASSWORD_FILE:-}" ]]; then
+                      password_aux=$(cat "$MARIADB_ROOT_PASSWORD_FILE")
+                  fi
+                  exec mysqladmin status -u"${MARIADB_ROOT_USER}" -p"${password_aux}"
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
@@ -240,7 +244,11 @@ spec:
                 - bash
                 - -ec
                 - |
-                  exec mysqladmin status -u$MARIADB_ROOT_USER -p$MARIADB_ROOT_PASSWORD
+                  password_aux="${MARIADB_ROOT_PASSWORD:-}"
+                  if [[ -f "${MARIADB_ROOT_PASSWORD_FILE:-}" ]]; then
+                      password_aux=$(cat "$MARIADB_ROOT_PASSWORD_FILE")
+                  fi
+                  exec mysqladmin status -u"${MARIADB_ROOT_USER}" -p"${password_aux}"
             initialDelaySeconds: {{ .Values.startupProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.startupProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.startupProbe.timeoutSeconds }}
@@ -339,6 +347,7 @@ spec:
           emptyDir: {}
         {{- if and .Values.usePasswordFiles (not .Values.customPasswordFiles) }}
         - name: mariadb-galera-credentials
+          secret:
             secretName: {{ template "mariadb-galera.secretName" . }}
             items:
               - key: mariadb-root-password
