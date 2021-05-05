@@ -118,7 +118,7 @@ spec:
             - name: MARIADB_GALERA_MARIABACKUP_USER
               value: {{ .Values.galera.mariabackup.user }}
             {{- if .Values.usePasswordFiles }}
-            - name: MARIADB_PASSWORD_FILE
+            - name: MARIADB_GALERA_MARIABACKUP_PASSWORD_FILE
               value: {{ default "/opt/bitnami/mariadb/secrets/mariadb-galera-mariabackup-password" .Values.customPasswordFiles.mariabackup }}
             {{- else }}
             - name: MARIADB_GALERA_MARIABACKUP_PASSWORD
