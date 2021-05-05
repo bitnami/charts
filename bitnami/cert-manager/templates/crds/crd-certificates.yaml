@@ -4,7 +4,7 @@ kind: CustomResourceDefinition
 metadata:
   name: certificates.cert-manager.io
   annotations:
-    cert-manager.io/inject-ca-from-secret: '{{ template "certManager.webhook.caRef" . }}'
+    cert-manager.io/inject-ca-from-secret: '{{ template "certmanager.webhook.caRef" . }}'
   labels: {{- include "common.labels.standard" . | nindent 4 }}
 spec:
   group: cert-manager.io
@@ -28,7 +28,7 @@ spec:
       clientConfig:
         service:
           namespace: '{{ .Release.Namespace }}'
-          name: '{{ template "certManager.webhook.fullname" . }}'
+          name: '{{ template "certmanager.webhook.fullname" . }}'
           path: /convert
   versions:
     - name: v1alpha2

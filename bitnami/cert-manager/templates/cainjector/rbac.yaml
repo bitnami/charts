@@ -1,10 +1,10 @@
-{{- if .Values.rbac.enabled }}
+{{- if .Values.rbac.create }}
 ---
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: Role
 metadata:
-  name: {{ include "certManager.cainjector.fullname" . }}-leaderelection
-  namespace: {{ .Values.global.leaderElection.namespace }}
+  name: {{ printf "%s-leader-election" (include "certmanager.cainjector.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ .Values.leaderElection.namespace }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: cainjector
     {{- if .Values.commonLabels }}
@@ -25,8 +25,8 @@ rules:
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: RoleBinding
 metadata:
-  name: {{ include "certManager.cainjector.fullname" . }}-leaderelection
-  namespace: {{ .Values.global.leaderElection.namespace }}
+  name: {{ printf "%s-leader-election" (include "certmanager.cainjector.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ .Values.leaderElection.namespace }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: cainjector
     {{- if .Values.commonLabels }}
@@ -38,16 +38,16 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: {{ include "certManager.cainjector.fullname" . }}-leaderelection
+  name: {{ printf "%s-leader-election" (include "certmanager.cainjector.fullname" .) | trunc 63 | trimSuffix "-" }}
 subjects:
   - kind: ServiceAccount
-    name: {{ template "certManager.cainjector.fullname" . }}
-    namespace: {{ .Release.Namespace }}
+    name: {{ template "certmanager.cainjector.serviceAccountName" . }}
+    namespace: {{ .Release.Namespace | quote }}
 ---
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
-  name: {{ include "certManager.cainjector.fullname" . }}
+  name: {{ include "certmanager.cainjector.fullname" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: cainjector
     {{- if .Values.commonLabels }}
@@ -82,7 +82,7 @@ rules:
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRoleBinding
 metadata:
-  name: {{ include "certManager.cainjector.fullname" . }}
+  name: {{ include "certmanager.cainjector.fullname" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: cainjector
     {{- if .Values.commonLabels }}
@@ -94,9 +94,9 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: {{ include "certManager.cainjector.fullname" . }}
+  name: {{ include "certmanager.cainjector.fullname" . }}
 subjects:
-  - name: {{ template "certManager.cainjector.fullname" . }}
+  - name: {{ template "certmanager.cainjector.fullname" . }}
     namespace: {{ .Release.Namespace | quote }}
     kind: ServiceAccount
 {{- end -}}

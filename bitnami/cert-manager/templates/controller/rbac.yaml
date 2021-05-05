@@ -1,10 +1,10 @@
-{{- if .Values.rbac.enabled }}
+{{- if .Values.rbac.create }}
 ---
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: Role
 metadata:
-  name: {{ include "common.names.fullname" . }}-leader-election
-  namespace: {{ .Values.global.leaderElection.namespace }}
+  name: {{ printf "%s-leader-election" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ .Values.leaderElection.namespace }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: controller
     {{- if .Values.commonLabels }}
@@ -25,8 +25,8 @@ rules:
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: RoleBinding
 metadata:
-  name: {{ include "common.names.fullname" . }}-leader-election
-  namespace: {{ .Values.global.leaderElection.namespace }}
+  name: {{ printf "%s-leader-election" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ .Values.leaderElection.namespace }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: controller
     {{- if .Values.commonLabels }}
@@ -38,17 +38,17 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: {{ include "common.names.fullname" . }}-leader-election
+  name: {{ printf "%s-leader-election" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
 subjects:
   - apiGroup: ""
     kind: ServiceAccount
-    name: {{ template "common.names.fullname" . }}
+    name: {{ template "certmanager.controller.serviceAccountName" . }}
     namespace: {{ .Release.Namespace | quote }}
 ---
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
-  name: {{ include "common.names.fullname" . }}-controller-issuers
+  name: {{ printf "%s-controller-issuers" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: controller
     {{- if .Values.commonLabels }}
@@ -74,7 +74,7 @@ rules:
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
-  name: {{ include "common.names.fullname" . }}-controller-clusterissuers
+  name: {{ printf "%s-controller-clusterissuers" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: controller
     {{- if .Values.commonLabels }}
@@ -100,7 +100,7 @@ rules:
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
-  name: {{ include "common.names.fullname" . }}-controller-certificates
+  name: {{ printf "%s-controller-certificates" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: controller
     {{- if .Values.commonLabels }}
@@ -132,7 +132,7 @@ rules:
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
-  name: {{ include "common.names.fullname" . }}-controller-orders
+  name: {{ printf "%s-controller-orders" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: controller
     {{- if .Values.commonLabels }}
@@ -167,7 +167,7 @@ rules:
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
-  name: {{ include "common.names.fullname" . }}-controller-challenges
+  name: {{ printf "%s-controller-challenges" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: controller
     {{- if .Values.commonLabels }}
@@ -218,7 +218,7 @@ rules:
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
-  name: {{ include "common.names.fullname" . }}-controller-ingress-shim
+  name: {{ printf "%s-controller-ingress-shim" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: controller
     {{- if .Values.commonLabels }}
@@ -247,7 +247,7 @@ rules:
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRoleBinding
 metadata:
-  name: {{ include "common.names.fullname" . }}-controller-issuers
+  name: {{ printf "%s-controller-issuers" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: controller
     {{- if .Values.commonLabels }}
@@ -259,16 +259,16 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: {{ include "common.names.fullname" . }}-controller-issuers
+  name: {{ printf "%s-controller-issuers" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
 subjects:
   - kind: ServiceAccount
-    name: {{ template "common.names.fullname" . }}
+    name: {{ template "certmanager.controller.serviceAccountName" . }}
     namespace: {{ .Release.Namespace | quote }}
 ---
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRoleBinding
 metadata:
-  name: {{ include "common.names.fullname" . }}-controller-clusterissuers
+  name: {{ printf "%s-controller-clusterissuers" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: controller
     {{- if .Values.commonLabels }}
@@ -280,16 +280,16 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: {{ include "common.names.fullname" . }}-controller-clusterissuers
+  name: {{ printf "%s-controller-clusterissuers" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
 subjects:
   - kind: ServiceAccount
-    name: {{ template "common.names.fullname" . }}
+    name: {{ template "certmanager.controller.serviceAccountName" . }}
     namespace: {{ .Release.Namespace | quote }}
 ---
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRoleBinding
 metadata:
-  name: {{ include "common.names.fullname" . }}-controller-certificates
+  name: {{ printf "%s-controller-certificates" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: controller
     {{- if .Values.commonLabels }}
@@ -301,16 +301,16 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: {{ include "common.names.fullname" . }}-controller-certificates
+  name: {{ printf "%s-controller-certificates" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
 subjects:
   - kind: ServiceAccount
-    name: {{ template "common.names.fullname" . }}
+    name: {{ template "certmanager.controller.serviceAccountName" . }}
     namespace: {{ .Release.Namespace | quote }}
 ---
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRoleBinding
 metadata:
-  name: {{ include "common.names.fullname" . }}-controller-orders
+  name: {{ printf "%s-controller-orders" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: controller
     {{- if .Values.commonLabels }}
@@ -322,16 +322,16 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: {{ include "common.names.fullname" . }}-controller-orders
+  name: {{ printf "%s-controller-orders" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
 subjects:
   - kind: ServiceAccount
-    name: {{ template "common.names.fullname" . }}
+    name: {{ template "certmanager.controller.serviceAccountName" . }}
     namespace: {{ .Release.Namespace | quote }}
 ---
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRoleBinding
 metadata:
-  name: {{ include "common.names.fullname" . }}-controller-challenges
+  name: {{ printf "%s-controller-challenges" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: controller
     {{- if .Values.commonLabels }}
@@ -343,16 +343,16 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: {{ include "common.names.fullname" . }}-controller-challenges
+  name: {{ printf "%s-controller-challenges" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
 subjects:
   - kind: ServiceAccount
-    name: {{ template "common.names.fullname" . }}
+    name: {{ template "certmanager.controller.serviceAccountName" . }}
     namespace: {{ .Release.Namespace | quote }}
 ---
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRoleBinding
 metadata:
-  name: {{ include "common.names.fullname" . }}-controller-ingress-shim
+  name: {{ printf "%s-controller-ingress-shim" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: controller
     {{- if .Values.commonLabels }}
@@ -364,16 +364,16 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: {{ include "common.names.fullname" . }}-controller-ingress-shim
+  name: {{ printf "%s-controller-ingress-shim" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
 subjects:
   - kind: ServiceAccount
-    name: {{ template "common.names.fullname" . }}
+    name: {{ template "certmanager.controller.serviceAccountName" . }}
     namespace: {{ .Release.Namespace | quote }}
 ---
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
-  name: {{ include "common.names.fullname" . }}-view
+  name: {{ printf "%s-view" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: controller
     {{- if .Values.commonLabels }}
@@ -393,7 +393,7 @@ rules:
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
-  name: {{ include "common.names.fullname" . }}-edit
+  name: {{ printf "%s-edit" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: controller
     {{- if .Values.commonLabels }}
@@ -413,7 +413,7 @@ rules:
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
-  name: {{ include "common.names.fullname" . }}-controller-approve
+  name: {{ printf "%s-controller-approve" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: cert-manager
     {{- if .Values.commonLabels }}
@@ -431,7 +431,7 @@ rules:
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRoleBinding
 metadata:
-  name: {{ include "common.names.fullname" . }}-controller-approve
+  name: {{ printf "%s-controller-approve" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: cert-manager
     {{- if .Values.commonLabels }}
@@ -443,9 +443,9 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: {{ include "common.names.fullname" . }}-controller-approve
+  name: {{ printf "%s-controller-approve" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
 subjects:
   - kind: ServiceAccount
     namespace: {{ .Release.Namespace | quote }}
-    name: {{ template "common.names.fullname" . }}
+    name: {{ template "certmanager.controller.serviceAccountName" . }}
 {{- end -}}

@@ -1,9 +1,9 @@
-{{- if .Values.rbac.enabled }}
+{{- if .Values.rbac.create }}
 ---
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: Role
 metadata:
-  name: {{ include "certManager.webhook.fullname" . }}-dynamic-serving
+  name: {{ printf "%s-dynamic-serving" (include "certmanager.webhook.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: webhook
@@ -17,7 +17,7 @@ rules:
 - apiGroups: [""]
   resources: ["secrets"]
   resourceNames:
-  - '{{ template "certManager.webhook.fullname" . }}-ca'
+  - '{{ template "certmanager.webhook.fullname" . }}-ca'
   verbs: ["get", "list", "watch", "update"]
 - apiGroups: [""]
   resources: ["secrets"]
@@ -26,7 +26,7 @@ rules:
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: RoleBinding
 metadata:
-  name: {{ include "certManager.webhook.fullname" . }}-dynamic-serving
+  name: {{ printf "%s-dynamic-serving" (include "certmanager.webhook.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: webhook
@@ -39,17 +39,17 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: {{ include "certManager.webhook.fullname" . }}-dynamic-serving
+  name: {{ printf "%s-dynamic-serving" (include "certmanager.webhook.fullname" .) | trunc 63 | trimSuffix "-" }}
 subjects:
 - apiGroup: ""
   kind: ServiceAccount
-  name: {{ template "certManager.webhook.fullname" . }}
+  name: {{ template "certmanager.webhook.serviceAccountName" . }}
   namespace: {{ .Release.Namespace | quote }}
 ---
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
-  name: {{ include "certManager.webhook.fullname" . }}-subjectaccessreviews
+  name: {{ printf "%s-subjectaccessreviews" (include "certmanager.webhook.fullname" .) | trunc 63 | trimSuffix "-" }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: webhook
     {{- if .Values.commonLabels }}
@@ -66,7 +66,7 @@ rules:
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRoleBinding
 metadata:
-  name: {{ include "certManager.webhook.fullname" . }}-subjectaccessreviews
+  name: {{ printf "%s-subjectaccessreviews" (include "certmanager.webhook.fullname" .) | trunc 63 | trimSuffix "-" }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: webhook
     {{- if .Values.commonLabels }}
@@ -78,10 +78,10 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: {{ include "certManager.webhook.fullname" . }}-subjectaccessreviews
+  name: {{ printf "%s-subjectaccessreviews" (include "certmanager.webhook.fullname" .) | trunc 63 | trimSuffix "-" }}
 subjects:
 - apiGroup: ""
   kind: ServiceAccount
-  name: {{ template "certManager.webhook.fullname" . }}
+  name: {{ template "certmanager.webhook.serviceAccountName" . }}
   namespace: {{ .Release.Namespace | quote }}
 {{- end -}}

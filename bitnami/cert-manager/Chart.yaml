@@ -1,6 +1,6 @@
 annotations:
-  category: Infrastructure
-apiVersion: v1.3
+  category: CertificateAuthority
+apiVersion: v2
 appVersion: 1.3.1
 dependencies:
   - name: common
@@ -15,6 +15,8 @@ icon: https://bitnami.com/assets/stacks/cert-manager/img/cert-manager-stack-220x
 keywords:
   - go
   - security
+  - tls
+  - certificate
 maintainers:
   - email: containers@bitnami.com
     name: Bitnami

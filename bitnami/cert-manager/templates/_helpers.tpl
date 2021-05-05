@@ -1,49 +1,49 @@
 {{/*
-Return the proper certManager image name
+Return the proper certmanager.image name
 */}}
-{{- define "certManager.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) }}
+{{- define "certmanager.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.controller.image "global" .Values.global) }}
 {{- end -}}
 
 {{/*
 Return the proper image name (for the init container volume-permissions image)
 */}}
-{{- define "certManager.volumePermissions.image" -}}
+{{- define "certmanager.volumePermissions.image" -}}
 {{- include "common.images.image" ( dict "imageRoot" .Values.volumePermissions.image "global" .Values.global ) -}}
 {{- end -}}
 
 {{/*
 Return the proper Docker Image Registry Secret Names
 */}}
-{{- define "certManager.imagePullSecrets" -}}
-{{ include "common.images.pullSecrets" (dict "images" (list .Values.image) "global" .Values.global) }}
+{{- define "certmanager.imagePullSecrets" -}}
+{{ include "common.images.pullSecrets" (dict "images" (list .Values.controller.image) "global" .Values.global) }}
 {{- end -}}
 
 {{/*
 Returns the proper service account name depending if an explicit service account name is set
-in the values file. If the name is not set it will default to either common.names.fullname if serviceAccount.enabled
+in the values file. If the name is not set it will default to either common.names.fullname if controller.serviceAccount.create
 is true or default otherwise.
 */}}
-{{- define "certManager.serviceAccountName" -}}
-    {{- if .Values.serviceAccount.enabled -}}
-        {{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
+{{- define "certmanager.controller.serviceAccountName" -}}
+    {{- if .Values.controller.serviceAccount.create -}}
+        {{ default (include "common.names.fullname" .) .Values.controller.serviceAccount.name }}
     {{- else -}}
-        {{ default "default" .Values.serviceAccount.name }}
+        {{ default "default" .Values.controller.serviceAccount.name }}
     {{- end -}}
 {{- end -}}
 
 {{/*
-Return the proper certManager webhook image name
+Return the proper certmanager.webhook image name
 */}}
-{{- define "certManager.webhook.image" -}}
+{{- define "certmanager.webhook.image" -}}
 {{ include "common.images.image" (dict "imageRoot" .Values.webhook.image "global" .Values.global) }}
 {{- end -}}
 
 {{/*
 Return the proper Docker Image Registry Secret Names
 */}}
-{{- define "certManager.webhook.imagePullSecrets" -}}
-{{ include "common.images.pullSecrets" (dict "images" (list .Values.image) "global" .Values.global) }}
+{{- define "certmanager.webhook.imagePullSecrets" -}}
+{{ include "common.images.pullSecrets" (dict "images" (list .Values.webhook.image) "global" .Values.global) }}
 {{- end -}}
 
 {{/*
@@ -51,21 +51,19 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "certManager.webhook.fullname" -}}
-{{- $trimmedName := printf "%s" (include "common.names.fullname" .) | trunc 55 | trimSuffix "-" -}}
-{{- printf "%s-webhook" $trimmedName | trunc 63 | trimSuffix "-" -}}
+{{- define "certmanager.webhook.fullname" -}}
+{{- printf "%s-webhook" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
 Returns the proper service account name depending if an explicit service account name is set
-in the values file. If the name is not set it will default to either common.names.fullname if serviceAccount.enabled
+in the values file. If the name is not set it will default to either common.names.fullname if webhook.serviceAccount.create
 is true or default otherwise.
 */}}
-{{- define "certManager.webhook.serviceAccountName" -}}
-    {{- if .Values.webhook.serviceAccount.enabled -}}
+{{- define "certmanager.webhook.serviceAccountName" -}}
+    {{- if .Values.webhook.serviceAccount.create -}}
         {{- if (empty .Values.webhook.serviceAccount.name) -}}
-          {{- $trimmedName := printf "%s" (include "common.names.fullname" .) | trunc 55 | trimSuffix "-" -}}
-          {{- printf "%s-webhook" $trimmedName | trunc 63 | trimSuffix "-" -}}
+          {{- printf "%s-webhook" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
         {{- else -}}
           {{ default "default" .Values.webhook.serviceAccount.name }}
         {{- end -}}
@@ -77,15 +75,15 @@ is true or default otherwise.
 {{/*
 Return the proper cainjector image name
 */}}
-{{- define "certManager.cainjector.image" -}}
+{{- define "certmanager.cainjector.image" -}}
 {{ include "common.images.image" (dict "imageRoot" .Values.cainjector.image "global" .Values.global) }}
 {{- end -}}
 
 {{/*
 Return the proper Docker Image Registry Secret Names
 */}}
-{{- define "certManager.cainjector.imagePullSecrets" -}}
-{{ include "common.images.pullSecrets" (dict "images" (list .Values.image) "global" .Values.global) }}
+{{- define "certmanager.cainjector.imagePullSecrets" -}}
+{{ include "common.images.pullSecrets" (dict "images" (list .Values.cainjector.image) "global" .Values.global) }}
 {{- end -}}
 
 {{/*
@@ -93,21 +91,19 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "certManager.cainjector.fullname" -}}
-{{- $trimmedName := printf "%s" (include "common.names.fullname" .) | trunc 55 | trimSuffix "-" -}}
-{{- printf "%s-cainjector" $trimmedName | trunc 63 | trimSuffix "-" -}}
+{{- define "certmanager.cainjector.fullname" -}}
+{{- printf "%s-cainjector" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
 Returns the proper service account name depending if an explicit service account name is set
-in the values file. If the name is not set it will default to either common.names.fullname if serviceAccount.enabled
+in the values file. If the name is not set it will default to either common.names.fullname if webhook.serviceAccount.create
 is true or default otherwise.
 */}}
-{{- define "certManager.cainjector.serviceAccountName" -}}
-    {{- if .Values.cainjector.serviceAccount.enabled -}}
+{{- define "certmanager.cainjector.serviceAccountName" -}}
+    {{- if .Values.cainjector.serviceAccount.create -}}
         {{- if (empty .Values.cainjector.serviceAccount.name) -}}
-          {{- $trimmedName := printf "%s" (include "common.names.fullname" .) | trunc 55 | trimSuffix "-" -}}
-          {{- printf "%s-cainjector" $trimmedName | trunc 63 | trimSuffix "-" -}}
+          {{- printf "%s-cainjector" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
         {{- else -}}
           {{ default "default" .Values.cainjector.serviceAccount.name }}
         {{- end -}}
@@ -116,17 +112,17 @@ is true or default otherwise.
     {{- end -}}
 {{- end -}}
 
-{{- define "certManager.webhook.caRef" -}}
-{{ .Release.Namespace}}/{{ template "certManager.webhook.fullname" . }}-ca
+{{- define "certmanager.webhook.caRef" -}}
+{{ .Release.Namespace }}/{{ template "certmanager.webhook.fullname" . }}-ca
 {{- end -}}
 
 {{/*
 Compile all warnings into a single message.
 */}}
-{{- define "certManager.validateValues" -}}
+{{- define "certmanager.validateValues" -}}
 {{- $messages := list -}}
-{{- $messages := append $messages (include "certManager.validateValues.foo" .) -}}
-{{- $messages := append $messages (include "certManager.validateValues.bar" .) -}}
+{{- $messages := append $messages (include "certmanager.validateValues.foo" .) -}}
+{{- $messages := append $messages (include "certmanager.validateValues.bar" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
