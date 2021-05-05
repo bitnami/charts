@@ -27,6 +27,16 @@ image:
   ## Set to true if you would like to see extra information on logs
   ##
   debug: false
+  
+  ## Set lifecycle hooks for pod
+  ##
+  lifecycle: {}
+  # preStop:
+  #   exec:
+  #     command: ["/bin/sh", "-c", "echo Hello from the postStart handler > /usr/share/message"]
+  # postStart:
+  #   exec:
+  #     command: ["/bin/sh", "-c", "echo Hello from the postStart handler > /usr/share/message"]
 
 ## Force target Kubernetes version (using Helm capabilites if not set)
 ##
@@ -232,6 +242,11 @@ securityContext:
   enabled: true
   fsGroup: 1001
   runAsUser: 1001
+
+## Init Containers to run before pod assignment. Evaluated as a template.
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+##
+initContainers: {}
 
 ## Logstash containers' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
