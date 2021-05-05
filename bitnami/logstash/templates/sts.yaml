@@ -159,10 +159,10 @@ spec:
           configMap:
             name: {{ include "logstash.configmapName" . }}
         {{- end }}
-        {{- if and .Values.persistence.enabled .Values.persistence.existingClaim }}
+        {{- if and .Values.persistence.enabled }}
         - name: data
           persistentVolumeClaim:
-            claimName: {{ .Values.persistence.existingClaim }}
+            claimName: {{ .Values.persistence.existingClaim | default (include "common.names.fullname" .) }}
         {{- end }}
       {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumes "context" $ ) | nindent 8 }}
