@@ -5,7 +5,7 @@
 
 Complete your Kibana deployment by running:
 
-  helm upgrade {{ .Release.Name }} bitnami/kibana \
+  helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} bitnami/kibana \
     --set elasticsearch.hosts[0]=YOUR_ES_HOST,elasticsearch.port=YOUR_ES_PORT
 
 Replacing "YOUR_ES_HOST" and "YOUR_ES_PORT" placeholders by the proper values of your Elasticsearch deployment.
