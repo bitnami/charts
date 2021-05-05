@@ -120,7 +120,7 @@ spec:
     {{- end }}
     {{- if or .Values.commonAnnotations .Values.grafana.ingress.annotations }}
     annotations:
-      {{- if .Values.ingress.certManager }}
+      {{- if .Values.grafana.ingress.certManager }}
       kubernetes.io/tls-acme: "true"
       {{- end }}
       {{- if .Values.commonAnnotations }}
