@@ -60,3 +60,4 @@ sources:
   - https://github.com/wavefrontHQ/wavefront-collector-for-kubernetes
   - https://github.com/wavefrontHQ/wavefront-proxy
 version: 1.0.2
+
