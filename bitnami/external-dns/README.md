@@ -288,6 +288,15 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ## Upgrading
 
+### To 5.0.0
+
+The CRD API version has changed. If you deployed the Helm Chart using `crd.create=true` you need to manually delete the old CRD before upgrading the release.
+
+```console
+kubectl delete crd dnsendpoints.externaldns.k8s.io
+helm upgrade my-release -f my-values.yaml
+```
+
 ### To 4.3.0
 
 This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated thechart dependencies before executing any upgrade.
