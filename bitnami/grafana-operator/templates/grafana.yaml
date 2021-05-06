@@ -118,7 +118,6 @@ spec:
       {{- include "common.tplvalues.render" ( dict "value" .Values.grafana.ingress.labels "context" $ ) | nindent 6 }}
       {{- end }}
     {{- end }}
-    {{- if or .Values.commonAnnotations .Values.grafana.ingress.annotations }}
     annotations:
       {{- if .Values.grafana.ingress.certManager }}
       kubernetes.io/tls-acme: "true"
@@ -129,7 +128,6 @@ spec:
       {{- if .Values.grafana.ingress.annotations }}
       {{- include "common.tplvalues.render" ( dict "value" .Values.grafana.ingress.annotations "context" $ ) | nindent 6 }}
       {{- end }}
-    {{- end }}
     path: {{ include "common.tplvalues.render" (dict "value" .Values.grafana.ingress.path "context" $) }}
   config: {{- include "common.tplvalues.render" ( dict "value" .Values.grafana.config "context" $ ) | nindent 4 }}
   {{- if .Values.grafana.configMaps }}
