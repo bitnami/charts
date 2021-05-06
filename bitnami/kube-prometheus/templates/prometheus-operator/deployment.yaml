@@ -29,6 +29,9 @@ spec:
       {{- if .Values.operator.priorityClassName }}
       priorityClassName: {{ .Values.operator.priorityClassName }}
       {{- end }}
+      {{- if .Values.operator.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.operator.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.operator.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.operator.affinity "context" $) | nindent 8 }}
       {{- else }}
@@ -48,11 +51,6 @@ spec:
           image: {{ template "kube-prometheus.image" . }}
           imagePullPolicy: {{ .Values.operator.image.pullPolicy }}
           env:
-            - name: CONFIG_RELOADER_IMAGE
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ template "kube-prometheus.operator.fullname" . }}
-                  key: config-reloader-image
             - name: PROMETHEUS_CONFIG_RELOADER
               valueFrom:
                 configMapKeyRef:
@@ -69,7 +67,6 @@ spec:
             - --log-level={{ .Values.operator.logLevel }}
             {{- end }}
             - --localhost=127.0.0.1
-            - --config-reloader-image=$(CONFIG_RELOADER_IMAGE)
             - --prometheus-config-reloader=$(PROMETHEUS_CONFIG_RELOADER)
           {{- if .Values.operator.configReloaderCpu }}
             - --config-reloader-cpu={{ .Values.operator.configReloaderCpu }}
@@ -85,12 +82,12 @@ spec:
             httpGet:
               path: /metrics
               port: http
-{{ toYaml .Values.operator.livenessProbe | indent 12 }}
+          {{- toYaml .Values.operator.livenessProbe | nindent 12 }}
           readinessProbe:
             httpGet:
               path: /metrics
               port: http
-{{ toYaml .Values.operator.readinessProbe | indent 12 }}
+          {{- toYaml .Values.operator.readinessProbe | nindent 12 }}
           {{- if .Values.operator.resources }}
           resources: {{- toYaml .Values.operator.resources | nindent 12 }}
           {{- end }}

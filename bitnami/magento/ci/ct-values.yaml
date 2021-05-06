@@ -1,5 +1,6 @@
 service:
   type: ClusterIP
+# Avoids issues with yamllint
 livenessProbe:
   httpGet:
     httpHeaders: []

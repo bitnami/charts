@@ -1,0 +1,22 @@
+{{- if and (.Values.receive.enabled) (.Values.receive.service.additionalHeadless) -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "common.names.fullname" . }}-receive-headless
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: receive
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+    - port: {{ .Values.receive.service.http.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+    - port: {{ .Values.receive.service.grpc.port }}
+      targetPort: grpc
+      protocol: TCP
+      name: grpc
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: receive
+{{- end }}

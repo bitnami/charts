@@ -1,0 +1,28 @@
+{{- if and .Values.receive.enabled .Values.receive.autoscaling.enabled }}
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "common.names.fullname" . }}-receive
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: receive
+spec:
+  scaleTargetRef:
+    apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
+    kind: StatefulSet
+    name: {{ include "common.names.fullname" . }}-receive
+  minReplicas: {{ .Values.receive.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.receive.autoscaling.maxReplicas }}
+  metrics:
+    {{- if .Values.receive.autoscaling.targetMemory }}
+    - type: Resource
+      resource:
+        name: memory
+        targetAverageUtilization: {{ .Values.receive.autoscaling.targetMemory  }}
+    {{- end }}
+    {{- if .Values.receive.autoscaling.targetCPU }}
+    - type: Resource
+      resource:
+        name: cpu
+        targetAverageUtilization: {{ .Values.receive.autoscaling.targetCPU }}
+    {{- end }}
+{{- end }}    

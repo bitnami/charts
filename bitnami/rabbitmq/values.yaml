@@ -14,11 +14,10 @@
 image:
   registry: docker.io
   repository: bitnami/rabbitmq
-  tag: 3.8.9-debian-10-r64
+  tag: 3.8.16-debian-10-r0
 
   ## set to true if you would like to see extra information on logs
-  ## it turns BASH and NAMI debugging in minideb
-  ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ## It turns BASH and/or NAMI debugging in the image
   ##
   debug: false
 
@@ -42,9 +41,18 @@ image:
 ##
 # fullnameOverride:
 
+## Force target Kubernetes version (using Helm capabilites if not set)
+##
+kubeVersion:
+
 ## Kubernetes Cluster Domain
 ##
 clusterDomain: cluster.local
+
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
 
 ## RabbitMQ Authentication parameters
 ##
@@ -77,6 +85,7 @@ auth:
     serverCertificate: |-
     serverKey: |-
     # existingSecret: name-of-existing-secret-to-rabbitmq
+    existingSecretFullChain: false
 
 ## Value for the RABBITMQ_LOGS environment variable
 ## ref: https://www.rabbitmq.com/logging.html#log-file-location
@@ -129,6 +138,7 @@ extraPlugins: 'rabbitmq_auth_backend_ldap'
 ## Clustering settings
 ##
 clustering:
+  enabled: true
   addressType: hostname
   ## Rebalance master for queues in cluster when new replica is created
   ## ref: https://www.rabbitmq.com/rabbitmq-queues.8.html#rebalance
@@ -157,6 +167,7 @@ loadDefinition:
 
 ## Default duration in seconds k8s waits for container to exit before sending kill signal. Any time in excess of
 ## 10 seconds will be spent waiting for any synchronization necessary for cluster not to lose data.
+##
 terminationGracePeriodSeconds: 120
 
 ## Additional environment variables to set
@@ -188,15 +199,21 @@ extraContainerPorts: []
 ## To add more configuration, use `extraConfiguration` of `advancedConfiguration` instead
 ##
 configuration: |-
+  {{- if not .Values.loadDefinition.enabled -}}
   ## Username and password
+  ##
   default_user = {{ .Values.auth.username }}
   default_pass = CHANGEME
+  {{- end }}
+  {{- if .Values.clustering.enabled }}
   ## Clustering
+  ##
   cluster_formation.peer_discovery_backend  = rabbit_peer_discovery_k8s
   cluster_formation.k8s.host = kubernetes.default.svc.{{ .Values.clusterDomain }}
   cluster_formation.node_cleanup.interval = 10
   cluster_formation.node_cleanup.only_log_warning = true
   cluster_partition_handling = autoheal
+  {{- end }}
   # queue master locator
   queue_master_locator = min-masters
   # enable guest user
@@ -224,10 +241,12 @@ configuration: |-
   {{- end }}
   {{- if .Values.metrics.enabled }}
   ## Prometheus metrics
+  ##
   prometheus.tcp.port = 9419
   {{- end }}
   {{- if .Values.memoryHighWatermark.enabled }}
   ## Memory Threshold
+  ##
   total_memory_available_override_value = {{ include "rabbitmq.toBytes" .Values.resources.limits.memory }}
   vm_memory_high_watermark.{{ .Values.memoryHighWatermark.type }} = {{ .Values.memoryHighWatermark.value }}
   {{- end }}
@@ -288,6 +307,7 @@ ldap:
 ## extraVolumes:
 ##   - name: extras
 ##     emptyDir: {}
+##
 extraVolumeMounts: []
 extraVolumes: []
 
@@ -301,6 +321,9 @@ extraVolumes: []
 ##         ...
 ##       }
 ##
+## Set this flag to true if extraSecrets should be created with <release-name> prepended.
+##
+extraSecretsPrependReleaseName: false
 extraSecrets: {}
 
 ## Number of RabbitMQ replicas to deploy
@@ -368,6 +391,7 @@ podAntiAffinityPreset: soft
 nodeAffinityPreset:
   ## Node affinity type
   ## Allowed values: soft, hard
+  ##
   type: ""
   ## Node label key to match
   ## E.g.
@@ -398,10 +422,16 @@ nodeSelector: {}
 ##
 tolerations: []
 
+## Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+##
+topologySpreadConstraints: {}
+
 ## RabbitMQ pods' Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ##
 podSecurityContext:
+  enabled: true
   fsGroup: 1001
   runAsUser: 1001
 
@@ -524,6 +554,7 @@ persistence:
   ## selector:
   ##   matchLabels:
   ##     app: my-app
+  ##
   selector: {}
   accessMode: ReadWriteOnce
 
@@ -577,6 +608,7 @@ networkPolicy:
   #        - frontend
 
 ## Kubernetes service type
+##
 service:
   type: ClusterIP
   ## Amqp port
@@ -621,6 +653,8 @@ service:
   ## RabbitMQ Manager port
   ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
   ##
+  managerPortEnabled: true
+
   managerPort: 15672
 
   ## RabbitMQ Manager service port name
@@ -689,6 +723,12 @@ service:
   ##   service.beta.kubernetes.io/aws-load-balancer-internal: 0.0.0.0/0
   ##
   annotations: {}
+  ## Headless Service annotations. Evaluated as a template
+  ## Example:
+  ## annotations:
+  ##   external-dns.alpha.kubernetes.io/internal-hostname: rabbitmq.example.com
+  ##
+  annotationsHeadless: {}
 
 ## Configure the ingress resource that allows you to access the
 ## RabbitMQ installation. Set up the URL
@@ -699,13 +739,14 @@ ingress:
   ##
   enabled: false
 
-  ## Path for the default host
+  ## Path for the default host. You may need to set this to '/*' in order to use this
+  ## with ALB ingress controllers.
   ##
   path: /
 
-  ## Set this to true in order to add the corresponding annotations for cert-manager
+  ## Ingress Path type
   ##
-  certManager: false
+  pathType: ImplementationSpecific
 
   ## When the ingress is enabled, a host pointing to this will be created
   ##
@@ -721,42 +762,62 @@ ingress:
 
   ## Enable TLS configuration for the hostname defined at ingress.hostname parameter
   ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
-  ## or a custom one if you use the tls.existingSecret parameter
-  ## You can use the ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
+  ## You can:
+  ##   - Use the `ingress.secrets` parameter to create this TLS secret
+  ##   - Relay on cert-manager to create it by setting `ingress.certManager=true`
+  ##   - Relay on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
   ##
   tls: false
-  ## existingSecret: name-of-existing-secret
+
+  ## Set this to true in order to add the corresponding annotations for cert-manager
+  ## to generate a TLS secret for the ingress record
+  ##
+  certManager: false
+
+  ## Set this to true in order to create a TLS secret for this ingress record
+  ## using self-signed certificates generated by Helm
+  ##
+  selfSigned: false
 
   ## The list of additional hostnames to be covered with this ingress record.
   ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
+  ## e.g:
   ## extraHosts:
-  ## - name: rabbitmq.local
-  ##   path: /
+  ##   - name: rabbitmq.local
+  ##     path: /
   ##
+  extraHosts: []
 
   ## The tls configuration for additional hostnames to be covered with this ingress record.
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ## e.g:
   ## extraTls:
-  ## - hosts:
-  ##     - rabbitmq.local
-  ##   secretName: rabbitmq.local-tls
+  ##   - hosts:
+  ##       - rabbitmq.local
+  ##     secretName: rabbitmq.local-tls
   ##
+  extraTls: []
 
-  ## If you're providing your own certificates, please use this to add the certificates as secrets
-  ## key and certificate should start with -----BEGIN CERTIFICATE----- or
-  ## -----BEGIN RSA PRIVATE KEY-----
-  ##
-  ## name should line up with a tlsSecret set further up
-  ## If you're using cert-manager, this is unneeded, as it will create the secret for you if it is not set
-  ##
+  ## Custom TLS certificates as secrets
+  ## NOTE: 'key' and 'certificate' are expected in PEM format
+  ## NOTE: 'name' should line up with a 'secretName' set further up
+  ## If it is not set and you're using cert-manager, this is unneeded, as it will create a secret for you with valid certificates
+  ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created valid for 365 days
   ## It is also possible to create and manage the certificates outside of this helm chart
   ## Please see README.md for more information
+  ## e.g:
+  ## secrets:
+  ##   - name: rabbitmq.local-tls
+  ##     key: |-
+  ##       -----BEGIN RSA PRIVATE KEY-----
+  ##       ...
+  ##       -----END RSA PRIVATE KEY-----
+  ##     certificate: |-
+  ##       -----BEGIN CERTIFICATE-----
+  ##       ...
+  ##       -----END CERTIFICATE-----
   ##
   secrets: []
-  ## - name: rabbitmq.local-tls
-  ##   key:
-  ##   certificate:
-  ##
 
 ## Prometheus Metrics
 ##
@@ -792,13 +853,16 @@ metrics:
     ## Specify honorLabels parameter to add the scrape endpoint
     ##
     honorLabels: false
-    ## Specify the release for ServiceMonitor. Sometimes it should be custom for prometheus operator to work
-    ##
-    # release: ""
     ## Used to pass Labels that are used by the Prometheus installed in your cluster to select Service Monitors to work with
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
     ##
     additionalLabels: {}
+    ## Used to keep given pod's labels in target
+    targetLabels:
+    # - app.kubernetes.io/name
+    ## Used to keep given service's labels in target
+    podTargetLabels:
+    # - app.kubernetes.io/name
 
   ## Custom PrometheusRule to be defined
   ## The value is evaluated as a template, so, for example, the value can depend on .Release or .Chart
@@ -872,13 +936,10 @@ metrics:
 ##
 volumePermissions:
   enabled: false
-  ## Bitnami Minideb image
-  ## ref: https://hub.docker.com/r/bitnami/minideb/tags/
-  ##
   image:
     registry: docker.io
-    repository: bitnami/minideb
-    tag: buster
+    repository: bitnami/bitnami-shell
+    tag: "10"
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images

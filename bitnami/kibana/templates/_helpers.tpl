@@ -36,9 +36,10 @@ Set Elasticsearch URL.
 {{- define "kibana.elasticsearch.url" -}}
 {{- if .Values.elasticsearch.hosts -}}
 {{- $totalHosts := len .Values.elasticsearch.hosts -}}
+{{- $protocol := ternary "https" "http" .Values.elasticsearch.tls -}}
 {{- range $i, $hostTemplate := .Values.elasticsearch.hosts -}}
 {{- $host := tpl $hostTemplate $ }}
-{{- printf "http://%s:%s" $host (include "kibana.elasticsearch.port" $) -}}
+{{- printf "%s://%s:%s" $protocol $host (include "kibana.elasticsearch.port" $) -}}
 {{- if (lt ( add1 $i ) $totalHosts ) }}{{- printf "," -}}{{- end }}
 {{- end -}}
 {{- end -}}
@@ -142,5 +143,4 @@ Check if there are rolling tags in the images
 */}}
 {{- define "kibana.checkRollingTags" -}}
 {{- include "common.warnings.rollingTag" .Values.image }}
-{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- end -}}

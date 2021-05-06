@@ -1,0 +1,62 @@
+annotations:
+  category: Infrastructure
+apiVersion: v2
+appVersion: 1.0.0
+dependencies:
+  - condition: kafka.enabled
+    name: kafka
+    repository: https://charts.bitnami.com/bitnami
+    version: 12.x.x
+  - condition: spark.enabled
+    name: spark
+    repository: https://charts.bitnami.com/bitnami
+    version: 5.x.x
+  - condition: solr.enabled
+    name: solr
+    repository: https://charts.bitnami.com/bitnami
+    version: 0.x.x
+  - condition: zookeeper.enabled
+    name: zookeeper
+    repository: https://charts.bitnami.com/bitnami
+    version: 6.x.x
+  - condition: wavefront.enabled
+    name: wavefront
+    repository: https://charts.bitnami.com/bitnami
+    version: 2.x.x
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 1.x.x
+description: OCTO Data platform Kafka-Spark-Solr Helm Chart
+engine: gotpl
+home: https://github.com/bitnami/charts/tree/master/bitnami/dataplatform-bp1
+icon: https://bitnami.com/assets/stacks/dataplatform-bp1/img/dataplatform-bp1-stack-220x234.png
+keywords:
+  - dataplatform
+  - kafka
+  - spark
+  - solr
+  - zookeeper
+  - wavefront
+  - observability
+  - apache
+  - tanzuobservability
+maintainers:
+  - email: containers@bitnami.com
+    name: Bitnami
+name: dataplatform-bp1
+sources:
+  - https://github.com/bitnami/bitnami-docker-kafka
+  - https://kafka.apache.org/
+  - https://github.com/bitnami/bitnami-docker-spark
+  - https://spark.apache.org/
+  - https://lucene.apache.org/solr/
+  - https://github.com/bitnami/bitnami-docker-solr
+  - https://zookeeper.apache.org/
+  - https://github.com/bitnami/bitnami-docker-zookeeper
+  - https://github.com/bitnami/bitnami-docker-wavefront-kubernetes-collector
+  - https://github.com/bitnami/bitnami-docker-wavefront-proxy
+  - https://github.com/wavefrontHQ/wavefront-collector-for-kubernetes
+  - https://github.com/wavefrontHQ/wavefront-proxy
+version: 1.0.1

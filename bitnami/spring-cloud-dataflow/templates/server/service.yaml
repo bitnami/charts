@@ -4,8 +4,16 @@ metadata:
   name: {{ include "scdf.fullname" . }}-server
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: server
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  namespace: {{ .Release.Namespace }}
+  annotations:
+  {{- if .Values.commonAnnotations }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
   {{- if .Values.server.service.annotations }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.server.service.annotations "context" $) | nindent 4 }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.server.service.annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   type: {{ .Values.server.service.type }}

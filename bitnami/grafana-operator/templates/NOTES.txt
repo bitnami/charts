@@ -1,0 +1,13 @@
+** Please be patient while the chart is being deployed **
+
+Watch the Grafana Operator Deployment status using the command:
+
+    kubectl get deploy -w --namespace {{ .Release.Namespace }} -l app.kubernetes.io/name={{ include "common.names.name" . }},app.kubernetes.io/instance={{ .Release.Name }}
+
+{{- if .Values.operator.enabled }}
+{{ include "common.warnings.rollingTag" .Values.operator.image }}
+{{- end }}
+{{- if .Values.grafana.enabled }}
+{{ include "common.warnings.rollingTag" .Values.grafana.image }}
+{{- end }}
+{{ include "common.warnings.rollingTag" .Values.grafanaPluginInit.image }}

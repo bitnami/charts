@@ -1,0 +1,30 @@
+annotations:
+  category: Infrastructure
+apiVersion: v2
+appVersion: 8.8.2
+dependencies:
+  - condition: zookeeper.enabled
+    name: zookeeper
+    repository: https://charts.bitnami.com/bitnami
+    version: 6.x.x
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 1.x.x
+description: Apache Solr is an open source enterprise search platform
+engine: gotpl
+home: https://github.com/bitnami/charts/tree/master/bitnami/solr
+icon: https://bitnami.com/assets/stacks/solr/img/solr-stack-110x117.png
+keywords:
+  - solr
+  - zookeeper
+  - apache
+maintainers:
+  - email: containers@bitnami.com
+    name: Bitnami
+name: solr
+sources:
+  - https://github.com/bitnami/bitnami-docker-solr
+  - https://lucene.apache.org/solr/
+version: 0.3.2

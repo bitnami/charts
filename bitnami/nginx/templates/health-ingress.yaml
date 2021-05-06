@@ -23,19 +23,24 @@ spec:
     - host: {{ .Values.healthIngress.hostname }}
       http:
         paths:
-          - path: /
-            backend:
-              serviceName: {{ template "common.names.fullname" . }}
-              servicePort: http
+          {{- if .Values.healthIngress.extraPaths }}
+          {{- toYaml .Values.healthIngress.extraPaths | nindent 10 }}
+          {{- end }}
+          - path: {{ .Values.healthIngress.path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+            pathType: {{ .Values.healthIngress.pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" .) "servicePort" "http" "context" $)  | nindent 14 }}
     {{- end }}
     {{- range .Values.healthIngress.extraHosts }}
-    - host: {{ .name }}
+    - host: {{ .name | quote }}
       http:
         paths:
           - path: {{ default "/" .path }}
-            backend:
-              serviceName: {{ template "common.names.fullname" $ }}
-              servicePort: http
+            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
+            pathType: {{ default "ImplementationSpecific" .pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" $) "servicePort" "http" "context" $) | nindent 14 }}
     {{- end }}
   {{- if or .Values.healthIngress.tls .Values.healthIngress.extraTls }}
   tls:
@@ -45,7 +50,7 @@ spec:
       secretName: {{ printf "%s-tls" .Values.healthIngress.hostname }}
     {{- end }}
     {{- if .Values.healthIngress.extraTls }}
-    {{- toYaml .Values.healthIngress.extraTls | nindent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.healthIngress.extraTls "context" $ ) | nindent 4 }}
     {{- end }}
   {{- end }}
 {{- end }}

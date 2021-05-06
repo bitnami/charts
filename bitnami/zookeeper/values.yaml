@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/zookeeper
-  tag: 3.6.2-debian-10-r89
+  tag: 3.7.0-debian-10-r27
 
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -28,8 +28,7 @@ image:
   # pullSecrets:
   #   - myRegistryKeySecretName
   ## Set to true if you would like to see extra information on logs
-  ## It turns BASH and NAMI debugging in minideb
-  ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ## It turns BASH and/or NAMI debugging in the image
   ##
   debug: false
 
@@ -39,9 +38,18 @@ image:
 ## String to fully override common.names.fullname template
 # fullnameOverride:
 
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
+
 ## Kubernetes Cluster Domain
 ##
 clusterDomain: cluster.local
+
+## Extra objects to deploy (value evaluated as a template)
+##
+extraDeploy: []
 
 ## Add labels to all the deployed resources
 ##
@@ -58,8 +66,8 @@ volumePermissions:
   enabled: false
   image:
     registry: docker.io
-    repository: bitnami/minideb
-    tag: buster
+    repository: bitnami/bitnami-shell
+    tag: "10"
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -194,7 +202,7 @@ logLevel: ERROR
 ## Example:
 ## dataLogDir: /bitnami/zookeeper/dataLog
 ##
-dataLogDir: ""
+dataLogDir: ''
 
 ## Default JVMFLAGS for the ZooKeeper process
 ##
@@ -228,14 +236,14 @@ service:
     client_port: 3181
 
     client_keystore_path: /tls_key_store/key_store_file
-    client_keystore_password: ""
+    client_keystore_password: ''
     client_truststore_path: /tls_trust_store/trust_store_file
-    client_truststore_password: ""
+    client_truststore_password: ''
 
     quorum_keystore_path: /tls_key_store/key_store_file
-    quorum_keystore_password: ""
+    quorum_keystore_password: ''
     quorum_truststore_path: /tls_trust_store/trust_store_file
-    quorum_truststore_password: ""
+    quorum_truststore_password: ''
   annotations: {}
   headless:
     annotations: {}
@@ -250,12 +258,28 @@ serviceAccount:
   ## The name of the ServiceAccount to use.
   ## If not set and create is true, a name is generated using the common.names.fullname template
   # name:
+  # Allows auto mount of ServiceAccountToken on the serviceAccount created
+  # Can be set to false if pods using this serviceAccount do not need to use K8s API
+  automountServiceAccountToken: true
 
 ## Zookeeper Pod Security Context
+##
 securityContext:
   enabled: true
   fsGroup: 1001
   runAsUser: 1001
+
+## Add initContainers to the web pods.
+## Example:
+## initContainers:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+initContainers: []
 
 ## Zookeeper data Persistent Volume Storage Class
 ## If defined, storageClassName: <storageClass>
@@ -289,7 +313,7 @@ persistence:
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ## Allowed values: soft, hard
 ##
-podAffinityPreset: ""
+podAffinityPreset: ''
 
 ## Pod anti-affinity preset
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
@@ -304,12 +328,13 @@ podAntiAffinityPreset: soft
 nodeAffinityPreset:
   ## Node affinity type
   ## Allowed values: soft, hard
-  type: ""
+  ##
+  type: ''
   ## Node label key to match
   ## E.g.
   ## key: "kubernetes.io/e2e-az-name"
   ##
-  key: ""
+  key: ''
   ## Node label values to match
   ## E.g.
   ## values:
@@ -336,15 +361,18 @@ tolerations: []
 
 ## Labels
 ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
 podLabels: {}
 
 ## Annotations
 ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+##
 podAnnotations: {}
 
 ## Name of the priority class to be used by zookeeper pods, priority class needs to be created beforehand
 ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
-priorityClassName: ""
+##
+priorityClassName: ''
 
 ## Scheduler name
 ## https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
@@ -389,7 +417,7 @@ networkPolicy:
   enabled: false
 
   ## The Policy model to apply. When set to false, only pods with the correct
-  ## client label will have network access to the port Redis is listening
+  ## client label will have network access to the port Redis(TM) is listening
   ## on. When true, zookeeper accept connections from any source
   ## (with the correct destination port).
   ##
@@ -416,9 +444,9 @@ metrics:
     ## Annotations for the Zookeeper Prometheus Exporter metrics service
     ##
     annotations:
-      prometheus.io/scrape: "true"
-      prometheus.io/port: "{{ .Values.metrics.service.port }}"
-      prometheus.io/path: "/metrics"
+      prometheus.io/scrape: 'true'
+      prometheus.io/port: '{{ .Values.metrics.service.port }}'
+      prometheus.io/path: '/metrics'
 
   ## Prometheus Operator ServiceMonitor configuration
   ##
@@ -432,12 +460,10 @@ metrics:
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
     # interval: 10s
-
     ## Timeout after which the scrape is ended
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
     # scrapeTimeout: 10s
-
     ## ServiceMonitor selector labels
     ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
     ##
@@ -459,6 +485,7 @@ metrics:
     #   prometheus: my-prometheus
 
     ## Some example rules.
+    ##
     rules: []
     #  - alert: ZookeeperSyncedFollowers
     #    annotations:

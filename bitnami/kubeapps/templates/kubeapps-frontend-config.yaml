@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ template "kubeapps.frontend-config.fullname" . }}
-  labels:{{ include "kubeapps.extraAppLabels" . | nindent 4 }}
+  labels: {{ include "kubeapps.extraAppLabels" . | nindent 4 }}
     app: {{ template "kubeapps.frontend-config.fullname" . }}
 data:
   k8s-api-proxy.conf: |-
@@ -22,10 +22,10 @@ data:
     # Google Kubernetes Engine requires the access_token as the Bearer when talking to the k8s api server.
     proxy_set_header Authorization "Bearer $http_x_forwarded_access_token";
     {{- end }}
-  {{- range .Values.clusters }}
+    {{- range .Values.clusters }}
   {{- if .certificateAuthorityData }}
   {{ .name }}-ca.pem: {{ .certificateAuthorityData }}
-   {{- end }}
+  {{- end }}
   {{- end}}
   vhost.conf: |-
     # Retain the default nginx handling of requests without a "Connection" header
@@ -40,12 +40,12 @@ data:
 
     server {
       listen 8080;
-  {{- if .Values.frontend.largeClientHeaderBuffers }}
+    {{- if .Values.frontend.largeClientHeaderBuffers }}
       large_client_header_buffers {{ .Values.frontend.largeClientHeaderBuffers }};
-  {{- end }}
-  {{- if .Values.enableIPv6 }}
+    {{- end }}
+    {{- if .Values.enableIPv6 }}
       listen [::]:8080;
-  {{- end}}
+    {{- end}}
       server_name _;
 
       location /healthz {
@@ -57,53 +57,79 @@ data:
       # Ensure each cluster can be reached (should only be
       # used with an auth-proxy where k8s credentials never leave
       # the cluster). See clusters option.
-      {{- range .Values.clusters }}
+    {{- range .Values.clusters }}
       location ~* /api/clusters/{{ .name }} {
-        rewrite /api/clusters/{{ .name }}/(.*) /$1 break;
-        rewrite /api/clusters/{{ .name }} / break;
-        proxy_pass {{ default "https://kubernetes.default" .apiServiceURL }};
-        {{- if .certificateAuthorityData }}
+    {{/* We need to split the API service URL(s) into the base url and the path segment so
+           those configurations using a path can be appropriately rewritten below while
+           ensuring the proxy_pass statement is given the base URL only. */}}
+    {{- $parsed := urlParse (default "https://kubernetes.default" .apiServiceURL) }}
+    {{- $apiServiceBaseURL := urlJoin (pick $parsed "scheme" "host") }}
+    {{- $apiServiceURLPath := $parsed.path }}
+        rewrite /api/clusters/{{ .name }}/(.*) {{ $apiServiceURLPath }}/$1 break;
+        rewrite /api/clusters/{{ .name }} {{ $apiServiceURLPath }}/ break;
+
+    {{/* Helm returns a nil pointer error when accessing foo.bar if foo doesn't
+           exist, even with the `default` function.
+           See https://github.com/helm/helm/issues/8026#issuecomment-756538254 */}}
+    {{- $pinnipedConfig := .pinnipedConfig | default dict }}
+    {{- if and $.Values.pinnipedProxy.enabled $pinnipedConfig.enable }}
+        # If pinniped proxy is enabled *and* the current cluster is configured
+        # to exchange credentials then we route via pinnipedProxy to exchange
+        # credentials for client certificates.
+    {{- if .apiServiceURL }}
+        proxy_set_header PINNIPED_PROXY_API_SERVER_URL {{ .apiServiceURL }};
+    {{- end }}
+    {{- if .certificateAuthorityData }}
+        proxy_set_header PINNIPED_PROXY_API_SERVER_CERT {{ .certificateAuthorityData }};
+    {{- end }}
+        proxy_pass http://kubeapps-internal-pinniped-proxy.{{ $.Release.Namespace }}:{{ $.Values.pinnipedProxy.service.port }};
+    {{- else }}
+        # Otherwise we route directly through to the clusters with existing credentials.
+        proxy_pass {{ $apiServiceBaseURL }};
+    {{- if .certificateAuthorityData }}
         proxy_ssl_trusted_certificate "./server_blocks/{{ .name }}-ca.pem";
-        {{- end }}
+    {{- end }}
+    {{- end }}
         include "./server_blocks/k8s-api-proxy.conf";
       }
-      {{- end }}
+    {{- end }}
 
-      # TODO: The following location is left for backwards compat but will no longer
-      # be needed once clients are sending the cluster name.
-      # Using regexp match instead of prefix one because the application can be
-      # deployed under a specific path i.e /kubeapps
-      location ~* /api/kube {
-        rewrite /api/kube/(.*) /$1 break;
-        rewrite /api/kube / break;
-        proxy_pass https://kubernetes.default;
-        include "./server_blocks/k8s-api-proxy.conf";
-      }
-
+      # Forward '/api/assetsvc' to '/assetsvc'
+      # but preserving the encoding (eg. '%2F' is not converted to '/')
+      # see https://serverfault.com/a/906479
+      # Ex: from "/api/assetsvc/what$2Fever?param=value"
+      #     it matches as $1="/what$2Fever" and $args="param=value"
+      #     downstream services will receive "/assetsvc/what$2Fever?param=value"
       location ~* /api/assetsvc {
-        rewrite /api/assetsvc/(.*) /assetsvc/$1 break;
-        rewrite /api/assetsvc /assetsvc break;
+        rewrite ^ $request_uri; # pass the encoded url downstream as is,
+        rewrite /api/assetsvc([^?]*) /assetsvc$1?$args break;
 
-        {{- if .Values.frontend.proxypassAccessTokenAsBearer }}
+    {{- if .Values.frontend.proxypassAccessTokenAsBearer }}
         # Google Kubernetes Engine requires the access_token as the Bearer when talking to the k8s api server.
         proxy_set_header Authorization "Bearer $http_x_forwarded_access_token";
-        {{- end }}
+    {{- end }}
 
+    {{- if .Values.frontend.proxypassExtraSetHeader }}
+        proxy_set_header {{ .Values.frontend.proxypassExtraSetHeader }};
+    {{- end }}
         proxy_pass {{ include "kubeapps.frontend-config.proxy_pass" . -}};
       }
 
-      location ~* /api/tiller-deploy {
+      location ~* /api/kubeops {
         # Keep the connection open with the API server even if idle (the default is 60 seconds)
         # Setting it to 10 minutes which should be enough for our current use case of deploying/upgrading/deleting apps
         proxy_read_timeout 10m;
-        rewrite /api/tiller-deploy/(.*) /$1 break;
-        rewrite /api/tiller-deploy / break;
+        rewrite /api/kubeops/(.*) /$1 break;
+        rewrite /api/kubeops / break;
+    {{- if .Values.frontend.proxypassExtraSetHeader }}
+        proxy_set_header {{ .Values.frontend.proxypassExtraSetHeader }};
+    {{- end }}
         proxy_pass {{ include "kubeapps.frontend-config.proxy_pass" . -}};
 
-        {{- if .Values.frontend.proxypassAccessTokenAsBearer }}
+    {{- if .Values.frontend.proxypassAccessTokenAsBearer }}
         # Google Kubernetes Engine requires the access_token as the Bearer when talking to the k8s api server.
         proxy_set_header Authorization "Bearer $http_x_forwarded_access_token";
-        {{- end }}
+    {{- end }}
       }
 
       # The route for the Kubeapps backend API is not prefixed.
@@ -111,11 +137,14 @@ data:
         rewrite /api/(.*) /backend/$1 break;
         rewrite /api/ /backend break;
 
-        {{- if .Values.frontend.proxypassAccessTokenAsBearer }}
+    {{- if .Values.frontend.proxypassAccessTokenAsBearer }}
         # Google Kubernetes Engine requires the access_token as the Bearer when talking to the k8s api server.
         proxy_set_header Authorization "Bearer $http_x_forwarded_access_token";
-        {{- end }}
+    {{- end }}
 
+    {{- if .Values.frontend.proxypassExtraSetHeader }}
+        proxy_set_header {{ .Values.frontend.proxypassExtraSetHeader }};
+    {{- end }}
         proxy_pass {{ include "kubeapps.frontend-config.proxy_pass" . -}};
       }
 

@@ -1,0 +1,56 @@
+{{- if and .Values.aggregator.enabled .Values.aggregator.ingress.enabled }}
+{{- $serviceName := printf "%s-aggregator" (include "fluentd.fullname" .) -}}
+apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
+kind: Ingress
+metadata:
+  name: {{ include "fluentd.fullname" . }}-aggregator
+  labels: {{- include "fluentd.labels" . | nindent 4 }}
+    app.kubernetes.io/component: aggregator
+    app: aggregator
+  annotations:
+    {{- if .Values.aggregator.ingress.certManager }}
+    kubernetes.io/tls-acme: "true"
+    {{- end }}
+    {{- if .Values.aggregator.ingress.annotations }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.aggregator.ingress.annotations "context" $) | nindent 4 }}
+    {{- end }}
+spec:
+  rules:
+    {{- if .Values.aggregator.ingress.hostname }}
+    - host: {{ .Values.aggregator.ingress.hostname }}
+      http:
+        paths:
+          {{- if .Values.aggregator.ingress.extraPaths }}
+          {{- toYaml .Values.aggregator.ingress.extraPaths | nindent 10 }}
+          {{- end }}
+          - path: {{ .Values.aggregator.ingress.path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+            pathType: {{ .Values.aggregator.ingress.pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" $serviceName "servicePort" "http" "context" $)  | nindent 14 }}
+    {{- end }}
+    {{- range .Values.aggregator.ingress.extraHosts }}
+    - host: {{ .name | quote }}
+      http:
+        paths:
+          - path: {{ default "/" .path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
+            pathType: {{ default "ImplementationSpecific" .pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" $serviceName "servicePort" "http" "context" $) | nindent 14 }}
+    {{- end }}
+  {{- if or .Values.aggregator.ingress.tls .Values.aggregator.ingress.extraTls }}
+  tls:
+    {{- if .Values.aggregator.ingress.tls }}
+    - hosts:
+        - {{ .Values.aggregator.ingress.hostname }}
+        {{- range .Values.aggregator.ingress.extraHosts }}
+        - {{ .name }}
+        {{- end }}
+      secretName: {{ printf "%s-tls" .Values.aggregator.ingress.hostname }}
+    {{- end }}
+    {{- if .Values.aggregator.ingress.extraTls }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.aggregator.ingress.extraTls "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+{{- end }}

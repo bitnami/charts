@@ -16,6 +16,9 @@ spec:
   {{- if and .Values.storegateway.service.clusterIP (eq .Values.storegateway.service.type "ClusterIP") }}
   clusterIP: {{ .Values.storegateway.service.clusterIP }}
   {{- end }}
+  {{- if ne .Values.storegateway.service.type "ClusterIP" }}
+  externalTrafficPolicy: {{ .Values.storegateway.service.externalTrafficPolicy }}
+  {{- end }}
   {{- if and .Values.storegateway.service.loadBalancerIP (eq .Values.storegateway.service.type "LoadBalancer") }}
   loadBalancerIP: {{ .Values.storegateway.service.loadBalancerIP }}
   {{- end }}

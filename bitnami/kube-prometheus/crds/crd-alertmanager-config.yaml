@@ -1,4 +1,4 @@
-# https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.44.0/example/prometheus-operator-crd/monitoring.coreos.com_alertmanagerconfigs.yaml
+# https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.46.0/example/prometheus-operator-crd/monitoring.coreos.com_alertmanagerconfigs.yaml
 
 ---
 apiVersion: apiextensions.k8s.io/v1
@@ -11,6 +11,8 @@ metadata:
 spec:
   group: monitoring.coreos.com
   names:
+    categories:
+      - prometheus-operator
     kind: AlertmanagerConfig
     listKind: AlertmanagerConfigList
     plural: alertmanagerconfigs
@@ -50,6 +52,7 @@ spec:
                           properties:
                             name:
                               description: Label to match.
+                              minLength: 1
                               type: string
                             regex:
                               description: Whether to match on equality (false) or regular-expression (true).
@@ -59,7 +62,6 @@ spec:
                               type: string
                           required:
                             - name
-                            - value
                           type: object
                         type: array
                       targetMatch:
@@ -69,6 +71,7 @@ spec:
                           properties:
                             name:
                               description: Label to match.
+                              minLength: 1
                               type: string
                             regex:
                               description: Whether to match on equality (false) or regular-expression (true).
@@ -78,7 +81,6 @@ spec:
                               type: string
                           required:
                             - name
-                            - value
                           type: object
                         type: array
                     type: object
@@ -94,9 +96,10 @@ spec:
                           description: EmailConfig configures notifications via Email.
                           properties:
                             authIdentity:
+                              description: The identity to use for authentication.
                               type: string
                             authPassword:
-                              description: SecretKeySelector selects a key of a Secret.
+                              description: The secret's key that contains the password to use for authentication. The secret needs to be in the same namespace as the AlertmanagerConfig object and accessible by the Prometheus Operator.
                               properties:
                                 key:
                                   description: The key of the secret to select from.  Must be a valid secret key.
@@ -111,7 +114,7 @@ spec:
                                 - key
                               type: object
                             authSecret:
-                              description: SecretKeySelector selects a key of a Secret.
+                              description: The secret's key that contains the CRAM-MD5 secret. The secret needs to be in the same namespace as the AlertmanagerConfig object and accessible by the Prometheus Operator.
                               properties:
                                 key:
                                   description: The key of the secret to select from.  Must be a valid secret key.
@@ -126,7 +129,7 @@ spec:
                                 - key
                               type: object
                             authUsername:
-                              description: SMTP authentication information.
+                              description: The username to use for authentication.
                               type: string
                             from:
                               description: The sender address.
@@ -138,6 +141,7 @@ spec:
                                 properties:
                                   key:
                                     description: Key of the tuple.
+                                    minLength: 1
                                     type: string
                                   value:
                                     description: Value of the tuple.
@@ -265,6 +269,7 @@ spec:
                         type: array
                       name:
                         description: Name of the receiver. Must be unique across all items from the list.
+                        minLength: 1
                         type: string
                       opsgenieConfigs:
                         description: List of OpsGenie configurations.
@@ -299,6 +304,7 @@ spec:
                                 properties:
                                   key:
                                     description: Key of the tuple.
+                                    minLength: 1
                                     type: string
                                   value:
                                     description: Value of the tuple.
@@ -469,7 +475,7 @@ spec:
                             responders:
                               description: List of responders responsible for notifications.
                               items:
-                                description: OpsGenieConfigResponder defines a responder to an incident. One of id, name or username has to be defined.
+                                description: OpsGenieConfigResponder defines a responder to an incident. One of `id`, `name` or `username` has to be defined.
                                 properties:
                                   id:
                                     description: ID of the responder.
@@ -479,10 +485,13 @@ spec:
                                     type: string
                                   type:
                                     description: Type of responder.
+                                    minLength: 1
                                     type: string
                                   username:
                                     description: Username of the responder.
                                     type: string
+                                required:
+                                  - type
                                 type: object
                               type: array
                             sendResolved:
@@ -523,6 +532,7 @@ spec:
                                 properties:
                                   key:
                                     description: Key of the tuple.
+                                    minLength: 1
                                     type: string
                                   value:
                                     description: Value of the tuple.
@@ -904,7 +914,7 @@ spec:
                               description: Notification title.
                               type: string
                             token:
-                              description: Your registered application’s API token, see https://pushover.net/apps
+                              description: The secret's key that contains the registered application’s API token, see https://pushover.net/apps. The secret needs to be in the same namespace as the AlertmanagerConfig object and accessible by the Prometheus Operator.
                               properties:
                                 key:
                                   description: The key of the secret to select from.  Must be a valid secret key.
@@ -925,7 +935,7 @@ spec:
                               description: A title for supplementary URL, otherwise just the URL is shown
                               type: string
                             userKey:
-                              description: The recipient user’s user key.
+                              description: The secret's key that contains the recipient user’s user key. The secret needs to be in the same namespace as the AlertmanagerConfig object and accessible by the Prometheus Operator.
                               properties:
                                 key:
                                   description: The key of the secret to select from.  Must be a valid secret key.
@@ -959,6 +969,7 @@ spec:
                                       okText:
                                         type: string
                                       text:
+                                        minLength: 1
                                         type: string
                                       title:
                                         type: string
@@ -970,8 +981,10 @@ spec:
                                   style:
                                     type: string
                                   text:
+                                    minLength: 1
                                     type: string
                                   type:
+                                    minLength: 1
                                     type: string
                                   url:
                                     type: string
@@ -1014,8 +1027,10 @@ spec:
                                   short:
                                     type: boolean
                                   title:
+                                    minLength: 1
                                     type: string
                                   value:
+                                    minLength: 1
                                     type: string
                                 required:
                                   - title
@@ -1210,7 +1225,7 @@ spec:
                           description: VictorOpsConfig configures notifications via VictorOps. See https://prometheus.io/docs/alerting/latest/configuration/#victorops_config
                           properties:
                             apiKey:
-                              description: The API key to use when talking to the VictorOps API.
+                              description: The secret's key that contains the API key to use when talking to the VictorOps API. The secret needs to be in the same namespace as the AlertmanagerConfig object and accessible by the Prometheus Operator.
                               properties:
                                 key:
                                   description: The key of the secret to select from.  Must be a valid secret key.
@@ -1234,6 +1249,7 @@ spec:
                                 properties:
                                   key:
                                     description: Key of the tuple.
+                                    minLength: 1
                                     type: string
                                   value:
                                     description: Value of the tuple.
@@ -1410,8 +1426,6 @@ spec:
                             stateMessage:
                               description: Contains long explanation of the alerted problem.
                               type: string
-                          required:
-                            - routingKey
                           type: object
                         type: array
                       webhookConfigs:
@@ -1569,8 +1583,9 @@ spec:
                                   type: object
                               type: object
                             maxAlerts:
-                              description: Maximum number of alerts to be sent per webhook message.
+                              description: Maximum number of alerts to be sent per webhook message. When 0, all alerts are included.
                               format: int32
+                              minimum: 0
                               type: integer
                             sendResolved:
                               description: Whether or not to notify about resolved alerts.
@@ -1793,7 +1808,7 @@ spec:
                     type: object
                   type: array
                 route:
-                  description: The Alertmanager route definition for alerts matching the resource’s namespace. It will be added to the generated Alertmanager configuration as a first-level route.
+                  description: The Alertmanager route definition for alerts matching the resource’s namespace. If present, it will be added to the generated Alertmanager configuration as a first-level route.
                   properties:
                     continue:
                       description: Boolean indicating whether an alert should continue matching subsequent sibling nodes. It will always be overridden to true for the first-level route by the Prometheus operator.
@@ -1816,6 +1831,7 @@ spec:
                         properties:
                           name:
                             description: Label to match.
+                            minLength: 1
                             type: string
                           regex:
                             description: Whether to match on equality (false) or regular-expression (true).
@@ -1825,11 +1841,10 @@ spec:
                             type: string
                         required:
                           - name
-                          - value
                         type: object
                       type: array
                     receiver:
-                      description: Name of the receiver for this route. If present, it should be listed in the `receivers` field. The field can be omitted only for nested routes otherwise it is mandatory.
+                      description: Name of the receiver for this route. If not empty, it should be listed in the `receivers` field.
                       type: string
                     repeatInterval:
                       description: How long to wait before repeating the last notification. Must match the regular expression `[0-9]+(ms|s|m|h)` (milliseconds seconds minutes hours).

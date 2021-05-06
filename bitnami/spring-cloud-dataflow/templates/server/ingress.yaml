@@ -1,16 +1,23 @@
 {{- if .Values.server.ingress.enabled -}}
-apiVersion: extensions/v1beta1
+apiVersion: {{ template "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
   name: {{ include "scdf.fullname" . }}-server
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: server
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  namespace: {{ .Release.Namespace }}
   annotations:
     {{- if .Values.server.ingress.certManager }}
     kubernetes.io/tls-acme: "true"
     {{- end }}
-    {{- range $key, $value := .Values.server.ingress.annotations }}
-    {{ $key }}: {{ $value | quote }}
+    {{- if .Values.server.ingress.annotations }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.server.ingress.annotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
 spec:
   rules:
@@ -18,19 +25,24 @@ spec:
     - host: {{ .Values.server.ingress.hostname }}
       http:
         paths:
-          - path: /
-            backend:
-              serviceName: {{ include "scdf.fullname" . }}-server
-              servicePort: http
+          {{- if .Values.server.ingress.extraPaths }}
+          {{- toYaml .Values.server.ingress.extraPaths | nindent 10 }}
+          {{- end }}
+          - path: {{ .Values.server.ingress.path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+            pathType: {{ .Values.server.ingress.pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (printf "%s-server" (include "common.names.fullname" .)) "servicePort" "http" "context" $)  | nindent 14 }}
     {{- end }}
     {{- range .Values.server.ingress.extraHosts }}
     - host: {{ .name }}
       http:
         paths:
           - path: {{ default "/" .path }}
-            backend:
-              serviceName: {{ include "scdf.fullname" . }}-server
-              servicePort: http
+            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
+            pathType: {{ default "ImplementationSpecific" .pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (printf "%s-server" (include "common.names.fullname" $)) "servicePort" "http" "context" $)  | nindent 14 }}
     {{- end }}
   {{- if or .Values.server.ingress.tls .Values.server.ingress.extraTls .Values.server.ingress.hosts }}
   tls:

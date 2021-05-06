@@ -39,6 +39,6 @@ spec:
     {{- if .Values.metrics.enabled }}
     # Allow prometheus scrapes for metrics
     - ports:
-        - port: 8080
+        - port: {{ .Values.metrics.containerPorts.http | default "8080" }}
     {{- end }}
 {{- end }}

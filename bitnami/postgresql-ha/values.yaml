@@ -29,7 +29,7 @@
 postgresqlImage:
   registry: docker.io
   repository: bitnami/postgresql-repmgr
-  tag: 11.10.0-debian-10-r27
+  tag: 11.11.0-debian-10-r70
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -41,7 +41,6 @@ postgresqlImage:
   #   - myRegistryKeySecretName
 
   ## Set to true if you would like to see extra information on logs
-  ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
   ##
   debug: false
 
@@ -51,7 +50,7 @@ postgresqlImage:
 pgpoolImage:
   registry: docker.io
   repository: bitnami/pgpool
-  tag: 4.2.0-debian-10-r14
+  tag: 4.2.2-debian-10-r70
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -63,17 +62,16 @@ pgpoolImage:
   #   - myRegistryKeySecretName
 
   ## Set to true if you would like to see extra information on logs
-  ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
   ##
   debug: false
 
-## Bitnami Minideb image
-## ref: https://hub.docker.com/r/bitnami/pgpool/tags/
+## Init containers parameters:
+## volumePermissions: Change the owner and group of the persistent volume mountpoint
 ##
 volumePermissionsImage:
   registry: docker.io
-  repository: bitnami/minideb
-  tag: buster
+  repository: bitnami/bitnami-shell
+  tag: "10"
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -90,7 +88,7 @@ volumePermissionsImage:
 metricsImage:
   registry: docker.io
   repository: bitnami/postgres-exporter
-  tag: 0.8.0-debian-10-r298
+  tag: 0.9.0-debian-10-r56
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -102,7 +100,6 @@ metricsImage:
   #   - myRegistryKeySecretName
 
   ## Set to true if you would like to see extra information on logs
-  ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
   ##
   debug: false
 
@@ -117,6 +114,14 @@ metricsImage:
 ## Kubernetes Cluster Domain
 ##
 clusterDomain: cluster.local
+
+## Pod Service Account
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+##
+serviceAccount:
+  enabled: false
+  ## Name of an already existing service account. Setting this value disables the automatic service account creation.
+  # name:
 
 ## Common annotations to add to all resources (sub-charts are not considered). Evaluated as a template
 ##
@@ -145,6 +150,11 @@ postgresql:
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategyType: RollingUpdate
+
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
 
   ## Additional pod annotations
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
@@ -175,6 +185,7 @@ postgresql:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -226,6 +237,10 @@ postgresql:
   ## Custom Readiness probe
   ##
   customReadinessProbe: {}
+
+  ## Custom Startup probe
+  ##
+  customStartupProbe: {}
 
   ## Container command (using container default if not set)
   ##
@@ -285,7 +300,7 @@ postgresql:
     #   cpu: 250m
     #   memory: 256Mi
 
-  ## PostgreSQL container's liveness and readiness probes
+  ## PostgreSQL container's liveness, readiness, and startup probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
   livenessProbe:
@@ -302,6 +317,13 @@ postgresql:
     timeoutSeconds: 5
     successThreshold: 1
     failureThreshold: 6
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 10
 
   ## Pod disruption budget configuration
   ##
@@ -327,6 +349,14 @@ postgresql:
 
   ## Mount PostgreSQL secret as a file instead of passing environment variable
   # usePasswordFile: false
+
+  ## Store Repmgr username and password into a passfile with format "*:*:*:username:password" and use it to configure Repmgr instead of using password (Requires Postgresql 10+, otherwise ignored)
+  # ref: https://repmgr.org/docs/current/configuration-password-management.html
+  #      https://www.postgresql.org/docs/current/libpq-pgpass.html
+  # repmgrUsePassfile: false
+
+  ## Store Repmgr in a custom path
+  # repmgrPassfilePath:
 
   ## Upgrade repmgr extension in the database
   ##
@@ -427,46 +457,69 @@ postgresql:
   extraInitContainers: []
 
   ## Repmgr configuration
-  ## Specify content for repmgr.conf
-  ## Default: do not create repmgr.conf
-  ## Alternatively, you can put your repmgr.conf under the files/ directory
+  ## You can use this parameter to specify the content for repmgr.conf
+  ## Otherwise, a repmgr.conf will be generated based on the environment variables
+  ## ref: https://github.com/bitnami/bitnami-docker-postgresql-repmgr#configuration
   ## ref: https://github.com/bitnami/bitnami-docker-postgresql-repmgr#configuration-file
+  ## Example:
+  ## repmgrConfiguration: |-
+  ##   ssh_options='-o "StrictHostKeyChecking no" -v'
+  ##   use_replication_slots='1'
+  ##   ...
   ##
-  # repmgrConfiguration: |-
+  repmgrConfiguration: ""
+
   ## PostgreSQL configuration
-  ## Specify runtime configuration parameters as a dict, using camelCase, e.g.
-  ## {"sharedBuffers": "500MB"}
-  ## Alternatively, you can put your postgresql.conf under the files/ directory
+  ## You can use this parameter to specify the content for postgresql.conf
+  ## Otherwise, a repmgr.conf will be generated based on the environment variables
+  ## ref: https://github.com/bitnami/bitnami-docker-postgresql-repmgr#configuration
   ## ref: https://github.com/bitnami/bitnami-docker-postgresql-repmgr#configuration-file
+  ## Example:
+  ## configuration: |-
+  ##   listen_addresses = '*'
+  ##   port = '5432'
+  ##   ...
   ##
-  # configuration:
+  configuration: ""
+
   ## PostgreSQL client authentication configuration
-  ## Specify content for pg_hba.conf
-  ## Default: do not create pg_hba.conf
-  ## Alternatively, you can put your pg_hba.conf under the files/ directory
+  ## You can use this parameter to specify the content for pg_hba.conf
+  ## Otherwise, a repmgr.conf will be generated based on the environment variables
+  ## ref: https://github.com/bitnami/bitnami-docker-postgresql-repmgr#configuration
   ## ref: https://github.com/bitnami/bitnami-docker-postgresql-repmgr#configuration-file
+  ## Example:
+  ## pgHbaConfiguration: |-
+  ##   host     all            repmgr    0.0.0.0/0    md5
+  ##   host     repmgr         repmgr    0.0.0.0/0    md
+  ##   ...
   ##
-  # pgHbaConfiguration: |-
-  #   local all all trust
-  #   host all all localhost trust
-  #   host mydatabase mysuser 192.168.0.0/24 md5
-  ## ConfigMap with PostgreSQL configuration
-  ## NOTE: This will override repmgrConfiguration, configuration and pgHbaConfiguration
+  pgHbaConfiguration: ""
+
+  ## Name of existing ConfigMap with configuration files
+  ## NOTE: This will override postgresql.repmgrConfiguration, postgresql.configuration and postgresql.pgHbaConfiguration
   ##
   # configurationCM:
+
   ## PostgreSQL extended configuration
-  ## As above, but _appended_ to the main configuration
-  ## Alternatively, you can put your *.conf under the files/conf.d/ directory
+  ## Similar to postgresql.configuration, but _appended_ to the main configuration
   ## ref: https://github.com/bitnami/bitnami-docker-postgresql-repmgr#allow-settings-to-be-loaded-from-files-other-than-the-default-postgresqlconf
+  ## Example:
+  ## extendedConf: |-
+  ##   deadlock_timeout = 1s
+  ##   max_locks_per_transaction = 64
+  ##   ...
   ##
-  # extendedConf:
+  extendedConf: ""
+
   ## ConfigMap with PostgreSQL extended configuration
-  ## NOTE: This will override extendedConf
+  ## NOTE: This will override postgresql.extendedConf
   ##
   # extendedConfCM:
+
   ## initdb scripts
   ## Specify dictionary of scripts to be run at first boot
-  ## Alternatively, you can put your scripts under the files/docker-entrypoint-initdb.d directory
+  ## The allowed extensions are `.sh`, `.sql` and `.sql.gz`
+  ## ref: https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#initialize-a-fresh-instance
   ##
   # initdbScripts:
   #   my_init_script.sh: |
@@ -496,6 +549,11 @@ pgpool:
   ##  users above
   #   passwords: 'pass01;pass02'
 
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
   ## Alternatively, you can provide the name of a secret containing this information.
   ## The secret must contain the keys "usernames" and "passwords" respectively.
   ##
@@ -513,6 +571,10 @@ pgpool:
   ##
   podLabels: {}
 
+  ## Labels to add to the service. Evaluated as template
+  ##
+  serviceLabels: {}
+
   ## Custom Liveness probe
   ##
   customLivenessProbe: {}
@@ -520,6 +582,10 @@ pgpool:
   ## Custom Readiness probe
   ##
   customReadinessProbe: {}
+
+  ## Custom Startup probe
+  ##
+  customStartupProbe: {}
 
   ## Container command (using container default if not set)
   ##
@@ -597,6 +663,7 @@ pgpool:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -656,7 +723,7 @@ pgpool:
     #   cpu: 250m
     #   memory: 256Mi
 
-  ## Pgpool container's liveness and readiness probes
+  ## Pgpool container's liveness, readiness, and startup probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
   livenessProbe:
@@ -673,6 +740,13 @@ pgpool:
     timeoutSeconds: 5
     successThreshold: 1
     failureThreshold: 5
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 10
 
   ## Pod disruption budget configuration
   ##
@@ -759,11 +833,17 @@ pgpool:
   useLoadBalancing: true
 
   ## Pgpool configuration
-  ## Specify content for pgpool.conf
-  ## Alternatively, you can put your pgpool.conf under the files/ directory
+  ## You can use this parameter to specify the content for pgpool.conf
+  ## Otherwise, a repmgr.conf will be generated based on the environment variables
+  ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
   ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration-file
+  ## Example:
+  ## configuration: |-
+  ##   listen_addresses = '*'
+  ##   port = '5432'
+  ##   ...
   ##
-  # configuration:
+  configuration: ""
 
   ## ConfigMap with Pgpool configuration
   ## NOTE: This will override pgpool.configuration parameter
@@ -772,7 +852,8 @@ pgpool:
 
   ## initdb scripts
   ## Specify dictionary of scripts to be run every time Pgpool container is initialized
-  ## Alternatively, you can put your scripts under the files/pgpool-entrypoint-initdb.d directory
+  ## The allowed extension is `.sh`
+  ## ref: https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha#initialize-a-fresh-instance
   ##
   # initdbScripts:
   #   my_init_script.sh: |
@@ -885,7 +966,7 @@ metrics:
     #   cpu: 250m
     #   memory: 256Mi
 
-  ## Prometheus exporter container's liveness and readiness probes
+  ## Prometheus exporter container's liveness, readiness, and startup probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
   livenessProbe:
@@ -902,6 +983,13 @@ metrics:
     timeoutSeconds: 5
     successThreshold: 1
     failureThreshold: 6
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 10
 
   ## Annotations for Prometheus exporter
   ##
@@ -944,8 +1032,10 @@ metrics:
 persistence:
   enabled: true
   ## A manually managed Persistent Volume and Claim
-  ## If defined, PVC must be created manually before volume will be bound
-  ## The value is evaluated as a template
+  ## If defined, PVC must be created manually before volume will be bound.
+  ## All replicas will share this PVC, using existingClaim with
+  ## replicas > 1 is only useful in very special use cases.
+  ## The value is evaluated as a template.
   ##
   # existingClaim:
   ## Persistent Volume Storage Class
@@ -973,6 +1063,7 @@ persistence:
   ## selector:
   ##   matchLabels:
   ##     app: my-app
+  ##
   selector: {}
 
 ## PgPool service parameters
@@ -1001,9 +1092,21 @@ service:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#choosing-your-own-ip-address
   ##
   # clusterIP: None
+  ## Enable client source IP preservation
+  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ##
+  externalTrafficPolicy: Cluster
+  ## Control where client requests go, to the same pod or round-robin
+  ## Values: ClientIP or None
+  ## ref: https://kubernetes.io/docs/user-guide/services/
+  ##
+  sessionAffinity: "None"
   ## Provide any additional annotations which may be required
   ##
   annotations: {}
+  ## Labels to add to the service. Evaluated as template
+  ##
+  serviceLabels: {}
 
 ## NetworkPolicy parameters
 ##

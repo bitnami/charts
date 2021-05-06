@@ -18,7 +18,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 
 ## Installing the Chart
 
@@ -58,6 +58,8 @@ The following tables lists the configurable parameters of the Logstash chart and
 | `image.pullPolicy`                         | Logstash image pull policy                                                                                           | `IfNotPresent`                                          |
 | `image.pullSecrets`                        | Specify docker-registry secret names as an array                                                                     | `[]` (does not add image pull secrets to deployed pods) |
 | `image.debug`                              | Specify if debug logs should be enabled                                                                              | `false`                                                 |
+| `kubeVersion`                              | Force target Kubernetes version (using Helm capabilities if not set)                                                 | `nil`                                                   |
+| `hostAliases`                              | Add deployment host aliases                                                                                          | `[]`                                                    |
 | `nameOverride`                             | String to partially override logstash.fullname template with a string (will prepend the release name)                | `nil`                                                   |
 | `fullnameOverride`                         | String to fully override logstash.fullname template with a string                                                    | `nil`                                                   |
 | `clusterDomain`                            | Default Kubernetes cluster domain                                                                                    | `cluster.local`                                         |
@@ -65,6 +67,8 @@ The following tables lists the configurable parameters of the Logstash chart and
 | `enableMonitoringAPI`                      | Whether to enable the Logstash Monitoring API or not  Kubernetes cluster domain                                      | `true`                                                  |
 | `monitoringAPIPort`                        | Logstash Monitoring API Port                                                                                         | `9600`                                                  |
 | `extraEnvVars`                             | Array containing extra env vars to configure Logstash                                                                | `nil`                                                   |
+| `extraEnvVarsSecret`                       | Kubernetes Secrets name                                                                                             | `nil`                                                   |
+| `extraEnvVarsCM`                           | Kubernetes Configmap name                                                                                           | `nil`                                                   |
 | `input`                                    | Input Plugins configuration                                                                                          | `Check values.yaml file`                                |
 | `filter`                                   | Filter Plugins configuration                                                                                         | `nil`                                                   |
 | `output`                                   | Output Plugins configuration                                                                                         | `Check values.yaml file`                                |
@@ -99,13 +103,18 @@ The following tables lists the configurable parameters of the Logstash chart and
 | `service.loadBalancerIP`                   | loadBalancerIP if service type is `LoadBalancer`                                                                     | `nil`                                                   |
 | `service.loadBalancerSourceRanges`         | Address that are allowed when service is LoadBalancer                                                                | `[]`                                                    |
 | `service.clusterIP`                        | Static clusterIP or None for headless services                                                                       | `nil`                                                   |
+| `service.externalTrafficPolicy`            | External traffic policy, configure to Local to preserve client source IP when using an external loadBalancer.      | `Cluster`                                               |
 | `ingress.enabled`                          | Enable ingress controller resource                                                                                   | `false`                                                 |
 | `ingress.certManager`                      | Add annotations for cert-manager                                                                                     | `false`                                                 |
-| `ingress.annotations`                      | Ingress annotations                                                                                                  | `{}`                                                    |
-| `ingress.hosts[0].name`                    | Hostname for Logstash service                                                                                        | `logstash.local`                                        |
-| `ingress.hosts[0].path`                    | Path within the url structure                                                                                        | `/`                                                     |
-| `ingress.tls[0].hosts[0]`                  | TLS hosts                                                                                                            | `logstash.local`                                        |
-| `ingress.tls[0].secretName`                | TLS Secret (certificates)                                                                                            | `logstash.local-tls`                                    |
+| `ingress.hostname`                         | Default host for the ingress resource                                                                                | `logstash.local`                                        |
+| `ingress.path`                             | Default path for the ingress resource                                                                                | `/`                                                     |
+| `ingress.tls`                              | Create TLS Secret                                                                                                    | `false`                                                 |
+| `ingress.annotations`                      | Ingress annotations                                                                                                  | `[]` (evaluated as a template)                          |
+| `ingress.extraHosts[0].name`               | Additional hostnames to be covered                                                                                   | `nil`                                                   |
+| `ingress.extraHosts[0].path`               | Additional hostnames to be covered                                                                                   | `nil`                                                   |
+| `ingress.extraPaths`                       | Additional arbitrary path/backend objects                                                                            | `nil`                                                   |
+| `ingress.extraTls[0].hosts[0]`             | TLS configuration for additional hostnames to be covered                                                             | `nil`                                                   |
+| `ingress.extraTls[0].secretName`           | TLS configuration for additional hostnames to be covered                                                             | `nil`                                                   |
 | `ingress.secrets[0].name`                  | TLS Secret Name                                                                                                      | `nil`                                                   |
 | `ingress.secrets[0].certificate`           | TLS Secret Certificate                                                                                               | `nil`                                                   |
 | `ingress.secrets[0].key`                   | TLS Secret Key                                                                                                       | `nil`                                                   |
@@ -160,24 +169,6 @@ $ helm install my-release -f values.yaml bitnami/logstash
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Production configuration
-
-This chart includes a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`:
-
-- Increase the number of Logstash replicas:
-
-```diff
-- replicaCount: 1
-+ replicaCount: 3
-```
-
-- Enable Prometheus metrics:
-
-```diff
-- metrics.enabled: false
-+ metrics.enabled: true
-```
 
 ### Configure the way how to expose Logstash
 
@@ -280,6 +271,14 @@ $ kubectl logs -f logstash-0
        "message" => "bye"
 }
 ```
+### Adding extra environment variables
+
+In case you want to add extra environment variables from an external configmap or secrets, you can use the `extraEnvVarsCM` and `extraEnvVarsSecret` properties. Be aware that the secret and configmap should be already available in the namespace.
+
+```yaml
+extraEnvVarsSecret: logstash-secrets
+extraEnvVarsCM: logstash-configmap
+```
 
 ### Adding extra environment variables
 
@@ -302,6 +301,10 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 3.0.0
+
+This version standardizes the way of defining Ingress rules. When configuring a single hostname for the Ingress rule, set the `ingress.hostname` value. When defining more than one, set the `ingress.extraHosts` array. Apart from this case, no issues are expected to appear when upgrading.
 
 ### To 2.0.0
 

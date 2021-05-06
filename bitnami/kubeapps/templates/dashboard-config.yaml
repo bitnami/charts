@@ -7,17 +7,29 @@ metadata:
 data:
   vhost.conf: |-
     server {
-      listen 8080;
+      listen {{ .Values.dashboard.service.port }};
   {{- if .Values.frontend.largeClientHeaderBuffers }}
       large_client_header_buffers {{ .Values.frontend.largeClientHeaderBuffers }};
   {{- end }}
   {{- if .Values.enableIPv6 }}
-      listen [::]:8080;
+      listen [::]:{{ .Values.dashboard.service.port }};
   {{- end}}
       server_name _;
 
       gzip on;
       gzip_static  on;
+
+      location /custom_style.css {
+        root /app/custom-css/;
+      }
+
+      location /custom_locale.json {
+        root /app/custom-locale/;
+      }
+
+      location /custom_components.js {
+        root /app/custom-components/;
+      }
 
       location / {
         # Redirects are required to be relative otherwise the internal hostname will be exposed
@@ -40,6 +52,12 @@ data:
         try_files $uri /index.html;
       }
     }
+  custom_style.css: |-
+{{- .Values.dashboard.customStyle | nindent 4 }}
+  custom_components.js: |-
+{{- .Values.dashboard.customComponents | nindent 4 }}
+  custom_locale.json: |-
+{{- .Values.dashboard.customLocale | toJson | nindent 4 }}
   config.json: |-
     {
       "kubeappsCluster": "{{ template "kubeapps.kubeappsCluster" . -}}",

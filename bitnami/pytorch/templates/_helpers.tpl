@@ -35,6 +35,7 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := list -}}
 {{- $messages := append $messages (include "pytorch.validateValues.mode" .) -}}
 {{- $messages := append $messages (include "pytorch.validateValues.worldSize" .) -}}
+{{- $messages := append $messages (include "pytorch.validateValues.extraVolumes" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -59,6 +60,15 @@ pytorch: mode
 pytorch: worldSize
     World size must be greater than 1 and lower than 32 in distributed mode!!
     Please set a valid world size (--set worldSize=X)
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of PyTorch - Incorrect extra volume settings */}}
+{{- define "pytorch.validateValues.extraVolumes" -}}
+{{- if and (.Values.extraVolumes) (not (or .Values.extraVolumeMounts .Values.cloneFilesFromGit.extraVolumeMounts)) -}}
+pytorch: missing-extra-volume-mounts
+    You specified extra volumes but not mount points for them. Please set
+    the extraVolumeMounts value
 {{- end -}}
 {{- end -}}
 

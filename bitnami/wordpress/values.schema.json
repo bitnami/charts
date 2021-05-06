@@ -196,6 +196,17 @@
         }
       }
     },
+    "volumePermissions": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "form": true,
+          "title": "Enable Init Containers",
+          "description": "Use an init container to set required folder permissions on the data volume before mounting it in the final destination"
+        }
+      }
+    },
     "metrics": {
       "type": "object",
       "properties": {

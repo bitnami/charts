@@ -1,0 +1,18 @@
+{{- if and (.Values.defaultBackend.enabled) (.Values.defaultBackend.serverBlockConfig) -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "nginx-ingress-controller.defaultBackend.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: default-backend
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  defaultBackend.conf: |-
+    {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.serverBlockConfig "context" $) | nindent 4 }}
+{{- end }}

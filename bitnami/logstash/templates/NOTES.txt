@@ -8,21 +8,13 @@ Logstash can be accessed through following DNS names from within your cluster:
     Logstash Prometheus Metrics: {{ include "common.names.fullname" . }}-metrics.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} (port {{ .Values.metrics.service.port }})
     {{- end }}
 
-
 To access Logstash from outside the cluster execute the following commands:
 
 {{- if .Values.ingress.enabled }}
-{{- $ingressHost := first .Values.ingress.hosts }}
 
   You should be able to access your new Logstash server(s) through:
 
-    {{- range .Values.ingress.hosts }}
-    {{ if .tls }}https{{- else }}http{{ end }}://{{ .name }}
-    {{- end }}
-
-e.g.:
-
-    curl {{ if .tls }}https{{- else }}http{{ end }}://{{ $ingressHost.name }}
+    curl {{ if .Values.ingress.tls }}https{{- else }}http{{ end }}://{{ .Values.ingress.hostname }}
 
 {{- else if contains "NodePort" .Values.service.type }}
 

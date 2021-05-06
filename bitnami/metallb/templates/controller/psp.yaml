@@ -1,0 +1,47 @@
+{{- if and .Values.psp.create .Values.controller.psp.create -}}
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: {{ include "common.names.fullname" . }}-controller
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: controller
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  allowPrivilegeEscalation: {{ .Values.controller.securityContext.allowPrivilegeEscalation }}
+  allowedCapabilities: []
+  allowedHostPaths: []
+  defaultAddCapabilities: []
+  defaultAllowPrivilegeEscalation: {{ .Values.controller.securityContext.allowPrivilegeEscalation }}
+  fsGroup:
+    ranges:
+    - max: {{ .Values.controller.securityContext.fsGroup }}
+      min: {{ .Values.controller.securityContext.fsGroup }}
+    rule: MustRunAs
+  hostIPC: false
+  hostNetwork: false
+  hostPID: false
+  privileged: false
+  readOnlyRootFilesystem: {{ .Values.controller.securityContext.readOnlyRootFilesystem }}
+  requiredDropCapabilities: {{- toYaml .Values.controller.securityContext.capabilities.drop | nindent 2 }}
+  runAsUser:
+    ranges:
+    - max: {{ .Values.controller.securityContext.runAsUser }}
+      min: {{ .Values.controller.securityContext.runAsUser }}
+    rule: MustRunAs
+  seLinux:
+    rule: RunAsAny
+  supplementalGroups:
+    ranges:
+    - max: {{ .Values.controller.securityContext.runAsUser }}
+      min: {{ .Values.controller.securityContext.runAsUser }}
+    rule: MustRunAs
+  volumes:
+  - configMap
+  - secret
+  - emptyDir
+{{- end -}}

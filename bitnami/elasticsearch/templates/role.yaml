@@ -1,9 +1,9 @@
 {{- if and .Values.curator.enabled .Values.curator.rbac.enabled }}
 kind: Role
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
-  name: {{ include "elasticsearch.curator.name" . }}
-  labels: {{- include "elasticsearch.labels" . | nindent 4 }}
+  name: {{ include "elasticsearch.curator.fullname" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     role: curator
     component: elasticsearch-curator-configmap
 rules:

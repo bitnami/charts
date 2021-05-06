@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/mysql
-  tag: 8.0.22-debian-10-r44
+  tag: 8.0.24-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -28,8 +28,8 @@ image:
   ##
   pullSecrets: []
   ## Set to true if you would like to see extra information on logs
-  ## It turns BASH and NAMI debugging in minideb
-  ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ## It turns BASH and/or NAMI debugging in the image
+  ##
   debug: false
 
 ## String to partially override common.names.fullname template (will maintain the release name)
@@ -121,6 +121,11 @@ primary:
   command: []
   args: []
 
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
   ## Configure MySQL Primary with a custom my.cnf file
   ## ref: https://mysql.com/kb/en/mysql/configuring-mysql-with-mycnf/#example-of-configuration-file
   ##
@@ -130,7 +135,7 @@ primary:
     skip-name-resolve
     explicit_defaults_for_timestamp
     basedir=/opt/bitnami/mysql
-    plugin_dir=/opt/bitnami/mysql/plugin
+    plugin_dir=/opt/bitnami/mysql/lib/plugin
     port=3306
     socket=/opt/bitnami/mysql/tmp/mysql.sock
     datadir=/bitnami/mysql/data
@@ -146,7 +151,7 @@ primary:
     port=3306
     socket=/opt/bitnami/mysql/tmp/mysql.sock
     default-character-set=UTF8
-    plugin_dir=/opt/bitnami/mysql/plugin
+    plugin_dir=/opt/bitnami/mysql/lib/plugin
 
     [manager]
     port=3306
@@ -192,6 +197,7 @@ primary:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -333,6 +339,7 @@ primary:
     ## selector:
     ##   matchLabels:
     ##     app: my-app
+    ##
     selector: {}
 
   ## Extra volumes to add to the MySQL Primary pod(s)
@@ -372,6 +379,10 @@ primary:
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
     loadBalancerIP: ""
+    ## Enable client source IP preservation
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
     ## Load Balancer sources
     ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## E.g.
@@ -387,7 +398,7 @@ primary:
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
   ##
   pdb:
-    create: false
+    enabled: false
     ## Min number of pods that must still be available after the eviction
     ##
     minAvailable: 1
@@ -395,12 +406,21 @@ primary:
     ##
     # maxUnavailable: 1
 
+  ## MySQL Primary pod label. If labels are same as commonLabels , this will take precedence.
+  ##
+  podLabels: {}
+
 ## MySQL Secondary parameters
 ##
 secondary:
   ## Number of MySQL Secondary replicas to deploy
   ##
   replicaCount: 1
+
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
 
   ## Command and args for running the container (set to default if not set). Use array form
   ##
@@ -476,6 +496,7 @@ secondary:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -613,6 +634,7 @@ secondary:
     ## selector:
     ##   matchLabels:
     ##     app: my-app
+    ##
     selector: {}
 
   ## Extra volumes to add to the MySQL Secondary pod(s)
@@ -652,6 +674,10 @@ secondary:
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
     loadBalancerIP: ""
+    ## Enable client source IP preservation
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
     ## Load Balancer sources
     ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## E.g.
@@ -667,13 +693,17 @@ secondary:
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
   ##
   pdb:
-    create: false
+    enabled: false
     ## Min number of pods that must still be available after the eviction
     ##
     minAvailable: 1
     ## Max number of pods that can be unavailable after the eviction
     ##
     # maxUnavailable: 1
+
+  ## MySQL Secondary pod label. If labels are same as commonLabels , this will take precedence.
+  ##
+  podLabels: {}
 
 ## MySQL pods ServiceAccount
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
@@ -705,8 +735,8 @@ volumePermissions:
   enabled: false
   image:
     registry: docker.io
-    repository: bitnami/minideb
-    tag: buster
+    repository: bitnami/bitnami-shell
+    tag: "10"
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -723,7 +753,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mysqld-exporter
-    tag: 0.12.1-debian-10-r289
+    tag: 0.12.1-debian-10-r414
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -735,6 +765,7 @@ metrics:
   ## MySQL Prometheus exporter service parameters
   ## Mysqld Prometheus exporter liveness and readiness probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes  ##
+  ##
   service:
     type: ClusterIP
     port: 9104
@@ -846,3 +877,7 @@ metrics:
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
     ##
     additionalLabels: {}
+
+## Array with extra yaml to deploy with the chart. Evaluated as a template
+##
+extraDeploy: []

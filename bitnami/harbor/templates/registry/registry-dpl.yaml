@@ -41,6 +41,7 @@ spec:
         {{- end }}
     spec:
       {{- include "harbor.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: false
       {{- if .Values.registry.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.registry.affinity "context" $) | nindent 8 }}
       {{- else }}
@@ -387,5 +388,5 @@ spec:
         {{- end }}
         {{- end }}
       {{- if .Values.registry.extraVolumes }}
-      {{- include "common.tplvalues.render" (dict "value" .Values.registry.extraVolumes "context" $) | nindent 6 }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.registry.extraVolumes "context" $) | nindent 8 }}
       {{- end }}

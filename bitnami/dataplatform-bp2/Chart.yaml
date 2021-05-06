@@ -1,0 +1,61 @@
+annotations:
+  category: Infrastructure
+apiVersion: v2
+appVersion: 1.0.0
+dependencies:
+  - condition: kafka.enabled
+    name: kafka
+    repository: https://charts.bitnami.com/bitnami
+    version: 12.x.x
+  - condition: spark.enabled
+    name: spark
+    repository: https://charts.bitnami.com/bitnami
+    version: 5.x.x
+  - condition: elasticsearch.enabled
+    name: elasticsearch
+    repository: https://charts.bitnami.com/bitnami
+    version: 15.x.x
+  - condition: logstash.enabled
+    name: logstash
+    repository: https://charts.bitnami.com/bitnami
+    version: 3.x.x
+  - condition: wavefront.enabled
+    name: wavefront
+    repository: https://charts.bitnami.com/bitnami
+    version: 2.x.x
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 1.x.x
+description: OCTO Data platform Kafka-Spark-Elasticsearch Helm Chart
+engine: gotpl
+home: https://github.com/bitnami/charts/tree/master/bitnami/dataplatform-bp2
+icon: https://bitnami.com/assets/stacks/dataplatform-bp1/img/dataplatform-bp1-stack-220x234.png
+keywords:
+  - dataplatform
+  - kafka
+  - spark
+  - elasticsearch
+  - logstash
+  - kibana
+  - zookeeper
+  - apache
+  - tanzuobservability
+  - wavefront
+maintainers:
+  - email: containers@bitnami.com
+    name: Bitnami
+name: dataplatform-bp2
+sources:
+  - https://github.com/bitnami/bitnami-docker-kafka
+  - https://kafka.apache.org/
+  - https://github.com/bitnami/bitnami-docker-spark
+  - https://spark.apache.org/
+  - https://github.com/bitnami/bitnami-docker-elasticsearch
+  - https://www.elastic.co/products/elasticsearch
+  - https://github.com/bitnami/bitnami-docker-logstash
+  - https://www.elastic.co/products/logstash
+  - https://zookeeper.apache.org/
+  - https://github.com/bitnami/bitnami-docker-zookeeper
+version: 0.3.0

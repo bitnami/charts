@@ -1,12 +1,12 @@
 {{/* vim: set filetype=mustache: */}}
 {{/*
-Validate MongoDB required passwords are not empty.
+Validate MongoDB(R) required passwords are not empty.
 
 Usage:
 {{ include "common.validations.values.mongodb.passwords" (dict "secret" "secretName" "subchart" false "context" $) }}
 Params:
-  - secret - String - Required. Name of the secret where MongoDB values are stored, e.g: "mongodb-passwords-secret"
-  - subchart - Boolean - Optional. Whether MongoDB is used as subchart or not. Default: false
+  - secret - String - Required. Name of the secret where MongoDB(R) values are stored, e.g: "mongodb-passwords-secret"
+  - subchart - Boolean - Optional. Whether MongoDB(R) is used as subchart or not. Default: false
 */}}
 {{- define "common.validations.values.mongodb.passwords" -}}
   {{- $existingSecret := include "common.mongodb.values.auth.existingSecret" . -}}
@@ -81,7 +81,7 @@ Auxiliary function to get the right value for the key auth
 Usage:
 {{ include "common.mongodb.values.key.auth" (dict "subchart" "true" "context" $) }}
 Params:
-  - subchart - Boolean - Optional. Whether MongoDB is used as subchart or not. Default: false
+  - subchart - Boolean - Optional. Whether MongoDB(R) is used as subchart or not. Default: false
 */}}
 {{- define "common.mongodb.values.key.auth" -}}
   {{- if .subchart -}}

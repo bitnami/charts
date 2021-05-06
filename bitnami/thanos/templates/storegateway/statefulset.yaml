@@ -21,6 +21,9 @@ spec:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: storegateway
+        {{- if and .Values.storegateway.enabled .Values.storegateway.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.podLabels "context" $) | nindent 8 }}
+        {{- end }}
       annotations:
         checksum/ojbstore-configuration: {{ include (print $.Template.BasePath "/objstore-secret.yaml") . | sha256sum }}
         {{- if (include "thanos.storegateway.createConfigmap" .) }}
@@ -30,8 +33,11 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
     spec:
-{{- include "thanos.imagePullSecrets" . | nindent 6 }}
+      {{- include "thanos.imagePullSecrets" . | nindent 6 }}
       serviceAccount: {{ include "thanos.serviceaccount.name" (dict "component" "storegateway" "context" $) }}
+      {{- if .Values.storegateway.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.storegateway.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.affinity "context" $) | nindent 8 }}
       {{- else }}
@@ -81,6 +87,7 @@ spec:
           args:
             - store
             - --log.level={{ .Values.storegateway.logLevel }}
+            - --log.format={{ .Values.storegateway.logFormat }}
             - --grpc-address=0.0.0.0:10901
             - --http-address=0.0.0.0:10902
             - --data-dir=/data
@@ -94,9 +101,18 @@ spec:
             {{- if or .Values.storegateway.config .Values.storegateway.existingConfigmap }}
             - --index-cache.config-file=/conf/cache/config.yml
             {{- end }}
+            {{- if or .Values.storegateway.grpc.tls.enabled }}
+            - --grpc-server-tls-cert=/certs/{{ include "common.secrets.key" (dict "existingSecret" .Values.storegateway.grpc.tls.existingSecret "key" "tls-cert") }}
+            - --grpc-server-tls-key=/certs/{{ include "common.secrets.key" (dict "existingSecret" .Values.storegateway.grpc.tls.existingSecret "key" "tls-key") }}
+            - --grpc-server-tls-client-ca=/certs/{{ include "common.secrets.key" (dict "existingSecret" .Values.storegateway.grpc.tls.existingSecret "key" "ca-cert") }}
+            {{- end }}
             {{- if .Values.storegateway.extraFlags }}
             {{- .Values.storegateway.extraFlags | toYaml | nindent 12 }}
             {{- end }}
+          {{- if .Values.storegateway.extraEnv }}
+          env:
+            {{- toYaml .Values.storegateway.extraEnv | nindent 12 }}
+          {{- end }}
           ports:
             - name: http
               containerPort: 10902
@@ -122,6 +138,13 @@ spec:
             - name: cache-config
               mountPath: /conf/cache
             {{- end }}
+            {{- if .Values.storegateway.grpc.tls.enabled }}
+            - name: tls-server
+              mountPath: /certs
+            {{- end }}
+            {{- if .Values.storegateway.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
       volumes:
         - name: objstore-config
           secret:
@@ -129,10 +152,18 @@ spec:
             {{- if .Values.existingObjstoreSecretItems }}
             items: {{- toYaml .Values.existingObjstoreSecretItems | nindent 14 }}
             {{- end }}
+        {{- if .Values.storegateway.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
         {{- if or .Values.storegateway.config .Values.storegateway.existingConfigmap }}
         - name: cache-config
           configMap:
             name: {{ include "thanos.storegateway.configmapName" . }}
+        {{- end }}
+        {{- if .Values.storegateway.grpc.tls.enabled }}
+        - name: tls-server
+          secret:
+            secretName: {{ include "common.secrets.name" (dict "existingSecret" .Values.storegateway.grpc.tls.existingSecret "defaultNameSuffix" "store-tls-server" "context" $) }}
         {{- end }}
   {{- if and .Values.storegateway.persistence.enabled .Values.storegateway.persistence.existingClaim }}
         - name: data

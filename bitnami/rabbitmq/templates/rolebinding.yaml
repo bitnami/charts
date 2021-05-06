@@ -1,6 +1,6 @@
 {{- if and .Values.serviceAccount.create .Values.rbac.create }}
 kind: RoleBinding
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
   name: {{ template "rabbitmq.fullname" . }}-endpoint-reader
   namespace: {{ .Release.Namespace | quote }}

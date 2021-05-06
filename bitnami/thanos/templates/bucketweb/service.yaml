@@ -13,6 +13,9 @@ spec:
   {{- if and .Values.bucketweb.service.clusterIP (eq .Values.bucketweb.service.type "ClusterIP") }}
   clusterIP: {{ .Values.bucketweb.service.clusterIP }}
   {{- end }}
+  {{- if ne .Values.bucketweb.service.type "ClusterIP" }}
+  externalTrafficPolicy: {{ .Values.bucketweb.service.externalTrafficPolicy }}
+  {{- end }}
   {{- if and .Values.bucketweb.service.loadBalancerIP (eq .Values.bucketweb.service.type "LoadBalancer") }}
   loadBalancerIP: {{ .Values.bucketweb.service.loadBalancerIP }}
   {{- end }}
@@ -21,7 +24,7 @@ spec:
   {{- end }}
   ports:
     - port: {{ .Values.bucketweb.service.http.port }}
-      targetPort: http
+      targetPort: {{ .Values.bucketweb.service.targetPort | default "http" }}
       protocol: TCP
       name: http
       {{- if (and (or (eq .Values.bucketweb.service.type "NodePort") (eq .Values.bucketweb.service.type "LoadBalancer")) .Values.bucketweb.service.http.nodePort) }}

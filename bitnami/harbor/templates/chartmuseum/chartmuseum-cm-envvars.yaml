@@ -48,6 +48,9 @@ data:
   {{- if .Values.chartmuseum.maxUploadSize }}
   MAX_UPLOAD_SIZE: {{ .Values.chartmuseum.maxUploadSize | quote }}
   {{- end }}
+  {{- if .Values.chartmuseum.storageTimestampTolerance }}
+  STORAGE_TIMESTAMP_TOLERANCE: {{ .Values.chartmuseum.storageTimestampTolerance | quote }}
+  {{- end }}
   {{- if .Values.chartmuseum.maxStorageObjects }}
   MAX_STORAGE_OBJECTS: {{ .Values.chartmuseum.maxStorageObjects | quote }}
   {{- end }}
@@ -75,11 +78,15 @@ data:
   {{- end }}
   {{- else if eq .Values.persistence.imageChartStorage.type "s3" }}
   STORAGE: "amazon"
+  {{- if .Values.persistence.imageChartStorage.s3.bucket }}
   STORAGE_AMAZON_BUCKET: {{ .Values.persistence.imageChartStorage.s3.bucket | quote }}
+  {{- end }}
   {{- if .Values.persistence.imageChartStorage.s3.rootdirectory }}
   STORAGE_AMAZON_PREFIX: {{ .Values.persistence.imageChartStorage.s3.rootdirectory | quote }}
   {{- end }}
+  {{- if .Values.persistence.imageChartStorage.s3.region }}
   STORAGE_AMAZON_REGION: {{ .Values.persistence.imageChartStorage.s3.region | quote }}
+  {{- end }}
   {{- if .Values.persistence.imageChartStorage.s3.regionendpoint }}
   STORAGE_AMAZON_ENDPOINT: {{ .Values.persistence.imageChartStorage.s3.regionendpoint | quote }}
   {{- end }}

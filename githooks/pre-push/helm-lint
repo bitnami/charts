@@ -14,10 +14,16 @@ failed=0
 for chart_name in $( cut -d'/' -f1,2 <<< "$files_to_push" | uniq ); do
     # Avoid running 'helm lint|install' when modified dirs are not charts
     if [[ $chart_name = bitnami/* ]]; then
+        printf '\033[01;33mUpdating dependencies for %s with helm dep update:\n\033[0m' "$chart_name"
+        helm dep update "$chart_name"
+
         printf '\033[01;33mValidating %s with helm lint:\n\033[0m' "$chart_name"
         if ! run_helm_lint_chart "$chart_name"; then
             failed=1
         fi
+
+        printf '\033[01;33mDiscard changes in working directory for "%s/Chart.lock\n\033[0m' "$chart_name"
+        git checkout -- "$chart_name/Chart.lock"
     fi
 done
 

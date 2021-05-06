@@ -1,18 +1,24 @@
-{{- if and .Values.prometheus.prometheusRule.enabled .Values.prometheus.enabled }}
+{{- if and .Values.prometheusRule.enabled .Values.speaker.prometheus.serviceMonitor.enabled .Values.controller.prometheus.serviceMonitor.enabled }}
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
-  name: {{ include "metallb.fullname" . }}
-  labels: {{ include "metallb.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   groups:
-  - name: {{ include "metallb.fullname" . }}.alerts
+  - name: {{ include "common.names.fullname" . }}.alerts
     rules:
     - alert: MetalLBStaleConfig
       annotations:
         message: {{`'{{ $labels.job }} - MetalLB {{ $labels.container_name }} on {{ $labels.instance
           }} has a stale config for > 1 minute'`}}
-      expr: metallb_k8s_client_config_stale_bool{job="{{ .Values.prometheus.serviceMonitor.jobLabel }}"} == 1
+      expr: metallb_k8s_client_config_stale_bool{job="{{ include "common.names.name" . }}"} == 1
       for: 1m
       labels:
         severity: warning
@@ -20,7 +26,7 @@ spec:
       annotations:
         message: {{`'{{ $labels.job }} - MetalLB {{ $labels.container_name }} on {{ $labels.instance
           }} has not loaded for > 1 minute'`}}
-      expr: metallb_k8s_client_config_loaded_bool{job="{{ .Values.prometheus.serviceMonitor.jobLabel }}"} == 0
+      expr: metallb_k8s_client_config_loaded_bool{job="{{ include "common.names.name" . }}"} == 0
       for: 1m
       labels:
         severity: warning

@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ template "common.names.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: controller
     {{- if .Values.service.labels }}
@@ -41,24 +41,28 @@ spec:
   healthCheckNodePort: {{ .Values.service.healthCheckNodePort }}
   {{- end }}
   ports:
+    {{- if not (empty .Values.service.ports.http) }}
     - name: http
       port: {{ .Values.service.ports.http }}
       protocol: TCP
-      targetPort: http
+      targetPort: {{ .Values.service.targetPorts.http }}
       {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.http)) }}
       nodePort: {{ .Values.service.nodePorts.http }}
       {{- else if eq .Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
+    {{- end }}
+    {{- if not (empty .Values.service.ports.https) }}
     - name: https
       port: {{ .Values.service.ports.https }}
       protocol: TCP
-      targetPort: https
+      targetPort: {{ .Values.service.targetPorts.https }}
       {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.https)) }}
       nodePort: {{ .Values.service.nodePorts.https }}
       {{- else if eq .Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
+    {{- end }}
     {{- range $key, $value := .Values.tcp }}
     - name: {{ $key }}-tcp
       port: {{ $key }}

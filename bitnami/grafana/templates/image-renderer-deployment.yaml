@@ -2,18 +2,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "grafana.fullname" . }}-image-renderer
+  name: {{ include "common.names.fullname" . }}-image-renderer
   namespace: {{ .Release.Namespace }}
-  labels: {{- include "grafana.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: image-renderer
 spec:
   replicas: {{ .Values.imageRenderer.replicaCount }}
   selector:
-    matchLabels: {{- include "grafana.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: image-renderer
   template:
     metadata:
-      labels: {{- include "grafana.labels" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: image-renderer
       {{- if .Values.imageRenderer.podAnnotations }}
       annotations: {{- toYaml .Values.imageRenderer.podAnnotations | nindent 8 }}
@@ -25,13 +25,13 @@ spec:
       schedulerName: {{ .Values.schedulerName | quote }}
       {{- end }}
       {{- if .Values.imageRenderer.affinity }}
-      affinity: {{- include "grafana.tplValue" (dict "value" .Values.imageRenderer.affinity "context" $) | nindent 8 }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.imageRenderer.affinity "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.imageRenderer.nodeSelector }}
-      nodeSelector: {{- include "grafana.tplValue" (dict "value" .Values.imageRenderer.nodeSelector "context" $) | nindent 8 }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.imageRenderer.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.imageRenderer.tolerations }}
-      tolerations: {{- include "grafana.tplValue" (dict "value" .Values.imageRenderer.tolerations "context" $) | nindent 8 }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.imageRenderer.tolerations "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.imageRenderer.securityContext.enabled }}
       securityContext:

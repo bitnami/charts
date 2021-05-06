@@ -40,6 +40,11 @@ If release name contains chart name it will be used as a full name.
 {{- printf "%s-alertmanager" (include "kube-prometheus.name" .) -}}
 {{- end }}
 
+{{/* Name suffixed with thanos */}}
+{{- define "kube-prometheus.thanos.name" -}}
+{{- printf "%s-thanos" (include "kube-prometheus.name" .) -}}
+{{- end }}
+
 {{/* Fullname suffixed with operator */}}
 {{- define "kube-prometheus.operator.fullname" -}}
 {{- printf "%s-operator" (include "kube-prometheus.fullname" .) -}}
@@ -53,6 +58,11 @@ If release name contains chart name it will be used as a full name.
 {{/* Fullname suffixed with alertmanager */}}
 {{- define "kube-prometheus.alertmanager.fullname" -}}
 {{- printf "%s-alertmanager" (include "kube-prometheus.fullname" .) -}}
+{{- end }}
+
+{{/* Fullname suffixed with thanos */}}
+{{- define "kube-prometheus.thanos.fullname" -}}
+{{- printf "%s-thanos" (include "kube-prometheus.prometheus.fullname" .) -}}
 {{- end }}
 
 {{- define "kube-prometheus.chart" -}}
@@ -128,19 +138,8 @@ Return the proper Prometheus Operator image name
 Return the proper Prometheus Operator Reloader image name
 */}}
 {{- define "kube-prometheus.prometheusConfigReloader.image" -}}
-{{- if and .Values.operator.prometheusConfigReloader.image.registry (and .Values.operator.prometheusConfigReloader.image.repository .Values.operator.prometheusConfigReloader.image.tag) }}
+{{- if and .Values.operator.prometheusConfigReloader.image.repository .Values.operator.prometheusConfigReloader.image.tag }}
 {{- include "common.images.image" (dict "imageRoot" .Values.operator.prometheusConfigReloader.image "global" .Values.global) }}
-{{- else -}}
-{{- include "kube-prometheus.image" . -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return the proper ConfigMap Reload image name
-*/}}
-{{- define "kube-prometheus.configmapReload.image" -}}
-{{- if and .Values.operator.configmapReload.image.registry (and .Values.operator.configmapReload.image.repository .Values.operator.configmapReload.image.tag) }}
-{{- include "common.images.image" (dict "imageRoot" .Values.operator.configmapReload.image "global" .Values.global) }}
 {{- else -}}
 {{- include "kube-prometheus.image" . -}}
 {{- end -}}
@@ -171,7 +170,7 @@ Return the proper Alertmanager Image name
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "kube-prometheus.imagePullSecrets" -}}
-{{ include "common.images.pullSecrets" (dict "images" (list .Values.operator.image .Values.operator.prometheusConfigReloader.image .Values.operator.configmapReload.image .Values.prometheus.image .Values.prometheus.thanos.image .Values.alertmanager.image) "global" .Values.global) }}
+{{ include "common.images.pullSecrets" (dict "images" (list .Values.operator.image .Values.operator.prometheusConfigReloader.image .Values.prometheus.image .Values.prometheus.thanos.image .Values.alertmanager.image) "global" .Values.global) }}
 {{- end -}}
 
 {{/*

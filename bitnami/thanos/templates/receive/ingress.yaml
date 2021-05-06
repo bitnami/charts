@@ -1,0 +1,58 @@
+{{- if and .Values.receive.enabled .Values.receive.ingress.enabled -}}
+apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
+kind: Ingress
+metadata:
+  name: {{ include "common.names.fullname" . }}-receive
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  annotations:
+    {{- if .Values.receive.ingress.certManager }}
+    kubernetes.io/tls-acme: "true"
+    {{- end }}
+    {{- range $key, $value := .Values.receive.ingress.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+spec:
+  rules:
+    {{- if .Values.receive.ingress.hostname }}
+    - host: {{ .Values.receive.ingress.hostname }}
+      http:
+        paths:
+          - path: {{ .Values.receive.ingress.path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+            pathType: {{ .Values.receive.ingress.pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (printf "%s-%s"  (include "common.names.fullname" .) "receive") "servicePort" "http" "context" $)  | nindent 14 }}
+    - host: {{ .Values.receive.ingress.hostname }}
+      http:
+        paths:
+          - path: /api/v1/receive
+            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+            pathType: {{ .Values.receive.ingress.pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (printf "%s-%s"  (include "common.names.fullname" .) "receive") "servicePort" "remote-write" "context" $)  | nindent 14 }}
+    {{- end }}
+    {{- range .Values.receive.ingress.extraHosts }}
+    - host: {{ .name | quote }}
+      http:
+        paths:
+          - path: {{ default "/" .path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
+            pathType: {{ default "ImplementationSpecific" .pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (printf "%s-%s"  (include "common.names.fullname" $) "receive") "servicePort" "http" "context" $) | nindent 14 }}
+    {{- end }}
+  {{- if or .Values.receive.ingress.tls .Values.receive.ingress.extraTls .Values.receive.ingress.hosts }}
+  tls:
+    {{- if or .Values.receive.ingress.secrets .Values.receive.ingress.tls }}
+    - hosts:
+        - {{ .Values.receive.ingress.hostname }}
+        {{- range .Values.receive.ingress.extraHosts }}
+        - {{ .name | quote }}
+        {{- end }}
+      secretName: {{ printf "%s-tls" .Values.receive.ingress.hostname }}
+    {{- end }}
+    {{- if .Values.receive.ingress.extraTls }}
+    {{- toYaml .Values.receive.ingress.extraTls | nindent 4 }}
+    {{- end }}
+  {{- end }}
+{{- end }}
