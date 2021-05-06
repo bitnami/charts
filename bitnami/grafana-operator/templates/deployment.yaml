@@ -85,7 +85,6 @@ spec:
           securityContext:
             runAsUser: {{ .Values.operator.containerSecurityContext.runAsUser }}
             runAsGroup: {{ .Values.operator.containerSecurityContext.runAsGroup }}
-            fsGroup: {{ .Values.operator.containerSecurityContext.fsGroup }}
             allowPrivilegeEscalation: {{ .Values.operator.containerSecurityContext.allowPrivilegeEscalation }}
             readOnlyRootFilesystem: {{ .Values.operator.containerSecurityContext.readOnlyRootFilesystem }}
         {{- end }}
