@@ -533,13 +533,13 @@ tls:
   # File containing DH params (in order to support DH based ciphers)
   dhParamsFilename:
 
-## Annotations for all the deployed objects
+## @param commonAnnotations Annotations to add to all deployed objects
 ##
-commonAnnotations:
+commonAnnotations: {}
 
-## Labels for all the deployed objects
+## @param commonLabels Labels to add to all deployed objects
 ##
-commonLabels:
+commonLabels: {}
 
 ## Redis(TM) Service properties for standalone mode.
 ##
