@@ -36,46 +36,9 @@ commonAnnotations: {}
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
-## @param allowNamespaceDiscovery Allow users to discover available namespaces (only the ones they have access)
-## NOTE: When set to true, Kubeapps creates a ClusterRole to be able to list namespaces.
-##
-allowNamespaceDiscovery: true
-## @param clusters [array] List of clusters that Kubeapps can target for deployments
-## When populated with a single cluster (as it is by default), Kubeapps will not allow users to
-## change the target cluster. When populated with multiple clusters, Kubeapps will present the clusters to
-## the user as potential targets for install or browsing.
-## - Note that you can define a single cluster without an apiServiceURL and the chart will assume this is
-##   the name you are assigning to the cluster on which Kubeapps is itself installed. Specifying more than
-##   one cluster without an apiServiceURL will cause the chart display an error.
-## - The base64-encoded certificateAuthorityData can be obtained from the additional cluster's kube config
-##   file, for example, to get the ca data for the 0th cluster in your config (adjust the index 0 as necessary):
-##   kubectl --kubeconfig ~/.kube/kind-config-kubeapps-additional config view --raw -o jsonpath='{.clusters[0].cluster.certificate-authority-data}'
-## - serviceToken is an optional token configured to allow LIST namespaces and package manifests (operators) only on the additional cluster
-##   so that the UI can present a list of (only) those namespaces to which the user has access and the available operators.
-## - isKubeappsCluster is an optional parameter that allows defining the cluster in which Kubeapps is installed;
-##   this param is useful when every cluster is using an apiServiceURL (e.g., when using the Pinniped Impersonation Proxy)
-##   as the chart cannot infer the cluster on which Kubeapps is installed in that case.
-## e.g.:
-## clusters:
-## - name: default
-##   domain: cluster.local
-## - name: second-cluster
-##   domain: cluster.local
-##   apiServiceURL: https://second-cluster:6443
-##   certificateAuthorityData: LS0tLS1CRUdJ...
-##   serviceToken: ...
-##   isKubeappsCluster: true
-##
-clusters:
-  - name: default
-    domain: cluster.local
 ## @param enableIPv6 Enable IPv6 configuration
 ##
 enableIPv6: false
-## @param featureFlags [object] Feature flags (used to switch on development features)
-##
-featureFlags:
-  invalidateCache: true
 
 ## @section Traffic Exposure Parameters
 
@@ -672,7 +635,7 @@ frontend:
     ##
     annotations: {}
 
-## @section AppRepository parameters
+## @section AppRepository Controller parameters
 
 ## AppRepository Controller parameters
 ##
@@ -1445,6 +1408,43 @@ pinnipedProxy:
 
 ## @section Other Parameters
 
+## @param allowNamespaceDiscovery Allow users to discover available namespaces (only the ones they have access)
+## NOTE: When set to true, Kubeapps creates a ClusterRole to be able to list namespaces.
+##
+allowNamespaceDiscovery: true
+## @param clusters [array] List of clusters that Kubeapps can target for deployments
+## When populated with a single cluster (as it is by default), Kubeapps will not allow users to
+## change the target cluster. When populated with multiple clusters, Kubeapps will present the clusters to
+## the user as potential targets for install or browsing.
+## - Note that you can define a single cluster without an apiServiceURL and the chart will assume this is
+##   the name you are assigning to the cluster on which Kubeapps is itself installed. Specifying more than
+##   one cluster without an apiServiceURL will cause the chart display an error.
+## - The base64-encoded certificateAuthorityData can be obtained from the additional cluster's kube config
+##   file, for example, to get the ca data for the 0th cluster in your config (adjust the index 0 as necessary):
+##   kubectl --kubeconfig ~/.kube/kind-config-kubeapps-additional config view --raw -o jsonpath='{.clusters[0].cluster.certificate-authority-data}'
+## - serviceToken is an optional token configured to allow LIST namespaces and package manifests (operators) only on the additional cluster
+##   so that the UI can present a list of (only) those namespaces to which the user has access and the available operators.
+## - isKubeappsCluster is an optional parameter that allows defining the cluster in which Kubeapps is installed;
+##   this param is useful when every cluster is using an apiServiceURL (e.g., when using the Pinniped Impersonation Proxy)
+##   as the chart cannot infer the cluster on which Kubeapps is installed in that case.
+## e.g.:
+## clusters:
+## - name: default
+##   domain: cluster.local
+## - name: second-cluster
+##   domain: cluster.local
+##   apiServiceURL: https://second-cluster:6443
+##   certificateAuthorityData: LS0tLS1CRUdJ...
+##   serviceToken: ...
+##   isKubeappsCluster: true
+##
+clusters:
+  - name: default
+    domain: cluster.local
+## @param featureFlags [object] Feature flags (used to switch on development features)
+##
+featureFlags:
+  invalidateCache: true
 ## RBAC configuration
 ##
 rbac:

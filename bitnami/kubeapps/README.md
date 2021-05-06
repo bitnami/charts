@@ -63,18 +63,15 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 
 ### Common parameters
 
-| Name                      | Description                                                                   | Value   |
-| ------------------------- | ----------------------------------------------------------------------------- | ------- |
-| `kubeVersion`             | Override Kubernetes version                                                   | `nil`   |
-| `nameOverride`            | String to partially override common.names.fullname                            | `nil`   |
-| `fullnameOverride`        | String to fully override common.names.fullname                                | `nil`   |
-| `commonLabels`            | Labels to add to all deployed objects                                         | `{}`    |
-| `commonAnnotations`       | Annotations to add to all deployed objects                                    | `{}`    |
-| `extraDeploy`             | Array of extra objects to deploy with the release                             | `[]`    |
-| `allowNamespaceDiscovery` | Allow users to discover available namespaces (only the ones they have access) | `true`  |
-| `clusters`                | List of clusters that Kubeapps can target for deployments                     | `[]`    |
-| `enableIPv6`              | Enable IPv6 configuration                                                     | `false` |
-| `featureFlags`            | Feature flags (used to switch on development features)                        | `{}`    |
+| Name                | Description                                        | Value   |
+| ------------------- | -------------------------------------------------- | ------- |
+| `kubeVersion`       | Override Kubernetes version                        | `nil`   |
+| `nameOverride`      | String to partially override common.names.fullname | `nil`   |
+| `fullnameOverride`  | String to fully override common.names.fullname     | `nil`   |
+| `commonLabels`      | Labels to add to all deployed objects              | `{}`    |
+| `commonAnnotations` | Annotations to add to all deployed objects         | `{}`    |
+| `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`    |
+| `enableIPv6`        | Enable IPv6 configuration                          | `false` |
 
 
 ### Traffic Exposure Parameters
@@ -438,14 +435,17 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 
 ### Other Parameters
 
-| Name                    | Description                                        | Value                   |
-| ----------------------- | -------------------------------------------------- | ----------------------- |
-| `rbac.create`           | Specifies whether RBAC resources should be created | `true`                  |
-| `testImage.registry`    | NGINX image registry                               | `docker.io`             |
-| `testImage.repository`  | NGINX image repository                             | `bitnami/nginx`         |
-| `testImage.tag`         | NGINX image tag (immutable tags are recommended)   | `1.19.10-debian-10-r11` |
-| `testImage.pullPolicy`  | NGINX image pull policy                            | `IfNotPresent`          |
-| `testImage.pullSecrets` | NGINX image pull secrets                           | `[]`                    |
+| Name                      | Description                                                                   | Value                   |
+| ------------------------- | ----------------------------------------------------------------------------- | ----------------------- |
+| `allowNamespaceDiscovery` | Allow users to discover available namespaces (only the ones they have access) | `true`                  |
+| `clusters`                | List of clusters that Kubeapps can target for deployments                     | `[]`                    |
+| `featureFlags`            | Feature flags (used to switch on development features)                        | `{}`                    |
+| `rbac.create`             | Specifies whether RBAC resources should be created                            | `true`                  |
+| `testImage.registry`      | NGINX image registry                                                          | `docker.io`             |
+| `testImage.repository`    | NGINX image repository                                                        | `bitnami/nginx`         |
+| `testImage.tag`           | NGINX image tag (immutable tags are recommended)                              | `1.19.10-debian-10-r11` |
+| `testImage.pullPolicy`    | NGINX image pull policy                                                       | `IfNotPresent`          |
+| `testImage.pullSecrets`   | NGINX image pull secrets                                                      | `[]`                    |
 
 
 ### Database Parameters
