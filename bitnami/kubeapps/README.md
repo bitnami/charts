@@ -226,7 +226,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `frontend.service.annotations`                   | Additional custom annotations for frontend service                                        | `{}`                    |
 
 
-### AppRepository parameters
+### AppRepository Controller parameters
 
 | Name                                                  | Description                                                                               | Value                                       |
 | ----------------------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------- |
