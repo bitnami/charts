@@ -290,7 +290,7 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ### To 5.0.0
 
-The CRD API version has changed. If you deployed the Helm Chart using `crd.create=true` you need to manually delete the old CRD before upgrading the release.
+The CRD was updated according to the latest changes in the upstream project. As a consequence, the CRD API version was moved from `apiextensions.k8s.io/v1beta1` to `apiextensions.k8s.io/v1`. If you deployed the Helm Chart using `crd.create=true` you need to manually delete the old CRD before upgrading the release.
 
 ```console
 kubectl delete crd dnsendpoints.externaldns.k8s.io
