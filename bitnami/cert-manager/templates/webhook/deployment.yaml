@@ -2,6 +2,7 @@ apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "certmanager.webhook.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: webhook
     {{- if .Values.commonLabels }}
@@ -17,7 +18,7 @@ spec:
   {{- if .Values.webhook.updateStrategy }}
   strategy: {{- toYaml .Values.webhook.updateStrategy | nindent 4 }}
   {{- end }}
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.webhook.replicaCount }}
   template:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
@@ -55,9 +56,7 @@ spec:
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.webhook.tolerations "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.webhook.hostAliases }}
-      # yamllint disable rule:indentation
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.webhook.hostAliases "context" $) | nindent 8 }}
-      # yamllint enable rule:indentation
       {{- end }}
       initContainers:
         {{- if .Values.webhook.initContainers }}

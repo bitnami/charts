@@ -6,6 +6,13 @@ Return the proper certmanager.image name
 {{- end -}}
 
 {{/*
+Return the proper certmanager.image name
+*/}}
+{{- define "certmanager.acmesolver.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.controller.acmesolver.image "global" .Values.global) }}
+{{- end -}}
+
+{{/*
 Return the proper image name (for the init container volume-permissions image)
 */}}
 {{- define "certmanager.volumePermissions.image" -}}
@@ -20,13 +27,26 @@ Return the proper Docker Image Registry Secret Names
 {{- end -}}
 
 {{/*
+Create a default fully qualified app name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+If release name contains chart name it will be used as a full name.
+*/}}
+{{- define "certmanager.controller.fullname" -}}
+{{- printf "%s-controller" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
 Returns the proper service account name depending if an explicit service account name is set
 in the values file. If the name is not set it will default to either common.names.fullname if controller.serviceAccount.create
 is true or default otherwise.
 */}}
 {{- define "certmanager.controller.serviceAccountName" -}}
     {{- if .Values.controller.serviceAccount.create -}}
-        {{ default (include "common.names.fullname" .) .Values.controller.serviceAccount.name }}
+        {{- if (empty .Values.controller.serviceAccount.name) -}}
+          {{- printf "%s-controller" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
+        {{- else -}}
+          {{ default "default" .Values.controller.serviceAccount.name }}
+        {{- end -}}
     {{- else -}}
         {{ default "default" .Values.controller.serviceAccount.name }}
     {{- end -}}
@@ -121,13 +141,21 @@ Compile all warnings into a single message.
 */}}
 {{- define "certmanager.validateValues" -}}
 {{- $messages := list -}}
-{{- $messages := append $messages (include "certmanager.validateValues.foo" .) -}}
-{{- $messages := append $messages (include "certmanager.validateValues.bar" .) -}}
+{{- $messages := append $messages (include "certmanager.validateValues.setCRD" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
 {{- if $message -}}
 {{-   printf "\nVALUES VALIDATION:\n%s" $message -}}
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of Cert Manager - CRD */}}
+{{- define "certmanager.validateValues.setCRD" -}}
+{{- if not .Values.installCRDs -}}
+cert-manager: CRDs
+    You will use cert manager without installing CRDs.
+    If you want to include our CRD resources, please install the cert manager using the crd flags (--set .Values.installCRDs=true).
 {{- end -}}
 {{- end -}}
 

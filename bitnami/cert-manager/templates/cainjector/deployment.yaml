@@ -2,6 +2,7 @@ apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "certmanager.cainjector.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: cainjector
     {{- if .Values.commonLabels }}
@@ -17,7 +18,7 @@ spec:
   {{- if .Values.cainjector.updateStrategy }}
   strategy: {{- toYaml .Values.cainjector.updateStrategy | nindent 4 }}
   {{- end }}
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.cainjector.replicaCount }}
   template:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
@@ -55,9 +56,7 @@ spec:
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.cainjector.tolerations "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.cainjector.hostAliases }}
-      # yamllint disable rule:indentation
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.cainjector.hostAliases "context" $) | nindent 8 }}
-      # yamllint enable rule:indentation
       {{- end }}
       initContainers:
         {{- if .Values.cainjector.initContainers }}
@@ -102,15 +101,6 @@ spec:
             {{- end }}
           {{- if .Values.cainjector.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.cainjector.lifecycleHooks "context" $) | nindent 12 }}
-          {{- end }}
-          {{- if .Values.cainjector.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.cainjector.customStartupProbe "context" $) | nindent 12 }}
-          {{- end }}
-          {{- if .Values.cainjector.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.cainjector.customLivenessProbe "context" $) | nindent 12 }}
-          {{- end }}
-          {{- if .Values.cainjector.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.cainjector.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.cainjector.resources }}
           resources: {{- toYaml .Values.cainjector.resources | nindent 12 }}

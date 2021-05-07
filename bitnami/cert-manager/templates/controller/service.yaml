@@ -3,7 +3,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "common.names.fullname" . }}
+  name: {{ include "certmanager.controller.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: controller
@@ -12,7 +12,8 @@ spec:
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: controller
   ports:
-    - port: {{ .Values.controller.containerPort }}
+    - name: controller
+      port: {{ .Values.controller.containerPort }}
       protocol: TCP
       targetPort: {{ .Values.metrics.serviceMonitor.targetPort }}
 {{- end }}

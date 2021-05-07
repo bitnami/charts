@@ -4,48 +4,39 @@
 ## @section Global parameters
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
-# global:
-#   imageRegistry: myRegistryName
-#   imagePullSecrets:
-#     - myRegistryKeySecretName
 global:
   imageRegistry:
   imagePullSecrets: []
-
+  storageClass:
 
 ## @section Common parameters
-## Override Kubernetes version
+
 ## @param kubeVersion Override Kubernetes version
 ##
 kubeVersion:
 
-## String to partially override common.names.fullname template (will maintain the release name)
 ## @param nameOverride String to partially override common.names.fullname
 ##
 nameOverride:
 
-## String to fully override common.names.fullname template
 ## @param fullnameOverride String to fully override common.names.fullname
 ##
 fullnameOverride:
 
-## Add labels to all the deployed resources
 ## @param commonLabels  Labels to add to all deployed objects
 ##
 commonLabels: {}
 
-## Add annotations to all the deployed resources
 ## @param commonAnnotations  Annotations to add to all deployed objects
 ##
 commonAnnotations: {}
 
-## Extra objects to deploy (value evaluated as a template)
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
 
-## Cert Manager Log Level
 ## @param logLevel Set up cert manager log level
 ##
 logLevel: 2
@@ -56,27 +47,25 @@ leaderElection:
   ##
   namespace: "kube-system"
 
-## Flag to install CRDs
 ## @param installCRDs Flag to install Cert Manager CRDs
 ##
 installCRDs: false
 
-## Number of replicas
 ## @param replicaCount Number of Cert Manager replicas
 ##
 replicaCount: 1
-
-## RBAC configuration
-##
-rbac:
-  ## @param rbac.create Specifies whether RBAC resources should be created
-  ##
-  create: true
 
 ## @section Controller deployment parameters
 ## Controller deployment parameters
 ##
 controller:
+  ## @param controller.replicaCount Number of Controller replicas
+  ##
+  replicaCount: 1
+
+  ## Bitnami Cert Manager image
+  ## ref: https://hub.docker.com/r/bitnami/cert-manager/tags/
+  ##
   image:
     ## @param controller.image.registry Controller image registry
     ##
@@ -97,7 +86,7 @@ controller:
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ## e.g:
+    ## E.g:
     ## pullSecrets:
     ##  - myRegistryKeySecretName
     ## @param controller.image.pullSecrets Controller image pull secrets
@@ -108,6 +97,49 @@ controller:
     ## @param controller.image.debug Controller image debug mode
     debug: false
 
+  acmesolver:
+    image:
+      ## @param controller.acmesolver.image.registry Controller image registry
+      ##
+      registry: docker.io
+      ## @param controller.acmesolver.image.repository Controller image repository
+      ##
+      repository: bitnami/acme-solver
+      ## @param controller.acmesolver.image.tag Controller image tag (immutabe tags are recommended)
+      ##
+      tag: 1.3.1-debian-10-r10
+      ## Specify a imagePullPolicy
+      ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+      ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+      ##
+      ## @param controller.acmesolver.image.pullPolicy Controller image pull policy
+      ##
+      pullPolicy: IfNotPresent
+      ## Optionally specify an array of imagePullSecrets.
+      ## Secrets must be manually created in the namespace.
+      ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+      ## E.g:
+      ## pullSecrets:
+      ##  - myRegistryKeySecretName
+      ## @param controller.acmesolver.image.pullSecrets Controller image pull secrets
+      ##
+      pullSecrets: []
+      ## Set to true if you would like to see extra information on logs
+      ##
+      ## @param controller.acmesolver.image.debug Controller image debug mode
+      debug: false
+
+  ## Controller containers' resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    ## @param controller.resources.limits  The resources limits for the Controller container
+    ##
+    limits: {}
+    ## @param controller.resources.requests  The requested resources for the Controller container
+    ##
+    requests: {}
+
   ## controller pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param controller.podSecurityContext.enabled Enabled Controller pods' Security Context
@@ -116,25 +148,6 @@ controller:
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-
-  ## controller resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ##
-  resources:
-    # We usually recommend not to specify default resources and to leave this as a conscious
-    # choice for the user. This also increases chances charts run on environments with little
-    # resources, such as Minikube. If you do want to specify resources, uncomment the following
-    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    ## @param controller.resources.limits  The resources limits for the Controller container
-    ##
-    limits: {}
-    #   cpu: 200m
-    #   memory: 256Mi
-    ## @param controller.resources.requests  The requested resources for the Controller container
-    ##
-    requests: {}
-    #   cpu: 200m
-    #   memory: 10Mi
 
   ## controller containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
@@ -147,38 +160,27 @@ controller:
     runAsUser: 1001
     runAsNonRoot: true
 
-  ## Pod affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
-  ## @param controller.podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ## @param controller.podAffinityPreset Pod affinity preset. Ignored if `controller.affinity` is set. Allowed values: `soft` or `hard`
   ##
   podAffinityPreset: ""
 
-  ## Pod anti-affinity preset
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
-  ## @param controller.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ## @param controller.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `controller.affinity` is set. Allowed values: `soft` or `hard`
   ##
   podAntiAffinityPreset: soft
 
   ## Node affinity preset
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ## Allowed values: soft, hard
-  ## @param controller.nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
-  ## @param controller.nodeAffinityPreset.key Node label key to match. Ignored if `affinity` is set
-  ## @param controller.nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set
   ##
   nodeAffinityPreset:
-    ## Node affinity type
-    ## Allowed values: soft, hard
+    ## @param controller.nodeAffinityPreset.type Node affinity preset type. Ignored if `controller.affinity` is set. Allowed values: `soft` or `hard`
     ##
     type: ""
-    ## Node label key to match
-    ## E.g.
-    ## key: "kubernetes.io/e2e-az-name"
+    ## @param controller.nodeAffinityPreset.key Node label key to match. Ignored if `controller.affinity` is set
     ##
     key: ""
-    ## Node label values to match
+    ## @param controller.nodeAffinityPreset.values Node label values to match. Ignored if `controller.affinity` is set
     ## E.g.
     ## values:
     ##   - e2e-az1
@@ -192,7 +194,6 @@ controller:
   ##
   affinity: {}
 
-  ## Node labels for pod assignment. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ## @param controller.nodeSelector  Node labels for pod assignment
   ##
@@ -203,101 +204,74 @@ controller:
   ##
   containerPort: 9402
 
-  ## Command and args for running the container (set to default if not set). Use array form
   ## @param controller.command Override Controller default command
-  ## @param controller.args Override Controller default args
   ##
   command: []
+  ## @param controller.args Override Controller default args
+  ##
   args: []
 
   ## @param controller.priorityClassName Controller pod priority class name
   ##
   priorityClassName:
 
-  ## Deployment pod host aliases
+  ## @param controller.hostAliases Custom host aliases for Controller pods
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
-  ## @param controller.hostAliases Add deployment host aliases
   ##
   hostAliases: []
 
-  ## Tolerations for pod assignment. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ## @param controller.tolerations  Tolerations for pod assignment
   ##
   tolerations: []
 
-  ## Pod extra labels
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ## @param controller.podLabels  Extra labels for Controller pods
   ##
   podLabels: {}
 
-  ## Annotations for server pods.
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ## @param controller.podAnnotations  Annotations for Controller pods
   ##
   podAnnotations: {}
 
-  ## lifecycleHooks for the controller container to automate configuration before or after startup.
   ## @param controller.lifecycleHooks Add lifecycle hooks to the Controller deployment
   ##
   lifecycleHooks: {}
 
-  ## Custom Startup probes for controller
-  ## @param controller.customStartupProbe  Override default startup probe
-  ##
-  customStartupProbe: {}
-
-  ## Custom Liveness probes for controller
-  ## @param controller.customLivenessProbe  Override default liveness probe
-  ##
-  customLivenessProbe: {}
-
-  ## Custom Rediness probes controller
-  ## @param controller.customReadinessProbe  Override default readiness probe
-  ##
-  customReadinessProbe: {}
-
-  ## Update strategy - only really applicable for deployments with RWO PVs attached
-  ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
-  ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
-  ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
-  ## @param controller.updateStrategy.type Controller deployment update strategy
-  ##
   updateStrategy:
+    ## @param controller.updateStrategy.type Controller deployment update strategy
     type: RollingUpdate
+    ## @param controller.updateStrategy.rollingUpdate Controller deployment rolling update configuration parameters
+    rollingUpdate: {}
 
-  ## Additional environment variables to set
-  ## Example:
+  ## @param controller.extraEnvVars Add extra environment variables to the Controller container
+  ## E.g:
   ## extraEnvVars:
   ##   - name: FOO
   ##     value: "bar"
-  ## @param controller.extraEnvVars Add extra environment variables to the Controller container
   ##
   extraEnvVars: []
 
-  ## ConfigMap with extra environment variables
   ## @param controller.extraEnvVarsCM Name of existing ConfigMap containing extra env vars
   ##
   extraEnvVarsCM:
 
-  ## Secret with extra environment variables
   ## @param controller.extraEnvVarsSecret Name of existing Secret containing extra env vars
   ##
   extraEnvVarsSecret:
 
-  ## Extra volumes to add to the deployment
   ## @param controller.extraVolumes  Optionally specify extra list of additional volumes for Controller pods
   ##
   extraVolumes: []
 
-  ## Extra volume mounts to add to the container
   ## @param controller.extraVolumeMounts  Optionally specify extra list of additional volumeMounts for Controller container(s)
   ##
   extraVolumeMounts: []
 
-  ## Add init containers to the controller pods.
-  ## Example:
+  ## @param controller.initContainers  Add additional init containers to the Controller pods
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## E.g:
   ## initContainers:
   ##   - name: your-image-name
   ##     image: your-image
@@ -305,12 +279,11 @@ controller:
   ##     ports:
   ##       - name: portname
   ##         containerPort: 1234
-  ## @param controller.initContainers  Add additional init containers to the Controller pods
   ##
   initContainers: {}
 
-  ## Add sidecars to the controller pods.
-  ## Example:
+  ## @param controller.sidecars  Add additional sidecar containers to the Controller pod
+  ## E.g:
   ## sidecars:
   ##   - name: your-image-name
   ##     image: your-image
@@ -318,7 +291,6 @@ controller:
   ##     ports:
   ##       - name: portname
   ##         containerPort: 1234
-  ## @param controller.sidecars  Add additional sidecar containers to the Controller pod
   ##
   sidecars: {}
 
@@ -340,6 +312,13 @@ controller:
 ## Webhook deployment parameters
 ##
 webhook:
+  ## @param webhook.replicaCount Number of Webhook replicas
+  ##
+  replicaCount: 1
+
+  ## Bitnami Cert Manager Webhook image
+  ## ref: https://hub.docker.com/r/bitnami/cert-manager-webhook/tags/
+  ##
   image:
     ## @param webhook.image.registry Webhook image registry
     ##
@@ -360,7 +339,7 @@ webhook:
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ## e.g:
+    ## E.g:
     ## pullSecrets:
     ##  - myRegistryKeySecretName
     ## @param webhook.image.pullSecrets Webhook image pull secrets
@@ -371,6 +350,17 @@ webhook:
     ## @param webhook.image.debug Webhook image debug mode
     debug: false
 
+  ## Webhook containers' resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    ## @param webhook.resources.limits  The resources limits for the Webhook container
+    ##
+    limits: {}
+    ## @param webhook.resources.requests  The requested resources for the Webhook container
+    ##
+    requests: {}
+
   ## webhook pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param webhook.podSecurityContext.enabled Enabled Webhook pods' Security Context
@@ -379,25 +369,6 @@ webhook:
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-
-  ## webhook resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ##
-  resources:
-    # We usually recommend not to specify default resources and to leave this as a conscious
-    # choice for the user. This also increases chances charts run on environments with little
-    # resources, such as Minikube. If you do want to specify resources, uncomment the following
-    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    ## @param webhook.resources.limits  The resources limits for the Webhook container
-    ##
-    limits: {}
-    #   cpu: 200m
-    #   memory: 256Mi
-    ## @param webhook.resources.requests  The requested resources for the Webhook container
-    ##
-    requests: {}
-    #   cpu: 200m
-    #   memory: 10Mi
 
   ## webhook containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
@@ -410,38 +381,27 @@ webhook:
     runAsUser: 1001
     runAsNonRoot: true
 
-  ## Pod affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
-  ## @param webhook.podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ## @param webhook.podAffinityPreset Pod affinity preset. Ignored if `webhook.affinity` is set. Allowed values: `soft` or `hard`
   ##
   podAffinityPreset: ""
 
-  ## Pod anti-affinity preset
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
-  ## @param webhook.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ## @param webhook.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `webhook.affinity` is set. Allowed values: `soft` or `hard`
   ##
   podAntiAffinityPreset: soft
 
   ## Node affinity preset
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ## Allowed values: soft, hard
-  ## @param webhook.nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
-  ## @param webhook.nodeAffinityPreset.key Node label key to match. Ignored if `affinity` is set
-  ## @param webhook.nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set
   ##
   nodeAffinityPreset:
-    ## Node affinity type
-    ## Allowed values: soft, hard
+    ## @param webhook.nodeAffinityPreset.type Node affinity preset type. Ignored if `webhook.affinity` is set. Allowed values: `soft` or `hard`
     ##
     type: ""
-    ## Node label key to match
-    ## E.g.
-    ## key: "kubernetes.io/e2e-az-name"
+    ## @param webhook.nodeAffinityPreset.key Node label key to match. Ignored if `webhook.affinity` is set
     ##
     key: ""
-    ## Node label values to match
+    ## @param webhook.nodeAffinityPreset.values Node label values to match. Ignored if `webhook.affinity` is set
     ## E.g.
     ## values:
     ##   - e2e-az1
@@ -455,7 +415,6 @@ webhook:
   ##
   affinity: {}
 
-  ## Node labels for pod assignment. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ## @param webhook.nodeSelector  Node labels for pod assignment
   ##
@@ -471,11 +430,11 @@ webhook:
   ##
   httpsPort: 443
 
-  ## Command and args for running the container (set to default if not set). Use array form
   ## @param webhook.command Override Webhook default command
-  ## @param webhook.args Override Webhook default args
   ##
   command: []
+  ## @param webhook.args Override Webhook default args
+  ##
   args: []
 
   ## @param webhook.livenessProbe.enabled Enable livenessProbe
@@ -530,75 +489,62 @@ webhook:
   ##
   priorityClassName:
 
-  ## Deployment pod host aliases
+  ## @param webhook.hostAliases Custom host aliases for Webhook pods
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
-  ## @param webhook.hostAliases Add deployment host aliases
   ##
   hostAliases: []
 
-  ## Tolerations for pod assignment. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ## @param webhook.tolerations  Tolerations for pod assignment
   ##
   tolerations: []
 
-  ## Pod extra labels
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ## @param webhook.podLabels  Extra labels for Webhook pods
   ##
   podLabels: {}
 
-  ## Annotations for server pods.
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ## @param webhook.podAnnotations  Annotations for Webhook pods
   ##
   podAnnotations: {}
 
-  ## lifecycleHooks for the webhook container to automate configuration before or after startup.
   ## @param webhook.lifecycleHooks Add lifecycle hooks to the Webhook deployment
   ##
   lifecycleHooks: {}
 
-  ## Update strategy - only really applicable for deployments with RWO PVs attached
-  ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
-  ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
-  ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
-  ## @param webhook.updateStrategy.type Webhook deployment update strategy
-  ##
   updateStrategy:
+    ## @param webhook.updateStrategy.type Webhook deployment update strategy
     type: RollingUpdate
+    ## @param webhook.updateStrategy.rollingUpdate Controller deployment rolling update configuration parameters
+    rollingUpdate: {}
 
-  ## Additional environment variables to set
-  ## Example:
+  ## @param webhook.extraEnvVars Add extra environment variables to the Webhook container
+  ## E.g:
   ## extraEnvVars:
   ##   - name: FOO
   ##     value: "bar"
-  ## @param webhook.extraEnvVars Add extra environment variables to the Webhook container
   ##
   extraEnvVars: []
 
-  ## ConfigMap with extra environment variables
   ## @param webhook.extraEnvVarsCM Name of existing ConfigMap containing extra env vars
   ##
   extraEnvVarsCM:
 
-  ## Secret with extra environment variables
   ## @param webhook.extraEnvVarsSecret Name of existing Secret containing extra env vars
   ##
   extraEnvVarsSecret:
 
-  ## Extra volumes to add to the deployment
   ## @param webhook.extraVolumes  Optionally specify extra list of additional volumes for Webhook pods
   ##
   extraVolumes: []
 
-  ## Extra volume mounts to add to the container
   ## @param webhook.extraVolumeMounts  Optionally specify extra list of additional volumeMounts for Webhook container(s)
   ##
   extraVolumeMounts: []
 
-  ## Add init containers to the webhook pods.
-  ## Example:
+  ## @param webhook.initContainers  Add additional init containers to the Webhook pods
+  ## E.g:
   ## initContainers:
   ##   - name: your-image-name
   ##     image: your-image
@@ -606,12 +552,11 @@ webhook:
   ##     ports:
   ##       - name: portname
   ##         containerPort: 1234
-  ## @param webhook.initContainers  Add additional init containers to the Webhook pods
   ##
   initContainers: {}
 
-  ## Add sidecars to the webhook pods.
-  ## Example:
+  ## @param webhook.sidecars  Add additional sidecar containers to the Webhook pod
+  ## E.g:
   ## sidecars:
   ##   - name: your-image-name
   ##     image: your-image
@@ -619,7 +564,6 @@ webhook:
   ##     ports:
   ##       - name: portname
   ##         containerPort: 1234
-  ## @param webhook.sidecars  Add additional sidecar containers to the Webhook pod
   ##
   sidecars: {}
 
@@ -641,6 +585,13 @@ webhook:
 ## CAInjector deployment parameters
 ##
 cainjector:
+  ## @param cainjector.replicaCount Number of CAInjector replicas
+  ##
+  replicaCount: 1
+
+  ## Bitnami CAInjector image
+  ## ref: https://hub.docker.com/r/bitnami/cainjector/tags/
+  ##
   image:
     ## @param cainjector.image.registry CAInjector image registry
     ##
@@ -661,7 +612,7 @@ cainjector:
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ## e.g:
+    ## E.g:
     ## pullSecrets:
     ##  - myRegistryKeySecretName
     ## @param cainjector.image.pullSecrets CAInjector image pull secrets
@@ -672,6 +623,17 @@ cainjector:
     ## @param cainjector.image.debug CAInjector image debug mode
     debug: false
 
+  ## CAInjector containers' resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    ## @param cainjector.resources.limits  The resources limits for the CAInjector container
+    ##
+    limits: {}
+    ## @param cainjector.resources.requests  The requested resources for the CAInjector container
+    ##
+    requests: {}
+
   ## cainjector pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param cainjector.podSecurityContext.enabled Enabled CAInjector pods' Security Context
@@ -680,25 +642,6 @@ cainjector:
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-
-  ## cainjector resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ##
-  resources:
-    # We usually recommend not to specify default resources and to leave this as a conscious
-    # choice for the user. This also increases chances charts run on environments with little
-    # resources, such as Minikube. If you do want to specify resources, uncomment the following
-    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    ## @param cainjector.resources.limits  The resources limits for the CAInjector container
-    ##
-    limits: {}
-    #   cpu: 200m
-    #   memory: 256Mi
-    ## @param cainjector.resources.requests  The requested resources for the CAInjector container
-    ##
-    requests: {}
-    #   cpu: 200m
-    #   memory: 10Mi
 
   ## cainjector containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
@@ -711,38 +654,27 @@ cainjector:
     runAsUser: 1001
     runAsNonRoot: true
 
-  ## Pod affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
-  ## @param cainjector.podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ## @param cainjector.podAffinityPreset Pod affinity preset. Ignored if `cainjector.affinity` is set. Allowed values: `soft` or `hard`
   ##
   podAffinityPreset: ""
 
-  ## Pod anti-affinity preset
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
-  ## @param cainjector.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ## @param cainjector.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `cainjector.affinity` is set. Allowed values: `soft` or `hard`
   ##
   podAntiAffinityPreset: soft
 
   ## Node affinity preset
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ## Allowed values: soft, hard
-  ## @param cainjector.nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
-  ## @param cainjector.nodeAffinityPreset.key Node label key to match. Ignored if `affinity` is set
-  ## @param cainjector.nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set
   ##
   nodeAffinityPreset:
-    ## Node affinity type
-    ## Allowed values: soft, hard
+    ## @param cainjector.nodeAffinityPreset.type Node affinity preset type. Ignored if `cainjector.affinity` is set. Allowed values: `soft` or `hard`
     ##
     type: ""
-    ## Node label key to match
-    ## E.g.
-    ## key: "kubernetes.io/e2e-az-name"
+    ## @param cainjector.nodeAffinityPreset.key Node label key to match. Ignored if `cainjector.affinity` is set
     ##
     key: ""
-    ## Node label values to match
+    ## @param cainjector.nodeAffinityPreset.values Node label values to match. Ignored if `cainjector.affinity` is set
     ## E.g.
     ## values:
     ##   - e2e-az1
@@ -756,107 +688,78 @@ cainjector:
   ##
   affinity: {}
 
-  ## Node labels for pod assignment. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ## @param cainjector.nodeSelector  Node labels for pod assignment
   ##
   nodeSelector: {}
 
-  ## Command and args for running the container (set to default if not set). Use array form
   ## @param cainjector.command Override CAInjector default command
-  ## @param cainjector.args Override CAInjector default args
   ##
   command: []
+  ## @param cainjector.args Override CAInjector default args
+  ##
   args: []
 
   ## @param cainjector.priorityClassName CAInjector pod priority class name
   ##
   priorityClassName:
 
-  ## Deployment pod host aliases
+  ## @param cainjector.hostAliases Custom host aliases for CAInjector pods
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
-  ## @param cainjector.hostAliases Add deployment host aliases
   ##
   hostAliases: []
 
-  ## Tolerations for pod assignment. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ## @param cainjector.tolerations  Tolerations for pod assignment
   ##
   tolerations: []
 
-  ## Pod extra labels
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ## @param cainjector.podLabels  Extra labels for CAInjector pods
   ##
   podLabels: {}
 
-  ## Annotations for server pods.
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ## @param cainjector.podAnnotations  Annotations for CAInjector pods
   ##
   podAnnotations: {}
 
-  ## lifecycleHooks for the cainjector container to automate configuration before or after startup.
   ## @param cainjector.lifecycleHooks Add lifecycle hooks to the CAInjector deployment
   ##
   lifecycleHooks: {}
 
-  ## Custom Startup probes for cainjector
-  ## @param cainjector.customStartupProbe  Override default startup probe
-  ##
-  customStartupProbe: {}
-
-  ## Custom Liveness probes for cainjector
-  ## @param cainjector.customLivenessProbe  Override default liveness probe
-  ##
-  customLivenessProbe: {}
-
-  ## Custom Rediness probes cainjector
-  ## @param cainjector.customReadinessProbe  Override default readiness probe
-  ##
-  customReadinessProbe: {}
-
-  ## Update strategy - only really applicable for deployments with RWO PVs attached
-  ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
-  ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
-  ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
-  ## @param cainjector.updateStrategy.type CAInjector deployment update strategy
-  ##
   updateStrategy:
+    ## @param cainjector.updateStrategy.type Controller deployment update strategy
     type: RollingUpdate
+    ## @param cainjector.updateStrategy.rollingUpdate Controller deployment rolling update configuration parameters
+    rollingUpdate: {}
 
-  ## Additional environment variables to set
-  ## Example:
+  ## @param cainjector.extraEnvVars Add extra environment variables to the CAInjector container
+  ## E.g:
   ## extraEnvVars:
   ##   - name: FOO
   ##     value: "bar"
-  ## @param cainjector.extraEnvVars Add extra environment variables to the CAInjector container
   ##
   extraEnvVars: []
 
-  ## ConfigMap with extra environment variables
   ## @param cainjector.extraEnvVarsCM Name of existing ConfigMap containing extra env vars
   ##
   extraEnvVarsCM:
 
-  ## Secret with extra environment variables
   ## @param cainjector.extraEnvVarsSecret Name of existing Secret containing extra env vars
   ##
   extraEnvVarsSecret:
 
-  ## Extra volumes to add to the deployment
   ## @param cainjector.extraVolumes  Optionally specify extra list of additional volumes for CAInjector pods
   ##
   extraVolumes: []
 
-  ## Extra volume mounts to add to the container
   ## @param cainjector.extraVolumeMounts  Optionally specify extra list of additional volumeMounts for CAInjector container(s)
   ##
   extraVolumeMounts: []
 
-  ## Add init containers to the cainjector pods.
-  ## Example:
+  ## @param cainjector.initContainers  Add additional init containers to the CAInjector pods
+  ## E.g:
   ## initContainers:
   ##   - name: your-image-name
   ##     image: your-image
@@ -864,12 +767,11 @@ cainjector:
   ##     ports:
   ##       - name: portname
   ##         containerPort: 1234
-  ## @param cainjector.initContainers  Add additional init containers to the CAInjector pods
   ##
   initContainers: {}
 
-  ## Add sidecars to the cainjector pods.
-  ## Example:
+  ## @param cainjector.sidecars  Add additional sidecar containers to the CAInjector pod
+  ## E.g:
   ## sidecars:
   ##   - name: your-image-name
   ##     image: your-image
@@ -877,7 +779,6 @@ cainjector:
   ##     ports:
   ##       - name: portname
   ##         containerPort: 1234
-  ## @param cainjector.sidecars  Add additional sidecar containers to the CAInjector pod
   ##
   sidecars: {}
 
@@ -897,7 +798,7 @@ cainjector:
 
 ## @section Metrics Parameters
 metrics:
-  ## @param metrics.enabled Start a sidecar prometheus exporter
+  ## @param metrics.enabled Start metrics
   ##
   enabled: true
   ## Prometheus Service Monitor
@@ -911,15 +812,12 @@ metrics:
   podAnnotations:
     prometheus.io/path: "/metrics"
     prometheus.io/scrape: "true"
-    prometheus.io/port: "9402"
+    prometheus.io/port: "{{ .Values.controller.containerPort }}"
 
   serviceMonitor:
     ## @param metrics.serviceMonitor.enabled Create ServiceMonitor resource(s) for scraping metrics using PrometheusOperator
     ##
     enabled: false
-    ## @param metrics.serviceMonitor.targetPort The port in which the ServiceMonitor will monitor
-    ##
-    targetPort: 9402
     ## @param metrics.serviceMonitor.namespace The namespace in which the ServiceMonitor will be created
     ##
     namespace:
@@ -937,3 +835,12 @@ metrics:
     additionalLabels:
       app.kubernetes.io/component: "controller"
       prometheus: default
+
+
+## @section Other Parameters
+## RBAC configuration
+##
+rbac:
+  ## @param rbac.create Specifies whether RBAC resources should be created
+  ##
+  create: true
