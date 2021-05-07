@@ -29,7 +29,7 @@ It also packages the [Bitnami PostgreSQL chart](https://github.com/bitnami/chart
 
 ## Prerequisites
 
-- Kubernetes 1.15+ (tested with Azure Kubernetes Service, Google Kubernetes Engine, minikube and Docker for Desktop Kubernetes)
+- Kubernetes 1.16+ (tested with both bare-metal and managed clusters, including EKS, AKS, GKE and Tanzu Kubernetes Grid, as well as dev clusters, such as Kind, Minikube and Docker for Desktop Kubernetes)
 - Helm 3.0.2+
 - Administrative access to the cluster to create Custom Resource Definitions (CRDs)
 - PV provisioner support in the underlying infrastructure (required for PostgreSQL database)
