@@ -146,11 +146,17 @@ spec:
               {{- if .Values.envoy.useHostPort }}
               hostPort: {{ .Values.envoy.hostPorts.http }}
               {{- end }}
+              {{- if .Values.envoy.useHostIP }}
+              hostIP: {{ .Values.envoy.hostIPs.http }}
+              {{- end }}
               name: http
               protocol: TCP
             - containerPort: {{ .Values.envoy.containerPorts.https }}
               {{- if .Values.envoy.useHostPort }}
               hostPort: {{ .Values.envoy.hostPorts.https }}
+              {{- end }}
+              {{- if .Values.envoy.useHostIP }}
+              hostIP: {{ .Values.envoy.hostIPs.https }}
               {{- end }}
               name: https
               protocol: TCP

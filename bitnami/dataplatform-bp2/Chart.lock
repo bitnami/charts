@@ -1,0 +1,21 @@
+dependencies:
+- name: kafka
+  repository: https://charts.bitnami.com/bitnami
+  version: 12.17.4
+- name: spark
+  repository: https://charts.bitnami.com/bitnami
+  version: 5.4.2
+- name: elasticsearch
+  repository: https://charts.bitnami.com/bitnami
+  version: 15.1.1
+- name: logstash
+  repository: https://charts.bitnami.com/bitnami
+  version: 3.3.1
+- name: wavefront
+  repository: https://charts.bitnami.com/bitnami
+  version: 2.0.5
+- name: common
+  repository: https://charts.bitnami.com/bitnami
+  version: 1.4.2
+digest: sha256:2dfde3b3940dc9dcfeadc580e7f23a32e9273587222cdfb7337b456a23229164
+generated: "2021-04-23T07:43:31.963283899Z"

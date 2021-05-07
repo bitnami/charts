@@ -8,7 +8,7 @@ data:
   kibana.yml: |
     pid.file: /opt/bitnami/kibana/tmp/kibana.pid
     server.host: "::"
-    server.port: 5601
+    server.port: {{ .Values.containerPort }}
     elasticsearch.hosts: [{{ include "kibana.elasticsearch.url" . }}]
     {{- if .Values.configuration.server.basePath }}
     server.basePath: {{ .Values.configuration.server.basePath | quote }}

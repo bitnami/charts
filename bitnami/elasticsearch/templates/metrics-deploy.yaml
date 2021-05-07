@@ -45,6 +45,9 @@ spec:
             - --es.uri=http://{{ include "elasticsearch.master.fullname" . }}:{{ .Values.master.service.port }}
             {{- end }}
             - --es.all
+            {{- if .Values.metrics.extraArgs }}
+            {{- toYaml .Values.metrics.extraArgs | nindent 12 }}
+            {{- end }}
           ports:
             - name: metrics
               containerPort: 9114

@@ -183,11 +183,11 @@ a defined apiServiceURL.
         {{- fail "At least one cluster must be defined." }}
     {{- end }}
     {{- range .Values.clusters }}
-        {{- if eq (.apiServiceURL | toString) "<nil>" }}
+        {{- if or .isKubeappsCluster ( eq (.apiServiceURL | toString) "<nil>") }}
             {{- if eq $kubeappsCluster "" }}
                 {{- $kubeappsCluster = .name }}
             {{- else }}
-                {{- fail "Only one cluster can be specified without an apiServiceURL to refer to the cluster on which Kubeapps is installed." }}
+                {{- fail "Only one cluster can be configured using either 'isKubeappsCluster: true' or without an apiServiceURL to refer to the cluster on which Kubeapps is installed. Please check the provided 'clusters' configuration." }}
             {{- end }}
         {{- end }}
     {{- end }}
@@ -203,4 +203,15 @@ Returns a JSON list of cluster names only (without sensitive tokens etc.)
     {{- $sanitizedClusters = append $sanitizedClusters .name }}
     {{- end }}
     {{- $sanitizedClusters | toJson }}
+{{- end -}}
+
+{{/*
+Return the Postgresql secret name
+*/}}
+{{- define "kubeapps.postgresql.secretName" -}}
+  {{- if .Values.postgresql.existingSecret }}
+      {{- printf "%s" .Values.postgresql.existingSecret -}}
+  {{- else -}}
+      {{- printf "%s" (include "kubeapps.postgresql.fullname" .) -}}
+  {{- end -}}
 {{- end -}}

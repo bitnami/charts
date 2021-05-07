@@ -47,72 +47,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## Architecture
 
-This charts allows you install MongoDB&reg; using two different architecture setups: "standalone" or "replicaset". You can use the `architecture` parameter to choose the one to use:
+This chart allows installing MongoDB&reg; using two different architecture setups: `standalone` or `replicaset`. Use the `architecture` parameter to choose the one to use:
 
 ```console
 architecture="standalone"
 architecture="replicaset"
 ```
 
-The standalone architecture installs a deployment (or statefulset) with one MongoDB&reg; server (it cannot be scaled):
-
-```
-                ┌────────────────┐
-                │   MongoDB&reg; │
-                |      svc       │
-                └───────┬────────┘
-                        │
-                        ▼
-                  ┌────────────┐
-                  │MongoDB&reg;│
-                  │   Server   │
-                  │    Pod     │
-                  └────────────┘
-```
-
-The chart supports the replicaset architecture with and without a [MongoDB&reg; Arbiter](https://docs.mongodb.com/manual/core/replica-set-arbiter/):
-
-- When the MongoDB&reg; Arbiter is enabled, the chart installs two statefulsets: A statefulset with N MongoDB&reg; servers (organised with one primary and N-1 secondary nodes), and a statefulset with one MongoDB&reg; arbiter node (it cannot be scaled).
-
-    ```
-        ┌────────────────┐ ┌────────────────┐ ┌────────────────┐    ┌─────────────┐
-        │ MongoDB&reg; 0 │ │ MongoDB&reg; 1 │ │ MongoDB&reg; N │    │   Arbiter   │
-        |  external svc  │ |  external svc  │ |  external svc  │    |     svc     │
-        └───────┬────────┘ └───────┬────────┘ └───────┬────────┘    └──────┬──────┘
-                │                  │                  │                    │
-                ▼                  ▼                  ▼                    ▼
-        ┌────────────────┐ ┌────────────────┐ ┌────────────────┐    ┌──────────────┐
-        │ MongoDB&reg; 0 │ │ MongoDB&reg; 1 │ │ MongoDB&reg; N │    │ MongoDB&reg; │
-        │    Server      │ │     Server     │ │     Server     │    │    Arbiter   │
-        │     Pod        │ │      Pod       │ │      Pod       │    │     Pod      │
-        └────────────────┘ └────────────────┘ └────────────────┘    └──────────────┘
-             primary           secondary         secondary
-    ```
-
-    The PSA model is useful when the third Availability Zone cannot hold a full MongoDB&reg; instance. The MongoDB&reg; Arbiter as decision maker is lightweight and can run alongside other workloads.
-
-    _Note:_ An update takes your MongoDB&reg; replicaset offline if the Arbiter is enabled and the number of MongoDB&reg; replicas is two. Helm applies updates to the statefulsets for the MongoDB&reg; instance _and_ the Arbiter at the same time so you loose two out of three quorum votes.
-
-- Without the Arbiter, the chart deploys a single statefulset with N MongoDB&reg; servers (organised with one primary and N-1 secondary nodes)
-
-    ```
-        ┌────────────────┐ ┌────────────────┐ ┌────────────────┐
-        │ MongoDB&reg; 0 │ │ MongoDB&reg; 1 │ │ MongoDB&reg; N │
-        |  external svc  │ |  external svc  │ |  external svc  │
-        └───────┬────────┘ └───────┬────────┘ └───────┬────────┘
-                │                  │                  │
-                ▼                  ▼                  ▼
-        ┌────────────────┐ ┌────────────────┐ ┌────────────────┐
-        │ MongoDB&reg; 0 │ │ MongoDB&reg; 1 │ │ MongoDB&reg; N │
-        │    Server      │ │     Server     │ │     Server     │
-        │     Pod        │ │      Pod       │ │      Pod       │
-        └────────────────┘ └────────────────┘ └────────────────┘
-             primary           secondary         secondary
-    ```
-
-There are no services load balancing requests between MongoDB&reg; nodes, instead each node has an associated service to access them individually.
-
-> Note: although the 1st replica is initially assigned the "primary" role, any of the "secondary" nodes can become the "primary" if it is down, or during upgrades. Do not make any assumption about what replica has the "primary" role, instead configure your Mongo client with the list of MongoDB&reg; hostnames so it can dynamically choose the node to send requests.
+Refer to the [chart documentation for more information on each of these architectures](https://docs.bitnami.com/kubernetes/infrastructure/mongodb/get-started/understand-architecture/).
 
 ## Parameters
 
@@ -149,6 +91,7 @@ The following tables lists the configurable parameters of the MongoDB&reg; chart
 | `architecture`           | MongoDB&reg; architecture (`standalone` or `replicaset`)                                                                      | `standalone`                                   |
 | `hostAliases`            | Add deployment host aliases                                                                                                   | `[]`                                           |
 | `useStatefulSet`         | Set to true to use a StatefulSet instead of a Deployment (only when `architecture=standalone`)                                | `false`                                        |
+| `commonAnnotations`      | Annotations to be added to all Mongo resources                                                                                     | `{}`                                                    |
 | `auth.enabled`           | Enable authentication                                                                                                         | `true`                                         |
 | `auth.rootPassword`      | MongoDB&reg; admin password                                                                                                   | _random 10 character long alphanumeric string_ |
 | `auth.username`          | MongoDB&reg; custom user (mandatory if `auth.database` is set)                                                                | `nil`                                          |
@@ -162,6 +105,8 @@ The following tables lists the configurable parameters of the MongoDB&reg; chart
 | `directoryPerDB`         | Switch to enable/disable DirectoryPerDB on MongoDB&reg;                                                                       | `false`                                        |
 | `systemLogVerbosity`     | MongoDB&reg; system log verbosity level                                                                                       | `0`                                            |
 | `disableSystemLog`       | Switch to enable/disable MongoDB&reg; system log                                                                              | `false`                                        |
+| `disableJavascript`      | Switch to enable/disable MongoDB&reg; server-side JavaScript execution                                                        | `false`                                        |
+| `enableJournal`          | Switch to enable/disable MongoDB&reg; Journaling                                                                              | `true`                                         |
 | `configuration`          | MongoDB&reg; configuration file to be used                                                                                    | `{}`                                           |
 | `existingConfigmap`      | Name of existing ConfigMap with MongoDB&reg; configuration                                                                    | `nil`                                          |
 | `initdbScripts`          | Dictionary of initdb scripts                                                                                                  | `nil`                                          |
@@ -207,8 +152,10 @@ The following tables lists the configurable parameters of the MongoDB&reg; chart
 | `resources.requests`        | The requested resources for MongoDB&reg; containers                                                    | `{}`                           |
 | `livenessProbe`             | Liveness probe configuration for MongoDB&reg;                                                          | Check `values.yaml` file       |
 | `readinessProbe`            | Readiness probe configuration for MongoDB&reg;                                                         | Check `values.yaml` file       |
+| `startupProbe`              | Startup probe configuration for MongoDB&reg;                                                           | Check `values.yaml` file       |
 | `customLivenessProbe`       | Override default liveness probe for MongoDB&reg; containers                                            | `nil`                          |
 | `customReadinessProbe`      | Override default readiness probe for MongoDB&reg; containers                                           | `nil`                          |
+| `customStartupProbe`        | Override default startup probe for MongoDB&reg; containers                                             | `nil`                          |
 | `pdb.create`                | Enable/disable a Pod Disruption Budget creation for MongoDB&reg; pod(s)                                | `false`                        |
 | `pdb.minAvailable`          | Minimum number/percentage of MongoDB&reg; pods that should remain scheduled                            | `1`                            |
 | `pdb.maxUnavailable`        | Maximum number/percentage of MongoDB&reg; pods that may be made unavailable                            | `nil`                          |
@@ -220,7 +167,7 @@ The following tables lists the configurable parameters of the MongoDB&reg; chart
 ### Exposure parameters
 
 | Parameter                                                | Description                                                                                            | Default                        |
-| -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | ------------------------------ |
+|----------------------------------------------------------|--------------------------------------------------------------------------------------------------------|--------------------------------|
 | `service.type`                                           | Kubernetes Service type                                                                                | `ClusterIP`                    |
 | `service.nameOverride`                                   | MongoDB&reg; service name                                                                              | `{mongodb.fullname}-headless`  |
 | `service.port`                                           | MongoDB&reg; service port                                                                              | `27017`                        |
@@ -238,7 +185,7 @@ The following tables lists the configurable parameters of the MongoDB&reg; chart
 | `externalAccess.autoDiscovery.image.pullPolicy`          | Init container auto-discovery image pull policy (kubectl)                                              | `Always`                       |
 | `externalAccess.autoDiscovery.resources.limits`          | Init container auto-discovery resource limits                                                          | `{}`                           |
 | `externalAccess.autoDiscovery.resources.requests`        | Init container auto-discovery resource requests                                                        | `{}`                           |
-| `externalAccess.service.type`                            | Kubernetes Service type for external access. It can be NodePort, LoadBalancer or ClusterIP                        | `LoadBalancer`                 |
+| `externalAccess.service.type`                            | Kubernetes Service type for external access. It can be NodePort, LoadBalancer or ClusterIP             | `LoadBalancer`                 |
 | `externalAccess.service.port`                            | MongoDB&reg; port used for external access when service type is LoadBalancer                           | `27017`                        |
 | `externalAccess.service.loadBalancerIPs`                 | Array of load balancer IPs for MongoDB&reg; nodes                                                      | `[]`                           |
 | `externalAccess.service.loadBalancerSourceRanges`        | Address(es) that are allowed when service is LoadBalancer                                              | `[]`                           |
@@ -254,30 +201,29 @@ The following tables lists the configurable parameters of the MongoDB&reg; chart
 | `externalAccess.hidden.service.nodePorts`                | Array of node ports used to configure MongoDB&reg; advertised hostname when service type is NodePort   | `[]`                           |
 | `externalAccess.hidden.service.annotations`              | Service annotations for external access                                                                | `{}`(evaluated as a template)  |
 
-
-
 ### Persistence parameters
 
-| Parameter                                   | Description                                                                        | Default                         |
-|---------------------------------------------|------------------------------------------------------------------------------------|---------------------------------|
-| `persistence.enabled`                       | Enable MongoDB&reg; data persistence using PVC                                     | `true`                          |
-| `persistence.existingClaim`                 | Provide an existing `PersistentVolumeClaim` (only when `architecture=standalone`)  | `nil` (evaluated as a template) |
-| `persistence.storageClass`                  | PVC Storage Class for MongoDB&reg; data volume                                     | `nil`                           |
-| `persistence.accessMode`                    | PVC Access Mode for MongoDB&reg; data volume                                       | `ReadWriteOnce`                 |
-| `persistence.size`                          | PVC Storage Request for MongoDB&reg; data volume                                   | `8Gi`                           |
-| `persistence.mountPath`                     | Path to mount the volume at                                                        | `/bitnami/mongodb`              |
-| `persistence.subPath`                       | Subdirectory of the volume to mount at                                             | `""`                            |
-| `persistence.volumeClaimTemplates.selector` | A label query over volumes to consider for binding (e.g. when using local volumes) | ``                              |
-| `persistence.volumeClaimTemplates.requests` | Custom PVC requests attributes                                                     | `{}` (evaluated as a template)  |
+| Parameter                                     | Description                                                                        | Default                         |
+|-----------------------------------------------|------------------------------------------------------------------------------------|---------------------------------|
+| `persistence.enabled`                         | Enable MongoDB&reg; data persistence using PVC                                     | `true`                          |
+| `persistence.existingClaim`                   | Provide an existing `PersistentVolumeClaim` (only when `architecture=standalone`)  | `nil` (evaluated as a template) |
+| `persistence.storageClass`                    | PVC Storage Class for MongoDB&reg; data volume                                     | `nil`                           |
+| `persistence.accessMode`                      | PVC Access Mode for MongoDB&reg; data volume                                       | `ReadWriteOnce`                 |
+| `persistence.size`                            | PVC Storage Request for MongoDB&reg; data volume                                   | `8Gi`                           |
+| `persistence.mountPath`                       | Path to mount the volume at                                                        | `/bitnami/mongodb`              |
+| `persistence.subPath`                         | Subdirectory of the volume to mount at                                             | `""`                            |
+| `persistence.volumeClaimTemplates.selector`   | A label query over volumes to consider for binding (e.g. when using local volumes) | ``                              |
+| `persistence.volumeClaimTemplates.dataSource` | Add dataSource to the VolumeClaimTemplate                                          | ``                              |
+| `persistence.volumeClaimTemplates.requests`   | Custom PVC requests attributes                                                     | `{}` (evaluated as a template)  |
 
 ### RBAC parameters
 
 | Parameter                                    | Description                                                                                          | Default                                         |
-| -------------------------------------------- | ---------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
+|----------------------------------------------|------------------------------------------------------------------------------------------------------|-------------------------------------------------|
 | `serviceAccount.create`                      | Enable creation of ServiceAccount for MongoDB&reg; pods                                              | `true`                                          |
 | `serviceAccount.name`                        | Name of the created serviceAccount                                                                   | Generated using the `mongodb.fullname` template |
 | `serviceAccount.annotations`                 | Additional Service Account annotations                                                               | `{}`                                            |
-| `rbac.create`                                | Weather to create & use RBAC resources or not                                                        | `false`                                         |
+| `rbac.create`                                | Whether to create & use RBAC resources or not                                                        | `false`                                         |
 | `podSecurityPolicy.create`                   | Whether to create & use PSP resource or not (Note: `rbac.create` needs to be `true`)                 | `false`                                         |
 | `podSecurityPolicy.allowPrivilegeEscalation` | Enable privilege escalation                                                                          | `false`                                         |
 | `podSecurityPolicy.privileged`               | Allow privileged                                                                                     | `false`                                         |
@@ -343,54 +289,56 @@ The following tables lists the configurable parameters of the MongoDB&reg; chart
 
 ### Hidden Node parameters
 
-| Parameter                                                | Description                                                                                                          | Default                                                 |
-| -------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
-| `hidden.enabled`                                         | Enable deploying the hidden nodes                                                                                    | `false`                                                 |
-| `hidden.hostAliases`                                     | Add deployment host aliases                                                                                          | `[]`                                                    |
-| `hidden.configuration`                                   | Hidden node configuration file to be used                                                                            | `{}`                                                    |
-| `hidden.existingConfigmap`                               | Name of existing ConfigMap with Hidden node configuration                                                            | `nil`                                                   |
-| `hidden.command`                                         | Override default container command (useful when using custom images)                                                 | `nil`                                                   |
-| `hidden.args`                                            | Override default container args (useful when using custom images)                                                    | `nil`                                                   |
-| `hidden.extraFlags`                                      | Hidden node additional command line flags                                                                            | `[]`                                                    |
-| `hidden.extraEnvVars`                                    | Extra environment variables to add to Hidden node pods                                                               | `[]`                                                    |
-| `hidden.extraEnvVarsCM`                                  | Name of existing ConfigMap containing extra env vars                                                                 | `nil`                                                   |
-| `hidden.extraEnvVarsSecret`                              | Name of existing Secret containing extra env vars (in case of sensitive data)                                        | `nil`                                                   |
-| `hidden.replicaCount`                                    | Number of hidden nodes (only when `architecture=replicaset`)                                                         | `2`                                                     |
-| `hidden.labels`                                          | Annotations to be added to the hidden node statefulset                                                               | `{}` (evaluated as a template)                          |
-| `hidden.annotations`                                     | Additional labels to be added to thehidden node statefulset                                                          | `{}` (evaluated as a template)                          |
-| `hidden.podManagementPolicy`                             | Pod management policy for hidden node                                                                                | `OrderedReady`                                          |
-| `hidden.strategyType`                                    | StrategyType for hidden node statefulset                                                                             | `RollingUpdate`                                         |
-| `hidden.podLabels`                                       | Hidden node pod labels                                                                                               | `{}` (evaluated as a template)                          |
-| `hidden.podAnnotations`                                  | Hidden node Pod annotations                                                                                          | `{}` (evaluated as a template)                          |
-| `hidden.priorityClassName`                               | Name of the existing priority class to be used by hidden node pod(s)                                                 | `""`                                                    |
-| `hidden.podAffinityPreset`                               | Hidden node Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                      | `""`                                                    |
-| `hidden.podAntiAffinityPreset`                           | Hidden node Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                 | `soft`                                                  |
-| `hidden.nodeAffinityPreset.type`                         | Hidden Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                     | `""`                                                    |
-| `hidden.nodeAffinityPreset.key`                          | Hidden Node label key to match Ignored if `affinity` is set.                                                         | `""`                                                    |
-| `hidden.nodeAffinityPreset.values`                       | Hidden Node label values to match. Ignored if `affinity` is set.                                                     | `[]`                                                    |
-| `hidden.affinity`                                        | Hidden node Affinity for pod assignment                                                                              | `{}` (evaluated as a template)                          |
-| `hidden.nodeSelector`                                    | Hidden node Node labels for pod assignment                                                                           | `{}` (evaluated as a template)                          |
-| `hidden.tolerations`                                     | Hidden node Tolerations for pod assignment                                                                           | `[]` (evaluated as a template)                          |
-| `hidden.resources.limits`                                | The resources limits for hidden node containers                                                                      | `{}`                                                    |
-| `hidden.resources.requests`                              | The requested resources for hidden node containers                                                                   | `{}`                                                    |
-| `hidden.livenessProbe`                                   | Liveness probe configuration for hidden node                                                                         | Check `values.yaml` file                                |
-| `hidden.readinessProbe`                                  | Readiness probe configuration for hidden node                                                                        | Check `values.yaml` file                                |
-| `hidden.customLivenessProbe`                             | Override default liveness probe for hidden node containers                                                           | `nil`                                                   |
-| `hidden.customReadinessProbe`                            | Override default readiness probe for hidden node containers                                                          | `nil`                                                   |
-| `hidden.pdb.create`                                      | Enable/disable a Pod Disruption Budget creation for hidden node pod(s)                                               | `false`                                                 |
-| `hidden.pdb.minAvailable`                                | Minimum number/percentage of hidden node pods that should remain scheduled                                           | `1`                                                     |
-| `hidden.pdb.maxUnavailable`                              | Maximum number/percentage of hidden node pods that may be made unavailable                                           | `nil`                                                   |
-| `initContainers`                                        | Add additional init containers for the hidden node pod(s)                                                            | `{}` (evaluated as a template)                          |
-| `hidden.sidecars`                                        | Add additional sidecar containers for the hidden node pod(s)                                                         | `{}` (evaluated as a template)                          |
-| `hidden.extraVolumeMounts`                               | Optionally specify extra list of additional volumeMounts for the hidden node container(s)                            | `{}`                                                    |
-| `hidden.extraVolumes`                                    | Optionally specify extra list of additional volumes to the hidden node statefulset                                   | `{}`                                                    |
-| `hidden.persistence.enabled`                             | Enable hidden node data persistence using PVC                                                                        | `true`                                                  |
-| `hidden.persistence.storageClass`                        | PVC Storage Class for hidden node data volume                                                                        | `nil`                                                   |
-| `hidden.persistence.accessMode`                          | PVC Access Mode for hidden node data volume                                                                          | `ReadWriteOnce`                                         |
-| `hidden.persistence.size`                                | PVC Storage Request for hidden node data volume                                                                      | `8Gi`                                                   |
-| `hidden.persistence.mountPath`                           | Path to mount the volume at                                                                                          | `/bitnami/mongodb`                                      |
-| `hidden.persistence.subPath`                             | Subdirectory of the volume to mount at                                                                               | `""`                                                    |
-| `hidden.persistence.volumeClaimTemplates.selector`       | A label query over volumes to consider for binding (e.g. when using local volumes)                                   | ``                                                      |
+| Parameter                                     | Description                                                                                          | Default                        |
+|-----------------------------------------------|------------------------------------------------------------------------------------------------------|--------------------------------|
+| `hidden.enabled`                              | Enable deploying the hidden nodes                                                                    | `false`                        |
+| `hidden.hostAliases`                          | Add deployment host aliases                                                                          | `[]`                           |
+| `hidden.configuration`                        | Hidden node configuration file to be used                                                            | `{}`                           |
+| `hidden.existingConfigmap`                    | Name of existing ConfigMap with Hidden node configuration                                            | `nil`                          |
+| `hidden.command`                              | Override default container command (useful when using custom images)                                 | `nil`                          |
+| `hidden.args`                                 | Override default container args (useful when using custom images)                                    | `nil`                          |
+| `hidden.extraFlags`                           | Hidden node additional command line flags                                                            | `[]`                           |
+| `hidden.extraEnvVars`                         | Extra environment variables to add to Hidden node pods                                               | `[]`                           |
+| `hidden.extraEnvVarsCM`                       | Name of existing ConfigMap containing extra env vars                                                 | `nil`                          |
+| `hidden.extraEnvVarsSecret`                   | Name of existing Secret containing extra env vars (in case of sensitive data)                        | `nil`                          |
+| `hidden.replicaCount`                         | Number of hidden nodes (only when `architecture=replicaset`)                                         | `2`                            |
+| `hidden.labels`                               | Annotations to be added to the hidden node statefulset                                               | `{}` (evaluated as a template) |
+| `hidden.annotations`                          | Additional labels to be added to thehidden node statefulset                                          | `{}` (evaluated as a template) |
+| `hidden.podManagementPolicy`                  | Pod management policy for hidden node                                                                | `OrderedReady`                 |
+| `hidden.strategyType`                         | StrategyType for hidden node statefulset                                                             | `RollingUpdate`                |
+| `hidden.podLabels`                            | Hidden node pod labels                                                                               | `{}` (evaluated as a template) |
+| `hidden.podAnnotations`                       | Hidden node Pod annotations                                                                          | `{}` (evaluated as a template) |
+| `hidden.priorityClassName`                    | Name of the existing priority class to be used by hidden node pod(s)                                 | `""`                           |
+| `hidden.podAffinityPreset`                    | Hidden node Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`      | `""`                           |
+| `hidden.podAntiAffinityPreset`                | Hidden node Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `soft`                         |
+| `hidden.nodeAffinityPreset.type`              | Hidden Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`     | `""`                           |
+| `hidden.nodeAffinityPreset.key`               | Hidden Node label key to match Ignored if `affinity` is set.                                         | `""`                           |
+| `hidden.nodeAffinityPreset.values`            | Hidden Node label values to match. Ignored if `affinity` is set.                                     | `[]`                           |
+| `hidden.affinity`                             | Hidden node Affinity for pod assignment                                                              | `{}` (evaluated as a template) |
+| `hidden.nodeSelector`                         | Hidden node Node labels for pod assignment                                                           | `{}` (evaluated as a template) |
+| `hidden.tolerations`                          | Hidden node Tolerations for pod assignment                                                           | `[]` (evaluated as a template) |
+| `hidden.resources.limits`                     | The resources limits for hidden node containers                                                      | `{}`                           |
+| `hidden.resources.requests`                   | The requested resources for hidden node containers                                                   | `{}`                           |
+| `hidden.livenessProbe`                        | Liveness probe configuration for hidden node                                                         | Check `values.yaml` file       |
+| `hidden.readinessProbe`                       | Readiness probe configuration for hidden node                                                        | Check `values.yaml` file       |
+| `hidden.customLivenessProbe`                  | Override default liveness probe for hidden node containers                                           | `nil`                          |
+| `hidden.customReadinessProbe`                 | Override default readiness probe for hidden node containers                                          | `nil`                          |
+| `hidden.pdb.create`                           | Enable/disable a Pod Disruption Budget creation for hidden node pod(s)                               | `false`                        |
+| `hidden.pdb.minAvailable`                     | Minimum number/percentage of hidden node pods that should remain scheduled                           | `1`                            |
+| `hidden.pdb.maxUnavailable`                   | Maximum number/percentage of hidden node pods that may be made unavailable                           | `nil`                          |
+| `initContainers`                              | Add additional init containers for the hidden node pod(s)                                            | `{}` (evaluated as a template) |
+| `hidden.sidecars`                             | Add additional sidecar containers for the hidden node pod(s)                                         | `{}` (evaluated as a template) |
+| `hidden.extraVolumeMounts`                    | Optionally specify extra list of additional volumeMounts for the hidden node container(s)            | `{}`                           |
+| `hidden.extraVolumes`                         | Optionally specify extra list of additional volumes to the hidden node statefulset                   | `{}`                           |
+| `hidden.persistence.enabled`                  | Enable hidden node data persistence using PVC                                                        | `true`                         |
+| `hidden.persistence.storageClass`             | PVC Storage Class for hidden node data volume                                                        | `nil`                          |
+| `hidden.persistence.accessMode`               | PVC Access Mode for hidden node data volume                                                          | `ReadWriteOnce`                |
+| `hidden.persistence.size`                     | PVC Storage Request for hidden node data volume                                                      | `8Gi`                          |
+| `hidden.persistence.mountPath`                | Path to mount the volume at                                                                          | `/bitnami/mongodb`             |
+| `hidden.persistence.subPath`                  | Subdirectory of the volume to mount at                                                               | `""`                           |
+| `persistence.volumeClaimTemplates.selector`   | A label query over volumes to consider for binding (e.g. when using local volumes)                   | ``                             |
+| `persistence.volumeClaimTemplates.dataSource` | Add dataSource to the VolumeClaimTemplate                                                            | ``                             |
+| `persistence.volumeClaimTemplates.requests`   | Custom PVC requests attributes                                                                       | `{}` (evaluated as a template) |
 
 ### Metrics parameters
 
@@ -444,80 +392,33 @@ $ helm install my-release -f values.yaml bitnami/mongodb
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling vs Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### Initialize a fresh instance
+### Customize a new MongoDB instance
 
-The [Bitnami MongoDB&reg;](https://github.com/bitnami/bitnami-docker-mongodb) image allows you to use your custom scripts to initialize a fresh instance. In order to execute the scripts, you can specify them using the `initdbScripts` parameter as dict.
+The [Bitnami MongoDB&reg; image](https://github.com/bitnami/bitnami-docker-mongodb) supports the use of custom scripts to initialize a fresh instance. In order to execute the scripts, two options are available:
 
-You can also set an external ConfigMap with all the initialization scripts. This is done by setting the `initdbScriptsConfigMap` parameter. Note that this will override the previous option.
+* Specify them using the `initdbScripts` parameter as dict.
+* Define an external Kubernetes ConfigMap with all the initialization scripts by setting the `initdbScriptsConfigMap` parameter. Note that this will override the previous option.
 
-The allowed extensions are `.sh`, and `.js`.
+The allowed script extensions are `.sh` and `.js`.
 
-### Replicaset: Accessing MongoDB&reg; nodes from outside the cluster
+### Replicaset: Access MongoDB&reg; nodes from outside the cluster
 
 In order to access MongoDB&reg; nodes from outside the cluster when using a replicaset architecture, a specific service per MongoDB&reg; pod will be created. There are two ways of configuring external access:
 
 - Using LoadBalancer services
 - Using NodePort services.
 
-#### Using LoadBalancer services
+Refer to the [chart documentation for more details and configuration examples](https://docs.bitnami.com/kubernetes/infrastructure/mongodb/configuration/configure-external-access-replicaset/).
 
-You have two alternatives to use LoadBalancer services:
+### Add extra environment variables
 
-- Option A) Use random load balancer IPs using an **initContainer** that waits for the IPs to be ready and discover them automatically.
-
-```console
-architecture=replicaset
-replicaCount=2
-externalAccess.enabled=true
-externalAccess.service.type=LoadBalancer
-externalAccess.service.port=27017
-externalAccess.autoDiscovery.enabled=true
-serviceAccount.create=true
-rbac.create=true
-```
-
-> Note: This option requires creating RBAC rules on clusters where RBAC policies are enabled.
-
-- Option B) Manually specify the load balancer IPs:
-
-```console
-architecture=replicaset
-replicaCount=2
-externalAccess.enabled=true
-externalAccess.service.type=LoadBalancer
-externalAccess.service.port=27017
-externalAccess.service.loadBalancerIPs[0]='external-ip-1'
-externalAccess.service.loadBalancerIPs[1]='external-ip-2'}
-```
-
-> Note: You need to know in advance the load balancer IPs so each MongoDB&reg; node advertised hostname is configured with it.
-
-#### Using NodePort services
-
-Manually specify the node ports to use:
-
-```console
-architecture=replicaset
-replicaCount=2
-externalAccess.enabled=true
-externalAccess.service.type=NodePort
-externalAccess.service.nodePorts[0]='node-port-1'
-externalAccess.service.nodePorts[1]='node-port-2'
-```
-
-> Note: You need to know in advance the node ports that will be exposed so each MongoDB&reg; node advertised hostname is configured with it.
-
-The pod will try to get the external ip of the node using `curl -s https://ipinfo.io/ip` unless `externalAccess.service.domain` is provided.
-
-### Adding extra environment variables
-
-In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property.
+To add extra environment variables (useful for advanced operations like custom init scripts), use the `extraEnvVars` property.
 
 ```yaml
 extraEnvVars:
@@ -527,31 +428,11 @@ extraEnvVars:
 
 Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` properties.
 
-### Sidecars and Init Containers
+### Use Sidecars and Init Containers
 
-If you have a need for additional containers to run within the same pod as MongoDB&reg; (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
+If additional containers are needed in the same pod (such as additional metrics or logging exporters), they can be defined using the `sidecars` config parameter. Similarly, extra init containers can be added using the `initContainers` parameter.
 
-```yaml
-sidecars:
-  - name: your-image-name
-    image: your-image
-    imagePullPolicy: Always
-    ports:
-      - name: portname
-       containerPort: 1234
-```
-
-Similarly, you can add extra init containers using the `initContainers` parameter.
-
-```yaml
-initContainers:
-  - name: your-image-name
-    image: your-image
-    imagePullPolicy: Always
-    ports:
-      - name: portname
-        containerPort: 1234
-```
+Refer to the chart documentation for more information on, and examples of, configuring and using [sidecars and init containers](https://docs.bitnami.com/kubernetes/infrastructure/mongodb/configuration/configure-sidecar-init-containers/).
 
 ## Persistence
 
@@ -559,62 +440,25 @@ The [Bitnami MongoDB&reg;](https://github.com/bitnami/bitnami-docker-mongodb) im
 
 The chart mounts a [Persistent Volume](http://kubernetes.io/docs/user-guide/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning.
 
-### Adjust permissions of persistent volume mountpoint
+If you encounter errors when working with persistent volumes, refer to our [troubleshooting guide for persistent volumes](https://docs.bitnami.com/kubernetes/faq/troubleshooting/troubleshooting-persistence-volumes/).
 
-As the image run as non-root by default, it is necessary to adjust the ownership of the persistent volume so that the container can write data into it. By default, the chart is configured to use Kubernetes Security Context to automatically change the ownership of the volume. However, this feature does not work in all Kubernetes distributions.
+## Use custom Prometheus rules
 
-As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination. You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
+Custom Prometheus rules can be defined for the Prometheus Operator by using the `prometheusRule` parameter.
 
-## Using Prometheus rules
+Refer to the [chart documentation for an example of a custom rule](https://docs.bitnami.com/kubernetes/infrastructure/mongodb/administration/use-prometheus-rules/).
 
-You can use custom Prometheus rules for Prometheus operator by using the `prometheusRule` parameter, see below a basic configuration example:
+## Enable SSL/TLS
 
-```yaml
-metrics:
-  enabled: true
-  prometheusRule:
-    enabled: true
-    rules:
-    - name: rule1
-      rules:
-      - alert: HighRequestLatency
-        expr: job:request_latency_seconds:mean5m{job="myjob"} > 0.5
-        for: 10m
-        labels:
-          severity: page
-        annotations:
-          summary: High request latency
-```
+This chart supports enabling SSL/TLS between nodes in the cluster, as well as between MongoDB&reg; clients and nodes, by setting the `MONGODB_EXTRA_FLAGS` and `MONGODB_CLIENT_EXTRA_FLAGS` container environment variables, together with the correct `MONGODB_ADVERTISED_HOSTNAME`. To enable full TLS encryption, set the `tls.enabled` parameter to `true`.
 
-## Enabling SSL/TLS
+Refer to the [chart documentation for more information on enabling TLS](https://docs.bitnami.com/kubernetes/infrastructure/mongodb/administration/enable-tls/).
 
-This container supports enabling SSL/TLS between nodes in the cluster, as well as between mongo clients and nodes, by setting the MONGODB_EXTRA_FLAGS and MONGODB_CLIENT_EXTRA_FLAGS environment variables, together with the correct MONGODB_ADVERTISED_HOSTNAME.
-To enable full TLS encryption set tls.enabled to true
+### Set Pod affinity
 
-### Generating the self-signed cert via pre install helm hooks
+This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod affinity in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-The secrets-ca.yaml utilizes the helm "pre-install" hook to ensure that the certs will only be generated on chart install. The genCA function will create a new self-signed x509 certificate authority, the genSignedCert function creates an object with a pair of items in it — the Cert and Key which we base64 encode and use in a yaml like object. With the genSignedCert function, we pass the CN, an empty IP list (the nil part), the validity and the CA created previously.
-To hold the signed certificate created above, we can use a kubernetes Secret object and the initContainer sets up the rest.
-Using Helm’s hook annotations ensures that the certs will only be generated on chart install. This will prevent overriding the certs anytime we upgrade the chart’s released instance.
-
-### Using your own CA
-
-To use your own CA set `tls.caCert` and `tls.caKey` with appropriate base64 encoded data. The secrets-ca.yaml will utilize this data to create secret. Please Note:- Currently only RSA private keys are supported.
-
-### Accessing the cluster
-
-To access the cluster you will need to enable the initContainer which generates the MongoDB&reg; server/client pem needed to access the cluster. Please ensure that you include the $my_hostname section with your actual hostname and alternative hostnames section should contain the hostnames you want to allow access to the MongoDB&reg; replicaset. Additionally, if the [external access](#replicaset-accessing-mongodb-nodes-from-outside-the-cluster) is enabled, the `loadBalancerIPs` are added to the alternative names list.
-Note: You will be generating self signed certs for the MongoDB&reg; deployment. With the initContainer it will generate a new MongoDB&reg; private key which will be used to create your own Certificate Authority (CA),the public  cert for the CA will be created, the Certificate Signing Request will be created as well and signed using the private key of the CA previously created. Finally the PEM bundle will be created using the private key and public certificate. The process will be repeated for each node in the cluster.
-
-### Starting the cluster
-
-After the certs have been generated and made available to the containers at the correct mount points, the mongod server will be started with TLS enabled. The options for the TLS mode will be (disabled|allowTLS|preferTLS|requireTLS). This value can be changed via the MONGODB_EXTRA_FLAGS field using the tlsMode. The client should now be able to connect to the TLS enabled cluster with the provided certs.
-
-### Setting Pod's affinity
-
-This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
-
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
+As an alternative, you can use the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 
 ## Troubleshooting
 
@@ -632,26 +476,9 @@ $ helm upgrade my-release bitnami/mongodb --set auth.rootPassword=[PASSWORD] (--
 
 ### To 10.0.0
 
-[On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
+[On November 13, 2020, Helm v2 support formally ended](https://github.com/helm/charts#status-of-the-project). This major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
-**What changes were introduced in this major version?**
-
-- Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
-- Move dependency information from the *requirements.yaml* to the *Chart.yaml*
-- After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
-- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
-
-**Considerations when upgrading to this version**
-
-- If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
-- If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
-- If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
-
-**Useful links**
-
-- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
-- https://helm.sh/docs/topics/v2_v3_migration/
-- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+[Learn more about this change and related upgrade considerations](https://docs.bitnami.com/kubernetes/infrastructure/mongodb/administration/upgrade-helm3/).
 
 ### To 9.0.0
 

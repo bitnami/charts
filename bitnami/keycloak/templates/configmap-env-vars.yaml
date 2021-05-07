@@ -15,13 +15,15 @@ data:
   KEYCLOAK_CREATE_ADMIN_USER: {{ ternary "true" "false" .Values.auth.createAdminUser | quote }}
   KEYCLOAK_ADMIN_USER: {{ .Values.auth.adminUser | quote }}
   KEYCLOAK_MANAGEMENT_USER: {{ .Values.auth.managementUser | quote }}
+  KEYCLOAK_HTTP_PORT: {{ .Values.containerPorts.http | quote }}
+  KEYCLOAK_PROXY_ADDRESS_FORWARDING: {{ ternary "true" "false" .Values.proxyAddressForwarding | quote }}
+  KEYCLOAK_ENABLE_STATISTICS: {{ ternary "true" "false" .Values.metrics.enabled | quote }}
+  {{- if (not .Values.externalDatabase.existingSecret) }}
   KEYCLOAK_DATABASE_HOST: {{ include "keycloak.databaseHost" . | quote }}
   KEYCLOAK_DATABASE_PORT: {{ include "keycloak.databasePort" . }}
   KEYCLOAK_DATABASE_NAME: {{ include "keycloak.databaseName" . | quote }}
   KEYCLOAK_DATABASE_USER: {{ include "keycloak.databaseUser" . | quote }}
-  KEYCLOAK_HTTP_PORT: {{ .Values.containerPorts.http | quote }}
-  KEYCLOAK_PROXY_ADDRESS_FORWARDING: {{ ternary "true" "false" .Values.proxyAddressForwarding | quote }}
-  KEYCLOAK_ENABLE_STATISTICS: {{ ternary "true" "false" .Values.metrics.enabled | quote }}
+  {{- end }}
   {{- if .Values.serviceDiscovery.enabled }}
   KEYCLOAK_JGROUPS_DISCOVERY_PROTOCOL: {{ .Values.serviceDiscovery.protocol | quote }}
   KEYCLOAK_JGROUPS_DISCOVERY_PROPERTIES: {{ (tpl (join "," .Values.serviceDiscovery.properties) $) | quote }}

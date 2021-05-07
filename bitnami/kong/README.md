@@ -74,6 +74,7 @@ The following tables list the configurable parameters of the kong chart and thei
 | `image.tag`                              | kong image tag                                                                                                                                | `{TAG_NAME}`                                            |
 | `image.pullPolicy`                       | kong image pull policy                                                                                                                        | `IfNotPresent`                                          |
 | `image.pullSecrets`                      | Specify docker-registry secret names as an array                                                                                              | `[]` (does not add image pull secrets to deployed pods) |
+| `useDaemonset`                           | Use a daemonset instead of a deployment. `replicaCount` will not take effect.                                                                 | `false`                                                 |
 | `replicaCount`                           | Number of replicas of the kong Pod                                                                                                            | `2`                                                     |
 | `updateStrategy`                         | Update strategy for deployment                                                                                                                | `{type: "RollingUpdate"}`                               |
 | `schedulerName`                          | Alternative scheduler                                                                                                                         | `nil`                                                   |
@@ -124,6 +125,7 @@ The following tables list the configurable parameters of the kong chart and thei
 | Parameter                        | Description                                                      | Default                        |
 |----------------------------------|------------------------------------------------------------------|--------------------------------|
 | `service.type`                   | Kubernetes Service type                                          | `ClusterIP`                    |
+| `service.externalTrafficPolicy`  | external traffic policy managing client source IP preservation   | `Cluster`                      |
 | `service.exposeAdmin`            | Add the Kong Admin ports to the service                          | `false`                        |
 | `service.proxyHttpPort`          | kong proxy HTTP service port port                                | `80`                           |
 | `service.proxyHttpsPort`         | kong proxy HTTPS service port port                               | `443`                          |
@@ -134,6 +136,7 @@ The following tables list the configurable parameters of the kong chart and thei
 | `service.adminHttpNodePort`      | Port to bind to for NodePort service type (admin HTTP)           | `nil`                          |
 | `service.aminHttpsNodePort`      | Port to bind to for NodePort service type (proxy HTTP)           | `nil`                          |
 | `service.annotations`            | Annotations for kong service                                     | `{}`                           |
+| `service.clusterIP`              | Cluster internal IP of the service                               | `nil`                          |
 | `service.loadBalancerIP`         | loadBalancerIP if kong service type is `LoadBalancer`            | `nil`                          |
 | `ingress.enabled`                | Enable ingress controller resource                               | `false`                        |
 | `ingress.certManager`            | Add annotations for cert-manager                                 | `false`                        |
@@ -309,6 +312,21 @@ The Bitnami Kong chart allows setting two database backends: PostgreSQL or Cassa
     ...
     --set cassandra.external.user=_USER_OF_YOUR_CASSANDRA_INSTALLATION_ \
     --set cassandra.external.password=_PASSWORD_OF_YOUR_CASSANDRA_INSTALLATION_
+```
+
+### DB-less
+
+Kong 1.1 added the capability to run Kong without a database, using only in-memory storage for entities: we call this DB-less mode. When running Kong DB-less, the configuration of entities is done in a second configuration file, in YAML or JSON, using declarative configuration (ref. [Link](https://docs.konghq.com/gateway-oss/1.1.x/db-less-and-declarative-config/)).
+As is said in step 4 of [kong official docker installation](https://docs.konghq.com/install/docker#db-less-mode), just add the env variable "KONG_DATABASE=off".
+
+#### How to enable it
+
+1. Set `database` value with any value other than "postgresql" or "cassandra". For example `database: "off"`
+2. Use `kong.extraEnvVars` value to set the `KONG_DATABASE` environment variable:
+```yaml
+kong.extraEnvVars:
+- name: KONG_DATABASE
+  value: "off"
 ```
 
 ### Sidecars and Init Containers

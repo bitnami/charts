@@ -96,7 +96,7 @@ The following tables lists the configurable parameters of the Airflow chart and 
 | `auth.username`          | Username to access web UI                                                                                            | `user`             |
 | `configurationConfigMap` | Name of an existing config map containing the Airflow config file                                                    | `nil`              |
 | `dagsConfigMap`          | Name of an existing config map containing all the DAGs files you want to load in Airflow.                            | `nil`              |
-| `executor`               | Airflow executor, it should be one of `SequentialExecutor`, `Local Executor`, `CeleryExecutor`, `KubernetesExecutor` | `"CeleryExecutor"` |
+| `executor`               | Airflow executor, it should be one of `SequentialExecutor`, `LocalExecutor`, `CeleryExecutor`, `KubernetesExecutor` | `"CeleryExecutor"` |
 | `loadExamples`           | Switch to load some Airflow examples                                                                                 | `false`            |
 
 ## Airflow web parameters
@@ -187,6 +187,8 @@ The following tables lists the configurable parameters of the Airflow chart and 
 
 | Parameter                                   | Description                                                                                                                                                            | Default                                                 |
 | ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+| `worker.affinity`                           | Affinity for worker pod assignment. Supersedes the common 
+affinity configuration                                                                                       | `nil`                                                   |
 | `worker.args`                               | Override default container args (useful when using custom images)                                                                                                      | `nil`                                                   |
 | `worker.autoscaling.enabled`                | Switch to enable Horizontal Pod Autoscaler for Airflow worker component (only when executor is `CeleryExecutor`). When enable you should also set `resources.requests` | `false`                                                 |
 | `worker.autoscaling.replicas.max`           | Maximum amount of replicas                                                                                                                                             | `3`                                                     |
@@ -234,31 +236,34 @@ The following tables lists the configurable parameters of the Airflow chart and 
 | `worker.resources.requests`                 | The requested resources for the worker containers                                                                                                                      | `{}`                                                    |
 | `worker.rollingUpdatePartition`             | Partition update strategy                                                                                                                                              | `nil`                                                   |
 | `worker.sidecars`                           | List of sidecar containers to be added to the worker's pods                                                                                                            | `nil`                                                   |
-| `worker.updateStrategy`                     | pdate strategy for the statefulset                                                                                                                                     | `"RollingUpdate"`                                       |
+| `worker.tolerations`                        | Tolerations for worker pod assignment. Supersedes the common 
+tolerations configuration                                                                                       | `nil`                                                   |
+| `worker.updateStrategy`                     | Update strategy for the statefulset                                                                                                                                     | `"RollingUpdate"`                                       |
 
 ### Airflow database parameters
 
-| Parameter                         | Description                                                                                                                                                                                                                    | Default           |
-| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------- |
-| `externalDatabase.database`       | External PostgreSQL database name                                                                                                                                                                                              | `nil`             |
-| `externalDatabase.existingSecret` | Name of an existing secret containing the PostgreSQL password ('postgresql-password' key)                                                                                                                                      | `nil`             |
-| `externalDatabase.host`           | External PostgreSQL host                                                                                                                                                                                                       | `nil`             |
-| `externalDatabase.password`       | External PostgreSQL password                                                                                                                                                                                                   | `nil`             |
-| `externalDatabase.port`           | External PostgreSQL port                                                                                                                                                                                                       | `nil`             |
-| `externalDatabase.user`           | External PostgreSQL user                                                                                                                                                                                                       | `nil`             |
-| `externalRedis.existingSecret`    | Name of an existing secret containing the Redis<sup>TM</sup> password ('redis-password' key)                                                                                                                                   | `nil`             |
-| `externalRedis.host`              | External Redis<sup>TM</sup> host                                                                                                                                                                                               | `nil`             |
-| `externalRedis.password`          | External Redis<sup>TM</sup> password                                                                                                                                                                                           | `nil`             |
-| `externalRedis.port`              | External Redis<sup>TM</sup> port                                                                                                                                                                                               | `nil`             |
-| `externalRedis.username`          | External Redis<sup>TM</sup> username (not required on most Redis<sup>TM</sup> implementations)                                                                                                                                 | `nil`             |
-| `postgresql.enabled`              | Switch to enable or disable the PostgreSQL helm chart                                                                                                                                                                          | `true`            |
-| `postgresql.existingSecret`       | Name of an existing secret containing the PostgreSQL password ('postgresql-password' key) . This secret is used in case of postgresql.enabled=true and we would like to specify password for newly created postgresql instance | `nil`             |
-| `postgresql.postgresqlDatabase`   | Airflow Postgresql database                                                                                                                                                                                                    | `bitnami_airflow` |
-| `postgresql.postgresqlPassword`   | Airflow Postgresql password                                                                                                                                                                                                    | `nil`             |
-| `postgresql.postgresqlUsername`   | Airflow Postgresql username                                                                                                                                                                                                    | `bn_airflow`      |
-| `redis.cluster.enabled`           | Switch to enable a clustered redis                                                                                                                                                                                             | `false`           |
-| `redis.enabled`                   | Switch to enable or disable the Redis<sup>TM</sup> helm chart                                                                                                                                                                  | `true`            |
-| `redis.existingSecret`            | Name of an existing secret containing the Redis<sup>TM</sup> password ('redis-password' key) . This secret is used in case of redis.enabled=true and we would like to specify password for newly created redis instance        | `nil`             |
+| Parameter                                    | Description                                                                                                                                                                                                                    | Default           |
+|----------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------|
+| `externalDatabase.database`                  | External PostgreSQL database name                                                                                                                                                                                              | `nil`             |
+| `externalDatabase.existingSecret`            | Name of an existing secret resource containing the PostgreSQL password                                                                                                                                                         | `nil`             |
+| `externalDatabase.existingSecretPasswordKey` | Name of an existing secret key containing the PostgreSQL password                                                                                                                                                              | `nil`             |
+| `externalDatabase.host`                      | External PostgreSQL host                                                                                                                                                                                                       | `nil`             |
+| `externalDatabase.password`                  | External PostgreSQL password                                                                                                                                                                                                   | `nil`             |
+| `externalDatabase.port`                      | External PostgreSQL port                                                                                                                                                                                                       | `nil`             |
+| `externalDatabase.user`                      | External PostgreSQL user                                                                                                                                                                                                       | `nil`             |
+| `externalRedis.existingSecret`               | Name of an existing secret containing the Redis<sup>TM</sup> password ('redis-password' key)                                                                                                                                   | `nil`             |
+| `externalRedis.host`                         | External Redis<sup>TM</sup> host                                                                                                                                                                                               | `nil`             |
+| `externalRedis.password`                     | External Redis<sup>TM</sup> password                                                                                                                                                                                           | `nil`             |
+| `externalRedis.port`                         | External Redis<sup>TM</sup> port                                                                                                                                                                                               | `nil`             |
+| `externalRedis.username`                     | External Redis<sup>TM</sup> username (not required on most Redis<sup>TM</sup> implementations)                                                                                                                                 | `nil`             |
+| `postgresql.enabled`                         | Switch to enable or disable the PostgreSQL helm chart                                                                                                                                                                          | `true`            |
+| `postgresql.existingSecret`                  | Name of an existing secret containing the PostgreSQL password ('postgresql-password' key) . This secret is used in case of postgresql.enabled=true and we would like to specify password for newly created postgresql instance | `nil`             |
+| `postgresql.postgresqlDatabase`              | Airflow Postgresql database                                                                                                                                                                                                    | `bitnami_airflow` |
+| `postgresql.postgresqlPassword`              | Airflow Postgresql password                                                                                                                                                                                                    | `nil`             |
+| `postgresql.postgresqlUsername`              | Airflow Postgresql username                                                                                                                                                                                                    | `bn_airflow`      |
+| `redis.architecture`                         | Redis<sup>TM</sup> architecture. Allowed values: `standalone` or `replication`                                                                                                                                                 | `standalone`      |
+| `redis.enabled`                              | Switch to enable or disable the Redis<sup>TM</sup> helm chart                                                                                                                                                                  | `true`            |
+| `redis.auth.existingSecret`                  | Name of an existing secret containing the Redis<sup>TM</sup> password ('redis-password' key) . This secret is used in case of redis.enabled=true and we would like to specify password for newly created redis instance        | `nil`             |
 
 ### Airflow exposing parameters
 
@@ -320,6 +325,7 @@ The following tables lists the configurable parameters of the Airflow chart and 
 | `git.clone.extraEnvVarsCM`               | ConfigMap containing extra env vars                                                                               | `nil`                   |
 | `git.clone.extraEnvVarsSecret`           | Secret containing extra env vars (in case of sensitive data)                                                      | `nil`                   |
 | `git.clone.extraVolumeMounts`            | Array of extra volume mounts to be added (evaluated as template). Normally used with `extraVolumes`.              | `nil`                   |
+| `git.clone.resources`                    | The resources for the clone init container                                                                        | {}                      |
 | `git.dags.enabled`                       | Enable in order to download DAG files from git repository.                                                        | `false`                 |
 | `git.dags.repositories[0].branch`        | Branch from repository to checkout                                                                                | `nil`                   |
 | `git.dags.repositories[0].name`          | An unique identifier for repository, must be unique for each repository, by default: `[0].repository` in kebacase | `nil`                   |
@@ -341,6 +347,7 @@ The following tables lists the configurable parameters of the Airflow chart and 
 | `git.sync.extraEnvVarsCM`                | ConfigMap containing extra env vars                                                                               | `nil`                   |
 | `git.sync.extraEnvVarsSecret`            | Secret containing extra env vars (in case of sensitive data)                                                      | `nil`                   |
 | `git.sync.extraVolumeMounts`             | Array of extra volume mounts to be added (evaluated as template). Normally used with `extraVolumes`.              | `nil`                   |
+| `git.sync.resources`                     | The resources for the sync sidecar container                                                                      | {}                      |
 | `git.sync.interval`                      | Interval (in seconds) to pull the git repository containing the plugins and/or DAG files                          | `60`                    |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
@@ -526,7 +533,11 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ## Notable changes
 
-### 7.0.0
+### To 10.0.0
+
+This major updates the Redis<sup>TM</sup> subchart to it newest major, 14.0.0, which contains breaking changes. For more information on this subchart's major and the steps needed to migrate your data from your previous release, please refer to [Redis<sup>TM</sup> upgrade notes.](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1400).
+
+### To 7.0.0
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
@@ -580,7 +591,7 @@ $ export AIRFLOW_PASSWORD=$(kubectl get secret --namespace default airflow -o js
 $ export AIRFLOW_FERNETKEY=$(kubectl get secret --namespace default airflow -o jsonpath="{.data.airflow-fernetKey}" | base64 --decode)
 $ export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default airflow-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
 $ export REDIS_PASSWORD=$(kubectl get secret --namespace default airflow-redis -o jsonpath="{.data.redis-password}" | base64 --decode)
-$ export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=postgresql,role=master -o jsonpath="{.items[0].metadata.name}")
+$ export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=airflow,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
 ```
 
 ##### Delete statefulsets
@@ -622,14 +633,14 @@ $ kubectl delete pod airflow-postgresql-0
 - https://helm.sh/docs/topics/v2_v3_migration/
 - https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
 
-### 6.5.0
+### To 6.5.0
 
 This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
 
-### 6.0.0
+### To 6.0.0
 
 This release adds support for LDAP authentication.
 
-### 1.0.0
+### To 1.0.0
 
 This release updates the PostgreSQL chart dependency to use PostgreSQL 11.x. You need to migrate the existing PostgreSQL data to this version before upgrading to this release. For more information follow [this link](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#500).

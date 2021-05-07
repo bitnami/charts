@@ -166,6 +166,16 @@ spec:
                 secretKeyRef:
                   name: {{ template "rabbitmq.secretErlangName" . }}
                   key: rabbitmq-erlang-cookie
+            {{- if .Values.loadDefinition.enabled }}
+            - name: RABBITMQ_LOAD_DEFINITIONS
+              value: "yes"
+            - name: RABBITMQ_SECURE_PASSWORD
+              value: "no"
+            {{- else }}
+            - name: RABBITMQ_LOAD_DEFINITIONS
+              value: "no"
+            - name: RABBITMQ_SECURE_PASSWORD
+              value: "yes"
             - name: RABBITMQ_USERNAME
               value: {{ .Values.auth.username | quote }}
             - name: RABBITMQ_PASSWORD
@@ -173,6 +183,7 @@ spec:
                 secretKeyRef:
                   name: {{ template "rabbitmq.secretPasswordName" . }}
                   key: rabbitmq-password
+            {{- end }}
             - name: RABBITMQ_PLUGINS
               value: {{ include "rabbitmq.plugins" . | quote }}
             {{- if .Values.communityPlugins }}

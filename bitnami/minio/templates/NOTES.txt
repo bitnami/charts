@@ -10,8 +10,8 @@ MinIO(R) can be accessed via port {{ .Values.service.port }} on the following DN
 
 To get your credentials run:
 
-   export ACCESS_KEY=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "minio.secretName" . }} -o jsonpath="{.data.{{ include "minio.secret.userKey" . }}}" | base64 --decode)
-   export SECRET_KEY=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "minio.secretName" . }} -o jsonpath="{.data.{{ include "minio.secret.passwordKey" . }}}" | base64 --decode)
+   export ACCESS_KEY=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "minio.secretName" . }} -o jsonpath="{.data.access-key}" | base64 --decode)
+   export SECRET_KEY=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "minio.secretName" . }} -o jsonpath="{.data.secret-key}" | base64 --decode)
 
 To connect to your MinIO(R) server using a client:
 
@@ -77,8 +77,8 @@ To access the MinIO(R) web UI:
 {{- $requiredPassword := list -}}
 {{- $secretName := include "minio.secretName" . -}}
 {{- if and (not .Values.existingSecret) (not .Values.forceNewKeys) -}}
-  {{- $requiredAccessKey := dict "valueKey" "accessKey.password" "secret" $secretName "field" (include "minio.secret.userKey" .) -}}
-  {{- $requiredSecretKey := dict "valueKey" "secretKey.password" "secret" $secretName "field" (include "minio.secret.passwordKey" .) -}}
+  {{- $requiredAccessKey := dict "valueKey" "accessKey.password" "secret" $secretName "field" "access-key" -}}
+  {{- $requiredSecretKey := dict "valueKey" "secretKey.password" "secret" $secretName "field" "secret-key" -}}
   {{- $requiredPassword = append $requiredPassword $requiredAccessKey -}}
   {{- $requiredPassword = append $requiredPassword $requiredSecretKey -}}
 {{- end -}}

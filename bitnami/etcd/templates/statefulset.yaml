@@ -55,6 +55,7 @@ spec:
       {{- if .Values.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
+      serviceAccountName: {{ include "etcd.serviceAccountName" $ | quote }}
       {{- if or .Values.initContainers (and .Values.volumePermissions.enabled .Values.persistence.enabled) }}
       initContainers:
         {{- if .Values.initContainers }}
@@ -213,6 +214,10 @@ spec:
             - name: ETCD_PEER_TRUSTED_CA_FILE
               value: "/opt/bitnami/etcd/certs/peer/{{ .Values.auth.peer.caFilename | default "ca.crt"}}"
             {{- end }}
+            {{- end }}
+            {{- if .Values.startFromSnapshot.enabled }}
+            - name: ETCD_INIT_SNAPSHOT_FILENAME
+              value: {{ .Values.startFromSnapshot.snapshotFilename | quote }}
             {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}

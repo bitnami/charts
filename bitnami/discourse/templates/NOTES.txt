@@ -23,7 +23,7 @@ This deployment will be incomplete until you configure Discourse with a resolvab
   {{- end }}
   {{ include "common.utils.secret.getvalue" (dict "secret" $secretName "field" "discourse-password" "context" $) }}
   {{ include "common.utils.secret.getvalue" (dict "secret" $postgresqlSecretName "field" "postgresql-password" "context" $) }}
-  {{- if (include "discourse.redis.usePassword" .) }}
+  {{- if (include "discourse.redis.auth.enabled" .) }}
   {{ include "common.utils.secret.getvalue" (dict "secret" $redisSecretName "field" "redis-password" "context" $) }}
   {{- end }}
 
@@ -31,14 +31,14 @@ This deployment will be incomplete until you configure Discourse with a resolvab
 
 {{- if .Values.postgresql.enabled }}
 
-  helm upgrade {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
+  helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
     --set discourse.host=$DISCOURSE_HOST \
     --set discourse.password=$DISCOURSE_PASSWORD \
     {{- if .Values.global }}{{- if .Values.global.imagePullSecrets }}
     --set global.imagePullSecrets={{ .Values.global.imagePullSecrets }} \
     {{- end }}{{- end }}
-    {{- if and .Values.redis.enabled .Values.redis.usePassword (not .Values.redis.existingSecret) (not .Values.redis.password) }}
-    --set redis.password=$REDIS_PASSWORD \
+    {{- if and .Values.redis.enabled .Values.redis.auth.enabled (not .Values.redis.auth.existingSecret) (not .Values.redis.auth.password) }}
+    --set redis.auth.password=$REDIS_PASSWORD \
     {{- end }}
     --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD
 
@@ -46,7 +46,7 @@ This deployment will be incomplete until you configure Discourse with a resolvab
 
   ## PLEASE UPDATE THE EXTERNAL DATABASE CONNECTION PARAMETERS IN THE FOLLOWING COMMAND AS NEEDED ##
 
-  helm upgrade {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
+  helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
     --set discourse.host=$DISCOURSE_HOST \
     --set discourse.password=$DISCOURSE_PASSWORD \
     --set service.type={{ .Values.service.type }} \
@@ -58,8 +58,8 @@ This deployment will be incomplete until you configure Discourse with a resolvab
     {{- if .Values.global }}{{- if .Values.global.imagePullSecrets }}
     --set global.imagePullSecrets={{ .Values.global.imagePullSecrets }} \
     {{- end }}{{- end }}
-    {{- if and .Values.redis.enabled .Values.redis.usePassword (not .Values.redis.existingSecret) (not .Values.redis.password) }}
-    --set redis.password=$REDIS_PASSWORD \
+    {{- if and .Values.redis.enabled .Values.redis.auth.enabled (not .Values.redis.auth.existingSecret) (not .Values.redis.auth.password) }}
+    --set redis.auth.password=$REDIS_PASSWORD \
     {{- end }}
     --set postgresql.enabled=false
 {{- end }}
@@ -79,7 +79,7 @@ This deployment will be incomplete until you configure Discourse with a resolvab
   Username: {{ .Values.discourse.username }}
   {{ include "common.utils.secret.getvalue" (dict "secret" $secretName "field" "discourse-password" "context" $) }}
   {{ include "common.utils.secret.getvalue" (dict "secret" $postgresqlSecretName "field" "postgresql-password" "context" $) }}
-  {{- if (include "discourse.redis.usePassword" .) }}
+  {{- if (include "discourse.redis.auth.enabled" .) }}
   {{ include "common.utils.secret.getvalue" (dict "secret" $redisSecretName "field" "redis-password" "context" $) }}
   {{- end }}
 
@@ -109,14 +109,14 @@ This deployment will be incomplete until you configure Discourse with a resolvab
 {{- end }}
   {{ include "common.utils.secret.getvalue" (dict "secret" $secretName "field" "discourse-password" "context" $) }}
   {{ include "common.utils.secret.getvalue" (dict "secret" $postgresqlSecretName "field" "postgresql-password" "context" $) }}
-  {{- if (include "discourse.redis.usePassword" .) }}
+  {{- if (include "discourse.redis.auth.enabled" .) }}
   {{ include "common.utils.secret.getvalue" (dict "secret" $redisSecretName "field" "redis-password" "context" $) }}
   {{- end }}
 
 
   ## PLEASE UPDATE THE EXTERNAL DATABASE CONNECTION PARAMETERS IN THE FOLLOWING COMMAND AS NEEDED ##
 
-  helm upgrade {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
+  helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
     --set discourse.host=$DISCOURSE_HOST \
     --set discourse.password=$DISCOURSE_PASSWORD \
     --set postgresql.enabled=false \
@@ -133,8 +133,8 @@ This deployment will be incomplete until you configure Discourse with a resolvab
     {{- if .Values.global }}{{- if .Values.global.imagePullSecrets }}
     --set global.imagePullSecrets={{ .Values.global.imagePullSecrets }} \
     {{- end }}{{- end }}
-    {{- if and .Values.redis.enabled .Values.redis.usePassword (not .Values.redis.existingSecret) (not .Values.redis.password) }}
-    --set redis.password=$REDIS_PASSWORD \
+    {{- if and .Values.redis.enabled .Values.redis.auth.enabled (not .Values.redis.auth.existingSecret) (not .Values.redis.auth.password) }}
+    --set redis.auth.password=$REDIS_PASSWORD \
     {{- end }}
     --set service.type={{ .Values.service.type }}
 {{- end }}
@@ -157,7 +157,7 @@ This deployment will be incomplete until you configure Discourse with a resolvab
 {{- $postgresqlPasswordValidationErrors := include "common.validations.values.postgresql.passwords" (dict "secret" $postgresqlSecretName "subchart" true "context" $) -}}
 {{- $passwordValidationErrors = append $passwordValidationErrors $postgresqlPasswordValidationErrors -}}
 
-{{- if (include "discourse.redis.usePassword" .) }}
+{{- if (include "discourse.redis.auth.enabled" .) }}
 {{- $redisPasswordValidationErrors := include "common.validations.values.redis.passwords" (dict "secret" $redisSecretName "subchart" true "context" $) -}}
 {{- $passwordValidationErrors = append $passwordValidationErrors $redisPasswordValidationErrors -}}
 {{- end }}

@@ -128,6 +128,7 @@ The following tables lists the configurable parameters of the kibana chart and t
 | `securityContext.enabled`              | Enable securityContext on for Kibana deployment                                                                                                                                                                                                                                                                | `true`                                                                                                  |
 | `securityContext.runAsUser`            | User for the security context                                                                                                                                                                                                                                                                                  | `1001`                                                                                                  |
 | `securityContext.fsGroup`              | Group to configure permissions for volumes                                                                                                                                                                                                                                                                     | `1001`                                                                                                  |
+| `containerPort`                        | Port to expose at container level                                                                                                                                                                                                                                                                              | `5601`                                                                                                  |
 | `resources`                            | Configure resource requests and limits (evaluated as a template)                                                                                                                                                                                                                                               | `nil`                                                                                                   |
 | `podAffinityPreset`                    | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                                                                                                            | `""`                                                                                                    |
 | `podAntiAffinityPreset`                | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                                                                                                       | `soft`                                                                                                  |
@@ -323,6 +324,16 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 8.0.0
+
+The Kibana container configuration logic was migrated to bash.
+
+From this version onwards, Kibana container components are now licensed under the [Elastic License](https://www.elastic.co/licensing/elastic-license) that is not currently accepted as an Open Source license by the Open Source Initiative (OSI).
+
+Also, from now on, the Helm Chart will include the X-Pack plugin installed by default.
+
+Regular upgrade is compatible from previous versions.
 
 ### To 6.2.0
 

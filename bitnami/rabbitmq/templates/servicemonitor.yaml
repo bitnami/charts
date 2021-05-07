@@ -30,6 +30,14 @@ spec:
   namespaceSelector:
     matchNames:
       - {{ .Release.Namespace | quote }}
+  {{- with .Values.metrics.serviceMonitor.podTargetLabels }}
+  podTargetLabels:
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.metrics.serviceMonitor.targetLabels }}
+  targetLabels:
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
 {{- end }}

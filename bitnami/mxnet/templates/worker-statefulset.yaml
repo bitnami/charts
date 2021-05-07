@@ -50,10 +50,14 @@ spec:
             - /bin/sh
             - -c
             - |
+              [[ -f "/opt/bitnami/scripts/git/entrypoint.sh" ]] && source "/opt/bitnami/scripts/git/entrypoint.sh"
               git clone {{ .Values.cloneFilesFromGit.repository }} --branch {{ .Values.cloneFilesFromGit.revision }} /app
           volumeMounts:
             - name: git-cloned-files
               mountPath: /app
+          {{- if .Values.cloneFilesFromGit.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.cloneFilesFromGit.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
         {{- end }}
         {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
         - name: volume-permissions
@@ -151,6 +155,9 @@ spec:
             - name: git-cloned-files
               mountPath: /app
             {{- end }}
+            {{- if .Values.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
             - name: data
               mountPath: {{ .Values.persistence.mountPath }}
             {{- if .Values.existingSecret }}
@@ -177,6 +184,9 @@ spec:
         {{- else if .Values.cloneFilesFromGit.enabled }}
         - name: git-cloned-files
           emptyDir: {}
+        {{- end }}
+        {{- if .Values.extraVolumes }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
 {{- if not .Values.persistence.enabled }}
         - name: data

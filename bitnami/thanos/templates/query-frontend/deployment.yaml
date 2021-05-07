@@ -61,6 +61,9 @@ spec:
         fsGroup: {{ .Values.queryFrontend.securityContext.fsGroup }}
       {{- end }}
       containers:
+        {{- if .Values.queryFrontend.extraContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.extraContainers "context" $) | nindent 8 }}
+        {{- end }}           
         - name: query-frontend
           image: {{ include "thanos.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
@@ -76,6 +79,10 @@ spec:
             {{- if .Values.queryFrontend.extraFlags }}
             {{- .Values.queryFrontend.extraFlags | toYaml | nindent 12 }}
             {{- end }}
+          {{- if .Values.queryFrontend.extraEnv }}
+          env:
+            {{- toYaml .Values.queryFrontend.extraEnv | nindent 12 }}
+          {{- end }}
           ports:
             - name: http
               containerPort: 10902
@@ -94,10 +101,16 @@ spec:
             - name: cache-config
               mountPath: /conf/cache
             {{- end }}
+            {{- if .Values.queryFrontend.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
       volumes:
         {{- if or .Values.queryFrontend.config .Values.queryFrontend.existingConfigmap }}
         - name: cache-config
           configMap:
             name: {{ include "thanos.queryFrontend.configmapName" . }}
+        {{- end }}
+        {{- if .Values.queryFrontend.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
 {{- end }}

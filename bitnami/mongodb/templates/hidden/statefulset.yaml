@@ -154,6 +154,7 @@ spec:
               cd /certs/
               shopt -s extglob
               rm -rf !(mongodb-ca-cert|mongodb.pem|CAs|openssl.cnf)
+              chmod 0600 mongodb-ca-cert mongodb.pem
               EOF
         {{- end }}
         {{- if and .Values.externalAccess.hidden.enabled .Values.externalAccess.autoDiscovery.enabled (eq .Values.externalAccess.hidden.service.type "LoadBalancer") }}
@@ -213,6 +214,8 @@ spec:
                   fieldPath: metadata.namespace
             - name: K8S_SERVICE_NAME
               value: "{{ include "mongodb.fullname" . }}-headless"
+            - name: K8S_HIDDEN_NODE_SERVICE_NAME
+              value: "{{ include "mongodb.fullname" . }}-hidden-headless"
             - name: MONGODB_REPLICA_SET_MODE
               value: "hidden"
             - name: MONGODB_INITIAL_PRIMARY_HOST
@@ -221,7 +224,7 @@ spec:
               value: {{ .Values.replicaSetName | quote }}
             {{- if and .Values.replicaSetHostnames (not .Values.externalAccess.hidden.enabled) }}
             - name: MONGODB_ADVERTISED_HOSTNAME
-              value: "$(MY_POD_NAME).$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.{{ .Values.clusterDomain }}"
+              value: "$(MY_POD_NAME).$(K8S_HIDDEN_NODE_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.{{ .Values.clusterDomain }}"
             {{- end }}
             {{- if .Values.auth.username }}
             - name: MONGODB_USERNAME
@@ -256,17 +259,21 @@ spec:
               value: {{ .Values.systemLogVerbosity | quote }}
             - name: MONGODB_DISABLE_SYSTEM_LOG
               value: {{ ternary "yes" "no" .Values.disableSystemLog | quote }}
+            - name: MONGODB_DISABLE_JAVASCRIPT
+              value: {{ ternary "yes" "no" .Values.disableJavascript | quote }}
+            - name: MONGODB_ENABLE_JOURNAL
+              value: {{ ternary "yes" "no" .Values.enableJournal | quote }}
             - name: MONGODB_ENABLE_IPV6
               value: {{ ternary "yes" "no" .Values.enableIPv6 | quote }}
             - name: MONGODB_ENABLE_DIRECTORY_PER_DB
               value: {{ ternary "yes" "no" .Values.directoryPerDB | quote }}
+            {{- $extraFlags := .Values.hidden.extraFlags | join " " -}}
             {{- if .Values.tls.enabled }}
-            - name: MONGODB_EXTRA_FLAGS
-              value: --tlsMode=requireTLS --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert
+              {{- $extraFlags = printf "%s %s" "--tlsMode=requireTLS --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert" $extraFlags  }}
             {{- end }}
-            {{- if .Values.hidden.extraFlags }}
+            {{- if ne $extraFlags ""}}
             - name: MONGODB_EXTRA_FLAGS
-              value: {{ .Values.hidden.extraFlags | join " " | quote }}
+              value: {{ $extraFlags | quote }}
             {{- end }}
             {{- if .Values.tls.enabled }}
             - name: MONGODB_CLIENT_EXTRA_FLAGS
@@ -448,10 +455,10 @@ spec:
             items:
             - key: mongodb-ca-cert
               path: mongodb-ca-cert
-              mode: 511
+              mode: 0600
             - key: mongodb-ca-key
               path: mongodb-ca-key
-              mode: 511
+              mode: 0600
         {{- end }}
   {{- if not .Values.hidden.persistence.enabled }}
         - name: datadir
@@ -471,6 +478,12 @@ spec:
         resources:
           requests:
             storage: {{ .Values.hidden.persistence.size | quote }}
+            {{- if .Values.hidden.persistence.volumeClaimTemplates.requests }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.hidden.persistence.volumeClaimTemplates.requests "context" $) | nindent 12 }}
+            {{- end }}
+        {{- if .Values.hidden.persistence.volumeClaimTemplates.dataSource }}
+        dataSource: {{- include "common.tplvalues.render" (dict "value" .Values.hidden.persistence.volumeClaimTemplates.dataSource "context" $) | nindent 10 }}
+        {{- end }}
         {{- if .Values.hidden.persistence.volumeClaimTemplates.selector }}
         selector: {{- include "common.tplvalues.render" (dict "value" .Values.hidden.persistence.volumeClaimTemplates.selector "context" $) | nindent 10 }}
         {{- end }}

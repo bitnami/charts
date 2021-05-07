@@ -31,6 +31,12 @@ spec:
   {{- if and (eq .Values.influxdb.service.type "ClusterIP") .Values.influxdb.service.clusterIP }}
   clusterIP: {{ .Values.influxdb.service.clusterIP }}
   {{- end }}
+  {{- if .Values.influxdb.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.influxdb.service.sessionAffinity }}
+  {{- if .Values.influxdb.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  {{- end }}
   ports:
     - port: {{ .Values.influxdb.service.port }}
       targetPort: http

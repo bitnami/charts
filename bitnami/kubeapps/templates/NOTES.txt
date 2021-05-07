@@ -1,3 +1,5 @@
+{{- $postgresqlSecretName := include "kubeapps.postgresql.secretName" . -}}
+
 ** Please be patient while the chart is being deployed **
 
 Tip:
@@ -56,3 +58,16 @@ To access Kubeapps from outside your K8s cluster, follow the steps below:
 {{- end }}
 
 2. Open a browser and access Kubeapps using the obtained URL.
+
+{{ if and (not .Values.postgresql.existingSecret) (empty .Values.postgresql.postgresqlPassword) -}}
+##########################################################################################################
+### WARNING: You did not provide a value for the postgresqlPassword so one has been generated randomly ###
+##########################################################################################################
+{{- end }}
+
+{{- $passwordValidationErrors := list -}}
+
+{{- $postgresqlPasswordValidationErrors := include "common.validations.values.postgresql.passwords" (dict "secret" $postgresqlSecretName "subchart" true "context" $) -}}
+{{- $passwordValidationErrors = append $passwordValidationErrors $postgresqlPasswordValidationErrors -}}
+
+{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}
