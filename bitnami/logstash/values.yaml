@@ -13,7 +13,7 @@
 image:
   registry: docker.io
   repository: bitnami/logstash
-  tag: 7.12.1-debian-10-r0
+  tag: 7.12.1-debian-10-r9
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -311,6 +311,77 @@ service:
   ##
   annotations: {}
 
+## Persistence parameters
+##
+persistence:
+  enabled: false
+  ## A manually managed Persistent Volume and Claim
+  ## If defined, PVC must be created manually before volume will be bound
+  ## The value is evaluated as a template
+  ##
+  # existingClaim:
+  ## PV Storage Class
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ## set, choosing the default provisioner.
+  ##
+  # storageClass: "-"
+  ## PV Access Mode
+  ##
+  accessModes:
+    - ReadWriteOnce
+  ## PVC size
+  ##
+  size: 2Gi
+  ## PVC annotations
+  ##
+  annotations: {}
+  ## Mount point for persistence
+  ##
+  mountPath: /bitnami/logstash/data
+
+## Init Container parameters
+## Change the owner and group of the persistent volume(s) mountpoint(s) to 'runAsUser:fsGroup' on each component
+## values from the securityContext section of the component
+##
+volumePermissions:
+  enabled: false
+  ## The security context for the volumePermissions init container
+  ##
+  securityContext:
+    runAsUser: 0
+  image:
+    registry: docker.io
+    repository: bitnami/bitnami-shell
+    tag: "10"
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: Always
+    ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## Example:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## Init Container resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits: {}
+    #   cpu: 100m
+    #   memory: 128Mi
+    requests: {}
+    #   cpu: 100m
+    #   memory: 128Mi
+
 ## Configure the ingress resource that allows you to access the
 ## Logstash installation. Set up the URL
 ## ref: http://kubernetes.io/docs/user-guide/ingress/
@@ -405,7 +476,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/logstash-exporter
-    tag: 7.3.0-debian-10-r168
+    tag: 7.3.0-debian-10-r177
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -521,3 +592,7 @@ podDisruptionBudget:
 ## Array of extra objects to deploy
 ##
 extraDeploy:
+
+## Extra init containers to add to the deployment
+##
+initContainers: []
