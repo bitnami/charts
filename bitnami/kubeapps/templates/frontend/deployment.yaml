@@ -114,7 +114,7 @@ spec:
           {{- end }}
           args:
             - --provider={{ required "You must fill \".Values.authProxy.provider\" with the provider. Valid values at https://oauth2-proxy.github.io/oauth2-proxy/docs/configuration/overview" .Values.authProxy.provider }}
-            - --upstream=http://localhost:8080/
+            - --upstream=http://localhost:{{ .Values.frontend.containerPort }}/
             - --http-address=0.0.0.0:{{ .Values.authProxy.containerPort }}
             - --email-domain={{ .Values.authProxy.emailDomain }}
             - --pass-basic-auth=false

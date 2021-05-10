@@ -46,12 +46,12 @@ data:
     proxy_set_header Connection $connection_upgrade;
 
     server {
-      listen 8080;
+      listen {{ .Values.frontend.containerPort }};
     {{- if .Values.frontend.largeClientHeaderBuffers }}
       large_client_header_buffers {{ .Values.frontend.largeClientHeaderBuffers }};
     {{- end }}
     {{- if .Values.enableIPv6 }}
-      listen [::]:8080;
+      listen [::]:{{ .Values.frontend.containerPort }};
     {{- end}}
       server_name _;
 
