@@ -323,7 +323,7 @@ persistence:
   ## Requires persistence.existingClaim: nil|false
   ## Default: nil.
   ##
-  path: /bitnami
+  path: /bitnami/ghost
 
 ## Ghost containers' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
