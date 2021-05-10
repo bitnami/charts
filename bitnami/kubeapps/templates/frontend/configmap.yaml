@@ -89,7 +89,7 @@ data:
     {{- if .certificateAuthorityData }}
         proxy_set_header PINNIPED_PROXY_API_SERVER_CERT {{ .certificateAuthorityData }};
     {{- end }}
-        proxy_pass http://kubeapps-internal-pinniped-proxy.{{ $.Release.Namespace }}:{{ $.Values.pinnipedProxy.service.port }};
+        proxy_pass http://{{ template "kubeapps.pinniped-proxy.fullname" $ }}.{{ $.Release.Namespace }}:{{ $.Values.pinnipedProxy.service.port }};
     {{- else }}
         # Otherwise we route directly through to the clusters with existing credentials.
         proxy_pass {{ $apiServiceBaseURL }};
