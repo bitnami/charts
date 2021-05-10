@@ -82,9 +82,9 @@ spec:
             - --database-secret-name={{ template "kubeapps.postgresql.fullname" . }}
             {{- end }}
             - --database-secret-key=postgresql-password
-            - --database-url={{ template "kubeapps.postgresql.fullname" . }}:5432
+            - --database-url={{ template "kubeapps.postgresql.fullname" . }}:{{ default "5432" .Values.postgresql.service.port }}
             - --database-user=postgres
-            - --database-name=assets
+            - --database-name={{ .Values.postgresql.postgresqlDatabase }}
             {{- if .Values.apprepository.crontab }}
             - --crontab={{ .Values.apprepository.crontab }}
             {{- end }}

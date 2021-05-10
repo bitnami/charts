@@ -24,34 +24,6 @@ Create name for the apprepository-controller based on the fullname
 {{- end -}}
 
 {{/*
-Create name for the apprepository pre-upgrade job
-*/}}
-{{- define "kubeapps.apprepository-job-postupgrade.fullname" -}}
-{{- printf "%s-internal-apprepository-job-postupgrade" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{/*
-Create name for the apprepository cleanup job
-*/}}
-{{- define "kubeapps.apprepository-jobs-cleanup.fullname" -}}
-{{- printf "%s-internal-apprepository-job-cleanup" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{/*
-Create name for the db-secret secret bootstrap job
-*/}}
-{{- define "kubeapps.db-secret-jobs-cleanup.fullname" -}}
-{{- printf "%s-internal-db-secret-jobs-cleanup" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{/*
-Create name for the kubeapps upgrade job
-*/}}
-{{- define "kubeapps.kubeapps-jobs-upgrade.fullname" -}}
-{{- printf "%s-internal-kubeapps-jobs-upgrade" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{/*
 Create name for the assetsvc based on the fullname
 */}}
 {{- define "kubeapps.assetsvc.fullname" -}}

@@ -51,7 +51,7 @@ spec:
       secretName: {{ printf "%s-tls" .Values.ingress.hostname }}
     {{- end }}
     {{- if .Values.ingress.extraTls }}
-    {{- toYaml .Values.ingress.extraTls | nindent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.ingress.extraTls "context" $ ) | nindent 4 }}
     {{- end }}
   {{- end }}
 {{- end }}

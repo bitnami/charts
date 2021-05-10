@@ -74,7 +74,7 @@ spec:
             - --clusters-config-path=/config/clusters.conf
             {{- end }}
             {{- if .Values.pinnipedProxy.enabled }}
-            - --pinniped-proxy-url=http://kubeapps-internal-pinniped-proxy.{{ .Release.Namespace }}:{{ .Values.pinnipedProxy.service.port }}
+            - --pinniped-proxy-url=http://{{ template "kubeapps.pinniped-proxy.fullname" . }}.{{ .Release.Namespace }}:{{ .Values.pinnipedProxy.service.port }}
             {{- end }}
             {{- if .Values.kubeops.burst }}
             - --burst={{ .Values.kubeops.burst }}
