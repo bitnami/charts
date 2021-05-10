@@ -66,18 +66,13 @@ spec:
           args:
             - --database-user=postgres
             - --database-name=assets
-            - --database-url={{ template "kubeapps.postgresql.fullname" . }}-headless:5432
+            - --database-url={{ template "kubeapps.postgresql.fullname" . }}-headless:{{ default "5432" .Values.postgresql.service.port }}
           env:
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
                   key: postgresql-password
-                  # TODO
-              {{- if .Values.postgresql.existingSecret }}
-                  name: {{ .Values.postgresql.existingSecret }}
-              {{- else }}
-                  name: {{ template "kubeapps.postgresql.fullname" . }}
-              {{- end }}
+                  name: {{ include "kubeapps.postgresql.secretName" . }}
             - name: POD_NAMESPACE
               valueFrom:
                 fieldRef:
