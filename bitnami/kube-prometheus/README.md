@@ -517,10 +517,7 @@ $ helm upgrade my-release bitnami/kube-prometheus
 
 ### To 4.4.0
 
-This version replaced the old `configReloaderCpu` and `configReloaderMemory`
-variables in favor of the new `configReloaderResources` map to define the
-requests and limits for the config-reloader sidecards. Users who made use
-of the old variables will need to migrate to the new ones.
+This version replaced the old `configReloaderCpu` and `configReloaderMemory` variables in favor of the new `configReloaderResources` map to define the requests and limits for the config-reloader sidecards. Users who made use of the old variables will need to migrate to the new ones.
 
 ### To 4.0.0
 
