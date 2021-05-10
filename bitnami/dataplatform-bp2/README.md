@@ -276,6 +276,6 @@ Regular upgrade is compatible from previous versions.
 
 ## Upgrading
 
-### To 1.0.00 
+### To 1.0.0
 
-This version upgrade allows the two datapltaform blueprints to be deployed together on the same cluster. The affinity rules of the blueprint was upgraded to facilitate this.
+This version upgrade allows the two dataplatform blueprints to be deployed together on the same cluster. The affinity rules of the blueprint was upgraded to facilitate this.

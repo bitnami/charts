@@ -234,9 +234,9 @@ In order to render complete information about the deployment including all the s
 
 ## Upgrading
 
-### To 2.0.00 
+### To 2.0.0
 
-This version upgrade allows the two datapltaform blueprints to be deployed together on the same cluster. The affinity rules of the blueprint was upgraded to facilitate this.
+This version upgrade allows the two dataplatform blueprints to be deployed together on the same cluster. The affinity rules of the blueprint was upgraded to facilitate this.
 
 ### To 1.0.0
 
