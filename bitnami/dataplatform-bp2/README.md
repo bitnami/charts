@@ -274,3 +274,8 @@ Elasticsearch dependency version was bumped to a new major version changing the 
 
 Regular upgrade is compatible from previous versions.
 
+## Upgrading
+
+### To 1.0.00 
+
+This version upgrade allows the two datapltaform blueprints to be deployed together on the same cluster. The affinity rules of the blueprint was upgraded to facilitate this.
