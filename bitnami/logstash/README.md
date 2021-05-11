@@ -105,7 +105,23 @@ The following tables lists the configurable parameters of the Logstash chart and
 | `service.loadBalancerIP`                   | loadBalancerIP if service type is `LoadBalancer`                                                                     | `nil`                                                   |
 | `service.loadBalancerSourceRanges`         | Address that are allowed when service is LoadBalancer                                                                | `[]`                                                    |
 | `service.clusterIP`                        | Static clusterIP or None for headless services                                                                       | `nil`                                                   |
-| `service.externalTrafficPolicy`            | External traffic policy, configure to Local to preserve client source IP when using an external loadBalancer.      | `Cluster`                                               |
+| `service.externalTrafficPolicy`            | External traffic policy, configure to Local to preserve client source IP when using an external loadBalancer.        | `Cluster`                                               |
+| `persistence.enabled`                      | Enable Logstash data persistence using PVC                                                                           | `true`                                                  |
+| `persistence.existingClaim`                | Provide an existing `PersistentVolumeClaim`, the value is evaluated as a template                                    | `nil`                                                   |
+| `persistence.storageClass`                 | PVC Storage Class for Logstash data volume                                                                           | `nil`                                                   |
+| `persistence.accessModes`                   | PVC Access Mode for Logstash data volume                                                                             | `[ReadWriteOnce]`                                       |
+| `persistence.size`                         | PVC Storage Request for Logstash data volume                                                                         | `2Gi`                                                   |
+| `persistence.annotations`                  | Annotations for the PVC                                                                                              | `{}`(evaluated as a template)                           |
+| `persistence.mountPath`                    | Mount path of the Logstash data volume                                                                               | `/bitnami/logstash/data`                                |
+| `volumePermissions.enabled`                | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                                                 |
+| `volumePermissions.image.registry`         | Init container volume-permissions image registry                                                                     | `docker.io`                                             |
+| `volumePermissions.image.repository`       | Init container volume-permissions image name                                                                         | `bitnami/bitnami-shell`                                 |
+| `volumePermissions.image.tag`              | Init container volume-permissions image tag                                                                          | `"10"`                                                  |
+| `volumePermissions.image.pullPolicy`       | Init container volume-permissions image pull policy                                                                  | `Always`                                                |
+| `volumePermissions.image.pullSecrets`      | Specify docker-registry secret names as an array                                                                     | `[]` (does not add image pull secrets to deployed pods) |
+| `volumePermissions.resources.limits`       | Init container volume-permissions resource  limits                                                                   | `{}`                                                    |
+| `volumePermissions.resources.requests`     | Init container volume-permissions resource  requests                                                                 | `{}`                                                    |
+| `volumePermissions.securityContext`        | Init container volume-permissions security context                                                                   | `{runAsUser: 0}` (interpreted as YAML)                  |
 | `ingress.enabled`                          | Enable ingress controller resource                                                                                   | `false`                                                 |
 | `ingress.certManager`                      | Add annotations for cert-manager                                                                                     | `false`                                                 |
 | `ingress.hostname`                         | Default host for the ingress resource                                                                                | `logstash.local`                                        |
@@ -146,6 +162,7 @@ The following tables lists the configurable parameters of the Logstash chart and
 | `podDisruptionBudget.minAvailable`         | Minimum number / percentage of pods that should remain scheduled                                                     | `1`                                                     |
 | `podDisruptionBudget.maxUnavailable`       | Maximum number / percentage of pods that may be made unavailable                                                     | `nil`                                                   |
 | `extraDeploy`                              | Array of extra objects to deploy with the release (evaluated as a template).                                         | `nil`                                                   |
+| `initContainers`                           | Add extra init containers                                                                                            | `[]`                                                    |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -297,6 +314,13 @@ extraEnvVars:
 This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+
+## Persistence
+
+The [Bitnami Logstash](https://github.com/bitnami/bitnami-docker-logstash) image stores the Logstash data at the `/bitnami/logstash/data` path of the container.
+
+Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
+See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
 
 ## Troubleshooting
 

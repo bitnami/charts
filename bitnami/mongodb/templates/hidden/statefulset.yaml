@@ -119,7 +119,7 @@ spec:
             - |
               /bin/bash <<'EOF'
               my_hostname=$(hostname)
-              svc=$(echo -n "$my_hostname" | sed s/-[0-9]*$//)-hidden-headless
+              svc=$(echo -n "$my_hostname" | sed s/-[0-9]*$//)-headless
               cp /certs/CAs/* /certs/
               cat >/certs/openssl.cnf <<EOL
               [req]

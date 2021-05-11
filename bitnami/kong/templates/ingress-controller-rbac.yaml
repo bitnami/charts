@@ -174,6 +174,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: {{ template "common.names.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: server
     {{- if .Values.commonLabels }}

@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/kong
-  tag: 2.4.0-debian-10-r0
+  tag: 2.4.0-debian-10-r6
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -75,6 +75,10 @@ commonAnnotations: {}
 ## Common labels to add to all Kong resources (sub-charts are not considered). Evaluated as a template
 ##
 commonLabels: {}
+
+## Use a daemonset instead of a deployment
+##
+useDaemonset: false
 
 kong:
   ## Command and args for running the container (set to default if not set). Use array form
@@ -162,7 +166,7 @@ ingressController:
   image:
     registry: docker.io
     repository: bitnami/kong-ingress-controller
-    tag: 1.2.0-debian-10-r34
+    tag: 1.2.0-debian-10-r41
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images

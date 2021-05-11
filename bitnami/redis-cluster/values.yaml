@@ -18,7 +18,7 @@ image:
   ## Bitnami Redis(TM) image tag
   ## ref: https://github.com/bitnami/bitnami-docker-redis#supported-tags-and-respective-dockerfile-links
   ##
-  tag: 6.2.3-debian-10-r0
+  tag: 6.2.3-debian-10-r2
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -533,13 +533,13 @@ tls:
   # File containing DH params (in order to support DH based ciphers)
   dhParamsFilename:
 
-## Annotations for all the deployed objects
+## @param commonAnnotations Annotations to add to all deployed objects
 ##
-commonAnnotations:
+commonAnnotations: {}
 
-## Labels for all the deployed objects
+## @param commonLabels Labels to add to all deployed objects
 ##
-commonLabels:
+commonLabels: {}
 
 ## Redis(TM) Service properties for standalone mode.
 ##
@@ -611,7 +611,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/redis-exporter
-    tag: 1.23.0-debian-10-r8
+    tag: 1.23.1-debian-10-r0
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

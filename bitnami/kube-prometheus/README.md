@@ -132,8 +132,7 @@ The following table lists the configurable parameters of the kube-prometheus cha
 | `operator.logLevel`                                   | Log Level                                                                                                     | `info`                                                           |
 | `operator.logFormat`                                  | Log Format                                                                                                    | `logfmt`                                                         |
 | `operator.kubeletService.enabled`                     | Whether to maintain a service for scraping kubelets                                                           | `true`                                                           |
-| `operator.configReloaderCpu`                          | Set the prometheus config reloader side-car CPU limit. If unset, uses the kube-prometheus project default     | `nil`                                                            |
-| `operator.configReloaderMemory`                       | Set the prometheus config reloader side-car memory limit. If unset, uses the kube-prometheus project default  | `nil`                                                            |
+| `operator.configReloaderResources                     | CPU/Memory resources requests/limits for config-reloader sidecars                                             | `{}`                                                             |
 | `operator.kubeletService.namespace`                   | Namespace to deploy the kubelet service                                                                       | `kube-system`                                                    |
 | `operator.prometheusConfigReloader.image.registry`    | Prometheus Config Reloader image registry                                                                     | same as `operator.image.registry`                                |
 | `operator.prometheusConfigReloader.image.repository`  | Prometheus Config Reloader Image name                                                                         | same as `operator.image.repository`                              |
@@ -515,6 +514,10 @@ Find more information about how to deal with common errors related to Bitnami’
 ```bash
 $ helm upgrade my-release bitnami/kube-prometheus
 ```
+
+### To 4.4.0
+
+This version replaced the old `configReloaderCpu` and `configReloaderMemory` variables in favor of the new `configReloaderResources` map to define the requests and limits for the config-reloader sidecards. Users who made use of the old variables will need to migrate to the new ones.
 
 ### To 4.0.0
 
