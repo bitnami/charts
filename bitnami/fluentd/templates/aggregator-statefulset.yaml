@@ -57,6 +57,7 @@ spec:
       initContainers:
       {{- include "fluentd.tplValue" ( dict "value" .Values.aggregator.initContainers "context" $ ) | nindent 8 }}
       {{- end }}
+      terminationGracePeriodSeconds: {{ .Values.aggregator.terminationGracePeriodSeconds }}
       containers:
         - name: fluentd
           image: {{ include "fluentd.image" . }}
