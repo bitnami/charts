@@ -102,7 +102,7 @@ spec:
             {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumeMounts "context" $ ) | nindent 12 }}
           {{- end }}
           {{- if .Values.lifecycle }}
-          lifecycle: {{- toYaml .Values.lifecycle | nindent 12 }}
+          lifecycle: {{- include "common.tplvalues.render" ( dict "value" .Values.lifecycle "context" $ ) | nindent 12 }}
           {{- end }}
         {{- if .Values.metrics.enabled }}
         - name: metrics
