@@ -515,6 +515,10 @@ Find more information about how to deal with common errors related to Bitnami’
 $ helm upgrade my-release bitnami/kube-prometheus
 ```
 
+### To 5.0.0
+
+This major updates the kube-state-metrics subchart to it newest major, 2.0.0, which contains name changes to a few of its values. For more information on this subchart's major, please refer to [kube-state-metrics upgrade notes.](https://github.com/bitnami/charts/tree/master/bitnami/kube-state-metrics#to-200).
+
 ### To 4.4.0
 
 This version replaced the old `configReloaderCpu` and `configReloaderMemory` variables in favor of the new `configReloaderResources` map to define the requests and limits for the config-reloader sidecards. Users who made use of the old variables will need to migrate to the new ones.
