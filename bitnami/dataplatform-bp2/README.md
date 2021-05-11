@@ -278,4 +278,4 @@ Regular upgrade is compatible from previous versions.
 
 ### To 1.0.0
 
-This version upgrade allows the two dataplatform blueprints to be deployed together on the same cluster. The affinity rules of the blueprint was upgraded to facilitate this.
+The affinity rules have been updated to allow deploying this chart and the `dataplatform-bp1` chart in the same cluster.
