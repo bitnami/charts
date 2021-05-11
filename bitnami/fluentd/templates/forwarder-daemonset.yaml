@@ -58,6 +58,7 @@ spec:
       {{- if .Values.forwarder.initContainers }}
       initContainers: {{- include "fluentd.tplValue" ( dict "value" .Values.forwarder.initContainers "context" $ ) | nindent 8 }}
       {{- end }}
+      terminationGracePeriodSeconds: {{ .Values.forwarder.terminationGracePeriodSeconds }}
       containers:
         - name: fluentd
           image: {{ include "fluentd.image" . }}
