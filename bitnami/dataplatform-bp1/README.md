@@ -234,6 +234,10 @@ In order to render complete information about the deployment including all the s
 
 ## Upgrading
 
+### To 2.0.0
+
+The affinity rules have been updated to allow deploying this chart and the `dataplatform-bp2` chart in the same cluster.
+
 ### To 1.0.0
 
 This version updates the wavefront dependency to `2.x.x` where wavefront started to use a scratch image instead of debian. This can affect a current deployment if wavefront commands were provided. From now on, the only command that you will be able to execute inside the wavefront pod will be `/wavefront-collector`.

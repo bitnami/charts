@@ -429,6 +429,12 @@ spec:
             - name: postgresql-password
               mountPath: /opt/bitnami/postgresql/secrets/
             {{- end }}
+            {{- if .Values.metrics.customMetrics }}
+            - name: custom-metrics
+              mountPath: /conf
+              readOnly: true
+          args: ["--extend.query-path", "/conf/custom-metrics.yaml"]
+            {{- end }}
         {{- end }}
         {{- if .Values.postgresql.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.postgresql.sidecars "context" $) | nindent 8 }}
@@ -436,6 +442,11 @@ spec:
       volumes:
         {{- if .Values.postgresql.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.postgresql.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if and .Values.metrics.enabled .Values.metrics.customMetrics }}
+        - name: custom-metrics
+          configMap:
+            name: {{ include "postgresql.metricsCM" . }}
         {{- end }}
         - name: hooks-scripts
           configMap:

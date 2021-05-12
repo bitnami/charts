@@ -145,20 +145,36 @@ spec:
               value: {{ .Values.wordpressLastName | quote }}
             - name: WORDPRESS_HTACCESS_OVERRIDE_NONE
               value: {{ ternary "yes" "no" .Values.allowOverrideNone | quote }}
-            - name: WORDPRESS_HTACCESS_PERSISTENCE_ENABLED
+            - name: WORDPRESS_ENABLE_HTACCESS_PERSISTENCE
               value: {{ ternary "yes" "no" .Values.htaccessPersistenceEnabled | quote }}
             - name: WORDPRESS_BLOG_NAME
               value: {{ .Values.wordpressBlogName | quote }}
-            - name: WORDPRESS_SKIP_INSTALL
+            - name: WORDPRESS_SKIP_BOOTSTRAP
               value: {{ ternary "yes" "no" .Values.wordpressSkipInstall | quote }}
-            - name: WORDPRESS_READ_ONLY_CONFIG
-              value: {{ ternary "yes" "no" (or (not (empty .Values.wordpressConfiguration)) (not (empty .Values.existingWordPressConfigurationSecret))) | quote }}
             - name: WORDPRESS_TABLE_PREFIX
               value: {{ .Values.wordpressTablePrefix | quote }}
             - name: WORDPRESS_SCHEME
               value: {{ .Values.wordpressScheme | quote }}
             - name: WORDPRESS_EXTRA_WP_CONFIG_CONTENT
               value: {{ .Values.wordpressExtraConfigContent | quote }}
+            - name: WORDPRESS_AUTO_UPDATE_LEVEL
+              value: {{ .Values.wordpressAutoUpdateLevel | quote }}
+            - name: WORDPRESS_PLUGINS
+              value: {{ join "," .Values.wordpressPlugins | quote }}
+            {{- if .Values.multisite.enable }}
+            - name: WORDPRESS_ENABLE_MULTISITE
+              value: "yes"
+            - name: WORDPRESS_MULTISITE_HOST
+              value: {{ .Values.multisite.host | quote }}
+            - name: WORDPRESS_MULTISITE_EXTERNAL_HTTP_PORT_NUMBER
+              value: {{ .Values.service.port | quote }}
+            - name: WORDPRESS_MULTISITE_EXTERNAL_HTTPS_PORT_NUMBER
+              value: {{ .Values.service.httpsPort | quote }}
+            - name: WORDPRESS_MULTISITE_NETWORK_TYPE
+              value: {{ .Values.multisite.networkType | quote }}
+            - name: WORDPRESS_MULTISITE_ENABLE_NIP_IO_REDIRECTION
+              value: {{ ternary "yes" "no" .Values.multisite.enableNipIoRedirect | quote }}
+            {{- end }}
             {{- if .Values.smtpHost }}
             - name: SMTP_HOST
               value: {{ .Values.smtpHost | quote }}

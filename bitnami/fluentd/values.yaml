@@ -87,6 +87,11 @@ forwarder:
       drop:
         - ALL
 
+  ## Duration in seconds the pod needs to terminate gracefully
+  ## https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/
+  ##
+  terminationGracePeriodSeconds: 30
+
   ## Name of the config file that will be used by Fluentd at launch
   ## Fluentd will look for it under the /opt/bitnami/fluentd/conf directory
   ##
@@ -497,6 +502,11 @@ aggregator:
     capabilities:
       drop:
         - ALL
+
+  ## Duration in seconds the pod needs to terminate gracefully
+  ## https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/
+  ##
+  terminationGracePeriodSeconds: 30
 
   ## Name of the config file that will be used by Fluentd at launch
   ## Fluentd will look for it under the /opt/bitnami/fluentd/conf directory

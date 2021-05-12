@@ -207,7 +207,7 @@ spec:
           {{- end }}
           volumeMounts:
             - name: ghost-data
-              mountPath: /bitnami/ghost
+              mountPath: {{ .Values.persistence.path }}
           {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumeMounts "context" $ ) | nindent 12 }}
           {{- end }}

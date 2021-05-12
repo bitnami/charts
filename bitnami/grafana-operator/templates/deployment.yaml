@@ -81,8 +81,13 @@ spec:
         {{- if .Values.operator.resources }}
           resources: {{- toYaml .Values.operator.resources | nindent 12 }}
         {{- end }}
+        {{- if .Values.operator.containerSecurityContext.enabled }}
           securityContext:
-            allowPrivilegeEscalation: false
+            runAsUser: {{ .Values.operator.containerSecurityContext.runAsUser }}
+            runAsGroup: {{ .Values.operator.containerSecurityContext.runAsGroup }}
+            allowPrivilegeEscalation: {{ .Values.operator.containerSecurityContext.allowPrivilegeEscalation }}
+            readOnlyRootFilesystem: {{ .Values.operator.containerSecurityContext.readOnlyRootFilesystem }}
+        {{- end }}
         {{- if .Values.operator.readinessProbe.enabled }}
           readinessProbe:
             httpGet:

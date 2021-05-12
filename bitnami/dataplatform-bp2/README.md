@@ -274,3 +274,8 @@ Elasticsearch dependency version was bumped to a new major version changing the 
 
 Regular upgrade is compatible from previous versions.
 
+## Upgrading
+
+### To 1.0.0
+
+The affinity rules have been updated to allow deploying this chart and the `dataplatform-bp1` chart in the same cluster.

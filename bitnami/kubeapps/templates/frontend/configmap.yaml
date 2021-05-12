@@ -2,8 +2,15 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ template "kubeapps.frontend-config.fullname" . }}
-  labels: {{ include "kubeapps.extraAppLabels" . | nindent 4 }}
-    app: {{ template "kubeapps.frontend-config.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: frontend
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" . ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 data:
   k8s-api-proxy.conf: |-
     # Disable buffering for log streaming
@@ -22,11 +29,11 @@ data:
     # Google Kubernetes Engine requires the access_token as the Bearer when talking to the k8s api server.
     proxy_set_header Authorization "Bearer $http_x_forwarded_access_token";
     {{- end }}
-    {{- range .Values.clusters }}
+{{- range .Values.clusters }}
   {{- if .certificateAuthorityData }}
   {{ .name }}-ca.pem: {{ .certificateAuthorityData }}
   {{- end }}
-  {{- end}}
+{{- end}}
   vhost.conf: |-
     # Retain the default nginx handling of requests without a "Connection" header
     map $http_upgrade $connection_upgrade {
@@ -39,12 +46,12 @@ data:
     proxy_set_header Connection $connection_upgrade;
 
     server {
-      listen 8080;
+      listen {{ .Values.frontend.containerPort }};
     {{- if .Values.frontend.largeClientHeaderBuffers }}
       large_client_header_buffers {{ .Values.frontend.largeClientHeaderBuffers }};
     {{- end }}
     {{- if .Values.enableIPv6 }}
-      listen [::]:8080;
+      listen [::]:{{ .Values.frontend.containerPort }};
     {{- end}}
       server_name _;
 
@@ -82,7 +89,7 @@ data:
     {{- if .certificateAuthorityData }}
         proxy_set_header PINNIPED_PROXY_API_SERVER_CERT {{ .certificateAuthorityData }};
     {{- end }}
-        proxy_pass http://kubeapps-internal-pinniped-proxy.{{ $.Release.Namespace }}:{{ $.Values.pinnipedProxy.service.port }};
+        proxy_pass http://{{ template "kubeapps.pinniped-proxy.fullname" $ }}.{{ $.Release.Namespace }}:{{ $.Values.pinnipedProxy.service.port }};
     {{- else }}
         # Otherwise we route directly through to the clusters with existing credentials.
         proxy_pass {{ $apiServiceBaseURL }};

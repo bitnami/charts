@@ -230,13 +230,17 @@ operator:
   ##
   logFormat: logfmt
 
-  ## Set the prometheus config reloader side-car CPU limit. If unset, uses the prometheus-operator project default
-  ##
-  # configReloaderCpu: 100m
 
-  ## Set the prometheus config reloader side-car memory limit. If unset, uses the prometheus-operator project default
+  ## Set the prometheus config reloader side-car CPU and memory requests and limits.
   ##
-  # configReloaderMemory: 25Mi
+  configReloaderResources: {}
+  #  limits:
+  #    cpu: 200m
+  #    memory: 100Mi
+  #  requests:
+  #    cpu: 100m
+  #    memory: 50Mi
+
 
   ## If true, the operator will create and maintain a service for scraping kubelets
   ##
