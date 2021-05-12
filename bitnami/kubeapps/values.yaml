@@ -127,250 +127,6 @@ ingress:
   ##
   secrets: []
 
-## @section Dashboard parameters
-
-## Dashboard parameters
-##
-dashboard:
-  ## Bitnami Kubeapps Dashboard image
-  ## ref: https://hub.docker.com/r/bitnami/kubeops/tags/
-  ## @param dashboard.image.registry Dashboard image registry
-  ## @param dashboard.image.repository Dashboard image repository
-  ## @param dashboard.image.tag Dashboard image tag (immutable tags are recommended)
-  ## @param dashboard.image.pullPolicy Dashboard image pull policy
-  ## @param dashboard.image.pullSecrets Dashboard image pull secrets
-  ## @param dashboard.image.debug Enable image debug mode
-  ##
-  image:
-    registry: docker.io
-    repository: bitnami/kubeapps-dashboard
-    tag: 2.3.2-debian-10-r0
-    ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-    ##
-    pullPolicy: IfNotPresent
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ## e.g:
-    ## pullSecrets:
-    ##   - myRegistryKeySecretName
-    ##
-    pullSecrets: []
-    ## Enable debug mode
-    ##
-    debug: false
-  ## @param dashboard.customStyle Custom CSS injected to the Dashboard to customize Kubeapps look and feel
-  ## e.g:
-  ##  customStyle: |-
-  ##    .header.header-7 {
-  ##      background-color: #991700;
-  ##    }
-  ##
-  customStyle: ""
-  ## @param dashboard.customComponents Custom Form components injected into the BasicDeploymentForm
-  ## ref: https://github.com/kubeapps/kubeapps/blob/master/docs/developer/custom-form-component-support.md
-  ##
-  customComponents: ""
-  ## @param dashboard.customLocale Custom translations injected to the Dashboard to customize the strings used in Kubeapps
-  ## ref: https://github.com/kubeapps/kubeapps/blob/master/docs/developer/translate-kubeapps.md
-  ## e.g:
-  ## customLocale:
-  ##   "Kubeapps": "My Dashboard"
-  ##   "login-oidc": "Login with my company SSO"
-  ##
-  customLocale: ""
-  ## @param dashboard.replicaCount Number of Dashboard replicas to deploy
-  ##
-  replicaCount: 2
-  ## @param dashboard.extraEnvVars Array with extra environment variables to add to the Dashboard container
-  ## e.g:
-  ## extraEnvVars:
-  ##   - name: FOO
-  ##     value: "bar"
-  ##
-  extraEnvVars: []
-  ## @param dashboard.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for the Dashboard container
-  ##
-  extraEnvVarsCM:
-  ## @param dashboard.extraEnvVarsSecret Name of existing Secret containing extra env vars for the Dashboard container
-  ##
-  extraEnvVarsSecret:
-  ## @param dashboard.containerPort Dashboard HTTP container port
-  ##
-  containerPort: 8080
-  ## Dashboard containers' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ## @param dashboard.resources.limits.cpu The CPU limits for the Dashboard container
-  ## @param dashboard.resources.limits.memory The memory limits for the Dashboard container
-  ## @param dashboard.resources.requests.cpu The requested CPU for the Dashboard container
-  ## @param dashboard.resources.requests.memory The requested memory for the Dashboard container
-  ##
-  resources:
-    limits:
-      cpu: 250m
-      memory: 128Mi
-    requests:
-      cpu: 25m
-      memory: 32Mi
-  ## Configure Pods Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param dashboard.podSecurityContext.enabled Enabled Dashboard pods' Security Context
-  ## @param dashboard.podSecurityContext.fsGroup Set Dashboard pod's Security Context fsGroup
-  ##
-  podSecurityContext:
-    enabled: true
-    fsGroup: 1001
-  ## Configure Container Security Context (only main container)
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param dashboard.containerSecurityContext.enabled Enabled Dashboard containers' Security Context
-  ## @param dashboard.containerSecurityContext.runAsUser Set Dashboard container's Security Context runAsUser
-  ## @param dashboard.containerSecurityContext.runAsNonRoot Set Dashboard container's Security Context runAsNonRoot
-  ##
-  containerSecurityContext:
-    enabled: true
-    runAsUser: 1001
-    runAsNonRoot: true
-  ## Configure extra options for Dashboard containers' liveness and readiness probes
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
-  ## @param dashboard.livenessProbe.enabled Enable livenessProbe
-  ## @skip dashboard.livenessProbe.httpGet
-  ## @param dashboard.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
-  ## @param dashboard.livenessProbe.periodSeconds Period seconds for livenessProbe
-  ## @param dashboard.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
-  ## @param dashboard.livenessProbe.failureThreshold Failure threshold for livenessProbe
-  ## @param dashboard.livenessProbe.successThreshold Success threshold for livenessProbe
-  ## Dashboard containers' liveness and readiness probes
-  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
-  ##
-  livenessProbe:
-    enabled: true
-    httpGet:
-      path: /
-      port: 8080
-    initialDelaySeconds: 60
-    periodSeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 6
-    successThreshold: 1
-  ## @param dashboard.readinessProbe.enabled Enable readinessProbe
-  ## @skip dashboard.readinessProbe.httpGet
-  ## @param dashboard.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-  ## @param dashboard.readinessProbe.periodSeconds Period seconds for readinessProbe
-  ## @param dashboard.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
-  ## @param dashboard.readinessProbe.failureThreshold Failure threshold for readinessProbe
-  ## @param dashboard.readinessProbe.successThreshold Success threshold for readinessProbe
-  ##
-  readinessProbe:
-    enabled: true
-    httpGet:
-      path: /
-      port: 8080
-    initialDelaySeconds: 0
-    periodSeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 6
-    successThreshold: 1
-  ## @param dashboard.customLivenessProbe Custom livenessProbe that overrides the default one
-  ##
-  customLivenessProbe: {}
-  ## @param dashboard.customReadinessProbe Custom readinessProbe that overrides the default one
-  ##
-  customReadinessProbe: {}
-  ## @param dashboard.lifecycleHooks Custom lifecycle hooks for Dashboard containers
-  ##
-  lifecycleHooks: {}
-  ## @param dashboard.podLabels Extra labels for Dasbhoard pods
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-  ##
-  podLabels: {}
-  ## @param dashboard.podAnnotations Annotations for Dasbhoard pods
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-  ##
-  podAnnotations: {}
-  ## @param dashboard.podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ##
-  podAffinityPreset: ""
-  ## @param dashboard.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
-  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ##
-  podAntiAffinityPreset: soft
-  ## Node affinity preset
-  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ##
-  nodeAffinityPreset:
-    ## @param dashboard.nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
-    ##
-    type: ""
-    ## @param dashboard.nodeAffinityPreset.key Node label key to match. Ignored if `affinity` is set
-    ##
-    key: ""
-    ## @param dashboard.nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set
-    ## E.g.
-    ## values:
-    ##   - e2e-az1
-    ##   - e2e-az2
-    ##
-    values: []
-  ## @param dashboard.affinity Affinity for pod assignment
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ## NOTE: dashboard.podAffinityPreset, dashboard.podAntiAffinityPreset, and dashboard.nodeAffinityPreset will be ignored when it's set
-  ##
-  affinity: {}
-  ## @param dashboard.nodeSelector Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
-  ##
-  nodeSelector: {}
-  ## @param dashboard.tolerations Tolerations for pod assignment
-  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-  ##
-  tolerations: []
-  ## @param dashboard.priorityClassName Priority class name for Dashboard pods
-  ##
-  priorityClassName:
-  ## @param dashboard.hostAliases Custom host aliases for Dashboard pods
-  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
-  ##
-  hostAliases: []
-  ## @param dashboard.extraVolumes Optionally specify extra list of additional volumes for Dasbhoard pods
-  ##
-  extraVolumes: []
-  ## @param dashboard.extraVolumeMounts Optionally specify extra list of additional volumeMounts for Dasbhoard container(s)
-  ##
-  extraVolumeMounts: []
-  ## @param dashboard.sidecars Add additional sidecar containers to the Dasbhoard pod
-  ## e.g:
-  ## sidecars:
-  ##   - name: your-image-name
-  ##     image: your-image
-  ##     imagePullPolicy: Always
-  ##     ports:
-  ##       - name: portname
-  ##         containerPort: 1234
-  ##
-  sidecars: {}
-  ## @param dashboard.initContainers Add additional init containers to the Dasbhoard pods
-  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
-  ## e.g:
-  ## initContainers:
-  ##  - name: your-image-name
-  ##    image: your-image
-  ##    imagePullPolicy: Always
-  ##    command: ['sh', '-c', 'echo "hello world"']
-  ##
-  initContainers: {}
-  ## Dasbhoard service parameters
-  ##
-  service:
-    ## @param dashboard.service.port Dasbhoard service HTTP port
-    ##
-    port: 8080
-    ## @param dashboard.service.annotations Additional custom annotations for Dasbhoard service
-    ##
-    annotations: {}
-
 ## @section Frontend parameters
 
 ## Frontend parameters
@@ -632,6 +388,250 @@ frontend:
     ##
     externalTrafficPolicy: Cluster
     ## @param frontend.service.annotations Additional custom annotations for frontend service
+    ##
+    annotations: {}
+
+## @section Dashboard parameters
+
+## Dashboard parameters
+##
+dashboard:
+  ## Bitnami Kubeapps Dashboard image
+  ## ref: https://hub.docker.com/r/bitnami/kubeops/tags/
+  ## @param dashboard.image.registry Dashboard image registry
+  ## @param dashboard.image.repository Dashboard image repository
+  ## @param dashboard.image.tag Dashboard image tag (immutable tags are recommended)
+  ## @param dashboard.image.pullPolicy Dashboard image pull policy
+  ## @param dashboard.image.pullSecrets Dashboard image pull secrets
+  ## @param dashboard.image.debug Enable image debug mode
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/kubeapps-dashboard
+    tag: 2.3.2-debian-10-r0
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+    ## Enable debug mode
+    ##
+    debug: false
+  ## @param dashboard.customStyle Custom CSS injected to the Dashboard to customize Kubeapps look and feel
+  ## e.g:
+  ##  customStyle: |-
+  ##    .header.header-7 {
+  ##      background-color: #991700;
+  ##    }
+  ##
+  customStyle: ""
+  ## @param dashboard.customComponents Custom Form components injected into the BasicDeploymentForm
+  ## ref: https://github.com/kubeapps/kubeapps/blob/master/docs/developer/custom-form-component-support.md
+  ##
+  customComponents: ""
+  ## @param dashboard.customLocale Custom translations injected to the Dashboard to customize the strings used in Kubeapps
+  ## ref: https://github.com/kubeapps/kubeapps/blob/master/docs/developer/translate-kubeapps.md
+  ## e.g:
+  ## customLocale:
+  ##   "Kubeapps": "My Dashboard"
+  ##   "login-oidc": "Login with my company SSO"
+  ##
+  customLocale: ""
+  ## @param dashboard.replicaCount Number of Dashboard replicas to deploy
+  ##
+  replicaCount: 2
+  ## @param dashboard.extraEnvVars Array with extra environment variables to add to the Dashboard container
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param dashboard.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for the Dashboard container
+  ##
+  extraEnvVarsCM:
+  ## @param dashboard.extraEnvVarsSecret Name of existing Secret containing extra env vars for the Dashboard container
+  ##
+  extraEnvVarsSecret:
+  ## @param dashboard.containerPort Dashboard HTTP container port
+  ##
+  containerPort: 8080
+  ## Dashboard containers' resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param dashboard.resources.limits.cpu The CPU limits for the Dashboard container
+  ## @param dashboard.resources.limits.memory The memory limits for the Dashboard container
+  ## @param dashboard.resources.requests.cpu The requested CPU for the Dashboard container
+  ## @param dashboard.resources.requests.memory The requested memory for the Dashboard container
+  ##
+  resources:
+    limits:
+      cpu: 250m
+      memory: 128Mi
+    requests:
+      cpu: 25m
+      memory: 32Mi
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param dashboard.podSecurityContext.enabled Enabled Dashboard pods' Security Context
+  ## @param dashboard.podSecurityContext.fsGroup Set Dashboard pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+  ## Configure Container Security Context (only main container)
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param dashboard.containerSecurityContext.enabled Enabled Dashboard containers' Security Context
+  ## @param dashboard.containerSecurityContext.runAsUser Set Dashboard container's Security Context runAsUser
+  ## @param dashboard.containerSecurityContext.runAsNonRoot Set Dashboard container's Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+  ## Configure extra options for Dashboard containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param dashboard.livenessProbe.enabled Enable livenessProbe
+  ## @skip dashboard.livenessProbe.httpGet
+  ## @param dashboard.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param dashboard.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param dashboard.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param dashboard.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param dashboard.livenessProbe.successThreshold Success threshold for livenessProbe
+  ## Dashboard containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ##
+  livenessProbe:
+    enabled: true
+    httpGet:
+      path: /
+      port: 8080
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  ## @param dashboard.readinessProbe.enabled Enable readinessProbe
+  ## @skip dashboard.readinessProbe.httpGet
+  ## @param dashboard.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param dashboard.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param dashboard.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param dashboard.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param dashboard.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    httpGet:
+      path: /
+      port: 8080
+    initialDelaySeconds: 0
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  ## @param dashboard.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param dashboard.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param dashboard.lifecycleHooks Custom lifecycle hooks for Dashboard containers
+  ##
+  lifecycleHooks: {}
+  ## @param dashboard.podLabels Extra labels for Dasbhoard pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param dashboard.podAnnotations Annotations for Dasbhoard pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param dashboard.podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param dashboard.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Node affinity preset
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param dashboard.nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param dashboard.nodeAffinityPreset.key Node label key to match. Ignored if `affinity` is set
+    ##
+    key: ""
+    ## @param dashboard.nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param dashboard.affinity Affinity for pod assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: dashboard.podAffinityPreset, dashboard.podAntiAffinityPreset, and dashboard.nodeAffinityPreset will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param dashboard.nodeSelector Node labels for pod assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ## @param dashboard.tolerations Tolerations for pod assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param dashboard.priorityClassName Priority class name for Dashboard pods
+  ##
+  priorityClassName:
+  ## @param dashboard.hostAliases Custom host aliases for Dashboard pods
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param dashboard.extraVolumes Optionally specify extra list of additional volumes for Dasbhoard pods
+  ##
+  extraVolumes: []
+  ## @param dashboard.extraVolumeMounts Optionally specify extra list of additional volumeMounts for Dasbhoard container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param dashboard.sidecars Add additional sidecar containers to the Dasbhoard pod
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: {}
+  ## @param dashboard.initContainers Add additional init containers to the Dasbhoard pods
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: {}
+  ## Dasbhoard service parameters
+  ##
+  service:
+    ## @param dashboard.service.port Dasbhoard service HTTP port
+    ##
+    port: 8080
+    ## @param dashboard.service.annotations Additional custom annotations for Dasbhoard service
     ##
     annotations: {}
 
