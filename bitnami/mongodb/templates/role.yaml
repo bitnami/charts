@@ -20,4 +20,13 @@ rules:
     verbs: ['use']
     resourceNames: [{{ include "mongodb.fullname" . }}]
 {{- end -}}
+{{- if .Values.volumeSnapshot.enabled }}
+  - apiGroups:
+      - "snapshot.storage.k8s.io/v1beta1"
+      - "snapshot.storage.k8s.io"
+    resources:
+      - "volumesnapshots"
+    verbs:
+      - "*"
+  {{- end -}}
 {{- end }}

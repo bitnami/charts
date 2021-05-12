@@ -1,0 +1,63 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ include "mongodb.fullname" . }}-volume-snapshot
+spec:
+  schedule: "{{ .Values.volumeSnapshot.cron }}"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: {{ template "mongodb.serviceAccountName" . }}
+          containers:
+            - name: backup-cron
+              env:
+                - name: M_RELEASE_NAME
+                  value: {{ include "mongodb.fullname" . }}
+                - name: M_PORT
+                  value: {{ .Values.service.port | toString | quote }}
+                - name: M_ROOT_PASSWORD
+                  value: {{ .Values.auth.rootPassword | toString | quote }}
+                - name: VSC_NAME
+                  value: {{ .Values.volumeSnapshot.volumeSnapshotClass }}
+              image: {{ .Values.volumeSnapshot.image }}
+              imagePullPolicy: IfNotPresent
+              command:
+                - /bin/bash
+                - -i
+                - -c
+                - |
+                    set -e
+                    echo alias M_CMD=\'mongo admin --host ${M_RELEASE_NAME}-1.{{ include "mongodb.service.nameOverride" . }}:${M_PORT} {{- if .Values.auth.enabled }} --authenticationDatabase admin -u root -p ${M_ROOT_PASSWORD} {{- end }} --quiet --eval\' >> ~/.bashrc
+                    source ~/.bashrc
+                    echo -e "[+] Check if it is a Primary node to make it stepDown\n"
+                    if [[ `M_CMD " db.runCommand( { isMaster: 1 } )['ismaster']"` != "false" ]]
+                    then
+                      echo -e "[+] Stepping Down\n"
+                      M_CMD "rs.stepDown()"
+                    fi
+                    echo -e "[+] Send Slave to Freeze\n"
+                    M_CMD "rs.freeze(99999999999)"
+                    export E_TIME=$(date +%s)
+                    echo -e "[+] Creating snapshot object\n"
+                    cat <<EOF | kubectl apply -f -
+                    apiVersion: snapshot.storage.k8s.io/v1beta1
+                    kind: VolumeSnapshot
+                    metadata:
+                      name: snapshot-${M_RELEASE_NAME}-${E_TIME}
+                    spec:
+                      volumeSnapshotClassName: ${VSC_NAME}
+                      source:
+                        persistentVolumeClaimName: datadir-${M_RELEASE_NAME}-1
+                    EOF
+                    echo -e "[+] Waiting for snapshot to finish\n"
+                    while : ; do
+                      result=$(kubectl get volumesnapshot   -o custom-columns='READY:.status.readyToUse' --field-selector metadata.name=snapshot-${M_RELEASE_NAME}-${E_TIME} | grep -v READY)
+                      [[ "${result}" == "true" ]] && break
+                      echo "[-] still waiting for snapshot to be ready .. "
+                      sleep 1
+                    done
+                    echo -e "[+] Snapshot finished, unfreeze Slave\n"
+                    M_CMD "rs.freeze(0)"
+                    echo -e "[+] Snapshotting finished successfully\n"
+          restartPolicy: OnFailure
