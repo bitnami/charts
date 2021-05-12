@@ -276,13 +276,30 @@ operator:
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ##
     containerSecurityContext:
-      enabled: false
+      enabled: true
       readOnlyRootFilesystem: true
       allowPrivilegeEscalation: false
       runAsNonRoot: true
       capabilities:
         drop:
           - ALL
+
+    ## Configure extra options for liveness and readiness probes
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+    ##
+    livenessProbe:
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 6
+      successThreshold: 1
+
+    readinessProbe:
+      initialDelaySeconds: 15
+      periodSeconds: 20
+      timeoutSeconds: 5
+      failureThreshold: 6
+      successThreshold: 1
 
 ## Deploy a Prometheus instance
 ##
@@ -330,7 +347,7 @@ prometheus:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ##
   containerSecurityContext:
-    enabled: false
+    enabled: true
     readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     runAsNonRoot: true
@@ -865,6 +882,17 @@ prometheus:
       # pullSecrets:
       #   - myRegistryKeySecretName
 
+    ## Thanos Sidecar container's securityContext
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+    ##
+    containerSecurityContext:
+      enabled: true
+      readOnlyRootFilesystem: true
+      allowPrivilegeEscalation: false
+      runAsNonRoot: true
+      capabilities:
+        drop:
+          - ALL
 
     ## Override default prometheus url "http://localhost:9090"
     ##
