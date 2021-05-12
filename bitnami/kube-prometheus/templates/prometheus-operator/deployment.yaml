@@ -20,11 +20,8 @@ spec:
       {{- if .Values.operator.schedulerName }}
       schedulerName: {{ .Values.operator.schedulerName | quote }}
       {{- end }}
-      {{- if .Values.operator.securityContext.enabled }}
-      securityContext:
-        runAsUser: {{ .Values.operator.securityContext.runAsUser }}
-        fsGroup: {{ .Values.operator.securityContext.fsGroup }}
-        runAsNonRoot: {{ .Values.operator.securityContext.runAsNonRoot }}
+      {{- if .Values.operator.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       {{- if .Values.operator.priorityClassName }}
       priorityClassName: {{ .Values.operator.priorityClassName }}
@@ -101,7 +98,9 @@ spec:
           {{- if .Values.operator.resources }}
           resources: {{- toYaml .Values.operator.resources | nindent 12 }}
           {{- end }}
-          securityContext:
-            allowPrivilegeEscalation: false
-            readOnlyRootFilesystem: false
+          {{- if .Values.operator.containerSecurityContext.enabled }}
+          # yamllint disable rule:indentation
+          securityContext: {{- omit .Values.operator.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          # yamllint enable rule:indentation
+          {{- end }}
 {{- end }}

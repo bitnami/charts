@@ -76,12 +76,21 @@ operator:
   ##
   # schedulerName:
 
-  ## SecurityContext configuration
+  ## Prometheus Operator pods' Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ##
-  securityContext:
+  podSecurityContext:
     enabled: true
     runAsUser: 1001
     fsGroup: 1001
+
+  ## Prometheus Operator containers' Security Context (only main container)
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ##
+  containerSecurityContext:
+    enabled: true
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: false
 
   ## Prometheus Operator Service
   ##
@@ -263,6 +272,18 @@ operator:
     # pullSecrets:
     #   - myRegistryKeySecretName
 
+    ## Prometheus config reload container's securityContext
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+    ##
+    containerSecurityContext:
+      enabled: false
+      readOnlyRootFilesystem: true
+      allowPrivilegeEscalation: false
+      runAsNonRoot: true
+      capabilities:
+        drop:
+          - ALL
+
 ## Deploy a Prometheus instance
 ##
 prometheus:
@@ -297,12 +318,25 @@ prometheus:
     # annotations:
     #   eks.amazonaws.com/role-arn: arn:aws:iam::ACCOUNT:role/prometheus
 
-  ## SecurityContext configuration
+  ## Prometheus pods' Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ##
-  securityContext:
+  podSecurityContext:
     enabled: true
     runAsUser: 1001
     fsGroup: 1001
+
+  ## Prometheus containers' Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ##
+  containerSecurityContext:
+    enabled: false
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    runAsNonRoot: true
+    capabilities:
+      drop:
+        - ALL
 
   ## Configure pod disruption budgets for Prometheus
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/#specifying-a-poddisruptionbudget

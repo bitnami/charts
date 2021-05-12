@@ -111,10 +111,8 @@ spec:
   {{- if .Values.prometheus.remoteWrite }}
   remoteWrite: {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.remoteWrite "context" $) | nindent 4 }}
   {{- end }}
-  {{- if .Values.prometheus.securityContext.enabled }}
-  securityContext:
-    runAsUser: {{ .Values.prometheus.securityContext.runAsUser }}
-    fsGroup: {{ .Values.prometheus.securityContext.fsGroup }}
+  {{- if .Values.prometheus.podSecurityContext.enabled }}
+  securityContext: {{- omit .Values.prometheus.podSecurityContext "enabled" | toYaml | nindent 8 }}
   {{- end }}
   {{- if .Values.prometheus.ruleNamespaceSelector }}
   ruleNamespaceSelector: {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.ruleNamespaceSelector "context" $) | nindent 4 }}
@@ -245,6 +243,23 @@ spec:
           {{- if not (.Values.prometheus.storageSpec.disableMountSubPath | default (not .Values.prometheus.persistence.enabled)) }}
           subPath: prometheus-db
           {{- end }}
+      {{- if .Values.thanos.containerSecurityContext.enabled }}
+      # yamllint disable rule:indentation
+      securityContext: {{- omit .Values.thanos.containerSecurityContext "enabled" | toYaml | nindent 8 }}
+      # yamllint enable rule:indentation
+      {{- end }}
+    {{- end }}
+    {{- if .Values.prometheus.containerSecurityContext.enabled }}
+    ## This monkey patching is needed until the securityContexts are
+    ## directly patchable via the CRD.
+    - name: prometheus
+      securityContext: {{- omit .Values.prometheus.containerSecurityContext "enabled" | toYaml | nindent 8 }}
+    {{- end }}
+    {{- if .Values.operator.prometheusConfigReloader.containerSecurityContext.enabled }}
+    ## This monkey patching is needed until the securityContexts are
+    ## directly patchable via the CRD.
+    - name: config-reloader
+      securityContext: {{- omit .Values.operator.prometheusConfigReloader.containerSecurityContext "enabled" | toYaml | nindent 8 }}
     {{- end }}
     {{- if .Values.prometheus.containers }}
     {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.containers "context" $) | nindent 4 }}
