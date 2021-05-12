@@ -525,7 +525,7 @@ containerSecurityContext:
 ##
 livenessProbe:
   enabled: true
-  path: /login
+  path: /
   initialDelaySeconds: 600
   periodSeconds: 10
   timeoutSeconds: 5
@@ -533,7 +533,7 @@ livenessProbe:
   successThreshold: 1
 readinessProbe:
   enabled: true
-  path: /login
+  path: /
   initialDelaySeconds: 30
   periodSeconds: 5
   timeoutSeconds: 3
@@ -541,7 +541,7 @@ readinessProbe:
   successThreshold: 1
 startupProbe:
   enabled: false
-  path: /login
+  path: /
   initialDelaySeconds: 0
   periodSeconds: 10
   timeoutSeconds: 3
