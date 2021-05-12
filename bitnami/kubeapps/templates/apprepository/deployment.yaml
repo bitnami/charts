@@ -1,0 +1,94 @@
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ template "kubeapps.apprepository.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: apprepository
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" . ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.apprepository.replicaCount }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: apprepository
+  template:
+    metadata:
+      {{- if .Values.apprepository.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.apprepository.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app.kubernetes.io/component: apprepository
+        {{- if .Values.apprepository.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.apprepository.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- include "kubeapps.imagePullSecrets" . | indent 6 }}
+      serviceAccountName: {{ template "kubeapps.apprepository.fullname" . }}
+      {{- if .Values.apprepository.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.apprepository.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.apprepository.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.apprepository.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.apprepository.podAffinityPreset "component" "apprepository" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.apprepository.podAntiAffinityPreset "component" "apprepository" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.apprepository.nodeAffinityPreset.type "key" .Values.apprepository.nodeAffinityPreset.key "values" .Values.apprepository.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.apprepository.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.apprepository.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.apprepository.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.apprepository.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.apprepository.priorityClassName }}
+      priorityClassName: {{ .Values.apprepository.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.apprepository.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.apprepository.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: controller
+          image: {{ include "common.images.image" (dict "imageRoot" .Values.apprepository.image "global" .Values.global) }}
+          imagePullPolicy: {{ .Values.apprepository.image.pullPolicy | quote }}
+          {{- if .Values.apprepository.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.apprepository.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.apprepository.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.apprepository.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          command:
+            - /apprepository-controller
+          args:
+            - --user-agent-comment=kubeapps/{{ .Chart.AppVersion }}
+            - --repo-sync-image={{ include "common.images.image" (dict "imageRoot" .Values.apprepository.syncImage "global" .Values.global) }}
+            {{- if .Values.global }}
+              {{- if.Values.global.imagePullSecrets }}
+                {{- range $key, $value := .Values.global.imagePullSecrets }}
+            -  --repo-sync-image-pullsecrets={{ $value | quote }}
+                {{- end }}
+              {{- end }}
+            {{- end }}
+            - --repo-sync-cmd=/asset-syncer
+            - --namespace={{ .Release.Namespace }}
+            {{- if .Values.postgresql.existingSecret }}
+            - --database-secret-name={{ .Values.postgresql.existingSecret }}
+            {{- else }}
+            - --database-secret-name={{ template "kubeapps.postgresql.fullname" . }}
+            {{- end }}
+            - --database-secret-key=postgresql-password
+            - --database-url={{ template "kubeapps.postgresql.fullname" . }}:{{ default "5432" .Values.postgresql.service.port }}
+            - --database-user=postgres
+            - --database-name={{ .Values.postgresql.postgresqlDatabase }}
+            {{- if .Values.apprepository.crontab }}
+            - --crontab={{ .Values.apprepository.crontab }}
+            {{- end }}
+            - --repos-per-namespace={{ .Values.apprepository.watchAllNamespaces }}
+          {{- if .Values.apprepository.resources }}
+          resources: {{- toYaml .Values.apprepository.resources | nindent 12 }}
+          {{- end }}
