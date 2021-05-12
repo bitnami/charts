@@ -216,6 +216,13 @@ Also, we can't use a single if because lazy evaluation is not an option
 {{- end -}}
 
 {{/*
+Get the metrics ConfigMap name.
+*/}}
+{{- define "postgresql.metricsCM" -}}
+{{- printf "%s-metrics" (include "common.names.fullname" .) -}}
+{{- end -}}
+
+{{/*
 Return the PostgreSQL database to create
 */}}
 {{- define "postgresql-ha.postgresqlDatabase" -}}
