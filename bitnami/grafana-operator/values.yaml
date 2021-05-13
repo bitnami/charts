@@ -102,7 +102,7 @@ operator:
     enabled: true
     runAsUser: 1001
     runAsGroup: 1001
-    readOnlyRootFilesystem: true
+    readOnlyRootFilesystem: false
     allowPrivilegeEscalation: false
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
@@ -239,6 +239,7 @@ grafana:
     enabled: true
     runAsUser: 1001
     runAsGroup: 1001
+    fsGroup: 1001
     allowPrivilegeEscalation: false
 
   ## Grafana containers' resource requests and limits
