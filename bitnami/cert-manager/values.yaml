@@ -6,10 +6,10 @@
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
-#global:
-#  imageRegistry:
-#  imagePullSecrets: []
-#  storageClass:
+# global:
+#   imageRegistry:
+#   imagePullSecrets: []
+#   storageClass:
 
 ## @section Common parameters
 
