@@ -53,7 +53,9 @@ clusterDomain: cluster.local
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
 hostAliases: []
-
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
 ## RabbitMQ Authentication parameters
 ##
 auth:
