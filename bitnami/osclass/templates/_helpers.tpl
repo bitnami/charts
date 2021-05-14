@@ -14,7 +14,7 @@ Return the proper certificate image name
 {{- end -}}
 
 {{/*
-Return the proper Drupal image name
+Return the proper Osclass image name
 */}}
 {{- define "osclass.image" -}}
 {{- include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) -}}
@@ -49,7 +49,7 @@ Return  the proper Storage Class
 {{- end -}}
 
 {{/*
-Drupal credential secret name
+Osclass credential secret name
 */}}
 {{- define "osclass.secretName" -}}
 {{- coalesce .Values.existingSecret (include "common.names.fullname" .) -}}

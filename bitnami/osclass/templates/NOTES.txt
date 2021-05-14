@@ -1,14 +1,14 @@
 {{- if or .Values.mariadb.enabled .Values.externalDatabase.host -}}
 
 *******************************************************************
-*** PLEASE BE PATIENT: Drupal may take a few minutes to install ***
+*** PLEASE BE PATIENT: Osclass may take a few minutes to install ***
 *******************************************************************
 
-1. Get the Drupal URL:
+1. Get the Osclass URL:
 
 {{- if .Values.ingress.enabled }}
 
-  You should be able to access your new Drupal installation through
+  You should be able to access your new Osclass installation through
 
   http://{{- .Values.ingress.hostname }}/
 
@@ -20,11 +20,11 @@
   export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
 
 {{- $port:=.Values.service.port | toString }}
-  echo "Drupal URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.port }}{{ end }}/"
+  echo "Osclass URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.port }}{{ end }}/"
 
 {{- else if eq .Values.service.type "ClusterIP" }}
 
-  echo "Drupal URL: http://127.0.0.1:8080/"
+  echo "Osclass URL: http://127.0.0.1:8080/"
   kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "common.names.fullname" . }} 8080:{{ .Values.service.port }}
 
 {{- end }}
@@ -35,11 +35,11 @@
 
   export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "common.names.fullname" . }})
   export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-  echo "Drupal URL: http://$NODE_IP:$NODE_PORT/"
+  echo "Osclass URL: http://$NODE_IP:$NODE_PORT/"
 
 {{- end }}
 
-2. Get your Drupal login credentials by running:
+2. Get your Osclass login credentials by running:
 
   echo Username: {{ .Values.osclassUsername }}
   echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "osclass.secretName" . }} -o jsonpath="{.data.osclass-password}" | base64 --decode)
@@ -50,10 +50,10 @@
 ### ERROR: You did not provide an external database host in your 'helm install' call ###
 ########################################################################################
 
-This deployment will be incomplete until you configure Drupal with a resolvable database
-host. To configure Drupal to use and external database host:
+This deployment will be incomplete until you configure Osclass with a resolvable database
+host. To configure Osclass to use and external database host:
 
-1. Complete your Drupal deployment by running:
+1. Complete your Osclass deployment by running:
 
   export APP_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "osclass.secretName" . }} -o jsonpath="{.data.osclass-password}" | base64 --decode)
 
@@ -70,9 +70,9 @@ host. To configure Drupal to use and external database host:
 {{- $passwordValidationErrors := list -}}
 {{- if not .Values.existingSecret -}}
     {{- $secretName := include "osclass.secretName" . -}}
-    {{- $requiredDrupalPassword := dict "valueKey" "osclassPassword" "secret" $secretName "field" "osclass-password" "context" $ -}}
-    {{- $requiredDrupalPasswordError := include "common.validations.values.single.empty" $requiredDrupalPassword -}}
-    {{- $passwordValidationErrors = append $passwordValidationErrors $requiredDrupalPasswordError -}}
+    {{- $requiredOsclassPassword := dict "valueKey" "osclassPassword" "secret" $secretName "field" "osclass-password" "context" $ -}}
+    {{- $requiredOsclassPasswordError := include "common.validations.values.single.empty" $requiredOsclassPassword -}}
+    {{- $passwordValidationErrors = append $passwordValidationErrors $requiredOsclassPasswordError -}}
 {{- end -}}
 
 {{- $mariadbSecretName := include "osclass.databaseSecretName" . -}}
