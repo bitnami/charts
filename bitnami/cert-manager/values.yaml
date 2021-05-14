@@ -830,12 +830,12 @@ metrics:
     ## @param metrics.serviceMonitor.scrapeTimeout The timeout after which the scrape is ended
     ##
     scrapeTimeout: 30s
+    ## @param metrics.serviceMonitor.targetPort The port in which the ServiceMonitor will monitor
+    ##
+    targetPort: 9402
     ## @param metrics.serviceMonitor.additionalLabels Additional labels that can be used so ServiceMonitor resource(s) can be discovered by Prometheus
     ##
-    additionalLabels:
-      app.kubernetes.io/component: "controller"
-      prometheus: default
-
+    additionalLabels: {}
 
 ## @section Other Parameters
 ## RBAC configuration

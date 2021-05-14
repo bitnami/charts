@@ -27,7 +27,7 @@ spec:
     matchNames:
       - {{ .Release.Namespace | quote }}
   endpoints:
-    - targetPort: controller
+    - targetPort: {{ .Values.metrics.serviceMonitor.targetPort }}
       {{- if .Values.metrics.serviceMonitor.path }}
       path: {{ .Values.metrics.serviceMonitor.path }}
       {{- end }}

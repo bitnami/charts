@@ -1,9 +1,8 @@
 {{- if .Values.metrics.enabled }}
----
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "certmanager.controller.fullname" . }}
+  name: {{ printf "%s-metrics" (include "certmanager.controller.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: controller

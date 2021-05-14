@@ -249,6 +249,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.interval`         | The interval at which metrics should be scraped                                                  | `60s`       |
 | `metrics.serviceMonitor.path`             | The path which the ServiceMonitor will monitor                                                   | `/metrics`  |
 | `metrics.serviceMonitor.scrapeTimeout`    | The timeout after which the scrape is ended                                                      | `30s`       |
+| `metrics.serviceMonitor.targetPort`       | The port in which the ServiceMonitor will monitor                                                | `9402`      |
 | `metrics.serviceMonitor.additionalLabels` | Additional labels that can be used so ServiceMonitor resource(s) can be discovered by Prometheus | `undefined` |
 
 
