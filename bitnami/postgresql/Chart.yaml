@@ -1,7 +1,7 @@
 annotations:
   category: Database
 apiVersion: v2
-appVersion: 11.11.0
+appVersion: 11.12.0
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -26,4 +26,4 @@ name: postgresql
 sources:
   - https://github.com/bitnami/bitnami-docker-postgresql
   - https://www.postgresql.org/
-version: 10.4.3
+version: 10.4.4
