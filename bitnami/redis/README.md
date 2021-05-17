@@ -489,9 +489,9 @@ In case the current master crashes, the Sentinel containers will elect a new mas
 
 ### Using a password file
 
-To use a password file for Redis you need to create a secret containing the password and then deploy the chart using that secret.
+To use a password file for Redis<sup>TM</sup> you need to create a secret containing the password and then deploy the chart using that secret.
 
-Refer to the chart documentation for more information on [using a password file for Redis](https://docs.bitnami.com/kubernetes/infrastructure/redis/administration/use-password-file/). 
+Refer to the chart documentation for more information on [using a password file for Redis<sup>TM</sup>](https://docs.bitnami.com/kubernetes/infrastructure/redis/administration/use-password-file/). 
 
 ### Securing traffic using TLS
 
@@ -541,17 +541,17 @@ $ helm install my-release --set master.persistence.existingClaim=PVC_NAME bitnam
 
 ## Backup and restore
 
-Refer to the chart documentation for more information on [backing up and restoring Redis deployments](https://docs.bitnami.com/kubernetes/infrastructure/redis/administration/backup-restore/).
+Refer to the chart documentation for more information on [backing up and restoring Redis<sup>TM</sup> deployments](https://docs.bitnami.com/kubernetes/infrastructure/redis/administration/backup-restore/).
 
 ## NetworkPolicy
 
 To enable network policy for Redis<sup>TM</sup>, install [a networking plugin that implements the Kubernetes NetworkPolicy spec](https://kubernetes.io/docs/tasks/administer-cluster/declare-network-policy#before-you-begin), and set `networkPolicy.enabled` to `true`.
 
-Refer to the chart documenation for more information on [enabling the network policy in Redis deployments](https://docs.bitnami.com/kubernetes/infrastructure/redis/administration/enable-network-policy/).
+Refer to the chart documenation for more information on [enabling the network policy in Redis<sup>TM</sup> deployments](https://docs.bitnami.com/kubernetes/infrastructure/redis/administration/enable-network-policy/).
 
 ### Setting Pod's affinity
 
-This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more infomation about Pod's affinity in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 
