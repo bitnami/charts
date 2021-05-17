@@ -384,6 +384,9 @@ spec:
             {{- end }}
             - name: DATA_SOURCE_USER
               value: {{ (include "postgresql-ha.postgresqlUsername" .) | quote }}
+            {{- if .Values.metrics.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.metrics.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
           ports:
             - name: metrics
               containerPort: 9187
