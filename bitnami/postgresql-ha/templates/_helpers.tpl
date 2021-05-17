@@ -674,3 +674,45 @@ Return the path to the CA cert file.
 {{- define "postgresql-ha.pgpool.tlsCACert" -}}
 {{- printf "/opt/bitnami/pgpool/certs/%s" .Values.pgpool.tls.certCAFilename -}}
 {{- end -}}
+
+{{/*
+Return true if PostgreSQL postgres existingSecret has been provided
+*/}}
+{{- define "postgresql-ha.postgresql.existingSecretProvided" -}}
+{{- if .Values.global -}}
+    {{- if .Values.global.postgresql -}}
+        {{- if .Values.global.postgresql.existingSecret -}}
+            {{- true -}}
+        {{- else if .Values.postgresql.existingSecret -}}
+            {{- true -}}
+        {{- end -}}
+    {{- else if .Values.postgresql.existingSecret -}}
+        {{- true -}}
+    {{- end -}}
+{{- else -}}
+    {{- if .Values.postgresql.existingSecret -}}
+      {{- true -}}
+    {{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if PostgreSQL pgpool existingSecret has been provided
+*/}}
+{{- define "postgresql-ha.pgpool.existingSecretProvided" -}}
+{{- if .Values.global -}}
+    {{- if .Values.global.pgpool -}}
+        {{- if .Values.global.pgpool.existingSecret -}}
+            {{- true -}}
+        {{- else if .Values.pgpool.existingSecret -}}
+            {{- true -}}
+        {{- end -}}
+    {{- else if .Values.pgpool.existingSecret -}}
+        {{- true -}}
+    {{- end -}}
+{{- else -}}
+    {{- if .Values.pgpool.existingSecret -}}
+      {{- true -}}
+    {{- end -}}
+{{- end -}}
+{{- end -}}
