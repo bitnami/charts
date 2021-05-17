@@ -1058,7 +1058,7 @@ bucketweb:
   ##
   livenessProbe:
     httpGet:
-      path: /
+      path: /-/healthy
       port: http
     initialDelaySeconds: 30
     timeoutSeconds: 30
@@ -1067,7 +1067,7 @@ bucketweb:
     # failureThreshold: 6
   readinessProbe:
     httpGet:
-      path: /
+      path: /-/ready
       port: http
     initialDelaySeconds: 30
     timeoutSeconds: 30
