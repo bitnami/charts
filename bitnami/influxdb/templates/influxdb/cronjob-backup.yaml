@@ -76,7 +76,7 @@ spec:
                   subPath: backup.sh
           containers:
             - name: influxdb-backup-dummy-container
-              image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+              image: {{ include "influxdb.image" . | quote }}
               command:
                 - "/bin/true"
             {{- if .Values.backup.uploadProviders.google.enabled }}
