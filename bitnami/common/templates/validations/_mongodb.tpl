@@ -116,9 +116,10 @@ Params:
   - subchart - Boolean - Optional. Whether to bypassUpgradeValidation for password environment variables. Default: false
 */}}
 {{- define "common.mongodb.values.bypassUpgradeValidation" -}}
-  {{- if .subchart -}}
-    {{- .context.Values.mongodb.bypassUpgradeValidation -}}
-  {{- else -}}
-    {{- .context.Values.bypassUpgradeValidation -}}
-  {{- end -}}
+   {{- if .subchart -}}
+      {{- .context.Values.mongodb.bypassUpgradeValidation -}}
+    {{- else -}}
+      {{- .context.Values.bypassUpgradeValidation -}}
+    {{- end -}}
+   {{- end -}}
 {{- end -}}
