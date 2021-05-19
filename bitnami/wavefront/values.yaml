@@ -178,10 +178,8 @@ collector:
   ##
   discovery:
     enabled: true
-  ## When specified, this replaces `prometheus.io` as the prefix for annotations used to
-  ## auto-discover Prometheus endpoints
-  ##
-  #   annotationPrefix: "wavefront.com"
+
+    annotationPrefix: "wavefront.com"
 
   ## Whether to enable runtime discovery configurations
   ## Ref: https://github.com/wavefrontHQ/wavefront-collector-for-kubernetes/blob/master/docs/discovery.md#runtime-configurations
@@ -624,6 +622,10 @@ proxy:
   ## TCP ports to receive Jaeger Thrift formatted data via HTTP. The data is then sent to Wavefront in Wavefront span format.
   ##
   # traceJaegerHttpListenerPort: 30080
+
+  ## TCP ports to receive Jaeger GRPC formatted data via HTTP.
+  ##
+  # traceJaegerGrpcListenerPort: 14250
 
   ## The port number the proxy will listen on for tracing spans in Zipkin data format.
   ##
