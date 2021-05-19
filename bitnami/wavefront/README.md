@@ -300,7 +300,7 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ### To 3.0.0
 
-This major updates the kube-state-metrics subchart to it newest major, 2.0.0, which contains name changes to a few of its values. For more information on this subchart's major, please refer to [kube-state-metrics upgrade notes.](https://github.com/bitnami/charts/tree/master/bitnami/kube-state-metrics#to-200).
+This major updates the kube-state-metrics subchart to it newest major, 2.0.0, which contains name changes to a few of its values. For more information on this subchart's major, please refer to [kube-state-metrics upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/kube-state-metrics#to-200).
 
 ### To 2.0.0
 
