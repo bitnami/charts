@@ -147,9 +147,9 @@ spec:
             tcpSocket:
               port: worker
             {{ omit .Values.worker.readinessProbe "enabled" | toYaml | nindent 12 }}
-          {{- else if .Values.worker.customRedinessProbe }}
+          {{- else if .Values.worker.customReadinessProbe }}
           readinessProbe:
-            {{- include "common.tplvalues.render" (dict "value" .Values.worker.customRedinessProbe "context" $) | trim | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.worker.customReadinessProbe "context" $) | trim | nindent 12 }}
           {{- end }}
           volumeMounts:
           {{- if .Files.Glob "files/dags/*.py" }}
