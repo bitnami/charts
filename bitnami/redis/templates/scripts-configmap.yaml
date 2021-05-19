@@ -151,7 +151,7 @@ data:
     #If >1 IP, use the first IPv4 address
     if [[ "$myip" =~ ( ) ]]
     then
-        myip=$(echo $myip | awk '{if ( match($0,/([0-9]+\.){3}[0-9]+/) ) { print substr($0,RSTART,RLENGTH); } }')
+        myip=$(echo $myip | awk '{if ( match($0,/([0-9]+\.)([0-9]+\.)([0-9]+\.)[0-9]+/) ) { print substr($0,RSTART,RLENGTH); } }')
     fi
 
     sentinel_conf_set() {
