@@ -18,12 +18,13 @@ data:
     . /opt/bitnami/scripts/libos.sh
     . /opt/bitnami/scripts/liblog.sh
     . /opt/bitnami/scripts/libvalidations.sh
+
     myip=$(hostname -i)
     
-    #If two IPs, use 2nd one (IPv4 in dualstack environment)
+    #If >1 IP, use the first IPv4 address
     if [[ "$myip" =~ ( ) ]]
     then
-        myip=$(echo $myip | cut -d ' ' -f 2)
+        myip=$(echo $myip | awk '{if ( match($0,/([0-9]+\.){3}[0-9]+/) ) { print substr($0,RSTART,RLENGTH); } }')
     fi
 
     not_exists_dns_entry() {
@@ -147,10 +148,10 @@ data:
 
     myip=$(hostname -i)
     
-    #If two IPs, use 2nd one (IPv4 in dualstack environment)
+    #If >1 IP, use the first IPv4 address
     if [[ "$myip" =~ ( ) ]]
     then
-        myip=$(echo $myip | cut -d ' ' -f 2)
+        myip=$(echo $myip | awk '{if ( match($0,/([0-9]+\.){3}[0-9]+/) ) { print substr($0,RSTART,RLENGTH); } }')
     fi
 
     sentinel_conf_set() {
