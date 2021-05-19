@@ -120,7 +120,7 @@ auth:
     enabled: false
     ## Name of the existing secret containing the truststore and one keystore per Keycloak replica
     ## Create this secret following the steps below:
-    ## 1) Generate your trustore and keystore files (more info at https://github.com/keycloak/keycloak-documentation/blob/master/openshift/topics/advanced_concepts.adoc#creating-https-and-jgroups-keystores-and-truststore-for-the-project_name-server)
+    ## 1) Generate your trustore and keystore files (more info at https://www.keycloak.org/docs/latest/server_installation/#_truststore)
     ## 2) Rename your truststore to `keycloak.truststore.jks`.
     ## 3) Rename your keystores to `keycloak-X.keystore.jks` where X is the ID of each Keycloak replica
     ## 4) Run the command below where SECRET_NAME is the name of the secret you want to create:
