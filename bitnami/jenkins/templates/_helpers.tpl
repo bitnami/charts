@@ -36,7 +36,7 @@ When using Ingress, it will be set to the Ingress hostname.
 {{- if .Values.ingress.enabled }}
 {{- .Values.ingress.hostname | default "" -}}
 {{- else -}}
-{{- index .Values (printf "%sHost" .Chart.Name) | default "" -}}
+{{- .Values.jenkinsHost | default "" -}}
 {{- end -}}
 {{- end -}}
 
