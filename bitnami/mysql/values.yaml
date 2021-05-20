@@ -157,6 +157,7 @@ primary:
     port=3306
     socket=/opt/bitnami/mysql/tmp/mysql.sock
     pid-file=/opt/bitnami/mysql/tmp/mysqld.pid
+    !include /opt/bitnami/mysql/conf/bitnami/my_custom.cnf
 
   ## Name of existing ConfigMap with MySQL Primary configuration.
   ## NOTE: When it's set the 'configuration' parameter is ignored
@@ -170,9 +171,9 @@ primary:
   ## Write your my_custom.cnf file with the following content.
   ## https://github.com/bitnami/bitnami-docker-mysql#step-1-write-your-my_customcnf-file-with-the-following-content
   ##
-  ##extendedConf: |-
-  ##  [mysqld]
-  ##  max_allowed_packet=32M
+  ## extendedConf: |-
+  ##   [mysqld]
+  ##   max_allowed_packet=32M
 
   updateStrategy: RollingUpdate
 
@@ -464,6 +465,7 @@ secondary:
     port=3306
     socket=/opt/bitnami/mysql/tmp/mysql.sock
     pid-file=/opt/bitnami/mysql/tmp/mysqld.pid
+    !include /opt/bitnami/mysql/conf/bitnami/my_custom.cnf
 
   ## Name of existing ConfigMap with MySQL Secondary configuration.
   ## NOTE: When it's set the 'configuration' parameter is ignored
@@ -477,9 +479,9 @@ secondary:
   ## Write your my_custom.cnf file with the following content.
   ## https://github.com/bitnami/bitnami-docker-mysql#step-1-write-your-my_customcnf-file-with-the-following-content
   ##
-  ##extendedConf: |-
-  ##  [mysqld]
-  ##  max_allowed_packet=32M
+  ## extendedConf: |-
+  ##   [mysqld]
+  ##   max_allowed_packet=32M
 
   updateStrategy: RollingUpdate
 
