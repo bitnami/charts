@@ -222,6 +222,11 @@ spec:
               mountPath: /opt/bitnami/mysql/conf/my.cnf
               subPath: my.cnf
             {{- end }}
+            {{- if .Values.primary.extendedConf }}
+            - name: config-extended
+              mountPath: /opt/bitnami/mysql/conf/bitnami/my_custom.cnf
+              subPath: my_custom.cnf
+            {{- end }}
             {{- if and .Values.auth.usePasswordFiles (not .Values.auth.customPasswordFiles) }}
             - name: mysql-credentials
               mountPath: /opt/bitnami/mysql/secrets/
@@ -285,6 +290,11 @@ spec:
         - name: config
           configMap:
             name: {{ include "mysql.primary.configmapName" . }}
+        {{- end }}
+        {{- if .Values.primary.extendedConf }}
+        - name: config-extended
+          configMap:
+            name: {{ include "mysql.primary.configmapName" . }}-extended
         {{- end }}
         {{- if or .Values.initdbScriptsConfigMap .Values.initdbScripts }}
         - name: custom-init-scripts

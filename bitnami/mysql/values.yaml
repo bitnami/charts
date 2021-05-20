@@ -166,6 +166,14 @@ primary:
   ## updateStrategy for MySQL Primary statefulset
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
+
+  ## Write your my_custom.cnf file with the following content.
+  ## https://github.com/bitnami/bitnami-docker-mysql#step-1-write-your-my_customcnf-file-with-the-following-content
+  #
+  ##extendedConf: |-
+  ##  [mysqld]
+  ##  max_allowed_packet=32M
+
   updateStrategy: RollingUpdate
 
   ## Partition update strategy for MySQL Primary statefulset
@@ -465,6 +473,14 @@ secondary:
   ## updateStrategy for MySQL Secondary statefulset
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
+
+  ## Write your my_custom.cnf file with the following content.
+  ## https://github.com/bitnami/bitnami-docker-mysql#step-1-write-your-my_customcnf-file-with-the-following-content
+  #
+  ##extendedConf: |-
+  ##  [mysqld]
+  ##  max_allowed_packet=32M
+
   updateStrategy: RollingUpdate
 
   ## Partition update strategy for MySQL Secondary statefulset

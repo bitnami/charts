@@ -1,0 +1,15 @@
+{{- if .Values.secondary.extendedConf }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "mysql.secondary.configmapName" . }}-extended
+  labels:
+  {{- include "common.labels.standard" . | nindent 4 }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+  namespace: {{ .Release.Namespace }}
+data:
+  my_custom.cnf: |-
+  {{ .Values.secondary.extendedConf | nindent 4 }}
+{{- end }}

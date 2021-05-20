@@ -99,6 +99,7 @@ The following table lists the configurable parameters of the MySQL chart and the
 | `primary.args`                               | Override default container args on MySQL Primary container(s) (useful when using custom images)                 | `nil`                          |
 | `primary.configuration`                      | MySQL Primary configuration to be injected as ConfigMap                                                         | Check `values.yaml` file       |
 | `primary.existingConfigmap`                  | Name of existing ConfigMap with MySQL Primary configuration                                                     | `nil`                          |
+| `primary.extendedConf`                       | MySQL Primary additional configuration to be injected as ConfigMap                                              | `nil`                          |
 | `primary.updateStrategy`                     | Update strategy type for the MySQL primary statefulset                                                          | `RollingUpdate`                |
 | `primary.podAnnotations`                     | Additional pod annotations for MySQL primary pods                                                               | `{}` (evaluated as a template) |
 | `primary.hostAliases`                        | Add deployment host aliases                                                                                     | `[]`                           |
@@ -155,6 +156,7 @@ The following table lists the configurable parameters of the MySQL chart and the
 | `secondary.args`                               | Override default container args on MySQL Secondary container(s) (useful when using custom images)                   | `nil`                          |
 | `secondary.configuration`                      | MySQL Secondary configuration to be injected as ConfigMap                                                           | Check `values.yaml` file       |
 | `secondary.existingConfigmap`                  | Name of existing ConfigMap with MySQL Secondary configuration                                                       | `nil`                          |
+| `secondary.extendedConf`                       | MySQL Secondary additional configuration to be injected as ConfigMap                                                | `nil`                          |
 | `secondary.replicaCount`                       | Number of MySQL secondary replicas                                                                                  | `1`                            |
 | `secondary.hostAliases`                        | Add deployment host aliases                                                                                         | `[]`                           |
 | `secondary.updateStrategy`                     | Update strategy type for the MySQL secondary statefulset                                                            | `RollingUpdate`                |
