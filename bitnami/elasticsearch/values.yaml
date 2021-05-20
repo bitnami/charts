@@ -46,6 +46,8 @@ image:
 ##
 sysctlImage:
   enabled: true
+  vmMaxMapCount: "262144"
+  fsFileMax: "65536"
   registry: docker.io
   repository: bitnami/bitnami-shell
   tag: "10"

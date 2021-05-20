@@ -71,7 +71,7 @@ spec:
             - /bin/bash
             - -ec
             - |
-              sysctl -w vm.max_map_count=262144 && sysctl -w fs.file-max=65536
+              sysctl -w vm.max_map_count={{ .Values.sysctlImage.vmMaxMapCount }} && sysctl -w fs.file-max={{ .Values.sysctlImage.fsFileMax }}
           securityContext:
             privileged: true
           {{- if .Values.sysctlImage.resources }}
