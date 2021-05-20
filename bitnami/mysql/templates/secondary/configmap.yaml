@@ -13,6 +13,6 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 data:
-  my.cnf: |-
+  my.cnf: |+
     {{ .Values.secondary.configuration | nindent 4 }}
 {{- end -}}
