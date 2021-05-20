@@ -64,7 +64,7 @@ spec:
         {{- end }}
       serviceAccountName: {{ template "certmanager.cainjector.serviceAccountName" . }}
       containers:
-        - name: {{ include "certmanager.cainjector.fullname" . }}
+        - name: cainjector
           image: {{ template "certmanager.cainjector.image" . }}
           imagePullPolicy: {{ .Values.cainjector.image.pullPolicy | quote }}
           {{- if .Values.cainjector.command }}
