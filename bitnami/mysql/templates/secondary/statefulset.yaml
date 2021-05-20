@@ -35,6 +35,9 @@ spec:
         {{- if (include "mysql.secondary.createConfigmap" .) }}
         checksum/configuration: {{ include (print $.Template.BasePath "/secondary/configmap.yaml") . | sha256sum }}
         {{- end }}
+        {{- if  .Values.primary.extendedConf }}
+        checksum/extendedConf: {{ .Values.primary.extendedConf | sha256sum }}
+        {{- end }}
         {{- if .Values.secondary.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.secondary.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
