@@ -67,7 +67,7 @@ spec:
         {{- end }}
       serviceAccountName: {{ template "certmanager.controller.serviceAccountName" . }}
       containers:
-        - name: {{ include "certmanager.controller.fullname" . }}
+        - name: cert-manager
           image: {{ template "certmanager.image" . }}
           imagePullPolicy: {{ .Values.controller.image.pullPolicy | quote }}
           {{- if .Values.controller.command }}

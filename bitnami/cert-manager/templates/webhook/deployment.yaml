@@ -64,7 +64,7 @@ spec:
         {{- end }}
       serviceAccountName: {{ template "certmanager.webhook.serviceAccountName" . }}
       containers:
-        - name: {{ include "certmanager.webhook.fullname" . }}
+        - name: cert-manager-webhook
           image: {{ template "certmanager.webhook.image" . }}
           imagePullPolicy: {{ .Values.webhook.image.pullPolicy | quote }}
           {{- if .Values.webhook.command }}
