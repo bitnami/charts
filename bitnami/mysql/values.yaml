@@ -169,7 +169,7 @@ primary:
 
   ## Write your my_custom.cnf file with the following content.
   ## https://github.com/bitnami/bitnami-docker-mysql#step-1-write-your-my_customcnf-file-with-the-following-content
-  #
+  ##
   ##extendedConf: |-
   ##  [mysqld]
   ##  max_allowed_packet=32M
@@ -476,7 +476,7 @@ secondary:
 
   ## Write your my_custom.cnf file with the following content.
   ## https://github.com/bitnami/bitnami-docker-mysql#step-1-write-your-my_customcnf-file-with-the-following-content
-  #
+  ##
   ##extendedConf: |-
   ##  [mysqld]
   ##  max_allowed_packet=32M
