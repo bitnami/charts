@@ -1,0 +1,11 @@
+{{- if .Values.primary-labeler-sidecar.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.primary-labeler-sidecar.service-name }}
+  namespace: {{ include "mongodb.namespace" . }}
+spec:
+  externalTrafficPolicy: {{ .Values.primary-labeler-sidecar.externalTrafficPolicy }}
+  ports: {{ .Values.primary-labeler-sidecar.ports }}
+  selector: {{ .Values.primary-labeler-sidecar.selector }}
+{{- end }}
