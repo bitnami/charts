@@ -227,7 +227,7 @@ redis: architecture
 
 {{/* Validate values of Redis(TM) - PodSecurityPolicy create */}}
 {{- define "redis.validateValues.podSecurityPolicy.create" -}}
-{{- if and (eq .Values.podSecurityPolicy.create true) (eq .Values.podSecurityPolicy.enabled false) }}
+{{- if and .Values.podSecurityPolicy.create (not .Values.podSecurityPolicy.enabled) }}
 redis: podSecurityPolicy.create
     In order to create PodSecurityPolicy, you also need to enable
     podSecurityPolicy.enabled field

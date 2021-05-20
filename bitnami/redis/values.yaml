@@ -950,7 +950,7 @@ networkPolicy:
 ## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/
 ##
 podSecurityPolicy:
-  ## @param podSecurityPolicy.create Specifies whether a PodSecurityPolicy should be created. You also need to set podSecurityPolicy.enabled to true
+  ## @param podSecurityPolicy.create Specifies whether a PodSecurityPolicy should be created (set `podSecurityPolicy.enabled` to `true` to enable it)
   ##
   create: false
   ## @param podSecurityPolicy.enable Enable PodSecurityPolicy
