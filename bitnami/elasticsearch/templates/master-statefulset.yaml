@@ -150,6 +150,17 @@ spec:
               containerPort: 9200
             - name: transport
               containerPort: 9300
+          {{- if .Values.master.startupProbe.enabled }}
+          startupProbe:
+            initialDelaySeconds: {{ .Values.master.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.master.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.master.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.master.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.master.startupProbe.failureThreshold }}
+            httpGet:
+              path: /_cluster/health?local=true
+              port: 9200
+          {{- end }}
           {{- if .Values.master.livenessProbe.enabled }}
           livenessProbe:
             initialDelaySeconds: {{ .Values.master.livenessProbe.initialDelaySeconds }}

@@ -285,9 +285,16 @@ master:
     requests:
       cpu: 25m
       memory: 256Mi
-  ## Elasticsearch master-eligible container's liveness and readiness probes
+  ## Elasticsearch master-eligible container's startup, liveness and readiness probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
+  startupProbe:
+    enabled: false
+  #  initialDelaySeconds: 90
+  #  periodSeconds: 10
+  #  timeoutSeconds: 5
+  #  successThreshold: 1
+  #  failureThreshold: 5
   livenessProbe:
     enabled: false
   #  initialDelaySeconds: 90
@@ -480,9 +487,16 @@ coordinating:
     requests:
       cpu: 25m
       memory: 256Mi
-  ## Elasticsearch coordinating-only container's liveness and readiness probes
+  ## Elasticsearch coordinating-only container's startup, liveness and readiness probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
+  startupProbe:
+    enabled: false
+  #  initialDelaySeconds: 90
+  #  periodSeconds: 10
+  #  timeoutSeconds: 5
+  #  successThreshold: 1
+  #  failureThreshold: 5
   livenessProbe:
     enabled: false
   #  initialDelaySeconds: 90
@@ -632,9 +646,16 @@ data:
     requests:
       cpu: 25m
       memory: 2048Mi
-  ## Elasticsearch data container's liveness and readiness probes
+  ## Elasticsearch data container's startup, liveness and readiness probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
+  startupProbe:
+    enabled: false
+  #  initialDelaySeconds: 90
+  #  periodSeconds: 10
+  #  timeoutSeconds: 5
+  #  successThreshold: 1
+  #  failureThreshold: 5
   livenessProbe:
     enabled: false
   #  initialDelaySeconds: 90
@@ -799,9 +820,16 @@ ingest:
     requests:
       cpu: 25m
       memory: 256Mi
-  ## Elasticsearch ingest container's liveness and readiness probes
+  ## Elasticsearch ingest container's startup, liveness and readiness probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
+  startupProbe:
+    enabled: false
+  #  initialDelaySeconds: 90
+  #  periodSeconds: 10
+  #  timeoutSeconds: 5
+  #  successThreshold: 1
+  #  failureThreshold: 5
   livenessProbe:
     enabled: false
   #  initialDelaySeconds: 90
