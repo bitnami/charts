@@ -1,9 +1,9 @@
 dependencies:
 - name: common
   repository: https://charts.bitnami.com/bitnami
-  version: 1.4.2
+  version: 1.5.2
 - name: postgresql
   repository: https://charts.bitnami.com/bitnami
-  version: 10.3.18
-digest: sha256:1b990faa7c91a2d451e4aaa0c9981db82b69ca1ab88d7d19e1485ad12125674b
-generated: "2021-04-23T06:41:12.258879244Z"
+  version: 10.4.6
+digest: sha256:66452df87aacced541504affac6fc818ad5a23939839250a5be9704cd53c8f12
+generated: "2021-05-24T05:01:54.228441412Z"
