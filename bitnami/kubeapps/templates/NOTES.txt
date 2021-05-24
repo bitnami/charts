@@ -71,3 +71,5 @@ To access Kubeapps from outside your K8s cluster, follow the steps below:
 {{- $passwordValidationErrors = append $passwordValidationErrors $postgresqlPasswordValidationErrors -}}
 
 {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}
+{{- include "kubeapps.checkRollingTags" . }}
+{{- include "kubeapps.validateValues" . }}

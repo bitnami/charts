@@ -70,7 +70,7 @@ monitoringAPIPort: 9600
 ## To add secrets or configmaps to environment
 ## extraEnvVarsSecret: "x"
 ## extraEnvVarsCM: "y"
-
+##
 
 ## Input Plugins configuration
 ## ref: https://www.elastic.co/guide/en/logstash/current/input-plugins.html
@@ -269,6 +269,17 @@ readinessProbe:
   # timeoutSeconds: 5
   # successThreshold: 1
   # failureThreshold: 6
+
+## Logstash pods' lifecycle hooks
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/
+##
+lifecycle: {}
+# preStop:
+#   exec:
+#     command: ["/bin/sh", "-c", "echo Hello from the postStart handler > /usr/share/message"]
+# postStart:
+#   exec:
+#     command: ["/bin/sh", "-c", "echo Hello from the postStart handler > /usr/share/message"]
 
 ## Service parameters
 ##
@@ -593,6 +604,7 @@ podDisruptionBudget:
 ##
 extraDeploy:
 
-## Extra init containers to add to the deployment
+## Init Containers to run before pod assignment. Evaluated as a template.
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
 ##
 initContainers: []

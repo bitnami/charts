@@ -12,7 +12,7 @@ preferredDuringSchedulingIgnoredDuringExecution:
           operator: In
           values:
             {{- range .values }}
-            - {{ . }}
+            - {{ . | quote }}
             {{- end }}
     weight: 1
 {{- end -}}
@@ -29,7 +29,7 @@ requiredDuringSchedulingIgnoredDuringExecution:
           operator: In
           values:
             {{- range .values }}
-            - {{ . }}
+            - {{ . | quote }}
             {{- end }}
 {{- end -}}
 

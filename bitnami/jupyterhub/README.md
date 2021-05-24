@@ -17,6 +17,8 @@ This chart bootstraps a [JupyterHub](https://github.com/jupyterhub/jupyterhub) D
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
+[Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/jupyterhub/get-started/understand-default-configuration/).
+
 ## Prerequisites
 
 - Kubernetes 1.12+
@@ -45,63 +47,6 @@ $ helm uninstall my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
-
-## Overview of JupyterHub
-
-This chart deploys three basic elements:
-
-- JupyterHub: Central element of the chart. Manages authentication and is responsible for creating the Jupyter Notebook instances (called Single User instances). As a consequence, the Hub requires special RBAC privileges in order to access the Kubernetes API to create and manage Deployments.
-- Proxy: This is the external endpoint for users. It manages the communication with the Hub and the Single User instances.
-- Image Puller: In order to improve the Single User instance boot time, a DaemonSet object is deployed that pre-pulls all the necessary images to run the Single User Notebooks.
-
-The following diagram shows a deployed release of the chart:
-
-```
-                                                         │
-                                                         │
-                                                         │
-                                                         │
-             ┌────────────────┐                          │
-             │                │                          │
-             │  Image Puller  │◄──────Pull images to─────┘
-             │                │         all nodes
-             └────────────────┘
-
-    ┌───────────┐           ┌─────────────┐
-    │           │           │             │
-    │   Proxy   ├──────────►│     Hub     │
-    │           │           │             │
-    └───────────┘           └─────────────┘
-```
-
-After accessing the hub and creating a Single User instance, the deployment looks as follows:
-
-```
-                                                         │
-                                                         │
-                                                         │
-                                                         │
-             ┌────────────────┐                          │
-             │                │                          │
-             │  Image Puller  │◄──────Pull images to─────┘
-             │                │         all nodes
-             └────────────────┘
-
-   ┌───────────┐           ┌─────────────┐
-   │           │           │             │
-   │   Proxy   ├──────────►│     Hub     │
-   │           │           │             │
-   └────┬──────┘           └───────┬─────┘
-        │                          │
-        │                          │
-        │                          │
-        │     ┌─────────────┐      │
-        │     │ Single User │      │
-        └────►│  Instance   │◄─────┘
-              └─────────────┘
-```
-
-For more information, check the official [JupyterHub documentation](https://github.com/jupyterhub/jupyterhub).
 
 ## Parameters
 
@@ -470,117 +415,67 @@ $ helm install my-release -f values.yaml bitnami/jupyterhub
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling vs Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### Authenticator
+### Configure authentication
 
-The chart configures the Hub [DummyAuthenticator](https://github.com/jupyterhub/dummyauthenticator) by default, with the password set in the `hub.password` (auto-generated if not set) and `user` as the administrator user. In order to change the authentication mechanism change the `hub.config.JupyterHub` section inside the `hub.configuration` value. The following example sets the [NativeAuthenticator](https://github.com/jupyterhub/nativeauthenticator) authenticator, and configures an admin user called `test`.
+The chart configures the Hub [DummyAuthenticator](https://github.com/jupyterhub/dummyauthenticator) by default, with the password set in the `hub.password` (auto-generated if not set) chart parameter and `user` as the administrator user. In order to change the authentication mechanism, change the `hub.config.JupyterHub` section inside the `hub.configuration` value.
 
-```yaml
-hub:
-  configuration: |
-    ...
-    hub:
-      config:
-        JupyterHub:
-          admin_access: true
-          authenticator_class: nativeauthenticator.NativeAuthenticator
-          Authenticator:
-            admin_users:
-              - test
-    ...
-```
+Refer to the [chart documentation for a configuration example](https://docs.bitnami.com/kubernetes/infrastructure/jupyterhub/configuration/configure-authentication).
 
-When deploying, you will need to Sign Up to set the password for the `test` user. For more information on Authenticators, check the [official JupyterHub documentation](https://jupyterhub.readthedocs.io/en/stable/getting-started/authenticators-users-basics.html).
+### Configure the Single User instances
 
-### Configuring the Single User instances
+As explained in the [documentation](https://docs.bitnami.com/kubernetes/infrastructure/jupyterhub/get-started/understand-default-configuration/), the Hub is responsible for deploying the Single User instances. The configuration of these instances is passed to the Hub instance via the `hub.configuration` chart parameter. The chart's `singleuser` section can be used to generate the `hub.configuration` value.
 
-As mentioned in the section [Overview of JupyterHub](#overview-of-jupyter-hub), the Hub is responsible for deploying the Single User instances. The configuration of these instances is passed to the Hub instance via the `hub.configuration` value. In order to make the chart follow Bitnami standards and to ease the generation of this configuration file, the chart has a `singleuser` section, which is then used for generating the `hub.configuration` value. The `hub.configuration` value can be easily overridden via modifying its default value or by providing a secret in the `hub.existingSecret` value. In that case, all the settings in the `singleuser` section will be ignored.
+For more information, including how to provide a secret or a custom ConfigMap, refer to the [chart documentation on configuring Single User instances](https://docs.bitnami.com/kubernetes/infrastructure/jupyterhub/configuration/configure-single-user-instances/).
 
-All the settings specified in the `hub.configuration` value are consumed by the `jupyter_config.py` script available in the `templates/hub/configmap.yaml` file. This script can be changed by providing a ConfigMap in the `hub.existingConfigmap` value. Find in the [official JupyterHub documentation](https://jupyterhub.readthedocs.io/en/stable/reference/config-examples.html) more examples of the `jupyter_config.py` script.
+### Restrict traffic using NetworkPolicies
 
-### Restricting traffic using NetworkPolicies
-
-The Bitnami JupyterHub chart enables NetworkPolicies by default. These restricts the communication between the three main components: the Proxy, the Hub and the Single User instances. There are two elements that were left open on purpose:
+The Bitnami JupyterHub chart enables NetworkPolicies by default. This restricts the communication between the three main components: the Proxy, the Hub and the Single User instances. There are two elements that were left open on purpose:
 
 - Ingress access to the Proxy instance HTTP port: by default, it is open to any IP, as it is the entry point to the JupyterHub instance. This behavior can be changed by tweaking the `proxy.networkPolicy.extraIngress` value.
 - Hub egress access: As the Hub requires access to the Kubernetes API, the Hub can access to any IP by default (depending on the Kubernetes platform, the Service IP ranges can vary and so there is no easy way to detect the Kubernetes API internal IP). This behavior can be changed by tweaking the `hub.networkPolicy.extraEgress` value.
 
-### Sidecars and Init Containers
+### Use sidecars and init containers
 
-If you have a need for additional containers to run within the same pod as the JupyterHub container, the Proxy container or the Single User container (e.g. an additional metrics or logging exporter), you can do so via the `proxy.sidecars`, `hub.sidecars` or `singleuser.sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
+If additional containers are needed in the same pod (such as additional metrics or logging exporters), they can be defined using the `proxy.sidecars`, `hub.sidecars` or `singleuser.sidecars` config parameters. Similarly, extra init containers can be added using the `hub.initContainers`, `proxy.initContainers` and `singleuser.initContainers` parameters.
 
-```yaml
-hub:
-  sidecars:
-    - name: your-image-name
-      image: your-image
-      imagePullPolicy: Always
-      ports:
-        - name: portname
-        containerPort: 1234
-```
+Refer to the chart documentation for more information on, and examples of, configuring and using [sidecars and init containers](https://docs.bitnami.com/kubernetes/infrastructure/jupyterhub/configuration/configure-sidecar-init-containers/).
 
-Similarly, you can add extra init containers using the `hub.initContainers`, `proxy.initContainers` and `singleuser.initContainers` parameters.
+### Configure Ingress
 
-```yaml
-hub:
-  initContainers:
-    - name: your-image-name
-      image: your-image
-      imagePullPolicy: Always
-      ports:
-        - name: portname
-          containerPort: 1234
-```
+This chart provides support for Ingress resources for the JupyterHub proxy component. If an Ingress controller, such as [nginx-ingress](https://kubeapps.com/charts/stable/nginx-ingress) or [traefik](https://kubeapps.com/charts/stable/traefik), that Ingress controller can be used to serve WordPress.
 
-### Ingress
+To enable Ingress integration, set `proxy.ingress.enabled` to `true`. The `proxy.ingress.hostname` property can be used to set the host name. The `proxy.ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host.
 
-This chart provides support for ingress resources for the JupyterHub proxy component. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/master/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/master/bitnami/contour) you can utilize the ingress controller to serve your application.
+Learn more about [configuring and using Ingress in the chart documentation](https://docs.bitnami.com/kubernetes/infrastructure/jupyterhub/configuration/configure-ingress/).
 
-To enable ingress integration, please set `proxy.ingress.enabled` to `true`.
+### Configure TLS secrets
 
-#### Hosts
+This chart facilitates the creation of TLS secrets for use with the Ingress controller (although this is not mandatory). There are four common use cases:
 
-Most likely you will only want to have one hostname that maps to this JupyterHub installation. If that's your case, the property `proxy.ingress.hostname` will set it. However, it is possible to have more than one host. To facilitate this, the `proxy.ingress.extraHosts` object can be specified as an array. You can also use `proxy.ingress.extraTLS` to add the TLS configuration for extra hosts.
+* Helm generates/manages certificate secrets based on the parameters.
+* User generates/manages certificates separately.
+* Helm creates self-signed certificates and generates/manages certificate secrets.
+* An additional tool (like [cert-manager](https://github.com/jetstack/cert-manager/)) manages the secrets for the application.
 
-For each host indicated at `proxy.ingress.extraHosts`, please indicate a `name`, `path`, and any `annotations` that you may want the ingress controller to know about.
+Refer to the [chart documentation for more information on working with TLS](https://docs.bitnami.com/kubernetes/infrastructure/jupyterhub/administration/enable-tls).
 
-For annotations, please see [this document](https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md). Not all annotations are supported by all ingress controllers, but this document does a good job of indicating which annotation is supported by many popular ingress controllers.
+### Set pod affinity
 
-### TLS Secrets
+This chart allows you to set your custom affinity using the `hub.affinity` and `proxy.affinity` parameters. Refer to the [chart documentation on pod affinity](https://docs.bitnami.com/kubernetes/infrastructure/jupyterhub/configuration/configure-pod-affinity).
 
-This chart will facilitate the creation of TLS secrets for use with the ingress controller, however, this is not required. There are four common use cases:
-
-- Helm generates/manages certificate secrets based on the parameters.
-- User generates/manages certificates separately.
-- Helm creates self-signed certificates and generates/manages certificate secrets.
-- An additional tool (like [cert-manager](https://github.com/jetstack/cert-manager/)) manages the secrets for the application.
-
-In the first two cases, it's needed a certificate and a key. Files are expected in PEM format.
-
-- If you are going to use Helm to manage the certificates based on the parameters, please copy these values into the `certificate` and `key` values for a given `proxy.ingress.secrets` entry.
-- In case you are going to manage TLS secrets separately, please know that you must create a TLS secret with name *INGRESS_HOSTNAME-tls* (where *INGRESS_HOSTNAME* is a placeholder to be replaced with the hostname you set using the `proxy.ingress.hostname` parameter).
-- To use self-signed certificates created by Helm, set `proxy.ingress.tls` to `true`, and `proxy.ingress.certManager` to `false`.
-- If your cluster has a [cert-manager](https://github.com/jetstack/cert-manager) add-on to automate the management and issuance of TLS certificates, set `proxy.ingress.certManager` boolean to `true` to enable the corresponding annotations for cert-manager.
-
-### Setting Pod's affinity
-
-This chart allows you to set your custom affinity using the `hub.affinity` and `proxy.affinity` parameters. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
-
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `hub.podAffinityPreset`, `hub.podAntiAffinityPreset`, or `hub.nodeAffinityPreset` parameters for the hub and `proxy.podAffinityPreset`, `proxy.podAntiAffinityPreset`, or `ploxy.nodeAffinityPreset` parameters for the proxy.
-
-### Deploying extra resources
+### Deploy extra resources
 
 There are cases where you may want to deploy extra objects, such a ConfigMap containing your app's configuration or some extra deployment with a micro service used by your app. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter.
 
 ## Troubleshooting
 
-Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
 

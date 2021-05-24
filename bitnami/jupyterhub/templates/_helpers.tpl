@@ -82,6 +82,29 @@ Create the name of the service account to use
 {{- end -}}
 
 {{/*
+Return  the proper Storage Class (adapted to the Jupyterhub configuration format)
+{{ include "jupyterhub.storage.class" ( dict "persistence" .Values.path.to.the.persistence "global" $) }}
+*/}}
+{{- define "jupyterhub.storage.class" -}}
+
+{{- $storageClass := .persistence.storageClass -}}
+{{- if .global -}}
+    {{- if .global.storageClass -}}
+        {{- $storageClass = .global.storageClass -}}
+    {{- end -}}
+{{- end -}}
+
+{{- if $storageClass -}}
+  {{- if (eq "-" $storageClass) -}}
+      {{- printf "storageClass: \"\"" -}}
+  {{- else }}
+      {{- printf "storageClass: %s" $storageClass -}}
+  {{- end -}}
+{{- end -}}
+
+{{- end -}}
+
+{{/*
 Create a default fully qualified postgresql name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}

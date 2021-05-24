@@ -12,6 +12,9 @@ metadata:
     {{- if .Values.metrics.serviceMonitor.additionalLabels }}
     {{- include "common.tplvalues.render" (dict "value" .Values.metrics.serviceMonitor.additionalLabels "context" $) | nindent 4 }}
     {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   endpoints:
     - port: metrics
@@ -26,6 +29,9 @@ spec:
       {{- end }}
       {{- if .Values.metrics.serviceMonitor.relabellings }}
       metricRelabelings: {{- toYaml .Values.metrics.serviceMonitor.relabellings | nindent 6 }}
+      {{- end }}
+      {{- if .Values.metrics.serviceMonitor.path }}
+      path: {{ .Values.metrics.serviceMonitor.path }}
       {{- end }}
   namespaceSelector:
     matchNames:

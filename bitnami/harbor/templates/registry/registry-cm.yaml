@@ -185,14 +185,6 @@ data:
             ipfilteredby: {{ .Values.registry.middleware.cloudFront.ipfilteredby }}
     {{- end }}
     {{- end }}
-    notifications:
-      endpoints:
-        - name: harbor
-          disabled: false
-          url: http://{{ template "harbor.core" . }}/service/notifications
-          timeout: 3000ms
-          threshold: 5
-          backoff: 1s
   ctl-config.yml: |+
     ---
     {{- if .Values.internalTLS.enabled }}

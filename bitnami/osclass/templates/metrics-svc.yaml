@@ -11,19 +11,22 @@ metadata:
     {{- end }}
   {{- if or .Values.metrics.service.annotations .Values.commonAnnotations }}
   annotations:
-    {{- if .Values.metrics.service.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.service.annotations "context" $ ) | nindent 4 }}
-    {{- end }}
     {{- if .Values.commonAnnotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
+    {{- if .Values.metrics.service.annotations }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.metrics.service.annotations "context" $) | nindent 4 }}
+    {{- end }}
   {{- end }}
 spec:
-  type: ClusterIP
+  type: {{ .Values.metrics.service.type }}
+  {{ if and (eq .Values.metrics.service.type "LoadBalancer") .Values.metrics.service.loadBalancerIP }}
+  loadBalancerIP: {{ .Values.metrics.service.loadBalancerIP }}
+  {{- end }}
   ports:
-    - name: metrics
-      port: {{ .Values.metrics.service.port }}
-      protocol: TCP
+    - port: {{ .Values.metrics.service.port }}
       targetPort: metrics
-  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+      protocol: TCP
+      name: metrics
+  selector: {{- include "common.labels.matchLabels" $ | nindent 4 }}
 {{- end }}
