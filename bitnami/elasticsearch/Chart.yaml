@@ -25,4 +25,4 @@ name: elasticsearch
 sources:
   - https://github.com/bitnami/bitnami-docker-elasticsearch
   - https://www.elastic.co/products/elasticsearch
-version: 15.1.7
+version: 15.2.0
