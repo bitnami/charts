@@ -4,9 +4,9 @@ dependencies:
   version: 1.5.2
 - name: mariadb
   repository: https://charts.bitnami.com/bitnami
-  version: 9.3.11
+  version: 9.3.12
 - name: elasticsearch
   repository: https://charts.bitnami.com/bitnami
-  version: 15.1.6
-digest: sha256:433ec575cd7b8724a796fb137a406224d5238ff82796d36fd5633659eebdd9cb
-generated: "2021-05-22T09:35:28.866219308Z"
+  version: 15.1.7
+digest: sha256:ea2531a003e05c4faa0be59f5b524a920522be7a892858fbb7f8cc45e0c50af2
+generated: "2021-05-23T15:40:46.755915146Z"
