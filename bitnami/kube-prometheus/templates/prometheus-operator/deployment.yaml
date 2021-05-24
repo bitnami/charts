@@ -70,18 +70,18 @@ spec:
             - --prometheus-config-reloader=$(PROMETHEUS_CONFIG_RELOADER)
             {{- if .Values.operator.configReloaderResources.requests }}
               {{- if .Values.operator.configReloaderResources.requests.cpu }}
-                - --config-reloader-cpu-request={{ .Values.operator.configReloaderResources.requests.cpu }}
+            - --config-reloader-cpu-request={{ .Values.operator.configReloaderResources.requests.cpu }}
               {{- end }}
               {{- if .Values.operator.configReloaderResources.requests.memory }}
-                - --config-reloader-memory-request={{ .Values.operator.configReloaderResources.requests.memory }}
+            - --config-reloader-memory-request={{ .Values.operator.configReloaderResources.requests.memory }}
               {{- end }}
             {{- end }}
             {{- if .Values.operator.configReloaderResources.limits }}
               {{- if .Values.operator.configReloaderResources.limits.cpu }}
-                - --config-reloader-cpu-limit={{ .Values.operator.configReloaderResources.limits.cpu }}
+            - --config-reloader-cpu-limit={{ .Values.operator.configReloaderResources.limits.cpu }}
               {{- end }}
               {{- if .Values.operator.configReloaderResources.limits.memory }}
-                - --config-reloader-memory-limit={{ .Values.operator.configReloaderResources.limits.memory }}
+            - --config-reloader-memory-limit={{ .Values.operator.configReloaderResources.limits.memory }}
               {{- end }}
             {{- end }}
           ports:
