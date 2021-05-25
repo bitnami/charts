@@ -455,6 +455,10 @@ envoy:
     # The name of the ServiceAccount to use.  If not set and create is
     # true, a name is generated using the fullname template
     name: ''
+    ## Automount API credentials for a service account.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/#use-the-default-service-account-to-access-the-api-server
+    ##
+    automountServiceAccountToken: false
 
   livenessProbe:
     enabled: true
