@@ -4,6 +4,6 @@ dependencies:
   version: 1.5.2
 - name: mariadb
   repository: https://charts.bitnami.com/bitnami
-  version: 9.3.11
-digest: sha256:53c9b6f4a130eb22631136bbb866da3df053c523112b4ceb95fbb121c12db34e
-generated: "2021-05-22T14:53:49.539525863Z"
+  version: 9.3.12
+digest: sha256:d9dbe71a05c854049d2b5baf753b162fd711bd5b88acb5e123ce08280119d373
+generated: "2021-05-23T21:53:24.810162537Z"
