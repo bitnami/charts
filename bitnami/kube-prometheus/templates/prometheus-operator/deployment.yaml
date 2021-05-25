@@ -21,7 +21,7 @@ spec:
       schedulerName: {{ .Values.operator.schedulerName | quote }}
       {{- end }}
       {{- if .Values.operator.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- omit .Values.operator.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       {{- if .Values.operator.priorityClassName }}
       priorityClassName: {{ .Values.operator.priorityClassName }}

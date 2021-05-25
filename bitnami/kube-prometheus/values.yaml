@@ -1043,13 +1043,25 @@ alertmanager:
     ## If not set and create is true, a name is generated using the kube-prometheus.alertmanager.fullname template
     # name:
 
-  ## SecurityContext configuration
+  ## Prometheus Alertmanager pods' Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ##
-  securityContext:
+  podSecurityContext:
     enabled: true
     runAsUser: 1001
     fsGroup: 1001
 
+  ## Prometheus Alertmanager container's securityContext
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ##
+  containerSecurityContext:
+    enabled: true
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    runAsNonRoot: true
+    capabilities:
+      drop:
+        - ALL
   ## Configure pod disruption budgets for Alertmanager
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/#specifying-a-poddisruptionbudget
   ##

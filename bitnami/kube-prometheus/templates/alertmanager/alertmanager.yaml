@@ -95,21 +95,28 @@ spec:
 {{- include "kube-prometheus.imagePullSecrets" . | indent 2 }}
   {{- if or .Values.alertmanager.containers .Values.alertmanager.containerSecurityContext.enabled .Values.operator.prometheusConfigReloader.containerSecurityContext.enabled }}
   containers:
-    {{- if .Values.alertmanager.containerSecurityContext.enabled }}
+    {{- if and .Values.alertmanager.containerSecurityContext.enabled (not .Values.alertmanager.containers) }}
     ## This monkey patching is needed until the securityContexts are
     ## directly patchable via the CRD.
-    - name: prometheus
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/issues/3947
+    ## currently implemented with strategic merge
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/user-guides/strategic-merge-patch.md
+    - name: alertmanager
       securityContext: {{- omit .Values.alertmanager.containerSecurityContext "enabled" | toYaml | nindent 8 }}
     {{- end }}
-    {{- if .Values.operator.prometheusConfigReloader.containerSecurityContext.enabled }}
+    {{- if and .Values.operator.prometheusConfigReloader.containerSecurityContext.enabled (not .Values.alertmanager.containers) }}
     ## This monkey patching is needed until the securityContexts are
     ## directly patchable via the CRD.
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/issues/3947
+    ## currently implemented with strategic merge
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/user-guides/strategic-merge-patch.md
     - name: config-reloader
       securityContext: {{- omit .Values.operator.prometheusConfigReloader.containerSecurityContext "enabled" | toYaml | nindent 8 }}
     {{- end }}
     {{- if .Values.alertmanager.containers }}
     {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.containers "context" $) | nindent 4 }}
     {{- end }}
+  {{- end }}
   {{- if .Values.alertmanager.priorityClassName }}
   priorityClassName: {{ .Values.alertmanager.priorityClassName }}
   {{- end }}

@@ -249,15 +249,21 @@ spec:
       # yamllint enable rule:indentation
       {{- end }}
     {{- end }}
-    {{- if .Values.prometheus.containerSecurityContext.enabled }}
+    {{- if and .Values.prometheus.containerSecurityContext.enabled (not .Values.prometheus.containers) }}
     ## This monkey patching is needed until the securityContexts are
     ## directly patchable via the CRD.
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/issues/3947
+    ## currently implemented with strategic merge
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/user-guides/strategic-merge-patch.md
     - name: prometheus
       securityContext: {{- omit .Values.prometheus.containerSecurityContext "enabled" | toYaml | nindent 8 }}
     {{- end }}
-    {{- if .Values.operator.prometheusConfigReloader.containerSecurityContext.enabled }}
+    {{- if and .Values.operator.prometheusConfigReloader.containerSecurityContext.enabled (not .Values.prometheus.containers) }}
     ## This monkey patching is needed until the securityContexts are
     ## directly patchable via the CRD.
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/issues/3947
+    ## currently implemented with strategic merge
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/user-guides/strategic-merge-patch.md
     - name: config-reloader
       securityContext: {{- omit .Values.operator.prometheusConfigReloader.containerSecurityContext "enabled" | toYaml | nindent 8 }}
     {{- end }}
