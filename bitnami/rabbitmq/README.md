@@ -55,12 +55,13 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 
 ### Common parameters
 
-| Parameter          | Description                                                          | Default         |
-|--------------------|----------------------------------------------------------------------|-----------------|
-| `nameOverride`     | String to partially override rabbitmq.fullname                       | `nil`           |
-| `fullnameOverride` | String to fully override rabbitmq.fullname                           | `nil`           |
-| `clusterDomain`    | Default Kubernetes cluster domain                                    | `cluster.local` |
-| `kubeVersion`      | Force target Kubernetes version (using Helm capabilities if not set) | `nil`           |
+| Parameter           | Description                                                          | Default                        |
+|---------------------|----------------------------------------------------------------------|--------------------------------|
+| `nameOverride`      | String to partially override rabbitmq.fullname                       | `nil`                          |
+| `fullnameOverride`  | String to fully override rabbitmq.fullname                           | `nil`                          |
+| `clusterDomain`     | Default Kubernetes cluster domain                                    | `cluster.local`                |
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set) | `nil`                          |
+| `commonAnnotations` | Annotations to add to all deployed objects                           | `{}` (evaluated as a template) |
 
 ### RabbitMQ parameters
 

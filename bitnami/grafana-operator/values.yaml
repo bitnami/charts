@@ -53,7 +53,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/grafana-operator
-    tag: 3.10.0-debian-10-r0
+    tag: 3.10.1-debian-10-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## Ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -102,7 +102,7 @@ operator:
     enabled: true
     runAsUser: 1001
     runAsGroup: 1001
-    readOnlyRootFilesystem: true
+    readOnlyRootFilesystem: false
     allowPrivilegeEscalation: false
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
@@ -213,7 +213,7 @@ grafana:
   image:
     registry: docker.io
     repository: bitnami/grafana
-    tag: 7.5.4-debian-10-r5
+    tag: 7.5.6-debian-10-r2
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -239,6 +239,7 @@ grafana:
     enabled: true
     runAsUser: 1001
     runAsGroup: 1001
+    fsGroup: 1001
     allowPrivilegeEscalation: false
 
   ## Grafana containers' resource requests and limits
@@ -471,7 +472,7 @@ grafanaPluginInit:
   image:
     registry: docker.io
     repository: bitnami/grafana
-    tag: 7.5.4-debian-10-r5
+    tag: 7.5.6-debian-10-r2
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/

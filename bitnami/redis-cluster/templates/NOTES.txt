@@ -1,9 +1,10 @@
 {{- $secretName := include "redis-cluster.secretName" . -}}
+{{- $secretPasswordKey := include "redis-cluster.secretPasswordKey" . -}}
 ** Please be patient while the chart is being deployed **
 
 {{ if .Values.usePassword }}
 To get your password run:
-    {{ include "common.utils.secret.getvalue" (dict "secret" $secretName "field" "redis-password" "context" $) }}
+    {{ include "common.utils.secret.getvalue" (dict "secret" $secretName "field" $secretPasswordKey "context" $) }}
 {{- end }}
 
 {{- if .Values.cluster.externalAccess.enabled }}
@@ -80,7 +81,8 @@ will be able to connect to redis.
 {{- include "redis-cluster.checkRollingTags" . }}
 
 {{- if and .Values.usePassword (not .Values.existingSecret) -}}
-  {{- $requiredPassword := dict "valueKey" "password" "secret" $secretName "field" "redis-password" "context" $ -}}
+
+  {{- $requiredPassword := dict "valueKey" "password" "secret" $secretName "field" $secretPasswordKey "context" $ -}}
   {{- $requiredPasswordError := include "common.validations.values.single.empty" $requiredPassword -}}
 
   {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" (list $requiredPasswordError) "context" $) -}}

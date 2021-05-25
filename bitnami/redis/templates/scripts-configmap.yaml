@@ -19,9 +19,14 @@ data:
     . /opt/bitnami/scripts/liblog.sh
     . /opt/bitnami/scripts/libvalidations.sh
 
-    not_exists_dns_entry() {
-        myip=$(hostname -i)
+    myip=$(hostname -i)
+    
+    # If there are more than one IP, use the first IPv4 address
+    if [[ "$myip" = *" "* ]]; then
+        myip=$(echo $myip | awk '{if ( match($0,/([0-9]+\.){3}[0-9]+/) ) { print substr($0,RSTART,RLENGTH); } }')
+    fi
 
+    not_exists_dns_entry() {
         if [[ -z "$(getent ahosts "$HEADLESS_SERVICE" | grep "^${myip}" )" ]]; then
             warn "$HEADLESS_SERVICE does not contain the IP of this pod: ${myip}"
             return 1
@@ -37,7 +42,7 @@ data:
     retry_while not_exists_dns_entry
 
     export REDIS_REPLICATION_MODE="slave"
-    [[ -z "$(getent ahosts "$HEADLESS_SERVICE" | grep -v "^$(hostname -i) ")" ]] && export REDIS_REPLICATION_MODE="master"
+    [[ -z "$(getent ahosts "$HEADLESS_SERVICE" | grep -v "^${myip}")" ]] && export REDIS_REPLICATION_MODE="master"
 
     {{- if and .Values.replica.containerSecurityContext.runAsUser (eq (.Values.replica.containerSecurityContext.runAsUser | int) 0) }}
     useradd redis
@@ -140,6 +145,13 @@ data:
     . /opt/bitnami/scripts/libvalidations.sh
     . /opt/bitnami/scripts/libfile.sh
 
+    myip=$(hostname -i)
+    
+    # If there are more than one IP, use the first IPv4 address
+    if [[ "$myip" = *" "* ]]; then
+        myip=$(echo $myip | awk '{if ( match($0,/([0-9]+\.)([0-9]+\.)([0-9]+\.)[0-9]+/) ) { print substr($0,RSTART,RLENGTH); } }')
+    fi
+
     sentinel_conf_set() {
         local -r key="${1:?missing key}"
         local value="${2:-}"
@@ -159,8 +171,6 @@ data:
         echo "$1" | openssl sha1 | awk '{print $2}'
     }
     not_exists_dns_entry() {
-        myip=$(hostname -i)
-
         if [[ -z "$(getent ahosts "$HEADLESS_SERVICE" | grep "^${myip}" )" ]]; then
             warn "$HEADLESS_SERVICE does not contain the IP of this pod: ${myip}"
             return 1
@@ -192,12 +202,12 @@ data:
     # Waits for DNS to add this ip to the service DNS entry
     retry_while not_exists_dns_entry
 
-    if [[ -z "$(getent ahosts "$HEADLESS_SERVICE" | grep -v "^$(hostname -i)")" ]]; then
+    if [[ -z "$(getent ahosts "$HEADLESS_SERVICE" | grep -v "^${myip}")" ]]; then
         export REDIS_REPLICATION_MODE="master"
     fi
 
     # Clean sentineles from the current sentinel nodes
-    for node in $( getent ahosts "$HEADLESS_SERVICE" | grep -v "^$(hostname -i)" | cut -f 1 -d ' ' | uniq ); do
+    for node in $( getent ahosts "$HEADLESS_SERVICE" | grep -v "^${myip}" | cut -f 1 -d ' ' | uniq ); do
         info "Cleaning sentinels in sentinel node: $node"
         if is_boolean_yes "$REDIS_SENTINEL_TLS_ENABLED"; then
             redis-cli {{- if .Values.auth.enabled }} -a $REDIS_PASSWORD {{- end }} -h $node -p {{ .Values.sentinel.service.sentinelPort }} --tls --cert ${REDIS_SENTINEL_TLS_CERT_FILE} --key ${REDIS_SENTINEL_TLS_KEY_FILE} --cacert ${REDIS_SENTINEL_TLS_CA_FILE} sentinel reset "*"
@@ -209,7 +219,7 @@ data:
     info "Sentinels clean up done"
 
     if [[ "$REDIS_REPLICATION_MODE" = "master" ]]; then
-        REDIS_MASTER_HOST="$(hostname -i)"
+        REDIS_MASTER_HOST=${myip}
         REDIS_MASTER_PORT_NUMBER="{{ .Values.master.service.port }}"
     else
         if is_boolean_yes "$REDIS_SENTINEL_TLS_ENABLED"; then
@@ -258,7 +268,7 @@ data:
             add_replica "$IP"
         fi
     done
-    add_replica "$(hostname -i)"
+    add_replica "${myip}"
     {{- end }}
 
     {{- if .Values.tls.enabled }}
@@ -293,7 +303,7 @@ data:
     failover_finished() {
       REDIS_SENTINEL_INFO=($(run_sentinel_command get-master-addr-by-name "{{ .Values.sentinel.masterSet }}"))
       REDIS_MASTER_HOST="${REDIS_SENTINEL_INFO[0]}"
-      [[ "$REDIS_MASTER_HOST" != "$(hostname -i)" ]]
+      [[ "$REDIS_MASTER_HOST" != "${myip}" ]]
     }
 
     REDIS_SERVICE="{{ include "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
