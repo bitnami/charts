@@ -120,6 +120,9 @@ controller:
     ## create specifies whether to install Pod Security Policies.
     ##
     create: true
+  
+  ## Set pod priorityClassName
+  # priorityClassName: ""
 
   ## Controller container resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -307,6 +310,9 @@ speaker:
     ##
     create: true
 
+  ## Set pod priorityClassName
+  # priorityClassName: ""
+  
   ## Speaker container resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
