@@ -41,7 +41,7 @@ data:
       echo "$response"
       exit 1
     fi
-
+{{- if not .Values.cluster.externalAccess.enabled }}
     if [ ! -f "$REDIS_STATUS_FILE" ]; then
       response=$(
         timeout -s 3 $1 \
@@ -65,6 +65,7 @@ data:
         touch "$REDIS_STATUS_FILE"
       fi
     fi
+{{- end }}
   ping_liveness_local.sh: |-
     {{- if .Values.usePasswordFile }}
     password_aux=`cat ${REDIS_PASSWORD_FILE}`
