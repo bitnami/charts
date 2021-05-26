@@ -30,9 +30,13 @@ spec:
         {{- if .Values.data.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.data.podLabels "context" $) | nindent 8 }}
         {{- end }}
-      {{- with .Values.data.podAnnotations }}
-      annotations: {{- toYaml . | nindent 8 }}
-      {{- end }}
+      annotations:
+        {{- if and (include "elasticsearch.createTlsSecret" .) (not .Values.security.tls.data.existingSecret) }}
+        checksum/tls: {{ include (print $.Template.BasePath "/tls-secret.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if .Values.data.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.data.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
     spec:
       {{- include "elasticsearch.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.data.affinity }}
@@ -106,6 +110,10 @@ spec:
             runAsUser: {{ .Values.data.securityContext.runAsUser }}
           {{- end }}
           env:
+            - name: MY_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.image.debug | quote }}
             - name: ELASTICSEARCH_CLUSTER_NAME
@@ -128,6 +136,48 @@ spec:
               value: "yes"
             - name: ELASTICSEARCH_NODE_TYPE
               value: "data"
+            - name: ELASTICSEARCH_ADVERTISED_HOSTNAME
+              value: "$(MY_POD_NAME).{{ include "elasticsearch.data.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
+            {{- if .Values.security.enabled }}
+            - name: ELASTICSEARCH_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "elasticsearch.secretName" . }}
+                  key: elasticsearch-password
+            - name: ELASTICSEARCH_SECURITY_ENABLED
+              value: "true"
+            - name: ELASTICSEARCH_REST_SSL_ENABLED
+              value: {{ .Values.security.tls.restEncryption | quote }}
+            {{- if .Values.security.tls.restEncryption }}
+            - name: ELASTICSEARCH_REST_SSL_ENABLED
+              value: {{ .Values.security.tls.restEncryption | quote }}
+            {{- end }}
+            {{- if or (include "elasticsearch.createTlsSecret" .) .Values.security.tls.usePemCerts }}
+            - name: ELASTICSEARCH_SSL_USE_PEM
+              value: "true"
+            {{- if .Values.security.tls.keyPassword }}
+            - name: ELASTICSEARCH_KEY_PASSWORD
+              value: {{ .Values.security.tls.keyPassword | quote }}
+            {{- end }}
+            {{- else }}
+            - name: ELASTICSEARCH_KEYSTORE_LOCATION
+              value: "/opt/bitnami/elasticsearch/config/certs/{{ .Values.security.tls.keystoreFilename }}"
+            - name: ELASTICSEARCH_TRUSTSTORE_LOCATION
+              value: "/opt/bitnami/elasticsearch/config/certs/{{ .Values.security.tls.truststoreFilename }}"
+            {{- if .Values.security.tls.keystorePassword }}
+            - name: ELASTICSEARCH_KEYSTORE_PASSWORD
+              value: {{ .Values.security.tls.keystorePassword | quote }}
+            {{- end }}
+            {{- if .Values.security.tls.truststorePassword }}
+            - name: ELASTICSEARCH_TRUSTSTORE_PASSWORD
+              value: {{ .Values.security.tls.truststorePassword | quote }}
+            {{- end }}
+            {{- end }}
+            - name: ELASTICSEARCH_SSL_VERIFICATION_MODE
+              value: {{ .Values.security.tls.verificationMode | quote }}
+            - name: ELASTICSEARCH_FIPS_MODE_ENABLED
+              value: {{ .Values.security.fipsMode | quote }}
+            {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.extraEnvVars "context" $ ) | nindent 12 }}
             {{- end }}
@@ -191,6 +241,11 @@ spec:
             {{- end }}
             - name: "data"
               mountPath: "/bitnami/elasticsearch/data"
+            {{- if .Values.security.enabled }}
+            - name: elasticsearch-certificates
+              mountPath: /opt/bitnami/elasticsearch/config/certs
+              readOnly: true
+            {{- end }}
             {{- if .Values.extraVolumeMounts }}
             {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
             {{- end }}
@@ -211,6 +266,12 @@ spec:
         - name: "config"
           configMap:
             name: {{ template "common.names.fullname" . }}
+        {{- end }}
+        {{- if .Values.security.enabled }}
+        - name: elasticsearch-certificates
+          secret:
+            secretName: {{ include "elasticsearch.data.tlsSecretName" . }}
+            defaultMode: 256
         {{- end }}
         {{- if .Values.extraVolumes }}
         {{- toYaml .Values.extraVolumes | nindent 8 }}
