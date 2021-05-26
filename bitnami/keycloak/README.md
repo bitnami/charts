@@ -225,7 +225,7 @@ The following tables lists the configurable parameters of the Keycloak chart and
 |-------------------------|-----------------------------------------------------------|--------------------------------------------------|
 | `serviceAccount.create` | Enable the creation of a ServiceAccount for Keycloak pods | `true`                                           |
 | `serviceAccount.name`   | Name of the created ServiceAccount                        | Generated using the `keycloak.fullname` template |
-| `rbac.create`           | Weather to create & use RBAC resources or not             | `false`                                          |
+| `rbac.create`           | Whether to create & use RBAC resources or not             | `false`                                          |
 | `rbac.rules`            | Specifies whether RBAC resources should be created        | `[]`                                             |
 
 ### Other parameters

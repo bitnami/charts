@@ -573,7 +573,9 @@ spec:
         - name: dshm
           emptyDir:
             medium: Memory
-            sizeLimit: 1Gi
+{{- with .Values.shmVolume.sizeLimit }}
+            sizeLimit: {{ . }}
+{{- end }}
         {{- end }}
 {{- if and .Values.persistence.enabled .Values.persistence.existingClaim }}
         - name: data

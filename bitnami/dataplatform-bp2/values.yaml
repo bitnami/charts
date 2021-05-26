@@ -48,6 +48,10 @@ kafka:
                 operator: In
                 values:
                   - kafka
+              - key: app.kubernetes.io/instance
+                operator: In
+                values:
+                  - '{{ .Release.Name }}'    
           topologyKey: "kubernetes.io/hostname"
     podAffinity:
       preferredDuringSchedulingIgnoredDuringExecution:
@@ -59,6 +63,10 @@ kafka:
                   operator: In
                   values:
                     - zookeeper
+                - key: app.kubernetes.io/instance
+                  operator: In
+                  values:
+                    - '{{ .Release.Name }}'    
             topologyKey: "kubernetes.io/hostname"
   ## Prometheus Exporters / Metrics
   ##
@@ -142,6 +150,10 @@ kafka:
                   operator: In
                   values:
                     - zookeeper
+                - key: app.kubernetes.io/instance
+                  operator: In
+                  values:
+                    - '{{ .Release.Name }}'    
             topologyKey: "kubernetes.io/hostname"
   ## This value is only used when zookeeper.enabled is set to false.
   ##
@@ -185,6 +197,10 @@ spark:
                   operator: In
                   values:
                     - worker
+                - key: app.kubernetes.io/instance
+                  operator: In
+                  values:
+                    - '{{ .Release.Name }}'    
             topologyKey: "kubernetes.io/hostname"
   ## Spark worker specific configuration
   ##
@@ -222,6 +238,10 @@ spark:
                   operator: In
                   values:
                     - spark
+                - key: app.kubernetes.io/instance
+                  operator: In
+                  values:
+                    - '{{ .Release.Name }}'    
             topologyKey: "kubernetes.io/hostname"
   ## Metrics configuration
   ##
@@ -282,6 +302,10 @@ elasticsearch:
                   operator: In
                   values:
                     - elasticsearch
+                - key: app.kubernetes.io/instance
+                  operator: In
+                  values:
+                    - '{{ .Release.Name }}'    
             topologyKey: "kubernetes.io/hostname"
 
     ## Elasticsearch master-eligible container's resource requests and limits
@@ -329,6 +353,10 @@ elasticsearch:
                   operator: In
                   values:
                     - elasticsearch
+                - key: app.kubernetes.io/instance
+                  operator: In
+                  values:
+                    - '{{ .Release.Name }}'    
             topologyKey: "kubernetes.io/hostname"
 
     ## Elasticsearch data container's resource requests and limits
@@ -371,6 +399,10 @@ elasticsearch:
                   operator: In
                   values:
                     - elasticsearch
+                - key: app.kubernetes.io/instance
+                  operator: In
+                  values:
+                    - '{{ .Release.Name }}'    
             topologyKey: "kubernetes.io/hostname"
 
     ## Elasticsearch coordinating-only container's resource requests and limits
@@ -441,6 +473,10 @@ logstash:
                 operator: In
                 values:
                   - logstash
+              - key: app.kubernetes.io/instance
+                operator: In
+                values:
+                  - '{{ .Release.Name }}'    
           topologyKey: "kubernetes.io/hostname"
 
   ## Logstash containers' resource requests and limits

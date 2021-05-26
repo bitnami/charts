@@ -76,6 +76,9 @@ spec:
               mountPath: /data
       {{- end }}
       containers:
+        {{- if .Values.ruler.extraContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.ruler.extraContainers  "context" $) | nindent 8 }}
+        {{- end }}         
         - name: ruler
           image: {{ include "thanos.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}

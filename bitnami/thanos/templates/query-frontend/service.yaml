@@ -24,7 +24,7 @@ spec:
   {{- end }}
   ports:
     - port: {{ .Values.queryFrontend.service.http.port }}
-      targetPort: http
+      targetPort: {{ .Values.queryFrontend.service.targetPort | default "http" }}
       protocol: TCP
       name: http
       {{- if (and (or (eq .Values.queryFrontend.service.type "NodePort") (eq .Values.queryFrontend.service.type "LoadBalancer")) .Values.queryFrontend.service.http.nodePort) }}

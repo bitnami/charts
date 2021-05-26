@@ -57,7 +57,7 @@ serviceAccount:
 image:
   registry: docker.io
   repository: bitnami/kube-state-metrics
-  tag: 1.9.8-debian-10-r57
+  tag: 2.0.0-debian-10-r1
 
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -76,11 +76,11 @@ image:
 extraArgs: {}
 
 ## Comma-separated list of namespaces to be enabled. Defaults to all namespaces
-# namespace: ""
+# namespaces: ""
 
-## Collectors to be enabled
+## kube-state-metrics resources to be enabled
 ##
-collectors:
+kubeResources:
   certificatesigningrequests: true
   configmaps: true
   cronjobs: true

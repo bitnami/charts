@@ -55,12 +55,13 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 
 ### Common parameters
 
-| Parameter          | Description                                                          | Default         |
-|--------------------|----------------------------------------------------------------------|-----------------|
-| `nameOverride`     | String to partially override rabbitmq.fullname                       | `nil`           |
-| `fullnameOverride` | String to fully override rabbitmq.fullname                           | `nil`           |
-| `clusterDomain`    | Default Kubernetes cluster domain                                    | `cluster.local` |
-| `kubeVersion`      | Force target Kubernetes version (using Helm capabilities if not set) | `nil`           |
+| Parameter           | Description                                                          | Default                        |
+|---------------------|----------------------------------------------------------------------|--------------------------------|
+| `nameOverride`      | String to partially override rabbitmq.fullname                       | `nil`                          |
+| `fullnameOverride`  | String to fully override rabbitmq.fullname                           | `nil`                          |
+| `clusterDomain`     | Default Kubernetes cluster domain                                    | `cluster.local`                |
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set) | `nil`                          |
+| `commonAnnotations` | Annotations to add to all deployed objects                           | `{}` (evaluated as a template) |
 
 ### RabbitMQ parameters
 
@@ -191,12 +192,12 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `service.annotationsHeadless`      | Headless service annotations different from regular service                       | `{}` (evaluated as a template) |
 | `ingress.enabled`                  | Enable ingress resource for Management console                                    | `false`                        |
 | `ingress.path`                     | Path for the default host                                                         | `/`                            |
-| `ingress.certManager`              | Add annotations for cert-manager                                                  | `false`                        |
 | `ingress.hostname`                 | Default host for the ingress resource                                             | `rabbitmq.local`               |
 | `ingress.pathType`                 | Ingress path type                                                                 | `ImplementationSpecific`       |
 | `ingress.annotations`              | Ingress annotations                                                               | `[]`                           |
 | `ingress.tls`                      | Enable TLS configuration for the hostname defined at `ingress.hostname` parameter | `false`                        |
-| `ingress.existingSecret`           | Existing secret for the Ingress TLS certificate                                   | `nil`                          |
+| `ingress.certManager`              | Add annotations for cert-manager to generate a TLS secret for the ingress record  | `false`                        |
+| `ingress.selfSigned`               | Create a TLS secret for the ingress record using self-signed certificates         | `false`                        |
 | `ingress.extraHosts[0].name`       | Additional hostnames to be covered                                                | `nil`                          |
 | `ingress.extraHosts[0].path`       | Additional hostnames to be covered                                                | `nil`                          |
 | `ingress.extraTls[0].hosts[0]`     | TLS configuration for additional hostnames to be covered                          | `nil`                          |
@@ -226,7 +227,7 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 |-------------------------|-----------------------------------------------------|--------------------------------------------------|
 | `serviceAccount.create` | Enable creation of ServiceAccount for RabbitMQ pods | `true`                                           |
 | `serviceAccount.name`   | Name of the created serviceAccount                  | Generated using the `rabbitmq.fullname` template |
-| `rbac.create`           | Weather to create & use RBAC resources or not       | `true`                                           |
+| `rbac.create`           | Whether to create & use RBAC resources or not       | `true`                                           |
 
 ### Volume Permissions parameters
 
@@ -252,6 +253,7 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `metrics.serviceMonitor.namespace`        | Namespace which Prometheus is running in                                               | `monitoring`                                                 |
 | `metrics.serviceMonitor.interval`         | Interval at which metrics should be scraped                                            | `30s`                                                        |
 | `metrics.serviceMonitor.scrapeTimeout`    | Specify the timeout after which the scrape is ended                                    | `nil`                                                        |
+| `metrics.serviceMonitor.path`             | define the path used by ServiceMonitor to scrap metrics                                | `nil`                                                        |
 | `metrics.serviceMonitor.relabellings`     | Specify Metric Relabellings to add to the scrape endpoint                              | `nil`                                                        |
 | `metrics.serviceMonitor.honorLabels`      | honorLabels chooses the metric's labels on collisions with target labels.              | `false`                                                      |
 | `metrics.serviceMonitor.targetLabels`     | Used to keep given service's labels in  target                                         | `[]`                                                         |

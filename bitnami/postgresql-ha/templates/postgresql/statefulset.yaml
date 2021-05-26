@@ -70,7 +70,7 @@ spec:
       serviceAccountName: {{ default (include "common.names.fullname" . ) .Values.serviceAccount.name}}
       {{- end }}
       initContainers:
-      {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
+      {{- if and .Values.persistence.enabled (or (or (not (empty .Values.postgresql.extendedConf)) (not (empty .Values.postgresql.extendedConfCM)) ) .Values.volumePermissions.enabled) }}
         - name: init-chmod-data
           image: {{ include "postgresql-ha.volumePermissionsImage" . }}
           imagePullPolicy: {{ .Values.volumePermissionsImage.pullPolicy | quote }}
@@ -384,6 +384,9 @@ spec:
             {{- end }}
             - name: DATA_SOURCE_USER
               value: {{ (include "postgresql-ha.postgresqlUsername" .) | quote }}
+            {{- if .Values.metrics.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.metrics.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
           ports:
             - name: metrics
               containerPort: 9187
@@ -429,6 +432,12 @@ spec:
             - name: postgresql-password
               mountPath: /opt/bitnami/postgresql/secrets/
             {{- end }}
+            {{- if .Values.metrics.customMetrics }}
+            - name: custom-metrics
+              mountPath: /conf
+              readOnly: true
+          args: ["--extend.query-path", "/conf/custom-metrics.yaml"]
+            {{- end }}
         {{- end }}
         {{- if .Values.postgresql.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.postgresql.sidecars "context" $) | nindent 8 }}
@@ -436,6 +445,11 @@ spec:
       volumes:
         {{- if .Values.postgresql.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.postgresql.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if and .Values.metrics.enabled .Values.metrics.customMetrics }}
+        - name: custom-metrics
+          configMap:
+            name: {{ include "postgresql.metricsCM" . }}
         {{- end }}
         - name: hooks-scripts
           configMap:

@@ -74,6 +74,7 @@ The following tables list the configurable parameters of the kong chart and thei
 | `image.tag`                              | kong image tag                                                                                                                                | `{TAG_NAME}`                                            |
 | `image.pullPolicy`                       | kong image pull policy                                                                                                                        | `IfNotPresent`                                          |
 | `image.pullSecrets`                      | Specify docker-registry secret names as an array                                                                                              | `[]` (does not add image pull secrets to deployed pods) |
+| `useDaemonset`                           | Use a daemonset instead of a deployment. `replicaCount` will not take effect.                                                                 | `false`                                                 |
 | `replicaCount`                           | Number of replicas of the kong Pod                                                                                                            | `2`                                                     |
 | `updateStrategy`                         | Update strategy for deployment                                                                                                                | `{type: "RollingUpdate"}`                               |
 | `schedulerName`                          | Alternative scheduler                                                                                                                         | `nil`                                                   |
@@ -135,6 +136,7 @@ The following tables list the configurable parameters of the kong chart and thei
 | `service.adminHttpNodePort`      | Port to bind to for NodePort service type (admin HTTP)           | `nil`                          |
 | `service.aminHttpsNodePort`      | Port to bind to for NodePort service type (proxy HTTP)           | `nil`                          |
 | `service.annotations`            | Annotations for kong service                                     | `{}`                           |
+| `service.clusterIP`              | Cluster internal IP of the service                               | `nil`                          |
 | `service.loadBalancerIP`         | loadBalancerIP if kong service type is `LoadBalancer`            | `nil`                          |
 | `ingress.enabled`                | Enable ingress controller resource                               | `false`                        |
 | `ingress.certManager`            | Add annotations for cert-manager                                 | `false`                        |

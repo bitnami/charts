@@ -119,7 +119,7 @@ spec:
             - |
               /bin/bash <<'EOF'
               my_hostname=$(hostname)
-              svc=$(echo -n "$my_hostname" | sed s/-[0-9]*$//)-hidden-headless
+              svc=$(echo -n "$my_hostname" | sed s/-[0-9]*$//)-headless
               cp /certs/CAs/* /certs/
               cat >/certs/openssl.cnf <<EOL
               [req]
@@ -261,6 +261,8 @@ spec:
               value: {{ ternary "yes" "no" .Values.disableSystemLog | quote }}
             - name: MONGODB_DISABLE_JAVASCRIPT
               value: {{ ternary "yes" "no" .Values.disableJavascript | quote }}
+            - name: MONGODB_ENABLE_JOURNAL
+              value: {{ ternary "yes" "no" .Values.enableJournal | quote }}
             - name: MONGODB_ENABLE_IPV6
               value: {{ ternary "yes" "no" .Values.enableIPv6 | quote }}
             - name: MONGODB_ENABLE_DIRECTORY_PER_DB
@@ -476,6 +478,12 @@ spec:
         resources:
           requests:
             storage: {{ .Values.hidden.persistence.size | quote }}
+            {{- if .Values.hidden.persistence.volumeClaimTemplates.requests }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.hidden.persistence.volumeClaimTemplates.requests "context" $) | nindent 12 }}
+            {{- end }}
+        {{- if .Values.hidden.persistence.volumeClaimTemplates.dataSource }}
+        dataSource: {{- include "common.tplvalues.render" (dict "value" .Values.hidden.persistence.volumeClaimTemplates.dataSource "context" $) | nindent 10 }}
+        {{- end }}
         {{- if .Values.hidden.persistence.volumeClaimTemplates.selector }}
         selector: {{- include "common.tplvalues.render" (dict "value" .Values.hidden.persistence.volumeClaimTemplates.selector "context" $) | nindent 10 }}
         {{- end }}

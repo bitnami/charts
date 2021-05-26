@@ -71,7 +71,8 @@ The following table lists the helpers available in the library which are scoped 
 | Helper identifier           | Description                                          | Expected Input                                                                                          |
 |-----------------------------|------------------------------------------------------|---------------------------------------------------------------------------------------------------------|
 | `common.images.image`       | Return the proper and full image name                | `dict "imageRoot" .Values.path.to.the.image "global" $`, see [ImageRoot](#imageroot) for the structure. |
-| `common.images.pullSecrets` | Return the proper Docker Image Registry Secret Names | `dict "images" (list .Values.path.to.the.image1, .Values.path.to.the.image2) "global" .Values.global`   |
+| `common.images.pullSecrets` | Return the proper Docker Image Registry Secret Names (deprecated: use common.images.renderPullSecrets instead) | `dict "images" (list .Values.path.to.the.image1, .Values.path.to.the.image2) "global" .Values.global` |
+| `common.images.renderPullSecrets` | Return the proper Docker Image Registry Secret Names (evaluates values as templates) | `dict "images" (list .Values.path.to.the.image1, .Values.path.to.the.image2) "context" $` |
 
 ### Ingress
 
@@ -170,7 +171,7 @@ pullSecrets:
   type: array
   items:
     type: string
-  description: Optionally specify an array of imagePullSecrets.
+  description: Optionally specify an array of imagePullSecrets (evaluated as templates).
 
 debug:
   type: boolean

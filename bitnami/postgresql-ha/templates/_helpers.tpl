@@ -216,6 +216,13 @@ Also, we can't use a single if because lazy evaluation is not an option
 {{- end -}}
 
 {{/*
+Get the metrics ConfigMap name.
+*/}}
+{{- define "postgresql.metricsCM" -}}
+{{- printf "%s-metrics" (include "common.names.fullname" .) -}}
+{{- end -}}
+
+{{/*
 Return the PostgreSQL database to create
 */}}
 {{- define "postgresql-ha.postgresqlDatabase" -}}
@@ -580,9 +587,7 @@ Compile all warnings into a single message, and call fail.
 {{- define "postgresql-ha.validateValues.nodesHostnames" -}}
 {{- $postgresqlFullname := include "postgresql-ha.postgresql" . }}
 {{- $postgresqlHeadlessServiceName := printf "%s-headless" (include "postgresql-ha.postgresql" .) }}
-{{- $releaseNamespace := .Release.Namespace }}
-{{- $clusterDomain:= .Values.clusterDomain }}
-{{- $nodeHostname := printf "%s-00.%s.%s.svc.%s:1234" $postgresqlFullname $postgresqlHeadlessServiceName $releaseNamespace $clusterDomain }}
+{{- $nodeHostname := printf "%s-00.%s" $postgresqlFullname $postgresqlHeadlessServiceName }}
 {{- if gt (len $nodeHostname) 128 -}}
 postgresql-ha: Nodes hostnames
     PostgreSQL nodes hostnames ({{ $nodeHostname }}) exceeds the characters limit for Pgpool: 128.

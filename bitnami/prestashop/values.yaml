@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/prestashop
-  tag: 1.7.7-3-debian-10-r6
+  tag: 1.7.7-4-debian-10-r19
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -525,7 +525,7 @@ containerSecurityContext:
 ##
 livenessProbe:
   enabled: true
-  path: /login
+  path: /
   initialDelaySeconds: 600
   periodSeconds: 10
   timeoutSeconds: 5
@@ -533,7 +533,7 @@ livenessProbe:
   successThreshold: 1
 readinessProbe:
   enabled: true
-  path: /login
+  path: /
   initialDelaySeconds: 30
   periodSeconds: 5
   timeoutSeconds: 3
@@ -541,7 +541,7 @@ readinessProbe:
   successThreshold: 1
 startupProbe:
   enabled: false
-  path: /login
+  path: /
   initialDelaySeconds: 0
   periodSeconds: 10
   timeoutSeconds: 3
@@ -581,7 +581,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.8.0-debian-10-r345
+    tag: 0.8.0-debian-10-r389
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

@@ -232,7 +232,7 @@ The following tables lists the configurable parameters of the kiam chart and the
 | `server.serviceAccount.create` | Enable the creation of a ServiceAccount for kiam pods | `true`                                       |
 | `agent.serviceAccount.name`    | Name of the created ServiceAccount                    | Generated using the `kiam.fullname` template |
 | `agent.serviceAccount.create`  | Enable the creation of a ServiceAccount for kiam pods | `true`                                       |
-| `rbac.create`                  | Weather to create & use RBAC resources or not         | `false`                                      |
+| `rbac.create`                  | Whether to create & use RBAC resources or not         | `false`                                      |
 
 ### Metrics parameters
 

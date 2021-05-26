@@ -13,7 +13,7 @@
 image:
   registry: docker.io
   repository: bitnami/external-dns
-  tag: 0.7.6-debian-10-r91
+  tag: 0.8.0-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -334,6 +334,14 @@ ovh:
   applicationKey: ""
   applicationSecret: ""
 
+  ## Use an existing secret with following keys:
+  ##  - ovh_consumer_key
+  ##  - ovh_application_key
+  ##  - ovh_application_secret
+  ## This ignores consumerKey, applicationKey & applicationSecret
+  ##
+  # secretName:
+
 ## Scaleway configuration to be set via arguments/env. variables
 ##
 scaleway:
@@ -419,7 +427,7 @@ logLevel: info
 ## - text, json
 ##
 logFormat: text
-## Modify how DNS records are synchronized between sources and providers (options: sync, upsert-only)
+## Modify how DNS records are synchronized between sources and providers (options: create-only, sync, upsert-only)
 ##
 policy: upsert-only
 ## Registry Type. Available types are: txt, noop

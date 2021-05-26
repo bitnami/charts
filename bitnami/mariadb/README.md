@@ -213,7 +213,7 @@ The following table lists the configurable parameters of the MariaDB chart and t
 | `serviceAccount.create`      | Enable the creation of a ServiceAccount for MariaDB pods | `true`                                          |
 | `serviceAccount.name`        | Name of the created ServiceAccount                       | Generated using the `mariadb.fullname` template |
 | `serviceAccount.annotations` | Annotations for MariaDB Service Account                  | `{}` (evaluated as a template)                  |
-| `rbac.create`                | Weather to create & use RBAC resources or not            | `false`                                         |
+| `rbac.create`                | Whether to create & use RBAC resources or not            | `false`                                         |
 
 ### Volume Permissions parameters
 

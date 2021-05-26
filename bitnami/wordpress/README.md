@@ -48,8 +48,6 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## Parameters
 
-The following table lists the configurable parameters of the WordPress chart and their default values per section/component:
-
 ### Global parameters
 
 | Name                      | Description                                     | Value |
@@ -76,7 +74,7 @@ The following table lists the configurable parameters of the WordPress chart and
 | ------------------- | ---------------------------------------------------- | --------------------- |
 | `image.registry`    | WordPress image registry                             | `docker.io`           |
 | `image.repository`  | WordPress image repository                           | `bitnami/wordpress`   |
-| `image.tag`         | WordPress image tag (immutable tags are recommended) | `5.7.0-debian-10-r11` |
+| `image.tag`         | WordPress image tag (immutable tags are recommended) | `5.7.1-debian-10-r11` |
 | `image.pullPolicy`  | WordPress image pull policy                          | `IfNotPresent`        |
 | `image.pullSecrets` | WordPress image pull secrets                         | `[]`                  |
 | `image.debug`       | Enable image debug mode                              | `false`               |
@@ -99,6 +97,10 @@ The following table lists the configurable parameters of the WordPress chart and
 | `wordpressConfiguration`               | The content for your custom wp-config.php file (experimental feature)                     | `nil`              |
 | `existingWordPressConfigurationSecret` | The name of an existing secret with your custom wp-config.php file (experimental feature) | `nil`              |
 | `wordpressConfigureCache`              | Enable W3 Total Cache plugin and configure cache settings                                 | `false`            |
+| `wordpressAutoUpdateLevel`             | Level of auto-updates to allow. Allowed values: `major`, `minor` or `none`.               | `none`             |
+| `wordpressPlugins`                     | Array of plugins to install and activate. Can be specified as `all` or `none`.            | `none`             |
+| `apacheConfiguration`                  | The content for your custom httpd.conf file (advanced feature)                            | `nil`              |
+| `existingApacheConfigurationConfigMap` | The name of an existing secret with your custom wp-config.php file (advanced feature)     | `nil`              |
 | `customPostInitScripts`                | Custom post-init.d user scripts                                                           | `{}`               |
 | `smtpHost`                             | SMTP server host                                                                          | `""`               |
 | `smtpPort`                             | SMTP server port                                                                          | `""`               |
@@ -115,6 +117,15 @@ The following table lists the configurable parameters of the WordPress chart and
 | `extraEnvVars`                         | Array with extra environment variables to add to the WordPress container                  | `[]`               |
 | `extraEnvVarsCM`                       | Name of existing ConfigMap containing extra env vars                                      | `nil`              |
 | `extraEnvVarsSecret`                   | Name of existing Secret containing extra env vars                                         | `nil`              |
+
+### WordPress Multisite Configuration parameters
+
+| Name                            | Description                                                                                                                        | Value              |
+| ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
+| `multisite.enable`              | Whether to enable WordPress Multisite configuration.                                                                               | `false`            |
+| `multisite.host`                | WordPress Multisite hostname/address. This value is mandatory when enabling Multisite mode.                                        | `""`               |
+| `multisite.networkType`         | WordPress Multisite network type to enable. Allowed values: `subfolder`, `subdirectory` or `subdomain`.                            | `subdomain`        |
+| `multisite.enableNipIoRedirect` | Whether to enable IP address redirection to nip.io wildcard DNS. Useful when running on an IP address with subdomain network type. | `false`            |
 
 ### WordPress deployment parameters
 
@@ -139,7 +150,7 @@ The following table lists the configurable parameters of the WordPress chart and
 | `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set                                  | `[]`            |
 | `affinity`                              | Affinity for pod assignment                                                               | `{}`            |
 | `nodeSelector`                          | Node labels for pod assignment                                                            | `{}`            |
-| `tolerations`                           | Tolerations for pod assignment                                                            | `{}`            |
+| `tolerations`                           | Tolerations for pod assignment                                                            | `[]`            |
 | `resources.limits`                      | The resources limits for the WordPress container                                          | `{}`            |
 | `resources.requests`                    | The requested resources for the WordPress container                                       | `{}`            |
 | `containerPorts.http`                   | WordPress HTTP container port                                                             | `8080`          |
@@ -234,7 +245,7 @@ The following table lists the configurable parameters of the WordPress chart and
 | `metrics.enabled`                         | Start a sidecar prometheus exporter to expose metrics                        | `false`                   |
 | `metrics.image.registry`                  | Apache Exporter image registry                                               | `docker.io`               |
 | `metrics.image.repository`                | Apache Exporter image repository                                             | `bitnami/apache-exporter` |
-| `metrics.image.tag`                       | Apache Exporter image tag (immutable tags are recommended)                   | `0.8.0-debian-10-r334`    |
+| `metrics.image.tag`                       | Apache Exporter image tag (immutable tags are recommended)                   | `0.8.0-debian-10-r364`    |
 | `metrics.image.pullPolicy`                | Apache Exporter image pull policy                                            | `IfNotPresent`            |
 | `metrics.image.pullSecrets`               | Apache Exporter image pull secrets                                           | `[]`                      |
 | `metrics.resources.limits`                | The resources limits for the Prometheus exporter container                   | `{}`                      |
@@ -249,30 +260,31 @@ The following table lists the configurable parameters of the WordPress chart and
 | `metrics.serviceMonitor.honorLabels`      | Labels to honor to add to the scrape endpoint                                | `false`                   |
 | `metrics.serviceMonitor.additionalLabels` | Additional custom labels for the ServiceMonitor                              | `{}`                      |
 
+
 ### Database Parameters
 
-| Name                                         | Description                                                               | Value               |
-| -------------------------------------------- | ------------------------------------------------------------------------- | ------------------- |
-| `mariadb.enabled`                            | Deploy a MariaDB server to satisfy the applications database requirements | `true`              |
-| `mariadb.architecture`                       | MariaDB architecture. Allowed values: `standalone` or `replication`       | `standalone`        |
-| `mariadb.auth.rootPassword`                  | MariaDB root password                                                     | `""`                |
-| `mariadb.auth.database`                      | MariaDB custom database                                                   | `bitnami_wordpress` |
-| `mariadb.auth.username`                      | MariaDB custom user name                                                  | `bn_wordpress`      |
-| `mariadb.auth.password`                      | MariaDB custom user password                                              | `""`                |
-| `mariadb.primary.persistence.enabled`        | Enable persistence on MariaDB using PVC(s)                                | `true`              |
-| `mariadb.primary.persistence.storageClass`   | Persistent Volume storage class                                           | `nil`               |
-| `mariadb.primary.accessModes`                | Persistent Volume access modes                                            | `[ReadWriteOnce]`   |
-| `mariadb.primary.persistence.size`           | Persistent Volume size                                                    | `8Gi`               |
-| `externalDatabase.host`                      | External Database server host                                             | `localhost`         |
-| `externalDatabase.port`                      | External Database server port                                             | `3306`              |
-| `externalDatabase.user`                      | External Database username                                                | `bn_wordpress`      |
-| `externalDatabase.password`                  | External Database user password                                           | `""`                |
-| `externalDatabase.database`                  | External Database database name                                           | `bitnami_wordpress` |
-| `externalDatabase.existingSecret`            | The name of an existing secret with database credentials                  | `nil`               |
-| `memcached.enabled`                          | Deploy a Memcached server for caching database queries                    | `false`             |
-| `memcached.service.port`                     | Memcached service port                                                    | `11211`             |
-| `externalCache.host`                         | External cache server host                                                | `localhost`         |
-| `externalCache.port`                         | External cache server port                                                | `11211`             |
+| Name                                       | Description                                                               | Value               |
+| ------------------------------------------ | ------------------------------------------------------------------------- | ------------------- |
+| `mariadb.enabled`                          | Deploy a MariaDB server to satisfy the applications database requirements | `true`              |
+| `mariadb.architecture`                     | MariaDB architecture. Allowed values: `standalone` or `replication`       | `standalone`        |
+| `mariadb.auth.rootPassword`                | MariaDB root password                                                     | `""`                |
+| `mariadb.auth.database`                    | MariaDB custom database                                                   | `bitnami_wordpress` |
+| `mariadb.auth.username`                    | MariaDB custom user name                                                  | `bn_wordpress`      |
+| `mariadb.auth.password`                    | MariaDB custom user password                                              | `""`                |
+| `mariadb.primary.persistence.enabled`      | Enable persistence on MariaDB using PVC(s)                                | `true`              |
+| `mariadb.primary.persistence.storageClass` | Persistent Volume storage class                                           | `nil`               |
+| `mariadb.primary.persistence.accessModes`  | Persistent Volume access modes                                            | `[ReadWriteOnce]`   |
+| `mariadb.primary.persistence.size`         | Persistent Volume size                                                    | `8Gi`               |
+| `externalDatabase.host`                    | External Database server host                                             | `localhost`         |
+| `externalDatabase.port`                    | External Database server port                                             | `3306`              |
+| `externalDatabase.user`                    | External Database username                                                | `bn_wordpress`      |
+| `externalDatabase.password`                | External Database user password                                           | `""`                |
+| `externalDatabase.database`                | External Database database name                                           | `bitnami_wordpress` |
+| `externalDatabase.existingSecret`          | The name of an existing secret with database credentials                  | `nil`               |
+| `memcached.enabled`                        | Deploy a Memcached server for caching database queries                    | `false`             |
+| `memcached.service.port`                   | Memcached service port                                                    | `11211`             |
+| `externalCache.host`                       | External cache server host                                                | `localhost`         |
+| `externalCache.port`                       | External cache server port                                                | `11211`             |
 
 The above parameters map to the env variables defined in [bitnami/wordpress](http://github.com/bitnami/bitnami-docker-wordpress). For more information please refer to the [bitnami/wordpress](http://github.com/bitnami/bitnami-docker-wordpress) image documentation.
 
@@ -399,7 +411,27 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
+## Notable changes
+
+### 11.0.0
+
+The [Bitnami WordPress](https://github.com/bitnami/bitnami-docker-wordpress) image was refactored and now the source code is published in GitHub in the [`rootfs`](https://github.com/bitnami/bitnami-docker-wordpress/tree/master/5/debian-10/rootfs) folder of the container image.
+
+In addition, several new features have been implemented:
+
+- Multisite mode is now supported via `multisite.*` options.
+- Plugins can be installed and activated on the first deployment via the `wordpressPlugins` option.
+- Added support for limiting auto-updates to WordPress core via the `wordpressAutoUpdateLevel` option. In addition, auto-updates have been disabled by default. To update WordPress core, we recommend to swap the container image version for your deployment instead of using the built-in update functionality.
+
+To enable the new features, it is not possible to do it by upgrading an existing deployment. Instead, it is necessary to perform a fresh deploy.
+
 ## Upgrading
+
+### To 11.0.0
+
+The [Bitnami WordPress](https://github.com/bitnami/bitnami-docker-wordpress) image was refactored and now the source code is published in GitHub in the [`rootfs`](https://github.com/bitnami/bitnami-docker-wordpress/tree/master/5/debian-10/rootfs) folder of the container image.
+
+Compatibility is not guaranteed due to the amount of involved changes, however no breaking changes are expected.
 
 ### To 10.0.0
 
