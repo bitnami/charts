@@ -36,4 +36,4 @@ request, mention that information here.-->
 <!-- [Place an '[X]' (no spaces) in all applicable fields. Please remove unrelated fields.] -->
 - [ ] Chart version bumped in `Chart.yaml` according to [semver](http://semver.org/).
 - [ ] Variables are documented in the README.md
-- [ ] Title of the PR starts with chart name (e.g. `[bitnami/chart]`)
+- [ ] Title of the PR starts with chart name (e.g. [bitnami/<name_of_the_chart>])
