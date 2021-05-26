@@ -1302,6 +1302,7 @@ authProxy:
   ##   - --cookie-secure=false
   ##   - --scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/cloud-platform
   ##   - --oidc-issuer-url=https://accounts.google.com # Only needed if provider is oidc
+  ##   - --cookie-refresh=2m
   ##
   additionalFlags: []
   ## @param authProxy.containerPort Auth Proxy HTTP container port
