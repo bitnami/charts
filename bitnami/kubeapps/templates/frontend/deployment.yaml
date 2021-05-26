@@ -128,6 +128,7 @@ spec:
             - --skip-auth-regex=^\/static\/
             - --skip-auth-regex=^\/$
             - --scope=openid email groups
+            - --cookie-refresh=2mn
             {{- range .Values.authProxy.additionalFlags }}
             - {{ . }}
             {{- end }}
