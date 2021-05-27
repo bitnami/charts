@@ -236,7 +236,7 @@ In order to render complete information about the deployment including all the s
 
 ### To 4.0.0
 
-The prefixes for the metrics emitted were changed to have them in sync with individual dashboards of Kafka Spark and Solr on Tanzu Observability platform. 
+This major version updates the prefixes of individual applications metrics in Wavefront Collectors which are fed to Tanzu observability in order to light up the individual dashboards of Kafka, Spark and Solr on Tanzu Observability platform.
 
 ### To 3.0.0
 
