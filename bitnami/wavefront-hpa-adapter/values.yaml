@@ -329,6 +329,11 @@ sidecars: {}
 ##
 adapterMetricPrefix: kubernetes
 
+## Adapter API Timeout
+## @param adapterAPIClientTimeout Adapter API timeout
+##
+adapterAPIClientTimeout: 10s
+
 ## Adapter prefix parameter
 ## @param adapterMetricRelistInterval Adapter metric relist interval
 ##

@@ -84,6 +84,7 @@ spec:
             - --metrics-relist-interval={{ .Values.adapterMetricRelistInterval }}
             - --cert-dir={{ .Values.adapterSSLCertDir }}
             - --secure-port={{ .Values.containerPort }}
+            - --api-client-timeout={{ .Values.adapterAPIClientTimeout }}
             {{- if .Values.adapterRules }}
             - --external-metrics-config=/bitnami/wavefront-hpa-adapter/conf/config.yaml
             {{- end }}
@@ -111,8 +112,7 @@ spec:
               name: https
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
-            httpGet:
-              path: /
+            tcpSocket:
               port: https
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
@@ -124,8 +124,7 @@ spec:
           {{- end }}
           {{- if .Values.readinessProbe.enabled }}
           readinessProbe:
-            httpGet:
-              path: /
+            tcpSocket:
               port: https
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
@@ -158,7 +157,6 @@ spec:
         - name: ssl-cert-dirs
           secret:
             secretName: {{ .Values.adapterSSLCertsSecret }}
-      {{- else }}
       {{- end }}
         - name: temp-vol
           emptyDir: {}
