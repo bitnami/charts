@@ -67,7 +67,7 @@ kafka:
               - key: app.kubernetes.io/instance
                 operator: In
                 values:
-                  - '{{ .Release.Name }}'  
+                  - '{{ .Release.Name }}'
           topologyKey: "kubernetes.io/hostname"
     podAffinity:
       preferredDuringSchedulingIgnoredDuringExecution:
