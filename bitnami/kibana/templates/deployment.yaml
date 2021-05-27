@@ -13,9 +13,13 @@ spec:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- if .Values.podAnnotations }}
-      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
-      {{- end }}
+      annotations:
+        {{- if (include "kibana.createTlsSecret" .) }}
+        checksum/tls: {{ include (print $.Template.BasePath "/tls-secret.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if .Values.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app: kibana
         {{- if .Values.podLabels }}
@@ -82,6 +86,51 @@ spec:
               value: {{ include "kibana.elasticsearch.port" . | quote }}
             - name: KIBANA_FORCE_INITSCRIPTS
               value: {{ .Values.forceInitScripts | quote }}
+            {{- if .Values.tls.enabled }}
+            - name: KIBANA_SERVER_SSL_ENABLED
+              value: {{ .Values.tls.enabled | quote }}
+            {{- if or (include "kibana.createTlsSecret" .) .Values.tls.usePemCerts }}
+            - name: KIBANA_SERVER_SSL_USE_PEM
+              value: "true"
+            {{- if .Values.tls.keyPassword }}
+            - name: KIBANA_SERVER_KEY_PASSWORD
+              value: {{ .Values.tls.keyPassword | quote }}
+            {{- end }}
+            {{- else }}
+            - name: KIBANA_SERVER_KEYSTORE_LOCATION
+              value: "/opt/bitnami/kibana/config/certs/server/{{ .Values.tls.keystoreFilename }}"
+            {{- if .Values.tls.keystorePassword }}
+            - name: KIBANA_SERVER_KEYSTORE_PASSWORD
+              value: {{ .Values.tls.keystorePassword | quote }}
+            {{- end }}
+            {{- end }}
+            {{- end }}
+            {{- if .Values.elasticsearch.security.auth.enabled }}
+            - name: KIBANA_USERNAME
+              value: {{ .Values.elasticsearch.security.auth.kibanaUsername | quote }}
+            - name: KIBANA_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "kibana.elasticsearch.auth.secretName" . }}
+                  key: kibana-password
+            {{- end }}
+            {{- if .Values.elasticsearch.security.tls.enabled }}
+            - name: KIBANA_ELASTICSEARCH_SSL_ENABLED
+              value: "true"
+            - name: KIBANA_ELASTICSEARCH_SSL_VERIFICATION_MODE
+              value: {{ .Values.elasticsearch.security.tls.verificationMode | quote }}
+            {{- if .Values.elasticsearch.security.tls.usePemCerts }}
+            - name: KIBANA_ELASTICSEARCH_SSL_USE_PEM
+              value: "true"
+            {{- else }}
+            - name: KIBANA_ELASTICSEARCH_TRUSTSTORE_LOCATION
+              value: "/opt/bitnami/kibana/config/certs/elasticsearch/{{ .Values.elasticsearch.security.tls.truststoreFilename }}"
+            {{- if .Values.elasticsearch.security.tls.truststorePassword }}
+            - name: KIBANA_ELASTICSEARCH_TRUSTSTORE_PASSWORD
+              value: {{ .Values.elasticsearch.security.tls.truststorePassword | quote }}
+            {{- end }}
+            {{- end }}
+            {{- end }}
           {{- if .Values.extraEnvVars }}
           {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
           {{- end }}
@@ -138,6 +187,16 @@ spec:
               mountPath: /bitnami/kibana
             - name: kibana-config
               mountPath: /bitnami/kibana/conf
+            {{- if .Values.tls.enabled }}
+            - name: kibana-certificates
+              mountPath: /opt/bitnami/kibana/config/certs/server
+              readOnly: true
+            {{- end }}
+            {{- if and .Values.elasticsearch.security.tls.enabled (not (eq .Values.elasticsearch.security.tls.verificationMode "none" )) }}
+            - name: elasticsearch-certificates
+              mountPath: /opt/bitnami/kibana/config/certs/elasticsearch
+              readOnly: true
+            {{- end }}
             {{- if .Values.plugins }}
             - name: plugins-init-scripts
               mountPath: /docker-entrypoint-initdb.d/plugin-install
@@ -172,6 +231,18 @@ spec:
         {{- else }}
           emptyDir: {}
         {{ end }}
+        {{- if .Values.elasticsearch.security.tls.enabled }}
+        - name: kibana-certificates
+          secret:
+            secretName: {{ include "kibana.tlsSecretName" . }}
+            defaultMode: 256
+        {{- end }}
+        {{- if and .Values.elasticsearch.security.tls.enabled (not (eq .Values.elasticsearch.security.tls.verificationMode "none" )) }}
+        - name: elasticsearch-certificates
+          secret:
+            secretName: {{ required "A secret containing the Truststore or CA certificate for Elasticsearch is required" .Values.elasticsearch.security.tls.existingSecret }}
+            defaultMode: 256
+        {{- end }}
         - name: kibana-config
           configMap:
             name: {{ include "kibana.configurationCM" . }}
