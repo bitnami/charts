@@ -99,10 +99,12 @@ spec:
             - --provider={{ .Values.provider }}
             - --registry={{ .Values.registry }}
             - --interval={{ .Values.interval }}
-            {{- if eq .Values.registry "txt" }}
+            {{- if or (ne .Values.registry "aws-sd") .Values.forceTxtOwnerId }}
             {{- if .Values.txtOwnerId }}
             - --txt-owner-id={{ .Values.txtOwnerId }}
             {{- end }}
+            {{- end }}
+            {{- if eq .Values.registry "txt" }}
             {{- if .Values.txtPrefix }}
             - --txt-prefix={{ .Values.txtPrefix }}
             {{- end }}
