@@ -192,21 +192,21 @@ spec:
               value: {{ .Values.cluster.datacenter }}
             - name: CASSANDRA_ENDPOINT_SNITCH
               value: {{ .Values.cluster.endpointSnitch }}
-            {{- if   .Values.tlsEncryptionSecretName }}
+            {{- if (include "cassandra.tlsEncryption" . ) }}
             - name: CASSANDRA_INTERNODE_ENCRYPTION
-              value: {{ .Values.cluster.internodeEncryption | quote }}
+              value: {{ (include "cassandra.internode.tlsEncryption" .) | quote }}
+            {{- if (include "cassandra.createTlsSecret" .) }}
+            - name: CASSANDRA_SSL_CREATE_KEYSTORE
+              value: "true"
+            {{- end }}
+            {{- if (include "cassandra.client.tlsEncryption" .) }}
             - name: CASSANDRA_CLIENT_ENCRYPTION
-              value: {{ .Values.cluster.clientEncryption | quote }}
+              value: "true"
+            {{- end }}
             - name: CASSANDRA_TRUSTSTORE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.tlsEncryptionSecretName }}
-                  key: truststore-password
+              value: {{ .Values.tls.password | quote }}
             - name: CASSANDRA_KEYSTORE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.tlsEncryptionSecretName }}
-                  key: keystore-password
+              value: {{ .Values.tls.password | quote }}
             {{- end }}
             - name: CASSANDRA_RACK
               value: {{ .Values.cluster.rack }}
@@ -335,7 +335,7 @@ spec:
             - name: commitlog
               mountPath: {{ .Values.persistence.commitLogMountPath }}
             {{- end }}
-            {{- if .Values.tlsEncryptionSecretName }}
+            {{- if (include "cassandra.tlsEncryption" . ) }}
             - name: encryption-secrets
               mountPath: {{ .Values.persistence.mountPath }}/secrets
             {{- end }}
@@ -394,15 +394,11 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        {{- if .Values.tlsEncryptionSecretName }}
+        {{- if (include "cassandra.tlsEncryption" . ) }}
         - name: encryption-secrets
           secret:
-            secretName: {{ tpl .Values.tlsEncryptionSecretName $ }}
-            items:
-              - key: keystore
-                path: keystore
-              - key: truststore
-                path: truststore
+            secretName: {{ include "cassandra.tlsSecretName" . }}
+            defaultMode: 256
         {{- end }}
         {{- if .Values.existingConfiguration }}
         - name: configurations
