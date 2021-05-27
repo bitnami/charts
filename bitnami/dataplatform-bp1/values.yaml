@@ -338,7 +338,7 @@ wavefront:
           port: 9308
           path: /metrics
           scheme: http
-          prefix: kube.kafka.
+          prefix: kafka.
 
         ## auto-discover jmx exporter
         ##
@@ -350,7 +350,7 @@ wavefront:
           port: 5556
           path: /metrics
           scheme: http
-          prefix: kube.kafkajmx.
+          prefix: kafkajmx.
 
         ## auto-discover solr
         ##
@@ -362,7 +362,6 @@ wavefront:
           port: 9983
           path: /metrics
           scheme: http
-          prefix: kube.solr.
 
         ## auto-discover spark
         ##
@@ -374,7 +373,7 @@ wavefront:
           port: 8081
           path: /metrics/
           scheme: http
-          prefix: kube.spark.
+          prefix: spark.
 
         ## auto-discover spark
         ##
@@ -386,7 +385,7 @@ wavefront:
           port: 8080
           path: /metrics/
           scheme: http
-          prefix: kube.spark.
+          prefix: spark.
   proxy:
     ## Wavefront Proxy resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
