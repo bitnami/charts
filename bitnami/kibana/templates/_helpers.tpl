@@ -176,3 +176,12 @@ Return the name of secret containing the Elasticsearch auth credentials
   {{- printf "%s" (include "common.names.fullname" .) -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+basePath URL in use by the APIs.
+*/}}
+{{- define "kibana.basePath" -}}
+{{- if  (.Values.configuration.server.rewriteBasePath) }}
+{{- .Values.configuration.server.basePath -}}
+{{- end -}}
+{{- end -}}

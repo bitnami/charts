@@ -434,15 +434,33 @@ policy: upsert-only
 ## ref: https://github.com/kubernetes-sigs/external-dns/blob/master/docs/proposal/registry.md
 ##
 registry: "txt"
-## TXT Registry Identifier
-##
-txtOwnerId: ""
 ## Prefix to create a TXT record with a name following the pattern prefix.<CNAME record> (Mutual exclusive with txt-suffix)
 ##
 # txtPrefix: ""
 ## Suffix to create a TXT record with a name following the pattern <CNAME record>.suffix (Mutual exclusive with txt-prefix)
 ##
 # txtSuffix: ""
+
+## Registry Identifier
+## Currently supported by two registry types: txt and aws-sd.
+## But other registry types might be added in the future.
+##
+txtOwnerId: ""
+
+## This setting added for backward compatibility for
+## customers who already used bitnami/external-dns helm chart
+## to privision 'aws-sd' registry type.
+## Previously bitnami/external-dns helm chart did not pass
+## txtOwnerId value down to the external-dns application
+## so the app itself sets that value to be a string 'default'.
+## If existing customers force the actual txtOwnerId value to be
+## passed properly, their external-dns updates will stop working
+## because the owner's value for exting DNS records in
+## AWS Service Discovery would remain 'default'.
+## NOTE: It is up to the end user to update AWS Service Discovery
+## 'default' values in description fields to make it work with new
+## value passed as txtOwnerId when forceTxtOwnerId=true
+forceTxtOwnerId: false
 
 ## Extra Arguments to passed to external-dns
 ##
