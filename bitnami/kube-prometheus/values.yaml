@@ -970,6 +970,33 @@ prometheus:
       #   cpu: 100m
       #   memory: 128Mi
 
+    ## Configure extra options for liveness and readiness probes
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+    ##
+    livenessProbe:
+      enabled: true
+      httpGet:
+        path: /-/healthy
+        port: web
+        scheme: HTTP
+      initialDelaySeconds: 0
+      periodSeconds: 5
+      timeoutSeconds: 3
+      failureThreshold: 120
+      successThreshold: 1
+
+    readinessProbe:
+      enabled: true
+      httpGet:
+        path: /-/ready
+        port: web
+        scheme: HTTP
+      initialDelaySeconds: 0
+      periodSeconds: 5
+      timeoutSeconds: 3
+      failureThreshold: 120
+      successThreshold: 1
+
     ## Thanos Sidecar Service
     ##
     service:

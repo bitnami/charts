@@ -248,6 +248,12 @@ spec:
       securityContext: {{- omit .Values.prometheus.thanos.containerSecurityContext "enabled" | toYaml | nindent 8 }}
       # yamllint enable rule:indentation
       {{- end }}
+      {{- if .Values.prometheus.thanos.livenessProbe.enabled }}
+      livenessProbe: {{- omit .Values.prometheus.thanos.livenessProbe "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.prometheus.thanos.readinessProbe.enabled }}
+      readinessProbe: {{- omit .Values.prometheus.thanos.readinessProbe "enabled" | toYaml | nindent 8 }}
+      {{- end }}
     {{- end }}
     {{- if or .Values.prometheus.containerSecurityContext.enabled .Values.prometheus.livenessProbe.enabled .Values.prometheus.readinessProbe.enabled }}
     ## This monkey patching is needed until the securityContexts are
