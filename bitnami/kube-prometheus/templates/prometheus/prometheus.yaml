@@ -243,9 +243,9 @@ spec:
           {{- if not (.Values.prometheus.storageSpec.disableMountSubPath | default (not .Values.prometheus.persistence.enabled)) }}
           subPath: prometheus-db
           {{- end }}
-      {{- if .Values.thanos.containerSecurityContext.enabled }}
+      {{- if .Values.prometheus.thanos.containerSecurityContext.enabled }}
       # yamllint disable rule:indentation
-      securityContext: {{- omit .Values.thanos.containerSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- omit .Values.prometheus.thanos.containerSecurityContext "enabled" | toYaml | nindent 8 }}
       # yamllint enable rule:indentation
       {{- end }}
     {{- end }}
