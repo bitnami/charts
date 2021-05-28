@@ -13,6 +13,7 @@ spec:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
   template:
     metadata:
+      {{- if or .Values.podAnnotations (include "kibana.createTlsSecret" .) }}
       annotations:
         {{- if (include "kibana.createTlsSecret" .) }}
         checksum/tls: {{ include (print $.Template.BasePath "/tls-secret.yaml") . | sha256sum }}
@@ -20,6 +21,7 @@ spec:
         {{- if .Values.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
+      {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app: kibana
         {{- if .Values.podLabels }}
