@@ -607,6 +607,7 @@ prometheus:
   ##
   livenessProbe:
     enabled: true
+    initialDelaySeconds: 0
     failureThreshold: 10
     httpGet:
       path: /-/healthy
@@ -618,6 +619,7 @@ prometheus:
 
   readinessProbe:
     enabled: true
+    initialDelaySeconds: 0
     failureThreshold: 10
     httpGet:
       path: /-/ready
@@ -1360,25 +1362,27 @@ alertmanager:
   ##
   livenessProbe:
     enabled: true
-    failureThreshold: 120
     httpGet:
       path: /-/healthy
       port: web
       scheme: HTTP
+    initialDelaySeconds: 0
     periodSeconds: 5
-    successThreshold: 1
     timeoutSeconds: 3
+    failureThreshold: 120
+    successThreshold: 1
 
   readinessProbe:
     enabled: true
-    failureThreshold: 120
     httpGet:
       path: /-/ready
       port: web
       scheme: HTTP
+    initialDelaySeconds: 0
     periodSeconds: 5
-    successThreshold: 1
     timeoutSeconds: 3
+    failureThreshold: 120
+    successThreshold: 1
 
   ## Log level for Alertmanager
   ##
