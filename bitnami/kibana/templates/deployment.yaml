@@ -233,13 +233,13 @@ spec:
         {{- else }}
           emptyDir: {}
         {{ end }}
-        {{- if .Values.elasticsearch.security.tls.enabled }}
+        {{- if .Values.tls.enabled }}
         - name: kibana-certificates
           secret:
             secretName: {{ include "kibana.tlsSecretName" . }}
             defaultMode: 256
         {{- end }}
-        {{- if and .Values.elasticsearch.security.tls.enabled (not (eq .Values.elasticsearch.security.tls.verificationMode "none" )) }}
+        {{- if and .Values.elasticsearch.security.tls.enabled (ne .Values.elasticsearch.security.tls.verificationMode "none" ) }}
         - name: elasticsearch-certificates
           secret:
             secretName: {{ required "A secret containing the Truststore or CA certificate for Elasticsearch is required" .Values.elasticsearch.security.tls.existingSecret }}
