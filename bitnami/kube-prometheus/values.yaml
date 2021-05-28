@@ -977,7 +977,7 @@ prometheus:
       enabled: true
       httpGet:
         path: /-/healthy
-        port: web
+        port: http
         scheme: HTTP
       initialDelaySeconds: 0
       periodSeconds: 5
@@ -989,7 +989,7 @@ prometheus:
       enabled: true
       httpGet:
         path: /-/ready
-        port: web
+        port: http
         scheme: HTTP
       initialDelaySeconds: 0
       periodSeconds: 5
