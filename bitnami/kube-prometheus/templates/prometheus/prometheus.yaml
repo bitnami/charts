@@ -249,23 +249,39 @@ spec:
       # yamllint enable rule:indentation
       {{- end }}
     {{- end }}
-    {{- if and .Values.prometheus.containerSecurityContext.enabled (not .Values.prometheus.containers) }}
+    {{- if or .Values.prometheus.containerSecurityContext.enabled .Values.prometheus.livenessProbe.enabled .Values.prometheus.readinessProbe.enabled }}
     ## This monkey patching is needed until the securityContexts are
     ## directly patchable via the CRD.
     ## ref: https://github.com/prometheus-operator/prometheus-operator/issues/3947
     ## currently implemented with strategic merge
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/user-guides/strategic-merge-patch.md
     - name: prometheus
+      {{- if .Values.prometheus.containerSecurityContext.enabled }}
       securityContext: {{- omit .Values.prometheus.containerSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.prometheus.livenessProbe.enabled }}
+      livenessProbe: {{- omit .Values.prometheus.livenessProbe "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.prometheus.readinessProbe.enabled }}
+      readinessProbe: {{- omit .Values.prometheus.readinessProbe "enabled" | toYaml | nindent 8 }}
+      {{- end }}
     {{- end }}
-    {{- if and .Values.operator.prometheusConfigReloader.containerSecurityContext.enabled (not .Values.prometheus.containers) }}
+    {{- if or .Values.operator.prometheusConfigReloader.containerSecurityContext.enabled .Values.operator.prometheusConfigReloader.livenessProbe.enabled .Values.operator.prometheusConfigReloader.readinessProbe.enabled }}
     ## This monkey patching is needed until the securityContexts are
     ## directly patchable via the CRD.
     ## ref: https://github.com/prometheus-operator/prometheus-operator/issues/3947
     ## currently implemented with strategic merge
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/user-guides/strategic-merge-patch.md
     - name: config-reloader
+      {{- if .Values.operator.prometheusConfigReloader.containerSecurityContext.enabled }}
       securityContext: {{- omit .Values.operator.prometheusConfigReloader.containerSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.operator.prometheusConfigReloader.livenessProbe.enabled }}
+      livenessProbe: {{- omit .Values.operator.prometheusConfigReloader.livenessProbe "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.operator.prometheusConfigReloader.readinessProbe.enabled }}
+      readinessProbe: {{- omit .Values.operator.prometheusConfigReloader.readinessProbe "enabled" | toYaml | nindent 8 }}
+      {{- end }}
     {{- end }}
     {{- if .Values.prometheus.containers }}
     {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.containers "context" $) | nindent 4 }}

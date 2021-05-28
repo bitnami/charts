@@ -218,6 +218,10 @@ operator:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
   ##
   livenessProbe:
+    enabled: true
+    httpGet:
+      path: /metrics
+      port: http
     initialDelaySeconds: 120
     periodSeconds: 10
     timeoutSeconds: 5
@@ -225,6 +229,10 @@ operator:
     successThreshold: 1
 
   readinessProbe:
+    enabled: true
+    httpGet:
+      path: /metrics
+      port: http
     initialDelaySeconds: 30
     periodSeconds: 10
     timeoutSeconds: 5
@@ -288,6 +296,10 @@ operator:
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
     ##
     livenessProbe:
+      enabled: true
+      httpGet:
+        path: /metrics
+        port: http
       initialDelaySeconds: 10
       periodSeconds: 10
       timeoutSeconds: 5
@@ -295,6 +307,10 @@ operator:
       successThreshold: 1
 
     readinessProbe:
+      enabled: true
+      httpGet:
+        path: /metrics
+        port: http
       initialDelaySeconds: 15
       periodSeconds: 20
       timeoutSeconds: 5
@@ -585,6 +601,31 @@ prometheus:
   ## ListenLocal makes the Prometheus server listen on loopback, so that it does not bind against the Pod IP.
   ##
   listenLocal: false
+
+  ## Configure extra options for liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+  ##
+  livenessProbe:
+    enabled: true
+    failureThreshold: 10
+    httpGet:
+      path: /-/healthy
+      port: web
+      scheme: HTTP
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 3
+
+  readinessProbe:
+    enabled: true
+    failureThreshold: 10
+    httpGet:
+      path: /-/ready
+      port: web
+      scheme: HTTP
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 3
 
   ## Enable Prometheus adminitrative API
   ## ref: https://prometheus.io/docs/prometheus/latest/querying/api/#tsdb-admin-apis
@@ -1313,6 +1354,31 @@ alertmanager:
   ## Desired number of Alertmanager nodes
   ##
   replicaCount: 1
+
+  ## Configure extra options for liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+  ##
+  livenessProbe:
+    enabled: true
+    failureThreshold: 120
+    httpGet:
+      path: /-/healthy
+      port: web
+      scheme: HTTP
+    periodSeconds: 5
+    successThreshold: 1
+    timeoutSeconds: 3
+
+  readinessProbe:
+    enabled: true
+    failureThreshold: 120
+    httpGet:
+      path: /-/ready
+      port: web
+      scheme: HTTP
+    periodSeconds: 5
+    successThreshold: 1
+    timeoutSeconds: 3
 
   ## Log level for Alertmanager
   ##

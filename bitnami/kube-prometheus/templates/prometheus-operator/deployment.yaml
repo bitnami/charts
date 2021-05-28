@@ -85,16 +85,12 @@ spec:
             - name: http
               containerPort: 8080
               protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /metrics
-              port: http
-          {{- toYaml .Values.operator.livenessProbe | nindent 12 }}
-          readinessProbe:
-            httpGet:
-              path: /metrics
-              port: http
-          {{- toYaml .Values.operator.readinessProbe | nindent 12 }}
+          {{- if .Values.operator.livenessProbe.enabled }}
+          livenessProbe: {{- omit .Values.operator.livenessProbe "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.operator.readinessProbe.enabled }}
+          readinessProbe: {{- omit .Values.operator.readinessProbe "enabled" | toYaml | nindent 12 }}
+          {{- end }}
           {{- if .Values.operator.resources }}
           resources: {{- toYaml .Values.operator.resources | nindent 12 }}
           {{- end }}
