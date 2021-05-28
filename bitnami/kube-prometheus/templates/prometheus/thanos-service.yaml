@@ -34,6 +34,6 @@ spec:
     {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.thanos.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
   selector:
-    app: prometheus
+    app.kubernetes.io/name: prometheus
     prometheus: {{ template "kube-prometheus.prometheus.fullname" . }}
 {{- end }}

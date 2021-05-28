@@ -8,7 +8,7 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: prometheus
+      app.kubernetes.io/name: prometheus
       prometheus: {{ template "kube-prometheus.prometheus.fullname" . }}
   {{- if .Values.prometheus.podDisruptionBudget.minAvailable }}
   minAvailable: {{ .Values.prometheus.podDisruptionBudget.minAvailable }}
