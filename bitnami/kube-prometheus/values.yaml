@@ -90,7 +90,7 @@ operator:
   containerSecurityContext:
     enabled: true
     allowPrivilegeEscalation: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
 
   ## Prometheus Operator Service
   ##

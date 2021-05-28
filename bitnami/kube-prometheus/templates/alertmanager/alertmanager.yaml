@@ -95,23 +95,39 @@ spec:
 {{- include "kube-prometheus.imagePullSecrets" . | indent 2 }}
   {{- if or .Values.alertmanager.containers .Values.alertmanager.containerSecurityContext.enabled .Values.operator.prometheusConfigReloader.containerSecurityContext.enabled }}
   containers:
-    {{- if and .Values.alertmanager.containerSecurityContext.enabled (not .Values.alertmanager.containers) }}
+    {{- if or .Values.alertmanager.containerSecurityContext.enabled .Values.alertmanager.livenessProbe.enabled .Values.alertmanager.readinessProbe.enabled }}
     ## This monkey patching is needed until the securityContexts are
     ## directly patchable via the CRD.
     ## ref: https://github.com/prometheus-operator/prometheus-operator/issues/3947
     ## currently implemented with strategic merge
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/user-guides/strategic-merge-patch.md
     - name: alertmanager
+      {{- if .Values.alertmanager.containerSecurityContext.enabled }}
       securityContext: {{- omit .Values.alertmanager.containerSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.alertmanager.livenessProbe.enabled }}
+      livenessProbe: {{- omit .Values.alertmanager.livenessProbe "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.alertmanager.readinessProbe.enabled }}
+      readinessProbe: {{- omit .Values.alertmanager.readinessProbe "enabled" | toYaml | nindent 8 }}
+      {{- end }}
     {{- end }}
-    {{- if and .Values.operator.prometheusConfigReloader.containerSecurityContext.enabled (not .Values.alertmanager.containers) }}
+    {{- if or .Values.operator.prometheusConfigReloader.containerSecurityContext.enabled .Values.operator.prometheusConfigReloader.livenessProbe.enabled .Values.operator.prometheusConfigReloader.readinessProbe.enabled }}
     ## This monkey patching is needed until the securityContexts are
     ## directly patchable via the CRD.
     ## ref: https://github.com/prometheus-operator/prometheus-operator/issues/3947
     ## currently implemented with strategic merge
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/user-guides/strategic-merge-patch.md
     - name: config-reloader
+      {{- if .Values.operator.prometheusConfigReloader.containerSecurityContext.enabled }}
       securityContext: {{- omit .Values.operator.prometheusConfigReloader.containerSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.operator.prometheusConfigReloader.livenessProbe.enabled }}
+      livenessProbe: {{- omit .Values.operator.prometheusConfigReloader.livenessProbe "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.operator.prometheusConfigReloader.readinessProbe.enabled }}
+      readinessProbe: {{- omit .Values.operator.prometheusConfigReloader.readinessProbe "enabled" | toYaml | nindent 8 }}
+      {{- end }}
     {{- end }}
     {{- if .Values.alertmanager.containers }}
     {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.containers "context" $) | nindent 4 }}
