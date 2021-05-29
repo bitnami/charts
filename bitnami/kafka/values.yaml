@@ -744,6 +744,11 @@ persistence:
   ## PVC annotations
   ##
   annotations: {}
+  ## selector can be used to match an existing PersistentVolume
+  ## selector:
+  ##   matchLabels:
+  ##     app: my-app
+  selector: {}
   ## Mount point for persistence
   ##
   mountPath: /bitnami/kafka
@@ -776,6 +781,11 @@ logPersistence:
   ## PVC annotations
   ##
   annotations: {}
+  ## selector can be used to match an existing PersistentVolume
+  ## selector:
+  ##   matchLabels:
+  ##     app: my-app
+  selector: {}
   ## Mount path for persistent logs
   ##
   mountPath: /opt/bitnami/kafka/logs
