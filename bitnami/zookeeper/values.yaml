@@ -301,13 +301,25 @@ persistence:
     - ReadWriteOnce
   size: 8Gi
   annotations: {}
+  ## selector can be used to match an existing PersistentVolume
+  ## selector:
+  ##   matchLabels:
+  ##     app: my-app
+  selector: {}
+
   dataLogDir:
-    size: 8Gi
     ## A manually managed Persistent Volume and Claim
     ## If defined, PVC must be created manually before volume will be bound
     ## The value is evaluated as a template
     ##
     # existingClaim:
+
+    size: 8Gi
+    ## selector can be used to match an existing PersistentVolume
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    selector: {}
 
 ## Pod affinity preset
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
