@@ -241,7 +241,8 @@ nodeAffinityPreset:
   ##
   values: []
 
-## @param configuration haproxy configuration
+## @param configuration [string] haproxy configuration
+## Taken from haproxytech/haproxy chart: https://github.com/haproxytech/helm-charts/tree/main/haproxy
 ##
 configuration: |
   global
