@@ -1449,3 +1449,39 @@ hidden:
       ## Set volumeClaimTemplate dataSource
       ##
       dataSource:
+
+## Array with extra yaml to deploy with the chart. Evaluated as a template
+###
+#extraDeploy:
+#
+# This is an example of an extraDeploy feature that deploys a service which always expose the 
+# primary pod in the replia-set, using a sidecar that dynamically tags the pod with 'primary=true'
+#
+#  primary-labeler-sidecar:
+#    enabled: true
+#    service-name: primary-mongodb-svc
+#    externalTrafficPolicy: Cluster
+#    ports:
+#      - name: primary-mongodb-nodeport
+#        nodePort: 30001
+#        port: 30001
+#        protocol: TCP
+#        targetPort: 27017
+#    selector:
+#      primary: "true"
+#      type: NodePort
+#   
+#  sidecars:
+#    - name: primary-mongodb-labeler-sidecar
+#      image: korenlev/k8s-mongo-labeler-sidecar
+#      imagePullPolicy: Always
+#      ports:
+#        - name: portname
+#          containerPort: 80
+#      env:
+#        - name: LABEL_SELECTOR
+#          value:"role=mongo,environment=dev"
+#        - name: NAMESPACE
+#          value: "dev"
+#        - name: DEBUG
+#          value: "true"

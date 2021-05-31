@@ -10,14 +10,14 @@ rules:
       - ""
     resources:
       - services
-{{- if .Values.primary-labeler-sidecar.enabled }}
+{{- if .Values.extraDeploy.primary-labeler-sidecar.enabled }}
       - pods
 {{- end -}}
     verbs:
       - get
       - list
       - watch
-{{- if .Values.primary-labeler-sidecar.enabled }}
+{{- if .Values.extraDeploy.primary-labeler-sidecar.enabled }}
       - update
 {{- end -}}
 {{- if .Values.podSecurityPolicy.create }}
