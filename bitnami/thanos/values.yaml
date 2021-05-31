@@ -2340,7 +2340,9 @@ receive:
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
   securityContext:
-    enabled: false
+    enabled: true
+    fsGroup: 1001
+    runAsUser: 1001
 
   ## Thanos Receive GRPC TLS parameters
   ## ref: https://github.com/thanos-io/thanos/blob/master/docs/components/receive.md#flags
