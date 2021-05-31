@@ -301,10 +301,12 @@ persistence:
     - ReadWriteOnce
   size: 8Gi
   annotations: {}
-  ## selector can be used to match an existing PersistentVolume
+  ## Selector to match an existing PersistentVolume
+  ## E.g.
   ## selector:
   ##   matchLabels:
   ##     app: my-app
+  ##
   selector: {}
 
   dataLogDir:
@@ -315,10 +317,12 @@ persistence:
     # existingClaim:
 
     size: 8Gi
-    ## selector can be used to match an existing PersistentVolume
+    ## Selector to match an existing PersistentVolume
+    ## E.g.
     ## selector:
     ##   matchLabels:
     ##     app: my-app
+    ##
     selector: {}
 
 ## Pod affinity preset
