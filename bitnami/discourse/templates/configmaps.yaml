@@ -10,7 +10,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 data:
-  {{- $port:=.Values.service.port | toString }}
+  {{- $port := .Values.service.port | toString }}
   DISCOURSE_HOST: "{{ include "discourse.host" . }}{{- if ne $port "80" }}:{{ .Values.service.port }}{{ end }}"
   DISCOURSE_SKIP_INSTALL: {{ ternary "yes" "no" .Values.discourse.skipInstall | quote }}
   DISCOURSE_SITE_NAME: {{ .Values.discourse.siteName | quote }}
@@ -30,4 +30,4 @@ data:
   POSTGRESQL_CLIENT_POSTGRES_USER: {{ .Values.externalDatabase.postgresqlPostgresUser | quote }}
   {{- end }}
   POSTGRESQL_CLIENT_CREATE_DATABASE_NAME: {{ template "discourse.databaseName" . }}
-  POSTGRESQL_CLIENT_CREATE_DATABASE_USERNAME: {{ template "discourse.databaseUser" . }}
+  POSTGRESQL_CLIENT_CREATE_DATABASE_EXTENSIONS: "hstore,pg_trgm"

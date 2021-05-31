@@ -82,11 +82,6 @@ spec:
                 secretKeyRef:
                   name: {{ include "discourse.postgresql.secretName" . }}
                   key: postgresql-password
-            - name: POSTGRESQL_CLIENT_CREATE_DATABASE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "discourse.postgresql.secretName" . }}
-                  key: postgresql-password
             - name: POSTGRESQL_CLIENT_POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
