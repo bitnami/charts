@@ -458,6 +458,9 @@ spec:
         {{- if .Values.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
+        {{- if .Values.extraDeploy.primary-labeler-sidecar.enabled }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.extraDeploy.sidecars "context" $) | nindent 8 }}
+        {{- end }}
       volumes:
         {{- if or .Values.initdbScriptsConfigMap .Values.initdbScripts }}
         - name: custom-init-scripts

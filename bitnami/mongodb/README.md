@@ -529,3 +529,12 @@ Use the workaround below to upgrade from versions previous to 5.0.0. The followi
 ```console
 $ kubectl delete statefulset my-release-mongodb-arbiter my-release-mongodb-primary my-release-mongodb-secondary --cascade=false
 ```
+
+### Add extra deployment options
+
+To add extra deployments (useful for advanced features like sidecars), use the `extraDeploy` property.
+# example here for as 'labeler sidecar to find primary pod in replica set'
+```yaml
+extraDeploy:
+  primary-labeler-sidecar:
+    enabled: true
