@@ -150,6 +150,17 @@ spec:
               containerPort: 9200
             - name: transport
               containerPort: 9300
+          {{- if .Values.master.startupProbe.enabled }}
+          startupProbe:
+            initialDelaySeconds: {{ .Values.master.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.master.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.master.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.master.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.master.startupProbe.failureThreshold }}
+            httpGet:
+              path: /_cluster/health?local=true
+              port: 9200
+          {{- end }}
           {{- if .Values.master.livenessProbe.enabled }}
           livenessProbe:
             initialDelaySeconds: {{ .Values.master.livenessProbe.initialDelaySeconds }}
@@ -163,11 +174,11 @@ spec:
           {{- end }}
           {{- if .Values.master.readinessProbe.enabled }}
           readinessProbe:
-            initialDelaySeconds: {{ .Values.master.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.master.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.master.livenessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.master.livenessProbe.successThreshold }}
-            failureThreshold: {{ .Values.master.livenessProbe.failureThreshold }}
+            initialDelaySeconds: {{ .Values.master.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.master.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.master.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.master.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.master.readinessProbe.failureThreshold }}
             httpGet:
               path: /_cluster/health?local=true
               port: 9200

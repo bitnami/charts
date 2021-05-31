@@ -247,7 +247,7 @@ spec:
       {{- if .Values.envoy.initContainers }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.envoy.initContainers "context" $ ) | nindent 8 }}
       {{- end }}
-      automountServiceAccountToken: false
+      automountServiceAccountToken: {{ .Values.envoy.serviceAccount.automountServiceAccountToken }}
       serviceAccountName: {{ include "envoy.envoyServiceAccountName" . }}
       volumes:
         - name: envoy-config

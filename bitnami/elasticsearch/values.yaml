@@ -19,7 +19,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/elasticsearch
-  tag: 7.12.1-debian-10-r2
+  tag: 7.13.0-debian-10-r6
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -48,7 +48,7 @@ sysctlImage:
   enabled: true
   registry: docker.io
   repository: bitnami/bitnami-shell
-  tag: "10"
+  tag: 10-debian-10-r94
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -83,7 +83,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: "10"
+    tag: 10-debian-10-r94
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -285,9 +285,16 @@ master:
     requests:
       cpu: 25m
       memory: 256Mi
-  ## Elasticsearch master-eligible container's liveness and readiness probes
+  ## Elasticsearch master-eligible container's startup, liveness and readiness probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
+  startupProbe:
+    enabled: false
+  #  initialDelaySeconds: 90
+  #  periodSeconds: 10
+  #  timeoutSeconds: 5
+  #  successThreshold: 1
+  #  failureThreshold: 5
   livenessProbe:
     enabled: false
   #  initialDelaySeconds: 90
@@ -480,9 +487,16 @@ coordinating:
     requests:
       cpu: 25m
       memory: 256Mi
-  ## Elasticsearch coordinating-only container's liveness and readiness probes
+  ## Elasticsearch coordinating-only container's startup, liveness and readiness probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
+  startupProbe:
+    enabled: false
+  #  initialDelaySeconds: 90
+  #  periodSeconds: 10
+  #  timeoutSeconds: 5
+  #  successThreshold: 1
+  #  failureThreshold: 5
   livenessProbe:
     enabled: false
   #  initialDelaySeconds: 90
@@ -632,9 +646,16 @@ data:
     requests:
       cpu: 25m
       memory: 2048Mi
-  ## Elasticsearch data container's liveness and readiness probes
+  ## Elasticsearch data container's startup, liveness and readiness probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
+  startupProbe:
+    enabled: false
+  #  initialDelaySeconds: 90
+  #  periodSeconds: 10
+  #  timeoutSeconds: 5
+  #  successThreshold: 1
+  #  failureThreshold: 5
   livenessProbe:
     enabled: false
   #  initialDelaySeconds: 90
@@ -799,9 +820,16 @@ ingest:
     requests:
       cpu: 25m
       memory: 256Mi
-  ## Elasticsearch ingest container's liveness and readiness probes
+  ## Elasticsearch ingest container's startup, liveness and readiness probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
+  startupProbe:
+    enabled: false
+  #  initialDelaySeconds: 90
+  #  periodSeconds: 10
+  #  timeoutSeconds: 5
+  #  successThreshold: 1
+  #  failureThreshold: 5
   livenessProbe:
     enabled: false
   #  initialDelaySeconds: 90
@@ -847,7 +875,7 @@ curator:
   image:
     registry: docker.io
     repository: bitnami/elasticsearch-curator
-    tag: 5.8.4-debian-10-r0
+    tag: 5.8.4-debian-10-r26
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1073,7 +1101,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/elasticsearch-exporter
-    tag: 1.1.0-debian-10-r426
+    tag: 1.1.0-debian-10-r453
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

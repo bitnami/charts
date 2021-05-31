@@ -144,3 +144,12 @@ Check if there are rolling tags in the images
 {{- define "kibana.checkRollingTags" -}}
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- end -}}
+
+{{/*
+basePath URL in use by the APIs.
+*/}}
+{{- define "kibana.basePath" -}}
+{{- if  (.Values.configuration.server.rewriteBasePath) }}
+{{- .Values.configuration.server.basePath -}}
+{{- end -}}
+{{- end -}}
