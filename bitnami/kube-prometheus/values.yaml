@@ -297,9 +297,8 @@ operator:
     ##
     livenessProbe:
       enabled: true
-      httpGet:
-        path: /metrics
-        port: http
+      tcpSocket:
+        port: reloader-web
       initialDelaySeconds: 10
       periodSeconds: 10
       timeoutSeconds: 5
@@ -308,9 +307,8 @@ operator:
 
     readinessProbe:
       enabled: true
-      httpGet:
-        path: /metrics
-        port: http
+      tcpSocket:
+        port: reloader-web
       initialDelaySeconds: 15
       periodSeconds: 20
       timeoutSeconds: 5
