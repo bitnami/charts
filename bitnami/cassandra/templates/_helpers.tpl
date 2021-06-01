@@ -129,9 +129,9 @@ Return true if encryption via TLS for client connections should be configured
 Return true if encryption via TLS for internode communication connections should be configured
 */}}
 {{- define "cassandra.internode.tlsEncryption" -}}
-{{- if (not eq .Values.tls.internodeEncryption "none") -}}
+{{- if (ne .Values.tls.internodeEncryption "none") -}}
     {{- printf "%s" .Values.tls.internodeEncryption -}}
-{{- else if (not eq .Values.cluster.internodeEncryption "none") -}}
+{{- else if (ne .Values.cluster.internodeEncryption "none") -}}
     {{- printf "%s" .Values.cluster.internodeEncryption -}}
 {{- else -}}
     {{- printf "none" -}}
@@ -142,7 +142,7 @@ Return true if encryption via TLS for internode communication connections should
 Return true if encryption via TLS should be configured
 */}}
 {{- define "cassandra.tlsEncryption" -}}
-{{- if or (include "cassandra.internode.tlsEncryption" .) (include "cassandra.client.tlsEncryption" .) -}}
+{{- if or (include "cassandra.client.tlsEncryption" . ) ( ne "none" (include "cassandra.internode.tlsEncryption" . )) -}}
     {{- true -}}
 {{- end -}}
 {{- end -}}
@@ -167,3 +167,16 @@ Return true if a TLS credentials secret object should be created
     {{- true -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Return true if a TLS credentials secret object should be created
+*/}}
+{{- define "cassandra.tlsPasswordsSecret" -}}
+{{- $secretName := coalesce .Values.ssl.passwordsSecretName .Values.tlsEncryptionSecretName -}}
+{{- if $secretName -}}
+    {{- printf "%s" (tpl $secretName $) -}}
+{{- else -}}
+    {{- printf "%s-secret" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
