@@ -498,8 +498,12 @@ spec:
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
-          readinessProbe: {{ toYaml .Values.readinessProbe | nindent 12 }}
-          livenessProbe: {{ toYaml .Values.livenessProbe | nindent 12 }}
+          {{- if .Values.readinessProbe.enabled }}
+          readinessProbe: {{- omit .Values.readinessProbe "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.livenessProbe.enabled }}
+          livenessProbe: {{- omit .Values.livenessProbe "enabled" | toYaml | nindent 12 }}
+          {{- end }}
           {{- if .Values.securityContext }}
           securityContext: {{ toYaml .Values.securityContext | nindent 12 }}
           {{- end }}
