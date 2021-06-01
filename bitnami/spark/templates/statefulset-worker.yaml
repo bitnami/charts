@@ -84,7 +84,7 @@ spec:
             - name: config
               mountPath: '/opt/bitnami/spark/conf/'
             {{- end }}
-            {{- if .Values.security.certificatesSecretName }}
+            {{- if or .Values.security.certificatesSecretName .Values.security.autoGenerateCerts }}
             - name: certs
               mountPath: '/opt/bitnami/spark/conf/certs'
               readOnly: true
@@ -173,6 +173,10 @@ spec:
             - name: SPARK_SSL_PROTOCOL
               value: {{ .Values.security.ssl.protocol | quote }}
             {{- end }}
+            {{- if .Values.security.autoGenerateCerts }}
+            - name: SPARK_CREATE_KEYSTORE
+              value: "true"
+            {{- end }}
             {{- if .Values.worker.extraEnvVars }}
             {{- toYaml .Values.worker.extraEnvVars | nindent 12 }}
             {{- end }}
@@ -207,10 +211,10 @@ spec:
           configMap:
             name: {{ .Values.worker.configurationConfigMap }}
         {{- end }}
-        {{- if .Values.security.certificatesSecretName }}
+        {{- if or .Values.security.certificatesSecretName .Values.security.autoGenerateCerts }}
         - name: certs
           secret:
-            secretName: {{ .Values.security.certificatesSecretName }}
+            secretName: {{ include "spark.tlsSecretName" . }}
         {{- end }}
         {{- if .Values.worker.extraVolumes }}
         {{- tpl (toYaml .Values.worker.extraVolumes) $ | nindent 8 }}

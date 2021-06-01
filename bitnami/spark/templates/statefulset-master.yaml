@@ -78,7 +78,7 @@ spec:
             - name: config
               mountPath: '/opt/bitnami/spark/conf/'
             {{- end }}
-            {{- if .Values.security.certificatesSecretName }}
+            {{- if  or .Values.security.certificatesSecretName .Values.security.autoGenerateCerts }}
             - name: certs
               mountPath: '/opt/bitnami/spark/conf/certs'
               readOnly: true
@@ -151,6 +151,10 @@ spec:
             - name: SPARK_SSL_PROTOCOL
               value: {{ .Values.security.ssl.protocol | quote }}
             {{- end }}
+            {{- if .Values.security.autoGenerateCerts }}
+            - name: SPARK_CREATE_KEYSTORE
+              value: "true"
+            {{- end }}
             {{- if .Values.master.extraEnvVars }}
             {{- toYaml .Values.master.extraEnvVars | nindent 12 }}
             {{- end }}
@@ -185,7 +189,7 @@ spec:
           configMap:
             name: {{ .Values.master.configurationConfigMap }}
         {{- end }}
-        {{- if .Values.security.certificatesSecretName }}
+        {{- if  or .Values.security.certificatesSecretName .Values.security.autoGenerateCerts }}
         - name: certs
           secret:
             secretName: {{ .Values.security.certificatesSecretName }}
