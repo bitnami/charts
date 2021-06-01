@@ -45,7 +45,7 @@ data:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: {{ include "fluentd.fullname" . }}-aggregator-crt
+  name: {{ include "fluentd.fullname" . }}-agg-crt
   labels: {{- include "fluentd.labels" . | nindent 4 }}
 type: kubernetes.io/tls
 data:
@@ -59,7 +59,7 @@ data:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: {{ include "fluentd.fullname" . }}-forwarder-crt
+  name: {{ include "fluentd.fullname" . }}-fwd-crt
   labels: {{- include "fluentd.labels" . | nindent 4 }}
 type: kubernetes.io/tls
 data:

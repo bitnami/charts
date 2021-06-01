@@ -224,7 +224,7 @@ Get the certificates secret name.
 {{- if .Values.tls.forwarder.existingSecret -}}
     {{- printf "%s" (tpl .Values.tls.forwarder.existingSecret $) -}}
 {{- else -}}
-    {{- printf "%s-forwarder-crt" (include "fluentd.fullname" . ) -}}
+    {{- printf "%s-fwd-crt" (include "fluentd.fullname" . ) -}}
 {{- end -}}
 {{- end -}}
 
@@ -235,7 +235,7 @@ Get the certificates secret name.
 {{- if .Values.tls.aggregator.existingSecret -}}
     {{- printf "%s" (tpl .Values.tls.aggregator.existingSecret $) -}}
 {{- else -}}
-    {{- printf "%s-aggregator-crt" (include "fluentd.fullname" . ) -}}
+    {{- printf "%s-agg-crt" (include "fluentd.fullname" . ) -}}
 {{- end -}}
 {{- end -}}
 
