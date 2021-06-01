@@ -104,7 +104,7 @@ spec:
             - --label=ruler_cluster="{{ .Values.ruler.clusterName }}"
             - --alert.label-drop={{ .Values.ruler.replicaLabel }}
             - --objstore.config-file=/conf/objstore/objstore.yml
-            - --rule-file=/conf/rules/ruler.yml
+            - --rule-file=/conf/rules/*.yml
             {{- range .Values.ruler.queries }}
             - --query={{ . }}
             {{- end }}
