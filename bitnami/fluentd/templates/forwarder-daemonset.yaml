@@ -125,8 +125,13 @@ spec:
               mountPath: /opt/bitnami/fluentd/logs/buffers
             {{- end }}
             {{- if .Values.tls.enabled }}
+            - name: fluentd-forwarder-certificates
+              mountPath: /opt/bitnami/fluentd/certs/out_forward
+              readOnly: true
+            {{- end }}
+            {{- if .Values.mountedTLS.enabled }}
             - name: certs
-              mountPath: /opt/bitnami/fluentd/certs
+              mountPath: {{ .Values.mountedTLS.mountPath }}
             {{- end }}
             - name: varlog
               mountPath: /var/log
@@ -144,16 +149,22 @@ spec:
             {{- toYaml .Values.forwarder.extraVolumes | nindent 8 }}
         {{- end }}
         {{- if .Values.tls.enabled }}
+        - name: fluentd-forwarder-certificates
+          secret:
+            secretName: {{ include "fluentd.forwarder.tlsSecretName" . }}
+            defaultMode: 256
+        {{- end }}
+        {{- if .Values.mountedTLS.enabled }}
         - name: certs
           secret:
-            secretName: {{ template "fluentd.tls.secretName" . }}
+            secretName: {{ template "fluentd.mountedTLS.secretName" . }}
             items:
               - key: tls.crt
                 path: tls.crt
               - key: tls.key
                 path: tls.key
               - key: rootCA.crt
-                path: rootCA.crt  
+                path: rootCA.crt
         {{- end }}
         - name: fluentd-config
           configMap:

@@ -125,8 +125,13 @@ spec:
               mountPath: /opt/bitnami/fluentd/logs/buffers
             {{- end }}
             {{- if .Values.tls.enabled }}
+            - name: fluentd-aggregator-certificates
+              mountPath: /opt/bitnami/fluentd/certs/in_forward
+              readOnly: true
+            {{- end }}
+            {{- if .Values.mountedTLS.enabled }}
             - name: certs
-              mountPath: /opt/bitnami/fluentd/certs
+              mountPath: {{ .Values.mountedTLS.mountPath }}
             {{- end }}
             {{- if .Values.aggregator.extraVolumeMounts }}
             {{- toYaml .Values.aggregator.extraVolumeMounts | nindent 12 }}
@@ -139,9 +144,15 @@ spec:
           {{- toYaml .Values.aggregator.extraVolumes | nindent 8 }}
         {{- end }}
         {{- if .Values.tls.enabled }}
+        - name: fluentd-aggregator-certificates
+          secret:
+            secretName: {{ include "fluentd.aggregator.tlsSecretName" . }}
+            defaultMode: 256
+        {{- end }}
+        {{- if .Values.mountedTLS.enabled }}
         - name: certs
           secret:
-            secretName: {{ template "fluentd.tls.secretName" . }}
+            secretName: {{ template "fluentd.mountedTLS.secretName" . }}
             items:
               - key: tls.crt
                 path: tls.crt

@@ -19,7 +19,7 @@ data:
 ---
 {{- end }}
 {{- end }}
-{{- if and (not .Values.tls.existingSecret) ( .Values.tls.enabled) }}
+{{- if and (not .Values.mountedTLS.existingSecret) ( .Values.mountedTLS.enabled) }}
 apiVersion: v1
 kind: Secret
 metadata:
@@ -27,7 +27,43 @@ metadata:
   labels: {{- include "fluentd.labels" . | nindent 4 }}
 type: kubernetes.io/tls
 data:
-  tls.crt: {{ required "A valid .Values.tls.certificate entry required!" .Values.tls.certificate | b64enc }}
-  tls.key: {{ required "A valid .Values.tls.key entry required!" .Values.tls.key | b64enc }}
-  rootCA.crt: {{ required "A valid .Values.tls.caCertificate entry required!" .Values.tls.caCertificate | b64enc }}
+  tls.crt: {{ required "A valid .Values.mountedTLS.certificate entry required!" .Values.mountedTLS.certificate | b64enc }}
+  tls.key: {{ required "A valid .Values.mountedTLS.key entry required!" .Values.mountedTLS.key | b64enc }}
+  rootCA.crt: {{ required "A valid .Values.mountedTLS.caCertificate entry required!" .Values.mountedTLS.caCertificate | b64enc }}
+{{- end }}
+---
+{{- if (include "fluentd.createTlsSecret" .) }}
+{{- $ca := genCA "fluentd-ca" 365 }}
+{{- $releaseNamespace := .Release.Namespace }}
+{{- $clusterDomain := .Values.clusterDomain }}
+{{- $fullname := include "fluentd.fullname" . }}
+
+{{- $headlessServiceName := printf "%s-headless" ( include "fluentd.fullname" . ) }}
+{{- $aggregatorServiceName := printf "%s-aggregator" ( include "fluentd.fullname" . ) }}
+{{- $altNames := list (printf "*.%s.%s.svc.%s" $headlessServiceName $releaseNamespace $clusterDomain) (printf "%s.%s.svc.%s" $headlessServiceName $releaseNamespace $clusterDomain) (printf "*.%s.%s.svc.%s" $aggregatorServiceName $releaseNamespace $clusterDomain) (printf "%s.%s.svc.%s" $aggregatorServiceName $releaseNamespace $clusterDomain) $fullname }}
+{{- $crt := genSignedCert $fullname nil $altNames 365 $ca }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ include "fluentd.fullname" . }}-aggregator-crt
+  labels: {{- include "fluentd.labels" . | nindent 4 }}
+type: kubernetes.io/tls
+data:
+  ca.crt: {{ $ca.Cert | b64enc | quote }}
+  tls.crt: {{ $crt.Cert | b64enc | quote }}
+  tls.key: {{ $crt.Key | b64enc | quote }}
+---
+{{- $forwarderServiceName := printf "%s-forwarder" ( include "fluentd.fullname" . ) }}
+{{- $altNames := list (printf "*.%s.%s.svc.%s" $forwarderServiceName $releaseNamespace $clusterDomain) (printf "%s.%s.svc.%s" $forwarderServiceName $releaseNamespace $clusterDomain) $fullname }}
+{{- $crt := genSignedCert $fullname nil $altNames 365 $ca }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ include "fluentd.fullname" . }}-forwarder-crt
+  labels: {{- include "fluentd.labels" . | nindent 4 }}
+type: kubernetes.io/tls
+data:
+  ca.crt: {{ $ca.Cert | b64enc | quote }}
+  tls.crt: {{ $crt.Cert | b64enc | quote }}
+  tls.key: {{ $crt.Key | b64enc | quote }}
 {{- end }}
