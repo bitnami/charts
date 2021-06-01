@@ -1191,6 +1191,14 @@ metrics:
     # selector:
     #   prometheus: my-prometheus
 
+    ## Relabel configuration for the metrics.
+    ##
+    # relabelings: []
+
+    # MetricRelabelConfigs to apply to samples before ingestion.
+    ##
+    # metricRelabelings: []
+
 ##
 ## Zookeeper chart configuration
 ##

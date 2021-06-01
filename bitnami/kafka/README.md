@@ -295,6 +295,8 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `metrics.serviceMonitor.interval`      | Interval at which metrics should be scraped                                                                                      | `nil`                                                   |
 | `metrics.serviceMonitor.scrapeTimeout` | Timeout after which the scrape is ended                                                                                          | `nil` (Prometheus Operator default value)               |
 | `metrics.serviceMonitor.selector`      | ServiceMonitor selector labels                                                                                                   | `nil` (Prometheus Operator default value)               |
+| `metrics.serviceMonitor.relabelings`   | Relabel configuration for the metrics | `[]` |
+| `metrics.serviceMonitor.metricRelabelings` | MetricRelabelConfigs to apply to samples before ingestion | `[]` |
 
 ### Kafka provisioning parameters
 
