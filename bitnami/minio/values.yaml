@@ -135,6 +135,10 @@ tls:
   enabled: false
   ## Name of an existing secret holding the certificate information
   ##
+  existingSecret:
+  ## DEPRECATED. Use `tls.existingSecret` instead.
+  ## Name of an existing secret holding the certificate information
+  ##
   secretName: ""
   ## The mounted path where the secret will be located
   ##  Custom mount path where the certificates will be located, if empty will default to /certs
