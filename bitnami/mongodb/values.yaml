@@ -54,29 +54,29 @@ extraDeploy: []
 
 ## this needs to be uncommented and added to 'extraDeploy' in order to use the replicaset 'mongo-labeler' sidecar
 ## for dynamically discovering the mongodb primary pod
-# - apiVersion: v1
-#   kind: Service
-#   metadata:
-#     name: mongodb-primary
-#     namespace: default
-#     labels:
-#       app.kubernetes.io/component: mongodb
-#       app.kubernetes.io/instance: mongodb
-#       app.kubernetes.io/managed-by: Helm
-#       app.kubernetes.io/name: mongodb
-#   spec:
-#     type: NodePort
-#     externalTrafficPolicy: Cluster
-#     ports:
-#       - name: mongodb
-#         port: 27017
-#         protocol: TCP
-#         targetPort: mongodb
-#     selector:
-#       app.kubernetes.io/component: mongodb
-#       app.kubernetes.io/instance: mongodb
-#       app.kubernetes.io/name: mongodb
-#       primary: "true"
+#- apiVersion: v1
+#  kind: Service
+#  metadata:
+#    name: mongodb-primary
+#    namespace: the-mongodb-namespace
+#    labels:
+#      app.kubernetes.io/component: mongodb
+#      app.kubernetes.io/instance: mongodb
+#      app.kubernetes.io/managed-by: Helm
+#      app.kubernetes.io/name: mongodb
+#  spec:
+#    type: NodePort
+#    externalTrafficPolicy: Cluster
+#    ports:
+#      - name: mongodb
+#        port: 27017
+#        protocol: TCP
+#        targetPort: mongodb
+#   selector:
+#     app.kubernetes.io/component: mongodb
+#     app.kubernetes.io/instance: mongodb
+#     app.kubernetes.io/name: mongodb
+#     primary: "true"
 
 
 ## Common annotations to add to all Mongo resources (sub-charts are not considered). Evaluated as a template
@@ -90,7 +90,7 @@ commonAnnotations: {}
 
 ## MongoDB(R) architecture. Allowed values: standalone or replicaset
 ##
-architecture: standalone
+architecture: replicaset
 
 ## Use StatefulSet instead of Deployment when deploying standalone
 ##
@@ -289,7 +289,7 @@ labels: {}
 ## Number of MongoDB(R) replicas to deploy.
 ## Ignored when mongodb.architecture=standalone
 ##
-replicaCount: 2
+replicaCount: 3
 
 ## StrategyType for MongoDB(R) statefulset
 ## It can be set to RollingUpdate or Recreate by default.
@@ -476,16 +476,16 @@ sidecars: {}
 ## and the suggested rbac example for the pod to be allowed adding labels to mongo replica pods
 ## search 'mongo-labeler' through this file to find the sections that needs to be uncommented to make it work
 
-#  - name: mongo-labeler
-#    image: korenlev/k8s-mongo-labeler-sidecar
-#    imagePullPolicy: Always
-#    env:
-#      - name: LABEL_SELECTOR
-#        value: "app.kubernetes.io/component=mongodb,app.kubernetes.io/instance=mongodb,app.kubernetes.io/name=mongodb"
-#      - name: NAMESPACE
-#        value: "default"
-#      - name: DEBUG
-#        value: "true"
+#- name: mongo-labeler
+#  image: korenlev/k8s-mongo-labeler-sidecar
+#  imagePullPolicy: Always
+#  env:
+#    - name: LABEL_SELECTOR
+#      value: "app.kubernetes.io/component=mongodb,app.kubernetes.io/instance=mongodb,app.kubernetes.io/name=mongodb"
+#    - name: NAMESPACE
+#      value: "the-mongodb-namespace"
+#    - name: DEBUG
+#      value: "true"
 
 
 ## extraVolumes and extraVolumeMounts allows you to mount other volumes on MongoDB(R) pods
@@ -1000,21 +1000,23 @@ rbac:
   ## Specifies whether RBAC rules should be created
   ## binding MongoDB(R) ServiceAccount to a role
   ## that allows MongoDB(R) pods querying the K8s API
-  ##
+  ## this needs to be set to 'true' to enable the mongo-labeler sidecar primary mongodb discovery
   create: false
   role:
     ## Custom rules to create following the role specification
     ## the example below needs to be uncommented to use the 'mongo-labeler' sidecar for dynamic discovery of the primary mongodb pod
-    ## e.g.
-    ## rules:
-    ##   - apiGroups:
-    ##       - ""
-    ##     resources:
-    ##       - pods
-    ##     verbs:
-    ##       - update
-    ##
-    rules: []
+    #
+    #rules:
+    #  - apiGroups:
+    #       - ""
+    #    resources:
+    #      - pods
+    #    verbs:
+    #     - get
+    #     - list
+    #     - watch 
+    #     - update
+    ## rules: []
 
 ## PodSecurityPolicy configuration
 ## Be sure to also set rbac.create to true, otherwise Role and RoleBinding
