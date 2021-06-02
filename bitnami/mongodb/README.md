@@ -535,8 +535,29 @@ $ kubectl delete statefulset my-release-mongodb-arbiter my-release-mongodb-prima
 ### Add extra deployment options
 
 To add extra deployments (useful for advanced features like sidecars), use the `extraDeploy` property.
-# example here for as 'labeler sidecar to find primary pod in replica set'
+# example here for as ' mongo-labeler sidecar to find primary pod in replica set'
 ```yaml
 extraDeploy:
-  primary-labeler-sidecar:
-    enabled: true
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: mongodb-primary
+      namespace: default
+      labels:
+        app.kubernetes.io/component: mongodb
+        app.kubernetes.io/instance: mongodb
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: mongodb
+    spec:
+      type: NodePort
+      externalTrafficPolicy: Cluster
+      ports:
+        - name: mongodb
+          port: 27017
+          protocol: TCP
+          targetPort: mongodb
+      selector:
+        app.kubernetes.io/component: mongodb
+        app.kubernetes.io/instance: mongodb
+        app.kubernetes.io/name: mongodb
+        primary: "true"
