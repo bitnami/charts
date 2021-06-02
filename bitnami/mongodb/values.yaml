@@ -957,6 +957,18 @@ rbac:
   ## that allows MongoDB(R) pods querying the K8s API
   ##
   create: false
+  role:
+    ## Custom rules to create following the role specification
+    ## e.g.
+    ## rules:
+    ##   - apiGroups:
+    ##       - ""
+    ##     resources:
+    ##       - pods
+    ##     verbs:
+    ##       - update
+    ##
+    rules: []
 
 ## PodSecurityPolicy configuration
 ## Be sure to also set rbac.create to true, otherwise Role and RoleBinding
