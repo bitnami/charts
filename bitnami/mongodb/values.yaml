@@ -1,4 +1,5 @@
-## Global Docker image parameters
+##be
+#Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry and imagePullSecrets
 ##
@@ -58,7 +59,7 @@ extraDeploy: []
 #  kind: Service
 #  metadata:
 #    name: mongodb-primary
-#    namespace: the-mongodb-namespace
+#    namespace: the-mongodb-namespace 
 #    labels:
 #      app.kubernetes.io/component: mongodb
 #      app.kubernetes.io/instance: mongodb
@@ -72,11 +73,11 @@ extraDeploy: []
 #        port: 27017
 #        protocol: TCP
 #        targetPort: mongodb
-#   selector:
-#     app.kubernetes.io/component: mongodb
-#     app.kubernetes.io/instance: mongodb
-#     app.kubernetes.io/name: mongodb
-#     primary: "true"
+#    selector:
+#      app.kubernetes.io/component: mongodb
+#      app.kubernetes.io/instance: mongodb
+#      app.kubernetes.io/name: mongodb
+#      primary: "true"
 
 
 ## Common annotations to add to all Mongo resources (sub-charts are not considered). Evaluated as a template
@@ -1008,14 +1009,14 @@ rbac:
     #
     #rules:
     #  - apiGroups:
-    #       - ""
+    #      - ""
     #    resources:
     #      - pods
     #    verbs:
-    #     - get
-    #     - list
-    #     - watch 
-    #     - update
+    #      - get
+    #      - list
+    #      - watch 
+    #      - update
     ## rules: []
 
 ## PodSecurityPolicy configuration
