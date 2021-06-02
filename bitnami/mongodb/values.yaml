@@ -52,6 +52,33 @@ clusterDomain: cluster.local
 ##
 extraDeploy: []
 
+## this needs to be uncommented and added to 'extraDeploy' in order to use the replicaset 'mongo-labeler' sidecar
+## for dynamically discovering the mongodb primary pod
+# - apiVersion: v1
+#   kind: Service
+#   metadata:
+#     name: mongodb-primary
+#     namespace: default
+#     labels:
+#       app.kubernetes.io/component: mongodb
+#       app.kubernetes.io/instance: mongodb
+#       app.kubernetes.io/managed-by: Helm
+#       app.kubernetes.io/name: mongodb
+#   spec:
+#     type: NodePort
+#     externalTrafficPolicy: Cluster
+#     ports:
+#       - name: mongodb
+#         port: 27017
+#         protocol: TCP
+#         targetPort: mongodb
+#     selector:
+#       app.kubernetes.io/component: mongodb
+#       app.kubernetes.io/instance: mongodb
+#       app.kubernetes.io/name: mongodb
+#       primary: "true"
+
+
 ## Common annotations to add to all Mongo resources (sub-charts are not considered). Evaluated as a template
 ##
 commonAnnotations: {}
@@ -442,6 +469,24 @@ initContainers: {}
 ##         containerPort: 1234
 ##
 sidecars: {}
+
+## this is an optional 'mongo-labeler' sidecar container that tracks replica-set for the primary mongodb pod 
+## and labels it dynamically with ' primary: "true" ' in order for an extra-deployed service to always expose 
+## and attach to the primary pod, this needs to be uncommented along with the suggested 'extraDeploy' example
+## and the suggested rbac example for the pod to be allowed adding labels to mongo replica pods
+## search 'mongo-labeler' through this file to find the sections that needs to be uncommented to make it work
+
+#  - name: mongo-labeler
+#    image: korenlev/k8s-mongo-labeler-sidecar
+#    imagePullPolicy: Always
+#    env:
+#      - name: LABEL_SELECTOR
+#        value: "app.kubernetes.io/component=mongodb,app.kubernetes.io/instance=mongodb,app.kubernetes.io/name=mongodb"
+#      - name: NAMESPACE
+#        value: "default"
+#      - name: DEBUG
+#        value: "true"
+
 
 ## extraVolumes and extraVolumeMounts allows you to mount other volumes on MongoDB(R) pods
 ## Examples:
@@ -959,6 +1004,7 @@ rbac:
   create: false
   role:
     ## Custom rules to create following the role specification
+    ## the example below needs to be uncommented to use the 'mongo-labeler' sidecar for dynamic discovery of the primary mongodb pod
     ## e.g.
     ## rules:
     ##   - apiGroups:
@@ -1465,38 +1511,3 @@ hidden:
       ##
       dataSource:
 
-## Array with extra yaml to deploy with the chart. Evaluated as a template
-###
-#extraDeploy:
-#
-# This is an example of an extraDeploy feature that deploys a service which always expose the 
-# primary pod in the replia-set, using a sidecar that dynamically tags the pod with 'primary=true'
-#
-#  primary-labeler-sidecar:
-#    enabled: true
-#    service-name: primary-mongodb-svc
-#    externalTrafficPolicy: Cluster
-#    ports:
-#      - name: primary-mongodb-nodeport
-#        nodePort: 30001
-#        port: 30001
-#        protocol: TCP
-#        targetPort: 27017
-#    selector:
-#      primary: "true"
-#      type: NodePort
-#   
-#  sidecars:
-#    - name: primary-mongodb-labeler-sidecar
-#      image: korenlev/k8s-mongo-labeler-sidecar
-#      imagePullPolicy: Always
-#      ports:
-#        - name: portname
-#          containerPort: 80
-#      env:
-#        - name: LABEL_SELECTOR
-#          value:"role=mongo,environment=dev"
-#        - name: NAMESPACE
-#          value: "dev"
-#        - name: DEBUG
-#          value: "true"
