@@ -90,7 +90,7 @@ commonAnnotations: {}
 
 ## MongoDB(R) architecture. Allowed values: standalone or replicaset
 ##
-architecture: replicaset
+architecture: standalone
 
 ## Use StatefulSet instead of Deployment when deploying standalone
 ##
@@ -289,7 +289,7 @@ labels: {}
 ## Number of MongoDB(R) replicas to deploy.
 ## Ignored when mongodb.architecture=standalone
 ##
-replicaCount: 3
+replicaCount: 2
 
 ## StrategyType for MongoDB(R) statefulset
 ## It can be set to RollingUpdate or Recreate by default.
