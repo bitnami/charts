@@ -117,8 +117,10 @@ The following table lists the configurable parameters of the MySQL chart and the
 | `primary.containerSecurityContext.runAsUser` | User ID for the MySQL primary container                                                                         | `1001`                         |
 | `primary.livenessProbe`                      | Liveness probe configuration for MySQL primary containers                                                       | Check `values.yaml` file       |
 | `primary.readinessProbe`                     | Readiness probe configuration for MySQL primary containers                                                      | Check `values.yaml` file       |
+| `primary.startupProbe`                       | Startup probe configuration for MySQL primary containers                                                        | Check `values.yaml` file       |
 | `primary.customLivenessProbe`                | Override default liveness probe for MySQL primary containers                                                    | `nil`                          |
 | `primary.customReadinessProbe`               | Override default readiness probe for MySQL primary containers                                                   | `nil`                          |
+| `primary.customStartupProbe`                 | Override default startup probe for MySQL primary containers                                                     | `nil`                          |
 | `primary.resources.limits`                   | The resources limits for MySQL primary containers                                                               | `{}`                           |
 | `primary.resources.requests`                 | The requested resources for MySQL primary containers                                                            | `{}`                           |
 | `primary.extraEnvVars`                       | Extra environment variables to be set on MySQL primary containers                                               | `{}`                           |
@@ -174,8 +176,10 @@ The following table lists the configurable parameters of the MySQL chart and the
 | `secondary.containerSecurityContext.runAsUser` | User ID for the MySQL secondary container                                                                           | `1001`                         |
 | `secondary.livenessProbe`                      | Liveness probe configuration for MySQL secondary containers                                                         | Check `values.yaml` file       |
 | `secondary.readinessProbe`                     | Readiness probe configuration for MySQL secondary containers                                                        | Check `values.yaml` file       |
+| `secondary.startupProbe`                       | Startup probe configuration for MySQL secondary containers                                                          | Check `values.yaml` file       |
 | `secondary.customLivenessProbe`                | Override default liveness probe for MySQL secondary containers                                                      | `nil`                          |
 | `secondary.customReadinessProbe`               | Override default readiness probe for MySQL secondary containers                                                     | `nil`                          |
+| `secondary.customStartupProbe`                 | Override default startup probe for MySQL secondary containers                                                       | `nil`                          |
 | `secondary.resources.limits`                   | The resources limits for MySQL secondary containers                                                                 | `{}`                           |
 | `secondary.resources.requests`                 | The requested resources for MySQL secondary containers                                                              | `{}`                           |
 | `secondary.extraEnvVars`                       | Extra environment variables to be set on MySQL secondary containers                                                 | `{}`                           |

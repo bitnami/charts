@@ -48,10 +48,13 @@ image:
 ##
 clusterDomain: cluster.local
 
+## Extra objects to deploy (value evaluated as a template)
+##
+extraDeploy: []
+
 ## Common annotations to add to all Mongo resources (sub-charts are not considered). Evaluated as a template
 ##
 commonAnnotations: {}
-
 
 ## Use an alternate scheduler, e.g. "stork".
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
@@ -954,6 +957,18 @@ rbac:
   ## that allows MongoDB(R) pods querying the K8s API
   ##
   create: false
+  role:
+    ## Custom rules to create following the role specification
+    ## e.g.
+    ## rules:
+    ##   - apiGroups:
+    ##       - ""
+    ##     resources:
+    ##       - pods
+    ##     verbs:
+    ##       - update
+    ##
+    rules: []
 
 ## PodSecurityPolicy configuration
 ## Be sure to also set rbac.create to true, otherwise Role and RoleBinding

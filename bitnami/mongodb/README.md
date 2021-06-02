@@ -76,6 +76,7 @@ The following tables lists the configurable parameters of the MongoDB&reg; chart
 | `nameOverride`      | String to partially override mongodb.fullname                  | `nil`                                                   |
 | `fullnameOverride`  | String to fully override mongodb.fullname                      | `nil`                                                   |
 | `clusterDomain`     | Default Kubernetes cluster domain                              | `cluster.local`                                         |
+| `extraDeploy`       | Array of extra objects to deploy with the release              | `[]` (evaluated as a template)                          |
 | `schedulerName`     | Name of the scheduler (other than default) to dispatch pods    | `nil`                                                   |
 | `image.registry`    | MongoDB&reg; image registry                                    | `docker.io`                                             |
 | `image.repository`  | MongoDB&reg; image name                                        | `bitnami/mongodb`                                       |
@@ -224,6 +225,7 @@ The following tables lists the configurable parameters of the MongoDB&reg; chart
 | `serviceAccount.name`                        | Name of the created serviceAccount                                                                   | Generated using the `mongodb.fullname` template |
 | `serviceAccount.annotations`                 | Additional Service Account annotations                                                               | `{}`                                            |
 | `rbac.create`                                | Whether to create & use RBAC resources or not                                                        | `false`                                         |
+| `rbac.role.rules`                            | Custom rules to create following the role specification                                              | `[]`                                            |
 | `podSecurityPolicy.create`                   | Whether to create & use PSP resource or not (Note: `rbac.create` needs to be `true`)                 | `false`                                         |
 | `podSecurityPolicy.allowPrivilegeEscalation` | Enable privilege escalation                                                                          | `false`                                         |
 | `podSecurityPolicy.privileged`               | Allow privileged                                                                                     | `false`                                         |

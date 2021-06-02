@@ -10,15 +10,12 @@ rules:
       - ""
     resources:
       - services
-{{- if .Values.extraDeploy.primary-labeler-sidecar.enabled }}
-      - pods
-{{- end -}}
     verbs:
       - get
       - list
       - watch
-{{- if .Values.extraDeploy.primary-labeler-sidecar.enabled }}
-      - update
+{{- if .Values.rbac.role.rules }}
+{{- toYaml .Values.rbac.role.rules | nindent 2 }}
 {{- end -}}
 {{- if .Values.podSecurityPolicy.create }}
   - apiGroups: ['{{ template "podSecurityPolicy.apiGroup" . }}']
