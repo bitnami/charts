@@ -225,6 +225,7 @@ The following tables lists the configurable parameters of the MongoDB&reg; chart
 | `serviceAccount.name`                        | Name of the created serviceAccount                                                                   | Generated using the `mongodb.fullname` template |
 | `serviceAccount.annotations`                 | Additional Service Account annotations                                                               | `{}`                                            |
 | `rbac.create`                                | Whether to create & use RBAC resources or not                                                        | `false`                                         |
+| `rbac.role.rules`                            | Custom rules to create following the role specification                                              | `[]`                                            |
 | `podSecurityPolicy.create`                   | Whether to create & use PSP resource or not (Note: `rbac.create` needs to be `true`)                 | `false`                                         |
 | `podSecurityPolicy.allowPrivilegeEscalation` | Enable privilege escalation                                                                          | `false`                                         |
 | `podSecurityPolicy.privileged`               | Allow privileged                                                                                     | `false`                                         |
