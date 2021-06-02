@@ -70,6 +70,7 @@ spec:
           {{- if .Values.securityContext.enabled }}
           securityContext:
             runAsUser: {{ .Values.securityContext.runAsUser }}
+            runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
           {{- end }}
           command:
             {{- if .Values.command }}
