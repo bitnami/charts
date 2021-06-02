@@ -48,10 +48,13 @@ image:
 ##
 clusterDomain: cluster.local
 
+## Extra objects to deploy (value evaluated as a template)
+##
+extraDeploy: []
+
 ## Common annotations to add to all Mongo resources (sub-charts are not considered). Evaluated as a template
 ##
 commonAnnotations: {}
-
 
 ## Use an alternate scheduler, e.g. "stork".
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/

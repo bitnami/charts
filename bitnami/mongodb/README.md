@@ -76,6 +76,7 @@ The following tables lists the configurable parameters of the MongoDB&reg; chart
 | `nameOverride`      | String to partially override mongodb.fullname                  | `nil`                                                   |
 | `fullnameOverride`  | String to fully override mongodb.fullname                      | `nil`                                                   |
 | `clusterDomain`     | Default Kubernetes cluster domain                              | `cluster.local`                                         |
+| `extraDeploy`       | Array of extra objects to deploy with the release              | `[]` (evaluated as a template)                          |
 | `schedulerName`     | Name of the scheduler (other than default) to dispatch pods    | `nil`                                                   |
 | `image.registry`    | MongoDB&reg; image registry                                    | `docker.io`                                             |
 | `image.repository`  | MongoDB&reg; image name                                        | `bitnami/mongodb`                                       |
