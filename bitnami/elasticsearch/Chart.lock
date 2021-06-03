@@ -4,6 +4,6 @@ dependencies:
   version: 1.5.2
 - name: kibana
   repository: https://charts.bitnami.com/bitnami
-  version: 8.1.4
-digest: sha256:3b7992440167d11032a9b00a041b0bf119c0b1d0df49db57c4f5cb831ad47a6c
-generated: "2021-05-30T09:24:08.242231561Z"
+  version: 8.1.5
+digest: sha256:24504e28634df45ee81ed7461dafbadf5696dc8238e42d5ef9028a8522e731a0
+generated: "2021-06-02T23:41:53.746415206Z"
