@@ -531,3 +531,37 @@ Use the workaround below to upgrade from versions previous to 5.0.0. The followi
 ```console
 $ kubectl delete statefulset my-release-mongodb-arbiter my-release-mongodb-primary my-release-mongodb-secondary --cascade=false
 ```
+
+### Add extra deployment options
+
+To add extra deployments (useful for advanced features like sidecars), use the `extraDeploy` property.
+
+In the example below, you can find how to use a example here for a [MongoDB replica set pod labeler sidecar](https://github.com/combor/k8s-mongo-labeler-sidecar) to identify the primary pod and dynamically label it as the primary node:
+
+```yaml
+extraDeploy:
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: mongodb-primary
+      namespace: default
+      labels:
+        app.kubernetes.io/component: mongodb
+        app.kubernetes.io/instance: mongodb
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: mongodb
+    spec:
+      type: NodePort
+      externalTrafficPolicy: Cluster
+      ports:
+        - name: mongodb-primary
+          port: 30001
+          nodePort: 30001
+          protocol: TCP
+          targetPort: mongodb
+      selector:
+        app.kubernetes.io/component: mongodb
+        app.kubernetes.io/instance: mongodb
+        app.kubernetes.io/name: mongodb
+        primary: "true"
+```

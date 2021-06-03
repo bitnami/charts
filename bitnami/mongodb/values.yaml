@@ -49,6 +49,33 @@ image:
 clusterDomain: cluster.local
 
 ## Extra objects to deploy (value evaluated as a template)
+## This needs to be uncommented and added to 'extraDeploy' in order to use the replicaset 'mongo-labeler' sidecar
+## for dynamically discovering the mongodb primary pod
+## suggestion is to use a hard-coded and predictable TCP port for the primary mongodb pod (here is 30001, choose your own)
+## - apiVersion: v1
+##   kind: Service
+##   metadata:
+##     name: mongodb-primary
+##     namespace: the-mongodb-namespace
+##     labels:
+##       app.kubernetes.io/component: mongodb
+##       app.kubernetes.io/instance: mongodb
+##       app.kubernetes.io/managed-by: Helm
+##       app.kubernetes.io/name: mongodb
+##   spec:
+##    type: NodePort
+##     externalTrafficPolicy: Cluster
+##     ports:
+##       - name: mongodb
+##         port: 30001
+##         nodePort: 30001
+##         protocol: TCP
+##         targetPort: mongodb
+##     selector:
+##       app.kubernetes.io/component: mongodb
+##       app.kubernetes.io/instance: mongodb
+##       app.kubernetes.io/name: mongodb
+##       primary: "true"
 ##
 extraDeploy: []
 
@@ -440,6 +467,22 @@ initContainers: {}
 ##     ports:
 ##       - name: portname
 ##         containerPort: 1234
+## This is an optional 'mongo-labeler' sidecar container that tracks replica-set for the primary mongodb pod
+## and labels it dynamically with ' primary: "true" ' in order for an extra-deployed service to always expose
+## and attach to the primary pod, this needs to be uncommented along with the suggested 'extraDeploy' example
+## and the suggested rbac example for the pod to be allowed adding labels to mongo replica pods
+## search 'mongo-labeler' through this file to find the sections that needs to be uncommented to make it work
+##
+## - name: mongo-labeler
+##   image: korenlev/k8s-mongo-labeler-sidecar
+##   imagePullPolicy: Always
+##   env:
+##     - name: LABEL_SELECTOR
+##       value: "app.kubernetes.io/component=mongodb,app.kubernetes.io/instance=mongodb,app.kubernetes.io/name=mongodb"
+##     - name: NAMESPACE
+##       value: "the-mongodb-namespace"
+##     - name: DEBUG
+##       value: "true"
 ##
 sidecars: {}
 
@@ -955,17 +998,20 @@ rbac:
   ## Specifies whether RBAC rules should be created
   ## binding MongoDB(R) ServiceAccount to a role
   ## that allows MongoDB(R) pods querying the K8s API
-  ##
+  ## this needs to be set to 'true' to enable the mongo-labeler sidecar primary mongodb discovery
   create: false
   role:
     ## Custom rules to create following the role specification
-    ## e.g.
+    ## The example below needs to be uncommented to use the 'mongo-labeler' sidecar for dynamic discovery of the primary mongodb pod:
     ## rules:
     ##   - apiGroups:
     ##       - ""
     ##     resources:
     ##       - pods
     ##     verbs:
+    ##       - get
+    ##       - list
+    ##       - watch
     ##       - update
     ##
     rules: []
