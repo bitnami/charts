@@ -94,8 +94,16 @@ spec:
             - --http-address=0.0.0.0:10902
             - --data-dir=/data
             - --eval-interval={{ .Values.ruler.evalInterval }}
+            {{- if not (empty .Values.ruler.alertmanagers) }}
             {{- range .Values.ruler.alertmanagers }}
             - --alertmanagers.url={{ . }}
+            {{- end }}
+            {{- end }}
+            {{- if not (empty .Values.ruler.alertmanagerConfig) }}
+            - --alertmanagers.config={{ .Values.ruler.alertmanagerConfig }}
+            {{- end }}
+            {{- if not (empty .Values.ruler.alertmanagersConfigFile) }}
+            - --alertmanagers.config-file={{ .Values.ruler.alertmanagersConfigFile }}
             {{- end }}
             {{- if and $query.enabled .Values.ruler.dnsDiscovery.enabled }}
             - --query=dnssrv+_http._tcp.{{ include "common.names.fullname" . }}-query.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
