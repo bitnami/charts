@@ -776,6 +776,11 @@ mongos:
   ## Use StatefulSet instead of Deployment
   ##
   useStatefulSet: false
+  ## When using a statefulset, you can enable one service per replica
+  ## This is useful when exposing the mongos through load balancers to make sure clients
+  ## connect to the same mongos and therefore can follow their cursors
+  ##
+  servicePerReplica: false
   ## Pod disruption budget
   ##
   pdb:
