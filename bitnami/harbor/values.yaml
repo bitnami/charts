@@ -573,6 +573,7 @@ persistence:
       rootdirectory:
       chunksize:
     ## Images/charts storage parameters when type is "s3"
+    ## ref: https://docs.docker.com/registry/storage-drivers/s3/
     ##
     s3:
       region: us-west-1
@@ -583,6 +584,7 @@ persistence:
       encrypt:
       keyid:
       secure:
+      skipverify:
       v4auth:
       chunksize:
       rootdirectory:
