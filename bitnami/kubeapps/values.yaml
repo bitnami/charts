@@ -1288,19 +1288,25 @@ authProxy:
   ## NOTE: It must be a particular number of bytes. It's recommended using the following
   ## script to generate a cookieSecret:
   ##   python -c 'import os,base64; print base64.urlsafe_b64encode(os.urandom(16))'
-  ## ref: https://pusher.github.io/oauth2_proxy/configuration
+  ## ref: https://oauth2-proxy.github.io/oauth2-proxy/docs/configuration/overview#generating-a-cookie-secret
   ##
   cookieSecret: ""
+  ## @param authProxy.cookieRefresh Duration after which to refresh the cookie
+  ##
+  cookieRefresh: 2m
+  ## @param authProxy.scope OAuth scope specification
+  ##
+  scope: "openid email groups"
   ## @param authProxy.emailDomain Allowed email domains
   ## Use "example.com" to restrict logins to emails from example.com
   ##
   emailDomain: "*"
   ## @param authProxy.additionalFlags Additional flags for oauth2-proxy
+  ## ref: https://oauth2-proxy.github.io/oauth2-proxy/docs/configuration/overview
   ## e.g:
   ## additionalFlags:
   ##   - --ssl-insecure-skip-verify
   ##   - --cookie-secure=false
-  ##   - --scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/cloud-platform
   ##   - --oidc-issuer-url=https://accounts.google.com # Only needed if provider is oidc
   ##
   additionalFlags: []
