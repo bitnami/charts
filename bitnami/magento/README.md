@@ -127,7 +127,8 @@ The following table lists the configurable parameters of the Magento chart and t
 | `podSecurityContext.fsGroup`         | Magento pods' group ID                                                                                                | `1001`                                         |
 | `readinessProbe`                     | Readiness probe configuration                                                                                         | `Check values.yaml file`                       |
 | `replicaCount`                       | Number of Magento Pods to run                                                                                         | `1`                                            |
-| `resources`                          | CPU/Memory resource requests/limits                                                                                   | Memory: `512Mi`, CPU: `300m`                   |
+| `resources.limits`                   | The resources limits for the Magento container                                                                        | `{}`                                           |
+| `resources.requests`                 | The requested resourcesc for the Magento container                                                                    | `{}`                                           |
 | `sidecars`                           | Attach additional containers to the pod (evaluated as a template)                                                     | `nil`                                          |
 | `startupProbe`                       | Startup probe configuration                                                                                           | `Check values.yaml file`                       |
 | `tolerations`                        | Tolerations for pod assignment                                                                                        | `[]` (The value is evaluated as a template)    |
@@ -191,7 +192,8 @@ The following table lists the configurable parameters of the Magento chart and t
 | `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                                                               | `"10"`                                                  |
 | `volumePermissions.image.pullSecrets` | Specify docker-registry secret names as an array                                                                                                          | `[]` (does not add image pull secrets to deployed pods) |
 | `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                                                       | `Always`                                                |
-| `volumePermissions.resources`         | Init container resource requests/limit                                                                                                                    | `nil`                                                   |
+| `volumePermissions.resources.limits`  | The resources limits for the init container                                                                                                               | `{}`                                                    |
+| `volumePermissions.resources.requests`| The requested resourcesc for the init container                                                                                                           | `{}`                                                    |
 
 ### Traffic Exposure Parameters
 
@@ -221,18 +223,19 @@ The following table lists the configurable parameters of the Magento chart and t
 
 ### Metrics parameters
 
-| Parameter                     | Description                                      | Default                                                      |
-|-------------------------------|--------------------------------------------------|--------------------------------------------------------------|
-| `metrics.enabled`             | Start a side-car prometheus exporter             | `false`                                                      |
-| `metrics.image.registry`      | Apache exporter image registry                   | `docker.io`                                                  |
-| `metrics.image.repository`    | Apache exporter image name                       | `bitnami/apache-exporter`                                    |
-| `metrics.image.tag`           | Apache exporter image tag                        | `{TAG_NAME}`                                                 |
-| `metrics.image.pullPolicy`    | Image pull policy                                | `IfNotPresent`                                               |
-| `metrics.image.pullSecrets`   | Specify docker-registry secret names as an array | `[]` (does not add image pull secrets to deployed pods)      |
-| `metrics.service.type`        | Prometheus metrics service type                  | `LoadBalancer`                                               |
-| `metrics.service.port`        | Service Metrics port                             | `9117`                                                       |
-| `metrics.service.annotations` | Annotations for enabling prometheus scraping     | `{prometheus.io/scrape: "true", prometheus.io/port: "9117"}` |
-| `metrics.resources`           | Exporter resource requests/limit                 | `{}`                                                         |
+| Parameter                     | Description                                        | Default                                                      |
+|-------------------------------|----------------------------------------------------|--------------------------------------------------------------|
+| `metrics.enabled`             | Start a side-car prometheus exporter               | `false`                                                      |
+| `metrics.image.registry`      | Apache exporter image registry                     | `docker.io`                                                  |
+| `metrics.image.repository`    | Apache exporter image name                         | `bitnami/apache-exporter`                                    |
+| `metrics.image.tag`           | Apache exporter image tag                          | `{TAG_NAME}`                                                 |
+| `metrics.image.pullPolicy`    | Image pull policy                                  | `IfNotPresent`                                               |
+| `metrics.image.pullSecrets`   | Specify docker-registry secret names as an array   | `[]` (does not add image pull secrets to deployed pods)      |
+| `metrics.service.type`        | Prometheus metrics service type                    | `LoadBalancer`                                               |
+| `metrics.service.port`        | Service Metrics port                               | `9117`                                                       |
+| `metrics.service.annotations` | Annotations for enabling prometheus scraping       | `{prometheus.io/scrape: "true", prometheus.io/port: "9117"}` |
+| `metrics.resources.limits`    | The resources limits for the metrics container     | `{}`                                                         |
+| `metrics.resources.requests`  | The requested resourcesc for the metrics container | `{}`                                                         |
 
 ### Certificate injection parameters
 
