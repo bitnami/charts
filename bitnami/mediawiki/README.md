@@ -191,6 +191,7 @@ The following tables lists the configurable parameters of the Mediawki chart and
 | `metrics.image.tag`                       | Apache exporter image tag                                                    | `{TAG_NAME}`                                                 |
 | `metrics.image.pullPolicy`                | Image pull policy                                                            | `IfNotPresent`                                               |
 | `metrics.image.pullSecrets`               | Specify docker-registry secret names as an array                             | `[]` (does not add image pull secrets to deployed pods)      |
+| `metrics.port`                            | Metrics service port                                                         | `9117`                                                       |
 | `metrics.podAnnotations`                  | Additional annotations for Metrics exporter pod                              | `{prometheus.io/scrape: "true", prometheus.io/port: "9117"}` |
 | `metrics.resources`                       | Exporter resource requests/limit                                             | `{}`                                                         |
 | `metrics.serviceMonitor.enabled`          | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator | `false`                   |
@@ -199,7 +200,7 @@ The following tables lists the configurable parameters of the Mediawki chart and
 | `metrics.serviceMonitor.scrapeTimeout`    | The timeout after which the scrape is ended                                  | `nil`                     |
 | `metrics.serviceMonitor.relabellings`     | Metrics relabellings to add to the scrape endpoint                           | `nil`                     |
 | `metrics.serviceMonitor.honorLabels`      | Labels to honor to add to the scrape endpoint                                | `false`                   |
-| `metrics.serviceMonitor.additionalLabels` | Additional custom labels for the ServiceMonitor                              | `{}`                 
+| `metrics.serviceMonitor.additionalLabels` | Additional custom labels for the ServiceMonitor                              | `{}`                      |
 
 
 The above parameters map to the env variables defined in [bitnami/mediawiki](http://github.com/bitnami/bitnami-docker-mediawiki). For more information please refer to the [bitnami/mediawiki](http://github.com/bitnami/bitnami-docker-mediawiki) image documentation.
