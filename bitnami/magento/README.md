@@ -256,6 +256,16 @@ The following table lists the configurable parameters of the Magento chart and t
 | `certificates.extraEnvVarsCM`                        | ConfigMap containing extra env vars                                  | `nil`                                    |
 | `certificates.extraEnvVarsSecret`                    | Secret containing extra env vars (in case of sensitive data)         | `nil`                                    |
 
+### Other Parameters
+
+| Name                                    | Description                                                                                                         | Value   |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------- |
+| `autoscaling.enabled`               | Enable autoscaling for replicas                                               | `false` |
+| `autoscaling.minReplicas`           | Minimum number of replicas                                                    | `1`     |
+| `autoscaling.maxReplicas`           | Maximum number of replicas                                                    | `11`    |
+| `autoscaling.targetCPU`             | Target CPU utilization percentage                                             | `nil`   |
+| `autoscaling.targetMemory`          | Target Memory utilization percentage                                          | `nil`   |
+
 The above parameters map to the env variables defined in [bitnami/magento](http://github.com/bitnami/bitnami-docker-magento). For more information please refer to the [bitnami/magento](http://github.com/bitnami/bitnami-docker-magento) image documentation.
 
 > **Note**:
