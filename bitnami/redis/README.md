@@ -342,6 +342,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tls.certKeyFilename`                   | Certificate Key filename                                                                                            | `nil`   |
 | `tls.certCAFilename`                    | CA Certificate filename                                                                                             | `nil`   |
 | `tls.dhParamsFilename`                  | File containing DH params (in order to support DH based ciphers)                                                    | `nil`   |
+| `autoscaling.enabled`               | Enable autoscaling for replicas                                               | `false` |
+| `autoscaling.minReplicas`           | Minimum number of replicas                                                    | `1`     |
+| `autoscaling.maxReplicas`           | Maximum number of replicas                                                    | `11`    |
+| `autoscaling.targetCPU`             | Target CPU utilization percentage                                             | `nil`   |
+| `autoscaling.targetMemory`          | Target Memory utilization percentage                                          | `nil`   |
 
 
 ### Metrics Parameters
