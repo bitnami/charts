@@ -1,0 +1,197 @@
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ template "common.names.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: frontend
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" . ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.frontend.replicaCount }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: frontend
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/frontend/configmap.yaml") . | sha256sum }}
+        {{- if .Values.frontend.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.frontend.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app.kubernetes.io/component: frontend
+        {{- if .Values.frontend.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.frontend.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- include "kubeapps.imagePullSecrets" . | indent 6 }}
+      {{- if .Values.frontend.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.frontend.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.frontend.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.frontend.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.frontend.podAffinityPreset "component" "frontend" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.frontend.podAntiAffinityPreset "component" "frontend" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.frontend.nodeAffinityPreset.type "key" .Values.frontend.nodeAffinityPreset.key "values" .Values.frontend.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.frontend.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.frontend.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.frontend.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.frontend.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.frontend.priorityClassName }}
+      priorityClassName: {{ .Values.frontend.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.frontend.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.frontend.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.frontend.initContainers }}
+      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.frontend.initContainers "context" $) | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: nginx
+          image: {{ include "common.images.image" (dict "imageRoot" .Values.frontend.image "global" .Values.global) }}
+          imagePullPolicy: {{ .Values.frontend.image.pullPolicy | quote }}
+          {{- if .Values.frontend.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.frontend.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.frontend.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.frontend.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" .Values.frontend.image.debug | quote }}
+            {{- if .Values.frontend.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.frontend.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.frontend.extraEnvVarsCM .Values.frontend.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.frontend.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.frontend.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.frontend.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.frontend.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- end }}
+          {{- if .Values.frontend.livenessProbe.enabled }}
+          livenessProbe: {{- omit .Values.frontend.livenessProbe "enabled" | toYaml | nindent 12 }}
+          {{- else if .Values.dashboard.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.frontend.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.frontend.readinessProbe.enabled }}
+          readinessProbe: {{- omit .Values.frontend.readinessProbe "enabled" | toYaml | nindent 12 }}
+          {{- else if .Values.frontend.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.frontend.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.frontend.containerPort }}
+          {{- if .Values.frontend.resources }}
+          resources: {{- toYaml .Values.frontend.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: vhost
+              mountPath: /opt/bitnami/nginx/conf/server_blocks
+            {{- if .Values.frontend.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.frontend.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+        {{- if and .Values.authProxy.enabled (not .Values.authProxy.external) }}
+        - name: auth-proxy
+          image: {{ include "common.images.image" (dict "imageRoot" .Values.authProxy.image "global" .Values.global) }}
+          imagePullPolicy: {{ .Values.authProxy.image.pullPolicy | quote }}
+          {{- if .Values.authProxy.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.authProxy.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          args:
+            - --provider={{ required "You must fill \".Values.authProxy.provider\" with the provider. Valid values at https://oauth2-proxy.github.io/oauth2-proxy/docs/configuration/overview" .Values.authProxy.provider }}
+            - --upstream=http://localhost:{{ .Values.frontend.containerPort }}/
+            - --http-address=0.0.0.0:{{ .Values.authProxy.containerPort }}
+            - --email-domain={{ .Values.authProxy.emailDomain }}
+            - --pass-basic-auth=false
+            - --pass-access-token=true
+            - --pass-authorization-header=true
+            - --skip-auth-regex=^\/config\.json$
+            - --skip-auth-regex=^\/manifest\.json$
+            - --skip-auth-regex=^\/custom_style\.css$
+            - --skip-auth-regex=^\/custom_locale\.json$
+            - --skip-auth-regex=^\/favicon.*\.png$
+            - --skip-auth-regex=^\/static\/
+            - --skip-auth-regex=^\/$
+            - --scope={{ .Values.authProxy.scope }}
+            - --cookie-refresh={{ .Values.authProxy.cookieRefresh }}
+            {{- range .Values.authProxy.additionalFlags }}
+            - {{ . }}
+            {{- end }}
+          env:
+            - name: OAUTH2_PROXY_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "kubeapps.oauth2_proxy-secret.name" . }}
+                  key: clientID
+            - name: OAUTH2_PROXY_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "kubeapps.oauth2_proxy-secret.name" . }}
+                  key: clientSecret
+            - name: OAUTH2_PROXY_COOKIE_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "kubeapps.oauth2_proxy-secret.name" . }}
+                  key: cookieSecret
+          ports:
+            - name: proxy
+              containerPort: {{ .Values.authProxy.containerPort }}
+          {{- if .Values.authProxy.resources }}
+          resources: {{- toYaml .Values.authProxy.resources | nindent 12 }}
+          {{- end }}
+        {{- end }}
+        {{- if and (gt (len .Values.clusters) 1) (not .Values.authProxy.enabled) }}
+          {{ fail "clusters can be configured only when using an auth proxy for cluster oidc authentication."}}
+        {{- end }}
+        {{- if and .Values.pinnipedProxy.enabled }}
+        - name: pinniped-proxy
+          image: {{ include "common.images.image" (dict "imageRoot" .Values.pinnipedProxy.image "global" .Values.global) }}
+          imagePullPolicy: {{ .Values.pinnipedProxy.image.pullPolicy | quote }}
+          {{- if .Values.pinnipedProxy.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.pinnipedProxy.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          command:
+            - pinniped-proxy
+          env:
+            - name: DEFAULT_PINNIPED_NAMESPACE
+              value: {{ .Values.pinnipedProxy.defaultPinnipedNamespace }}
+            - name: DEFAULT_PINNIPED_AUTHENTICATOR_TYPE
+              value: {{ .Values.pinnipedProxy.defaultAuthenticatorType }}
+            - name: DEFAULT_PINNIPED_AUTHENTICATOR_NAME
+              value: {{ .Values.pinnipedProxy.defaultAuthenticatorName }}
+            - name: DEFAULT_PINNIPED_API_SUFFIX
+              value: {{ .Values.pinnipedProxy.defaultPinnipedAPISuffix }}
+            - name: RUST_LOG
+              value: info
+          ports:
+            - name: pinniped-proxy
+              containerPort: {{ .Values.pinnipedProxy.containerPort }}
+          {{- if .Values.pinnipedProxy.resources }}
+          resources: {{- toYaml .Values.pinnipedProxy.resources | nindent 12 }}
+          {{- end }}
+        {{- end }}
+        {{- if .Values.pinnipedProxy.sidecars }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.pinnipedProxy.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: vhost
+          configMap:
+            name: {{ template "kubeapps.frontend-config.fullname" . }}
+        {{- if .Values.frontend.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.frontend.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}

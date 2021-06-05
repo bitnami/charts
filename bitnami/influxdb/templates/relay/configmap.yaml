@@ -1,16 +1,18 @@
-{{- if and (eq .Values.architecture "high-availability") (or (.Files.Glob "files/conf/relay.toml") .Values.relay.configuration) (not .Values.relay.existingConfiguration) }}
+{{- if and (eq .Values.architecture "high-availability") .Values.relay.configuration (not .Values.relay.existingConfiguration) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "influxdb.fullname" . }}-relay
+  name: {{ include "common.names.fullname" . }}-relay
   labels:
-    {{- include "influxdb.labels" . | nindent 4 }}
+    {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: relay
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 data:
-{{- if (.Files.Glob "files/conf/relay.toml") }}
-{{ (.Files.Glob "files/conf/relay.toml").AsConfig | indent 2 }}
-{{- else if .Values.relay.configuration }}
   relay.toml: |-
-{{ tpl .Values.relay.configuration . | indent 4 }}
-{{- end }}
+    {{ include "common.tplvalues.render" (dict "value" .Values.relay.configuration "context" $) | nindent 4 }}
 {{- end }}

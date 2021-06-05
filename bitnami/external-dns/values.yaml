@@ -13,7 +13,7 @@
 image:
   registry: docker.io
   repository: bitnami/external-dns
-  tag: 0.7.6-debian-10-r0
+  tag: 0.8.0-debian-10-r26
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -31,6 +31,11 @@ image:
 
 ## String to fully override external-dns.fullname template
 # fullnameOverride:
+
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
 
 ## K8s resources type to be observed for new DNS entries by ExternalDNS
 ##
@@ -74,9 +79,11 @@ serviceTypeFilter: []
 ##
 alibabacloud:
   ## These will be added to /etc/kubernetes/alibaba-cloud.json via secret
+  ##
   accessKeyId: ""
   accessKeySecret: ""
   regionId: ""
+  vpcId: ""
 
   ## Use an existing secret with key "alibaba-cloud.json" defined.
   ## This ignores alibabacloud.accessKeyId, and alibabacloud.accessKeySecret
@@ -157,6 +164,10 @@ azure:
   ## If you use Azure MSI, this should be set to true
   ##
   useManagedIdentityExtension: false
+  ## If you use Azure MSI, this is Client ID of Azure user-assigned managed identity (optional,
+  # system-assigned managed identity is used if empty)
+  #
+  userAssignedIdentityID: ""
 
 ## Cloudflare configuration to be set via arguments/env. variables
 ##
@@ -280,6 +291,7 @@ hetzner:
   token: ""
 
   ## Use an existing secret. Mutually exclusive with `hetzner.token`
+  ##
   secretName: ""
   secretKey: "hetzner_token"
 
@@ -296,6 +308,7 @@ infoblox:
   ##
   ## Existing secret name, when in place wapiUsername and wapiPassword are not required
   ## secretName: ""
+  ##
   domainFilter: ""
   noSslVerify: false
   wapiPort: ""
@@ -321,6 +334,14 @@ ovh:
   applicationKey: ""
   applicationSecret: ""
 
+  ## Use an existing secret with following keys:
+  ##  - ovh_consumer_key
+  ##  - ovh_application_key
+  ##  - ovh_application_secret
+  ## This ignores consumerKey, applicationKey & applicationSecret
+  ##
+  # secretName:
+
 ## Scaleway configuration to be set via arguments/env. variables
 ##
 scaleway:
@@ -335,10 +356,15 @@ rfc2136:
   port: 53
   zone: ""
   tsigSecret: ""
+  ## Use an existing secret with key "rfc2136_tsig_secret" defined.
+  ## This ignores rfc2136.tsigSecret
+  ##
+  # secretName:
   tsigSecretAlg: hmac-sha256
   tsigKeyname: externaldns-key
   tsigAxfr: true
   ## Possible units [ns, us, ms, s, m, h], see more https://golang.org/pkg/time/#ParseDuration
+  ##
   minTTL: "0s"
 
 ## PowerDNS configuration to be set via arguments/env. variables
@@ -359,6 +385,7 @@ transip:
   account: ""
   ##
   ## API key that is authorised for the account
+  ##
   apiKey: ""
 
 ## VinylDNS configuration to be set via arguments/env. variables
@@ -374,6 +401,9 @@ domainFilters: []
 ## Exclude subdomains (optional)
 ##
 excludeDomains: []
+## Filter target zones by zone domain (optional)
+##
+zoneNameFilters: []
 ## Limit possible target zones by zone id (optional)
 ##
 zoneIdFilters: []
@@ -390,26 +420,47 @@ triggerLoopOnEvent: false
 ##
 interval: "1m"
 ## Verbosity of the ExternalDNS logs. Available values are:
-## - panic, debug, info, warn, error, fatal
+## - panic, debug, info, warning, error, fatal, trace
 ##
 logLevel: info
 ## Formats of the ExternalDNS logs. Available values are:
 ## - text, json
 ##
 logFormat: text
-## Modify how DNS records are synchronized between sources and providers (options: sync, upsert-only)
+## Modify how DNS records are synchronized between sources and providers (options: create-only, sync, upsert-only)
 ##
 policy: upsert-only
 ## Registry Type. Available types are: txt, noop
 ## ref: https://github.com/kubernetes-sigs/external-dns/blob/master/docs/proposal/registry.md
 ##
 registry: "txt"
-## TXT Registry Identifier
-##
-txtOwnerId: ""
-## Prefix to create a TXT record with a name following the pattern prefix.<CNAME record>
+## Prefix to create a TXT record with a name following the pattern prefix.<CNAME record> (Mutual exclusive with txt-suffix)
 ##
 # txtPrefix: ""
+## Suffix to create a TXT record with a name following the pattern <CNAME record>.suffix (Mutual exclusive with txt-prefix)
+##
+# txtSuffix: ""
+
+## Registry Identifier
+## Currently supported by two registry types: txt and aws-sd.
+## But other registry types might be added in the future.
+##
+txtOwnerId: ""
+
+## This setting added for backward compatibility for
+## customers who already used bitnami/external-dns helm chart
+## to privision 'aws-sd' registry type.
+## Previously bitnami/external-dns helm chart did not pass
+## txtOwnerId value down to the external-dns application
+## so the app itself sets that value to be a string 'default'.
+## If existing customers force the actual txtOwnerId value to be
+## passed properly, their external-dns updates will stop working
+## because the owner's value for exting DNS records in
+## AWS Service Discovery would remain 'default'.
+## NOTE: It is up to the end user to update AWS Service Discovery
+## 'default' values in description fields to make it work with new
+## value passed as txtOwnerId when forceTxtOwnerId=true
+forceTxtOwnerId: false
 
 ## Extra Arguments to passed to external-dns
 ##
@@ -424,6 +475,7 @@ extraArgs: {}
 ##     secretKeyRef:
 ##       name: existing-secret
 ##       key: varname2-key
+##
 extraEnv: []
 
 ## Replica count
@@ -449,6 +501,7 @@ podAntiAffinityPreset: soft
 nodeAffinityPreset:
   ## Node affinity type
   ## Allowed values: soft, hard
+  ##
   type: ""
   ## Node label key to match
   ## E.g.
@@ -499,8 +552,10 @@ secretAnnotations: {}
 ##
 crd:
   ## Install and use the integrated DNSEndpoint CRD
+  ##
   create: false
   ## Change these to use an external DNSEndpoint CRD (E.g. from kubefed)
+  ##
   apiversion: ""
   kind: ""
 
@@ -539,6 +594,7 @@ service:
   ## have external-dns show up in `kubectl cluster-info`
   ##  kubernetes.io/cluster-service: "true"
   ##  kubernetes.io/name: "external-dns"
+  ##
   labels: {}
 
 ## ServiceAccount parameters
@@ -552,6 +608,9 @@ serviceAccount:
   ## Annotations for the Service Account
   ##
   annotations: {}
+  ## Automount API credentials for a service account.
+  ##
+  automountServiceAccountToken: true
 
 ## RBAC parameteres
 ## https://kubernetes.io/docs/reference/access-authn-authz/rbac/
@@ -559,6 +618,7 @@ serviceAccount:
 rbac:
   create: true
   ## Deploys ClusterRole by Default
+  ##
   clusterRole: true
   ## RBAC API version
   ##
@@ -597,6 +657,7 @@ resources: {}
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/
 ##
 livenessProbe:
+  enabled: true
   httpGet:
     path: /healthz
     port: http
@@ -609,6 +670,7 @@ livenessProbe:
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/
 ##
 readinessProbe:
+  enabled: true
   httpGet:
     path: /healthz
     port: http
@@ -619,10 +681,16 @@ readinessProbe:
   successThreshold: 1
 
 ## Configure extra volumes
+##
 extraVolumes: []
 
 ## Configure extra volumeMounts
+##
 extraVolumeMounts: []
+
+## Configure PodDisruptionBudget
+## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+podDisruptionBudget: {}
 
 ## Prometheus Exporter / Metrics
 ##

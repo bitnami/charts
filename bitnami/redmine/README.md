@@ -84,6 +84,7 @@ The following table lists the configurable parameters of the Redmine chart and t
 | `image.tag`           | Redmine image tag                                                                                                                                             | `{TAG_NAME}`                                            |
 | `image.pullPolicy`    | Image pull policy                                                                                                                                             | `IfNotPresent`                                          |
 | `image.pullSecrets`   | Specify docker-registry secret names as an array                                                                                                              | `[]` (does not add image pull secrets to deployed pods) |
+| `hostAliases`         | Add deployment host aliases                                                                                                                                   | `[]`                                                    |
 | `redmineUsername`     | User of the application                                                                                                                                       | `user`                                                  |
 | `redminePassword`     | Application password                                                                                                                                          | _random 10 character long alphanumeric string_          |
 | `redmineEmail`        | Admin email                                                                                                                                                   | `user@example.com`                                      |
@@ -164,8 +165,8 @@ The following table lists the configurable parameters of the Redmine chart and t
 |---------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `volumePermissions.enabled`           | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                                                 |
 | `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                                                                          | `docker.io`                                             |
-| `volumePermissions.image.repository`  | Init container volume-permissions image name                                                                                                              | `bitnami/minideb`                                       |
-| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                                                               | `buster`                                                |
+| `volumePermissions.image.repository`  | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell`                                 |
+| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                                                               | `"10"`                                                  |
 | `volumePermissions.image.pullSecrets` | Specify docker-registry secret names as an array                                                                                                          | `[]` (does not add image pull secrets to deployed pods) |
 | `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                                                       | `Always`                                                |
 | `volumePermissions.resources`         | Init container resource requests/limit                                                                                                                    | `nil`                                                   |
@@ -291,8 +292,8 @@ The following table lists the configurable parameters of the Redmine chart and t
 | `certificates.customCertificate.chainLocation`       | Location in the container to store the certificate chain           | `/etc/ssl/certs/chain.pem`               |
 | `certificates.customCA`                              | Defines a list of secrets to import into the container trust store | `[]`                                     |
 | `certificates.image.registry`                        | Container sidecar registry                                         | `docker.io`                              |
-| `certificates.image.repository`                      | Container sidecar image                                            | `bitnami/minideb`                        |
-| `certificates.image.tag`                             | Container sidecar image tag                                        | `buster`                                 |
+| `certificates.image.repository`                      | Container sidecar image                                            | `bitnami/bitnami-shell`                  |
+| `certificates.image.tag`                             | Container sidecar image tag                                        | `"10"`                                   |
 | `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                               | `image.pullSecrets`                      |
 | `certificates.extraEnvVars`                          | Container sidecar extra environment variables (eg proxy)           | `[]`                                     |
@@ -308,6 +309,8 @@ $ helm install my-release \
 ```
 
 The above command sets the Redmine administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
+
+> NOTE: Once this chart is deployed, it is not possible to change the application's access credentials, such as usernames or passwords, using Helm. To change these application credentials after deployment, delete any persistent volumes (PVs) used by the chart and re-deploy it, or use the application's built-in administrative tools if available.
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
@@ -328,6 +331,14 @@ Bitnami will release a new chart updating its containers if a new version of the
 ### Replicas
 
 Redmine writes uploaded files to a persistent volume. By default that volume cannot be shared between pods (RWO). In such a configuration the `replicas` option must be set to `1`. If the persistent volume supports more than one writer (RWX), ie NFS, `replicas` can be greater than `1`.
+
+> **Important**: When running more than one instance of Redmine they must share the same `secret_key_base` to have sessions working acreoss all instances.
+> This can be achieved by setting
+> ```
+>   extraEnvVars:
+>    - name: SECRET_KEY_BASE
+>      value: someredminesecretkeybase
+> ```
 
 ### Deploying to a sub-URI
 

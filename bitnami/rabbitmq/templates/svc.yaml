@@ -7,8 +7,14 @@ metadata:
     {{- if .Values.service.labels }}
     {{- include "common.tplvalues.render" (dict "value" .Values.service.labels "context" $) | nindent 4 }}
     {{- end }}
-  {{- if .Values.service.annotations }}
-  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.service.annotations "context" $) | nindent 4 }}
+  {{- if or (.Values.service.annotations) (.Values.commonAnnotations) }}
+  annotations:
+    {{- if .Values.commonAnnotations}}
+    {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
+    {{- end -}}
+    {{- if .Values.service.annotations}}
+    {{- include "common.tplvalues.render" (dict "value" .Values.service.annotations "context" $) | nindent 4 }}
+    {{- end -}}
   {{- end }}
 spec:
   type: {{ .Values.service.type }}
@@ -61,6 +67,7 @@ spec:
       {{- else if (and (eq .Values.service.type "NodePort") (not (empty .Values.service.distNodePort))) }}
       nodePort: {{ .Values.service.distNodePort }}
       {{- end }}
+    {{- if .Values.service.managerPortEnabled }}
     - name: {{ .Values.service.managerPortName }}
       port: {{ .Values.service.managerPort }}
       targetPort: stats
@@ -69,6 +76,7 @@ spec:
       {{- else if (and (eq .Values.service.type "NodePort") (not (empty .Values.service.managerNodePort))) }}
       nodePort: {{ .Values.service.managerNodePort }}
       {{- end }}
+    {{- end }}
     {{- if .Values.metrics.enabled }}
     - name: {{ .Values.service.metricsPortName }}
       port: {{ .Values.service.metricsPort }}

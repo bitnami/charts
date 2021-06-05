@@ -18,7 +18,7 @@ Return the proper image name (for the metrics image)
 Return the proper image name (for the init container volume-permissions image)
 */}}
 {{- define "redis-cluster.volumePermissions.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.volumePermissions "global" .Values.global) }}
+{{ include "common.images.image" (dict "imageRoot" .Values.volumePermissions.image "global" .Values.global) }}
 {{- end -}}
 
 {{/*

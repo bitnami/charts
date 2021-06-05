@@ -13,7 +13,6 @@ $ helm install my-release bitnami/kubernetes-event-exporter
 
 This chart bootstraps a [Kubernetes Event Exporter](https://github.com/opsgenie/kubernetes-event-exporter) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-
 ## Prerequisites
 
 - Kubernetes 1.12+
@@ -68,6 +67,7 @@ The following table lists the configurable parameters of the Kubernetes Event Ex
 | `containerSecurityContext.readOnlyRootFilesystem` | Allows the pod to mount the RootFS as ReadOnly only                                       | `true`                                                   |
 | `containerSecurityContext.runAsNonRoot`           | If the pod should run as a non root container.                                            | `true`                                                   |
 | `containerSecurityContext.runAsUser`              | Define the uid with which the pod will run                                                | `1001`                                                   |
+| `hostAliases`                                     | Add deployment host aliases                                                               | `[]`                                                     |
 | `extraEnvVars`                                    | Array containing extra env vars to be added to all containers                             | `[]` (evaluated as a template)                           |
 | `extraEnvVarsConfigMap`                           | ConfigMap containing extra env vars to be added to all containers                         | `""` (evaluated as a template)                           |
 | `extraEnvVarsSecret`                              | Secret containing extra env vars to be added to all containers                            | `""` (evaluated as a template)                           |
@@ -99,12 +99,12 @@ The following table lists the configurable parameters of the Kubernetes Event Ex
 
 ### Kubernetes Event Exporter parameters
 
-| Parameter             | Description                                                                  | Default                                                    |
-|-----------------------|------------------------------------------------------------------------------|------------------------------------------------------------|
-| `config.logFormat`    | How the logs are formatted. Allowed values: `pretty` or `json`               | `pretty`                                                   |
-| `config.logLevel`     | Verbosity of the logs (options: `fatal`, `error`, `warn`, `info` or `debug`) | `debug`                                                    |
-| `config.receivers`    | Array containing event receivers                                             | `[ {"name": "dump", "file": { "path": "/dev/stdout" }} ]`  |
-| `config.route.routes` | Array containing event route configuration                                   | `[ {"match": [ {"receiver": "dumps"} ]} ]`                 |
+| Parameter             | Description                                                                  | Default                                                   |
+|-----------------------|------------------------------------------------------------------------------|-----------------------------------------------------------|
+| `config.logFormat`    | How the logs are formatted. Allowed values: `pretty` or `json`               | `pretty`                                                  |
+| `config.logLevel`     | Verbosity of the logs (options: `fatal`, `error`, `warn`, `info` or `debug`) | `debug`                                                   |
+| `config.receivers`    | Array containing event receivers                                             | `[ {"name": "dump", "file": { "path": "/dev/stdout" }} ]` |
+| `config.route.routes` | Array containing event route configuration                                   | `[ {"match": [ {"receiver": "dumps"} ]} ]`                |
 
 ## Configuration and installation details
 

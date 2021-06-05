@@ -3,9 +3,9 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "elasticsearch.ingest.fullname" . }}
-  labels: {{- include "elasticsearch.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: ingest
-  annotations: {{ include "elasticsearch.tplValue" ( dict "value" .Values.ingest.service.annotations "context" $) | nindent 4 }}
+  annotations: {{ include "common.tplvalues.render" ( dict "value" .Values.ingest.service.annotations "context" $) | nindent 4 }}
 spec:
   type: {{ .Values.ingest.service.type | quote }}
   {{- if and (eq .Values.ingest.service.type "LoadBalancer") (not (empty .Values.ingest.service.loadBalancerIP)) }}
@@ -24,6 +24,6 @@ spec:
       {{- else if eq .Values.ingest.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-  selector: {{- include "elasticsearch.matchLabels" . | nindent 4 }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: ingest
 {{- end }}

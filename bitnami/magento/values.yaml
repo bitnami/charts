@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/magento
-  tag: 2.4.1-debian-10-r81
+  tag: 2.4.2-debian-10-r90
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -27,9 +27,21 @@ image:
   pullSecrets:
   #   - myRegistryKeySecretName
   ## Set to true if you would like to see extra information on logs
-  ## ref: https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
   ##
   debug: false
+
+## Force target Kubernetes version (using Helm capabilities if not set)
+##
+kubeVersion:
+
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases:
+  # Necessary for apache-exporter to work
+  - ip: "127.0.0.1"
+    hostnames:
+      - "status.localhost"
 
 ## String to partially override magento.fullname template (will maintain the release name)
 ##
@@ -215,10 +227,11 @@ mariadb:
   enabled: true
   ## Override MariaDB default image as 10.5 is not supported https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements.html#database
   ## ref: https://github.com/bitnami/bitnami-docker-mariadb
+  ##
   image:
     registry: docker.io
     repository: bitnami/mariadb
-    tag: 10.4.17-debian-10-r64
+    tag: 10.3.29-debian-10-r25
 
   ## MariaDB architecture. Allowed values: standalone or replication
   ##
@@ -268,9 +281,11 @@ mariadb:
 ##
 externalElasticsearch:
   ## Elasticsearch host
+  ##
   host:
 
   ## Elasticsearch port
+  ##
   port:
 
 ##
@@ -281,17 +296,22 @@ externalElasticsearch:
 elasticsearch:
   ## Whether to deploy a elasticsearch server to use as magento's search engine
   ## To use an external server set this to false and configure the externalElasticsearch parameters
+  ##
   enabled: true
   ## Enable to perform the sysctl operation
+  ##
   sysctlImage:
     enabled: true
   ## Elasticsearch master-eligible node parameters
+  ##
   master:
     replicas: 1
   ## Elasticsearch coordinating-only node parameters
+  ##
   coordinating:
     replicas: 1
   ## Elasticsearch data node parameters
+  ##
   data:
     replicas: 1
 
@@ -321,6 +341,7 @@ service:
   ## nodePorts:
   ##   http: <to set explicitly, choose port between 30000-32767>
   ##   https: <to set explicitly, choose port between 30000-32767>
+  ##
   nodePorts:
     http: ""
     https: ""
@@ -342,9 +363,21 @@ ingress:
   ##
   certManager: false
 
+  ## Ingress Path type
+  ##
+  pathType: ImplementationSpecific
+
+  ## Override API Version (automatically detected if not set)
+  ##
+  apiVersion:
+
   ## When the ingress is enabled, a host pointing to this will be created
   ##
   hostname: magento.local
+
+  ## Default path for the ingress resource
+  ##
+  path: /
 
   ## Ingress annotations done as key:value pairs
   ## For a full list of possible ingress annotations, please see
@@ -399,6 +432,7 @@ ingress:
 ## Control where client requests go, to the same pod or round-robin
 ## Values: ClientIP or None
 ## ref: https://kubernetes.io/docs/user-guide/services/
+##
 sessionAffinity: "None"
 
 ## Enable persistence using Persistent Volume Claims
@@ -495,8 +529,8 @@ volumePermissions:
   enabled: false
   image:
     registry: docker.io
-    repository: bitnami/minideb
-    tag: buster
+    repository: bitnami/bitnami-shell
+    tag: 10-debian-10-r99
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -538,6 +572,7 @@ containerSecurityContext:
 
 ## Configure extra options for liveness, readiness and startup probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+##
 livenessProbe:
   enabled: true
   path: /index.php
@@ -596,7 +631,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.8.0-debian-10-r273
+    tag: 0.8.0-debian-10-r399
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -662,8 +697,8 @@ certificates:
 
   image:
     registry: docker.io
-    repository: bitnami/minideb
-    tag: buster
+    repository: bitnami/bitnami-shell
+    tag: 10-debian-10-r99
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images

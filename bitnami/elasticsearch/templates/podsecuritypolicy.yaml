@@ -2,8 +2,8 @@
 apiVersion: {{ include "podsecuritypolicy.apiVersion" . }}
 kind: PodSecurityPolicy
 metadata:
-  name: {{ include "elasticsearch.curator.name" . }}
-  labels: {{- include "elasticsearch.labels" . | nindent 4 }}
+  name: {{ include "elasticsearch.curator.fullname" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     role: curator
 spec:
   privileged: true

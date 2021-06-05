@@ -16,6 +16,7 @@ metadata:
   {{- with .Values.readReplicas.annotations }}
   {{- toYaml . | nindent 4 }}
   {{- end }}
+  namespace: {{ .Release.Namespace }}
 spec:
   serviceName: {{ template "common.names.fullname" . }}-headless
   replicas: {{ .Values.replication.readReplicas }}
@@ -175,7 +176,7 @@ spec:
               value: {{ template "common.names.fullname" . }}
             - name: POSTGRES_MASTER_PORT_NUMBER
               value: {{ include "postgresql.port" . | quote }}
-            {{- if and (not (eq .Values.postgresqlUsername "postgres")) (or .Values.postgresqlPostgresPassword (include "postgresql.useExistingSecret" .)) }}
+            {{- if not (eq (include "postgresql.username" .) "postgres")  }}
             {{- if .Values.usePasswordFile }}
             - name: POSTGRES_POSTGRES_PASSWORD_FILE
               value: "/opt/bitnami/postgresql/secrets/postgresql-postgres-password"
@@ -263,9 +264,9 @@ spec:
             - name: POSTGRESQL_STATEMENT_TIMEOUT
               value: {{ .Values.postgresqlStatementTimeout | quote }}
             {{- end }}
-            {{- if .Values.postgresqlTcpKeealivesCount }}
+            {{- if .Values.postgresqlTcpKeepalivesCount }}
             - name: POSTGRESQL_TCP_KEEPALIVES_COUNT
-              value: {{ .Values.postgresqlTcpKeealivesCount | quote }}
+              value: {{ .Values.postgresqlTcpKeepalivesCount | quote }}
             {{- end }}
             {{- if .Values.postgresqlPghbaRemoveFilters }}
             - name: POSTGRESQL_PGHBA_REMOVE_FILTERS

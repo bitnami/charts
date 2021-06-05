@@ -1,0 +1,128 @@
+{{ if .Values.imagePuller.enabled }}
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: image-puller
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  name: {{ printf "%s-image-puller" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ .Release.Namespace | quote }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if .Values.imagePuller.updateStrategy }}
+  updateStrategy: {{- toYaml .Values.imagePuller.updateStrategy | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: image-puller
+  template:
+    metadata:
+      {{- if .Values.imagePuller.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.imagePuller.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app.kubernetes.io/component: image-puller
+        {{- if .Values.imagePuller.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.imagePuller.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- include "jupyterhub.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.imagePuller.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.imagePuller.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.imagePuller.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.imagePuller.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.imagePuller.podAffinityPreset "component" "image-puller" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.imagePuller.podAntiAffinityPreset "component" "image-puller" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.imagePuller.nodeAffinityPreset.type "key" .Values.imagePuller.nodeAffinityPreset.key "values" .Values.imagePuller.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.imagePuller.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.imagePuller.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.imagePuller.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.imagePuller.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.imagePuller.priorityClassName }}
+      priorityClassName: {{ .Values.imagePuller.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.imagePuller.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.imagePuller.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      initContainers:
+      {{- range $index, $image := (list .Values.singleuser.image .Values.auxiliaryImage) }}
+        - name: pull-{{ $index }}
+          image: {{ include "common.images.image" (dict "imageRoot" . "global" $.Values.global) }}
+          imagePullPolicy: {{ .pullPolicy }}
+          command:
+            - /bin/sh
+            - -c
+            - echo "Pulling complete"
+          {{- if $.Values.imagePuller.containerSecurityContext.enabled }}
+          securityContext: {{- omit $.Values.imagePuller.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+      {{- end }}
+      {{- if .Values.imagePuller.initContainers }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.imagePuller.initContainers "context" $) | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: pause
+          image: {{ template "jupyterhub.auxiliary.image" . }}
+          imagePullPolicy: {{ .Values.auxiliaryImage.pullPolicy }}
+          {{- if .Values.imagePuller.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.imagePuller.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.imagePuller.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.imagePuller.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.imagePuller.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.imagePuller.command "context" $) | nindent 12 }}
+          {{- else }}
+          command:
+            - /bin/sh
+            - -c
+            - sleep infinity
+          {{- end }}
+          {{- if .Values.imagePuller.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.imagePuller.args "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.imagePuller.extraEnvVars }}
+          env: {{- include "common.tplvalues.render" (dict "value" .Values.imagePuller.extraEnvVars "context" $) | nindent 12 }}
+          {{- end }}
+          envFrom:
+            {{- if .Values.imagePuller.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.imagePuller.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.imagePuller.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.imagePuller.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- if .Values.imagePuller.resources }}
+          resources: {{- toYaml .Values.imagePuller.resources | nindent 12 }}
+          {{- end }}
+          {{- if .Values.imagePuller.customStartupProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.imagePuller.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.imagePuller.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.imagePuller.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.imagePuller.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.imagePuller.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.imagePuller.extraVolumeMounts }}
+          volumeMounts:
+            {{- include "common.tplvalues.render" (dict "value" .Values.imagePuller.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.imagePuller.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.imagePuller.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      {{- if .Values.imagePuller.extraVolumes }}
+      volumes: {{- include "common.tplvalues.render" (dict "value" .Values.imagePuller.extraVolumes "context" $) | nindent 8 }}
+      {{- end }}
+{{- end }}

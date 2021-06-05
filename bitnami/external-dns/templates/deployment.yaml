@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ template "external-dns.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels: {{ include "external-dns.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicas }}
@@ -21,7 +22,7 @@ spec:
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
         {{- end }}
     spec:
-{{- include "external-dns.imagePullSecrets" . | indent 6 }}
+      {{- include "external-dns.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.podSecurityContext }}
       securityContext: {{ toYaml .Values.podSecurityContext | nindent 8 }}
       {{- end }}
@@ -61,8 +62,8 @@ spec:
             {{- if .Values.triggerLoopOnEvent }}
             - --events
             {{- end }}
-            {{- if .Values.namespace }}
-            - --namespace={{ .Values.namespace }}
+            {{- if (include "external-dns.namespace" .) }}
+            - --namespace={{ template "external-dns.namespace" . }}
             {{- end }}
             {{- if .Values.fqdnTemplates }}
             - --fqdn-template={{ join "," .Values.fqdnTemplates }}{{/* Explicitly wants comma separated list */}}
@@ -88,6 +89,9 @@ spec:
             {{- range .Values.excludeDomains }}
             - --exclude-domains={{ . }}
             {{- end }}
+            {{- range .Values.zoneNameFilters }}
+            - --zone-name-filter={{ . }}
+            {{- end }}
             {{- range .Values.zoneIdFilters }}
             - --zone-id-filter={{ . }}
             {{- end }}
@@ -95,12 +99,17 @@ spec:
             - --provider={{ .Values.provider }}
             - --registry={{ .Values.registry }}
             - --interval={{ .Values.interval }}
-            {{- if eq .Values.registry "txt" }}
+            {{- if or (ne .Values.registry "aws-sd") .Values.forceTxtOwnerId }}
             {{- if .Values.txtOwnerId }}
             - --txt-owner-id={{ .Values.txtOwnerId }}
             {{- end }}
+            {{- end }}
+            {{- if eq .Values.registry "txt" }}
             {{- if .Values.txtPrefix }}
             - --txt-prefix={{ .Values.txtPrefix }}
+            {{- end }}
+            {{- if .Values.txtSuffix }}
+            - --txt-suffix={{ .Values.txtSuffix }}
             {{- end }}
             {{- end }}
             {{- if .Values.annotationFilter }}
@@ -119,6 +128,8 @@ spec:
             # Alibaba Cloud arguments
             {{- if or (and .Values.alibabacloud.accessKeyId .Values.alibabacloud.accessKeySecret) .Values.alibabacloud.secretName }}
             - --alibaba-cloud-config-file=/etc/kubernetes/alibaba-cloud.json
+            {{- else }}
+            - --alibaba-cloud-config-file=
             {{- end }}
             {{- if .Values.alibabacloud.zoneType }}
             - --alibaba-cloud-zone-type={{ .Values.alibabacloud.zoneType }}
@@ -374,21 +385,21 @@ spec:
             {{- end }}
             {{- if eq .Values.provider "ovh" }}
             # OVH environment variables
-            {{- if .Values.ovh.consumerKey }}
+            {{- if or (.Values.ovh.consumerKey) (.Values.ovh.secretName) }}
             - name: OVH_CONSUMER_KEY
               valueFrom:
                 secretKeyRef:
                   name: {{ template "external-dns.secretName" . }}
                   key: ovh_consumer_key
             {{- end }}
-            {{- if .Values.ovh.applicationKey }}
+            {{- if or (.Values.ovh.applicationKey) (.Values.ovh.secretName) }}
             - name: OVH_APPLICATION_KEY
               valueFrom:
                 secretKeyRef:
                   name: {{ template "external-dns.secretName" . }}
                   key: ovh_application_key
             {{- end }}
-            {{- if .Values.ovh.applicationSecret }}
+            {{- if or (.Values.ovh.applicationSecret) (.Values.ovh.secretName) }}
             - name: OVH_APPLICATION_SECRET
               valueFrom:
                 secretKeyRef:
@@ -443,7 +454,7 @@ spec:
                   key: infoblox_wapi_password
             {{- end }}
             {{- end }}
-            {{- if and .Values.rfc2136.tsigSecret }}
+            {{- if or .Values.rfc2136.tsigSecret .Values.rfc2136.secretName }}
             # RFC 2136 environment variables
             - name: EXTERNAL_DNS_RFC2136_TSIG_SECRET
               valueFrom:
@@ -487,8 +498,12 @@ spec:
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
-          readinessProbe: {{ toYaml .Values.readinessProbe | nindent 12 }}
-          livenessProbe: {{ toYaml .Values.livenessProbe | nindent 12 }}
+          {{- if .Values.readinessProbe.enabled }}
+          readinessProbe: {{- omit .Values.readinessProbe "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.livenessProbe.enabled }}
+          livenessProbe: {{- omit .Values.livenessProbe "enabled" | toYaml | nindent 12 }}
+          {{- end }}
           {{- if .Values.securityContext }}
           securityContext: {{ toYaml .Values.securityContext | nindent 12 }}
           {{- end }}

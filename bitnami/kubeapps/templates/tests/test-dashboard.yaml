@@ -7,10 +7,10 @@ metadata:
 spec:
   containers:
     - name: {{ .Release.Name }}-dashboard-test
-      image: {{ template "kubeapps.image" (list .Values.testImage .Values.global) }}
+      image: {{ include "common.images.image" (dict "imageRoot" .Values.testImage "global" .Values.global) }}
       env:
         - name: DASHBOARD_HOST
-          value: {{ template "kubeapps.fullname" . }}.{{ .Release.Namespace }}
+          value: {{ template "common.names.fullname" . }}.{{ .Release.Namespace }}
       command:
         - sh
         - -c

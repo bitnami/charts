@@ -29,6 +29,9 @@ spec:
         {{- end }}
     spec:
       {{- include "common.images.pullSecrets" ( dict "images" (list .Values.image) "global" .Values.global) | nindent 6 }}
+      {{- if .Values.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
       {{- else }}
@@ -57,7 +60,9 @@ spec:
             - -conf=/data/config.yaml
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- if .Values.containerSecurityContext.enabled }}
+          # yamllint disable rule:indentation
           securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          # yamllint enable rule:indentation
           {{- end }}
           volumeMounts:
             - mountPath: /data

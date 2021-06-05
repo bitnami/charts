@@ -17,7 +17,7 @@ kubeVersion:
 image:
   registry: docker.io
   repository: bitnami/apache
-  tag: 2.4.46-debian-10-r134
+  tag: 2.4.48-debian-10-r1
   ## Specify a imagePullPolicy
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -30,9 +30,12 @@ image:
   #   - myRegistryKeySecretName
 
   ## Set to true if you would like to see extra information on logs
-  ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
   ##
   debug: false
+
+## Extra objects to deploy (value evaluated as a template)
+##
+extraDeploy: []
 
 ## Bitnami Git image version
 ## ref: https://hub.docker.com/r/bitnami/git/tags/
@@ -40,7 +43,7 @@ image:
 git:
   registry: docker.io
   repository: bitnami/git
-  tag: 2.30.0-debian-10-r6
+  tag: 2.31.1-debian-10-r62
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
@@ -56,6 +59,14 @@ git:
 ## String to fully override apache.fullname template
 ##
 # fullnameOverride:
+
+## Add labels to all the deployed resources
+##
+commonLabels: {}
+
+## Add annotations to all the deployed resources
+##
+commonAnnotations: {}
 
 ## Number of Apache replicas to deploy
 ##
@@ -119,6 +130,14 @@ cloneHtdocsFromGit:
   # branch:
   interval: 60
   resources: {}
+  ## Add extra volume mounts for the GIT containers
+  ## Useful to mount keys to connect through ssh. (normally used with extraVolumes)
+  ## E.g:
+  ## extraVolumeMounts:
+  ##   - name: ssh-dir
+  ##     mountPath: /root/.ssh/
+  ##
+  extraVolumeMounts: []
 
 ## Name of a config map with the server static content
 ##
@@ -136,10 +155,24 @@ cloneHtdocsFromGit:
 ##
 # httpdConfConfigMap:
 
+## Additional pod labels
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
+podLabels: {}
+
 ## Pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
+
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases:
+  # Necessary for apache-exporter to work
+  - ip: "127.0.0.1"
+    hostnames:
+      - "status.localhost"
 
 ## Apache pods' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -254,7 +287,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.8.0-debian-10-r260
+    tag: 0.8.0-debian-10-r397
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -294,6 +327,30 @@ extraVolumeMounts: []
 ## An array to add extra env vars
 ##
 extraEnvVars: []
+
+## Add init containers to the Apache pods.
+## Example:
+## initContainers:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+initContainers: {}
+
+## Add sidecars to the Apache pods.
+## Example:
+## sidecars:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+sidecars: {}
 
 ## Service parameters
 ##

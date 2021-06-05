@@ -1,6 +1,6 @@
 {{- if and .Values.operator.rbac.create .Values.operator.enabled }}
 ---
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: Role
 metadata:
   name: {{ include "common.names.fullname" . }}
@@ -103,7 +103,7 @@ rules:
       - deletecollection
       - watch
 ---
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: RoleBinding
 metadata:
   name: {{ include "common.names.fullname" . }}
@@ -117,13 +117,13 @@ metadata:
 roleRef:
   name: {{ include "common.names.fullname" . }}
   kind: Role
-  apiGroup: ""
+  apiGroup: rbac.authorization.k8s.io
 subjects:
   - kind: ServiceAccount
     name: {{ include "grafana-operator.serviceAccountName" . }}
-{{- if or .Values.operator.args.scanAllNamespaces  .Values.operator.args.scanNamespaces}}
+{{- if or .Values.operator.args.scanAllNamespaces  .Values.operator.args.scanNamespaces }}
 ---
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
   name: {{ include "common.names.fullname" . }}
@@ -140,14 +140,24 @@ rules:
     resources:
       - grafanadashboards
       - grafanadashboards/status
+      - grafanadatasources
+      - grafanadatasources/status
     verbs: ['get', 'list', 'update', 'watch']
   - apiGroups:
       - ""
     resources:
       - namespaces
+      - configmaps
     verbs: ['get', 'list', 'watch']
+  - apiGroups:
+      - ""
+    resources:
+      - events
+    verbs:
+      - create
+      - patch
 ---
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRoleBinding
 metadata:
   name: {{ include "common.names.fullname" . }}
@@ -161,7 +171,7 @@ metadata:
 roleRef:
   name: {{ include "common.names.fullname" . }}
   kind: ClusterRole
-  apiGroup: ""
+  apiGroup: rbac.authorization.k8s.io
 subjects:
   - kind: ServiceAccount
     name: {{ include "grafana-operator.serviceAccountName" . }}

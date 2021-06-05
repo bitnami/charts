@@ -1,16 +1,23 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "etcd.fullname" . }}-headless
-  labels: {{- include "etcd.labels" . | nindent 4 }}
+  name: {{ printf "%s-headless" (include "common.names.fullname" .) }}
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
   annotations:
     service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
 spec:
   type: ClusterIP
   clusterIP: None
   publishNotReadyAddresses: true
   ports:
-    {{- if .Values.auth.client.clientPortNameOverride }}
+    {{- if .Values.service.clientPortNameOverride }}
     {{- if .Values.auth.client.secureTransport }}
     - name: {{ .Values.service.clientPortNameOverride }}-ssl
     {{- else}}
@@ -21,7 +28,7 @@ spec:
     {{- end }}
       port: {{ .Values.service.port  }}
       targetPort: client
-    {{- if .Values.auth.client.peerPortNameOverride }}
+    {{- if .Values.service.peerPortNameOverride }}
     {{- if .Values.auth.peer.secureTransport }}
     - name: {{ .Values.service.peerPortNameOverride }}-ssl
     {{- else}}
@@ -32,4 +39,4 @@ spec:
     {{- end }}
       port: {{ .Values.service.peerPort  }}
       targetPort: peer
-  selector: {{- include "etcd.matchLabels" . | nindent 4 }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}

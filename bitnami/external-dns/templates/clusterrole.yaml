@@ -19,8 +19,18 @@ rules:
   - apiGroups:
       - extensions
       - "networking.k8s.io"
+      - getambassador.io
     resources:
       - ingresses
+      - hosts
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - route.openshift.io
+    resources:
+      - routes
     verbs:
       - get
       - list
@@ -57,6 +67,16 @@ rules:
       - get
       - watch
       - list
+  - apiGroups:
+      - gloo.solo.io
+      - gateway.solo.io
+    resources:
+      - proxies
+      - virtualservices
+    verbs:
+      - get
+      - list
+      - watch
   {{- if or .Values.crd.create .Values.crd.apiversion }}
   - apiGroups:
       {{- if .Values.crd.create }}

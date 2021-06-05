@@ -11,6 +11,11 @@ metadata:
   {{- end }}
 data:
   ping_readiness_local.sh: |-
+    #!/bin/sh
+    set -e
+
+    REDIS_STATUS_FILE=/tmp/.redis_cluster_check
+
     {{- if .Values.usePasswordFile }}
     password_aux=`cat ${REDIS_PASSWORD_FILE}`
     export REDISCLI_AUTH=$password_aux
@@ -18,7 +23,7 @@ data:
     export REDISCLI_AUTH=$REDIS_PASSWORD
     {{- end }}
     response=$(
-      timeout -s 9 $1 \
+      timeout -s 3 $1 \
       redis-cli \
         -h localhost \
 {{- if .Values.tls.enabled }}
@@ -36,6 +41,31 @@ data:
       echo "$response"
       exit 1
     fi
+{{- if not .Values.cluster.externalAccess.enabled }}
+    if [ ! -f "$REDIS_STATUS_FILE" ]; then
+      response=$(
+        timeout -s 3 $1 \
+        redis-cli \
+          -h localhost \
+  {{- if .Values.tls.enabled }}
+          -p $REDIS_TLS_PORT \
+          --tls \
+          --cert {{ template "redis-cluster.tlsCert" . }} \
+          --key {{ template "redis-cluster.tlsCertKey" . }} \
+          --cacert {{ template "redis-cluster.tlsCACert" . }} \
+  {{- else }}
+          -p $REDIS_PORT \
+  {{- end }}
+          CLUSTER INFO | grep cluster_state | tr -d '[:space:]'
+      )
+      if [ "$response" != "cluster_state:ok" ]; then
+        echo "$response"
+        exit 1
+      else
+        touch "$REDIS_STATUS_FILE"
+      fi
+    fi
+{{- end }}
   ping_liveness_local.sh: |-
     {{- if .Values.usePasswordFile }}
     password_aux=`cat ${REDIS_PASSWORD_FILE}`
@@ -44,7 +74,7 @@ data:
     export REDISCLI_AUTH=$REDIS_PASSWORD
     {{- end }}
     response=$(
-      timeout -s 9 $1 \
+      timeout -s 3 $1 \
       redis-cli \
         -h localhost \
 {{- if .Values.tls.enabled }}

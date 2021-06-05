@@ -138,7 +138,7 @@ in the values file. If the name is not explicitly set it will take the "common.n
 {{- end -}}
 
 {{/*
-Return the proper MongoDB image name
+Return the proper MongoDB(R) image name
 */}}
 {{- define "mongodb-sharded.image" -}}
 {{ include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) }}
@@ -183,7 +183,7 @@ Compile all warnings into a single message, and call fail.
 {{- end -}}
 
 {{/*
-Validate values of MongoDB - both mongodbUsername and mongodbDatabase are necessary
+Validate values of MongoDB(R) - both mongodbUsername and mongodbDatabase are necessary
 to create a custom user and database during 1st initialization
 */}}
 {{- define "mongodb-sharded.validateValues.mongodbCustomDatabase" -}}
@@ -196,7 +196,7 @@ mongodb: mongodbUsername, mongodbDatabase
 {{- end -}}
 
 {{/*
-Validate values of MongoDB - If using an external config server, then both the host and the replicaset name should be set.
+Validate values of MongoDB(R) - If using an external config server, then both the host and the replicaset name should be set.
 */}}
 {{- define "mongodb-sharded.validateValues.externalCfgServer" -}}
 {{- if and .Values.configsvr.external.replicasetName (not .Values.configsvr.external.host) -}}
@@ -218,7 +218,7 @@ mongodb: invalidExternalConfigServer
 {{- end -}}
 
 {{/*
-Validate values of MongoDB - The number of shards must be positive, as well as the data node replicas
+Validate values of MongoDB(R) - The number of shards must be positive, as well as the data node replicas
 */}}
 {{- define "mongodb-sharded.validateValues.replicas" -}}
 {{- if and (le (int .Values.shardsvr.dataNode.replicas) 0) (ge (int .Values.shards) 1) }}
@@ -237,7 +237,7 @@ mongodb: invalidConfigSvrReplicas
 {{- end -}}
 
 {{/*
-Validate values of MongoDB - Cannot use both .config and .configCM
+Validate values of MongoDB(R) - Cannot use both .config and .configCM
 */}}
 {{- define "mongodb-sharded.validateValues.config" -}}
 {{- if and .Values.shardsvr.dataNode.configCM .Values.shardsvr.dataNode.config }}

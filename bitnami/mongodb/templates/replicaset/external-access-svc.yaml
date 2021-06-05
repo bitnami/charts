@@ -1,4 +1,4 @@
-{{- if and (eq .Values.architecture "replicaset") .Values.externalAccess.enabled }}
+{{- if and (eq .Values.architecture "replicaset") .Values.externalAccess.enabled (not (eq .Values.externalAccess.service.type "ClusterIP"))}}
 {{- $fullName := include "mongodb.fullname" . }}
 {{- $replicaCount := .Values.replicaCount | int }}
 {{- $root := . }}
@@ -34,8 +34,6 @@ spec:
       port: {{ $root.Values.externalAccess.service.port }}
       {{- if not (empty $root.Values.externalAccess.service.nodePorts) }}
       nodePort: {{ index $root.Values.externalAccess.service.nodePorts $i }}
-      {{- else }}
-      nodePort: null
       {{- end }}
       targetPort: mongodb
   selector: {{- include "common.labels.matchLabels" $ | nindent 4 }}

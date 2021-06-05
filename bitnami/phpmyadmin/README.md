@@ -94,6 +94,7 @@ The following tables lists the configurable parameters of the phpMyAdmin chart a
 | `readinessProbe`            | Readiness probe configuration for PhpMyAdmin                                              | Check `values.yaml` file             |
 | `customLivenessProbe`       | Override default liveness probe                                                           | `nil`                                |
 | `customReadinessProbe`      | Override default readiness probe                                                          | `nil`                                |
+| `hostAliases`               | Add deployment host aliases                                                               | `Check values.yaml`                  |
 | `updateStrategy`            | Strategy to use to update Pods                                                            | Check `values.yaml` file             |
 | `podAffinityPreset`         | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                                 |
 | `podAntiAffinityPreset`     | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                               |

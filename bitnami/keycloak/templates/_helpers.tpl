@@ -18,6 +18,13 @@ If release name contains chart name it will be used as a full name.
 {{- end -}}
 
 {{/*
+Return the proper Auth TLS image name
+*/}}
+{{- define "keycloak.auth.tls.image" -}}
+{{- include "common.images.image" (dict "imageRoot" .Values.auth.tls.image "global" .Values.global) -}}
+{{- end -}}
+
+{{/*
 Return the proper Keycloak image name
 */}}
 {{- define "keycloak.image" -}}
@@ -25,10 +32,37 @@ Return the proper Keycloak image name
 {{- end -}}
 
 {{/*
+Return the proper keycloak-config-cli image name
+*/}}
+{{- define "keycloak.keycloakConfigCli.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.keycloakConfigCli.image "global" .Values.global) }}
+{{- end -}}
+
+{{/*
+Return the keycloak-config-cli configuration configmap.
+*/}}
+{{- define "keycloak.keycloakConfigCli.configmapName" -}}
+{{- if .Values.keycloakConfigCli.existingConfigmap -}}
+    {{- printf "%s" (tpl .Values.keycloakConfigCli.existingConfigmap $) -}}
+{{- else -}}
+    {{- printf "%s-keycloak-config-cli-configmap" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if a configmap object should be created for keycloak-config-cli
+*/}}
+{{- define "keycloak.keycloakConfigCli.createConfigmap" -}}
+{{- if and .Values.keycloakConfigCli.enabled .Values.keycloakConfigCli.configuration (not .Values.keycloakConfigCli.existingConfigmap) -}}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "keycloak.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.image) "global" .Values.global) -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.keycloakConfigCli.image) "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
@@ -165,10 +199,11 @@ keycloak: replicaCount
 
 {{/* Validate values of Keycloak - database */}}
 {{- define "keycloak.validateValues.database" -}}
-{{- if and (not .Values.postgresql.enabled) (not .Values.externalDatabase.host) -}}
+{{- if and (not .Values.postgresql.enabled) (not .Values.externalDatabase.host) (not .Values.externalDatabase.existingSecret) -}}
 keycloak: database
     You disabled the PostgreSQL sub-chart but did not specify an external PostgreSQL host.
     Either deploy the PostgreSQL sub-chart (--set postgresql.enabled=true),
-    or set a value for the external database host (--set externalDatabase.host=FOO).
+    or set a value for the external database host (--set externalDatabase.host=FOO)
+    or set a value for the external database existing secret (--set externalDatabase.existingSecret=BAR).
 {{- end -}}
 {{- end -}}

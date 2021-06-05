@@ -22,7 +22,7 @@ spec:
     metadata:
       labels: {{- include "common.labels.matchLabels" . | nindent 8 }}
         {{- if .Values.commonLabels }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
         {{- end }}
         {{- if .Values.core.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.core.podLabels "context" $) | nindent 8 }}
@@ -121,7 +121,7 @@ spec:
             timeoutSeconds: {{ .Values.core.startupProbe.timeoutSeconds }}
             successThreshold: {{ .Values.core.startupProbe.successThreshold }}
             failureThreshold: {{ .Values.core.startupProbe.failureThreshold }}
-          {{- else if .Values.core.startupProbe }}
+          {{- else if .Values.core.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.core.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           envFrom:
@@ -186,7 +186,7 @@ spec:
             {{- end }}
             {{- if .Values.core.uaaSecretName }}
             - name: auth-ca-cert
-              mountPath: /etc/core/ca/auth-ca.crt
+              mountPath: /etc/core/auth-ca/auth-ca.crt
               subPath: auth-ca.crt
             {{- end }}
             - name: psc

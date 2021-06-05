@@ -2,9 +2,9 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "elasticsearch.master.fullname" . }}
-  labels: {{- include "elasticsearch.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: master
-  annotations: {{ include "elasticsearch.tplValue" ( dict "value" .Values.master.service.annotations "context" $) | nindent 4 }}
+  annotations: {{ include "common.tplvalues.render" ( dict "value" .Values.master.service.annotations "context" $) | nindent 4 }}
 spec:
   type: {{ .Values.master.service.type | quote }}
   {{- if and (eq .Values.master.service.type "LoadBalancer") (not (empty .Values.master.service.loadBalancerIP)) }}
@@ -23,5 +23,5 @@ spec:
       {{- else if eq .Values.master.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-  selector: {{- include "elasticsearch.matchLabels" . | nindent 4 }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: master

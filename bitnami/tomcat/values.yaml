@@ -18,7 +18,7 @@ kubeVersion:
 image:
   registry: docker.io
   repository: bitnami/tomcat
-  tag: 9.0.41-debian-10-r36
+  tag: 10.0.6-debian-10-r13
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -60,6 +60,11 @@ clusterDomain: cluster.local
 ##
 extraDeploy: []
 
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
+
 ## Admin user
 ## ref: https://github.com/bitnami/bitnami-docker-tomcat#creating-a-custom-user
 ##
@@ -100,6 +105,13 @@ extraEnvVarsSecret:
 ##
 replicaCount: 1
 
+## Deployment
+##
+deployment:
+  ## Deployment type: deployment or statefulset
+  ##
+  type: deployment
+
 ## Strategy to use to update Pods
 ##
 updateStrategy:
@@ -111,6 +123,15 @@ updateStrategy:
 ## Tomcat container port to open
 ##
 containerPort: 8080
+
+## Tomcat container extra ports to open
+##
+## Example:
+## containerExtraPorts:
+##  - name: ajp
+##    containerPort: 8081
+##
+containerExtraPorts: {}
 
 ## Tomcat pods' Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
@@ -202,6 +223,7 @@ podAntiAffinityPreset: soft
 nodeAffinityPreset:
   ## Node affinity type
   ## Allowed values: soft, hard
+  ##
   type: ""
   ## Node label key to match
   ## E.g.
@@ -235,6 +257,10 @@ tolerations: []
 ## Extra volumes to add to the deployment
 ##
 extraVolumes: []
+
+## Extra volume claim templates to add to the statefulset
+##
+extraVolumeClaimTemplates: []
 
 ## Extra volume mounts to add to the container
 ##
@@ -292,6 +318,10 @@ persistence:
   ## Name of an existing PVC
   ##
   existingClaim:
+  ## Selector labels to use in volume claim template in statefulset
+  ## Applicable when deployment.type is statefulset
+  ##
+  selectorLabels:
 
 ## Service parameters
 ##
@@ -406,8 +436,8 @@ volumePermissions:
   enabled: false
   image:
     registry: docker.io
-    repository: bitnami/minideb
-    tag: buster
+    repository: bitnami/bitnami-shell
+    tag: 10-debian-10-r92
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

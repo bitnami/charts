@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/mysql
-  tag: 8.0.23-debian-10-r0
+  tag: 8.0.25-debian-10-r16
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -28,8 +28,8 @@ image:
   ##
   pullSecrets: []
   ## Set to true if you would like to see extra information on logs
-  ## It turns BASH and NAMI debugging in minideb
-  ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ## It turns BASH and/or NAMI debugging in the image
+  ##
   debug: false
 
 ## String to partially override common.names.fullname template (will maintain the release name)
@@ -121,6 +121,11 @@ primary:
   command: []
   args: []
 
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
   ## Configure MySQL Primary with a custom my.cnf file
   ## ref: https://mysql.com/kb/en/mysql/configuring-mysql-with-mycnf/#example-of-configuration-file
   ##
@@ -130,7 +135,7 @@ primary:
     skip-name-resolve
     explicit_defaults_for_timestamp
     basedir=/opt/bitnami/mysql
-    plugin_dir=/opt/bitnami/mysql/plugin
+    plugin_dir=/opt/bitnami/mysql/lib/plugin
     port=3306
     socket=/opt/bitnami/mysql/tmp/mysql.sock
     datadir=/bitnami/mysql/data
@@ -146,7 +151,7 @@ primary:
     port=3306
     socket=/opt/bitnami/mysql/tmp/mysql.sock
     default-character-set=UTF8
-    plugin_dir=/opt/bitnami/mysql/plugin
+    plugin_dir=/opt/bitnami/mysql/lib/plugin
 
     [manager]
     port=3306
@@ -192,6 +197,7 @@ primary:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -251,7 +257,7 @@ primary:
     #   memory: 256Mi
     #   cpu: 250m
 
-  ## MySQL primary container's liveness and readiness probes
+  ## MySQL primary container's liveness, readiness and startup probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
   livenessProbe:
@@ -268,6 +274,13 @@ primary:
     timeoutSeconds: 1
     failureThreshold: 3
     successThreshold: 1
+  startupProbe:
+    enabled: true
+    initialDelaySeconds: 120
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 60
+    successThreshold: 1
 
   ## MySQL primary custom liveness probe
   ##
@@ -276,6 +289,10 @@ primary:
   ## MySQL primary custom rediness probe
   ##
   customReadinessProbe: {}
+
+  ## MySQL primary custom startup probe
+  ##
+  customStartupProbe: {}
 
   ## MySQL primary additional command line flags
   ## Can be used to specify command line flags, for example:
@@ -333,6 +350,7 @@ primary:
     ## selector:
     ##   matchLabels:
     ##     app: my-app
+    ##
     selector: {}
 
   ## Extra volumes to add to the MySQL Primary pod(s)
@@ -372,6 +390,10 @@ primary:
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
     loadBalancerIP: ""
+    ## Enable client source IP preservation
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
     ## Load Balancer sources
     ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## E.g.
@@ -387,7 +409,7 @@ primary:
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
   ##
   pdb:
-    create: false
+    enabled: false
     ## Min number of pods that must still be available after the eviction
     ##
     minAvailable: 1
@@ -395,12 +417,21 @@ primary:
     ##
     # maxUnavailable: 1
 
+  ## MySQL Primary pod label. If labels are same as commonLabels , this will take precedence.
+  ##
+  podLabels: {}
+
 ## MySQL Secondary parameters
 ##
 secondary:
   ## Number of MySQL Secondary replicas to deploy
   ##
   replicaCount: 1
+
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
 
   ## Command and args for running the container (set to default if not set). Use array form
   ##
@@ -476,6 +507,7 @@ secondary:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -535,7 +567,7 @@ secondary:
     #   memory: 256Mi
     #   cpu: 250m
 
-  ## MySQL secondary container's liveness and readiness probes
+  ## MySQL secondary container's liveness, readiness and startup probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
   livenessProbe:
@@ -552,6 +584,13 @@ secondary:
     timeoutSeconds: 1
     failureThreshold: 3
     successThreshold: 1
+  startupProbe:
+    enabled: true
+    initialDelaySeconds: 120
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 60
+    successThreshold: 1
 
   ## MySQL secondary custom liveness probe
   ##
@@ -560,6 +599,10 @@ secondary:
   ## MySQL secondary custom rediness probe
   ##
   customReadinessProbe: {}
+
+  ## MySQL secondary custom startup probe
+  ##
+  customStartupProbe: {}
 
   ## MySQL secondary additional command line flags
   ## Can be used to specify command line flags, for example:
@@ -613,6 +656,7 @@ secondary:
     ## selector:
     ##   matchLabels:
     ##     app: my-app
+    ##
     selector: {}
 
   ## Extra volumes to add to the MySQL Secondary pod(s)
@@ -652,6 +696,10 @@ secondary:
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
     loadBalancerIP: ""
+    ## Enable client source IP preservation
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
     ## Load Balancer sources
     ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## E.g.
@@ -667,13 +715,17 @@ secondary:
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
   ##
   pdb:
-    create: false
+    enabled: false
     ## Min number of pods that must still be available after the eviction
     ##
     minAvailable: 1
     ## Max number of pods that can be unavailable after the eviction
     ##
     # maxUnavailable: 1
+
+  ## MySQL Secondary pod label. If labels are same as commonLabels , this will take precedence.
+  ##
+  podLabels: {}
 
 ## MySQL pods ServiceAccount
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
@@ -705,8 +757,8 @@ volumePermissions:
   enabled: false
   image:
     registry: docker.io
-    repository: bitnami/minideb
-    tag: buster
+    repository: bitnami/bitnami-shell
+    tag: 10-debian-10-r92
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -723,7 +775,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mysqld-exporter
-    tag: 0.12.1-debian-10-r327
+    tag: 0.12.1-debian-10-r449
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -735,6 +787,7 @@ metrics:
   ## MySQL Prometheus exporter service parameters
   ## Mysqld Prometheus exporter liveness and readiness probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes  ##
+  ##
   service:
     type: ClusterIP
     port: 9104

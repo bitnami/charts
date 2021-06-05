@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/zookeeper
-  tag: 3.6.2-debian-10-r100
+  tag: 3.7.0-debian-10-r56
 
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -28,8 +28,7 @@ image:
   # pullSecrets:
   #   - myRegistryKeySecretName
   ## Set to true if you would like to see extra information on logs
-  ## It turns BASH and NAMI debugging in minideb
-  ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
+  ## It turns BASH and/or NAMI debugging in the image
   ##
   debug: false
 
@@ -39,9 +38,18 @@ image:
 ## String to fully override common.names.fullname template
 # fullnameOverride:
 
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
+
 ## Kubernetes Cluster Domain
 ##
 clusterDomain: cluster.local
+
+## Extra objects to deploy (value evaluated as a template)
+##
+extraDeploy: []
 
 ## Add labels to all the deployed resources
 ##
@@ -58,8 +66,8 @@ volumePermissions:
   enabled: false
   image:
     registry: docker.io
-    repository: bitnami/minideb
-    tag: buster
+    repository: bitnami/bitnami-shell
+    tag: 10-debian-10-r97
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -250,8 +258,12 @@ serviceAccount:
   ## The name of the ServiceAccount to use.
   ## If not set and create is true, a name is generated using the common.names.fullname template
   # name:
+  # Allows auto mount of ServiceAccountToken on the serviceAccount created
+  # Can be set to false if pods using this serviceAccount do not need to use K8s API
+  automountServiceAccountToken: true
 
 ## Zookeeper Pod Security Context
+##
 securityContext:
   enabled: true
   fsGroup: 1001
@@ -316,6 +328,7 @@ podAntiAffinityPreset: soft
 nodeAffinityPreset:
   ## Node affinity type
   ## Allowed values: soft, hard
+  ##
   type: ''
   ## Node label key to match
   ## E.g.
@@ -348,14 +361,17 @@ tolerations: []
 
 ## Labels
 ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
 podLabels: {}
 
 ## Annotations
 ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+##
 podAnnotations: {}
 
 ## Name of the priority class to be used by zookeeper pods, priority class needs to be created beforehand
 ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+##
 priorityClassName: ''
 
 ## Scheduler name
@@ -391,6 +407,14 @@ readinessProbe:
   failureThreshold: 6
   successThreshold: 1
   probeCommandTimeout: 2
+
+## Custom Liveness probes for ZooKeeper
+##
+customLivenessProbe: {}
+
+## Custom Readiness probes for ZooKeeper
+##
+customReadinessProbe: {}
 
 ## Network policies
 ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
@@ -469,6 +493,7 @@ metrics:
     #   prometheus: my-prometheus
 
     ## Some example rules.
+    ##
     rules: []
     #  - alert: ZookeeperSyncedFollowers
     #    annotations:

@@ -28,6 +28,9 @@ spec:
       {{- end }}
     spec:
       {{- include "common.images.pullSecrets" (dict "images" (list .Values.operator.image .Values.grafana.image .Values.grafanaPluginInit.image ) "global" .Values.global) | nindent 6 }}
+      {{- if .Values.operator.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.operator.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.operator.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.operator.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
@@ -78,8 +81,13 @@ spec:
         {{- if .Values.operator.resources }}
           resources: {{- toYaml .Values.operator.resources | nindent 12 }}
         {{- end }}
+        {{- if .Values.operator.containerSecurityContext.enabled }}
           securityContext:
-            allowPrivilegeEscalation: false
+            runAsUser: {{ .Values.operator.containerSecurityContext.runAsUser }}
+            runAsGroup: {{ .Values.operator.containerSecurityContext.runAsGroup }}
+            allowPrivilegeEscalation: {{ .Values.operator.containerSecurityContext.allowPrivilegeEscalation }}
+            readOnlyRootFilesystem: {{ .Values.operator.containerSecurityContext.readOnlyRootFilesystem }}
+        {{- end }}
         {{- if .Values.operator.readinessProbe.enabled }}
           readinessProbe:
             httpGet:

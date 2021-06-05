@@ -73,3 +73,14 @@ Return the appropriate apiVersion for PodSecurityPolicy
 {{- print "extensions/v1beta1" -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Return the appropriate apiGroup for PodSecurityPolicy.
+*/}}
+{{- define "nginx-ingress-controller.podSecurityPolicy.apiGroup" -}}
+{{- if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
+{{- print "policy" -}}
+{{- else -}}
+{{- print "extensions" -}}
+{{- end -}}
+{{- end -}}

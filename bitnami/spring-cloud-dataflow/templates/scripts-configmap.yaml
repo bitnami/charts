@@ -7,6 +7,7 @@ metadata:
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
+  namespace: {{ .Release.Namespace }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -17,6 +18,10 @@ data:
   {{- $releaseNamespace := .Release.Namespace }}
   wait-for-backends.sh: |-
     #!/bin/bash
+
+    set -o errexit
+    set -o pipefail
+    set -o nounset
 
     # Auxiliary functions
     k8s_wait_for_statefulset() {

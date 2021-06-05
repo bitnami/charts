@@ -32,6 +32,9 @@ spec:
         {{- end }}
     spec:
       {{- include "fluentd.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.aggregator.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.aggregator.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       serviceAccountName: {{ template "fluentd.aggregator.serviceAccountName" . }}
       {{- if .Values.aggregator.securityContext.enabled }}
       securityContext: {{- omit .Values.aggregator.securityContext "enabled" | toYaml | nindent 8 }}
@@ -54,6 +57,7 @@ spec:
       initContainers:
       {{- include "fluentd.tplValue" ( dict "value" .Values.aggregator.initContainers "context" $ ) | nindent 8 }}
       {{- end }}
+      terminationGracePeriodSeconds: {{ .Values.aggregator.terminationGracePeriodSeconds }}
       containers:
         - name: fluentd
           image: {{ include "fluentd.image" . }}
@@ -106,7 +110,9 @@ spec:
           resources: {{- toYaml .Values.aggregator.resources | nindent 12 }}
           {{- end }}
           {{- if .Values.aggregator.containerSecurityContext.enabled }}
+          # yamllint disable rule:indentation
           securityContext: {{- omit .Values.aggregator.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          # yamllint enable rule:indentation
           {{ end }}
           volumeMounts:
             - name: fluentd-config
@@ -141,6 +147,8 @@ spec:
                 path: tls.crt
               - key: tls.key
                 path: tls.key
+              - key: rootCA.crt
+                path: rootCA.crt
         {{- end }}
         - name: fluentd-config
           configMap:
@@ -156,9 +164,9 @@ spec:
         name: {{ include "fluentd.fullname" . }}-buffer
       spec:
         accessModes: [{{ .Values.aggregator.persistence.accessMode }}]
-        storageClassName: {{ .Values.aggregator.persistence.storageClass }}
         resources:
           requests:
             storage: {{ .Values.aggregator.persistence.size }}
+        {{- include "common.storage.class" (dict "persistence" .Values.aggregator.persistence "global" .Values.global) | nindent 8 }}
   {{- end }}
 {{- end -}}

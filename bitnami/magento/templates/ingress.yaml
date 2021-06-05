@@ -23,22 +23,24 @@ metadata:
 spec:
   rules:
     {{- if .Values.ingress.hostname }}
-    - host: {{ .Values.ingress.hostname }}
+    - host: {{ .Values.ingress.hostname | quote }}
       http:
         paths:
-          - path: /
-            backend:
-              serviceName: {{ include "common.names.fullname" . }}
-              servicePort: http
+          - path: {{ default "/" .Values.ingress.path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+            pathType: {{ .Values.ingress.pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" $) "servicePort" "http" "context" $) | nindent 14 }}
     {{- end }}
     {{- range .Values.ingress.extraHosts }}
-    - host: {{ .name }}
+    - host: {{ .name | quote }}
       http:
         paths:
           - path: {{ default "/" .path }}
-            backend:
-              serviceName: {{ include "common.names.fullname" $ }}
-              servicePort: http
+            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
+            pathType: {{ default "ImplementationSpecific" .pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" $) "servicePort" "http" "context" $) | nindent 14 }}
     {{- end }}
   {{- if or .Values.ingress.tls .Values.ingress.extraTls }}
   tls:

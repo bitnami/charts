@@ -24,6 +24,9 @@ spec:
         app.kubernetes.io/component: envoy
     spec:
       {{- include "common.images.pullSecrets" ( dict "images" (list .Values.contour.image .Values.envoy.image) "global" .Values.global) | nindent 6 }}
+      {{- if .Values.envoy.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.envoy.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.affinity "context" $) | nindent 8 }}
       {{- else }}
@@ -103,6 +106,9 @@ spec:
             - --service-cluster $(CONTOUR_NAMESPACE)
             - --service-node $(ENVOY_POD_NAME)
             - --log-level {{ .Values.envoy.logLevel }}
+            {{- if .Values.envoy.extraArgs }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.envoy.extraArgs "context" $) | nindent 12 }}
+            {{- end }}
           image: {{ include "common.images.image" ( dict "imageRoot" .Values.envoy.image "global" .Values.global ) }}
           imagePullPolicy: {{ .Values.envoy.image.pullPolicy }}
           name: envoy
@@ -140,11 +146,17 @@ spec:
               {{- if .Values.envoy.useHostPort }}
               hostPort: {{ .Values.envoy.hostPorts.http }}
               {{- end }}
+              {{- if .Values.envoy.useHostIP }}
+              hostIP: {{ .Values.envoy.hostIPs.http }}
+              {{- end }}
               name: http
               protocol: TCP
             - containerPort: {{ .Values.envoy.containerPorts.https }}
               {{- if .Values.envoy.useHostPort }}
               hostPort: {{ .Values.envoy.hostPorts.https }}
+              {{- end }}
+              {{- if .Values.envoy.useHostIP }}
+              hostIP: {{ .Values.envoy.hostIPs.https }}
               {{- end }}
               name: https
               protocol: TCP
@@ -235,7 +247,7 @@ spec:
       {{- if .Values.envoy.initContainers }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.envoy.initContainers "context" $ ) | nindent 8 }}
       {{- end }}
-      automountServiceAccountToken: false
+      automountServiceAccountToken: {{ .Values.envoy.serviceAccount.automountServiceAccountToken }}
       serviceAccountName: {{ include "envoy.envoyServiceAccountName" . }}
       volumes:
         - name: envoy-config

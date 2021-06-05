@@ -12,7 +12,7 @@ preferredDuringSchedulingIgnoredDuringExecution:
           operator: In
           values:
             {{- range .values }}
-            - {{ . }}
+            - {{ . | quote }}
             {{- end }}
     weight: 1
 {{- end -}}
@@ -29,7 +29,7 @@ requiredDuringSchedulingIgnoredDuringExecution:
           operator: In
           values:
             {{- range .values }}
-            - {{ . }}
+            - {{ . | quote }}
             {{- end }}
 {{- end -}}
 
@@ -59,7 +59,7 @@ preferredDuringSchedulingIgnoredDuringExecution:
           {{ printf "app.kubernetes.io/component: %s" $component }}
           {{- end }}
       namespaces:
-        - {{ .context.Release.Namespace }}
+        - {{ .context.Release.Namespace | quote }}
       topologyKey: kubernetes.io/hostname
     weight: 1
 {{- end -}}
@@ -77,7 +77,7 @@ requiredDuringSchedulingIgnoredDuringExecution:
         {{ printf "app.kubernetes.io/component: %s" $component }}
         {{- end }}
     namespaces:
-      - {{ .context.Release.Namespace }}
+      - {{ .context.Release.Namespace | quote }}
     topologyKey: kubernetes.io/hostname
 {{- end -}}
 

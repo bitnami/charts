@@ -55,7 +55,7 @@ To access the MariaDB Prometheus metrics from outside the cluster execute the fo
 To upgrade this helm chart:
 
     helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} bitnami/mariadb-galera \
-      --set rootUser.password=$(kubectl get secret {{ if .Values.existingSecret }}{{ .Values.existingSecret }}{{ else }}{{ template "common.names.fullname" . }}{{ end }} -o jsonpath="{.data.mariadb-root-password}" | base64 --decode) \
+      --set rootUser.password=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ if .Values.existingSecret }}{{ .Values.existingSecret }}{{ else }}{{ template "common.names.fullname" . }}{{ end }} -o jsonpath="{.data.mariadb-root-password}" | base64 --decode) \
       {{ if .Values.db.user }}--set db.user={{ .Values.db.user }} --set db.password=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ if .Values.existingSecret }}{{ .Values.existingSecret }}{{ else }}{{ template "common.names.fullname" . }}{{ end }} -o jsonpath="{.data.mariadb-password}" | base64 --decode) {{ end }}--set db.name={{ .Values.db.name }} \
       --set galera.mariabackup.password=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ if .Values.existingSecret }}{{ .Values.existingSecret }}{{ else }}{{ template "common.names.fullname" . }}{{ end }} -o jsonpath="{.data.mariadb-galera-mariabackup-password}" | base64 --decode)
 
