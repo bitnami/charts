@@ -274,18 +274,22 @@ The following tables lists the configurable parameters of the Airflow chart and 
 
 ### Airflow metrics parameters
 
-| Parameter                   | Description                                      | Default                                                 |
-|-----------------------------|--------------------------------------------------|---------------------------------------------------------|
-| `metrics.enabled`           | Start a side-car prometheus exporter             | `false`                                                 |
-| `metrics.image.pullPolicy`  | Image pull policy                                | `IfNotPresent`                                          |
-| `metrics.image.pullSecrets` | Specify docker-registry secret names as an array | `[]` (does not add image pull secrets to deployed pods) |
-| `metrics.image.registry`    | Airflow exporter image registry                  | `docker.io`                                             |
-| `metrics.image.repository`  | Airflow exporter image name                      | `bitnami/airflow-exporter`                              |
-| `metrics.image.tag`         | Airflow exporter image tag                       | `{TAG_NAME}`                                            |
-| `metrics.podAnnotations`    | Annotations to add to the metrics's pods         | `nil`                                                   |
-| `metrics.podLabels`         | Labels to add to the worker's pods               | `{}`                                                    |
-| `metrics.resources`         | The resources for the metrics containers         | `{}`                                                    |
-| `metrics.tolerations`       | The tolerations for the metrics pod              | `[]`                                                    |
+| Parameter                               | Description                                      | Default                                                 |
+|-----------------------------------------|--------------------------------------------------|---------------------------------------------------------|
+| `metrics.enabled`                       | Start a side-car prometheus exporter             | `false`                                                 |
+| `metrics.image.pullPolicy`              | Image pull policy                                | `IfNotPresent`                                          |
+| `metrics.image.pullSecrets`             | Specify docker-registry secret names as an array | `[]` (does not add image pull secrets to deployed pods) |
+| `metrics.image.registry`                | Airflow exporter image registry                  | `docker.io`                                             |
+| `metrics.image.repository`              | Airflow exporter image name                      | `bitnami/airflow-exporter`                              |
+| `metrics.image.tag`                     | Airflow exporter image tag                       | `{TAG_NAME}`                                            |
+| `metrics.podAnnotations`                | Annotations to add to the metrics's pods         | `nil`                                                   |
+| `metrics.podLabels`                     | Labels to add to the worker's pods               | `{}`                                                    |
+| `metrics.resources`                     | The resources for the metrics containers         | `{}`                                                    |
+| `metrics.tolerations`                   | The tolerations for the metrics pod              | `[]`                                                    |
+| `metrics.serviceMonitor.enabled`        | Create ServiceMonitor resource                   | `false`                                                 |
+| `metrics.serviceMonitor.interval`       | Interval in which prometheus scrapes             | `60s`                                                   |
+| `metrics.serviceMonitor.scrapeTimeout`  | Scrape Timeout duration for prometheus           | `10s`                                                   |
+| `metrics.serviceMonitor.labels`         | Additional labels to attach                      | `{}`                                                    |
 
 ### Airflow ldap parameters
 
