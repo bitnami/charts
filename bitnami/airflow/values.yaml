@@ -978,6 +978,14 @@ metrics:
   ##
   hostAliases: []
 
+  ## Prometheus Operator ServiceMonitor resource
+  serviceMonitor:
+    enabled: false
+    interval: 60s
+    scrapeTimeout: 10s
+    # ServiceMonitor Labels
+    labels: {}
+
   ## Metrics exporter resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##

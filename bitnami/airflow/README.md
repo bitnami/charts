@@ -286,7 +286,7 @@ tolerations configuration                                                       
 ### Airflow metrics parameters
 
 | Parameter                               | Description                                      | Default                                                 |
-| --------------------------------------- | ------------------------------------------------ | ------------------------------------------------------- |
+|-----------------------------------------|--------------------------------------------------|---------------------------------------------------------|
 | `metrics.enabled`                       | Start a side-car prometheus exporter             | `false`                                                 |
 | `metrics.image.pullPolicy`              | Image pull policy                                | `IfNotPresent`                                          |
 | `metrics.image.pullSecrets`             | Specify docker-registry secret names as an array | `[]` (does not add image pull secrets to deployed pods) |
