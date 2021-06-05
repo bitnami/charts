@@ -176,8 +176,8 @@ The following tables lists the configurable parameters of the ZooKeeper chart an
 | `persistence.size`                     | PVC Storage Request for ZooKeeper data volume                                  | `8Gi`                           |
 | `persistence.annotations`              | Annotations for the PVC                                                        | `{}` (evaluated as a template)  |
 | `persistence.selector`                 | Selector to match an existing Persistent Volume for Zookeeper's data PVC. If set, the PVC can't have a PV dynamically provisioned for it                                                                        | `{}` (evaluated as a template)  |
-| `persistence.dataLogDir.existingClaim` | Provide an existing `PersistentVolumeClaim` for Zookeeper's Data log directory | `nil` (evaluated as a template) |
 | `persistence.dataLogDir.size`          | PVC Storage Request for ZooKeeper's Data log directory                         | `8Gi`                           |
+| `persistence.dataLogDir.existingClaim` | Provide an existing `PersistentVolumeClaim` for Zookeeper's Data log directory | `nil` (evaluated as a template) |
 | `persistence.dataLogDir.selector`      | Selector to match an existing Persistent Volume for Zookeeper's Data log PVC. If set, the PVC can't have a PV dynamically provisioned for it                                                                    | `{}` (evaluated as a template)  |
 
 ### Volume Permissions parameters
