@@ -249,10 +249,28 @@ spec:
       # yamllint enable rule:indentation
       {{- end }}
       {{- if .Values.prometheus.thanos.livenessProbe.enabled }}
-      livenessProbe: {{- omit .Values.prometheus.thanos.livenessProbe "enabled" | toYaml | nindent 8 }}
+      livenessProbe:
+        httpGet:
+          path: /-/healthy
+          port: http
+          scheme: HTTP
+        initialDelaySeconds: {{ .Values.prometheus.thanos.livenessProbe.initialDelaySeconds }}
+        periodSeconds: {{ .Values.prometheus.thanos.livenessProbe.periodSeconds }}
+        timeoutSeconds: {{ .Values.prometheus.thanos.livenessProbe.timeoutSeconds }}
+        failureThreshold: {{ .Values.prometheus.thanos.livenessProbe.failureThreshold }}
+        successThreshold: {{ .Values.prometheus.thanos.livenessProbe.successThreshold }}
       {{- end }}
       {{- if .Values.prometheus.thanos.readinessProbe.enabled }}
-      readinessProbe: {{- omit .Values.prometheus.thanos.readinessProbe "enabled" | toYaml | nindent 8 }}
+      readinessProbe:
+        httpGet:
+          path: /-/ready
+          port: http
+          scheme: HTTP
+        initialDelaySeconds: {{ .Values.prometheus.thanos.readinessProbe.initialDelaySeconds }}
+        periodSeconds: {{ .Values.prometheus.thanos.readinessProbe.periodSeconds }}
+        timeoutSeconds: {{ .Values.prometheus.thanos.readinessProbe.timeoutSeconds }}
+        failureThreshold: {{ .Values.prometheus.thanos.readinessProbe.failureThreshold }}
+        successThreshold: {{ .Values.prometheus.thanos.readinessProbe.successThreshold }}
       {{- end }}
     {{- end }}
     {{- if or .Values.prometheus.containerSecurityContext.enabled .Values.prometheus.livenessProbe.enabled .Values.prometheus.readinessProbe.enabled }}
@@ -266,10 +284,28 @@ spec:
       securityContext: {{- omit .Values.prometheus.containerSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       {{- if .Values.prometheus.livenessProbe.enabled }}
-      livenessProbe: {{- omit .Values.prometheus.livenessProbe "enabled" | toYaml | nindent 8 }}
+      livenessProbe:
+        httpGet:
+          path: /-/healthy
+          port: web
+          scheme: HTTP
+        initialDelaySeconds: {{ .Values.prometheus.livenessProbe.initialDelaySeconds }}
+        periodSeconds: {{ .Values.prometheus.livenessProbe.periodSeconds }}
+        timeoutSeconds: {{ .Values.prometheus.livenessProbe.timeoutSeconds }}
+        failureThreshold: {{ .Values.prometheus.livenessProbe.failureThreshold }}
+        successThreshold: {{ .Values.prometheus.livenessProbe.successThreshold }}
       {{- end }}
       {{- if .Values.prometheus.readinessProbe.enabled }}
-      readinessProbe: {{- omit .Values.prometheus.readinessProbe "enabled" | toYaml | nindent 8 }}
+      readinessProbe:
+        httpGet:
+          path: /-/ready
+          port: web
+          scheme: HTTP
+        initialDelaySeconds: {{ .Values.prometheus.readinessProbe.initialDelaySeconds }}
+        periodSeconds: {{ .Values.prometheus.readinessProbe.periodSeconds }}
+        timeoutSeconds: {{ .Values.prometheus.readinessProbe.timeoutSeconds }}
+        failureThreshold: {{ .Values.prometheus.readinessProbe.failureThreshold }}
+        successThreshold: {{ .Values.prometheus.readinessProbe.successThreshold }}
       {{- end }}
     {{- end }}
     {{- if or .Values.operator.prometheusConfigReloader.containerSecurityContext.enabled .Values.operator.prometheusConfigReloader.livenessProbe.enabled .Values.operator.prometheusConfigReloader.readinessProbe.enabled }}
@@ -283,10 +319,24 @@ spec:
       securityContext: {{- omit .Values.operator.prometheusConfigReloader.containerSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       {{- if .Values.operator.prometheusConfigReloader.livenessProbe.enabled }}
-      livenessProbe: {{- omit .Values.operator.prometheusConfigReloader.livenessProbe "enabled" | toYaml | nindent 8 }}
+      livenessProbe:
+        tcpSocket:
+          port: reloader-web
+        initialDelaySeconds: {{ .Values.operator.prometheusConfigReloader.livenessProbe.initialDelaySeconds }}
+        periodSeconds: {{ .Values.operator.prometheusConfigReloader.livenessProbe.periodSeconds }}
+        timeoutSeconds: {{ .Values.operator.prometheusConfigReloader.livenessProbe.timeoutSeconds }}
+        failureThreshold: {{ .Values.operator.prometheusConfigReloader.livenessProbe.failureThreshold }}
+        successThreshold: {{ .Values.operator.prometheusConfigReloader.livenessProbe.successThreshold }}
       {{- end }}
       {{- if .Values.operator.prometheusConfigReloader.readinessProbe.enabled }}
-      readinessProbe: {{- omit .Values.operator.prometheusConfigReloader.readinessProbe "enabled" | toYaml | nindent 8 }}
+      readinessProbe:
+        tcpSocket:
+          port: reloader-web
+        initialDelaySeconds: {{ .Values.operator.prometheusConfigReloader.readinessProbe.initialDelaySeconds }}
+        periodSeconds: {{ .Values.operator.prometheusConfigReloader.readinessProbe.periodSeconds }}
+        timeoutSeconds: {{ .Values.operator.prometheusConfigReloader.readinessProbe.timeoutSeconds }}
+        failureThreshold: {{ .Values.operator.prometheusConfigReloader.readinessProbe.failureThreshold }}
+        successThreshold: {{ .Values.operator.prometheusConfigReloader.readinessProbe.successThreshold }}
       {{- end }}
     {{- end }}
     {{- if .Values.prometheus.containers }}

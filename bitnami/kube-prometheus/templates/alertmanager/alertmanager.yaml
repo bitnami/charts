@@ -106,10 +106,28 @@ spec:
       securityContext: {{- omit .Values.alertmanager.containerSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       {{- if .Values.alertmanager.livenessProbe.enabled }}
-      livenessProbe: {{- omit .Values.alertmanager.livenessProbe "enabled" | toYaml | nindent 8 }}
+      livenessProbe:
+        httpGet:
+          path: /-/healthy
+          port: web
+          scheme: HTTP
+        initialDelaySeconds: {{ .Values.alertmanager.livenessProbe.initialDelaySeconds }}
+        periodSeconds: {{ .Values.alertmanager.livenessProbe.periodSeconds }}
+        timeoutSeconds: {{ .Values.alertmanager.livenessProbe.timeoutSeconds }}
+        failureThreshold: {{ .Values.alertmanager.livenessProbe.failureThreshold }}
+        successThreshold: {{ .Values.alertmanager.livenessProbe.successThreshold }}
       {{- end }}
       {{- if .Values.alertmanager.readinessProbe.enabled }}
-      readinessProbe: {{- omit .Values.alertmanager.readinessProbe "enabled" | toYaml | nindent 8 }}
+      readinessProbe:
+        httpGet:
+          path: /-/ready
+          port: web
+          scheme: HTTP
+        initialDelaySeconds: {{ .Values.alertmanager.readinessProbe.initialDelaySeconds }}
+        periodSeconds: {{ .Values.alertmanager.readinessProbe.periodSeconds }}
+        timeoutSeconds: {{ .Values.alertmanager.readinessProbe.timeoutSeconds }}
+        failureThreshold: {{ .Values.alertmanager.readinessProbe.failureThreshold }}
+        successThreshold: {{ .Values.alertmanager.readinessProbe.successThreshold }}
       {{- end }}
     {{- end }}
     {{- if or .Values.operator.prometheusConfigReloader.containerSecurityContext.enabled .Values.operator.prometheusConfigReloader.livenessProbe.enabled .Values.operator.prometheusConfigReloader.readinessProbe.enabled }}
@@ -123,10 +141,24 @@ spec:
       securityContext: {{- omit .Values.operator.prometheusConfigReloader.containerSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       {{- if .Values.operator.prometheusConfigReloader.livenessProbe.enabled }}
-      livenessProbe: {{- omit .Values.operator.prometheusConfigReloader.livenessProbe "enabled" | toYaml | nindent 8 }}
+      livenessProbe:
+        tcpSocket:
+          port: reloader-web
+        initialDelaySeconds: {{ .Values.operator.prometheusConfigReloader.livenessProbe.initialDelaySeconds }}
+        periodSeconds: {{ .Values.operator.prometheusConfigReloader.livenessProbe.periodSeconds }}
+        timeoutSeconds: {{ .Values.operator.prometheusConfigReloader.livenessProbe.timeoutSeconds }}
+        failureThreshold: {{ .Values.operator.prometheusConfigReloader.livenessProbe.failureThreshold }}
+        successThreshold: {{ .Values.operator.prometheusConfigReloader.livenessProbe.successThreshold }}
       {{- end }}
       {{- if .Values.operator.prometheusConfigReloader.readinessProbe.enabled }}
-      readinessProbe: {{- omit .Values.operator.prometheusConfigReloader.readinessProbe "enabled" | toYaml | nindent 8 }}
+      readinessProbe:
+        tcpSocket:
+          port: reloader-web
+        initialDelaySeconds: {{ .Values.operator.prometheusConfigReloader.readinessProbe.initialDelaySeconds }}
+        periodSeconds: {{ .Values.operator.prometheusConfigReloader.readinessProbe.periodSeconds }}
+        timeoutSeconds: {{ .Values.operator.prometheusConfigReloader.readinessProbe.timeoutSeconds }}
+        failureThreshold: {{ .Values.operator.prometheusConfigReloader.readinessProbe.failureThreshold }}
+        successThreshold: {{ .Values.operator.prometheusConfigReloader.readinessProbe.successThreshold }}
       {{- end }}
     {{- end }}
     {{- if .Values.alertmanager.containers }}

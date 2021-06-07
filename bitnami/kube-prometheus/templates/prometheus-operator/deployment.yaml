@@ -86,10 +86,28 @@ spec:
               containerPort: 8080
               protocol: TCP
           {{- if .Values.operator.livenessProbe.enabled }}
-          livenessProbe: {{- omit .Values.operator.livenessProbe "enabled" | toYaml | nindent 12 }}
+          livenessProbe:
+            httpGet:
+              path: /metrics
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: {{ .Values.operator.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.operator.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.operator.livenessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.operator.livenessProbe.failureThreshold }}
+            successThreshold: {{ .Values.operator.livenessProbe.successThreshold }}
           {{- end }}
           {{- if .Values.operator.readinessProbe.enabled }}
-          readinessProbe: {{- omit .Values.operator.readinessProbe "enabled" | toYaml | nindent 12 }}
+          readinessProbe:
+            httpGet:
+              path: /metrics
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: {{ .Values.operator.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.operator.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.operator.readinessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.operator.readinessProbe.failureThreshold }}
+            successThreshold: {{ .Values.operator.readinessProbe.successThreshold }}
           {{- end }}
           {{- if .Values.operator.resources }}
           resources: {{- toYaml .Values.operator.resources | nindent 12 }}

@@ -89,6 +89,10 @@ operator:
   ##
   containerSecurityContext:
     enabled: true
+    capabilities:
+      drop:
+      - ALL
+    runAsNonRoot: true
     allowPrivilegeEscalation: false
     readOnlyRootFilesystem: true
 
@@ -219,9 +223,6 @@ operator:
   ##
   livenessProbe:
     enabled: true
-    httpGet:
-      path: /metrics
-      port: http
     initialDelaySeconds: 120
     periodSeconds: 10
     timeoutSeconds: 5
@@ -230,9 +231,6 @@ operator:
 
   readinessProbe:
     enabled: true
-    httpGet:
-      path: /metrics
-      port: http
     initialDelaySeconds: 30
     periodSeconds: 10
     timeoutSeconds: 5
@@ -297,8 +295,6 @@ operator:
     ##
     livenessProbe:
       enabled: true
-      tcpSocket:
-        port: reloader-web
       initialDelaySeconds: 10
       periodSeconds: 10
       timeoutSeconds: 5
@@ -307,8 +303,6 @@ operator:
 
     readinessProbe:
       enabled: true
-      tcpSocket:
-        port: reloader-web
       initialDelaySeconds: 15
       periodSeconds: 20
       timeoutSeconds: 5
@@ -607,10 +601,6 @@ prometheus:
     enabled: true
     initialDelaySeconds: 0
     failureThreshold: 10
-    httpGet:
-      path: /-/healthy
-      port: web
-      scheme: HTTP
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 3
@@ -619,10 +609,6 @@ prometheus:
     enabled: true
     initialDelaySeconds: 0
     failureThreshold: 10
-    httpGet:
-      path: /-/ready
-      port: web
-      scheme: HTTP
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 3
@@ -973,10 +959,6 @@ prometheus:
     ##
     livenessProbe:
       enabled: true
-      httpGet:
-        path: /-/healthy
-        port: http
-        scheme: HTTP
       initialDelaySeconds: 0
       periodSeconds: 5
       timeoutSeconds: 3
@@ -985,10 +967,6 @@ prometheus:
 
     readinessProbe:
       enabled: true
-      httpGet:
-        path: /-/ready
-        port: http
-        scheme: HTTP
       initialDelaySeconds: 0
       periodSeconds: 5
       timeoutSeconds: 3
@@ -1387,10 +1365,6 @@ alertmanager:
   ##
   livenessProbe:
     enabled: true
-    httpGet:
-      path: /-/healthy
-      port: web
-      scheme: HTTP
     initialDelaySeconds: 0
     periodSeconds: 5
     timeoutSeconds: 3
@@ -1399,10 +1373,6 @@ alertmanager:
 
   readinessProbe:
     enabled: true
-    httpGet:
-      path: /-/ready
-      port: web
-      scheme: HTTP
     initialDelaySeconds: 0
     periodSeconds: 5
     timeoutSeconds: 3
