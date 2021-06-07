@@ -94,7 +94,7 @@ operator:
       - ALL
     runAsNonRoot: true
     allowPrivilegeEscalation: false
-    readOnlyRootFilesystem: true
+    readOnlyRootFilesystem: false
 
   ## Prometheus Operator Service
   ##
@@ -283,7 +283,7 @@ operator:
     ##
     containerSecurityContext:
       enabled: true
-      readOnlyRootFilesystem: true
+      readOnlyRootFilesystem: false
       allowPrivilegeEscalation: false
       runAsNonRoot: true
       capabilities:
@@ -356,7 +356,7 @@ prometheus:
   ##
   containerSecurityContext:
     enabled: true
-    readOnlyRootFilesystem: true
+    readOnlyRootFilesystem: false
     allowPrivilegeEscalation: false
     runAsNonRoot: true
     capabilities:
@@ -914,7 +914,7 @@ prometheus:
     ##
     containerSecurityContext:
       enabled: true
-      readOnlyRootFilesystem: true
+      readOnlyRootFilesystem: false
       allowPrivilegeEscalation: false
       runAsNonRoot: true
       capabilities:
@@ -1102,7 +1102,7 @@ alertmanager:
   ##
   containerSecurityContext:
     enabled: true
-    readOnlyRootFilesystem: true
+    readOnlyRootFilesystem: false
     allowPrivilegeEscalation: false
     runAsNonRoot: true
     capabilities:
