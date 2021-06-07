@@ -216,7 +216,7 @@ thanos: ruler alertmanagers
     See https://github.com/thanos-io/thanos/blob/ef94b7e6468d94e2c47943ebf5fc6db24c48d867/docs/components/rule.md#flags and https://github.com/thanos-io/thanos/blob/ef94b7e6468d94e2c47943ebf5fc6db24c48d867/docs/components/rule.md#Configuration for more information.
 {{- end -}}
 {{/* Check that the values are defined in a mutually exclusive manner */}}
-{{- if or (and .Values.ruler.enabled .Values.ruler.alertmanagers .Values.ruler.alertmanagerConfig) or (and .Values.ruler.enabled .Values.ruler.alertmanagers .Values.ruler.alertmanagersConfigFile) or (and .Values.ruler.enabled .Values.ruler.alertmanagerConfig .Values.ruler.alertmanagersConfigFile) -}}
+{{- if or (and .Values.ruler.enabled .Values.ruler.alertmanagers .Values.ruler.alertmanagerConfig) (and .Values.ruler.enabled .Values.ruler.alertmanagers .Values.ruler.alertmanagersConfigFile) (and .Values.ruler.enabled .Values.ruler.alertmanagerConfig .Values.ruler.alertmanagersConfigFile) -}}
 thanos: ruler alertmanagers
     Only one of the following can be used at one time:
         * .Values.ruler.alertmanagers
