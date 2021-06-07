@@ -192,6 +192,7 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := list -}}
 {{- $messages := append $messages (include "redis.validateValues.spreadConstraints" .) -}}
 {{- $messages := append $messages (include "redis.validateValues.architecture" .) -}}
+{{- $messages := append $messages (include "redis.validateValues.podSecurityPolicy.create" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -221,5 +222,14 @@ redis: architecture
     Using redis sentinel on standalone mode is not supported.
     To deploy redis sentinel, please select the "replication" mode
     (--set "architecture=replication,sentinel.enabled=true")
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of Redis(TM) - PodSecurityPolicy create */}}
+{{- define "redis.validateValues.podSecurityPolicy.create" -}}
+{{- if and .Values.podSecurityPolicy.create (not .Values.podSecurityPolicy.enabled) }}
+redis: podSecurityPolicy.create
+    In order to create PodSecurityPolicy, you also need to enable
+    podSecurityPolicy.enabled field
 {{- end -}}
 {{- end -}}

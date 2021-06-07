@@ -56,12 +56,7 @@ spec:
       priorityClassName: {{ .Values.updateJob.priorityClassName }}
       {{- end }}
       {{- if .Values.podSecurityContext.enabled }}
-      securityContext:
-        fsGroup: {{ .Values.podSecurityContext.fsGroup }}
-        {{- if .Values.podSecurityContext.sysctls }}
-        sysctls:
-          {{- toYaml .Values.podSecurityContext.sysctls | nindent 8 }}
-        {{- end }}
+      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ include "redis-cluster.serviceAccountName" . }}
       {{- if .Values.updateJob.initContainers }}
@@ -72,8 +67,7 @@ spec:
           image: {{ include "redis-cluster.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.containerSecurityContext.enabled }}
-          securityContext:
-            runAsUser: {{ .Values.containerSecurityContext.runAsUser }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           {{- if .Values.updateJob.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.updateJob.command "context" $) | nindent 12 }}

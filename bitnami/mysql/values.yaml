@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/mysql
-  tag: 8.0.24-debian-10-r0
+  tag: 8.0.25-debian-10-r16
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -257,7 +257,7 @@ primary:
     #   memory: 256Mi
     #   cpu: 250m
 
-  ## MySQL primary container's liveness and readiness probes
+  ## MySQL primary container's liveness, readiness and startup probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
   livenessProbe:
@@ -274,6 +274,13 @@ primary:
     timeoutSeconds: 1
     failureThreshold: 3
     successThreshold: 1
+  startupProbe:
+    enabled: true
+    initialDelaySeconds: 120
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 60
+    successThreshold: 1
 
   ## MySQL primary custom liveness probe
   ##
@@ -282,6 +289,10 @@ primary:
   ## MySQL primary custom rediness probe
   ##
   customReadinessProbe: {}
+
+  ## MySQL primary custom startup probe
+  ##
+  customStartupProbe: {}
 
   ## MySQL primary additional command line flags
   ## Can be used to specify command line flags, for example:
@@ -556,7 +567,7 @@ secondary:
     #   memory: 256Mi
     #   cpu: 250m
 
-  ## MySQL secondary container's liveness and readiness probes
+  ## MySQL secondary container's liveness, readiness and startup probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
   livenessProbe:
@@ -573,6 +584,13 @@ secondary:
     timeoutSeconds: 1
     failureThreshold: 3
     successThreshold: 1
+  startupProbe:
+    enabled: true
+    initialDelaySeconds: 120
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 60
+    successThreshold: 1
 
   ## MySQL secondary custom liveness probe
   ##
@@ -581,6 +599,10 @@ secondary:
   ## MySQL secondary custom rediness probe
   ##
   customReadinessProbe: {}
+
+  ## MySQL secondary custom startup probe
+  ##
+  customStartupProbe: {}
 
   ## MySQL secondary additional command line flags
   ## Can be used to specify command line flags, for example:
@@ -736,7 +758,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: "10"
+    tag: 10-debian-10-r92
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -753,7 +775,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mysqld-exporter
-    tag: 0.12.1-debian-10-r414
+    tag: 0.12.1-debian-10-r449
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

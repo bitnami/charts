@@ -43,7 +43,7 @@ initContainers:
     mountPath: /bitnami/tomcat
 {{- end }}
 {{- if .Values.initContainers }}
-{{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) }}
+{{ include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) }}
 {{- end }}
 containers:
 - name: tomcat
@@ -110,7 +110,7 @@ containers:
   {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 2 }}
   {{- end }}
 {{- if .Values.sidecars }}
-{{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) }}
+{{ include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) }}
 {{- end }}
 volumes:
 {{- if and .Values.persistence.enabled (eq .Values.deployment.type "deployment") }}

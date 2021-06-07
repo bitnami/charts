@@ -274,3 +274,17 @@ Elasticsearch dependency version was bumped to a new major version changing the 
 
 Regular upgrade is compatible from previous versions.
 
+## Upgrading
+
+### To 3.0.0
+
+This major version updates the prefixes of individual applications metrics in Wavefront Collectors which are fed to Tanzu observability in order to light up the individual dashboards of Kafka, Spark ElasticSearch and Logstash on Tanzu Observability platform.
+
+
+### To 2.0.0
+
+This major updates the wavefront subchart to it newest major, 3.0.0, which contains a new major for kube-state-metrics. For more information on this subchart's major, please refer to [wavefront upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/wavefront#to-300).
+
+### To 1.0.0
+
+The affinity rules have been updated to allow deploying this chart and the `dataplatform-bp1` chart in the same cluster.

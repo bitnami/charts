@@ -256,6 +256,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replica.service.loadBalancerSourceRanges`   | Redis(TM) replicas service Load Balancer sources                                                  | `[]`            |
 | `replica.service.annotations`                | Additional custom annotations for Redis(TM) replicas service                                      | `{}`            |
 | `replica.terminationGracePeriodSeconds`      | Integer setting the termination grace period for the redis-replicas pods                          | `30`            |
+| `replica.autoscaling.enabled`                | Enable autoscaling for replicas                                                                   | `false`         |
+| `replica.autoscaling.minReplicas`            | Minimum number of replicas                                                                        | `1`             |
+| `replica.autoscaling.maxReplicas`            | Maximum number of replicas                                                                        | `11`            |
+| `replica.autoscaling.targetCPU`              | Target CPU utilization percentage                                                                 | `nil`           |
+| `replica.autoscaling.targetMemory`           | Target Memory utilization percentage                                                              | `nil`           |
 
 
 ### Redis(TM) Sentinel configuration parameters
@@ -317,30 +322,31 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Other Parameters
 
-| Name                                    | Description                                                         | Value   |
-| --------------------------------------- | ------------------------------------------------------------------- | ------- |
-| `networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                          | `false` |
-| `networkPolicy.allowExternal`           | Don't require client label for connections                          | `true`  |
-| `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                        | `[]`    |
-| `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                        | `[]`    |
-| `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces              | `{}`    |
-| `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces          | `{}`    |
-| `podSecurityPolicy.create`              | Specifies whether a PodSecurityPolicy should be created             | `false` |
-| `rbac.create`                           | Specifies whether RBAC resources should be created                  | `false` |
-| `rbac.rules`                            | Custom RBAC rules to set                                            | `[]`    |
-| `serviceAccount.create`                 | Specifies whether a ServiceAccount should be created                | `true`  |
-| `serviceAccount.name`                   | The name of the ServiceAccount to use.                              | `""`    |
-| `serviceAccount.annotations`            | Additional custom annotations for the ServiceAccount                | `{}`    |
-| `pdb.create`                            | Specifies whether a ServiceAccount should be created                | `false` |
-| `pdb.minAvailable`                      | Min number of pods that must still be available after the eviction  | `1`     |
-| `pdb.maxUnavailable`                    | Max number of pods that can be unavailable after the eviction       | `nil`   |
-| `tls.enabled`                           | Enable TLS traffic                                                  | `false` |
-| `tls.authClients`                       | Require clients to authenticate                                     | `true`  |
-| `tls.certificatesSecret`                | Then name of the existing secret that contains the TLS certificates | `nil`   |
-| `tls.certFilename`                      | Certificate filename                                                | `nil`   |
-| `tls.certKeyFilename`                   | Certificate Key filename                                            | `nil`   |
-| `tls.certCAFilename`                    | CA Certificate filename                                             | `nil`   |
-| `tls.dhParamsFilename`                  | File containing DH params (in order to support DH based ciphers)    | `nil`   |
+| Name                                    | Description                                                                                                         | Value   |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------- |
+| `networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                                                                          | `false` |
+| `networkPolicy.allowExternal`           | Don't require client label for connections                                                                          | `true`  |
+| `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                                        | `[]`    |
+| `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                        | `[]`    |
+| `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                                              | `{}`    |
+| `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                                          | `{}`    |
+| `podSecurityPolicy.enabled`             | Enable PodSecurityPolicy                                                                                            | `false` |
+| `podSecurityPolicy.create`              | Specifies whether a PodSecurityPolicy should be created. You also need to set `podSecurityPolicy.enabled` to `true` | `false` |
+| `rbac.create`                           | Specifies whether RBAC resources should be created                                                                  | `false` |
+| `rbac.rules`                            | Custom RBAC rules to set                                                                                            | `[]`    |
+| `serviceAccount.create`                 | Specifies whether a ServiceAccount should be created                                                                | `true`  |
+| `serviceAccount.name`                   | The name of the ServiceAccount to use.                                                                              | `""`    |
+| `serviceAccount.annotations`            | Additional custom annotations for the ServiceAccount                                                                | `{}`    |
+| `pdb.create`                            | Specifies whether a ServiceAccount should be created                                                                | `false` |
+| `pdb.minAvailable`                      | Min number of pods that must still be available after the eviction                                                  | `1`     |
+| `pdb.maxUnavailable`                    | Max number of pods that can be unavailable after the eviction                                                       | `nil`   |
+| `tls.enabled`                           | Enable TLS traffic                                                                                                  | `false` |
+| `tls.authClients`                       | Require clients to authenticate                                                                                     | `true`  |
+| `tls.certificatesSecret`                | Then name of the existing secret that contains the TLS certificates                                                 | `nil`   |
+| `tls.certFilename`                      | Certificate filename                                                                                                | `nil`   |
+| `tls.certKeyFilename`                   | Certificate Key filename                                                                                            | `nil`   |
+| `tls.certCAFilename`                    | CA Certificate filename                                                                                             | `nil`   |
+| `tls.dhParamsFilename`                  | File containing DH params (in order to support DH based ciphers)                                                    | `nil`   |
 
 
 ### Metrics Parameters
@@ -487,21 +493,11 @@ This command will return the address of the current master, which can be accesse
 
 In case the current master crashes, the Sentinel containers will elect a new master node.
 
-### Using password file
+### Using a password file
 
-To use a password file for Redis<sup>TM</sup> you need to create a secret containing the password.
+To use a password file for Redis<sup>TM</sup> you need to create a secret containing the password and then deploy the chart using that secret.
 
-> *NOTE*: It is important that the file with the password must be called `redis-password`
-
-And then deploy the Helm Chart using the secret name as parameter:
-
-```console
-auth.enabled=true
-auth.usePasswordFiles=true
-auth.existingSecret=redis-password-file
-sentinels.enabled=true
-metrics.enabled=true
-```
+Refer to the chart documentation for more information on [using a password file for Redis<sup>TM</sup>](https://docs.bitnami.com/kubernetes/infrastructure/redis/administration/use-password-file/). 
 
 ### Securing traffic using TLS
 
@@ -513,23 +509,7 @@ TLS support can be enabled in the chart by specifying the `tls.` parameters whil
 - `tls.certKeyFilename`: Certificate key filename. No defaults.
 - `tls.certCAFilename`: CA Certificate filename. No defaults.
 
-For example:
-
-First, create the secret with the certificates files:
-
-```console
-kubectl create secret generic certificates-tls-secret --from-file=./cert.pem --from-file=./cert.key --from-file=./ca.pem
-```
-
-Then, use the following parameters:
-
-```console
-tls.enabled="true"
-tls.certificatesSecret="certificates-tls-secret"
-tls.certFilename="cert.pem"
-tls.certKeyFilename="cert.key"
-tls.certCAFilename="ca.pem"
-```
+Refer to the chart documentation for more information on [creating the secret and a TLS deployment example](https://docs.bitnami.com/kubernetes/infrastructure/redis/administration/enable-tls/).
 
 ### Metrics
 
@@ -547,30 +527,9 @@ tls-ca-cert-file
 
 ### Host Kernel Settings
 
-Redis<sup>TM</sup> may require some changes in the kernel of the host machine to work as expected, in particular increasing the `somaxconn` value and disabling transparent huge pages. To do so, you can set up a privileged initContainer with the `sysctlImage` config values, for example:
+Redis<sup>TM</sup> may require some changes in the kernel of the host machine to work as expected, in particular increasing the `somaxconn` value and disabling transparent huge pages. 
 
-```
-sysctlImage:
-  enabled: true
-  mountHostSys: true
-  command:
-    - /bin/sh
-    - -c
-    - |-
-      sysctl -w net.core.somaxconn=10000
-      echo never > /host-sys/kernel/mm/transparent_hugepage/enabled
-```
-
-Alternatively, for Kubernetes 1.12+ you can set `securityContext.sysctls` which will configure sysctls for master and slave pods. Example:
-
-```yaml
-securityContext:
-  sysctls:
-  - name: net.core.somaxconn
-    value: "10000"
-```
-
-Note that this will not disable transparent huge tables.
+Refer to the chart documentation for more information on [configuring host kernel settings with an example](https://docs.bitnami.com/kubernetes/infrastructure/redis/administration/configure-kernel-settings/). 
 
 ## Persistence
 
@@ -588,118 +547,17 @@ $ helm install my-release --set master.persistence.existingClaim=PVC_NAME bitnam
 
 ## Backup and restore
 
-### Backup
-
-To perform a backup you will need to connect to one of the nodes and execute:
-
-```bash
-$ kubectl exec -it my-redis-master-0 bash
-
-$ redis-cli
-127.0.0.1:6379> auth your_current_redis_password
-OK
-127.0.0.1:6379> save
-OK
-```
-
-Then you will need to get the created dump file form the redis node:
-
-```bash
-$ kubectl cp my-redis-master-0:/data/dump.rdb dump.rdb -c redis
-```
-
-### Restore
-
-To restore in a new cluster, you will need to change a parameter in the redis.conf file and then upload the `dump.rdb` to the volume. Follow the following steps:
-
-- First you will need to set in the `values.yaml` the parameter `appendonly` to `no`, if it is already `no` you can skip this step.
-
-```yaml
-configmap: |-
-  # Enable AOF https://redis.io/topics/persistence#append-only-file
-  appendonly no
-  # Disable RDB persistence, AOF persistence already enabled.
-  save ""
-```
-
-- Start the new cluster to create the PVCs.
-
-For example, :
-
-```bash
-helm install new-redis  -f values.yaml . --set architecture=replication  --set replica.replicaCount=3
-```
-
-- Now that the PVC were created, stop it and copy the `dump.rdp` on the persisted data by using a helping pod.
-
-```
-$ helm delete new-redis
-
-$ kubectl run --generator=run-pod/v1 -i --rm --tty volpod --overrides='
-{
-    "apiVersion": "v1",
-    "kind": "Pod",
-    "metadata": {
-        "name": "redisvolpod"
-    },
-    "spec": {
-        "containers": [{
-            "command": [
-                "tail",
-                "-f",
-                "/dev/null"
-            ],
-            "image": "bitnami/minideb",
-            "name": "mycontainer",
-            "volumeMounts": [{
-                "mountPath": "/mnt",
-                "name": "redisdata"
-            }]
-        }],
-        "restartPolicy": "Never",
-        "volumes": [{
-            "name": "redisdata",
-            "persistentVolumeClaim": {
-                "claimName": "redis-data-new-redis-master-0"
-            }
-        }]
-    }
-}' --image="bitnami/minideb"
-
-$ kubectl cp dump.rdb redisvolpod:/mnt/dump.rdb
-$ kubectl delete pod volpod
-```
-
-- Start again the cluster:
-
-```
-helm install new-redis  -f values.yaml .  --set architecture=replication  --set replica.replicaCount=3
-```
+Refer to the chart documentation for more information on [backing up and restoring Redis<sup>TM</sup> deployments](https://docs.bitnami.com/kubernetes/infrastructure/redis/administration/backup-restore/).
 
 ## NetworkPolicy
 
 To enable network policy for Redis<sup>TM</sup>, install [a networking plugin that implements the Kubernetes NetworkPolicy spec](https://kubernetes.io/docs/tasks/administer-cluster/declare-network-policy#before-you-begin), and set `networkPolicy.enabled` to `true`.
 
-For Kubernetes v1.5 & v1.6, you must also turn on NetworkPolicy by setting the DefaultDeny namespace annotation. Note: this will enforce policy for _all_ pods in the namespace:
-
-    kubectl annotate namespace default "net.beta.kubernetes.io/network-policy={\"ingress\":{\"isolation\":\"DefaultDeny\"}}"
-
-With NetworkPolicy enabled, only pods with the generated client label will be able to connect to Redis<sup>TM</sup>. This label will be displayed in the output after a successful install.
-
-With `networkPolicy.ingressNSMatchLabels` pods from other namespaces can connect to redis. Set `networkPolicy.ingressNSPodMatchLabels` to match pod labels in matched namespace. For example, for a namespace labeled `redis=external` and pods in that namespace labeled `redis-client=true` the fields should be set:
-
-```
-networkPolicy:
-  enabled: true
-  ingressNSMatchLabels:
-    redis: external
-  ingressNSPodMatchLabels:
-    redis-client: true
-```
+Refer to the chart documenation for more information on [enabling the network policy in Redis<sup>TM</sup> deployments](https://docs.bitnami.com/kubernetes/infrastructure/redis/administration/enable-network-policy/).
 
 ### Setting Pod's affinity
 
-This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more infomation about Pod's affinity in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 
@@ -722,7 +580,7 @@ incompatible breaking change needing manual actions.
   - `sentinel.metrics.*` parameters are deprecated in favor of `metrics.sentinel.*` ones.
 - New parameters to add custom command, environment variables, sidecars, init containers, etc. were added.
 - Chart labels were adapted to follow the [Helm charts standard labels](https://helm.sh/docs/chart_best_practices/labels/#standard-labels).
-- values.yaml metadata was adapted to follow the format supported by [readmenator](https://github.com/bitnami-labs/readmenator).
+- values.yaml metadata was adapted to follow the format supported by [Readme Generator for Helm](https://github.com/bitnami-labs/readme-generator-for-helm).
 
 Consequences:
 

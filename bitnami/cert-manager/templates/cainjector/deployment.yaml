@@ -1,0 +1,118 @@
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ include "certmanager.cainjector.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: cainjector
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: cainjector
+  {{- if .Values.cainjector.updateStrategy }}
+  strategy: {{- toYaml .Values.cainjector.updateStrategy | nindent 4 }}
+  {{- end }}
+  replicas: {{ .Values.cainjector.replicaCount }}
+  template:
+    metadata:
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app.kubernetes.io/component: cainjector
+        {{- if .Values.commonLabels }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.cainjector.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.cainjector.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+      annotations:
+        {{- if .Values.cainjector.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.cainjector.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- include "certmanager.cainjector.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.cainjector.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.cainjector.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.cainjector.priorityClassName }}
+      priorityClassName: {{ .Values.cainjector.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.cainjector.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.cainjector.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.cainjector.podAffinityPreset "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.cainjector.podAntiAffinityPreset "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.cainjector.nodeAffinityPreset.type "key" .Values.cainjector.nodeAffinityPreset.key "values" .Values.cainjector.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.cainjector.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.cainjector.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.cainjector.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.cainjector.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.cainjector.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.cainjector.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      initContainers:
+        {{- if .Values.cainjector.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.cainjector.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      serviceAccountName: {{ template "certmanager.cainjector.serviceAccountName" . }}
+      containers:
+        - name: cainjector
+          image: {{ template "certmanager.cainjector.image" . }}
+          imagePullPolicy: {{ .Values.cainjector.image.pullPolicy | quote }}
+          {{- if .Values.cainjector.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.cainjector.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.cainjector.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.cainjector.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            - --v={{ .Values.logLevel }}
+            - --leader-election-namespace={{ .Values.leaderElection.namespace }}
+          {{- end }}
+          {{- if .Values.cainjector.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.cainjector.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" .Values.cainjector.image.debug | quote }}
+            {{- if .Values.cainjector.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.cainjector.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          envFrom:
+            {{- if .Values.cainjector.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.cainjector.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.cainjector.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.cainjector.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- if .Values.cainjector.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.cainjector.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.cainjector.resources }}
+          resources: {{- toYaml .Values.cainjector.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            {{- if .Values.cainjector.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.cainjector.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+        {{- if .Values.cainjector.sidecars }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.cainjector.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        {{- if .Values.cainjector.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.cainjector.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}

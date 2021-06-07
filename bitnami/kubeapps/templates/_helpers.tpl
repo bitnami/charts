@@ -1,39 +1,10 @@
 {{/* vim: set filetype=mustache: */}}
 
 {{/*
-Create chart name and version as used by the chart label.
-*/}}
-{{- define "kubeapps.chart" -}}
-{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{/*
-Common labels for additional kubeapps applications. Used on resources whose app name is different
-from kubeapps
-*/}}
-{{- define "kubeapps.extraAppLabels" -}}
-chart: {{ include "kubeapps.chart" . }}
-release: {{ .Release.Name }}
-heritage: {{ .Release.Service }}
-helm.sh/chart: {{ include "kubeapps.chart" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
-app.kubernetes.io/name: {{ include "common.names.name" . }}
-{{- end -}}
-
-{{/*
-Common labels
-*/}}
-{{- define "kubeapps.labels" -}}
-app: {{ include "common.names.name" . }}
-{{ template "kubeapps.extraAppLabels" . }}
-{{- end -}}
-
-{{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "kubeapps.imagePullSecrets" -}}
-{{ include "common.images.pullSecrets" (dict "images" (list .Values.frontend.image .Values.dashboard.image .Values.apprepository.image .Values.apprepository.syncImage .Values.assetsvc.image .Values.kubeops.image .Values.authProxy.image .Values.pinnipedProxy.image .Values.hooks.image .Values.testImage) "global" .Values.global) }}
+{{ include "common.images.pullSecrets" (dict "images" (list .Values.frontend.image .Values.dashboard.image .Values.apprepository.image .Values.apprepository.syncImage .Values.assetsvc.image .Values.kubeops.image .Values.authProxy.image .Values.pinnipedProxy.image .Values.testImage) "global" .Values.global) }}
 {{- end -}}
 
 {{/*
@@ -49,98 +20,63 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 Create name for the apprepository-controller based on the fullname
 */}}
 {{- define "kubeapps.apprepository.fullname" -}}
-{{ include "common.names.fullname" . }}-internal-apprepository-controller
-{{- end -}}
-
-{{/*
-Create name for the apprepository pre-upgrade job
-*/}}
-{{- define "kubeapps.apprepository-job-postupgrade.fullname" -}}
-{{ include "common.names.fullname" . }}-internal-apprepository-job-postupgrade
-{{- end -}}
-
-{{/*
-Create name for the apprepository cleanup job
-*/}}
-{{- define "kubeapps.apprepository-jobs-cleanup.fullname" -}}
-{{ include "common.names.fullname" . }}-internal-apprepository-jobs-cleanup
-{{- end -}}
-
-{{/*
-Create name for the db-secret secret bootstrap job
-*/}}
-{{- define "kubeapps.db-secret-jobs-cleanup.fullname" -}}
-{{ include "common.names.fullname" . }}-internal-db-secret-jobs-cleanup
-{{- end -}}
-
-{{/*
-Create name for the kubeapps upgrade job
-*/}}
-{{- define "kubeapps.kubeapps-jobs-upgrade.fullname" -}}
-{{ include "common.names.fullname" . }}-internal-kubeapps-jobs-upgrade
+{{- printf "%s-internal-apprepository-controller" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
 Create name for the assetsvc based on the fullname
 */}}
 {{- define "kubeapps.assetsvc.fullname" -}}
-{{ include "common.names.fullname" . }}-internal-assetsvc
+{{- printf "%s-internal-assetsvc" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
 Create name for the dashboard based on the fullname
 */}}
 {{- define "kubeapps.dashboard.fullname" -}}
-{{ include "common.names.fullname" . }}-internal-dashboard
+{{- printf "%s-internal-dashboard" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
 Create name for the dashboard config based on the fullname
 */}}
 {{- define "kubeapps.dashboard-config.fullname" -}}
-{{ include "common.names.fullname" . }}-internal-dashboard-config
+{{- printf "%s-internal-dashboard-config" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
 Create name for the frontend config based on the fullname
 */}}
 {{- define "kubeapps.frontend-config.fullname" -}}
-{{ include "common.names.fullname" . }}-frontend-config
-{{- end -}}
-
-{{/*
-Create proxy_pass for the frontend config
-*/}}
-{{- define "kubeapps.frontend-config.proxy_pass" -}}
-http://{{ template "kubeapps.kubeops.fullname" . }}:{{ .Values.kubeops.service.port }}
+{{- printf "%s-frontend-config" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
 Create name for kubeops based on the fullname
 */}}
 {{- define "kubeapps.kubeops.fullname" -}}
-{{ include "common.names.fullname" . }}-internal-kubeops
+{{- printf "%s-internal-kubeops" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
 Create name for the kubeops config based on the fullname
 */}}
 {{- define "kubeapps.kubeops-config.fullname" -}}
-{{ include "common.names.fullname" . }}-kubeops-config
+{{- printf "%s-kubeops-config" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
-Create name for the secrets related to an app repository
+Create proxy_pass for the frontend config
 */}}
-{{- define "kubeapps.apprepository-secret.name" -}}
-apprepo-{{ .name }}-secrets
+{{- define "kubeapps.frontend-config.proxy_pass" -}}
+http://{{ include "kubeapps.kubeops.fullname" . }}:{{ .Values.kubeops.service.port }}
 {{- end -}}
 
 {{/*
 Create name for the secrets related to oauth2_proxy
 */}}
 {{- define "kubeapps.oauth2_proxy-secret.name" -}}
-{{ template "common.names.fullname" . }}-oauth2
+{{- printf "%s-oauth2" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
@@ -148,7 +84,7 @@ Create name for pinniped-proxy based on the fullname.
 Currently used for a service name only.
 */}}
 {{- define "kubeapps.pinniped-proxy.fullname" -}}
-{{ include "common.names.fullname" . }}-internal-pinniped-proxy
+{{- printf "%s-internal-pinniped-proxy" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
@@ -167,9 +103,9 @@ Frontend service port number
 */}}
 {{- define "kubeapps.frontend-port-number" -}}
 {{- if .Values.authProxy.enabled -}}
-3000
+{{ .Values.authProxy.containerPort | int }}
 {{- else -}}
-8080
+{{ .Values.frontend.containerPort | int }}
 {{- end -}}
 {{- end -}}
 
@@ -214,4 +150,47 @@ Return the Postgresql secret name
   {{- else -}}
       {{- printf "%s" (include "kubeapps.postgresql.fullname" .) -}}
   {{- end -}}
+{{- end -}}
+
+{{/*
+Compile all warnings into a single message, and call fail.
+*/}}
+{{- define "kubeapps.validateValues" -}}
+{{- $messages := list -}}
+{{- $messages := append $messages (include "kubeapps.validateValues.ingress.tls" .) -}}
+{{- $messages := without $messages "" -}}
+{{- $message := join "\n" $messages -}}
+
+{{- if $message -}}
+{{-   printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of Kubeapps - TLS configuration for Ingress
+*/}}
+{{- define "kubeapps.validateValues.ingress.tls" -}}
+{{- if and .Values.ingress.enabled .Values.ingress.tls (not .Values.ingress.certManager) (not .Values.ingress.selfSigned) (empty .Values.ingress.extraTls) }}
+kubeapps: ingress.tls
+    You enabled the TLS configuration for the default ingress hostname but
+    you did not enable any of the available mechanisms to create the TLS secret
+    to be used by the Ingress Controller.
+    Please use any of these alternatives:
+      - Use the `ingress.extraTls` and `ingress.secrets` parameters to provide your custom TLS certificates.
+      - Relay on cert-manager to create it by setting `ingress.certManager=true`
+      - Relay on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
+{{- end -}}
+{{- end -}}
+
+{{/*
+Check if there are rolling tags in the images
+*/}}
+{{- define "kubeapps.checkRollingTags" -}}
+{{- include "common.warnings.rollingTag" .Values.frontend.image }}
+{{- include "common.warnings.rollingTag" .Values.dashboard.image }}
+{{- include "common.warnings.rollingTag" .Values.apprepository.image }}
+{{- include "common.warnings.rollingTag" .Values.assetsvc.image }}
+{{- include "common.warnings.rollingTag" .Values.kubeops.image }}
+{{- include "common.warnings.rollingTag" .Values.authProxy.image }}
+{{- include "common.warnings.rollingTag" .Values.pinnipedProxy.image }}
 {{- end -}}

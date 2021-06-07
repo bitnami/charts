@@ -237,3 +237,7 @@ Find more information about how to deal with common errors related to Bitnami’
 ```bash
 $ helm upgrade my-release bitnami/wavefront-adapter-for-istio
 ```
+
+### To 1.0.0
+
+This major updates the wavefront subchart to it newest major, 3.0.0, which contains a new major for kube-state-metrics. For more information on this subchart's major, please refer to [wavefront upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/wavefront#to-300).

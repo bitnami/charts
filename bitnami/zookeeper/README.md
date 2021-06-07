@@ -126,6 +126,8 @@ The following tables lists the configurable parameters of the ZooKeeper chart an
 | `resources`                          | CPU/Memory resource requests/limits                                                       | Memory: `256Mi`, CPU: `250m`   |
 | `livenessProbe`                      | Liveness probe configuration for ZooKeeper                                                | Check `values.yaml` file       |
 | `readinessProbe`                     | Readiness probe configuration for ZooKeeper                                               | Check `values.yaml` file       |
+| `customLivenessProbe`                | Override default liveness probe                                                           | `nil`                          |
+| `customReadinessProbe`               | Override default readiness probe                                                          | `nil`                          |
 | `extraVolumes`                       | Extra volumes                                                                             | `nil`                          |
 | `extraVolumeMounts`                  | Mount extra volume(s)                                                                     | `nil`                          |
 | `initContainers`                     | Extra init container to add to the statefulset                                            | `nil`                          |

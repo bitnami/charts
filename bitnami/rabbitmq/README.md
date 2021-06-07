@@ -55,12 +55,13 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 
 ### Common parameters
 
-| Parameter          | Description                                                          | Default         |
-|--------------------|----------------------------------------------------------------------|-----------------|
-| `nameOverride`     | String to partially override rabbitmq.fullname                       | `nil`           |
-| `fullnameOverride` | String to fully override rabbitmq.fullname                           | `nil`           |
-| `clusterDomain`    | Default Kubernetes cluster domain                                    | `cluster.local` |
-| `kubeVersion`      | Force target Kubernetes version (using Helm capabilities if not set) | `nil`           |
+| Parameter           | Description                                                          | Default                        |
+|---------------------|----------------------------------------------------------------------|--------------------------------|
+| `nameOverride`      | String to partially override rabbitmq.fullname                       | `nil`                          |
+| `fullnameOverride`  | String to fully override rabbitmq.fullname                           | `nil`                          |
+| `clusterDomain`     | Default Kubernetes cluster domain                                    | `cluster.local`                |
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set) | `nil`                          |
+| `commonAnnotations` | Annotations to add to all deployed objects                           | `{}` (evaluated as a template) |
 
 ### RabbitMQ parameters
 
@@ -252,6 +253,7 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `metrics.serviceMonitor.namespace`        | Namespace which Prometheus is running in                                               | `monitoring`                                                 |
 | `metrics.serviceMonitor.interval`         | Interval at which metrics should be scraped                                            | `30s`                                                        |
 | `metrics.serviceMonitor.scrapeTimeout`    | Specify the timeout after which the scrape is ended                                    | `nil`                                                        |
+| `metrics.serviceMonitor.path`             | define the path used by ServiceMonitor to scrap metrics                                | `nil`                                                        |
 | `metrics.serviceMonitor.relabellings`     | Specify Metric Relabellings to add to the scrape endpoint                              | `nil`                                                        |
 | `metrics.serviceMonitor.honorLabels`      | honorLabels chooses the metric's labels on collisions with target labels.              | `false`                                                      |
 | `metrics.serviceMonitor.targetLabels`     | Used to keep given service's labels in  target                                         | `[]`                                                         |

@@ -32,6 +32,10 @@ zookeeper:
                 operator: In
                 values:
                   - zookeeper
+              - key: app.kubernetes.io/instance
+                operator: In
+                values:
+                  - '{{ .Release.Name }}'
           topologyKey: "kubernetes.io/hostname"
 
 ## Kafka Subchart parameters
@@ -60,6 +64,10 @@ kafka:
                 operator: In
                 values:
                   - kafka
+              - key: app.kubernetes.io/instance
+                operator: In
+                values:
+                  - '{{ .Release.Name }}'
           topologyKey: "kubernetes.io/hostname"
     podAffinity:
       preferredDuringSchedulingIgnoredDuringExecution:
@@ -71,6 +79,10 @@ kafka:
                   operator: In
                   values:
                     - zookeeper
+                - key: app.kubernetes.io/instance
+                  operator: In
+                  values:
+                    - '{{ .Release.Name }}'
             topologyKey: "kubernetes.io/hostname"
   ## Prometheus Exporters / Metrics
   ##
@@ -150,6 +162,10 @@ spark:
                   operator: In
                   values:
                     - worker
+                - key: app.kubernetes.io/instance
+                  operator: In
+                  values:
+                    - '{{ .Release.Name }}'
             topologyKey: "kubernetes.io/hostname"
   ## Spark worker specific configuration
   ##
@@ -170,6 +186,10 @@ spark:
                   values:
                     - worker
                     - master
+                - key: app.kubernetes.io/instance
+                  operator: In
+                  values:
+                    - '{{ .Release.Name }}'
             topologyKey: "kubernetes.io/hostname"
     resources:
       ## Recommended values for cpu and memory requests
@@ -220,6 +240,10 @@ solr:
                 operator: In
                 values:
                   - solr
+              - key: app.kubernetes.io/instance
+                operator: In
+                values:
+                  - '{{ .Release.Name }}'
           topologyKey: "kubernetes.io/hostname"
   resources:
     ## Recommended values for cpu and memory requests
@@ -246,6 +270,10 @@ solr:
                     operator: In
                     values:
                       - solr
+                  - key: app.kubernetes.io/instance
+                    operator: In
+                    values:
+                      - '{{ .Release.Name }}'
               topologyKey: "kubernetes.io/hostname"
     resources:
       limits: {}
@@ -310,7 +338,7 @@ wavefront:
           port: 9308
           path: /metrics
           scheme: http
-          prefix: kube.kafka.
+          prefix: kafka.
 
         ## auto-discover jmx exporter
         ##
@@ -322,7 +350,7 @@ wavefront:
           port: 5556
           path: /metrics
           scheme: http
-          prefix: kube.kafkajmx.
+          prefix: kafkajmx.
 
         ## auto-discover solr
         ##
@@ -334,7 +362,6 @@ wavefront:
           port: 9983
           path: /metrics
           scheme: http
-          prefix: kube.solr.
 
         ## auto-discover spark
         ##
@@ -346,7 +373,7 @@ wavefront:
           port: 8081
           path: /metrics/
           scheme: http
-          prefix: kube.spark.
+          prefix: spark.
 
         ## auto-discover spark
         ##
@@ -358,7 +385,7 @@ wavefront:
           port: 8080
           path: /metrics/
           scheme: http
-          prefix: kube.spark.
+          prefix: spark.
   proxy:
     ## Wavefront Proxy resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/

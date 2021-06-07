@@ -40,12 +40,7 @@ spec:
       enableServiceLinks: false
       {{- include "redis-cluster.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.podSecurityContext.enabled }}
-      securityContext:
-        fsGroup: {{ .Values.podSecurityContext.fsGroup }}
-        {{- if .Values.podSecurityContext.sysctls }}
-        sysctls:
-          {{- toYaml .Values.podSecurityContext.sysctls | nindent 8 }}
-        {{- end }}
+      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ include "redis-cluster.serviceAccountName" . }}
       {{- if .Values.redis.hostAliases }}
@@ -82,8 +77,7 @@ spec:
           image: {{ include "redis-cluster.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.containerSecurityContext.enabled }}
-          securityContext:
-            runAsUser: {{ .Values.containerSecurityContext.runAsUser }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           {{- if .Values.redis.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.redis.command "context" $) | nindent 12 }}
