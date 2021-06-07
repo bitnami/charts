@@ -257,7 +257,7 @@ primary:
     #   memory: 256Mi
     #   cpu: 250m
 
-  ## MySQL primary container's liveness and readiness probes
+  ## MySQL primary container's liveness, readiness and startup probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
   livenessProbe:
@@ -274,6 +274,13 @@ primary:
     timeoutSeconds: 1
     failureThreshold: 3
     successThreshold: 1
+  startupProbe:
+    enabled: true
+    initialDelaySeconds: 120
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 60
+    successThreshold: 1
 
   ## MySQL primary custom liveness probe
   ##
@@ -282,6 +289,10 @@ primary:
   ## MySQL primary custom rediness probe
   ##
   customReadinessProbe: {}
+
+  ## MySQL primary custom startup probe
+  ##
+  customStartupProbe: {}
 
   ## MySQL primary additional command line flags
   ## Can be used to specify command line flags, for example:
@@ -556,7 +567,7 @@ secondary:
     #   memory: 256Mi
     #   cpu: 250m
 
-  ## MySQL secondary container's liveness and readiness probes
+  ## MySQL secondary container's liveness, readiness and startup probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
   livenessProbe:
@@ -573,6 +584,13 @@ secondary:
     timeoutSeconds: 1
     failureThreshold: 3
     successThreshold: 1
+  startupProbe:
+    enabled: true
+    initialDelaySeconds: 120
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 60
+    successThreshold: 1
 
   ## MySQL secondary custom liveness probe
   ##
@@ -581,6 +599,10 @@ secondary:
   ## MySQL secondary custom rediness probe
   ##
   customReadinessProbe: {}
+
+  ## MySQL secondary custom startup probe
+  ##
+  customStartupProbe: {}
 
   ## MySQL secondary additional command line flags
   ## Can be used to specify command line flags, for example:
