@@ -408,6 +408,14 @@ readinessProbe:
   successThreshold: 1
   probeCommandTimeout: 2
 
+## Custom Liveness probes for ZooKeeper
+##
+customLivenessProbe: {}
+
+## Custom Readiness probes for ZooKeeper
+##
+customReadinessProbe: {}
+
 ## Network policies
 ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
 ##

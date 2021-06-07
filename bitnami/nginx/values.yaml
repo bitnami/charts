@@ -248,6 +248,11 @@ nodeSelector: {}
 ##
 tolerations: {}
 
+## Priority class name
+## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+##
+priorityClassName: ""
+
 ## NGINX pods' Security Context.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ##
