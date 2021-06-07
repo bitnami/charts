@@ -180,7 +180,7 @@ The following tables lists the configurable parameters of the spark chart and th
 | `security.ssl.enabled`               | Enable the SSL configuration                                            | `false`    |
 | `security.ssl.needClientAuth`        | Enable the client authentication                                        | `false`    |
 | `security.ssl.protocol`              | Set the SSL protocol                                                    | `TLSv1.2`  |
-| `security.certificatesSecretName`    | Set the name of the secret that contains the certificates               | No default |
+| `security.ssl.existingSecret`    | Set the name of the secret that contains the certificates               | No default |
 
 ### Exposure parameters
 
@@ -285,18 +285,18 @@ In order to enable secure transport between workers and master deploy the helm c
 
 #### How to create the certificates secret
 
-It is needed to create two secrets to set the passwords and certificates. The name of the two secrets should be configured on `security.passwordsSecretName` and `security.certificatesSecretName`. To generate certificates for testing purpose you can use [this script](https://raw.githubusercontent.com/confluentinc/confluent-platform-security-tools/master/kafka-generate-ssl.sh).
+It is needed to create two secrets to set the passwords and certificates. The name of the two secrets should be configured on `security.passwordsSecretName` and `security.ssl.existingSecret`. To generate certificates for testing purpose you can use [this script](https://raw.githubusercontent.com/confluentinc/confluent-platform-security-tools/master/kafka-generate-ssl.sh).
 Into the certificates secret, the keys must be `spark-keystore.jks` and `spark-truststore.jks`, and the content must be text on JKS format.
 To generate the certificates secret, first it is needed to generate the two certificates and rename them as `spark-keystore.jks` and `spark-truststore.jks`.
 Once the certificates are created, you can create the secret having the file names as keys.
 
 The second secret, the secret for passwords should have four keys: `rpc-authentication-secret`, `ssl-key-password`, `ssl-keystore-password` and `ssl-truststore-password`.
 
-Now that the two secrets are created, deploy the chart enabling security configuration and setting the name for the certificates secret (`my-secret` in this case) at the `security.certificatesSecretName` and setting the name for the passwords secret (`my-passwords-secret` in this case) at `security.passwordsSecretName`.
+Now that the two secrets are created, deploy the chart enabling security configuration and setting the name for the certificates secret (`my-secret` in this case) at the `security.ssl.existingSecret` and setting the name for the passwords secret (`my-passwords-secret` in this case) at `security.passwordsSecretName`.
 
 To deploy chart, use the following parameters:
 ```bash
-security.certificatesSecretName=my-secret
+security.ssl.existingSecret=my-secret
 security.passwordsSecretName=my-passwords-secret
 security.rpc.authenticationEnabled=true
 security.rpc.encryptionEnabled=true
