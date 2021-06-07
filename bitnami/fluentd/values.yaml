@@ -31,11 +31,11 @@ image:
 ##
 kubeVersion:
 
-## String to partially override fluentd.fullname template (will maintain the release name)
+## String to partially override common.names.fullname template (will maintain the release name)
 ##
 # nameOverride:
 
-## String to fully override fluentd.fullname template
+## String to fully override common.names.fullname template
 ##
 # fullnameOverride:
 
@@ -156,7 +156,7 @@ forwarder:
         tls_client_private_key_path /opt/bitnami/fluentd/certs/out_forward/tls.key
         {{- end }}
 
-        {{- $fullName := (include "fluentd.fullname" .) }}
+        {{- $fullName := (include "common.names.fullname" .) }}
         {{- $global := . }}
         {{- $domain := default "cluster.local" .Values.clusterDomain }}
         {{- $port := .Values.aggregator.port | int }}
@@ -410,7 +410,7 @@ forwarder:
     ##
     create: true
     ## The name of the ServiceAccount to use.
-    ## If not set and create is true, a name is generated using the fluentd.fullname template
+    ## If not set and create is true, a name is generated using the common.names.fullname template
     # name:
     ## Annotations for the Service Account (evaluated as a template)
     ##
@@ -865,7 +865,7 @@ aggregator:
     ##
     create: false
     ## The name of the ServiceAccount to use.
-    ## If not set and create is true, a name is generated using the fluentd.fullname template
+    ## If not set and create is true, a name is generated using the common.names.fullname template
     # name:
     ## Annotations for the Service Account (evaluated as a template)
     ##
