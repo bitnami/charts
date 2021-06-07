@@ -19,7 +19,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/elasticsearch
-  tag: 7.13.0-debian-10-r2
+  tag: 7.13.1-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -48,7 +48,7 @@ sysctlImage:
   enabled: true
   registry: docker.io
   repository: bitnami/bitnami-shell
-  tag: "10"
+  tag: 10-debian-10-r98
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -83,7 +83,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: "10"
+    tag: 10-debian-10-r98
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -384,6 +384,14 @@ master:
     ## The name of the ServiceAccount to use.
     ## If not set and create is true, a name is generated using the fullname template
     # name:
+  ## Autoscaling configuration
+  ##
+  autoscaling:
+    enabled: false
+    minReplicas: 2
+    maxReplicas: 11
+    # targetCPU: 50
+    # targetMemory: 50
 
 ## Elasticsearch coordinating-only node parameters
 ##
@@ -543,6 +551,14 @@ coordinating:
     ## If not set and create is true, a name is generated using the fullname template
     ##
     # name:
+  ## Autoscaling configuration
+  ##
+  autoscaling:
+    enabled: false
+    minReplicas: 2
+    maxReplicas: 11
+    # targetCPU: 50
+    # targetMemory: 50
 
 ## Elasticsearch data node parameters
 ##
@@ -722,7 +738,14 @@ data:
     ## If not set and create is true, a name is generated using the fullname template
     ##
     # name:
-
+  ## Autoscaling configuration
+  ##
+  autoscaling:
+    enabled: false
+    minReplicas: 2
+    maxReplicas: 11
+    # targetCPU: 50
+    # targetMemory: 50
 ## Elasticsearch ingest node parameters
 ##
 ingest:
@@ -875,7 +898,7 @@ curator:
   image:
     registry: docker.io
     repository: bitnami/elasticsearch-curator
-    tag: 5.8.4-debian-10-r23
+    tag: 5.8.4-debian-10-r29
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1101,7 +1124,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/elasticsearch-exporter
-    tag: 1.1.0-debian-10-r450
+    tag: 1.1.0-debian-10-r456
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

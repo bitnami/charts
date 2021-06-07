@@ -14,6 +14,7 @@ metadata:
   {{- end }}
 spec:
   replicas: {{ .Values.secondary.replicaCount }}
+  revisionHistoryLimit: {{ .Values.secondary.revisionHistoryLimit }}
   selector:
     matchLabels: {{ include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: secondary
