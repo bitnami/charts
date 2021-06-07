@@ -347,7 +347,7 @@ spec:
         {{- include "common.storage.class" (dict "persistence" .Values.persistence "global" .Values.global) | nindent 8 }}
         {{- if .Values.persistence.selector }}
         selector: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.selector "context" $) | nindent 10 }}
-        {{- end -}}
+        {{- end }}
     {{- end }}
     {{- if and (not .Values.persistence.dataLogDir.existingClaim) .Values.dataLogDir }}
     - metadata:
@@ -367,6 +367,6 @@ spec:
         {{- include "common.storage.class" (dict "persistence" .Values.persistence "global" .Values.global) | nindent 8 }}
         {{- if .Values.persistence.dataLogDir.selector }}
         selector: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.dataLogDir.selector "context" $) | nindent 10 }}
-        {{- end -}}
+        {{- end }}
     {{- end }}
   {{- end }}
