@@ -224,7 +224,7 @@ thanos: ruler alertmanagers
     Otherwise, the configurations will collide and Thanos will error out. Please consolidate your configuration
     into one of the above options.
 {{- else if and .Values.ruler.enabled .Values.ruler.alertmanagersConfig -}}
-{{- if and .Values.ruler.alertmanagerConfig.alertmanagers .Values.ruler.alertmanagerConfig.file -}}
+{{- if and .Values.ruler.alertmanagersConfig.alertmanagers .Values.ruler.alertmanagersConfig.file -}}
 thanos: ruler alertmanagers
     Only one of the following can be used at one time:
         * .Values.ruler.alertmanagersConfig.alertmanagers
