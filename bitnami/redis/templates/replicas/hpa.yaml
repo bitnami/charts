@@ -1,4 +1,4 @@
-{{- if .Values.autoscaling.enabled }}
+{{- if .Values.replicate.autoscaling.enabled }}
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
@@ -17,19 +17,19 @@ spec:
     apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
     kind: StatefulSet
     name: {{ printf "%s-replicas" (include "common.names.fullname" .) }}
-  minReplicas: {{ .Values.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.autoscaling.maxReplicas }}
+  minReplicas: {{ .Values.replicate.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.replicate.autoscaling.maxReplicas }}
   metrics:
-    {{- if .Values.autoscaling.targetCPU }}
+    {{- if .Values.replicate.autoscaling.targetCPU }}
     - type: Resource
       resource:
         name: cpu
-        targetAverageUtilization: {{ .Values.autoscaling.targetCPU }}
+        targetAverageUtilization: {{ .Values.replicate.autoscaling.targetCPU }}
     {{- end }}
-    {{- if .Values.autoscaling.targetMemory }}
+    {{- if .Values.replicate.autoscaling.targetMemory }}
     - type: Resource
       resource:
         name: memory
-        targetAverageUtilization: {{ .Values.autoscaling.targetMemory }}
+        targetAverageUtilization: {{ .Values.replicate.autoscaling.targetMemory }}
     {{- end }}
 {{- end }}
