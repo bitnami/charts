@@ -371,7 +371,7 @@ spec:
         {{- if .Values.tls.enabled }}
         - name: redis-certificates
           secret:
-            secretName: {{ required "A secret containing the certificates for the TLS traffic is required when TLS in enabled" .Values.tls.certificatesSecret }}
+            secretName: {{ required "A secret containing the certificates for the TLS traffic is required when TLS in enabled" (tpl .Values.tls.certificatesSecret .) }}
             defaultMode: 256
         {{- end }}
         {{- if .Values.replica.extraVolumes }}
