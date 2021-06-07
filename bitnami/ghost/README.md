@@ -128,7 +128,7 @@ The following table lists the configurable parameters of the Ghost chart and the
 | `persistence.accessMode`                | PVC Access Mode for Ghost volume                                                                                      | `ReadWriteOnce`                             |
 | `persistence.enabled`                   | Enable persistence using PVC                                                                                          | `true`                                      |
 | `persistence.existingClaim`             | An Existing PVC name                                                                                                  | `nil`                                       |
-| `persistence.path`                      | Host mount path for Ghost volume                                                                                      | `nil` (will not mount to a host path)       |
+| `persistence.path`                      | Path to mount the Ghost volume at                                                                                     | `/bitnami/ghost`                            |
 | `persistence.size`                      | PVC Storage Request for Ghost volume                                                                                  | `8Gi`                                       |
 | `persistence.storageClass`              | PVC Storage Class for Ghost volume                                                                                    | `nil` (uses alpha storage class annotation) |
 | `podAnnotations`                        | Pod annotations                                                                                                       | `{}`                                        |

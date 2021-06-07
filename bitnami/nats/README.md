@@ -79,6 +79,7 @@ The following tables lists the configurable parameters of the NATS chart and the
 | `auth.user`                | Client authentication user                                                     | `nats_client`                                           |
 | `auth.password`            | Client authentication password                                                 | `random alhpanumeric string (10)`                       |
 | `auth.token`               | Client authentication token                                                    | `nil`                                                   |
+| `auth.timeout`             | Client authentication timeout (seconds)                                        | `1`                                                     |
 | `clusterAuth.enabled`      | Switch to enable/disable cluster authentication                                | `true`                                                  |
 | `clusterAuth.user`         | Cluster authentication user                                                    | `nats_cluster`                                          |
 | `clusterAuth.password`     | Cluster authentication password                                                | `random alhpanumeric string (10)`                       |

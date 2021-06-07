@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/ghost
-  tag: 4.2.1-debian-10-r0
+  tag: 4.6.4-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -60,7 +60,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: "10"
+    tag: 10-debian-10-r92
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -323,7 +323,7 @@ persistence:
   ## Requires persistence.existingClaim: nil|false
   ## Default: nil.
   ##
-  path: /bitnami
+  path: /bitnami/ghost
 
 ## Ghost containers' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/

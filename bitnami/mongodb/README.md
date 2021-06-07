@@ -15,7 +15,7 @@ $ helm install my-release bitnami/mongodb
 
 This chart bootstraps a [MongoDB&reg;](https://github.com/bitnami/bitnami-docker-mongodb) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
+Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with Fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
 
 ## Prerequisites
 
@@ -76,6 +76,7 @@ The following tables lists the configurable parameters of the MongoDB&reg; chart
 | `nameOverride`      | String to partially override mongodb.fullname                  | `nil`                                                   |
 | `fullnameOverride`  | String to fully override mongodb.fullname                      | `nil`                                                   |
 | `clusterDomain`     | Default Kubernetes cluster domain                              | `cluster.local`                                         |
+| `extraDeploy`       | Array of extra objects to deploy with the release              | `[]` (evaluated as a template)                          |
 | `schedulerName`     | Name of the scheduler (other than default) to dispatch pods    | `nil`                                                   |
 | `image.registry`    | MongoDB&reg; image registry                                    | `docker.io`                                             |
 | `image.repository`  | MongoDB&reg; image name                                        | `bitnami/mongodb`                                       |
@@ -91,6 +92,7 @@ The following tables lists the configurable parameters of the MongoDB&reg; chart
 | `architecture`           | MongoDB&reg; architecture (`standalone` or `replicaset`)                                                                      | `standalone`                                   |
 | `hostAliases`            | Add deployment host aliases                                                                                                   | `[]`                                           |
 | `useStatefulSet`         | Set to true to use a StatefulSet instead of a Deployment (only when `architecture=standalone`)                                | `false`                                        |
+| `commonAnnotations`      | Annotations to be added to all Mongo resources                                                                                     | `{}`                                                    |
 | `auth.enabled`           | Enable authentication                                                                                                         | `true`                                         |
 | `auth.rootPassword`      | MongoDB&reg; admin password                                                                                                   | _random 10 character long alphanumeric string_ |
 | `auth.username`          | MongoDB&reg; custom user (mandatory if `auth.database` is set)                                                                | `nil`                                          |
@@ -105,6 +107,7 @@ The following tables lists the configurable parameters of the MongoDB&reg; chart
 | `systemLogVerbosity`     | MongoDB&reg; system log verbosity level                                                                                       | `0`                                            |
 | `disableSystemLog`       | Switch to enable/disable MongoDB&reg; system log                                                                              | `false`                                        |
 | `disableJavascript`      | Switch to enable/disable MongoDB&reg; server-side JavaScript execution                                                        | `false`                                        |
+| `enableJournal`          | Switch to enable/disable MongoDB&reg; Journaling                                                                              | `true`                                         |
 | `configuration`          | MongoDB&reg; configuration file to be used                                                                                    | `{}`                                           |
 | `existingConfigmap`      | Name of existing ConfigMap with MongoDB&reg; configuration                                                                    | `nil`                                          |
 | `initdbScripts`          | Dictionary of initdb scripts                                                                                                  | `nil`                                          |
@@ -165,7 +168,7 @@ The following tables lists the configurable parameters of the MongoDB&reg; chart
 ### Exposure parameters
 
 | Parameter                                                | Description                                                                                            | Default                        |
-| -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | ------------------------------ |
+|----------------------------------------------------------|--------------------------------------------------------------------------------------------------------|--------------------------------|
 | `service.type`                                           | Kubernetes Service type                                                                                | `ClusterIP`                    |
 | `service.nameOverride`                                   | MongoDB&reg; service name                                                                              | `{mongodb.fullname}-headless`  |
 | `service.port`                                           | MongoDB&reg; service port                                                                              | `27017`                        |
@@ -183,7 +186,7 @@ The following tables lists the configurable parameters of the MongoDB&reg; chart
 | `externalAccess.autoDiscovery.image.pullPolicy`          | Init container auto-discovery image pull policy (kubectl)                                              | `Always`                       |
 | `externalAccess.autoDiscovery.resources.limits`          | Init container auto-discovery resource limits                                                          | `{}`                           |
 | `externalAccess.autoDiscovery.resources.requests`        | Init container auto-discovery resource requests                                                        | `{}`                           |
-| `externalAccess.service.type`                            | Kubernetes Service type for external access. It can be NodePort, LoadBalancer or ClusterIP                        | `LoadBalancer`                 |
+| `externalAccess.service.type`                            | Kubernetes Service type for external access. It can be NodePort, LoadBalancer or ClusterIP             | `LoadBalancer`                 |
 | `externalAccess.service.port`                            | MongoDB&reg; port used for external access when service type is LoadBalancer                           | `27017`                        |
 | `externalAccess.service.loadBalancerIPs`                 | Array of load balancer IPs for MongoDB&reg; nodes                                                      | `[]`                           |
 | `externalAccess.service.loadBalancerSourceRanges`        | Address(es) that are allowed when service is LoadBalancer                                              | `[]`                           |
@@ -199,30 +202,30 @@ The following tables lists the configurable parameters of the MongoDB&reg; chart
 | `externalAccess.hidden.service.nodePorts`                | Array of node ports used to configure MongoDB&reg; advertised hostname when service type is NodePort   | `[]`                           |
 | `externalAccess.hidden.service.annotations`              | Service annotations for external access                                                                | `{}`(evaluated as a template)  |
 
-
-
 ### Persistence parameters
 
-| Parameter                                   | Description                                                                        | Default                         |
-|---------------------------------------------|------------------------------------------------------------------------------------|---------------------------------|
-| `persistence.enabled`                       | Enable MongoDB&reg; data persistence using PVC                                     | `true`                          |
-| `persistence.existingClaim`                 | Provide an existing `PersistentVolumeClaim` (only when `architecture=standalone`)  | `nil` (evaluated as a template) |
-| `persistence.storageClass`                  | PVC Storage Class for MongoDB&reg; data volume                                     | `nil`                           |
-| `persistence.accessMode`                    | PVC Access Mode for MongoDB&reg; data volume                                       | `ReadWriteOnce`                 |
-| `persistence.size`                          | PVC Storage Request for MongoDB&reg; data volume                                   | `8Gi`                           |
-| `persistence.mountPath`                     | Path to mount the volume at                                                        | `/bitnami/mongodb`              |
-| `persistence.subPath`                       | Subdirectory of the volume to mount at                                             | `""`                            |
-| `persistence.volumeClaimTemplates.selector` | A label query over volumes to consider for binding (e.g. when using local volumes) | ``                              |
-| `persistence.volumeClaimTemplates.requests` | Custom PVC requests attributes                                                     | `{}` (evaluated as a template)  |
+| Parameter                                     | Description                                                                        | Default                         |
+|-----------------------------------------------|------------------------------------------------------------------------------------|---------------------------------|
+| `persistence.enabled`                         | Enable MongoDB&reg; data persistence using PVC                                     | `true`                          |
+| `persistence.existingClaim`                   | Provide an existing `PersistentVolumeClaim` (only when `architecture=standalone`)  | `nil` (evaluated as a template) |
+| `persistence.storageClass`                    | PVC Storage Class for MongoDB&reg; data volume                                     | `nil`                           |
+| `persistence.accessMode`                      | PVC Access Mode for MongoDB&reg; data volume                                       | `ReadWriteOnce`                 |
+| `persistence.size`                            | PVC Storage Request for MongoDB&reg; data volume                                   | `8Gi`                           |
+| `persistence.mountPath`                       | Path to mount the volume at                                                        | `/bitnami/mongodb`              |
+| `persistence.subPath`                         | Subdirectory of the volume to mount at                                             | `""`                            |
+| `persistence.volumeClaimTemplates.selector`   | A label query over volumes to consider for binding (e.g. when using local volumes) | ``                              |
+| `persistence.volumeClaimTemplates.dataSource` | Add dataSource to the VolumeClaimTemplate                                          | ``                              |
+| `persistence.volumeClaimTemplates.requests`   | Custom PVC requests attributes                                                     | `{}` (evaluated as a template)  |
 
 ### RBAC parameters
 
 | Parameter                                    | Description                                                                                          | Default                                         |
-| -------------------------------------------- | ---------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
+|----------------------------------------------|------------------------------------------------------------------------------------------------------|-------------------------------------------------|
 | `serviceAccount.create`                      | Enable creation of ServiceAccount for MongoDB&reg; pods                                              | `true`                                          |
 | `serviceAccount.name`                        | Name of the created serviceAccount                                                                   | Generated using the `mongodb.fullname` template |
 | `serviceAccount.annotations`                 | Additional Service Account annotations                                                               | `{}`                                            |
-| `rbac.create`                                | Weather to create & use RBAC resources or not                                                        | `false`                                         |
+| `rbac.create`                                | Whether to create & use RBAC resources or not                                                        | `false`                                         |
+| `rbac.role.rules`                            | Custom rules to create following the role specification                                              | `[]`                                            |
 | `podSecurityPolicy.create`                   | Whether to create & use PSP resource or not (Note: `rbac.create` needs to be `true`)                 | `false`                                         |
 | `podSecurityPolicy.allowPrivilegeEscalation` | Enable privilege escalation                                                                          | `false`                                         |
 | `podSecurityPolicy.privileged`               | Allow privileged                                                                                     | `false`                                         |
@@ -288,54 +291,56 @@ The following tables lists the configurable parameters of the MongoDB&reg; chart
 
 ### Hidden Node parameters
 
-| Parameter                                                | Description                                                                                                          | Default                                                 |
-| -------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
-| `hidden.enabled`                                         | Enable deploying the hidden nodes                                                                                    | `false`                                                 |
-| `hidden.hostAliases`                                     | Add deployment host aliases                                                                                          | `[]`                                                    |
-| `hidden.configuration`                                   | Hidden node configuration file to be used                                                                            | `{}`                                                    |
-| `hidden.existingConfigmap`                               | Name of existing ConfigMap with Hidden node configuration                                                            | `nil`                                                   |
-| `hidden.command`                                         | Override default container command (useful when using custom images)                                                 | `nil`                                                   |
-| `hidden.args`                                            | Override default container args (useful when using custom images)                                                    | `nil`                                                   |
-| `hidden.extraFlags`                                      | Hidden node additional command line flags                                                                            | `[]`                                                    |
-| `hidden.extraEnvVars`                                    | Extra environment variables to add to Hidden node pods                                                               | `[]`                                                    |
-| `hidden.extraEnvVarsCM`                                  | Name of existing ConfigMap containing extra env vars                                                                 | `nil`                                                   |
-| `hidden.extraEnvVarsSecret`                              | Name of existing Secret containing extra env vars (in case of sensitive data)                                        | `nil`                                                   |
-| `hidden.replicaCount`                                    | Number of hidden nodes (only when `architecture=replicaset`)                                                         | `2`                                                     |
-| `hidden.labels`                                          | Annotations to be added to the hidden node statefulset                                                               | `{}` (evaluated as a template)                          |
-| `hidden.annotations`                                     | Additional labels to be added to thehidden node statefulset                                                          | `{}` (evaluated as a template)                          |
-| `hidden.podManagementPolicy`                             | Pod management policy for hidden node                                                                                | `OrderedReady`                                          |
-| `hidden.strategyType`                                    | StrategyType for hidden node statefulset                                                                             | `RollingUpdate`                                         |
-| `hidden.podLabels`                                       | Hidden node pod labels                                                                                               | `{}` (evaluated as a template)                          |
-| `hidden.podAnnotations`                                  | Hidden node Pod annotations                                                                                          | `{}` (evaluated as a template)                          |
-| `hidden.priorityClassName`                               | Name of the existing priority class to be used by hidden node pod(s)                                                 | `""`                                                    |
-| `hidden.podAffinityPreset`                               | Hidden node Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                      | `""`                                                    |
-| `hidden.podAntiAffinityPreset`                           | Hidden node Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                 | `soft`                                                  |
-| `hidden.nodeAffinityPreset.type`                         | Hidden Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                     | `""`                                                    |
-| `hidden.nodeAffinityPreset.key`                          | Hidden Node label key to match Ignored if `affinity` is set.                                                         | `""`                                                    |
-| `hidden.nodeAffinityPreset.values`                       | Hidden Node label values to match. Ignored if `affinity` is set.                                                     | `[]`                                                    |
-| `hidden.affinity`                                        | Hidden node Affinity for pod assignment                                                                              | `{}` (evaluated as a template)                          |
-| `hidden.nodeSelector`                                    | Hidden node Node labels for pod assignment                                                                           | `{}` (evaluated as a template)                          |
-| `hidden.tolerations`                                     | Hidden node Tolerations for pod assignment                                                                           | `[]` (evaluated as a template)                          |
-| `hidden.resources.limits`                                | The resources limits for hidden node containers                                                                      | `{}`                                                    |
-| `hidden.resources.requests`                              | The requested resources for hidden node containers                                                                   | `{}`                                                    |
-| `hidden.livenessProbe`                                   | Liveness probe configuration for hidden node                                                                         | Check `values.yaml` file                                |
-| `hidden.readinessProbe`                                  | Readiness probe configuration for hidden node                                                                        | Check `values.yaml` file                                |
-| `hidden.customLivenessProbe`                             | Override default liveness probe for hidden node containers                                                           | `nil`                                                   |
-| `hidden.customReadinessProbe`                            | Override default readiness probe for hidden node containers                                                          | `nil`                                                   |
-| `hidden.pdb.create`                                      | Enable/disable a Pod Disruption Budget creation for hidden node pod(s)                                               | `false`                                                 |
-| `hidden.pdb.minAvailable`                                | Minimum number/percentage of hidden node pods that should remain scheduled                                           | `1`                                                     |
-| `hidden.pdb.maxUnavailable`                              | Maximum number/percentage of hidden node pods that may be made unavailable                                           | `nil`                                                   |
-| `initContainers`                                        | Add additional init containers for the hidden node pod(s)                                                            | `{}` (evaluated as a template)                          |
-| `hidden.sidecars`                                        | Add additional sidecar containers for the hidden node pod(s)                                                         | `{}` (evaluated as a template)                          |
-| `hidden.extraVolumeMounts`                               | Optionally specify extra list of additional volumeMounts for the hidden node container(s)                            | `{}`                                                    |
-| `hidden.extraVolumes`                                    | Optionally specify extra list of additional volumes to the hidden node statefulset                                   | `{}`                                                    |
-| `hidden.persistence.enabled`                             | Enable hidden node data persistence using PVC                                                                        | `true`                                                  |
-| `hidden.persistence.storageClass`                        | PVC Storage Class for hidden node data volume                                                                        | `nil`                                                   |
-| `hidden.persistence.accessMode`                          | PVC Access Mode for hidden node data volume                                                                          | `ReadWriteOnce`                                         |
-| `hidden.persistence.size`                                | PVC Storage Request for hidden node data volume                                                                      | `8Gi`                                                   |
-| `hidden.persistence.mountPath`                           | Path to mount the volume at                                                                                          | `/bitnami/mongodb`                                      |
-| `hidden.persistence.subPath`                             | Subdirectory of the volume to mount at                                                                               | `""`                                                    |
-| `hidden.persistence.volumeClaimTemplates.selector`       | A label query over volumes to consider for binding (e.g. when using local volumes)                                   | ``                                                      |
+| Parameter                                     | Description                                                                                          | Default                        |
+|-----------------------------------------------|------------------------------------------------------------------------------------------------------|--------------------------------|
+| `hidden.enabled`                              | Enable deploying the hidden nodes                                                                    | `false`                        |
+| `hidden.hostAliases`                          | Add deployment host aliases                                                                          | `[]`                           |
+| `hidden.configuration`                        | Hidden node configuration file to be used                                                            | `{}`                           |
+| `hidden.existingConfigmap`                    | Name of existing ConfigMap with Hidden node configuration                                            | `nil`                          |
+| `hidden.command`                              | Override default container command (useful when using custom images)                                 | `nil`                          |
+| `hidden.args`                                 | Override default container args (useful when using custom images)                                    | `nil`                          |
+| `hidden.extraFlags`                           | Hidden node additional command line flags                                                            | `[]`                           |
+| `hidden.extraEnvVars`                         | Extra environment variables to add to Hidden node pods                                               | `[]`                           |
+| `hidden.extraEnvVarsCM`                       | Name of existing ConfigMap containing extra env vars                                                 | `nil`                          |
+| `hidden.extraEnvVarsSecret`                   | Name of existing Secret containing extra env vars (in case of sensitive data)                        | `nil`                          |
+| `hidden.replicaCount`                         | Number of hidden nodes (only when `architecture=replicaset`)                                         | `2`                            |
+| `hidden.labels`                               | Annotations to be added to the hidden node statefulset                                               | `{}` (evaluated as a template) |
+| `hidden.annotations`                          | Additional labels to be added to thehidden node statefulset                                          | `{}` (evaluated as a template) |
+| `hidden.podManagementPolicy`                  | Pod management policy for hidden node                                                                | `OrderedReady`                 |
+| `hidden.strategyType`                         | StrategyType for hidden node statefulset                                                             | `RollingUpdate`                |
+| `hidden.podLabels`                            | Hidden node pod labels                                                                               | `{}` (evaluated as a template) |
+| `hidden.podAnnotations`                       | Hidden node Pod annotations                                                                          | `{}` (evaluated as a template) |
+| `hidden.priorityClassName`                    | Name of the existing priority class to be used by hidden node pod(s)                                 | `""`                           |
+| `hidden.podAffinityPreset`                    | Hidden node Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`      | `""`                           |
+| `hidden.podAntiAffinityPreset`                | Hidden node Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `soft`                         |
+| `hidden.nodeAffinityPreset.type`              | Hidden Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`     | `""`                           |
+| `hidden.nodeAffinityPreset.key`               | Hidden Node label key to match Ignored if `affinity` is set.                                         | `""`                           |
+| `hidden.nodeAffinityPreset.values`            | Hidden Node label values to match. Ignored if `affinity` is set.                                     | `[]`                           |
+| `hidden.affinity`                             | Hidden node Affinity for pod assignment                                                              | `{}` (evaluated as a template) |
+| `hidden.nodeSelector`                         | Hidden node Node labels for pod assignment                                                           | `{}` (evaluated as a template) |
+| `hidden.tolerations`                          | Hidden node Tolerations for pod assignment                                                           | `[]` (evaluated as a template) |
+| `hidden.resources.limits`                     | The resources limits for hidden node containers                                                      | `{}`                           |
+| `hidden.resources.requests`                   | The requested resources for hidden node containers                                                   | `{}`                           |
+| `hidden.livenessProbe`                        | Liveness probe configuration for hidden node                                                         | Check `values.yaml` file       |
+| `hidden.readinessProbe`                       | Readiness probe configuration for hidden node                                                        | Check `values.yaml` file       |
+| `hidden.customLivenessProbe`                  | Override default liveness probe for hidden node containers                                           | `nil`                          |
+| `hidden.customReadinessProbe`                 | Override default readiness probe for hidden node containers                                          | `nil`                          |
+| `hidden.pdb.create`                           | Enable/disable a Pod Disruption Budget creation for hidden node pod(s)                               | `false`                        |
+| `hidden.pdb.minAvailable`                     | Minimum number/percentage of hidden node pods that should remain scheduled                           | `1`                            |
+| `hidden.pdb.maxUnavailable`                   | Maximum number/percentage of hidden node pods that may be made unavailable                           | `nil`                          |
+| `initContainers`                              | Add additional init containers for the hidden node pod(s)                                            | `{}` (evaluated as a template) |
+| `hidden.sidecars`                             | Add additional sidecar containers for the hidden node pod(s)                                         | `{}` (evaluated as a template) |
+| `hidden.extraVolumeMounts`                    | Optionally specify extra list of additional volumeMounts for the hidden node container(s)            | `{}`                           |
+| `hidden.extraVolumes`                         | Optionally specify extra list of additional volumes to the hidden node statefulset                   | `{}`                           |
+| `hidden.persistence.enabled`                  | Enable hidden node data persistence using PVC                                                        | `true`                         |
+| `hidden.persistence.storageClass`             | PVC Storage Class for hidden node data volume                                                        | `nil`                          |
+| `hidden.persistence.accessMode`               | PVC Access Mode for hidden node data volume                                                          | `ReadWriteOnce`                |
+| `hidden.persistence.size`                     | PVC Storage Request for hidden node data volume                                                      | `8Gi`                          |
+| `hidden.persistence.mountPath`                | Path to mount the volume at                                                                          | `/bitnami/mongodb`             |
+| `hidden.persistence.subPath`                  | Subdirectory of the volume to mount at                                                               | `""`                           |
+| `persistence.volumeClaimTemplates.selector`   | A label query over volumes to consider for binding (e.g. when using local volumes)                   | ``                             |
+| `persistence.volumeClaimTemplates.dataSource` | Add dataSource to the VolumeClaimTemplate                                                            | ``                             |
+| `persistence.volumeClaimTemplates.requests`   | Custom PVC requests attributes                                                                       | `{}` (evaluated as a template) |
 
 ### Metrics parameters
 
@@ -429,7 +434,7 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 If additional containers are needed in the same pod (such as additional metrics or logging exporters), they can be defined using the `sidecars` config parameter. Similarly, extra init containers can be added using the `initContainers` parameter.
 
-Refer to the chart documentation for more information on, and examples of, configuring and using [sidecars](https://docs.bitnami.com/kubernetes/infrastructure/mongodb/configuration/configure-use-sidecars/) and [init containers](https://docs.bitnami.com/kubernetes/infrastructure/mongodb/configuration/configure-use-init-containers/).
+Refer to the chart documentation for more information on, and examples of, configuring and using [sidecars and init containers](https://docs.bitnami.com/kubernetes/infrastructure/mongodb/configuration/configure-sidecar-init-containers/).
 
 ## Persistence
 
@@ -437,7 +442,7 @@ The [Bitnami MongoDB&reg;](https://github.com/bitnami/bitnami-docker-mongodb) im
 
 The chart mounts a [Persistent Volume](http://kubernetes.io/docs/user-guide/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning.
 
-[Learn more about persistence in the chart documentation](https://docs.bitnami.com/kubernetes/infrastructure/mongodb/configuration/understand-chart-persistence/).
+If you encounter errors when working with persistent volumes, refer to our [troubleshooting guide for persistent volumes](https://docs.bitnami.com/kubernetes/faq/troubleshooting/troubleshooting-persistence-volumes/).
 
 ## Use custom Prometheus rules
 
@@ -525,4 +530,38 @@ Use the workaround below to upgrade from versions previous to 5.0.0. The followi
 
 ```console
 $ kubectl delete statefulset my-release-mongodb-arbiter my-release-mongodb-primary my-release-mongodb-secondary --cascade=false
+```
+
+### Add extra deployment options
+
+To add extra deployments (useful for advanced features like sidecars), use the `extraDeploy` property.
+
+In the example below, you can find how to use a example here for a [MongoDB replica set pod labeler sidecar](https://github.com/combor/k8s-mongo-labeler-sidecar) to identify the primary pod and dynamically label it as the primary node:
+
+```yaml
+extraDeploy:
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: mongodb-primary
+      namespace: default
+      labels:
+        app.kubernetes.io/component: mongodb
+        app.kubernetes.io/instance: mongodb
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: mongodb
+    spec:
+      type: NodePort
+      externalTrafficPolicy: Cluster
+      ports:
+        - name: mongodb-primary
+          port: 30001
+          nodePort: 30001
+          protocol: TCP
+          targetPort: mongodb
+      selector:
+        app.kubernetes.io/component: mongodb
+        app.kubernetes.io/instance: mongodb
+        app.kubernetes.io/name: mongodb
+        primary: "true"
 ```

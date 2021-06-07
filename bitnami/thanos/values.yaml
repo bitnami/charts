@@ -18,7 +18,7 @@ kubeVersion:
 image:
   registry: docker.io
   repository: bitnami/thanos
-  tag: 0.19.0-scratch-r0
+  tag: 0.21.1-scratch-r0
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -125,6 +125,29 @@ query:
   ##
   # existingSDConfigmap:
 
+  ## Optional additional containers (sidecar)
+  ##
+  extraContainers: []
+  ## Example:
+  ## - name: oAuth2-proxy
+  ##   args:
+  ##     - -https-address=:9092
+  ##     - -upstream=http://localhost:9091
+  ##     - -skip-auth-regex=^/metrics
+  ##   image: openshift/oauth-proxy:v1.1.0
+  ##   ports:
+  ##       - containerPort: 9092
+  ##         name: proxy
+  ##   resources:
+  ##       limits:
+  ##         memory: 16Mi
+  ##       requests:
+  ##         memory: 4Mi
+  ##         cpu: 20m
+  ##   volumeMounts:
+  ##     - mountPath: /secrets/proxy-tls
+  ##       name: secret-proxy-tls
+
   ## Extra environment variable(s) to set on query container.
   ##
   ## extraEnv:
@@ -137,6 +160,14 @@ query:
   ##       key: varname2-key
   ##
   extraEnv: []
+
+  ## Extra volumes to add to Thanos Query
+  ##
+  extraVolumes: []
+
+  ## Extra volume mounts to add to the query container
+  ##
+  extraVolumeMounts: []
 
   ## Extra Flags to passed to Thanos Query
   ##
@@ -327,6 +358,7 @@ query:
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
       ##
       # nodePort:
+    targetPort: http
     ## GRPC Port
     ##
     grpc:
@@ -529,6 +561,29 @@ queryFrontend:
   ##
   hostAliases: []
 
+  ## Optional additional containers (sidecar)
+  ##
+  extraContainers: []
+  ## Example:
+  ## - name: oAuth2-proxy
+  ##   args:
+  ##     - -https-address=:9092
+  ##     - -upstream=http://localhost:9091
+  ##     - -skip-auth-regex=^/metrics
+  ##   image: openshift/oauth-proxy:v1.1.0
+  ##   ports:
+  ##       - containerPort: 9092
+  ##         name: proxy
+  ##   resources:
+  ##       limits:
+  ##         memory: 16Mi
+  ##       requests:
+  ##         memory: 4Mi
+  ##         cpu: 20m
+  ##   volumeMounts:
+  ##     - mountPath: /secrets/proxy-tls
+  ##       name: secret-proxy-tls
+
   ## Extra environment variable(s) to set on query-frontend container.
   ##
   ## extraEnv:
@@ -542,6 +597,16 @@ queryFrontend:
   ##
   extraEnv: []
 
+  ## Extra volumes to add to the Query Frontend
+  ##
+  extraVolumes: []
+
+  ## Extra volume mounts to add to the query-frontend container
+  ##
+  extraVolumeMounts: []
+
+  ## Extra Flags to passed to Thanos Query Frontend
+  ##
   extraFlags: []
 
   ## Thanos Query Frontend Cache Configuration
@@ -696,6 +761,7 @@ queryFrontend:
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
       ##
       # nodePort:
+    targetPort: http
     ##
     ## Set the LoadBalancer service type to internal only.
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -843,6 +909,29 @@ bucketweb:
   ##
   timeout: 5m
 
+  ## Optional additional containers (sidecar)
+  ##
+  extraContainers: []
+  ## Example:
+  ## - name: oAuth2-proxy
+  ##   args:
+  ##     - -https-address=:9092
+  ##     - -upstream=http://localhost:9091
+  ##     - -skip-auth-regex=^/metrics
+  ##   image: openshift/oauth-proxy:v1.1.0
+  ##   ports:
+  ##       - containerPort: 9092
+  ##         name: proxy
+  ##   resources:
+  ##       limits:
+  ##         memory: 16Mi
+  ##       requests:
+  ##         memory: 4Mi
+  ##         cpu: 20m
+  ##   volumeMounts:
+  ##     - mountPath: /secrets/proxy-tls
+  ##       name: secret-proxy-tls
+
   ## Extra environment variable(s) to set on bucketweb container.
   ##
   ## extraEnv:
@@ -855,6 +944,14 @@ bucketweb:
   ##       key: varname2-key
   ##
   extraEnv: []
+
+  ## Extra volumes to add to Bucket Web
+  ##
+  extraVolumes: []
+
+  ## Extra volume mounts to add to the bucketweb container
+  ##
+  extraVolumeMounts: []
 
   ## Extra Flags to passed to Bucket Web
   ##
@@ -995,6 +1092,7 @@ bucketweb:
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
       ##
       # nodePort:
+    targetPort: http
     ## Set the LoadBalancer service type to internal only.
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
@@ -1147,6 +1245,14 @@ compactor:
   ##       key: varname2-key
   ##
   extraEnv: []
+
+  ## Extra volumes to add to Thanos Compactor
+  ##
+  extraVolumes: []
+
+  ## Extra volume mounts to add to the compactor container
+  ##
+  extraVolumeMounts: []
 
   ## Extra Flags to passed to Thanos Compactor
   ##
@@ -1366,6 +1472,14 @@ storegateway:
   ##       key: varname2-key
   ##
   extraEnv: []
+
+  ## Extra volumes to add to Thanos Store Gateway
+  ##
+  extraVolumes: []
+
+  ## Extra volume mounts to add to the storegateway container
+  ##
+  extraVolumeMounts: []
 
   ## Extra Flags to passed to Thanos Store Gateway
   ##
@@ -1675,6 +1789,29 @@ ruler:
   ##
   # clusterName:
 
+  ## Optional additional containers (sidecar)
+  ##
+  extraContainers: []
+  ## Example:
+  ## - name: oAuth2-proxy
+  ##   args:
+  ##     - -https-address=:9092
+  ##     - -upstream=http://localhost:9091
+  ##     - -skip-auth-regex=^/metrics
+  ##   image: openshift/oauth-proxy:v1.1.0
+  ##   ports:
+  ##       - containerPort: 9092
+  ##         name: proxy
+  ##   resources:
+  ##       limits:
+  ##         memory: 16Mi
+  ##       requests:
+  ##         memory: 4Mi
+  ##         cpu: 20m
+  ##   volumeMounts:
+  ##     - mountPath: /secrets/proxy-tls
+  ##       name: secret-proxy-tls
+
   ## Extra environment variable(s) to set on ruler container.
   ##
   ## extraEnv:
@@ -1687,6 +1824,14 @@ ruler:
   ##       key: varname2-key
   ##
   extraEnv: []
+
+  ## Extra volumes to add to Thanos Ruler
+  ##
+  extraVolumes: []
+
+  ## Extra volume mounts to add to the ruler container
+  ##
+  extraVolumeMounts: []
 
   ## Extra Flags to passed to Thanos Ruler
   ##
@@ -1842,6 +1987,7 @@ ruler:
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
       ##
       # nodePort:
+    targetPort: http
     ## GRPC Port
     ##
     grpc:
@@ -2021,6 +2167,29 @@ receive:
   #   - endpoints:
   #     - "127.0.0.1:10901"
 
+  ## Optional additional containers (sidecar)
+  ##
+  extraContainers: []
+  ## Example:
+  ## - name: oAuth2-proxy
+  ##   args:
+  ##     - -https-address=:9092
+  ##     - -upstream=http://localhost:9091
+  ##     - -skip-auth-regex=^/metrics
+  ##   image: openshift/oauth-proxy:v1.1.0
+  ##   ports:
+  ##       - containerPort: 9092
+  ##         name: proxy
+  ##   resources:
+  ##       limits:
+  ##         memory: 16Mi
+  ##       requests:
+  ##         memory: 4Mi
+  ##         cpu: 20m
+  ##   volumeMounts:
+  ##     - mountPath: /secrets/proxy-tls
+  ##       name: secret-proxy-tls
+
   ## Extra environment variable(s) to set on receive container.
   ##
   ## extraEnv:
@@ -2033,6 +2202,14 @@ receive:
   ##       key: varname2-key
   ##
   extraEnv: []
+
+  ## Extra volumes to add to Thanos Receive
+  ##
+  extraVolumes: []
+
+  ## Extra volume mounts to add to the receive container
+  ##
+  extraVolumeMounts: []
 
   ## Extra Flags to passed to Thanos Receive
   ##
@@ -2163,7 +2340,9 @@ receive:
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
   securityContext:
-    enabled: false
+    enabled: true
+    fsGroup: 1001
+    runAsUser: 1001
 
   ## Thanos Receive GRPC TLS parameters
   ## ref: https://github.com/thanos-io/thanos/blob/master/docs/components/receive.md#flags
@@ -2199,6 +2378,7 @@ receive:
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
       ##
       # nodePort:
+    targetPort: http
     ## GRPC Port
     ##
     grpc:
@@ -2386,7 +2566,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: "10"
+    tag: 10-debian-10-r99
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##

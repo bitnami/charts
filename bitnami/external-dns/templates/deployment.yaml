@@ -99,12 +99,17 @@ spec:
             - --provider={{ .Values.provider }}
             - --registry={{ .Values.registry }}
             - --interval={{ .Values.interval }}
-            {{- if eq .Values.registry "txt" }}
+            {{- if or (ne .Values.registry "aws-sd") .Values.forceTxtOwnerId }}
             {{- if .Values.txtOwnerId }}
             - --txt-owner-id={{ .Values.txtOwnerId }}
             {{- end }}
+            {{- end }}
+            {{- if eq .Values.registry "txt" }}
             {{- if .Values.txtPrefix }}
             - --txt-prefix={{ .Values.txtPrefix }}
+            {{- end }}
+            {{- if .Values.txtSuffix }}
+            - --txt-suffix={{ .Values.txtSuffix }}
             {{- end }}
             {{- end }}
             {{- if .Values.annotationFilter }}
@@ -380,21 +385,21 @@ spec:
             {{- end }}
             {{- if eq .Values.provider "ovh" }}
             # OVH environment variables
-            {{- if .Values.ovh.consumerKey }}
+            {{- if or (.Values.ovh.consumerKey) (.Values.ovh.secretName) }}
             - name: OVH_CONSUMER_KEY
               valueFrom:
                 secretKeyRef:
                   name: {{ template "external-dns.secretName" . }}
                   key: ovh_consumer_key
             {{- end }}
-            {{- if .Values.ovh.applicationKey }}
+            {{- if or (.Values.ovh.applicationKey) (.Values.ovh.secretName) }}
             - name: OVH_APPLICATION_KEY
               valueFrom:
                 secretKeyRef:
                   name: {{ template "external-dns.secretName" . }}
                   key: ovh_application_key
             {{- end }}
-            {{- if .Values.ovh.applicationSecret }}
+            {{- if or (.Values.ovh.applicationSecret) (.Values.ovh.secretName) }}
             - name: OVH_APPLICATION_SECRET
               valueFrom:
                 secretKeyRef:
@@ -493,8 +498,12 @@ spec:
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
-          readinessProbe: {{ toYaml .Values.readinessProbe | nindent 12 }}
-          livenessProbe: {{ toYaml .Values.livenessProbe | nindent 12 }}
+          {{- if .Values.readinessProbe.enabled }}
+          readinessProbe: {{- omit .Values.readinessProbe "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.livenessProbe.enabled }}
+          livenessProbe: {{- omit .Values.livenessProbe "enabled" | toYaml | nindent 12 }}
+          {{- end }}
           {{- if .Values.securityContext }}
           securityContext: {{ toYaml .Values.securityContext | nindent 12 }}
           {{- end }}

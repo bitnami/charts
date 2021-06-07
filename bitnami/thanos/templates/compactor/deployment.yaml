@@ -116,6 +116,9 @@ spec:
               mountPath: /conf
             - name: data
               mountPath: /data
+            {{- if .Values.compactor.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.compactor.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
       volumes:
         - name: objstore-config
           secret:
@@ -130,4 +133,7 @@ spec:
           {{- else }}
           emptyDir: {}
           {{- end }}
+        {{- if .Values.compactor.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.compactor.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
 {{- end }}

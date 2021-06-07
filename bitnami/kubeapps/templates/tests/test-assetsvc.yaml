@@ -21,18 +21,13 @@ spec:
         - |
             n=0
             until [ "$n" -ge 5 ]; do
-              if curl -o /tmp/output $ASSETSVC_HOST:$ASSETSVC_PORT/v1/clusters/default/namespaces/{{ .Release.Namespace }}/charts && cat /tmp/output && cat /tmp/output | grep wordpress; then
-                break
-              fi
-              sleep 10
-              ((n+=1))
+                if curl -o /tmp/output $ASSETSVC_HOST:$ASSETSVC_PORT/v1/clusters/default/namespaces/{{ .Release.Namespace }}/charts && cat /tmp/output && cat /tmp/output | grep wordpress; then
+                    break
+                fi
+                sleep 10
+                ((n+=1))
             done
             if [ "$n" -eq 5 ]; then
-              exit 1
+                exit 1
             fi
-      {{- if .Values.securityContext.enabled }}
-      securityContext:
-        fsGroup: {{ .Values.securityContext.fsGroup }}
-        runAsUser: {{ .Values.securityContext.runAsUser }}
-      {{- end }}
   restartPolicy: Never

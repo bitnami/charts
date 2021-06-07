@@ -54,7 +54,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/wordpress
-  tag: 5.7.0-debian-10-r22
+  tag: 5.7.2-debian-10-r18
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -107,7 +107,7 @@ wordpressTablePrefix: wp_
 ##
 wordpressScheme: http
 ## @param wordpressSkipInstall Skip wizard installation
-## NOTE: useful if you use an external database that already contains WordPress data)
+## NOTE: useful if you use an external database that already contains WordPress data
 ## ref: https://github.com/bitnami/bitnami-docker-wordpress#connect-wordpress-docker-container-to-an-existing-database
 ##
 wordpressSkipInstall: false
@@ -118,12 +118,12 @@ wordpressSkipInstall: false
 ##   @ini_set( 'memory_limit', '256M' );
 ##
 wordpressExtraConfigContent:
-## @param wordpressConfiguration The content for your custom wp-config.php file (experimental feature)
+## @param wordpressConfiguration The content for your custom wp-config.php file (advanced feature)
 ## NOTE: This will override configuring WordPress based on environment variables (including those set by the chart)
 ## NOTE: Currently only supported when `wordpressSkipInstall=true`
 ##
 wordpressConfiguration:
-## @param existingWordPressConfigurationSecret The name of an existing secret with your custom wp-config.php file (experimental feature)
+## @param existingWordPressConfigurationSecret The name of an existing secret with your custom wp-config.php file (advanced feature)
 ## NOTE: When it's set the `wordpressConfiguration` parameter is ignored
 ##
 existingWordPressConfigurationSecret:
@@ -131,6 +131,20 @@ existingWordPressConfigurationSecret:
 ## NOTE: useful if you deploy Memcached for caching database queries or you use an external cache server
 ##
 wordpressConfigureCache: false
+## @param wordpressAutoUpdateLevel Level of auto-updates to allow. Allowed values: `major`, `minor` or `none`.
+##
+wordpressAutoUpdateLevel: none
+## @param wordpressPlugins Array of plugins to install and activate. Can be specified as `all` or `none`.
+## NOTE: If set to all, only plugins that are already installed will be activated, and if set to none, no plugins will be activated
+##
+wordpressPlugins: none
+## @param apacheConfiguration The content for your custom httpd.conf file (advanced feature)
+##
+apacheConfiguration:
+## @param existingApacheConfigurationConfigMap The name of an existing secret with your custom httpd.conf file (advanced feature)
+## NOTE: When it's set the `apacheConfiguration` parameter is ignored
+##
+existingApacheConfigurationConfigMap:
 ## @param customPostInitScripts Custom post-init.d user scripts
 ## ref: https://github.com/bitnami/bitnami-docker-wordpress/tree/master/5/debian-10/rootfs/post-init.d
 ## NOTE: supported formats are `.sh`, `.sql` or `.php`
@@ -174,13 +188,13 @@ allowEmptyPassword: true
 ##
 allowOverrideNone: false
 ## @param htaccessPersistenceEnabled Persist custom changes on htaccess files
-## If `allowOverrideNone` is `true`, it will persist `/opt/bitnami/wordpress/wordpress-htaccess.conf`
-## If `allowOverrideNone` is `false`, it will persist `/opt/bitnami/wordpress/.htaccess`
+## If `allowOverrideNone` is `false`, it will persist `/opt/bitnami/wordpress/wordpress-htaccess.conf`
+## If `allowOverrideNone` is `true`, it will persist `/opt/bitnami/wordpress/.htaccess`
 ##
 htaccessPersistenceEnabled: false
 ## @param customHTAccessCM The name of an existing ConfigMap with custom htaccess rules
 ## NOTE: Must contain key `wordpress-htaccess.conf` with the file content
-## NOTE: Requires setting `allowOverrideNone=true`
+## NOTE: Requires setting `allowOverrideNone=false`
 ##
 customHTAccessCM:
 ## @param command Override default container command (useful when using custom images)
@@ -202,6 +216,20 @@ extraEnvVarsCM:
 ## @param extraEnvVarsSecret Name of existing Secret containing extra env vars
 ##
 extraEnvVarsSecret:
+
+## @section WordPress Multisite Configuration parameters
+## ref: https://github.com/bitnami/bitnami-docker-wordpress#multisite-configuration
+
+## @param multisite.enable Whether to enable WordPress Multisite configuration.
+## @param multisite.host WordPress Multisite hostname/address. This value is mandatory when enabling Multisite mode.
+## @param multisite.networkType WordPress Multisite network type to enable. Allowed values: `subfolder`, `subdirectory` or `subdomain`.
+## @param multisite.enableNipIoRedirect Whether to enable IP address redirection to nip.io wildcard DNS. Useful when running on an IP address with subdomain network type.
+##
+multisite:
+  enable: false
+  host: ""
+  networkType: subdomain
+  enableNipIoRedirect: false
 
 ## @section WordPress deployment parameters
 
@@ -310,7 +338,7 @@ nodeSelector: {}
 ## @param tolerations Tolerations for pod assignment
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
-tolerations: {}
+tolerations: []
 ## WordPress containers' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ## @param resources.limits The resources limits for the WordPress container
@@ -595,7 +623,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: "10"
+    tag: 10-debian-10-r97
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -669,7 +697,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.8.0-debian-10-r346
+    tag: 0.8.0-debian-10-r397
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

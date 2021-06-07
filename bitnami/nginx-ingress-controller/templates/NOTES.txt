@@ -42,7 +42,7 @@ Get the application URL by running these commands:
 
 An example Ingress that makes use of the controller:
 
-  apiVersion: extensions/v1beta1
+  apiVersion: networking.k8s.io/v1
   kind: Ingress
   metadata:
     annotations:
@@ -55,9 +55,12 @@ An example Ingress that makes use of the controller:
         http:
           paths:
             - backend:
-                serviceName: exampleService
-                port: 80
+                service:
+                  name: exampleService
+                  port:
+                    number: 80
               path: /
+              pathType: Prefix
     # This section is only required if TLS is to be enabled for the Ingress
     tls:
         - hosts:

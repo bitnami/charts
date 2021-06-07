@@ -149,8 +149,8 @@ The following table lists the configurable parameters of the Discourse chart and
 | Parameter                                    | Description                                                       | Default                                                 |
 |----------------------------------------------|-------------------------------------------------------------------|---------------------------------------------------------|
 | `sidekiq.containerSecurityContext`           | Container security context specification                          | `{}`                                                    |
-| `sidekiq.command`                            | Custom command to override image cmd (evaluated as a template)    | `["/app-entrypoint.sh"]`                                |
-| `sidekiq.args`                               | Custom args for the custom command (evaluated as a template)      | `["nami", "start", "--foreground", "discourse-sidekiq"` |
+| `sidekiq.command`                            | Custom command to override image cmd (evaluated as a template)    | `["/opt/bitnami/scripts/discourse/entrypoint.sh"]`      |
+| `sidekiq.args`                               | Custom args for the custom command (evaluated as a template)      | `["/opt/bitnami/scripts/discourse-sidekiq/run.sh"`      |
 | `sidekiq.resources`                          | Sidekiq container's resource requests and limits                  | `{}`                                                    |
 | `sidekiq.livenessProbe.enabled`              | Enable/disable livenessProbe                                      | `true`                                                  |
 | `sidekiq.livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated                          | `500`                                                   |
@@ -216,11 +216,11 @@ The following table lists the configurable parameters of the Discourse chart and
 | Parameter                                 | Description                                                                             | Default          |
 |-------------------------------------------|-----------------------------------------------------------------------------------------|------------------|
 | `redis.enabled`                           | Deploy Redis<sup>TM</sup> container(s)                                                  | `true`           |
-| `redis.usePassword`                       | Use password authentication                                                             | `false`          |
-| `redis.password`                          | Password for Redis<sup>TM</sup> authentication  - ignored if existingSecret is provided | `nil`            |
-| `redis.existingSecret`                    | Name of an existing Kubernetes secret                                                   | `nil`            |
-| `redis.existingSecretPasswordKey`         | Name of the key pointing to the password in your Kubernetes secret                      | `redis-password` |
-| `redis.cluster.enabled`                   | Whether to use cluster replication                                                      | `false`          |
+| `redis.auth.enabled`                      | Use password authentication                                                             | `false`          |
+| `redis.auth.password`                     | Password for Redis<sup>TM</sup> authentication  - ignored if existingSecret is provided | `nil`            |
+| `redis.auth.existingSecret`               | Name of an existing Kubernetes secret                                                   | `nil`            |
+| `redis.auth.existingSecretPasswordKey`    | Name of the key pointing to the password in your Kubernetes secret                      | `redis-password` |
+| `redis.architecture`                      | Redis<sup>TM</sup> architecture. Allowed values: `standalone` or `replication`          | `standalone`     |
 | `redis.master.persistence.enabled`        | Enable database persistence using PVC                                                   | `true`           |
 | `externalRedis.host`                      | Host of the external database                                                           | `""`             |
 | `externalRedis.port`                      | Database port number                                                                    | `6379`           |
@@ -437,6 +437,16 @@ imagePullSecrets:
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 4.0.0
+
+The [Bitnami Discourse](https://github.com/bitnami/bitnami-docker-discourse) image was refactored and now the source code is published in GitHub in the [`rootfs`](https://github.com/bitnami/bitnami-docker-discourse/tree/master/2/debian-10/rootfs) folder of the container image repository.
+
+Full compatibility is not guaranteed due to the amount of involved changes, however no breaking changes are expected.
+
+### To 3.0.0
+
+This major updates the Redis<sup>TM</sup> subchart to it newest major, 14.0.0, which contains breaking changes. For more information on this subchart's major and the steps needed to migrate your data from your previous release, please refer to [Redis<sup>TM</sup> upgrade notes.](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1400).
 
 ### To 2.0.0
 

@@ -283,7 +283,7 @@ The [Bitnami Apache Cassandra](https://github.com/bitnami/bitnami-docker-cassand
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
 
-[Learn more about persistence in the chart documentation](https://docs.bitnami.com/kubernetes/infrastructure/cassandra/configuration/understand-chart-persistence/).
+If you encounter errors when working with persistent volumes, refer to our [troubleshooting guide for persistent volumes](https://docs.bitnami.com/kubernetes/faq/troubleshooting/troubleshooting-persistence-volumes/).
 
 ### Adjust permissions of persistent volume mountpoint
 

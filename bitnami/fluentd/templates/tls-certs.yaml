@@ -29,4 +29,5 @@ type: kubernetes.io/tls
 data:
   tls.crt: {{ required "A valid .Values.tls.certificate entry required!" .Values.tls.certificate | b64enc }}
   tls.key: {{ required "A valid .Values.tls.key entry required!" .Values.tls.key | b64enc }}
+  rootCA.crt: {{ required "A valid .Values.tls.caCertificate entry required!" .Values.tls.caCertificate | b64enc }}
 {{- end }}

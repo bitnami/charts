@@ -106,7 +106,6 @@ spec:
             - name: AIRFLOW_LDAP_BIND_USER
               value: {{ .Values.ldap.binddn }}
             - name: AIRFLOW_LDAP_BIND_PASSWORD
-              value: {{ .Values.ldap.bindpw }}
               valueFrom:
                 secretKeyRef:
                   name: {{ include "airflow.ldapSecretName" . }}

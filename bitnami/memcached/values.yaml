@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/memcached
-  tag: 1.6.9-debian-10-r114
+  tag: 1.6.9-debian-10-r169
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -91,6 +91,20 @@ arguments:
 ## ref: https://github.com/bitnami/bitnami-docker-memcached#configuration
 ##
 extraEnv: []
+
+## Pod disruption budget configuration
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions/
+##
+podDisruptionBudget:
+  ## Specifies whether a Pod disruption budget should be created
+  ##
+  create: false
+  ## Minimum number of pods that need to be available
+  ##
+  # minAvailable: 1
+  ## Maximum number of pods that can be unavailable.
+  ##
+  maxUnavailable: 1
 
 ## Service parameters
 ##
@@ -262,7 +276,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/memcached-exporter
-    tag: 0.8.0-debian-10-r105
+    tag: 0.9.0-debian-10-r56
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -329,3 +343,26 @@ metrics:
     ##
     # selector:
     #   prometheus: my-prometheus
+
+    ## MetricRelabelConfigs to apply to samples before ingestion
+    ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs
+    ##
+    # metricRelabelings:
+    # - sourceLabels: [__meta_kubernetes_pod_label_app_kubernetes_io_instance]
+    #   separator: ;
+    #   regex: ^(.*)$
+    #   targetLabel: pod_name
+    #   replacement: $1
+    #   action: replace
+
+
+    ## RelabelConfigs to apply to samples before scraping
+    ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+    ##
+    # relabelings:
+    # - sourceLabels: [__meta_kubernetes_pod_label_app_kubernetes_io_instance]
+    #   separator: ;
+    #   regex: ^(.*)$
+    #   targetLabel: pod_name
+    #   replacement: $1
+    #   action: replace

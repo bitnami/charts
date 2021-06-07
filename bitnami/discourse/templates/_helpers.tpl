@@ -185,8 +185,8 @@ Return the Redis(TM) secret name
 */}}
 {{- define "discourse.redis.secretName" -}}
 {{- if .Values.redis.enabled }}
-    {{- if .Values.redis.existingSecret }}
-        {{- printf "%s" .Values.redis.existingSecret -}}
+    {{- if .Values.redis.auth.existingSecret }}
+        {{- printf "%s" .Values.redis.auth.existingSecret -}}
     {{- else -}}
         {{- printf "%s" (include "redis.fullname" .) -}}
     {{- end -}}
@@ -201,8 +201,8 @@ Return the Redis(TM) secret name
 Return the Redis(TM) secret key
 */}}
 {{- define "discourse.redis.secretPasswordKey" -}}
-{{- if and .Values.redis.enabled .Values.redis.existingSecret }}
-    {{- required "You need to provide existingSecretPasswordKey when an existingSecret is specified in redis" .Values.redis.existingSecretPasswordKey | printf "%s" }}
+{{- if and .Values.redis.enabled .Values.redis.auth.existingSecret }}
+    {{- required "You need to provide existingSecretPasswordKey when an existingSecret is specified in redis" .Values.redis.auth.existingSecretPasswordKey | printf "%s" }}
 {{- else if and (not .Values.redis.enabled) .Values.externalRedis.existingSecret }}
     {{- required "You need to provide existingSecretPasswordKey when an existingSecret is specified in redis" .Values.externalRedis.existingSecretPasswordKey | printf "%s" }}
 {{- else -}}
@@ -213,8 +213,8 @@ Return the Redis(TM) secret key
 {{/*
 Return whether Redis(TM) uses password authentication or not
 */}}
-{{- define "discourse.redis.usePassword" -}}
-{{- if or (and .Values.redis.enabled .Values.redis.usePassword) (and (not .Values.redis.enabled) (or .Values.externalRedis.password .Values.externalRedis.existingSecret)) }}
+{{- define "discourse.redis.auth.enabled" -}}
+{{- if or (and .Values.redis.enabled .Values.redis.auth.enabled) (and (not .Values.redis.enabled) (or .Values.externalRedis.password .Values.externalRedis.existingSecret)) }}
     {{- true -}}
 {{- end -}}
 {{- end -}}

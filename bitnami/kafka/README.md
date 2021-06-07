@@ -111,13 +111,13 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `auth.clientProtocol`                     | Authentication protocol for communications with clients. Allowed protocols: `plaintext`, `tls`, `mtls`, `sasl` and `sasl_tls`                        | `plaintext`                                             |
 | `auth.interBrokerProtocol`                | Authentication protocol for inter-broker communications. Allowed protocols: `plaintext`, `tls`, `mtls`, `sasl` and `sasl_tls`                        | `plaintext`                                             |
 | `auth.sasl.mechanisms`                    | SASL mechanisms when either `auth.interBrokerProtocol` or `auth.clientProtocol` are `sasl`. Allowed types: `plain`, `scram-sha-256`, `scram-sha-512` | `plain,scram-sha-256,scram-sha-512`                     |
-| `auth.sasl.interBrokerMechanism`          | SASL mechanism to use as inter broker protocol, it must be included at `auth.saslMechanisms`                                                         | `plain`                                                 |
+| `auth.sasl.interBrokerMechanism`          | SASL mechanism to use as inter broker protocol, it must be included at `auth.sasl.mechanisms`                                                         | `plain`                                                 |
 | `auth.sasl.jaas.interBrokerUser`          | Kafka inter broker communication user for SASL authentication                                                                                        | `admin`                                                 |
 | `auth.sasl.jaas.interBrokerPassword`      | Kafka inter broker communication password for SASL authentication                                                                                    | `nil`                                                   |
 | `auth.sasl.jaas.zookeeperUser`            | Kafka Zookeeper user for SASL authentication                                                                                                         | `nil`                                                   |
 | `auth.sasl.jaas.zookeeperPassword`        | Kafka Zookeeper password for SASL authentication                                                                                                     | `nil`                                                   |
 | `auth.sasl.jaas.clientUsers`              | List of Kafka client users to be created, separated by commas. This values will override `auth.jaas.clientUser`                                      | `["user"]`                                              |
-| `auth.sasl.jaas.clientPasswords`          | List of passwords for `auth.jaas.clientUsers`. It is mandatory to provide the passwords when using `auth.jaas.clientUsers`                           | `[]`                                                    |
+| `auth.sasl.jaas.clientPasswords`          | List of passwords for `auth.sasl.jaas.clientUsers`. It is mandatory to provide the passwords when using `auth.sasl.jaas.clientUsers`                           | `[]`                                                    |
 | `auth.sasl.jaas.existingSecret`           | Name of the existing secret containing credentials for brokerUser, interBrokerUser and zookeeperUser                                                 | `nil`                                                   |
 | `auth.tls.type`                           | Format to use for TLS certificates. Allowed types: `jks` and `pem`                                                                                   | `jks`                                                   |
 | `auth.tls.existingSecret`                 | Name of the existing secret containing the TLS certificates for the Kafka brokers                                                                    | `nil`                                                   |
@@ -211,12 +211,14 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `persistence.accessMode`       | PVC Access Mode for Kafka data volume                                                  | `ReadWriteOnce`               |
 | `persistence.size`             | PVC Storage Request for Kafka data volume                                              | `8Gi`                         |
 | `persistence.annotations`      | Annotations for the PVC                                                                | `{}`(evaluated as a template) |
+| `persistence.selector`         | Selector to match an existing Persistent Volume for Kafka's data PVC. If set, the PVC can't have a PV dynamically provisioned for it                                                                                  | `{}`(evaluated as a template) |
 | `persistence.mountPath`        | Mount path of the Kafka data volume                                                    | `/bitnami/kafka`              |
 | `logPersistence.enabled`       | Enable Kafka logs persistence using PVC, note that Zookeeper persistence is unaffected | `false`                       |
 | `logPersistence.existingClaim` | Provide an existing `PersistentVolumeClaim`, the value is evaluated as a template      | `nil`                         |
 | `logPersistence.accessMode`    | PVC Access Mode for Kafka logs volume                                                  | `ReadWriteOnce`               |
 | `logPersistence.size`          | PVC Storage Request for Kafka logs volume                                              | `8Gi`                         |
 | `logPersistence.annotations`   | Annotations for the PVC                                                                | `{}`(evaluated as a template) |
+| `logPersistence.selector`      | Selector to match an existing Persistent Volume for Kafka's log data PVC. If set, the PVC can't have a PV dynamically provisioned for it                                                                                  | `{}`(evaluated as a template) |
 | `logPersistence.mountPath`     | Mount path of the Kafka logs volume                                                    | `/opt/bitnami/kafka/logs`     |
 
 ### RBAC parameters
@@ -293,6 +295,8 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `metrics.serviceMonitor.interval`      | Interval at which metrics should be scraped                                                                                      | `nil`                                                   |
 | `metrics.serviceMonitor.scrapeTimeout` | Timeout after which the scrape is ended                                                                                          | `nil` (Prometheus Operator default value)               |
 | `metrics.serviceMonitor.selector`      | ServiceMonitor selector labels                                                                                                   | `nil` (Prometheus Operator default value)               |
+| `metrics.serviceMonitor.relabelings`   | Relabel configuration for the metrics | `[]` |
+| `metrics.serviceMonitor.metricRelabelings` | MetricRelabelConfigs to apply to samples before ingestion | `[]` |
 
 ### Kafka provisioning parameters
 
@@ -375,8 +379,8 @@ Learn more about how to configure Kafka to use the different authentication prot
 
 If you enabled SASL authentication on any listener, you can set the SASL credentials using the parameters below:
 
-- `auth.jaas.clientUsers`/`auth.jaas.clientPasswords`: when enabling SASL authentication for communications with clients.
-- `auth.jaas.interBrokerUser`/`auth.jaas.interBrokerPassword`:  when enabling SASL authentication for inter-broker communications.
+- `auth.sasl.jaas.clientUsers`/`auth.sasl.jaas.clientPasswords`: when enabling SASL authentication for communications with clients.
+- `auth.sasl.jaas.interBrokerUser`/`auth.sasl.jaas.interBrokerPassword`:  when enabling SASL authentication for inter-broker communications.
 - `auth.jaas.zookeeperUser`/`auth.jaas.zookeeperPassword`: In the case that the Zookeeper chart is deployed with SASL authentication enabled.
 
 In order to configure TLS authentication/encryption, you **can** create a secret containing the Java Key Stores (JKS) files: the truststore (`kafka.truststore.jks`) and one keystore (`kafka.keystore.jks`) per Kafka broker you have in the cluster. Then, you need pass the secret name with the `--auth.jksSecret` parameter when deploying the chart.
@@ -409,8 +413,8 @@ auth.clientProtocol=sasl
 auth.interBrokerProtocol=tls
 auth.certificatesSecret=kafka-jks
 auth.certificatesPassword=jksPassword
-auth.jaas.clientUsers[0]=brokerUser
-auth.jaas.clientPassword[0]=brokerPassword
+auth.sasl.jaas.clientUsers[0]=brokerUser
+auth.sasl.jaas.clientPasswords[0]=brokerPassword
 auth.jaas.zookeeperUser=zookeeperUser
 auth.jaas.zookeeperPassword=zookeeperPassword
 zookeeper.auth.enabled=true

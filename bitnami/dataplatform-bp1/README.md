@@ -234,6 +234,18 @@ In order to render complete information about the deployment including all the s
 
 ## Upgrading
 
+### To 4.0.0
+
+This major version updates the prefixes of individual applications metrics in Wavefront Collectors which are fed to Tanzu observability in order to light up the individual dashboards of Kafka, Spark and Solr on Tanzu Observability platform.
+
+### To 3.0.0
+
+This major updates the wavefront subchart to it newest major, 3.0.0, which contains a new major for kube-state-metrics. For more information on this subchart's major, please refer to [wavefront upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/wavefront#to-300).
+
+### To 2.0.0
+
+The affinity rules have been updated to allow deploying this chart and the `dataplatform-bp2` chart in the same cluster.
+
 ### To 1.0.0
 
 This version updates the wavefront dependency to `2.x.x` where wavefront started to use a scratch image instead of debian. This can affect a current deployment if wavefront commands were provided. From now on, the only command that you will be able to execute inside the wavefront pod will be `/wavefront-collector`.

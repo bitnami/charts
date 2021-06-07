@@ -188,6 +188,7 @@ The following table lists the configurable parameters of the Wavefront chart and
 | `proxy.tracePort`                   | Port for distributed tracing data (usually 30000)                                                                      | `nil`                                     |
 | `proxy.jaegerPort`                  | Port for Jaeger format distributed tracing data (usually 30001)                                                        | `nil`                                     |
 | `proxy.traceJaegerHttpListenerPort` | Port for Jaeger Thrift format data (usually 30080)                                                                     | `nil`                                     |
+| `proxy.traceJaegerGrpcListenerPort` | Port for Jaeger GRPC format data (usually 14250)                                                                       | `nil`                                     |
 | `proxy.zipkinPort`                  | Port for Zipkin format distributed tracing data (usually 9411)                                                         | `nil`                                     |
 | `proxy.traceSamplingRate`           | Distributed tracing data sampling rate (0 to 1)                                                                        | `nil`                                     |
 | `proxy.traceSamplingDuration`       | When set to greater than 0, spans that exceed this duration will force trace to be sampled (ms)                        | `nil`                                     |
@@ -296,6 +297,10 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 3.0.0
+
+This major updates the kube-state-metrics subchart to it newest major, 2.0.0, which contains name changes to a few of its values. For more information on this subchart's major, please refer to [kube-state-metrics upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/kube-state-metrics#to-200).
 
 ### To 2.0.0
 

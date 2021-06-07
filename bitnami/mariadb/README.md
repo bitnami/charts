@@ -147,6 +147,7 @@ The following table lists the configurable parameters of the MariaDB chart and t
 | `primary.pdb.enabled`                        | Enable/disable a Pod Disruption Budget creation for MariaDB primary pods                                          | `false`                        |
 | `primary.pdb.minAvailable`                   | Minimum number/percentage of MariaDB primary pods that should remain scheduled                                    | `1`                            |
 | `primary.pdb.maxUnavailable`                 | Maximum number/percentage of MariaDB primary pods that may be made unavailable                                    | `nil`                          |
+| `primary.revisionHistoryLimit`               | Maximum number of revisions that will be maintained in the StatefulSet’s revision history for primary pods.       | `10`                           |
 
 ### MariaDB Secondary parameters
 
@@ -205,6 +206,7 @@ The following table lists the configurable parameters of the MariaDB chart and t
 | `secondary.pdb.enabled`                        | Enable/disable a Pod Disruption Budget creation for MariaDB secondary pods                                            | `false`                        |
 | `secondary.pdb.minAvailable`                   | Minimum number/percentage of MariaDB secondary pods that should remain scheduled                                      | `1`                            |
 | `secondary.pdb.maxUnavailable`                 | Maximum number/percentage of MariaDB secondary pods that may be made unavailable                                      | `nil`                          |
+| `secondary.revisionHistoryLimit`               | Maximum number of revisions that will be maintained in the StatefulSet’s revision history for secondary pods.         | `10`                           |
 
 ### RBAC parameters
 
@@ -213,7 +215,7 @@ The following table lists the configurable parameters of the MariaDB chart and t
 | `serviceAccount.create`      | Enable the creation of a ServiceAccount for MariaDB pods | `true`                                          |
 | `serviceAccount.name`        | Name of the created ServiceAccount                       | Generated using the `mariadb.fullname` template |
 | `serviceAccount.annotations` | Annotations for MariaDB Service Account                  | `{}` (evaluated as a template)                  |
-| `rbac.create`                | Weather to create & use RBAC resources or not            | `false`                                         |
+| `rbac.create`                | Whether to create & use RBAC resources or not            | `false`                                         |
 
 ### Volume Permissions parameters
 
@@ -300,9 +302,9 @@ These scripts are treated differently depending on their extension. While `.sh` 
 
 If additional containers are needed in the same pod as MariaDB (such as additional metrics or logging exporters), they can be defined using the sidecars parameter.
 
-The Helm chart already includes sidecar containers for the Prometheus exporters. These can be activated by adding the `–enable-metrics=true` parameter at deployment time. The `sidecars` parameter should therefore only be used for any extra sidecar containers. [See an example of configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/infrastructure/mariadb/administration/configure-use-sidecars/).
+The Helm chart already includes sidecar containers for the Prometheus exporters. These can be activated by adding the `–enable-metrics=true` parameter at deployment time. The `sidecars` parameter should therefore only be used for any extra sidecar containers. [See an example of configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/infrastructure/mariadb/configuration/configure-sidecar-init-containers/).
 
-Similarly, additional containers can be added to MariaDB pods using the `initContainers` parameter. [See an example of configuring and using init containers](https://docs.bitnami.com/kubernetes/infrastructure/mariadb/administration/configure-use-init-containers/).
+Similarly, additional containers can be added to MariaDB pods using the `initContainers` parameter. [See an example of configuring and using init containers](https://docs.bitnami.com/kubernetes/infrastructure/mariadb/configuration/configure-sidecar-init-containers/).
 
 ## Persistence
 
@@ -310,7 +312,7 @@ The [Bitnami MariaDB](https://github.com/bitnami/bitnami-docker-mariadb) image s
 
 The chart mounts a [Persistent Volume](https://kubernetes.io/docs/user-guide/persistent-volumes/) volume at this location. The volume is created using dynamic volume provisioning, by default. An existing PersistentVolumeClaim can also be defined.
 
-[Learn more about persistence in the chart documentation](https://docs.bitnami.com/kubernetes/infrastructure/mariadb/configuration/understand-chart-persistence/).
+If you encounter errors when working with persistent volumes, refer to our [troubleshooting guide for persistent volumes](https://docs.bitnami.com/kubernetes/faq/troubleshooting/troubleshooting-persistence-volumes/).
 
 ### Adjust permissions of persistent volume mountpoint
 

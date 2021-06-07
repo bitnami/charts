@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/kong
-  tag: 2.3.3-debian-10-r35
+  tag: 2.4.1-debian-10-r9
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -75,6 +75,10 @@ commonAnnotations: {}
 ## Common labels to add to all Kong resources (sub-charts are not considered). Evaluated as a template
 ##
 commonLabels: {}
+
+## Use a daemonset instead of a deployment
+##
+useDaemonset: false
 
 kong:
   ## Command and args for running the container (set to default if not set). Use array form
@@ -162,7 +166,7 @@ ingressController:
   image:
     registry: docker.io
     repository: bitnami/kong-ingress-controller
-    tag: 1.2.0-debian-10-r19
+    tag: 1.2.0-debian-10-r53
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -335,6 +339,19 @@ service:
   ##
   type: ClusterIP
 
+  ## clusterIP for the service (optional)
+  ## This is the internal IP address of the service and is usually assigned randomly.
+  ## ref: https://kubernetes.io/docs/reference/kubernetes-api/service-resources/service-v1/#ServiceSpec
+  ##
+  clusterIP:
+
+  ## externalTrafficPolicy for the service
+  ## default to "Cluster"
+  ## set to "Local" in order to preserve the client source IP (only on service of type LoadBalancer or NodePort)
+  ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/
+  ##
+  externalTrafficPolicy:
+
   ## kong proxy HTTP service port
   ##
   proxyHttpPort: 80
@@ -360,7 +377,7 @@ service:
   # adminHttpNodePort:
   # adminHttpsNodePort:
 
-  ## loadBalancerIP for the PrestaShop Service (optional, cloud specific)
+  ## loadBalancerIP for the Kong Service (optional, cloud specific)
   ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
   ##
   loadBalancerIP:
