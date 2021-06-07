@@ -51,7 +51,7 @@ kafka:
               - key: app.kubernetes.io/instance
                 operator: In
                 values:
-                  - '{{ .Release.Name }}'    
+                  - '{{ .Release.Name }}'
           topologyKey: "kubernetes.io/hostname"
     podAffinity:
       preferredDuringSchedulingIgnoredDuringExecution:
@@ -66,7 +66,7 @@ kafka:
                 - key: app.kubernetes.io/instance
                   operator: In
                   values:
-                    - '{{ .Release.Name }}'    
+                    - '{{ .Release.Name }}'
             topologyKey: "kubernetes.io/hostname"
   ## Prometheus Exporters / Metrics
   ##
@@ -153,7 +153,7 @@ kafka:
                 - key: app.kubernetes.io/instance
                   operator: In
                   values:
-                    - '{{ .Release.Name }}'    
+                    - '{{ .Release.Name }}'
             topologyKey: "kubernetes.io/hostname"
   ## This value is only used when zookeeper.enabled is set to false.
   ##
@@ -200,7 +200,7 @@ spark:
                 - key: app.kubernetes.io/instance
                   operator: In
                   values:
-                    - '{{ .Release.Name }}'    
+                    - '{{ .Release.Name }}'
             topologyKey: "kubernetes.io/hostname"
   ## Spark worker specific configuration
   ##
@@ -241,7 +241,7 @@ spark:
                 - key: app.kubernetes.io/instance
                   operator: In
                   values:
-                    - '{{ .Release.Name }}'    
+                    - '{{ .Release.Name }}'
             topologyKey: "kubernetes.io/hostname"
   ## Metrics configuration
   ##
@@ -305,7 +305,7 @@ elasticsearch:
                 - key: app.kubernetes.io/instance
                   operator: In
                   values:
-                    - '{{ .Release.Name }}'    
+                    - '{{ .Release.Name }}'
             topologyKey: "kubernetes.io/hostname"
 
     ## Elasticsearch master-eligible container's resource requests and limits
@@ -356,7 +356,7 @@ elasticsearch:
                 - key: app.kubernetes.io/instance
                   operator: In
                   values:
-                    - '{{ .Release.Name }}'    
+                    - '{{ .Release.Name }}'
             topologyKey: "kubernetes.io/hostname"
 
     ## Elasticsearch data container's resource requests and limits
@@ -402,7 +402,7 @@ elasticsearch:
                 - key: app.kubernetes.io/instance
                   operator: In
                   values:
-                    - '{{ .Release.Name }}'    
+                    - '{{ .Release.Name }}'
             topologyKey: "kubernetes.io/hostname"
 
     ## Elasticsearch coordinating-only container's resource requests and limits
@@ -476,7 +476,7 @@ logstash:
               - key: app.kubernetes.io/instance
                 operator: In
                 values:
-                  - '{{ .Release.Name }}'    
+                  - '{{ .Release.Name }}'
           topologyKey: "kubernetes.io/hostname"
 
   ## Logstash containers' resource requests and limits
@@ -580,7 +580,7 @@ wavefront:
           port: 9308
           path: /metrics
           scheme: http
-          prefix: kube.kafka.
+          prefix: kafka.
 
         ## auto-discover jmx exporter
         ##
@@ -592,7 +592,7 @@ wavefront:
           port: 5556
           path: /metrics
           scheme: http
-          prefix: kube.kafkajmx.
+          prefix: kafkajmx.
 
         ## auto-discover elasticsearch
         ##
@@ -604,7 +604,6 @@ wavefront:
           port: 9114
           path: /metrics
           scheme: http
-          prefix: kube.elasticsearch.
 
         ## auto-discover logstash
         ##
@@ -616,7 +615,6 @@ wavefront:
           port: 9198
           path: /metrics
           scheme: http
-          prefix: kube.logstash.
 
         ## auto-discover spark
         ##
@@ -628,7 +626,7 @@ wavefront:
           port: 8081
           path: /metrics/
           scheme: http
-          prefix: kube.spark.
+          prefix: spark.
 
         ## auto-discover spark
         ##
@@ -640,7 +638,7 @@ wavefront:
           port: 8080
           path: /metrics/
           scheme: http
-          prefix: kube.spark.
+          prefix: spark.
   proxy:
     ## Wavefront Proxy resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/

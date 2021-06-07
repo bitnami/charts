@@ -70,31 +70,25 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.discourse.args "context" $) | nindent 12 }}
           {{- end }}
           env:
-            {{- if .Values.image.debug }}
-            - name: NAMI_DEBUG
-              value: "--log-level trace"
-            {{- end }}
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" .Values.image.debug | quote }}
             - name: DISCOURSE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "discourse.secretName" . }}
                   key: discourse-password
-            - name: DISCOURSE_POSTGRESQL_PASSWORD
+            - name: DISCOURSE_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "discourse.postgresql.secretName" . }}
                   key: postgresql-password
-            {{- if and (not .Values.postgresql.enabled) .Values.externalDatabase.postgresqlPostgresUser }}
-            - name: POSTGRESQL_ROOT_USER
-              value: {{ .Values.externalDatabase.postgresqlPostgresUser | quote }}
-            {{- end }}
-            - name: POSTGRESQL_ROOT_PASSWORD
+            - name: POSTGRESQL_CLIENT_POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "discourse.postgresql.secretName" . }}
                   key: postgresql-postgres-password
             {{- if (include "discourse.redis.auth.enabled" .) }}
-            - name: REDIS_PASSWORD
+            - name: DISCOURSE_REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "discourse.redis.secretName" . }}
@@ -161,10 +155,8 @@ spec:
           command: {{- include "common.tplvalues.render" (dict "value" .Values.sidekiq.command "context" $) | nindent 12 }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.sidekiq.args "context" $) | nindent 12 }}
           env:
-            {{- if .Values.image.debug }}
-            - name: NAMI_DEBUG
-              value: "--log-level trace"
-            {{- end }}
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" .Values.image.debug | quote }}
             - name: DISCOURSE_HOST
               value: "127.0.0.1"
             - name: DISCOURSE_PORT
@@ -203,7 +195,7 @@ spec:
           {{- if .Values.sidekiq.livenessProbe.enabled }}
           livenessProbe:
             exec:
-              command: ["/bin/sh", "-c", "nami status discourse-sidekiq"]
+              command: ["/bin/sh", "-c", "pgrep -f ^sidekiq"]
             initialDelaySeconds: {{ .Values.sidekiq.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.sidekiq.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.sidekiq.livenessProbe.timeoutSeconds }}
@@ -215,7 +207,7 @@ spec:
           {{- if .Values.sidekiq.readinessProbe.enabled }}
           readinessProbe:
             exec:
-              command: ["/bin/sh", "-c", "nami status discourse-sidekiq"]
+              command: ["/bin/sh", "-c", "pgrep -f ^sidekiq"]
             initialDelaySeconds: {{ .Values.sidekiq.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.sidekiq.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.sidekiq.readinessProbe.timeoutSeconds }}

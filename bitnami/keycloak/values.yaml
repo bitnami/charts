@@ -47,7 +47,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/keycloak
-  tag: 13.0.1-debian-10-r0
+  tag: 13.0.1-debian-10-r3
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -138,7 +138,7 @@ auth:
     image:
       registry: docker.io
       repository: bitnami/bitnami-shell
-      tag: "10"
+      tag: 10-debian-10-r92
       pullPolicy: Always
       ## Optionally specify an array of imagePullSecrets.
       ## Secrets must be manually created in the namespace.
@@ -755,7 +755,7 @@ keycloakConfigCli:
   image:
     registry: docker.io
     repository: bitnami/keycloak-config-cli
-    tag: 3.4.0-debian-10-r7
+    tag: 3.4.0-debian-10-r10
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images

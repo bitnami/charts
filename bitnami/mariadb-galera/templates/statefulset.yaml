@@ -213,7 +213,11 @@ spec:
                 - bash
                 - -ec
                 - |
-                  exec mysqladmin status -u$MARIADB_ROOT_USER -p$MARIADB_ROOT_PASSWORD
+                  password_aux="${MARIADB_ROOT_PASSWORD:-}"
+                  if [[ -f "${MARIADB_ROOT_PASSWORD_FILE:-}" ]]; then
+                      password_aux=$(cat "$MARIADB_ROOT_PASSWORD_FILE")
+                  fi
+                  exec mysqladmin status -u"${MARIADB_ROOT_USER}" -p"${password_aux}"
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
