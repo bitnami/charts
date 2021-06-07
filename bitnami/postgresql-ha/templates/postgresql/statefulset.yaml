@@ -70,6 +70,32 @@ spec:
       serviceAccountName: {{ default (include "common.names.fullname" . ) .Values.serviceAccount.name}}
       {{- end }}
       initContainers:
+      {{- if .Values.postgresql.tls.enabled }}
+        - name: init-chmod-data
+          image: {{ template "postgresql-ha.volumePermissionsImage" . }}
+          imagePullPolicy: {{ .Values.volumePermissionsImage.pullPolicy | quote }}
+          command:
+            - /bin/sh
+            - -cx
+            - |
+              cp /tmp/certs/* /opt/bitnami/postgresql/certs/
+              {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
+              chown -R `id -u`:`id -G | cut -d " " -f2` /opt/bitnami/postgresql/certs/
+              {{- else }}
+              chown -R {{ .Values.postgresql.containerSecurityContext.runAsUser }}:{{ .Values.postgresql.securityContext.fsGroup }} /opt/bitnami/postgresql/certs/
+              {{- end }}
+              chmod 600 {{ template "postgresql-ha.postgresql.tlsCertKey" . }}
+          {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
+          securityContext: {{- omit .Values.volumePermissions.securityContext "runAsUser" | toYaml | nindent 12 }}
+          {{- else }}
+          securityContext: {{- .Values.volumePermissions.securityContext | toYaml | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: raw-certificates
+              mountPath: /tmp/certs
+            - name: postgresql-certificates
+              mountPath: /opt/bitnami/postgresql/certs
+      {{- end }}
       {{- if and .Values.persistence.enabled (or (or (not (empty .Values.postgresql.extendedConf)) (not (empty .Values.postgresql.extendedConfCM)) ) .Values.volumePermissions.enabled) }}
         - name: init-chmod-data
           image: {{ include "postgresql-ha.volumePermissionsImage" . }}
@@ -211,6 +237,20 @@ spec:
             {{- if .Values.postgresql.pghbaRemoveFilters }}
             - name: POSTGRESQL_PGHBA_REMOVE_FILTERS
               value: {{ .Values.postgresql.pghbaRemoveFilters | quote }}
+            {{- end }}
+            - name: POSTGRESQL_ENABLE_TLS
+              value: {{ ternary "yes" "no" .Values.postgresql.tls.enabled | quote }}
+            {{- if .Values.postgresql.tls.enabled }}
+            - name: POSTGRESQL_TLS_PREFER_SERVER_CIPHERS
+              value: {{ ternary "yes" "no" .Values.postgresql.tls.preferServerCiphers | quote }}
+            - name: POSTGRESQL_TLS_CERT_FILE
+              value: {{ template "postgresql-ha.postgresql.tlsCert" . }}
+            - name: POSTGRESQL_TLS_KEY_FILE
+              value: {{ template "postgresql-ha.postgresql.tlsCertKey" . }}
+            {{- if .Values.pgpool.tls.certCAFilename }}
+            - name: POSTGRESQL_TLS_CA_FILE
+              value: {{ template "postgresql-ha.postgresql.tlsCACert" . }}
+            {{- end }}
             {{- end }}
             # Repmgr configuration
             - name: MY_POD_NAME
@@ -354,6 +394,10 @@ spec:
             - name: postgresql-password
               mountPath: /opt/bitnami/postgresql/secrets/
             {{- end }}
+            {{- if .Values.postgresql.tls.enabled }}
+            - name: postgresql-certificates
+              mountPath: /opt/bitnami/postgresql/certs
+            {{- end }}
             - name: data
               mountPath: {{ .Values.persistence.mountPath }}
             - name: hooks-scripts
@@ -479,6 +523,13 @@ spec:
         - name: custom-init-scripts
           configMap:
             name: {{ template "postgresql-ha.postgresqlInitdbScriptsCM" . }}
+        {{- end }}
+        {{- if .Values.postgresql.tls.enabled }}
+        - name: raw-certificates
+          secret:
+            secretName: {{ required "A secret containing TLS certificates is required when TLS is enabled" .Values.postgresql.tls.certificatesSecret }}
+        - name: postgresql-certificates
+          emptyDir: {}
         {{- end }}
       {{- if and .Values.persistence.enabled .Values.persistence.existingClaim }}
         - name: data

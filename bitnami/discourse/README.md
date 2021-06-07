@@ -149,8 +149,8 @@ The following table lists the configurable parameters of the Discourse chart and
 | Parameter                                    | Description                                                       | Default                                                 |
 |----------------------------------------------|-------------------------------------------------------------------|---------------------------------------------------------|
 | `sidekiq.containerSecurityContext`           | Container security context specification                          | `{}`                                                    |
-| `sidekiq.command`                            | Custom command to override image cmd (evaluated as a template)    | `["/app-entrypoint.sh"]`                                |
-| `sidekiq.args`                               | Custom args for the custom command (evaluated as a template)      | `["nami", "start", "--foreground", "discourse-sidekiq"` |
+| `sidekiq.command`                            | Custom command to override image cmd (evaluated as a template)    | `["/opt/bitnami/scripts/discourse/entrypoint.sh"]`      |
+| `sidekiq.args`                               | Custom args for the custom command (evaluated as a template)      | `["/opt/bitnami/scripts/discourse-sidekiq/run.sh"`      |
 | `sidekiq.resources`                          | Sidekiq container's resource requests and limits                  | `{}`                                                    |
 | `sidekiq.livenessProbe.enabled`              | Enable/disable livenessProbe                                      | `true`                                                  |
 | `sidekiq.livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated                          | `500`                                                   |
@@ -437,6 +437,12 @@ imagePullSecrets:
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 4.0.0
+
+The [Bitnami Discourse](https://github.com/bitnami/bitnami-docker-discourse) image was refactored and now the source code is published in GitHub in the [`rootfs`](https://github.com/bitnami/bitnami-docker-discourse/tree/master/2/debian-10/rootfs) folder of the container image repository.
+
+Full compatibility is not guaranteed due to the amount of involved changes, however no breaking changes are expected.
 
 ### To 3.0.0
 
