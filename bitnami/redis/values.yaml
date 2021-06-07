@@ -718,6 +718,14 @@ replica:
   ## @param replica.terminationGracePeriodSeconds Integer setting the termination grace period for the redis-replicas pods
   ##
   terminationGracePeriodSeconds: 30
+  ## Autoscaling configuration
+  ##
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 11
+    # targetCPU: 50
+    # targetMemory: 50
 
 ## @section Redis(TM) Sentinel configuration parameters
 
@@ -1008,14 +1016,6 @@ pdb:
   ## @param pdb.maxUnavailable Max number of pods that can be unavailable after the eviction
   ##
   maxUnavailable:
-## Autoscaling configuration
-##
-autoscaling:
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 11
-  # targetCPU: 50
-  # targetMemory: 50
 ## TLS configuration
 ##
 tls:

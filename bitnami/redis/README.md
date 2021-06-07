@@ -256,6 +256,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replica.service.loadBalancerSourceRanges`   | Redis(TM) replicas service Load Balancer sources                                                  | `[]`            |
 | `replica.service.annotations`                | Additional custom annotations for Redis(TM) replicas service                                      | `{}`            |
 | `replica.terminationGracePeriodSeconds`      | Integer setting the termination grace period for the redis-replicas pods                          | `30`            |
+| `replica.autoscaling.enabled`                | Enable autoscaling for replicas                                                                   | `false`         |
+| `replica.autoscaling.minReplicas`            | Minimum number of replicas                                                                        | `1`             |
+| `replica.autoscaling.maxReplicas`            | Maximum number of replicas                                                                        | `11`            |
+| `replica.autoscaling.targetCPU`              | Target CPU utilization percentage                                                                 | `nil`           |
+| `replica.autoscaling.targetMemory`           | Target Memory utilization percentage                                                              | `nil`           |
 
 
 ### Redis(TM) Sentinel configuration parameters
@@ -342,11 +347,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tls.certKeyFilename`                   | Certificate Key filename                                                                                            | `nil`   |
 | `tls.certCAFilename`                    | CA Certificate filename                                                                                             | `nil`   |
 | `tls.dhParamsFilename`                  | File containing DH params (in order to support DH based ciphers)                                                    | `nil`   |
-| `autoscaling.enabled`               | Enable autoscaling for replicas                                               | `false` |
-| `autoscaling.minReplicas`           | Minimum number of replicas                                                    | `1`     |
-| `autoscaling.maxReplicas`           | Maximum number of replicas                                                    | `11`    |
-| `autoscaling.targetCPU`             | Target CPU utilization percentage                                             | `nil`   |
-| `autoscaling.targetMemory`          | Target Memory utilization percentage                                          | `nil`   |
 
 
 ### Metrics Parameters
