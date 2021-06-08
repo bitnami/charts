@@ -290,8 +290,6 @@ Add environment variables to configure redis values
 Add environment variables to configure airflow common values
 */}}
 {{- define "airflow.configure.airflow.common" -}}
-- name: AIRFLOW_EXECUTOR
-  value: {{ .Values.executor }}
 - name: AIRFLOW_FERNET_KEY
   valueFrom:
     secretKeyRef:
@@ -448,4 +446,17 @@ airflow: git.plugins.repositories[$index].branch
 {{- include "common.warnings.rollingTag" .Values.worker.image }}
 {{- include "common.warnings.rollingTag" .Values.git.image }}
 {{- include "common.warnings.rollingTag" .Values.metrics.image }}
+{{- end -}}
+
+{{/*
+In Airflow version 2.1.0, the CeleryKubernetesExecutor requires setting workers with CeleryExecutor in order to work properly.
+This is a workaround and is subject to Airflow official resolution.
+Ref: https://github.com/bitnami/charts/pull/6096#issuecomment-856499047
+*/}}
+{{- define "airflow.worker.executor" -}}
+{{- if eq .Values.executor "CeleryKubernetesExecutor" -}}
+{{- printf "CeleryExecutor" -}}
+{{- else -}}
+{{- .Values.executor -}}
+{{- end -}}
 {{- end -}}
