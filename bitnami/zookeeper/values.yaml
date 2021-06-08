@@ -301,6 +301,14 @@ persistence:
     - ReadWriteOnce
   size: 8Gi
   annotations: {}
+  ## Selector to match an existing PersistentVolume
+  ## E.g.
+  ## selector:
+  ##   matchLabels:
+  ##     app: my-app
+  ##
+  selector: {}
+
   dataLogDir:
     size: 8Gi
     ## A manually managed Persistent Volume and Claim
@@ -308,6 +316,14 @@ persistence:
     ## The value is evaluated as a template
     ##
     # existingClaim:
+
+    ## Selector to match an existing PersistentVolume
+    ## E.g.
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    ##
+    selector: {}
 
 ## Pod affinity preset
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
