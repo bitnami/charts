@@ -1781,19 +1781,11 @@ ruler:
   ##
   alertmanagers: []
 
-  ## Alertmanagers Configuration (passed directly to the `ruler`)
-  ## If `file` is given intead of an alertmanager config, the file
-  ## will be passed directly to the thanos ruler, but no secret or
-  ## volume mount will be created
+  ## Alertmanagers Configuration
   ##
-  ## Example 1:
-  ## # Assumes the alertmanagers_config.yaml is mounted to the pod
-  # alertmanagersConfig:
-  #  file: alertmanagers_config.yaml
-  ##
-  ## Example 2:
-  ## # Creates a secret from the config which is then mounted to the pod
-  # alertmanagersConfig:
+  ## Creates a secret from the config which is then mounted to the pod
+  ## for more complicated alertmanager setups.
+  alertmanagersConfig:
   #  alertmanagers:
   #  - http_config:
   #      basic_auth:

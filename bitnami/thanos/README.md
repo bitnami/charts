@@ -475,8 +475,6 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `ruler.dnsDiscovery.enabled`                  | Enable Query APIs discovery via DNS                                                                          | `true`                         |
 | `ruler.alertmanagers`                         | Alertmanager URLs array                                                                                      | `[]`                           |
 | `ruler.alertmanagersConfig`                   | Alertmanager Configuration passed directly to the ruler                                                      | `nil`                          |
-| `ruler.alertmanagersConfig.alertmanagers`     | See the [Thanos Docs](https://thanos.io/tip/components/rule.md/#configuration)                               | `nil`                          |
-| `ruler.alertmanagersConfig.file`              | Name of the file containing alertmanager configuration                                                       | `nil`                          |
 | `ruler.hostAliases`                           | Add deployment host aliases                                                                                  | `[]`                           |
 | `ruler.evalInterval`                          | The default evaluation interval to use                                                                       | `1m`                           |
 | `ruler.clusterName`                           | Used to set the 'ruler_cluster' label                                                                        | `nil`                          |
