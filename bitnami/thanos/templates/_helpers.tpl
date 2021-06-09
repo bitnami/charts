@@ -226,7 +226,6 @@ thanos: ruler alertmanagers
 {{- end -}}
 {{- end -}}
 
-
 {{/* Validate values of Thanos - Ruler configuration */}}
 {{- define "thanos.validateValues.ruler.config" -}}
 {{- if and .Values.ruler.enabled (not (include "thanos.ruler.createConfigmap" .)) (not .Values.ruler.existingConfigmap) -}}
