@@ -84,6 +84,7 @@ The following tables lists the configurable parameters of the metallb chart and 
 | `controller.hostAliases`                                 | Add deployment host aliases                                                                  | `[]`                                                    |
 | `controller.rbac.create`                                 | create specifies whether to install and use RBAC rules.                                      | `true`                                                  |
 | `controller.psp.create`                                  | create specifies whether to install Pod Security Policies.                                   | `true`                                                  |
+| `controller.priorityClassName`                           | Set pod priorityClassName.                                                                   | `null`                                                  |
 | `controller.resources.limits`                            | Specify resource limits which the container is not allowed to succeed.                       | `{}` (does not add resource limits to deployed pods)    |
 | `controller.resources.requests`                          | Specify resource requests which the container needs to spawn.                                | `{}` (does not add resource limits to deployed pods)    |
 | `controller.nodeSelector`                                | Node labels for controller pod assignment                                                    | `{}`                                                    |
@@ -137,6 +138,7 @@ The following tables lists the configurable parameters of the metallb chart and 
 | `speaker.image.pullSecrets`                           | Specify docker-registry secret names as an array                                             | `[]` (does not add image pull secrets to deployed pods) |
 | `speaker.rbac.create`                                 | create specifies whether to install and use RBAC rules.                                      | `true`                                                  |
 | `speaker.psp.create`                                  | create specifies whether to install Pod Security Policies.                                   | `true`                                                  |
+| `speaker.priorityClassName`                           | Set pod priorityClassName.                                                                   | `null`                                                  |
 | `speaker.resources.limits`                            | Specify resource limits which the container is not allowed to succeed.                       | `{}` (does not add resource limits to deployed pods)    |
 | `speaker.resources.requests`                          | Specify resource requests which the container needs to spawn.                                | `{}` (does not add resource limits to deployed pods)    |
 | `speaker.nodeSelector`                                | Node labels for speaker pod assignment                                                       | `{}`                                                    |

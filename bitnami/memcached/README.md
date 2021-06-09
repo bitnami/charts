@@ -87,7 +87,6 @@ The following tables lists the configurable parameters of the Memcached chart an
 | `podDisruptionBudget.maxUnavailable`     | Maximum number of pods that can be unavailable                                            | `1`                                                          |
 | `service.type`                           | Kubernetes service type for Memcached                                                     | `ClusterIP`                                                  |
 | `service.port`                           | Memcached service port                                                                    | `11211`                                                      |
-| `service.clusterIP`                      | Specific cluster IP when service type is cluster IP. Use `None` for headless service      | `nil`                                                        |
 | `service.nodePort`                       | Kubernetes Service nodePort                                                               | `nil`                                                        |
 | `service.loadBalancerIP`                 | `loadBalancerIP` if service type is `LoadBalancer`                                        | `nil`                                                        |
 | `service.annotations`                    | Additional annotations for Memcached service                                              | `{}`                                                         |

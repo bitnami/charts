@@ -76,7 +76,7 @@ To access the MinIO(R) web UI:
 
 {{- $requiredPassword := list -}}
 {{- $secretName := include "minio.secretName" . -}}
-{{- if and (not .Values.existingSecret) (not .Values.forceNewKeys) -}}
+{{- if and (not .Values.existingSecret) (not .Values.forceNewKeys) (not .Values.gateway.enabled) -}}
   {{- $requiredAccessKey := dict "valueKey" "accessKey.password" "secret" $secretName "field" "access-key" -}}
   {{- $requiredSecretKey := dict "valueKey" "secretKey.password" "secret" $secretName "field" "secret-key" -}}
   {{- $requiredPassword = append $requiredPassword $requiredAccessKey -}}

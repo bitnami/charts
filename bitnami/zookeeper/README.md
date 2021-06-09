@@ -126,6 +126,8 @@ The following tables lists the configurable parameters of the ZooKeeper chart an
 | `resources`                          | CPU/Memory resource requests/limits                                                       | Memory: `256Mi`, CPU: `250m`   |
 | `livenessProbe`                      | Liveness probe configuration for ZooKeeper                                                | Check `values.yaml` file       |
 | `readinessProbe`                     | Readiness probe configuration for ZooKeeper                                               | Check `values.yaml` file       |
+| `customLivenessProbe`                | Override default liveness probe                                                           | `nil`                          |
+| `customReadinessProbe`               | Override default readiness probe                                                          | `nil`                          |
 | `extraVolumes`                       | Extra volumes                                                                             | `nil`                          |
 | `extraVolumeMounts`                  | Mount extra volume(s)                                                                     | `nil`                          |
 | `initContainers`                     | Extra init container to add to the statefulset                                            | `nil`                          |
@@ -173,8 +175,10 @@ The following tables lists the configurable parameters of the ZooKeeper chart an
 | `persistence.accessMode`               | PVC Access Mode for ZooKeeper data volume                                      | `ReadWriteOnce`                 |
 | `persistence.size`                     | PVC Storage Request for ZooKeeper data volume                                  | `8Gi`                           |
 | `persistence.annotations`              | Annotations for the PVC                                                        | `{}` (evaluated as a template)  |
+| `persistence.selector`                 | Selector to match an existing Persistent Volume for Zookeeper's data PVC. If set, the PVC can't have a PV dynamically provisioned for it                                                                        | `{}` (evaluated as a template)  |
 | `persistence.dataLogDir.size`          | PVC Storage Request for ZooKeeper's Data log directory                         | `8Gi`                           |
 | `persistence.dataLogDir.existingClaim` | Provide an existing `PersistentVolumeClaim` for Zookeeper's Data log directory | `nil` (evaluated as a template) |
+| `persistence.dataLogDir.selector`      | Selector to match an existing Persistent Volume for Zookeeper's Data log PVC. If set, the PVC can't have a PV dynamically provisioned for it                                                                    | `{}` (evaluated as a template)  |
 
 ### Volume Permissions parameters
 

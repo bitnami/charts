@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/kafka
-  tag: 2.8.0-debian-10-r0
+  tag: 2.8.0-debian-10-r30
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -649,7 +649,7 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.17.17-debian-10-r90
+      tag: 1.19.11-debian-10-r14
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -744,6 +744,11 @@ persistence:
   ## PVC annotations
   ##
   annotations: {}
+  ## selector can be used to match an existing PersistentVolume
+  ## selector:
+  ##   matchLabels:
+  ##     app: my-app
+  selector: {}
   ## Mount point for persistence
   ##
   mountPath: /bitnami/kafka
@@ -776,6 +781,11 @@ logPersistence:
   ## PVC annotations
   ##
   annotations: {}
+  ## selector can be used to match an existing PersistentVolume
+  ## selector:
+  ##   matchLabels:
+  ##     app: my-app
+  selector: {}
   ## Mount path for persistent logs
   ##
   mountPath: /opt/bitnami/kafka/logs
@@ -793,7 +803,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: "10"
+    tag: 10-debian-10-r98
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -854,7 +864,7 @@ provisioning:
   image:
     registry: docker.io
     repository: bitnami/kafka
-    tag: 2.7.0-debian-10-r124
+    tag: 2.8.0-debian-10-r29
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -882,6 +892,8 @@ provisioning:
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   # schedulerName:
+
+  podAnnotations: {}
 
   resources:
     # We usually recommend not to specify default resources and to leave this as a conscious
@@ -923,7 +935,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/kafka-exporter
-      tag: 1.3.0-debian-10-r0
+      tag: 1.3.1-debian-10-r14
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1061,7 +1073,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/jmx-exporter
-      tag: 0.15.0-debian-10-r81
+      tag: 0.15.0-debian-10-r121
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1180,6 +1192,14 @@ metrics:
     ##
     # selector:
     #   prometheus: my-prometheus
+
+    ## Relabel configuration for the metrics.
+    ##
+    # relabelings: []
+
+    # MetricRelabelConfigs to apply to samples before ingestion.
+    ##
+    # metricRelabelings: []
 
 ##
 ## Zookeeper chart configuration

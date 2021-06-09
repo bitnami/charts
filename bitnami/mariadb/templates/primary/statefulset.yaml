@@ -13,6 +13,7 @@ metadata:
   {{- end }}
 spec:
   replicas: 1
+  revisionHistoryLimit: {{ .Values.primary.revisionHistoryLimit }}
   selector:
     matchLabels: {{ include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: primary

@@ -716,3 +716,24 @@ Return true if PostgreSQL pgpool existingSecret has been provided
     {{- end -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Return the path to the cert file.
+*/}}
+{{- define "postgresql-ha.postgresql.tlsCert" -}}
+{{- required "Certificate filename is required when TLS in enabled" .Values.postgresql.tls.certFilename | printf "/opt/bitnami/postgresql/certs/%s" -}}
+{{- end -}}
+
+{{/*
+Return the path to the cert key file.
+*/}}
+{{- define "postgresql-ha.postgresql.tlsCertKey" -}}
+{{- required "Certificate Key filename is required when TLS in enabled" .Values.postgresql.tls.certKeyFilename | printf "/opt/bitnami/postgresql/certs/%s" -}}
+{{- end -}}
+
+{{/*
+Return the path to the CA cert file.
+*/}}
+{{- define "postgresql-ha.postgresql.tlsCACert" -}}
+{{- printf "/opt/bitnami/postgresql/certs/%s" .Values.postgresql.tls.certCAFilename -}}
+{{- end -}}

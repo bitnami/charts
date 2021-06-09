@@ -102,6 +102,7 @@ The following tables lists the configurable parameters of the NGINX chart and th
 | `affinity`                   | Affinity for pod assignment                                                                    | `{}` (evaluated as a template)                       |
 | `nodeSelector`               | Node labels for pod assignment                                                                 | `{}` (evaluated as a template)                       |
 | `tolerations`                | Tolerations for pod assignment                                                                 | `[]` (evaluated as a template)                       |
+| `priorityClassName`          | Priority class name for pod                                                                    | `""`                                                 |
 | `podLabels`                  | Additional labels for NGINX pods                                                               | `{}` (evaluated as a template)                       |
 | `podAnnotations`             | Annotations for NGINX pods                                                                     | `{}` (evaluated as a template)                       |
 | `podSecurityContext`         | NGINX pods' Security Context                                                                   | Check `values.yaml` file                             |

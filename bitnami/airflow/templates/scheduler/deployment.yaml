@@ -115,9 +115,9 @@ spec:
           livenessProbe:
             {{- include "common.tplvalues.render" (dict "value" .Values.scheduler.customLivenessProbe "context" $) | trim | nindent 12 }}
           {{- end }}
-          {{- if .Values.scheduler.customRedinessProbe }}
+          {{- if .Values.scheduler.customReadinessProbe }}
           readinessProbe:
-            {{- include "common.tplvalues.render" (dict "value" .Values.scheduler.customRedinessProbe "context" $) | trim | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.scheduler.customReadinessProbe "context" $) | trim | nindent 12 }}
           {{- end }}
           volumeMounts:
           {{- if .Files.Glob "files/dags/*.py" }}

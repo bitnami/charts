@@ -489,6 +489,9 @@ spec:
           requests:
             storage: {{ .Values.persistence.size | quote }}
         {{ include "kafka.storageClass" . | nindent 8 }}
+        {{- if .Values.persistence.selector }}
+        selector: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.selector "context" $) | nindent 10 }}
+        {{- end -}}
 {{- end }}
 {{- if and .Values.logPersistence.enabled (not .Values.logPersistence.existingClaim) }}
     - metadata:
@@ -505,5 +508,8 @@ spec:
           requests:
             storage: {{ .Values.logPersistence.size | quote }}
         {{ include "kafka.storageClass" . | nindent 8 }}
+        {{- if .Values.logPersistence.selector }}
+        selector: {{- include "common.tplvalues.render" (dict "value" .Values.logPersistence.selector "context" $) | nindent 10 }}
+        {{- end -}}
 {{- end }}
 {{- end }}

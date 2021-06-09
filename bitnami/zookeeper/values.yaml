@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/zookeeper
-  tag: 3.7.0-debian-10-r27
+  tag: 3.7.0-debian-10-r56
 
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -67,7 +67,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: "10"
+    tag: 10-debian-10-r97
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -301,6 +301,14 @@ persistence:
     - ReadWriteOnce
   size: 8Gi
   annotations: {}
+  ## Selector to match an existing PersistentVolume
+  ## E.g.
+  ## selector:
+  ##   matchLabels:
+  ##     app: my-app
+  ##
+  selector: {}
+
   dataLogDir:
     size: 8Gi
     ## A manually managed Persistent Volume and Claim
@@ -308,6 +316,14 @@ persistence:
     ## The value is evaluated as a template
     ##
     # existingClaim:
+
+    ## Selector to match an existing PersistentVolume
+    ## E.g.
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    ##
+    selector: {}
 
 ## Pod affinity preset
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
@@ -407,6 +423,14 @@ readinessProbe:
   failureThreshold: 6
   successThreshold: 1
   probeCommandTimeout: 2
+
+## Custom Liveness probes for ZooKeeper
+##
+customLivenessProbe: {}
+
+## Custom Readiness probes for ZooKeeper
+##
+customReadinessProbe: {}
 
 ## Network policies
 ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/

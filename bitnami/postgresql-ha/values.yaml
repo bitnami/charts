@@ -29,7 +29,7 @@
 postgresqlImage:
   registry: docker.io
   repository: bitnami/postgresql-repmgr
-  tag: 11.12.0-debian-10-r0
+  tag: 11.12.0-debian-10-r20
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -50,7 +50,7 @@ postgresqlImage:
 pgpoolImage:
   registry: docker.io
   repository: bitnami/pgpool
-  tag: 4.2.2-debian-10-r79
+  tag: 4.2.3-debian-10-r13
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -71,7 +71,7 @@ pgpoolImage:
 volumePermissionsImage:
   registry: docker.io
   repository: bitnami/bitnami-shell
-  tag: "10"
+  tag: 10-debian-10-r98
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -88,7 +88,7 @@ volumePermissionsImage:
 metricsImage:
   registry: docker.io
   repository: bitnami/postgres-exporter
-  tag: 0.9.0-debian-10-r64
+  tag: 0.9.0-debian-10-r84
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -533,6 +533,36 @@ postgresql:
   ## Note: can be used with initdbScriptsCM or initdbScripts
   ##
   # initdbScriptsSecret:
+
+  ##
+  ## TLS configuration
+  ##
+  tls:
+    ## Enable TLS traffic
+    ##
+    enabled: false
+    ##
+    ## Whether to use the server's TLS cipher preferences rather than the client's.
+    ##
+    preferServerCiphers: true
+    ##
+    ## Name of the Secret that contains the certificates
+    ##
+    certificatesSecret: ""
+    ##
+    ## Certificate filename
+    ##
+    certFilename: ""
+    ##
+    ## Certificate Key filename
+    ##
+    certKeyFilename: ""
+    ##
+    ## CA Certificate filename
+    ## If provided, PgPool will authenticate TLS/SSL clients by requesting them a certificate
+    ## ref: https://www.pgpool.net/docs/latest/en/html/runtime-ssl.html
+    ##
+    certCAFilename:
 
 ## Pgpool parameters
 ##
@@ -996,6 +1026,28 @@ metrics:
   annotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "9187"
+
+  ## Define additional custom metrics
+  ## ref: https://github.com/wrouesnel/postgres_exporter#adding-new-metrics-via-a-config-file
+  # customMetrics:
+  #   pg_database:
+  #     query: "SELECT d.datname AS name, CASE WHEN pg_catalog.has_database_privilege(d.datname, 'CONNECT') THEN pg_catalog.pg_database_size(d.datname) ELSE 0 END AS size_bytes FROM pg_catalog.pg_database d where datname not in ('template0', 'template1', 'postgres')"
+  #     metrics:
+  #       - name:
+  #           usage: "LABEL"
+  #           description: "Name of the database"
+  #       - size_bytes:
+  #           usage: "GAUGE"
+  #           description: "Size of the database in bytes"
+  #
+
+  ## An array to add extra env vars to configure postgres-exporter
+  ## see: https://github.com/wrouesnel/postgres_exporter#environment-variables
+  ## For example:
+  #  extraEnvVars:
+  #  - name: PG_EXPORTER_DISABLE_DEFAULT_METRICS
+  #    value: "true"
+  extraEnvVars: {}
 
   ## Enable this if you're using Prometheus Operator
   ##
