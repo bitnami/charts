@@ -17,7 +17,7 @@ spec:
   {{- if and (eq $.Values.mongos.servicePerReplica.type "LoadBalancer") $.Values.mongos.servicePerReplica.loadBalancerSourceRanges }}
   loadBalancerSourceRanges:
   {{ with $.Values.mongos.servicePerReplica.loadBalancerSourceRanges }}
-{{ include "common.tplvalues.render" . | indent 4 }}
+  {{ include "common.tplvalues.render" . | nindent 4 }}
   {{- end }}
   {{- end }}
   {{- if and (eq $.Values.mongos.servicePerReplica.type "ClusterIP") $.Values.mongos.servicePerReplica.clusterIP }}
