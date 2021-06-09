@@ -102,9 +102,6 @@ operator:
     enabled: true
     runAsUser: 1001
     runAsGroup: 1001
-    capabilities:
-      drop:
-      - ALL
     readOnlyRootFilesystem: false
     allowPrivilegeEscalation: false
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -243,9 +240,6 @@ grafana:
     runAsUser: 1001
     runAsGroup: 1001
     fsGroup: 1001
-    capabilities:
-      drop:
-      - ALL
     allowPrivilegeEscalation: false
 
   ## Grafana containers' resource requests and limits
