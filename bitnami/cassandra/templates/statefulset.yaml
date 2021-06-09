@@ -346,7 +346,7 @@ spec:
             {{- end }}
             {{- if (include "cassandra.tlsEncryption" . ) }}
             - name: encryption-secrets
-              mountPath: {{ .Values.persistence.mountPath }}/secrets
+              mountPath: /opt/bitnami/cassandra/certs
             {{- end }}
             {{- if .Values.initDBConfigMap }}
             - name: init-db-cm
