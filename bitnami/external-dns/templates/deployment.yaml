@@ -201,6 +201,10 @@ spec:
             - --infoblox-ssl-verify
               {{- end }}
             {{- end }}
+            {{- if eq .Values.provider "ns1" }}
+            # ns1 arguments
+            - --ns1-min-ttl={{ .Values.ns1.minTTL }}
+            {{- end }}
             {{- if eq .Values.provider "rfc2136" }}
             # RFC 2136 arguments
             - --rfc2136-host={{ required "rfc2136.host must be supplied for provider 'rfc2136'" .Values.rfc2136.host }}
