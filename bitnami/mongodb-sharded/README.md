@@ -212,6 +212,18 @@ The following table lists the configurable parameters of the MongoDB&reg; chart 
 | `mongos.extraVolumeMounts`         | Array of extra volume mounts (evaluated as template). Normally used with `common.extraVolumes`.  | `[]`                           |
 | `mongos.serviceAccount.name`       | Name of a Service Account to be used by mongos                                                   | `nil`                          |
 | `mongos.serviceAccount.create`     | Whether to create a Service Account for mongos automatically                                     | `false`                        |
+| `mongos.servicePerReplica.enabled` | Create one service per mongos replica (must be used with statefulset)                            | `false`                        |
+| `mongos.servicePerReplica.annotations` | Kubernetes service annotations (evaluate as a template)                                      | `{}`                           |
+| `mongos.servicePerReplica.type`    | Kubernetes Service type                                                                          | `ClusterIP`                    |
+| `mongos.servicePerReplica.clusterIP` | Static clusterIP or None for headless services                                                 | `nil`                          |
+| `mongos.servicePerReplica.port`    | MongoDB&reg; service port                                                                        | `27017`                        |
+| `mongos.servicePerReplica.extraPorts` | Extra ports to expose in the service (normally used with the `sidecar` value). Evaluated as a template. | `[]`                 |
+| `mongos.servicePerReplica.externalTrafficPolicy` | Enable client source IP preservation                                               | `Cluster`                      |
+| `mongos.servicePerReplica.nodePort` | Port to bind to for NodePort service type                                                       | `nil`                          |
+| `mongos.servicePerReplica.loadBalancerIP` | Static IP Address to use for LoadBalancer service type                                    | `nil`                          |
+| `mongos.servicePerReplica.externalIPs` | External IP list to use with ClusterIP service type                                          | `[]`                           |
+| `mongos.servicePerReplica.loadBalancerSourceRanges` | List of IP ranges allowed access to load balancer (if supported)                | `[]`                           |
+| `mongos.servicePerReplica.sessionAffinity` | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                     | `None`                         |
 
 ### Shard configuration: Data nodes
 
