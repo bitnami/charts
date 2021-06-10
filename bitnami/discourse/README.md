@@ -171,6 +171,19 @@ The following table lists the configurable parameters of the Discourse chart and
 | `sidekiq.extraEnvVarsSecret`                 | Array to add extra environment from a Secret                      | `nil`                                                   |
 | `discourse.extraVolumeMounts`                | Additional volume mounts (used along with `extraVolumes`)         | `[]` (evaluated as a template)                          |
 
+### Volume Permissions parameters
+
+| Parameter                             | Description                                                                                                                                               | Default                                                 |
+|---------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| `volumePermissions.enabled`           | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                                                 |
+| `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                                                                          | `docker.io`                                             |
+| `volumePermissions.image.repository`  | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell`                                 |
+| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                                                               | `"10"`                                                  |
+| `volumePermissions.image.pullSecrets` | Specify docker-registry secret names as an array                                                                                                          | `[]` (does not add image pull secrets to deployed pods) |
+| `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                                                       | `Always`                                                |
+| `volumePermissions.resources.limits`  | The resources limits for the init container                                                                                                               | `{}`                                                    |
+| `volumePermissions.resources.requests`| The requested resourcesc for the init container                                                                                                           | `{}`                                                    |
+
 ### Ingress parameters
 
 | Parameter                        | Description                                                   | Default                        |
@@ -442,7 +455,18 @@ Find more information about how to deal with common errors related to Bitnami’
 
 The [Bitnami Discourse](https://github.com/bitnami/bitnami-docker-discourse) image was refactored and now the source code is published in GitHub in the [`rootfs`](https://github.com/bitnami/bitnami-docker-discourse/tree/master/2/debian-10/rootfs) folder of the container image repository.
 
-Full compatibility is not guaranteed due to the amount of involved changes, however no breaking changes are expected.
+Upgrades from previous versions require to specify `--set volumePermissions.enabled=true` in order for all features to work properly:
+
+```console
+$ helm upgrade discourse bitnami/discourse \
+    --set discourse.host=$DISCOURSE_HOST \
+    --set discourse.password=$DISCOURSE_PASSWORD \
+    --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD \
+    --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC \
+    --set volumePermissions.enabled=true
+```
+
+Full compatibility is not guaranteed due to the amount of involved changes, however no breaking changes are expected aside from the ones mentioned above.
 
 ### To 3.0.0
 
