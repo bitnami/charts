@@ -209,10 +209,10 @@ web:
   ##
   containerPort: 8080
   ## @param web.customLivenessProbe Custom liveness probe for the web component
-  customLivenessProbe: { }
+  customLivenessProbe: {}
   ## @param web.customReadinessProbe Custom rediness probe for the web component
   ##
-  customReadinessProbe: { }
+  customReadinessProbe: {}
   ## @param web.extraEnvVars Array containing extra env vars
   ##
   extraEnvVars:
