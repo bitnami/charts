@@ -327,6 +327,11 @@ linode:
   ##
   # secretName:
 
+## NS1 configuration to be set via arguments/env. variables
+##
+ns1:
+  minTTL: 10
+
 ## OVH configuration to be set via arguments/env. variables
 ##
 ovh:
