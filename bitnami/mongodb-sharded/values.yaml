@@ -141,10 +141,18 @@ shardsvr:
     affinity: {}
     ## Node labels for pod assignment
     ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+    ## You can set dataNodeLoopId (or any other parameter) by setting the below code block under this 'nodeSelector' section:
+    ## nodeSelector: { shardId: "{{ .dataNodeLoopId }}" }
     ##
     nodeSelector: {}
     ## Tolerations for pod assignment
     ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+    ## You can set dataNodeLoopId (or any other parameter) by setting the below code block under this 'nodeSelector' section:
+    ## tolerations:
+    ## - key: "shardId"
+    ##   operator: "Equal"
+    ##   value: "{{ .dataNodeLoopId }}"
+    ##   effect: "NoSchedule"
     ##
     tolerations: []
     ## podManagementPolicy for the statefulset, allows parallel startup of pods
