@@ -27,11 +27,21 @@ spec:
     - name: tcp-client
       port: 2181
       targetPort: client
+      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.client)) }}
+      nodePort: {{ .Values.service.nodePorts.client }}
+      {{- else if eq .Values.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
     {{ end }}
     {{ if .Values.service.tls.client_enable }}
     - name: tcp-client-tls
       port: {{ .Values.service.tls.client_port }}
       targetPort: client-tls
+      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.clientTls)) }}
+      nodePort: {{ .Values.service.nodePorts.clientTls }}
+      {{- else if eq .Values.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
     {{ end }}
     - name: follower
       port: 2888

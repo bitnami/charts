@@ -142,6 +142,8 @@ The following tables lists the configurable parameters of the ZooKeeper chart an
 | `service.port`                           | ZooKeeper port                                                                                     | `2181`                                               |
 | `service.followerPort`                   | ZooKeeper follower port                                                                            | `2888`                                               |
 | `service.electionPort`                   | ZooKeeper election port                                                                            | `3888`                                               |
+| `service.nodePorts.client`               | Nodeport for client connections                                                                    | `""`                                                 |
+| `service.nodePorts.clientTls`            | Nodeport for tls client connections                                                                | `""`                                                 | 
 | `service.publishNotReadyAddresses`       | If the ZooKeeper headless service should publish DNS records for not ready pods                    | `true`                                               |
 | `serviceAccount.create`                  | Enable creation of ServiceAccount for zookeeper pod                                                | `false`                                              |
 | `serviceAccount.name`                    | The name of the service account to use. If not set and `create` is `true`, a name is generated     | Generated using the `common.names.fullname` template |
