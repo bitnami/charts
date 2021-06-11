@@ -233,3 +233,27 @@ redis: podSecurityPolicy.create
     podSecurityPolicy.enabled field
 {{- end -}}
 {{- end -}}
+
+{{/*
+Kubernetes standard labels adopted for redis when used as multiple subcharts in an umbrella chart
+*/}}
+{{- define "redis.labels.standard" -}}
+{{ include "common.labels.standard" . }}
+{{- if .Values.extraMatchLabels }}
+{{- range $key, $value := .Values.extraMatchLabels }}
+{{ $key }}: {{ $value | quote }}
+{{- end }}
+{{- end }}
+{{- end -}}
+
+{{/*
+Labels to use on deploy.spec.selector.matchLabels and svc.spec.selector
+*/}}
+{{- define "redis.labels.matchLabels" -}}
+{{ include "common.labels.matchLabels" . }}
+{{- if .Values.extraMatchLabels }}
+{{- range $key, $value := .Values.extraMatchLabels }}
+{{ $key }}: {{ $value | quote }}
+{{- end }}
+{{- end }}
+{{- end -}}

@@ -8,7 +8,7 @@ metadata:
   {{- else }}
   namespace: {{ .Release.Namespace | quote }}
   {{- end }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "redis.labels.standard" . | nindent 4 }}
     {{- if .Values.metrics.prometheusRule.additionalLabels }}
     {{- include "common.tplvalues.render" (dict "value" .Values.metrics.prometheusRule.additionalLabels "context" $) | nindent 4 }}
     {{- end }}

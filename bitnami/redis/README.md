@@ -78,6 +78,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `fullnameOverride`  | String to fully override common.names.fullname     | `nil`           |
 | `commonLabels`      | Labels to add to all deployed objects              | `{}`            |
 | `commonAnnotations` | Annotations to add to all deployed objects         | `{}`            |
+| `extraMatchLabels`  | Labels to add to all deployed objects              | `{}`            |
 | `clusterDomain`     | Kubernetes cluster domain name                     | `cluster.local` |
 | `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`            |
 
