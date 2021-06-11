@@ -151,7 +151,7 @@ shardsvr:
     ## tolerations:
     ## - key: "shardId"
     ##   operator: "Equal"
-    ##   value: "{{ . dataNodeLoopId }}"
+    ##   value: "{{ .dataNodeLoopId }}"
     ##   effect: "NoSchedule"
     ##
     tolerations: []
