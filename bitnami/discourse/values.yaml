@@ -554,8 +554,8 @@ postgresql:
   postgresqlPostgresPassword: 'bitnami'
   ## Name of existing secret object
   ## The secret should contain the following keys:
-  ## postgresql-postgres-password (for the unprivileged user)
-  ## postgresql-password (for root user)
+  ## postgresql-postgres-password (for root user)
+  ## postgresql-password (for the unprivileged user)
   ##
   # existingSecret: my-secret
   ## Create a database
@@ -583,6 +583,10 @@ externalDatabase:
   ## Database password
   ##
   password: ''
+  ## PostgreSQL create user/database
+  ## If true it will add POSTGRESQL_CLIENT_* env vars to the deployment which will create the PostgreSQL user & database using the provided admin credentials
+  ##
+  create: true
   ## PostgreSQL admin user (used in the installation stage)
   ##
   postgresqlPostgresUser: ''
@@ -591,8 +595,8 @@ externalDatabase:
   postgresqlPostgresPassword: ''
   ## Name of existing secret object
   ## The secret should contain the following keys:
-  ## postgresql-postgres-password (for the unprivileged user)
-  ## postgresql-password (for root user)
+  ## postgresql-postgres-password (for root user)
+  ## postgresql-password (for the unprivileged user)
   ##
   # existingSecret: my-secret
   ## Database name

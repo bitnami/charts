@@ -102,7 +102,7 @@ spec:
                 secretKeyRef:
                   name: {{ include "discourse.postgresql.secretName" . }}
                   key: postgresql-password
-            {{- if .Values.externalDatabase.create }}
+            {{- if or .Values.postgresql.enabled .Values.externalDatabase.create }}
             - name: POSTGRESQL_CLIENT_POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
