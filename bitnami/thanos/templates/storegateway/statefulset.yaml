@@ -68,7 +68,7 @@ spec:
             - -c
             - |
               mkdir -p /data
-              chown -R "{{ .Values.storegateway.securityContext.runAsUser }}:{{ .Values.storegateway.securityContext.fsGroup }}" /data
+              chown -R "{{ .Values.storegateway.podSecurityContext.runAsUser }}:{{ .Values.storegateway.podSecurityContext.fsGroup }}" /data
           securityContext:
             runAsUser: 0
           volumeMounts:

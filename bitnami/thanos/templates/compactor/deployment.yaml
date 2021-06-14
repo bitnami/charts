@@ -63,7 +63,7 @@ spec:
             - -c
             - |
               mkdir -p /data
-              chown -R "{{ .Values.compactor.securityContext.runAsUser }}:{{ .Values.compactor.securityContext.fsGroup }}" /data
+              chown -R "{{ .Values.compactor.podSecurityContext.runAsUser }}:{{ .Values.compactor.podSecurityContext.fsGroup }}" /data
           securityContext:
             runAsUser: 0
           volumeMounts:

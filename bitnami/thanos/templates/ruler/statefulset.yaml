@@ -67,7 +67,7 @@ spec:
             - -c
             - |
               mkdir -p /data
-              chown -R "{{ .Values.ruler.securityContext.runAsUser }}:{{ .Values.ruler.securityContext.fsGroup }}" /data
+              chown -R "{{ .Values.ruler.podSecurityContext.runAsUser }}:{{ .Values.ruler.podSecurityContext.fsGroup }}" /data
           securityContext:
             runAsUser: 0
           volumeMounts:
@@ -81,7 +81,7 @@ spec:
         - name: ruler
           image: {{ include "thanos.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-          {{- if .Values.ruler.securityContext.enabled }}
+          {{- if .Values.ruler.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.ruler.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           args:
