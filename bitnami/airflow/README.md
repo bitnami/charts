@@ -44,6 +44,307 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## Parameters
 
+### Global parameters
+
+| Name                      | Description                                     | Value |
+| ------------------------- | ----------------------------------------------- | ----- |
+| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `nil` |
+
+
+### Common parameters
+
+| Name                                 | Description                                                                                          | Value   |
+| ------------------------------------ | ---------------------------------------------------------------------------------------------------- | ------- |
+| `kubeVersion`                        | Force target Kubernetes version (using Helm capabilities if not set)                                 | `nil`   |
+| `nameOverride`                       | String to partially override airflow.fullname template with a string (will prepend the release name) | `nil`   |
+| `fullnameOverride`                   | String to fully override airflow.fullname template with a string                                     | `nil`   |
+| `affinity`                           | Affinity for pod assignment (evaluated as a template)                                                | `{}`    |
+| `commonAnnotations`                  | Annotations to add to all deployed objects                                                           | `{}`    |
+| `commonLabels`                       | Labels to add to all deployed objects                                                                | `{}`    |
+| `containerSecurityContext.enabled`   | Enable container security context                                                                    | `true`  |
+| `containerSecurityContext.runAsUser` | User ID for the container                                                                            | `1001`  |
+| `extraDeploy`                        | A list of extra kubernetes resources to be deployed                                                  | `[]`    |
+| `extraEnvVars`                       | Extra environment variables to add to web, worker and scheduler pods                                 | `[]`    |
+| `extraEnvVarsCM`                     | ConfigMap containing extra env vars to add to web, worker and scheduler pods                         | `nil`   |
+| `extraEnvVarsSecret`                 | Secret containing extra env vars to add to web, worker and scheduler pods                            | `nil`   |
+| `initContainers`                     | List of init containers to be added to the web, worker and scheduler pods                            | `nil`   |
+| `networkPolicies.enabled`            | Switch to enable network policies                                                                    | `false` |
+| `nodeAffinityPreset.key`             | Node label key to match. Ignored if `affinity` is set.                                               | `""`    |
+| `nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`            | `""`    |
+| `nodeAffinityPreset.values`          | Node label values to match. Ignored if `affinity` is set.                                            | `[]`    |
+| `nodeSelector`                       | Node labels for pod assignment                                                                       | `{}`    |
+| `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`.                 | `""`    |
+| `podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`.            | `soft`  |
+| `podSecurityContext.enabled`         | Enable pod security context                                                                          | `true`  |
+| `podSecurityContext.fsGroup`         | fsGroup ID for the pod                                                                               | `1001`  |
+| `rbac.create`                        | If true, create & use RBAC resources                                                                 | `false` |
+| `serviceAccount.annotations`         | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.           | `{}`    |
+| `serviceAccount.create`              | Specifies whether a ServiceAccount should be created                                                 | `false` |
+| `sidecars`                           | List of sidecar containers to be added to web, worker and scheduler pods                             | `nil`   |
+| `tolerations`                        | Tolerations for pod assignment                                                                       | `[]`    |
+
+
+### Airflow common parameters
+
+| Name                     | Description                                                                                                         | Value            |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| `auth.existingSecret`    | Name of an existing secret containing password and fernet key ('airflow-password and 'airflow-fernetKey' keys)      | `nil`            |
+| `auth.fernetKey`         | Fernet key to secure connections                                                                                    | `nil`            |
+| `auth.forcePassword`     | Force users to specify a password                                                                                   | `false`          |
+| `auth.password`          | Password to access web UI                                                                                           | `nil`            |
+| `auth.username`          | Username to access web UI                                                                                           | `user`           |
+| `configurationConfigMap` | Name of an existing config map containing the Airflow config file                                                   | `nil`            |
+| `executor`               | Airflow executor, it should be one of `SequentialExecutor`, `LocalExecutor`, `CeleryExecutor`, `KubernetesExecutor` | `CeleryExecutor` |
+| `dagsConfigMap`          | Name of an existing config map containing all the DAGs files you want to load in Airflow                            | `nil`            |
+| `loadExamples`           | Switch to load some Airflow examples                                                                                | `false`          |
+
+
+### Airflow web parameters
+
+| Name                                     | Description                                                                 | Value                |
+| ---------------------------------------- | --------------------------------------------------------------------------- | -------------------- |
+| `web.image.registry`                     | Airflow image registry                                                      | `docker.io`          |
+| `web.image.repository`                   | Airflow image repository                                                    | `bitnami/airflow`    |
+| `web.image.tag`                          | Airflow image tag (immutable tags are recommended)                          | `2.1.0-debian-10-r0` |
+| `web.image.pullPolicy`                   | Airflow image pull policy                                                   | `IfNotPresent`       |
+| `web.image.pullSecrets`                  | Airflow image pull secrets                                                  | `[]`                 |
+| `web.image.debug`                        | Enable image debug mode                                                     | `false`              |
+| `web.replicaCount`                       | Number of web replicas                                                      | `1`                  |
+| `web.hostAliases`                        | Deployment pod host aliases                                                 | `[]`                 |
+| `web.baseUrl`                            | URL used to access to airflow web ui                                        | `nil`                |
+| `web.configMap`                          | Name of an existing config map containing the Airflow webserver config file | `nil`                |
+| `web.command`                            | Override default container command (useful when using custom images)        | `nil`                |
+| `web.args`                               | Override default container args (useful when using custom images)           | `nil`                |
+| `web.podLabels`                          | Add extra labels to the web's pods                                          | `nil`                |
+| `web.podAnnotations`                     | Add extra annotations to the web's pods                                     | `nil`                |
+| `web.containerPort`                      | Container port to be used for exposing http server                          | `8080`               |
+| `web.extraVolumeMounts`                  | Add extra volume mounts                                                     | `nil`                |
+| `web.extraVolumes`                       | Add extra volumes                                                           | `nil`                |
+| `web.extraEnvVars`                       | Array containing extra environment variables                                | `nil`                |
+| `web.extraEnvVarsCM`                     | ConfigMap containing extra environment variables                            | `nil`                |
+| `web.extraEnvVarsSecret`                 | Secret containing extra environment variables (in case of sensitive data)   | `nil`                |
+| `web.resources.limits`                   | The resources limits for the Web container                                  | `{}`                 |
+| `web.resources.requests`                 | The requested resources for the Web container                               | `{}`                 |
+| `web.livenessProbe.enabled`              | Enable livenessProbe                                                        | `true`               |
+| `web.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                     | `180`                |
+| `web.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                            | `20`                 |
+| `web.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                           | `5`                  |
+| `web.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                         | `6`                  |
+| `web.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                         | `1`                  |
+| `web.readinessProbe.enabled`             | Enable readinessProbe                                                       | `true`               |
+| `web.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                    | `30`                 |
+| `web.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                           | `10`                 |
+| `web.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                          | `5`                  |
+| `web.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                        | `6`                  |
+| `web.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                        | `1`                  |
+| `web.customLivenessProbe`                | Custom liveness probe for the Web component                                 | `{}`                 |
+| `web.customReadinessProbe`               | Custom rediness probe for the Web component                                 | `{}`                 |
+| `web.podDisruptionBudget.enabled`        | Enable PodDisruptionBudget for web pods                                     | `false`              |
+| `web.podDisruptionBudget.minAvailable`   | Minimum available instances; ignored if there is no PodDisruptionBudget     | `1`                  |
+| `web.sidecars`                           | Add sidecars to the Web pods                                                | `nil`                |
+| `web.initContainers`                     | Add initContainers to the Web pods                                          | `nil`                |
+| `web.priorityClassName`                  | Priority Class Name                                                         | `""`                 |
+| `web.nodeSelector`                       | Node labels for pod assignment                                              | `{}`                 |
+| `service.type`                           | Airflow service type                                                        | `ClusterIP`          |
+| `service.port`                           | Airflow service HTTP port                                                   | `8080`               |
+| `service.nodePort`                       | Airflow service NodePort                                                    | `nil`                |
+| `service.annotations`                    | Additional custom annotations for Airflow service                           | `nil`                |
+
+
+### Airflow scheduler parameters
+
+| Name                                         | Description                                                             | Value                       |
+| -------------------------------------------- | ----------------------------------------------------------------------- | --------------------------- |
+| `scheduler.image.registry`                   | Airflow Scheduler image registry                                        | `docker.io`                 |
+| `scheduler.image.repository`                 | Airflow Scheduler image repository                                      | `bitnami/airflow-scheduler` |
+| `scheduler.image.tag`                        | Airflow Scheduler image tag (immutable tags are recommended)            | `2.0.2-debian-10-r30`       |
+| `scheduler.image.pullPolicy`                 | Airflow Scheduler image pull policy                                     | `IfNotPresent`              |
+| `scheduler.image.pullSecrets`                | Airflow Scheduler image pull secrets                                    | `[]`                        |
+| `scheduler.image.debug`                      | Enable image debug mode                                                 | `false`                     |
+| `scheduler.replicaCount`                     | Number of scheduler replicas                                            | `1`                         |
+| `scheduler.command`                          | Override cmd                                                            | `nil`                       |
+| `scheduler.args`                             | Override args                                                           | `nil`                       |
+| `scheduler.hostAliases`                      | Deployment pod host aliases                                             | `[]`                        |
+| `scheduler.podLabels`                        | Add extra labels to the web's pods                                      | `nil`                       |
+| `scheduler.podAnnotations`                   | Add extra annotations to the web's pods                                 | `nil`                       |
+| `scheduler.extraVolumeMounts`                | Add extra volume mounts                                                 | `nil`                       |
+| `scheduler.extraVolumes`                     | Add extra volumes                                                       | `nil`                       |
+| `scheduler.extraEnvVars`                     | Add extra environment variables                                         | `nil`                       |
+| `scheduler.extraEnvVarsCM`                   | ConfigMap with extra environment variables                              | `nil`                       |
+| `scheduler.extraEnvVarsSecret`               | Secret with extra environment variables                                 | `nil`                       |
+| `scheduler.resources.limits`                 | The resources limits for the Scheduler container                        | `{}`                        |
+| `scheduler.resources.requests`               | The requested resources for the Scheduler container                     | `{}`                        |
+| `scheduler.customLivenessProbe`              | Custom Liveness probe                                                   | `{}`                        |
+| `scheduler.customReadinessProbe`             | Custom Liveness probe                                                   | `{}`                        |
+| `scheduler.podDisruptionBudget.enabled`      | Enable PodDisruptionBudget for scheduler pods                           | `false`                     |
+| `scheduler.podDisruptionBudget.minAvailable` | Minimum available instances; ignored if there is no PodDisruptionBudget | `1`                         |
+| `scheduler.sidecars`                         | Add sidecars to the scheduler pods.                                     | `nil`                       |
+| `scheduler.initContainers`                   | Add initContainers to the scheduler pods.                               | `nil`                       |
+| `scheduler.priorityClassName`                | Priority Class Name                                                     | `""`                        |
+| `scheduler.nodeSelector`                     | Node labels for pod assignment                                          | `{}`                        |
+
+
+### Airflow worker parameters
+
+| Name                                        | Description                                                                                                          | Value                    |
+| ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `worker.image.registry`                     | Airflow Worker image registry                                                                                        | `docker.io`              |
+| `worker.image.repository`                   | Airflow Worker image repository                                                                                      | `bitnami/airflow-worker` |
+| `worker.image.tag`                          | Airflow Worker image tag (immutable tags are recommended)                                                            | `2.0.2-debian-10-r29`    |
+| `worker.image.pullPolicy`                   | Airflow Worker image pull policy                                                                                     | `IfNotPresent`           |
+| `worker.image.pullSecrets`                  | Airflow Worker image pull secrets                                                                                    | `[]`                     |
+| `worker.image.debug`                        | Enable image debug mode                                                                                              | `false`                  |
+| `worker.port`                               | Port where the worker will be exposed                                                                                | `8793`                   |
+| `worker.replicaCount`                       | Number of worker replicas                                                                                            | `1`                      |
+| `worker.hostAliases`                        | Deployment pod host aliases                                                                                          | `[]`                     |
+| `worker.podTemplate`                        | Template to replace the default one to be use when `executor=KubernetesExecutor` to create worker pods               | `nil`                    |
+| `worker.podManagementPolicy`                | podManagementPolicy to manage scaling operation of worker pods                                                       | `nil`                    |
+| `worker.command`                            | Override cmd                                                                                                         | `nil`                    |
+| `worker.args`                               | Override args                                                                                                        | `nil`                    |
+| `worker.podAnnotations`                     | Add annotations to the worker pods                                                                                   | `{}`                     |
+| `worker.podLabels`                          | Add extra labels to the web's pods                                                                                   | `nil`                    |
+| `worker.extraVolumeMounts`                  | Add extra volume mounts                                                                                              | `nil`                    |
+| `worker.extraVolumes`                       | Add extra volumes                                                                                                    | `nil`                    |
+| `worker.extraEnvVars`                       | Add extra environment variables                                                                                      | `nil`                    |
+| `worker.extraEnvVarsCM`                     | ConfigMap with extra environment variables                                                                           | `nil`                    |
+| `worker.extraEnvVarsSecret`                 | Secret with extra environment variables                                                                              | `nil`                    |
+| `worker.resources.limits`                   | The resources limits for the Worker container                                                                        | `{}`                     |
+| `worker.resources.requests`                 | The requested resources for the Worker container                                                                     | `{}`                     |
+| `worker.livenessProbe.enabled`              | Enable livenessProbe                                                                                                 | `true`                   |
+| `worker.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                              | `180`                    |
+| `worker.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                                     | `20`                     |
+| `worker.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                                    | `5`                      |
+| `worker.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                                  | `6`                      |
+| `worker.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                                  | `1`                      |
+| `worker.readinessProbe.enabled`             | Enable readinessProbe                                                                                                | `true`                   |
+| `worker.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                                             | `30`                     |
+| `worker.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                                    | `10`                     |
+| `worker.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                                   | `5`                      |
+| `worker.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                                 | `6`                      |
+| `worker.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                                 | `1`                      |
+| `worker.customLivenessProbe`                | Custom Liveness probe                                                                                                | `{}`                     |
+| `worker.customReadinessProbe`               | Custom Liveness probe                                                                                                | `{}`                     |
+| `worker.podDisruptionBudget.enabled`        | Enable PodDisruptionBudget for worker pods                                                                           | `false`                  |
+| `worker.podDisruptionBudget.minAvailable`   | Minimum available instances; ignored if there is no PodDisruptionBudget                                              | `1`                      |
+| `worker.autoscaling.enabled`                | Whether enable horizontal pod autoscale                                                                              | `false`                  |
+| `worker.autoscaling.replicas.min`           | Configure a minimum amount of pods                                                                                   | `1`                      |
+| `worker.autoscaling.replicas.max`           | Configure a maximum amount of pods                                                                                   | `3`                      |
+| `worker.autoscaling.targets.cpu`            | Define the CPU target to trigger the scaling actions (utilization percentage)                                        | `80`                     |
+| `worker.autoscaling.targets.memory`         | Define the memory target to trigger the scaling actions (utilization percentage)                                     | `80`                     |
+| `worker.updateStrategy`                     | StatefulSet controller supports automated updates. There are two valid update strategies: RollingUpdate and OnDelete | `RollingUpdate`          |
+| `worker.rollingUpdatePartition`             | Partition update strategy                                                                                            | `nil`                    |
+| `worker.sidecars`                           | Add sidecars to the worker pods.                                                                                     | `nil`                    |
+| `worker.initContainers`                     | Add initContainers to the worker pods.                                                                               | `nil`                    |
+| `worker.priorityClassName`                  | Priority Class Name                                                                                                  | `""`                     |
+| `worker.nodeSelector`                       | Node labels for pod assignment                                                                                       | `{}`                     |
+| `worker.affinity`                           | Affinity for worker pod assignment                                                                                   | `{}`                     |
+| `worker.tolerations`                        | Tolerations for worker pod assignment                                                                                | `[]`                     |
+
+
+### Airflow git sync parameters
+
+| Name                           | Description                                                                            | Value                  |
+| ------------------------------ | -------------------------------------------------------------------------------------- | ---------------------- |
+| `git.image.registry`           | Git image registry                                                                     | `docker.io`            |
+| `git.image.repository`         | Git image repository                                                                   | `bitnami/git`          |
+| `git.image.tag`                | Git image tag (immutable tags are recommended)                                         | `2.31.1-debian-10-r53` |
+| `git.image.pullPolicy`         | Git image pull policy                                                                  | `IfNotPresent`         |
+| `git.image.pullSecrets`        | Git image pull secrets                                                                 | `[]`                   |
+| `git.dags.enabled`             | Enable in order to download DAG files from git repositories.                           | `false`                |
+| `git.dags.repositories`        | Array of repositories from which to download DAG files                                 | `[]`                   |
+| `git.plugins.enabled`          | Enable in order to download Plugins files from git repositories.                       | `false`                |
+| `git.plugins.repositories`     | Array of repositories from which to download DAG files                                 | `[]`                   |
+| `git.clone.command`            | Override cmd                                                                           | `nil`                  |
+| `git.clone.args`               | Override args                                                                          | `nil`                  |
+| `git.clone.extraVolumeMounts`  | Add extra volume mounts                                                                | `nil`                  |
+| `git.clone.extraEnvVars`       | Add extra environment variables                                                        | `nil`                  |
+| `git.clone.extraEnvVarsCM`     | ConfigMap with extra environment variables                                             | `nil`                  |
+| `git.clone.extraEnvVarsSecret` | Secret with extra environment variables                                                | `nil`                  |
+| `git.clone.resources`          | Clone init container resource requests and limits                                      | `{}`                   |
+| `git.sync.interval`            | Interval in seconds to pull the git repository containing the plugins and/or DAG files | `60`                   |
+| `git.sync.command`             | Override cmd                                                                           | `nil`                  |
+| `git.sync.args`                | Override args                                                                          | `nil`                  |
+| `git.sync.extraVolumeMounts`   | Add extra volume mounts                                                                | `nil`                  |
+| `git.sync.extraEnvVars`        | Add extra environment variables                                                        | `nil`                  |
+| `git.sync.extraEnvVarsCM`      | ConfigMap with extra environment variables                                             | `nil`                  |
+| `git.sync.extraEnvVarsSecret`  | Secret with extra environment variables                                                | `nil`                  |
+| `git.sync.resources`           | Sync sidecar container resource requests and limits                                    | `{}`                   |
+
+
+### Airflow ldap parameters
+
+| Name                             | Description                                                                                      | Value                      |
+| -------------------------------- | ------------------------------------------------------------------------------------------------ | -------------------------- |
+| `ldap.enabled`                   | Enable LDAP authentication                                                                       | `false`                    |
+| `ldap.uri`                       | Server URI, eg. ldap://ldap_server:389                                                           | `ldap://ldap_server:389`   |
+| `ldap.base`                      | Base of the search, eg. ou=example,o=org                                                         | `ou=example,o=org`         |
+| `ldap.binddn`                    | Bind DN                                                                                          | `cn=user,ou=example,o=org` |
+| `ldap.bindpw`                    | Bind Password                                                                                    | `""`                       |
+| `ldap.uidField`                  | Field used for uid                                                                               | `uid`                      |
+| `ldap.tls.enabled`               | Enabled TLS/SSL for LDAP, you must include the CA file.                                          | `false`                    |
+| `ldap.tls.allowSelfSigned`       | Allow to use self signed certificates                                                            | `true`                     |
+| `ldap.tls.CAcertificateSecret`   | Name of the existing secret containing the certificate CA file that will be used by ldap client. | `""`                       |
+| `ldap.tls.CAcertificateFilename` | LDAP CA cert filename                                                                            | `""`                       |
+
+
+### Airflow exposing parameters
+
+| Name                  | Description                                                                            | Value                    |
+| --------------------- | -------------------------------------------------------------------------------------- | ------------------------ |
+| `ingress.enabled`     | Set to true to enable ingress record generation                                        | `false`                  |
+| `ingress.apiVersion`  | Override API Version (automatically detected if not set)                               | `nil`                    |
+| `ingress.pathType`    | Ingress Path type                                                                      | `ImplementationSpecific` |
+| `ingress.certManager` | Set this to true in order to add the corresponding annotations for cert-manager        | `false`                  |
+| `ingress.annotations` | Ingress annotations done as key:value pairs                                            | `nil`                    |
+| `ingress.hosts`       | The list of hostnames to be covered with this ingress record.                          | `[]`                     |
+| `ingress.secrets`     | If you're providing your own certificates, use this to add the certificates as secrets | `nil`                    |
+
+
+### Airflow database parameters
+
+| Name                                         | Description                                                                                     | Value             |
+| -------------------------------------------- | ----------------------------------------------------------------------------------------------- | ----------------- |
+| `postgresql.enabled`                         | Switch to enable or disable the PostgreSQL helm chart                                           | `true`            |
+| `postgresql.postgresqlUsername`              | Airflow Postgresql username                                                                     | `bn_airflow`      |
+| `postgresql.postgresqlDatabase`              | Airflow Postgresql database                                                                     | `bitnami_airflow` |
+| `postgresql.existingSecret`                  | Name of an existing secret containing the PostgreSQL password ('postgresql-password' key)       | `nil`             |
+| `externalDatabase.host`                      | Database host                                                                                   | `localhost`       |
+| `externalDatabase.user`                      | non-root Username for Airflow Database                                                          | `bn_airflow`      |
+| `externalDatabase.password`                  | Database password                                                                               | `nil`             |
+| `externalDatabase.existingSecret`            | Name of an existing secret resource containing the DB password                                  | `nil`             |
+| `externalDatabase.existingSecretPasswordKey` | Name of an existing secret key containing the DB password                                       | `nil`             |
+| `externalDatabase.database`                  | Database name                                                                                   | `bitnami_airflow` |
+| `externalDatabase.port`                      | Database port number                                                                            | `5432`            |
+| `redis.enabled`                              | Switch to enable or disable the Redis(TM) helm                                                  | `true`            |
+| `redis.auth.enabled`                         | Switch to enable or disable authentication                                                      | `true`            |
+| `redis.auth.existingSecret`                  | Name of existing secret object containing the password                                          | `nil`             |
+| `redis.architecture`                         | Cluster settings                                                                                | `standalone`      |
+| `externalRedis.host`                         | Redis(TM) host                                                                                  | `localhost`       |
+| `externalRedis.port`                         | Redis(TM) port number                                                                           | `6379`            |
+| `externalRedis.password`                     | Redis(TM) password                                                                              | `nil`             |
+| `externalRedis.existingSecret`               | Name of an existing secret resource containing the Redis(TM) password in a 'redis-password' key | `nil`             |
+| `externalRedis.username`                     | Redis(TM) username                                                                              | `nil`             |
+
+
+### Airflow metrics parameters
+
+| Name                        | Description                                                 | Value                         |
+| --------------------------- | ----------------------------------------------------------- | ----------------------------- |
+| `metrics.enabled`           | Start a side-car prometheus exporter                        | `false`                       |
+| `metrics.image.registry`    | Airflow Exporter image registry                             | `docker.io`                   |
+| `metrics.image.repository`  | Airflow Exporter image repository                           | `bitnami/airflow-exporter`    |
+| `metrics.image.tag`         | Airflow Exporter image tag (immutable tags are recommended) | `0.20210126.0-debian-10-r110` |
+| `metrics.image.pullPolicy`  | Airflow Exporter image pull policy                          | `IfNotPresent`                |
+| `metrics.image.pullSecrets` | Airflow Exporter image pull secrets                         | `[]`                          |
+| `metrics.hostAliases`       | Deployment pod host aliases                                 | `[]`                          |
+| `metrics.resources`         | Metrics exporter resource requests and limits               | `{}`                          |
+| `metrics.tolerations`       | Metrics exporter labels and tolerations for pod assignment  | `[]`                          |
+| `metrics.podLabels`         | Metrics exporter pod Annotation and Labels                  | `{}`                          |
+| `metrics.nodeSelector`      | Node labels for pod assignment                              | `{}`                          |
+
+
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
