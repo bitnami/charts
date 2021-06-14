@@ -88,69 +88,69 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Airflow common parameters
 
-| Name                     | Description                                                                                                         | Value            |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------------- | ---------------- |
-| `auth.existingSecret`    | Name of an existing secret containing password and fernet key ('airflow-password and 'airflow-fernetKey' keys)      | `nil`            |
-| `auth.fernetKey`         | Fernet key to secure connections                                                                                    | `nil`            |
-| `auth.forcePassword`     | Force users to specify a password                                                                                   | `false`          |
-| `auth.password`          | Password to access web UI                                                                                           | `nil`            |
-| `auth.username`          | Username to access web UI                                                                                           | `user`           |
-| `configurationConfigMap` | Name of an existing config map containing the Airflow config file                                                   | `nil`            |
-| `executor`               | Airflow executor, it should be one of `SequentialExecutor`, `LocalExecutor`, `CeleryExecutor`, `KubernetesExecutor` | `CeleryExecutor` |
-| `dagsConfigMap`          | Name of an existing config map containing all the DAGs files you want to load in Airflow                            | `nil`            |
-| `loadExamples`           | Switch to load some Airflow examples                                                                                | `false`          |
+| Name                     | Description                                                                                                                                     | Value            |
+| ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| `auth.existingSecret`    | Name of an existing secret containing password and fernet key ('airflow-password and 'airflow-fernetKey' keys)                                  | `nil`            |
+| `auth.fernetKey`         | Fernet key to secure connections                                                                                                                | `nil`            |
+| `auth.forcePassword`     | Force users to specify a password                                                                                                               | `false`          |
+| `auth.password`          | Password to access web UI                                                                                                                       | `nil`            |
+| `auth.username`          | Username to access web UI                                                                                                                       | `user`           |
+| `configurationConfigMap` | Name of an existing config map containing the Airflow config file                                                                               | `nil`            |
+| `executor`               | Airflow executor, it should be one of 'SequentialExecutor', 'LocalExecutor', 'CeleryExecutor', 'KubernetesExecutor', 'CeleryKubernetesExecutor' | `CeleryExecutor` |
+| `dagsConfigMap`          | Name of an existing config map containing all the DAGs files you want to load in Airflow                                                        | `nil`            |
+| `loadExamples`           | Switch to load some Airflow examples                                                                                                            | `false`          |
 
 
 ### Airflow web parameters
 
-| Name                                     | Description                                                                 | Value                |
-| ---------------------------------------- | --------------------------------------------------------------------------- | -------------------- |
-| `web.image.registry`                     | Airflow image registry                                                      | `docker.io`          |
-| `web.image.repository`                   | Airflow image repository                                                    | `bitnami/airflow`    |
-| `web.image.tag`                          | Airflow image tag (immutable tags are recommended)                          | `2.1.0-debian-10-r0` |
-| `web.image.pullPolicy`                   | Airflow image pull policy                                                   | `IfNotPresent`       |
-| `web.image.pullSecrets`                  | Airflow image pull secrets                                                  | `[]`                 |
-| `web.image.debug`                        | Enable image debug mode                                                     | `false`              |
-| `web.replicaCount`                       | Number of web replicas                                                      | `1`                  |
-| `web.hostAliases`                        | Deployment pod host aliases                                                 | `[]`                 |
-| `web.baseUrl`                            | URL used to access to airflow web ui                                        | `nil`                |
-| `web.configMap`                          | Name of an existing config map containing the Airflow webserver config file | `nil`                |
-| `web.command`                            | Override default container command (useful when using custom images)        | `nil`                |
-| `web.args`                               | Override default container args (useful when using custom images)           | `nil`                |
-| `web.podLabels`                          | Add extra labels to the web's pods                                          | `nil`                |
-| `web.podAnnotations`                     | Add extra annotations to the web's pods                                     | `nil`                |
-| `web.containerPort`                      | Container port to be used for exposing http server                          | `8080`               |
-| `web.extraVolumeMounts`                  | Add extra volume mounts                                                     | `nil`                |
-| `web.extraVolumes`                       | Add extra volumes                                                           | `nil`                |
-| `web.extraEnvVars`                       | Array containing extra environment variables                                | `nil`                |
-| `web.extraEnvVarsCM`                     | ConfigMap containing extra environment variables                            | `nil`                |
-| `web.extraEnvVarsSecret`                 | Secret containing extra environment variables (in case of sensitive data)   | `nil`                |
-| `web.resources.limits`                   | The resources limits for the Web container                                  | `{}`                 |
-| `web.resources.requests`                 | The requested resources for the Web container                               | `{}`                 |
-| `web.livenessProbe.enabled`              | Enable livenessProbe                                                        | `true`               |
-| `web.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                     | `180`                |
-| `web.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                            | `20`                 |
-| `web.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                           | `5`                  |
-| `web.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                         | `6`                  |
-| `web.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                         | `1`                  |
-| `web.readinessProbe.enabled`             | Enable readinessProbe                                                       | `true`               |
-| `web.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                    | `30`                 |
-| `web.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                           | `10`                 |
-| `web.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                          | `5`                  |
-| `web.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                        | `6`                  |
-| `web.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                        | `1`                  |
-| `web.customLivenessProbe`                | Custom liveness probe for the Web component                                 | `{}`                 |
-| `web.customReadinessProbe`               | Custom rediness probe for the Web component                                 | `{}`                 |
-| `web.podDisruptionBudget.enabled`        | Enable PodDisruptionBudget for web pods                                     | `false`              |
-| `web.podDisruptionBudget.minAvailable`   | Minimum available instances; ignored if there is no PodDisruptionBudget     | `1`                  |
-| `web.sidecars`                           | Add sidecars to the Web pods                                                | `nil`                |
-| `web.initContainers`                     | Add initContainers to the Web pods                                          | `nil`                |
-| `web.priorityClassName`                  | Priority Class Name                                                         | `""`                 |
-| `web.nodeSelector`                       | Node labels for pod assignment                                              | `{}`                 |
-| `service.type`                           | Airflow service type                                                        | `ClusterIP`          |
-| `service.port`                           | Airflow service HTTP port                                                   | `8080`               |
-| `service.nodePort`                       | Airflow service NodePort                                                    | `nil`                |
-| `service.annotations`                    | Additional custom annotations for Airflow service                           | `nil`                |
+| Name                                     | Description                                                                 | Value                 |
+| ---------------------------------------- | --------------------------------------------------------------------------- | --------------------- |
+| `web.image.registry`                     | Airflow image registry                                                      | `docker.io`           |
+| `web.image.repository`                   | Airflow image repository                                                    | `bitnami/airflow`     |
+| `web.image.tag`                          | Airflow image tag (immutable tags are recommended)                          | `2.1.0-debian-10-r13` |
+| `web.image.pullPolicy`                   | Airflow image pull policy                                                   | `IfNotPresent`        |
+| `web.image.pullSecrets`                  | Airflow image pull secrets                                                  | `[]`                  |
+| `web.image.debug`                        | Enable image debug mode                                                     | `false`               |
+| `web.replicaCount`                       | Number of web replicas                                                      | `1`                   |
+| `web.hostAliases`                        | Deployment pod host aliases                                                 | `[]`                  |
+| `web.baseUrl`                            | URL used to access to airflow web ui                                        | `nil`                 |
+| `web.configMap`                          | Name of an existing config map containing the Airflow webserver config file | `nil`                 |
+| `web.command`                            | Override default container command (useful when using custom images)        | `nil`                 |
+| `web.args`                               | Override default container args (useful when using custom images)           | `nil`                 |
+| `web.podLabels`                          | Add extra labels to the web's pods                                          | `nil`                 |
+| `web.podAnnotations`                     | Add extra annotations to the web's pods                                     | `nil`                 |
+| `web.containerPort`                      | Container port to be used for exposing http server                          | `8080`                |
+| `web.extraVolumeMounts`                  | Add extra volume mounts                                                     | `nil`                 |
+| `web.extraVolumes`                       | Add extra volumes                                                           | `nil`                 |
+| `web.extraEnvVars`                       | Array containing extra environment variables                                | `nil`                 |
+| `web.extraEnvVarsCM`                     | ConfigMap containing extra environment variables                            | `nil`                 |
+| `web.extraEnvVarsSecret`                 | Secret containing extra environment variables (in case of sensitive data)   | `nil`                 |
+| `web.resources.limits`                   | The resources limits for the Web container                                  | `{}`                  |
+| `web.resources.requests`                 | The requested resources for the Web container                               | `{}`                  |
+| `web.livenessProbe.enabled`              | Enable livenessProbe                                                        | `true`                |
+| `web.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                     | `180`                 |
+| `web.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                            | `20`                  |
+| `web.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                           | `5`                   |
+| `web.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                         | `6`                   |
+| `web.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                         | `1`                   |
+| `web.readinessProbe.enabled`             | Enable readinessProbe                                                       | `true`                |
+| `web.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                    | `30`                  |
+| `web.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                           | `10`                  |
+| `web.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                          | `5`                   |
+| `web.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                        | `6`                   |
+| `web.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                        | `1`                   |
+| `web.customLivenessProbe`                | Custom liveness probe for the Web component                                 | `{}`                  |
+| `web.customReadinessProbe`               | Custom rediness probe for the Web component                                 | `{}`                  |
+| `web.podDisruptionBudget.enabled`        | Enable PodDisruptionBudget for web pods                                     | `false`               |
+| `web.podDisruptionBudget.minAvailable`   | Minimum available instances; ignored if there is no PodDisruptionBudget     | `1`                   |
+| `web.sidecars`                           | Add sidecars to the Web pods                                                | `nil`                 |
+| `web.initContainers`                     | Add initContainers to the Web pods                                          | `nil`                 |
+| `web.priorityClassName`                  | Priority Class Name                                                         | `""`                  |
+| `web.nodeSelector`                       | Node labels for pod assignment                                              | `{}`                  |
+| `service.type`                           | Airflow service type                                                        | `ClusterIP`           |
+| `service.port`                           | Airflow service HTTP port                                                   | `8080`                |
+| `service.nodePort`                       | Airflow service NodePort                                                    | `nil`                 |
+| `service.annotations`                    | Additional custom annotations for Airflow service                           | `nil`                 |
 
 
 ### Airflow scheduler parameters
@@ -159,7 +159,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------------- | ----------------------------------------------------------------------- | --------------------------- |
 | `scheduler.image.registry`                   | Airflow Scheduler image registry                                        | `docker.io`                 |
 | `scheduler.image.repository`                 | Airflow Scheduler image repository                                      | `bitnami/airflow-scheduler` |
-| `scheduler.image.tag`                        | Airflow Scheduler image tag (immutable tags are recommended)            | `2.0.2-debian-10-r30`       |
+| `scheduler.image.tag`                        | Airflow Scheduler image tag (immutable tags are recommended)            | `2.1.0-debian-10-r12`       |
 | `scheduler.image.pullPolicy`                 | Airflow Scheduler image pull policy                                     | `IfNotPresent`              |
 | `scheduler.image.pullSecrets`                | Airflow Scheduler image pull secrets                                    | `[]`                        |
 | `scheduler.image.debug`                      | Enable image debug mode                                                 | `false`                     |
@@ -192,7 +192,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `worker.image.registry`                     | Airflow Worker image registry                                                                                        | `docker.io`              |
 | `worker.image.repository`                   | Airflow Worker image repository                                                                                      | `bitnami/airflow-worker` |
-| `worker.image.tag`                          | Airflow Worker image tag (immutable tags are recommended)                                                            | `2.0.2-debian-10-r29`    |
+| `worker.image.tag`                          | Airflow Worker image tag (immutable tags are recommended)                                                            | `2.1.0-debian-10-r12`    |
 | `worker.image.pullPolicy`                   | Airflow Worker image pull policy                                                                                     | `IfNotPresent`           |
 | `worker.image.pullSecrets`                  | Airflow Worker image pull secrets                                                                                    | `[]`                     |
 | `worker.image.debug`                        | Enable image debug mode                                                                                              | `false`                  |
@@ -245,32 +245,32 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Airflow git sync parameters
 
-| Name                           | Description                                                                            | Value                  |
-| ------------------------------ | -------------------------------------------------------------------------------------- | ---------------------- |
-| `git.image.registry`           | Git image registry                                                                     | `docker.io`            |
-| `git.image.repository`         | Git image repository                                                                   | `bitnami/git`          |
-| `git.image.tag`                | Git image tag (immutable tags are recommended)                                         | `2.31.1-debian-10-r53` |
-| `git.image.pullPolicy`         | Git image pull policy                                                                  | `IfNotPresent`         |
-| `git.image.pullSecrets`        | Git image pull secrets                                                                 | `[]`                   |
-| `git.dags.enabled`             | Enable in order to download DAG files from git repositories.                           | `false`                |
-| `git.dags.repositories`        | Array of repositories from which to download DAG files                                 | `[]`                   |
-| `git.plugins.enabled`          | Enable in order to download Plugins files from git repositories.                       | `false`                |
-| `git.plugins.repositories`     | Array of repositories from which to download DAG files                                 | `[]`                   |
-| `git.clone.command`            | Override cmd                                                                           | `nil`                  |
-| `git.clone.args`               | Override args                                                                          | `nil`                  |
-| `git.clone.extraVolumeMounts`  | Add extra volume mounts                                                                | `nil`                  |
-| `git.clone.extraEnvVars`       | Add extra environment variables                                                        | `nil`                  |
-| `git.clone.extraEnvVarsCM`     | ConfigMap with extra environment variables                                             | `nil`                  |
-| `git.clone.extraEnvVarsSecret` | Secret with extra environment variables                                                | `nil`                  |
-| `git.clone.resources`          | Clone init container resource requests and limits                                      | `{}`                   |
-| `git.sync.interval`            | Interval in seconds to pull the git repository containing the plugins and/or DAG files | `60`                   |
-| `git.sync.command`             | Override cmd                                                                           | `nil`                  |
-| `git.sync.args`                | Override args                                                                          | `nil`                  |
-| `git.sync.extraVolumeMounts`   | Add extra volume mounts                                                                | `nil`                  |
-| `git.sync.extraEnvVars`        | Add extra environment variables                                                        | `nil`                  |
-| `git.sync.extraEnvVarsCM`      | ConfigMap with extra environment variables                                             | `nil`                  |
-| `git.sync.extraEnvVarsSecret`  | Secret with extra environment variables                                                | `nil`                  |
-| `git.sync.resources`           | Sync sidecar container resource requests and limits                                    | `{}`                   |
+| Name                           | Description                                                                            | Value                 |
+| ------------------------------ | -------------------------------------------------------------------------------------- | --------------------- |
+| `git.image.registry`           | Git image registry                                                                     | `docker.io`           |
+| `git.image.repository`         | Git image repository                                                                   | `bitnami/git`         |
+| `git.image.tag`                | Git image tag (immutable tags are recommended)                                         | `2.32.0-debian-10-r1` |
+| `git.image.pullPolicy`         | Git image pull policy                                                                  | `IfNotPresent`        |
+| `git.image.pullSecrets`        | Git image pull secrets                                                                 | `[]`                  |
+| `git.dags.enabled`             | Enable in order to download DAG files from git repositories.                           | `false`               |
+| `git.dags.repositories`        | Array of repositories from which to download DAG files                                 | `[]`                  |
+| `git.plugins.enabled`          | Enable in order to download Plugins files from git repositories.                       | `false`               |
+| `git.plugins.repositories`     | Array of repositories from which to download DAG files                                 | `[]`                  |
+| `git.clone.command`            | Override cmd                                                                           | `nil`                 |
+| `git.clone.args`               | Override args                                                                          | `nil`                 |
+| `git.clone.extraVolumeMounts`  | Add extra volume mounts                                                                | `nil`                 |
+| `git.clone.extraEnvVars`       | Add extra environment variables                                                        | `nil`                 |
+| `git.clone.extraEnvVarsCM`     | ConfigMap with extra environment variables                                             | `nil`                 |
+| `git.clone.extraEnvVarsSecret` | Secret with extra environment variables                                                | `nil`                 |
+| `git.clone.resources`          | Clone init container resource requests and limits                                      | `{}`                  |
+| `git.sync.interval`            | Interval in seconds to pull the git repository containing the plugins and/or DAG files | `60`                  |
+| `git.sync.command`             | Override cmd                                                                           | `nil`                 |
+| `git.sync.args`                | Override args                                                                          | `nil`                 |
+| `git.sync.extraVolumeMounts`   | Add extra volume mounts                                                                | `nil`                 |
+| `git.sync.extraEnvVars`        | Add extra environment variables                                                        | `nil`                 |
+| `git.sync.extraEnvVarsCM`      | ConfigMap with extra environment variables                                             | `nil`                 |
+| `git.sync.extraEnvVarsSecret`  | Secret with extra environment variables                                                | `nil`                 |
+| `git.sync.resources`           | Sync sidecar container resource requests and limits                                    | `{}`                  |
 
 
 ### Airflow ldap parameters
@@ -335,7 +335,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`           | Start a side-car prometheus exporter                        | `false`                       |
 | `metrics.image.registry`    | Airflow Exporter image registry                             | `docker.io`                   |
 | `metrics.image.repository`  | Airflow Exporter image repository                           | `bitnami/airflow-exporter`    |
-| `metrics.image.tag`         | Airflow Exporter image tag (immutable tags are recommended) | `0.20210126.0-debian-10-r110` |
+| `metrics.image.tag`         | Airflow Exporter image tag (immutable tags are recommended) | `0.20210126.0-debian-10-r123` |
 | `metrics.image.pullPolicy`  | Airflow Exporter image pull policy                          | `IfNotPresent`                |
 | `metrics.image.pullSecrets` | Airflow Exporter image pull secrets                         | `[]`                          |
 | `metrics.hostAliases`       | Deployment pod host aliases                                 | `[]`                          |
