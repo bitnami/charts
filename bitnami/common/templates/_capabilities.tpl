@@ -19,7 +19,7 @@ Return the target Kubernetes version
 Return the appropriate apiVersion for policy.
 */}}
 {{- define "common.capabilities.policy.apiVersion" -}}
-{{- if Capabilities.APIVersions.Has "policy/v1" }}
+{{- if .Capabilities.APIVersions.Has "policy/v1" }}
 {{- print "policy/v1" -}}
 {{- else -}}
 {{- print "policy/v1beta1" -}}
