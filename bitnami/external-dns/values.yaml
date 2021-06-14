@@ -140,8 +140,6 @@ azure:
   ## When a secret to load azure.json is not specified,
   ## the host's /etc/kubernetes/azure.json will be used
   ##
-  ## Deprecated: please use tenantId, subscriptionId, aadClientId and aadClientSecret values instead.
-  ##
   secretName: ""
   ## Azure resource group to use
   ##
