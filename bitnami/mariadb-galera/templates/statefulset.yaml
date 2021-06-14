@@ -277,8 +277,8 @@ spec:
             {{- end }}
             {{- if or (.Files.Glob "files/my.cnf") .Values.mariadbConfiguration .Values.configurationConfigMap }}
             - name: mariadb-galera-config
-              mountPath: /bitnami/conf/my.cnf
-              subPath: my.cnf
+              mountPath: /bitnami/mariadb/conf/my_custom.cnf
+              subPath: my_custom.cnf
             {{- end }}
             {{- if .Values.tls.enabled }}
             - name: mariadb-galera-certificates
