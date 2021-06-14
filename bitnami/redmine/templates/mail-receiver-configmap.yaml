@@ -107,7 +107,7 @@ data:
             COMMAND="$COMMAND move_on_failure=\"$REDMINE_MAIL_RECEIVER_IMAP_MOVE_ON_FAILURE\" "
         fi
 
-    elif [ "$REDMINE_MAIL_RECEIVER_PROTOCOL" = "IMAP" ]; then
+    elif [ "$REDMINE_MAIL_RECEIVER_PROTOCOL" = "POP3" ]; then
         COMMAND="bundle exec rake redmine:email:receive_pop3 --trace "
 
         if [ "$REDMINE_MAIL_RECEIVER_POP3_DELETE_UNPROCESSED" != "" ]; then
