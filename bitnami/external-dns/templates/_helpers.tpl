@@ -118,9 +118,7 @@ Return true if a secret object should be created
     {{- true -}}
 {{- else if and (eq .Values.provider "aws") .Values.aws.credentials.secretKey .Values.aws.credentials.accessKey (not .Values.aws.credentials.secretName) }}
     {{- true -}}
-{{- else if and (eq .Values.provider "azure") (or (and .Values.azure.resourceGroup .Values.azure.tenantId .Values.azure.subscriptionId .Values.azure.aadClientId .Values.azure.aadClientSecret (not .Values.azure.useManagedIdentityExtension)) (and .Values.azure.resourceGroup .Values.azure.tenantId .Values.azure.subscriptionId .Values.azure.useManagedIdentityExtension)) (not .Values.azure.secretName) -}}
-    {{- true -}}
-{{- else if and (eq .Values.provider "azure-private-dns") (or (and .Values.azure.aadClientId .Values.azure.aadClientSecret) (not .Values.azure.secretName)) -}}
+{{- else if and (or (eq .Values.provider "azure") (eq .Values.provider "azure-private-dns")) (or (and .Values.azure.resourceGroup .Values.azure.tenantId .Values.azure.subscriptionId .Values.azure.aadClientId .Values.azure.aadClientSecret (not .Values.azure.useManagedIdentityExtension)) (and .Values.azure.resourceGroup .Values.azure.tenantId .Values.azure.subscriptionId .Values.azure.useManagedIdentityExtension)) (not .Values.azure.secretName) -}}
     {{- true -}}
 {{- else if and (eq .Values.provider "cloudflare") (or .Values.cloudflare.apiToken .Values.cloudflare.apiKey) (not .Values.cloudflare.secretName) -}}
     {{- true -}}
