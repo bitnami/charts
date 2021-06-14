@@ -487,6 +487,10 @@ rbac.create=true
 serviceaccount.create=true
 ```
 
+### CeleryKubernetesExecutor
+
+The CeleryKubernetesExecutor is introduced in Airflow 2.0 and is a combination of both the Celery and the Kubernetes executors. Tasks will be executed using Celery by default, but those tasks that require it can be executed in a Kubernetes pod using the 'kubernetes' queue.
+
 #### LocalExecutor
 
 Local executor runs tasks by spawning processes in the Scheduler pods. To enable `LocalExecutor` set the following parameters.
@@ -550,7 +554,7 @@ This major updates the Redis<sup>TM</sup> subchart to it newest major, 14.0.0, w
     - They have been moved to `git.*` prefix.
     - `airflow.cloneDagsFromGit.*` no longer exists, instead you must use `git.dags.*` and `git.dags.repositories[*]` has been introduced that will add support for multiple repositories.
     - `airflow.clonePluginsFromGit.*` no longer exists, instead you must use `git.plugins.*`. `airflow.clonePluginsFromGit.repository`, `airflow.clonePluginsFromGit.branch` and `airflow.clonePluginsFromGit.path` have been removed in favour of `git.dags.repositories[*].*`.
-  - Liveness and rediness probe have been separated by components `airflow.livenessProbe.*` and `airflow.redinessProbe` have been removed in favour of `web.livenessProbe`, `worker.livenessProbe`, `web.redinessProbe` and `worker.redinessProbe`.
+  - Liveness and readiness probe have been separated by components `airflow.livenessProbe.*` and `airflow.readinessProbe` have been removed in favour of `web.livenessProbe`, `worker.livenessProbe`, `web.readinessProbe` and `worker.readinessProbe`.
   - `airflow.baseUrl` has been moved to `web.baseUrl`.
   - Security context has been migrated to the bitnami standard way so that `securityContext.*` has been divided into `podSecurityContext.*` that will define the `fsGroup` for all the containers in the pod and `containerSecurityContext.*` that will define the user id that will run the main containers.
   - Both `bitnami/postgresql` and `bitnami/redis` have been upgraded to their latest major versions, `10.x.x` and `11.x.x` respectively, find more info in their READMEs [`bitnami/postgresql`](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#to-1000) and [`bitnami/redis`](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1100)

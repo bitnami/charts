@@ -306,6 +306,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `provisioning.image`             | Kafka provisioning Job image                                          | `Check values.yaml file`       |
 | `provisioning.numPartitions`     | Default number of partitions for topics when unspecified.             | 1                              |
 | `provisioning.replicationFactor` | Default replication factor for topics when unspecified.               | 1                              |
+| `provisioning.podAnnotations`    | Provisioning Pod annotations.                                         | `{}` (evaluated as a template) |
 | `provisioning.resources`         | Kafka provisioning Job resources                                      | `Check values.yaml file`       |
 | `provisioning.topics`            | Kafka provisioning topics                                             | `[]`                           |
 | `provisioning.schedulerName`     | Name of the k8s scheduler (other than default) for kafka provisioning | `nil`                          |

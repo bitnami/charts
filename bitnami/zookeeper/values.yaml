@@ -227,6 +227,12 @@ service:
   port: 2181
   followerPort: 2888
   electionPort: 3888
+  ## Specify the nodePort value for the LoadBalancer and NodePort service types.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+  ##
+  nodePorts:
+    client: ""
+    clientTls: ""
   publishNotReadyAddresses: true
   tls:
     client_enable: false
