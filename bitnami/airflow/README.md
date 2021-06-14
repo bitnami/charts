@@ -299,7 +299,7 @@ The following tables lists the configurable parameters of the Airflow chart and 
 | `metrics.tolerations`                   | The tolerations for the metrics pod              | `[]`                                                    |
 | `metrics.serviceMonitor.enabled`        | Create ServiceMonitor resource                   | `false`                                                 |
 | `metrics.serviceMonitor.interval`       | Interval in which prometheus scrapes             | `60s`                                                   |
-| `metrics.serviceMonitor.namespace`      | servicemonitor namespace                         | `60s`                                                   |
+| `metrics.serviceMonitor.namespace`      | servicemonitor namespace                         | `` (evaluates to release namespace if not provided)     |
 | `metrics.serviceMonitor.scrapeTimeout`  | Scrape Timeout duration for prometheus           | `10s`                                                   |
 | `metrics.serviceMonitor.labels`         | Additional labels to attach                      | `{}`                                                    |
 
