@@ -74,6 +74,8 @@ discourse:
   ##
   # password:
   ## Name of an existing secret containing the password (ignores previous password)
+  ## The secret should contain the following key:
+  ## discourse-password
   ##
   # existingSecret: my-secret
   ## Admin email
@@ -137,6 +139,29 @@ discourse:
   ##
   customLivenessProbe: {}
   customReadinessProbe: {}
+
+  ## Discourse SMTP settings
+  smtp:
+    ## Enable SMTP
+    enabled: false
+    ## SMTP host.
+    host: ''
+    ## SMTP port.
+    port: ''
+    ## SMTP account user.
+    user: ''
+    ## SMTP account password.
+    password: ''
+    ## If specified, SMTP protocol to use. Allowed values: tls, ssl.
+    protocol: ''
+    ## SMTP authentication method.
+    auth: ''
+    ##
+    ## Name of existing secret object containing the password
+    ## The secret should contain the following key:
+    ## smtp-password
+    ##
+    existingSecret: ''
 
   ## An array to add extra env vars
   ## For example:
