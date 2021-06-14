@@ -65,7 +65,7 @@ Return the Discourse SMTP secret name
 {{- end -}}
 
 {{/*
-Return whether Discourse SMTP uses password authentication or not
+Return true if Discourse SMTP uses password authentication
 */}}
 {{- define "discourse.smtp.password.enabled" -}}
 {{- if and (or .Values.discourse.smtp.password .Values.discourse.smtp.existingSecret) .Values.discourse.smtp.enabled }}
