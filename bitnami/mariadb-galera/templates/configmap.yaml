@@ -8,7 +8,7 @@ data:
 {{- if (.Files.Glob "files/my.cnf") }}
 {{ (.Files.Glob "files/my.cnf").AsConfig | indent 2 }}
 {{- else if .Values.mariadbConfiguration }}
-  my.cnf: |
+  my_custom.cnf: |
 {{ .Values.mariadbConfiguration | indent 4 }}
 {{- end }}
 {{ end }}
