@@ -55,24 +55,10 @@ spec:
     {{- end }}
     replicas: {{ .Values.grafana.replicaCount }}
     {{- if .Values.grafana.podSecurityContext.enabled }}
-    securityContext:
-      runAsUser: {{ .Values.grafana.podSecurityContext.runAsUser }}
-      fsGroup: {{ .Values.grafana.podSecurityContext.fsGroup }}
-      runAsNonRoot: {{ .Values.grafana.podSecurityContext.runAsNonRoot }}
-      runAsGroup: {{ .Values.grafana.podSecurityContext.runAsGroup }}
-      {{- if .Values.grafana.podSecurityContext.supplementalGroups }}
-      supplementalGroups:
-      {{- with .Values.grafana.podSecurityContext.supplementalGroups }}
-        - {{ . }}
-      {{- end }}
-      {{- end }}
+    securityContext: {{- omit .Values.grafana.podSecurityContext "enabled" | toYaml | nindent 6 }}
     {{- end }}
     {{- if .Values.grafana.containerSecurityContext.enabled }}
-    containerSecurityContext:
-      runAsUser: {{ .Values.grafana.containerSecurityContext.runAsUser }}
-      runAsGroup: {{ .Values.grafana.containerSecurityContext.runAsGroup }}
-      fsGroup: {{ .Values.grafana.containerSecurityContext.fsGroup }}
-      allowPrivilegeEscalation: {{ .Values.grafana.containerSecurityContext.allowPrivilegeEscalation }}
+    containerSecurityContext: {{- omit .Values.grafana.containerSecurityContext "enabled" | toYaml | nindent 6 }}
     {{- end }}
     {{- if .Values.grafana.tolerations }}
     tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.tolerations "context" $) | nindent 6 }}
