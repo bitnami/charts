@@ -286,7 +286,7 @@ tolerations configuration                                                       
 ### Airflow metrics parameters
 
 | Parameter                               | Description                                      | Default                                                 |
-|-----------------------------------------|--------------------------------------------------|---------------------------------------------------------|
+| --------------------------------------- | ------------------------------------------------ | ------------------------------------------------------- |
 | `metrics.enabled`                       | Start a side-car prometheus exporter             | `false`                                                 |
 | `metrics.image.pullPolicy`              | Image pull policy                                | `IfNotPresent`                                          |
 | `metrics.image.pullSecrets`             | Specify docker-registry secret names as an array | `[]` (does not add image pull secrets to deployed pods) |
@@ -301,6 +301,7 @@ tolerations configuration                                                       
 | `metrics.tolerations`                   | The tolerations for the metrics pod              | `[]`                                                    |
 | `metrics.serviceMonitor.enabled`        | Create ServiceMonitor resource                   | `false`                                                 |
 | `metrics.serviceMonitor.interval`       | Interval in which prometheus scrapes             | `60s`                                                   |
+| `metrics.serviceMonitor.namespace`      | servicemonitor namespace                         | `60s`                                                   |
 | `metrics.serviceMonitor.scrapeTimeout`  | Scrape Timeout duration for prometheus           | `10s`                                                   |
 | `metrics.serviceMonitor.labels`         | Additional labels to attach                      | `{}`                                                    |
 
