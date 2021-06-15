@@ -138,9 +138,14 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `query.tolerations`                              | Thanos Query tolerations for pod assignment                                                                                                                   | `[]` (evaluated as a template)  |
 | `query.podLabels`                                | Thanos Query pod labels                                                                                                                                       | `{}` (evaluated as a template)  |
 | `query.priorityClassName`                        | Controller priorityClassName                                                                                                                                  | `nil`                           |
-| `query.securityContext.enabled`                  | Enable security context for Thanos Query pods                                                                                                                 | `true`                          |
-| `query.securityContext.fsGroup`                  | Group ID for the Thanos Query filesystem                                                                                                                      | `1001`                          |
-| `query.securityContext.runAsUser`                | User ID for the Thanos Query container                                                                                                                        | `1001`                          |
+| `query.podSecurityContext.enabled`               | Enable security context for Thanos Query pods                                                                                                                 | `true`                          |
+| `query.podSecurityContext.fsGroup`               | Group ID for the Thanos Query filesystem                                                                                                                      | `1001`                          |
+| `query.podSecurityContext.runAsUser`             | User ID for the Thanos Query container                                                                                                                        | `1001`                          |
+| `query.containerSecurityContext.enabled`                  | | `True`    |
+| `query.containerSecurityContext.capabilities.drop`        | | `['ALL']` |
+| `query.containerSecurityContext.runAsNonRoot`             | | `True`    |
+| `query.containerSecurityContext.allowPrivilegeEscalation` | | `False`   |
+| `query.containerSecurityContext.readOnlyRootFilesystem`   | | `True`    |
 | `query.resources.limits`                         | The resources limits for the Thanos Query container                                                                                                           | `{}`                            |
 | `query.resources.requests`                       | The requested resources for the Thanos Query container                                                                                                        | `{}`                            |
 | `query.podAnnotations`                           | Annotations for Thanos Query pods                                                                                                                             | `{}`                            |
