@@ -186,9 +186,12 @@ extraEnvVarsSecret:
 ##
 master:
   name: master
-  ## Number of master-eligible node(s) replicas to deploy
+  ## Number of master-eligible node(s) replicas to deploy.
+  ## "There should normally be an odd number of master-eligible nodes in a cluster" to address "split brain" scenario.
+  ## https://www.elastic.co/guide/en/elasticsearch/reference/7.x/modules-discovery-voting.html#_even_numbers_of_master_eligible_nodes
+  ## https://www.elastic.co/guide/en/elasticsearch/reference/7.x/modules-discovery-quorums.html#modules-discovery-quorums
   ##
-  replicas: 2
+  replicas: 3
 
   ## updateStrategy for ElasticSearch master statefulset
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
