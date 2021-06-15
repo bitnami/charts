@@ -19,10 +19,10 @@ Return the target Kubernetes version
 Return the appropriate apiVersion for policy.
 */}}
 {{- define "common.capabilities.policy.apiVersion" -}}
-{{- if .Capabilities.APIVersions.Has "policy/v1" }}
-{{- print "policy/v1" -}}
-{{- else -}}
+{{- if semverCompare "<1.21-0" (include "common.capabilities.kubeVersion" .) -}}
 {{- print "policy/v1beta1" -}}
+{{- else -}}
+{{- print "policy/v1" -}}
 {{- end -}}
 {{- end -}}
 
