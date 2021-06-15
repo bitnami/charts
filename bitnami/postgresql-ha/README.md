@@ -160,6 +160,12 @@ The following table lists the configurable parameters of the PostgreSQL HA chart
 | `postgresql.initdbScripts`                      | Dictionary of initdb scripts                                                                                                                                                                    | `nil`                                                        |
 | `postgresql.initdbScriptsCM`                    | ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`). The value is evaluated as a template.                                                                                      | `nil`                                                        |
 | `postgresql.initdbScriptsSecret`                | Secret with initdb scripts that contain sensitive information (Note: can be used with initdbScriptsCM or initdbScripts). The value is evaluated as a template.                                  | `nil`                                                        |
+| `postgresql.tls.enabled`                        | Enable TLS traffic support for end-client connections                                                                                                                                           | `false`                                                      |
+| `postgresql.tls.preferServerCiphers`            | Whether to use the server's TLS cipher preferences rather than the client's                                                                                                                     | `true`                                                       |
+| `postgresql.tls.certificatesSecret`             | Name of an existing secret that contains the certificates                                                                                                                                       | `nil`                                                        |
+| `postgresql.tls.certFilename`                   | Certificate filename                                                                                                                                                                            | `""`                                                         |
+| `postgresql.tls.certKeyFilename`                | Certificate key filename                                                                                                                                                                        | `""`                                                         |
+| `postgresql.tls.certCAFilename`                 | CA Certificate filename. If provided, PgPool will authenticate TLS/SSL clients by requesting them a certificate.                                                                                | `nil`                                                        |
 | **Pgpool**                                      |                                                                                                                                                                                                 |                                                              |
 | `pgpoolImage.registry`                          | Registry for Pgpool                                                                                                                                                                             | `docker.io`                                                  |
 | `pgpoolImage.repository`                        | Repository for Pgpool                                                                                                                                                                           | `bitnami/pgpool`                                             |
@@ -367,33 +373,9 @@ As an alternative, this chart supports using an initContainer to change the owne
 
 You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
 
-### Securing Pgpool traffic using TLS
+### Securing traffic using TLS
 
-TLS for end-client connections can be enabled in the chart by specifying the `pgpool.tls.` parameters while creating a release. The following parameters should be configured to properly enable the TLS support in the chart:
-
-- `pgpool.tls.enabled`: Enable TLS support. Defaults to `false`
-- `pgpool.tls.certificatesSecret`: Name of an existing secret that contains the certificates. No defaults.
-- `pgpool.tls.certFilename`: Certificate filename. No defaults.
-- `pgpool.tls.certKeyFilename`: Certificate key filename. No defaults.
-
-For example:
-
-- First, create the secret with the cetificates files:
-
-    ```console
-    kubectl create secret generic certificates-pgpool.tls.secret --from-file=./cert.crt --from-file=./cert.key --from-file=./ca.crt
-    ```
-
-- Then, use the following parameters:
-
-    ```console
-    pgpool.tls.enabled=true
-    pgpool.tls.certificatesSecret="certificates-pgpool.tls.secret"
-    pgpool.tls.certFilename="cert.crt"
-    pgpool.tls.certKeyFilename="cert.key"
-    ```
-
-    > Note TLS and VolumePermissions: PgPool requires certain permissions on sensitive files (such as certificate keys) to start up. Due to an on-going [issue](https://github.com/kubernetes/kubernetes/issues/57923) regarding kubernetes permissions and the use of `containerSecurityContext.runAsUser`, the `volumePermissions` init container will ensure everything works as expected.
+Learn how to [configure TLS authentication](/<%= platform_path %>/infrastructure/postgresql-ha/administration/enable-tls/)
 
 ### LDAP
 

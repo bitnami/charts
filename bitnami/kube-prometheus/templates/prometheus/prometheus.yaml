@@ -111,10 +111,8 @@ spec:
   {{- if .Values.prometheus.remoteWrite }}
   remoteWrite: {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.remoteWrite "context" $) | nindent 4 }}
   {{- end }}
-  {{- if .Values.prometheus.securityContext.enabled }}
-  securityContext:
-    runAsUser: {{ .Values.prometheus.securityContext.runAsUser }}
-    fsGroup: {{ .Values.prometheus.securityContext.fsGroup }}
+  {{- if .Values.prometheus.podSecurityContext.enabled }}
+  securityContext: {{- omit .Values.prometheus.podSecurityContext "enabled" | toYaml | nindent 4 }}
   {{- end }}
   {{- if .Values.prometheus.ruleNamespaceSelector }}
   ruleNamespaceSelector: {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.ruleNamespaceSelector "context" $) | nindent 4 }}
@@ -203,7 +201,7 @@ spec:
     key: {{ .Values.prometheus.additionalAlertRelabelConfigsExternal.key }}
   {{- end }}
 {{- include "kube-prometheus.imagePullSecrets" . | indent 2 }}
-  {{- if or .Values.prometheus.containers .Values.prometheus.thanos.create }}
+  {{- if or .Values.prometheus.containers .Values.prometheus.thanos.create .Values.prometheus.containerSecurityContext.enabled .Values.prometheus.containerSecurityContext.enabled .Values.operator.prometheusConfigReloader.containerSecurityContext.enabled }}
   containers:
     {{- if .Values.prometheus.thanos.create }}
     - name: thanos-sidecar
@@ -245,6 +243,101 @@ spec:
           {{- if not (.Values.prometheus.storageSpec.disableMountSubPath | default (not .Values.prometheus.persistence.enabled)) }}
           subPath: prometheus-db
           {{- end }}
+      {{- if .Values.prometheus.thanos.containerSecurityContext.enabled }}
+      # yamllint disable rule:indentation
+      securityContext: {{- omit .Values.prometheus.thanos.containerSecurityContext "enabled" | toYaml | nindent 8 }}
+      # yamllint enable rule:indentation
+      {{- end }}
+      {{- if .Values.prometheus.thanos.livenessProbe.enabled }}
+      livenessProbe:
+        httpGet:
+          path: /-/healthy
+          port: http
+          scheme: HTTP
+        initialDelaySeconds: {{ .Values.prometheus.thanos.livenessProbe.initialDelaySeconds }}
+        periodSeconds: {{ .Values.prometheus.thanos.livenessProbe.periodSeconds }}
+        timeoutSeconds: {{ .Values.prometheus.thanos.livenessProbe.timeoutSeconds }}
+        failureThreshold: {{ .Values.prometheus.thanos.livenessProbe.failureThreshold }}
+        successThreshold: {{ .Values.prometheus.thanos.livenessProbe.successThreshold }}
+      {{- end }}
+      {{- if .Values.prometheus.thanos.readinessProbe.enabled }}
+      readinessProbe:
+        httpGet:
+          path: /-/ready
+          port: http
+          scheme: HTTP
+        initialDelaySeconds: {{ .Values.prometheus.thanos.readinessProbe.initialDelaySeconds }}
+        periodSeconds: {{ .Values.prometheus.thanos.readinessProbe.periodSeconds }}
+        timeoutSeconds: {{ .Values.prometheus.thanos.readinessProbe.timeoutSeconds }}
+        failureThreshold: {{ .Values.prometheus.thanos.readinessProbe.failureThreshold }}
+        successThreshold: {{ .Values.prometheus.thanos.readinessProbe.successThreshold }}
+      {{- end }}
+    {{- end }}
+    {{- if or .Values.prometheus.containerSecurityContext.enabled .Values.prometheus.livenessProbe.enabled .Values.prometheus.readinessProbe.enabled }}
+    ## This monkey patching is needed until the securityContexts are
+    ## directly patchable via the CRD.
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/issues/3947
+    ## currently implemented with strategic merge
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/user-guides/strategic-merge-patch.md
+    - name: prometheus
+      {{- if .Values.prometheus.containerSecurityContext.enabled }}
+      securityContext: {{- omit .Values.prometheus.containerSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.prometheus.livenessProbe.enabled }}
+      livenessProbe:
+        httpGet:
+          path: /-/healthy
+          port: web
+          scheme: HTTP
+        initialDelaySeconds: {{ .Values.prometheus.livenessProbe.initialDelaySeconds }}
+        periodSeconds: {{ .Values.prometheus.livenessProbe.periodSeconds }}
+        timeoutSeconds: {{ .Values.prometheus.livenessProbe.timeoutSeconds }}
+        failureThreshold: {{ .Values.prometheus.livenessProbe.failureThreshold }}
+        successThreshold: {{ .Values.prometheus.livenessProbe.successThreshold }}
+      {{- end }}
+      {{- if .Values.prometheus.readinessProbe.enabled }}
+      readinessProbe:
+        httpGet:
+          path: /-/ready
+          port: web
+          scheme: HTTP
+        initialDelaySeconds: {{ .Values.prometheus.readinessProbe.initialDelaySeconds }}
+        periodSeconds: {{ .Values.prometheus.readinessProbe.periodSeconds }}
+        timeoutSeconds: {{ .Values.prometheus.readinessProbe.timeoutSeconds }}
+        failureThreshold: {{ .Values.prometheus.readinessProbe.failureThreshold }}
+        successThreshold: {{ .Values.prometheus.readinessProbe.successThreshold }}
+      {{- end }}
+    {{- end }}
+    {{- if or .Values.operator.prometheusConfigReloader.containerSecurityContext.enabled .Values.operator.prometheusConfigReloader.livenessProbe.enabled .Values.operator.prometheusConfigReloader.readinessProbe.enabled }}
+    ## This monkey patching is needed until the securityContexts are
+    ## directly patchable via the CRD.
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/issues/3947
+    ## currently implemented with strategic merge
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/user-guides/strategic-merge-patch.md
+    - name: config-reloader
+      {{- if .Values.operator.prometheusConfigReloader.containerSecurityContext.enabled }}
+      securityContext: {{- omit .Values.operator.prometheusConfigReloader.containerSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.operator.prometheusConfigReloader.livenessProbe.enabled }}
+      livenessProbe:
+        tcpSocket:
+          port: reloader-web
+        initialDelaySeconds: {{ .Values.operator.prometheusConfigReloader.livenessProbe.initialDelaySeconds }}
+        periodSeconds: {{ .Values.operator.prometheusConfigReloader.livenessProbe.periodSeconds }}
+        timeoutSeconds: {{ .Values.operator.prometheusConfigReloader.livenessProbe.timeoutSeconds }}
+        failureThreshold: {{ .Values.operator.prometheusConfigReloader.livenessProbe.failureThreshold }}
+        successThreshold: {{ .Values.operator.prometheusConfigReloader.livenessProbe.successThreshold }}
+      {{- end }}
+      {{- if .Values.operator.prometheusConfigReloader.readinessProbe.enabled }}
+      readinessProbe:
+        tcpSocket:
+          port: reloader-web
+        initialDelaySeconds: {{ .Values.operator.prometheusConfigReloader.readinessProbe.initialDelaySeconds }}
+        periodSeconds: {{ .Values.operator.prometheusConfigReloader.readinessProbe.periodSeconds }}
+        timeoutSeconds: {{ .Values.operator.prometheusConfigReloader.readinessProbe.timeoutSeconds }}
+        failureThreshold: {{ .Values.operator.prometheusConfigReloader.readinessProbe.failureThreshold }}
+        successThreshold: {{ .Values.operator.prometheusConfigReloader.readinessProbe.successThreshold }}
+      {{- end }}
     {{- end }}
     {{- if .Values.prometheus.containers }}
     {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.containers "context" $) | nindent 4 }}

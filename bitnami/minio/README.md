@@ -118,6 +118,7 @@ The following table lists the configurable parameters of the MinIO&reg; chart an
 | `securityContext.enabled`         | Enable security context                                                                   | `true`                         |
 | `securityContext.fsGroup`         | Group ID for the container                                                                | `1001`                         |
 | `securityContext.runAsUser`       | User ID for the container                                                                 | `1001`                         |
+| `securityContext.runAsNonRoot`    | Avoid running as root User                                                                | `true`                         |
 | `containerPort`                   | MinIO(R) container port to open                                                           | `9000`                         |
 | `resources.limits`                | The resources limits for the MinIO&reg; container                                         | `{}`                           |
 | `resources.requests`              | The requested resources for the MinIO&reg; container                                      | `{}`                           |

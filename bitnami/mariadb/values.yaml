@@ -407,6 +407,10 @@ primary:
     ##
     # maxUnavailable: 1
 
+  ## Revision history limit for Mariadb Primary
+  ##
+  revisionHistoryLimit: 10
+
 ## Mariadb Secondary parameters
 ##
 secondary:
@@ -698,6 +702,10 @@ secondary:
     ## Max number of pods that can be unavailable after the eviction
     ##
     # maxUnavailable: 1
+
+  ## Revision history limit for Mariadb Secondary
+  ##
+  revisionHistoryLimit: 10
 
 ## MariaDB pods ServiceAccount
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/

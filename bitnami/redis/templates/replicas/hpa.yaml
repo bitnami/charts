@@ -1,0 +1,35 @@
+{{- if .Values.replica.autoscaling.enabled }}
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ printf "%s-replicas" (include "common.names.fullname" .) }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: replica
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  scaleTargetRef:
+    apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+    kind: StatefulSet
+    name: {{ printf "%s-replicas" (include "common.names.fullname" .) }}
+  minReplicas: {{ .Values.replica.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.replica.autoscaling.maxReplicas }}
+  metrics:
+    {{- if .Values.replica.autoscaling.targetCPU }}
+    - type: Resource
+      resource:
+        name: cpu
+        targetAverageUtilization: {{ .Values.replica.autoscaling.targetCPU }}
+    {{- end }}
+    {{- if .Values.replica.autoscaling.targetMemory }}
+    - type: Resource
+      resource:
+        name: memory
+        targetAverageUtilization: {{ .Values.replica.autoscaling.targetMemory }}
+    {{- end }}
+{{- end }}

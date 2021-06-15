@@ -20,11 +20,8 @@ spec:
       {{- if .Values.operator.schedulerName }}
       schedulerName: {{ .Values.operator.schedulerName | quote }}
       {{- end }}
-      {{- if .Values.operator.securityContext.enabled }}
-      securityContext:
-        runAsUser: {{ .Values.operator.securityContext.runAsUser }}
-        fsGroup: {{ .Values.operator.securityContext.fsGroup }}
-        runAsNonRoot: {{ .Values.operator.securityContext.runAsNonRoot }}
+      {{- if .Values.operator.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.operator.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       {{- if .Values.operator.priorityClassName }}
       priorityClassName: {{ .Values.operator.priorityClassName }}
@@ -88,20 +85,36 @@ spec:
             - name: http
               containerPort: 8080
               protocol: TCP
+          {{- if .Values.operator.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
               path: /metrics
               port: http
-          {{- toYaml .Values.operator.livenessProbe | nindent 12 }}
+              scheme: HTTP
+            initialDelaySeconds: {{ .Values.operator.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.operator.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.operator.livenessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.operator.livenessProbe.failureThreshold }}
+            successThreshold: {{ .Values.operator.livenessProbe.successThreshold }}
+          {{- end }}
+          {{- if .Values.operator.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
               path: /metrics
               port: http
-          {{- toYaml .Values.operator.readinessProbe | nindent 12 }}
+              scheme: HTTP
+            initialDelaySeconds: {{ .Values.operator.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.operator.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.operator.readinessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.operator.readinessProbe.failureThreshold }}
+            successThreshold: {{ .Values.operator.readinessProbe.successThreshold }}
+          {{- end }}
           {{- if .Values.operator.resources }}
           resources: {{- toYaml .Values.operator.resources | nindent 12 }}
           {{- end }}
-          securityContext:
-            allowPrivilegeEscalation: false
-            readOnlyRootFilesystem: false
+          {{- if .Values.operator.containerSecurityContext.enabled }}
+          # yamllint disable rule:indentation
+          securityContext: {{- omit .Values.operator.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          # yamllint enable rule:indentation
+          {{- end }}
 {{- end }}
