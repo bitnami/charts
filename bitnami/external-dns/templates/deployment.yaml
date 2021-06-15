@@ -299,11 +299,11 @@ spec:
               value: {{ .Values.coredns.etcdEndpoints | quote }}
             {{- if .Values.coredns.etcdTLS.enabled }}
             - name: ETCD_CERT_FILE
-              value: {{ .Values.coredns.etcdTLS.mountPath }}/{{ .Values.coredns.etcdTLS.certFilename }}
+              value: {{ .Values.coredns.etcdTLS.mountPath }}/{{ include "external-dns.tlsCert" . }}
             - name: ETCD_KEY_FILE
-              value: {{ .Values.coredns.etcdTLS.mountPath }}/{{ .Values.coredns.etcdTLS.keyFilename }}
+              value: {{ .Values.coredns.etcdTLS.mountPath }}/{{ include "external-dns.tlsCertKey" . }}
             - name: ETCD_CA_FILE
-              value: {{ .Values.coredns.etcdTLS.mountPath }}/{{ .Values.coredns.etcdTLS.caFilename }}
+              value: {{ .Values.coredns.etcdTLS.mountPath }}/{{ include "external-dns.tlsCACert" . }}
             {{- end }}
             {{- end }}
             {{- if eq .Values.provider "designate" }}
@@ -539,7 +539,7 @@ spec:
             {{- end }}
             {{- if and (eq .Values.provider "coredns") (.Values.coredns.etcdTLS.enabled) }}
             # CoreDNS mountPath(s)
-            - name: {{ .Values.coredns.etcdTLS.secretName }}
+            - name: {{ include "external-dns.tlsSecretName" . }}
               mountPath: {{ .Values.coredns.etcdTLS.mountPath }}
               readOnly: true
             {{- end }}
@@ -599,9 +599,9 @@ spec:
         {{- end }}
         {{- if and (eq .Values.provider "coredns") (.Values.coredns.etcdTLS.enabled) }}
         # CoreDNS volume(s)
-        - name: {{ .Values.coredns.etcdTLS.secretName }}
+        - name: {{ include "external-dns.tlsSecretName" . }}
           secret:
-            secretName: {{ .Values.coredns.etcdTLS.secretName }}
+            secretName: {{ include "external-dns.tlsSecretName" . }}
             defaultMode: 400
         {{- end }}
         {{- if and (eq .Values.provider "google") (or .Values.google.serviceAccountKey .Values.google.serviceAccountSecret) }}

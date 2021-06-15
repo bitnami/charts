@@ -301,7 +301,7 @@ Add environment variables to configure airflow common values
 - name: BASH_DEBUG
   value: "1"
 - name: BITNAMI_DEBUG
-  value: "1"
+  value: "true"
 {{- end }}
 {{- end -}}
 
