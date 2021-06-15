@@ -1028,4 +1028,3 @@ tls:
     ## Name of the existing secret containing the Aggregator certificates
     ##
     existingSecret:
-
