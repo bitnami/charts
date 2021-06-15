@@ -28,6 +28,7 @@ data:
 {{- $aggregatorServiceName := printf "%s-aggregator" ( include "common.names.fullname" . ) }}
 {{- $altNames := list (printf "*.%s.%s.svc.%s" $headlessServiceName $releaseNamespace $clusterDomain) (printf "%s.%s.svc.%s" $headlessServiceName $releaseNamespace $clusterDomain) (printf "*.%s.%s.svc.%s" $aggregatorServiceName $releaseNamespace $clusterDomain) (printf "%s.%s.svc.%s" $aggregatorServiceName $releaseNamespace $clusterDomain) $fullname }}
 {{- $crt := genSignedCert $fullname nil $altNames 365 $ca }}
+{{- if .Values.aggregator.enabled }}
 apiVersion: v1
 kind: Secret
 metadata:
@@ -45,6 +46,8 @@ data:
   tls.crt: {{ $crt.Cert | b64enc | quote }}
   tls.key: {{ $crt.Key | b64enc | quote }}
 ---
+{{- end }}
+{{- if .Values.forwarder.enabled }}
 {{- $forwarderServiceName := printf "%s-forwarder" ( include "common.names.fullname" . ) }}
 {{- $altNames := list (printf "*.%s.%s.svc.%s" $forwarderServiceName $releaseNamespace $clusterDomain) (printf "%s.%s.svc.%s" $forwarderServiceName $releaseNamespace $clusterDomain) $fullname }}
 {{- $crt := genSignedCert $fullname nil $altNames 365 $ca }}
@@ -64,4 +67,5 @@ data:
   ca.crt: {{ $ca.Cert | b64enc | quote }}
   tls.crt: {{ $crt.Cert | b64enc | quote }}
   tls.key: {{ $crt.Key | b64enc | quote }}
+{{- end }}
 {{- end }}
