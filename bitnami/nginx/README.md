@@ -102,6 +102,7 @@ The following tables lists the configurable parameters of the NGINX chart and th
 | `affinity`                   | Affinity for pod assignment                                                                    | `{}` (evaluated as a template)                       |
 | `nodeSelector`               | Node labels for pod assignment                                                                 | `{}` (evaluated as a template)                       |
 | `tolerations`                | Tolerations for pod assignment                                                                 | `[]` (evaluated as a template)                       |
+| `priorityClassName`          | Priority class name for pod                                                                    | `""`                                                 |
 | `podLabels`                  | Additional labels for NGINX pods                                                               | `{}` (evaluated as a template)                       |
 | `podAnnotations`             | Annotations for NGINX pods                                                                     | `{}` (evaluated as a template)                       |
 | `podSecurityContext`         | NGINX pods' Security Context                                                                   | Check `values.yaml` file                             |
@@ -219,6 +220,7 @@ The following tables lists the configurable parameters of the NGINX chart and th
 | Parameter                              | Description                                                                                 | Default                                                      |
 |----------------------------------------|---------------------------------------------------------------------------------------------|--------------------------------------------------------------|
 | `metrics.enabled`                      | Start a Prometheus exporter sidecar container                                               | `false`                                                      |
+| `metrics.port`                         | NGINX Container Status Port scraped by Prometheus Exporter                                  | `8080`                                                       |
 | `metrics.image.registry`               | NGINX Prometheus exporter image registry                                                    | `docker.io`                                                  |
 | `metrics.image.repository`             | NGINX Prometheus exporter image name                                                        | `bitnami/nginx-exporter`                                     |
 | `metrics.image.tag`                    | NGINX Prometheus exporter image tag                                                         | `{TAG_NAME}`                                                 |

@@ -99,7 +99,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | ------------------------------------------------ | ----------------------------------------------------------------------------------------- | ----------------------- |
 | `frontend.image.registry`                        | NGINX image registry                                                                      | `docker.io`             |
 | `frontend.image.repository`                      | NGINX image repository                                                                    | `bitnami/nginx`         |
-| `frontend.image.tag`                             | NGINX image tag (immutable tags are recommended)                                          | `1.19.10-debian-10-r11` |
+| `frontend.image.tag`                             | NGINX image tag (immutable tags are recommended)                                          | `1.19.10-debian-10-r36` |
 | `frontend.image.pullPolicy`                      | NGINX image pull policy                                                                   | `IfNotPresent`          |
 | `frontend.image.pullSecrets`                     | NGINX image pull secrets                                                                  | `[]`                    |
 | `frontend.image.debug`                           | Enable image debug mode                                                                   | `false`                 |
@@ -167,7 +167,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | ------------------------------------------------- | ----------------------------------------------------------------------------------------- | ---------------------------- |
 | `dashboard.image.registry`                        | Dashboard image registry                                                                  | `docker.io`                  |
 | `dashboard.image.repository`                      | Dashboard image repository                                                                | `bitnami/kubeapps-dashboard` |
-| `dashboard.image.tag`                             | Dashboard image tag (immutable tags are recommended)                                      | `2.3.2-debian-10-r0`         |
+| `dashboard.image.tag`                             | Dashboard image tag (immutable tags are recommended)                                      | `2.3.2-debian-10-r23`        |
 | `dashboard.image.pullPolicy`                      | Dashboard image pull policy                                                               | `IfNotPresent`               |
 | `dashboard.image.pullSecrets`                     | Dashboard image pull secrets                                                              | `[]`                         |
 | `dashboard.image.debug`                           | Enable image debug mode                                                                   | `false`                      |
@@ -386,7 +386,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `authProxy.enabled`                               | Specifies whether Kubeapps should configure OAuth login/logout                | `false`                |
 | `authProxy.image.registry`                        | OAuth2 Proxy image registry                                                   | `docker.io`            |
 | `authProxy.image.repository`                      | OAuth2 Proxy image repository                                                 | `bitnami/oauth2-proxy` |
-| `authProxy.image.tag`                             | OAuth2 Proxy image tag (immutable tags are recommended)                       | `7.1.2-debian-10-r22`  |
+| `authProxy.image.tag`                             | OAuth2 Proxy image tag (immutable tags are recommended)                       | `7.1.3-debian-10-r23`  |
 | `authProxy.image.pullPolicy`                      | OAuth2 Proxy image pull policy                                                | `IfNotPresent`         |
 | `authProxy.image.pullSecrets`                     | OAuth2 Proxy image pull secrets                                               | `[]`                   |
 | `authProxy.external`                              | Use an external Auth Proxy instead of deploying its own one                   | `false`                |
@@ -397,6 +397,8 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `authProxy.clientID`                              | OAuth Client ID                                                               | `""`                   |
 | `authProxy.clientSecret`                          | OAuth Client secret                                                           | `""`                   |
 | `authProxy.cookieSecret`                          | Secret used by oauth2-proxy to encrypt any credentials                        | `""`                   |
+| `authProxy.cookieRefresh`                         | Duration after which to refresh the cookie                                    | `2m`                   |
+| `authProxy.scope`                                 | OAuth scope specification                                                     | `openid email groups`  |
 | `authProxy.emailDomain`                           | Allowed email domains                                                         | `*`                    |
 | `authProxy.additionalFlags`                       | Additional flags for oauth2-proxy                                             | `[]`                   |
 | `authProxy.containerPort`                         | Auth Proxy HTTP container port                                                | `3000`                 |
@@ -416,7 +418,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `pinnipedProxy.enabled`                               | Specifies whether Kubeapps should configure Pinniped Proxy               | `false`                           |
 | `pinnipedProxy.image.registry`                        | Pinniped Proxy image registry                                            | `docker.io`                       |
 | `pinnipedProxy.image.repository`                      | Pinniped Proxy image repository                                          | `bitnami/kubeapps-pinniped-proxy` |
-| `pinnipedProxy.image.tag`                             | Pinniped Proxy image tag (immutable tags are recommended)                | `2.3.2-debian-10-r0`              |
+| `pinnipedProxy.image.tag`                             | Pinniped Proxy image tag (immutable tags are recommended)                | `2.3.2-debian-10-r22`             |
 | `pinnipedProxy.image.pullPolicy`                      | Pinniped Proxy image pull policy                                         | `IfNotPresent`                    |
 | `pinnipedProxy.image.pullSecrets`                     | Pinniped Proxy image pull secrets                                        | `[]`                              |
 | `pinnipedProxy.defaultPinnipedNamespace`              | Specify the (default) namespace in which pinniped concierge is installed | `pinniped-concierge`              |
@@ -443,7 +445,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `rbac.create`             | Specifies whether RBAC resources should be created                            | `true`                  |
 | `testImage.registry`      | NGINX image registry                                                          | `docker.io`             |
 | `testImage.repository`    | NGINX image repository                                                        | `bitnami/nginx`         |
-| `testImage.tag`           | NGINX image tag (immutable tags are recommended)                              | `1.19.10-debian-10-r11` |
+| `testImage.tag`           | NGINX image tag (immutable tags are recommended)                              | `1.19.10-debian-10-r36` |
 | `testImage.pullPolicy`    | NGINX image pull policy                                                       | `IfNotPresent`          |
 | `testImage.pullSecrets`   | NGINX image pull secrets                                                      | `[]`                    |
 
