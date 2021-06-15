@@ -22,6 +22,13 @@ Return the proper image name (for the init container volume-permissions image)
 {{- end -}}
 
 {{/*
+Return the proper image name (for the init container init-certs image)
+*/}}
+{{- define "cassandra.tls.image" -}}
+{{- include "common.images.image" (dict "imageRoot" .Values.tls.image "global" .Values.global) -}}
+{{- end -}}
+
+{{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "cassandra.imagePullSecrets" -}}
@@ -172,11 +179,11 @@ Return true if a TLS credentials secret object should be created
 Return true if a TLS credentials secret object should be created
 */}}
 {{- define "cassandra.tlsPasswordsSecret" -}}
-{{- $secretName := coalesce .Values.ssl.passwordsSecretName .Values.tlsEncryptionSecretName -}}
+{{- $secretName := coalesce .Values.tls.passwordsSecret .Values.tlsEncryptionSecretName -}}
 {{- if $secretName -}}
     {{- printf "%s" (tpl $secretName $) -}}
 {{- else -}}
-    {{- printf "%s-secret" (include "common.names.fullname" .) -}}
+    {{- printf "%s-tls-pass" (include "common.names.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
