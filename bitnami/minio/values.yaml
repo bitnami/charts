@@ -580,9 +580,9 @@ volumePermissions:
     requests: {}
   ## Init container' Security Context
   ## Note: the chown of the data folder is done to containerSecurityContext.runAsUser
-  ## and not the below volumePermissions.securityContext.runAsUser
+  ## and not the below volumePermissions.containerSecurityContext.runAsUser
   ##
-  securityContext:
+  containerSecurityContext:
     runAsUser: 0
 
 ## Specifies whether a ServiceAccount should be created
