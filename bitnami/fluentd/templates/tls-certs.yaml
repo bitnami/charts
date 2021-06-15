@@ -19,19 +19,6 @@ data:
 ---
 {{- end }}
 {{- end }}
-{{- if and .Values.mountedTLS.enabled (not .Values.mountedTLS.existingSecret) }}
-apiVersion: v1
-kind: Secret
-metadata:
-  name: {{ include "common.names.fullname" . }}-tls
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-type: kubernetes.io/tls
-data:
-  tls.crt: {{ required "A valid .Values.mountedTLS.certificate entry required!" .Values.mountedTLS.certificate | b64enc }}
-  tls.key: {{ required "A valid .Values.mountedTLS.key entry required!" .Values.mountedTLS.key | b64enc }}
-  rootCA.crt: {{ required "A valid .Values.mountedTLS.caCertificate entry required!" .Values.mountedTLS.caCertificate | b64enc }}
----
-{{- end }}
 {{- if (include "fluentd.createTlsSecret" .) }}
 {{- $ca := genCA "fluentd-ca" 365 }}
 {{- $releaseNamespace := .Release.Namespace }}

@@ -1029,12 +1029,3 @@ tls:
     ##
     existingSecret:
 
-## Mount TLS certificates
-##
-mountedTLS:
-  enabled: false
-  mountPath: /opt/bitnami/fluentd/certs/
-  certificate: |-
-  key: |-
-  caCertificate: |-
-  # existingSecret: name-of-existing-secret-to-certificates

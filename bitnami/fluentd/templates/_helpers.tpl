@@ -159,18 +159,6 @@ Get the aggregator configmap name.
 {{/*
 Get the certificates secret name.
 */}}
-{{- define "fluentd.mountedTLS.secretName" -}}
-{{- if .Values.mountedTLS.existingSecret -}}
-    {{- printf "%s" (tpl .Values.mountedTLS.existingSecret $) -}}
-{{- else -}}
-    {{- printf "%s-tls" (include "common.names.fullname" . ) -}}
-{{- end -}}
-{{- end -}}
-
-
-{{/*
-Get the certificates secret name.
-*/}}
 {{- define "fluentd.forwarder.tlsSecretName" -}}
 {{- if .Values.tls.forwarder.existingSecret -}}
     {{- printf "%s" (tpl .Values.tls.forwarder.existingSecret $) -}}
