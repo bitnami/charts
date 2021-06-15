@@ -713,6 +713,10 @@ healthIngress:
 metrics:
   enabled: false
 
+  ## Specify which port is used by the exporter to retrieve the NGINX status.
+  ## Defaults to specified http port
+  port:
+
   ## Bitnami NGINX Prometheus Exporter image
   ## ref: https://hub.docker.com/r/bitnami/nginx-exporter/tags/
   ##

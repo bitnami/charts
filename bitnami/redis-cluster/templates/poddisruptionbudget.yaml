@@ -14,6 +14,6 @@ spec:
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
     matchExpressions:
-      - {key: job-name, operator: NotIn, values: [{{ template "common.names.fullname" . }}-cluster-create]}
+      - {key: job-name, operator: NotIn, values: [{{ template "common.names.fullname" . }}-cluster-update]}
   {{- toYaml .Values.podDisruptionBudget | nindent 2 }}
 {{- end }}

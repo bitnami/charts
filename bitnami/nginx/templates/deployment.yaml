@@ -260,7 +260,7 @@ spec:
           {{- if .Values.metrics.securityContext.enabled }}
           securityContext: {{- omit .Values.metrics.securityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
-          command: ['/usr/bin/exporter', '-nginx.scrape-uri', 'http://127.0.0.1:8080/status']
+          command: ['/usr/bin/exporter', '-nginx.scrape-uri', 'http://127.0.0.1:{{- default .Values.containerPorts.http .Values.metrics.port }}/status']
           ports:
             - name: metrics
               containerPort: 9113
