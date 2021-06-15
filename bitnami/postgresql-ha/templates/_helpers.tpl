@@ -674,3 +674,66 @@ Return the path to the CA cert file.
 {{- define "postgresql-ha.pgpool.tlsCACert" -}}
 {{- printf "/opt/bitnami/pgpool/certs/%s" .Values.pgpool.tls.certCAFilename -}}
 {{- end -}}
+
+{{/*
+Return true if PostgreSQL postgres existingSecret has been provided
+*/}}
+{{- define "postgresql-ha.postgresql.existingSecretProvided" -}}
+{{- if .Values.global -}}
+    {{- if .Values.global.postgresql -}}
+        {{- if .Values.global.postgresql.existingSecret -}}
+            {{- true -}}
+        {{- else if .Values.postgresql.existingSecret -}}
+            {{- true -}}
+        {{- end -}}
+    {{- else if .Values.postgresql.existingSecret -}}
+        {{- true -}}
+    {{- end -}}
+{{- else -}}
+    {{- if .Values.postgresql.existingSecret -}}
+      {{- true -}}
+    {{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if PostgreSQL pgpool existingSecret has been provided
+*/}}
+{{- define "postgresql-ha.pgpool.existingSecretProvided" -}}
+{{- if .Values.global -}}
+    {{- if .Values.global.pgpool -}}
+        {{- if .Values.global.pgpool.existingSecret -}}
+            {{- true -}}
+        {{- else if .Values.pgpool.existingSecret -}}
+            {{- true -}}
+        {{- end -}}
+    {{- else if .Values.pgpool.existingSecret -}}
+        {{- true -}}
+    {{- end -}}
+{{- else -}}
+    {{- if .Values.pgpool.existingSecret -}}
+      {{- true -}}
+    {{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the path to the cert file.
+*/}}
+{{- define "postgresql-ha.postgresql.tlsCert" -}}
+{{- required "Certificate filename is required when TLS in enabled" .Values.postgresql.tls.certFilename | printf "/opt/bitnami/postgresql/certs/%s" -}}
+{{- end -}}
+
+{{/*
+Return the path to the cert key file.
+*/}}
+{{- define "postgresql-ha.postgresql.tlsCertKey" -}}
+{{- required "Certificate Key filename is required when TLS in enabled" .Values.postgresql.tls.certKeyFilename | printf "/opt/bitnami/postgresql/certs/%s" -}}
+{{- end -}}
+
+{{/*
+Return the path to the CA cert file.
+*/}}
+{{- define "postgresql-ha.postgresql.tlsCACert" -}}
+{{- printf "/opt/bitnami/postgresql/certs/%s" .Values.postgresql.tls.certCAFilename -}}
+{{- end -}}
