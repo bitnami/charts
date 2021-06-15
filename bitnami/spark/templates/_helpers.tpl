@@ -100,7 +100,7 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := list -}}
 {{- $messages := append $messages (include "spark.validateValues.extraVolumes" .) -}}
 {{- $messages := append $messages (include "spark.validateValues.workerCount" .) -}}
-{{- $messages := append $messages (include "spark.validateValues.security.tls" .) -}}
+{{- $messages := append $messages (include "spark.validateValues.security.ssl" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
