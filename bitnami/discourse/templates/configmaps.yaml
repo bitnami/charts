@@ -35,6 +35,7 @@ data:
   DISCOURSE_SMTP_AUTH: {{ .Values.discourse.smtp.auth | quote }}
   {{- end }}
   {{- end }}
+  {{- if or .Values.postgresql.enabled .Values.externalDatabase.create }}
   POSTGRESQL_CLIENT_DATABASE_HOST: {{ template "discourse.databaseHost" . }}
   POSTGRESQL_CLIENT_DATABASE_PORT_NUMBER: {{ template "discourse.databasePort" . }}
   {{- if or .Values.postgresql.enabled (not .Values.externalDatabase.postgresqlPostgresUser) }}
@@ -46,3 +47,4 @@ data:
   {{- end }}
   POSTGRESQL_CLIENT_CREATE_DATABASE_NAME: {{ template "discourse.databaseName" . }}
   POSTGRESQL_CLIENT_CREATE_DATABASE_EXTENSIONS: "hstore,pg_trgm"
+  {{- end }}

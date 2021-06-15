@@ -220,6 +220,7 @@ The following tables lists the configurable parameters of the NGINX chart and th
 | Parameter                              | Description                                                                                 | Default                                                      |
 |----------------------------------------|---------------------------------------------------------------------------------------------|--------------------------------------------------------------|
 | `metrics.enabled`                      | Start a Prometheus exporter sidecar container                                               | `false`                                                      |
+| `metrics.port`                         | NGINX Container Status Port scraped by Prometheus Exporter                                  | `8080`                                                       |
 | `metrics.image.registry`               | NGINX Prometheus exporter image registry                                                    | `docker.io`                                                  |
 | `metrics.image.repository`             | NGINX Prometheus exporter image name                                                        | `bitnami/nginx-exporter`                                     |
 | `metrics.image.tag`                    | NGINX Prometheus exporter image tag                                                         | `{TAG_NAME}`                                                 |
