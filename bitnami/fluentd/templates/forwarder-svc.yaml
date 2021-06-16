@@ -2,12 +2,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "fluentd.fullname" . }}-forwarder
-  labels: {{- include "fluentd.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}-forwarder
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: forwarder
     app: forwarder
   {{- if .Values.forwarder.service.annotations }}
-  annotations: {{- include "fluentd.tplValue" (dict "value" .Values.forwarder.service.annotations "context" $) | nindent 4 }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.forwarder.service.annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   type: {{ .Values.forwarder.service.type }}
@@ -28,6 +28,6 @@ spec:
     - name: {{ $key }}
       {{ toYaml $value | nindent 6 }}
   {{- end }}
-  selector: {{ include "fluentd.matchLabels" . | nindent 4 }}
+  selector: {{ include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: forwarder
 {{- end }}

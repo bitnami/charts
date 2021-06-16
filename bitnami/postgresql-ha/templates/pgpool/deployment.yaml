@@ -384,7 +384,7 @@ spec:
         {{- if .Values.pgpool.tls.enabled }}
         - name: raw-certificates
           secret:
-            secretName: {{ required "A secret containing TLS certificates is required when TLS is enabled" .Values.pgpool.tls.certificatesSecret }}
+            secretName: {{ include "postgresql-ha.tlsSecretName" . }}
         - name: pgpool-certificates
           emptyDir: {}
         {{- end }}
