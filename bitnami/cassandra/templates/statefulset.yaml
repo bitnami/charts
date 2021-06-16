@@ -131,8 +131,8 @@ spec:
         {{- end }}
         {{- if (include "cassandra.tlsEncryption" . ) }}
         - name: init-certs
-          image: {{ include "cassandra.tls.image" . }}
-          imagePullPolicy: {{ .Values.tls.image.pullPolicy | quote }}
+          image: {{ include "cassandra.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
