@@ -8,13 +8,6 @@ Return the proper Spark image name
 {{- end -}}
 
 {{/*
-Return the proper Spark TLS image name
-*/}}
-{{- define "spark.certs.image" -}}
-{{- include "common.images.image" (dict "imageRoot" .Values.security.ssl.image "global" .Values.global) -}}
-{{- end -}}
-
-{{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "spark.imagePullSecrets" -}}

@@ -71,8 +71,8 @@ spec:
         {{- end }}
         {{- if .Values.security.ssl.enabled }}
         - name: init-certs
-          image: {{ include "spark.certs.image" . }}
-          imagePullPolicy: {{ .Values.security.ssl.image.pullPolicy | quote }}
+          image: {{ include "spark.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           command:
           - /bin/bash
           - -ec
