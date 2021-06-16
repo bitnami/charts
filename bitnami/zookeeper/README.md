@@ -135,23 +135,25 @@ The following tables lists the configurable parameters of the ZooKeeper chart an
 
 ### Exposure parameters
 
-| Parameter                                     | Description                                                                                        | Default                                              |
-|-----------------------------------------------|----------------------------------------------------------------------------------------------------|------------------------------------------------------|
-| `service.type`                                | Kubernetes Service type                                                                            | `ClusterIP`                                          |
-| `service.loadBalancerIP`                      | Use with service.type `LoadBalancer` to assign static IP to Load Balancer instance                 | `""`                                                 |
-| `service.port`                                | ZooKeeper port                                                                                     | `2181`                                               |
-| `service.followerPort`                        | ZooKeeper follower port                                                                            | `2888`                                               |
-| `service.electionPort`                        | ZooKeeper election port                                                                            | `3888`                                               |
-| `service.publishNotReadyAddresses`            | If the ZooKeeper headless service should publish DNS records for not ready pods                    | `true`                                               |
-| `serviceAccount.create`                       | Enable creation of ServiceAccount for zookeeper pod                                                | `false`                                              |
-| `serviceAccount.name`                         | The name of the service account to use. If not set and `create` is `true`, a name is generated     | Generated using the `common.names.fullname` template |
+| Parameter                                | Description                                                                                        | Default                                              |
+|------------------------------------------|----------------------------------------------------------------------------------------------------|------------------------------------------------------|
+| `service.type`                           | Kubernetes Service type                                                                            | `ClusterIP`                                          |
+| `service.loadBalancerIP`                 | Use with service.type `LoadBalancer` to assign static IP to Load Balancer instance                 | `""`                                                 |
+| `service.port`                           | ZooKeeper port                                                                                     | `2181`                                               |
+| `service.followerPort`                   | ZooKeeper follower port                                                                            | `2888`                                               |
+| `service.electionPort`                   | ZooKeeper election port                                                                            | `3888`                                               |
+| `service.nodePorts.client`               | Nodeport for client connections                                                                    | `""`                                                 |
+| `service.nodePorts.clientTls`            | Nodeport for tls client connections                                                                | `""`                                                 | 
+| `service.publishNotReadyAddresses`       | If the ZooKeeper headless service should publish DNS records for not ready pods                    | `true`                                               |
+| `serviceAccount.create`                  | Enable creation of ServiceAccount for zookeeper pod                                                | `false`                                              |
+| `serviceAccount.name`                    | The name of the service account to use. If not set and `create` is `true`, a name is generated     | Generated using the `common.names.fullname` template |
 | `serviceAccount.automountServiceAccountToken` | Enable/Disable automountServiceAccountToken  for Service Account                                   | `true`                                               |
 | `service.disableBaseClientPort`               | Remove client port from service definitions.                                                       | `false`                                              |
 | `service.tlsClientPort`                       | Service port for tls client connections                                                            | `3181`                                               |
-| `service.annotations`                         | Annotations for the Service                                                                        | `{}`                                                 |
-| `service.headless.annotations`                | Annotations for the Headless Service                                                               | `{}`                                                 |
-| `networkPolicy.enabled`                       | Enable NetworkPolicy                                                                               | `false`                                              |
-| `networkPolicy.allowExternal`                 | Don't require client label for connections                                                         | `true`                                               |
+| `service.annotations`                    | Annotations for the Service                                                                        | `{}`                                                 |
+| `service.headless.annotations`           | Annotations for the Headless Service                                                               | `{}`                                                 |
+| `networkPolicy.enabled`                  | Enable NetworkPolicy                                                                               | `false`                                              |
+| `networkPolicy.allowExternal`            | Don't require client label for connections                                                         | `true`                                               |
 
 ### Persistence parameters
 
@@ -163,8 +165,10 @@ The following tables lists the configurable parameters of the ZooKeeper chart an
 | `persistence.accessMode`               | PVC Access Mode for ZooKeeper data volume                                      | `ReadWriteOnce`                 |
 | `persistence.size`                     | PVC Storage Request for ZooKeeper data volume                                  | `8Gi`                           |
 | `persistence.annotations`              | Annotations for the PVC                                                        | `{}` (evaluated as a template)  |
+| `persistence.selector`                 | Selector to match an existing Persistent Volume for Zookeeper's data PVC. If set, the PVC can't have a PV dynamically provisioned for it                                                                        | `{}` (evaluated as a template)  |
 | `persistence.dataLogDir.size`          | PVC Storage Request for ZooKeeper's Data log directory                         | `8Gi`                           |
 | `persistence.dataLogDir.existingClaim` | Provide an existing `PersistentVolumeClaim` for Zookeeper's Data log directory | `nil` (evaluated as a template) |
+| `persistence.dataLogDir.selector`      | Selector to match an existing Persistent Volume for Zookeeper's Data log PVC. If set, the PVC can't have a PV dynamically provisioned for it                                                                    | `{}` (evaluated as a template)  |
 
 ### Volume Permissions parameters
 

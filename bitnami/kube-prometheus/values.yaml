@@ -76,12 +76,25 @@ operator:
   ##
   # schedulerName:
 
-  ## SecurityContext configuration
+  ## Prometheus Operator pods' Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ##
-  securityContext:
+  podSecurityContext:
     enabled: true
     runAsUser: 1001
     fsGroup: 1001
+
+  ## Prometheus Operator containers' Security Context (only main container)
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ##
+  containerSecurityContext:
+    enabled: true
+    capabilities:
+      drop:
+      - ALL
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: false
 
   ## Prometheus Operator Service
   ##
@@ -209,6 +222,7 @@ operator:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
   ##
   livenessProbe:
+    enabled: true
     initialDelaySeconds: 120
     periodSeconds: 10
     timeoutSeconds: 5
@@ -216,6 +230,7 @@ operator:
     successThreshold: 1
 
   readinessProbe:
+    enabled: true
     initialDelaySeconds: 30
     periodSeconds: 10
     timeoutSeconds: 5
@@ -263,6 +278,37 @@ operator:
     # pullSecrets:
     #   - myRegistryKeySecretName
 
+    ## Prometheus config reload container's securityContext
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+    ##
+    containerSecurityContext:
+      enabled: true
+      readOnlyRootFilesystem: false
+      allowPrivilegeEscalation: false
+      runAsNonRoot: true
+      capabilities:
+        drop:
+          - ALL
+
+    ## Configure extra options for liveness and readiness probes
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+    ##
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 6
+      successThreshold: 1
+
+    readinessProbe:
+      enabled: true
+      initialDelaySeconds: 15
+      periodSeconds: 20
+      timeoutSeconds: 5
+      failureThreshold: 6
+      successThreshold: 1
+
 ## Deploy a Prometheus instance
 ##
 prometheus:
@@ -297,12 +343,25 @@ prometheus:
     # annotations:
     #   eks.amazonaws.com/role-arn: arn:aws:iam::ACCOUNT:role/prometheus
 
-  ## SecurityContext configuration
+  ## Prometheus pods' Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ##
-  securityContext:
+  podSecurityContext:
     enabled: true
     runAsUser: 1001
     fsGroup: 1001
+
+  ## Prometheus containers' Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ##
+  containerSecurityContext:
+    enabled: true
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    runAsNonRoot: true
+    capabilities:
+      drop:
+        - ALL
 
   ## Configure pod disruption budgets for Prometheus
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/#specifying-a-poddisruptionbudget
@@ -534,6 +593,25 @@ prometheus:
   ## ListenLocal makes the Prometheus server listen on loopback, so that it does not bind against the Pod IP.
   ##
   listenLocal: false
+
+  ## Configure extra options for liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 0
+    failureThreshold: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 3
+
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 0
+    failureThreshold: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 3
 
   ## Enable Prometheus adminitrative API
   ## ref: https://prometheus.io/docs/prometheus/latest/querying/api/#tsdb-admin-apis
@@ -831,6 +909,17 @@ prometheus:
       # pullSecrets:
       #   - myRegistryKeySecretName
 
+    ## Thanos Sidecar container's securityContext
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+    ##
+    containerSecurityContext:
+      enabled: true
+      readOnlyRootFilesystem: false
+      allowPrivilegeEscalation: false
+      runAsNonRoot: true
+      capabilities:
+        drop:
+          - ALL
 
     ## Override default prometheus url "http://localhost:9090"
     ##
@@ -864,6 +953,25 @@ prometheus:
       requests: {}
       #   cpu: 100m
       #   memory: 128Mi
+
+    ## Configure extra options for liveness and readiness probes
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+    ##
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 0
+      periodSeconds: 5
+      timeoutSeconds: 3
+      failureThreshold: 120
+      successThreshold: 1
+
+    readinessProbe:
+      enabled: true
+      initialDelaySeconds: 0
+      periodSeconds: 5
+      timeoutSeconds: 3
+      failureThreshold: 120
+      successThreshold: 1
 
     ## Thanos Sidecar Service
     ##
@@ -981,13 +1089,25 @@ alertmanager:
     ## If not set and create is true, a name is generated using the kube-prometheus.alertmanager.fullname template
     # name:
 
-  ## SecurityContext configuration
+  ## Prometheus Alertmanager pods' Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ##
-  securityContext:
+  podSecurityContext:
     enabled: true
     runAsUser: 1001
     fsGroup: 1001
 
+  ## Prometheus Alertmanager container's securityContext
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ##
+  containerSecurityContext:
+    enabled: true
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    runAsNonRoot: true
+    capabilities:
+      drop:
+        - ALL
   ## Configure pod disruption budgets for Alertmanager
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/#specifying-a-poddisruptionbudget
   ##
@@ -1239,6 +1359,25 @@ alertmanager:
   ## Desired number of Alertmanager nodes
   ##
   replicaCount: 1
+
+  ## Configure extra options for liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 0
+    periodSeconds: 5
+    timeoutSeconds: 3
+    failureThreshold: 120
+    successThreshold: 1
+
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 0
+    periodSeconds: 5
+    timeoutSeconds: 3
+    failureThreshold: 120
+    successThreshold: 1
 
   ## Log level for Alertmanager
   ##

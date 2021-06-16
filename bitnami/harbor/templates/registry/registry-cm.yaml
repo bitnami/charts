@@ -60,6 +60,9 @@ data:
         {{- if .Values.persistence.imageChartStorage.s3.secure }}
         secure: {{ .Values.persistence.imageChartStorage.s3.secure }}
         {{- end }}
+        {{- if .Values.persistence.imageChartStorage.s3.skipverify }}
+        skipverify: {{ .Values.persistence.imageChartStorage.s3.skipverify }}
+        {{- end }}
         {{- if .Values.persistence.imageChartStorage.s3.v4auth }}
         v4auth: {{ .Values.persistence.imageChartStorage.s3.v4auth }}
         {{- end }}
