@@ -123,12 +123,12 @@ spec:
           - name: SOLR_SSL_KEY_STORE_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: {{ .Values.tls.passwordsSecretName | quote }}
+                name: {{ include "solr.tlsPasswordsSecret" . }}
                 key: tls-keystore-password
           - name: SOLR_SSL_TRUST_STORE_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: {{ .Values.tls.passwordsSecretName | quote }}
+                name: {{ include "solr.tlsPasswordsSecret" . }}
                 key: tls-truststore-password
           {{- if .Values.resources }}
           resources: {{- include "common.tplvalues.render" (dict "value" .Values.tls.resources "context" $) | nindent 12 }}
@@ -228,14 +228,14 @@ spec:
             - name: SOLR_SSL_KEY_STORE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.tls.passwordsSecretName | quote }}
+                  name: {{ include "solr.tlsPasswordsSecret" . }}
                   key: tls-keystore-password
             - name: SOLR_SSL_TRUST_STORE
               value: /opt/bitnami/solr/certs/truststore.p12
             - name: SOLR_SSL_TRUST_STORE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.tls.passwordsSecretName | quote }}
+                  name: {{ include "solr.tlsPasswordsSecret" . }}
                   key: tls-truststore-password
             - name: SOLR_SSL_CHECK_PEER_NAME
               value: "false"
