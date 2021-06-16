@@ -88,24 +88,25 @@ spec:
               value: {{ include "kibana.elasticsearch.port" . | quote }}
             - name: KIBANA_FORCE_INITSCRIPTS
               value: {{ .Values.forceInitScripts | quote }}
-            {{- if .Values.tls.enabled }}
             - name: KIBANA_SERVER_SSL_ENABLED
-              value: {{ .Values.tls.enabled | quote }}
-            {{- if or (include "kibana.createTlsSecret" .) .Values.tls.usePemCerts }}
+              value: {{ ternary "true" "false" .Values.tls.enabled | quote }}
+            {{- if or .Values.tls.usePemCerts (include "kibana.createTlsSecret" .) }}
             - name: KIBANA_SERVER_SSL_USE_PEM
               value: "true"
-            {{- if .Values.tls.keyPassword }}
+            {{- end }}
+            {{- if or .Values.tls.keyPassword .Values.tls.passwordsSecret }}
             - name: KIBANA_SERVER_KEY_PASSWORD
-              value: {{ .Values.tls.keyPassword | quote }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "kibana.tls.secretName" . }}
+                  key: kibana-key-password
             {{- end }}
-            {{- else }}
-            - name: KIBANA_SERVER_KEYSTORE_LOCATION
-              value: "/opt/bitnami/kibana/config/certs/server/{{ .Values.tls.keystoreFilename }}"
-            {{- if .Values.tls.keystorePassword }}
+            {{- if or .Values.tls.keystorePassword .Values.tls.passwordsSecret }}
             - name: KIBANA_SERVER_KEYSTORE_PASSWORD
-              value: {{ .Values.tls.keystorePassword | quote }}
-            {{- end }}
-            {{- end }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "kibana.tls.secretName" . }}
+                  key: kibana-keystore-password
             {{- end }}
             {{- if .Values.elasticsearch.security.auth.enabled }}
             - name: KIBANA_USERNAME
@@ -116,26 +117,22 @@ spec:
                   name: {{ include "kibana.elasticsearch.auth.secretName" . }}
                   key: kibana-password
             {{- end }}
-            {{- if .Values.elasticsearch.security.tls.enabled }}
             - name: KIBANA_ELASTICSEARCH_SSL_ENABLED
-              value: "true"
+              value: {{ ternary "true" "false" .Values.elasticsearch.security.tls.enabled | quote }}
+            - name: KIBANA_ELASTICSEARCH_SSL_USE_PEM
+              value: {{ ternary "true" "false" .Values.elasticsearch.security.tls.usePemCerts | quote }}
             - name: KIBANA_ELASTICSEARCH_SSL_VERIFICATION_MODE
               value: {{ .Values.elasticsearch.security.tls.verificationMode | quote }}
-            {{- if .Values.elasticsearch.security.tls.usePemCerts }}
-            - name: KIBANA_ELASTICSEARCH_SSL_USE_PEM
-              value: "true"
-            {{- else }}
-            - name: KIBANA_ELASTICSEARCH_TRUSTSTORE_LOCATION
-              value: "/opt/bitnami/kibana/config/certs/elasticsearch/{{ .Values.elasticsearch.security.tls.truststoreFilename }}"
-            {{- if .Values.elasticsearch.security.tls.truststorePassword }}
+            {{- if or .Values.elasticsearch.security.tls.truststorePassword .Values.elasticsearch.security.tls.passwordsSecret }}
             - name: KIBANA_ELASTICSEARCH_TRUSTSTORE_PASSWORD
-              value: {{ .Values.elasticsearch.security.tls.truststorePassword | quote }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "kibana.elasticsearch.tls.secretName" . }}
+                  key: elasticsearch-truststore-password
             {{- end }}
+            {{- if .Values.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
-            {{- end }}
-          {{- if .Values.extraEnvVars }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
-          {{- end }}
           {{- if or .Values.extraEnvVarsCM .Values.extraEnvVarsSecret }}
           envFrom:
             {{- if .Values.extraEnvVarsCM }}
