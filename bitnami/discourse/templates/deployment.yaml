@@ -137,7 +137,7 @@ spec:
           {{- if .Values.discourse.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
-              path: /
+              path: /srv/status
               port: http
             initialDelaySeconds: {{ .Values.discourse.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.discourse.livenessProbe.periodSeconds }}
@@ -150,7 +150,7 @@ spec:
           {{- if .Values.discourse.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
-              path: /
+              path: /srv/status
               port: http
             initialDelaySeconds: {{ .Values.discourse.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.discourse.readinessProbe.periodSeconds }}
