@@ -384,6 +384,12 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ## Upgrading
 
+### To 4.0.0
+
+In this version, introduces changes to the `tls.*` settings.
+The previous settings only would mount the TLS volume in the container, and have been removed as the Chart now includes `extraVolumes` and `extraVolumeMounts` which could be used for that purpose.
+The new `tls.*` settings will now configure SSL/TLS certificates for the out_forward communications in the Fluentd Forwarder and in_forward in the Fluentd Aggregator, securing the communications between the Forwarder and the Aggretator.
+
 ### To 3.1.0
 
 This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
@@ -408,12 +414,6 @@ This version also introduces `bitnami/common`, a [library chart](https://helm.sh
 - https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
 - https://helm.sh/docs/topics/v2_v3_migration/
 - https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
-
-### To 4.0.0
-
-In this version, introduces changes to the `tls.*` settings.
-The previous settings only would mount the TLS volume in the container, and have been removed as the Chart now includes `extraVolumes` and `extraVolumeMounts` which could be used for that purpose.
-The new `tls.*` settubgs will now configure SSL/TLS certificates for the out_forward communications in the Fluentd Forwarder and in_forward in the Fluentd Aggregator, securing the communications between the Forwarder and the Aggretator.
 
 ### To 2.0.0
 
