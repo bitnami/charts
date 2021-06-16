@@ -220,6 +220,7 @@ The following tables lists the configurable parameters of the NGINX chart and th
 | Parameter                              | Description                                                                                 | Default                                                      |
 |----------------------------------------|---------------------------------------------------------------------------------------------|--------------------------------------------------------------|
 | `metrics.enabled`                      | Start a Prometheus exporter sidecar container                                               | `false`                                                      |
+| `metrics.port`                         | NGINX Container Status Port scraped by Prometheus Exporter                                  | `8080`                                                       |
 | `metrics.image.registry`               | NGINX Prometheus exporter image registry                                                    | `docker.io`                                                  |
 | `metrics.image.repository`             | NGINX Prometheus exporter image name                                                        | `bitnami/nginx-exporter`                                     |
 | `metrics.image.tag`                    | NGINX Prometheus exporter image tag                                                         | `{TAG_NAME}`                                                 |
@@ -228,6 +229,7 @@ The following tables lists the configurable parameters of the NGINX chart and th
 | `metrics.podAnnotations`               | Additional annotations for NGINX Prometheus exporter pod(s)                                 | `{}`                                                         |
 | `metrics.resources.limits`             | The resources limits for the NGINX Prometheus exporter container                            | `{}`                                                         |
 | `metrics.resources.requests`           | The requested resources for the NGINX Prometheus exporter container                         | `{}`                                                         |
+| `metrics.securityContext`              | NGINX Prometheus exporter containers' Security Context                                      | Check `values.yaml` file                                     |
 | `metrics.service.port`                 | NGINX Prometheus exporter service port                                                      | `9113`                                                       |
 | `metrics.service.annotations`          | Annotations for Jenkins Prometheus exporter service                                         | `{prometheus.io/scrape: "true", prometheus.io/port: "9113"}` |
 | `metrics.serviceMonitor.enabled`       | Creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`) | `false`                                                      |
