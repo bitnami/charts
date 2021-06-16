@@ -417,7 +417,6 @@ ingress:
     ## - name: wordpress.local
     ##   path: /
     ##
-
     ## Any additional arbitrary paths that may need to be added to the ingress under the main host.
     ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
     ## extraPaths:
@@ -447,7 +446,6 @@ ingress:
     ## - name: wordpress.local
     ##   path: /
     ##
-
     ## Any additional arbitrary paths that may need to be added to the ingress under the main host.
     ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
     ## extraPaths:
@@ -516,6 +514,19 @@ mongodb:
     ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#setting-the-root-password-on-first-run
     ##
     rootPassword: ""
+
+    ## MongoDB(R) username
+    ##
+    username: bn_parse
+
+    ## MongoDB(R) password
+    ##
+    password: ""
+
+    ## MongoDB(R) database
+    ##
+    database: bitnami_parse
+
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
