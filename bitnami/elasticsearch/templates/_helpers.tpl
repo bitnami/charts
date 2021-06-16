@@ -324,7 +324,7 @@ Returns true if at least 1 existing secret was provided
 {{- $coordSecret :=.Values.security.tls.coordinating.existingSecret -}}
 {{- $ingestSecret :=.Values.security.tls.ingest.existingSecret -}}
 {{- $ingestEnabled := .Values.ingest.enabled -}}
-{{- if or $masterSecret $dataSecret $coordSecret (and $ingestEnabled $IngestSecret) }}
+{{- if or $masterSecret $dataSecret $coordSecret (and $ingestEnabled $ingestSecret) }}
     {{- true -}}
 {{- end -}}
 {{- end -}}
@@ -338,7 +338,7 @@ Returns true if at least 1 existing secret is missing
 {{- $coordSecret :=.Values.security.tls.coordinating.existingSecret -}}
 {{- $ingestSecret :=.Values.security.tls.ingest.existingSecret -}}
 {{- $ingestEnabled := .Values.ingest.enabled -}}
-{{- if or (not $masterSecret) (not $dataSecret) (not $coordSecret) (and $ingestEnabled (not $IngestSecret)) }}
+{{- if or (not $masterSecret) (not $dataSecret) (not $coordSecret) (and $ingestEnabled (not $ingestSecret)) }}
     {{- true -}}
 {{- end -}}
 {{- end -}}
