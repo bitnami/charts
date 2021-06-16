@@ -141,10 +141,18 @@ shardsvr:
     affinity: {}
     ## Node labels for pod assignment
     ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+    ## You can set dataNodeLoopId (or any other parameter) by setting the below code block under this 'nodeSelector' section:
+    ## nodeSelector: { shardId: "{{ .dataNodeLoopId }}" }
     ##
     nodeSelector: {}
     ## Tolerations for pod assignment
     ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+    ## You can set dataNodeLoopId (or any other parameter) by setting the below code block under this 'nodeSelector' section:
+    ## tolerations:
+    ## - key: "shardId"
+    ##   operator: "Equal"
+    ##   value: "{{ .dataNodeLoopId }}"
+    ##   effect: "NoSchedule"
     ##
     tolerations: []
     ## podManagementPolicy for the statefulset, allows parallel startup of pods
@@ -776,6 +784,59 @@ mongos:
   ## Use StatefulSet instead of Deployment
   ##
   useStatefulSet: false
+  ## When using a statefulset, you can enable one service per replica
+  ## This is useful when exposing the mongos through load balancers to make sure clients
+  ## connect to the same mongos and therefore can follow their cursors
+  ##
+  servicePerReplica:
+    enabled: false
+    ## Additional service annotations (evaluate as a template)
+    ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+    ##
+    annotations: {}
+    ## Service type
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types
+    ##
+    type: ClusterIP
+    ## External traffic policy
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types
+    ##
+    externalTrafficPolicy: Cluster
+    ## MongoDB(R) Service port and Container Port
+    ##
+    port: 27017
+    ## Set a fixed service ClusterIP address
+    ## ref: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.16/#servicespec-v1-core
+    ##
+    clusterIP:
+    ## Specify the nodePort value for the LoadBalancer and NodePort service types.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ##
+    nodePort:
+
+    ## Specify the externalIP value ClusterIP service type.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#external-ips
+    ##
+    externalIPs: []
+
+    ## Specify the loadBalancerIP value for LoadBalancer service types.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#loadbalancer
+    ##
+    loadBalancerIP:
+
+    ## Specify the loadBalancerSourceRanges value for LoadBalancer service types.
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ##
+    loadBalancerSourceRanges: []
+    ## Extra ports to expose (normally used with the `sidecar` value)
+    ##
+    extraPorts: []
+    ## Specify the sessionAffinity setting for the service. Can be "None" or "ClientIP".
+    ## If "ClientIP", consecutive client requests will be directed to the same mongos Pod
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+    ##
+    sessionAffinity: None
+
   ## Pod disruption budget
   ##
   pdb:

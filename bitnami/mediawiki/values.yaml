@@ -453,9 +453,41 @@ metrics:
   resources: {}
   ## Metrics exporter pod Annotation and Labels
   ##
+
+  ## @param metrics.port Metrics service port
+  ##
+  port: 9117
+
   podAnnotations:
     prometheus.io/scrape: "true"
-    prometheus.io/port: "9117"
+    prometheus.io/port: "{{ .Values.metrics.port }}"
+
+  ## Prometheus Service Monitor
+  ## ref: https://github.com/coreos/prometheus-operator
+  ##      https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+  ##
+  serviceMonitor:
+    ## @param metrics.serviceMonitor.enabled Create ServiceMonitor Resource for scraping metrics using PrometheusOperator
+    ##
+    enabled: true
+    ## @param metrics.serviceMonitor.namespace The namespace in which the ServiceMonitor will be created
+    ##
+    namespace:
+    ## @param metrics.serviceMonitor.interval The interval at which metrics should be scraped
+    ##
+    interval: 30s
+    ## @param metrics.serviceMonitor.scrapeTimeout The timeout after which the scrape is ended
+    ##
+    scrapeTimeout:
+    ## @param metrics.serviceMonitor.relabellings Metrics relabellings to add to the scrape endpoint
+    ##
+    relabellings:
+    ## @param metrics.serviceMonitor.honorLabels Labels to honor to add to the scrape endpoint
+    ##
+    honorLabels: false
+    ## @param metrics.serviceMonitor.additionalLabels Additional custom labels for the ServiceMonitor
+    ##
+    additionalLabels: {}
 
 ##
 ## External database configuration

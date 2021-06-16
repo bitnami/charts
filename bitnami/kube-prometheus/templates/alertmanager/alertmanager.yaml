@@ -32,10 +32,8 @@ spec:
   {{- end }}
   resources: {{- toYaml .Values.alertmanager.resources | nindent 4 }}
   routePrefix: "{{ .Values.alertmanager.routePrefix }}"
-  {{- if .Values.alertmanager.securityContext.enabled }}
-  securityContext:
-    runAsUser: {{ .Values.alertmanager.securityContext.runAsUser }}
-    fsGroup: {{ .Values.alertmanager.securityContext.fsGroup }}
+  {{- if .Values.alertmanager.podSecurityContext.enabled }}
+  securityContext: {{- omit .Values.alertmanager.podSecurityContext "enabled" | toYaml | nindent 4 }}
   {{- end }}
   {{- if .Values.alertmanager.storageSpec }}
   storage: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.storageSpec "context" $) | nindent 4 }}
@@ -95,8 +93,77 @@ spec:
   volumeMounts: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.volumeMounts "context" $) | nindent 4 }}
   {{- end }}
 {{- include "kube-prometheus.imagePullSecrets" . | indent 2 }}
-  {{- if .Values.alertmanager.containers }}
-  containers: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.containers "context" $) | nindent 4 }}
+  {{- if or .Values.alertmanager.containers .Values.alertmanager.containerSecurityContext.enabled .Values.operator.prometheusConfigReloader.containerSecurityContext.enabled }}
+  containers:
+    {{- if or .Values.alertmanager.containerSecurityContext.enabled .Values.alertmanager.livenessProbe.enabled .Values.alertmanager.readinessProbe.enabled }}
+    ## This monkey patching is needed until the securityContexts are
+    ## directly patchable via the CRD.
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/issues/3947
+    ## currently implemented with strategic merge
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/user-guides/strategic-merge-patch.md
+    - name: alertmanager
+      {{- if .Values.alertmanager.containerSecurityContext.enabled }}
+      securityContext: {{- omit .Values.alertmanager.containerSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.alertmanager.livenessProbe.enabled }}
+      livenessProbe:
+        httpGet:
+          path: /-/healthy
+          port: web
+          scheme: HTTP
+        initialDelaySeconds: {{ .Values.alertmanager.livenessProbe.initialDelaySeconds }}
+        periodSeconds: {{ .Values.alertmanager.livenessProbe.periodSeconds }}
+        timeoutSeconds: {{ .Values.alertmanager.livenessProbe.timeoutSeconds }}
+        failureThreshold: {{ .Values.alertmanager.livenessProbe.failureThreshold }}
+        successThreshold: {{ .Values.alertmanager.livenessProbe.successThreshold }}
+      {{- end }}
+      {{- if .Values.alertmanager.readinessProbe.enabled }}
+      readinessProbe:
+        httpGet:
+          path: /-/ready
+          port: web
+          scheme: HTTP
+        initialDelaySeconds: {{ .Values.alertmanager.readinessProbe.initialDelaySeconds }}
+        periodSeconds: {{ .Values.alertmanager.readinessProbe.periodSeconds }}
+        timeoutSeconds: {{ .Values.alertmanager.readinessProbe.timeoutSeconds }}
+        failureThreshold: {{ .Values.alertmanager.readinessProbe.failureThreshold }}
+        successThreshold: {{ .Values.alertmanager.readinessProbe.successThreshold }}
+      {{- end }}
+    {{- end }}
+    {{- if or .Values.operator.prometheusConfigReloader.containerSecurityContext.enabled .Values.operator.prometheusConfigReloader.livenessProbe.enabled .Values.operator.prometheusConfigReloader.readinessProbe.enabled }}
+    ## This monkey patching is needed until the securityContexts are
+    ## directly patchable via the CRD.
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/issues/3947
+    ## currently implemented with strategic merge
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/user-guides/strategic-merge-patch.md
+    - name: config-reloader
+      {{- if .Values.operator.prometheusConfigReloader.containerSecurityContext.enabled }}
+      securityContext: {{- omit .Values.operator.prometheusConfigReloader.containerSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.operator.prometheusConfigReloader.livenessProbe.enabled }}
+      livenessProbe:
+        tcpSocket:
+          port: reloader-web
+        initialDelaySeconds: {{ .Values.operator.prometheusConfigReloader.livenessProbe.initialDelaySeconds }}
+        periodSeconds: {{ .Values.operator.prometheusConfigReloader.livenessProbe.periodSeconds }}
+        timeoutSeconds: {{ .Values.operator.prometheusConfigReloader.livenessProbe.timeoutSeconds }}
+        failureThreshold: {{ .Values.operator.prometheusConfigReloader.livenessProbe.failureThreshold }}
+        successThreshold: {{ .Values.operator.prometheusConfigReloader.livenessProbe.successThreshold }}
+      {{- end }}
+      {{- if .Values.operator.prometheusConfigReloader.readinessProbe.enabled }}
+      readinessProbe:
+        tcpSocket:
+          port: reloader-web
+        initialDelaySeconds: {{ .Values.operator.prometheusConfigReloader.readinessProbe.initialDelaySeconds }}
+        periodSeconds: {{ .Values.operator.prometheusConfigReloader.readinessProbe.periodSeconds }}
+        timeoutSeconds: {{ .Values.operator.prometheusConfigReloader.readinessProbe.timeoutSeconds }}
+        failureThreshold: {{ .Values.operator.prometheusConfigReloader.readinessProbe.failureThreshold }}
+        successThreshold: {{ .Values.operator.prometheusConfigReloader.readinessProbe.successThreshold }}
+      {{- end }}
+    {{- end }}
+    {{- if .Values.alertmanager.containers }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.containers "context" $) | nindent 4 }}
+    {{- end }}
   {{- end }}
   {{- if .Values.alertmanager.priorityClassName }}
   priorityClassName: {{ .Values.alertmanager.priorityClassName }}
