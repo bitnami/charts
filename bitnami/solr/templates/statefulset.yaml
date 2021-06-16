@@ -131,7 +131,7 @@ spec:
                 name: {{ .Values.tls.passwordsSecretName | quote }}
                 key: tls-truststore-password
           {{- if .Values.resources }}
-          resources: {{- include "common.tplvalues.render" (dict "value" .Values.resources "context" $) | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.tls.resources "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
           - name: certs
