@@ -87,8 +87,8 @@ spec:
         {{- if .Values.tls.enabled}}
         {{- $fullname := include "solr.fullname" . }}
         - name: init-certs
-          image: {{ include "solr.tls.image" . }}
-          imagePullPolicy: {{ .Values.tls.image.pullPolicy | quote }}
+          image: {{ include "solr.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
@@ -130,8 +130,8 @@ spec:
               secretKeyRef:
                 name: {{ .Values.tls.passwordsSecretName | quote }}
                 key: tls-truststore-password
-          {{- if .Values.tls.resources }}
-          resources: {{- toYaml .Values.tls.resources | nindent 12 }}
+          {{- if .Values.resources }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.resources "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
           - name: certs
