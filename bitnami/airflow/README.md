@@ -109,7 +109,7 @@ The following tables lists the configurable parameters of the Airflow chart and 
 | `web.configMap`                          | Config map name for ~/airflow/webserver_config.py                                                    | `nil`                                                   |
 | `web.containerPort`                      | Container port to be used for exposing http server.                                                  | `8080`                                                  |
 | `web.customLivenessProbe`                | Custom liveness probe for the web component                                                          | `{}`                                                    |
-| `web.customReadinessProbe`               | Custom rediness probe for the web component                                                          | `{}`                                                    |
+| `web.customReadinessProbe`               | Custom readiness probe for the web component                                                          | `{}`                                                    |
 | `web.extraEnvVars`                       | Array containing extra env vars                                                                      | `nil`                                                   |
 | `web.extraEnvVarsCM`                     | ConfigMap containing extra env vars                                                                  | `nil`                                                   |
 | `web.extraEnvVarsSecret`                 | Secret containing extra env vars (in case of sensitive data)                                         | `nil`                                                   |
@@ -158,7 +158,7 @@ The following tables lists the configurable parameters of the Airflow chart and 
 | `scheduler.args`                             | Override default container args (useful when using custom images)                                    | `nil`                                                   |
 | `scheduler.command`                          | Override default container command (useful when using custom images)                                 | `nil`                                                   |
 | `scheduler.customLivenessProbe`              | Custom liveness probe for the Airflow scheduler component                                            | `{}`                                                    |
-| `scheduler.customReadinessProbe`             | Custom rediness probe for the Airflow scheduler component                                            | `{}`                                                    |
+| `scheduler.customReadinessProbe`             | Custom readiness probe for the Airflow scheduler component                                           | `{}`                                                    |
 | `scheduler.extraEnvVars`                     | Array containing extra env vars                                                                      | `nil`                                                   |
 | `scheduler.extraEnvVarsCM`                   | ConfigMap containing extra env vars                                                                  | `nil`                                                   |
 | `scheduler.extraEnvVarsSecret`               | Secret containing extra env vars (in case of sensitive data)                                         | `nil`                                                   |
@@ -187,8 +187,7 @@ The following tables lists the configurable parameters of the Airflow chart and 
 
 | Parameter                                   | Description                                                                                                                                                            | Default                                                 |
 | ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
-| `worker.affinity`                           | Affinity for worker pod assignment. Supersedes the common 
-affinity configuration                                                                                       | `nil`                                                   |
+| `worker.affinity`                           | Affinity for worker pod assignment. Supersedes the common affinity configuration                                                                                       | `nil`                                                   |
 | `worker.args`                               | Override default container args (useful when using custom images)                                                                                                      | `nil`                                                   |
 | `worker.autoscaling.enabled`                | Switch to enable Horizontal Pod Autoscaler for Airflow worker component (only when executor is `CeleryExecutor`). When enable you should also set `resources.requests` | `false`                                                 |
 | `worker.autoscaling.replicas.max`           | Maximum amount of replicas                                                                                                                                             | `3`                                                     |
@@ -198,7 +197,7 @@ affinity configuration                                                          
 | `worker.command`                            | Override default container command (useful when using custom images)                                                                                                   | `nil`                                                   |
 | `worker.hostAliases`                        | Add deployment host aliases                                                                                                                                            | `[]`                                                    |
 | `worker.customLivenessProbe`                | Custom liveness probe for the Airflow worker component                                                                                                                 | `{}`                                                    |
-| `worker.customReadinessProbe`               | Custom rediness probe for the Airflow worker component                                                                                                                 | `{}`                                                    |
+| `worker.customReadinessProbe`               | Custom readiness probe for the Airflow worker component                                                                                                                | `{}`                                                    |
 | `worker.extraEnvVars`                       | Array containing extra env vars                                                                                                                                        | `nil`                                                   |
 | `worker.extraEnvVarsCM`                     | ConfigMap containing extra env vars                                                                                                                                    | `nil`                                                   |
 | `worker.extraEnvVarsSecret`                 | Secret containing extra env vars (in case of sensitive data)                                                                                                           | `nil`                                                   |
@@ -236,9 +235,8 @@ affinity configuration                                                          
 | `worker.resources.requests`                 | The requested resources for the worker containers                                                                                                                      | `{}`                                                    |
 | `worker.rollingUpdatePartition`             | Partition update strategy                                                                                                                                              | `nil`                                                   |
 | `worker.sidecars`                           | List of sidecar containers to be added to the worker's pods                                                                                                            | `nil`                                                   |
-| `worker.tolerations`                        | Tolerations for worker pod assignment. Supersedes the common 
-tolerations configuration                                                                                       | `nil`                                                   |
-| `worker.updateStrategy`                     | Update strategy for the statefulset                                                                                                                                     | `"RollingUpdate"`                                       |
+| `worker.tolerations`                        | Tolerations for worker pod assignment. Supersedes the common tolerations configuration                                                                                 | `nil`                                                   |
+| `worker.updateStrategy`                     | Update strategy for the statefulset                                                                                                                                    | `"RollingUpdate"`                                       |
 
 ### Airflow database parameters
 
@@ -492,6 +490,10 @@ rbac.create=true
 serviceaccount.create=true
 ```
 
+### CeleryKubernetesExecutor
+
+The CeleryKubernetesExecutor is introduced in Airflow 2.0 and is a combination of both the Celery and the Kubernetes executors. Tasks will be executed using Celery by default, but those tasks that require it can be executed in a Kubernetes pod using the 'kubernetes' queue.
+
 #### LocalExecutor
 
 Local executor runs tasks by spawning processes in the Scheduler pods. To enable `LocalExecutor` set the following parameters.
@@ -555,7 +557,7 @@ This major updates the Redis<sup>TM</sup> subchart to it newest major, 14.0.0, w
     - They have been moved to `git.*` prefix.
     - `airflow.cloneDagsFromGit.*` no longer exists, instead you must use `git.dags.*` and `git.dags.repositories[*]` has been introduced that will add support for multiple repositories.
     - `airflow.clonePluginsFromGit.*` no longer exists, instead you must use `git.plugins.*`. `airflow.clonePluginsFromGit.repository`, `airflow.clonePluginsFromGit.branch` and `airflow.clonePluginsFromGit.path` have been removed in favour of `git.dags.repositories[*].*`.
-  - Liveness and rediness probe have been separated by components `airflow.livenessProbe.*` and `airflow.redinessProbe` have been removed in favour of `web.livenessProbe`, `worker.livenessProbe`, `web.redinessProbe` and `worker.redinessProbe`.
+  - Liveness and readiness probe have been separated by components `airflow.livenessProbe.*` and `airflow.readinessProbe` have been removed in favour of `web.livenessProbe`, `worker.livenessProbe`, `web.readinessProbe` and `worker.readinessProbe`.
   - `airflow.baseUrl` has been moved to `web.baseUrl`.
   - Security context has been migrated to the bitnami standard way so that `securityContext.*` has been divided into `podSecurityContext.*` that will define the `fsGroup` for all the containers in the pod and `containerSecurityContext.*` that will define the user id that will run the main containers.
   - Both `bitnami/postgresql` and `bitnami/redis` have been upgraded to their latest major versions, `10.x.x` and `11.x.x` respectively, find more info in their READMEs [`bitnami/postgresql`](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#to-1000) and [`bitnami/redis`](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1100)

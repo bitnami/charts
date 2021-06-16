@@ -580,6 +580,33 @@ Find more information about how to deal with common errors related to Bitnami’
 ```bash
 $ helm upgrade my-release bitnami/kube-prometheus
 ```
+### To 6.0.0
+
+This major update changes the `securityContext` interface in the `values.yaml` file.
+
+Please note if you have changes in the `securityContext` fields those need to be migrated to `podSecurityContext`.
+
+```diff
+# ...
+- securityContext:
++ podSecurityContext:
+# ... 
+```
+
+Other than that a new `securityContext` interface for containers got introduced `containerSecurityContext`. It's default is enabled so if you do not need it you need to opt out of it.
+
+If you use [Strategic Merge Patch](https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/user-guides/strategic-merge-patch.md) for any of the
+`Alertmanager` or `Prometheus` kinds you need to actively disable all of those things below. For the resource you want to use Strategic Merge Patch for.
+
+```yaml
+<resource>:
+  containerSecurityContext:
+    enabled: false
+  livenessProbe:
+    enabled: false
+  readinessProbe:
+    enabled: false
+```
 
 ### To 5.0.0
 

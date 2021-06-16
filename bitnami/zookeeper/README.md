@@ -142,24 +142,14 @@ The following tables lists the configurable parameters of the ZooKeeper chart an
 | `service.port`                           | ZooKeeper port                                                                                     | `2181`                                               |
 | `service.followerPort`                   | ZooKeeper follower port                                                                            | `2888`                                               |
 | `service.electionPort`                   | ZooKeeper election port                                                                            | `3888`                                               |
+| `service.nodePorts.client`               | Nodeport for client connections                                                                    | `""`                                                 |
+| `service.nodePorts.clientTls`            | Nodeport for tls client connections                                                                | `""`                                                 | 
 | `service.publishNotReadyAddresses`       | If the ZooKeeper headless service should publish DNS records for not ready pods                    | `true`                                               |
 | `serviceAccount.create`                  | Enable creation of ServiceAccount for zookeeper pod                                                | `false`                                              |
 | `serviceAccount.name`                    | The name of the service account to use. If not set and `create` is `true`, a name is generated     | Generated using the `common.names.fullname` template |
-`serviceAccount.automountServiceAccountToken` | Enable/Disable automountServiceAccountToken  for Service Account                                             | `true`                                                  |
-| `service.tls.client_enable`              | Enable tls for client connections                                                                  | `false`                                              |
-| `service.tls.quorum_enable`              | Enable tls for quorum protocol                                                                     | `false`                                              |
-| `service.tls.disable_base_client_port`   | Remove client port from service definitions.                                                       | `false`                                              |
-| `service.tls.client_port`                | Service port for tls client connections                                                            | `3181`                                               |
-| `service.tls.client_key_pem_path`        | Key pem file path. Refer to extraVolumes amd extraVolumeMounts for mounting files into the pods    | `/tls_key_store/key_store_file`                      |
-| `service.tls.client_cert_pem_path`       | Cert pem file path. Refer to extraVolumes amd extraVolumeMounts for mounting files into the pods   | `/tls_key_store/key_store_file`                      |
-| `service.tls.client_keystore_path`       | KeyStore file path. Refer to extraVolumes amd extraVolumeMounts for mounting files into the pods   | `/tls_key_store/key_store_file`                      |
-| `service.tls.client_keystore_password`   | KeyStore password. You can use environment variables.                                              | `nil`                                                |
-| `service.tls.client_truststore_path`     | TrustStore file path. Refer to extraVolumes amd extraVolumeMounts for mounting files into the pods | `/tls_trust_store/trust_store_file`                  |
-| `service.tls.client_truststore_password` | TrustStore password. You can use environment variables.                                            | `nil`                                                |
-| `service.tls.quorum_keystore_path`       | KeyStore file path. Refer to extraVolumes amd extraVolumeMounts for mounting files into the pods   | `/tls_key_store/key_store_file`                      |
-| `service.tls.quorum_keystore_password`   | KeyStore password. You can use environment variables.                                              | `nil`                                                |
-| `service.tls.quorum_truststore_path`     | TrustStore file path. Refer to extraVolumes amd extraVolumeMounts for mounting files into the pods | `/tls_trust_store/trust_store_file`                  |
-| `service.tls.quorum_truststore_password` | TrustStore password. You can use environment variables.                                            | `nil`                                                |
+| `serviceAccount.automountServiceAccountToken` | Enable/Disable automountServiceAccountToken  for Service Account                                   | `true`                                               |
+| `service.disableBaseClientPort`               | Remove client port from service definitions.                                                       | `false`                                              |
+| `service.tlsClientPort`                       | Service port for tls client connections                                                            | `3181`                                               |
 | `service.annotations`                    | Annotations for the Service                                                                        | `{}`                                                 |
 | `service.headless.annotations`           | Annotations for the Headless Service                                                               | `{}`                                                 |
 | `networkPolicy.enabled`                  | Enable NetworkPolicy                                                                               | `false`                                              |
@@ -209,6 +199,27 @@ The following tables lists the configurable parameters of the ZooKeeper chart an
 | `metrics.prometheusRule.namespace`     | Namespace for the PrometheusRule Resource                                                                                                 | The Release Namespace                                        |
 | `metrics.prometheusRule.selector`      | Prometheus instance selector labels                                                                                                       | `nil`                                                        |
 | `metrics.prometheusRule.rules`         | Prometheus Rule definitions (see values.yaml for examples)                                                                                | `[]`                                                         |
+
+### TLS/SSL parameters
+
+| Parameter                        | Description                                                                                                                        | Default                                                               |
+|----------------------------------|------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------|
+| `tls.client.enabled`             | Enable TLS for client connections                                                                                                  | `false`                                                               |
+| `tls.client.autoGenerated`       | Generate automatically self-signed TLS certificates for Zookeeper client communications. Currently only supports PEM certificates. | `false`                                                               |
+| `tls.client.existingSecret`      | Name of the existing secret containing the TLS certificates for Zookeper client communications                                     | `nil`                                                                 |
+| `tls.client.keystorePath`        | Location of the KeyStore file used for Client connections                                                                          | `/opt/bitnami/zookeeper/config/certs/client/zookeeper.keystore.jks`   |
+| `tls.client.truststorePath`      | Location of the TrustStore file used for Client connections                                                                        | `/opt/bitnami/zookeeper/config/certs/client/zookeeper.truststore.jks` |
+| `tls.client.keystorePassword`    | Password to access KeyStore if needed                                                                                              | `nil`                                                                 |
+| `tls.client.truststorePassword`  | Password to access TrustStore if needed                                                                                            | `nil`                                                                 |
+| `tls.quorum.enabled`             | Enable TLS for quorum protocol                                                                                                     | `false`                                                               |
+| `tls.quorum.autoGenerated`       | Generate automatically self-signed TLS certificates for Zookeeper quorum protocol. Currently only supports PEM certificates.       | `false`                                                               |
+| `tls.quorum.existingSecret`      | Name of the existing secret containing the TLS certificates for Zookeper quorum protocol                                           | `nil`                                                                 |
+| `tls.quorum.keystorePath`        | Location of the KeyStore file used for Quorum protocol                                                                             | `/opt/bitnami/zookeeper/config/certs/quorum/zookeeper.keystore.jks`   |
+| `tls.quorum.truststorePath`      | Location of the TrustStore file used for Quorum protocol                                                                           | `/opt/bitnami/zookeeper/config/certs/quorum/zookeeper.truststore.jks` |
+| `tls.quorum.keystorePassword`    | Password to access KeyStore if needed                                                                                              | `nil`                                                                 |
+| `tls.quorum.truststorePassword`  | Password to access TrustStore if needed                                                                                            | `nil`                                                                 |
+| `tls.resources.limits`           | The resources limits for the TLS init container                                                                                    | `{}`                                                                  |
+| `tls.resources.requests`         | The requested resources for the TLS init container                                                                                 | `{}`                                                                  |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -276,6 +287,23 @@ As an alternative, you can use any of the preset configurations for pod affinity
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 7.0.0
+
+This new version renames the parameters used to configure TLS for both client and quorum.
+
+- `service.tls.disable_base_client_port` is renamed to `service.disableBaseClientPort`
+- `service.tls.client_port` is renamed to `service.tlsClientPort`
+- `service.tls.client_enable` is renamed to `tls.client.enabled`
+- `service.tls.client_keystore_path` is renamed to `tls.client.keystorePath`
+- `service.tls.client_truststore_path` is renamed to `tls.client.truststorePath`
+- `service.tls.client_keystore_password` is renamed to `tls.client.keystorePassword`
+- `service.tls.client_truststore_password` is renamed to `tls.client.truststorePassword`
+- `service.tls.quorum_enable` is renamed to `tls.quorum.enabled`
+- `service.tls.quorum_keystore_path` is renamed to `tls.quorum.keystorePath`
+- `service.tls.quorum_truststore_path` is renamed to `tls.quorum.truststorePath`
+- `service.tls.quorum_keystore_password` is renamed to `tls.quorum.keystorePassword`
+- `service.tls.quorum_truststore_password` is renamed to `tls.quorum.truststorePassword`
 
 ### 6.1.0
 
