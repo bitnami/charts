@@ -52,13 +52,6 @@ Return the proper image name (for the init container volume-permissions image)
 {{- end -}}
 
 {{/*
-Return the proper Apache Solr TLS image name
-*/}}
-{{- define "solr.tls.image" -}}
-{{- include "common.images.image" (dict "imageRoot" .Values.tls.image "global" .Values.global) -}}
-{{- end -}}
-
-{{/*
  Create the name of the service account to use
  */}}
 {{- define "solr.serviceAccountName" -}}
