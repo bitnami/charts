@@ -51,10 +51,10 @@ spec:
       hostAliases: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.dataNode.hostAliases "context" $) | nindent 8 }}
       {{- end }}
       {{- if $.Values.shardsvr.dataNode.nodeSelector }}
-      nodeSelector: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.dataNode.nodeSelector "context" $) | nindent 8 }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.dataNode.nodeSelector "context" (set $ "dataNodeLoopId" $i)) | nindent 8 }}
       {{- end }}
       {{- if $.Values.shardsvr.dataNode.tolerations }}
-      tolerations: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.dataNode.tolerations "context" $) | nindent 8 }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.dataNode.tolerations "context" (set $ "dataNodeLoopId" $i)) | nindent 8 }}      
       {{- end }}
       serviceAccountName: {{ include "mongodb-sharded.serviceAccountName" (dict "value" $.Values.shardsvr.dataNode.serviceAccount "context" $) }}
       {{- if $.Values.securityContext.enabled }}

@@ -54,15 +54,18 @@ To connect to your database from outside the cluster execute the following comma
 
 {{- $passwordValidationErrors := list -}}
 {{- $requiredPasswords := list -}}
+{{- if not (include "postgresql-ha.postgresql.existingSecretProvided" . ) }}
 {{- $secretName := include "postgresql-ha.postgresqlSecretName" . -}}
 {{- $requiredPostgresqlPassword := dict "valueKey" "postgresql.password" "secret" $secretName "field" "postgresql-password" "context" $ -}}
 {{- $requiredPasswords = append $requiredPasswords $requiredPostgresqlPassword -}}
 {{- $requiredRepmgrPassword := dict "valueKey" "postgresql.repmgrPassword" "secret" $secretName "field" "repmgr-password" "context" $ -}}
 {{- $requiredPasswords = append $requiredPasswords $requiredRepmgrPassword -}}
+{{- end }}
+{{- if not (include "postgresql-ha.pgpool.existingSecretProvided" . ) }}
 {{- $secretName := include "postgresql-ha.pgpoolSecretName" . -}}
 {{- $requiredPgpoolPassword := dict "valueKey" "pgpool.adminPassword" "secret" $secretName "field" "admin-password" "context" $ -}}
 {{- $requiredPasswords = append $requiredPasswords $requiredPgpoolPassword -}}
-
+{{- end }}
 {{- $passwordValidationErrors = include "common.validations.values.multiple.empty" (dict "required" $requiredPasswords "context" .) -}}
 
 {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}
