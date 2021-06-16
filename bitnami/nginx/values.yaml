@@ -737,6 +737,13 @@ metrics:
   ##
   podAnnotations: {}
 
+  ## Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ##
+  securityContext:
+    enabled: false
+    runAsUser: 1001
+
   ## Prometheus exporter service parameters
   ##
   service:
