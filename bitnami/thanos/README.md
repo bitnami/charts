@@ -476,7 +476,8 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `ruler.logFormat`                             | Thanos Ruler log format                                                                                      | `logfmt`                       |
 | `ruler.replicaLabel`                          | Label to treat as a replica indicator along which data is deduplicated                                       | `replica`                      |
 | `ruler.dnsDiscovery.enabled`                  | Enable Query APIs discovery via DNS                                                                          | `true`                         |
-| `ruler.alertmanagers`                         | Alermanager URLs array                                                                                       | `[]`                           |
+| `ruler.alertmanagers`                         | Alertmanager URLs array                                                                                      | `[]`                           |
+| `ruler.alertmanagersConfig`                   | Alertmanager Configuration passed directly to the ruler                                                      | `nil`                          |
 | `ruler.hostAliases`                           | Add deployment host aliases                                                                                  | `[]`                           |
 | `ruler.evalInterval`                          | The default evaluation interval to use                                                                       | `1m`                           |
 | `ruler.clusterName`                           | Used to set the 'ruler_cluster' label                                                                        | `nil`                          |

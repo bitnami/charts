@@ -1790,6 +1790,22 @@ ruler:
   ##
   alertmanagers: []
 
+  ## Alertmanagers Configuration
+  ##
+  ## Creates a secret from the config which is then mounted to the pod
+  ## for more complicated alertmanager setups.
+  alertmanagersConfig:
+  #  alertmanagers:
+  #  - http_config:
+  #      basic_auth:
+  #        username: some_user
+  #        password: some_pass
+  #    static_configs:
+  #    - alertmanager.thanos.io
+  #    scheme: http
+  #    timeout: 10s
+  #    api_version: v2
+
   ## The default evaluation interval to use
   ##
   evalInterval: 1m
