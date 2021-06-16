@@ -73,8 +73,8 @@ spec:
         {{- if .Values.auth.tls.enabled }}
         {{- $fullname := include "keycloak.fullname" . }}
         - name: init-certs
-          image: {{ include "keycloak.auth.tls.image" . }}
-          imagePullPolicy: {{ .Values.auth.tls.image.pullPolicy | quote }}
+          image: {{ include "keycloak.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
