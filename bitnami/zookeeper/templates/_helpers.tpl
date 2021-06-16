@@ -15,13 +15,6 @@ Return the proper image name (for the init container volume-permissions image)
 {{- end -}}
 
 {{/*
-Return the proper image name (for the init container init-certs image)
-*/}}
-{{- define "zookeeper.tls.image" -}}
-{{- include "common.images.image" (dict "imageRoot" .Values.tls.image "global" .Values.global) -}}
-{{- end -}}
-
-{{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "zookeeper.imagePullSecrets" -}}

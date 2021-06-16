@@ -214,6 +214,8 @@ The following tables lists the configurable parameters of the ZooKeeper chart an
 | `tls.quorum.truststorePath`      | Location of the TrustStore file used for Quorum protocol                                                                           | `/opt/bitnami/zookeeper/config/certs/quorum/zookeeper.truststore.jks` |
 | `tls.quorum.keystorePassword`    | Password to access KeyStore if needed                                                                                              | `nil`                                                                 |
 | `tls.quorum.truststorePassword`  | Password to access TrustStore if needed                                                                                            | `nil`                                                                 |
+| `tls.resources.limits`           | The resources limits for the TLS init container                                                                                    | `{}`                                                                  |
+| `tls.resources.requests`         | The requested resources for the TLS init container                                                                                 | `{}`                                                                  |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

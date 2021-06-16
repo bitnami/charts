@@ -110,8 +110,8 @@ spec:
         {{- end }}
         {{- if or .Values.tls.client.enabled .Values.tls.quorum.enabled }}
         - name: init-certs
-          image: {{ include "zookeeper.tls.image" . }}
-          imagePullPolicy: {{ .Values.tls.image.pullPolicy | quote }}
+          image: {{ include "zookeeper.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.securityContext.enabled }}
           securityContext:
             runAsUser: {{ .Values.securityContext.runAsUser }}
