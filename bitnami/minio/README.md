@@ -106,43 +106,44 @@ The following table lists the configurable parameters of the MinIO&reg; chart an
 
 ### MinIO&reg; deployment/statefulset parameters
 
-| Parameter                         | Description                                                                               | Default                        |
-|-----------------------------------|-------------------------------------------------------------------------------------------|--------------------------------|
-| `schedulerName`                   | Specifies the schedulerName, if it's nil uses kube-scheduler                              | `nil`                          |
-| `statefulset.replicaCount`        | Number of pods per zone (only for MinIO&reg; distributed mode). Should be even and `>= 4` | `4`                            |
-| `statefulset.zones`               | Number of zones (only for MinIO&reg; distributed mode)                                    | `1`                            |
-| `statefulset.drivesPerNode`       | Number of drives per node (only for MinIO&reg; distributed mode)                          | `1`                            |
-| `statefulset.updateStrategy`      | Statefulset update strategy policy                                                        | `RollingUpdate`                |
-| `statefulset.podManagementPolicy` | Statefulset pods management policy                                                        | `Parallel`                     |
-| `deployment.updateStrategy`       | Deployment update strategy policy                                                         | `Recreate`                     |
-| `securityContext.enabled`         | Enable security context                                                                   | `true`                         |
-| `securityContext.fsGroup`         | Group ID for the container                                                                | `1001`                         |
-| `securityContext.runAsUser`       | User ID for the container                                                                 | `1001`                         |
-| `securityContext.runAsNonRoot`    | Avoid running as root User                                                                | `true`                         |
-| `containerPort`                   | MinIO(R) container port to open                                                           | `9000`                         |
-| `resources.limits`                | The resources limits for the MinIO&reg; container                                         | `{}`                           |
-| `resources.requests`              | The requested resources for the MinIO&reg; container                                      | `{}`                           |
-| `livenessProbe`                   | Liveness probe configuration for MinIO&reg;                                               | Check `values.yaml` file       |
-| `readinessProbe`                  | Readiness probe configuration for MinIO&reg;                                              | Check `values.yaml` file       |
-| `startupProbe`                    | Startup probe configuration for MinIO&reg;                                                | Check `values.yaml` file       |
-| `customLivenessProbe`             | Override default liveness probe                                                           | `nil`                          |
-| `customReadinessProbe`            | Override default readiness probe                                                          | `nil`                          |
-| `customStartupProbe`              | Override default startup probe                                                            | `nil`                          |
-| `hostAliases`                     | MinIO&reg; pod host aliases                                                               | `[]`                           |
-| `podLabels`                       | Extra labels for MinIO&reg; pods                                                          | `{}`                           |
-| `podAnnotations`                  | Annotations for MinIO&reg; pods                                                           | `{}`                           |
-| `podAffinityPreset`               | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                           |
-| `podAntiAffinityPreset`           | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                         |
-| `nodeAffinityPreset.type`         | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                           |
-| `nodeAffinityPreset.key`          | Node label key to match. Ignored if `affinity` is set.                                    | `""`                           |
-| `nodeAffinityPreset.values`       | Node label values to match. Ignored if `affinity` is set.                                 | `[]`                           |
-| `affinity`                        | Affinity for pod assignment                                                               | `{}` (evaluated as a template) |
-| `nodeSelector`                    | Node labels for pod assignment                                                            | `{}` (evaluated as a template) |
-| `tolerations`                     | Tolerations for pod assignment                                                            | `[]` (evaluated as a template) |
-| `extraVolumeMounts`               | Optionally specify extra list of additional volumeMounts for MinIO&reg; container(s)      | `[]`                           |
-| `extraVolumes`                    | Optionally specify extra list of additional volumes for MinIO&reg; pods                   | `[]`                           |
-| `initContainers`                  | Add additional init containers to the MinIO&reg; pods                                     | `{}` (evaluated as a template) |
-| `sidecars`                        | Add additional sidecar containers to the MinIO&reg; pods                                  | `{}` (evaluated as a template) |
+| Parameter                               | Description                                                                               | Default                        |
+|-----------------------------------------|-------------------------------------------------------------------------------------------|--------------------------------|
+| `schedulerName`                         | Specifies the schedulerName, if it's nil uses kube-scheduler                              | `nil`                          |
+| `statefulset.replicaCount`              | Number of pods per zone (only for MinIO&reg; distributed mode). Should be even and `>= 4` | `4`                            |
+| `statefulset.zones`                     | Number of zones (only for MinIO&reg; distributed mode)                                    | `1`                            |
+| `statefulset.drivesPerNode`             | Number of drives per node (only for MinIO&reg; distributed mode)                          | `1`                            |
+| `statefulset.updateStrategy`            | Statefulset update strategy policy                                                        | `RollingUpdate`                |
+| `statefulset.podManagementPolicy`       | Statefulset pods management policy                                                        | `Parallel`                     |
+| `deployment.updateStrategy`             | Deployment update strategy policy                                                         | `Recreate`                     |
+| `podSecurityContext.enabled`            | Enable pod Security Context                                                               | `true`                         |
+| `podSecurityContext.fsGroup`            | Group ID for the container                                                                | `1001`                         |
+| `containerSecurityContext.enabled`      | Enable container Security Context                                                         | `true`                         |
+| `containerSecurityContext.runAsUser`    | User ID for the container                                                                 | `1001`                         |
+| `containerSecurityContext.runAsNonRoot` | Avoid running as root User                                                                | `true`                         |
+| `containerPort`                         | MinIO(R) container port to open                                                           | `9000`                         |
+| `resources.limits`                      | The resources limits for the MinIO&reg; container                                         | `{}`                           |
+| `resources.requests`                    | The requested resources for the MinIO&reg; container                                      | `{}`                           |
+| `livenessProbe`                         | Liveness probe configuration for MinIO&reg;                                               | Check `values.yaml` file       |
+| `readinessProbe`                        | Readiness probe configuration for MinIO&reg;                                              | Check `values.yaml` file       |
+| `startupProbe`                          | Startup probe configuration for MinIO&reg;                                                | Check `values.yaml` file       |
+| `customLivenessProbe`                   | Override default liveness probe                                                           | `nil`                          |
+| `customReadinessProbe`                  | Override default readiness probe                                                          | `nil`                          |
+| `customStartupProbe`                    | Override default startup probe                                                            | `nil`                          |
+| `hostAliases`                           | MinIO&reg; pod host aliases                                                               | `[]`                           |
+| `podLabels`                             | Extra labels for MinIO&reg; pods                                                          | `{}`                           |
+| `podAnnotations`                        | Annotations for MinIO&reg; pods                                                           | `{}`                           |
+| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                           |
+| `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                         |
+| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                           |
+| `nodeAffinityPreset.key`                | Node label key to match. Ignored if `affinity` is set.                                    | `""`                           |
+| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                                 | `[]`                           |
+| `affinity`                              | Affinity for pod assignment                                                               | `{}` (evaluated as a template) |
+| `nodeSelector`                          | Node labels for pod assignment                                                            | `{}` (evaluated as a template) |
+| `tolerations`                           | Tolerations for pod assignment                                                            | `[]` (evaluated as a template) |
+| `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for MinIO&reg; container(s)      | `[]`                           |
+| `extraVolumes`                          | Optionally specify extra list of additional volumes for MinIO&reg; pods                   | `[]`                           |
+| `initContainers`                        | Add additional init containers to the MinIO&reg; pods                                     | `{}` (evaluated as a template) |
+| `sidecars`                              | Add additional sidecar containers to the MinIO&reg; pods                                  | `{}` (evaluated as a template) |
 
 ### Exposure parameters
 
@@ -190,16 +191,17 @@ The following table lists the configurable parameters of the MinIO&reg; chart an
 
 ### Volume Permissions parameters
 
-| Parameter                              | Description                                                                                                          | Default                                                 |
-|----------------------------------------|----------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                                                 |
-| `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                     | `docker.io`                                             |
-| `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                         | `bitnami/bitnami-shell`                                 |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                          | `"10"`                                                  |
-| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                  | `Always`                                                |
-| `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                     | `[]` (does not add image pull secrets to deployed pods) |
-| `volumePermissions.resources.limits`   | Init container volume-permissions resource  limits                                                                   | `{}`                                                    |
-| `volumePermissions.resources.requests` | Init container volume-permissions resource  requests                                                                 | `{}`                                                    |
+| Parameter                                              | Description                                                                                                          | Default                                                 |
+|--------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                                                 |
+| `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                                                     | `docker.io`                                             |
+| `volumePermissions.image.repository`                   | Init container volume-permissions image name                                                                         | `bitnami/bitnami-shell`                                 |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag                                                                          | `"10"`                                                  |
+| `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                                                                  | `Always`                                                |
+| `volumePermissions.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                     | `[]` (does not add image pull secrets to deployed pods) |
+| `volumePermissions.resources.limits`                   | Init container volume-permissions resource  limits                                                                   | `{}`                                                    |
+| `volumePermissions.resources.requests`                 | Init container volume-permissions resource  requests                                                                 | `{}`                                                    |
+| `volumePermissions.containerSecurityContext.runAsUser` | User ID for the init container                                                                                       | `0`                                                     |
 
 ### RBAC parameters
 
@@ -441,6 +443,10 @@ There are cases where you may want to deploy extra objects, such a ConfigMap con
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 7.0.0
+
+This version introduces pod and container securityContext support. The previous configuration of `securityContext` has moved to `podSecurityContext` and `containerSecurityContext`. Apart from this case, no issues are expected to appear when upgrading.
 
 ### To 5.0.0
 

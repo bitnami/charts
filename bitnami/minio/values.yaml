@@ -217,12 +217,18 @@ hostAliases: []
 ##
 containerPort: 9000
 
-## Security Context
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+## MinIO(R) pod Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ##
-securityContext:
+podSecurityContext:
   enabled: true
   fsGroup: 1001
+
+## MinIO(R) container Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+##
+containerSecurityContext:
+  enabled: true
   runAsUser: 1001
   runAsNonRoot: true
 
@@ -572,6 +578,12 @@ volumePermissions:
     ##
     limits: {}
     requests: {}
+  ## Init container' Security Context
+  ## Note: the chown of the data folder is done to containerSecurityContext.runAsUser
+  ## and not the below volumePermissions.containerSecurityContext.runAsUser
+  ##
+  containerSecurityContext:
+    runAsUser: 0
 
 ## Specifies whether a ServiceAccount should be created
 ##
