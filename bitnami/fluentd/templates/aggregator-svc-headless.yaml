@@ -2,8 +2,8 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "fluentd.fullname" . }}-headless
-  labels: {{- include "fluentd.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}-headless
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: aggregator
     app: aggregator
 spec:
@@ -14,6 +14,6 @@ spec:
     - name: {{ $key }}
       {{ omit $value "nodePort" | toYaml | nindent 6 }}
   {{- end }}
-  selector: {{- include "fluentd.matchLabels" . | nindent 4 }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: aggregator
 {{- end -}}

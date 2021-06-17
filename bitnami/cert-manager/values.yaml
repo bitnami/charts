@@ -75,7 +75,7 @@ controller:
     repository: bitnami/cert-manager
     ## @param controller.image.tag Controller image tag (immutabe tags are recommended)
     ##
-    tag: 1.3.1-debian-10-r35
+    tag: 1.4.0-debian-10-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -107,7 +107,7 @@ controller:
       repository: bitnami/acmesolver
       ## @param controller.acmesolver.image.tag Controller image tag (immutabe tags are recommended)
       ##
-      tag: 1.3.1-debian-10-r35
+      tag: 1.3.1-debian-10-r52
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -328,7 +328,7 @@ webhook:
     repository: bitnami/cert-manager-webhook
     ## @param webhook.image.tag Webhook image tag (immutabe tags are recommended)
     ##
-    tag: 1.3.1-debian-10-r29
+    tag: 1.4.0-debian-10-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -601,7 +601,7 @@ cainjector:
     repository: bitnami/cainjector
     ## @param cainjector.image.tag CAInjector image tag (immutabe tags are recommended)
     ##
-    tag: 1.3.1-debian-10-r29
+    tag: 1.4.0-debian-10-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
