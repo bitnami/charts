@@ -476,7 +476,8 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `ruler.logFormat`                             | Thanos Ruler log format                                                                                      | `logfmt`                       |
 | `ruler.replicaLabel`                          | Label to treat as a replica indicator along which data is deduplicated                                       | `replica`                      |
 | `ruler.dnsDiscovery.enabled`                  | Enable Query APIs discovery via DNS                                                                          | `true`                         |
-| `ruler.alertmanagers`                         | Alermanager URLs array                                                                                       | `[]`                           |
+| `ruler.alertmanagers`                         | Alertmanager URLs array                                                                                      | `[]`                           |
+| `ruler.alertmanagersConfig`                   | Alertmanager Configuration passed directly to the ruler                                                      | `nil`                          |
 | `ruler.hostAliases`                           | Add deployment host aliases                                                                                  | `[]`                           |
 | `ruler.evalInterval`                          | The default evaluation interval to use                                                                       | `1m`                           |
 | `ruler.clusterName`                           | Used to set the 'ruler_cluster' label                                                                        | `nil`                          |
@@ -553,7 +554,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `receive.enabled`                               | Enable/disable Thanos Receive component                                                                        | `false`                                 |
 | `receive.logLevel`                              | Thanos Receive log level                                                                                       | `info`                                  |
 | `receive.logFormat`                             | Thanos Receive log format                                                                                      | `logfmt`                                |
-| `receive.logFormat`                             | Thanos Receive TSDB retention period                                                                           | `tsdbRetention`                         |
+| `receive.tsdbRetention`                         | Thanos Receive TSDB retention period                                                                           | `15d`                         |
 | `receive.replicationFactor`                     | Thanos Receive replication-factor                                                                              | `1`                                     |
 | `receive.replicaLabel`                          | Label to treat as a replica indicator along which data is deduplicated                                         | `replica`                               |
 | `receive.alertmanagers`                         | Alermanager URLs array                                                                                         | `[]`                                    |
