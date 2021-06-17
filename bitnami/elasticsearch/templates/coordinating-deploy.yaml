@@ -128,6 +128,8 @@ spec:
             httpGet:
               path: /_cluster/health?local=true
               port: 9200
+          {{- else if .Values.coordinating.customStartupProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.coordinating.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.coordinating.livenessProbe.enabled }}
           livenessProbe:
@@ -139,6 +141,8 @@ spec:
             httpGet:
               path: /_cluster/health?local=true
               port: http
+          {{- else if .Values.coordinating.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.coordinating.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.coordinating.readinessProbe.enabled}}
           readinessProbe:
@@ -150,6 +154,8 @@ spec:
             httpGet:
               path: /_cluster/health?local=true
               port: http
+          {{- else if .Values.coordinating.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.coordinating.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.coordinating.resources }}
           resources: {{- toYaml .Values.coordinating.resources | nindent 12 }}
