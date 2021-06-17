@@ -1,0 +1,5 @@
+To verify that oauth2-proxy has started, run:
+
+  kubectl --namespace={{ .Release.Namespace }} get pods
+
+{{- include "common.warnings.rollingTag" .Values.image }}
