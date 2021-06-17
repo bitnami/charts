@@ -49,4 +49,5 @@ To connect to your ZooKeeper server from outside the cluster execute the followi
 
 {{- end }}
 
+{{- include "zookeeper.validateValues" . }}
 {{- include "zookeeper.checkRollingTags" . }}
