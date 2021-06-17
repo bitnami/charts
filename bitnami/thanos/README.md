@@ -554,7 +554,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `receive.enabled`                               | Enable/disable Thanos Receive component                                                                        | `false`                                 |
 | `receive.logLevel`                              | Thanos Receive log level                                                                                       | `info`                                  |
 | `receive.logFormat`                             | Thanos Receive log format                                                                                      | `logfmt`                                |
-| `receive.logFormat`                             | Thanos Receive TSDB retention period                                                                           | `tsdbRetention`                         |
+| `receive.tsdbRetention`                         | Thanos Receive TSDB retention period                                                                           | `15d`                         |
 | `receive.replicationFactor`                     | Thanos Receive replication-factor                                                                              | `1`                                     |
 | `receive.replicaLabel`                          | Label to treat as a replica indicator along which data is deduplicated                                         | `replica`                               |
 | `receive.alertmanagers`                         | Alermanager URLs array                                                                                         | `[]`                                    |
