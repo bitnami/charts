@@ -286,6 +286,18 @@ primary:
   ##
   customReadinessProbe: {}
 
+  ## MariaDB startup wait options
+  ## `bitnami/mariadb` Docker image has built-in startup check mechanism,
+  ## which periodically checks if MariaDB service has started up and stops it
+  ## if all checks have failed after X tries. Use these to control these checks.
+  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/pull/240
+  ## Example (with default options):
+  ## startupWaitOptions:
+  ##   retries: 300
+  ##   waitTime: 2
+  ##
+  startupWaitOptions: {}
+
   ## MariaDB primary additional command line flags
   ## Can be used to specify command line flags, for example:
   ## E.g.
@@ -585,6 +597,18 @@ secondary:
   ## MariaDB secondary custom rediness probe
   ##
   customReadinessProbe: {}
+
+  ## MariaDB startup wait options
+  ## `bitnami/mariadb` Docker image has built-in startup check mechanism,
+  ## which periodically checks if MariaDB service has started up and stops it
+  ## if all checks have failed after X tries. Use these to control these checks.
+  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/pull/240
+  ## Example (with default options):
+  ## startupWaitOptions:
+  ##   retries: 300
+  ##   waitTime: 2
+  ##
+  startupWaitOptions: {}
 
   ## MariaDB secondary additional command line flags
   ## Can be used to specify command line flags, for example:
