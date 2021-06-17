@@ -261,9 +261,9 @@ spec:
         {{- if .Values.tls.enabled }}
         - name: minio-certs
           secret:
-            secretName: {{ .Values.tls.secretName }}
+            secretName: {{ include "minio.tlsSecretName" . }}
             items:
-            - key: tls.crt 
+            - key: tls.crt
               path: public.crt
             - key: tls.key
               path: private.key

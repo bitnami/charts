@@ -80,7 +80,7 @@ spec:
             {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
             {{- else }}
             - --certs-dir
-            - /opt/bitnami/minio/certs
+            - {{ default "/opt/bitnami/minio/certs" .Values.tls.mountPath }}
             - gateway
             - {{ .Values.gateway.type }}
             {{- if eq .Values.gateway.type "gcs" }}
@@ -139,6 +139,10 @@ spec:
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
+            {{- if .Values.tls.enabled }}
+            - name: minio-certs
+              mountPath: {{ default "/opt/bitnami/minio/certs" .Values.tls.mountPath }}
+            {{- end }}
             {{- if and (eq .Values.gateway.type "gcs") .Values.gateway.auth.gcs.keyJSON }}
             - name: minio-credentials
               mountPath: /opt/bitnami/minio/secrets/
@@ -168,6 +172,18 @@ spec:
           {{- else }}
           emptyDir: {}
           {{- end }}
+        {{- end }}
+        {{- if .Values.tls.enabled }}
+        - name: minio-certs
+          secret:
+            secretName: {{ include "minio.tlsSecretName" . }}
+            items:
+            - key: tls.crt
+              path: public.crt
+            - key: tls.key
+              path: private.key
+            - key: ca.crt
+              path: CAs/public.crt
         {{- end }}
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}

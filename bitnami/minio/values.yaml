@@ -26,7 +26,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/minio
-  tag: 2021.6.14-debian-10-r0
+  tag: 2021.6.17-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -50,7 +50,7 @@ image:
 clientImage:
   registry: docker.io
   repository: bitnami/minio-client
-  tag: 2021.6.13-debian-10-r0
+  tag: 2021.6.13-debian-10-r3
 
 ## String to partially override common.names.fullname template (will maintain the release name)
 ##
@@ -133,6 +133,10 @@ tls:
   ## If true, mount an existing secret to the container
   ##
   enabled: false
+  ## Name of an existing secret holding the certificate information
+  ##
+  existingSecret:
+  ## DEPRECATED. Use `tls.existingSecret` instead.
   ## Name of an existing secret holding the certificate information
   ##
   secretName: ""
@@ -553,7 +557,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r106
+    tag: 10-debian-10-r109
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
