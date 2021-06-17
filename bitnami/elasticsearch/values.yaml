@@ -293,25 +293,34 @@ master:
   ##
   startupProbe:
     enabled: false
-  #  initialDelaySeconds: 90
-  #  periodSeconds: 10
-  #  timeoutSeconds: 5
-  #  successThreshold: 1
-  #  failureThreshold: 5
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
   livenessProbe:
-    enabled: false
-  #  initialDelaySeconds: 90
-  #  periodSeconds: 10
-  #  timeoutSeconds: 5
-  #  successThreshold: 1
-  #  failureThreshold: 5
+    enabled: true
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
   readinessProbe:
-    enabled: false
-  #  initialDelaySeconds: 90
-  #  periodSeconds: 10
-  #  timeoutSeconds: 5
-  #  successThreshold: 1
-  #  failureThreshold: 5
+    enabled: true
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## Custom Startup probes for master-eligible containers
+  ##
+  customStartupProbe: {}
+  ## Custom Liveness probes for master-eligible containers
+  ##
+  customLivenessProbe: {}
+  ## Custom Rediness probes master-eligible containers
+  ##
+  customReadinessProbe: {}
 
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
@@ -503,25 +512,34 @@ coordinating:
   ##
   startupProbe:
     enabled: false
-  #  initialDelaySeconds: 90
-  #  periodSeconds: 10
-  #  timeoutSeconds: 5
-  #  successThreshold: 1
-  #  failureThreshold: 5
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
   livenessProbe:
-    enabled: false
-  #  initialDelaySeconds: 90
-  #  periodSeconds: 10
-  #  timeoutSeconds: 5
-  #  successThreshold: 1
-  #  failureThreshold: 5
+    enabled: true
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
   readinessProbe:
-    enabled: false
-  #  initialDelaySeconds: 90
-  #  periodSeconds: 10
-  #  timeoutSeconds: 5
-  #  successThreshold: 1
-  #  failureThreshold: 5
+    enabled: true
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## Custom Startup probes for coordinating-only containers
+  ##
+  customStartupProbe: {}
+  ## Custom Liveness probes for coordinating-only containers
+  ##
+  customLivenessProbe: {}
+  ## Custom Rediness probes coordinating-only containers
+  ##
+  customReadinessProbe: {}
   ## Service parameters for coordinating-only node(s)
   ##
   service:
@@ -670,25 +688,34 @@ data:
   ##
   startupProbe:
     enabled: false
-  #  initialDelaySeconds: 90
-  #  periodSeconds: 10
-  #  timeoutSeconds: 5
-  #  successThreshold: 1
-  #  failureThreshold: 5
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
   livenessProbe:
-    enabled: false
-  #  initialDelaySeconds: 90
-  #  periodSeconds: 10
-  #  timeoutSeconds: 5
-  #  successThreshold: 1
-  #  failureThreshold: 5
+    enabled: true
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
   readinessProbe:
-    enabled: false
-  #  initialDelaySeconds: 90
-  #  periodSeconds: 10
-  #  timeoutSeconds: 5
-  #  successThreshold: 1
-  #  failureThreshold: 5
+    enabled: true
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## Custom Startup probes for data containers
+  ##
+  customStartupProbe: {}
+  ## Custom Liveness probes for data containers
+  ##
+  customLivenessProbe: {}
+  ## Custom Rediness probes data containers
+  ##
+  customReadinessProbe: {}
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
@@ -851,25 +878,34 @@ ingest:
   ##
   startupProbe:
     enabled: false
-  #  initialDelaySeconds: 90
-  #  periodSeconds: 10
-  #  timeoutSeconds: 5
-  #  successThreshold: 1
-  #  failureThreshold: 5
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
   livenessProbe:
-    enabled: false
-  #  initialDelaySeconds: 90
-  #  periodSeconds: 10
-  #  timeoutSeconds: 5
-  #  successThreshold: 1
-  #  failureThreshold: 5
+    enabled: true
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
   readinessProbe:
-    enabled: false
-  #  initialDelaySeconds: 90
-  #  periodSeconds: 10
-  #  timeoutSeconds: 5
-  #  successThreshold: 1
-  #  failureThreshold: 5
+    enabled: true
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## Custom Startup probes for ingest containers
+  ##
+  customStartupProbe: {}
+  ## Custom Liveness probes for ingest containers
+  ##
+  customLivenessProbe: {}
+  ## Custom Rediness probes ingest containers
+  ##
+  customReadinessProbe: {}
   ## Service parameters for ingest node(s)
   ##
   service:
