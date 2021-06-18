@@ -83,10 +83,10 @@ spec:
             - --qps={{ .Values.kubeops.QPS }}
             {{- end }}
             {{- if .Values.kubeops.namespaceHeaderName }}
-            - --ns-header-name={{ .Values.kubeops.namespaceHeaderName }}
+            - --namespace-header-name={{ .Values.kubeops.namespaceHeaderName }}
             {{- end }}
             {{- if .Values.kubeops.namespaceHeaderPattern }}
-            - --ns-header-pattern={{ .Values.kubeops.namespaceHeaderPattern }}
+            - --namespace-header-pattern={{ .Values.kubeops.namespaceHeaderPattern }}
             {{- end }}
           env:
             - name: POD_NAMESPACE

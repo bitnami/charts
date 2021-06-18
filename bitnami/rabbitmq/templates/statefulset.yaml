@@ -35,9 +35,6 @@ spec:
         {{- if or (not .Values.auth.existingErlangSecret) (not .Values.auth.existingPasswordSecret) .Values.extraSecrets }}
         checksum/secret: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
         {{- end }}
-        {{- if and .Values.auth.tls.enabled (not .Values.auth.tls.existingSecret) }}
-        checksum/secret-cert: {{ include (print $.Template.BasePath "/certs.yaml") . | sha256sum }}
-        {{- end }}
         {{- if or .Values.podAnnotations .Values.metrics.enabled }}
         {{- include "rabbitmq.podAnnotations" . | nindent 8 }}
         {{- end }}
@@ -318,7 +315,7 @@ spec:
         {{- if .Values.auth.tls.enabled }}
         - name: certs
           secret:
-            secretName: {{ template "rabbitmq.secretTLSName" . }}
+            secretName: {{ template "rabbitmq.tlsSecretName" . }}
             items:
               - key: {{ ternary "tls.crt" "ca.crt" .Values.auth.tls.existingSecretFullChain }}
                 path: ca_certificate.pem

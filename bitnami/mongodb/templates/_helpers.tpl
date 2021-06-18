@@ -172,17 +172,6 @@ Return true if a secret object should be created for MongoDB(R)
 {{- end -}}
 
 {{/*
-Return true if a secret object should be created for MongoDB(R)
-*/}}
-{{- define "mongodb.caSecretName" -}}
-{{- if .Values.tls.existingSecret -}}
-    {{ .Values.tls.existingSecret }}
-{{- else -}}
-    {{ include "mongodb.fullname" . }}-ca
-{{- end -}}
-{{- end -}}
-
-{{/*
 Get the initialization scripts ConfigMap name.
 */}}
 {{- define "mongodb.initdbScriptsCM" -}}
@@ -382,5 +371,26 @@ Return the appropriate apiVersion for PodSecurityPolicy.
 {{- print "policy/v1beta1" -}}
 {{- else -}}
 {{- print "extensions/v1beta1" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if a TLS secret object should be created
+*/}}
+{{- define "mongodb.createTlsSecret" -}}
+{{- if and .Values.tls.enabled (not .Values.tls.existingSecret) }}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the secret containing MongoDB(R) TLS certificates
+*/}}
+{{- define "mongodb.tlsSecretName" -}}
+{{- $secretName := .Values.tls.existingSecret -}}
+{{- if $secretName -}}
+    {{- printf "%s" (tpl $secretName $) -}}
+{{- else -}}
+    {{- printf "%s-ca" (include "mongodb.fullname" .) -}}
 {{- end -}}
 {{- end -}}

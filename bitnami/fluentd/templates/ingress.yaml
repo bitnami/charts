@@ -1,10 +1,10 @@
 {{- if and .Values.aggregator.enabled .Values.aggregator.ingress.enabled }}
-{{- $serviceName := printf "%s-aggregator" (include "fluentd.fullname" .) -}}
+{{- $serviceName := printf "%s-aggregator" (include "common.names.fullname" .) -}}
 apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
-  name: {{ include "fluentd.fullname" . }}-aggregator
-  labels: {{- include "fluentd.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}-aggregator
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: aggregator
     app: aggregator
   annotations:
