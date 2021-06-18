@@ -276,7 +276,6 @@ redis: tls.enabled
     an existing secret containing the TLS certificates or
     enable auto-generated certificates.
 {{- end -}}
->>>>>>> master
 {{- end -}}
 
 {{/*
