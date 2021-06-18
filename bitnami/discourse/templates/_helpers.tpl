@@ -34,6 +34,15 @@ Return the proper Docker image registry secret names
 {{- end -}}
 
 {{/*
+Return true if a secret object for Discourse should be created
+*/}}
+{{- define "discourse.createSecret" -}}
+{{- if or (not .Values.discourse.existingSecret) (and (not .Values.discourse.smtp.existingSecret) .Values.discourse.smtp.password .Values.discourse.smtp.enabled) }}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the Discourse secret name
 */}}
 {{- define "discourse.secretName" -}}
@@ -41,6 +50,26 @@ Return the Discourse secret name
     {{- printf "%s" .Values.discourse.existingSecret -}}
 {{- else -}}
     {{- printf "%s-discourse" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the Discourse SMTP secret name
+*/}}
+{{- define "discourse.smtp.secretName" -}}
+{{- if .Values.discourse.smtp.existingSecret }}
+    {{- printf "%s" .Values.discourse.smtp.existingSecret -}}
+{{- else -}}
+    {{- printf "%s-discourse" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if Discourse SMTP uses password authentication
+*/}}
+{{- define "discourse.smtp.password.enabled" -}}
+{{- if and (or .Values.discourse.smtp.password .Values.discourse.smtp.existingSecret) .Values.discourse.smtp.enabled }}
+    {{- true -}}
 {{- end -}}
 {{- end -}}
 

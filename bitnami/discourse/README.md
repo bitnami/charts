@@ -112,37 +112,45 @@ The following table lists the configurable parameters of the Discourse chart and
 
 ### Discourse parameters
 
-| Parameter                                      | Description                                                                           | Default                                        |
-|------------------------------------------------|---------------------------------------------------------------------------------------|------------------------------------------------|
-| `discourse.host`                               | Discourse host to create application URLs (include the port if =/= 80)                | `""`                                           |
-| `discourse.siteName`                           | Discourse site name                                                                   | `My Site!`                                     |
-| `discourse.username`                           | Admin user of the application                                                         | `user`                                         |
-| `discourse.password`                           | Application password (min length of 10 chars) - ignored if existingSecret is provided | _random 10 character long alphanumeric string_ |
-| `discourse.existingSecret`                     | Name of an existing Kubernetes secret                                                 | `nil`                                          |
-| `discourse.email`                              | Admin user email of the application                                                   | `user@example.com`                             |
-| `discourse.command`                            | Custom command to override image cmd                                                  | `nil` (evaluated as a template)                |
-| `discourse.args`                               | Custom args for the custom command                                                    | `nil` (evaluated as a template)                |
-| `discourse.containerSecurityContext`           | Container security context specification                                              | `{}`                                           |
-| `discourse.resources`                          | Discourse container's resource requests and limits                                    | `{}`                                           |
-| `discourse.livenessProbe.enabled`              | Enable/disable livenessProbe                                                          | `true`                                         |
-| `discourse.livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated                                              | `500`                                          |
-| `discourse.livenessProbe.periodSeconds`        | How often to perform the probe                                                        | `10`                                           |
-| `discourse.livenessProbe.timeoutSeconds`       | When the probe times out                                                              | `5`                                            |
-| `discourse.livenessProbe.failureThreshold`     | Minimum consecutive failures for the probe                                            | `6`                                            |
-| `discourse.livenessProbe.successThreshold`     | Minimum consecutive successes for the probe                                           | `1`                                            |
-| `discourse.readinessProbe.enabled`             | Enable/disable readinessProbe                                                         | `true`                                         |
-| `discourse.readinessProbe.initialDelaySeconds` | Delay before readiness probe is initiated                                             | `30`                                           |
-| `discourse.readinessProbe.periodSeconds`       | How often to perform the probe                                                        | `10`                                           |
-| `discourse.readinessProbe.timeoutSeconds`      | When the probe times out                                                              | `5`                                            |
-| `discourse.readinessProbe.failureThreshold`    | Minimum consecutive failures for the probe                                            | `6`                                            |
-| `discourse.readinessProbe.successThreshold`    | Minimum consecutive successes for the probe                                           | `1`                                            |
-| `discourse.customLivenessProbe`                | Custom liveness probe to execute (when the main one is disabled)                      | `{}` (evaluated as a template)                 |
-| `discourse.customReadinessProbe`               | Custom readiness probe to execute (when the main one is disabled)                     | `{}` (evaluated as a template)                 |
-| `discourse.extraEnvVars`                       | An array to add extra env vars                                                        | `[]` (evaluated as a template)                 |
-| `discourse.extraEnvVarsCM`                     | Array to add extra configmaps                                                         | `[]`                                           |
-| `discourse.extraEnvVarsSecret`                 | Array to add extra environment from a Secret                                          | `nil`                                          |
-| `discourse.extraVolumeMounts`                  | Additional volume mounts (used along with `extraVolumes`)                             | `[]` (evaluated as a template)                 |
-| `discourse.skipInstall`                        | Do not run the Discourse installation wizard                                          | `false`                                        |
+| Parameter                                      | Description                                                                                                | Default                                        |
+|------------------------------------------------|------------------------------------------------------------------------------------------------------------|------------------------------------------------|
+| `discourse.host`                               | Discourse host to create application URLs (include the port if =/= 80)                                     | `""`                                           |
+| `discourse.siteName`                           | Discourse site name                                                                                        | `My Site!`                                     |
+| `discourse.username`                           | Admin user of the application                                                                              | `user`                                         |
+| `discourse.password`                           | Application password (min length of 10 chars) - ignored if existingSecret is provided                      | _random 10 character long alphanumeric string_ |
+| `discourse.existingSecret`                     | Name of an existing Kubernetes secret                                                                      | `nil`                                          |
+| `discourse.email`                              | Admin user email of the application                                                                        | `user@example.com`                             |
+| `discourse.command`                            | Custom command to override image cmd                                                                       | `nil` (evaluated as a template)                |
+| `discourse.args`                               | Custom args for the custom command                                                                         | `nil` (evaluated as a template)                |
+| `discourse.containerSecurityContext`           | Container security context specification                                                                   | `{}`                                           |
+| `discourse.resources`                          | Discourse container's resource requests and limits                                                         | `{}`                                           |
+| `discourse.livenessProbe.enabled`              | Enable/disable livenessProbe                                                                               | `true`                                         |
+| `discourse.livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated                                                                   | `500`                                          |
+| `discourse.livenessProbe.periodSeconds`        | How often to perform the probe                                                                             | `10`                                           |
+| `discourse.livenessProbe.timeoutSeconds`       | When the probe times out                                                                                   | `5`                                            |
+| `discourse.livenessProbe.failureThreshold`     | Minimum consecutive failures for the probe                                                                 | `6`                                            |
+| `discourse.livenessProbe.successThreshold`     | Minimum consecutive successes for the probe                                                                | `1`                                            |
+| `discourse.readinessProbe.enabled`             | Enable/disable readinessProbe                                                                              | `true`                                         |
+| `discourse.readinessProbe.initialDelaySeconds` | Delay before readiness probe is initiated                                                                  | `30`                                           |
+| `discourse.readinessProbe.periodSeconds`       | How often to perform the probe                                                                             | `10`                                           |
+| `discourse.readinessProbe.timeoutSeconds`      | When the probe times out                                                                                   | `5`                                            |
+| `discourse.readinessProbe.failureThreshold`    | Minimum consecutive failures for the probe                                                                 | `6`                                            |
+| `discourse.readinessProbe.successThreshold`    | Minimum consecutive successes for the probe                                                                | `1`                                            |
+| `discourse.customLivenessProbe`                | Custom liveness probe to execute (when the main one is disabled)                                           | `{}` (evaluated as a template)                 |
+| `discourse.customReadinessProbe`               | Custom readiness probe to execute (when the main one is disabled)                                          | `{}` (evaluated as a template)                 |
+| `discourse.smtp.enabled`                       | Enable/disable SMTP                                                                                        | `false`                                        |
+| `discourse.smtp.host`                          | SMTP host name                                                                                             | `""`                                           |
+| `discourse.smtp.port`                          | SMTP port number                                                                                           | `""`                                           |
+| `discourse.smtp.user`                          | SMTP account user name                                                                                     | `""`                                           |
+| `discourse.smtp.password`                      | SMTP account password                                                                                      | `""`                                           |
+| `discourse.smtp.protocol`                      | SMTP protocol (Allowed values: tls, ssl)                                                                   | `""`                                           |
+| `discourse.smtp.auth`                          | SMTP authentication method                                                                                 | `""`                                           |
+| `discourse.smtp.existingSecret`                | Name of an existing Kubernetes secret. The secret must have the following key configured: `smtp-password`  | `""`                                           |
+| `discourse.extraEnvVars`                       | An array to add extra env vars                                                                             | `[]` (evaluated as a template)                 |
+| `discourse.extraEnvVarsCM`                     | Array to add extra configmaps                                                                              | `[]`                                           |
+| `discourse.extraEnvVarsSecret`                 | Array to add extra environment from a Secret                                                               | `nil`                                          |
+| `discourse.extraVolumeMounts`                  | Additional volume mounts (used along with `extraVolumes`)                                                  | `[]` (evaluated as a template)                 |
+| `discourse.skipInstall`                        | Do not run the Discourse installation wizard                                                               | `false`                                        |
 
 ### Sidekiq parameters
 

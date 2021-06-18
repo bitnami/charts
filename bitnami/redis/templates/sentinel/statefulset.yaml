@@ -224,7 +224,7 @@ spec:
             - name: redis-certificates
               mountPath: /opt/bitnami/redis/certs
               readOnly: true
-            {{- end }}            
+            {{- end }}
             {{- if .Values.replica.extraVolumeMounts }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.replica.extraVolumeMounts "context" $ ) | nindent 12 }}
             {{- end }}
@@ -549,7 +549,7 @@ spec:
         {{- if .Values.tls.enabled }}
         - name: redis-certificates
           secret:
-            secretName: {{ required "A secret containing the certificates for the TLS traffic is required when TLS in enabled" (tpl .Values.tls.certificatesSecret .) }}
+            secretName: {{ include "redis.tlsSecretName" . }}
             defaultMode: 256
         {{- end }}
   {{- if not .Values.replica.persistence.enabled }}

@@ -22,6 +22,19 @@ data:
   DISCOURSE_DATABASE_PORT_NUMBER: {{ template "discourse.databasePort" . }}
   DISCOURSE_DATABASE_NAME: {{ template "discourse.databaseName" . }}
   DISCOURSE_DATABASE_USER: {{ template "discourse.databaseUser" . }}
+  {{- if .Values.discourse.smtp.enabled }}
+  DISCOURSE_SMTP_HOST: {{ .Values.discourse.smtp.host | quote }}
+  DISCOURSE_SMTP_PORT: {{ .Values.discourse.smtp.port | quote }}
+  {{- if .Values.discourse.smtp.user }}
+  DISCOURSE_SMTP_USER: {{ .Values.discourse.smtp.user | quote }}
+  {{- end }}
+  {{- if .Values.discourse.smtp.protocol }}
+  DISCOURSE_SMTP_PROTOCOL: {{ .Values.discourse.smtp.protocol | quote }}
+  {{- end }}
+  {{- if .Values.discourse.smtp.auth }}
+  DISCOURSE_SMTP_AUTH: {{ .Values.discourse.smtp.auth | quote }}
+  {{- end }}
+  {{- end }}
   {{- if or .Values.postgresql.enabled .Values.externalDatabase.create }}
   POSTGRESQL_CLIENT_DATABASE_HOST: {{ template "discourse.databaseHost" . }}
   POSTGRESQL_CLIENT_DATABASE_PORT_NUMBER: {{ template "discourse.databasePort" . }}
