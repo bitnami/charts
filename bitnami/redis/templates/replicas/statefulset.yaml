@@ -4,7 +4,7 @@ kind: StatefulSet
 metadata:
   name: {{ printf "%s-replicas" (include "common.names.fullname" .) }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "redis.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: replica
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -15,7 +15,7 @@ metadata:
 spec:
   replicas: {{ .Values.replica.replicaCount }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "redis.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: replica
   serviceName: {{ printf "%s-headless" (include "common.names.fullname" .) }}
   {{- if .Values.replica.updateStrategy }}
@@ -23,7 +23,7 @@ spec:
   {{- end }}
   template:
     metadata:
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "redis.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: replica
         {{- if .Values.replica.podLabels }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.replica.podLabels "context" $ ) | nindent 8 }}
@@ -60,8 +60,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.replica.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.replica.podAffinityPreset "component" "replica" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.replica.podAntiAffinityPreset "component" "replica" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.replica.podAffinityPreset "component" "replica" "extraMatchLabels" .Values.extraMatchLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.replica.podAntiAffinityPreset "component" "replica" "extraMatchLabels" .Values.extraMatchLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.replica.nodeAffinityPreset.type "key" .Values.replica.nodeAffinityPreset.key "values" .Values.replica.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.replica.nodeSelector }}
@@ -384,7 +384,7 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: redis-data
-        labels: {{- include "common.labels.matchLabels" . | nindent 10 }}
+        labels: {{- include "redis.labels.matchLabels" . | nindent 10 }}
           app.kubernetes.io/component: replica
         {{- if .Values.replica.persistence.annotations }}
         annotations: {{- toYaml .Values.replica.persistence.annotations | nindent 10 }}

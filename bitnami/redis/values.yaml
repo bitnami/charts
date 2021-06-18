@@ -36,6 +36,9 @@ commonLabels: {}
 ## @param commonAnnotations Annotations to add to all deployed objects
 ##
 commonAnnotations: {}
+## @param extraMatchLabels Labels to add to all deployed objects
+##
+extraMatchLabels: {}
 ## @param clusterDomain Kubernetes cluster domain name
 ##
 clusterDomain: cluster.local

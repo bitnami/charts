@@ -4,7 +4,7 @@ kind: Service
 metadata:
   name: {{ printf "%s-sentinel-metrics" (include "common.names.fullname" .) }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "redis.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: sentinel-metrics
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -34,5 +34,5 @@ spec:
       port: {{ .Values.metrics.sentinel.service.port }}
       protocol: TCP
       targetPort: sentinelmetrics
-  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+  selector: {{- include "redis.labels.matchLabels" . | nindent 4 }}
 {{- end }}
