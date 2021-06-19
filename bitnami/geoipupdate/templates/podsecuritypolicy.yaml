@@ -1,0 +1,33 @@
+{{- if .Values.podSecurityPolicy.enabled }}
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: {{ include "geoipupdate.fullname" . }}
+  labels:
+    {{- include "geoipupdate.labels" . | nindent 4 }}
+spec:
+  privileged: false
+  allowPrivilegeEscalation: false
+  {{- with .Values.podSecurityPolicy.allowedHostPaths }}
+  allowedHostPaths:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  requiredDropCapabilities:
+    - ALL
+  {{- with .Values.podSecurityPolicy.volumes }}
+  volumes:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  hostNetwork: false
+  hostIPC: false
+  hostPID: false
+  runAsUser:
+    {{- toYaml .Values.podSecurityPolicy.runAsUser | nindent 4 }}
+  seLinux:
+    {{- toYaml .Values.podSecurityPolicy.seLinux | nindent 4 }}
+  supplementalGroups:
+    {{- toYaml .Values.podSecurityPolicy.supplementalGroups | nindent 4 }}
+  fsGroup:
+    {{- toYaml .Values.podSecurityPolicy.fsGroup | nindent 4 }}
+  readOnlyRootFilesystem: false
+{{- end }}

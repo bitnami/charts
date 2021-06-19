@@ -1,0 +1,72 @@
+# VCS
+.git
+.gitattributes
+.gitignore
+.gitkeep
+.gitlab-ci.yml
+.pre-commit-config.yaml
+
+# Docker
+.dockerignore
+docker/
+Dockerfile
+
+# helm-docs templates
+*.md.gotmpl
+
+# Backups
+*.backup
+*.bak
+*.gho
+*.ori
+*.orig
+*.tmp
+
+# Logs
+*.log
+
+# Various IDEs
+.editorconfig
+.project
+.idea/
+*.tmproj
+.vscode/
+
+# Other
+resources/
+docker/
+scripts/
+values/
+
+# Linux trash folder
+.Trash-*
+
+# macOS
+.apdisk
+.AppleDB
+.AppleDesktop
+.AppleDouble
+.com.apple.timemachine.donotpresent
+.DocumentRevisions-V100
+.DS_Store
+.fseventsd
+.LSOverride
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+desktop.ini
+*RECYCLE.BIN
+*.lnk
+
+# Ansible
+*.retry
+
+# Other
+Makefile

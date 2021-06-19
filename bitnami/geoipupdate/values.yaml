@@ -1,0 +1,200 @@
+## Container images.
+## ref: https://kubernetes.io/docs/concepts/containers/images
+##
+image:
+  repository: "maxmindinc/geoipupdate"
+  tag: v4.7.1
+  pullPolicy: IfNotPresent
+
+## CronJob type.
+## Valid values are cronJob and daemonSet.
+##
+cronJobType: cronJob
+
+## Configure CronJob.
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/
+##
+cronJob:
+  ## Run a job periodically on a given schedule.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#cron-schedule-syntax
+  ##
+  schedule: "0 4 * * 6"
+
+  ## Attempt or not a job to be scheduled when there was a previous schedule still running.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#cron-job-limitations
+  ##
+  concurrencyPolicy: Forbid
+
+  ## Specify how many completed and failed jobs should be kept.
+  ## ref: https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#jobs-history-limits
+  ##
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+
+  ## How long to try recreating failed pods.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy
+  backoffLimit: 6
+
+  ## Terminate all running Pods of a job if activeDeadlineSeconds is reached.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/job/#job-termination-and-cleanup
+  ##
+  activeDeadlineSeconds: 0
+
+## Containers restart policy.
+## If cronJobType is daemonSet, you should use Always.
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy
+##
+restartPolicy: OnFailure
+
+## Grace period before pods are allowed to be killed forcefully.
+## ref: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/
+##
+terminationGracePeriodSeconds: 10
+
+## Tolerations for pod assignment.
+## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+##
+tolerations: []
+
+## Affinity for pod assignment.
+## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+##
+affinity: {}
+  # podAntiAffinity:
+  #   requiredDuringSchedulingIgnoredDuringExecution:
+  #   - labelSelector:
+  #       matchExpressions:
+  #       - key: app
+  #         operator: In
+  #         values:
+  #         - loki
+  #     topologyKey: "kubernetes.io/hostname"
+
+## Pod-level security settings.
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+##
+podSecurityContext:
+  fsGroup: 1000
+
+## Container-level security settings.
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+##
+containerSecurityContext:
+  runAsUser: 1000
+  runAsGroup: 1000
+
+## Resources requests and limits for Pods.
+## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+##
+resources: {}
+  # limits:
+  #   cpu: 100m
+  #   memory: 256Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+## Creates geoipupdate config file with specified rights.
+##
+createConfig:
+  enabled: true
+
+  ## InitContainer image for creating a config file.
+  ##
+  image:
+    repository: bash
+    tag: 5
+    pullPolicy: IfNotPresent
+
+  ## Command to run into this initContainer.
+  ##
+  command:
+  - bash
+  - -c
+
+  ## Arguments for the command.
+  ##
+  args:
+  - |
+    touch /config/GeoIP.conf \
+    && chmod 0644 /config/GeoIP.conf \
+    && ls -lah /config
+
+  ## InitContainer Security Context.
+  ##
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 1000
+
+## Run additional containers before the main one.
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+##
+extraInitContainers: []
+# - name: volume-mount-fix
+#   image: bash
+#   command: ["bash", "-c", "chown -R 1000:1000 /usr/share/GeoIP/"]
+#   volumeMounts:
+#   - name: geoipdb
+#     mountPath: /usr/share/GeoIP/
+#   securityContext:
+#     runAsUser: 0
+
+## Volumes to mount into Pods.
+## Note that if you use hostPath, you should create the directory before that with the correct owner and group (in the default case - 1000:1000).
+## ref: https://kubernetes.io/docs/concepts/storage/volumes/
+##
+extraVolumes: []
+# - name: geoipdb
+#   hostPath:
+#     path: /usr/share/GeoIP/
+
+## Pod volume mounts.
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-volume-storage/
+##
+extraVolumeMounts: []
+# - mountPath: /usr/share/GeoIP/
+#   name: geoipdb
+
+## Pod Security Policy.
+## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/
+##
+podSecurityPolicy:
+  enabled: true
+  allowedHostPaths: []
+  # - pathPrefix: /usr/share/GeoIP/
+  volumes: []
+  # - hostPath
+  runAsUser:
+    rule: 'RunAsAny'
+  seLinux:
+    rule: 'RunAsAny'
+  supplementalGroups:
+    rule: 'RunAsAny'
+  fsGroup:
+    rule: 'RunAsAny'
+
+## geoipupdate configuration.
+## ref: https://github.com/maxmind/geoipupdate/blob/main/doc/docker.md#configuring
+##
+configSecret:
+  annotations: {}
+
+  ## The following variables are required. You can set them, f.e., via --set helm flag.
+  ##
+  geoipupdateAccountID: ""
+  geoipupdateLicenseKey: ""
+  geoipupdateEditionIDs: ""
+
+  ## The following variables are optional.
+  ##
+  geoipupdateFrequency: "168"
+  geoipupdateHost: ""
+  geoipupdateProxy: ""
+  geoipupdateProxyUserPassword: ""
+  geoipupdateVerbose: ""
+
+## Service account.
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+##
+serviceAccount:
+  name: ""
