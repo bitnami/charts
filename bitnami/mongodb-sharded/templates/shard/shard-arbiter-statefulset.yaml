@@ -57,7 +57,7 @@ spec:
       {{- if $.Values.shardsvr.arbiter.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.arbiter.tolerations "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.shardsvr.arbiter.priorityClassName }}
+      {{- if .Values.shardsvr.arbiter.priorityClassName | quote }}
       priorityClassName: {{ .Values.shardsvr.arbiter.priorityClassName }}
       {{- end }}
       {{- if $.Values.securityContext.enabled }}
