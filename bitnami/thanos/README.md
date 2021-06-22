@@ -813,6 +813,34 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ## Upgrading
 
+### To 4.0.0
+
+This major update changes the `securityContext` interface in the `values.yaml` file.
+
+Please note if you have changes in the `securityContext` fields those need to be migrated to `podSecurityContext`.
+
+```diff
+# ...
+- securityContext:
++ podSecurityContext:
+# ... 
+```
+
+Other than that a new `securityContext` interface for containers got introduced `containerSecurityContext`. It's default is enabled so if you do not need it you need to opt out of it.
+
+```diff
+# ...
++ containerSecurityContext
++   enabled: true  # opt out by enabled: false
++   capabilities:
++     drop:
++     - ALL
++   runAsNonRoot: true
++   allowPrivilegeEscalation: false
++   readOnlyRootFilesystem: false
+# ...
+```
+
 ### To 3.3.0
 
 This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
