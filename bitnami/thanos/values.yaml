@@ -259,9 +259,6 @@ query:
   ##
   containerSecurityContext:
     enabled: true
-    capabilities:
-      drop:
-      - ALL
     runAsNonRoot: true
     allowPrivilegeEscalation: false
     readOnlyRootFilesystem: false
@@ -719,9 +716,6 @@ queryFrontend:
   ##
   containerSecurityContext:
     enabled: true
-    capabilities:
-      drop:
-      - ALL
     runAsNonRoot: true
     allowPrivilegeEscalation: false
     readOnlyRootFilesystem: false
@@ -1065,9 +1059,6 @@ bucketweb:
   ##
   containerSecurityContext:
     enabled: true
-    capabilities:
-      drop:
-      - ALL
     runAsNonRoot: true
     allowPrivilegeEscalation: false
     readOnlyRootFilesystem: false
@@ -1370,9 +1361,6 @@ compactor:
   ##
   containerSecurityContext:
     enabled: true
-    capabilities:
-      drop:
-      - ALL
     runAsNonRoot: true
     allowPrivilegeEscalation: false
     readOnlyRootFilesystem: false
@@ -1656,9 +1644,6 @@ storegateway:
   ##
   containerSecurityContext:
     enabled: true
-    capabilities:
-      drop:
-      - ALL
     runAsNonRoot: true
     allowPrivilegeEscalation: false
     readOnlyRootFilesystem: false
@@ -2003,9 +1988,6 @@ ruler:
   ##
   containerSecurityContext:
     enabled: true
-    capabilities:
-      drop:
-      - ALL
     runAsNonRoot: true
     allowPrivilegeEscalation: false
     readOnlyRootFilesystem: false
@@ -2418,9 +2400,6 @@ receive:
   ##
   containerSecurityContext:
     enabled: true
-    capabilities:
-      drop:
-      - ALL
     runAsNonRoot: true
     allowPrivilegeEscalation: false
     readOnlyRootFilesystem: false
