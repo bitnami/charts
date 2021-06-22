@@ -54,6 +54,9 @@ spec:
       {{- if .Values.configsvr.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.configsvr.tolerations "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.configsvr.priorityClassName }}
+      priorityClassName: {{ .Values.configsvr.priorityClassName | quote }}
+      {{- end }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
         fsGroup: {{ .Values.securityContext.fsGroup }}
