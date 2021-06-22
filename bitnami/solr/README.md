@@ -351,3 +351,24 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
+## Upgrading
+
+### To 1.0.0
+
+This version updates Zookeeper dependency from 6.x.x to 7.x.x.
+
+This affects Zookeper TLS/SSL settings:
+
+- `zookeeper.service.tls.disable_base_client_port` is renamed to `zookeeper.service.disableBaseClientPort`
+- `zookeeper.service.tls.client_port` is renamed to `zookeeper.service.tlsClientPort`
+- `zookeeper.service.tls.client_enable` is renamed to `zookeeper.tls.client.enabled`
+- `zookeeper.service.tls.client_keystore_path` is renamed to `zookeeper.tls.client.keystorePath`
+- `zookeeper.service.tls.client_truststore_path` is renamed to `zookeeper.tls.client.truststorePath`
+- `zookeeper.service.tls.client_keystore_password` is renamed to `zookeeper.tls.client.keystorePassword`
+- `zookeeper.service.tls.client_truststore_password` is renamed to `zookeeper.tls.client.truststorePassword`
+- `zookeeper.service.tls.quorum_enable` is renamed to `zookeeper.tls.quorum.enabled`
+- `zookeeper.service.tls.quorum_keystore_path` is renamed to `zookeeper.tls.quorum.keystorePath`
+- `zookeeper.service.tls.quorum_truststore_path` is renamed to `zookeeper.tls.quorum.truststorePath`
+- `zookeeper.service.tls.quorum_keystore_password` is renamed to `zookeeper.tls.quorum.keystorePassword`
+- `zookeeper.service.tls.quorum_truststore_password` is renamed to `zookeeper.tls.quorum.truststorePassword`
