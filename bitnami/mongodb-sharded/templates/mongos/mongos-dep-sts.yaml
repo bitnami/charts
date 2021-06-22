@@ -58,6 +58,9 @@ spec:
       {{- if .Values.mongos.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.mongos.tolerations "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.mongos.priorityClassName }}
+      priorityClassName: {{ .Values.mongos.priorityClassName | quote }}
+      {{- end }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
         fsGroup: {{ .Values.securityContext.fsGroup }}
