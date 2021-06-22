@@ -77,6 +77,14 @@ rules:
       - get
       - list
       - watch
+  - apiGroups:
+      - configuration.konghq.com
+    resources:
+      - tcpingresses
+    verbs:
+      - get
+      - list
+      - watch
   {{- if or .Values.crd.create .Values.crd.apiversion }}
   - apiGroups:
       {{- if .Values.crd.create }}
