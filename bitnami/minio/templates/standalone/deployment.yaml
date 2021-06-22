@@ -55,9 +55,8 @@ spec:
       {{- if .Values.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.securityContext.enabled }}
-      securityContext:
-        fsGroup: {{ .Values.securityContext.fsGroup }}
+      {{- if .Values.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       {{- if or .Values.initContainers (and .Values.volumePermissions.enabled .Values.persistence.enabled) }}
       initContainers:
@@ -72,9 +71,8 @@ spec:
             - /bin/bash
             - -ec
             - |
-              chown -R {{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }} {{ .Values.persistence.mountPath }}
-          securityContext:
-            runAsUser: 0
+              chown -R {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }} {{ .Values.persistence.mountPath }}
+          securityContext: {{- .Values.volumePermissions.containerSecurityContext | toYaml | nindent 12 }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
           {{- end }}
@@ -87,10 +85,8 @@ spec:
         - name: minio
           image: {{ include "minio.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-          {{- if .Values.securityContext.enabled }}
-          securityContext:
-            runAsUser: {{ .Values.securityContext.runAsUser }}
-            runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           {{- if .Values.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
@@ -101,6 +97,8 @@ spec:
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.image.debug | quote }}
+            - name: MINIO_SCHEME
+              value: {{ ternary "https" "http" .Values.tls.enabled | quote }}
             - name: MINIO_FORCE_NEW_KEYS
               value: {{ ternary "yes" "no" .Values.forceNewKeys | quote }}
             {{- if .Values.useCredentialsFile }}
@@ -131,6 +129,10 @@ spec:
               value: {{ ternary "off" "on" .Values.disableWebUI | quote }}
             - name: MINIO_PROMETHEUS_AUTH_TYPE
               value: {{ .Values.metrics.prometheusAuthType | quote }}
+            {{- if .Values.tls.mountPath }}
+            - name: MINIO_CERTSDIR
+              value: {{ .Values.tls.mountPath | quote }}
+            {{- end }}
             {{- if .Values.extraEnv }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnv "context" $) | nindent 12 }}
             {{- end }}
@@ -152,6 +154,7 @@ spec:
             httpGet:
               path: /minio/health/live
               port: minio
+              scheme: {{ ternary "HTTPS" "HTTP" .Values.tls.enabled | quote }}
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
@@ -194,6 +197,10 @@ spec:
             {{- end }}
             - name: data
               mountPath: {{ .Values.persistence.mountPath }}
+            {{- if .Values.tls.enabled }}
+            - name: minio-certs
+              mountPath: {{ default "/certs" .Values.tls.mountPath }}
+            {{- end }}
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -213,6 +220,18 @@ spec:
           {{- else }}
           emptyDir: {}
           {{- end }}
+        {{- if .Values.tls.enabled }}
+        - name: minio-certs
+          secret:
+            secretName: {{ include "minio.tlsSecretName" . }}
+            items:
+            - key: tls.crt
+              path: public.crt
+            - key: tls.key
+              path: private.key
+            - key: ca.crt
+              path: CAs/public.crt
+        {{- end }}
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
