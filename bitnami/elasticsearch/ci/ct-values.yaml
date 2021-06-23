@@ -1,15 +1,6 @@
 master:
-  livenessProbe:
-    enabled: false
-  readinessProbe:
-    enabled: false
+  replicas: 1
 data:
-  livenessProbe:
-    enabled: false
-  readinessProbe:
-    enabled: false
+  replicas: 1
 coordinating:
-  livenessProbe:
-    enabled: false
-  readinessProbe:
-    enabled: false
+  replicas: 1
