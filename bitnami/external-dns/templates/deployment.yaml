@@ -200,6 +200,9 @@ spec:
               {{- else }}
             - --infoblox-ssl-verify
               {{- end }}
+              {{- if .Values.infoblox.maxResults }}
+            - --infoblox-max-results={{ .Values.infoblox.maxResults }}
+              {{- end }}
             {{- end }}
             {{- if eq .Values.provider "ns1" }}
             # ns1 arguments

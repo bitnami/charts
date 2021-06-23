@@ -82,7 +82,6 @@ The following table lists the configurable parameters of the Cassandra chart and
 | `dbUser.existingSecret`       | Use an existing secret object for `dbUser.user` password (will ignore `dbUser.password`)                                                            | `nil`                                                   |
 | `initDBConfigMap`             | Configmap for initialization CQL commands (done in the first node). Useful for creating keyspaces at startup                                        | `nil` (evaluated as a template)                         |
 | `initDBSecret`                | Secret for initialization CQL commands (done in the first node) that contain sensitive data. Useful for creating keyspaces at startup               | `nil` (evaluated as a template)                         |
-| `tlsEncryptionSecretName`     | Secret with keystore, keystore password, truststore and truststore password                                                                         | `{}`                                                    |
 | `existingConfiguration`       | Pointer to a configMap that contains custom Cassandra configuration files. This will override any Cassandra configuration variable set in the chart | `nil` (evaluated as a template)                         |
 | `cluster.name`                | Cassandra cluster name                                                                                                                              | `cassandra`                                             |
 | `cluster.seedCount`           | Number of seed nodes (note: must be greater or equal than 1 and less or equal to `replicaCount`)                                                    | `1`                                                     |
@@ -91,8 +90,6 @@ The following table lists the configurable parameters of the Cassandra chart and
 | `cluster.rack`                | Rack name                                                                                                                                           | `rack1`                                                 |
 | `cluster.enableRPC`           | Enable Thrift RPC endpoint                                                                                                                          | `true`                                                  |
 | `cluster.enableUDF`           | Enable CASSANDRA_ENABLE_USER_DEFINED_FUNCTIONS                                                                                                      | `false`                                                 |
-| `cluster.internodeEncryption` | Set internode encryption. NOTE: A value different from 'none' requires setting `tlsEncryptionSecretName`                                            | `none`                                                  |
-| `cluster.clientEncryption`    | Set client-server encryption. NOTE: A value different from 'false' requires setting `tlsEncryptionSecretName`                                       | `false`                                                 |
 | `jvm.extraOpts`               | Set the value for Java Virtual Machine extra options (JVM_EXTRA_OPTS)                                                                               | `nil`                                                   |
 | `jvm.maxHeapSize`             | Set Java Virtual Machine maximum heap size (MAX_HEAP_SIZE). Calculated automatically if `nil`                                                       | `nil`                                                   |
 | `jvm.newHeapSize`             | Set Java Virtual Machine new heap size (HEAP_NEWSIZE). Calculated automatically if `nil`                                                            | `nil`                                                   |
@@ -218,6 +215,18 @@ The following table lists the configurable parameters of the Cassandra chart and
 | `metrics.serviceMonitor.interval`      | Interval at which metrics should be scraped.                                                           | `nil` (Prometheus Operator default value)                    |
 | `metrics.serviceMonitor.scrapeTimeout` | Timeout after which the scrape is ended                                                                | `nil` (Prometheus Operator default value)                    |
 | `metrics.serviceMonitor.selector`      | Prometheus instance selector labels                                                                    | `nil`                                                        |
+
+### TLS/SSL parameters
+
+| Parameter                 | Description                                                        | Default |
+|-------------------------- |--------------------------------------------------------------------|---------|
+| `tls.internodeEncryption` | Set internode encryption.                                          | `none`  |
+| `tls.clientEncryption`    | Set client-server encryption.                                      | `false` |
+| `tls.autoGenerated`       | Generate automatically self-signed TLS certificates                | `false` |
+| `tls.existingSecret`      | Existing secret that contains Cassandra Keystore and truststore    | `nil`   |
+| `tls.passwordsSecret`     | Secret containing the Keystore and Truststore passwords if needed  | `nil`   |
+| `tls.resources.limits`    | The resources limits for the TLS init container                    | `{}`    |
+| `tls.resources.requests`  | The requested resources for the TLS init container                 | `{}`    |
 
 The above parameters map to the env variables defined in [bitnami/cassandra](http://github.com/bitnami/bitnami-docker-cassandra). For more information please refer to the [bitnami/cassandra](http://github.com/bitnami/bitnami-docker-cassandra) image documentation.
 

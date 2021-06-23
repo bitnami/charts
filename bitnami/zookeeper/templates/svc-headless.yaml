@@ -22,14 +22,14 @@ spec:
   clusterIP: None
   publishNotReadyAddresses: {{ .Values.service.publishNotReadyAddresses }}
   ports:
-    {{ if not .Values.service.tls.disable_base_client_port }}
+    {{ if not .Values.service.disableBaseClientPort }}
     - name: tcp-client
       port: 2181
       targetPort: client
     {{ end }}
-    {{ if .Values.service.tls.client_enable }}
+    {{ if .Values.tls.client.enabled }}
     - name: tcp-client-tls
-      port: {{ .Values.service.tls.client_port }}
+      port: {{ .Values.service.tlsClientPort }}
       targetPort: client-tls
     {{ end }}
     - name: follower

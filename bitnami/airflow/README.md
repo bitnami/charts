@@ -343,6 +343,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.tolerations`       | Metrics exporter labels and tolerations for pod assignment  | `[]`                          |
 | `metrics.podLabels`         | Metrics exporter pod Annotation and Labels                  | `{}`                          |
 | `metrics.nodeSelector`      | Node labels for pod assignment                              | `{}`                          |
+| `metrics.serviceMonitor.enabled`        | Create ServiceMonitor resource                   | `false`                                                 |
+| `metrics.serviceMonitor.interval`       | Interval in which prometheus scrapes             | `60s`                                                   |
+| `metrics.serviceMonitor.namespace`      | servicemonitor namespace                         | `` (evaluates to release namespace if not provided)     |
+| `metrics.serviceMonitor.scrapeTimeout`  | Scrape Timeout duration for prometheus           | `10s`                                                   |
+| `metrics.serviceMonitor.labels`         | Additional labels to attach                      | `{}`                                                    |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
