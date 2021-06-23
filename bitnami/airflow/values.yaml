@@ -1029,6 +1029,11 @@ metrics:
   ##
   hostAliases: []
   ## Prometheus Operator ServiceMonitor resource
+  ## @param metrics.serviceMonitor.enabled Create ServiceMonitor resource
+  ## @param metrics.serviceMonitor.interval Interval in which prometheus scrapes
+  ## @param metrics.serviceMonitor.scrapeTimeout Scrape Timeout duration for prometheus
+  ## @param metrics.serviceMonitor.labels Additional labels to attach
+  ##
   serviceMonitor:
     enabled: false
     ## Namespace in which Prometheus is running

@@ -107,7 +107,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------------- | --------------------------------------------------------------------------- | --------------------- |
 | `web.image.registry`                     | Airflow image registry                                                      | `docker.io`           |
 | `web.image.repository`                   | Airflow image repository                                                    | `bitnami/airflow`     |
-| `web.image.tag`                          | Airflow image tag (immutable tags are recommended)                          | `2.1.0-debian-10-r13` |
+| `web.image.tag`                          | Airflow image tag (immutable tags are recommended)                          | `2.1.0-debian-10-r20` |
 | `web.image.pullPolicy`                   | Airflow image pull policy                                                   | `IfNotPresent`        |
 | `web.image.pullSecrets`                  | Airflow image pull secrets                                                  | `[]`                  |
 | `web.image.debug`                        | Enable image debug mode                                                     | `false`               |
@@ -159,7 +159,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------------- | ----------------------------------------------------------------------- | --------------------------- |
 | `scheduler.image.registry`                   | Airflow Scheduler image registry                                        | `docker.io`                 |
 | `scheduler.image.repository`                 | Airflow Scheduler image repository                                      | `bitnami/airflow-scheduler` |
-| `scheduler.image.tag`                        | Airflow Scheduler image tag (immutable tags are recommended)            | `2.1.0-debian-10-r12`       |
+| `scheduler.image.tag`                        | Airflow Scheduler image tag (immutable tags are recommended)            | `2.1.0-debian-10-r20`       |
 | `scheduler.image.pullPolicy`                 | Airflow Scheduler image pull policy                                     | `IfNotPresent`              |
 | `scheduler.image.pullSecrets`                | Airflow Scheduler image pull secrets                                    | `[]`                        |
 | `scheduler.image.debug`                      | Enable image debug mode                                                 | `false`                     |
@@ -192,7 +192,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `worker.image.registry`                     | Airflow Worker image registry                                                                                        | `docker.io`              |
 | `worker.image.repository`                   | Airflow Worker image repository                                                                                      | `bitnami/airflow-worker` |
-| `worker.image.tag`                          | Airflow Worker image tag (immutable tags are recommended)                                                            | `2.1.0-debian-10-r12`    |
+| `worker.image.tag`                          | Airflow Worker image tag (immutable tags are recommended)                                                            | `2.1.0-debian-10-r18`    |
 | `worker.image.pullPolicy`                   | Airflow Worker image pull policy                                                                                     | `IfNotPresent`           |
 | `worker.image.pullSecrets`                  | Airflow Worker image pull secrets                                                                                    | `[]`                     |
 | `worker.image.debug`                        | Enable image debug mode                                                                                              | `false`                  |
@@ -249,7 +249,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------ | -------------------------------------------------------------------------------------- | --------------------- |
 | `git.image.registry`           | Git image registry                                                                     | `docker.io`           |
 | `git.image.repository`         | Git image repository                                                                   | `bitnami/git`         |
-| `git.image.tag`                | Git image tag (immutable tags are recommended)                                         | `2.32.0-debian-10-r1` |
+| `git.image.tag`                | Git image tag (immutable tags are recommended)                                         | `2.32.0-debian-10-r8` |
 | `git.image.pullPolicy`         | Git image pull policy                                                                  | `IfNotPresent`        |
 | `git.image.pullSecrets`        | Git image pull secrets                                                                 | `[]`                  |
 | `git.dags.enabled`             | Enable in order to download DAG files from git repositories.                           | `false`               |
@@ -330,24 +330,23 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Airflow metrics parameters
 
-| Name                        | Description                                                 | Value                         |
-| --------------------------- | ----------------------------------------------------------- | ----------------------------- |
-| `metrics.enabled`           | Start a side-car prometheus exporter                        | `false`                       |
-| `metrics.image.registry`    | Airflow Exporter image registry                             | `docker.io`                   |
-| `metrics.image.repository`  | Airflow Exporter image repository                           | `bitnami/airflow-exporter`    |
-| `metrics.image.tag`         | Airflow Exporter image tag (immutable tags are recommended) | `0.20210126.0-debian-10-r123` |
-| `metrics.image.pullPolicy`  | Airflow Exporter image pull policy                          | `IfNotPresent`                |
-| `metrics.image.pullSecrets` | Airflow Exporter image pull secrets                         | `[]`                          |
-| `metrics.hostAliases`       | Deployment pod host aliases                                 | `[]`                          |
-| `metrics.resources`         | Metrics exporter resource requests and limits               | `{}`                          |
-| `metrics.tolerations`       | Metrics exporter labels and tolerations for pod assignment  | `[]`                          |
-| `metrics.podLabels`         | Metrics exporter pod Annotation and Labels                  | `{}`                          |
-| `metrics.nodeSelector`      | Node labels for pod assignment                              | `{}`                          |
-| `metrics.serviceMonitor.enabled`        | Create ServiceMonitor resource                   | `false`                                                 |
-| `metrics.serviceMonitor.interval`       | Interval in which prometheus scrapes             | `60s`                                                   |
-| `metrics.serviceMonitor.namespace`      | servicemonitor namespace                         | `` (evaluates to release namespace if not provided)     |
-| `metrics.serviceMonitor.scrapeTimeout`  | Scrape Timeout duration for prometheus           | `10s`                                                   |
-| `metrics.serviceMonitor.labels`         | Additional labels to attach                      | `{}`                                                    |
+| Name                                   | Description                                                 | Value                         |
+| -------------------------------------- | ----------------------------------------------------------- | ----------------------------- |
+| `metrics.enabled`                      | Start a side-car prometheus exporter                        | `false`                       |
+| `metrics.image.registry`               | Airflow Exporter image registry                             | `docker.io`                   |
+| `metrics.image.repository`             | Airflow Exporter image repository                           | `bitnami/airflow-exporter`    |
+| `metrics.image.tag`                    | Airflow Exporter image tag (immutable tags are recommended) | `0.20210126.0-debian-10-r129` |
+| `metrics.image.pullPolicy`             | Airflow Exporter image pull policy                          | `IfNotPresent`                |
+| `metrics.image.pullSecrets`            | Airflow Exporter image pull secrets                         | `[]`                          |
+| `metrics.hostAliases`                  | Deployment pod host aliases                                 | `[]`                          |
+| `metrics.serviceMonitor.enabled`       | Create ServiceMonitor resource                              | `false`                       |
+| `metrics.serviceMonitor.interval`      | Interval in which prometheus scrapes                        | `60s`                         |
+| `metrics.serviceMonitor.scrapeTimeout` | Scrape Timeout duration for prometheus                      | `10s`                         |
+| `metrics.serviceMonitor.labels`        | Additional labels to attach                                 | `{}`                          |
+| `metrics.resources`                    | Metrics exporter resource requests and limits               | `{}`                          |
+| `metrics.tolerations`                  | Metrics exporter labels and tolerations for pod assignment  | `[]`                          |
+| `metrics.podLabels`                    | Metrics exporter pod Annotation and Labels                  | `{}`                          |
+| `metrics.nodeSelector`                 | Node labels for pod assignment                              | `{}`                          |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
