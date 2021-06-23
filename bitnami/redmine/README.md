@@ -359,35 +359,48 @@ metadata:
 data:
 
   init.sh: |-
-
     #!/bin/bash
 
-    # Set default values depending on database variation
-    if [ -n "$REDMINE_DB_POSTGRES" ]; then
-        export REDMINE_DB_PORT_NUMBER=${REDMINE_DB_PORT_NUMBER:-5432}
-        export REDMINE_DB_USERNAME=${REDMINE_DB_USERNAME:-postgres}
-    elif [ -n "$REDMINE_DB_MYSQL" ]; then
-        export REDMINE_DB_PORT_NUMBER=${REDMINE_DB_PORT_NUMBER:-3306}
-        export REDMINE_DB_USERNAME=${REDMINE_DB_USERNAME:-root}
-    fi
+    set -o errexit
+    set -o nounset
+    set -o pipefail
+    # set -o xtrace # Uncomment this line for debugging purpose
 
-    # REPLACE WITH YOUR OWN SUB-URI
-    SUB_URI_PATH='/redmine'
+    # Load Redmine environment
+    . /opt/bitnami/scripts/redmine-env.sh
 
-    #Config files where to apply changes
-    config1=/opt/bitnami/redmine/config.ru
-    config2=/opt/bitnami/redmine/config/environment.rb
+    # Load libraries
+    . /opt/bitnami/scripts/libbitnami.sh
+    . /opt/bitnami/scripts/liblog.sh
 
-    if [[ ! -d /opt/bitnami/redmine/conf/ ]]; then
+    print_welcome_page
+
+    if [[ "$1" = "/opt/bitnami/scripts/redmine/run.sh" ]]; then
+        /opt/bitnami/scripts/mysql-client/setup.sh
+        /opt/bitnami/scripts/postgresql-client/setup.sh
+        /opt/bitnami/scripts/redmine/setup.sh
+        /post-init.sh
+        info "** Redmine setup finished! **"
+
+        # REPLACE WITH YOUR OWN SUB-URI
+        SUB_URI_PATH='/redmine'
+
+        #Config files where to apply changes
+        config1=/opt/bitnami/redmine/config.ru
+        config2=/opt/bitnami/redmine/config/environment.rb
+
         sed -i '$ d' ${config1}
         echo 'map ActionController::Base.config.try(:relative_url_root) || "/" do' >> ${config1}
         echo 'run Rails.application' >> ${config1}
         echo 'end' >> ${config1}
         echo 'Redmine::Utils::relative_url_root = "'${SUB_URI_PATH}'"' >> ${config2}
+
+        SUB_URI_PATH=$(echo ${SUB_URI_PATH} | sed -e 's|/|\\/|g')
+        sed -i -e "s/\(relative_url_root\ \=\ \"\).*\(\"\)/\1${SUB_URI_PATH}\2/" ${config2}
     fi
 
-    SUB_URI_PATH=$(echo ${SUB_URI_PATH} | sed -e 's|/|\\/|g')
-    sed -i -e "s/\(relative_url_root\ \=\ \"\).*\(\"\)/\1${SUB_URI_PATH}\2/" ${config2}
+    echo ""
+    exec "$@"
 ```
 
 #### Add this confimap as a volume/volume mount in the chart values
@@ -404,8 +417,8 @@ extraVolumes:
 ##
 extraVolumeMounts:
   - name: "redmine-init-volume"
-    mountPath: "/init.sh"
-    subPath: init.sh
+    mountPath: "/opt/bitnami/scripts/entrypoint.sh"
+    subPath: entrypoint.sh
 ```
 
 #### Change the probes URI
@@ -505,6 +518,12 @@ kubectl create secret generic my-cert-chain --from-file chain.pem
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### 16.0.0
+
+The [Bitnami Redmine](https://github.com/bitnami/bitnami-docker-redmine) image was refactored and now the source code is published in GitHub in the [`rootfs`](https://github.com/bitnami/bitnami-docker-redmine/tree/master/4/debian-10/rootfs) folder of the container image repository.
+
+Full compatibility is not guaranteed due to the amount of involved changes, but in most scenarios, upgrades are expected to work as no breaking changes are expected.
 
 ### 15.0.0
 

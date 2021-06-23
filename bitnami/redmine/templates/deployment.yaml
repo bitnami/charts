@@ -96,17 +96,15 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
           {{- end }}
           env:
-            {{- if eq .Values.databaseType "mariadb" }}
-            - name: REDMINE_DB_MYSQL
-            {{- else }}
-            - name: REDMINE_DB_POSTGRES
-            {{- end }}
+            - name: REDMINE_DATABASE_TYPE
+              value: {{ default "" .Values.databaseType | quote }}
+            - name: REDMINE_DATABASE_HOST
               value: {{ template "redmine.database.host" . }}
-            - name: REDMINE_DB_NAME
+            - name: REDMINE_DATABASE_NAME
               value: {{ template "redmine.database.name" . }}
-            - name: REDMINE_DB_USERNAME
+            - name: REDMINE_DATABASE_USER
               value: {{ template "redmine.database.username" . }}
-            - name: REDMINE_DB_PASSWORD
+            - name: REDMINE_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ template "redmine.database.secretName" . }}
@@ -116,7 +114,7 @@ spec:
                   key: postgresql-password
                   {{- end }}
             {{- if (include "redmine.useExternalDB" .) }}
-            - name: REDMINE_DB_PORT_NUMBER
+            - name: REDMINE_DATABASE_PORT_NUMBER
               value: {{ .Values.externalDatabase.port | quote }}
             {{- end }}
             - name: REDMINE_USERNAME
@@ -131,27 +129,27 @@ spec:
             - name: REDMINE_LANG
               value: {{ .Values.redmineLanguage | quote }}
             {{- if .Values.smtpHost }}
-            - name: SMTP_HOST
+            - name: REDMINE_SMTP_HOST
               value: {{ .Values.smtpHost | quote }}
             {{- end }}
             {{- if .Values.smtpPort }}
-            - name: SMTP_PORT
+            - name: REDMINE_SMTP_PORT_NUMBER
               value: {{ .Values.smtpPort | quote }}
             {{- end }}
             {{- if .Values.smtpUser }}
-            - name: SMTP_USER
+            - name: REDMINE_SMTP_USER
               value: {{ .Values.smtpUser | quote }}
             {{- end }}
             {{- if .Values.smtpPassword }}
-            - name: SMTP_PASSWORD
+            - name: REDMINE_SMTP_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ template "redmine.secretName" . }}
                   key: smtp-password
             {{- end }}
             {{- if .Values.smtpTls }}
-            - name: SMTP_TLS
-              value: {{ .Values.smtpTls | quote }}
+            - name: REDMINE_SMTP_PROTOCOL
+              value: "tls"
             {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
