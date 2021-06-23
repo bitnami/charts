@@ -346,7 +346,7 @@ Redmine writes uploaded files to a persistent volume. By default that volume can
 
 On certain occasions, you may need that Redmine is available under a specific sub-URI path rather than the root. A common scenario to this problem may arise if you plan to set up your Redmine container behind a reverse proxy. To deploy your Redmine container using a certain sub-URI you just need to follow these steps:
 
-#### Create a configmap containing an altered version of entrypoint.sh
+#### Create a configmap containing an altered version of post-init.sh
 
 ```yaml
 apiVersion: v1
@@ -358,49 +358,24 @@ metadata:
   ...
 data:
 
-  entrypoint.sh: |-
+  post-init.sh: |-
     #!/bin/bash
 
-    set -o errexit
-    set -o nounset
-    set -o pipefail
-    # set -o xtrace # Uncomment this line for debugging purpose
+    # REPLACE WITH YOUR OWN SUB-URI
+    SUB_URI_PATH='/redmine'
 
-    # Load Redmine environment
-    . /opt/bitnami/scripts/redmine-env.sh
+    #Config files where to apply changes
+    config1=/opt/bitnami/redmine/config.ru
+    config2=/opt/bitnami/redmine/config/environment.rb
 
-    # Load libraries
-    . /opt/bitnami/scripts/libbitnami.sh
-    . /opt/bitnami/scripts/liblog.sh
+    sed -i '$ d' ${config1}
+    echo 'map ActionController::Base.config.try(:relative_url_root) || "/" do' >> ${config1}
+    echo 'run Rails.application' >> ${config1}
+    echo 'end' >> ${config1}
+    echo 'Redmine::Utils::relative_url_root = "'${SUB_URI_PATH}'"' >> ${config2}
 
-    print_welcome_page
-
-    if [[ "$1" = "/opt/bitnami/scripts/redmine/run.sh" ]]; then
-        /opt/bitnami/scripts/mysql-client/setup.sh
-        /opt/bitnami/scripts/postgresql-client/setup.sh
-        /opt/bitnami/scripts/redmine/setup.sh
-        /post-init.sh
-        info "** Redmine setup finished! **"
-
-        # REPLACE WITH YOUR OWN SUB-URI
-        SUB_URI_PATH='/redmine'
-
-        #Config files where to apply changes
-        config1=/opt/bitnami/redmine/config.ru
-        config2=/opt/bitnami/redmine/config/environment.rb
-
-        sed -i '$ d' ${config1}
-        echo 'map ActionController::Base.config.try(:relative_url_root) || "/" do' >> ${config1}
-        echo 'run Rails.application' >> ${config1}
-        echo 'end' >> ${config1}
-        echo 'Redmine::Utils::relative_url_root = "'${SUB_URI_PATH}'"' >> ${config2}
-
-        SUB_URI_PATH=$(echo ${SUB_URI_PATH} | sed -e 's|/|\\/|g')
-        sed -i -e "s/\(relative_url_root\ \=\ \"\).*\(\"\)/\1${SUB_URI_PATH}\2/" ${config2}
-    fi
-
-    echo ""
-    exec "$@"
+    SUB_URI_PATH=$(echo ${SUB_URI_PATH} | sed -e 's|/|\\/|g')
+    sed -i -e "s/\(relative_url_root\ \=\ \"\).*\(\"\)/\1${SUB_URI_PATH}\2/" ${config2}
 ```
 
 #### Add this confimap as a volume/volume mount in the chart values
@@ -417,8 +392,8 @@ extraVolumes:
 ##
 extraVolumeMounts:
   - name: "redmine-init-volume"
-    mountPath: "/opt/bitnami/scripts/entrypoint.sh"
-    subPath: entrypoint.sh
+    mountPath: "/post-init.sh"
+    subPath: post-init.sh
 ```
 
 #### Change the probes URI
