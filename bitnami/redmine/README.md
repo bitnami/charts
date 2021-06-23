@@ -346,7 +346,7 @@ Redmine writes uploaded files to a persistent volume. By default that volume can
 
 On certain occasions, you may need that Redmine is available under a specific sub-URI path rather than the root. A common scenario to this problem may arise if you plan to set up your Redmine container behind a reverse proxy. To deploy your Redmine container using a certain sub-URI you just need to follow these steps:
 
-#### Create a configmap containing an altered version of init.sh
+#### Create a configmap containing an altered version of entrypoint.sh
 
 ```yaml
 apiVersion: v1
@@ -358,7 +358,7 @@ metadata:
   ...
 data:
 
-  init.sh: |-
+  entrypoint.sh: |-
     #!/bin/bash
 
     set -o errexit
