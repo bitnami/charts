@@ -322,6 +322,7 @@ infoblox:
   wapiVersion: ""
   wapiConnectionPoolSize: ""
   wapiHttpTimeout: ""
+  maxResults: ""
 
 ## Linode configuration to be set via arguments/env. variables
 ##
