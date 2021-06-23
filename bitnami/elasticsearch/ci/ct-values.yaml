@@ -1,15 +1,15 @@
 master:
   livenessProbe:
-    initialDelaySeconds: 180
+    enabled: false
   readinessProbe:
-    initialDelaySeconds: 180
+    enabled: false
 data:
   livenessProbe:
-    initialDelaySeconds: 180
+    enabled: false
   readinessProbe:
-    initialDelaySeconds: 180
+    enabled: false
 coordinating:
   livenessProbe:
-    initialDelaySeconds: 180
+    enabled: false
   readinessProbe:
-    initialDelaySeconds: 180
+    enabled: false
