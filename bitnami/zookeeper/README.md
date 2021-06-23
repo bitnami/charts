@@ -251,7 +251,9 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### Configure log level
 
-You can configure the ZooKeeper log level using the `ZOO_LOG_LEVEL` environment variable. By default, it is set to `ERROR` because of each readiness probe produce an `INFO` message on connection and a `WARN` message on disconnection.
+You can configure the ZooKeeper log level using the `ZOO_LOG_LEVEL` environment variable or the parameter `logLevel`. By default, it is set to `ERROR` because each instance of the liveness probe and the readiness probe produces an `INFO` message on connection and a `WARN` message on disconnection.
+
+To avoid the connection/disconnection messages from the probes, you can enable the use of the ZooKeeper Admin Server for these checks by setting both `livenessProbe.useAdmin` and `readinessProbe.useAdmin` to `true`. If you are polling for ZooKeeper metrics then you must also ensure that you are using the ZooKeeper metrics server (`metrics.enabled` set to `true`) and not the deprecated pattern of polling 'mntr' on the ZooKeeper client port. If these precautions are taken, it is recommended that you set log level to ‘INFO’.
 
 ## Persistence
 

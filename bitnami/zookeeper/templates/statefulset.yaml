@@ -404,6 +404,9 @@ spec:
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             exec:
+              {{- if .Values.livenessProbe.useAdmin }}
+              command: ['/bin/bash', '-c', 'curl -s -m {{ .Values.livenessProbe.probeCommandTimeout }} http://localhost:8080/commands/ruok | grep ruok']
+              {{- else }}
               {{- if not .Values.service.disableBaseClientPort }}
               command: ['/bin/bash', '-c', 'echo "ruok" | timeout {{ .Values.livenessProbe.probeCommandTimeout }} nc -w {{ .Values.livenessProbe.probeCommandTimeout }} localhost {{ .Values.service.port }} | grep imok']
               {{- else }}
@@ -412,6 +415,7 @@ spec:
                 {{- else }}
                 command: ['/bin/bash', '-c', 'echo "ruok" | timeout {{ .Values.livenessProbe.probeCommandTimeout }} openssl s_client -quiet -crlf -connect localhost:{{ .Values.service.tlsClientPort }} -cert {{ .Values.service.tls.client_cert_pem_path }} -key {{ .Values.service.tls.client_key_pem_path }} | grep imok']
                 {{- end }}
+              {{- end }}
               {{- end }}
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
@@ -424,6 +428,9 @@ spec:
           {{- if .Values.readinessProbe.enabled }}
           readinessProbe:
             exec:
+              {{- if .Values.readinessProbe.useAdmin }}
+              command: ['/bin/bash', '-c', 'curl -s -m {{ .Values.readinessProbe.probeCommandTimeout }} http://localhost:8080/commands/ruok | grep error | grep null']
+              {{- else }}
               {{- if not .Values.service.disableBaseClientPort }}
               command: ['/bin/bash', '-c', 'echo "ruok" | timeout {{ .Values.readinessProbe.probeCommandTimeout }} nc -w {{ .Values.readinessProbe.probeCommandTimeout }} localhost {{ .Values.service.port }} | grep imok']
               {{- else }}
@@ -432,6 +439,7 @@ spec:
                 {{- else }}
                 command: ['/bin/bash', '-c', 'echo "ruok" | timeout {{ .Values.livenessProbe.probeCommandTimeout }} openssl s_client -quiet -crlf -connect localhost:{{ .Values.service.tlsClientPort }} -cert {{ .Values.service.tls.client_cert_pem_path }} -key {{ .Values.service.tls.client_key_pem_path }} | grep imok']
                 {{- end }}
+              {{- end }}
               {{- end }}
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
