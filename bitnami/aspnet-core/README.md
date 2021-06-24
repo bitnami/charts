@@ -47,153 +47,148 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## Parameters
 
-The following tables lists the configurable parameters of the ASP.NET Core chart and their default values per section/component:
-
 ### Global parameters
 
-| Parameter                               | Description                                                | Default                                                 |
-|-----------------------------------------|------------------------------------------------------------|---------------------------------------------------------|
-| `global.imageRegistry`                  | Global Docker image registry                               | `nil`                                                   |
-| `global.imagePullSecrets`               | Global Docker registry secret names as an array            | `[]` (does not add image pull secrets to deployed pods) |
+| Name                      | Description                                     | Value |
+| ------------------------- | ----------------------------------------------- | ----- |
+| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
+
 
 ### Common parameters
 
-| Parameter                               | Description                                                | Default                                                 |
-|-----------------------------------------|------------------------------------------------------------|---------------------------------------------------------|
-| `nameOverride`                          | String to partially override aspnet-core.fullname          | `nil`                                                   |
-| `fullnameOverride`                      | String to fully override aspnet-core.fullname              | `nil`                                                   |
-| `clusterDomain`                         | Default Kubernetes cluster domain                          | `cluster.local`                                         |
-| `commonLabels`                          | Labels to add to all deployed objects                      | `{}`                                                    |
-| `commonAnnotations`                     | Annotations to add to all deployed objects                 | `{}`                                                    |
-| `extraDeploy`                           | Array of extra objects to deploy with the release          | `[]` (evaluated as a template)                          |
-| `kubeVersion`                        | Force target Kubernetes version (using Helm capabilities if not set)                                                    | `nil`                          |
+| Name                | Description                                                                                 | Value           |
+| ------------------- | ------------------------------------------------------------------------------------------- | --------------- |
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilites if not set)                         | `nil`           |
+| `nameOverride`      | String to partially override aspnet-core.fullname template (will maintain the release name) | `nil`           |
+| `fullnameOverride`  | String to fully override aspnet-core.fullname template                                      | `nil`           |
+| `clusterDomain`     | Default Kubernetes cluster domain                                                           | `cluster.local` |
+| `commonLabels`      | Labels to add to all deployed objects                                                       | `{}`            |
+| `commonAnnotations` | Annotations to add to all deployed objects                                                  | `{}`            |
+| `extraDeploy`       | Array of extra objects to deploy with the release                                           | `[]`            |
+
 
 ### ASP.NET Core parameters
 
-| Parameter                               | Description                                                                              | Default                                                 |
-|-----------------------------------------|------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `image.registry`                        | ASP.NET Core image registry                                                              | `docker.io`                                             |
-| `image.repository`                      | ASP.NET Core image name                                                                  | `bitnami/aspnet-core`                                   |
-| `image.tag`                             | ASP.NET Core image tag                                                                   | `{TAG_NAME}`                                            |
-| `image.pullPolicy`                      | ASP.NET Core image pull policy                                                           | `IfNotPresent`                                          |
-| `image.pullSecrets`                     | Specify docker-registry secret names as an array                                         | `[]` (does not add image pull secrets to deployed pods) |
-| `command`                               | Override default container command (useful when using custom images)                     | `nil`                                                   |a
-| `args`                                  | Override default container args (useful when using custom images)                        | `nil`                                                   |
-| `bindURLs`                              | URLs to bind                                                                             | `http://+:8080`                                         |
-| `extraEnvVars`                          | Extra environment variables to be set on ASP.NET Core container                          | `{}`                                                    |
-| `extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars                                     | `nil`                                                   |
-| `extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars                                        | `nil`                                                   |
+| Name                 | Description                                                                   | Value                 |
+| -------------------- | ----------------------------------------------------------------------------- | --------------------- |
+| `image.registry`     | ASP.NET Core image registry                                                   | `docker.io`           |
+| `image.repository`   | ASP.NET Core image name                                                       | `bitnami/aspnet-core` |
+| `image.tag`          | ASP.NET Core image tag                                                        | `3.1.16-debian-10-r0` |
+| `image.pullPolicy`   | ASP.NET Core image pull policy                                                | `IfNotPresent`        |
+| `command`            | Command for running the container (set to default if not set). Use array form | `[]`                  |
+| `args`               | Args for running the container (set to default if not set). Use array form    | `[]`                  |
+| `bindURLs`           | URLs to bind                                                                  | `http://+:8080`       |
+| `extraEnvVars`       | Extra environment variables to be set on ASP.NET Core container               | `[]`                  |
+| `extraEnvVarsCM`     | ConfigMap with extra environment variables                                    | `nil`                 |
+| `extraEnvVarsSecret` | Secret with extra environment variables                                       | `nil`                 |
+
 
 ### ASP.NET Core deployment parameters
 
-| Parameter                             | Description                                                                                | Default                                                 |
-|---------------------------------------|--------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `replicaCount`                        | Number of ASP.NET Core replicas to deploy                                                  | `1`                                                     |
-| `hostAliases`                    | Add deployment host aliases                                                               | `[]`                                          |
-| `strategyType`                        | Deployment Strategy Type                                                                   | `RollingUpdate`                                         |
-| `podAffinityPreset`                   | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`        | `""`                                                    |
-| `podAntiAffinityPreset`               | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`   | `soft`                                                  |
-| `nodeAffinityPreset.type`             | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `""`                                                    |
-| `nodeAffinityPreset.key`              | Node label key to match Ignored if `affinity` is set.                                      | `""`                                                    |
-| `affinity`                            | Affinity for pod assignment                                                                | `{}` (evaluated as a template)                          |
-| `nodeSelector`                        | Node labels for pod assignment                                                             | `{}` (evaluated as a template)                          |
-| `tolerations`                         | Tolerations for pod assignment                                                             | `[]` (evaluated as a template)                          |
-| `priorityClassName`                   | Controller priorityClassName                                                               | `nil`                                                   |
-| `podSecurityContext`                  | ASP.NET Core pods' Security Context                                                        | Check `values.yaml` file                                |
-| `containerSecurityContext`            | ASP.NET Corecontainers' Security Context                                                   | Check `values.yaml` file                                |
-| `containerPort`                       | Port to expose at container level                                                          | `8080`                                                  |
-| `resources.limits`                    | The resources limits for the ASP.NET Core container                                        | `{}`                                                    |
-| `resources.requests`                  | The requested resources for the ASP.NET Core container                                     | `{}`                                                    |
-| `podAnnotations`                      | Annotations for ASP.NET Core pods                                                          | `{}`                                                    |
-| `lifecycleHooks`                      | LifecycleHooks to set additional configuration at startup.                                 | `{}` (evaluated as a template)                          |
-| `livenessProbe`                       | Liveness probe configuration for ASP.NET Core                                              | Check `values.yaml` file                                |
-| `readinessProbe`                      | Readiness probe configuration for ASP.NET Core                                             | Check `values.yaml` file                                |
-| `customLivenessProbe`                 | Override default liveness probe                                                            | `nil`                                                   |
-| `customReadinessProbe`                | Override default readiness probe                                                           | `nil`                                                   |
-| `extraVolumeMounts`                   | Optionally specify extra list of additional volumeMounts for ASP.NET Core container(s)     | `[]`                                                    |
-| `extraVolumes`                        | Optionally specify extra list of additional volumes for ASP.NET Core statefulset           | `[]`                                                    |
-| `initContainers`                      | Add additional init containers to the ASP.NET Core pods                                    | `{}` (evaluated as a template)                          |
-| `sidecars`                            | Add additional sidecar containers to the ASP.NET Core pods                                 | `{}` (evaluated as a template)                          |
-| `pdb.create`                          | Enable/disable a Pod Disruption Budget creation                                            | `false`                                                 |
-| `pdb.minAvailable`                    | Minimum number/percentage of pods that should remain scheduled                             | `1`                                                     |
-| `pdb.maxUnavailable`                  | Maximum number/percentage of pods that may be made unavailable                             | `nil`                                                   |
-| `autoscaling.enabled`                 | Enable autoscaling for ASP.NET Core                                                        | `false`                                                 |
-| `autoscaling.minReplicas`             | Minimum number of ASP.NET Core replicas                                                    | `nil`                                                   |
-| `autoscaling.maxReplicas`             | Maximum number of ASP.NET Core replicas                                                    | `nil`                                                   |
-| `autoscaling.targetCPU`               | Target CPU utilization percentage                                                          | `nil`                                                   |
-| `autoscaling.targetMemory`            | Target Memory utilization percentage                                                       | `nil`                                                   |
+| Name                                 | Description                                                                                      | Value           |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------ | --------------- |
+| `hostAliases`                        | Deployment pod host aliases                                                                      | `[]`            |
+| `replicaCount`                       | Number of ASP.NET Core replicas to deploy                                                        | `1`             |
+| `strategyType`                       | Deployment Strategy Type, can be set to RollingUpdate or Recreate by default.                    | `RollingUpdate` |
+| `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`              | `""`            |
+| `podAntiAffinityPreset`              | Pod anti-affinity preset                                                                         | `soft`          |
+| `nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`        | `""`            |
+| `nodeAffinityPreset.key`             | Node label key to match. Ignored if `affinity` is set. Allowed values: `soft` or `hard`          | `""`            |
+| `nodeAffinityPreset.values`          | Node label values to match                                                                       | `[]`            |
+| `affinity`                           | Affinity for pod assignment. Evaluated as a template.                                            | `{}`            |
+| `nodeSelector`                       | Node labels for pod assignment. Evaluated as a template.                                         | `{}`            |
+| `tolerations`                        | Tolerations for pod assignment. Evaluated as a template.                                         | `[]`            |
+| `podAnnotations`                     | Annotations for ASP.NET Core pods                                                                | `{}`            |
+| `priorityClassName`                  | ASP.NET Core pods' priority.                                                                     | `""`            |
+| `lifecycleHooks`                     | lifecycleHooks for the ASP.NET Core container to automate configuration before or after startup. | `{}`            |
+| `podSecurityContext.enabled`         | !!!!!                                                                                            | `false`         |
+| `podSecurityContext.sysctls`         | !!!!!                                                                                            | `{}`            |
+| `containerSecurityContext.enabled`   | !!!!!                                                                                            | `false`         |
+| `containerSecurityContext.runAsUser` | !!!!!                                                                                            | `0`             |
+| `containerPort`                      | Port to expose at container level                                                                | `8080`          |
+| `resources.limits`                   | The resources limits for the ASP.NET Core container                                              | `{}`            |
+| `resources.requests`                 | The requested resources for the ASP.NET Core container                                           | `{}`            |
+| `livenessProbe.enabled`              | Enable livenessProbe                                                                             | `true`          |
+| `livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                          | `10`            |
+| `livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                 | `20`            |
+| `livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                | `1`             |
+| `livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                              | `6`             |
+| `livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                              | `1`             |
+| `readinessProbe.enabled`             | Enable readinessProbe                                                                            | `true`          |
+| `readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                         | `10`            |
+| `readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                | `20`            |
+| `readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                               | `1`             |
+| `readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                             | `6`             |
+| `readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                             | `1`             |
+| `customLivenessProbe`                | Custom Liveness probes for ASP.NET Core pods                                                     | `{}`            |
+| `customReadinessProbe`               | Custom Rediness probes ASP.NET Core pods                                                         | `{}`            |
+| `extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for ASP.NET Core container              | `[]`            |
+| `extraVolumes`                       | Optionally specify extra list of additional volumes for ASP.NET Core statefulset                 | `[]`            |
+| `initContainers`                     | Add additional init containers to the ASP.NET Core pods                                          | `{}`            |
+| `sidecars`                           | Add additional sidecar containers to the ASP.NET Core pods                                       | `{}`            |
+| `pdb.create`                         | Enable/disable a Pod Disruption Budget creation                                                  | `false`         |
+| `pdb.minAvailable`                   | Minimum number                                                                                   | `1`             |
+| `autoscaling.enabled`                | Enable autoscaling for ASP.NET Core                                                              | `false`         |
+| `autoscaling.minReplicas`            | Minimum number of ASP.NET Core replicas                                                          | `1`             |
+| `autoscaling.maxReplicas`            | Maximum number of ASP.NET Core replicas                                                          | `11`            |
+
 
 ### Custom ASP.NET Core application parameters
 
-| Parameter                                         | Description                                                                    | Default                                                            |
-|---------------------------------------------------|--------------------------------------------------------------------------------|--------------------------------------------------------------------|
-| `appFromExternalRepo.enabled`                     | Enable to download/build ASP.NET Core app from external git repository         | `true`                                                             |
-| `appFromExternalRepo.clone.image.registry`        | GIT image registry                                                             | `docker.io`                                                        |
-| `appFromExternalRepo.clone.image.repository`      | GIT image name                                                                 | `bitnami/git`                                                      |
-| `appFromExternalRepo.clone.image.tag`             | GIT image tag                                                                  | `{TAG_NAME}`                                                       |
-| `appFromExternalRepo.clone.image.pullPolicy`      | GIT image pull policy                                                          | `IfNotPresent`                                                     |
-| `appFromExternalRepo.clone.image.pullSecrets`     | Specify docker-registry secret names as an array                               | `[]` (does not add image pull secrets to deployed pods)            |
-| `appFromExternalRepo.clone.repository`            | GIT Repository to clone                                                        | `https://github.com/dotnet/AspNetCore.Docs.git`                    |
-| `appFromExternalRepo.clone.revision`              | GIT revision to checkout                                                       | `main`                                                             |
-| `appFromExternalRepo.clone.extraVolumeMounts`     | Add extra volume mounts for the GIT container                                  | `[]`                                                               |
-| `appFromExternalRepo.publish.image.registry`      | .NET SDK image registry                                                        | `docker.io`                                                        |
-| `appFromExternalRepo.publish.image.repository`    | .NET SDK Image name                                                            | `bitnami/git`                                                      |
-| `appFromExternalRepo.publish.image.tag`           | .NET SDK Image tag                                                             | `{TAG_NAME}`                                                       |
-| `appFromExternalRepo.publish.image.pullPolicy`    | .NET SDK image pull policy                                                     | `IfNotPresent`                                                     |
-| `appFromExternalRepo.publish.image.pullSecrets`   | Specify docker-registry secret names as an array                               | `[]` (does not add image pull secrets to deployed pods)            |
-| `appFromExternalRepo.publish.subFolder`           | Sub folder under the Git repository containin the ASP.NET Core app             | `spnetcore/fundamentals/servers/kestrel/samples/3.x/KestrelSample` |
-| `appFromExternalRepo.publish.extraFlags`          | Extra flags to be appended to "dotnet publish" command                         | `[]`                                                               |
-| `appFromExternalRepo.startCommand`                | Command used to start ASP.NET Core app                                         | `["dotnet", "KestrelSample.dll"]`                                  |
-| `appFromExistingPVC.enabled`                      | Enable mounting your ASP.NET Core app from an existing PVC                     | `false`                                                            |
-| `appFromExistingPVC.existingClaim`                | A existing Persistent Volume Claim containing your ASP.NET Core app            | `nil`                                                              |
+| Name                                           | Description                                                            | Value                                                               |
+| ---------------------------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| `appFromExternalRepo.enabled`                  | Enable to download/build ASP.NET Core app from external git repository | `true`                                                              |
+| `appFromExternalRepo.clone.image.registry`     | Git image registry                                                     | `docker.io`                                                         |
+| `appFromExternalRepo.clone.image.repository`   | Git image name                                                         | `bitnami/git`                                                       |
+| `appFromExternalRepo.clone.image.tag`          | Git image tag                                                          | `2.32.0-debian-10-r1`                                               |
+| `appFromExternalRepo.clone.image.pullPolicy`   | Git image pull policy                                                  | `IfNotPresent`                                                      |
+| `appFromExternalRepo.clone.repository`         | Git repository to clone                                                | `https://github.com/dotnet/AspNetCore.Docs.git`                     |
+| `appFromExternalRepo.clone.revision`           | Git revision to checkout                                               | `main`                                                              |
+| `appFromExternalRepo.clone.extraVolumeMounts`  | Add extra volume mounts for the GIT container                          | `[]`                                                                |
+| `appFromExternalRepo.publish.image.registry`   | .NET SDK image registry                                                | `docker.io`                                                         |
+| `appFromExternalRepo.publish.image.repository` | .NET SDK Image name                                                    | `bitnami/dotnet-sdk`                                                |
+| `appFromExternalRepo.publish.image.tag`        | .NET SDK Image tag                                                     | `3.1.409-debian-10-r24`                                             |
+| `appFromExternalRepo.publish.image.pullPolicy` | .NET SDK image pull policy                                             | `IfNotPresent`                                                      |
+| `appFromExternalRepo.publish.subFolder`        | Sub folder under the Git repository containing the ASP.NET Core app    | `aspnetcore/fundamentals/servers/kestrel/samples/3.x/KestrelSample` |
+| `appFromExternalRepo.publish.extraFlags`       | Extra flags to be appended to "dotnet publish" command                 | `[]`                                                                |
+| `appFromExternalRepo.startCommand`             | Command used to start ASP.NET Core app                                 | `[]`                                                                |
+| `appFromExistingPVC.enabled`                   | Enable mounting your ASP.NET Core app from an existing PVC             | `false`                                                             |
+
 
 ### Exposure parameters
 
-| Parameter                               | Description                                                                              | Default                                                 |
-|-----------------------------------------|------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `service.type`                          | Kubernetes service type                                                                  | `ClusterIP`                                             |
-| `service.port`                          | Service HTTP port                                                                        | `8081`                                                  |
-| `service.nodePort`                      | Service HTTP node port                                                                   | `nil`                                                   |
-| `service.clusterIP`                     | ASP.NET Core service clusterIP IP                                                        | `None`                                                  |
-| `service.externalTrafficPolicy`         | Enable client source IP preservation                                                     | `Cluster`                                               |
-| `service.loadBalancerIP`                | loadBalancerIP if service type is `LoadBalancer`                                         | `nil`                                                   |
-| `service.loadBalancerSourceRanges`      | Address that are allowed when service is LoadBalancer                                    | `[]`                                                    |
-| `service.annotations`                   | Annotations for ASP.NET Core service                                                     | `{}`                                                    |
-| `ingress.enabled`                       | Enable ingress controller resource                                                       | `false`                                                 |
-| `ingress.apiVersion`             | Force Ingress API version (automatically detected if not set) | ``                             |
-| `ingress.path`                   | Ingress path                                                  | `/`                            |
-| `ingress.pathType`               | Ingress path type                                             | `ImplementationSpecific`       |
-| `ingress.certManager`                   | Add annotations for cert-manager                                                         | `false`                                                 |
-| `ingress.hostname`                      | Default host for the ingress resource                                                    | `aspnet-core.local`                                     |
-| `ingress.tls`                           | Enable TLS configuration for the hostname defined at `ingress.hostname` parameter        | `false`                                                 |
-| `ingress.annotations`                   | Ingress annotations                                                                      | `[]`                                                    |
-| `ingress.extraHosts[0].name`            | Additional hostnames to be covered                                                       | `nil`                                                   |
-| `ingress.extraHosts[0].path`            | Additional hostnames to be covered                                                       | `nil`                                                   |
-| `ingress.extraTls[0].hosts[0]`          | TLS configuration for additional hostnames to be covered                                 | `nil`                                                   |
-| `ingress.extraTls[0].secretName`        | TLS configuration for additional hostnames to be covered                                 | `nil`                                                   |
-| `ingress.secrets[0].name`               | TLS Secret Name                                                                          | `nil`                                                   |
-| `ingress.secrets[0].certificate`        | TLS Secret Certificate                                                                   | `nil`                                                   |
-| `ingress.secrets[0].key`                | TLS Secret Key                                                                           | `nil`                                                   |
-| `healthIngress.enabled`                 | Enable healthIngress controller resource                                                 | `false`                                                 |
-| `healthIngress.certManager`             | Add annotations for cert-manager                                                         | `false`                                                 |
-| `healthIngress.hostname`                | Default host for the healthIngress resource                                              | `aspnet-core.local`                                     |
-| `healthIngress.tls`                     | Enable TLS configuration for the hostname defined at `healthIngress.hostname` parameter  | `false`                                                 |
-| `healthIngress.annotations`             | Ingress annotations                                                                      | `[]`                                                    |
-| `healthIngress.extraHosts[0].name`      | Additional hostnames to be covered                                                       | `nil`                                                   |
-| `healthIngress.extraHosts[0].path`      | Additional hostnames to be covered                                                       | `nil`                                                   |
-| `healthIngress.extraTls[0].hosts[0]`    | TLS configuration for additional hostnames to be covered                                 | `nil`                                                   |
-| `healthIngress.extraTls[0].secretName`  | TLS configuration for additional hostnames to be covered                                 | `nil`                                                   |
-| `healthIngress.secrets[0].name`         | TLS Secret Name                                                                          | `nil`                                                   |
-| `healthIngress.secrets[0].certificate`  | TLS Secret Certificate                                                                   | `nil`                                                   |
-| `healthIngress.secrets[0].key`          | TLS Secret Key                                                                           | `nil`                                                   |
+| Name                            | Description                                                                                                | Value                    |
+| ------------------------------- | ---------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                  | Kubernetes service type                                                                                    | `ClusterIP`              |
+| `service.port`                  | Service HTTP port                                                                                          | `80`                     |
+| `service.externalTrafficPolicy` | Enable client source IP preservation                                                                       | `Cluster`                |
+| `service.annotations`           | Provide any additional annotations for ASP.NET Core service that may be required. Evaluated as a template. | `{}`                     |
+| `ingress.enabled`               | Set to true to enable ingress record generation                                                            | `false`                  |
+| `ingress.apiVersion`            | Override API Version (automatically detected if not set)                                                   | `nil`                    |
+| `ingress.path`                  | Ingress path                                                                                               | `/`                      |
+| `ingress.pathType`              | Ingress path type                                                                                          | `ImplementationSpecific` |
+| `ingress.certManager`           | Set this to true in order to add the corresponding annotations for cert-manager                            | `false`                  |
+| `ingress.hostname`              | Default host for the ingress resource, a host pointing to this will be created                             | `aspnet-core.local`      |
+| `ingress.annotations`           | Ingress annotations done as key:value pairs                                                                | `{}`                     |
+| `ingress.tls`                   | Enable TLS configuration for the hostname defined at ingress.hostname parameter                            | `false`                  |
+| `ingress.secrets`               | If you're providing your own certificates, please use this to add the certificates as secrets              | `[]`                     |
+| `healthIngress.enabled`         | Enable healthIngress controller resource                                                                   | `false`                  |
+| `healthIngress.certManager`     | Set this to true in order to add the corresponding annotations for cert-manager                            | `false`                  |
+| `healthIngress.hostname`        | When the heallth ingress is enabled, a host pointing to this will be created                               | `aspnet-core.local`      |
+| `healthIngress.annotations`     | Ingress annotations done as key:value pairs                                                                | `{}`                     |
+| `healthIngress.tls`             | Enable TLS configuration for the hostname defined at ingress.hostname parameter                            | `false`                  |
+| `healthIngress.secrets`         | If you're providing your own certificates, please use this to add the certificates as secrets              | `[]`                     |
+
 
 ### RBAC parameters
 
-| Parameter                               | Description                                                         | Default                                                 |
-|-----------------------------------------|---------------------------------------------------------------------|---------------------------------------------------------|
-| `serviceAccount.create`                 | Enable the creation of a ServiceAccount for ASP.NET Core pods       | `true`                                                  |
-| `serviceAccount.name`                   | Name of the created ServiceAccount                                  | Generated using the `aspnet-core.fullname` template     |
-| `serviceAccount.annotations`            | Annotations for ASP.NET Core ServiceAccount                         | `{}`                                                    |
+| Name                         | Description                                                   | Value  |
+| ---------------------------- | ------------------------------------------------------------- | ------ |
+| `serviceAccount.create`      | Enable the creation of a ServiceAccount for ASP.NET Core pods | `true` |
+| `serviceAccount.name`        | The name of the ServiceAccount to use.                        | `nil`  |
+| `serviceAccount.annotations` | Annotations for ASP.NET Core ServiceAccount                   | `{}`   |
+
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
