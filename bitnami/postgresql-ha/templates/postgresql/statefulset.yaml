@@ -247,7 +247,7 @@ spec:
               value: {{ template "postgresql-ha.postgresql.tlsCert" . }}
             - name: POSTGRESQL_TLS_KEY_FILE
               value: {{ template "postgresql-ha.postgresql.tlsCertKey" . }}
-            {{- if .Values.pgpool.tls.certCAFilename }}
+            {{- if .Values.postgresql.tls.certCAFilename }}
             - name: POSTGRESQL_TLS_CA_FILE
               value: {{ template "postgresql-ha.postgresql.tlsCACert" . }}
             {{- end }}
