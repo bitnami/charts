@@ -6,11 +6,13 @@ on:
       - master
     paths:
       - 'bitnami/airflow/values.yaml'
+      - 'bitnami/apache/values.yaml'
+      - 'bitnami/aspnet-core/values.yaml'
+      - 'bitnami/cassandra/values.yaml'
 
 jobs:
   generate-chart-readme:
     runs-on: ubuntu-latest
-
     steps:
 
       - name: Checkout bitnami-labs/readme-generator-for-helm
