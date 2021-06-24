@@ -258,27 +258,6 @@ spec:
               value: {{ .Values.aws.credentials.mountPath }}/credentials
             {{- end }}
             {{- end }}
-            {{- if eq .Values.provider "azure-private-dns" }}
-            # Azure Private DNS variables
-            {{- if .Values.azure.tenantId }}
-            - name: AZURE_TENANT_ID
-              value: {{ .Values.azure.tenantId }}
-            {{- end }}
-            {{- if not .Values.azure.useManagedIdentityExtension }}
-            {{- if or .Values.azure.aadClientId .Values.azure.aadClientSecret .Values.azure.secretName }}
-            - name: AZURE_CLIENT_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: {{ template "external-dns.secretName" . }}
-                  key: azure_aad_client_secret
-            - name: AZURE_CLIENT_ID
-              valueFrom:
-                secretKeyRef:
-                  name: {{ template "external-dns.secretName" . }}
-                  key: azure_aad_client_id
-            {{- end }}
-            {{- end }}
-            {{- end }}
             {{- if eq .Values.provider "cloudflare" }}
             # Cloudflare environment variables
             - name: CF_API_TOKEN
@@ -589,7 +568,7 @@ spec:
             secretName: {{ template "external-dns.secretName" . }}
         {{- end }}
         {{- if or (eq .Values.provider "azure") (eq .Values.provider "azure-private-dns") }}
-        # Azure volume(s)
+        # Azure and Azure Private DNS volume(s)
         - name: azure-config-file
           {{- if or .Values.azure.secretName (and .Values.azure.resourceGroup .Values.azure.tenantId .Values.azure.subscriptionId) }}
           secret:

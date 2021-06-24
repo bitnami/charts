@@ -1,67 +1,206 @@
+## @section Global parameters
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
-## Current available global Docker image parameters: imageRegistry and imagePullSecrets
-##
-# global:
-#   imageRegistry: myRegistryName
-#   imagePullSecrets:
-#     - myRegistryKeySecretName
-#   storageClass: myStorageClass
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
 
-## Force target Kubernetes version (using Helm capabilites if not set)
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.storageClass Global StorageClass for Persistent Volume(s)
+##
+global:
+  imageRegistry:
+  ## e.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+  storageClass:
+
+## @section Common parameters
+
+## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
 kubeVersion:
-
-## String to partially override airflow.fullname template (will maintain the release name)
+## @param nameOverride String to partially override airflow.fullname template with a string (will prepend the release name)
 ##
 nameOverride:
-## String to fully override airflow.fullname template
+## @param fullnameOverride String to fully override airflow.fullname template with a string
 ##
 fullnameOverride:
-## Airflow executor
-## ref: http://airflow.apache.org/docs/stable/executor/index.html
-## valid values: ['SequentialExecutor', 'LocalExecutor', 'CeleryExecutor', 'KubernetesExecutor', 'CeleryKubernetesExecutor']
+## @param affinity Affinity for pod assignment (evaluated as a template)
+## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
 ##
-executor: 'CeleryExecutor'
-## Name of an existing config map containing the Airflow config file
+affinity: {}
+## @param commonAnnotations Annotations to add to all deployed objects
 ##
-configurationConfigMap:
-## Name of an existing config map containing all the DAGs files you want to load in Airflow.
+commonAnnotations: {}
+## @param commonLabels Labels to add to all deployed objects
 ##
-dagsConfigMap:
-## Whether to load examples dags or not
+commonLabels: {}
+## Configure Container Security Context (only main container)
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+## @param containerSecurityContext.enabled Enable container security context
+## @param containerSecurityContext.runAsUser User ID for the container
 ##
-loadExamples: false
-## Authentication options
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1001
+## @param extraDeploy A list of extra kubernetes resources to be deployed
+##
+extraDeploy: []
+## @param extraEnvVars Extra environment variables to add to web, worker and scheduler pods
+## The parameters from the configuration file can be overwritten by using environment variables with this format:
+## AIRFLOW__{SECTION}__{KEY}. Note the double underscores. More info at https://airflow.readthedocs.io/en/stable/howto/set-config.html
+##
+## - name: AIRFLOW__SMTP__SMTP_HOST
+##   value: "localhost"
+## - name: AIRFLOW__SMTP__SMTP_PORT
+##   value: "25"
+## - name: AIRFLOW__SMTP__USER
+##   value: ""
+##
+extraEnvVars: []
+## @param extraEnvVarsCM ConfigMap containing extra env vars to add to web, worker and scheduler pods
+##
+extraEnvVarsCM:
+## @param extraEnvVarsSecret Secret containing extra env vars to add to web, worker and scheduler pods
+##
+extraEnvVarsSecret:
+## @param initContainers List of init containers to be added to the web, worker and scheduler pods
+## Example:
+## initContainers:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+initContainers:
+## Network policies
+## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+## @param networkPolicies.enabled Switch to enable network policies
+##
+networkPolicies:
+  enabled: false
+## Node affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+## @param nodeAffinityPreset.key Node label key to match. Ignored if `affinity` is set.
+## @param nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+## @param nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set.
+##
+nodeAffinityPreset:
+  ## Example:
+  ## key: "kubernetes.io/e2e-az-name"
+  ##
+  key: ''
+  type: ''
+  ## Example:
+  ## values:
+  ##   - e2e-az1
+  ##   - e2e-az2
+  ##
+  values: []
+## @param nodeSelector Node labels for pod assignment
+## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+##
+nodeSelector: {}
+## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`.
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+##
+podAffinityPreset: ''
+## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`.
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+##
+podAntiAffinityPreset: soft
+## Configure Pods Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+## @param podSecurityContext.enabled Enable pod security context
+## @param podSecurityContext.fsGroup fsGroup ID for the pod
+##
+podSecurityContext:
+  enabled: true
+  fsGroup: 1001
+## Role Based Access
+## Ref: https://kubernetes.io/docs/admin/authorization/rbac/
+## @param rbac.create If true, create & use RBAC resources
+##
+rbac:
+  create: false
+## Pods Service Account
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+## @param serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
+## @param serviceAccount.create Specifies whether a ServiceAccount should be created
+##
+serviceAccount:
+  annotations: {}
+  create: false
+  ## The name of the service account to use. If not set and create is true, a name is generated using the fullname template.
+  # name:
+## @param sidecars List of sidecar containers to be added to web, worker and scheduler pods
+## Example:
+## sidecars:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+sidecars:
+## @param tolerations Tolerations for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+##
+tolerations: []
+
+## @section Airflow common parameters
+
+## Authentication
+## @param auth.existingSecret Name of an existing secret containing password and fernet key ('airflow-password and 'airflow-fernetKey' keys)
+## @param auth.fernetKey Fernet key to secure connections
+## @param auth.forcePassword Force users to specify a password
+## @param auth.password Password to access web UI
+## @param auth.username Username to access web UI
 ##
 auth:
-  ## Option to force users to specify a password. That is required for 'helm upgrade' to work properly.
-  ## If it is not forced, a random password will be generated.
-  ##
-  forcePassword: false
-  ## Specify username to access web UI
-  ##
-  username: user
-  ## Specify password to access web UI
-  ##
-  password:
-  ## Specify a fernet key to secure airflow connections
-  ## Fernet key must be 32 url-safe base64-encoded bytes.
-  ## More info at:
+  existingSecret:
+  ## More info about the fernet key at:
   ## - https://airflow.readthedocs.io/en/stable/howto/secure-connections.html
   ## - https://bcb.github.io/airflow/fernet-key
   ##
   fernetKey:
-  ## Use existing secret (ignores previous password and fernetKey)
+  ## This is required for 'helm upgrade' to work properly.
+  ## If it is not forced, a random password will be generated.
   ##
-  existingSecret:
-
-## Web component related properties
+  forcePassword: false
+  password:
+  username: user
+## @param configurationConfigMap Name of an existing config map containing the Airflow config file
 ##
+configurationConfigMap:
+## @param executor Airflow executor, it should be one of 'SequentialExecutor', 'LocalExecutor', 'CeleryExecutor', 'KubernetesExecutor', 'CeleryKubernetesExecutor'
+## ref: http://airflow.apache.org/docs/stable/executor/index.html
+##
+executor: 'CeleryExecutor'
+## @param dagsConfigMap Name of an existing config map containing all the DAGs files you want to load in Airflow
+##
+dagsConfigMap:
+## @param loadExamples Switch to load some Airflow examples
+##
+loadExamples: false
+
+## @section Airflow web parameters
+
 web:
   ## Bitnami Airflow image version
   ## ref: https://hub.docker.com/r/bitnami/airflow/tags/
-  ##
+  ## @param web.image.registry Airflow image registry
+  ## @param web.image.repository Airflow image repository
+  ## @param web.image.tag Airflow image tag (immutable tags are recommended)
+  ## @param web.image.pullPolicy Airflow image pull policy
+  ## @param web.image.pullSecrets Airflow image pull secrets
+  ## @param web.image.debug Enable image debug mode
   image:
     registry: docker.io
     repository: bitnami/airflow
@@ -74,74 +213,86 @@ web:
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-    #   - myRegistryKeySecretName
     ## Set to true if you would like to see extra information on logs
     ## It turns BASH and/or NAMI debugging in the image
     ##
     debug: false
-  ## Number of web replicas
+  ## @param web.replicaCount Number of web replicas
   ##
   replicaCount: 1
-
-  ## Deployment pod host aliases
+  ## @param web.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-
-  ## URL used to access to airflow web ui
+  ## @param web.baseUrl URL used to access to airflow web ui
   ##
   baseUrl:
-  ## Name of an existing config map containing the Airflow webserver config file
+  ## @param web.configMap Name of an existing config map containing the Airflow webserver config file
   ##
   configMap:
-  ## Override cmd
+  ## @param web.command Override default container command (useful when using custom images)
   ##
   command:
-  ## Override args
+  ## @param web.args Override default container args (useful when using custom images)
   ##
   args:
-  ## Add extra labels to the web's pods
+  ## @param web.podLabels Add extra labels to the web's pods
   ##
   podLabels:
-  ## Add extra annotations to the web's pods
+  ## @param web.podAnnotations Add extra annotations to the web's pods
   ##
   podAnnotations:
-  ## Container port to be used.
+  ## @param web.containerPort Container port to be used for exposing http server
   ##
   containerPort: 8080
-  ## Add extra volume mounts
+  ## @param web.extraVolumeMounts Add extra volume mounts
   ##
   extraVolumeMounts:
-  ## Add extra volumes
+  ## @param web.extraVolumes Add extra volumes
   ##
   extraVolumes:
-  ## Add extra environment variables
+  ## @param web.extraEnvVars Array containing extra environment variables
   ##
   extraEnvVars:
-  ## ConfigMap with extra environment variables
+  ## @param web.extraEnvVarsCM ConfigMap containing extra environment variables
   ##
   extraEnvVarsCM:
-  ## Secret with extra environment variables
+  ## @param web.extraEnvVarsSecret Secret containing extra environment variables (in case of sensitive data)
   ##
   extraEnvVarsSecret:
   ## Web container' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param web.resources.limits The resources limits for the Web container
+  ## @param web.resources.requests The requested resources for the Web container
   ##
   resources:
-    # We usually recommend not to specify default resources and to leave this as a conscious
-    # choice for the user. This also increases chances charts run on environments with little
-    # resources, such as Minikube. If you do want to specify resources, uncomment the following
-    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## Example:
+    ## limits:
+    ##    cpu: 200m
+    ##    memory: 1Gi
     limits: {}
-    #    cpu: 200m
-    #    memory: 1Gi
+    ## Examples:
+    ## requests:
+    ##    memory: 256Mi
+    ##    cpu: 250m
     requests: {}
-    #    memory: 256Mi
-    #    cpu: 250m
-  ## Configure extra options for liveness and readiness probes
+  ## Configure extra options for Web containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+  ## @param web.livenessProbe.enabled Enable livenessProbe
+  ## @param web.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param web.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param web.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param web.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param web.livenessProbe.successThreshold Success threshold for livenessProbe
   ##
   livenessProbe:
     enabled: true
@@ -150,6 +301,13 @@ web:
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
+  ## @param web.readinessProbe.enabled Enable readinessProbe
+  ## @param web.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param web.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param web.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param web.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param web.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
   readinessProbe:
     enabled: true
     initialDelaySeconds: 30
@@ -157,20 +315,21 @@ web:
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
-  ## Custom Liveness probe
-  ##
+  ## @param web.customLivenessProbe Custom liveness probe for the Web component
   customLivenessProbe: {}
-  ## Custom Liveness probe
+  ## @param web.customReadinessProbe Custom rediness probe for the Web component
   ##
   customReadinessProbe: {}
-  ## Enable PodDisruptionBudget for scheduler pods
+  ## Enable PodDisruptionBudget for Web pods
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+  ## @param web.podDisruptionBudget.enabled Enable PodDisruptionBudget for web pods
+  ## @param web.podDisruptionBudget.minAvailable Minimum available instances; ignored if there is no PodDisruptionBudget
   ##
   podDisruptionBudget:
     enabled: false
     minAvailable: 1
     # maxUnavailable: 1
-  ## Add sidecars to the web pods.
+  ## @param web.sidecars Add sidecars to the Web pods
   ## Example:
   ## sidecars:
   ##   - name: your-image-name
@@ -181,7 +340,7 @@ web:
   ##         containerPort: 1234
   ##
   sidecars:
-  ## Add initContainers to the web pods.
+  ## @param web.initContainers Add initContainers to the Web pods
   ## Example:
   ## initContainers:
   ##   - name: your-image-name
@@ -192,20 +351,43 @@ web:
   ##         containerPort: 1234
   ##
   initContainers:
-  ## Priority Class Name
+  ## @param web.priorityClassName Priority Class Name
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   ##
   priorityClassName: ''
-  ## Node labels for pod assignment
+  ## @param web.nodeSelector Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
 
-## Scheculer component related properties
+## Airflow service parameters. For minikube, set this to NodePort, elsewhere use LoadBalancer
+## @param service.type Airflow service type
+## @param service.port Airflow service HTTP port
+## @param service.nodePort Airflow service NodePort
+## @param service.annotations Additional custom annotations for Airflow service
 ##
+service:
+  type: ClusterIP
+  port: 8080
+  ## NodePort
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+  ##
+  nodePort:
+  ## Use loadBalancerIP to request a specific static IP,
+  # loadBalancerIP:
+  annotations:
+
+## @section Airflow scheduler parameters
+
 scheduler:
   ## Bitnami Airflow Scheduler image version
   ## ref: https://hub.docker.com/r/bitnami/airflow-scheduler/tags/
+  ## @param scheduler.image.registry Airflow Scheduler image registry
+  ## @param scheduler.image.repository Airflow Scheduler image repository
+  ## @param scheduler.image.tag Airflow Scheduler image tag (immutable tags are recommended)
+  ## @param scheduler.image.pullPolicy Airflow Scheduler image pull policy
+  ## @param scheduler.image.pullSecrets Airflow Scheduler image pull secrets
+  ## @param scheduler.image.debug Enable image debug mode
   ##
   image:
     registry: docker.io
@@ -219,75 +401,84 @@ scheduler:
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-    #   - myRegistryKeySecretName
     ## Set to true if you would like to see extra information on logs
     ## It turns BASH and/or NAMI debugging in the image
     ##
     debug: false
-  ## Number of scheduler replicas
+  ## @param scheduler.replicaCount Number of scheduler replicas
   ##
   replicaCount: 1
-  ## Override cmd
+  ## @param scheduler.command Override cmd
   ##
   command:
-  ## Override args
+  ## @param scheduler.args Override args
   ##
   args:
-  ## Deployment pod host aliases
+  ## @param scheduler.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-  ## Add extra labels to the web's pods
+  ## @param scheduler.podLabels Add extra labels to the web's pods
   ##
   podLabels:
-  ## Add extra annotations to the web's pods
+  ## @param scheduler.podAnnotations Add extra annotations to the web's pods
   ##
   podAnnotations:
-  ## Add extra volume mounts
+  ## @param scheduler.extraVolumeMounts Add extra volume mounts
   ##
   extraVolumeMounts:
-  ## Add extra volumes
+  ## @param scheduler.extraVolumes Add extra volumes
   ##
   extraVolumes:
-  ## Add extra environment variables
+  ## @param scheduler.extraEnvVars Add extra environment variables
   ##
   extraEnvVars:
-  ## ConfigMap with extra environment variables
+  ## @param scheduler.extraEnvVarsCM ConfigMap with extra environment variables
   ##
   extraEnvVarsCM:
-  ## Secret with extra environment variables
+  ## @param scheduler.extraEnvVarsSecret Secret with extra environment variables
   ##
   extraEnvVarsSecret:
   ## Scheduler containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube.
+  ## @param scheduler.resources.limits The resources limits for the Scheduler container
+  ## @param scheduler.resources.requests The requested resources for the Scheduler container
   ##
   resources:
-    # We usually recommend not to specify default resources and to leave this as a conscious
-    # choice for the user. This also increases chances charts run on environments with little
-    # resources, such as Minikube. If you do want to specify resources, uncomment the following
-    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## Example:
+    ## limits:
+    ##    cpu: 200m
+    ##    memory: 1Gi
     limits: {}
-    #    cpu: 200m
-    #    memory: 1Gi
+    ## Example:
+    ## requests:
+    ##    memory: 256Mi
+    ##    cpu: 250m
     requests: {}
-    #    memory: 256Mi
-    #    cpu: 250m
-  ## Custom Liveness probe
+  ## @param scheduler.customLivenessProbe Custom Liveness probe
   ##
   customLivenessProbe: {}
-  ## Custom Liveness probe
+  ## @param scheduler.customReadinessProbe Custom Liveness probe
   ##
   customReadinessProbe: {}
   ## Enable PodDisruptionBudget for scheduler pods
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+  ## @param scheduler.podDisruptionBudget.enabled Enable PodDisruptionBudget for scheduler pods
+  ## @param scheduler.podDisruptionBudget.minAvailable Minimum available instances; ignored if there is no PodDisruptionBudget
   ##
   podDisruptionBudget:
     enabled: false
     minAvailable: 1
     # maxUnavailable: 1
-  ## Add sidecars to the scheduler pods.
+  ## @param scheduler.sidecars Add sidecars to the scheduler pods.
   ## Example:
   ## sidecars:
   ##   - name: your-image-name
@@ -298,7 +489,7 @@ scheduler:
   ##         containerPort: 1234
   ##
   sidecars:
-  ## Add initContainers to the scheduler pods.
+  ## @param scheduler.initContainers Add initContainers to the scheduler pods.
   ## Example:
   ## initContainers:
   ##   - name: your-image-name
@@ -309,20 +500,26 @@ scheduler:
   ##         containerPort: 1234
   ##
   initContainers:
-  ## Priority Class Name
+  ## @param scheduler.priorityClassName Priority Class Name
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   ##
   priorityClassName: ''
-  ## Node labels for pod assignment
+  ## @param scheduler.nodeSelector Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
 
-## Worker component related properties
-##
+## @section Airflow worker parameters
+
 worker:
   ## Bitnami Airflow Worker image version
   ## ref: https://hub.docker.com/r/bitnami/airflow-worker/tags/
+  ## @param worker.image.registry Airflow Worker image registry
+  ## @param worker.image.repository Airflow Worker image repository
+  ## @param worker.image.tag Airflow Worker image tag (immutable tags are recommended)
+  ## @param worker.image.pullPolicy Airflow Worker image pull policy
+  ## @param worker.image.pullSecrets Airflow Worker image pull secrets
+  ## @param worker.image.debug Enable image debug mode
   ##
   image:
     registry: docker.io
@@ -336,73 +533,87 @@ worker:
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-    #   - myRegistryKeySecretName
     ## Set to true if you would like to see extra information on logs
     ## It turns BASH and/or NAMI debugging in the image
     ##
     debug: false
-  ## Port where the worker will be exposed
+  ## @param worker.port Port where the worker will be exposed
   ##
   port: 8793
-  ## Number of worker replicas
+  ## @param worker.replicaCount Number of worker replicas
   ##
   replicaCount: 1
-  ## Deployment pod host aliases
+  ## @param worker.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-  ## Template to replace the default one to be use when `executor=KubernetesExecutor` to create worker pods
+  ## @param worker.podTemplate Template to replace the default one to be use when `executor=KubernetesExecutor` to create worker pods
   ##
   podTemplate:
-  ## podManagementPolicy to manage scaling operation of worker pods
+  ## @param worker.podManagementPolicy podManagementPolicy to manage scaling operation of worker pods
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
   ##
   podManagementPolicy:
-  ## Override cmd
+  ## @param worker.command Override cmd
   ##
   command:
-  ## Override args
+  ## @param worker.args Override args
   ##
   args:
-  ## Add annotations to the worker pods
+  ## @param worker.podAnnotations Add annotations to the worker pods
   ##
   podAnnotations: {}
-  ## Add extra labels to the web's pods
+  ## @param worker.podLabels Add extra labels to the web's pods
   ##
   podLabels:
-  ## Add extra volume mounts
+  ## @param worker.extraVolumeMounts Add extra volume mounts
   ##
   extraVolumeMounts:
-  ## Add extra volumes
+  ## @param worker.extraVolumes Add extra volumes
   ##
   extraVolumes:
-  ## Add extra environment variables
+  ## @param worker.extraEnvVars Add extra environment variables
   ##
   extraEnvVars:
-  ## ConfigMap with extra environment variables
+  ## @param worker.extraEnvVarsCM ConfigMap with extra environment variables
   ##
   extraEnvVarsCM:
-  ## Secret with extra environment variables
+  ## @param worker.extraEnvVarsSecret Secret with extra environment variables
   ##
   extraEnvVarsSecret:
   ## Worker containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param worker.resources.limits The resources limits for the Worker container
+  ## @param worker.resources.requests The requested resources for the Worker container
   ##
   resources:
-    # We usually recommend not to specify default resources and to leave this as a conscious
-    # choice for the user. This also increases chances charts run on environments with little
-    # resources, such as Minikube. If you do want to specify resources, uncomment the following
-    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## Example:
+    ## limits:
+    ##    cpu: 200m
+    ##    memory: 1Gi
     limits: {}
-    #    cpu: 200m
-    #    memory: 1Gi
+    ## Example:
+    ## requests:
+    ##    memory: 256Mi
+    ##    cpu: 250m
     requests: {}
-    #    memory: 256Mi
-    #    cpu: 250m
   ## Configure extra options for liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+  ## @param worker.livenessProbe.enabled Enable livenessProbe
+  ## @param worker.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param worker.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param worker.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param worker.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param worker.livenessProbe.successThreshold Success threshold for livenessProbe
   ##
   livenessProbe:
     enabled: true
@@ -411,6 +622,13 @@ worker:
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
+  ## @param worker.readinessProbe.enabled Enable readinessProbe
+  ## @param worker.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param worker.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param worker.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param worker.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param worker.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
   readinessProbe:
     enabled: true
     initialDelaySeconds: 30
@@ -418,14 +636,16 @@ worker:
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
-  ## Custom Liveness probe
+  ## @param worker.customLivenessProbe Custom Liveness probe
   ##
   customLivenessProbe: {}
-  ## Custom Liveness probe
+  ## @param worker.customReadinessProbe Custom Liveness probe
   ##
   customReadinessProbe: {}
   ## Enable PodDisruptionBudget for worker pods
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+  ## @param worker.podDisruptionBudget.enabled Enable PodDisruptionBudget for worker pods
+  ## @param worker.podDisruptionBudget.minAvailable Minimum available instances; ignored if there is no PodDisruptionBudget
   ##
   podDisruptionBudget:
     enabled: false
@@ -433,30 +653,29 @@ worker:
     # maxUnavailable: 1
   ## Enable HorizontalPodAutoscaler for worker pods
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+  ## @param worker.autoscaling.enabled Whether enable horizontal pod autoscale
+  ## @param worker.autoscaling.replicas.min Configure a minimum amount of pods
+  ## @param worker.autoscaling.replicas.max Configure a maximum amount of pods
+  ## @param worker.autoscaling.targets.cpu Define the CPU target to trigger the scaling actions (utilization percentage)
+  ## @param worker.autoscaling.targets.memory Define the memory target to trigger the scaling actions (utilization percentage)
   ##
   autoscaling:
-    ## Whether enabled horizontal pod autoscale
-    ##
     enabled: false
-    ## Configure a minimum/maximum amount of pods
-    ##
     replicas:
       min: 1
       max: 3
-    ## Define the target to trigger the scaling actions (utilization percentage)
-    ##
     targets:
       cpu: 80
       memory: 80
-  ## StatefulSet controller supports automated updates. There are two valid update strategies: RollingUpdate and OnDelete
+  ## @param worker.updateStrategy StatefulSet controller supports automated updates. There are two valid update strategies: RollingUpdate and OnDelete
   ## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#updating-statefulsets
   ##
   updateStrategy: RollingUpdate
-  ## Partition update strategy
+  ## @param worker.rollingUpdatePartition Partition update strategy
   ## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
   ##
   rollingUpdatePartition:
-  ## Add sidecars to the worker pods.
+  ## @param worker.sidecars Add sidecars to the worker pods.
   ## Example:
   ## sidecars:
   ##   - name: your-image-name
@@ -467,7 +686,7 @@ worker:
   ##         containerPort: 1234
   ##
   sidecars:
-  ## Add initContainers to the worker pods.
+  ## @param worker.initContainers Add initContainers to the worker pods.
   ## Example:
   ## initContainers:
   ##   - name: your-image-name
@@ -478,76 +697,37 @@ worker:
   ##         containerPort: 1234
   ##
   initContainers:
-  ## Priority Class Name
+  ## @param worker.priorityClassName Priority Class Name
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   ##
   priorityClassName: ''
-  ## Node labels for pod assignment
+  ## @param worker.nodeSelector Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-  ## Affinity for worker pod assignment
+  ## @param worker.affinity Affinity for worker pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: this configuration supersedes the global affinity configuration
   ##
   affinity: {}
-  ## Tolerations for worker pod assignment
+  ## @param worker.tolerations Tolerations for worker pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ## Note: this configuration supersedes the global tolerations configuration
   ##
   tolerations: []
 
-## Add labels to all the deployed resources
-##
-commonLabels: {}
-## Add annotations to all the deployed resources
-##
-commonAnnotations: {}
-## Common parameters to all Airflow containers: the parameters from the configuration file can be overwritten by using environment variables with this format:
-## AIRFLOW__{SECTION}__{KEY}. Note the double underscores. More info at https://airflow.readthedocs.io/en/stable/howto/set-config.html
-##
-## - name: AIRFLOW__SMTP__SMTP_HOST
-##   value: "localhost"
-## - name: AIRFLOW__SMTP__SMTP_PORT
-##   value: "25"
-## - name: AIRFLOW__SMTP__USER
-##   value: ""
-##
-extraEnvVars: []
-## ConfigMap with common settings for all Airflow containers
-##
-extraEnvVarsCM:
-## Secret with common settings for all Airflow containers
-##
-extraEnvVarsSecret:
-## Add sidecars to all the pods.
-## Example:
-## sidecars:
-##   - name: your-image-name
-##     image: your-image
-##     imagePullPolicy: Always
-##     ports:
-##       - name: portname
-##         containerPort: 1234
-##
-sidecars:
-## Add initContainers to all the pods.
-## Example:
-## initContainers:
-##   - name: your-image-name
-##     image: your-image
-##     imagePullPolicy: Always
-##     ports:
-##       - name: portname
-##         containerPort: 1234
-##
-initContainers:
+## @section Airflow git sync parameters
 
-## Configure git to pull dags and plugins
+## Configure Git to pull dags and plugins
 ##
 git:
-  ## Bitnami git image version
+  ## Bitnami Git image version
   ## ref: https://hub.docker.com/r/bitnami/git/tags/
+  ## @param git.image.registry Git image registry
+  ## @param git.image.repository Git image repository
+  ## @param git.image.tag Git image tag (immutable tags are recommended)
+  ## @param git.image.pullPolicy Git image pull policy
+  ## @param git.image.pullSecrets Git image pull secrets
   ##
   image:
     registry: docker.io
@@ -561,223 +741,157 @@ git:
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-    #   - myRegistryKeySecretName
-  ## Name for repositories can be anything unique and must follow same naming conventions as kubernetes.
-  ## Kubernetes resources can have names up to 253 characters long. The characters allowed in names are:
-  ## digits (0-9), lower case letters (a-z), -, and .
-  ##
-  ##   - repository: https://github.com/myuser/myrepo
-  ##     branch: main
-  ##     name: my-dags
-  ##     path: /
+  ## Get DAG files from git repositories
+  ## @param git.dags.enabled Enable in order to download DAG files from git repositories.
+  ## @param git.dags.repositories Array of repositories from which to download DAG files
   ##
   dags:
-    ## Enable in order to download DAG files from git repositories.
-    ##
     enabled: false
+    ## Name for repositories can be anything unique and must follow same naming conventions as kubernetes.
+    ## Kubernetes resources can have names up to 253 characters long. The characters allowed in names are:
+    ## digits (0-9), lower case letters (a-z), -, and .
+    ## Example:
+    ##   - repository: https://github.com/myuser/myrepo
+    ##     branch: main
+    ##     name: my-dags
+    ##     path: /
+    ##
     repositories:
       - repository:
+        ## Branch from repository to checkout
+        ##
         branch:
+        ## An unique identifier for repository, must be unique for each repository
+        ##
         name:
+        ## Path to a folder in the repository containing the dags
+        ##
         path:
+  ## Get Plugins files from git repositories.
+  ## @param git.plugins.enabled Enable in order to download Plugins files from git repositories.
+  ## @param git.plugins.repositories Array of repositories from which to download DAG files
+  ##
   plugins:
-    ## Enable in order to download Plugins files from git repositories.
-    ##
     enabled: false
     repositories:
       - repository:
+        ## Branch from repository to checkout
+        ##
         branch:
+        ## An unique identifier for repository, must be unique for each repository
+        ##
         name:
+        ## Path to a folder in the repository containing the dags
+        ##
         path:
-  ## Properties for the clone init container
+  ## Properties for the Clone init container
+  ## @param git.clone.command Override cmd
+  ## @param git.clone.args Override args
+  ## @param git.clone.extraVolumeMounts Add extra volume mounts
+  ## @param git.clone.extraEnvVars Add extra environment variables
+  ## @param git.clone.extraEnvVarsCM ConfigMap with extra environment variables
+  ## @param git.clone.extraEnvVarsSecret Secret with extra environment variables
+  ## @param git.clone.resources Clone init container resource requests and limits
   ##
   clone:
-    ## Override cmd
-    ##
     command:
-    ## Override args
-    ##
     args:
-    ## Add extra volume mounts
-    ##
     extraVolumeMounts:
-    ## Add extra environment variables
-    ##
     extraEnvVars:
-    ## ConfigMap with extra environment variables
-    ##
     extraEnvVarsCM:
-    ## Secret with extra environment variables
-    ##
     extraEnvVarsSecret:
     ## Clone init container resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
     ##
     resources: {}
+  ## Properties for the Sync sidecar container
+  ## @param git.sync.interval Interval in seconds to pull the git repository containing the plugins and/or DAG files
+  ## @param git.sync.command Override cmd
+  ## @param git.sync.args Override args
+  ## @param git.sync.extraVolumeMounts Add extra volume mounts
+  ## @param git.sync.extraEnvVars Add extra environment variables
+  ## @param git.sync.extraEnvVarsCM ConfigMap with extra environment variables
+  ## @param git.sync.extraEnvVarsSecret Secret with extra environment variables
+  ## @param git.sync.resources Sync sidecar container resource requests and limits
+  ##
   sync:
-    ## Interval in seconds to pull the git repository containing the plugins and/or DAG files
-    ##
     interval: 60
-    ## Override cmd
-    ##
     command:
-    ## Override args
-    ##
     args:
-    ## Add extra volume mounts
-    ##
     extraVolumeMounts:
-    ## Add extra environment variables
-    ##
     extraEnvVars:
-    ## ConfigMap with extra environment variables
-    ##
     extraEnvVarsCM:
-    ## Secret with extra environment variables
-    ##
     extraEnvVarsSecret:
     ## Sync sidecar container resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
     ##
     resources: {}
 
+## @section Airflow ldap parameters
+
 ## LDAP configuration
+## @param ldap.enabled Enable LDAP authentication
+## @param ldap.uri Server URI, eg. ldap://ldap_server:389
+## @param ldap.base Base of the search, eg. ou=example,o=org
+## @param ldap.binddn Bind DN
+## @param ldap.bindpw Bind Password
+## @param ldap.uidField Field used for uid
 ##
 ldap:
-  ## Enable LDAP authentication
-  ##
   enabled: false
-  ## Server URI, eg. ldap://ldap_server:389
-  ##
   uri: 'ldap://ldap_server:389'
-  ## Base of the search, eg. ou=example,o=org
-  ##
   base: 'ou=example,o=org'
-  ## Bind DN
-  ##
   binddn: 'cn=user,ou=example,o=org'
-  ## Bind Password
-  ##
   bindpw: ''
-  ## Field used for uid
-  ##
   uidField: 'uid'
   ## SSL/TLS parameters for LDAP
+  ## @param ldap.tls.enabled Enabled TLS/SSL for LDAP, you must include the CA file.
+  ## @param ldap.tls.allowSelfSigned Allow to use self signed certificates
+  ## @param ldap.tls.CAcertificateSecret Name of the existing secret containing the certificate CA file that will be used by ldap client.
+  ## @param ldap.tls.CAcertificateFilename LDAP CA cert filename
   ##
   tls:
-    ## Enabled TLS/SSL for LDAP, you must include the CA file.
-    ##
     enabled: false
-    ## Allow to use self signed certificates
-    ##
     allowSelfSigned: true
-    ## Name of the existing secret containing the certificate CA file that will be used by ldap client.
     ## Cloud be create with: kubectl create secret generic airflow-secret --from-file=./ca.pem
     ##
     CAcertificateSecret: ''
-    ## LDAP CA cert filename
-    ## eg. ca.pem
+    ## Example:
+    ## CAcertificateFilename: 'ca.pem'
     ##
     CAcertificateFilename: ''
 
-## Role Based Access
-## Ref: https://kubernetes.io/docs/admin/authorization/rbac/
-##
-rbac:
-  ## Specifies whether RBAC rules should be created
-  ##
-  create: false
+## @section Airflow exposing parameters
 
-## Pods Service Account
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
-##
-serviceAccount:
-  ## Specifies whether a ServiceAccount should be created
-  ##
-  create: false
-  ## The name of the ServiceAccount to use.
-  ## If not set and create is true, a name is generated using the airflow.fullname template
-  # name:
-
-  ## Annotations for service account. Evaluated as a template.
-  ## Only used if `create` is `true`.
-  ##
-  annotations: {}
-
-## Configure Pods Security Context
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-##
-podSecurityContext:
-  enabled: true
-  fsGroup: 1001
-## Configure Container Security Context (only main container)
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-##
-containerSecurityContext:
-  enabled: true
-  runAsUser: 1001
-
-## Network policies
-## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
-##
-networkPolicies:
-  ## Specifies whether a NetworkPolicy should be created
-  ##
-  enabled: false
-
-## Kubernetes configuration
-## For minikube, set this to NodePort, elsewhere use LoadBalancer
-##
-service:
-  type: ClusterIP
-  port: 8080
-
-  ## Specify the NodePort value for the LoadBalancer and NodePort service types.
-  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
-  ##
-  nodePort:
-
-  ## Use loadBalancerIP to request a specific static IP,
-  # loadBalancerIP:
-
-  ## Service annotations done as key:value pairs
-  ##
-  annotations:
-
-## Configure the ingress resource that allows you to access the
-## Airflow installation. Set up the URL
+## Configure the ingress resource that allows you to access the Airflow installation.
 ## ref: http://kubernetes.io/docs/user-guide/ingress/
+## @param ingress.enabled Set to true to enable ingress record generation
+## @param ingress.apiVersion Override API Version (automatically detected if not set)
+## @param ingress.pathType Ingress Path type
+## @param ingress.certManager Set this to true in order to add the corresponding annotations for cert-manager
+## @param ingress.annotations Ingress annotations done as key:value pairs
+## @param ingress.hosts The list of hostnames to be covered with this ingress record.
+## @param ingress.secrets If you're providing your own certificates, use this to add the certificates as secrets
 ##
 ingress:
-  ## Set to true to enable ingress record generation
-  ##
   enabled: false
-
-  ## Override API Version (automatically detected if not set)
-  ##
   apiVersion:
-
-  ## Ingress Path type
-  ##
   pathType: ImplementationSpecific
-
-  ## Set this to true in order to add the corresponding annotations for cert-manager
-  ##
   certManager: false
-
-  ## Ingress annotations done as key:value pairs
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
   ##
   ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
   ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+  ## Example:
+  ## kubernetes.io/ingress.class: nginx
   ##
   annotations:
-  #  kubernetes.io/ingress.class: nginx
-
-  ## The list of hostnames to be covered with this ingress record.
   ## Most likely this will be just one host, but in the event more hosts are needed, this is an array
   ##
   hosts:
@@ -786,22 +900,18 @@ ingress:
       ## Set this to true in order to enable TLS on the ingress record
       ##
       tls: false
-
       ## Optionally specify the TLS hosts for the ingress record
       ## Useful when the Ingress controller supports www-redirection
       ## If not specified, the above host name will be used
+      ## Examples:
+      ## - www.airflow.local
+      ## - airflow.local
       ##
       tlsHosts: []
-      # - www.airflow.local
-      # - airflow.local
-
       ## If TLS is set to true, you must declare what secret will store the key/certificate for TLS
       ##
       tlsSecret: airflow.local-tls
-
-  secrets:
-  ## If you're providing your own certificates, please use this to add the certificates as secrets
-  ## key and certificate should start with -----BEGIN CERTIFICATE----- or
+  ## Key and certificate should start with -----BEGIN CERTIFICATE----- or
   ## -----BEGIN RSA PRIVATE KEY-----
   ##
   ## name should line up with a tlsSecret set further up
@@ -812,147 +922,95 @@ ingress:
   # - name: airflow.local-tls
   #   key:
   #   certificate:
+  secrets:
 
-## Pod affinity preset
-## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-## Allowed values: soft, hard
-##
-podAffinityPreset: ''
+## @section Airflow database parameters
 
-## Pod anti-affinity preset
-## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-## Allowed values: soft, hard
-##
-podAntiAffinityPreset: soft
-
-## Node affinity preset
-## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-## Allowed values: soft, hard
-##
-nodeAffinityPreset:
-  ## Node affinity type
-  ## Allowed values: soft, hard
-  ##
-  type: ''
-  ## Node label key to match
-  ## E.g.
-  ## key: "kubernetes.io/e2e-az-name"
-  ##
-  key: ''
-  ## Node label values to match
-  ## E.g.
-  ## values:
-  ##   - e2e-az1
-  ##   - e2e-az2
-  ##
-  values: []
-
-## Affinity for pod assignment
-## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
-##
-affinity: {}
-
-## Tolerations for pod assignment
-## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-##
-tolerations: []
-
-## Node labels for pod assignment
-## Ref: https://kubernetes.io/docs/user-guide/node-selection/
-##
-nodeSelector: {}
-
-##
 ## PostgreSQL chart configuration
-##
-## https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
+## ref: https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
+## @param postgresql.enabled Switch to enable or disable the PostgreSQL helm chart
+## @param postgresql.postgresqlUsername Airflow Postgresql username
+## @param postgresql.postgresqlDatabase Airflow Postgresql database
+## @param postgresql.existingSecret Name of an existing secret containing the PostgreSQL password ('postgresql-password' key)
 ##
 postgresql:
   enabled: true
   postgresqlUsername: bn_airflow
   # postgresqlPassword:
   postgresqlDatabase: bitnami_airflow
-  ## In case of postgresql.enabled = true, allow the usage of existing secrets for postgresql
+  ## This secret is used in case of postgresql.enabled=true and we would like to specify password for newly created postgresql instance
   ##
   existingSecret:
 
+## External PostgreSQL configuration
+## All of these values are only used when postgresql.enabled is set to false
+## @param externalDatabase.host Database host
+## @param externalDatabase.user non-root Username for Airflow Database
+## @param externalDatabase.password Database password
+## @param externalDatabase.existingSecret Name of an existing secret resource containing the DB password
+## @param externalDatabase.existingSecretPasswordKey Name of an existing secret key containing the DB password
+## @param externalDatabase.database Database name
+## @param externalDatabase.port Database port number
+##
 externalDatabase:
-  ## All of these values are only used when postgresql.enabled is set to false
-  ## Database host
-  ##
   host: localhost
-  ## non-root Username for Airflow Database
-  ##
   user: bn_airflow
-  ## Database password
-  ##
   password:
-  ## Name of an existing secret resource containing the DB password
-  ##
   existingSecret:
-  ## Name of an existing secret key containing the DB password
-  ##
   existingSecretPasswordKey:
-  ## Database name
-  ##
   database: bitnami_airflow
-  ## Database port number
-  ##
   port: 5432
 
-##
 ## Redis(TM) chart configuration
-##
-## https://github.com/bitnami/charts/blob/master/bitnami/redis/values.yaml
+## ref: https://github.com/bitnami/charts/blob/master/bitnami/redis/values.yaml
+## @param redis.enabled Switch to enable or disable the Redis(TM) helm
+## @param redis.auth.enabled Switch to enable or disable authentication
+## @param redis.auth.existingSecret Name of existing secret object containing the password
+## @param redis.architecture Cluster settings
 ##
 redis:
   enabled: true
-  ## Use password authentication
-  ##
   auth:
     enabled: true
-    ## Redis(TM) password (both master and slave)
-    ## Defaults to a random 10-character alphanumeric string if not set and auth.enabled is true.
+    ## Redis(TM) password (both master and slave). Defaults to a random 10-character alphanumeric string if not set and auth.enabled is true.
     ## It should always be set using the password value or in the existingSecret to avoid issues
     ## with Airflow.
     ## The password value is ignored if existingSecret is set
     # password:
-    ##
-    ## Name of existing secret object containing the password
-    ##
     existingSecret:
-
-  ##
-  ## Cluster settings
-  ##
   architecture: standalone
 
+## External Redis(TM) configuration
+## All of these values are only used when redis.enabled is set to false
+## @param externalRedis.host Redis(TM) host
+## @param externalRedis.port Redis(TM) port number
+## @param externalRedis.password Redis(TM) password
+## @param externalRedis.existingSecret Name of an existing secret resource containing the Redis(TM) password in a 'redis-password' key
+## @param externalRedis.username Redis(TM) username
+##
 externalRedis:
-  ## All of these values are only used when redis.enabled is set to false
-  ## Redis(TM) host
-  ##
   host: localhost
-  ## Redis(TM) port number
-  ##
   port: 6379
-  ## Redis(TM) password
-  ##
   password:
-  ## Name of an existing secret resource containing the Redis(TM) password in a 'redis-password' key
-  ##
   existingSecret:
-  ## Redis(TM) username
   ## Most Redis(TM) implementnations do not require a username to authenticate
   ## and it should be enough with the password
   ##
   username:
 
-## Prometheus Exporter / Metrics
-##
-metrics:
-  enabled: false
+## @section Airflow metrics parameters
 
+metrics:
+  ## @param metrics.enabled Start a side-car prometheus exporter
+  enabled: false
+  ## Bitnami Airflow Exporter image
+  ## ref: https://hub.docker.com/r/bitnami/airflow-exporter/tags/
+  ## @param metrics.image.registry Airflow Exporter image registry
+  ## @param metrics.image.repository Airflow Exporter image repository
+  ## @param metrics.image.tag Airflow Exporter image tag (immutable tags are recommended)
+  ## @param metrics.image.pullPolicy Airflow Exporter image pull policy
+  ## @param metrics.image.pullSecrets Airflow Exporter image pull secrets
+  ##
   image:
     registry: docker.io
     repository: bitnami/airflow-exporter
@@ -961,16 +1019,21 @@ metrics:
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-    #   - myRegistryKeySecretName
-
-  ## Deployment pod host aliases
+  ## @param metrics.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-
   ## Prometheus Operator ServiceMonitor resource
+  ## @param metrics.serviceMonitor.enabled Create ServiceMonitor resource
+  ## @param metrics.serviceMonitor.interval Interval in which prometheus scrapes
+  ## @param metrics.serviceMonitor.scrapeTimeout Scrape Timeout duration for prometheus
+  ## @param metrics.serviceMonitor.labels Additional labels to attach
+  ##
   serviceMonitor:
     enabled: false
     ## Namespace in which Prometheus is running
@@ -981,29 +1044,23 @@ metrics:
     scrapeTimeout: 10s
     # ServiceMonitor Labels
     labels: {}
-
-  ## Metrics exporter resource requests and limits
+  ## @param metrics.resources Metrics exporter resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
   resources: {}
-
-  ## Metrics exporter labels and tolerations for pod assignment
-  # nodeSelector: {"beta.kubernetes.io/arch": "amd64"}
+  ## @param metrics.tolerations Metrics exporter labels and tolerations for pod assignment
+  ##
   tolerations: []
-
-  ## Metrics exporter pod Annotation and Labels
+  ## @param metrics.podLabels Metrics exporter pod Annotation and Labels
   ##
   podLabels: {}
-
+  ## Annotations to add to the metrics' pods
+  ## @skip metrics.podAnnotations.prometheus.io/scrape
+  ## @skip metrics.podAnnotations.prometheus.io/port
   podAnnotations:
     prometheus.io/scrape: 'true'
     prometheus.io/port: '9112'
-
-  ## Node labels for pod assignment
+  ## @param metrics.nodeSelector Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-
-## Array with extra yaml to deploy with the chart. Evaluated as a template
-##
-extraDeploy: []
