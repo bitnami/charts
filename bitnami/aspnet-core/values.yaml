@@ -30,10 +30,10 @@ fullnameOverride:
 clusterDomain: cluster.local
 ## @param commonLabels Labels to add to all deployed objects
 ##
-commonLabels: { }
+commonLabels: {}
 ## @param commonAnnotations Annotations to add to all deployed objects
 ##
-commonAnnotations: { }
+commonAnnotations: {}
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
