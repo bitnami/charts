@@ -1,0 +1,51 @@
+{{- if .Values.server.additionalProjects }}
+apiVersion: v1
+kind: List
+items:
+{{- range .Values.server.additionalProjects }}
+  - apiVersion: argoproj.io/v1alpha1
+    kind: AppProject
+    metadata:
+      {{- if .additionalAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .additionalAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .additionalLabels }}
+      labels:
+        {{- include "common.tplvalues.render" (dict "value" .additionalLabels "context" $) | nindent 8 }}
+      {{- end }}
+      name: {{ .name }}
+      {{- if .namespace }}
+      namespace: {{ .namespace }}
+      {{- end }}
+    spec:
+      description: {{ .description }}
+      sourceRepos:
+        {{- include "common.tplvalues.render" (dict "value" .sourceRepos "context" $) | nindent 8 }}
+      destinations:
+        {{- include "common.tplvalues.render" (dict "value" .destinations "context" $) | nindent 8 }}
+      {{- if .clusterResourceWhitelist }}
+      clusterResourceWhitelist:
+        {{- include "common.tplvalues.render" (dict "value" .clusterResourceWhitelist "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .namespaceResourceBlacklist }}
+      namespaceResourceBlacklist:
+        {{- include "common.tplvalues.render" (dict "value" .namespaceResourceBlacklist "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .namespaceResourceWhitelist }}
+      namespaceResourceWhitelist:
+        {{- include "common.tplvalues.render" (dict "value" .namespaceResourceWhitelist "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .orphanedResources }}
+      orphanedResources:
+        {{- include "common.tplvalues.render" (dict "value" .orphanedResources "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .roles }}
+      roles:
+        {{- include "common.tplvalues.render" (dict "value" .roles "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .syncWindows }}
+      syncWindows:
+        {{- include "common.tplvalues.render" (dict "value" .syncWindows "context" $) | nindent 8 }}
+      {{- end }}
+{{- end }}
+{{- end }}

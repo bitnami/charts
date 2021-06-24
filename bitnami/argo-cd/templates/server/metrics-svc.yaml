@@ -1,0 +1,32 @@
+{{- if .Values.server.metrics.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "argocd.server" . }}-metrics
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: server
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.server.metrics.service.type }}
+  {{- if (or (eq .Values.server.metrics.service.type "LoadBalancer") (eq .Values.server.metrics.service.type "NodePort")) }}
+  externalTrafficPolicy: {{ .Values.server.metrics.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{ if eq .Values.server.metrics.service.type "LoadBalancer" }}
+  loadBalancerSourceRanges: {{ .Values.server.metrics.service.loadBalancerSourceRanges }}
+  {{ end }}
+  {{- if (and (eq .Values.server.metrics.service.type "LoadBalancer") (not (empty .Values.server.metrics.service.loadBalancerIP))) }}
+  loadBalancerIP: {{ .Values.server.metrics.service.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - name: metrics
+      port: {{ .Values.server.metrics.service.port }}
+      protocol: TCP
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: server
+{{- end }}
