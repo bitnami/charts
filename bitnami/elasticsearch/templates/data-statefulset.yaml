@@ -195,6 +195,11 @@ spec:
               name: "config"
               subPath: elasticsearch.yml
             {{- end }}
+            {{- if .Values.extraConfig }}
+            - mountPath: /opt/bitnami/elasticsearch/config/my_elasticsearch.yml
+              name: config
+              subPath: my_elasticsearch.yml
+            {{- end }}
             - name: "data"
               mountPath: "/bitnami/elasticsearch/data"
             {{- if .Values.extraVolumeMounts }}
@@ -213,7 +218,7 @@ spec:
               mountPath: /docker-entrypoint-initdb.d/init-scripts-secret
             {{- end }}
       volumes:
-        {{- if .Values.config }}
+        {{- if or .Values.config .Values.extraConfig }}
         - name: "config"
           configMap:
             name: {{ template "common.names.fullname" . }}

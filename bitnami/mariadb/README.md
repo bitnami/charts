@@ -120,6 +120,7 @@ The following table lists the configurable parameters of the MariaDB chart and t
 | `primary.readinessProbe`                     | Readiness probe configuration for MariaDB primary containers                                                      | Check `values.yaml` file       |
 | `primary.customLivenessProbe`                | Override default liveness probe for MariaDB primary containers                                                    | `nil`                          |
 | `primary.customReadinessProbe`               | Override default readiness probe for MariaDB primary containers                                                   | `nil`                          |
+| `primary.startupWaitOptions`                 | Override default builtin startup wait check options for MariaDB primary containers                                | `{}`                           |
 | `primary.resources.limits`                   | The resources limits for MariaDB primary containers                                                               | `{}`                           |
 | `primary.resources.requests`                 | The requested resources for MariaDB primary containers                                                            | `{}`                           |
 | `primary.extraEnvVars`                       | Extra environment variables to be set on MariaDB primary containers                                               | `{}`                           |
@@ -179,6 +180,7 @@ The following table lists the configurable parameters of the MariaDB chart and t
 | `secondary.readinessProbe`                     | Readiness probe configuration for MariaDB secondary containers                                                        | Check `values.yaml` file       |
 | `secondary.customLivenessProbe`                | Override default liveness probe for MariaDB secondary containers                                                      | `nil`                          |
 | `secondary.customReadinessProbe`               | Override default readiness probe for MariaDB secondary containers                                                     | `nil`                          |
+| `secondary.startupWaitOptions`                 | Override default builtin startup wait check options for MariaDB secondary containers                                  | `{}`                           |
 | `secondary.resources.limits`                   | The resources limits for MariaDB secondary containers                                                                 | `{}`                           |
 | `secondary.resources.requests`                 | The requested resources for MariaDB secondary containers                                                              | `{}`                           |
 | `secondary.extraEnvVars`                       | Extra environment variables to be set on MariaDB secondary containers                                                 | `{}`                           |
