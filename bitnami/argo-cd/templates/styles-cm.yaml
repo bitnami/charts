@@ -1,16 +1,20 @@
+{{- if .Values.config.styles }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "common.names.fullname" . }}
+  name: {{ include "argocd.custom-styles.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
-    app.kubernetes.io/component: %%COMPONENT_NAME%%
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
+    # Mandatory annotation
+    # Ref: https://argoproj.github.io/argo-cd/operator-manual/declarative-setup/#atomic-configuration
+    app.kubernetes.io/part-of: argocd
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 data:
-  %%CONFIG_FILE_NAME%%: |
-  # Config file
+  custom.styles.css: |
+    {{- .Values.config.styles | nindent 4 }}
+{{- end }}
