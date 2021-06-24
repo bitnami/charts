@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "common.names.fullname" . }}-query-headless
+  name: {{ template "common.names.fullname" . }}-query-frontend-headless
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: query-frontend
@@ -13,6 +13,7 @@ metadata:
   {{- end }}
 spec:
   # NOTE: this is based on this https://github.com/grafana/helm-charts/pull/451. Should be reviewed if it is actually necessary in the future
+  publishNotReadyAddresses: true
   type: ClusterIP
   clusterIP: None
   ports:

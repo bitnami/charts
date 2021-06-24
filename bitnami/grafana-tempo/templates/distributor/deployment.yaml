@@ -12,7 +12,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.distributor.replicaCount }}
   {{- if .Values.distributor.updateStrategy }}
   strategy: {{- toYaml .Values.distributor.updateStrategy | nindent 4 }}
   {{- end }}
@@ -78,7 +78,7 @@ spec:
           {{- else }}
           args:
             - -target=distributor
-            - -config.file=/binami/grafana-tempo/conf/tempo.yaml
+            - -config.file=/bitnami/grafana-tempo/conf/tempo.yaml
             - -mem-ballast-size-mbs={{ .Values.tempo.memBallastSizeMbs }}
           {{- end }}
           {{- if .Values.distributor.extraEnvVars }}
@@ -146,7 +146,7 @@ spec:
           {{- if .Values.distributor.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
-              path: /health
+              path: /ready
               port: http
             initialDelaySeconds: {{ .Values.distributor.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.distributor.livenessProbe.periodSeconds }}
@@ -159,7 +159,7 @@ spec:
           {{- if .Values.distributor.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
-              path: /health
+              path: /ready
               port: http
             initialDelaySeconds: {{ .Values.distributor.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.distributor.readinessProbe.periodSeconds }}
@@ -170,8 +170,12 @@ spec:
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.distributor.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: config
-              mountPath: /bitnami/grafana-tempo/conf
+            - name: tempo-config
+              mountPath: /bitnami/grafana-tempo/conf/tempo.yaml
+              subPath: tempo.yaml
+            - name: overrides-config
+              mountPath: /bitnami/grafana-tempo/conf/overrides.yaml
+              subPath: overrides.yaml
           {{- if .Values.distributor.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.distributor.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -182,6 +186,9 @@ spec:
         - name: tempo-config
           configMap:
             name: {{ template "grafana-tempo.tempoConfigmapName" . }}
+        - name: overrides-config
+          configMap:
+            name: {{ template "grafana-tempo.overridesConfigmapName" . }}
         {{- if .Values.distributor.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.distributor.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

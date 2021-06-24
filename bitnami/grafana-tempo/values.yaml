@@ -52,12 +52,11 @@ tempo:
   ## @param tempo.image.tag Grafana Tempo image tag (immutable tags are recommended)
   ## @param tempo.image.pullPolicy Grafana Tempo image pull policy
   ## @param tempo.image.pullSecrets Grafana Tempo image pull secrets
-  ## @param tempo.image.debug Enable image debug mode
   ##
 
   image:
     registry: docker.io
-    repository: bitnami/grafana-tempo
+    repository: grafana/tempo
     tag: latest
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -72,46 +71,63 @@ tempo:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-    ## Enable debug mode
-    ##
-    debug: false
 
+  ## @param tempo.containerPort Tempo components web port
+  ##
   containerPort: 3100
+  ## @param tempo.grpcContainerPort Tempo components GRPC port
+  ##
   grpcContainerPort: 9095
+  ## @param tempo.memBallastSizeMbs Tempo components memory ballast size in MB
+  ##
   memBallastSizeMbs: 1024
-
+  ## @param tempo.dataDir Tempo components data directory
+  ##
+  dataDir: /bitnami/tempo-grafana/data
   traces:
     jaeger:
-      # -- Enable Tempo to ingest Jaeger GRPC traces
-      grpc: false
-      # -- Enable Tempo to ingest Jaeger Thrift Binary traces
+      ## @param tempo.traces.jaeger.grpc Enable Tempo to ingest Jaeger GRPC traces
+      ##
+      grpc: true
+      ## @param tempo.traces.jaeger.thriftBinary Enable Tempo to ingest Jaeger Thrift Binary traces
+      ##
       thriftBinary: false
-      # -- Enable Tempo to ingest Jaeger Thrift Compact traces
+      ## @param tempo.traces.jaeger.thriftCompact Enable Tempo to ingest Jaeger Thrift Compact traces
+      ##
       thriftCompact: false
-      # -- Enable Tempo to ingest Jaeger Thrift HTTP traces
-      thriftHttp: false
-    # -- Enable Tempo to ingest Zipkin traces
+      ## @param tempo.traces.jaeger.thriftHttp Enable Tempo to ingest Jaeger Thrift HTTP traces
+      ##
+      thriftHttp: true
+    ## @param tempo.traces.zipkin Enable Tempo to ingest Zipkin traces
+    ##
     zipkin: false
     otlp:
-      # -- Enable Tempo to ingest Open Telementry HTTP traces
+      ## @param tempo.traces.otlp.http Enable Tempo to ingest Open Telementry HTTP traces
+      ##
       http: false
-      # -- Enable Tempo to ingest Open Telementry GRPC traces
+      ## @param tempo.traces.otlp.grpc Enable Tempo to ingest Open Telementry GRPC traces
+      ##
       grpc: false
-    # -- Enable Tempo to ingest Open Census traces
+    ## @param tempo.traces.opencensus Enable Tempo to ingest Open Census traces
+    ##
     opencensus: false
 
   gossipRing:
+    ## @param tempo.gossipRing.containerPort gossip service HTTP port
+    ##
     containerPort: 7946
     ## gossip service parameters
     ##
     service:
-      ## @param service.port gossip service HTTP port
+      ## @param tempo.gossipRing.service.port gossip headless service HTTP port
       ##
       port: 7946
-      ## @param service.annotations Additional custom annotations for gossip service
+      ## @param tempo.gossipRing.service.annotations Additional custom annotations for gossip headless service
       ##
       annotations: {}
 
+  ## @param tempo.configuration [string] Tempo components configuration
+  ##
   configuration: |
     multitenancy_enabled: false
     compactor:
@@ -167,14 +183,14 @@ tempo:
         {{- end }}
     querier:
       frontend_worker:
-        frontend_address: {{ template "common.names.fullname" . }}-query-headless:{{ .Values.queryFrontend.service.grpcPort }}
+        frontend_address: {{ template "common.names.fullname" . }}-query-frontend-headless:{{ .Values.queryFrontend.service.grpcPort }}
     ingester:
       lifecycler:
         ring:
           replication_factor: 1
           kvstore:
             store: memberlist
-        tokens_file_path: /bitnami/grafana-tempo/data/tokens.json
+        tokens_file_path: {{ .Values.tempo.dataDir }}/tokens.json
     memberlist:
       abort_if_cluster_join_fails: false
       join_members:
@@ -188,22 +204,35 @@ tempo:
         backend: local
         blocklist_poll: 5m
         local:
-          path: /bitnami/grafana-tempo/data/traces
+          path: {{ .Values.tempo.dataDir }}/traces
         wal:
-          path: /bitnami/grafana-tempo/data/wal
+          path: {{ .Values.tempo.dataDir }}/wal
         cache: memcached
         memcached:
           consistent_hash: true
-          host: {{ include "common.names.fullname" . }}-memcached
+          host: {{ template "grafana-tempo.memcached.url" . }}
           service: memcache
           timeout: 500ms
 
+  ## @param tempo.existingConfigmap name of a ConfigMap with the tempo configuration
+  ##
+  existingConfigmap:
+
+  ## @param tempo.overridesConfiguration [string] Tempo components overrides configuration settings
+  ##
   overridesConfiguration: |
     overrides: {}
+
+  ## @param tempo.existingOverridesConfigmap name of a ConfigMap with the tempo overrides configuration
+  ##
+  existingOverridesConfigmap:
 
 ## @section Compactor Deployment Parameters
 ##
 compactor:
+  ## @param compactor.enabled Enable compactor deployment
+  ##
+  enabled: true
   ## @param compactor.replicaCount Number of compactor replicas to deploy
   ##
   replicaCount: 1
@@ -378,46 +407,45 @@ compactor:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: {}
-  ## @section Traffic Exposure Parameters
+  ## @section Compactor Traffic Exposure Parameters
   ##
 
   ## compactor service parameters
   ##
   service:
-    ## @param service.type compactor service type
+    ## @param compactor.service.type compactor service type
     ##
     type: ClusterIP
-    ## @param service.port compactor service HTTP port
+    ## @param compactor.service.port compactor service HTTP port
     ##
     port: 3100
     ## Node ports to expose
-    ## @param service.nodePorts.http Node port for HTTP
-    ## @param service.nodePorts.https Node port for HTTPS
+    ## @param compactor.service.nodePorts.http Node port for HTTP
     ## NOTE: choose port between <30000-32767>
     ##
     nodePorts:
       http:
-    ## @param service.clusterIP compactor service Cluster IP
+    ## @param compactor.service.clusterIP compactor service Cluster IP
     ## e.g.:
     ## clusterIP: None
     ##
     clusterIP:
-    ## @param service.loadBalancerIP compactor service Load Balancer IP
+    ## @param compactor.service.loadBalancerIP compactor service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
     loadBalancerIP:
-    ## @param service.loadBalancerSourceRanges compactor service Load Balancer sources
+    ## @param compactor.service.loadBalancerSourceRanges compactor service Load Balancer sources
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g:
     ## loadBalancerSourceRanges:
     ##   - 10.10.10.0/24
     ##
     loadBalancerSourceRanges: []
-    ## @param service.externalTrafficPolicy compactor service external traffic policy
+    ## @param compactor.service.externalTrafficPolicy compactor service external traffic policy
     ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
-    ## @param service.annotations Additional custom annotations for compactor service
+    ## @param compactor.service.annotations Additional custom annotations for compactor service
     ##
     annotations: {}
 
@@ -598,49 +626,50 @@ distributor:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: {}
-  ## @section Traffic Exposure Parameters
+  ## @section Distributor Traffic Exposure Parameters
   ##
 
   ## distributor service parameters
   ##
   service:
-    ## @param service.type distributor service type
+    ## @param distributor.service.type distributor service type
     ##
     type: ClusterIP
-    ## @param service.port distributor service HTTP port
+    ## @param distributor.service.port distributor service HTTP port
     ##
     port: 3100
-    ## @param service.grpcPort distributor service HTTP port
+    ## @param distributor.service.grpcPort distributor service HTTP port
     ##
     grpcPort: 9095
     ## Node ports to expose
-    ## @param service.nodePorts.http Node port for HTTP
-    ## @param service.nodePorts.https Node port for HTTPS
+    ## @param distributor.service.nodePorts.http Node port for HTTP
+    ## @param distributor.service.nodePorts.grpc Node port for GRPC
     ## NOTE: choose port between <30000-32767>
     ##
     nodePorts:
       http:
-    ## @param service.clusterIP distributor service Cluster IP
+      grpc:
+    ## @param distributor.service.clusterIP distributor service Cluster IP
     ## e.g.:
     ## clusterIP: None
     ##
     clusterIP:
-    ## @param service.loadBalancerIP distributor service Load Balancer IP
+    ## @param distributor.service.loadBalancerIP distributor service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
     loadBalancerIP:
-    ## @param service.loadBalancerSourceRanges distributor service Load Balancer sources
+    ## @param distributor.service.loadBalancerSourceRanges distributor service Load Balancer sources
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g:
     ## loadBalancerSourceRanges:
     ##   - 10.10.10.0/24
     ##
     loadBalancerSourceRanges: []
-    ## @param service.externalTrafficPolicy distributor service external traffic policy
+    ## @param distributor.service.externalTrafficPolicy distributor service external traffic policy
     ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
-    ## @param service.annotations Additional custom annotations for distributor service
+    ## @param distributor.service.annotations Additional custom annotations for distributor service
     ##
     annotations: {}
 
@@ -822,26 +851,40 @@ ingester:
   ##
   initContainers: {}
 
+  ## @section Ingester Persistence Parameters
+  ##
+
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
   persistence:
+    ## @param ingester.persistence.enabled Enable persistence in ingester instances
+    ##
     enabled: true
     ## PV Storage Class
     ## If defined, storageClassName: <storageClass>
     ## If set to "-", storageClassName: "", which disables dynamic provisioning
     ## If undefined (the default) or set to null, no storageClassName spec is
     ## set, choosing the default provisioner.
+    ## @param ingester.persistence.storageClass Persistent Volumes storage class
     ##
     storageClass:
+    ## The subdirectory of the volume to mount to, useful in dev environments
+    ## and one PV for multiple services.
+    ## @param ingester.persistence.subPath The subdirectory of the volume to mount to
+    ##
+    subPath: ""
     ## PV Access Mode
+    ## @param ingester.persistence.accessModes [array] Persistent Volumes access modes
     ##
     accessModes:
       - ReadWriteOnce
     ## PVC size
+    ## @param ingester.persistence.size Persistent Volumes size
     ##
     size: 8Gi
     ## PVC annotations
+    ## @param ingester.persistence.annotations Persistent Volumes annotations
     ##
     annotations: {}
     ## Fine tuning for volumeClaimTemplates
@@ -849,60 +892,64 @@ ingester:
     volumeClaimTemplates:
       ## A label query over volumes to consider for binding (e.g. when using local volumes)
       ## See https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#labelselector-v1-meta for more details
+      ## @param ingester.persistence.volumeClaimTemplates.selector Persistent Volumes selector
       ##
       selector:
       ## Override the requests attribute
       ## Sometime cloud providers use additional requests attributes to provision custom storage instance
       ## See https://cloud.ibm.com/docs/containers?topic=containers-file_storage#file_dynamic_statefulset
+      ## @param ingester.persistence.volumeClaimTemplates.requests Persistent Volumes requests
       ##
       requests:
       ## Set volumeClaimTemplate dataSource
+      ## @param ingester.persistence.volumeClaimTemplates.dataSource Persistent Volumes data source
       ##
       dataSource:
 
-  ## @section Traffic Exposure Parameters
+  ## @section Ingester Traffic Exposure Parameters
   ##
 
   ## ingester service parameters
   ##
   service:
-    ## @param service.type ingester service type
+    ## @param ingester.service.type ingester service type
     ##
     type: ClusterIP
-    ## @param service.port ingester service HTTP port
+    ## @param ingester.service.port ingester service HTTP port
     ##
     port: 3100
-    ## @param service.grpcPort ingester service HTTP port
+    ## @param ingester.service.grpcPort ingester service HTTP port
     ##
     grpcPort: 9095
     ## Node ports to expose
-    ## @param service.nodePorts.http Node port for HTTP
-    ## @param service.nodePorts.https Node port for HTTPS
+    ## @param ingester.service.nodePorts.http Node port for HTTP
+    ## @param ingester.service.nodePorts.grpc Node port for GRPC
     ## NOTE: choose port between <30000-32767>
     ##
     nodePorts:
       http:
-    ## @param service.clusterIP ingester service Cluster IP
+      grpc:
+    ## @param ingester.service.clusterIP ingester service Cluster IP
     ## e.g.:
     ## clusterIP: None
     ##
     clusterIP:
-    ## @param service.loadBalancerIP ingester service Load Balancer IP
+    ## @param ingester.service.loadBalancerIP ingester service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
     loadBalancerIP:
-    ## @param service.loadBalancerSourceRanges ingester service Load Balancer sources
+    ## @param ingester.service.loadBalancerSourceRanges ingester service Load Balancer sources
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g:
     ## loadBalancerSourceRanges:
     ##   - 10.10.10.0/24
     ##
     loadBalancerSourceRanges: []
-    ## @param service.externalTrafficPolicy ingester service external traffic policy
+    ## @param ingester.service.externalTrafficPolicy ingester service external traffic policy
     ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
-    ## @param service.annotations Additional custom annotations for ingester service
+    ## @param ingester.service.annotations Additional custom annotations for ingester service
     ##
     annotations: {}
 
@@ -1083,53 +1130,54 @@ querier:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: {}
-  ## @section Traffic Exposure Parameters
+  ## @section Querier Traffic Exposure Parameters
   ##
 
   ## querier service parameters
   ##
   service:
-    ## @param service.type querier service type
+    ## @param querier.service.type querier service type
     ##
     type: ClusterIP
-    ## @param service.port querier service HTTP port
+    ## @param querier.service.port querier service HTTP port
     ##
     port: 3100
-    ## @param service.grpcPort querier service HTTP port
+    ## @param querier.service.grpcPort querier service HTTP port
     ##
     grpcPort: 9095
     ## Node ports to expose
-    ## @param service.nodePorts.http Node port for HTTP
-    ## @param service.nodePorts.https Node port for HTTPS
+    ## @param querier.service.nodePorts.http Node port for HTTP
+    ## @param querier.service.nodePorts.grpc Node port for GRPC
     ## NOTE: choose port between <30000-32767>
     ##
     nodePorts:
       http:
-    ## @param service.clusterIP querier service Cluster IP
+      grpc:
+    ## @param querier.service.clusterIP querier service Cluster IP
     ## e.g.:
     ## clusterIP: None
     ##
     clusterIP:
-    ## @param service.loadBalancerIP querier service Load Balancer IP
+    ## @param querier.service.loadBalancerIP querier service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
     loadBalancerIP:
-    ## @param service.loadBalancerSourceRanges querier service Load Balancer sources
+    ## @param querier.service.loadBalancerSourceRanges querier service Load Balancer sources
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g:
     ## loadBalancerSourceRanges:
     ##   - 10.10.10.0/24
     ##
     loadBalancerSourceRanges: []
-    ## @param service.externalTrafficPolicy querier service external traffic policy
+    ## @param querier.service.externalTrafficPolicy querier service external traffic policy
     ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
-    ## @param service.annotations Additional custom annotations for querier service
+    ## @param querier.service.annotations Additional custom annotations for querier service
     ##
     annotations: {}
 
-## @section QueryFrontend Deployment Parameters
+## @section Query Frontend Deployment Parameters
 ##
 queryFrontend:
   ## @param queryFrontend.replicaCount Number of queryFrontend replicas to deploy
@@ -1317,11 +1365,10 @@ queryFrontend:
     ## @param queryFrontend.query.image.tag Grafana Tempo Query image tag (immutable tags are recommended)
     ## @param queryFrontend.query.image.pullPolicy Grafana Tempo Query image pull policy
     ## @param queryFrontend.query.image.pullSecrets Grafana Tempo Query image pull secrets
-    ## @param queryFrontend.query.image.debug Enable image debug mode
     ##
     image:
       registry: docker.io
-      repository: bitnami/grafana-tempo-query
+      repository: grafana/tempo-query
       tag: latest
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1336,9 +1383,6 @@ queryFrontend:
       ##   - myRegistryKeySecretName
       ##
       pullSecrets: []
-      ## Enable debug mode
-      ##
-      debug: false
 
     ## @param queryFrontend.query.command Override default container command (useful when using custom images)
     ##
@@ -1346,14 +1390,21 @@ queryFrontend:
     ## @param queryFrontend.query.args Override default container args (useful when using custom images)
     ##
     args: []
-    ## @param queryFrontend.query.configuration Query sidecar configuration
+    ## @param queryFrontend.query.configuration [string] Query sidecar configuration
     ##
     configuration: |
       backend: 127.0.0.1:{{ .Values.tempo.containerPort }}
 
+    ## @param queryFrontend.query.jaegerMetricsContainerPort Jaeger metrics container port
+    ##
     jaegerMetricsContainerPort: 16687
+    ## @param queryFrontend.query.jaegerUIContainerPort Jaeger UI container port
+    ##
     jaegerUIContainerPort: 16686
 
+    ## @param queryFrontend.query.existingConfigmap Name of a configmap with the query configuration
+    ##
+    existingConfigmap:
     ## Configure extra options for query sidecar containers' liveness and readiness probes
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
     ## @param queryFrontend.query.livenessProbe.enabled Enable livenessProbe on query sidecar nodes
@@ -1428,50 +1479,50 @@ queryFrontend:
       enabled: true
       runAsUser: 1001
 
-  ## @section Traffic Exposure Parameters
+  ## @section Query Frontend Traffic Exposure Parameters
   ##
 
   ## queryFrontend service parameters
   ##
   service:
-    ## @param service.type queryFrontend service type
+    ## @param queryFrontend.service.type queryFrontend service type
     ##
     type: ClusterIP
-    ## @param service.port queryFrontend service HTTP port
+    ## @param queryFrontend.service.port queryFrontend service HTTP port
     ##
     port: 3100
-    ## @param service.grpcPort queryFrontend service HTTP port
+    ## @param queryFrontend.service.grpcPort queryFrontend service HTTP port
     ##
     grpcPort: 9095
     ## Node ports to expose
-    ## @param service.nodePorts.http Node port for HTTP
-    ## @param service.nodePorts.https Node port for HTTPS
+    ## @param queryFrontend.service.nodePorts.http Node port for HTTP
+    ## @param queryFrontend.service.nodePorts.grpc Node port for GRPC
     ## NOTE: choose port between <30000-32767>
     ##
     nodePorts:
       http:
       grpc:
-    ## @param service.clusterIP queryFrontend service Cluster IP
+    ## @param queryFrontend.service.clusterIP queryFrontend service Cluster IP
     ## e.g.:
     ## clusterIP: None
     ##
     clusterIP:
-    ## @param service.loadBalancerIP queryFrontend service Load Balancer IP
+    ## @param queryFrontend.service.loadBalancerIP queryFrontend service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
     loadBalancerIP:
-    ## @param service.loadBalancerSourceRanges queryFrontend service Load Balancer sources
+    ## @param queryFrontend.service.loadBalancerSourceRanges queryFrontend service Load Balancer sources
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g:
     ## loadBalancerSourceRanges:
     ##   - 10.10.10.0/24
     ##
     loadBalancerSourceRanges: []
-    ## @param service.externalTrafficPolicy queryFrontend service external traffic policy
+    ## @param queryFrontend.service.externalTrafficPolicy queryFrontend service external traffic policy
     ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
-    ## @param service.annotations Additional custom annotations for queryFrontend service
+    ## @param queryFrontend.service.annotations Additional custom annotations for queryFrontend service
     ##
     annotations: {}
 
@@ -1489,12 +1540,11 @@ vulture:
   ## @param vulture.image.tag Grafana Vulture image tag (immutable tags are recommended)
   ## @param vulture.image.pullPolicy Grafana Vulture image pull policy
   ## @param vulture.image.pullSecrets Grafana Vulture image pull secrets
-  ## @param vulture.image.debug Enable image debug mode
   ##
 
   image:
     registry: docker.io
-    repository: bitnami/grafana-vulture
+    repository: grafana/tempo-vulture
     tag: latest
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1509,9 +1559,6 @@ vulture:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-    ## Enable debug mode
-    ##
-    debug: false
 
   ## @param vulture.replicaCount Number of vulture replicas to deploy
   ##
@@ -1691,49 +1738,45 @@ vulture:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: {}
-  ## @section Traffic Exposure Parameters
+  ## @section Vulture Traffic Exposure Parameters
   ##
 
   ## vulture service parameters
   ##
   service:
-    ## @param service.type vulture service type
+    ## @param vulture.service.type vulture service type
     ##
     type: ClusterIP
-    ## @param service.port vulture service HTTP port
+    ## @param vulture.service.port vulture service HTTP port
     ##
     port: 3100
-    ## @param service.grpcPort vulture service HTTP port
-    ##
-    grpcPort: 9095
     ## Node ports to expose
-    ## @param service.nodePorts.http Node port for HTTP
-    ## @param service.nodePorts.https Node port for HTTPS
+    ## @param vulture.service.nodePorts.http Node port for HTTP
     ## NOTE: choose port between <30000-32767>
     ##
     nodePorts:
       http:
-    ## @param service.clusterIP vulture service Cluster IP
+    ## @param vulture.service.clusterIP vulture service Cluster IP
     ## e.g.:
     ## clusterIP: None
     ##
     clusterIP:
-    ## @param service.loadBalancerIP vulture service Load Balancer IP
+    ## @param vulture.service.loadBalancerIP vulture service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
     loadBalancerIP:
-    ## @param service.loadBalancerSourceRanges vulture service Load Balancer sources
+    ## @param vulture.service.loadBalancerSourceRanges vulture service Load Balancer sources
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g:
     ## loadBalancerSourceRanges:
     ##   - 10.10.10.0/24
     ##
     loadBalancerSourceRanges: []
-    ## @param service.externalTrafficPolicy vulture service external traffic policy
+    ## @param vulture.service.externalTrafficPolicy vulture service external traffic policy
     ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
-    ## @param service.annotations Additional custom annotations for vulture service
+    ## @param vulture.service.annotations Additional custom annotations for vulture service
     ##
     annotations: {}
 
@@ -1787,6 +1830,9 @@ volumePermissions:
   containerSecurityContext:
     runAsUser: 0
 
+## @section Other Parameters
+##
+
 ## ServiceAccount configuration
 ##
 serviceAccount:
@@ -1798,38 +1844,54 @@ serviceAccount:
   ##
   name: ""
 
-## Memcached sub-chart
-##
-memcached:
-  enabled: true
-
+## @section Metrics Parameters
 ## Prometheus Exporter / Metrics
 ##
 metrics:
+  ## @param metrics.enabled Enable metrics
+  ##
   enabled: false
   ## Prometheus Service Monitor
   ## ref: https://github.com/coreos/prometheus-operator
   ##      https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md
   ##
   serviceMonitor:
-    ## If the operator is installed in your cluster, set to true to create a Service Monitor Entry
+    ## @param metrics.serviceMonitor.enabled Create ServiceMonitor resource(s) for scraping metrics using PrometheusOperator
     ##
     enabled: false
 
-    ## Specify the namespace where Prometheus Operator is running
+    ## @param metrics.serviceMonitor.namespace The namespace in which the ServiceMonitor will be created
     ##
     namespace:
 
-    ## Specify the interval at which metrics should be scraped
+    ## @param metrics.serviceMonitor.interval The interval at which metrics should be scraped
     ##
     interval: 30s
-    ## Specify the timeout after which the scrape is ended
+    ## @param metrics.serviceMonitor.scrapeTimeout The timeout after which the scrape is ended
     ##
     scrapeTimeout:
-    ## Specify the selector for the scrape
+    ## @param metrics.serviceMonitor.selector Scrape selector
     ##
     selector:
-    ## Used to pass Labels that are used by the Prometheus installed in your cluster to select Service Monitors to work with
-    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
-    ##
-    additionalLabels: {}
+
+## @section External Memcached Parameters
+##
+externalMemcached:
+  ## @param externalMemcached.host Host of a running external memcached instance
+  ##
+  host:
+  ## @param externalMemcached.port Port of a running external memcached instance
+  ##
+  port: 11211
+
+## @section Memcached Sub-chart Parameters
+## Memcached sub-chart
+##
+memcached:
+  ## @param memcached.enabled Deploy memcached sub-chart
+  ##
+  enabled: true
+  ## @param memcached.service.port Memcached service port
+  ##
+  service:
+    port: 11211

@@ -12,4 +12,5 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 data:
-  overrides.yaml: {{- include "common.tplvalues.render" (dict "value" .Values.tempo.overridesConfiguration "context" $) | nindent 4 }}
+  overrides.yaml: |-
+    {{- include "common.tplvalues.render" (dict "value" .Values.tempo.overridesConfiguration "context" $) | nindent 4 }}

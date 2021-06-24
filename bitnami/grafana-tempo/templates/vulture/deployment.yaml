@@ -1,3 +1,4 @@
+{{- if .Values.vulture.enabled }}
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
@@ -61,7 +62,7 @@ spec:
         {{- end }}
       containers:
         - name: grafana-tempo-vulture
-          image: {{ template "grafana-tempo.image" . }}
+          image: {{ template "grafana-tempo.vultureImage" . }}
           imagePullPolicy: {{ .Values.vulture.image.pullPolicy }}
           {{- if .Values.vulture.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.vulture.lifecycleHooks "context" $) | nindent 12 }}
@@ -76,9 +77,9 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.vulture.args "context" $) | nindent 12 }}
           {{- else }}
           args:
-            - -prometheus-listen-address=:{{ .Values.vulture.containerPort }}
-            - -tempo-push-url={{ template "common.names.fullname" . }}-distributor:{{ .Values.distributor.service.port }}
-            - -tempo-query-url={{ template "common.names.fullname" . }}-query:{{ .Values.queryFrontend.service.port }}
+            - -prometheus-listen-address=0.0.0.0:{{ .Values.vulture.containerPort }}
+            - -tempo-push-url=http://{{ template "common.names.fullname" . }}-distributor
+            - -tempo-query-url=http://{{ template "common.names.fullname" . }}-query-frontend:{{ .Values.queryFrontend.service.port }}
           {{- end }}
           {{- if .Values.vulture.extraEnvVars }}
           env: {{- include "common.tplvalues.render" (dict "value" .Values.vulture.extraEnvVars "context" $) | nindent 12 }}
@@ -95,15 +96,13 @@ spec:
           ports:
             - containerPort: {{ .Values.vulture.containerPort }}
               name: http
-            - containerPort: {{ .Values.tempo.gossipRing.containerPort }}
-              name: http-memberlist
           {{- if .Values.vulture.resources }}
           resources: {{- toYaml .Values.vulture.resources | nindent 12 }}
           {{- end }}
           {{- if .Values.vulture.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
-              path: /health
+              path: /metrics
               port: http
             initialDelaySeconds: {{ .Values.vulture.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.vulture.livenessProbe.periodSeconds }}
@@ -116,7 +115,7 @@ spec:
           {{- if .Values.vulture.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
-              path: /health
+              path: /metrics
               port: http
             initialDelaySeconds: {{ .Values.vulture.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.vulture.readinessProbe.periodSeconds }}
@@ -127,7 +126,7 @@ spec:
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.vulture.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: config
+            - name: tempo-config
               mountPath: /bitnami/grafana-tempo/conf
           {{- if .Values.vulture.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.vulture.extraVolumeMounts "context" $) | nindent 12 }}
@@ -142,3 +141,4 @@ spec:
         {{- if .Values.vulture.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.vulture.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
+{{- end }}

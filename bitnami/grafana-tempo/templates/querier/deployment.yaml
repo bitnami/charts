@@ -78,7 +78,7 @@ spec:
           {{- else }}
           args:
             - -target=querier
-            - -config.file=/binami/grafana-tempo/conf/tempo.yaml
+            - -config.file=/bitnami/grafana-tempo/conf/tempo.yaml
             - -mem-ballast-size-mbs={{ .Values.tempo.memBallastSizeMbs }}
           {{- end }}
           {{- if .Values.querier.extraEnvVars }}
@@ -106,7 +106,7 @@ spec:
           {{- if .Values.querier.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
-              path: /health
+              path: /ready
               port: http
             initialDelaySeconds: {{ .Values.querier.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.querier.livenessProbe.periodSeconds }}
@@ -119,7 +119,7 @@ spec:
           {{- if .Values.querier.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
-              path: /health
+              path: /ready
               port: http
             initialDelaySeconds: {{ .Values.querier.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.querier.readinessProbe.periodSeconds }}
@@ -130,8 +130,14 @@ spec:
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.querier.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: config
-              mountPath: /bitnami/grafana-tempo/conf
+            - name: tempo-config
+              mountPath: /bitnami/grafana-tempo/conf/tempo.yaml
+              subPath: tempo.yaml
+            - name: overrides-config
+              mountPath: /bitnami/grafana-tempo/conf/overrides.yaml
+              subPath: overrides.yaml
+            - name: data
+              mountPath: {{ .Values.tempo.dataDir }}
           {{- if .Values.querier.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.querier.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -139,9 +145,15 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.querier.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        # NOTE: The upstream chart does not create a PVC for this, we assume that it is just for tmp data
+        - name: data
+          emptyDir: {}
         - name: tempo-config
           configMap:
             name: {{ template "grafana-tempo.tempoConfigmapName" . }}
+        - name: overrides-config
+          configMap:
+            name: {{ template "grafana-tempo.overridesConfigmapName" . }}
         {{- if .Values.querier.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.querier.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

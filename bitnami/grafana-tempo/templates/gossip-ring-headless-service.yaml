@@ -8,11 +8,18 @@ metadata:
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-  {{- if .Values.commonAnnotations }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- if or .Values.commonAnnotations .Values.tempo.gossipRing.service.annotations }}
+  annotations:
+    {{- if .Values.tempo.gossipRing.service.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.tempo.gossipRing.service.annotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
   {{- end }}
 spec:
   type: ClusterIP
+  publishNotReadyAddresses: true
   clusterIP: None
   ports:
     - name: http

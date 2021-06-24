@@ -8,11 +8,20 @@ metadata:
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-  {{- if .Values.commonAnnotations }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- if or .Values.commonAnnotations .Values.distributor.service.annotations }}
+  annotations:
+    {{- if .Values.distributor.service.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.distributor.service.annotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
   {{- end }}
 spec:
   type: {{ .Values.distributor.service.type }}
+  {{- if .Values.distributor.service.clusterIP }}
+  clusterIP: {{ .Values.distributor.service.clusterIP }}
+  {{- end }}
   {{- if (or (eq .Values.distributor.service.type "LoadBalancer") (eq .Values.distributor.service.type "NodePort")) }}
   externalTrafficPolicy: {{ .Values.distributor.service.externalTrafficPolicy | quote }}
   {{- end }}
@@ -27,10 +36,21 @@ spec:
       port: {{ .Values.distributor.service.port }}
       targetPort: http
       protocol: TCP
+      {{- if (and (or (eq .Values.distributor.service.type "NodePort") (eq .Values.distributor.service.type "LoadBalancer")) (not (empty .Values.distributor.service.nodePorts.http))) }}
+      nodePort: {{ .Values.distributor.service.nodePorts.http }}
+      {{- else if eq .Values.distributor.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
     - name: grpc
       port: {{ .Values.distributor.service.grpcPort }}
       protocol: TCP
       targetPort: grpc
+      {{- if (and (or (eq .Values.distributor.service.type "NodePort") (eq .Values.distributor.service.type "LoadBalancer")) (not (empty .Values.distributor.service.nodePorts.grpc))) }}
+      nodePort: {{ .Values.distributor.service.nodePorts.grpc }}
+      {{- else if eq .Values.distributor.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    ## From here we use non-configurable, standard ports
     {{- if .Values.tempo.traces.jaeger.thriftCompact }}
     - name: distributor-jaeger-thrift-compact
       port: 6831

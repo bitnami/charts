@@ -8,11 +8,20 @@ metadata:
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-  {{- if .Values.commonAnnotations }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- if or .Values.commonAnnotations .Values.ingester.service.annotations }}
+  annotations:
+    {{- if .Values.ingester.service.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.ingester.service.annotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
   {{- end }}
 spec:
   type: {{ .Values.ingester.service.type }}
+  {{- if .Values.ingester.service.clusterIP }}
+  clusterIP: {{ .Values.ingester.service.clusterIP }}
+  {{- end }}
   {{- if (or (eq .Values.ingester.service.type "LoadBalancer") (eq .Values.ingester.service.type "NodePort")) }}
   externalTrafficPolicy: {{ .Values.ingester.service.externalTrafficPolicy | quote }}
   {{- end }}
@@ -27,9 +36,19 @@ spec:
       port: {{ .Values.ingester.service.port }}
       targetPort: http
       protocol: TCP
+      {{- if (and (or (eq .Values.ingester.service.type "NodePort") (eq .Values.ingester.service.type "LoadBalancer")) (not (empty .Values.ingester.service.nodePorts.http))) }}
+      nodePort: {{ .Values.ingester.service.nodePorts.http }}
+      {{- else if eq .Values.ingester.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
     - name: grpc
       port: {{ .Values.ingester.service.grpcPort }}
       targetPort: grpc
       protocol: TCP
+      {{- if (and (or (eq .Values.ingester.service.type "NodePort") (eq .Values.ingester.service.type "LoadBalancer")) (not (empty .Values.ingester.service.nodePorts.grpc))) }}
+      nodePort: {{ .Values.ingester.service.nodePorts.grpc }}
+      {{- else if eq .Values.ingester.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: ingester

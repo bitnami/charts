@@ -12,4 +12,5 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 data:
-  tempo-query.yaml: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.query.configuration "context" $) | nindent 4 }}
+  tempo-query.yaml: |-
+    {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.query.configuration "context" $) | nindent 4 }}
