@@ -193,6 +193,8 @@ Persistent Volume Claims (PVCs) are used to keep the data across deployments. Th
 
 See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
 
+If you encounter errors when working with persistent volumes, refer to our [troubleshooting guide for persistent volumes](https://docs.bitnami.com/kubernetes/faq/troubleshooting/troubleshooting-persistence-volumes/).
+
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
