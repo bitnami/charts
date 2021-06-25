@@ -28,6 +28,11 @@ spec:
       targetPort: metrics
       port: {{ .Values.repoServer.metrics.service.port }}
       protocol: TCP
+      {{- if (and (or (eq .Values.repoServer.service.type "NodePort") (eq .Values.repoServer.service.type "LoadBalancer")) (not (empty .Values.repoServer.metrics.service.nodePort))) }}
+      nodePort: {{ .Values.repoServer.metrics.service.nodePort }}
+      {{- else if eq .Values.repoServer.metrics.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: repo-server
 {{- end }}

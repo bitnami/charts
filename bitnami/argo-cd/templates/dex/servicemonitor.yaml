@@ -1,15 +1,15 @@
-{{- if and .Values.repoServer.metrics.enabled .Values.repoServer.metrics.serviceMonitor.enabled }}
+{{- if and .Values.dex.enabled .Values.dex.metrics.enabled .Values.dex.metrics.serviceMonitor.enabled }}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ include "argocd.repo-server" . }}
+  name: {{ include "argocd.dex" . }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
-    app.kubernetes.io/component: repo-server
+    app.kubernetes.io/component: dex
 spec:
   endpoints:
     - port: metrics
-      interval: {{ .Values.repoServer.metrics.serviceMonitor.interval }}
+      interval: {{ .Values.dex.metrics.serviceMonitor.interval }}
       path: /metrics
   namespaceSelector:
     matchNames:
@@ -17,6 +17,6 @@ spec:
   selector:
     matchLabels:
       {{- include "common.labels.matchLabels" . | nindent 6 }}
-      app.kubernetes.io/component: repo-server
+      app.kubernetes.io/component: dex
 {{- end }}
 

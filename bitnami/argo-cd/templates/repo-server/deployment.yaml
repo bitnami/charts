@@ -56,6 +56,24 @@ spec:
       securityContext: {{- omit .Values.repoServer.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       initContainers:
+        {{- if .Values.volumePermissions.enabled }}
+        - name: volume-permissions
+          image: {{ include "argocd.volumePermissions.image" . }}
+          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          command:
+            - /bin/bash
+            - -ec
+            - |
+              chown -R {{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }} /tmp
+          securityContext:
+            runAsUser: 0
+          {{- if .Values.volumePermissions.resources }}
+          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: tmp-dir
+              mountPath: /tmp
+        {{- end }}
         {{- if .Values.repoServer.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.initContainers "context" $) | nindent 8 }}
         {{- end }}
@@ -91,11 +109,11 @@ spec:
           {{- end }}
           ports:
             - name: repo-server
-              containerPort: {{ .Values.repoServer.containerPort }}
+              containerPort: {{ .Values.repoServer.ports.repoServer }}
               protocol: TCP
             {{- if .Values.repoServer.metrics.enabled }}
             - name: metrics
-              containerPort: 8084
+              containerPort: {{ .Values.repoServer.ports.metrics }}
               protocol: TCP
             {{- end }}
           env:
@@ -124,7 +142,7 @@ spec:
           {{- if .Values.repoServer.livenessProbe.enabled }}
           livenessProbe:
             tcpSocket:
-              port: {{ .Values.repoServer.containerPort }}
+              port: {{ .Values.repoServer.ports.repoServer }}
             initialDelaySeconds: {{ .Values.repoServer.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.repoServer.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.repoServer.livenessProbe.timeoutSeconds }}
@@ -136,7 +154,7 @@ spec:
           {{- if .Values.repoServer.readinessProbe.enabled }}
           readinessProbe:
             tcpSocket:
-              port: {{ .Values.repoServer.containerPort }}
+              port: {{ .Values.repoServer.ports.repoServer }}
             initialDelaySeconds: {{ .Values.repoServer.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.repoServer.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.repoServer.readinessProbe.timeoutSeconds }}

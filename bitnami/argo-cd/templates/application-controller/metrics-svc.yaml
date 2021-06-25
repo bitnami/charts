@@ -27,6 +27,11 @@ spec:
     - name: metrics
       port: {{ .Values.controller.metrics.service.port }}
       protocol: TCP
+      {{- if (and (or (eq .Values.controller.service.type "NodePort") (eq .Values.controller.service.type "LoadBalancer")) (not (empty .Values.controller.metrics.service.nodePort))) }}
+      nodePort: {{ .Values.controller.metrics.service.nodePort }}
+      {{- else if eq .Values.controller.metrics.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: controller
 {{- end }}

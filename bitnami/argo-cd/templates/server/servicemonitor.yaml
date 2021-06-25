@@ -17,5 +17,6 @@ spec:
   selector:
     matchLabels:
       {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: server
 {{- end }}
 

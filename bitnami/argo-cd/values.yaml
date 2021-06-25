@@ -177,15 +177,18 @@ controller:
 
   ## %%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
 
-  containerPort: 8082
+  ports:
+    controller: 8082
+    metrics: 8082
+
   ## Argo CD application controller service parameters
   ##
   service:
     ## @param controller.service.type Argo CD service type
     ##
     type: ClusterIP
-    ## @param controller.service.servicePortHttp HTTP port for the gRPC ingress when enabled
-    ## @param controller.service.servicePortHttps HTTPS port for the gRPC ingress when enabled
+    ## @param controller.service.http HTTP port for the gRPC ingress when enabled
+    ## @param controller.service.https HTTPS port for the gRPC ingress when enabled
     ##
     port: 8082
 
@@ -230,9 +233,6 @@ controller:
       ##
       port: 8082
 
-      ## @param controller.metrics.service.httpsPort Argo CD application controller service HTTPS port
-      ##
-      httpsPort: 443
       ## Node ports to expose
       ## @param controller.metrics.service.nodePortp Node port for the application controller service
       ## NOTE: choose port between <30000-32767>
@@ -762,9 +762,6 @@ server:
       ##
       port: 8084
 
-      ## @param server.metrics.service.httpsPort Argo CD server service HTTPS port
-      ##
-      httpsPort: 443
       ## Node ports to expose
       ## @param server.metrics.service.nodePorts.http Node port for HTTP
       ## @param server.metrics.service.nodePorts.https Node port for HTTPS
@@ -895,10 +892,12 @@ server:
     ##
 
   ## Argo CD server container port
-  ## @param server.containerPort Argo CD server container port
-  ## @param server.containerHttpsPort Argo CD server HTTPS container port
-  containerPort: 8080
-  containerHttpsPort: 8443
+  ## @param server.ports.http Argo CD server HTTP container port
+  ## @param server.ports.https Argo CD server HTTPS container port
+  ports:
+    http: 8080
+    https: 8443
+    metrics: 8083
 
   ## Argo CD server service parameters
   ##
@@ -906,16 +905,13 @@ server:
     ## @param server.service.type Argo CD service type
     ##
     type: ClusterIP
-    ## @param server.service.servicePortHttp HTTP port for the gRPC ingress when enabled
-    ## @param server.service.servicePortHttps HTTPS port for the gRPC ingress when enabled
+    ## @param server.service.http HTTP port for the gRPC ingress when enabled
+    ## @param server.service.https HTTPS port for the gRPC ingress when enabled
     ##
     ports:
-      servicePortHttp: 80
-      servicePortHttps: 443
+      http: 80
+      https: 443
 
-    ## @param server.service.httpsPort Argo CD service HTTPS port
-    ##
-    httpsPort: 443
     ## Node ports to expose
     ## @param server.service.nodePorts.http Node port for HTTP
     ## @param server.service.nodePorts.https Node port for HTTPS
@@ -1226,9 +1222,12 @@ repoServer:
   logLevel: info
 
   ## Argo CD repo server container port
-  ## @param repoServer.containerPort Container port for Argo CD repo server
+  ## @param repoServer.ports.repoServer Container port for Argo CD repo server
+  ## @param repoServer.ports.metrics Metrics port for Argo CD repo server
   ##
-  containerPort: 8081
+  ports:
+    repoServer: 8081
+    metrics:
 
   ## Metrics configuration for Argo CD repo server
   ##
@@ -1242,9 +1241,6 @@ repoServer:
       ##
       port: 8084
 
-      ## @param repoServer.metrics.service.httpsPort Argo CD repo server service HTTPS port
-      ##
-      httpsPort: 443
       ## Node ports to expose
       ## @param repoServer.metrics.service.nodePorts.http Node port for the repo server metrics service
       ## NOTE: choose port between <30000-32767>
@@ -1458,6 +1454,11 @@ dex:
     ## Enable debug mode
     ##
     debug: false
+
+  ## Enable Dex deployment
+  ## @params dex.enabled
+  ##
+  enabled: true
   ## @param dex.replicaCount Number of Dex replicas to deploy
   ##
   replicaCount: 1
@@ -1530,12 +1531,18 @@ dex:
     type: ClusterIP
     ## @param dex.service.port Dex service port
     ##
-    port: 5556
+    ports:
+      http: 5556
+      grpc: 5557
+
     ## Node ports to expose
-    ## @param dex.service.nodePorts.http Node port for the Dex service
+    ## @param dex.service.nodePorts.http HTTP node port for the Dex service
+    ## @param dex.service.nodePorts.grpc gRPC node port for the Dex service
     ## NOTE: choose port between <30000-32767>
     ##
-    nodePort:
+    nodePorts:
+      http:
+      grpc:
     ## @param dex.service.clusterIP Dex service Cluster IP
     ## e.g.:
     ## clusterIP: None
@@ -1559,6 +1566,76 @@ dex:
     ## @param dex.service.annotations Additional custom annotations for Dex service
     ##
     annotations: {}
+
+  ## Dex container ports
+  ## @param dex.ports.http Dex container HTTP port
+  ## @param dex.ports.grpc Dex gRPC port
+  ## @param dex.ports.metrics Dex metrics port
+  ##
+  ports:
+    http: 5556
+    grpc: 5557
+    metrics: 5558
+
+  ## Metrics configuration for Dex
+  ##
+  metrics:
+    enabled: false
+    service:
+      ## @param Dex.metrics.service.type Dex service type
+      ##
+      type: ClusterIP
+      ## @param Dex.metrics.service.port Dex metrics service port
+      ##
+      port: 5558
+
+      ## Node ports to expose
+      ## @param Dex.metrics.service.nodePortp Node port for the Dex service
+      ## NOTE: choose port between <30000-32767>
+      ##
+      nodePort:
+      ## @param Dex.metrics.service.clusterIP Dex service Cluster IP
+      ## e.g.:
+      ## clusterIP: None
+      ##
+      clusterIP:
+      ## @param Dex.metrics.service.loadBalancerIP Dex service Load Balancer IP
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+      ##
+      loadBalancerIP:
+      ## @param Dex.metrics.service.loadBalancerSourceRanges Dex service Load Balancer sources
+      ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+      ## e.g:
+      ## loadBalancerSourceRanges:
+      ##   - 10.10.10.0/24
+      ##
+      loadBalancerSourceRanges: []
+      ## @param Dex.metrics.service.externalTrafficPolicy Dex service external traffic policy
+      ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+      ##
+      externalTrafficPolicy: Cluster
+      ## @param Dex.metrics.service.annotations Additional custom annotations for Dex service
+      ##
+      annotations: {}
+    ## Dex metrics service monitor configuration
+    ## @param Dex.metrics.serviceMonitor.enabled Enable service monirot for Dex
+    ## @param Dex.metrics.serviceMonitor.interval Interval for the Dex service monitor
+    serviceMonitor:
+      enabled: false
+      interval: 30s
+
+  ## ServiceAccount configuration for the Dex
+  ##
+  serviceAccount:
+    ## @param dex.serviceAccount.create Specifies whether a ServiceAccount should be created for Dex
+    ##
+    create: true
+    ## @param dex.serviceAccount.name The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the common.names.fullname template
+    ##
+    name: ""
+    ## @param dex.serviceAccount.automountServiceAccountToken Automount service account token for the Dex service account
+    automountServiceAccountToken: true
 
   ## %%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
 
@@ -1788,6 +1865,34 @@ config:
     # NxexBk1UmkdtFftjHxsCQGjG+nhRYH92MsmrbvZyFzgxg9SIOu6xel7D3Dq9l5Le
     # XG+bpHPF4SiCpAxthP5WNa17zuvk+CDsMZgZNuhYNMo=
     # -----END RSA PRIVATE KEY-----
+
+  ## External Cluster Credentials
+  ## Refs:
+  ## - https://argoproj.github.io/argo-cd/operator-manual/declarative-setup/#clusters
+  ## - https://argoproj.github.io/argo-cd/operator-manual/security/#external-cluster-credentials
+  ## @param config.clusterCredentials Configure external cluster credentials
+  ## E.g
+  ##  - name: mycluster
+  ##   server: https://mycluster.com
+  ##   labels: {}
+  ##   annotations: {}
+  ##   config:
+  ##     bearerToken: "<authentication token>"
+  ##     tlsClientConfig:
+  ##       insecure: false
+  ##       caData: "<base64 encoded certificate>"
+  ## - name: mycluster2
+  ##   server: https://mycluster2.com
+  ##   labels: {}
+  ##   annotations: {}
+  ##   namespaces: namespace1,namespace2
+  ##   config:
+  ##     bearerToken: "<authentication token>"
+  ##     tlsClientConfig:
+  ##       insecure: false
+  ##       caData: "<base64 encoded certificate>"
+  ##
+  clusterCredentials: []
 
 ## @section Init Container Parameters
 

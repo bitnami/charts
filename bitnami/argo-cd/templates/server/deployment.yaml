@@ -103,7 +103,7 @@ spec:
             - {{ include "argocd.repo-server" . }}:{{ .Values.repoServer.service.port }}
             {{- if .Values.dex.enabled }}
             - --dex-server
-            - http://{{ include "argocd.dex" . }}:{{ .Values.dex.service.port }}
+            - http://{{ include "argocd.dex" . }}:{{ .Values.dex.service.ports.http }}
             {{- end }}
             - --logformat
             - {{ .Values.server.logFormat }}
@@ -117,14 +117,14 @@ spec:
           {{- end }}
           ports:
             - name: http
-              containerPort: {{ .Values.server.containerPort }}
+              containerPort: {{ .Values.server.ports.http }}
               protocol: TCP
             - name: https
-              containerPort: {{ .Values.server.containerHttpsPort }}
+              containerPort: {{ .Values.server.ports.https }}
               protocol: TCP
             {{- if .Values.server.metrics.enabled }}
             - name: metrics
-              containerPort: 8083
+              containerPort: {{ .Values.server.ports.metrics }}
               protocol: TCP
             {{- end }}
           env:
@@ -154,7 +154,7 @@ spec:
           livenessProbe:
             httpGet:
               path: /healthz
-              port: {{ .Values.server.containerPort }}
+              port: {{ .Values.server.ports.http }}
             initialDelaySeconds: {{ .Values.server.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.server.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.server.livenessProbe.timeoutSeconds }}
@@ -167,7 +167,7 @@ spec:
           readinessProbe:
             httpGet:
               path: /healthz
-              port: {{ .Values.server.containerPort }}
+              port: {{ .Values.server.ports.http }}
             initialDelaySeconds: {{ .Values.server.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.server.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.server.readinessProbe.timeoutSeconds }}

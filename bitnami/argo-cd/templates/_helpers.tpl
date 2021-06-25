@@ -119,6 +119,17 @@ Create the name of the service account to use for the Argo CD repo server
 {{- end -}}
 
 {{/*
+Create the name of the service account to use for Dex
+*/}}
+{{- define "argocd.dex.serviceAccountName" -}}
+{{- if .Values.dex.serviceAccount.create -}}
+    {{ default (printf "%s-dex" (include "common.names.fullname" .)) .Values.dex.serviceAccount.name | trunc 63 | trimSuffix "-" }}
+{{- else -}}
+    {{ default "default" .Values.dex.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Compile all warnings into a single message.
 */}}
 {{- define "argocd.validateValues" -}}

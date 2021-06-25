@@ -1,8 +1,8 @@
-{{- if .Values.rbac.create }}
+{{- if and .Values.dex.enabled .Values.rbac.create }}
 kind: Role
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
-  name: {{ include "argocd.server" . }}
+  name: {{ include "argocd.dex" . }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
   {{- if .Values.commonAnnotations }}
@@ -15,31 +15,7 @@ rules:
       - secrets
       - configmaps
     verbs:
-      - create
       - get
       - list
       - watch
-      - update
-      - patch
-      - delete
-  - apiGroups:
-      - argoproj.io
-    resources:
-      - applications
-      - appprojects
-    verbs:
-      - create
-      - get
-      - list
-      - watch
-      - update
-      - delete
-      - patch
-  - apiGroups:
-      - ""
-    resources:
-      - events
-    verbs:
-      - create
-      - list
 {{- end }}
