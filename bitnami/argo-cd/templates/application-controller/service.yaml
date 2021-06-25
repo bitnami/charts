@@ -27,8 +27,8 @@ spec:
       port: {{ .Values.controller.service.port }}
       targetPort: controller
       protocol: TCP
-      {{- if (and (or (eq .Values.controller.service.type "NodePort") (eq .Values.controller.service.type "LoadBalancer")) (not (empty .Values.controller.service.nodePorts.controller))) }}
-      nodePort: {{ .Values.controller.service.nodePorts.controller }}
+      {{- if (and (or (eq .Values.controller.service.type "NodePort") (eq .Values.controller.service.type "LoadBalancer")) (not (empty .Values.controller.service.nodePort))) }}
+      nodePort: {{ .Values.controller.service.nodePort }}
       {{- else if eq .Values.controller.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}

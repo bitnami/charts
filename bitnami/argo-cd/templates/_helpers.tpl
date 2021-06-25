@@ -15,7 +15,7 @@ Return the proper Argo CD server image name
 {{/*
 Return the proper Argo CD repoServer image name
 */}}
-{{- define "argocd.repoServer.image" -}}
+{{- define "argocd.repo-server.image" -}}
 {{ include "common.images.image" (dict "imageRoot" .Values.repoServer.image "global" .Values.global) }}
 {{- end -}}
 
@@ -90,7 +90,7 @@ Create the name of the service account to use for the Argo CD server
 */}}
 {{- define "argocd.server.serviceAccountName" -}}
 {{- if .Values.server.serviceAccount.create -}}
-    {{ default (printf "%s-argocd-server" (include "common.names.fullname" .)) .Values.server.serviceAccount.name }}
+    {{ default (printf "%s-argocd-server" (include "common.names.fullname" .)) .Values.server.serviceAccount.name | trunc 63 | trimSuffix "-" }}
 {{- else -}}
     {{ default "default" .Values.server.serviceAccount.name }}
 {{- end -}}
@@ -101,9 +101,20 @@ Create the name of the service account to use for the Argo CD application contro
 */}}
 {{- define "argocd.application-controller.serviceAccountName" -}}
 {{- if .Values.controller.serviceAccount.create -}}
-    {{ default (printf "%s-argocd-app-controller" (include "common.names.fullname" .)) .Values.controller.serviceAccount.name }}
+    {{ default (printf "%s-argocd-app-controller" (include "common.names.fullname" .)) .Values.controller.serviceAccount.name | trunc 63 | trimSuffix "-" }}
 {{- else -}}
     {{ default "default" .Values.controller.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the name of the service account to use for the Argo CD repo server
+*/}}
+{{- define "argocd.repo-server.serviceAccountName" -}}
+{{- if .Values.repoServer.serviceAccount.create -}}
+    {{ default (printf "%s-argocd-repo-server" (include "common.names.fullname" .)) .Values.repoServer.serviceAccount.name | trunc 63 | trimSuffix "-" }}
+{{- else -}}
+    {{ default "default" .Values.repoServer.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
 

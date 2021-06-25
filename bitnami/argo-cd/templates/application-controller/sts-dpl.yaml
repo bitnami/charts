@@ -108,6 +108,13 @@ spec:
               containerPort: {{ .Values.controller.containerPort }}
               protocol: TCP
           env:
+            {{- if and .Values.redis.enabled (include "argocd.redis.auth.enabled" .) }}
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "argocd.redis.secretName" . }}
+                  key: {{ include "argocd.redis.secretPasswordKey" . }}
+            {{- end }}
             {{- if .Values.controller.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.controller.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}

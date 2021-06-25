@@ -10,7 +10,7 @@ metadata:
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-    # Mandatory annotation
+    # Mandatory label
     # Ref: https://argoproj.github.io/argo-cd/operator-manual/declarative-setup/#atomic-configuration
     app.kubernetes.io/part-of: argocd
   {{- if .Values.commonAnnotations }}
