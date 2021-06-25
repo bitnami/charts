@@ -179,7 +179,9 @@ collector:
   discovery:
     enabled: true
 
-    annotationPrefix: "wavefront.com"
+    ## When specified, this replaces `prometheus.io` as the prefix for annotations used to
+    ## auto-discover Prometheus endpoints
+    #  annotationPrefix: "wavefront.com"
 
   ## Whether to enable runtime discovery configurations
   ## Ref: https://github.com/wavefrontHQ/wavefront-collector-for-kubernetes/blob/master/docs/discovery.md#runtime-configurations
