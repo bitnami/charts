@@ -60,7 +60,7 @@ spec:
       {{- end }}
       initContainers:
         {{- if .Values.controller.initContainers }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.controller.initContainers "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.controller.initContainers "context" $) | nindent 8 }}
         {{- end }}
       containers:
         - name: controller
@@ -82,23 +82,23 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.controller.args "context" $) | nindent 12 }}
           {{- else }}
           args:
-          - --status-processors
-          - {{ .Values.controller.defaultArgs.statusProcessors | quote }}
-          - --operation-processors
-          - {{ .Values.controller.defaultArgs.operationProcessors | quote }}
-          - --app-resync
-          - {{ .Values.controller.defaultArgs.appResyncPeriod | quote }}
-          - --self-heal-timeout-seconds
-          - {{ .Values.controller.defaultArgs.selfHealTimeout | quote }}
-          - --repo-server
-          - {{ include "argocd.application-controller" . }}:{{ .Values.repoServer.service.port }}
-          - --logformat
-          - {{ .Values.controller.logFormat }}
-          - --loglevel
-          - {{ .Values.controller.logLevel }}
-          # TODO(miguelaeh): We cannot support HA with the bitnami/redis chart because we don't have a single entrypoint to the redis cluster
-          - --redis
-          - {{ include "argocd.redisHost" . }}:{{ include "argocd.redisPort" . }}
+            - --status-processors
+            - {{ .Values.controller.defaultArgs.statusProcessors | quote }}
+            - --operation-processors
+            - {{ .Values.controller.defaultArgs.operationProcessors | quote }}
+            - --app-resync
+            - {{ .Values.controller.defaultArgs.appResyncPeriod | quote }}
+            - --self-heal-timeout-seconds
+            - {{ .Values.controller.defaultArgs.selfHealTimeout | quote }}
+            - --repo-server
+            - {{ include "argocd.application-controller" . }}:{{ .Values.repoServer.service.port }}
+            - --logformat
+            - {{ .Values.controller.logFormat }}
+            - --loglevel
+            - {{ .Values.controller.logLevel }}
+            # TODO(miguelaeh): We cannot support HA with the bitnami/redis chart because we don't have a single entrypoint to the redis cluster
+            - --redis
+            - {{ include "argocd.redisHost" . }}:{{ include "argocd.redisPort" . }}
           {{- if .Values.controller.extraArgs }}
           {{- include "common.tplvalues.render" (dict "value" .Values.controller.extraArgs "context" $) | nindent 8 }}
           {{- end }}

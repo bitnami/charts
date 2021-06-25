@@ -178,7 +178,7 @@ spec:
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.dex.readinessProbe "enabled") "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name : static-files
+            - name: static-files
               mountPath: /shared
             - name: tmp-dir
               mountPath: /tmp

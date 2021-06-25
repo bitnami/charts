@@ -16,7 +16,7 @@ roleRef:
   kind: ClusterRole
   name: {{ include "argocd.application-controller" . }}
 subjects:
-- kind: ServiceAccount
-  name: {{ include "argocd.application-controller" . }}
-  namespace: {{ .Release.Namespace }}
+  - kind: ServiceAccount
+    name: {{ include "argocd.application-controller" . }}
+    namespace: {{ .Release.Namespace }}
 {{- end }}

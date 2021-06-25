@@ -16,14 +16,14 @@ rules:
   {{- include "common.tplvalues.render" ( dict "value" .Values.controller.clusterRoleRules "context" $ ) | nindent 2 }}
   {{ else }}
   - apiGroups:
-    - '*'
+      - '*'
     resources:
-    - '*'
+      - '*'
     verbs:
-    - '*'
+      - '*'
   - nonResourceURLs:
-    - '*'
+      - '*'
     verbs:
-    - '*'
+      - '*'
   {{- end }}
 {{- end }}
