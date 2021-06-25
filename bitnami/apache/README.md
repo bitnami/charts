@@ -77,11 +77,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.repository`                     | Apache Docker image name                                                             | `bitnami/apache`          |
 | `image.tag`                            | Apache Docker image tag                                                              | `2.4.48-debian-10-r15`    |
 | `image.pullPolicy`                     | Apache Docker image pull policy                                                      | `IfNotPresent`            |
+| `image.pullSecrets`                    | Specify docker-registry secret names as an array                                     | `nil`                     |
 | `image.debug`                          | Set to true if you would like to see extra information on logs                       | `false`                   |
 | `git.registry`                         | Git image registry                                                                   | `docker.io`               |
 | `git.repository`                       | Git image name                                                                       | `bitnami/git`             |
 | `git.tag`                              | Git image tag                                                                        | `2.32.0-debian-10-r11`    |
 | `git.pullPolicy`                       | Git image pull policy                                                                | `IfNotPresent`            |
+| `git.pullSecrets`                      | Specify docker-registry secret names as an array                                     | `nil`                     |
 | `replicaCount`                         | Number of replicas of the Apache deployment                                          | `1`                       |
 | `podAffinityPreset`                    | Pod affinity preset                                                                  | `""`                      |
 | `podAntiAffinityPreset`                | Pod anti-affinity preset                                                             | `soft`                    |
@@ -92,6 +94,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `nodeSelector`                         | Node labels for pod assignment                                                       | `{}`                      |
 | `tolerations`                          | Tolerations for pod assignment                                                       | `[]`                      |
 | `cloneHtdocsFromGit.enabled`           | Get the server static content from a git repository                                  | `false`                   |
+| `cloneHtdocsFromGit.repository`        | Repository to clone static content from                                              | `nil`                     |
+| `cloneHtdocsFromGit.branch`            | Branch inside the git repository                                                     | `nil`                     |
 | `cloneHtdocsFromGit.interval`          | Interval for sidecar container pull from the repository                              | `60`                      |
 | `cloneHtdocsFromGit.resources`         | Init container git resource requests                                                 | `{}`                      |
 | `cloneHtdocsFromGit.extraVolumeMounts` | Add extra volume mounts for the GIT containers                                       | `[]`                      |
@@ -133,6 +137,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.image.repository`             | Apache exporter image name                                                           | `bitnami/apache-exporter` |
 | `metrics.image.tag`                    | Apache exporter image tag                                                            | `0.9.0-debian-10-r10`     |
 | `metrics.image.pullPolicy`             | Apache exporter image pull policy                                                    | `IfNotPresent`            |
+| `metrics.image.pullSecrets`            | Specify Docker registry secret names as an array                                     | `nil`                     |
 | `metrics.podAnnotations`               | Metrics exporter pod Annotation and Labels                                           | `{}`                      |
 | `metrics.resources`                    | Apache Prometheus exporter resource requests and limits                              | `{}`                      |
 | `extraVolumes`                         | Array to add extra volumes (evaluated as a template)                                 | `[]`                      |
@@ -144,6 +149,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.port`                         | Service HTTP port                                                                    | `80`                      |
 | `service.httpsPort`                    | Service HTTPS port                                                                   | `443`                     |
 | `service.nodePorts`                    | Specify the nodePort(s) value(s) for the LoadBalancer and NodePort service types.    | `[]`                      |
+| `service.loadBalancerIP`               | Set the LoadBalancer service type to internal only.                                  | `nil`                     |
 | `service.annotations`                  | Provide any additional annotations which may be required. This can be used to        | `{}`                      |
 | `service.externalTrafficPolicy`        | Enable client source IP preservation                                                 | `Cluster`                 |
 

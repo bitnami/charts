@@ -45,6 +45,7 @@ extraDeploy: []
 ## @param image.repository Cassandra Image name
 ## @param image.tag Cassandra Image tag
 ## @param image.pullPolicy Image pull policy
+## @param image.pullSecrets Specify docker-registry secret names as an array
 ## @param image.debug Specify if debug logs should be enabled
 ##
 image:
@@ -62,9 +63,11 @@ image:
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
   ##
-  # pullSecrets:
-  #   - myRegistryKeySecretName
+  pullSecrets: []
   ## Set to true if you would like to see extra information on logs
   ## It turns BASH and/or NAMI debugging in the image
   ##
@@ -81,24 +84,26 @@ hostAliases: []
 ## Database credentials
 ## @param dbUser.user Cassandra admin user
 ## @param dbUser.forcePassword Force the user to provide a non
+## @param dbUser.password Password for `dbUser.user`. Randomly generated if empty
+## @param dbUser.existingSecret Use an existing secret object for `dbUser.user` password (will ignore `dbUser.password`)
 ##
 dbUser:
   user: cassandra
   forcePassword: false
-  # password:
-
+  password:
   ## Use an existing secrets which already stores your password data.
   ## for backwards compatibility, existingSecret can be a simple string,
   ## referencing the secret by name.
-  # existingSecret:
-  #   ## Name of the existing secret
-  #   ##
-  #   name: mySecret
-  #   ## Key mapping where <key> is the value which the deployment is expecting and
-  #   ## <value> is the name of the key in the existing secret.
-  #   ##
-  #   keyMapping:
-  #     cassandra-password: myCassandraPasswordKey
+  ## existingSecret:
+  ##   ## Name of the existing secret
+  ##   ##
+  ##   name: mySecret
+  ##   ## Key mapping where <key> is the value which the deployment is expecting and
+  ##   ## <value> is the name of the key in the existing secret.
+  ##   ##
+  ##   keyMapping:
+  ##     cassandra-password: myCassandraPasswordKey
+  existingSecret:
 
 ## @param initDBConfigMap ConfigMap with cql scripts. Useful for creating a keyspace and pre-populating data
 ##
@@ -119,6 +124,7 @@ existingConfiguration:
 ## @param cluster.endpointSnitch Endpoint Snitch
 ## @param cluster.internodeEncryption DEPRECATED: use tls.internode and tls.client instead. Encryption values.
 ## @param cluster.clientEncryption Client Encryption
+## @param cluster.extraSeeds For an external/second cassandra ring.
 ##
 cluster:
   name: cassandra
@@ -132,29 +138,30 @@ cluster:
   ##
   internodeEncryption: none
   clientEncryption: false
-  ## extraSeeds - For an external/second cassandra ring. Seed list will be appended by this.
-  ##
-  # extraSeeds:
-  #   - hostname/IP
-  #   - hostname/IP
+  ## eg:
+  ## extraSeeds:
+  ##   - hostname/IP
+  ##   - hostname/IP
+  extraSeeds: []
 ## JVM Settings
 ## @param jvm.extraOpts Set the value for Java Virtual Machine extra options
+## @param jvm.maxHeapSize Set Java Virtual Machine maximum heap size (MAX_HEAP_SIZE). Calculated automatically if `nil`
+## @param jvm.newHeapSize Set Java Virtual Machine new heap size (HEAP_NEWSIZE). Calculated automatically if `nil`
 ##
 jvm:
   extraOpts:
   ## Memory settings: These are calculated automatically unless specified otherwise
   ## To run on environments with little resources (<= 8GB), tune your heap settings:
-  ## maxHeapSize:
   ## - calculate 1/2 ram and cap to 1024MB
   ## - calculate 1/4 ram and cap to 8192MB
   ## - pick the max
+  maxHeapSize:
   ## newHeapSize:
   ## A good guideline is 100 MB per CPU core.
   ## - min(100 * num_cores, 1/4 * heap size)
   ## ref: https://docs.datastax.com/en/archived/cassandra/2.0/cassandra/operations/ops_tune_jvm_c.html
   ##
-  # maxHeapSize: 4G
-  # newHeapSize: 800M
+  newHeapSize:
 ## @param command Command for running the container (set to default if not set). Use array form
 ##
 command: []
@@ -346,9 +353,9 @@ pdb:
   ## @param pdb.minAvailable Mininimum number of pods that must still be available after the eviction
   ##
   minAvailable: 1
-  ## Max number of pods that can be unavailable after the eviction
+  ## @param pdb.maxUnavailable Max number of pods that can be unavailable after the eviction
   ##
-  # maxUnavailable: 1
+  maxUnavailable:
 ## @param hostNetwork Enable HOST Network
 ## If hostNetwork true ->  dnsPolicy is set to ClusterFirstWithHostNet
 ##
@@ -412,10 +419,10 @@ service:
     cql: ''
     thrift: ''
     metrics: ''
-  ## Set the LoadBalancer service type to internal only.
+  ## @param service.loadBalancerIP LoadBalancerIP if service type is `LoadBalancer`
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
-  # loadBalancerIP:
+  loadBalancerIP:
   ## @param service.annotations Provide any additional annotations which may be required.
   ## This can be used to set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -428,12 +435,13 @@ networkPolicy:
   ## @param networkPolicy.enabled Specifies whether a NetworkPolicy should be created
   ##
   enabled: false
+  ## @param networkPolicy.allowExternal Don't require client label for connections
   ## The Policy model to apply. When set to false, only pods with the correct
   ## client label will have network access to the port Redis(TM) is listening
   ## on. When true, Redis(TM) will accept connections from any source
   ## (with the correct destination port).
   ##
-  # allowExternal: true
+  allowExternal: true
 
 ## @section Persistence parameters
 
@@ -444,22 +452,23 @@ persistence:
   ## @param persistence.enabled Enable Cassandra data persistence using PVC, use a Persistent Volume Claim, If false, use emptyDir
   ##
   enabled: true
-    ## Persistent Volume Storage Class
-    ## If defined, storageClassName: <storageClass>
-    ## If set to "-", storageClassName: "", which disables dynamic provisioning
-    ## If undefined (the default) or set to null, no storageClassName spec is
-    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-    ##   GKE, AWS & OpenStack)
-    ##
-    # storageClass: "-"
-    ### Storage class to use with CASSANDRA_COMMITLOG_DIR to reduce the concurrence for writing data and commit logs
-    ## ref: https://github.com/bitnami/bitnami-docker-cassandra
-    ## If set to "-", commitStorageClass: "", which disables dynamic provisioning
-    ## If undefined (the default) or set to null, no storageClassName spec is
-    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-    ##   GKE, AWS & OpenStack)
-    ##
-    # commitStorageClass: "-"
+  ## @param persistence.storageClass PVC Storage Class for Cassandra data volume
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
+  ##
+  storageClass:
+  ## @param persistence.commitStorageClass PVC Storage Class for Cassandra Commit Log volume
+  ## Storage class to use with CASSANDRA_COMMITLOG_DIR to reduce the concurrence for writing data and commit logs
+  ## ref: https://github.com/bitnami/bitnami-docker-cassandra
+  ## If set to "-", commitStorageClass: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
+  ##
+  commitStorageClass:
   ## @param persistence.annotations Persistent Volume Claim annotations
   ##
   annotations:
@@ -470,13 +479,13 @@ persistence:
   ## @param persistence.size PVC Storage Request for Cassandra data volume
   ##
   size: 8Gi
-  ## Commit Log Persistent Volume size
+  ## @skip persistence.commitLogsize PVC Storage Request for Cassandra commit log volume
   ##
   # commitLogsize: 2Gi
   ## @param persistence.mountPath The path the data volume will be mounted at
   ##
   mountPath: /bitnami/cassandra
-  ## The path the volume will be mounted at
+  ## @skip persistence.commitLogMountPath The path the commit log volume will be mounted at
   ##
   # commitLogMountPath: /bitnami/cassandra/commitlog
 
@@ -493,6 +502,7 @@ volumePermissions:
   ## @param volumePermissions.image.repository Init container volume
   ## @param volumePermissions.image.tag Init container volume
   ## @param volumePermissions.image.pullPolicy Init container volume
+  ## @param volumePermissions.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
     registry: docker.io
@@ -502,9 +512,11 @@ volumePermissions:
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
     ##
-    # pullSecrets:
-    #   - myRegistryKeySecretName
+    pullSecrets: []
   ## Init container' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -553,6 +565,7 @@ metrics:
   ## @param metrics.image.repository Cassandra exporter Image name
   ## @param metrics.image.tag Cassandra exporter Image tag
   ## @param metrics.image.pullPolicy Image pull policy
+  ## @param metrics.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
     registry: docker.io
@@ -562,9 +575,11 @@ metrics:
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
     ##
-    # pullSecrets:
-    #   - myRegistryKeySecretName
+    pullSecrets: []
   ## Cassandra Prometheus exporter resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -597,22 +612,28 @@ metrics:
     ## @param metrics.serviceMonitor.enabled If `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)
     ##
     enabled: false
-    ## Namespace in which Prometheus is running
+    ## @param metrics.serviceMonitor.namespace Namespace in which Prometheus is running
     ##
-    # namespace: monitoring
-    ## Interval at which metrics should be scraped.
+    namespace: monitoring
+    ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped.
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ## e.g:
+    ## interval: 10s
     ##
-    # interval: 10s
-    ## Timeout after which the scrape is ended
+    interval:
+    ## @param metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ## e.g:
+    ## scrapeTimeout: 10s
     ##
-    # scrapeTimeout: 10s
-    ## ServiceMonitor selector labels
+    scrapeTimeout:
+    ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
     ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+    ## e.g:
+    ## selector:
+    ##   prometheus: my-prometheus
     ##
-    # selector:
-    #   prometheus: my-prometheus
+    selector:
   ## Metrics container ports to open
   ## If hostNetwork true: the hostPort is set identical to the containerPort
   ## @param metrics.containerPorts.http HTTP Port on the Host and Container

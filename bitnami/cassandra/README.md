@@ -75,10 +75,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.repository`            | Cassandra Image name                                                                                                   | `bitnami/cassandra`      |
 | `image.tag`                   | Cassandra Image tag                                                                                                    | `3.11.10-debian-10-r125` |
 | `image.pullPolicy`            | Image pull policy                                                                                                      | `IfNotPresent`           |
+| `image.pullSecrets`           | Specify docker-registry secret names as an array                                                                       | `nil`                    |
 | `image.debug`                 | Specify if debug logs should be enabled                                                                                | `false`                  |
 | `hostAliases`                 | Add deployment host aliases                                                                                            | `[]`                     |
 | `dbUser.user`                 | Cassandra admin user                                                                                                   | `cassandra`              |
 | `dbUser.forcePassword`        | Force the user to provide a non                                                                                        | `false`                  |
+| `dbUser.password`             | Password for `dbUser.user`. Randomly generated if empty                                                                | `nil`                    |
+| `dbUser.existingSecret`       | Use an existing secret object for `dbUser.user` password (will ignore `dbUser.password`)                               | `nil`                    |
 | `initDBConfigMap`             | ConfigMap with cql scripts. Useful for creating a keyspace and pre-populating data                                     | `nil`                    |
 | `initDBSecret`                | Secret with cql script (with sensitive data). Useful for creating a keyspace and pre-populating data                   | `nil`                    |
 | `existingConfiguration`       | ConfigMap with custom cassandra configuration files. This overrides any other Cassandra configuration set in the chart | `nil`                    |
@@ -91,7 +94,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cluster.endpointSnitch`      | Endpoint Snitch                                                                                                        | `SimpleSnitch`           |
 | `cluster.internodeEncryption` | DEPRECATED: use tls.internode and tls.client instead. Encryption values.                                               | `none`                   |
 | `cluster.clientEncryption`    | Client Encryption                                                                                                      | `false`                  |
+| `cluster.extraSeeds`          | For an external/second cassandra ring.                                                                                 | `[]`                     |
 | `jvm.extraOpts`               | Set the value for Java Virtual Machine extra options                                                                   | `nil`                    |
+| `jvm.maxHeapSize`             | Set Java Virtual Machine maximum heap size (MAX_HEAP_SIZE). Calculated automatically if `nil`                          | `nil`                    |
+| `jvm.newHeapSize`             | Set Java Virtual Machine new heap size (HEAP_NEWSIZE). Calculated automatically if `nil`                               | `nil`                    |
 | `command`                     | Command for running the container (set to default if not set). Use array form                                          | `[]`                     |
 | `args`                        | Args for running the container (set to default if not set). Use array form                                             | `[]`                     |
 | `extraEnvVars`                | Extra environment variables to be set on cassandra container                                                           | `[]`                     |
@@ -145,6 +151,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sidecars`                           | Add additional sidecar containers to the cassandra pods                                   | `[]`            |
 | `pdb.create`                         | Enable/disable a Pod Disruption Budget creation                                           | `false`         |
 | `pdb.minAvailable`                   | Mininimum number of pods that must still be available after the eviction                  | `1`             |
+| `pdb.maxUnavailable`                 | Max number of pods that can be unavailable after the eviction                             | `nil`           |
 | `hostNetwork`                        | Enable HOST Network                                                                       | `false`         |
 | `containerPorts.intra`               | Intra Port on the Host and Container                                                      | `7000`          |
 | `containerPorts.tls`                 | TLS Port on the Host and Container                                                        | `7001`          |
@@ -164,28 +171,32 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Exposure parameters
 
-| Name                        | Description                                               | Value       |
-| --------------------------- | --------------------------------------------------------- | ----------- |
-| `service.type`              | Kubernetes Service type                                   | `ClusterIP` |
-| `service.port`              | CQL Port for the Kubernetes service                       | `9042`      |
-| `service.thriftPort`        | Thrift Port for the Kubernetes service                    | `9160`      |
-| `service.metricsPort`       | Metrics Port for the Kubernetes service                   | `8080`      |
-| `service.nodePorts.cql`     | Kubernetes CQL node port                                  | `""`        |
-| `service.nodePorts.thrift`  | Kubernetes Thrift node port                               | `""`        |
-| `service.nodePorts.metrics` | Kubernetes Metrics node port                              | `""`        |
-| `service.annotations`       | Provide any additional annotations which may be required. | `{}`        |
-| `networkPolicy.enabled`     | Specifies whether a NetworkPolicy should be created       | `false`     |
+| Name                          | Description                                               | Value       |
+| ----------------------------- | --------------------------------------------------------- | ----------- |
+| `service.type`                | Kubernetes Service type                                   | `ClusterIP` |
+| `service.port`                | CQL Port for the Kubernetes service                       | `9042`      |
+| `service.thriftPort`          | Thrift Port for the Kubernetes service                    | `9160`      |
+| `service.metricsPort`         | Metrics Port for the Kubernetes service                   | `8080`      |
+| `service.nodePorts.cql`       | Kubernetes CQL node port                                  | `""`        |
+| `service.nodePorts.thrift`    | Kubernetes Thrift node port                               | `""`        |
+| `service.nodePorts.metrics`   | Kubernetes Metrics node port                              | `""`        |
+| `service.loadBalancerIP`      | LoadBalancerIP if service type is `LoadBalancer`          | `nil`       |
+| `service.annotations`         | Provide any additional annotations which may be required. | `{}`        |
+| `networkPolicy.enabled`       | Specifies whether a NetworkPolicy should be created       | `false`     |
+| `networkPolicy.allowExternal` | Don't require client label for connections                | `true`      |
 
 
 ### Persistence parameters
 
-| Name                      | Description                                                                                        | Value                |
-| ------------------------- | -------------------------------------------------------------------------------------------------- | -------------------- |
-| `persistence.enabled`     | Enable Cassandra data persistence using PVC, use a Persistent Volume Claim, If false, use emptyDir | `true`               |
-| `persistence.annotations` | Persistent Volume Claim annotations                                                                | `nil`                |
-| `persistence.accessModes` | Persistent Volume Access Mode                                                                      | `[]`                 |
-| `persistence.size`        | PVC Storage Request for Cassandra data volume                                                      | `8Gi`                |
-| `persistence.mountPath`   | The path the data volume will be mounted at                                                        | `/bitnami/cassandra` |
+| Name                             | Description                                                                                        | Value                |
+| -------------------------------- | -------------------------------------------------------------------------------------------------- | -------------------- |
+| `persistence.enabled`            | Enable Cassandra data persistence using PVC, use a Persistent Volume Claim, If false, use emptyDir | `true`               |
+| `persistence.storageClass`       | PVC Storage Class for Cassandra data volume                                                        | `nil`                |
+| `persistence.commitStorageClass` | PVC Storage Class for Cassandra Commit Log volume                                                  | `nil`                |
+| `persistence.annotations`        | Persistent Volume Claim annotations                                                                | `nil`                |
+| `persistence.accessModes`        | Persistent Volume Access Mode                                                                      | `[]`                 |
+| `persistence.size`               | PVC Storage Request for Cassandra data volume                                                      | `8Gi`                |
+| `persistence.mountPath`          | The path the data volume will be mounted at                                                        | `/bitnami/cassandra` |
 
 
 ### Volume Permissions parameters
@@ -197,6 +208,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.image.repository`          | Init container volume                                                           | `bitnami/bitnami-shell` |
 | `volumePermissions.image.tag`                 | Init container volume                                                           | `10-debian-10-r112`     |
 | `volumePermissions.image.pullPolicy`          | Init container volume                                                           | `Always`                |
+| `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                | `nil`                   |
 | `volumePermissions.resources.limits`          | The resources limits for the container                                          | `{}`                    |
 | `volumePermissions.resources.requests`        | The requested resources for the container                                       | `{}`                    |
 | `volumePermissions.securityContext.runAsUser` | User ID for the init container                                                  | `0`                     |
@@ -204,19 +216,24 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Metrics parameters
 
-| Name                             | Description                                                                                            | Value                        |
-| -------------------------------- | ------------------------------------------------------------------------------------------------------ | ---------------------------- |
-| `metrics.enabled`                | Start a side-car prometheus exporter                                                                   | `false`                      |
-| `metrics.image.registry`         | Cassandra exporter Image registry                                                                      | `docker.io`                  |
-| `metrics.image.repository`       | Cassandra exporter Image name                                                                          | `bitnami/cassandra-exporter` |
-| `metrics.image.tag`              | Cassandra exporter Image tag                                                                           | `2.3.4-debian-10-r435`       |
-| `metrics.image.pullPolicy`       | Image pull policy                                                                                      | `IfNotPresent`               |
-| `metrics.resources.limits`       | The resources limits for the container                                                                 | `{}`                         |
-| `metrics.resources.requests`     | The requested resources for the container                                                              | `{}`                         |
-| `metrics.podAnnotations`         | Metrics exporter pod Annotation and Labels                                                             | `{}`                         |
-| `metrics.serviceMonitor.enabled` | If `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`) | `false`                      |
-| `metrics.containerPorts.http`    | HTTP Port on the Host and Container                                                                    | `8080`                       |
-| `metrics.containerPorts.jmx`     | JMX Port on the Host and Container                                                                     | `5555`                       |
+| Name                                   | Description                                                                                            | Value                        |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------ | ---------------------------- |
+| `metrics.enabled`                      | Start a side-car prometheus exporter                                                                   | `false`                      |
+| `metrics.image.registry`               | Cassandra exporter Image registry                                                                      | `docker.io`                  |
+| `metrics.image.repository`             | Cassandra exporter Image name                                                                          | `bitnami/cassandra-exporter` |
+| `metrics.image.tag`                    | Cassandra exporter Image tag                                                                           | `2.3.4-debian-10-r435`       |
+| `metrics.image.pullPolicy`             | Image pull policy                                                                                      | `IfNotPresent`               |
+| `metrics.image.pullSecrets`            | Specify docker-registry secret names as an array                                                       | `nil`                        |
+| `metrics.resources.limits`             | The resources limits for the container                                                                 | `{}`                         |
+| `metrics.resources.requests`           | The requested resources for the container                                                              | `{}`                         |
+| `metrics.podAnnotations`               | Metrics exporter pod Annotation and Labels                                                             | `{}`                         |
+| `metrics.serviceMonitor.enabled`       | If `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`) | `false`                      |
+| `metrics.serviceMonitor.namespace`     | Namespace in which Prometheus is running                                                               | `monitoring`                 |
+| `metrics.serviceMonitor.interval`      | Interval at which metrics should be scraped.                                                           | `nil`                        |
+| `metrics.serviceMonitor.scrapeTimeout` | Timeout after which the scrape is ended                                                                | `nil`                        |
+| `metrics.serviceMonitor.selector`      | Prometheus instance selector labels                                                                    | `nil`                        |
+| `metrics.containerPorts.http`          | HTTP Port on the Host and Container                                                                    | `8080`                       |
+| `metrics.containerPorts.jmx`           | JMX Port on the Host and Container                                                                     | `5555`                       |
 
 
 ### TLS/SSL parameters

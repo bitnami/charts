@@ -46,6 +46,7 @@ extraDeploy: []
 ## @param image.repository ASP.NET Core image name
 ## @param image.tag ASP.NET Core image tag
 ## @param image.pullPolicy ASP.NET Core image pull policy
+## @param image.pullSecrets Specify docker-registry secret names as an array
 ##
 image:
   registry: docker.io
@@ -59,9 +60,10 @@ image:
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
   ##
-  # pullSecrets:
-  #   - myRegistryKeySecretName
+  pullSecrets: []
 ## @param command Command for running the container (set to default if not set). Use array form
 ##
 command: []
@@ -271,25 +273,26 @@ sidecars: {}
 ## ASP.NET Core Pod Disruption Budget configuration
 ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
 ## @param pdb.create Enable/disable a Pod Disruption Budget creation
-## @param pdb.minAvailable Minimum number
+## @param pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
 ##
 pdb:
   create: false
   minAvailable: 1
-  ## Max number of pods that can be unavailable after the eviction
-  ##
-  # maxUnavailable: 1
+  maxUnavailable:
 ## ASP.NET Core Autoscaling parameters.
 ## @param autoscaling.enabled Enable autoscaling for ASP.NET Core
 ## @param autoscaling.minReplicas Minimum number of ASP.NET Core replicas
 ## @param autoscaling.maxReplicas Maximum number of ASP.NET Core replicas
+## @param autoscaling.targetCPU Target CPU utilization percentage
+## @param autoscaling.targetMemory Target Memory utilization percentage
 ##
 autoscaling:
   enabled: false
   minReplicas: 1
   maxReplicas: 11
-  # targetCPU: 50
-  # targetMemory: 50
+  targetCPU:
+  targetMemory:
 
 ## @section Custom ASP.NET Core application parameters
 
@@ -307,6 +310,7 @@ appFromExternalRepo:
     ## @param appFromExternalRepo.clone.image.repository Git image name
     ## @param appFromExternalRepo.clone.image.tag Git image tag
     ## @param appFromExternalRepo.clone.image.pullPolicy Git image pull policy
+    ## @param appFromExternalRepo.clone.image.pullSecrets Specify docker-registry secret names as an array
     ##
     image:
       registry: docker.io
@@ -320,9 +324,11 @@ appFromExternalRepo:
       ## Optionally specify an array of imagePullSecrets.
       ## Secrets must be manually created in the namespace.
       ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+      ## e.g:
+      ## pullSecrets:
+      ##   - myRegistryKeySecretName
       ##
-      # pullSecrets:
-      #   - myRegistryKeySecretName
+      pullSecrets: []
     ## @param appFromExternalRepo.clone.repository Git repository to clone
     ##
     repository: https://github.com/dotnet/AspNetCore.Docs.git
@@ -344,6 +350,7 @@ appFromExternalRepo:
     ## @param appFromExternalRepo.publish.image.repository .NET SDK Image name
     ## @param appFromExternalRepo.publish.image.tag .NET SDK Image tag
     ## @param appFromExternalRepo.publish.image.pullPolicy .NET SDK image pull policy
+    ## @param appFromExternalRepo.publish.image.pullSecrets Specify docker-registry secret names as an array
     ##
     image:
       registry: docker.io
@@ -357,9 +364,11 @@ appFromExternalRepo:
       ## Optionally specify an array of imagePullSecrets.
       ## Secrets must be manually created in the namespace.
       ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+      ## e.g:
+      ## pullSecrets:
+      ##   - myRegistryKeySecretName
       ##
-      # pullSecrets:
-      #   - myRegistryKeySecretName
+      pullSecrets: []
     ## @param appFromExternalRepo.publish.subFolder Sub folder under the Git repository containing the ASP.NET Core app
     ##
     subFolder: aspnetcore/fundamentals/servers/kestrel/samples/3.x/KestrelSample
@@ -372,14 +381,13 @@ appFromExternalRepo:
 ## Enable mounting your ASP.NET Core app from an existing PVC
 ## Do not enable it if your docker image already includes your application
 ## @param appFromExistingPVC.enabled Enable mounting your ASP.NET Core app from an existing PVC
+## @param appFromExistingPVC.existingClaim A existing Persistent Volume Claim containing your ASP.NET Core app
 ##
 appFromExistingPVC:
   enabled: false
-  ## A manually managed Persistent Volume and Claim
-  ## PVC must be created manually before volume will be bound
-  ## The value is evaluated as a template
+  ## PVC must be created manually before volume will be bound. The value is evaluated as a template
   ##
-  # existingClaim:
+  existingClaim:
 
 ## @section Exposure parameters
 
@@ -392,26 +400,28 @@ service:
   ## @param service.port Service HTTP port
   ##
   port: 80
-  ## Specify the nodePort value for the LoadBalancer and NodePort service types.
+  ## @param service.nodePort Specify the nodePort value for the LoadBalancer and NodePort service types.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
-  # nodePort:
-  ## Service clusterIP.
+  nodePort:
+  ## @param service.clusterIP Service clusterIP.
   ##
-  # clusterIP: None
+  clusterIP:
   ## @param service.externalTrafficPolicy Enable client source IP preservation
   ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: Cluster
-  ## Set the LoadBalancer service type to internal only.
+  ## @param service.loadBalancerIP Set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
-  # loadBalancerIP:
-  ## Load Balancer sources.
+  loadBalancerIP:
+  ## @param service.loadBalancerSourceRanges Load Balancer sources.
   ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+  ## e.g:
+  ## loadBalancerSourceRanges:
+  ##   - 10.10.10.0/24
   ##
-  # loadBalancerSourceRanges:
-  # - 10.10.10.0/24
+  loadBalancerSourceRanges: []
   ## @param service.annotations Provide any additional annotations for ASP.NET Core service that may be required. Evaluated as a template.
   ##
   annotations: {}
@@ -449,22 +459,21 @@ ingress:
   ## let the chart create self-signed certificates for you
   ##
   tls: false
-
-  ## The list of additional hostnames to be covered with this ingress record.
+  ## @param ingress.extraHosts The list of additional hostnames to be covered with this ingress record.
   ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
   ## extraHosts:
   ## - name: aspnet-core.local
   ##   path: /
   ##
-
-  ## The tls configuration for additional hostnames to be covered with this ingress record.
+  extraHosts: []
+  ## @param ingress.extraTls The tls configuration for additional hostnames to be covered with this ingress record.
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
   ## extraTls:
   ## - hosts:
   ##     - aspnet-core.local
   ##   secretName: aspnet-core.local-tls
   ##
-
+  extraTls: []
   ## @param ingress.secrets If you're providing your own certificates, please use this to add the certificates as secrets
   ## key and certificate should start with -----BEGIN CERTIFICATE----- or -----BEGIN RSA PRIVATE KEY-----
   ## name should line up with a secretName set further up
@@ -504,22 +513,21 @@ healthIngress:
   ## let the chart create self-signed certificates for you
   ##
   tls: false
-
-  ## The list of additional hostnames to be covered with this heallth ingress record.
+  ## @param healthIngress.extraHosts The list of additional hostnames to be covered with this heallth ingress record.
   ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
   ## extraHosts:
   ## - name: aspnet-core.local
   ##   path: /
   ##
-
-  ## The tls configuration for additional hostnames to be covered with this heallth ingress record.
+  extraHosts: []
+  ## @param healthIngress.extraTls The tls configuration for additional hostnames to be covered with this heallth ingress record.
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
   ## extraTls:
   ## - hosts:
   ##     - aspnet-core.local
   ##   secretName: aspnet-core.local-tls
   ##
-
+  extraTls: []
   ## @param healthIngress.secrets If you're providing your own certificates, please use this to add the certificates as secrets
   ## key and certificate should start with -----BEGIN CERTIFICATE----- or -----BEGIN RSA PRIVATE KEY-----
   ## name should line up with a secretName set further up

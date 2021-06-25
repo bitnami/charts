@@ -43,6 +43,7 @@ extraDeploy: []
 ## @param image.repository Apache Docker image name
 ## @param image.tag Apache Docker image tag
 ## @param image.pullPolicy Apache Docker image pull policy
+## @param image.pullSecrets Specify docker-registry secret names as an array
 ##
 image:
   registry: docker.io
@@ -55,9 +56,11 @@ image:
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
   ##
-  # pullSecrets:
-  #   - myRegistryKeySecretName
+  pullSecrets: []
 
   ## @param image.debug Set to true if you would like to see extra information on logs
   ##
@@ -68,6 +71,7 @@ image:
 ## @param git.repository Git image name
 ## @param git.tag Git image tag
 ## @param git.pullPolicy Git image pull policy
+## @param git.pullSecrets Specify docker-registry secret names as an array
 ##
 git:
   registry: docker.io
@@ -77,9 +81,11 @@ git:
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
   ##
-  # pullSecrets:
-  #   - myRegistryKeySecretName
+  pullSecrets: []
 ## @param replicaCount Number of replicas of the Apache deployment
 ##
 replicaCount: 1
@@ -126,14 +132,16 @@ nodeSelector: {}
 tolerations: []
 ## Get the server static content from a git repository
 ## @param cloneHtdocsFromGit.enabled Get the server static content from a git repository
+## @param cloneHtdocsFromGit.repository Repository to clone static content from
+## @param cloneHtdocsFromGit.branch Branch inside the git repository
 ## @param cloneHtdocsFromGit.interval Interval for sidecar container pull from the repository
 ## @param cloneHtdocsFromGit.resources Init container git resource requests
 ## @param cloneHtdocsFromGit.extraVolumeMounts Add extra volume mounts for the GIT containers
 ##
 cloneHtdocsFromGit:
   enabled: false
-  #  repository:
-  #  branch:
+  repository:
+  branch:
   interval: 60
   resources: {}
   ## Useful to mount keys to connect through ssh. (normally used with extraVolumes)
@@ -303,6 +311,7 @@ metrics:
   ## @param metrics.image.repository Apache exporter image name
   ## @param metrics.image.tag Apache exporter image tag
   ## @param metrics.image.pullPolicy Apache exporter image pull policy
+  ## @param metrics.image.pullSecrets Specify Docker registry secret names as an array
   ##
   image:
     registry: docker.io
@@ -312,9 +321,11 @@ metrics:
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
     ##
-    # pullSecrets:
-    #   - myRegistryKeySecretName
+    pullSecrets: []
   ## @param metrics.podAnnotations [object] Metrics exporter pod Annotation and Labels
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
@@ -387,10 +398,10 @@ service:
   nodePorts:
     http: ""
     https: ""
-  ## Set the LoadBalancer service type to internal only.
+  ## @param service.loadBalancerIP Set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
-  # loadBalancerIP:
+  loadBalancerIP:
   ## @param service.annotations Provide any additional annotations which may be required. This can be used to
   ## set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
