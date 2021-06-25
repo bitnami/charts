@@ -969,6 +969,10 @@ portal:
   ##
   podAnnotations: {}
 
+  ## Automount service account token
+  ##
+  automountServiceAccountToken: false
+
   ## Harbor Portal containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
@@ -1171,6 +1175,10 @@ core:
   ##
   lifecycleHooks:
 
+  ## Automount service account token
+  ##
+  automountServiceAccountToken: false
+
   ## Harbor Core containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
@@ -1357,6 +1365,10 @@ jobservice:
   ## Must be a string of 16 chars.
   ##
   secret: ''
+
+  ## Automount service account token
+  ##
+  automountServiceAccountToken: false
 
   ## Harbor Jobservice containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
@@ -1612,6 +1624,10 @@ registry:
   ##
   podAnnotations: {}
 
+  ## Automount service account token
+  ##
+  automountServiceAccountToken: false
+
   ## Secret is used to secure the upload state from client
   ## and registry storage backend.
   ## See: https://github.com/docker/distribution/blob/master/docs/configuration.md#http
@@ -1821,6 +1837,10 @@ chartmuseum:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
+
+  ## Automount service account token
+  ##
+  automountServiceAccountToken: false
 
   ## Chartmuseum containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
@@ -2093,6 +2113,10 @@ clair:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
+
+  ## Automount service account token
+  ##
+  automountServiceAccountToken: false
 
 ## Trivy adapter parameters
 ##
@@ -2458,6 +2482,10 @@ notary:
     ##
     podAnnotations: {}
 
+    ## Automount service account token
+    ##
+    automountServiceAccountToken: false
+
   signer:
     ## Notary signer container command (using container default if not set)
     ##
@@ -2613,6 +2641,10 @@ notary:
     ## Custom Rediness probe
     ##
     customReadinessProbe: {}
+
+    ## Automount service account token
+    ##
+    automountServiceAccountToken: false
 
   ## Fill the name of a kubernetes secret if you want to use your own
   ## TLS certificate authority, certificate and private key for notary
