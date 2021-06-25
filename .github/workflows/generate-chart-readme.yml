@@ -6,6 +6,9 @@ on:
       - master
     paths:
       - 'bitnami/airflow/values.yaml'
+      - 'bitnami/dataplatform-bp1/values.yaml'
+      - 'bitnami/dataplatform-bp2/values.yaml'
+      - 'bitnami/discourse/values.yaml'
 
 jobs:
   generate-chart-readme:
