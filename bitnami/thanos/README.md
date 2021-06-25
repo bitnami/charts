@@ -841,7 +841,7 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ## Upgrading
 
-### To 4.0.0
+### To 5.0.0
 
 This major update changes the `securityContext` interface in the `values.yaml` file.
 
@@ -868,6 +868,10 @@ Other than that a new `securityContext` interface for containers got introduced 
 +   readOnlyRootFilesystem: false
 # ...
 ```
+
+### To 4.0.0
+
+This major updates the MinIO subchart to its newest major, 7.0.0, which removes previous configuration of `securityContext` and moves to `podSecurityContext` and `containerSecurityContext`.
 
 ### To 3.3.0
 

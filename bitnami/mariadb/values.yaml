@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/mariadb
-  tag: 10.5.10-debian-10-r37
+  tag: 10.5.11-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -285,6 +285,18 @@ primary:
   ## MariaDB primary custom rediness probe
   ##
   customReadinessProbe: {}
+
+  ## MariaDB startup wait options
+  ## `bitnami/mariadb` Docker image has built-in startup check mechanism,
+  ## which periodically checks if MariaDB service has started up and stops it
+  ## if all checks have failed after X tries. Use these to control these checks.
+  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/pull/240
+  ## Example (with default options):
+  ## startupWaitOptions:
+  ##   retries: 300
+  ##   waitTime: 2
+  ##
+  startupWaitOptions: {}
 
   ## MariaDB primary additional command line flags
   ## Can be used to specify command line flags, for example:
@@ -586,6 +598,18 @@ secondary:
   ##
   customReadinessProbe: {}
 
+  ## MariaDB startup wait options
+  ## `bitnami/mariadb` Docker image has built-in startup check mechanism,
+  ## which periodically checks if MariaDB service has started up and stops it
+  ## if all checks have failed after X tries. Use these to control these checks.
+  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/pull/240
+  ## Example (with default options):
+  ## startupWaitOptions:
+  ##   retries: 300
+  ##   waitTime: 2
+  ##
+  startupWaitOptions: {}
+
   ## MariaDB secondary additional command line flags
   ## Can be used to specify command line flags, for example:
   ## E.g.
@@ -738,7 +762,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r111
+    tag: 10-debian-10-r115
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -755,7 +779,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mysqld-exporter
-    tag: 0.13.0-debian-10-r15
+    tag: 0.13.0-debian-10-r19
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
