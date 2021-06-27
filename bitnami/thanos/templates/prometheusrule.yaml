@@ -1,0 +1,45 @@
+{{- if and .Values.metrics.enabled .Values.metrics.prometheusRule.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ template "common.names.fullname" . }}
+  {{- if .Values.metrics.prometheusRule.namespace }}
+  namespace: {{ .Values.metrics.prometheusRule.namespace }}
+  {{- else }}
+  namespace: {{ .Release.Namespace | quote }}
+  {{- end }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.metrics.prometheusRule.additionalLabels }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.metrics.prometheusRule.additionalLabels "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  groups:
+    {{- if .Values.compactor.enabled }}
+    - name: thanos-compactor
+      rules: {{- tpl (toYaml .Values.metrics.prometheusRule.rules.compactor) $ | nindent 8 }}
+    {{- end }}
+    {{- if .Values.query.enabled }}
+    - name: thanos-query
+      rules: {{- tpl (toYaml .Values.metrics.prometheusRule.rules.query) $ | nindent 8 }}
+    {{- end }}
+    {{- if .Values.receive.enabled }}
+    - name: thanos-receive
+      rules: {{- tpl (toYaml .Values.metrics.prometheusRule.rules.receive) $ | nindent 8 }}
+    {{- end }}
+    {{- if .Values.storegateway.enabled }}
+    - name: thanos-storegateway
+      rules: {{- tpl (toYaml .Values.metrics.prometheusRule.rules.storegateway) $ | nindent 8 }}
+    {{- end }}
+    {{- if .Values.ruler.enabled }}
+    - name: thanos-ruler
+      rules: {{- tpl (toYaml .Values.metrics.prometheusRule.rules.ruler) $ | nindent 8 }}
+    {{- end }}
+    - name: thanos-component-absent
+      rules: {{- tpl (toYaml .Values.metrics.prometheusRule.rules.componentAbsent) $ | nindent 8 }}
+{{- end }}
