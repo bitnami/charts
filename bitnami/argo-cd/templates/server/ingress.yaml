@@ -29,7 +29,7 @@ spec:
             {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
             pathType: {{ .Values.server.ingress.pathType }}
             {{- end }}
-            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "argocd.server" .) "servicePort" (ternary .Values.server.service.https .Values.server.service.http .Values.server.ingress.https) "context" $)  | nindent 14 }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "argocd.server" .) "servicePort" (ternary "https" "http" .Values.server.ingress.tls) "context" $)  | nindent 14 }}
     {{- end }}
     {{- range .Values.server.ingress.extraHosts }}
     - host: {{ .name | quote }}
@@ -39,7 +39,7 @@ spec:
             {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
             pathType: {{ default "ImplementationSpecific" .pathType }}
             {{- end }}
-            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "argocd.server" .) "servicePort" (ternary .Values.server.service.https .Values.server.service.http .Values.server.ingressGrpc.tls) "context" $) | nindent 14 }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "argocd.server" .) "servicePort" (ternary "https" "http" .Values.server.ingress.tls) "context" $) | nindent 14 }}
     {{- end }}
   {{- if or .Values.server.ingress.tls .Values.server.ingress.extraTls }}
   tls:

@@ -34,7 +34,8 @@ spec:
       {{- end }}
     - name: https
       port: {{ .Values.server.service.ports.https }}
-      targetPort: https
+      # NOTE: Argo CD uses only one port (8080) configured with https and always redirects http request to it, so the target port is the same than for http
+      targetPort: http
       protocol: TCP
       {{- if (and (or (eq .Values.server.service.type "NodePort") (eq .Values.server.service.type "LoadBalancer")) (not (empty .Values.server.service.nodePorts.https))) }}
       nodePort: {{ .Values.server.service.nodePorts.https }}

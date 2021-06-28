@@ -64,7 +64,7 @@ spec:
             - /bin/bash
             - -ec
             - |
-              chown -R {{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }} /bitnami/argocd/shared
+              chown -R {{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }} /opt/bitnami/argo-cd/app
           securityContext:
             runAsUser: 0
           {{- if .Values.volumePermissions.resources }}
@@ -72,7 +72,7 @@ spec:
           {{- end }}
           volumeMounts:
             - name: static-assets
-              mountPath: /bitnami/argocd/app
+              mountPath: /opt/bitnami/argo-cd/app
         {{- end }}
         {{- if .Values.server.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.server.initContainers "context" $) | nindent 8 }}
@@ -98,7 +98,7 @@ spec:
           {{- else }}
           args:
             - --staticassets
-            - /bitnami/argocd/app
+            - /opt/bitnami/argo-cd/app
             - --repo-server
             - {{ include "argocd.repo-server" . }}:{{ .Values.repoServer.service.port }}
             {{- if .Values.dex.enabled }}
@@ -118,9 +118,6 @@ spec:
           ports:
             - name: http
               containerPort: {{ .Values.server.ports.http }}
-              protocol: TCP
-            - name: https
-              containerPort: {{ .Values.server.ports.https }}
               protocol: TCP
             {{- if .Values.server.metrics.enabled }}
             - name: metrics
