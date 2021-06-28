@@ -1,0 +1,213 @@
+{{- if .Values.worker.enabled -}}
+{{- if eq .Values.worker.mode "deployment" }}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ template "common.names.fullname" . }}-worker
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: worker
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.worker.replicaCount }}
+  {{- if .Values.worker.updateStrategy }}
+  strategy: {{- toYaml .Values.worker.updateStrategy | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: worker
+  template:
+    metadata:
+      {{- if .Values.worker.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.worker.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app.kubernetes.io/component: worker
+        {{- if .Values.worker.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.worker.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+    spec:
+      serviceAccountName: {{ template "common.names.fullname" . }}-worker
+      {{- include "concourse.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.worker.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.worker.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.worker.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.worker.affinity "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.worker.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.worker.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.worker.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.worker.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.worker.priorityClassName }}
+      priorityClassName: {{ .Values.worker.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.worker.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.worker.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      initContainers:
+        {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
+        - name: volume-permissions
+          image: {{ include "concourse.volumePermissions.image" . }}
+          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          command:
+            - %%commands%%
+          securityContext:
+            runAsUser: 0
+          {{- if .Values.volumePermissions.resources }}
+          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+        {{- end }}
+        {{- if .Values.worker.initContainers }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.worker.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: {{ template "common.names.fullname" . }}-worker
+          image: {{ template "concourse.image" . }}
+          imagePullPolicy: {{ .Values.concourse.image.pullPolicy }}
+          {{- if .Values.worker.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.worker.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.worker.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.worker.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.worker.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.worker.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.worker.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.worker.args "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            - name: CONCOURSE_TSA_PUBLIC_KEY
+              value: "{{ .Values.worker.keySecretsPath }}/host_key.pub"
+            - name: CONCOURSE_TSA_WORKER_PRIVATE_KEY
+              value: "{{ .Values.worker.keySecretsPath }}/worker_key"
+            {{- if .Values.worker.workDir }}
+            - name: CONCOURSE_WORK_DIR
+              value: {{ .Values.worker.workDir | quote }}
+            {{- end }}
+            {{- if .Values.worker.logLevel }}
+            - name: CONCOURSE_LOG_LEVEL
+              value: {{ .Values.worker.logLevel | quote }}
+            {{- end }}
+            {{- if .Values.worker.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.worker.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+            {{- if not .Values.web.enabled }}
+            - name: CONCOURSE_TSA_HOST
+              value: "{{- range $i, $tsaHost := .Values.worker.tsa.hosts }}{{- if $i }},{{ end }}{{- $tsaHost }}{{- end -}}"
+            {{- else }}
+            - name: CONCOURSE_TSA_HOST
+              value: "{{ template "concourse.web.tsa.address" . -}}"
+            {{- end }}
+            {{- if .Values.worker.workDir }}
+            - name: CONCOURSE_WORK_DIR
+              value: {{ .Values.worker.workDir | quote }}
+            {{- end }}
+            {{- if .Values.worker.bindIp }}
+            - name: CONCOURSE_BIND_IP
+              value: {{ .Values.worker.bindIp | quote }}
+            {{- end }}
+            {{- if .Values.worker.bindPort }}
+            - name: CONCOURSE_BIND_PORT
+              value: {{ .Values.worker.bindPort | quote }}
+            {{- end }}
+            {{- if .Values.worker.baggageclaim.logLevel }}
+            - name: CONCOURSE_BAGGAGECLAIM_LOG_LEVEL
+              value: {{ .Values.worker.baggageclaim.logLevel | quote }}
+            {{- end }}
+            {{- if .Values.worker.baggageclaim.bindIp }}
+            - name: CONCOURSE_BAGGAGECLAIM_BIND_IP
+              value: {{ .Values.worker.baggageclaim.bindIp | quote }}
+            {{- end }}
+            {{- if .Values.worker.baggageclaim.bindPort }}
+            - name: CONCOURSE_BAGGAGECLAIM_BIND_PORT
+              value: {{ .Values.worker.baggageclaim.bindPort | quote }}
+            {{- end }}
+            {{- if .Values.worker.baggageclaim.debugBindIp }}
+            - name: CONCOURSE_BAGGAGECLAIM_DEBUG_BIND_IP
+              value: {{ .Values.worker.baggageclaim.debugBindIp | quote }}
+            {{- end }}
+            {{- if .Values.worker.baggageclaim.debugBindPort }}
+            - name: CONCOURSE_BAGGAGECLAIM_DEBUG_BIND_PORT
+              value: {{ .Values.worker.baggageclaim.debugBindPort | quote }}
+            {{- end }}
+            {{- if .Values.worker.baggageclaim.volumes }}
+            - name: CONCOURSE_BAGGAGECLAIM_VOLUMES
+              value: {{ .Values.worker.baggageclaim.volumes | quote }}
+            {{- end }}
+            {{- if .Values.worker.baggageclaim.driver }}
+            - name: CONCOURSE_BAGGAGECLAIM_DRIVER
+              value: {{ .Values.worker.baggageclaim.driver | quote }}
+            {{- end }}
+            {{- if .Values.worker.baggageclaim.btrfsBin }}
+            - name: CONCOURSE_BAGGAGECLAIM_BTRFS_BIN
+              value: {{ .Values.worker.baggageclaim.btrfsBin | quote }}
+            {{- end }}
+            {{- if .Values.worker.baggageclaim.mkfsBin }}
+            - name: CONCOURSE_BAGGAGECLAIM_MKFS_BIN
+              value: {{ .Values.worker.baggageclaim.mkfsBin | quote }}
+            {{- end }}
+            {{- if .Values.worker.baggageclaim.overlaysDir }}
+            - name: CONCOURSE_BAGGAGECLAIM_OVERLAYS_DIR
+              value: {{ .Values.worker.baggageclaim.overlaysDir | quote }}
+            {{- end }}
+            {{- if .Values.worker.baggageclaim.disableUserNamespaces }}
+            - name: CONCOURSE_BAGGAGECLAIM_DISABLE_USER_NAMESPACES
+              value: {{ .Values.worker.baggageclaim.disableUserNamespaces | quote }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.worker.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.worker.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.worker.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.worker.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- if .Values.worker.resources }}
+          resources: {{- toYaml .Values.worker.resources | nindent 12 }}
+          {{- end }}
+          {{- if .Values.worker.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.worker.livenessProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.worker.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.worker.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.worker.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.worker.readinessProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.worker.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.worker.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: concourse-keys
+              mountPath: {{ .Values.worker.keySecretsPath | quote }}
+              readOnly: true
+          {{- if .Values.worker.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.worker.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.worker.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.worker.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: concourse-keys
+          secret:
+            secretName: {{ template "common.names.fullname" . }}-worker
+            defaultMode: 0400
+            items:
+              - key: host-key-pub
+                path: host_key.pub
+              - key: worker-key
+                path: worker_key
+        {{- if .Values.worker.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.worker.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+{{- end }}
+{{- end }}

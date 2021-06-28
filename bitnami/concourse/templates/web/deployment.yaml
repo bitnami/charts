@@ -1,0 +1,270 @@
+{{- if .Values.web.enabled -}}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ template "common.names.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: web
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.web.replicaCount }}
+  {{- if .Values.web.updateStrategy }}
+  strategy: {{- toYaml .Values.web.updateStrategy | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: web
+  template:
+    metadata:
+      {{- if .Values.web.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.web.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app.kubernetes.io/component: web
+        {{- if .Values.web.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.web.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+    spec:
+      serviceAccountName: {{ template "common.names.fullname" . }}
+      {{- include "concourse.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.web.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.web.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.web.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.web.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.web.podAffinityPreset "component" "web" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.web.podAntiAffinityPreset "component" "web" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.web.nodeAffinityPreset.type "key" .Values.web.nodeAffinityPreset.key "values" .Values.web.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.web.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.web.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.web.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.web.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.web.priorityClassName }}
+      priorityClassName: {{ .Values.web.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.web.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.web.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      initContainers:
+        {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
+        - name: volume-permissions
+          image: {{ include "concourse.volumePermissions.image" . }}
+          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          # command:
+          #   - %%commands%%
+          securityContext:
+            runAsUser: 0
+          {{- if .Values.volumePermissions.resources }}
+          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- end }}
+        {{- end }}
+        {{- if .Values.web.initContainers }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.web.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: {{ template "common.names.fullname" . }}
+          image: {{ template "concourse.image" . }}
+          imagePullPolicy: {{ .Values.concourse.image.pullPolicy }}
+          {{- if .Values.web.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.web.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.web.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.web.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.web.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.web.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.web.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.web.args "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            {{- if .Values.web.tsa.logLevel }}
+            - name: CONCOURSE_TSA_LOG_LEVEL
+              value: {{ .Values.web.tsa.logLevel | quote }}
+            {{- end }}
+            {{- if .Values.web.tsa.bindIp }}
+            - name: CONCOURSE_TSA_BIND_IP
+              value: {{ .Values.web.tsa.bindIp | quote }}
+            {{- end }}
+            - name: CONCOURSE_TSA_BIND_PORT
+              value: {{ .Values.web.tsa.bindPort | quote }}
+            {{- if .Values.web.tsa.debugBindIp }}
+            - name: CONCOURSE_TSA_DEBUG_BIND_IP
+              value: {{ .Values.web.tsa.debugBindIp | quote }}
+            {{- end }}
+            {{- if .Values.web.tsa.debugBindPort }}
+            - name: CONCOURSE_TSA_DEBUG_BIND_PORT
+              value: {{ .Values.web.tsa.debugBindPort | quote }}
+            {{- end }}
+            - name: CONCOURSE_TSA_HOST_KEY
+              value: "{{ .Values.web.keySecretsPath }}/host_key"
+            - name: CONCOURSE_TSA_AUTHORIZED_KEYS
+              value: "{{ .Values.web.keySecretsPath }}/worker_key.pub"
+            - name: CONCOURSE_SESSION_SIGNING_KEY
+              value: "{{ .Values.web.keySecretsPath }}/session_signing_key"
+            {{- if .Values.web.logLevel }}
+            - name: CONCOURSE_LOG_LEVEL
+              value: {{ .Values.web.logLevel | quote }}
+            {{- end }}
+            {{- if .Values.web.tls.enabled }}
+            - name: CONCOURSE_EXTERNAL_URL
+              value: {{ required "Must specify HTTPS external URL when web.tls.enabled is true" .Values.web.externalUrl | quote }}
+            {{- else }}
+            {{- if .Values.web.externalUrl }}
+            - name: CONCOURSE_EXTERNAL_URL
+              value: {{ .Values.web.externalUrl | quote }}
+            {{- end }}
+            {{- end }}
+            {{- if .Values.web.auth.mainTeam.localUser }}
+            - name: CONCOURSE_MAIN_TEAM_LOCAL_USER
+              value: {{ .Values.web.auth.mainTeam.localUser | quote }}
+            {{- end }}
+            {{- if .Values.secrets.localAuth.enabled }}
+            - name: CONCOURSE_ADD_LOCAL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "common.names.fullname" . }}
+                  key: local-users
+            {{- end }}
+            {{- if .Values.web.clusterName }}
+            - name: CONCOURSE_CLUSTER_NAME
+              value: {{ .Values.web.clusterName | quote }}
+            {{- end }}
+            {{- if .Values.web.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.web.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+            {{- if .Values.web.enablePipelineInstances }}
+            - name: CONCOURSE_ENABLE_PIPELINE_INSTANCES
+              value: {{ .Values.web.enablePipelineInstances | quote }}
+            {{- end }}
+            {{- if .Values.web.enableAcrossStep }}
+            - name: CONCOURSE_ENABLE_ACROSS_STEP
+              value: {{ .Values.web.enableAcrossStep | quote }}
+            {{- end }}
+            {{- if .Values.web.enableCacheStreamedVolumes }}
+            - name: CONCOURSE_ENABLE_CACHE_STREAMED_VOLUMES
+              value: {{ .Values.web.enableCacheStreamedVolumes | quote }}
+            {{- end }}
+            - name: CONCOURSE_POSTGRES_HOST
+              value: {{ template "concourse.postgresql.fullname" . }}
+            - name: CONCOURSE_POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "concourse.postgresql.secretName" . }}
+                  key: {{ include "concourse.database.existingsecret.key" . }}
+            - name: CONCOURSE_POSTGRES_DATABASE
+              value: {{ .Values.postgresql.postgresqlDatabase | quote }}
+            {{- if and (not .Values.postgresql.enabled) (.Values.externalDatabase.host) }}
+            - name: CONCOURSE_POSTGRES_HOST
+              value: {{ .Values.externalDatabase.host | quote }}
+            {{ else }}
+            - name: CONCOURSE_POSTGRES_HOST
+              value: {{ include "concourse.database.host" . | quote }}
+            {{- end }}
+            {{- if and (not .Values.postgresql.enabled) (.Values.externalDatabase.port) }}
+            - name: CONCOURSE_POSTGRES_PORT
+              value: {{ .Values.externalDatabase.port | quote }}
+            {{ else }}
+            - name: CONCOURSE_POSTGRES_PORT
+              value: {{ include "concourse.database.port" . | quote }}
+            {{- end }}
+            {{- if .Values.postgresql.enabled }}
+            - name: CONCOURSE_POSTGRES_USER
+              value: {{.Values.postgresql.postgresqlUsername | quote  }}
+            {{ else }}
+            - name: CONCOURSE_POSTGRES_USER
+              value: {{.Values.externalDatabase.postgresqlUsername }}
+            - name: CONCOURSE_POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "concourse.postgresql.secretName" . }}
+                  key: postgresql-password
+            {{- end }}
+          ports:
+            - name: atc
+              containerPort: {{ .Values.web.bindPort }}
+            - name: tsa
+              containerPort: {{ .Values.web.tsa.bindPort }}
+            {{- if .Values.web.debugBindPort }}
+            - name: atc-debug
+              containerPort: {{ .Values.web.debugBindPort }}
+            {{- end }}
+            {{- if .Values.web.tsa.bindDebugPort }}
+            - name: tsa-debug
+              containerPort: {{ .Values.web.tsa.bindDebugPort }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.web.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.web.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.web.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.web.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- if .Values.web.resources }}
+          resources: {{- toYaml .Values.web.resources | nindent 12 }}
+          {{- end }}
+          {{- if .Values.web.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.web.livenessProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.web.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.web.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.web.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.web.readinessProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.web.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.web.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: concourse-keys
+              mountPath: {{ .Values.web.keySecretsPath | quote }}
+              readOnly: true
+            {{- if .Values.secrets.teamAuthorizedKeys }}
+            - name: team-authorized-keys
+              mountPath: {{ .Values.web.teamSecretsPath | quote }}
+              readOnly: true
+            {{- end }}
+          {{- if .Values.web.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.web.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.web.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.web.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: concourse-keys
+          secret:
+            secretName: {{ template "common.names.fullname" . }}
+            defaultMode: 0400
+            items:
+              - key: host-key
+                path: host_key
+              - key: session-signing-key
+                path: session_signing_key
+              - key: worker-key-pub
+                path: worker_key.pub
+        {{- if .Values.secrets.teamAuthorizedKeys }}
+        - name: team-authorized-keys
+          secret:
+            secretName: {{ template "common.names.fullname" . }}
+            defaultMode: 0400
+            items:
+            {{- range .Values.secrets.teamAuthorizedKeys }}
+            - key: {{ .team }}-team-authorized-key
+              path: {{ .team }}-authorized-key.pub
+            {{- end }}
+        {{- if .Values.web.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.web.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+        {{- end }}
+{{- end }}
