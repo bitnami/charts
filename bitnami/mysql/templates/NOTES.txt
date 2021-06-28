@@ -34,8 +34,8 @@ To connect to your database:
       mysql -h {{ include "mysql.secondary.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} -uroot -p {{ .Values.auth.database }}
 {{- end }}
 
-{{ if and (.Values.primary.networkPolicy.enabled) (not .Values.primary.networkPolicy.allowExternal) }}
-Note: Since NetworkPolicy is enabled for primary, only pods with label {{ template "common.names.fullname" . }}-client=true" will be able to connect to the MySQL primary.
+{{ if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}
+Note: Since NetworkPolicy is enabled, only pods with label {{ template "common.names.fullname" . }}-client=true" will be able to connect to MySQL.
 {{- end }}
 
 {{- if .Values.metrics.enabled }}

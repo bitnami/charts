@@ -1,8 +1,8 @@
-{{- if .Values.primary.networkPolicy.enabled }}
+{{- if .Values.networkPolicy.enabled }}
 kind: NetworkPolicy
 apiVersion: {{ template "mysql.networkPolicy.apiVersion" . }}
 metadata:
-  name: {{ template "common.names.fullname" . }}-primary
+  name: {{ template "common.names.fullname" . }}
   labels:
   {{- include "common.labels.standard" . | nindent 4 }}
   {{- if .Values.commonAnnotations }}
@@ -13,24 +13,22 @@ spec:
   podSelector:
     matchLabels:
       {{- include "common.labels.matchLabels" . | nindent 6 }}
-      app.kubernetes.io/component: primary
   ingress:
     # Allow inbound connections
     - ports:
         - port: {{ .Values.primary.service.port }}
-      {{- if not .Values.primary.networkPolicy.allowExternal }}
+      {{- if not .Values.networkPolicy.allowExternal }}
       from:
         - podSelector:
             matchLabels:
               {{ template "common.names.fullname" . }}-client: "true"
-          {{- if .Values.primary.networkPolicy.explicitNamespacesSelector }}
+          {{- if .Values.networkPolicy.explicitNamespacesSelector }}
           namespaceSelector:
-{{ toYaml .Values.primary.networkPolicy.explicitNamespacesSelector | indent 12 }}
+{{ toYaml .Values.networkPolicy.explicitNamespacesSelector | indent 12 }}
           {{- end }}
         - podSelector:
             matchLabels:
             {{- include "common.labels.matchLabels" . | nindent 14 }}
-              app.kubernetes.io/component: secondary
       {{- end }}
     {{- if .Values.metrics.enabled }}
     # Allow prometheus scrapes
