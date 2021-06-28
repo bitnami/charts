@@ -49,11 +49,6 @@ data:
 
       access_log /dev/stdout timed_combined;
 
-      map $http_x_forwarded_proto $x_forwarded_proto {
-        default $http_x_forwarded_proto;
-        ""      $scheme;
-      }
-
       server {
         listen 8080;
         listen [::]:8080;
