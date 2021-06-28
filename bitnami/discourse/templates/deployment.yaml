@@ -116,6 +116,13 @@ spec:
                   name: {{ include "discourse.redis.secretName" . }}
                   key: {{ include "discourse.redis.secretPasswordKey" . }}
             {{- end }}
+            {{- if (include "discourse.smtp.password.enabled" .) }}
+            - name: DISCOURSE_SMTP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "discourse.smtp.secretName" . }}
+                  key: smtp-password
+            {{- end }}
             {{- if .Values.discourse.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.discourse.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -195,6 +202,13 @@ spec:
                 secretKeyRef:
                   name: {{ include "discourse.redis.secretName" . }}
                   key: {{ include "discourse.redis.secretPasswordKey" . }}
+            {{- end }}
+            {{- if (include "discourse.smtp.password.enabled" .) }}
+            - name: DISCOURSE_SMTP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "discourse.smtp.secretName" . }}
+                  key: smtp-password
             {{- end }}
             {{- if .Values.sidekiq.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.sidekiq.extraEnvVars "context" $) | nindent 12 }}

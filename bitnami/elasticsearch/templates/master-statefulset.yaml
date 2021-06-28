@@ -160,6 +160,8 @@ spec:
             httpGet:
               path: /_cluster/health?local=true
               port: 9200
+          {{- else if .Values.master.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.master.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.master.livenessProbe.enabled }}
           livenessProbe:
@@ -171,6 +173,8 @@ spec:
             httpGet:
               path: /_cluster/health?local=true
               port: 9200
+          {{- else if .Values.master.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.master.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.master.readinessProbe.enabled }}
           readinessProbe:
@@ -182,6 +186,8 @@ spec:
             httpGet:
               path: /_cluster/health?local=true
               port: 9200
+          {{- else if .Values.master.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.master.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.master.resources }}
           resources: {{- toYaml .Values.master.resources | nindent 12 }}
@@ -191,6 +197,11 @@ spec:
             - mountPath: /opt/bitnami/elasticsearch/config/elasticsearch.yml
               name: config
               subPath: elasticsearch.yml
+            {{- end }}
+            {{- if .Values.extraConfig }}
+            - mountPath: /opt/bitnami/elasticsearch/config/my_elasticsearch.yml
+              name: config
+              subPath: my_elasticsearch.yml
             {{- end }}
             - name: data
               mountPath: /bitnami/elasticsearch/data
@@ -210,7 +221,7 @@ spec:
               mountPath: /docker-entrypoint-initdb.d/init-scripts-secret
             {{- end }}
       volumes:
-        {{- if .Values.config }}
+        {{- if or .Values.config .Values.extraConfig }}
         - name: config
           configMap:
             name: {{ include "common.names.fullname" . }}

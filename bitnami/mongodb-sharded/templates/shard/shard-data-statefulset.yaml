@@ -57,6 +57,9 @@ spec:
       tolerations: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.dataNode.tolerations "context" (set $ "dataNodeLoopId" $i)) | nindent 8 }}      
       {{- end }}
       serviceAccountName: {{ include "mongodb-sharded.serviceAccountName" (dict "value" $.Values.shardsvr.dataNode.serviceAccount "context" $) }}
+      {{- if $.Values.shardsvr.dataNode.priorityClassName }}
+      priorityClassName: {{ $.Values.shardsvr.dataNode.priorityClassName | quote }}
+      {{- end }}
       {{- if $.Values.securityContext.enabled }}
       securityContext:
         fsGroup: {{ $.Values.securityContext.fsGroup }}

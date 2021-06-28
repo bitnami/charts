@@ -17,7 +17,7 @@ image:
   ## Bitnami Cassandra image tag
   ## ref: https://github.com/bitnami/bitnami-docker-cassandra#supported-tags-and-respective-dockerfile-links
   ##
-  tag: 3.11.10-debian-10-r108
+  tag: 3.11.10-debian-10-r125
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -172,7 +172,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r92
+    tag: 10-debian-10-r112
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -504,7 +504,7 @@ metrics:
     registry: docker.io
     pullPolicy: IfNotPresent
     repository: bitnami/cassandra-exporter
-    tag: 2.3.4-debian-10-r416
+    tag: 2.3.4-debian-10-r435
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
