@@ -113,6 +113,34 @@ initdbScripts: {}
 ##
 # initdbScriptsConfigMap:
 
+## MySQL Nework Policy configuration
+##
+networkPolicy:
+  ## Enable creation of NetworkPolicy resources.
+  ##
+  enabled: false
+
+  ## The Policy model to apply. When set to false, only pods with the correct
+  ## client label will have network access to the port MySQL is listening
+  ## on. When true, MySQL will accept connections from any source
+  ## (with the correct destination port).
+  ##
+  allowExternal: true
+
+  ## if explicitNamespacesSelector is missing or set to {}, only client Pods that are in the networkPolicy's namespace
+  ## and that match other criteria, the ones that have the good label, can reach the DB.
+  ## But sometimes, we want the DB to be accessible to clients from other namespaces, in this case, we can use this
+  ## LabelSelector to select these namespaces, note that the networkPolicy's namespace should also be explicitly added.
+  ##
+  ## Example:
+  ## explicitNamespacesSelector:
+  ##   matchLabels:
+  ##     role: frontend
+  ##   matchExpressions:
+  ##    - {key: role, operator: In, values: [frontend]}
+  ##
+  explicitNamespacesSelector: {}
+
 ## MySQL Primary parameters
 ##
 primary:
