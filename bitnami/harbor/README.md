@@ -883,6 +883,12 @@ Find more information about how to deal with common errors related to Bitnami’
 
 > NOTE: In you are upgrading an installation that contains a high amount of data, it is recommended to disable the liveness/readiness probes as the migration can take a substantial amount of time.
 
+### To 10.2.0
+
+This new version of the chart bumps the version of Harbor to [`2.3.0`](https://github.com/goharbor/harbor/releases/tag/v2.3.0), which introduces a breaking change regarding certain API routes, such as `GET /v2/$public_project/$repo/manifests/$tag`. The consumer will receive a 401 if the request does not carry "Authorization" header.
+
+For more information, refer to the following upstream issues: [#14711](https://github.com/goharbor/harbor/issues/14711), [#14768](https://github.com/goharbor/harbor/pull/14768)
+
 ### To 10.0.0
 
 This major updates the Redis<sup>TM</sup> subchart to it newest major, 14.0.0, which contains breaking changes. For more information on this subchart's major and the steps needed to migrate your data from your previous release, please refer to [Redis<sup>TM</sup> upgrade notes.](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1400).
