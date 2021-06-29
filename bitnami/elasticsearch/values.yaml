@@ -1284,9 +1284,9 @@ metrics:
     failureThreshold: 5
   readinessProbe:
     enabled: true
-    initialDelaySeconds: 30
+    initialDelaySeconds: 5
     periodSeconds: 10
-    timeoutSeconds: 5
+    timeoutSeconds: 1
     successThreshold: 1
     failureThreshold: 5
   ## Metrics exporter pod Annotation and Labels
