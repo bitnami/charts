@@ -185,82 +185,82 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Redis(TM) replicas configuration parameters
 
-| Name                                         | Description                                                                                       | Value           |
-| -------------------------------------------- | ------------------------------------------------------------------------------------------------- | --------------- |
-| `replica.replicaCount`                       | Number of Redis(TM) replicas to deploy                                                            | `3`             |
-| `replica.configuration`                      | Configuration for Redis(TM) replicas nodes                                                        | `nil`           |
-| `replica.disableCommands`                    | Array with Redis(TM) commands to disable on replicas nodes                                        | `[]`            |
-| `replica.command`                            | Override default container command (useful when using custom images)                              | `[]`            |
-| `replica.args`                               | Override default container args (useful when using custom images)                                 | `[]`            |
-| `replica.preExecCmds`                        | Additional commands to run prior to starting Redis(TM) replicas                                   | `[]`            |
-| `replica.extraFlags`                         | Array with additional command line flags for Redis(TM) replicas                                   | `[]`            |
-| `replica.extraEnvVars`                       | Array with extra environment variables to add to Redis(TM) replicas nodes                         | `[]`            |
-| `replica.extraEnvVarsCM`                     | Name of existing ConfigMap containing extra env vars for Redis(TM) replicas nodes                 | `nil`           |
-| `replica.extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for Redis(TM) replicas nodes                    | `nil`           |
-| `replica.containerPort`                      | Container port to open on Redis(TM) replicas nodes                                                | `6379`          |
-| `replica.livenessProbe.enabled`              | Enable livenessProbe on Redis(TM) replicas nodes                                                  | `true`          |
-| `replica.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                           | `5`             |
-| `replica.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                  | `5`             |
-| `replica.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                 | `5`             |
-| `replica.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                               | `5`             |
-| `replica.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                               | `1`             |
-| `replica.readinessProbe.enabled`             | Enable readinessProbe on Redis(TM) replicas nodes                                                 | `true`          |
-| `replica.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                          | `5`             |
-| `replica.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                 | `5`             |
-| `replica.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                | `1`             |
-| `replica.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                              | `5`             |
-| `replica.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                              | `1`             |
-| `replica.customLivenessProbe`                | Custom livenessProbe that overrides the default one                                               | `{}`            |
-| `replica.customReadinessProbe`               | Custom readinessProbe that overrides the default one                                              | `{}`            |
-| `replica.resources.limits`                   | The resources limits for the Redis(TM) replicas containers                                        | `{}`            |
-| `replica.resources.requests`                 | The requested resources for the Redis(TM) replicas containers                                     | `{}`            |
-| `replica.podSecurityContext.enabled`         | Enabled Redis(TM) replicas pods' Security Context                                                 | `true`          |
-| `replica.podSecurityContext.fsGroup`         | Set Redis(TM) replicas pod's Security Context fsGroup                                             | `1001`          |
-| `replica.containerSecurityContext.enabled`   | Enabled Redis(TM) replicas containers' Security Context                                           | `true`          |
-| `replica.containerSecurityContext.runAsUser` | Set Redis(TM) replicas containers' Security Context runAsUser                                     | `1001`          |
-| `replica.schedulerName`                      | Alternate scheduler for Redis(TM) replicas pods                                                   | `nil`           |
-| `replica.updateStrategy.type`                | Redis(TM) replicas statefulset strategy type                                                      | `RollingUpdate` |
-| `replica.priorityClassName`                  | Redis(TM) replicas pods' priorityClassName                                                        | `""`            |
-| `replica.hostAliases`                        | Redis(TM) replicas pods host aliases                                                              | `[]`            |
-| `replica.podLabels`                          | Extra labels for Redis(TM) replicas pods                                                          | `{}`            |
-| `replica.podAnnotations`                     | Annotations for Redis(TM) replicas pods                                                           | `{}`            |
-| `replica.shareProcessNamespace`              | Share a single process namespace between all of the containers in Redis(TM) replicas pods         | `false`         |
-| `replica.podAffinityPreset`                  | Pod affinity preset. Ignored if `replica.affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
-| `replica.podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `replica.affinity` is set. Allowed values: `soft` or `hard`  | `soft`          |
-| `replica.nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `replica.affinity` is set. Allowed values: `soft` or `hard` | `""`            |
-| `replica.nodeAffinityPreset.key`             | Node label key to match. Ignored if `replica.affinity` is set                                     | `""`            |
-| `replica.nodeAffinityPreset.values`          | Node label values to match. Ignored if `replica.affinity` is set                                  | `[]`            |
-| `replica.affinity`                           | Affinity for Redis(TM) replicas pods assignment                                                   | `{}`            |
-| `replica.nodeSelector`                       | Node labels for Redis(TM) replicas pods assignment                                                | `{}`            |
-| `replica.tolerations`                        | Tolerations for Redis(TM) replicas pods assignment                                                | `[]`            |
-| `replica.spreadConstraints`                  | Spread Constraints for Redis(TM) replicas pod assignment                                          | `{}`            |
-| `replica.lifecycleHooks`                     | for the Redis(TM) replica container(s) to automate configuration before or after startup          | `{}`            |
-| `replica.extraVolumes`                       | Optionally specify extra list of additional volumes for the Redis(TM) replicas pod(s)             | `[]`            |
-| `replica.extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for the Redis(TM) replicas container(s)  | `[]`            |
-| `replica.sidecars`                           | Add additional sidecar containers to the Redis(TM) replicas pod(s)                                | `{}`            |
-| `replica.initContainers`                     | Add additional init containers to the Redis(TM) replicas pod(s)                                   | `{}`            |
-| `replica.persistence.enabled`                | Enable persistence on Redis(TM) replicas nodes using Persistent Volume Claims                     | `true`          |
-| `replica.persistence.path`                   | The path the volume will be mounted at on Redis(TM) replicas containers                           | `/data`         |
-| `replica.persistence.subPath`                | The subdirectory of the volume to mount on Redis(TM) replicas containers                          | `""`            |
-| `replica.persistence.storageClass`           | Persistent Volume storage class                                                                   | `nil`           |
-| `replica.persistence.accessModes`            | Persistent Volume access modes                                                                    | `[]`            |
-| `replica.persistence.size`                   | Persistent Volume size                                                                            | `8Gi`           |
-| `replica.persistence.annotations`            | Additional custom annotations for the PVC                                                         | `{}`            |
-| `replica.persistence.selector`               | Additional labels to match for the PVC                                                            | `{}`            |
-| `replica.service.type`                       | Redis(TM) replicas service type                                                                   | `ClusterIP`     |
-| `replica.service.port`                       | Redis(TM) replicas service port                                                                   | `6379`          |
-| `replica.service.nodePort`                   | Node port for Redis(TM) replicas                                                                  | `nil`           |
-| `replica.service.externalTrafficPolicy`      | Redis(TM) replicas service external traffic policy                                                | `Cluster`       |
-| `replica.service.clusterIP`                  | Redis(TM) replicas service Cluster IP                                                             | `nil`           |
-| `replica.service.loadBalancerIP`             | Redis(TM) replicas service Load Balancer IP                                                       | `nil`           |
-| `replica.service.loadBalancerSourceRanges`   | Redis(TM) replicas service Load Balancer sources                                                  | `[]`            |
-| `replica.service.annotations`                | Additional custom annotations for Redis(TM) replicas service                                      | `{}`            |
-| `replica.terminationGracePeriodSeconds`      | Integer setting the termination grace period for the redis-replicas pods                          | `30`            |
-| `replica.autoscaling.enabled`                | Enable autoscaling for replicas                                                                   | `false`         |
-| `replica.autoscaling.minReplicas`            | Minimum number of replicas                                                                        | `1`             |
-| `replica.autoscaling.maxReplicas`            | Maximum number of replicas                                                                        | `11`            |
-| `replica.autoscaling.targetCPU`              | Target CPU utilization percentage                                                                 | `nil`           |
-| `replica.autoscaling.targetMemory`           | Target Memory utilization percentage                                                              | `nil`           |
+| Name                                         | Description                                                                                       | Value                |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------- | ---------------      |
+| `replica.replicaCount`                       | Number of Redis(TM) replicas to deploy                                                            | `3`                  |
+| `replica.configuration`                      | Configuration for Redis(TM) replicas nodes                                                        | `nil`                |
+| `replica.disableCommands`                    | Array with Redis(TM) commands to disable on replicas nodes                                        | `[FLUSHDB, FLUSHALL]`|
+| `replica.command`                            | Override default container command (useful when using custom images)                              | `[]`                 |
+| `replica.args`                               | Override default container args (useful when using custom images)                                 | `[]`                 |
+| `replica.preExecCmds`                        | Additional commands to run prior to starting Redis(TM) replicas                                   | `[]`                 |
+| `replica.extraFlags`                         | Array with additional command line flags for Redis(TM) replicas                                   | `[]`                 |
+| `replica.extraEnvVars`                       | Array with extra environment variables to add to Redis(TM) replicas nodes                         | `[]`                 |
+| `replica.extraEnvVarsCM`                     | Name of existing ConfigMap containing extra env vars for Redis(TM) replicas nodes                 | `nil`                |
+| `replica.extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for Redis(TM) replicas nodes                    | `nil`                |
+| `replica.containerPort`                      | Container port to open on Redis(TM) replicas nodes                                                | `6379`               |
+| `replica.livenessProbe.enabled`              | Enable livenessProbe on Redis(TM) replicas nodes                                                  | `true`               |
+| `replica.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                           | `5`                  |
+| `replica.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                  | `5`                  |
+| `replica.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                 | `5`                  |
+| `replica.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                               | `5`                  |
+| `replica.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                               | `1`                  |
+| `replica.readinessProbe.enabled`             | Enable readinessProbe on Redis(TM) replicas nodes                                                 | `true`               |
+| `replica.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                          | `5`                  |
+| `replica.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                 | `5`                  |
+| `replica.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                | `1`                  |
+| `replica.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                              | `5`                  |
+| `replica.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                              | `1`                  |
+| `replica.customLivenessProbe`                | Custom livenessProbe that overrides the default one                                               | `{}`                 |
+| `replica.customReadinessProbe`               | Custom readinessProbe that overrides the default one                                              | `{}`                 |
+| `replica.resources.limits`                   | The resources limits for the Redis(TM) replicas containers                                        | `{}`                 |
+| `replica.resources.requests`                 | The requested resources for the Redis(TM) replicas containers                                     | `{}`                 |
+| `replica.podSecurityContext.enabled`         | Enabled Redis(TM) replicas pods' Security Context                                                 | `true`               |
+| `replica.podSecurityContext.fsGroup`         | Set Redis(TM) replicas pod's Security Context fsGroup                                             | `1001`               |
+| `replica.containerSecurityContext.enabled`   | Enabled Redis(TM) replicas containers' Security Context                                           | `true`               |
+| `replica.containerSecurityContext.runAsUser` | Set Redis(TM) replicas containers' Security Context runAsUser                                     | `1001`               |
+| `replica.schedulerName`                      | Alternate scheduler for Redis(TM) replicas pods                                                   | `nil`                |
+| `replica.updateStrategy.type`                | Redis(TM) replicas statefulset strategy type                                                      | `RollingUpdate`      |
+| `replica.priorityClassName`                  | Redis(TM) replicas pods' priorityClassName                                                        | `""`                 |
+| `replica.hostAliases`                        | Redis(TM) replicas pods host aliases                                                              | `[]`                 |
+| `replica.podLabels`                          | Extra labels for Redis(TM) replicas pods                                                          | `{}`                 |
+| `replica.podAnnotations`                     | Annotations for Redis(TM) replicas pods                                                           | `{}`                 |
+| `replica.shareProcessNamespace`              | Share a single process namespace between all of the containers in Redis(TM) replicas pods         | `false`              |
+| `replica.podAffinityPreset`                  | Pod affinity preset. Ignored if `replica.affinity` is set. Allowed values: `soft` or `hard`       | `""`                 |
+| `replica.podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `replica.affinity` is set. Allowed values: `soft` or `hard`  | `soft`               |
+| `replica.nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `replica.affinity` is set. Allowed values: `soft` or `hard` | `""`                 |
+| `replica.nodeAffinityPreset.key`             | Node label key to match. Ignored if `replica.affinity` is set                                     | `""`                 |
+| `replica.nodeAffinityPreset.values`          | Node label values to match. Ignored if `replica.affinity` is set                                  | `[]`                 |
+| `replica.affinity`                           | Affinity for Redis(TM) replicas pods assignment                                                   | `{}`                 |
+| `replica.nodeSelector`                       | Node labels for Redis(TM) replicas pods assignment                                                | `{}`                 |
+| `replica.tolerations`                        | Tolerations for Redis(TM) replicas pods assignment                                                | `[]`                 |
+| `replica.spreadConstraints`                  | Spread Constraints for Redis(TM) replicas pod assignment                                          | `{}`                 |
+| `replica.lifecycleHooks`                     | for the Redis(TM) replica container(s) to automate configuration before or after startup          | `{}`                 |
+| `replica.extraVolumes`                       | Optionally specify extra list of additional volumes for the Redis(TM) replicas pod(s)             | `[]`                 |
+| `replica.extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for the Redis(TM) replicas container(s)  | `[]`                 |
+| `replica.sidecars`                           | Add additional sidecar containers to the Redis(TM) replicas pod(s)                                | `{}`                 |
+| `replica.initContainers`                     | Add additional init containers to the Redis(TM) replicas pod(s)                                   | `{}`                 |
+| `replica.persistence.enabled`                | Enable persistence on Redis(TM) replicas nodes using Persistent Volume Claims                     | `true`               |
+| `replica.persistence.path`                   | The path the volume will be mounted at on Redis(TM) replicas containers                           | `/data`              |
+| `replica.persistence.subPath`                | The subdirectory of the volume to mount on Redis(TM) replicas containers                          | `""`                 |
+| `replica.persistence.storageClass`           | Persistent Volume storage class                                                                   | `nil`                |
+| `replica.persistence.accessModes`            | Persistent Volume access modes                                                                    | `[]`                 |
+| `replica.persistence.size`                   | Persistent Volume size                                                                            | `8Gi`                |
+| `replica.persistence.annotations`            | Additional custom annotations for the PVC                                                         | `{}`                 |
+| `replica.persistence.selector`               | Additional labels to match for the PVC                                                            | `{}`                 |
+| `replica.service.type`                       | Redis(TM) replicas service type                                                                   | `ClusterIP`          |
+| `replica.service.port`                       | Redis(TM) replicas service port                                                                   | `6379`               |
+| `replica.service.nodePort`                   | Node port for Redis(TM) replicas                                                                  | `nil`                |
+| `replica.service.externalTrafficPolicy`      | Redis(TM) replicas service external traffic policy                                                | `Cluster`            |
+| `replica.service.clusterIP`                  | Redis(TM) replicas service Cluster IP                                                             | `nil`                |
+| `replica.service.loadBalancerIP`             | Redis(TM) replicas service Load Balancer IP                                                       | `nil`                |
+| `replica.service.loadBalancerSourceRanges`   | Redis(TM) replicas service Load Balancer sources                                                  | `[]`                 |
+| `replica.service.annotations`                | Additional custom annotations for Redis(TM) replicas service                                      | `{}`                 |
+| `replica.terminationGracePeriodSeconds`      | Integer setting the termination grace period for the redis-replicas pods                          | `30`                 |
+| `replica.autoscaling.enabled`                | Enable autoscaling for replicas                                                                   | `false`              |
+| `replica.autoscaling.minReplicas`            | Minimum number of replicas                                                                        | `1`                  |
+| `replica.autoscaling.maxReplicas`            | Maximum number of replicas                                                                        | `11`                 |
+| `replica.autoscaling.targetCPU`              | Target CPU utilization percentage                                                                 | `nil`                |
+| `replica.autoscaling.targetMemory`           | Target Memory utilization percentage                                                              | `nil`                |
 
 
 ### Redis(TM) Sentinel configuration parameters
