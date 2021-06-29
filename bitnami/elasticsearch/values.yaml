@@ -19,7 +19,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/elasticsearch
-  tag: 7.13.2-debian-10-r1
+  tag: 7.13.2-debian-10-r10
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -48,7 +48,7 @@ sysctlImage:
   enabled: true
   registry: docker.io
   repository: bitnami/bitnami-shell
-  tag: 10-debian-10-r108
+  tag: 10-debian-10-r119
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -83,7 +83,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r108
+    tag: 10-debian-10-r119
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -942,7 +942,7 @@ curator:
   image:
     registry: docker.io
     repository: bitnami/elasticsearch-curator
-    tag: 5.8.4-debian-10-r39
+    tag: 5.8.4-debian-10-r49
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1168,7 +1168,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/elasticsearch-exporter
-    tag: 1.2.0-debian-10-r5
+    tag: 1.2.1-debian-10-r0
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
