@@ -55,10 +55,8 @@ spec:
       {{- if $query.priorityClassName }}
       priorityClassName: {{ $query.priorityClassName | quote }}
       {{- end }}
-      {{- if $query.securityContext.enabled }}
-      securityContext:
-        runAsUser: {{ $query.securityContext.runAsUser }}
-        fsGroup: {{ $query.securityContext.fsGroup }}
+      {{- if $query.podSecurityContext.enabled }}
+      securityContext: {{- omit $query.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       containers:
         {{- if $query.extraContainers }}
@@ -67,6 +65,9 @@ spec:
         - name: query
           image: {{ include "thanos.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if $query.containerSecurityContext.enabled }}
+          securityContext: {{- omit $query.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
           args:
             - query
             - --log.level={{ $query.logLevel }}
@@ -147,11 +148,27 @@ spec:
             - name: grpc
               containerPort: 10901
               protocol: TCP
-          {{- if $query.livenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" $query.livenessProbe "context" $) | nindent 12 }}
+          {{- if $query.livenessProbe.enabled }}
+          livenessProbe: 
+            httpGet:
+              path: /-/healthy
+              port: http
+            initialDelaySeconds: {{ $query.livenessProbe.initialDelaySeconds }}
+            timeoutSeconds: {{ $query.livenessProbe.timeoutSeconds }}
+            periodSeconds: {{ $query.livenessProbe.periodSeconds }}
+            successThreshold: {{ $query.livenessProbe.successThreshold }}
+            failureThreshold: {{ $query.livenessProbe.failureThreshold }}
           {{- end }}
-          {{- if $query.readinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" $query.readinessProbe "context" $) | nindent 12 }}
+          {{- if $query.readinessProbe.enabled }}
+          readinessProbe: 
+            httpGet:
+              path: /-/ready
+              port: http
+            initialDelaySeconds: {{ $query.readinessProbe.initialDelaySeconds }}
+            timeoutSeconds: {{ $query.readinessProbe.timeoutSeconds }}
+            periodSeconds: {{ $query.readinessProbe.periodSeconds }}
+            successThreshold: {{ $query.readinessProbe.successThreshold }}
+            failureThreshold: {{ $query.readinessProbe.failureThreshold }}
           {{- end }}
           {{- if $query.resources }}
           resources: {{- toYaml $query.resources | nindent 12 }}
