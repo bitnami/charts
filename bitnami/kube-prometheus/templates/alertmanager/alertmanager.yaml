@@ -108,7 +108,7 @@ spec:
       {{- if .Values.alertmanager.livenessProbe.enabled }}
       livenessProbe:
         httpGet:
-          path: /-/healthy
+          path: {{ .Values.alertmanager.livenessProbe.path }}
           port: web
           scheme: HTTP
         initialDelaySeconds: {{ .Values.alertmanager.livenessProbe.initialDelaySeconds }}
@@ -120,7 +120,7 @@ spec:
       {{- if .Values.alertmanager.readinessProbe.enabled }}
       readinessProbe:
         httpGet:
-          path: /-/ready
+          path: {{ .Values.alertmanager.readinessProbe.path }}
           port: web
           scheme: HTTP
         initialDelaySeconds: {{ .Values.alertmanager.readinessProbe.initialDelaySeconds }}

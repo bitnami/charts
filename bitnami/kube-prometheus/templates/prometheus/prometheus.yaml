@@ -251,7 +251,7 @@ spec:
       {{- if .Values.prometheus.thanos.livenessProbe.enabled }}
       livenessProbe:
         httpGet:
-          path: /-/healthy
+          path: {{ .Values.prometheus.thanos.livenessProbe.path }}
           port: http
           scheme: HTTP
         initialDelaySeconds: {{ .Values.prometheus.thanos.livenessProbe.initialDelaySeconds }}
@@ -263,7 +263,7 @@ spec:
       {{- if .Values.prometheus.thanos.readinessProbe.enabled }}
       readinessProbe:
         httpGet:
-          path: /-/ready
+          path: {{ .Values.prometheus.thanos.readinessProbe.path }}
           port: http
           scheme: HTTP
         initialDelaySeconds: {{ .Values.prometheus.thanos.readinessProbe.initialDelaySeconds }}
@@ -286,7 +286,7 @@ spec:
       {{- if .Values.prometheus.livenessProbe.enabled }}
       livenessProbe:
         httpGet:
-          path: /-/healthy
+          path: {{ .Values.prometheus.livenessProbe.path }}
           port: web
           scheme: HTTP
         initialDelaySeconds: {{ .Values.prometheus.livenessProbe.initialDelaySeconds }}
@@ -298,7 +298,7 @@ spec:
       {{- if .Values.prometheus.readinessProbe.enabled }}
       readinessProbe:
         httpGet:
-          path: /-/ready
+          path: {{ .Values.prometheus.readinessProbe.path }}
           port: web
           scheme: HTTP
         initialDelaySeconds: {{ .Values.prometheus.readinessProbe.initialDelaySeconds }}
