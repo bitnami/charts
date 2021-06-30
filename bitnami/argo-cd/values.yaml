@@ -1959,12 +1959,7 @@ redis:
   nameOverride: ""
   service:
     port: 6379
-  # TODO: this is not needed by the moment is the same as the default
-  commonConfiguration: |-
-    # Enable AOF https://redis.io/topics/persistence#append-only-file
-    appendonly yes
-    # Disable RDB persistence, AOF persistence already enabled.
-    save ""
+
   ## Use password authentication
   ##
   auth:

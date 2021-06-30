@@ -1,0 +1,85 @@
+** Please be patient while the chart is being deployed **
+
+1. Access your Argo CD installation:
+
+{{- if .Values.server.ingress.enabled }}
+  Connect to one of the following hosts:
+  {{ if .Values.server.ingress.tls }}
+    {{- if .Values.server.ingress.hosts }}
+    {{- range .Values.server.ingress.hosts }}
+    - https://{{ . }}
+    {{- end }}
+    {{- else }}
+    {{ .Values.server.ingress.hostname }}
+    {{- end }}
+  {{- else }}
+    {{- if .Values.server.ingress.hosts }}
+    {{- range .Values.server.ingress.hosts }}
+    - http://{{ . }}
+    {{- end }}
+    {{- else }}
+    {{ .Values.server.ingress.hostname }}
+    {{- end }}
+  {{- end }}
+{{- else }}
+  Execute the following commands:
+{{- if contains "NodePort" .Values.server.service.type }}
+  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "argocd.server" . }})
+  export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+  export URL="http://${NODE_IP}:${NODE_PORT}/"
+  echo "Argo CD URL: http://$NODE_IP:$NODE_PORT/"
+
+{{- else if contains "LoadBalancer" .Values.server.service.type }}
+
+** Please ensure an external IP is associated to the {{ include "argocd.server" . }} service before proceeding **
+** Watch the status using: kubectl get svc --namespace {{ .Release.Namespace }} -w {{ include "argocd.server" . }} **
+
+  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "argocd.server" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+
+{{- $port:=.Values.server.service.ports.http | toString }}
+  export URL="http://${SERVICE_IP}{{- if ne $port "80" }}:{{ .Values.server.service.ports.http }}{{ end }}"
+  echo "Argo CD URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.server.service.ports.http }}{{ end }}/"
+
+{{- else if contains "ClusterIP" .Values.server.service.type }}
+
+  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "argocd.server" . }} 8080:{{ .Values.server.service.ports.http }} &
+  export URL=http://127.0.0.1:8080/
+  echo "Argo CD URL: http://127.0.0.1:8080/"
+{{- end }}
+{{- end }}
+
+2. Argo CD requires to change the initial admin password after loging for first time. To get the initial admin password execute the following command:
+
+  kubectl -n {{ .Release.Namespace }} get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+
+3. Login to Argo CD with user: "admin" and the password obtained above:
+
+  If you have the argocd binary installed locally:
+
+  {{ if .Values.server.ingress.enabled }}
+  Use as URL the of the URLs provided above:
+
+    argocd login <URL>
+  {{ else }}
+  Execute the following command:
+
+    argocd login "$URL"
+  {{ end }}
+
+  If you DO NOT have the argocd binary installed locally you can create a temporal pod to change the password:
+
+    kubectl run cli --restart=Never --command "sleep" --image bitnami/argo-cd -- infinity
+    kubectl exec -it cli bash
+
+  Execute inside the new pod:
+
+    argocd login {{ include "argocd.server" . }}
+
+4. Execute the following command to change the initial password:
+
+  argocd account update-password
+
+{{- include "common.warnings.rollingTag" .Values.server.image }}
+{{- include "common.warnings.rollingTag" .Values.controller.image }}
+{{- include "common.warnings.rollingTag" .Values.repoServer.image }}
+{{- include "common.warnings.rollingTag" .Values.dex.image }}

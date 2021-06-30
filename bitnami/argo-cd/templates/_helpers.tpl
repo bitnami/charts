@@ -132,17 +132,6 @@ Create the name of the service account to use for Dex
 {{/*
 Compile all warnings into a single message.
 */}}
-{{- define "argocd.validateValues" -}}
-{{- $messages := list -}}
-{{- $messages := append $messages (include "argocd.validateValues.foo" .) -}}
-{{- $messages := append $messages (include "argocd.validateValues.bar" .) -}}
-{{- $messages := without $messages "" -}}
-{{- $message := join "\n" $messages -}}
-
-{{- if $message -}}
-{{-   printf "\nVALUES VALIDATION:\n%s" $message -}}
-{{- end -}}
-{{- end -}}
 
 {{/*
 Return the Redis(TM) secret name
