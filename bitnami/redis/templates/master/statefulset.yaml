@@ -276,6 +276,11 @@ spec:
               mountPath: /opt/bitnami/redis/certs
               readOnly: true
             {{- end }}
+            {{- if .Values.metrics.extraArgs.script }}
+            - name: {{ printf "%s-metrics-script-file" (include "common.names.fullname" .) }}
+              mountPath: {{ printf "/mnt/%s/" (include "common.names.name" .) }}
+              readOnly: true
+            {{- end }}
         {{- end }}
         {{- if .Values.master.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.master.sidecars "context" $) | nindent 8 }}
