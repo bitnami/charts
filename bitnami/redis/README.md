@@ -370,6 +370,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.image.pullSecrets`                  | Redis(TM) Exporter image pull secrets                                                            | `[]`                     |
 | `metrics.redisTargetHost`                    | A way to specify an alternative Redis(TM) hostname                                               | `localhost`              |
 | `metrics.extraArgs`                          | Extra arguments for Redis(TM) exporter, for example:                                             | `{}`                     |
+| `metrics.extraVolumes`                       | Optionally specify extra list of additional volumes for the Redis(TM) metrics sidecar             | `[]`            |
+| `metrics.extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for the Redis(TM) metrics sidecar        | `[]`            |
 | `metrics.containerSecurityContext.enabled`   | Enabled Redis(TM) exporter containers' Security Context                                          | `true`                   |
 | `metrics.containerSecurityContext.runAsUser` | Set Redis(TM) exporter containers' Security Context runAsUser                                    | `1001`                   |
 | `metrics.resources.limits`                   | The resources limits for the Redis(TM) exporter container                                        | `{}`                     |

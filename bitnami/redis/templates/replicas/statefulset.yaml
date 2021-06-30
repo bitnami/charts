@@ -300,6 +300,11 @@ spec:
               mountPath: /opt/bitnami/redis/certs
               readOnly: true
             {{- end }}
+            {{- if .Values.metrics.extraArgs.script }}
+            - name: {{ printf "%s-metrics-script-file" (include "common.names.fullname" .) }}
+              mountPath: {{ printf "/mnt/%s/" (include "common.names.name" .) }}
+              readOnly: true
+            {{- end }}
         {{- end }}
         {{- if .Values.replica.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.replica.sidecars "context" $) | nindent 8 }}
@@ -391,6 +396,9 @@ spec:
         {{- end }}
         {{- if .Values.replica.extraVolumes }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.replica.extraVolumes "context" $ ) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.metrics.extraVolumes }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.extraVolumes "context" $ ) | nindent 8 }}
         {{- end }}
   {{- if not .Values.replica.persistence.enabled }}
         - name: redis-data
