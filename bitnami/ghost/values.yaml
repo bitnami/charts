@@ -260,8 +260,8 @@ resources:
 ## @param containerPorts.https Ghost HTTPS container port
 ##
 containerPorts:
-  http: 8080
-  https: 8443
+  http: 2368
+  https: 2368
 ## Configure Pods Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enabled Ghost pods' Security Context

@@ -91,8 +91,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `existingSecret`     | Name of existing secret containing Ghost credentials                 | `nil`              |
 | `ghostEmail`         | Ghost user email                                                     | `user@example.com` |
 | `ghostBlogTitle`     | Ghost Blog title                                                     | `User's Blog`      |
-| `ghostHost`          | Ghost host to create application URLs                                | `nil`              |
-| `ghostEnableHttps`   | Configure Ghost to build application URLs using https                | `true`             |
+| `ghostHost`          | Ghost host to create application URLs                                | `""`               |
+| `ghostEnableHttps`   | Configure Ghost to build application URLs using https                | `false`            |
 | `smtpHost`           | SMTP server host                                                     | `""`               |
 | `smtpPort`           | SMTP server port                                                     | `""`               |
 | `smtpUser`           | SMTP username                                                        | `""`               |
@@ -133,8 +133,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tolerations`                           | Tolerations for pod assignment                                                            | `{}`            |
 | `resources.limits`                      | The resources limits for the Ghost container                                              | `{}`            |
 | `resources.requests`                    | The requested resources for the Ghost container                                           | `{}`            |
-| `containerPorts.http`                   | Ghost HTTP container port                                                                 | `8080`          |
-| `containerPorts.https`                  | Ghost HTTPS container port                                                                | `8443`          |
+| `containerPorts.http`                   | Ghost HTTP container port                                                                 | `2368`          |
+| `containerPorts.https`                  | Ghost HTTPS container port                                                                | `2368`          |
 | `podSecurityContext.enabled`            | Enabled Ghost pods' Security Context                                                      | `true`          |
 | `podSecurityContext.fsGroup`            | Set Ghost pod's Security Context fsGroup                                                  | `1001`          |
 | `containerSecurityContext.enabled`      | Enabled Ghost containers' Security Context                                                | `true`          |
@@ -207,29 +207,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.securityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`                     |
 
 
-### Metrics Parameters
-
-| Name                                      | Description                                                                  | Value                     |
-| ----------------------------------------- | ---------------------------------------------------------------------------- | ------------------------- |
-| `metrics.enabled`                         | Start a sidecar prometheus exporter to expose metrics                        | `false`                   |
-| `metrics.image.registry`                  | Apache Exporter image registry                                               | `docker.io`               |
-| `metrics.image.repository`                | Apache Exporter image repository                                             | `bitnami/apache-exporter` |
-| `metrics.image.tag`                       | Apache Exporter image tag (immutable tags are recommended)                   | `0.9.0-debian-10-r9`      |
-| `metrics.image.pullPolicy`                | Apache Exporter image pull policy                                            | `IfNotPresent`            |
-| `metrics.image.pullSecrets`               | Apache Exporter image pull secrets                                           | `[]`                      |
-| `metrics.resources.limits`                | The resources limits for the Prometheus exporter container                   | `{}`                      |
-| `metrics.resources.requests`              | The requested resources for the Prometheus exporter container                | `{}`                      |
-| `metrics.service.port`                    | Metrics service port                                                         | `9117`                    |
-| `metrics.service.annotations`             | Additional custom annotations for Metrics service                            | `{}`                      |
-| `metrics.serviceMonitor.enabled`          | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator | `false`                   |
-| `metrics.serviceMonitor.namespace`        | The namespace in which the ServiceMonitor will be created                    | `nil`                     |
-| `metrics.serviceMonitor.interval`         | The interval at which metrics should be scraped                              | `30s`                     |
-| `metrics.serviceMonitor.scrapeTimeout`    | The timeout after which the scrape is ended                                  | `nil`                     |
-| `metrics.serviceMonitor.relabellings`     | Metrics relabellings to add to the scrape endpoint                           | `nil`                     |
-| `metrics.serviceMonitor.honorLabels`      | Labels to honor to add to the scrape endpoint                                | `false`                   |
-| `metrics.serviceMonitor.additionalLabels` | Additional custom labels for the ServiceMonitor                              | `{}`                      |
-
-
 ### Database Parameters
 
 | Name                                       | Description                                                               | Value           |
@@ -250,6 +227,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.password`                | External Database user password                                           | `""`            |
 | `externalDatabase.database`                | External Database database name                                           | `bitnami_ghost` |
 | `externalDatabase.existingSecret`          | The name of an existing secret with database credentials                  | `nil`           |
+
 
 The above parameters map to the env variables defined in [bitnami/ghost](http://github.com/bitnami/bitnami-docker-ghost). For more information please refer to the [bitnami/ghost](http://github.com/bitnami/bitnami-docker-ghost) image documentation.
 
