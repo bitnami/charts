@@ -216,6 +216,13 @@ The following table lists the configurable parameters of the MySQL chart and the
 | `serviceAccount.annotations` | Annotations for MySQL Service Account                  | `{}` (evaluated as a template)                       |
 | `rbac.create`                | Whether to create & use RBAC resources or not          | `false`                                              |
 
+### Network Policy
+| Parameter                    | Description                                            | Default                                              |
+|------------------------------|--------------------------------------------------------|------------------------------------------------------|
+| `networkPolicy.enabled`                       | Enable MySQL NetworkPolicy                                                                                                                                                                                                                                                                                                                                                                                                                                                       | `false`                                                       |
+| `networkPolicy.allowExternal`                 | Don't require client label for MySQL connections                                                                                                                                                                                                                                                                                                                                                                                                                                 | `true`                                                        |
+| `networkPolicy.explicitNamespacesSelector`    | A Kubernetes LabelSelector to explicitly select namespaces from which ingress traffic could be allowed to MySQL                                                                                                                                                                                                                                                                                                                                                                     | `{}`                                                          |
+
 ### Volume Permissions parameters
 
 | Parameter                              | Description                                                                                                          | Default                                                 |
@@ -334,6 +341,20 @@ The chart mounts a [Persistent Volume](https://kubernetes.io/docs/user-guide/per
 
 If you encounter errors when working with persistent volumes, refer to our [troubleshooting guide for persistent volumes](https://docs.bitnami.com/kubernetes/faq/troubleshooting/troubleshooting-persistence-volumes/).
 
+## Network Policy
+
+To enable network policy for MySQL, install [a networking plugin that implements the Kubernetes NetworkPolicy spec](https://kubernetes.io/docs/tasks/administer-cluster/declare-network-policy#before-you-begin), and set `networkPolicy.enabled` to `true`.
+
+For Kubernetes v1.5 & v1.6, you must also turn on NetworkPolicy by setting the DefaultDeny namespace annotation. Note: this will enforce policy for _all_ pods in the namespace:
+
+```console
+$ kubectl annotate namespace default "net.beta.kubernetes.io/network-policy={\"ingress\":{\"isolation\":\"DefaultDeny\"}}"
+```
+
+With NetworkPolicy enabled, traffic will be limited to just port 3306.
+
+For more precise policy, set `networkPolicy.allowExternal=false`. This will only allow pods with the generated client label to connect to MySQL.
+This label will be displayed in the output of a successful install.
 
 ## Pod affinity
 
