@@ -58,7 +58,7 @@ controller:
   ## ref: https://hub.docker.com/r/bitnami/cert-manager/tags/
   ## @param controller.image.registry Controller image registry
   ## @param controller.image.repository Controller image repository
-  ## @param controller.image.tag Controller image tag
+  ## @param controller.image.tag Controller image tag (immutable tags are recommended)
   ## @param controller.image.pullPolicy Controller image pull policy
   ## @param controller.image.pullSecrets Controller image pull secrets
   ## @param controller.image.debug Controller image debug mode
@@ -87,7 +87,7 @@ controller:
   acmesolver:
     ## @param controller.acmesolver.image.registry Controller image registry
     ## @param controller.acmesolver.image.repository Controller image repository
-    ## @param controller.acmesolver.image.tag Controller image tag
+    ## @param controller.acmesolver.image.tag Controller image tag (immutable tags are recommended)
     ## @param controller.acmesolver.image.pullPolicy Controller image pull policy
     ## @param controller.acmesolver.image.pullSecrets Controller image pull secrets
     ## @param controller.acmesolver.image.debug Controller image debug mode
@@ -276,7 +276,7 @@ webhook:
   ## ref: https://hub.docker.com/r/bitnami/cert-manager-webhook/tags/
   ## @param webhook.image.registry Webhook image registry
   ## @param webhook.image.repository Webhook image repository
-  ## @param webhook.image.tag Webhook image tag
+  ## @param webhook.image.tag Webhook image tag (immutable tags are recommended)
   ## @param webhook.image.pullPolicy Webhook image pull policy
   ## @param webhook.image.pullSecrets Webhook image pull secrets
   ## @param webhook.image.debug Webhook image debug mode
@@ -515,7 +515,7 @@ cainjector:
   ## ref: https://hub.docker.com/r/bitnami/cainjector/tags/
   ## @param cainjector.image.registry CAInjector image registry
   ## @param cainjector.image.repository CAInjector image repository
-  ## @param cainjector.image.tag CAInjector image tag
+  ## @param cainjector.image.tag CAInjector image tag (immutable tags are recommended)
   ## @param cainjector.image.pullPolicy CAInjector image pull policy
   ## @param cainjector.image.pullSecrets CAInjector image pull secrets
   ## @param cainjector.image.debug CAInjector image debug mode
