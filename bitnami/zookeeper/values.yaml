@@ -478,7 +478,6 @@ livenessProbe:
   failureThreshold: 6
   successThreshold: 1
   probeCommandTimeout: 2
-  useAdmin: false
 
 readinessProbe:
   enabled: true
@@ -488,7 +487,6 @@ readinessProbe:
   failureThreshold: 6
   successThreshold: 1
   probeCommandTimeout: 2
-  useAdmin: false
 
 ## Custom Liveness probes for ZooKeeper
 ##
