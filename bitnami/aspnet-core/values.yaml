@@ -394,7 +394,7 @@ appFromExistingPVC:
 service:
   ## @param service.type ASP.NET Core service type
   ##
-  type: LoadBalancer
+  type: ClusterIP
   ## @param service.port ASP.NET Core service HTTP port
   ##
   port: 80
