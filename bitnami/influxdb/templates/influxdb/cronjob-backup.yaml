@@ -52,6 +52,20 @@ spec:
             {{- else }}
                 emptyDir: {}
             {{- end }}
+          {{- if .Values.backup.affinity }}
+          affinity: {{- include "common.tplvalues.render" (dict "value" .Values.backup.affinity "context" $) | nindent 8 }}
+          {{- else }}
+          affinity:
+            podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.backup.podAffinityPreset "component" "influxdb" "context" $) | nindent 10 }}
+            podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.backup.podAntiAffinityPreset "component" "influxdb" "context" $) | nindent 10 }}
+            nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.backup.nodeAffinityPreset.type "key" .Values.backup.nodeAffinityPreset.key "values" .Values.backup.nodeAffinityPreset.values) | nindent 10 }}
+          {{- end }}
+          {{- if .Values.backup.nodeSelector }}
+          nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.backup.nodeSelector "context" $) | nindent 8 }}
+          {{- end }}
+          {{- if .Values.backup.tolerations }}
+          tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.backup.tolerations "context" $) | nindent 8 }}
+          {{- end }}
           initContainers:
             - name: influxdb-backup
               image: {{ include "influxdb.image" . | quote }}
