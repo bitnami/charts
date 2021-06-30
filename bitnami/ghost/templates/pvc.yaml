@@ -1,4 +1,4 @@
-{{- if and .Values.persistence.enabled (not .Values.persistence.existingClaim) -}}
+{{- if and .Values.persistence.enabled (not .Values.persistence.existingClaim) }}
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
@@ -13,9 +13,15 @@ metadata:
   {{- end }}
 spec:
   accessModes:
+  {{- if not (empty .Values.persistence.accessModes) }}
+  {{- range .Values.persistence.accessModes }}
+    - {{ . | quote }}
+  {{- end }}
+  {{- else }}
     - {{ .Values.persistence.accessMode | quote }}
+  {{- end }}
   resources:
     requests:
       storage: {{ .Values.persistence.size | quote }}
-  {{ include "ghost.storageClass" . }}
+  {{- include "common.storage.class" (dict "persistence" .Values.persistence "global" .Values.global) | nindent 2 }}
 {{- end -}}
