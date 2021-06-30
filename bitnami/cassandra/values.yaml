@@ -18,42 +18,39 @@ global:
 
 ## @section Common parameters
 
-## @param nameOverride String to partially override cassandra.fullname template (will maintain the release name)
+## @param nameOverride String to partially override common.names.fullname
 ##
 nameOverride:
-## @param fullnameOverride String to fully override cassandra.fullname template
+## @param fullnameOverride String to fully override common.names.fullname
 ##
 fullnameOverride:
-## @param clusterDomain Default Kubernetes cluster domain
-##
-clusterDomain: cluster.local
-## @param commonAnnotations Common annotations to add to all Cassandra resources (sub-charts are not considered). Evaluated as a template
-##
-commonAnnotations: {}
-## @param commonLabels Common labels to add to all Cassandra resources (sub-charts are not considered). Evaluated as a template
+## @param commonLabels Labels to add to all deployed objects (sub-charts are not considered)
 ##
 commonLabels: {}
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+## @param clusterDomain Kubernetes cluster domain name
+##
+clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
 
 ## @section Cassandra parameters
 
-## Bitnami Cassandra image version
+## Bitnami Cassandra image
 ## ref: https://hub.docker.com/r/bitnami/cassandra/tags/
-## @param image.registry Cassandra Image registry
-## @param image.repository Cassandra Image name
-## @param image.tag Cassandra Image tag
-## @param image.pullPolicy Image pull policy
-## @param image.pullSecrets Specify docker-registry secret names as an array
-## @param image.debug Specify if debug logs should be enabled
+## @param image.registry Cassandra image registry
+## @param image.repository Cassandra image repository
+## @param image.tag Cassandra image tag (immutable tags are recommended)
+## @param image.pullPolicy image pull policy
+## @param image.pullSecrets Cassandra image pull secrets
+## @param image.debug Enable image debug mode
 ##
 image:
   registry: docker.io
   repository: bitnami/cassandra
-  ## Bitnami Cassandra image tag
-  ## ref: https://github.com/bitnami/bitnami-docker-cassandra#supported-tags-and-respective-dockerfile-links
-  ##
   tag: 3.11.10-debian-10-r125
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -68,14 +65,9 @@ image:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
-  ## Set to true if you would like to see extra information on logs
-  ## It turns BASH and/or NAMI debugging in the image
+  ## Enable debug mode
   ##
   debug: false
-## @param hostAliases Add deployment host aliases
-## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
-##
-hostAliases: []
 
 ## Secret with keystore, keystore password, truststore, truststore password
 ## DEPRECATED. Use tls.existingSecret instead
@@ -190,6 +182,10 @@ replicaCount: 1
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
 ##
 updateStrategy: RollingUpdate
+## @param hostAliases Add deployment host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
 ## @param rollingUpdatePartition Partition update strategy
 ## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
 ##
@@ -219,16 +215,15 @@ podAffinityPreset: ""
 podAntiAffinityPreset: soft
 ## Node affinity preset
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-## @param nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
-## @param nodeAffinityPreset.key Node label key to match. Ignored if `affinity` is set.
-## @param nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set.
 ##
 nodeAffinityPreset:
+  ## @param nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ##
   type: ""
-  ## E.g.
-  ## key: "kubernetes.io/e2e-az-name"
+  ## @param nodeAffinityPreset.key Node label key to match. Ignored if `affinity` is set
   ##
   key: ""
+  ## @param nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set
   ## E.g.
   ## values:
   ##   - e2e-az1
@@ -237,15 +232,15 @@ nodeAffinityPreset:
   values: []
 ## @param affinity Affinity for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
+## NOTE: podAffinityPreset, podAntiAffinityPreset, and nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
 ## @param nodeSelector Node labels for pod assignment
-## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+## ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
 nodeSelector: {}
 ## @param tolerations Tolerations for pod assignment
-## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
 ## @param topologySpreadConstraints Topology Spread Constraints for pod assignment
@@ -255,16 +250,16 @@ tolerations: []
 topologySpreadConstraints: []
 ## Pod security context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-## @param podSecurityContext.enabled Enable security context for Cassandra pods
-## @param podSecurityContext.fsGroup Group ID for the volumes of the pod
+## @param podSecurityContext.enabled Enabled Cassandra pods' Security Context
+## @param podSecurityContext.fsGroup Set Cassandra pod's Security Context fsGroup
 ##
 podSecurityContext:
   enabled: true
   fsGroup: 1001
-## Cassandra container security context
+## Configure Container Security Context (only main container)
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-## @param containerSecurityContext.enabled Cassandra Container securityContext
-## @param containerSecurityContext.runAsUser User ID for the Cassandra container
+## @param containerSecurityContext.enabled Enabled Cassandra containers' Security Context
+## @param containerSecurityContext.runAsUser et Cassandra container's Security Context runAsUser
 ##
 containerSecurityContext:
   enabled: true
@@ -293,8 +288,8 @@ resources:
   ##    cpu: 2
   ##    memory: 4Gi
   requests: {}
-## Cassandra container's liveness probe
-## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+## Configure extra options for Cassandra containers' liveness and readiness probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe
 ## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
 ## @param livenessProbe.periodSeconds Period seconds for livenessProbe
@@ -309,8 +304,6 @@ livenessProbe:
   timeoutSeconds: 5
   successThreshold: 1
   failureThreshold: 5
-## Cassandra container's readiness probe
-## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ## @param readinessProbe.enabled Enable readinessProbe
 ## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
 ## @param readinessProbe.periodSeconds Period seconds for readinessProbe
@@ -325,10 +318,10 @@ readinessProbe:
   timeoutSeconds: 5
   successThreshold: 1
   failureThreshold: 5
-## @param customLivenessProbe Override default liveness probe
+## @param customLivenessProbe Custom livenessProbe that overrides the default one
 ##
 customLivenessProbe: {}
-## @param customReadinessProbe Override default readiness probe
+## @param customReadinessProbe Custom readinessProbe that overrides the default one
 ##
 customReadinessProbe: {}
 ## @param extraVolumes Optionally specify extra list of additional volumes for cassandra container
@@ -392,28 +385,28 @@ serviceAccount:
   ##
   annotations: {}
 
-## @section Exposure parameters
+## @section Traffic Exposure Parameters
 
-## Service parameters
+## Cassandra service parameters
 ##
 service:
-  ## @param service.type Kubernetes Service type
+  ## @param service.type Cassandra service type
   ##
   type: ClusterIP
-  ## @param service.port CQL Port for the Kubernetes service
+  ## @param service.port Cassandra service CQL Port
   ##
   port: 9042
-  ## @param service.thriftPort Thrift Port for the Kubernetes service
+  ## @param service.thriftPort Cassandra service Thrift Port
   ##
   thriftPort: 9160
-  ## @param service.metricsPort Metrics Port for the Kubernetes service
+  ## @param service.metricsPort Cassandra service metrics port
   ##
   metricsPort: 8080
-  ## Specify the nodePort(s) value(s) for the LoadBalancer and NodePort service types.
+  ## Node ports to expose
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
-  ## @param service.nodePorts.cql Kubernetes CQL node port
-  ## @param service.nodePorts.thrift Kubernetes Thrift node port
-  ## @param service.nodePorts.metrics Kubernetes Metrics node port
+  ## @param service.nodePorts.cql Node port for CQL
+  ## @param service.nodePorts.thrift Node port for Thrift
+  ## @param service.nodePorts.metrics Node port for metrics
   ##
   nodePorts:
     cql: ''
@@ -561,10 +554,10 @@ metrics:
   enabled: false
   ## Bitnami Cassandra Exporter image
   ## ref: https://hub.docker.com/r/bitnami/cassandra-exporter/tags/
-  ## @param metrics.image.registry Cassandra exporter Image registry
-  ## @param metrics.image.repository Cassandra exporter Image name
-  ## @param metrics.image.tag Cassandra exporter Image tag
-  ## @param metrics.image.pullPolicy Image pull policy
+  ## @param metrics.image.registry Cassandra exporter image registry
+  ## @param metrics.image.repository Cassandra exporter image name
+  ## @param metrics.image.tag Cassandra exporter image tag
+  ## @param metrics.image.pullPolicy image pull policy
   ## @param metrics.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:

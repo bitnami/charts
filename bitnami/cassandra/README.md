@@ -57,27 +57,26 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                | Description                                                                                                   | Value           |
-| ------------------- | ------------------------------------------------------------------------------------------------------------- | --------------- |
-| `nameOverride`      | String to partially override cassandra.fullname template (will maintain the release name)                     | `nil`           |
-| `fullnameOverride`  | String to fully override cassandra.fullname template                                                          | `nil`           |
-| `clusterDomain`     | Default Kubernetes cluster domain                                                                             | `cluster.local` |
-| `commonAnnotations` | Common annotations to add to all Cassandra resources (sub-charts are not considered). Evaluated as a template | `{}`            |
-| `commonLabels`      | Common labels to add to all Cassandra resources (sub-charts are not considered). Evaluated as a template      | `{}`            |
-| `extraDeploy`       | Array of extra objects to deploy with the release                                                             | `[]`            |
+| Name                | Description                                                           | Value           |
+| ------------------- | --------------------------------------------------------------------- | --------------- |
+| `nameOverride`      | String to partially override common.names.fullname                    | `nil`           |
+| `fullnameOverride`  | String to fully override common.names.fullname                        | `nil`           |
+| `commonLabels`      | Labels to add to all deployed objects (sub-charts are not considered) | `{}`            |
+| `commonAnnotations` | Annotations to add to all deployed objects                            | `{}`            |
+| `clusterDomain`     | Kubernetes cluster domain name                                        | `cluster.local` |
+| `extraDeploy`       | Array of extra objects to deploy with the release                     | `[]`            |
 
 
 ### Cassandra parameters
 
 | Name                          | Description                                                                                                            | Value                    |
 | ----------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `image.registry`              | Cassandra Image registry                                                                                               | `docker.io`              |
-| `image.repository`            | Cassandra Image name                                                                                                   | `bitnami/cassandra`      |
-| `image.tag`                   | Cassandra Image tag                                                                                                    | `3.11.10-debian-10-r125` |
-| `image.pullPolicy`            | Image pull policy                                                                                                      | `IfNotPresent`           |
-| `image.pullSecrets`           | Specify docker-registry secret names as an array                                                                       | `nil`                    |
-| `image.debug`                 | Specify if debug logs should be enabled                                                                                | `false`                  |
-| `hostAliases`                 | Add deployment host aliases                                                                                            | `[]`                     |
+| `image.registry`              | Cassandra image registry                                                                                               | `docker.io`              |
+| `image.repository`            | Cassandra image repository                                                                                             | `bitnami/cassandra`      |
+| `image.tag`                   | Cassandra image tag (immutable tags are recommended)                                                                   | `3.11.10-debian-10-r125` |
+| `image.pullPolicy`            | image pull policy                                                                                                      | `IfNotPresent`           |
+| `image.pullSecrets`           | Cassandra image pull secrets                                                                                           | `[]`                     |
+| `image.debug`                 | Enable image debug mode                                                                                                | `false`                  |
 | `dbUser.user`                 | Cassandra admin user                                                                                                   | `cassandra`              |
 | `dbUser.forcePassword`        | Force the user to provide a non                                                                                        | `false`                  |
 | `dbUser.password`             | Password for `dbUser.user`. Randomly generated if empty                                                                | `nil`                    |
@@ -111,6 +110,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------ | ----------------------------------------------------------------------------------------- | --------------- |
 | `replicaCount`                       | Number of Cassandra replicas                                                              | `1`             |
 | `updateStrategy`                     | updateStrategy for Cassandra statefulset                                                  | `RollingUpdate` |
+| `hostAliases`                        | Add deployment host aliases                                                               | `[]`            |
 | `rollingUpdatePartition`             | Partition update strategy                                                                 | `nil`           |
 | `podManagementPolicy`                | StatefulSet pod management policy                                                         | `OrderedReady`  |
 | `priorityClassName`                  | Cassandra pods' priority.                                                                 | `""`            |
@@ -119,16 +119,16 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
 | `podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`          |
 | `nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`            |
-| `nodeAffinityPreset.key`             | Node label key to match. Ignored if `affinity` is set.                                    | `""`            |
-| `nodeAffinityPreset.values`          | Node label values to match. Ignored if `affinity` is set.                                 | `[]`            |
+| `nodeAffinityPreset.key`             | Node label key to match. Ignored if `affinity` is set                                     | `""`            |
+| `nodeAffinityPreset.values`          | Node label values to match. Ignored if `affinity` is set                                  | `[]`            |
 | `affinity`                           | Affinity for pod assignment                                                               | `{}`            |
 | `nodeSelector`                       | Node labels for pod assignment                                                            | `{}`            |
 | `tolerations`                        | Tolerations for pod assignment                                                            | `[]`            |
 | `topologySpreadConstraints`          | Topology Spread Constraints for pod assignment                                            | `[]`            |
-| `podSecurityContext.enabled`         | Enable security context for Cassandra pods                                                | `true`          |
-| `podSecurityContext.fsGroup`         | Group ID for the volumes of the pod                                                       | `1001`          |
-| `containerSecurityContext.enabled`   | Cassandra Container securityContext                                                       | `true`          |
-| `containerSecurityContext.runAsUser` | User ID for the Cassandra container                                                       | `1001`          |
+| `podSecurityContext.enabled`         | Enabled Cassandra pods' Security Context                                                  | `true`          |
+| `podSecurityContext.fsGroup`         | Set Cassandra pod's Security Context fsGroup                                              | `1001`          |
+| `containerSecurityContext.enabled`   | Enabled Cassandra containers' Security Context                                            | `true`          |
+| `containerSecurityContext.runAsUser` | et Cassandra container's Security Context runAsUser                                       | `1001`          |
 | `resources.limits`                   | The resources limits for Cassandra containers                                             | `{}`            |
 | `resources.requests`                 | The requested resources for Cassandra containers                                          | `{}`            |
 | `livenessProbe.enabled`              | Enable livenessProbe                                                                      | `true`          |
@@ -143,8 +143,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                        | `5`             |
 | `readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                      | `5`             |
 | `readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                      | `1`             |
-| `customLivenessProbe`                | Override default liveness probe                                                           | `{}`            |
-| `customReadinessProbe`               | Override default readiness probe                                                          | `{}`            |
+| `customLivenessProbe`                | Custom livenessProbe that overrides the default one                                       | `{}`            |
+| `customReadinessProbe`               | Custom readinessProbe that overrides the default one                                      | `{}`            |
 | `extraVolumes`                       | Optionally specify extra list of additional volumes for cassandra container               | `[]`            |
 | `extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for cassandra container          | `[]`            |
 | `initContainers`                     | Add additional init containers to the cassandra pods                                      | `[]`            |
@@ -169,17 +169,17 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.annotations` | Annotations for Cassandra Service Account                  | `{}`   |
 
 
-### Exposure parameters
+### Traffic Exposure Parameters
 
 | Name                          | Description                                               | Value       |
 | ----------------------------- | --------------------------------------------------------- | ----------- |
-| `service.type`                | Kubernetes Service type                                   | `ClusterIP` |
-| `service.port`                | CQL Port for the Kubernetes service                       | `9042`      |
-| `service.thriftPort`          | Thrift Port for the Kubernetes service                    | `9160`      |
-| `service.metricsPort`         | Metrics Port for the Kubernetes service                   | `8080`      |
-| `service.nodePorts.cql`       | Kubernetes CQL node port                                  | `""`        |
-| `service.nodePorts.thrift`    | Kubernetes Thrift node port                               | `""`        |
-| `service.nodePorts.metrics`   | Kubernetes Metrics node port                              | `""`        |
+| `service.type`                | Cassandra service type                                    | `ClusterIP` |
+| `service.port`                | Cassandra service CQL Port                                | `9042`      |
+| `service.thriftPort`          | Cassandra service Thrift Port                             | `9160`      |
+| `service.metricsPort`         | Cassandra service metrics port                            | `8080`      |
+| `service.nodePorts.cql`       | Node port for CQL                                         | `""`        |
+| `service.nodePorts.thrift`    | Node port for Thrift                                      | `""`        |
+| `service.nodePorts.metrics`   | Node port for metrics                                     | `""`        |
 | `service.loadBalancerIP`      | LoadBalancerIP if service type is `LoadBalancer`          | `nil`       |
 | `service.annotations`         | Provide any additional annotations which may be required. | `{}`        |
 | `networkPolicy.enabled`       | Specifies whether a NetworkPolicy should be created       | `false`     |
@@ -208,7 +208,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.image.repository`          | Init container volume                                                           | `bitnami/bitnami-shell` |
 | `volumePermissions.image.tag`                 | Init container volume                                                           | `10-debian-10-r112`     |
 | `volumePermissions.image.pullPolicy`          | Init container volume                                                           | `Always`                |
-| `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                | `nil`                   |
+| `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                | `[]`                    |
 | `volumePermissions.resources.limits`          | The resources limits for the container                                          | `{}`                    |
 | `volumePermissions.resources.requests`        | The requested resources for the container                                       | `{}`                    |
 | `volumePermissions.securityContext.runAsUser` | User ID for the init container                                                  | `0`                     |
@@ -219,11 +219,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                   | Description                                                                                            | Value                        |
 | -------------------------------------- | ------------------------------------------------------------------------------------------------------ | ---------------------------- |
 | `metrics.enabled`                      | Start a side-car prometheus exporter                                                                   | `false`                      |
-| `metrics.image.registry`               | Cassandra exporter Image registry                                                                      | `docker.io`                  |
-| `metrics.image.repository`             | Cassandra exporter Image name                                                                          | `bitnami/cassandra-exporter` |
-| `metrics.image.tag`                    | Cassandra exporter Image tag                                                                           | `2.3.4-debian-10-r435`       |
-| `metrics.image.pullPolicy`             | Image pull policy                                                                                      | `IfNotPresent`               |
-| `metrics.image.pullSecrets`            | Specify docker-registry secret names as an array                                                       | `nil`                        |
+| `metrics.image.registry`               | Cassandra exporter image registry                                                                      | `docker.io`                  |
+| `metrics.image.repository`             | Cassandra exporter image name                                                                          | `bitnami/cassandra-exporter` |
+| `metrics.image.tag`                    | Cassandra exporter image tag                                                                           | `2.3.4-debian-10-r435`       |
+| `metrics.image.pullPolicy`             | image pull policy                                                                                      | `IfNotPresent`               |
+| `metrics.image.pullSecrets`            | Specify docker-registry secret names as an array                                                       | `[]`                         |
 | `metrics.resources.limits`             | The resources limits for the container                                                                 | `{}`                         |
 | `metrics.resources.requests`           | The requested resources for the container                                                              | `{}`                         |
 | `metrics.podAnnotations`               | Metrics exporter pod Annotation and Labels                                                             | `{}`                         |
