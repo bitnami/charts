@@ -282,20 +282,12 @@ webhook:
   ## @param webhook.image.debug Webhook image debug mode
   ##
   image:
-    ## @param webhook.image.registry Webhook image registry
-    ##
     registry: docker.io
-    ## @param webhook.image.repository Webhook image repository
-    ##
     repository: bitnami/cert-manager-webhook
-    ## @param webhook.image.tag Webhook image tag (immutabe tags are recommended)
-    ##
     tag: 1.4.0-debian-10-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-    ##
-    ## @param webhook.image.pullPolicy Webhook image pull policy
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -304,12 +296,10 @@ webhook:
     ## E.g:
     ## pullSecrets:
     ##  - myRegistryKeySecretName
-    ## @param webhook.image.pullSecrets Webhook image pull secrets
     ##
     pullSecrets: []
     ## Set to true if you would like to see extra information on logs
     ##
-    ## @param webhook.image.debug Webhook image debug mode
     debug: false
   ## Webhook containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/

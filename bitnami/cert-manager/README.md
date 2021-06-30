@@ -136,12 +136,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `webhook.image.pullPolicy`                      | Webhook image pull policy                                                                         | `IfNotPresent`                 |
 | `webhook.image.pullSecrets`                     | Webhook image pull secrets                                                                        | `[]`                           |
 | `webhook.image.debug`                           | Webhook image debug mode                                                                          | `false`                        |
-| `webhook.image.registry`                        | Webhook image registry                                                                            | `docker.io`                    |
-| `webhook.image.repository`                      | Webhook image repository                                                                          | `bitnami/cert-manager-webhook` |
-| `webhook.image.tag`                             | Webhook image tag (immutabe tags are recommended)                                                 | `1.4.0-debian-10-r0`           |
-| `webhook.image.pullPolicy`                      | Webhook image pull policy                                                                         | `IfNotPresent`                 |
-| `webhook.image.pullSecrets`                     | Webhook image pull secrets                                                                        | `[]`                           |
-| `webhook.image.debug`                           | Webhook image debug mode                                                                          | `false`                        |
 | `webhook.resources.limits`                      | The resources limits for the Webhook container                                                    | `{}`                           |
 | `webhook.resources.requests`                    | The requested resources for the Webhook container                                                 | `{}`                           |
 | `webhook.podSecurityContext.enabled`            | Enabled Webhook pods' Security Context                                                            | `true`                         |
