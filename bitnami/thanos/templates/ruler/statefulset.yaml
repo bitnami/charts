@@ -54,9 +54,8 @@ spec:
       {{- if .Values.ruler.priorityClassName }}
       priorityClassName: {{ .Values.ruler.priorityClassName | quote }}
       {{- end }}
-      {{- if .Values.ruler.securityContext.enabled }}
-      securityContext:
-        fsGroup: {{ .Values.ruler.securityContext.fsGroup }}
+      {{- if .Values.ruler.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.ruler.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       {{- if and .Values.volumePermissions.enabled .Values.ruler.persistence.enabled }}
       initContainers:
@@ -68,7 +67,7 @@ spec:
             - -c
             - |
               mkdir -p /data
-              chown -R "{{ .Values.ruler.securityContext.runAsUser }}:{{ .Values.ruler.securityContext.fsGroup }}" /data
+              chown -R "{{ .Values.ruler.podSecurityContext.runAsUser }}:{{ .Values.ruler.podSecurityContext.fsGroup }}" /data
           securityContext:
             runAsUser: 0
           volumeMounts:
@@ -82,9 +81,8 @@ spec:
         - name: ruler
           image: {{ include "thanos.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-          {{- if .Values.ruler.securityContext.enabled }}
-          securityContext:
-            runAsUser: {{ .Values.ruler.securityContext.runAsUser }}
+          {{- if .Values.ruler.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.ruler.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           args:
             - rule
@@ -129,11 +127,27 @@ spec:
             - name: grpc
               containerPort: 10901
               protocol: TCP
-          {{- if .Values.ruler.livenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ruler.livenessProbe "context" $) | nindent 12 }}
+          {{- if .Values.ruler.livenessProbe.enabled }}
+          livenessProbe: 
+            httpGet:
+              path: /-/healthy
+              port: http
+            initialDelaySeconds: {{ .Values.ruler.livenessProbe.initialDelaySeconds }}
+            timeoutSeconds: {{ .Values.ruler.livenessProbe.timeoutSeconds }}
+            periodSeconds: {{ .Values.ruler.livenessProbe.periodSeconds }}
+            successThreshold: {{ .Values.ruler.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.ruler.livenessProbe.failureThreshold }}
           {{- end }}
-          {{- if .Values.ruler.readinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ruler.readinessProbe "context" $) | nindent 12 }}
+          {{- if .Values.ruler.readinessProbe.enabled }}
+          readinessProbe: 
+            httpGet:
+              path: /-/ready
+              port: http
+            initialDelaySeconds: {{ .Values.ruler.readinessProbe.initialDelaySeconds }}
+            timeoutSeconds: {{ .Values.ruler.readinessProbe.timeoutSeconds }}
+            periodSeconds: {{ .Values.ruler.readinessProbe.periodSeconds }}
+            successThreshold: {{ .Values.ruler.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.ruler.readinessProbe.failureThreshold }}
           {{- end }}
           {{- if .Values.ruler.resources }}
           resources: {{- toYaml .Values.ruler.resources | nindent 12 }}

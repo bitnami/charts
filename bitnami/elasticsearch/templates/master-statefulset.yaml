@@ -161,7 +161,7 @@ spec:
               path: /_cluster/health?local=true
               port: 9200
           {{- else if .Values.master.customStartupProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.master.customStartupProbe "context" $) | nindent 12 }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.master.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.master.livenessProbe.enabled }}
           livenessProbe:
