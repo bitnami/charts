@@ -40,12 +40,11 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- if .Values.global.kibanaEnabled -}}
 {{- printf "%s-%s" .Release.Name .Values.global.coordinating.name | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
-{{ end }}
-{{- if .Values.coordinating.fullnameOverride -}}
-{{- .Values.coordinating.fullnameOverride | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
 {{- printf "%s-%s" (include "common.names.fullname" .) .Values.global.coordinating.name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
+{{- if .Values.coordinating }} {{ if .Values.coordinating.fullnameOverride }} 
+{{- .Values.coordinating.fullnameOverride | trunc 63 | trimSuffix "-" -}}
+{{- end -}}{{- end -}}
 {{- end -}}
 
 {{/*

@@ -76,16 +76,18 @@ spec:
                   key: master-key
             - name: PARSE_ENABLE_CLOUD_CODE
               value: {{ ternary "yes" "no" .Values.server.enableCloudCode | quote }}
-            - name: MONGODB_HOST
+            - name: PARSE_DATABASE_HOST
               value: {{ include "parse.mongodb.fullname" . }}
-            - name: MONGODB_PORT
+            - name: PARSE_DATABASE_PORT_NUMBER
               value: "27017"
             {{- if .Values.mongodb.auth.enabled }}
-            - name: MONGODB_PASSWORD
+            - name: PARSE_DATABASE_USER
+              value: {{ .Values.mongodb.auth.username | quote }}
+            - name: PARSE_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "parse.mongodb.fullname" . }}
-                  key: mongodb-root-password
+                  key: mongodb-password
             {{- end }}
             {{- if .Values.server.extraEnvVars }}
               {{- include "common.tplvalues.render" ( dict "value" .Values.server.extraEnvVars "context" $ ) | nindent 12 }}
