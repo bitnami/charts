@@ -61,8 +61,12 @@ spec:
         - name: volume-permissions
           image: {{ include "concourse.volumePermissions.image" . }}
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
-          # command:
-          #   - %%commands%%
+          command:
+            - sh
+            - -c
+            - |
+              mkdir -p "/bitnami/drupal"
+              chown -R "{{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}" "/bitnami/drupal"
           securityContext:
             runAsUser: 0
           {{- if .Values.volumePermissions.resources }}
