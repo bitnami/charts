@@ -35,23 +35,19 @@ kubeVersion:
 ## @param replicaCount Number of Contour Pod replicas
 ##
 replicaCount: 2
-## To configure Contour, you must specify ONE of the following two
-## options.
-#
-## existingConfigMap specifies the name of an externally-defined
-## ConfigMap to use as the configuration. Helm will not manage the
-## contents of this ConfigMap, it is your responsibility to create it.
-#
-# existingConfigMap: contour
-#
-## configInline specifies Contour's configuration directly, in yaml
-## format. When configInline is used, Helm manages Contour's
-## configuration ConfigMap as part of the release, and
-## existingConfigMap is ignored.
-## Refer to https://projectcontour.io/docs/v1.2.1/configuration/ for
-## available options.
+## To configure Contour, you must specify ONE of the following two options.
+## @param existingConfigMap Specifies the name of an externally-defined ConfigMap to use as the configuration (this is mutually exclusive with `configInline`)
+## Helm will not manage the contents of this ConfigMap, it is your responsibility to create it.
+## e.g:
+##   existingConfigMap: contour
+##
+existingConfigMap:
+## configInline specifies Contour's configuration directly, in yaml format.
+## When configInline is used, Helm manages
+## Contour's configuration ConfigMap as part of the release, and existingConfigMap is ignored.
+## Refer to https://projectcontour.io/docs/v1.2.1/configuration/ for available options.
 ## Evaluated as a template
-#
+##
 configInline:
   ## Should Contour expect to be running inside a k8s cluster
   # incluster: true
@@ -74,6 +70,7 @@ configInline:
     ## @param configInline.tls.fallback-certificate Defines the name/namespace matching a secret to use as the fallback certificate
     ## Used when requests which don't match the SNI defined for a vhost.
     ## Example:
+    ## fallback-certificate:
     ##   name: fallback-secret-name
     ##   namespace: '{{ .Release.Namespace }}'
     ##
@@ -92,6 +89,8 @@ configInline:
   envoy-service-name: '{{ include "common.names.fullname" . }}-envoy'
   ## Logging options
   ## @param configInline.accesslog-format Access log format
+  ## To enable JSON logging in Envoy
+  ## accesslog-format: json
   ##
   accesslog-format: envoy
   ## To enable JSON logging in Envoy
@@ -141,6 +140,7 @@ contour:
   ## @param contour.image.repository Contour image name
   ## @param contour.image.tag Contour image tag
   ## @param contour.image.pullPolicy Contour Image pull policy
+  ## @param contour.image.pullSecrets Contour Image pull secrets
   ##
   image:
     registry: docker.io
@@ -154,9 +154,11 @@ contour:
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
     ##
-    # pullSecrets:
-    #   - myRegistryKeySecretName
+    pullSecrets: []
   ## @param contour.hostAliases Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -282,9 +284,10 @@ contour:
     serviceAccount:
       create: true
       name: ''
-  ## Name of the existingSecret to be use in Contour deployment. It will override .tlsExistingSecret
+  ## @param contour.tlsExistingSecret Name of the existingSecret to be use in Contour deployment. If it is not nil `contour.certgen` will be disabled.
+  ## It will override `tlsExistingSecret`
   ##
-  # tlsExistingSecret: contour-certs
+  tlsExistingSecret:
   ## Contour Service properties
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#multi-port-services
   ## @param contour.service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
@@ -318,9 +321,9 @@ contour:
   ## @param contour.extraEnvVarsSecret Secret containing extra env vars to be added to all Contour containers
   ##
   extraEnvVarsSecret: ''
-  ## Name of the ingress class to route through this controller
+  ## @param contour.ingressClass Name of the ingress class to route through this controller
   ##
-  # ingressClass: contour
+  ingressClass: contour
 
 ## @section Envoy parameters
 
@@ -334,6 +337,7 @@ envoy:
   ## @param envoy.image.repository Envoy Proxy image repository
   ## @param envoy.image.tag Envoy Proxy image tag (immutable tags are recommended)
   ## @param envoy.image.pullPolicy Envoy image pull policy
+  ## @param envoy.image.pullSecrets Envoy image pull secrets
   ##
   image:
     registry: docker.io
@@ -351,6 +355,7 @@ envoy:
     ## pullSecrets:
     ##   - myRegistryKeySecretName
     ##
+    pullSecrets: []
   ## @param envoy.extraArgs Extra arguments passed to Envoy container
   ##
   extraArgs: []
@@ -442,9 +447,9 @@ envoy:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-s-dns-policy
   ##
   dnsPolicy: ClusterFirst
-  ## Name of the existingSecret to be use in Envoy deployment
+  ## @param envoy.tlsExistingSecret Name of the existingSecret to be use in Envoy deployment
   ##
-  # tlsExistingSecret: envoy-certs
+  tlsExistingSecret:
   ## @param envoy.serviceAccount.create Specifies whether a ServiceAccount should be created
   ## @param envoy.serviceAccount.name The name of the ServiceAccount to use. If not set and create is true, a name is generated using the fullname template
   ## @param envoy.serviceAccount.automountServiceAccountToken Whether to auto mount API credentials for a service account
@@ -497,10 +502,20 @@ envoy:
     ## @param envoy.service.externalTrafficPolicy Envoy Service external cluster policy. If `envoy.service.type` is NodePort or LoadBalancer
     ##
     externalTrafficPolicy: Local
-    # clusterIP: ""
-    # externalIPs: []
-    # loadBalancerIP: ""
-    # loadBalancerSourceRanges: []
+    ## @param envoy.service.clusterIP Internal envoy cluster service IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param envoy.service.externalIPs Envoy service external IP addresses
+    ##
+    externalIPs: []
+    ## @param envoy.service.loadBalancerIP IP address to assign to load balancer (if supported)
+    ##
+    loadBalancerIP: ""
+    ## @param envoy.service.loadBalancerSourceRanges List of IP CIDRs allowed access to load balancer (if supported)
+    ##
+    loadBalancerSourceRanges: []
     ## @param envoy.service.annotations Annotations for Envoy service
     ##
     annotations: {}
@@ -767,13 +782,12 @@ defaultBackend:
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
   ## @param defaultBackend.pdb.create
   ## @param defaultBackend.pdb.minAvailable Minimum number/percentage of Default backend pods that should remain scheduled
+  ## @param defaultBackend.pdb.maxUnavailable Maximum number/percentage of Default backend pods that should remain scheduled
   ##
   pdb:
     create: false
     minAvailable: 1
-    ## Max number of pods that can be unavailable after the eviction
-    ##
-    # maxUnavailable: 1
+    maxUnavailable:
 
 ## @section Metrics parameters
 
@@ -800,6 +814,6 @@ prometheus:
 ##
 rbac:
   create: true
-## Name of the existing secret to be use in envoy deployment. It will override .tlsExistingSecret, if it is not nil `contour.certgen` will be disabled.
+## @param tlsExistingSecret Name of the existing secret to be use in envoy deployment. It will override .tlsExistingSecret, if it is not nil `contour.certgen` will be disabled.
 ##
-# tlsExistingSecret: certs-secret
+tlsExistingSecret:
