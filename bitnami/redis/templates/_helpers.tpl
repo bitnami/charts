@@ -22,13 +22,6 @@ Return the proper image name (for the metrics image)
 {{- end -}}
 
 {{/*
-Return the proper image name (for the metrics image)
-*/}}
-{{- define "redis.metrics.sentinel.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.metrics.sentinel.image "global" .Values.global) }}
-{{- end -}}
-
-{{/*
 Return the proper image name (for the init container volume-permissions image)
 */}}
 {{- define "redis.volumePermissions.image" -}}
@@ -46,7 +39,7 @@ Return sysctl image
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "redis.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.sentinel.image .Values.metrics.image .Values.metrics.sentinel.image .Values.volumePermissions.image .Values.sysctl.image) "global" .Values.global) -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.sentinel.image .Values.metrics.image .Values.volumePermissions.image .Values.sysctl.image) "global" .Values.global) -}}
 {{- end -}}
 
 {{/*

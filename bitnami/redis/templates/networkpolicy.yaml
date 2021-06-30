@@ -72,11 +72,6 @@ spec:
     - ports:
         - port: 9121
     {{- end }}
-    {{- if .Values.metrics.sentinel.enabled }}
-    # Allow prometheus scrapes for sentinel metrics
-    - ports:
-        - port: 9355
-    {{- end }}
     {{- if .Values.networkPolicy.extraIngress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
     {{- end }}
