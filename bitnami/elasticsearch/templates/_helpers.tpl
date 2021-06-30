@@ -348,16 +348,16 @@ Add environment variables to configure database values
   value: "true"
 - name: ELASTICSEARCH_PASSWORD
   valueFrom:
-  secretKeyRef:
-      name: {{ include "elasticsearch.secretName" . }}
-      key: elasticsearch-password
+    secretKeyRef:
+        name: {{ include "elasticsearch.secretName" . }}
+        key: elasticsearch-password
 - name: ELASTICSEARCH_ENABLE_FIPS_MODE
   value: {{ .Values.security.fipsMode | quote }}
 - name: ELASTICSEARCH_TLS_VERIFICATION_MODE
   value: {{ .Values.security.tls.verificationMode | quote }}
 - name: ELASTICSEARCH_ENABLE_REST_TLS
   value: {{ ternary "true" "false" .Values.security.tls.restEncryption | quote }}
-{{- if or (include "elasticsearch.createTlsSecret" .) .Values.security.tls.usePemCerts -}}
+{{- if or (include "elasticsearch.createTlsSecret" .) .Values.security.tls.usePemCerts }}
 - name: ELASTICSEARCH_TLS_USE_PEM
   value: "true"
 {{- else }}
@@ -365,25 +365,25 @@ Add environment variables to configure database values
   value: "/opt/bitnami/elasticsearch/config/certs/{{ .Values.security.tls.keystoreFilename }}"
 - name: ELASTICSEARCH_TRUSTSTORE_LOCATION
   value: "/opt/bitnami/elasticsearch/config/certs/{{ .Values.security.tls.truststoreFilename }}"
-{{- end -}}
+{{- end }}
 {{- if and (not .Values.security.tls.usePemCerts) (or .Values.security.tls.keystorePassword .Values.security.tls.passwordsSecret) }}
 - name: ELASTICSEARCH_KEYSTORE_PASSWORD
   valueFrom:
     secretKeyRef:
       name: {{ include "elasticsearch.tlsPasswordsSecret" . }}
       key: keystore-password
-{{- end -}}
+{{- end }}
 {{- if and (not .Values.security.tls.usePemCerts) (or .Values.security.tls.truststorePassword .Values.security.tls.passwordsSecret) }}
 - name: ELASTICSEARCH_TRUSTSTORE_PASSWORD
   valueFrom:
     secretKeyRef:
       name: {{ include "elasticsearch.tlsPasswordsSecret" . }}
       key: truststore-password
-{{- end -}}
+{{- end }}
 {{- if and .Values.security.tls.usePemCerts (or .Values.security.tls.keyPassword .Values.security.tls.passwordsSecret) }}
 - name: ELASTICSEARCH_KEY_PASSWORD
   value: {{ .Values.security.tls.keyPassword | quote }}
-{{- end -}}
+{{- end }}
 {{- end -}}
 
 {{/*
