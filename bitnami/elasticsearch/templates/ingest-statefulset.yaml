@@ -119,44 +119,7 @@ spec:
             - name: ELASTICSEARCH_NODE_TYPE
               value: "ingest"
             {{- if .Values.security.enabled }}
-            - name: ELASTICSEARCH_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "elasticsearch.secretName" . }}
-                  key: elasticsearch-password
-            - name: ELASTICSEARCH_SECURITY_ENABLED
-              value: "true"
-            - name: ELASTICSEARCH_REST_SSL_ENABLED
-              value: {{ .Values.security.tls.restEncryption | quote }}
-            {{- if .Values.security.tls.restEncryption }}
-            - name: ELASTICSEARCH_REST_SSL_ENABLED
-              value: {{ .Values.security.tls.restEncryption | quote }}
-            {{- end }}
-            {{- if or (include "elasticsearch.createTlsSecret" .) .Values.security.tls.usePemCerts }}
-            - name: ELASTICSEARCH_SSL_USE_PEM
-              value: "true"
-            {{- if .Values.security.tls.keyPassword }}
-            - name: ELASTICSEARCH_KEY_PASSWORD
-              value: {{ .Values.security.tls.keyPassword | quote }}
-            {{- end }}
-            {{- else }}
-            - name: ELASTICSEARCH_KEYSTORE_LOCATION
-              value: "/opt/bitnami/elasticsearch/config/certs/{{ .Values.security.tls.keystoreFilename }}"
-            - name: ELASTICSEARCH_TRUSTSTORE_LOCATION
-              value: "/opt/bitnami/elasticsearch/config/certs/{{ .Values.security.tls.truststoreFilename }}"
-            {{- if .Values.security.tls.keystorePassword }}
-            - name: ELASTICSEARCH_KEYSTORE_PASSWORD
-              value: {{ .Values.security.tls.keystorePassword | quote }}
-            {{- end }}
-            {{- if .Values.security.tls.truststorePassword }}
-            - name: ELASTICSEARCH_TRUSTSTORE_PASSWORD
-              value: {{ .Values.security.tls.truststorePassword | quote }}
-            {{- end }}
-            {{- end }}
-            - name: ELASTICSEARCH_SSL_VERIFICATION_MODE
-              value: {{ .Values.security.tls.verificationMode | quote }}
-            - name: ELASTICSEARCH_FIPS_MODE_ENABLED
-              value: {{ .Values.security.fipsMode | quote }}
+            {{- include "elasticsearch.configure.security" . | nindent 12 }}
             {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.extraEnvVars "context" $ ) | nindent 12 }}

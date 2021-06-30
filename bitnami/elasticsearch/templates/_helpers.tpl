@@ -311,8 +311,79 @@ Return true if a TLS credentials secret object should be created
 {{/*
 Return the Elasticsearch authentication credentials secret name
 */}}
+{{- define "elasticsearch.createSecret" -}}
+{{- if and .Values.security.enabled (not .Values.security.existingSecret) }}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the Elasticsearch authentication credentials secret name
+*/}}
 {{- define "elasticsearch.secretName" -}}
 {{- coalesce .Values.security.existingSecret (include "common.names.fullname" .) -}}
+{{- end -}}
+
+{{/*
+Return the Elasticsearch authentication credentials secret name
+*/}}
+{{- define "elasticsearch.createTlsPasswordsSecret" -}}
+{{- if and .Values.security.enabled (not .Values.security.tls.passwordsSecret) (or .Values.security.tls.keystorePassword .Values.security.tls.truststorePassword .Values.security.tls.keyPassword ) }}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the Elasticsearch TLS secrets
+*/}}
+{{- define "elasticsearch.tlsPasswordsSecret" -}}
+{{- coalesce .Values.security.tls.passwordsSecret (printf "%s-tls-pass" (include "common.names.fullname" .)) -}}
+{{- end -}}
+
+{{/*
+Add environment variables to configure database values
+*/}}
+{{- define "elasticsearch.configure.security" -}}
+- name: ELASTICSEARCH_ENABLE_SECURITY
+  value: "true"
+- name: ELASTICSEARCH_PASSWORD
+  valueFrom:
+  secretKeyRef:
+      name: {{ include "elasticsearch.secretName" . }}
+      key: elasticsearch-password
+- name: ELASTICSEARCH_ENABLE_FIPS_MODE
+  value: {{ .Values.security.fipsMode | quote }}
+- name: ELASTICSEARCH_TLS_VERIFICATION_MODE
+  value: {{ .Values.security.tls.verificationMode | quote }}
+- name: ELASTICSEARCH_ENABLE_REST_TLS
+  value: {{ ternary "true" "false" .Values.security.tls.restEncryption | quote }}
+{{- if or (include "elasticsearch.createTlsSecret" .) .Values.security.tls.usePemCerts -}}
+- name: ELASTICSEARCH_TLS_USE_PEM
+  value: "true"
+{{- else }}
+- name: ELASTICSEARCH_KEYSTORE_LOCATION
+  value: "/opt/bitnami/elasticsearch/config/certs/{{ .Values.security.tls.keystoreFilename }}"
+- name: ELASTICSEARCH_TRUSTSTORE_LOCATION
+  value: "/opt/bitnami/elasticsearch/config/certs/{{ .Values.security.tls.truststoreFilename }}"
+{{- end -}}
+{{- if and (not .Values.security.tls.usePemCerts) (or .Values.security.tls.keystorePassword .Values.security.tls.passwordsSecret) }}
+- name: ELASTICSEARCH_KEYSTORE_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "elasticsearch.tlsPasswordsSecret" . }}
+      key: keystore-password
+{{- end -}}
+{{- if and (not .Values.security.tls.usePemCerts) (or .Values.security.tls.truststorePassword .Values.security.tls.passwordsSecret) }}
+- name: ELASTICSEARCH_TRUSTSTORE_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "elasticsearch.tlsPasswordsSecret" . }}
+      key: truststore-password
+{{- end -}}
+{{- if and .Values.security.tls.usePemCerts (or .Values.security.tls.keyPassword .Values.security.tls.passwordsSecret) }}
+- name: ELASTICSEARCH_KEY_PASSWORD
+  value: {{ .Values.security.tls.keyPassword | quote }}
+{{- end -}}
 {{- end -}}
 
 {{/*
