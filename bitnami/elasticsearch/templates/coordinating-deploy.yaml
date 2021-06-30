@@ -129,7 +129,7 @@ spec:
               path: /_cluster/health?local=true
               port: 9200
           {{- else if .Values.coordinating.customStartupProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.coordinating.customStartupProbe "context" $) | nindent 12 }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.coordinating.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.coordinating.livenessProbe.enabled }}
           livenessProbe:
@@ -166,6 +166,11 @@ spec:
               name: config
               subPath: elasticsearch.yml
             {{- end }}
+            {{- if .Values.extraConfig }}
+            - mountPath: /opt/bitnami/elasticsearch/config/my_elasticsearch.yml
+              name: config
+              subPath: my_elasticsearch.yml
+            {{- end }}
             - name: data
               mountPath: "/bitnami/elasticsearch/data/"
             {{- if .Values.extraVolumeMounts }}
@@ -184,7 +189,7 @@ spec:
               mountPath: /docker-entrypoint-initdb.d/init-scripts-secret
             {{- end }}
       volumes:
-        {{- if .Values.config }}
+        {{- if or .Values.config .Values.extraConfig }}
         - name: config
           configMap:
             name: {{ include "common.names.fullname" . }}
