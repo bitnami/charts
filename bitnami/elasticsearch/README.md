@@ -144,6 +144,8 @@ The following table lists the configurable parameters of the Elasticsearch chart
 | `master.customStartupProbe`                       | Override default startup probe                                                                                                                                    | `{}`                                                         |
 | `master.customLivenessProbe`                      | Override default liveness probe                                                                                                                                   | `{}`                                                         |
 | `master.customReadinessProbe`                     | Override default readiness probe                                                                                                                                  | `{}`                                                         |
+| `master.initContainers`                           | Add additional init containers to the Elasticsearch master-eligible pods                                                                                          | `{}` (evaluated as a template)                               |
+| `master.sidecars`                                 | Add additional sidecar containers to the  Elasticsearch master-eligible pods                                                                                      | `{}` (evaluated as a template)                               |
 | `master.serviceAccount.create`                    | Enable creation of ServiceAccount for the master node                                                                                                             | `false`                                                      |
 | `master.serviceAccount.name`                      | Name of the created serviceAccount                                                                                                                                | Generated using the `elasticsearch.master.fullname` template |
 | `master.autoscaling.enabled`                      | Enable autoscaling for master replicas                                                                                                                            | `false`                                                      |
@@ -200,6 +202,8 @@ The following table lists the configurable parameters of the Elasticsearch chart
 | `coordinating.customStartupProbe`                 | Override default startup probe                                                                                                                                    | `{}`                                                         |
 | `coordinating.customLivenessProbe`                | Override default liveness probe                                                                                                                                   | `{}`                                                         |
 | `coordinating.customReadinessProbe`               | Override default readiness probe                                                                                                                                  | `{}`                                                         |
+| `coordinating.initContainers`                     | Add additional init containers to the Elasticsearch coordinating-only pods                                                                                        | `{}` (evaluated as a template)                               |
+| `coordinating.sidecars`                           | Add additional sidecar containers to the  Elasticsearch coordinating-only pods                                                                                    | `{}` (evaluated as a template)                               |
 | `coordinating.serviceAccount.create`              | Enable creation of ServiceAccount for the coordinating-only node                                                                                                  | `false`                                                      |
 | `coordinating.serviceAccount.name`                | Name of the created serviceAccount                                                                                                                                | Generated using the `elasticsearch.coordinating.fullname`    |
 | `coordinating.autoscaling.enabled`                | Enable autoscaling for coordinating replicas                                                                                                                      | `false`                                                      |
@@ -261,6 +265,8 @@ The following table lists the configurable parameters of the Elasticsearch chart
 | `data.readinessProbe.timeoutSeconds`              | When the probe times out (data nodes pod)                                                                                                                         | `5`                                                          |
 | `data.readinessProbe.successThreshold`            | Minimum consecutive successes for the probe to be considered successful after having failed (data nodes pod)                                                      | `1`                                                          |
 | `data.readinessProbe.failureThreshold`            | Minimum consecutive failures for the probe to be considered failed after having succeeded                                                                         | `5`                                                          |
+| `data.initContainers`                             | Add additional init containers to the Elasticsearch data pods                                                                                                     | `{}` (evaluated as a template)                               |
+| `data.sidecars`                                   | Add additional sidecar containers to the  Elasticsearch data pods                                                                                                 | `{}` (evaluated as a template)                               |
 | `data.serviceAccount.create`                      | Enable creation of ServiceAccount for the data node                                                                                                               | `false`                                                      |
 | `data.serviceAccount.name`                        | Name of the created serviceAccount                                                                                                                                | Generated using the `elasticsearch.data.fullname` template   |
 | `data.autoscaling.enabled`                        | Enable autoscaling for data replicas                                                                                                                              | `false`                                                      |
@@ -312,6 +318,8 @@ The following table lists the configurable parameters of the Elasticsearch chart
 | `ingest.affinity`                                 | Ingest Affinity for pod assignment                                                                                                                                | `{}` (evaluated as a template)                               |
 | `ingest.nodeSelector`                             | Ingest Node labels for pod assignment                                                                                                                             | `{}` (evaluated as a template)                               |
 | `ingest.tolerations`                              | Ingest Tolerations for pod assignment                                                                                                                             | `[]` (evaluated as a template)                               |
+| `ingest.initContainers`                           | Add additional init containers to the Elasticsearch ingest pods                                                                                                   | `{}` (evaluated as a template)                               |
+| `ingest.sidecars`                                 | Add additional sidecar containers to the  Elasticsearch ingest pods                                                                                               | `{}` (evaluated as a template)                               |
 | `ingest.readinessProbe.enabled`                   | Enable/disable the readiness probe (ingest nodes pod)                                                                                                             | `true`                                                       |
 | `ingest.readinessProbe.initialDelaySeconds`       | Delay before readiness probe is initiated (ingest nodes pod)                                                                                                      | `90`                                                         |
 | `ingest.readinessProbe.periodSeconds`             | How often to perform the probe (ingest nodes pod)                                                                                                                 | `10`                                                         |
@@ -359,7 +367,8 @@ The following table lists the configurable parameters of the Elasticsearch chart
 | `curator.priorityClassName`                       | priorityClassName                                                                                                                                                 | `nil`                                                        |
 | `curator.extraVolumes`                            | Extra volumes                                                                                                                                                     |                                                              |
 | `curator.extraVolumeMounts`                       | Mount extra volume(s),                                                                                                                                            |                                                              |
-| `curator.extraInitContainers`                     | Init containers to add to the cronjob container                                                                                                                   | `{}`                                                         |
+| `curator.initContainers`                          | Add additional init containers to the Elasticsearch Curator pods                                                                                                  | `{}` (evaluated as a template)                               |
+| `curator.sidecars`                                | Add additional sidecar containers to the  Elasticsearch Curator pods                                                                                              | `{}` (evaluated as a template)                               |
 | `curator.envFromSecrets`                          | Environment variables from secrets to the cronjob container                                                                                                       | `{}`                                                         |
 | `curator.envFromSecrets.*.from.secret`            | - `secretKeyRef.name` used for environment variable                                                                                                               |                                                              |
 | `curator.envFromSecrets.*.from.key`               | - `secretKeyRef.key` used for environment variable                                                                                                                |                                                              |
@@ -521,6 +530,32 @@ extraVolumeMounts:
   - name: snapshot-repository
     mountPath: /snapshots
 snapshotRepoPath: "/snapshots"
+```
+
+### Sidecars and Init Containers
+
+If you have a need for additional containers to run within the same pod as Elasticsearch components (e.g. an additional metrics or logging exporter), you can do so via the `XXX.sidecars` parameter(s), where XXX is placeholder you need to replace with the actual component(s). Simply define your container according to the Kubernetes container spec.
+
+
+```yaml
+sidecars:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+       containerPort: 1234
+```
+
+Similarly, you can add extra init containers using the `initContainers` parameter.
+
+```yaml
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
 ```
 
 ### Setting Pod's affinity
