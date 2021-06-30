@@ -84,12 +84,10 @@ service:
   ##
   annotations: {}
 
-## @section web  Parameters
+## @section web Parameters
 
-## %%MAIN_CONTAINER/POD_DESCRIPTION%%
-##
 concourse:
-  ## Bitnami %%MAIN_CONTAINER image
+  ## Bitnami Concour image
   ## ref: https://hub.docker.com/r/bitnami/redis/tags/
   ## @param image.registry web  image registry
   ## @param image.repository web  image repository
@@ -120,6 +118,7 @@ concourse:
     debug: true
 
 web:
+  ## @param web.enabled Enable web
   enabled: true
   ## @param web.replicaCount Number of web replicas to deploy
   ##
@@ -151,7 +150,8 @@ web:
     ## Ref: https://concourse-ci.org/encryption.html
     ##
     enabled: false
-    
+  
+  externalUrl: http://0.0.0.0:8080
   ## Configure extra options for web containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param web.livenessProbe.enabled Enable livenessProbe on web nodes
@@ -211,7 +211,7 @@ web:
     ##
     bindPort: 443
 
-  ## @param web.existingConfigmap The name of an existing ConfigMap with your custom configuration for %%MAIN_CONTAINER_NAME%%
+  ## @param web.existingConfigmap The name of an existing ConfigMap with your custom configuration for web
   ##
   existingConfigmap:
   ## @param web.command Override default container command (useful when using custom images)

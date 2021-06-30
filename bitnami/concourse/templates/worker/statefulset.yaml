@@ -64,7 +64,11 @@ spec:
           image: {{ include "concourse.volumePermissions.image" . }}
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
           command:
-            - %%commands%%
+            - sh
+            - -c
+            - |
+              mkdir -p "/bitnami/drupal"
+              chown -R "{{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}" "/bitnami/drupal"
           {{- if .Values.worker.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.worker.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
@@ -77,7 +81,7 @@ spec:
           {{- include "common.tplvalues.render" (dict "value" .Values.worker.initContainers "context" $) | nindent 8 }}
         {{- end }}
       containers:
-        - name: %%CONTAINER_NAME%%
+        - name: concourse-web
           image: {{ template "concourse.image" . }}
           imagePullPolicy: {{ .Values.concourse.image.pullPolicy }}
           {{- if .Values.worker.lifecycleHooks }}
