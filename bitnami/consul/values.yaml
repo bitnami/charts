@@ -18,37 +18,38 @@ global:
 
 ## @section Common parameters
 
-## @param nameOverride String to partially override consul.fullname template (will maintain the release name)
+## @param kubeVersion Override Kubernetes version
+##
+kubeVersion:
+## @param nameOverride String to partially override common.names.fullname
 ##
 nameOverride:
-## @param fullnameOverride String to fully override consul.fullname template
+## @param fullnameOverride String to fully override common.names.fullname
 ##
 fullnameOverride:
-## @param clusterDomain Default Kubernetes cluster domain
-##
-clusterDomain: cluster.local
-## @param commonLabels Common labels to add to all HashiCorp Consul resources (sub-charts are not considered). Evaluated as a template
+## @param commonLabels Labels to add to all deployed objects (sub-charts are not considered)
 ##
 commonLabels: {}
-## @param commonAnnotations Common annotations to add to all HashiCorp Consul resources (sub-charts are not considered). Evaluated as a template
+## @param commonAnnotations Annotations to add to all deployed objects (sub-charts are not considered)
 ##
 commonAnnotations: {}
+## @param clusterDomain Kubernetes cluster domain name
+##
+clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
-## @param kubeVersion Force target Kubernetes version (using Helm capabilites if not set)
-##
-kubeVersion:
 
 ## @section HashiCorp Consul parameters
 
-## Bitnami HashiCorp Consul image version
+## Bitnami HashiCorp Consul image
 ## ref: https://hub.docker.com/r/bitnami/consul/tags/
 ## @param image.registry HashiCorp Consul image registry
-## @param image.repository HashiCorp Consul image name
-## @param image.tag HashiCorp Consul image tag
-## @param image.pullPolicy Image pull policy
-## @param image.debug Specify if debug logs should be enabled
+## @param image.repository HashiCorp Consul image repository
+## @param image.tag HashiCorp Consul image tag (immutable tags are recommended)
+## @param image.pullPolicy HashiCorp Consul image pull policy
+## @param image.pullSecrets HashiCorp Consul image pull secrets
+## @param image.debug Enable image debug mode
 ##
 image:
   registry: docker.io
@@ -62,10 +63,12 @@ image:
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
   ##
-  # pullSecrets:
-  #   - myRegistryKeySecretName
-  ## Set to true if you would like to see extra information on logs
+  pullSecrets: []
+  ## Enable debug mode
   ##
   debug: false
 ## @param datacenterName Datacenter name for Consul. If not supplied, will use the Consul
@@ -190,16 +193,17 @@ podAffinityPreset: ""
 podAntiAffinityPreset: soft
 ## Node affinity preset
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-## @param nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
-## @param nodeAffinityPreset.key Node label key to match. Ignored if `affinity` is set.
-## @param nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set.
 ##
 nodeAffinityPreset:
+  ## @param nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ##
   type: ""
+  ## @param nodeAffinityPreset.key Node label key to match. Ignored if `affinity` is set.
   ## E.g.
   ## key: "kubernetes.io/e2e-az-name"
   ##
   key: ""
+  ## @param nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set.
   ## E.g.
   ## values:
   ##   - e2e-az1
@@ -227,7 +231,7 @@ tolerations: []
 podSecurityContext:
   enabled: true
   fsGroup: 1001
-## HashiCorp Consul  container security context
+## Container security context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled HashiCorp Consul Container securityContext
 ## @param containerSecurityContext.runAsUser User ID for the HashiCorp Consul container
@@ -235,7 +239,7 @@ podSecurityContext:
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
-## HashiCorp Consul container's resource requests and limits
+## Container's resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious
 ## choice for the user. This also increases chances charts run on environments with little
@@ -255,8 +259,8 @@ resources:
   ##    cpu: 100m
   ##    memory: 128Mi
   requests: {}
-## HashiCorp Consul container's liveness probe
-## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+## Configure extra options for HashiCorp Consul containers' liveness and readiness probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe
 ## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
 ## @param livenessProbe.periodSeconds Period seconds for livenessProbe
@@ -271,8 +275,6 @@ livenessProbe:
   timeoutSeconds: 5
   failureThreshold: 6
   successThreshold: 1
-## HashiCorp Consul container's readiness probe
-## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ## @param readinessProbe.enabled Enable readinessProbe
 ## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
 ## @param readinessProbe.periodSeconds Period seconds for readinessProbe
@@ -304,34 +306,7 @@ extraVolumes: []
 initContainers: []
 ## @param sidecars Add additional sidecar containers to the Hashicorp Consul pods
 ##
-volumePermissions:
-  enabled: false
-  image:
-    registry: docker.io
-    repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r99
-    pullPolicy: Always
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ##
-    # pullSecrets:
-    #   - myRegistryKeySecretName
-  ## Init container' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ##
-  resources:
-    # We usually recommend not to specify default resources and to leave this as a conscious
-    # choice for the user. This also increases chances charts run on environments with little
-    # resources, such as Minikube. If you do want to specify resources, uncomment the following
-    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    limits: {}
-    #   cpu: 100m
-    #   memory: 128Mi
-    requests: {}
-    #   cpu: 100m
-    #   memory: 128Mi
-
+sidecars: []
 ## HashiCorp Consul Pod Disruption Budget configuration
 ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
 ##
@@ -342,9 +317,9 @@ pdb:
   ## @param pdb.minAvailable Minimum number of pods that must still be available after the eviction
   ##
   minAvailable: 1
-  ## Max number of pods that can be unavailable after the eviction
+  ## @param pdb.maxUnavailable Max number of pods that can be unavailable after the eviction
   ##
-  # maxUnavailable: 1
+  maxUnavailable:
 
 ## @section Exposure parameters
 
@@ -357,18 +332,19 @@ service:
   ## @param service.port HashiCorp Consul UI svc port
   ##
   port: 80
-  ## @param service.type Kubernetes Service Type
+  ## @param service.type HashiCorp Consul UI Service Type
   ##
   type: ClusterIP
   ## Specify the nodePort value for the LoadBalancer and NodePort service types.
-  ## @param service.nodePort Kubernetes node port for HashiCorp Consul UI
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+  ## @param service.nodePort Node port for HashiCorp Consul UI
   ##
   nodePort: ""
+  ## @param service.loadBalancerIP HashiCorp Consul UI service Load Balancer IP
   ## Set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
-  # loadBalancerIP:
+  loadBalancerIP: ""
   ## Provide any additional annotations which may be required. This can be used to
   ## set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -412,21 +388,21 @@ ingress:
   ## existingSecret: name-of-existing-secret
   ##
   tls: false
-  ## The list of additional hostnames to be covered with this ingress record.
+  ## @param ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
   ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
   ## extraHosts:
   ## - name: consul-ui.local
   ##   path: /
   ##
-  # extraHosts:
-  ## The tls configuration for additional hostnames to be covered with this ingress record.
+  extraHosts:
+  ## @param ingress.extraTls TLS configuration for additional hostname(s) to be covered with this ingress record
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
   ## extraTls:
   ## - hosts:
   ##     - consul-ui.local
   ##   secretName: rconsul-ui.local-tls
   ##
-  # extraTls:
+  extraTls:
   ## @param ingress.secrets If you're providing your own certificates, please use this to add the certificates as secrets
   ## key and certificate should start with -----BEGIN CERTIFICATE----- or
   ## -----BEGIN RSA PRIVATE KEY-----
@@ -447,24 +423,28 @@ ingress:
 
 ## Enable persistence using Persistent Volume Claims
 ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
-## @param persistence.enabled Enable HashiCorp Consul data persistence using PVC, use a Persistent Volume Claim, If false, use emptyDir
-## @param persistence.annotations Persistent Volume Claim annotations
-## @param persistence.accessModes Persistent Volume Access Mode
-## @param persistence.size PVC Storage Request for HashiCorp Consul data volume
 ##
 persistence:
+  ## @param persistence.enabled Enable HashiCorp Consul data persistence using PVC, use a Persistent Volume Claim, If false, use emptyDir
+  ##
   enabled: true
-  ## Persistent Volume Storage Class
+  ## @param persistence.storageClass Persistent Volume storage class
   ## If defined, storageClassName: <storageClass>
   ## If set to "-", storageClassName: "", which disables dynamic provisioning
   ## If undefined (the default) or set to null, no storageClassName spec is
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##   GKE, AWS & OpenStack)
   ##
-  # storageClass: "-"
+  storageClass:
+  ## @param persistence.annotations Persistent Volume Claim annotations
+  ##
   annotations: {}
+  ## @param persistence.accessModes Persistent Volume Access Mode
+  ##
   accessModes:
     - ReadWriteOnce
+  ## @param persistence.size PVC Storage Request for HashiCorp Consul data volume
+  ##
   size: 8Gi
 
 ## @section Volume Permissions parameters
@@ -476,10 +456,13 @@ volumePermissions:
   ## @param volumePermissions.enabled Enable init container that changes the owner and group of the persistent volume
   ##
   enabled: false
-  ## @param volumePermissions.image.registry Init container volume
-  ## @param volumePermissions.image.repository Init container volume
-  ## @param volumePermissions.image.tag Init container volume
-  ## @param volumePermissions.image.pullPolicy Init container volume
+  ## Bitnami Shell image
+  ## ref: https://hub.docker.com/r/bitnami/bitnami-shell/tags/
+  ## @param volumePermissions.image.registry Bitnami Shell image registry
+  ## @param volumePermissions.image.repository Bitnami Shell image repository
+  ## @param volumePermissions.image.tag Bitnami Shell image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.pullPolicy Bitnami Shell image pull policy
+  ## @param volumePermissions.image.pullSecrets Bitnami Shell image pull secrets
   ##
   image:
     registry: docker.io
@@ -489,9 +472,11 @@ volumePermissions:
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
     ##
-    # pullSecrets:
-    #   - myRegistryKeySecretName
+    pullSecrets: []
   ## Init container' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## @param volumePermissions.resources.limits The resources limits for the container
@@ -523,6 +508,7 @@ metrics:
   ## @param metrics.image.repository HashiCorp Consul Prometheus Exporter image repository
   ## @param metrics.image.tag HashiCorp Consul Prometheus Exporter image tag (immutable tags are recommended)
   ## @param metrics.image.pullPolicy HashiCorp Consul Prometheus Exporter image pull policy
+  ## @param metrics.image.pullSecrets HashiCorp Consul Prometheus Exporter image pull secrets
   ##
   image:
     registry: docker.io
@@ -532,22 +518,25 @@ metrics:
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
     ##
-    # pullSecrets:
-    #   - myRegistryKeySecretName
+    pullSecrets: []
   ## Consul Prometheus exporter service type
   ##
   service:
     ## @param metrics.service.type Kubernetes Service type
     ##
     type: ClusterIP
+    ## @param metrics.service.loadBalancerIP Service Load Balancer IP
+    ## Use serviceLoadBalancerIP to request a specific static IP, otherwise leave blank
+    ##
+    loadBalancerIP: ""
     ## @param metrics.service.annotations [object] Provide any additional annotations which may be required.
     ## This can be used to set the LoadBalancer service type to internal only.
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
-    ## Use serviceLoadBalancerIP to request a specific static IP,
-    ## otherwise leave blank
-    # loadBalancerIP:
     annotations:
       prometheus.io/scrape: "true"
       prometheus.io/port: "9107"
@@ -580,24 +569,24 @@ metrics:
     ## @param metrics.serviceMonitor.enabled Create ServiceMonitor Resource for scraping metrics using PrometheusOperator, set to true to create a Service Monitor Entry
     ##
     enabled: false
-    ## Specify the namespace in which the serviceMonitor resource will be created
+    ## @param metrics.serviceMonitor.namespace The namespace in which the ServiceMonitor will be created
     ##
-    # namespace: ""
+    namespace:
     ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped
     ##
     interval: 30s
-    ## Specify the timeout after which the scrape is ended
+    ## @param metrics.serviceMonitor.scrapeTimeout The timeout after which the scrape is ended
     ##
-    # scrapeTimeout: 30s
-    ## Specify Metric Relabellings to add to the scrape endpoint
+    scrapeTimeout:
+    ## @param metrics.serviceMonitor.relabellings Metrics relabellings to add to the scrape endpoint
     ##
-    # relabellings:
+    relabellings:
     ## @param metrics.serviceMonitor.honorLabels Specify honorLabels parameter to add the scrape endpoint
     ##
     honorLabels: false
-    ## Specify the release for ServiceMonitor. Sometimes it should be custom for prometheus operator to work
+    ## @param metrics.serviceMonitor.release Specify the release for ServiceMonitor. Sometimes it should be custom for prometheus operator to work
     ##
-    # release: ""
+    release:
     ## @param metrics.serviceMonitor.additionalLabels Used to pass Labels that are used by the Prometheus installed in your cluster to select Service Monitors to work with
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
     ##
