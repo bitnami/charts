@@ -88,20 +88,20 @@ spec:
               value: {{ include "kibana.elasticsearch.port" . | quote }}
             - name: KIBANA_FORCE_INITSCRIPTS
               value: {{ .Values.forceInitScripts | quote }}
-            - name: KIBANA_SERVER_SSL_ENABLED
+            - name: KIBANA_SERVER_ENABLE_TLS
               value: {{ ternary "true" "false" .Values.tls.enabled | quote }}
             {{- if or .Values.tls.usePemCerts (include "kibana.createTlsSecret" .) }}
-            - name: KIBANA_SERVER_SSL_USE_PEM
+            - name: KIBANA_SERVER_TLS_USE_PEM
               value: "true"
             {{- end }}
-            {{- if or .Values.tls.keyPassword .Values.tls.passwordsSecret }}
+            {{- if and .Values.tls.usePemCerts (or .Values.tls.keyPassword .Values.tls.passwordsSecret) }}
             - name: KIBANA_SERVER_KEY_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "kibana.tls.secretName" . }}
                   key: kibana-key-password
             {{- end }}
-            {{- if or .Values.tls.keystorePassword .Values.tls.passwordsSecret }}
+            {{- if and (not .Values.tls.usePemCerts) (or .Values.tls.keystorePassword .Values.tls.passwordsSecret) }}
             - name: KIBANA_SERVER_KEYSTORE_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -117,13 +117,13 @@ spec:
                   name: {{ include "kibana.elasticsearch.auth.secretName" . }}
                   key: kibana-password
             {{- end }}
-            - name: KIBANA_ELASTICSEARCH_SSL_ENABLED
+            - name: KIBANA_ELASTICSEARCH_ENABLE_TLS
               value: {{ ternary "true" "false" .Values.elasticsearch.security.tls.enabled | quote }}
-            - name: KIBANA_ELASTICSEARCH_SSL_USE_PEM
+            - name: KIBANA_ELASTICSEARCH_TLS_USE_PEM
               value: {{ ternary "true" "false" .Values.elasticsearch.security.tls.usePemCerts | quote }}
-            - name: KIBANA_ELASTICSEARCH_SSL_VERIFICATION_MODE
+            - name: KIBANA_ELASTICSEARCH_TLS_VERIFICATION_MODE
               value: {{ .Values.elasticsearch.security.tls.verificationMode | quote }}
-            {{- if or .Values.elasticsearch.security.tls.truststorePassword .Values.elasticsearch.security.tls.passwordsSecret }}
+            {{- if and (not .Values.elasticsearch.security.tls.usePemCerts) (or .Values.elasticsearch.security.tls.truststorePassword .Values.elasticsearch.security.tls.passwordsSecret) }}
             - name: KIBANA_ELASTICSEARCH_TRUSTSTORE_PASSWORD
               valueFrom:
                 secretKeyRef:
