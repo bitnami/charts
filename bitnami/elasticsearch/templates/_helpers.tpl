@@ -7,12 +7,17 @@ Return the proper ES image name
 {{ include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) }}
 {{- end -}}
 
+
 {{/*
 Create a default fully qualified master name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "elasticsearch.master.fullname" -}}
+{{- if .Values.master.fullnameOverride -}}
+{{- .Values.master.fullnameOverride | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
 {{- printf "%s-%s" (include "common.names.fullname" .) .Values.master.name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
@@ -20,7 +25,11 @@ Create a default fully qualified ingest name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "elasticsearch.ingest.fullname" -}}
+{{- if .Values.ingest.fullnameOverride -}}
+{{- .Values.ingest.fullnameOverride | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
 {{- printf "%s-%s" (include "common.names.fullname" .) .Values.ingest.name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
@@ -30,6 +39,10 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- define "elasticsearch.coordinating.fullname" -}}
 {{- if .Values.global.kibanaEnabled -}}
 {{- printf "%s-%s" .Release.Name .Values.global.coordinating.name | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{ end }}
+{{- if .Values.coordinating.fullnameOverride -}}
+{{- .Values.coordinating.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
 {{- printf "%s-%s" (include "common.names.fullname" .) .Values.global.coordinating.name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
@@ -58,7 +71,11 @@ Create a default fully qualified data name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "elasticsearch.data.fullname" -}}
+{{- if .Values.data.fullnameOverride -}}
+{{- .Values.data.fullnameOverride | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
 {{- printf "%s-%s" (include "common.names.fullname" .) .Values.data.name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
 {{- end -}}
 
 {{ template "elasticsearch.initScriptsSecret" . }}

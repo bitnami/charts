@@ -37,11 +37,11 @@ image:
 
 ## String to partially override common.names.fullname template (will maintain the release name)
 ##
-# nameOverride:
+# nameOverride: 
 
 ## String to fully override common.names.fullname template
 ##
-# fullnameOverride:
+# fullnameOverride: 
 
 ##
 sysctlImage:
@@ -191,6 +191,10 @@ extraEnvVarsSecret:
 ##
 master:
   name: master
+
+  ## Fully override the deployment name
+  # fullnameOverride: 
+  
   ## Number of master-eligible node(s) replicas to deploy.
   ## "There should normally be an odd number of master-eligible nodes in a cluster" to address "split brain" scenario.
   ## https://www.elastic.co/guide/en/elasticsearch/reference/7.x/modules-discovery-voting.html#_even_numbers_of_master_eligible_nodes
@@ -413,6 +417,10 @@ master:
 ## Elasticsearch coordinating-only node parameters
 ##
 coordinating:
+
+  ## Fully override the deployment name
+  # fullnameOverride: 
+
   ## Number of coordinating-only node(s) replicas to deploy
   ##
   replicas: 2
@@ -590,6 +598,10 @@ coordinating:
 ##
 data:
   name: data
+
+  ## Fully override the deployment name
+  # fullnameOverride: 
+
   ## Number of data node(s) replicas to deploy
   ##
   replicas: 2
@@ -784,8 +796,12 @@ data:
 ## Elasticsearch ingest node parameters
 ##
 ingest:
-  enabled: false
+  enabled: true
   name: ingest
+
+  ## Fully override the deployment name
+  # fullnameOverride: 
+
   ## Number of ingest node(s) replicas to deploy
   ##
   replicas: 2
