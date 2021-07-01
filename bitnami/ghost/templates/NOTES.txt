@@ -43,7 +43,7 @@ host. To configure Ghost with the URL of your service:
   ## PLEASE UPDATE THE EXTERNAL DATABASE CONNECTION PARAMETERS IN THE FOLLOWING COMMAND AS NEEDED ##
 
   helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
-    --set service.type={{ .Values.service.type }},ghostHost=$APP_HOST,ghostPassword=$APP_PASSWORD,{{- if contains "NodePort" .Values.service.type }}service.nodePort=$APP_PORT,{{- end }}mariadb.enabled=false{{- if not (empty .Values.externalDatabase.host) }},externalDatabase.host={{ .Values.externalDatabase.host }}{{- end }}{{- if not (empty .Values.externalDatabase.rootUser) }},externalDatabase.rootUser={{ .Values.externalDatabase.rootUser }}{{- end }}{{- if not (empty .Values.externalDatabase.rootPassword) }},externalDatabase.rootPassword={{ .Values.externalDatabase.rootPassword }}{{- end }}
+    --set service.type={{ .Values.service.type }},ghostHost=$APP_HOST,ghostPassword=$APP_PASSWORD,{{- if contains "NodePort" .Values.service.type }}service.nodePort=$APP_PORT,{{- end }}mariadb.enabled=false{{- if not (empty .Values.externalDatabase.host) }},externalDatabase.host={{ .Values.externalDatabase.host }}{{- end }}{{- if not (empty .Values.externalDatabase.user) }},externalDatabase.user={{ .Values.externalDatabase.user }}{{- end }}{{- if not (empty .Values.externalDatabase.password) }},externalDatabase.password={{ .Values.externalDatabase.password }}{{- end }}{{- if not (empty .Values.externalDatabase.database) }},externalDatabase.database={{ .Values.externalDatabase.database }}{{- end }}
 
 {{- end }}
 

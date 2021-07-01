@@ -47,11 +47,11 @@ If not using ClusterIP, or if a host or LoadBalancerIP is not defined, the value
 */}}
 {{- define "ghost.host" -}}
 {{- if .Values.ingress.enabled }}
-{{- $host := .Values.ingress.hostname | default "" -}}
-{{- default (include "ghost.serviceIP" .) $host -}}
+    {{- printf "%s%s" .Values.ingress.hostname .Values.ingress.path | default "" -}}
+{{- else if .Values.ghostHost -}}
+    {{- $host := printf "%s%s" .Values.ghostHost .Values.ghostPath | default "" -}}
 {{- else -}}
-{{- $host := index .Values (printf "%sHost" .Chart.Name) | default "" -}}
-{{- default (include "ghost.serviceIP" .) $host -}}
+    {{- include "ghost.serviceIP" . -}}
 {{- end -}}
 {{- end -}}
 

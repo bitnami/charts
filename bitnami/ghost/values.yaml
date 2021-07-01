@@ -97,6 +97,9 @@ ghostBlogTitle: User's Blog
 ## @param ghostHost Ghost host to create application URLs
 ##
 ghostHost: ""
+## @param ghostPath URL sub path where to server the Ghost application
+##
+ghostPath: /
 ## @param ghostEnableHttps Configure Ghost to build application URLs using https
 ##
 ghostEnableHttps: false
@@ -542,6 +545,7 @@ mariadb:
   ## @param mariadb.auth.database MariaDB custom database
   ## @param mariadb.auth.username MariaDB custom user name
   ## @param mariadb.auth.password MariaDB custom user password
+  ## @param mariadb.auth.existingSecret Existing secret with MariaDB credentials
   ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-the-root-password-on-first-run
   ##      https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-on-first-run
   ##      https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-user-on-first-run
@@ -550,6 +554,7 @@ mariadb:
     database: bitnami_ghost
     username: bn_ghost
     password: ""
+    existingSecret:
   ## MariaDB Primary configuration
   ##
   primary:

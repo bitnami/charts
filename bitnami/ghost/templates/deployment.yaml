@@ -101,6 +101,8 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
           {{- end }}
           env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" .Values.image.debug | quote }}
             - name: ALLOW_EMPTY_PASSWORD
               value: {{ ternary "yes" "no" .Values.allowEmptyPassword | quote }}
             - name: GHOST_DATABASE_HOST
@@ -157,10 +159,6 @@ spec:
                 secretKeyRef:
                   name: {{ include "common.secrets.name" (dict "existingSecret" .Values.existingSecret "context" $) }}
                   key: {{ include "common.secrets.key" (dict "existingSecret" .Values.existingSecret "key" "smtp-password") }}
-            {{- end }}
-            {{- if .Values.smtpFromAddress }}
-            - name: GHOST_SMTP_FROM_ADDRESS
-              value: {{ .Values.smtpFromAddress | quote }}
             {{- end }}
             {{- if .Values.smtpService }}
             - name: GHOST_SMTP_SERVICE
