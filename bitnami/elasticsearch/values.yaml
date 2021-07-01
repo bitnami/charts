@@ -51,13 +51,13 @@ image:
   ##
   debug: false
 
-## String to partially override common.names.fullname template (will maintain the release name)
+## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
 ##
-# nameOverride:
+nameOverride:
 
-## String to fully override common.names.fullname template
+## @param fullnameOverride String to fully override common.names.fullname template
 ##
-# fullnameOverride:
+fullnameOverride:
 
 
 sysctlImage:
@@ -162,21 +162,21 @@ clusterDomain: cluster.local
 ##
 name: elastic
 
-## Comma, semi-colon or space separated list of plugins to install at initialization
+## @param plugins Comma, semi-colon or space separated list of plugins to install at initialization
 ## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
 ##
-# plugins:
+plugins:
 
-## File System snapshot repository path
+## @param snapshotRepoPath File System snapshot repository path
 ## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
 ##
-# snapshotRepoPath:
+snapshotRepoPath:
 
-## Override elasticsearch configuration
+## @param config Override elasticsearch configuration
 ##
-# config:
+config:
 
-## Append extra configuration to the elasticsearch node configuration
+## @param extraConfig Append extra configuration to the elasticsearch node configuration
 ## Use this instead of `config` to add more configuration
 ## See below example:
 ## extraConfig:
@@ -185,19 +185,22 @@ name: elastic
 ##       allow_mmap: false
 ## ref: https://www.elastic.co/guide/en/elasticsearch/reference/current/settings.html
 ##
-# extraConfig:
+extraConfig:
 
-## extraVolumes and extraVolumeMounts allows you to mount other volumes
+## @param extraVolumes A list of volumes to be added to the pod
 ## Example Use Case: mount ssl certificates when elasticsearch has tls enabled
-# extraVolumes:
-#   - name: es-certs
-#     secret:
-#       defaultMode: 420
-#       secretName: es-certs
-# extraVolumeMounts:
-#   - name: es-certs
-#     mountPath: /certs
-#     readOnly: true
+## extraVolumes:
+##   - name: es-certs
+##     secret:
+##       defaultMode: 420
+##       secretName: es-certs
+extraVolumes:
+## @param extraVolumeMounts A list of volume mounts to be added to the pod
+## extraVolumeMounts:
+##   - name: es-certs
+##     mountPath: /certs
+##     readOnly: true
+extraVolumeMounts:
 
 ## @param initScripts Dictionary of init scripts. Evaluated as a template.
 ## Specify dictionary of scripts to be run at first boot
