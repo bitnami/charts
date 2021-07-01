@@ -294,6 +294,12 @@ master:
   ## @param master.customReadinessProbe Override default readiness probe
   ##
   customReadinessProbe: {}
+  ## @param master.initContainers Extra init containers to add to the Elasticsearch master-eligible pod(s)
+  ##
+  initContainers: []
+  ## @param master.sidecars Extra sidecar containers to add to the Elasticsearch master-eligible pod(s)
+  ##
+  sidecars: []
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
@@ -313,10 +319,10 @@ master:
     ## then accept the value as an existing Persistent Volume Claim to which
     ## the container should be bound
     ##
-    existingClaim: my-persistent-volume-claim
+    existingClaim:
     ## @param master.persistence.existingVolume Existing Persistent Volume for use as volume match label selector to the `volumeClaimTemplate`. Ignored when `master.persistence.selector` is set.
     ##
-    existingVolume: my-persistent-volume
+    existingVolume:
     ## @param master.persistence.selector Configure custom selector for existing Persistent Volume. Overwrites `master.persistence.existingVolume`
     ## selector:
     ##   matchLabels:
@@ -533,6 +539,12 @@ coordinating:
   ## @param coordinating.customReadinessProbe Override default readiness probe
   ##
   customReadinessProbe: {}
+  ## @param coordinating.initContainers Extra init containers to add to the Elasticsearch coordinating-only pod(s)
+  ##
+  initContainers: []
+  ## @param coordinating.sidecars Extra sidecar containers to add to the Elasticsearch coordinating-only pod(s)
+  ##
+  sidecars: []
   ## Service parameters for coordinating-only node(s)
   ##
   service:
@@ -740,6 +752,12 @@ data:
   ## @param data.customReadinessProbe Override default readiness probe
   ##
   customReadinessProbe: {}
+  ## @param data.initContainers Extra init containers to add to the Elasticsearch data pod(s)
+  ##
+  initContainers: []
+  ## @param data.sidecars Extra sidecar containers to add to the Elasticsearch data pod(s)
+  ##
+  sidecars: []
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
@@ -959,6 +977,12 @@ ingest:
   ## @param ingest.customReadinessProbe Override default readiness probe
   ##
   customReadinessProbe: {}
+  ## @param ingest.initContainers Extra init containers to add to the Elasticsearch ingest pod(s)
+  ##
+  initContainers: []
+  ## @param ingest.sidecars Extra sidecar containers to add to the Elasticsearch ingest pod(s)
+  ##
+  sidecars: []
   ## Service parameters for ingest node(s)
   ##
   service:
@@ -1062,6 +1086,12 @@ curator:
     ##   - e2e-az2
     ##
     values: []
+  ## @param curator.initContainers Extra init containers to add to the Elasticsearch coordinating-only pod(s)
+  ##
+  initContainers: []
+  ## @param curator.sidecars Extra sidecar containers to add to the Elasticsearch ingest pod(s)
+  ##
+  sidecars: []
   ## @param curator.affinity Curator Affinity for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
@@ -1192,7 +1222,7 @@ curator:
   ##     mountPath: /certs
   ##     readOnly: true
   extraVolumeMounts: []
-  ## @param curator.extraInitContainers Init containers to add to the cronjob container
+  ## @param curator.extraInitContainers DEPRECATED. Use `curator.initContainers` instead. Init containers to add to the cronjob container
   ## Don't configure S3 repository till Elasticsearch is reachable.
   ## Ensure that it is available at http://elasticsearch:9200
   ##
@@ -1226,7 +1256,7 @@ curator:
   ##       }
   ##     }
   ##
-  extraInitContainers: {}
+  extraInitContainers: []
 
 ## @section Metrics parameters
 
