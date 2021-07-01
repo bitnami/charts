@@ -687,7 +687,12 @@ persistence:
     filesystem:
       rootdirectory: /storage
       maxthreads:
-    ## @param persistence.imageChartStorage.azure [object] Images/charts storage parameters when type is "azure"
+    ## Images/charts storage parameters when type is "azure"
+    ## @param persistence.imageChartStorage.azure.accountname Azure storage type setting: Name of the Azure account
+    ## @param persistence.imageChartStorage.azure.accountkey Azure storage type setting: Key of the Azure account
+    ## @param persistence.imageChartStorage.azure.container Azure storage type setting: Container
+    ## @param persistence.imageChartStorage.azure.storagePrefix Azure storage type setting: Storage prefix
+    ## @param persistence.imageChartStorage.azure.realm Azure storage type setting: Realm of the Azure account
     ##
     azure:
       accountname: accountname
@@ -698,7 +703,11 @@ persistence:
       ## realm: core.windows.net
       ##
       realm:
-    ## @param persistence.imageChartStorage.gcs [object] Images/charts storage parameters when type is "gcs"
+    ## Images/charts storage parameters when type is "gcs"
+    ## @param persistence.imageChartStorage.gcs.bucket GCS storage type setting: Bucket name
+    ## @param persistence.imageChartStorage.gcs.encodedkey GCS storage type setting: Base64 encoded key
+    ## @param persistence.imageChartStorage.gcs.rootdirectory GCS storage type setting: Root directory name
+    ## @param persistence.imageChartStorage.gcs.chunksize GCS storage type setting: Chunk size name
     ##
     gcs:
       bucket: bucketname
@@ -707,8 +716,22 @@ persistence:
       encodedkey: base64-encoded-json-key-file
       rootdirectory:
       chunksize:
-    ## @param persistence.imageChartStorage.s3 [object] Images/charts storage parameters when type is "s3"
+    ## Images/charts storage parameters when type is "s3"
     ## ref: https://docs.docker.com/registry/storage-drivers/s3/
+    ## @param persistence.imageChartStorage.s3.region S3 storage type setting: Region
+    ## @param persistence.imageChartStorage.s3.bucket S3 storage type setting: Bucket name
+    ## @param persistence.imageChartStorage.s3.accesskey S3 storage type setting: Access key name
+    ## @param persistence.imageChartStorage.s3.secretkey S3 storage type setting: Secret Key name
+    ## @param persistence.imageChartStorage.s3.regionendpoint S3 storage type setting: Region Endpoint
+    ## @param persistence.imageChartStorage.s3.encrypt S3 storage type setting: Encrypt
+    ## @param persistence.imageChartStorage.s3.keyid S3 storage type setting: Key ID
+    ## @param persistence.imageChartStorage.s3.secure S3 storage type setting: Secure
+    ## @param persistence.imageChartStorage.s3.skipverify S3 storage type setting: TLS skip verification
+    ## @param persistence.imageChartStorage.s3.v4auth S3 storage type setting: V4 authorization
+    ## @param persistence.imageChartStorage.s3.chunksize S3 storage type setting: V4 authorization
+    ## @param persistence.imageChartStorage.s3.rootdirectory S3 storage type setting: Root directory name
+    ## @param persistence.imageChartStorage.s3.storageclass S3 storage type setting: Storage class
+    ## @param persistence.imageChartStorage.s3.sse S3 storage type setting: SSE name
     ##
     s3:
       region: us-west-1
@@ -725,7 +748,25 @@ persistence:
       rootdirectory:
       storageclass:
       sse:
-    ## @param persistence.imageChartStorage.swift [object] Images/charts storage parameters when type is "swift"
+    ## Images/charts storage parameters when type is "swift"
+    ## @param persistence.imageChartStorage.swift.authurl Swift storage type setting: Authentication url
+    ## @param persistence.imageChartStorage.swift.username Swift storage type setting: Authentication url
+    ## @param persistence.imageChartStorage.swift.password Swift storage type setting: Password
+    ## @param persistence.imageChartStorage.swift.container Swift storage type setting: Container
+    ## @param persistence.imageChartStorage.swift.region Swift storage type setting: Region
+    ## @param persistence.imageChartStorage.swift.tenant Swift storage type setting: Tenant
+    ## @param persistence.imageChartStorage.swift.tenantid Swift storage type setting: TenantID
+    ## @param persistence.imageChartStorage.swift.domain Swift storage type setting: Domain
+    ## @param persistence.imageChartStorage.swift.domainid Swift storage type setting: DomainID
+    ## @param persistence.imageChartStorage.swift.trustid Swift storage type setting: TrustID
+    ## @param persistence.imageChartStorage.swift.insecureskipverify Swift storage type setting: Verification
+    ## @param persistence.imageChartStorage.swift.chunksize Swift storage type setting: Chunk
+    ## @param persistence.imageChartStorage.swift.prefix Swift storage type setting: Prefix
+    ## @param persistence.imageChartStorage.swift.secretkey Swift storage type setting: Secre Key
+    ## @param persistence.imageChartStorage.swift.accesskey Swift storage type setting: Access Key
+    ## @param persistence.imageChartStorage.swift.authversion Swift storage type setting: Auth
+    ## @param persistence.imageChartStorage.swift.endpointtype Swift storage type setting: Endpoint
+    ## @param persistence.imageChartStorage.swift.tempurlmethods Swift storage type setting: Temp   URL methods
     ##
     swift:
       authurl: https://storage.myprovider.com/v3/auth
@@ -747,7 +788,17 @@ persistence:
       endpointtype:
       tempurlcontainerkey:
       tempurlmethods:
-    ## @param persistence.imageChartStorage.oss [object] Images/charts storage parameters when type is "oss"
+    ## Images/charts storage parameters when type is "oss"
+    ## @param persistence.imageChartStorage.oss.accesskeyid OSS storage type setting: Access key ID
+    ## @param persistence.imageChartStorage.oss.accesskeysecret OSS storage type setting: Access key secret name containing the token
+    ## @param persistence.imageChartStorage.oss.region OSS storage type setting: Region name
+    ## @param persistence.imageChartStorage.oss.bucket OSS storage type setting: Bucket name
+    ## @param persistence.imageChartStorage.oss.endpoint OSS storage type setting: Endpoint
+    ## @param persistence.imageChartStorage.oss.internal OSS storage type setting: Internal
+    ## @param persistence.imageChartStorage.oss.encrypt OSS storage type setting: Encrypt
+    ## @param persistence.imageChartStorage.oss.secure OSS storage type setting: Secure
+    ## @param persistence.imageChartStorage.oss.chunksize OSS storage type setting: Chunk
+    ## @param persistence.imageChartStorage.oss.secretkey OSS storage type setting: Secret key
     ##
     oss:
       accesskeyid:
