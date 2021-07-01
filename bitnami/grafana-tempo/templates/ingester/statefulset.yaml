@@ -1,7 +1,7 @@
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
-  name: {{ template "common.names.fullname" . }}-ingester
+  name: {{ template "grafana-tempo.ingester.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: ingester
@@ -19,7 +19,7 @@ spec:
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: ingester
-  serviceName: {{ template "common.names.fullname" . }}-ingester
+  serviceName: {{ template "grafana-tempo.ingester.fullname" . }}
   template:
     metadata:
       {{- if .Values.ingester.podAnnotations }}

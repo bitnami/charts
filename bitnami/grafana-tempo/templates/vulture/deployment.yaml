@@ -2,7 +2,7 @@
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ template "common.names.fullname" . }}-vulture
+  name: {{ template "grafana-tempo.vulture.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: vulture
@@ -78,8 +78,8 @@ spec:
           {{- else }}
           args:
             - -prometheus-listen-address=0.0.0.0:{{ .Values.vulture.containerPort }}
-            - -tempo-push-url=http://{{ template "common.names.fullname" . }}-distributor
-            - -tempo-query-url=http://{{ template "common.names.fullname" . }}-query-frontend:{{ .Values.queryFrontend.service.port }}
+            - -tempo-push-url=http://{{ template "grafana-tempo.distributor.fullname" . }}
+            - -tempo-query-url=http://{{ template "grafana-tempo.query-frontend.fullname" . }}:{{ .Values.queryFrontend.service.port }}
           {{- end }}
           {{- if .Values.vulture.extraEnvVars }}
           env: {{- include "common.tplvalues.render" (dict "value" .Values.vulture.extraEnvVars "context" $) | nindent 12 }}

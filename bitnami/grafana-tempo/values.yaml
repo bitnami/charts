@@ -183,7 +183,7 @@ tempo:
         {{- end }}
     querier:
       frontend_worker:
-        frontend_address: {{ template "common.names.fullname" . }}-query-frontend-headless:{{ .Values.queryFrontend.service.grpcPort }}
+        frontend_address: {{ template "grafana-tempo.query-frontend.fullname" . }}-headless:{{ .Values.queryFrontend.service.grpcPort }}
     ingester:
       lifecycler:
         ring:
@@ -194,7 +194,7 @@ tempo:
     memberlist:
       abort_if_cluster_join_fails: false
       join_members:
-        - {{ include "common.names.fullname" . }}-gossip-ring
+        - {{ template "grafana-tempo.gossip-ring.fullname" . }}
     overrides:
       per_tenant_override_config: /bitnami/grafana-tempo/conf/overrides.yaml
     server:

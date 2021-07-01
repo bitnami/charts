@@ -6,6 +6,55 @@ Return the proper Grafana Tempo image name
 {{- end -}}
 
 {{/*
+Return the proper Grafana Tempo compactor fullname
+*/}}
+{{- define "grafana-tempo.compactor.fullname" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) "compactor" -}}
+{{- end -}}
+
+{{/*
+Return the proper Grafana Tempo distributor fullname
+*/}}
+{{- define "grafana-tempo.distributor.fullname" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) "distributor" -}}
+{{- end -}}
+
+{{/*
+Return the proper Grafana Tempo ingester fullname
+*/}}
+{{- define "grafana-tempo.ingester.fullname" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) "ingester" -}}
+{{- end -}}
+
+{{/*
+Return the proper Grafana Tempo querier fullname
+*/}}
+{{- define "grafana-tempo.querier.fullname" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) "querier" -}}
+{{- end -}}
+
+{{/*
+Return the proper Grafana Tempo query-frontend fullname
+*/}}
+{{- define "grafana-tempo.query-frontend.fullname" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) "query-frontend" -}}
+{{- end -}}
+
+{{/*
+Return the proper Grafana Tempo vulture fullname
+*/}}
+{{- define "grafana-tempo.vulture.fullname" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) "vulture" -}}
+{{- end -}}
+
+{{/*
+Return the proper Grafana Tempo gossip-ring fullname
+*/}}
+{{- define "grafana-tempo.gossip-ring.fullname" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) "gossip-ring" -}}
+{{- end -}}
+
+{{/*
 Return the proper Grafana Tempo image name
 */}}
 {{- define "grafana-tempo.queryImage" -}}
@@ -73,7 +122,7 @@ Get the Tempo overrides  configmap.
 {{- if .Values.queryFrontend.query.existingConfigmap -}}
     {{- .Values.queryFrontend.query.existingConfigmap -}}
 {{- else }}
-    {{- printf "%s-query" (include "common.names.fullname" . ) -}}
+    {{- include "grafana-tempo.query-frontend.fullname" .  -}}
 {{- end -}}
 {{- end -}}
 
