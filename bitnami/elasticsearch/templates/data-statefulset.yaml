@@ -60,7 +60,7 @@ spec:
       securityContext:
         fsGroup: {{ .Values.data.securityContext.fsGroup }}
       {{- end }}
-      {{- if or .Values.sysctlImage.enabled (and .Values.volumePermissions.enabled .Values.data.persistence.enabled) }}
+      {{- if or .Values.data.initContainers .Values.sysctlImage.enabled (and .Values.volumePermissions.enabled .Values.data.persistence.enabled) }}
       initContainers:
         {{- if .Values.sysctlImage.enabled }}
         ## Image that performs the sysctl operation to modify Kernel settings (needed sometimes to avoid boot errors)
@@ -95,6 +95,9 @@ spec:
           volumeMounts:
             - name: data
               mountPath: "/bitnami/elasticsearch/data"
+        {{- end }}
+        {{- if .Values.data.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.data.initContainers "context" $) | nindent 8 }}
         {{- end }}
       {{- end }}
       containers:
@@ -217,6 +220,9 @@ spec:
             - name: custom-init-scripts-secret
               mountPath: /docker-entrypoint-initdb.d/init-scripts-secret
             {{- end }}
+        {{- if .Values.data.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.data.sidecars "context" $) | nindent 8 }}
+        {{- end }}
       volumes:
         {{- if or .Values.config .Values.extraConfig }}
         - name: "config"

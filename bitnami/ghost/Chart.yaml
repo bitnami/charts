@@ -1,7 +1,7 @@
 annotations:
   category: CMS
 apiVersion: v2
-appVersion: 4.8.3
+appVersion: 4.8.4
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -34,3 +34,4 @@ sources:
   - https://github.com/bitnami/bitnami-docker-ghost
   - http://www.ghost.org/
 version: 14.0.0
+
