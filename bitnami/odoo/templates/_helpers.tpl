@@ -124,3 +124,14 @@ Return the SMTP Secret Name
 {{- define "odoo.smtpSecretName" -}}
 {{- coalesce .Values.smtpExistingSecret (include "common.names.fullname" .) -}}
 {{- end -}}
+
+{{/*
+ Create the name of the service account to use
+ */}}
+{{- define "odoo.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create -}}
+    {{ default (include "odoo.fullname" .) .Values.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
