@@ -2939,7 +2939,7 @@ redis:
     ## @param redis.auth.enabled Use redis password
     ##
     enabled: false
-    ## @param redis.auth.password Redis
+    ## @param redis.auth.password Redis password
     ## Defaults to a random 10-character alphanumeric string if not set and auth.enabled is true.
     ## It should always be set using the password value or in the existingSecret to avoid issues
     ## with Harbor.

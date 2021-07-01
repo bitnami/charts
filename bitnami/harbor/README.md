@@ -876,7 +876,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `redis.enabled`                           | If external redis is used, set it to `false`                                                              | `true`       |
 | `redis.nameOverride`                      | String to partially override common.names.fullname template with a string (will prepend the release name) | `nil`        |
 | `redis.auth.enabled`                      | Use redis password                                                                                        | `false`      |
-| `redis.auth.password`                     | Redis                                                                                                     | `nil`        |
+| `redis.auth.password`                     | Redis password                                                                                            | `nil`        |
 | `redis.architecture`                      | Cluster settings                                                                                          | `standalone` |
 | `redis.master.persistence.enabled`        | Enable persistence for master Redis                                                                       | `true`       |
 | `redis.replica.persistence.enabled`       | Enable persistence for replica Redis                                                                      | `true`       |
