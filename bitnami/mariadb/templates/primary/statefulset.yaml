@@ -13,6 +13,7 @@ metadata:
   {{- end }}
 spec:
   replicas: 1
+  revisionHistoryLimit: {{ .Values.primary.revisionHistoryLimit }}
   selector:
     matchLabels: {{ include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: primary
@@ -158,6 +159,12 @@ spec:
             {{- if .Values.primary.extraFlags }}
             - name: MARIADB_EXTRA_FLAGS
               value: "{{ .Values.primary.extraFlags }}"
+            {{- end }}
+            {{- if .Values.primary.startupWaitOptions }}
+            - name: MARIADB_STARTUP_WAIT_RETRIES
+              value: "{{ .Values.primary.startupWaitOptions.retries | default 300 }}"
+            - name: MARIADB_STARTUP_WAIT_SLEEP_TIME
+              value: "{{ .Values.primary.startupWaitOptions.sleepTime | default 2 }}"
             {{- end }}
             {{- if .Values.primary.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.primary.extraEnvVars "context" $) | nindent 12 }}

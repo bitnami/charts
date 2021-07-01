@@ -19,7 +19,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/elasticsearch
-  tag: 7.13.0-debian-10-r2
+  tag: 7.13.2-debian-10-r11
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -48,7 +48,7 @@ sysctlImage:
   enabled: true
   registry: docker.io
   repository: bitnami/bitnami-shell
-  tag: "10"
+  tag: 10-debian-10-r119
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -83,7 +83,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: "10"
+    tag: 10-debian-10-r119
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -124,15 +124,20 @@ name: elastic
 ##
 # snapshotRepoPath:
 
-## Customize elasticsearch configuration
+## Override elasticsearch configuration
+##
+# config:
+
+## Append extra configuration to the elasticsearch node configuration
+## Use this instead of `config` to add more configuration
 ## See below example:
-## config:
+## extraConfig:
 ##   node:
 ##     store:
 ##       allow_mmap: false
 ## ref: https://www.elastic.co/guide/en/elasticsearch/reference/current/settings.html
 ##
-# config:
+# extraConfig:
 
 ## extraVolumes and extraVolumeMounts allows you to mount other volumes
 ## Example Use Case: mount ssl certificates when elasticsearch has tls enabled
@@ -186,9 +191,12 @@ extraEnvVarsSecret:
 ##
 master:
   name: master
-  ## Number of master-eligible node(s) replicas to deploy
+  ## Number of master-eligible node(s) replicas to deploy.
+  ## "There should normally be an odd number of master-eligible nodes in a cluster" to address "split brain" scenario.
+  ## https://www.elastic.co/guide/en/elasticsearch/reference/7.x/modules-discovery-voting.html#_even_numbers_of_master_eligible_nodes
+  ## https://www.elastic.co/guide/en/elasticsearch/reference/7.x/modules-discovery-quorums.html#modules-discovery-quorums
   ##
-  replicas: 2
+  replicas: 3
 
   ## updateStrategy for ElasticSearch master statefulset
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
@@ -290,25 +298,42 @@ master:
   ##
   startupProbe:
     enabled: false
-  #  initialDelaySeconds: 90
-  #  periodSeconds: 10
-  #  timeoutSeconds: 5
-  #  successThreshold: 1
-  #  failureThreshold: 5
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
   livenessProbe:
-    enabled: false
-  #  initialDelaySeconds: 90
-  #  periodSeconds: 10
-  #  timeoutSeconds: 5
-  #  successThreshold: 1
-  #  failureThreshold: 5
+    enabled: true
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
   readinessProbe:
-    enabled: false
-  #  initialDelaySeconds: 90
-  #  periodSeconds: 10
-  #  timeoutSeconds: 5
-  #  successThreshold: 1
-  #  failureThreshold: 5
+    enabled: true
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## Custom Startup probes for master-eligible containers
+  ##
+  customStartupProbe: {}
+  ## Custom Liveness probes for master-eligible containers
+  ##
+  customLivenessProbe: {}
+  ## Custom Rediness probes master-eligible containers
+  ##
+  customReadinessProbe: {}
+
+  ## Extra init containers to add to the Elasticsearch master-eligible pod(s)
+  ##
+  initContainers: []
+
+  ## Extra sidecar containers to add to the Elasticsearch master-eligible pod(s)
+  ##
+  sidecars: []
 
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
@@ -384,6 +409,14 @@ master:
     ## The name of the ServiceAccount to use.
     ## If not set and create is true, a name is generated using the fullname template
     # name:
+  ## Autoscaling configuration
+  ##
+  autoscaling:
+    enabled: false
+    minReplicas: 2
+    maxReplicas: 11
+    # targetCPU: 50
+    # targetMemory: 50
 
 ## Elasticsearch coordinating-only node parameters
 ##
@@ -492,25 +525,43 @@ coordinating:
   ##
   startupProbe:
     enabled: false
-  #  initialDelaySeconds: 90
-  #  periodSeconds: 10
-  #  timeoutSeconds: 5
-  #  successThreshold: 1
-  #  failureThreshold: 5
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
   livenessProbe:
-    enabled: false
-  #  initialDelaySeconds: 90
-  #  periodSeconds: 10
-  #  timeoutSeconds: 5
-  #  successThreshold: 1
-  #  failureThreshold: 5
+    enabled: true
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
   readinessProbe:
-    enabled: false
-  #  initialDelaySeconds: 90
-  #  periodSeconds: 10
-  #  timeoutSeconds: 5
-  #  successThreshold: 1
-  #  failureThreshold: 5
+    enabled: true
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## Custom Startup probes for coordinating-only containers
+  ##
+  customStartupProbe: {}
+  ## Custom Liveness probes for coordinating-only containers
+  ##
+  customLivenessProbe: {}
+  ## Custom Rediness probes coordinating-only containers
+  ##
+  customReadinessProbe: {}
+
+  ## Extra init containers to add to the Elasticsearch coordinating-only pod(s)
+  ##
+  initContainers: []
+
+  ## Extra sidecar containers to add to the Elasticsearch coordinating-only pod(s)
+  ##
+  sidecars: []
+
   ## Service parameters for coordinating-only node(s)
   ##
   service:
@@ -543,6 +594,14 @@ coordinating:
     ## If not set and create is true, a name is generated using the fullname template
     ##
     # name:
+  ## Autoscaling configuration
+  ##
+  autoscaling:
+    enabled: false
+    minReplicas: 2
+    maxReplicas: 11
+    # targetCPU: 50
+    # targetMemory: 50
 
 ## Elasticsearch data node parameters
 ##
@@ -651,25 +710,43 @@ data:
   ##
   startupProbe:
     enabled: false
-  #  initialDelaySeconds: 90
-  #  periodSeconds: 10
-  #  timeoutSeconds: 5
-  #  successThreshold: 1
-  #  failureThreshold: 5
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
   livenessProbe:
-    enabled: false
-  #  initialDelaySeconds: 90
-  #  periodSeconds: 10
-  #  timeoutSeconds: 5
-  #  successThreshold: 1
-  #  failureThreshold: 5
+    enabled: true
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
   readinessProbe:
-    enabled: false
-  #  initialDelaySeconds: 90
-  #  periodSeconds: 10
-  #  timeoutSeconds: 5
-  #  successThreshold: 1
-  #  failureThreshold: 5
+    enabled: true
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## Custom Startup probes for data containers
+  ##
+  customStartupProbe: {}
+  ## Custom Liveness probes for data containers
+  ##
+  customLivenessProbe: {}
+  ## Custom Rediness probes data containers
+  ##
+  customReadinessProbe: {}
+
+  ## Extra init containers to add to the Elasticsearch data pod(s)
+  ##
+  initContainers: []
+
+  ## Extra sidecar containers to add to the Elasticsearch data pod(s)
+  ##
+  sidecars: []
+
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
@@ -722,7 +799,14 @@ data:
     ## If not set and create is true, a name is generated using the fullname template
     ##
     # name:
-
+  ## Autoscaling configuration
+  ##
+  autoscaling:
+    enabled: false
+    minReplicas: 2
+    maxReplicas: 11
+    # targetCPU: 50
+    # targetMemory: 50
 ## Elasticsearch ingest node parameters
 ##
 ingest:
@@ -825,25 +909,43 @@ ingest:
   ##
   startupProbe:
     enabled: false
-  #  initialDelaySeconds: 90
-  #  periodSeconds: 10
-  #  timeoutSeconds: 5
-  #  successThreshold: 1
-  #  failureThreshold: 5
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
   livenessProbe:
-    enabled: false
-  #  initialDelaySeconds: 90
-  #  periodSeconds: 10
-  #  timeoutSeconds: 5
-  #  successThreshold: 1
-  #  failureThreshold: 5
+    enabled: true
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
   readinessProbe:
-    enabled: false
-  #  initialDelaySeconds: 90
-  #  periodSeconds: 10
-  #  timeoutSeconds: 5
-  #  successThreshold: 1
-  #  failureThreshold: 5
+    enabled: true
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## Custom Startup probes for ingest containers
+  ##
+  customStartupProbe: {}
+  ## Custom Liveness probes for ingest containers
+  ##
+  customLivenessProbe: {}
+  ## Custom Rediness probes ingest containers
+  ##
+  customReadinessProbe: {}
+
+  ## Extra init containers to add to the Elasticsearch ingest pod(s)
+  ##
+  initContainers: []
+
+  ## Extra sidecar containers to add to the Elasticsearch ingest pod(s)
+  ##
+  sidecars: []
+
   ## Service parameters for ingest node(s)
   ##
   service:
@@ -875,7 +977,7 @@ curator:
   image:
     registry: docker.io
     repository: bitnami/elasticsearch-curator
-    tag: 5.8.4-debian-10-r23
+    tag: 5.8.4-debian-10-r50
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1056,41 +1158,47 @@ curator:
   #     mountPath: /certs
   #     readOnly: true
 
-  ## Add your own init container or uncomment and modify the given example.
+  ## Extra init containers to add to the Elasticsearch ingest pod(s)
+  ## Example to configure S3 repository waiting for ES to be reachable:
+  ## elasticsearch-s3-repository:
+  ##   image: bitnami/bitnami-shell:latest
+  ##   imagePullPolicy: Always
+  ##   command:
+  ##     - /bin/bash
+  ##   args:
+  ##     - c
+  ##     - |
+  ##       ES_HOST=elasticsearch
+  ##       ES_PORT=9200
+  ##       ES_REPOSITORY=backup
+  ##       S3_REGION=us-east-1
+  ##       S3_BUCKET=bucket
+  ##       S3_BASE_PATH=backup
+  ##       S3_COMPRESS=true
+  ##       S3_STORAGE_CLASS=standard
+  ##       install_packages curl && \
+  ##       ( counter=0; while (( counter++ < 120 )); do curl -s http://${ES_HOST}:${ES_PORT} >/dev/null 2>&1 && break; echo "Waiting for elasticsearch $counter/120"; sleep 1; done ) && \
+  ##       cat <<EOF | curl -sS -XPUT -H "Content-Type: application/json" -d @- http://${ES_HOST}:${ES_PORT}/_snapshot/${ES_REPOSITORY} \
+  ##       {
+  ##         "type": "s3",
+  ##         "settings": {
+  ##           "bucket": "${S3_BUCKET}",
+  ##           "base_path": "${S3_BASE_PATH}",
+  ##           "region": "${S3_REGION}",
+  ##           "compress": "${S3_COMPRESS}",
+  ##           "storage_class": "${S3_STORAGE_CLASS}"
+  ##         }
+  ##       }
   ##
-  extraInitContainers: {}
-  ## Don't configure S3 repository till Elasticsearch is reachable.
-  ## Ensure that it is available at http://elasticsearch:9200
+  initContainers: []
+
+  ## DEPRECATED. Use `curator.initContainers` instead
   ##
-  # elasticsearch-s3-repository:
-  #   image: bitnami/minideb
-  #   imagePullPolicy: "IfNotPresent"
-  #   command:
-  #   - "/bin/bash"
-  #   - "-c"
-  #   args:
-  #   - |
-  #     ES_HOST=elasticsearch
-  #     ES_PORT=9200
-  #     ES_REPOSITORY=backup
-  #     S3_REGION=us-east-1
-  #     S3_BUCKET=bucket
-  #     S3_BASE_PATH=backup
-  #     S3_COMPRESS=true
-  #     S3_STORAGE_CLASS=standard
-  #     install_packages curl && \
-  #     ( counter=0; while (( counter++ < 120 )); do curl -s http://${ES_HOST}:${ES_PORT} >/dev/null 2>&1 && break; echo "Waiting for elasticsearch $counter/120"; sleep 1; done ) && \
-  #     cat <<EOF | curl -sS -XPUT -H "Content-Type: application/json" -d @- http://${ES_HOST}:${ES_PORT}/_snapshot/${ES_REPOSITORY} \
-  #     {
-  #       "type": "s3",
-  #       "settings": {
-  #         "bucket": "${S3_BUCKET}",
-  #         "base_path": "${S3_BASE_PATH}",
-  #         "region": "${S3_REGION}",
-  #         "compress": "${S3_COMPRESS}",
-  #         "storage_class": "${S3_STORAGE_CLASS}"
-  #       }
-  #     }
+  extraInitContainers: []
+
+  ## Extra sidecar containers to add to the Elasticsearch ingest pod(s)
+  ##
+  sidecars: []
 
 ## Elasticsearch Prometheus exporter configuration
 ## ref: https://hub.docker.com/r/bitnami/elasticsearch-exporter/tags/
@@ -1101,7 +1209,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/elasticsearch-exporter
-    tag: 1.1.0-debian-10-r450
+    tag: 1.2.1-debian-10-r0
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1205,6 +1313,23 @@ metrics:
     requests: {}
     #   cpu: 100m
     #   memory: 128Mi
+  ## Elasticsearch metrics container's liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 1
+    successThreshold: 1
+    failureThreshold: 5
   ## Metrics exporter pod Annotation and Labels
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##

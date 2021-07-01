@@ -185,6 +185,9 @@ The following table lists the configurable parameters of the Parse chart and the
 |------------------------------------|---------------------------------------------|---------------------------------------------|
 | `mongodb.auth.enabled`             | Enable MongoDB&reg; password authentication | `true`                                      |
 | `mongodb.auth.rootPassword`        | MongoDB&reg; admin password                 | `nil`                                       |
+| `mongodb.auth.username`            | MongoDB&reg; user                           | `bn_parse`                                  |
+| `mongodb.auth.password`            | MongoDB&reg; user password                  | ``                                          |
+| `mongodb.auth.database`            | MongoDB&reg; database                       | `bitnami_parse`                             |
 | `mongodb.persistence.enabled`      | Enable MongoDB&reg; persistence using PVC   | `true`                                      |
 | `mongodb.persistence.storageClass` | PVC Storage Class for MongoDB&reg; volume   | `nil` (uses alpha storage class annotation) |
 | `mongodb.persistence.accessMode`   | PVC Access Mode for MongoDB&reg; volume     | `ReadWriteOnce`                             |
@@ -306,6 +309,12 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ## Upgrading
 
+### To 15.0.0
+
+The [Bitnami Parse](https://github.com/bitnami/bitnami-docker-parse) and [Bitnami Parse Dashboard](https://github.com/bitnami/bitnami-docker-parse-dashboard) images were refactored and now the source code is published in GitHub in the [`rootfs`](https://github.com/bitnami/bitnami-docker-parse/tree/master/4/debian-10/rootfs) folder of the container images.
+
+Compatibility is not guaranteed due to the amount of involved changes, however no breaking changes are expected.
+
 ### To 14.0.0
 
 This version standardizes the way of defining Ingress rules. When configuring a single hostname for the Ingress rule, set the `ingress.dashboard.hostname` and `ingress.server.hostname` values. When defining more than one, set the `ingress.dashboard.extraHosts` and `ingress.server.extraHosts` arrays. Apart from this case, no issues are expected to appear when upgrading.
@@ -332,6 +341,8 @@ This version standardizes the way of defining Ingress rules. When configuring a 
 - https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
 - https://helm.sh/docs/topics/v2_v3_migration/
 - https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+
+### To 15.0.0
 
 ### To 12.0.0
 

@@ -127,7 +127,8 @@ spec:
             - --skip-auth-regex=^\/favicon.*\.png$
             - --skip-auth-regex=^\/static\/
             - --skip-auth-regex=^\/$
-            - --scope=openid email groups
+            - --scope={{ .Values.authProxy.scope }}
+            - --cookie-refresh={{ .Values.authProxy.cookieRefresh }}
             {{- range .Values.authProxy.additionalFlags }}
             - {{ . }}
             {{- end }}

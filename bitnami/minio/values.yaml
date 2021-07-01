@@ -26,7 +26,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/minio
-  tag: 2021.5.26-debian-10-r2
+  tag: 2021.6.17-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -50,7 +50,7 @@ image:
 clientImage:
   registry: docker.io
   repository: bitnami/minio-client
-  tag: 2021.5.18-debian-10-r9
+  tag: 2021.6.13-debian-10-r3
 
 ## String to partially override common.names.fullname template (will maintain the release name)
 ##
@@ -135,6 +135,10 @@ tls:
   enabled: false
   ## Name of an existing secret holding the certificate information
   ##
+  existingSecret:
+  ## DEPRECATED. Use `tls.existingSecret` instead.
+  ## Name of an existing secret holding the certificate information
+  ##
   secretName: ""
   ## The mounted path where the secret will be located
   ##  Custom mount path where the certificates will be located, if empty will default to /certs
@@ -217,13 +221,20 @@ hostAliases: []
 ##
 containerPort: 9000
 
-## Security Context
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+## MinIO(R) pod Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ##
-securityContext:
+podSecurityContext:
   enabled: true
   fsGroup: 1001
+
+## MinIO(R) container Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+##
+containerSecurityContext:
+  enabled: true
   runAsUser: 1001
+  runAsNonRoot: true
 
 ## Pod labels
 ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
@@ -546,7 +557,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r91
+    tag: 10-debian-10-r109
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -571,6 +582,12 @@ volumePermissions:
     ##
     limits: {}
     requests: {}
+  ## Init container' Security Context
+  ## Note: the chown of the data folder is done to containerSecurityContext.runAsUser
+  ## and not the below volumePermissions.containerSecurityContext.runAsUser
+  ##
+  containerSecurityContext:
+    runAsUser: 0
 
 ## Specifies whether a ServiceAccount should be created
 ##

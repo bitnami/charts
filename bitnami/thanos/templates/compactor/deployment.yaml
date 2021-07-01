@@ -50,9 +50,8 @@ spec:
       {{- if .Values.compactor.priorityClassName }}
       priorityClassName: {{ .Values.compactor.priorityClassName | quote }}
       {{- end }}
-      {{- if .Values.compactor.securityContext.enabled }}
-      securityContext:
-        fsGroup: {{ .Values.compactor.securityContext.fsGroup }}
+      {{- if .Values.compactor.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.compactor.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       {{- if and .Values.volumePermissions.enabled .Values.compactor.persistence.enabled }}
       initContainers:
@@ -64,7 +63,7 @@ spec:
             - -c
             - |
               mkdir -p /data
-              chown -R "{{ .Values.compactor.securityContext.runAsUser }}:{{ .Values.compactor.securityContext.fsGroup }}" /data
+              chown -R "{{ .Values.compactor.podSecurityContext.runAsUser }}:{{ .Values.compactor.podSecurityContext.fsGroup }}" /data
           securityContext:
             runAsUser: 0
           volumeMounts:
@@ -75,9 +74,8 @@ spec:
         - name: compactor
           image: {{ include "thanos.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-          {{- if .Values.compactor.securityContext.enabled }}
-          securityContext:
-            runAsUser: {{ .Values.compactor.securityContext.runAsUser }}
+          {{- if .Values.compactor.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.compactor.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           args:
             - compact
@@ -102,11 +100,27 @@ spec:
             - name: http
               containerPort: 10902
               protocol: TCP
-          {{- if .Values.compactor.livenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.livenessProbe "context" $) | nindent 12 }}
+          {{- if .Values.compactor.livenessProbe.enabled }}
+          livenessProbe: 
+            httpGet:
+              path: /-/healthy
+              port: http
+            initialDelaySeconds: {{ .Values.compactor.livenessProbe.initialDelaySeconds }}
+            timeoutSeconds: {{ .Values.compactor.livenessProbe.timeoutSeconds }}
+            periodSeconds: {{ .Values.compactor.livenessProbe.periodSeconds }}
+            successThreshold: {{ .Values.compactor.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.compactor.livenessProbe.failureThreshold }}
           {{- end }}
-          {{- if .Values.compactor.readinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.readinessProbe "context" $) | nindent 12 }}
+          {{- if .Values.compactor.readinessProbe.enabled }}
+          readinessProbe: 
+            httpGet:
+              path: /-/ready
+              port: http
+            initialDelaySeconds: {{ .Values.compactor.readinessProbe.initialDelaySeconds }}
+            timeoutSeconds: {{ .Values.compactor.readinessProbe.timeoutSeconds }}
+            periodSeconds: {{ .Values.compactor.readinessProbe.periodSeconds }}
+            successThreshold: {{ .Values.compactor.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.compactor.readinessProbe.failureThreshold }}
           {{- end }}
           {{- if .Values.compactor.resources }}
           resources: {{- toYaml .Values.compactor.resources | nindent 12 }}

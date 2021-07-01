@@ -16,7 +16,7 @@ Helm chart blueprint for this data platform deployment, covering:
 -   Pod placement rules – Affinity rules to ensure placement diversity to prevent single point of failures and optimize load distribution
 -   Pod resource sizing rules – Optimized Pod and JVM sizing settings for optimal performance and efficient resource usage
 -   Default settings to ensure Pod access security
--   Optional [Tanzu Observability](https://docs.wavefront.com/kubernetes.html) framework configuration 
+-   Optional [Tanzu Observability](https://docs.wavefront.com/kubernetes.html) framework configuration
 
 In addition to the Pod resource optimizations, this blueprint is validated and tested to provide Kubernetes node count and sizing recommendations [(see Kubernetes Cluster Requirements)](#kubernetes-cluster-requirements) to facilitate cloud platform capacity planning. The goal is optimize the number of required Kubernetes nodes in order to optimize server resource usage and, at the same time, ensuring runtime and resource diversity.
 
@@ -201,7 +201,7 @@ In case you need to deploy the data platform with [Tanzu Observability](https://
 ```console
 $ helm install my-release bitnami/dataplatform-bp1 \
     --set kafka.metrics.kafka.enabled=true \
-    --set kafka.metrics.jmx.enabled=true \    
+    --set kafka.metrics.jmx.enabled=true \
     --set spark.metrics.enabled=true \
     --set solr.exporter.enabled=true \
     --set wavefront.enabled=true \
@@ -233,6 +233,14 @@ Find more information about how to deal with common errors related to Bitnami’
 In order to render complete information about the deployment including all the sub-charts, please use --render-subchart-notes flag while installing the chart.
 
 ## Upgrading
+
+### To 5.0.0
+
+This major updates the Zookeeper subchart to it newest major, 7.0.0, which renames all TLS-related settings. For more information on this subchart's major, please refer to [zookeeper upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/zookeeper#to-700).
+
+### To 4.0.0
+
+This major version updates the prefixes of individual applications metrics in Wavefront Collectors which are fed to Tanzu observability in order to light up the individual dashboards of Kafka, Spark and Solr on Tanzu Observability platform.
 
 ### To 3.0.0
 
