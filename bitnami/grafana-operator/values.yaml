@@ -14,25 +14,25 @@ global:
   ##
   imagePullSecrets: []
 
+## @section Common parameters
+
 ## @param nameOverride String to partially override common.names.fullname template with a string (will prepend the release name)
 ##
 nameOverride:
-
 ## @param fullnameOverride String to fully override common.names.fullname template with a string
 ##
 fullnameOverride:
-
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
-
 ## @param commonLabels Common Labels which are applied to every resource deployed
 ##
 commonLabels: {}
-
 ## @param commonAnnotations Common Annotations which are applied to every ressource deployed
 ##
 commonAnnotations: {}
+
+## @section Grafana Operator parameters
 
 ## This all configuration for the Grafana Operator.
 ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/README.md
@@ -46,7 +46,6 @@ operator:
   ## @param operator.replicaCount Number of grafana-operator Pod replicas
   ##
   replicaCount: 1
-
   ## @param operator.updateStrategy.type Set up update strategy for Grafana installation.
   ## Set to Recreate if you use persistent volume that cannot be mounted by more than one pods to make sure the pods is destroyed first.
   ## Ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
@@ -82,7 +81,6 @@ operator:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-
   ## @param operator.args.scanAllNamespaces Specify if all namespace should be scanned for dashboards and datasources. (Creates ClusterRole)
   ## @param operator.args.scanNamespaces Specify the namespaces which should be scanned for dashboards and datasources (Creates ClusterRole)
   ##
@@ -92,19 +90,16 @@ operator:
     ##
     scanAllNamespaces: false
     scanNamespaces: []
-
   ## @param operator.rbac.create Create specifies whether to install and use RBAC rules
   ##
   rbac:
     create: true
-
   ## @param operator.serviceAccount.create Specifies whether a service account should be created
   ## @param operator.serviceAccount.name The name of the service account to use. If not set and create is true, a name is generated using the fullname template
   ##
   serviceAccount:
     create: true
     name:
-
   ## Pod securityContext
   ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param operator.podSecurityContext.enabled Enable pods security context
@@ -121,7 +116,6 @@ operator:
     runAsNonRoot: true
     fsGroup: 1001
     supplementalGroups: []
-
   ## Container securityContext
   ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param operator.containerSecurityContext.enabled Enable container security context
@@ -149,23 +143,19 @@ operator:
   ##   memory: 128Mi
   ##
   resources: {}
-
   ## @param operator.hostAliases Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-
   ## @param operator.podAffinityPreset Pod affinity preset
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ## Allowed values: soft, hard
   ##
   podAffinityPreset: ''
-
   ## @param operator.podAntiAffinityPreset Pod anti-affinity preset. Allowed values: `soft` or `hard`
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAntiAffinityPreset: soft
-
   ## Node affinity preset
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
   ##
@@ -185,32 +175,26 @@ operator:
     ##   - e2e-az2
     ##
     values: []
-
   ## @param operator.podAnnotations Pod annotations
   ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
-
   ## @param operator.podLabels Additional pod labels
   ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
-
   ## @param operator.nodeSelector Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-
   ## @param operator.tolerations Tolerations for controller pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-
   ## @param operator.affinity Affinity for controller pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ##
   affinity: {}
-
   prometheus:
     ## Prometheus Operator service monitors
     ##
@@ -230,7 +214,6 @@ operator:
       ## @param operator.prometheus.serviceMonitor.relabelings Specify general relabeling
       ##
       relabelings: []
-
   ## Liveness probe value
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param operator.livenessProbe.enabled Enable livenessProbe
@@ -264,6 +247,8 @@ operator:
     successThreshold: 1
     timeoutSeconds: 1
 
+## @section Grafana parameters
+
 grafana:
   ## @param grafana.enabled Enabled the deployment of the Grafana CRD object into the cluster
   ##
@@ -285,7 +270,6 @@ grafana:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-
   ## Pod securityContext
   ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param grafana.podSecurityContext.enabled Enable pods security context
@@ -302,7 +286,6 @@ grafana:
     runAsNonRoot: true
     fsGroup: 1001
     supplementalGroups: []
-
   ## Container securityContext
   ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param grafana.containerSecurityContext.enabled Enable containers security context
@@ -317,7 +300,6 @@ grafana:
     runAsGroup: 1001
     fsGroup: 1001
     allowPrivilegeEscalation: false
-
   ## Grafana containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -338,25 +320,21 @@ grafana:
     ##    cpu: 250m
     ##    memory: 256Mi
     requests: {}
-
   ## @param grafana.replicaCount Specify the amount of replicas running
   ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md#configuring-the-deployment
   ## NOTE: Number of replicas. If more than one is selected, a shared database should be configured.
   ##
   replicaCount: 1
-
   ## @param grafana.podAffinityPreset Pod affinity preset
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ## Allowed values: soft, hard
   ##
   podAffinityPreset: ""
-
   ## @param grafana.podAntiAffinityPreset Pod anti-affinity preset
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ## Allowed values: soft, hard
   ##
   podAntiAffinityPreset: soft
-
   ## Node affinity preset
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
   ## Allowed values: soft, hard
@@ -378,23 +356,19 @@ grafana:
     ##   - e2e-az2
     ##
     values: []
-
   ## @param grafana.affinity Affinity for controller pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
-
   ## @param grafana.nodeSelector Node labels for controller pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-
   ## @param grafana.tolerations Tolerations for controller pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-
   ## @param grafana.envFrom Extra environment variable to pass to the running container
   ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md#configuring-the-deployment
   ## e.g:
@@ -404,7 +378,6 @@ grafana:
   ## - secretRef:
   ##   name: grafana-secrets
   envFrom: []
-
   ## The grafana-operator client-configuration for this grafana instance
   ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md#configuring-grafana-api-access
   ## @param grafana.client.timeout The timeout in seconds for the Grafana Rest API on that instance
@@ -413,7 +386,6 @@ grafana:
   client:
     timeout: 5
     preferService: true
-
   ## Configure the ingress resource that allows you to access the
   ## Grafana web. Set up the URL
   ## Ref: http://kubernetes.io/docs/user-guide/ingress/
@@ -429,11 +401,9 @@ grafana:
     ## @param grafana.ingress.path The path for the ingress instance to forward to the grafana app
     ##
     path: /
-
     ## @param grafana.ingress.labels Additional Labels for the ingress resource
     ##
     labels: {}
-
     ## @param grafana.ingress.annotations Additional Annotations for the ingress resource
     ## For a full list of possible ingress annotations, please see
     ## Ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
@@ -444,15 +414,12 @@ grafana:
     ##   kubernetes.io/ingress.class: nginx
     ##
     annotations: {}
-
     ## @param grafana.ingress.tls This enables tls support for the ingress resource
     ##
     tls: false
-
     ## @param grafana.ingress.tlsSecret The name for the secret to use for the tls termination
     ##
     tlsSecret: grafana.local-tls
-
   ## Enable persistence using Persistent Volume Claims
   ## Ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
@@ -474,7 +441,6 @@ grafana:
     ## @param grafana.persistence.size Define the size of the PersistentVolumeClaim to request for
     ##
     size: 10Gi
-
   ## @param grafana.config [object] grafana.ini configuration for the instance for this to configure please look at upstream docs
   ## This is the configuration from the grafana pod itself. Every toml section is a root key
   ## Ref: https://grafana.com/docs/grafana/latest/administration/configuration/
@@ -520,7 +486,6 @@ grafana:
       #   # role_attribute_path: contains(groups[*], 'platform-readonly') && 'Viewer' || contains(groups[*], 'platform-admin') && 'Admin' || contains(groups[*], 'platform-emergency') && 'Admin' || contains(groups[*], 'customer-poweruser') && 'Admin' || contains(groups[*], 'customer-collaborator') && 'Editor' || contains(groups[*], 'customer-readonly') && 'Viewer'
       #   # allowed_domains: example.com
       #   allow_sign_up: True
-
   ## @param grafana.configMaps Extra configMaps to mount into the grafana pod
   ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/extra_files.md
   ## e.g:
@@ -528,7 +493,6 @@ grafana:
   ##   - myCustomConfigMap
   ##
   configMaps: []
-
   ## @param grafana.secrets Extra secrets to mount into the grafana pod
   ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/extra_files.md
   ## e.g:
@@ -536,14 +500,12 @@ grafana:
   ##   - myCustomSecret
   ##
   secrets: []
-
   ## @param grafana.jsonnetLibrarySelector [object] Configuring the read for jsonnetLibraries to pull in.
   ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md#jsonnet-library-discovery
   ##
   jsonnetLibrarySelector:
     matchLabels:
       app.kubernetes.io/instance: '{{ .Release.Name }}'
-
   ## @param grafana.dashboardLabelSelectors [object] This selects dashboards on the label.
   ## A cachall is not possible so you need to define at least one label selector here.
   ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md#deploying-grafana
@@ -551,7 +513,6 @@ grafana:
   dashboardLabelSelectors:
     - matchLabels:
         app.kubernetes.io/instance: '{{ .Release.Name }}'
-
   ## Grafana containers' liveness probe
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ## @param grafana.livenessProbe.enabled Enable livenessProbe
@@ -584,6 +545,8 @@ grafana:
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
+
+## @section PluginInit parameters
 
 grafanaPluginInit:
   ## @param grafanaPluginInit.image.registry Grafana Plugin Init image registry
