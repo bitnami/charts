@@ -105,7 +105,7 @@ spec:
             - name: ALLOW_EMPTY_PASSWORD
               value: {{ ternary "yes" "no" .Values.allowEmptyPassword | quote }}
             - name: REDMINE_DATABASE_TYPE
-              value: {{ default "" .Values.databaseType | quote }}
+              value: {{ .Values.databaseType | quote }}
             - name: REDMINE_DATABASE_HOST
               value: {{ template "redmine.database.host" . }}
             - name: REDMINE_DATABASE_NAME
