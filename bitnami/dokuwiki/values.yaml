@@ -18,6 +18,27 @@ global:
 
 ## @section Common parameters
 
+## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
+##
+kubeVersion:
+## @param nameOverride String to partially override dokuwiki.fullname template with a string (will prepend the release name)
+##
+nameOverride:
+## @param fullnameOverride String to fully override dokuwiki.fullname template with a string
+##
+fullnameOverride:
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
+## @param extraDeploy Array of extra objects to deploy with the release (evaluated as a template).
+##
+extraDeploy: []
+
+## @section Dokuwiki parameters
+
 ## Bitnami DokuWiki image version
 ## ref: https://hub.docker.com/r/bitnami/dokuwiki/tags/
 ## @param image.registry DokuWiki image registry
@@ -48,27 +69,6 @@ image:
   ## It turns BASH and/or NAMI debugging in the image
   ##
   debug: false
-## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
-##
-kubeVersion:
-## @param nameOverride String to partially override dokuwiki.fullname template with a string (will prepend the release name)
-##
-nameOverride:
-## @param fullnameOverride String to fully override dokuwiki.fullname template with a string
-##
-fullnameOverride:
-## @param commonAnnotations Annotations to add to all deployed objects
-##
-commonAnnotations: {}
-## @param commonLabels Labels to add to all deployed objects
-##
-commonLabels: {}
-## @param extraDeploy Array of extra objects to deploy with the release (evaluated as a template).
-##
-extraDeploy: []
-
-## @section Dokuwiki parameters
-
 ## @param hostAliases [array] Add deployment host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##

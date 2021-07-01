@@ -16,7 +16,25 @@ global:
   imagePullSecrets: []
   storageClass:
 
-## @section Common & Pod-specific parameters
+## @section Common parameters
+
+## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
+##
+kubeVersion:
+## @param nameOverride String to partially override ebjca.fullname template (will maintain the release name)
+##
+nameOverride:
+## @param fullnameOverride String to fully override ebjca.fullname template
+##
+fullnameOverride:
+## @param commonLabels Add labels to all the deployed resources
+##
+commonLabels: {}
+## @param commonAnnotations Annotations to be added to all deployed resources
+##
+commonAnnotations: {}
+
+## @section EJBCA parameters
 
 ## Bitnami EJBCA image version
 ## ref: https://hub.docker.com/r/bitnami/ejbca/tags/
@@ -45,15 +63,6 @@ image:
   pullSecrets: []
   ## Set to true if you would like to see extra information on logs
   ##
-## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
-##
-kubeVersion:
-## @param nameOverride String to partially override ebjca.fullname template (will maintain the release name)
-##
-nameOverride:
-## @param fullnameOverride String to fully override ebjca.fullname template
-##
-fullnameOverride:
 ## @param replicaCount Number of EJBCA replicas to deploy
 ##
 replicaCount: 1
@@ -84,12 +93,6 @@ podAnnotations: {}
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
 podLabels: {}
-## @param commonLabels Add labels to all the deployed resources
-##
-commonLabels: {}
-## @param commonAnnotations Annotations to be added to all deployed resources
-##
-commonAnnotations: {}
 ## K8s Security Context for EJBCA pods
 ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 ## @param podSecurityContext.enabled Enable security context for EJBCA container
@@ -184,9 +187,6 @@ sidecars: {}
 ##    imagePullPolicy: Always
 ##
 initContainers: {}
-
-## @section EJBCA parameters
-
 ## @param hostAliases Add deployment host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##

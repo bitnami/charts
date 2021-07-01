@@ -18,6 +18,27 @@ global:
 
 ## @section Common parameters
 
+## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
+##
+kubeVersion:
+## @param nameOverride String to partially override drupal.fullname template (will maintain the release name)
+##
+nameOverride:
+## @param fullnameOverride String to fully override drupal.fullname template
+##
+fullnameOverride:
+## @param commonAnnotations Common annotations to add to all Drupal resources (sub-charts are not considered). Evaluated as a template
+##
+commonAnnotations: {}
+## @param commonLabels Common labels to add to all Drupal resources (sub-charts are not considered). Evaluated as a template
+##
+commonLabels: {}
+## @param extraDeploy Array of extra objects to deploy with the release (evaluated as a template).
+##
+extraDeploy: []
+
+## @section Drupal parameters
+
 ## Bitnami Drupal image version
 ## ref: https://hub.docker.com/r/bitnami/drupal/tags/
 ## @param image.registry Drupal image registry
@@ -47,27 +68,6 @@ image:
   ## Set to true if you would like to see extra information on logs
   ##
   debug: false
-## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
-##
-kubeVersion:
-## @param nameOverride String to partially override drupal.fullname template (will maintain the release name)
-##
-nameOverride:
-## @param fullnameOverride String to fully override drupal.fullname template
-##
-fullnameOverride:
-## @param commonAnnotations Common annotations to add to all Drupal resources (sub-charts are not considered). Evaluated as a template
-##
-commonAnnotations: {}
-## @param commonLabels Common labels to add to all Drupal resources (sub-charts are not considered). Evaluated as a template
-##
-commonLabels: {}
-## @param extraDeploy Array of extra objects to deploy with the release (evaluated as a template).
-##
-extraDeploy: []
-
-## @section Drupal parameters
-
 ## @param replicaCount Number of Drupal Pods to run (requires ReadWriteMany PVC support)
 ##
 replicaCount: 1
