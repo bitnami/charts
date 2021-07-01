@@ -21,6 +21,20 @@ global:
     name: coordinating-only
   kibanaEnabled: false
 
+## @section Common parameters
+
+## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
+##
+nameOverride:
+## @param fullnameOverride String to fully override common.names.fullname template
+##
+fullnameOverride:
+## @param clusterDomain Kubernetes cluster domain
+##
+clusterDomain: cluster.local
+
+## @section Elasticsearch parameters
+
 ## Bitnami Elasticsearch image version
 ## ref: https://hub.docker.com/r/bitnami/elasticsearch/tags/
 ## @param image.registry Elasticsearch image registry
@@ -50,132 +64,20 @@ image:
   ## Set to true if you would like to see extra information on logs
   ##
   debug: false
-
-## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
-##
-nameOverride:
-
-## @param fullnameOverride String to fully override common.names.fullname template
-##
-fullnameOverride:
-
-
-sysctlImage:
-  ## @param sysctlImage.enabled Enable kernel settings modifier image
-  ##
-  enabled: true
-  ## @param sysctlImage.registry Kernel settings modifier image registry
-  ## @param sysctlImage.repository Kernel settings modifier image repository
-  ## @param sysctlImage.tag Kernel settings modifier image tag
-  ## @param sysctlImage.pullPolicy Kernel settings modifier image pull policy
-  ## @param sysctlImage.pullSecrets Kernel settings modifier image pull secrets
-  ##
-  registry: docker.io
-  repository: bitnami/bitnami-shell
-  tag: 10-debian-10-r119
-  ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-  ##
-  pullPolicy: Always
-  ## Optionally specify an array of imagePullSecrets.
-  ## Secrets must be manually created in the namespace.
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-  ## e.g:
-  ## pullSecrets:
-  ##   - myRegistryKeySecretName
-  ##
-  pullSecrets: []
-  ## Init container' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ## We usually recommend not to specify default resources and to leave this as a conscious
-  ## choice for the user. This also increases chances charts run on environments with little
-  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
-  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param sysctlImage.resources.limits The resources limits for the container
-  ## @param sysctlImage.resources.requests The requested resources for the container
-  ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    requests: {}
-
-## Init containers parameters:
-## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
-##
-volumePermissions:
-  ## @param volumePermissions.enabled Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work)
-  ##
-  enabled: false
-  ## @param volumePermissions.image.registry Init container volume-permissions image registry
-  ## @param volumePermissions.image.repository Init container volume-permissions image name
-  ## @param volumePermissions.image.tag Init container volume-permissions image tag
-  ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
-  ## @param volumePermissions.image.pullSecrets Init container volume-permissions image pull secrets
-  ##
-  image:
-    registry: docker.io
-    repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r119
-    pullPolicy: Always
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ## e.g:
-    ## pullSecrets:
-    ##   - myRegistryKeySecretName
-    ##
-    pullSecrets: []
-  ## Init container' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ## We usually recommend not to specify default resources and to leave this as a conscious
-  ## choice for the user. This also increases chances charts run on environments with little
-  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
-  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param volumePermissions.resources.limits The resources limits for the container
-  ## @param volumePermissions.resources.requests The requested resources for the container
-  ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    requests: {}
-
-## @param clusterDomain Kubernetes cluster domain
-##
-clusterDomain: cluster.local
-
 ## @param name Elasticsearch cluster name
 ##
 name: elastic
-
 ## @param plugins Comma, semi-colon or space separated list of plugins to install at initialization
 ## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
 ##
 plugins:
-
 ## @param snapshotRepoPath File System snapshot repository path
 ## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
 ##
 snapshotRepoPath:
-
 ## @param config Override elasticsearch configuration
 ##
 config:
-
 ## @param extraConfig Append extra configuration to the elasticsearch node configuration
 ## Use this instead of `config` to add more configuration
 ## See below example:
@@ -186,7 +88,6 @@ config:
 ## ref: https://www.elastic.co/guide/en/elasticsearch/reference/current/settings.html
 ##
 extraConfig:
-
 ## @param extraVolumes A list of volumes to be added to the pod
 ## Example Use Case: mount ssl certificates when elasticsearch has tls enabled
 ## extraVolumes:
@@ -201,7 +102,6 @@ extraVolumes:
 ##     mountPath: /certs
 ##     readOnly: true
 extraVolumeMounts:
-
 ## @param initScripts Dictionary of init scripts. Evaluated as a template.
 ## Specify dictionary of scripts to be run at first boot
 ## Alternatively, you can put your scripts under the files/docker-entrypoint-initdb.d directory
@@ -212,16 +112,13 @@ extraVolumeMounts:
 ##      echo "Do something."
 ##
 initScripts:
-
 ## @param initScriptsCM ConfigMap with the init scripts. Evaluated as a template.
 ## Note: This will override initScripts
 ##
 initScriptsCM:
-
 ## @param initScriptsSecret Secret containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time that contain sensitive data. Evaluated as a template.
 ##
 initScriptsSecret:
-
 ## @param extraEnvVars Array containing extra env vars to be added to all pods (evaluated as a template)
 ## For example:
 ## extraEnvVars:
@@ -229,14 +126,14 @@ initScriptsSecret:
 ##    value: env_var_value
 ##
 extraEnvVars: []
-
 ## @param extraEnvVarsConfigMap ConfigMap containing extra env vars to be added to all pods (evaluated as a template)
 ##
 extraEnvVarsConfigMap:
-
 ## @param extraEnvVarsSecret Secret containing extra env vars to be added to all pods (evaluated as a template)
 ##
 extraEnvVarsSecret:
+
+## @section Master parameters
 
 ## Elasticsearch master-eligible node parameters
 ##
@@ -436,7 +333,6 @@ master:
     ## @param master.persistence.size Persistent Volume Size
     ##
     size: 8Gi
-
   ## Service parameters for master-eligible node(s)
   ##
   service:
@@ -482,6 +378,8 @@ master:
     targetCPU: 50
     targetMemory: 50
 
+## @section Coordinating parameters
+
 ## Elasticsearch coordinating-only node parameters
 ##
 coordinating:
@@ -502,7 +400,6 @@ coordinating:
   ##
   updateStrategy:
     type: RollingUpdate
-
   ## @param coordinating.heapSize Coordinating-only node heap size
   ##
   heapSize: 128m
@@ -526,12 +423,10 @@ coordinating:
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAffinityPreset: ""
-
   ## @param coordinating.podAntiAffinityPreset Coordinating Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAntiAffinityPreset: ""
-
   ## Node affinity preset
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
   ## @param coordinating.nodeAffinityPreset.type Coordinating Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
@@ -550,7 +445,6 @@ coordinating:
     ##   - e2e-az2
     ##
     values: []
-
   ## @param coordinating.affinity Coordinating Affinity for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
@@ -685,6 +579,8 @@ coordinating:
     targetCPU: 50
     targetMemory: 50
 
+## @section Data parameters
+
 ## Elasticsearch data node parameters
 ##
 data:
@@ -698,12 +594,10 @@ data:
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-
   ## @param data.schedulerName Name of the k8s scheduler (other than default)
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName:
-
   ## Update strategy for ElasticSearch Data statefulset
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ## @param data.updateStrategy.type Update strategy for Data statefulset
@@ -909,6 +803,8 @@ data:
     targetCPU: 50
     targetMemory: 50
 
+## @section Ingest parameters
+
 ## Elasticsearch ingest node parameters
 ##
 ingest:
@@ -931,12 +827,10 @@ ingest:
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-
   ## @param ingest.schedulerName Name of the k8s scheduler (other than default)
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName:
-
   ## @param ingest.podLabels Extra labels to add to Pod
   ##
   podLabels: {}
@@ -954,12 +848,10 @@ ingest:
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAffinityPreset: ""
-
   ## @param ingest.podAntiAffinityPreset Ingest Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAntiAffinityPreset: ""
-
   ## Node affinity preset
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
   ## Allowed values: soft, hard
@@ -979,18 +871,15 @@ ingest:
     ##   - e2e-az2
     ##
     values: []
-
   ## @param ingest.affinity Ingest Affinity for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
-
   ## @param ingest.nodeSelector Ingest Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-
   ## @param ingest.tolerations Ingest Tolerations for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
@@ -1093,6 +982,8 @@ ingest:
     ##
     loadBalancerIP:
 
+## @section Curator parameters
+
 ## Elasticsearch curator parameters
 ##
 curator:
@@ -1120,7 +1011,6 @@ curator:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-
   ## @param curator.cronjob.schedule Schedule for the CronJob
   ## @param curator.cronjob.annotations Annotations to add to the cronjob
   ## @param curator.cronjob.concurrencyPolicy `Allow,Forbid,Replace` concurrent jobs
@@ -1136,12 +1026,10 @@ curator:
     failedJobsHistoryLimit: ""
     successfulJobsHistoryLimit: ""
     jobRestartPolicy: Never
-
   ## @param curator.schedulerName Name of the k8s scheduler (other than default)
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName:
-
   ## @param curator.podAnnotations Annotations to add to the pod
   ##
   podAnnotations: {}
@@ -1219,7 +1107,7 @@ curator:
   env: {}
   ## Curator configMaps
   configMaps:
-    ## @skip curator.configMaps.action_file_yml Contents of the Curator action_file.yml
+    ## @param curator.configMaps.action_file_yml [object] Contents of the Curator action_file.yml
     ## Delete indices older than 90 days
     ##
     action_file_yml: |-
@@ -1244,7 +1132,7 @@ curator:
             stats_result:
             epoch:
             exclude: False
-    ## @skip curator.configMaps.config_yml Contents of the Curator config.yml (overrides config)
+    ## @param curator.configMaps.config_yml [object] Contents of the Curator config.yml (overrides config)
     ## Default config (this value is evaluated as a template)
     ##
     config_yml: |-
@@ -1267,7 +1155,6 @@ curator:
       #   logfile:
       #   logformat: default
       #   blacklist: ['elasticsearch', 'urllib3']
-
   ## Curator resources requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -1291,7 +1178,6 @@ curator:
   ## @param curator.priorityClassName Priority Class Name
   ##
   priorityClassName: ""
-
   ## @param curator.extraVolumes Extra volumes
   ## Example Use Case: mount ssl certificates when elasticsearch has tls enabled
   ## extraVolumes:
@@ -1306,7 +1192,6 @@ curator:
   ##     mountPath: /certs
   ##     readOnly: true
   extraVolumeMounts: []
-
   ## @param curator.extraInitContainers Init containers to add to the cronjob container
   ## Don't configure S3 repository till Elasticsearch is reachable.
   ## Ensure that it is available at http://elasticsearch:9200
@@ -1342,6 +1227,8 @@ curator:
   ##     }
   ##
   extraInitContainers: {}
+
+## @section Metrics parameters
 
 ## Elasticsearch Prometheus exporter configuration
 ## ref: https://hub.docker.com/r/bitnami/elasticsearch-exporter/tags/
@@ -1384,12 +1271,10 @@ metrics:
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-
   ## @param metrics.schedulerName Name of the k8s scheduler (other than default)
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName:
-
   ## Elasticsearch Prometheus exporter service type
   ##
   service:
@@ -1500,11 +1385,9 @@ metrics:
   podAnnotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "9114"
-
   ## @param metrics.podLabels Extra labels to add to Pod
   ##
   podLabels: {}
-
   ## Prometheus Operator ServiceMonitor configuration
   ##
   serviceMonitor:
@@ -1514,23 +1397,120 @@ metrics:
     ## @param metrics.serviceMonitor.namespace Namespace in which Prometheus is running
     ##
     namespace: monitoring
-
     ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped.
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
     interval: 10s
-
     ## @param metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
     scrapeTimeout: 10s
-
     ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
     ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
     ## selector:
     ##   prometheus: my-prometheus
     ##
     selector: {}
+
+## @section VolumePermissions parameters
+
+## Kernel settings modifier image
+##
+sysctlImage:
+  ## @param sysctlImage.enabled Enable kernel settings modifier image
+  ##
+  enabled: true
+  ## @param sysctlImage.registry Kernel settings modifier image registry
+  ## @param sysctlImage.repository Kernel settings modifier image repository
+  ## @param sysctlImage.tag Kernel settings modifier image tag
+  ## @param sysctlImage.pullPolicy Kernel settings modifier image pull policy
+  ## @param sysctlImage.pullSecrets Kernel settings modifier image pull secrets
+  ##
+  registry: docker.io
+  repository: bitnami/bitnami-shell
+  tag: 10-debian-10-r119
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: Always
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  pullSecrets: []
+  ## Init container' resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param sysctlImage.resources.limits The resources limits for the container
+  ## @param sysctlImage.resources.requests The requested resources for the container
+  ##
+  resources:
+    ## Example:
+    ## limits:
+    ##    cpu: 100m
+    ##    memory: 128Mi
+    limits: {}
+    ## Examples:
+    ## requests:
+    ##    cpu: 100m
+    ##    memory: 128Mi
+    requests: {}
+
+## @section VolumePermissions parameters
+
+## Init containers parameters:
+## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
+##
+volumePermissions:
+  ## @param volumePermissions.enabled Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work)
+  ##
+  enabled: false
+  ## @param volumePermissions.image.registry Init container volume-permissions image registry
+  ## @param volumePermissions.image.repository Init container volume-permissions image name
+  ## @param volumePermissions.image.tag Init container volume-permissions image tag
+  ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
+  ## @param volumePermissions.image.pullSecrets Init container volume-permissions image pull secrets
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/bitnami-shell
+    tag: 10-debian-10-r119
+    pullPolicy: Always
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## Init container' resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param volumePermissions.resources.limits The resources limits for the container
+  ## @param volumePermissions.resources.requests The requested resources for the container
+  ##
+  resources:
+    ## Example:
+    ## limits:
+    ##    cpu: 100m
+    ##    memory: 128Mi
+    limits: {}
+    ## Examples:
+    ## requests:
+    ##    cpu: 100m
+    ##    memory: 128Mi
+    requests: {}
 
 ## Bundled Kibana parameters
 ## @param kibana.elasticsearch.hosts [array] Array containing hostnames for the ES instances. Used to generate the URL
