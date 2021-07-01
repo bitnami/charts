@@ -2,7 +2,7 @@
 {{- if .Values.rbac.create }}
 {{- if .Values.podSecurityPolicy.create }}
 ---
-apiVersion: rbac.authorization.k8s.io/{{ .Values.rbac.apiVersion }}
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
   name: {{ template "common.names.fullname" . }}

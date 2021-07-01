@@ -19,16 +19,16 @@ Return the proper Docker Image Registry Secret Names
 {{- include "common.images.pullSecrets" (dict "images" (list .Values.concourse.image .Values.volumePermissions.image) "global" .Values.global) -}}
 {{- end -}}
 
-{{/*
-Create the name of the service account to use
-*/}}
-{{- define "concourse.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create -}}
-    {{ default (printf "%s-concourse" (include "common.names.fullname" .)) .Values.concourse.serviceAccount.name }}
-{{- else -}}
-    {{ default "default" .Values.serviceAccount.name }}
-{{- end -}}
-{{- end -}}
+# {{/*
+# Create the name of the service account to use
+# */}}
+# {{- define "concourse.serviceAccountName" -}}
+# {{- if .Values.serviceAccount.create -}}
+#     {{ default (printf "%s-concourse" (include "common.names.fullname" .)) .Values.concourse.serviceAccount.name }}
+# {{- else -}}
+#     {{ default "default" .Values.serviceAccount.name }}
+# {{- end -}}
+# {{- end -}}
 
 {{/*
 Compile all warnings into a single message.

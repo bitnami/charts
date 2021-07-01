@@ -65,8 +65,8 @@ spec:
             - sh
             - -c
             - |
-              mkdir -p "/bitnami/drupal"
-              chown -R "{{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}" "/bitnami/drupal"
+              mkdir -p "/bitnami/concourse"
+              chown -R "{{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}" "/bitnami/concourse"
           securityContext:
             runAsUser: 0
           {{- if .Values.volumePermissions.resources }}
@@ -221,12 +221,28 @@ spec:
           resources: {{- toYaml .Values.web.resources | nindent 12 }}
           {{- end }}
           {{- if .Values.web.livenessProbe.enabled }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.web.livenessProbe "enabled") "context" $) | nindent 12 }}
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.web.baseUrl | trimSuffix "/" }}/api/v1/info
+              port: atc
+            initialDelaySeconds: {{ .Values.web.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.web.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.web.livenessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.web.livenessProbe.failureThreshold }}
+            successThreshold: {{ .Values.web.livenessProbe.successThreshold }}
           {{- else if .Values.web.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.web.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.web.readinessProbe.enabled }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.web.readinessProbe "enabled") "context" $) | nindent 12 }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.web.baseUrl | trimSuffix "/" }}/api/v1/info
+              port: atc
+            initialDelaySeconds: {{ .Values.web.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.web.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.web.readinessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.web.readinessProbe.failureThreshold }}
+            successThreshold: {{ .Values.web.readinessProbe.successThreshold }}
           {{- else if .Values.web.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.web.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
