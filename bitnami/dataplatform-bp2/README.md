@@ -104,7 +104,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `kafka.resources.limits`                                                                  | Resource limits for Kafka                                                                                                          | `{}`                  |
 | `kafka.resources.requests.cpu`                                                            | CPU capacity request for Kafka nodes                                                                                               | `250m`                |
 | `kafka.resources.requests.memory`                                                         | Memory capacity request for Kafka nodes                                                                                            | `5120Mi`              |
-| `kafka.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution`           | !!!! Kafka anti affinity rules                                                                                                     | `{}`                  |
+| `kafka.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution`           | Kafka anti affinity rules                                                                                                          | `{}`                  |
 | `kafka.affinity.podAffinity.preferredDuringSchedulingIgnoredDuringExecution`              | Kafka affinity rules                                                                                                               | `{}`                  |
 | `kafka.metrics.kafka.enabled`                                                             | Enable prometheus exporter for Kafka                                                                                               | `false`               |
 | `kafka.metrics.kafka.resources.limits`                                                    | Resource limits for kafka prometheus exporter                                                                                      | `{}`                  |
@@ -159,17 +159,17 @@ The command removes all the Kubernetes components associated with the chart and 
 | `elasticsearch.master.resources.limits`                                                              | Elasticsearch master resource limits         | `{}`     |
 | `elasticsearch.master.resources.requests.cpu`                                                        | Elasticsearch master CPUs                    | `250m`   |
 | `elasticsearch.master.resources.requests.memory`                                                     | Elasticsearch master requested memory        | `1048Mi` |
-| `elasticsearch.master.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution`       | !!! Anti affinity rules set for resiliency   | `{}`     |
+| `elasticsearch.master.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution`       | Anti affinity rules set for resiliency       | `{}`     |
 | `elasticsearch.data.name`                                                                            | Elasticsearch data node name                 | `data`   |
 | `elasticsearch.data.replicas`                                                                        | Number of Elasticsearch replicas             | `2`      |
 | `elasticsearch.data.heapSize`                                                                        | Heap Size for Elasticsearch data node        | `2560m`  |
-| `elasticsearch.data.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution`         | !!! Anti affinity rules set for resiliency   | `{}`     |
+| `elasticsearch.data.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution`         | Anti affinity rules set for resiliency       | `{}`     |
 | `elasticsearch.data.resources.limits`                                                                | Elasticsearch data node resource limits      | `{}`     |
 | `elasticsearch.data.resources.requests.cpu`                                                          | Elasticsearch data node CPUs                 | `250m`   |
 | `elasticsearch.data.resources.requests.memory`                                                       | Elasticsearch data node requested memory     | `5Gi`    |
 | `elasticsearch.coordinating.replicas`                                                                | Number of Elasticsearch replicas             | `2`      |
 | `elasticsearch.coordinating.heapSize`                                                                | Heap Size for Elasticsearch coordinating     | `1024m`  |
-| `elasticsearch.coordinating.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution` | !!! Anti affinity rules set for resiliency   | `{}`     |
+| `elasticsearch.coordinating.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution` | Anti affinity rules set for resiliency       | `{}`     |
 | `elasticsearch.coordinating.resources.limits`                                                        | Elasticsearch coordinating resource limits   | `{}`     |
 | `elasticsearch.coordinating.resources.requests.cpu`                                                  | Elasticsearch coordinating CPUs              | `100m`   |
 | `elasticsearch.coordinating.resources.requests.memory`                                               | Elasticsearch coordinating requested memory  | `2Gi`    |
@@ -182,20 +182,20 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Logstash parameters
 
-| Name                                                                               | Description                            | Value   |
-| ---------------------------------------------------------------------------------- | -------------------------------------- | ------- |
-| `logstash.enabled`                                                                 | Enable Logstash                        | `true`  |
-| `logstash.replicaCount`                                                            | Number of Logstash replicas            | `2`     |
-| `logstash.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution` | Logstash pod anti affinity             | `{}`    |
-| `logstash.resources.limits`                                                        | Elasticsearch metrics resource limits  | `{}`    |
-| `logstash.resources.requests.cpu`                                                  | Elasticsearch metrics CPUs             | `100m`  |
-| `logstash.resources.requests.memory`                                               | Elasticsearch metrics requested memory | `128Mi` |
-| `logstash.metrics.enabled`                                                         | Enable metrics for logstash            | `false` |
-| `logstash.metrics.resources.limits`                                                | Elasticsearch metrics resource limits  | `{}`    |
-| `logstash.metrics.resources.requests.cpu`                                          | Elasticsearch metrics CPUs             | `100m`  |
-| `logstash.metrics.resources.requests.memory`                                       | Elasticsearch metrics requested memory | `128Mi` |
-| `logstash.metrics.service.port`                                                    | Logstash service port                  | `9198`  |
-| `logstash.metrics.service.annotations`                                             | Logstash service annotations           | `{}`    |
+| Name                                                                               | Description                                    | Value   |
+| ---------------------------------------------------------------------------------- | ---------------------------------------------- | ------- |
+| `logstash.enabled`                                                                 | Enable Logstash                                | `true`  |
+| `logstash.replicaCount`                                                            | Number of Logstash replicas                    | `2`     |
+| `logstash.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution` | Logstash pod anti affinity                     | `{}`    |
+| `logstash.resources.limits`                                                        | Elasticsearch metrics resource limits          | `{}`    |
+| `logstash.resources.requests.cpu`                                                  | Elasticsearch metrics CPUs                     | `100m`  |
+| `logstash.resources.requests.memory`                                               | Elasticsearch metrics requested memory         | `128Mi` |
+| `logstash.metrics.enabled`                                                         | Enable metrics for logstash                    | `false` |
+| `logstash.metrics.resources.limits`                                                | Elasticsearch metrics resource limits          | `{}`    |
+| `logstash.metrics.resources.requests.cpu`                                          | Elasticsearch metrics CPUs                     | `100m`  |
+| `logstash.metrics.resources.requests.memory`                                       | Elasticsearch metrics requested memory         | `128Mi` |
+| `logstash.metrics.service.port`                                                    | Logstash Prometheus port                       | `9198`  |
+| `logstash.metrics.service.annotations`                                             | Annotations for the Prometheus metrics service | `{}`    |
 
 
 ### Tanzu Observability (Wavefront) parameters
@@ -203,7 +203,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                                 | Description                                    | Value                                |
 | ---------------------------------------------------- | ---------------------------------------------- | ------------------------------------ |
 | `wavefront.enabled`                                  | Enable Tanzu Observability Framework           | `false`                              |
-| `wavefront.clusterName`                              | cluster name                                   | `KUBERNETES_CLUSTER_NAME`            |
+| `wavefront.clusterName`                              | Cluster name                                   | `KUBERNETES_CLUSTER_NAME`            |
 | `wavefront.wavefront.url`                            | Tanzu Observability cluster URL                | `https://YOUR_CLUSTER.wavefront.com` |
 | `wavefront.wavefront.token`                          | Tanzu Observability access token               | `YOUR_API_TOKEN`                     |
 | `wavefront.wavefront.existingSecret`                 | Tanzu Observability existing secret            | `nil`                                |

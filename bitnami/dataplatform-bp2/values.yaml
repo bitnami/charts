@@ -518,7 +518,7 @@ wavefront:
   enabled: false
   ## This is a unique name for the cluster (required)
   ## All metrics will receive a `cluster` tag with this value
-  ## @param wavefront.clusterName cluster name
+  ## @param wavefront.clusterName Cluster name
   ##
   clusterName: KUBERNETES_CLUSTER_NAME
   ## Wavefront URL (cluster) and API Token (required)
