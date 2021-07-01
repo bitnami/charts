@@ -146,7 +146,7 @@ auth:
 ## - 'periodic' for duration based retention, defaulting to hours if no time unit is provided (e.g. ‘5m’).
 ## - 'revision' for revision number based retention.
 ##
-autoCompactionMode: periodic
+autoCompactionMode:
 ## @param autoCompactionRetention Auto compaction retention for mvcc key value store in hour, by default 0, means disabled
 ##
 autoCompactionRetention:
@@ -457,7 +457,7 @@ persistence:
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##   GKE, AWS & OpenStack)
   ##
-  storageClass: "-"
+  storageClass:
   ##
   ## @param persistence.annotations Annotations for the PVC
   ##
