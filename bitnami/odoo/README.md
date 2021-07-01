@@ -208,7 +208,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                          | Description                                                                       | Value           |
 | --------------------------------------------- | --------------------------------------------------------------------------------- | --------------- |
 | `postgresql.enabled`                          | Deploy PostgreSQL container(s)                                                    | `true`          |
-| `postgresql.postgresqlPassword`               | PostgreSQL password                                                               | `nil`           |
+| `postgresql.postgresqlUsername`               | PostgreSQL username                                                               | `bn_odoo`       |
+| `postgresql.postgresqlPassword`               | PostgreSQL password                                                               | `""`            |
 | `postgresql.postgresqlDatabase`               | PostgreSQL database                                                               | `bitnami_odoo`  |
 | `postgresql.existingSecret`                   | Name of existing secret object                                                    | `nil`           |
 | `postgresql.persistence.enabled`              | Enable PostgreSQL persistence using PVC                                           | `true`          |
@@ -219,11 +220,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.host`                       | External Database server host                                                     | `nil`           |
 | `externalDatabase.port`                       | External Database server port                                                     | `5432`          |
 | `externalDatabase.user`                       | External Database username                                                        | `bn_odoo`       |
-| `externalDatabase.password`                   | External Database user password                                                   | `nil`           |
+| `externalDatabase.password`                   | External Database user password                                                   | `""`            |
 | `externalDatabase.database`                   | External Database database name                                                   | `bitnami_odoo`  |
 | `externalDatabase.create`                     | Enable PostgreSQL user and database creation (when using an external db)          | `true`          |
 | `externalDatabase.postgresqlPostgresUser`     | External Database admin username                                                  | `postgres`      |
-| `externalDatabase.postgresqlPostgresPassword` | External Database admin password                                                  | `nil`           |
+| `externalDatabase.postgresqlPostgresPassword` | External Database admin password                                                  | `""`            |
 | `externalDatabase.existingSecret`             | Name of existing secret object                                                    | `nil`           |
 
 

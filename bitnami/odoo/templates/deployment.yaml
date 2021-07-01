@@ -113,7 +113,7 @@ spec:
                 secretKeyRef:
                   name: {{ include "odoo.databaseSecretName" . | quote }}
                   key: "postgresql-password"
-            {{- if .Values.externalDatabase.create }}
+            {{- if and (not .Values.postgresql.enabled) .Values.externalDatabase.create }}
             - name: POSTGRESQL_CLIENT_DATABASE_HOST
               value: {{ template "odoo.databaseHost" . }}
             - name: POSTGRESQL_CLIENT_DATABASE_PORT_NUMBER
@@ -145,7 +145,7 @@ spec:
             - name: ODOO_SKIP_BOOTSTRAP
               value: {{ .Values.skipInstall | quote }}
             - name: ODOO_LOAD_DEMO_DATA
-              value: {{ .Values.loadDemoData | quote }}
+              value: {{ ternary "yes" "no" .Values.loadDemoData | quote }}
             {{- if .Values.withoutDemo }}
             - name: WITHOUT_DEMO
               value: {{ .Values.withoutDemo | quote }}

@@ -559,6 +559,10 @@ postgresql:
   ## @param postgresql.enabled Deploy PostgreSQL container(s)
   ##
   enabled: true
+  ## @param postgresql.postgresqlUsername PostgreSQL username
+  ## ref: https://hub.docker.com/_/postgres/
+  ##
+  postgresqlUsername: "bn_odoo"
   ## @param postgresql.postgresqlPassword PostgreSQL password
   ## ref: https://hub.docker.com/_/postgres/
   ##
@@ -617,7 +621,7 @@ externalDatabase:
   user: bn_odoo
   ## @param externalDatabase.password External Database user password
   ##
-  password:
+  password: ""
   ## @param externalDatabase.database External Database database name
   ##
   database: bitnami_odoo
@@ -630,7 +634,7 @@ externalDatabase:
   postgresqlPostgresUser: "postgres"
   ## @param externalDatabase.postgresqlPostgresPassword External Database admin password
   ##
-  postgresqlPostgresPassword:
+  postgresqlPostgresPassword: ""
   ## @param externalDatabase.existingSecret Name of existing secret object
   ## The secret should contain the following keys:
   ## postgresql-postgres-password (for root user)
