@@ -107,7 +107,7 @@ operator:
   ## @param operator.podSecurityContext.runAsGroup User ID for the pods
   ## @param operator.podSecurityContext.runAsNonRoot Grafana Operator must run as nonRoot
   ## @param operator.podSecurityContext.fsGroup Group ID for the pods
-  ## @param operator.podSecurityContext.supplementalGroups Drop capabilities for the securityContext
+  ## @param operator.podSecurityContext.supplementalGroups Which group IDs containers add
   ##
   podSecurityContext:
     enabled: true
@@ -277,7 +277,7 @@ grafana:
   ## @param grafana.podSecurityContext.runAsGroup User ID for the pods
   ## @param grafana.podSecurityContext.runAsNonRoot Grafana Operator must run as nonRoot
   ## @param grafana.podSecurityContext.fsGroup Group ID for the pods
-  ## @param grafana.podSecurityContext.supplementalGroups Drop capabilities for the securityContext
+  ## @param grafana.podSecurityContext.supplementalGroups Which group IDs containers add
   ##
   podSecurityContext:
     enabled: true
