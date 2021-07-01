@@ -59,43 +59,13 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                         | Description                                                                               | Value                |
-| ---------------------------- | ----------------------------------------------------------------------------------------- | -------------------- |
-| `kubeVersion`                | Force target Kubernetes version (using Helm capabilites if not set)                       | `nil`                |
-| `replicaCount`               | Number of Discourse & Sidekiq replicas                                                    | `1`                  |
-| `image.registry`             | Discourse image registry                                                                  | `docker.io`          |
-| `image.repository`           | Discourse image repository                                                                | `bitnami/discourse`  |
-| `image.tag`                  | Discourse image tag                                                                       | `2.7.1-debian-10-r0` |
-| `image.pullPolicy`           | Discourse image pull policy                                                               | `IfNotPresent`       |
-| `image.debug`                | Specify if debug logs should be enabled                                                   | `false`              |
-| `imagePullSecrets`           | Specify docker-registry secret names as an array                                          | `[]`                 |
-| `nameOverride`               | String to partially override discourse.fullname template (will maintain the release name) | `nil`                |
-| `fullnameOverride`           | String to fully override discourse.fullname template                                      | `nil`                |
-| `extraVolumes`               | Array of extra volumes to be added deployment. Requires setting `extraVolumeMounts`       | `[]`                 |
-| `sidecars`                   | Attach additional sidecar containers to the pod                                           | `[]`                 |
-| `initContainers`             | Additional init containers to add to the pods                                             | `[]`                 |
-| `serviceAccount.create`      | Whether the service account should be created                                             | `false`              |
-| `serviceAccount.annotations` | Annotations to add to the service account                                                 | `{}`                 |
-| `serviceAccount.name`        | Name to be used for the service account                                                   | `nil`                |
-| `podSecurityContext`         | Pod security context specification                                                        | `{}`                 |
-| `hostAliases`                | Add deployment host aliases                                                               | `[]`                 |
-| `persistence.enabled`        | Whether to enable persistence based on Persistent Volume Claims                           | `true`               |
-| `persistence.accessMode`     | PVC Access Mode (RWO, ROX, RWX)                                                           | `ReadWriteOnce`      |
-| `persistence.size`           | Size of the PVC to request                                                                | `10Gi`               |
-| `persistence.selector`       | Selector to match an existing Persistent Volume (this value is evaluated as a template)   | `{}`                 |
-| `updateStrategy.type`        | Update strategy type. Only really applicable for deployments with RWO PVs attached        | `RollingUpdate`      |
-| `podAnnotations`             | Additional pod annotations                                                                | `{}`                 |
-| `podLabels`                  | Additional pod labels                                                                     | `{}`                 |
-| `commonLabels`               | Labels to be added to all deployed resources                                              | `{}`                 |
-| `commonAnnotations`          | Annotations to be added to all deployed resources                                         | `{}`                 |
-| `podAffinityPreset`          | Pod affinity preset. Allowed values: soft, hard                                           | `""`                 |
-| `podAntiAffinityPreset`      | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`               |
-| `nodeAffinityPreset.type`    | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                 |
-| `nodeAffinityPreset.key`     | Node label key to match Ignored if `affinity` is set.                                     | `""`                 |
-| `nodeAffinityPreset.values`  | Node label values to match. Ignored if `affinity` is set.                                 | `[]`                 |
-| `affinity`                   | Affinity for pod assignment                                                               | `{}`                 |
-| `nodeSelector`               | Node labels for pod assignment.                                                           | `{}`                 |
-| `tolerations`                | Tolerations for pod assignment.                                                           | `[]`                 |
+| Name                | Description                                                                               | Value |
+| ------------------- | ----------------------------------------------------------------------------------------- | ----- |
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                      | `nil` |
+| `nameOverride`      | String to partially override discourse.fullname template (will maintain the release name) | `nil` |
+| `fullnameOverride`  | String to fully override discourse.fullname template                                      | `nil` |
+| `commonLabels`      | Labels to be added to all deployed resources                                              | `{}`  |
+| `commonAnnotations` | Annotations to be added to all deployed resources                                         | `{}`  |
 
 
 ### Service parameters
@@ -104,49 +74,90 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------- | --------------------------------------------------------------- | -------------- |
 | `service.type`                     | Kubernetes Service type                                         | `LoadBalancer` |
 | `service.port`                     | Service HTTP port                                               | `80`           |
+| `service.nodePort`                 | Node Ports to expose                                            | `nil`          |
+| `service.loadBalancerIP`           | Use loadBalancerIP to request a specific static IP              | `nil`          |
 | `service.externalTrafficPolicy`    | Enable client source IP preservation                            | `Cluster`      |
 | `service.annotations`              | Service annotations                                             | `{}`           |
 | `service.loadBalancerSourceRanges` | Limits which cidr blocks can connect to service's load balancer | `[]`           |
+| `service.extraPorts`               | Extra ports to expose (normally used with the `sidecar` value)  | `nil`          |
 | `service.nodePorts.http`           | Kubernetes http node port                                       | `""`           |
 
 
 ### Discourse parameters
 
-| Name                                           | Description                                                                                               | Value              |
-| ---------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ------------------ |
-| `discourse.host`                               | Discourse host to create application URLs (include the port if =/= 80)                                    | `""`               |
-| `discourse.siteName`                           | Discourse site name                                                                                       | `My Site!`         |
-| `discourse.username`                           | Admin user of the application                                                                             | `user`             |
-| `discourse.email`                              | Admin user email of the application                                                                       | `user@example.com` |
-| `discourse.containerSecurityContext`           | Container security context specification                                                                  | `{}`               |
-| `discourse.resources.limits`                   | The resources limits for the container                                                                    | `{}`               |
-| `discourse.resources.requests`                 | The requested resources for the container                                                                 | `{}`               |
-| `discourse.livenessProbe.enabled`              | Enable/disable livenessProbe                                                                              | `true`             |
-| `discourse.livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated                                                                  | `500`              |
-| `discourse.livenessProbe.periodSeconds`        | How often to perform the probe                                                                            | `10`               |
-| `discourse.livenessProbe.timeoutSeconds`       | When the probe times out                                                                                  | `5`                |
-| `discourse.livenessProbe.failureThreshold`     | Minimum consecutive failures for the probe                                                                | `6`                |
-| `discourse.livenessProbe.successThreshold`     | Minimum consecutive successes for the probe                                                               | `1`                |
-| `discourse.readinessProbe.enabled`             | Enable/disable readinessProbe                                                                             | `true`             |
-| `discourse.readinessProbe.initialDelaySeconds` | Delay before readiness probe is initiated                                                                 | `30`               |
-| `discourse.readinessProbe.periodSeconds`       | How often to perform the probe                                                                            | `10`               |
-| `discourse.readinessProbe.timeoutSeconds`      | When the probe times out                                                                                  | `5`                |
-| `discourse.readinessProbe.failureThreshold`    | Minimum consecutive failures for the probe                                                                | `6`                |
-| `discourse.readinessProbe.successThreshold`    | Minimum consecutive successes for the probe                                                               | `1`                |
-| `discourse.customLivenessProbe`                | Custom liveness probe to execute (when the main one is disabled)                                          | `{}`               |
-| `discourse.customReadinessProbe`               | Custom readiness probe to execute (when the main one is disabled)                                         | `{}`               |
-| `discourse.smtp.enabled`                       | Enable/disable SMTP                                                                                       | `false`            |
-| `discourse.smtp.host`                          | SMTP host name                                                                                            | `""`               |
-| `discourse.smtp.port`                          | SMTP port number                                                                                          | `""`               |
-| `discourse.smtp.user`                          | SMTP account user name                                                                                    | `""`               |
-| `discourse.smtp.password`                      | SMTP account password                                                                                     | `""`               |
-| `discourse.smtp.protocol`                      | SMTP protocol (Allowed values: tls, ssl)                                                                  | `""`               |
-| `discourse.smtp.auth`                          | SMTP authentication method                                                                                | `""`               |
-| `discourse.smtp.existingSecret`                | Name of an existing Kubernetes secret. The secret must have the following key configured: `smtp-password` | `""`               |
-| `discourse.extraEnvVars`                       | An array to add extra env vars                                                                            | `[]`               |
-| `discourse.extraEnvVarsCM`                     | Array to add extra configmaps                                                                             | `[]`               |
-| `discourse.extraVolumeMounts`                  | Additional volume mounts (used along with `extraVolumes`)                                                 | `[]`               |
-| `discourse.skipInstall`                        | Do not run the Discourse installation wizard                                                              | `false`            |
+| Name                                           | Description                                                                                               | Value                |
+| ---------------------------------------------- | --------------------------------------------------------------------------------------------------------- | -------------------- |
+| `image.registry`                               | Discourse image registry                                                                                  | `docker.io`          |
+| `image.repository`                             | Discourse image repository                                                                                | `bitnami/discourse`  |
+| `image.tag`                                    | Discourse image tag                                                                                       | `2.7.4-debian-10-r0` |
+| `image.pullPolicy`                             | Discourse image pull policy                                                                               | `IfNotPresent`       |
+| `image.pullSecrets`                            | Discourse image pull secrets                                                                              | `[]`                 |
+| `image.debug`                                  | Specify if debug logs should be enabled                                                                   | `false`              |
+| `imagePullSecrets`                             | Specify docker-registry secret names as an array                                                          | `[]`                 |
+| `discourse.host`                               | Discourse host to create application URLs (include the port if =/= 80)                                    | `""`                 |
+| `discourse.siteName`                           | Discourse site name                                                                                       | `My Site!`           |
+| `discourse.username`                           | Admin user of the application                                                                             | `user`               |
+| `discourse.password`                           | password. WARNING: Minimum length of 10 characters                                                        | `nil`                |
+| `discourse.existingSecret`                     | Name of an existing secret containing the password (ignores previous password)                            | `nil`                |
+| `discourse.email`                              | Admin user email of the application                                                                       | `user@example.com`   |
+| `discourse.command`                            | Custom command to override image cmd                                                                      | `[]`                 |
+| `discourse.args`                               | Custom args for the custom command                                                                        | `[]`                 |
+| `discourse.containerSecurityContext`           | Container security context specification                                                                  | `{}`                 |
+| `discourse.resources.limits`                   | The resources limits for the container                                                                    | `{}`                 |
+| `discourse.resources.requests`                 | The requested resources for the container                                                                 | `{}`                 |
+| `discourse.livenessProbe.enabled`              | Enable/disable livenessProbe                                                                              | `true`               |
+| `discourse.livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated                                                                  | `500`                |
+| `discourse.livenessProbe.periodSeconds`        | How often to perform the probe                                                                            | `10`                 |
+| `discourse.livenessProbe.timeoutSeconds`       | When the probe times out                                                                                  | `5`                  |
+| `discourse.livenessProbe.failureThreshold`     | Minimum consecutive failures for the probe                                                                | `6`                  |
+| `discourse.livenessProbe.successThreshold`     | Minimum consecutive successes for the probe                                                               | `1`                  |
+| `discourse.readinessProbe.enabled`             | Enable/disable readinessProbe                                                                             | `true`               |
+| `discourse.readinessProbe.initialDelaySeconds` | Delay before readiness probe is initiated                                                                 | `30`                 |
+| `discourse.readinessProbe.periodSeconds`       | How often to perform the probe                                                                            | `10`                 |
+| `discourse.readinessProbe.timeoutSeconds`      | When the probe times out                                                                                  | `5`                  |
+| `discourse.readinessProbe.failureThreshold`    | Minimum consecutive failures for the probe                                                                | `6`                  |
+| `discourse.readinessProbe.successThreshold`    | Minimum consecutive successes for the probe                                                               | `1`                  |
+| `discourse.customLivenessProbe`                | Custom liveness probe to execute (when the main one is disabled)                                          | `{}`                 |
+| `discourse.customReadinessProbe`               | Custom readiness probe to execute (when the main one is disabled)                                         | `{}`                 |
+| `discourse.smtp.enabled`                       | Enable/disable SMTP                                                                                       | `false`              |
+| `discourse.smtp.host`                          | SMTP host name                                                                                            | `""`                 |
+| `discourse.smtp.port`                          | SMTP port number                                                                                          | `""`                 |
+| `discourse.smtp.user`                          | SMTP account user name                                                                                    | `""`                 |
+| `discourse.smtp.password`                      | SMTP account password                                                                                     | `""`                 |
+| `discourse.smtp.protocol`                      | SMTP protocol (Allowed values: tls, ssl)                                                                  | `""`                 |
+| `discourse.smtp.auth`                          | SMTP authentication method                                                                                | `""`                 |
+| `discourse.smtp.existingSecret`                | Name of an existing Kubernetes secret. The secret must have the following key configured: `smtp-password` | `""`                 |
+| `discourse.extraEnvVars`                       | An array to add extra env vars                                                                            | `[]`                 |
+| `discourse.extraEnvVarsCM`                     | Array to add extra configmaps                                                                             | `[]`                 |
+| `discourse.extraEnvVarsSecret`                 | Array to add extra environment variables from a secret                                                    | `""`                 |
+| `discourse.extraVolumeMounts`                  | Additional volume mounts (used along with `extraVolumes`)                                                 | `[]`                 |
+| `discourse.skipInstall`                        | Do not run the Discourse installation wizard                                                              | `false`              |
+| `replicaCount`                                 | Number of Discourse & Sidekiq replicas                                                                    | `1`                  |
+| `extraVolumes`                                 | Array of extra volumes to be added deployment. Requires setting `extraVolumeMounts`                       | `[]`                 |
+| `sidecars`                                     | Attach additional sidecar containers to the pod                                                           | `[]`                 |
+| `initContainers`                               | Additional init containers to add to the pods                                                             | `[]`                 |
+| `serviceAccount.create`                        | Whether the service account should be created                                                             | `false`              |
+| `serviceAccount.annotations`                   | Annotations to add to the service account                                                                 | `{}`                 |
+| `serviceAccount.name`                          | Name to be used for the service account                                                                   | `nil`                |
+| `podSecurityContext`                           | Pod security context specification                                                                        | `{}`                 |
+| `hostAliases`                                  | Add deployment host aliases                                                                               | `[]`                 |
+| `persistence.enabled`                          | Whether to enable persistence based on Persistent Volume Claims                                           | `true`               |
+| `persistence.storageClass`                     | discourse & sidekiq data Persistent Volume Storage Class                                                  | `nil`                |
+| `persistence.existingClaim`                    | Use a existing PVC which must be created manually before bound                                            | `nil`                |
+| `persistence.accessMode`                       | PVC Access Mode (RWO, ROX, RWX)                                                                           | `ReadWriteOnce`      |
+| `persistence.size`                             | Size of the PVC to request                                                                                | `10Gi`               |
+| `persistence.selector`                         | Selector to match an existing Persistent Volume (this value is evaluated as a template)                   | `{}`                 |
+| `updateStrategy.type`                          | Update strategy type. Only really applicable for deployments with RWO PVs attached                        | `RollingUpdate`      |
+| `podAnnotations`                               | Additional pod annotations                                                                                | `{}`                 |
+| `podLabels`                                    | Additional pod labels                                                                                     | `{}`                 |
+| `podAffinityPreset`                            | Pod affinity preset. Allowed values: soft, hard                                                           | `""`                 |
+| `podAntiAffinityPreset`                        | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                  | `soft`               |
+| `nodeAffinityPreset.type`                      | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                 | `""`                 |
+| `nodeAffinityPreset.key`                       | Node label key to match Ignored if `affinity` is set.                                                     | `""`                 |
+| `nodeAffinityPreset.values`                    | Node label values to match. Ignored if `affinity` is set.                                                 | `[]`                 |
+| `affinity`                                     | Affinity for pod assignment                                                                               | `{}`                 |
+| `nodeSelector`                                 | Node labels for pod assignment.                                                                           | `{}`                 |
+| `tolerations`                                  | Tolerations for pod assignment.                                                                           | `[]`                 |
 
 
 ### Sidekiq parameters
@@ -173,6 +184,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sidekiq.customReadinessProbe`               | Custom readiness probe to execute (when the main one is disabled) | `{}`   |
 | `sidekiq.extraEnvVars`                       | An array to add extra env vars                                    | `[]`   |
 | `sidekiq.extraEnvVarsCM`                     | Array to add extra configmaps                                     | `[]`   |
+| `sidekiq.extraEnvVarsSecret`                 | Name of the secret that holds extra env vars                      | `nil`  |
 | `sidekiq.extraVolumeMounts`                  | Additional volume mounts                                          | `[]`   |
 
 
@@ -197,6 +209,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.pathType`    | Ingress path type                                                                             | `ImplementationSpecific` |
 | `ingress.annotations` | Ingress annotations done as key:value pairs                                                   | `{}`                     |
 | `ingress.tls`         | Enable TLS configuration for the hostname defined at ingress.hostname parameter               | `false`                  |
+| `ingress.extraHosts`  | The list of additional hostnames to be covered with this ingress record.                      | `[]`                     |
+| `ingress.extraTls`    | The tls configuration for additional hostnames to be covered with this ingress record.        | `[]`                     |
 | `ingress.secrets`     | If you're providing your own certificates, please use this to add the certificates as secrets | `[]`                     |
 
 
@@ -206,7 +220,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------- | -------------------------------------------------------------------------------------------------- | --------------------- |
 | `postgresql.enabled`                          | Deploy PostgreSQL container(s)                                                                     | `true`                |
 | `postgresql.postgresqlUsername`               | PostgreSQL user to create (used by Discourse). Has superuser privileges if username is `postgres`. | `bn_discourse`        |
+| `postgresql.postgresqlPassword`               | PostgreSQL password                                                                                | `nil`                 |
 | `postgresql.postgresqlPostgresPassword`       | PostgreSQL admin password (used when `postgresqlUsername` is not `postgres`)                       | `bitnami`             |
+| `postgresql.existingSecret`                   | Name of existing secret object                                                                     | `nil`                 |
 | `postgresql.postgresqlDatabase`               | Name of the database to create                                                                     | `bitnami_application` |
 | `postgresql.persistence.enabled`              | Enable database persistence using PVC                                                              | `true`                |
 | `externalDatabase.host`                       | Host of the external database                                                                      | `""`                  |
@@ -216,6 +232,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.create`                     | PostgreSQL create user/database                                                                    | `true`                |
 | `externalDatabase.postgresqlPostgresUser`     | PostgreSQL admin user, used during the installation stage (when using an external db)              | `""`                  |
 | `externalDatabase.postgresqlPostgresPassword` | PostgreSQL admin password used in the installation stage (when using an external db)               | `""`                  |
+| `externalDatabase.existingSecret`             | Name of existing secret object                                                                     | `nil`                 |
 | `externalDatabase.database`                   | Name of the existing database (when using an external db)                                          | `bitnami_application` |
 
 
@@ -225,6 +242,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
 | `redis.enabled`                           | Whether to deploy a redis server to satisfy the applications requirements. To use an external redis instance set this to false and configure the externalRedis parameters | `true`           |
 | `redis.auth.enabled`                      | Use password authentication                                                                                                                                               | `false`          |
+| `redis.auth.password`                     | Redis(TM) password (both master and replica)                                                                                                                              | `nil`            |
 | `redis.auth.existingSecret`               | Name of an existing Kubernetes secret object containing the password                                                                                                      | `nil`            |
 | `redis.auth.existingSecretPasswordKey`    | Name of the key pointing to the password in your Kubernetes secret                                                                                                        | `redis-password` |
 | `redis.architecture`                      | Cluster settings                                                                                                                                                          | `standalone`     |
