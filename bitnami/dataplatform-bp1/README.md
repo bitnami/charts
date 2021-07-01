@@ -101,7 +101,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `zookeeper.replicaCount`                                                            | Number of Zookeeper replicas                                                              | `3`    |
 | `zookeeper.heapSize`                                                                | Size in MB for the Java Heap options (Xmx and XMs).                                       | `4096` |
 | `zookeeper.resources.limits`                                                        | The resources limits for Zookeeper containers                                             | `{}`   |
-| `zookeeper.resources.requests`                                                      | The requested resources for Zookeeper containers for a small kubernetes cluster           | `{}`   |
+| `zookeeper.resources.requests`                                                      | The requested resources for Zookeeper containers                                          | `{}`   |
 | `zookeeper.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution` | Zookeeper pods Anti Affinity rules for best possible resiliency (evaluated as a template) | `{}`   |
 
 
@@ -113,7 +113,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `kafka.replicaCount`                                                            | Number of Kafka replicas                                                                  | `3`                   |
 | `kafka.heapOpts`                                                                | Kafka's Java Heap size                                                                    | `-Xmx4096m -Xms4096m` |
 | `kafka.resources.limits`                                                        | The resources limits for Kafka containers                                                 | `{}`                  |
-| `kafka.resources.requests`                                                      | The requested resources for Kafka containers for a small kubernetes cluster               | `{}`                  |
+| `kafka.resources.requests`                                                      | The requested resources for Kafka containers                                              | `{}`                  |
 | `kafka.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution` | Zookeeper pods Anti Affinity rules for best possible resiliency (evaluated as a template) | `{}`                  |
 | `kafka.affinity.podAffinity.preferredDuringSchedulingIgnoredDuringExecution`    | Zookeeper pods Affinity rules for best possible resiliency (evaluated as a template)      | `{}`                  |
 | `kafka.metrics.kafka.enabled`                                                   | Whether or not to create a standalone Kafka exporter to expose Kafka metrics              | `false`               |

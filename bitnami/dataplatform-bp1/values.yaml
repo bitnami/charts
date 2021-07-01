@@ -32,7 +32,7 @@ zookeeper:
   ## Recommended values for cpu and memory requests
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## @param zookeeper.resources.limits The resources limits for Zookeeper containers
-  ## @param zookeeper.resources.requests [object] The requested resources for Zookeeper containers for a small kubernetes cluster
+  ## @param zookeeper.resources.requests [object] The requested resources for Zookeeper containers
   ##
   resources:
     limits: {}
@@ -73,7 +73,7 @@ kafka:
   heapOpts: -Xmx4096m -Xms4096m
   ## Recommended values for cpu and memory requests
   ## @param kafka.resources.limits The resources limits for Kafka containers
-  ## @param kafka.resources.requests [object] The requested resources for Kafka containers for a small kubernetes cluster
+  ## @param kafka.resources.requests [object] The requested resources for Kafka containers
   ##
   resources:
     limits: {}
