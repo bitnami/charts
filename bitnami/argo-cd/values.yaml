@@ -175,8 +175,6 @@ controller:
   ##
   logLevel: info
 
-  ## %%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
-
   ports:
     controller: 8082
     metrics: 8082
@@ -1123,7 +1121,6 @@ repoServer:
   ##
   livenessProbe:
     enabled: true
-    ## %%httpGet || command || etc%%
     initialDelaySeconds: 10
     periodSeconds: 10
     timeoutSeconds: 1
@@ -1304,8 +1301,6 @@ repoServer:
     name: ""
     ## @param repoServer.serviceAccount.automountServiceAccountToken Automount service account token for the repo server service account
     automountServiceAccountToken: true
-
-  ## %%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
 
   ## @param repoServer.existingConfigmap The name of an existing ConfigMap with your custom configuration for Argo CD repo server
   ##
@@ -1637,8 +1632,6 @@ dex:
     name: ""
     ## @param dex.serviceAccount.automountServiceAccountToken Automount service account token for the Dex service account
     automountServiceAccountToken: true
-
-  ## %%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
 
   ## @param dex.existingConfigmap The name of an existing ConfigMap with your custom configuration for Dex
   ##
