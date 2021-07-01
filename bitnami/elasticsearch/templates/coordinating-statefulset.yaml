@@ -164,13 +164,9 @@ spec:
             failureThreshold: {{ .Values.coordinating.livenessProbe.failureThreshold }}
             httpGet:
               path: /_cluster/health?local=true
-<<<<<<< HEAD:bitnami/elasticsearch/templates/coordinating-statefulset.yaml
-              port: 9200
-=======
               port: http
           {{- else if .Values.coordinating.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.coordinating.customLivenessProbe "context" $) | nindent 12 }}
->>>>>>> master:bitnami/elasticsearch/templates/coordinating-deploy.yaml
           {{- end }}
           {{- if .Values.coordinating.readinessProbe.enabled}}
           readinessProbe:
@@ -181,13 +177,9 @@ spec:
             failureThreshold: {{ .Values.coordinating.readinessProbe.failureThreshold }}
             httpGet:
               path: /_cluster/health?local=true
-<<<<<<< HEAD:bitnami/elasticsearch/templates/coordinating-statefulset.yaml
-              port: 9200
-=======
               port: http
           {{- else if .Values.coordinating.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.coordinating.customReadinessProbe "context" $) | nindent 12 }}
->>>>>>> master:bitnami/elasticsearch/templates/coordinating-deploy.yaml
           {{- end }}
           {{- if .Values.coordinating.resources }}
           resources: {{- toYaml .Values.coordinating.resources | nindent 12 }}
