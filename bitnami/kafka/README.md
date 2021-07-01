@@ -211,12 +211,14 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `persistence.accessMode`       | PVC Access Mode for Kafka data volume                                                  | `ReadWriteOnce`               |
 | `persistence.size`             | PVC Storage Request for Kafka data volume                                              | `8Gi`                         |
 | `persistence.annotations`      | Annotations for the PVC                                                                | `{}`(evaluated as a template) |
+| `persistence.selector`         | Selector to match an existing Persistent Volume for Kafka's data PVC. If set, the PVC can't have a PV dynamically provisioned for it                                                                                  | `{}`(evaluated as a template) |
 | `persistence.mountPath`        | Mount path of the Kafka data volume                                                    | `/bitnami/kafka`              |
 | `logPersistence.enabled`       | Enable Kafka logs persistence using PVC, note that Zookeeper persistence is unaffected | `false`                       |
 | `logPersistence.existingClaim` | Provide an existing `PersistentVolumeClaim`, the value is evaluated as a template      | `nil`                         |
 | `logPersistence.accessMode`    | PVC Access Mode for Kafka logs volume                                                  | `ReadWriteOnce`               |
 | `logPersistence.size`          | PVC Storage Request for Kafka logs volume                                              | `8Gi`                         |
 | `logPersistence.annotations`   | Annotations for the PVC                                                                | `{}`(evaluated as a template) |
+| `logPersistence.selector`      | Selector to match an existing Persistent Volume for Kafka's log data PVC. If set, the PVC can't have a PV dynamically provisioned for it                                                                                  | `{}`(evaluated as a template) |
 | `logPersistence.mountPath`     | Mount path of the Kafka logs volume                                                    | `/opt/bitnami/kafka/logs`     |
 
 ### RBAC parameters
@@ -293,6 +295,8 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `metrics.serviceMonitor.interval`      | Interval at which metrics should be scraped                                                                                      | `nil`                                                   |
 | `metrics.serviceMonitor.scrapeTimeout` | Timeout after which the scrape is ended                                                                                          | `nil` (Prometheus Operator default value)               |
 | `metrics.serviceMonitor.selector`      | ServiceMonitor selector labels                                                                                                   | `nil` (Prometheus Operator default value)               |
+| `metrics.serviceMonitor.relabelings`   | Relabel configuration for the metrics | `[]` |
+| `metrics.serviceMonitor.metricRelabelings` | MetricRelabelConfigs to apply to samples before ingestion | `[]` |
 
 ### Kafka provisioning parameters
 
@@ -302,6 +306,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `provisioning.image`             | Kafka provisioning Job image                                          | `Check values.yaml file`       |
 | `provisioning.numPartitions`     | Default number of partitions for topics when unspecified.             | 1                              |
 | `provisioning.replicationFactor` | Default replication factor for topics when unspecified.               | 1                              |
+| `provisioning.podAnnotations`    | Provisioning Pod annotations.                                         | `{}` (evaluated as a template) |
 | `provisioning.resources`         | Kafka provisioning Job resources                                      | `Check values.yaml file`       |
 | `provisioning.topics`            | Kafka provisioning topics                                             | `[]`                           |
 | `provisioning.schedulerName`     | Name of the k8s scheduler (other than default) for kafka provisioning | `nil`                          |
@@ -622,6 +627,10 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 13.0.0
+
+This major updates the Zookeeper subchart to it newest major, 7.0.0, which renames all TLS-related settings. For more information on this subchart's major, please refer to [zookeeper upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/zookeeper#to-700).
 
 ### To 12.2.0
 

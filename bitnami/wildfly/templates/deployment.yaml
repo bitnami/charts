@@ -94,6 +94,8 @@ spec:
                 secretKeyRef:
                   name: {{ template "common.names.fullname" . }}
                   key: wildfly-password
+            - name: WILDFLY_MANAGEMENT_LISTEN_ADDRESS
+              value: 0.0.0.0
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}

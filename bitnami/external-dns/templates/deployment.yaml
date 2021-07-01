@@ -99,10 +99,12 @@ spec:
             - --provider={{ .Values.provider }}
             - --registry={{ .Values.registry }}
             - --interval={{ .Values.interval }}
-            {{- if eq .Values.registry "txt" }}
+            {{- if or (ne .Values.registry "aws-sd") .Values.forceTxtOwnerId }}
             {{- if .Values.txtOwnerId }}
             - --txt-owner-id={{ .Values.txtOwnerId }}
             {{- end }}
+            {{- end }}
+            {{- if eq .Values.registry "txt" }}
             {{- if .Values.txtPrefix }}
             - --txt-prefix={{ .Values.txtPrefix }}
             {{- end }}
@@ -198,6 +200,13 @@ spec:
               {{- else }}
             - --infoblox-ssl-verify
               {{- end }}
+              {{- if .Values.infoblox.maxResults }}
+            - --infoblox-max-results={{ .Values.infoblox.maxResults }}
+              {{- end }}
+            {{- end }}
+            {{- if eq .Values.provider "ns1" }}
+            # ns1 arguments
+            - --ns1-min-ttl={{ .Values.ns1.minTTL }}
             {{- end }}
             {{- if eq .Values.provider "rfc2136" }}
             # RFC 2136 arguments
@@ -249,27 +258,6 @@ spec:
               value: {{ .Values.aws.credentials.mountPath }}/credentials
             {{- end }}
             {{- end }}
-            {{- if eq .Values.provider "azure-private-dns" }}
-            # Azure Private DNS variables
-            {{- if .Values.azure.tenantId }}
-            - name: AZURE_TENANT_ID
-              value: {{ .Values.azure.tenantId }}
-            {{- end }}
-            {{- if not .Values.azure.useManagedIdentityExtension }}
-            {{- if or .Values.azure.aadClientId .Values.azure.aadClientSecret .Values.azure.secretName }}
-            - name: AZURE_CLIENT_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: {{ template "external-dns.secretName" . }}
-                  key: azure_aad_client_secret
-            - name: AZURE_CLIENT_ID
-              valueFrom:
-                secretKeyRef:
-                  name: {{ template "external-dns.secretName" . }}
-                  key: azure_aad_client_id
-            {{- end }}
-            {{- end }}
-            {{- end }}
             {{- if eq .Values.provider "cloudflare" }}
             # Cloudflare environment variables
             - name: CF_API_TOKEN
@@ -293,11 +281,11 @@ spec:
               value: {{ .Values.coredns.etcdEndpoints | quote }}
             {{- if .Values.coredns.etcdTLS.enabled }}
             - name: ETCD_CERT_FILE
-              value: {{ .Values.coredns.etcdTLS.mountPath }}/{{ .Values.coredns.etcdTLS.certFilename }}
+              value: {{ .Values.coredns.etcdTLS.mountPath }}/{{ include "external-dns.tlsCert" . }}
             - name: ETCD_KEY_FILE
-              value: {{ .Values.coredns.etcdTLS.mountPath }}/{{ .Values.coredns.etcdTLS.keyFilename }}
+              value: {{ .Values.coredns.etcdTLS.mountPath }}/{{ include "external-dns.tlsCertKey" . }}
             - name: ETCD_CA_FILE
-              value: {{ .Values.coredns.etcdTLS.mountPath }}/{{ .Values.coredns.etcdTLS.caFilename }}
+              value: {{ .Values.coredns.etcdTLS.mountPath }}/{{ include "external-dns.tlsCACert" . }}
             {{- end }}
             {{- end }}
             {{- if eq .Values.provider "designate" }}
@@ -496,8 +484,12 @@ spec:
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
-          readinessProbe: {{ toYaml .Values.readinessProbe | nindent 12 }}
-          livenessProbe: {{ toYaml .Values.livenessProbe | nindent 12 }}
+          {{- if .Values.readinessProbe.enabled }}
+          readinessProbe: {{- omit .Values.readinessProbe "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.livenessProbe.enabled }}
+          livenessProbe: {{- omit .Values.livenessProbe "enabled" | toYaml | nindent 12 }}
+          {{- end }}
           {{- if .Values.securityContext }}
           securityContext: {{ toYaml .Values.securityContext | nindent 12 }}
           {{- end }}
@@ -529,7 +521,7 @@ spec:
             {{- end }}
             {{- if and (eq .Values.provider "coredns") (.Values.coredns.etcdTLS.enabled) }}
             # CoreDNS mountPath(s)
-            - name: {{ .Values.coredns.etcdTLS.secretName }}
+            - name: {{ include "external-dns.tlsSecretName" . }}
               mountPath: {{ .Values.coredns.etcdTLS.mountPath }}
               readOnly: true
             {{- end }}
@@ -576,7 +568,7 @@ spec:
             secretName: {{ template "external-dns.secretName" . }}
         {{- end }}
         {{- if or (eq .Values.provider "azure") (eq .Values.provider "azure-private-dns") }}
-        # Azure volume(s)
+        # Azure and Azure Private DNS volume(s)
         - name: azure-config-file
           {{- if or .Values.azure.secretName (and .Values.azure.resourceGroup .Values.azure.tenantId .Values.azure.subscriptionId) }}
           secret:
@@ -589,9 +581,9 @@ spec:
         {{- end }}
         {{- if and (eq .Values.provider "coredns") (.Values.coredns.etcdTLS.enabled) }}
         # CoreDNS volume(s)
-        - name: {{ .Values.coredns.etcdTLS.secretName }}
+        - name: {{ include "external-dns.tlsSecretName" . }}
           secret:
-            secretName: {{ .Values.coredns.etcdTLS.secretName }}
+            secretName: {{ include "external-dns.tlsSecretName" . }}
             defaultMode: 400
         {{- end }}
         {{- if and (eq .Values.provider "google") (or .Values.google.serviceAccountKey .Values.google.serviceAccountSecret) }}

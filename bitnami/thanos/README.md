@@ -138,9 +138,13 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `query.tolerations`                              | Thanos Query tolerations for pod assignment                                                                                                                   | `[]` (evaluated as a template)  |
 | `query.podLabels`                                | Thanos Query pod labels                                                                                                                                       | `{}` (evaluated as a template)  |
 | `query.priorityClassName`                        | Controller priorityClassName                                                                                                                                  | `nil`                           |
-| `query.securityContext.enabled`                  | Enable security context for Thanos Query pods                                                                                                                 | `true`                          |
-| `query.securityContext.fsGroup`                  | Group ID for the Thanos Query filesystem                                                                                                                      | `1001`                          |
-| `query.securityContext.runAsUser`                | User ID for the Thanos Query container                                                                                                                        | `1001`                          |
+| `query.podSecurityContext.enabled`                        | Enable security context for the Thanos Query pod                                                                                                     | `true`                          |
+| `query.podSecurityContext.fsGroup`                        | Group ID for the filesystem used by Query container                                                                                                  | `1001`                          |
+| `query.podSecurityContext.runAsUser`                      | User ID for the service user running the Query pod                                                                                                   | `1001`                          |
+| `query.containerSecurityContext.enabled`                  | Enable container security context for Query container                                                                                                | `true`                          |
+| `query.containerSecurityContext.runAsNonRoot`             | Force the container Query to run as a non root user                                                                                                  | `true`                          |
+| `query.containerSecurityContext.allowPrivilegeEscalation` | Switch privilegeEscalation possiblity on or off for Query                                                                                            | `false`                         |
+| `query.containerSecurityContext.readOnlyRootFilesystem`   | mount / (root) as a readonly filesystem of Query container                                                                                           | `false`                         |
 | `query.resources.limits`                         | The resources limits for the Thanos Query container                                                                                                           | `{}`                            |
 | `query.resources.requests`                       | The requested resources for the Thanos Query container                                                                                                        | `{}`                            |
 | `query.podAnnotations`                           | Annotations for Thanos Query pods                                                                                                                             | `{}`                            |
@@ -235,9 +239,13 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `queryFrontend.tolerations`                      | Thanos Query Frontend tolerations for pod assignment                                                                          | `[]` (evaluated as a template) |
 | `queryFrontend.podLabels`                        | Thanos Query Frontend pod labels                                                                                              | `{}` (evaluated as a template) |
 | `queryFrontend.priorityClassName`                | Controller priorityClassName                                                                                                  | `nil`                          |
-| `queryFrontend.securityContext.enabled`          | Enable security context for Thanos Query Frontend pods                                                                        | `true`                         |
-| `queryFrontend.securityContext.fsGroup`          | Group ID for the Thanos Query Frontend filesystem                                                                             | `1001`                         |
-| `queryFrontend.securityContext.runAsUser`        | User ID for the Thanos queryFrontend container                                                                                | `1001`                         |
+| `queryFrontend.podSecurityContext.enabled`                        | Enable security context for the Thanos Queryfrontend pod                                                     | `true`                         |
+| `queryFrontend.podSecurityContext.fsGroup`                        | Group ID for the filesystem used by Queryfrontend container                                                  | `1001`                         |
+| `queryFrontend.podSecurityContext.runAsUser`                      | User ID for the service user running the Queryfrontend pod                                                   | `1001`                         |
+| `queryFrontend.containerSecurityContext.enabled`                  | Enable container security context for Queryfrontend container                                                | `true`                         |
+| `queryFrontend.containerSecurityContext.runAsNonRoot`             | Force the container Queryfrontend to run as a non root user                                                  | `true`                         |
+| `queryFrontend.containerSecurityContext.allowPrivilegeEscalation` | Switch privilegeEscalation possiblity on or off for Queryfrontend                                            | `false`                        |
+| `queryFrontend.containerSecurityContext.readOnlyRootFilesystem`   | mount / (root) as a readonly filesystem of Queryfrontend container                                           | `false`                        |
 | `queryFrontend.resources.limits`                 | The resources limits for the Thanos Query Frontend container                                                                  | `{}`                           |
 | `queryFrontend.resources.requests`               | The requested resources for the Thanos Query Frontend container                                                               | `{}`                           |
 | `queryFrontend.podAnnotations`                   | Annotations for Thanos Query Frontend pods                                                                                    | `{}`                           |
@@ -306,9 +314,13 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `bucketweb.tolerations`                           | Thanos Bucket Web tolerations for pod assignment                                                                      | `[]` (evaluated as a template) |
 | `bucketweb.podLabels`                             | Thanos Bucket Web pod labels                                                                                          | `{}` (evaluated as a template) |
 | `bucketweb.priorityClassName`                     | Controller priorityClassName                                                                                          | `nil`                          |
-| `bucketweb.securityContext.enabled`               | Enable security context for Thanos Bucket Web pods                                                                    | `true`                         |
-| `bucketweb.securityContext.fsGroup`               | Group ID for the Thanos Bucket Web filesystem                                                                         | `1001`                         |
-| `bucketweb.securityContext.runAsUser`             | User ID for the Thanos Bucket Web container                                                                           | `1001`                         |
+| `bucketweb.podSecurityContext.enabled`                        | Enable security context for the Thanos Bucketweb pod                                                      | `true`                         |
+| `bucketweb.podSecurityContext.fsGroup`                        | Group ID for the filesystem used by Bucketweb container                                                   | `1001`                         |
+| `bucketweb.podSecurityContext.runAsUser`                      | User ID for the service user running the Bucketweb pod                                                    | `1001`                         |
+| `bucketweb.containerSecurityContext.enabled`                  | Enable container security context for Bucketweb container                                                 | `true`                         |
+| `bucketweb.containerSecurityContext.runAsNonRoot`             | Force the container Bucketweb to run as a non root user                                                   | `true`                         |
+| `bucketweb.containerSecurityContext.allowPrivilegeEscalation` | Switch privilegeEscalation possiblity on or off for Bucketweb                                             | `false`                        |
+| `bucketweb.containerSecurityContext.readOnlyRootFilesystem`   | mount / (root) as a readonly filesystem of Bucketweb container                                            | `false`                        |
 | `bucketweb.resources.limits`                      | The resources limits for the Thanos Bucket Web container                                                              | `{}`                           |
 | `bucketweb.resources.requests`                    | The requested resources for the Thanos Bucket Web container                                                           | `{}`                           |
 | `bucketweb.podAnnotations`                        | Annotations for Thanos Bucket Web pods                                                                                | `{}`                           |
@@ -371,9 +383,13 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `compactor.tolerations`                           | Thanos Compactor tolerations for pod assignment                                                                      | `[]` (evaluated as a template) |
 | `compactor.podLabels`                             | Thanos Compactor pod labels                                                                                          | `{}` (evaluated as a template) |
 | `compactor.priorityClassName`                     | Controller priorityClassName                                                                                         | `nil`                          |
-| `compactor.securityContext.enabled`               | Enable security context for Thanos Compactor pods                                                                    | `true`                         |
-| `compactor.securityContext.fsGroup`               | Group ID for the Thanos Compactor filesystem                                                                         | `1001`                         |
-| `compactor.securityContext.runAsUser`             | User ID for the Thanos Compactor container                                                                           | `1001`                         |
+| `compactor.podSecurityContext.enabled`                        | Enable security context for the Thanos Compactor pod                                                     | `true`                         |
+| `compactor.podSecurityContext.fsGroup`                        | Group ID for the filesystem used by Compactor container                                                  | `1001`                         |
+| `compactor.podSecurityContext.runAsUser`                      | User ID for the service user running the Compactor pod                                                   | `1001`                         |
+| `compactor.containerSecurityContext.enabled`                  | Enable container security context for Compactor container                                                | `true`                         |
+| `compactor.containerSecurityContext.runAsNonRoot`             | Force the container Compactor to run as a non root user                                                  | `true`                         |
+| `compactor.containerSecurityContext.allowPrivilegeEscalation` | Switch privilegeEscalation possiblity on or off for Compactor                                            | `false`                        |
+| `compactor.containerSecurityContext.readOnlyRootFilesystem`   | mount / (root) as a readonly filesystem of Compactor container                                           | `false`                        |
 | `compactor.resources.limits`                      | The resources limits for the Thanos Compactor container                                                              | `{}`                           |
 | `compactor.resources.requests`                    | The requested resources for the Thanos Compactor container                                                           | `{}`                           |
 | `compactor.podAnnotations`                        | Annotations for Thanos Compactor pods                                                                                | `{}`                           |
@@ -428,9 +444,13 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `storegateway.tolerations`                           | Thanos Store Gateway tolerations for pod assignment                                                                                                           | `[]` (evaluated as a template) |
 | `storegateway.podLabels`                             | Thanos Store Gateway pod labels                                                                                                                               | `{}` (evaluated as a template) |
 | `storegateway.priorityClassName`                     | Controller priorityClassName                                                                                                                                  | `nil`                          |
-| `storegateway.securityContext.enabled`               | Enable security context for Thanos Store Gateway pods                                                                                                         | `true`                         |
-| `storegateway.securityContext.fsGroup`               | Group ID for the Thanos Store Gateway filesystem                                                                                                              | `1001`                         |
-| `storegateway.securityContext.runAsUser`             | User ID for the Thanos Store Gateway container                                                                                                                | `1001`                         |
+| `storegateway.podSecurityContext.enabled`                        | Enable security context for the Thanos Storegateway pod                                                                                           | `true`                         |
+| `storegateway.podSecurityContext.fsGroup`                        | Group ID for the filesystem used by Storegateway container                                                                                        | `1001`                         |
+| `storegateway.podSecurityContext.runAsUser`                      | User ID for the service user running the Storegateway pod                                                                                         | `1001`                         |
+| `storegateway.containerSecurityContext.enabled`                  | Enable container security context for Storegateway container                                                                                      | `true`                         |
+| `storegateway.containerSecurityContext.runAsNonRoot`             | Force the container Storegateway to run as a non root user                                                                                        | `true`                         |
+| `storegateway.containerSecurityContext.allowPrivilegeEscalation` | Switch privilegeEscalation possiblity on or off for Storegateway                                                                                  | `false`                        |
+| `storegateway.containerSecurityContext.readOnlyRootFilesystem`   | mount / (root) as a readonly filesystem of Storegateway container                                                                                 | `false`                        |
 | `storegateway.resources.limits`                      | The resources limits for the Thanos Store Gateway container                                                                                                   | `{}`                           |
 | `storegateway.resources.requests`                    | The requested resources for the Thanos Store Gateway container                                                                                                | `{}`                           |
 | `storegateway.podAnnotations`                        | Annotations for Thanos Store Gateway pods                                                                                                                     | `{}`                           |
@@ -496,9 +516,13 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `ruler.tolerations`                           | Thanos Ruler tolerations for pod assignment                                                                  | `[]` (evaluated as a template) |
 | `ruler.podLabels`                             | Thanos Ruler pod labels                                                                                      | `{}` (evaluated as a template) |
 | `ruler.priorityClassName`                     | Controller priorityClassName                                                                                 | `nil`                          |
-| `ruler.securityContext.enabled`               | Enable security context for Thanos Ruler pods                                                                | `true`                         |
-| `ruler.securityContext.fsGroup`               | Group ID for the Thanos Ruler filesystem                                                                     | `1001`                         |
-| `ruler.securityContext.runAsUser`             | User ID for the Thanos Ruler container                                                                       | `1001`                         |
+| `ruler.podSecurityContext.enabled`                        | Enable security context for the Thanos Ruler pod                                                 | `true`                         |
+| `ruler.podSecurityContext.fsGroup`                        | Group ID for the filesystem used by Ruler container                                              | `1001`                         |
+| `ruler.podSecurityContext.runAsUser`                      | User ID for the service user running the Ruler pod                                               | `1001`                         |
+| `ruler.containerSecurityContext.enabled`                  | Enable container security context for Ruler container                                            | `true`                         |
+| `ruler.containerSecurityContext.runAsNonRoot`             | Force the container Ruler to run as a non root user                                              | `true`                         |
+| `ruler.containerSecurityContext.allowPrivilegeEscalation` | Switch privilegeEscalation possiblity on or off for Ruler                                        | `false`                        |
+| `ruler.containerSecurityContext.readOnlyRootFilesystem`   | mount / (root) as a readonly filesystem of Ruler container                                       | `false`                        |
 | `ruler.resources.limits`                      | The resources limits for the Thanos Ruler container                                                          | `{}`                           |
 | `ruler.resources.requests`                    | The requested resources for the Thanos Ruler container                                                       | `{}`                           |
 | `ruler.podAnnotations`                        | Annotations for Thanos Ruler pods                                                                            | `{}`                           |
@@ -550,7 +574,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `receive.enabled`                               | Enable/disable Thanos Receive component                                                                        | `false`                                 |
 | `receive.logLevel`                              | Thanos Receive log level                                                                                       | `info`                                  |
 | `receive.logFormat`                             | Thanos Receive log format                                                                                      | `logfmt`                                |
-| `receive.logFormat`                             | Thanos Receive TSDB retention period                                                                           | `tsdbRetention`                         |
+| `receive.tsdbRetention`                         | Thanos Receive TSDB retention period                                                                           | `15d`                         |
 | `receive.replicationFactor`                     | Thanos Receive replication-factor                                                                              | `1`                                     |
 | `receive.replicaLabel`                          | Label to treat as a replica indicator along which data is deduplicated                                         | `replica`                               |
 | `receive.alertmanagers`                         | Alermanager URLs array                                                                                         | `[]`                                    |
@@ -573,9 +597,13 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `receive.tolerations`                           | Thanos Receive tolerations for pod assignment                                                                  | `[]` (evaluated as a template)          |
 | `receive.podLabels`                             | Thanos Receive pod labels                                                                                      | `{}` (evaluated as a template)          |
 | `receive.priorityClassName`                     | Controller priorityClassName                                                                                   | `nil`                                   |
-| `receive.securityContext.enabled`               | Enable security context for Thanos Receive pods                                                                | `true`                                  |
-| `receive.securityContext.fsGroup`               | Group ID for the Thanos Receive filesystem                                                                     | `1001`                                  |
-| `receive.securityContext.runAsUser`             | User ID for the Thanos Receive container                                                                       | `1001`                                  |
+| `receive.podSecurityContext.enabled`                        | Enable security context for the Thanos Receive pod                                                 | `true`                                  |
+| `receive.podSecurityContext.fsGroup`                        | Group ID for the filesystem used by Receive container                                              | `1001`                                  |
+| `receive.podSecurityContext.runAsUser`                      | User ID for the service user running the Receive pod                                               | `1001`                                  |
+| `receive.containerSecurityContext.enabled`                  | Enable container security context for Receive container                                            | `true`                                  |
+| `receive.containerSecurityContext.runAsNonRoot`             | Force the container Receive to run as a non root user                                              | `true`                                  |
+| `receive.containerSecurityContext.allowPrivilegeEscalation` | Switch privilegeEscalation possiblity on or off for Receive                                        | `false`                                 |
+| `receive.containerSecurityContext.readOnlyRootFilesystem`   | mount / (root) as a readonly filesystem of Receive container                                       | `false`                                 |
 | `receive.resources.limits`                      | The resources limits for the Thanos Receive container                                                          | `{}`                                    |
 | `receive.resources.requests`                    | The requested resources for the Thanos Receive container                                                       | `{}`                                    |
 | `receive.podAnnotations`                        | Annotations for Thanos Ruler pods                                                                              | `{}`                                    |
@@ -812,6 +840,38 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 5.0.0
+
+This major update changes the `securityContext` interface in the `values.yaml` file.
+
+Please note if you have changes in the `securityContext` fields those need to be migrated to `podSecurityContext`.
+
+```diff
+# ...
+- securityContext:
++ podSecurityContext:
+# ... 
+```
+
+Other than that a new `securityContext` interface for containers got introduced `containerSecurityContext`. It's default is enabled so if you do not need it you need to opt out of it.
+
+```diff
+# ...
++ containerSecurityContext
++   enabled: true  # opt out by enabled: false
++   capabilities:
++     drop:
++     - ALL
++   runAsNonRoot: true
++   allowPrivilegeEscalation: false
++   readOnlyRootFilesystem: false
+# ...
+```
+
+### To 4.0.0
+
+This major updates the MinIO subchart to its newest major, 7.0.0, which removes previous configuration of `securityContext` and moves to `podSecurityContext` and `containerSecurityContext`.
 
 ### To 3.3.0
 

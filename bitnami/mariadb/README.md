@@ -120,6 +120,7 @@ The following table lists the configurable parameters of the MariaDB chart and t
 | `primary.readinessProbe`                     | Readiness probe configuration for MariaDB primary containers                                                      | Check `values.yaml` file       |
 | `primary.customLivenessProbe`                | Override default liveness probe for MariaDB primary containers                                                    | `nil`                          |
 | `primary.customReadinessProbe`               | Override default readiness probe for MariaDB primary containers                                                   | `nil`                          |
+| `primary.startupWaitOptions`                 | Override default builtin startup wait check options for MariaDB primary containers                                | `{}`                           |
 | `primary.resources.limits`                   | The resources limits for MariaDB primary containers                                                               | `{}`                           |
 | `primary.resources.requests`                 | The requested resources for MariaDB primary containers                                                            | `{}`                           |
 | `primary.extraEnvVars`                       | Extra environment variables to be set on MariaDB primary containers                                               | `{}`                           |
@@ -147,6 +148,7 @@ The following table lists the configurable parameters of the MariaDB chart and t
 | `primary.pdb.enabled`                        | Enable/disable a Pod Disruption Budget creation for MariaDB primary pods                                          | `false`                        |
 | `primary.pdb.minAvailable`                   | Minimum number/percentage of MariaDB primary pods that should remain scheduled                                    | `1`                            |
 | `primary.pdb.maxUnavailable`                 | Maximum number/percentage of MariaDB primary pods that may be made unavailable                                    | `nil`                          |
+| `primary.revisionHistoryLimit`               | Maximum number of revisions that will be maintained in the StatefulSet’s revision history for primary pods.       | `10`                           |
 
 ### MariaDB Secondary parameters
 
@@ -178,6 +180,7 @@ The following table lists the configurable parameters of the MariaDB chart and t
 | `secondary.readinessProbe`                     | Readiness probe configuration for MariaDB secondary containers                                                        | Check `values.yaml` file       |
 | `secondary.customLivenessProbe`                | Override default liveness probe for MariaDB secondary containers                                                      | `nil`                          |
 | `secondary.customReadinessProbe`               | Override default readiness probe for MariaDB secondary containers                                                     | `nil`                          |
+| `secondary.startupWaitOptions`                 | Override default builtin startup wait check options for MariaDB secondary containers                                  | `{}`                           |
 | `secondary.resources.limits`                   | The resources limits for MariaDB secondary containers                                                                 | `{}`                           |
 | `secondary.resources.requests`                 | The requested resources for MariaDB secondary containers                                                              | `{}`                           |
 | `secondary.extraEnvVars`                       | Extra environment variables to be set on MariaDB secondary containers                                                 | `{}`                           |
@@ -205,6 +208,7 @@ The following table lists the configurable parameters of the MariaDB chart and t
 | `secondary.pdb.enabled`                        | Enable/disable a Pod Disruption Budget creation for MariaDB secondary pods                                            | `false`                        |
 | `secondary.pdb.minAvailable`                   | Minimum number/percentage of MariaDB secondary pods that should remain scheduled                                      | `1`                            |
 | `secondary.pdb.maxUnavailable`                 | Maximum number/percentage of MariaDB secondary pods that may be made unavailable                                      | `nil`                          |
+| `secondary.revisionHistoryLimit`               | Maximum number of revisions that will be maintained in the StatefulSet’s revision history for secondary pods.         | `10`                           |
 
 ### RBAC parameters
 
