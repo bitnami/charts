@@ -16,6 +16,32 @@ global:
   imagePullSecrets: []
   storageClass:
 
+## @section Common parameters
+
+## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
+##
+kubeVersion: ""
+## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
+##
+nameOverride:
+## @param fullnameOverride String to fully override common.names.fullname template
+##
+fullnameOverride:
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+## @param clusterDomain Default Kubernetes cluster domain
+##
+clusterDomain: cluster.local
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
+
+## @section etcd parameters
+
 ## Bitnami etcd image version
 ## ref: https://hub.docker.com/r/bitnami/etcd/tags/
 ## @param image.registry etcd image registry
@@ -45,45 +71,6 @@ image:
   ## Set to true if you would like to see extra information on logs
   ##
   debug: false
-
-## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
-##
-nameOverride:
-
-## @param fullnameOverride String to fully override common.names.fullname template
-##
-fullnameOverride:
-
-## @param commonLabels Labels to add to all deployed objects
-##
-commonLabels: {}
-
-## @param commonAnnotations Annotations to add to all deployed objects
-##
-commonAnnotations: {}
-
-## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
-##
-kubeVersion: ""
-
-## @param clusterDomain Default Kubernetes cluster domain
-##
-clusterDomain: cluster.local
-
-## @param extraDeploy Array of extra objects to deploy with the release
-##
-extraDeploy: []
-
-## @param autoCompactionMode Auto compaction mode, by default periodic. Valid values: ‘periodic’, ‘revision’.
-## - 'periodic' for duration based retention, defaulting to hours if no time unit is provided (e.g. ‘5m’).
-## - 'revision' for revision number based retention.
-##
-autoCompactionMode: periodic
-
-## @param autoCompactionRetention Auto compaction retention for mvcc key value store in hour, by default 0, means disabled
-##
-autoCompactionRetention:
-
 ## Authentication parameters
 ##
 auth:
@@ -103,7 +90,6 @@ auth:
     ## @param auth.rbac.existingSecret Name of the existing secret containing credentials for the root user
     ##
     existingSecret: ""
-
   ## TLS authentication for client-to-server communications
   ## ref: https://etcd.io/docs/current/op-guide/security/
   ##
@@ -130,7 +116,6 @@ auth:
     ## If not specified and `auth.client.enableAuthentication=true` or `auth.rbac.enabled=true`, the default is is `ca.crt`
     ##
     caFilename: ""
-
   ## TLS authentication for server-to-server communications
   ## ref: https://etcd.io/docs/current/op-guide/security/
   ##
@@ -157,26 +142,30 @@ auth:
     ## If not specified and `auth.peer.enableAuthentication=true` or `rbac.enabled=true`, the default is is `ca.crt`
     ##
     caFilename: ""
-
+## @param autoCompactionMode Auto compaction mode, by default periodic. Valid values: ‘periodic’, ‘revision’.
+## - 'periodic' for duration based retention, defaulting to hours if no time unit is provided (e.g. ‘5m’).
+## - 'revision' for revision number based retention.
+##
+autoCompactionMode: periodic
+## @param autoCompactionRetention Auto compaction retention for mvcc key value store in hour, by default 0, means disabled
+##
+autoCompactionRetention:
 ## @param initialClusterState Initial cluster state. Allowed values: 'new' or 'existing'
 ## If this values is not set, the default values below are set:
 ## - 'new': when installing the chart ('helm install ...')
 ## - 'existing': when upgrading the chart ('helm upgrade ...')
 ##
 initialClusterState: ""
-
 ## @param maxProcs Limits the number of operating system threads that can execute user-level
 ## Go code simultaneously by setting GOMAXPROCS environment variable
 ## ref: https://golang.org/pkg/runtime
 ##
 maxProcs:
-
 ## @param removeMemberOnContainerTermination Use a PreStop hook to remove the etcd members from the etcd cluster on container termination
 ## they the containers are terminated
 ## NOTE: Ignored if lifecycleHooks is set or replicaCount=1
 ##
 removeMemberOnContainerTermination: true
-
 ## @param configuration etcd configuration. Specify content for etcd.conf.yml
 ## e.g:
 ## configuration: |-
@@ -184,12 +173,10 @@ removeMemberOnContainerTermination: true
 ##    baz:
 ##
 configuration:
-
 ## @param existingConfigmap Existing ConfigMap with etcd configuration
 ## NOTE: When it's set the configuration parameter is ignored
 ##
 existingConfigmap:
-
 ## @param extraEnvVars Extra environment variables to be set on etcd container
 ## e.g:
 ## extraEnvVars:
@@ -197,15 +184,12 @@ existingConfigmap:
 ##     value: "bar"
 ##
 extraEnvVars: []
-
 ## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars
 ##
 extraEnvVarsCM: ""
-
 ## @param extraEnvVarsSecret Name of existing Secret containing extra env vars
 ##
 extraEnvVarsSecret: ""
-
 ## @param command Default container command (useful when using custom images)
 ##
 command: []
@@ -213,31 +197,28 @@ command: []
 ##
 args: []
 
+## @section etcd statefulset parameters
+
 ## @param replicaCount Number of etcd replicas to deploy
 ##
 replicaCount: 1
-
 ## Update strategy
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
 ## @param updateStrategy.type Update strategy type, can be set to RollingUpdate or OnDelete.
 ##
 updateStrategy:
   type: RollingUpdate
-
 ## @param podManagementPolicy Pod management policy for the etcd statefulset
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
 ##
 podManagementPolicy: Parallel
-
 ## @param hostAliases etcd pod host aliases
 ## ref: https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
 hostAliases: []
-
 ## @param lifecycleHooks Override default etcd container hooks
 ##
 lifecycleHooks: {}
-
 ## etcd container ports to open
 ## @param containerPorts.client Client port to expose at container level
 ## @param containerPorts.peer Peer port to expose at container level
@@ -245,7 +226,6 @@ lifecycleHooks: {}
 containerPorts:
   client: 2379
   peer: 2380
-
 ## etcd pods' Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enabled etcd pods' Security Context
@@ -254,7 +234,6 @@ containerPorts:
 podSecurityContext:
   enabled: true
   fsGroup: 1001
-
 ## etcd containers' SecurityContext
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled Enabled etcd containers' Security Context
@@ -265,7 +244,6 @@ containerSecurityContext:
   enabled: true
   runAsUser: 1001
   runAsNonRoot: true
-
 ## etcd containers' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -282,7 +260,6 @@ resources:
   ##    memory: 1Gi
   limits: {}
   requests: {}
-
 ## Configure extra options for liveness probe
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe
@@ -331,27 +308,21 @@ startupProbe:
   timeoutSeconds: 5
   successThreshold: 1
   failureThreshold: 60
-
 ## @param customLivenessProbe Override default liveness probe
 ##
 customLivenessProbe: {}
-
 ## @param customReadinessProbe Override default readiness probe
 ##
 customReadinessProbe: {}
-
 ## @param customStartupProbe Override default startup probe
 ##
 customStartupProbe: {}
-
 ## @param extraVolumes Optionally specify extra list of additional volumes for etcd pods
 ##
 extraVolumes: []
-
 ## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for etcd container(s)
 ##
 extraVolumeMounts: []
-
 ## @param initContainers Add additional init containers to the etcd pods
 ## e.g:
 ## initContainers:
@@ -363,7 +334,6 @@ extraVolumeMounts: []
 ##         containerPort: 1234
 ##
 initContainers: {}
-
 ## @param sidecars Add additional sidecar containers to the etcd pods
 ## e.g:
 ## sidecars:
@@ -375,27 +345,22 @@ initContainers: {}
 ##         containerPort: 1234
 ##
 sidecars: {}
-
 ## @param podAnnotations Annotations for etcd pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
-
 ## @param podLabels Extra labels for etcd pods
 ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
 podLabels: {}
-
 ## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
 podAffinityPreset: ""
-
 ## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
 podAntiAffinityPreset: soft
-
 ## Node affinity preset
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
 ## @param nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
@@ -414,45 +379,27 @@ nodeAffinityPreset:
   ##   - e2e-az2
   ##
   values: []
-
 ## @param affinity Affinity for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ## Note: podAffinityPreset, podAntiAffinityPreset, and nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
-
 ## @param nodeSelector Node labels for pod assignment
 ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
 nodeSelector: {}
-
 ## @param tolerations Tolerations for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
-
 ## @param priorityClassName Name of the priority class to be used by etcd pods
 ## Priority class needs to be created beforehand
 ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
 ##
 priorityClassName: ""
 
-## etcd Pod Disruption Budget configuration
-## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
-##
-pdb:
-  ## @param pdb.create Enable/disable a Pod Disruption Budget creation
-  ##
-  create: false
-  ## @param pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
-  ##
-  minAvailable: 1
-  ## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
-  ##
-  maxUnavailable:
+## @section Traffic exposure parameters
 
-## Service parameters
-##
 service:
   ## @param service.type Kubernetes Service type
   ##
@@ -494,25 +441,7 @@ service:
   ##
   annotations: {}
 
-## Service account configuration
-##
-serviceAccount:
-  ## @param serviceAccount.create Enable/disable service account creation
-  ##
-  create: false
-  ## @param serviceAccount.name Name of the service account to create or use
-  ##
-  name: ""
-  ## @param serviceAccount.automountServiceAccountToken Enable/disable auto mounting of service account token
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/#use-the-default-service-account-to-access-the-api-server
-  ##
-  automountServiceAccountToken: true
-  ## @param serviceAccount.annotations Additional annotations to be included on the service account
-  ##
-  annotations: {}
-  ## @param serviceAccount.labels Additional labels to be included on the service account
-  ##
-  labels: {}
+## @section Persistence parameters
 
 ## Enable persistence using Persistent Volume Claims
 ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
@@ -545,6 +474,8 @@ persistence:
   ##
   selector: {}
 
+## @section Volume Permissions parameters
+
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
 ##
@@ -571,7 +502,6 @@ volumePermissions:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-
   ## Init container' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -589,8 +519,8 @@ volumePermissions:
     limits: {}
     requests: {}
 
-## etcd metrics configuration
-##
+## @section Metrics parameters
+
 metrics:
   ## @param metrics.enabled Expose etcd metrics
   ##
@@ -600,7 +530,6 @@ metrics:
   podAnnotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "2379"
-
   ## Prometheus Service Monitor
   ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
   ##
@@ -634,6 +563,8 @@ metrics:
     ##
     tlsConfig: {}
 
+## @section Snapshotting parameters
+
 ## Start a new etcd cluster recovering the data from an existing snapshot before bootstrapping
 ##
 startFromSnapshot:
@@ -646,7 +577,6 @@ startFromSnapshot:
   ## @param startFromSnapshot.snapshotFilename Snapshot filename
   ##
   snapshotFilename: ""
-
 ## Enable auto disaster recovery by periodically snapshotting the keyspace:
 ## - It creates a cronjob to periodically snapshotting the keyspace
 ## - It also creates a ReadWriteMany PVC to store the snapshots
@@ -694,10 +624,45 @@ disasterRecovery:
     ## The value is evaluated as a template, so, for example, the name can depend on .Release or .Chart
     ##
     existingClaim:
-
     ## @param disasterRecovery.pvc.size PVC Storage Request
     ##
     size: 2Gi
     ## @param disasterRecovery.pvc.storageClassName Storage Class for snapshots volume
     ##
     storageClassName: nfs
+
+## @section Service account parameters
+
+serviceAccount:
+  ## @param serviceAccount.create Enable/disable service account creation
+  ##
+  create: false
+  ## @param serviceAccount.name Name of the service account to create or use
+  ##
+  name: ""
+  ## @param serviceAccount.automountServiceAccountToken Enable/disable auto mounting of service account token
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/#use-the-default-service-account-to-access-the-api-server
+  ##
+  automountServiceAccountToken: true
+  ## @param serviceAccount.annotations Additional annotations to be included on the service account
+  ##
+  annotations: {}
+  ## @param serviceAccount.labels Additional labels to be included on the service account
+  ##
+  labels: {}
+
+## @section Other parameters
+
+## etcd Pod Disruption Budget configuration
+## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+##
+pdb:
+  ## @param pdb.create Enable/disable a Pod Disruption Budget creation
+  ##
+  create: false
+  ## @param pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ##
+  minAvailable: 1
+  ## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ##
+  maxUnavailable:
