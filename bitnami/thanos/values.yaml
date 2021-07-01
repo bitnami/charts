@@ -249,10 +249,19 @@ query:
   ## K8s Security Context for Thanos Query pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
-  securityContext:
+  podSecurityContext:
     enabled: true
     fsGroup: 1001
     runAsUser: 1001
+
+  ## K8s containers' Security Context for Thanos Query container
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: false
 
   # Create ClusterRole and ClusterRolebing for the Service account
   rbac:
@@ -280,23 +289,19 @@ query:
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
   livenessProbe:
-    httpGet:
-      path: /-/healthy
-      port: http
+    enabled: true
     initialDelaySeconds: 30
     timeoutSeconds: 30
-    # periodSeconds: 10
-    # successThreshold: 1
-    # failureThreshold: 6
+    periodSeconds: 10
+    successThreshold: 1
+    failureThreshold: 6
   readinessProbe:
-    httpGet:
-      path: /-/ready
-      port: http
+    enabled: true
     initialDelaySeconds: 30
     timeoutSeconds: 30
-    # periodSeconds: 10
-    # successThreshold: 1
-    # failureThreshold: 6
+    periodSeconds: 10
+    successThreshold: 1
+    failureThreshold: 6
 
   ## Thanos Query GRPC TLS parameters
   ## to configure --grpc-server-tls-cert, --grpc-server-tls-key, --grpc-server-tls-client-ca, --grpc-client-tls-secure, --grpc-client-tls-cert, --grpc-client-tls-key, --grpc-client-tls-ca, --grpc-client-server-name
@@ -701,10 +706,19 @@ queryFrontend:
   ## K8s Security Context for Thanos Query Frontend pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
-  securityContext:
+  podSecurityContext:
     enabled: true
     fsGroup: 1001
     runAsUser: 1001
+
+  ## K8s containers' Security Context for Thanos Query Frontend container
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: false
 
   # Create ClusterRole and ClusterRolebing for the Service account
   rbac:
@@ -732,23 +746,19 @@ queryFrontend:
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
   livenessProbe:
-    httpGet:
-      path: /-/healthy
-      port: http
+    enabled: true
     initialDelaySeconds: 30
     timeoutSeconds: 30
-    # periodSeconds: 10
-    # successThreshold: 1
-    # failureThreshold: 6
+    periodSeconds: 10
+    successThreshold: 1
+    failureThreshold: 6
   readinessProbe:
-    httpGet:
-      path: /-/ready
-      port: http
+    enabled: true
     initialDelaySeconds: 30
     timeoutSeconds: 30
-    # periodSeconds: 10
-    # successThreshold: 1
-    # failureThreshold: 6
+    periodSeconds: 10
+    successThreshold: 1
+    failureThreshold: 6
 
   ## Service parameters
   ##
@@ -1039,10 +1049,19 @@ bucketweb:
   ## K8s Security Context for Thanos Bucket Web pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
-  securityContext:
+  podSecurityContext:
     enabled: true
     fsGroup: 1001
     runAsUser: 1001
+
+  ## K8s containers' Security Context for Thanos Bucket Web container
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: false
 
   ## Thanos Bucket Web containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -1063,23 +1082,19 @@ bucketweb:
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
   livenessProbe:
-    httpGet:
-      path: /
-      port: http
+    enabled: true
     initialDelaySeconds: 30
     timeoutSeconds: 30
-    # periodSeconds: 10
-    # successThreshold: 1
-    # failureThreshold: 6
+    periodSeconds: 10
+    successThreshold: 1
+    failureThreshold: 6
   readinessProbe:
-    httpGet:
-      path: /
-      port: http
+    enabled: true
     initialDelaySeconds: 30
     timeoutSeconds: 30
-    # periodSeconds: 10
-    # successThreshold: 1
-    # failureThreshold: 6
+    periodSeconds: 10
+    successThreshold: 1
+    failureThreshold: 6
 
   ## Service parameters
   ##
@@ -1336,10 +1351,19 @@ compactor:
   ## K8s Security Context for Thanos Compactor pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
-  securityContext:
+  podSecurityContext:
     enabled: true
     fsGroup: 1001
     runAsUser: 1001
+
+  ## K8s containers' Security Context for Thanos Compactor container
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: false
 
   ## Thanos Compactor containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -1360,23 +1384,19 @@ compactor:
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
   livenessProbe:
-    httpGet:
-      path: /-/healthy
-      port: http
+    enabled: true
     initialDelaySeconds: 30
     timeoutSeconds: 30
-    # periodSeconds: 10
-    # successThreshold: 1
-    # failureThreshold: 6
+    periodSeconds: 10
+    successThreshold: 1
+    failureThreshold: 6
   readinessProbe:
-    httpGet:
-      path: /-/ready
-      port: http
+    enabled: true
     initialDelaySeconds: 30
     timeoutSeconds: 30
-    # periodSeconds: 10
-    # successThreshold: 1
-    # failureThreshold: 6
+    periodSeconds: 10
+    successThreshold: 1
+    failureThreshold: 6
 
   ## Service parameters
   ##
@@ -1611,13 +1631,22 @@ storegateway:
   ##
   # priorityClassName: ""
 
-  ## K8s Security Context for Thanos Store Gateway pods
+  ## K8s Pod Security Context for Thanos Store Gateway pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
-  securityContext:
+  podSecurityContext:
     enabled: true
     fsGroup: 1001
     runAsUser: 1001
+
+  ## K8s containers' Security Context for Thanos Store Gateway container
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: false
 
   ## Thanos Store Gateway containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -1638,23 +1667,19 @@ storegateway:
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
   livenessProbe:
-    httpGet:
-      path: /-/healthy
-      port: http
+    enabled: true
     initialDelaySeconds: 30
     timeoutSeconds: 30
-    # periodSeconds: 10
-    # successThreshold: 1
-    # failureThreshold: 6
+    periodSeconds: 10
+    successThreshold: 1
+    failureThreshold: 6
   readinessProbe:
-    httpGet:
-      path: /-/ready
-      port: http
+    enabled: true
     initialDelaySeconds: 30
     timeoutSeconds: 30
-    # periodSeconds: 10
-    # successThreshold: 1
-    # failureThreshold: 6
+    periodSeconds: 10
+    successThreshold: 1
+    failureThreshold: 6
 
   ## Service parameters
   ##
@@ -1953,10 +1978,19 @@ ruler:
   ## K8s Security Context for Thanos Ruler pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
-  securityContext:
+  podSecurityContext:
     enabled: true
     fsGroup: 1001
     runAsUser: 1001
+
+  ## K8s containers' Security Context for Thanos Ruler container
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: false
 
   ## Thanos Ruler containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -1977,23 +2011,19 @@ ruler:
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
   livenessProbe:
-    httpGet:
-      path: /-/healthy
-      port: http
+    enabled: true
     initialDelaySeconds: 30
     timeoutSeconds: 30
-    # periodSeconds: 10
-    # successThreshold: 1
-    # failureThreshold: 6
+    periodSeconds: 10
+    successThreshold: 1
+    failureThreshold: 6
   readinessProbe:
-    httpGet:
-      path: /-/ready
-      port: http
+    enabled: true
     initialDelaySeconds: 30
     timeoutSeconds: 30
-    # periodSeconds: 10
-    # successThreshold: 1
-    # failureThreshold: 6
+    periodSeconds: 10
+    successThreshold: 1
+    failureThreshold: 6
 
   ## Service parameters
   ##
@@ -2343,31 +2373,36 @@ receive:
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
   livenessProbe:
-    httpGet:
-      path: /-/healthy
-      port: http
+    enabled: true
     initialDelaySeconds: 30
     timeoutSeconds: 30
-    # periodSeconds: 10
-    # successThreshold: 1
-    # failureThreshold: 6
+    periodSeconds: 10
+    successThreshold: 1
+    failureThreshold: 6
   readinessProbe:
-    httpGet:
-      path: /-/ready
-      port: http
+    enabled: true
     initialDelaySeconds: 30
     timeoutSeconds: 30
-    # periodSeconds: 10
-    # successThreshold: 1
-    # failureThreshold: 6
+    periodSeconds: 10
+    successThreshold: 1
+    failureThreshold: 6
 
   ## K8s Security Context for Thanos Receive pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
-  securityContext:
+  podSecurityContext:
     enabled: true
     fsGroup: 1001
     runAsUser: 1001
+
+  ## K8s containers' Security Context for Thanos Receive container
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: false
 
   ## Thanos Receive GRPC TLS parameters
   ## ref: https://github.com/thanos-io/thanos/blob/master/docs/components/receive.md#flags

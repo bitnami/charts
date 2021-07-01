@@ -55,6 +55,7 @@ spec:
       securityContext:
         fsGroup: {{ .Values.master.securityContext.fsGroup }}
         runAsUser: {{ .Values.master.securityContext.runAsUser }}
+        runAsGroup: {{ .Values.master.securityContext.runAsGroup }}
         {{- if .Values.master.securityContext.seLinuxOptions }}
         seLinuxOptions: {{- include "common.tplvalues.render" (dict "value" .Values.master.securityContext.seLinuxOptions "context" $) | nindent 10 }}
         {{- end }}
