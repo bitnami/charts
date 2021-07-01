@@ -223,6 +223,7 @@ operator:
   ##
   livenessProbe:
     enabled: true
+    path: /metrics
     initialDelaySeconds: 120
     periodSeconds: 10
     timeoutSeconds: 5
@@ -231,6 +232,7 @@ operator:
 
   readinessProbe:
     enabled: true
+    path: /metrics
     initialDelaySeconds: 30
     periodSeconds: 10
     timeoutSeconds: 5
@@ -599,6 +601,7 @@ prometheus:
   ##
   livenessProbe:
     enabled: true
+    path: /-/healthy
     initialDelaySeconds: 0
     failureThreshold: 10
     periodSeconds: 10
@@ -607,6 +610,7 @@ prometheus:
 
   readinessProbe:
     enabled: true
+    path: /-/ready
     initialDelaySeconds: 0
     failureThreshold: 10
     periodSeconds: 10
@@ -959,6 +963,7 @@ prometheus:
     ##
     livenessProbe:
       enabled: true
+      path: /-/healthy
       initialDelaySeconds: 0
       periodSeconds: 5
       timeoutSeconds: 3
@@ -967,6 +972,7 @@ prometheus:
 
     readinessProbe:
       enabled: true
+      path: /-/ready
       initialDelaySeconds: 0
       periodSeconds: 5
       timeoutSeconds: 3
@@ -1365,6 +1371,7 @@ alertmanager:
   ##
   livenessProbe:
     enabled: true
+    path: /-/healthy
     initialDelaySeconds: 0
     periodSeconds: 5
     timeoutSeconds: 3
@@ -1373,6 +1380,7 @@ alertmanager:
 
   readinessProbe:
     enabled: true
+    path: /-/ready
     initialDelaySeconds: 0
     periodSeconds: 5
     timeoutSeconds: 3
