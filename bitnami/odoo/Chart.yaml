@@ -27,4 +27,5 @@ name: odoo
 sources:
   - https://github.com/bitnami/bitnami-docker-odoo
   - https://www.odoo.com/
-version: 18.2.11
+# TODO: Increase to 19.0.0 before merging
+version: 18.3.0
