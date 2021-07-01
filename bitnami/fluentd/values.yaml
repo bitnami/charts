@@ -91,9 +91,9 @@ forwarder:
   ## K8s Security Context for forwarder container
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param forwarder.containerSecurityContext.enabled Enable security context for the forwarder container
-  ## @param forwarder.containerSecurityContext.privileged !!!!!
-  ## @param forwarder.containerSecurityContext.allowPrivilegeEscalation !!!!!
-  ## @param forwarder.containerSecurityContext.capabilities.drop [array] !!!!!
+  ## @param forwarder.containerSecurityContext.privileged Run as privileged
+  ## @param forwarder.containerSecurityContext.allowPrivilegeEscalation Allow Privilege Escalation
+  ## @param forwarder.containerSecurityContext.capabilities.drop [array] Drop capabilities for the securityContext
   ##
   containerSecurityContext:
     enabled: true
@@ -516,9 +516,9 @@ aggregator:
   ## K8s Security Context for Aggregator containers
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param aggregator.containerSecurityContext.enabled Enable security context for the aggregator container
-  ## @param aggregator.containerSecurityContext.privileged !!!!!
-  ## @param aggregator.containerSecurityContext.allowPrivilegeEscalation !!!!!
-  ## @param aggregator.containerSecurityContext.capabilities.drop [array] !!!!!
+  ## @param aggregator.containerSecurityContext.privileged Run as privileged
+  ## @param aggregator.containerSecurityContext.allowPrivilegeEscalation Allow Privilege Escalation
+  ## @param aggregator.containerSecurityContext.capabilities.drop [array] Drop capabilities for the securityContext
   ##
   containerSecurityContext:
     enabled: true
@@ -731,8 +731,7 @@ aggregator:
     ##   secretName: fluentd.local-tls
     ##
     extraTls: []
-    ## @param aggregator.ingress.secrets !!!!!
-    ## If you're providing your own certificates, please use this to add the certificates as secrets
+    ## @param aggregator.ingress.secrets If you're providing your own certificates, please use this to add the certificates as secrets
     ## key and certificate should start with -----BEGIN CERTIFICATE----- or
     ## -----BEGIN RSA PRIVATE KEY-----
     ##
