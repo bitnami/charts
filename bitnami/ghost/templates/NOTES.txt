@@ -77,8 +77,8 @@ host. To configure Ghost with the URL of your service:
 
 {{- else }}
 
-  echo Blog URL  : http://{{ include "ghost.endpoint" . }}
-  echo Admin URL : http://{{ include "ghost.endpoint" . }}ghost
+  echo Blog URL  : http://{{ include "ghost.host" . }}
+  echo Admin URL : http://{{ include "ghost.host" . }}ghost
 
 {{- end }}
 {{- end }}
