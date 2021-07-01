@@ -546,7 +546,8 @@ server:
     targetCPU: 50
     targetMemory: 50
 
-  ## %%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
+  ## Redirect all request to https
+  insecure: false
 
   ## @param server.logFormat ArgoCD server logs format. Options: [text, json]
   ##
@@ -1831,8 +1832,7 @@ config:
     ##
     argocdServerTlsConfig: {}
 
-    ## Argo expects the password in the secret to be bcrypt hashed. You can create this hash with the following command:
-    ## $ `htpasswd -nbBC 10 "" $ARGO_PWD | tr -d ':\n' | sed 's/$2y/$2a/'`
+    ## Argo admin password
     ##
     argocdServerAdminPassword: ""
     ## Password modification time defaults to current time if not set

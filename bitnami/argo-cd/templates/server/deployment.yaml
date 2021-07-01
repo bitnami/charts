@@ -111,6 +111,9 @@ spec:
             - {{ .Values.server.logLevel }}
             - --redis
             - {{ include "argocd.redisHost" . }}:{{ include "argocd.redisPort" . }}
+            {{- if .Values.server.insecure }}
+            - --insecure
+            {{- end }}
             {{- if .Values.server.extraArgs }}
             {{- include "common.tplvalues.render" (dict "value" .Values.server.extraArgs "context" $) | nindent 8 }}
             {{- end }}

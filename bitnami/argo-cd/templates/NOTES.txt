@@ -48,36 +48,10 @@
 {{- end }}
 {{- end }}
 
-2. Argo CD requires to change the initial admin password after loging for first time. To get the initial admin password execute the following command:
+2. Execute the following commands to obtain the Argo CD credentials:
 
-  kubectl -n {{ .Release.Namespace }} get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
-
-3. Login to Argo CD with user: "admin" and the password obtained above:
-
-  If you have the argocd binary installed locally:
-
-  {{ if .Values.server.ingress.enabled }}
-  Use as URL the of the URLs provided above:
-
-    argocd login <URL>
-  {{ else }}
-  Execute the following command:
-
-    argocd login "$URL"
-  {{ end }}
-
-  If you DO NOT have the argocd binary installed locally you can create a temporal pod to change the password:
-
-    kubectl run cli --restart=Never --command "sleep" --image bitnami/argo-cd -- infinity
-    kubectl exec -it cli bash
-
-  Execute inside the new pod:
-
-    argocd login {{ include "argocd.server" . }}
-
-4. Execute the following command to change the initial password:
-
-  argocd account update-password
+  echo "Username: \"admin\""
+  echo "Password: $(kubectl -n {{ .Release.Namespace }} get secret argocd-secret -o jsonpath="{.data.clearPassword}" | base64 -d)"
 
 {{- include "common.warnings.rollingTag" .Values.server.image }}
 {{- include "common.warnings.rollingTag" .Values.controller.image }}
