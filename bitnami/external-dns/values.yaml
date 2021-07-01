@@ -14,6 +14,20 @@ global:
   ##
   imagePullSecrets: []
 
+## @section Common parameters
+
+## @param nameOverride String to partially override external-dns.fullname template (will maintain the release name)
+##
+nameOverride:
+## @param fullnameOverride String to fully override external-dns.fullname template
+##
+fullnameOverride:
+## @param clusterDomain Kubernetes Cluster Domain
+##
+clusterDomain: cluster.local
+
+## @section etcd parameters
+
 ## Bitnami external-dns image version
 ## ref: https://hub.docker.com/r/bitnami/external-dns/tags/
 ## @param image.registry ExternalDNS image registry
@@ -36,15 +50,7 @@ image:
   ##
   # pullSecrets:
   #   - myRegistryKeySecretName
-## @param nameOverride String to partially override external-dns.fullname template (will maintain the release name)
-##
-nameOverride:
-## @param fullnameOverride String to fully override external-dns.fullname template
-##
-fullnameOverride:
-## @param clusterDomain Kubernetes Cluster Domain
-##
-clusterDomain: cluster.local
+
 ## @param hostAliases Deployment pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -88,7 +94,7 @@ serviceTypeFilter: []
 ## These will be added to /etc/kubernetes/alibaba-cloud.json via secret
 ##
 alibabacloud:
-  ## @param alibabacloud.accessKeyId !!!!
+  ## @param alibabacloud.accessKeyId When using the Alibaba Cloud provider, set `accessKeyId` in the Alibaba Cloud configuration file (optional)
   ##
   accessKeyId: ""
   ## @param alibabacloud.accessKeySecret When using the Alibaba Cloud provider, set `accessKeySecret` in the Alibaba Cloud configuration file (optional)
@@ -97,7 +103,7 @@ alibabacloud:
   ## @param alibabacloud.regionId When using the Alibaba Cloud provider, set `regionId` in the Alibaba Cloud configuration file (optional)
   ##
   regionId: ""
-  ## @param alibabacloud.vpcId !!!!!
+  ## @param alibabacloud.vpcId Alibaba Cloud VPC Id
   ##
   vpcId: ""
   ## @param alibabacloud.secretName Use an existing secret with key "alibaba-cloud.json" defined.
@@ -328,7 +334,7 @@ infoblox:
   ## @param infoblox.gridHost When using the Infoblox provider, specify the Infoblox Grid host (required when provider=infoblox)
   ##
   gridHost: ""
-  ## @param infoblox.view !!!!!
+  ## @param infoblox.view Infoblox view
   ##
   view: ""
   ## Optional keys
@@ -368,7 +374,7 @@ linode:
   ##
   secretName:
 ## NS1 configuration to be set via arguments/env. variables
-## @param ns1.minTTL !!!!!
+## @param ns1.minTTL When using the ns1 provider, specify minimal TTL, as an integer, for records
 ##
 ns1:
   minTTL: 10
@@ -407,32 +413,31 @@ scaleway:
 ## RFC 2136 configuration to be set via arguments/env. variables
 ##
 rfc2136:
-  ## @param rfc2136.host !!!!!
+  ## @param rfc2136.host When using the rfc2136 provider, specify the RFC2136 host (required when provider=rfc2136)
   ##
   host: ""
-  ## @param rfc2136.port !!!!!
+  ## @param rfc2136.port When using the rfc2136 provider, specify the RFC2136 port (optional)
   ##
   port: 53
-  ## @param rfc2136.zone !!!!!
+  ## @param rfc2136.zone When using the rfc2136 provider, specify the zone (required when provider=rfc2136)
   ##
   zone: ""
-  ## @param rfc2136.tsigSecret !!!!!
+  ## @param rfc2136.tsigSecret When using the rfc2136 provider, specify the tsig secret to enable security. (do not specify if `rfc2136.secretName` is provided.) (optional)
   ##
   tsigSecret: ""
-  ## @param rfc2136.secretName Use an existing secret with key "rfc2136_tsig_secret" defined.
-  ## This ignores rfc2136.tsigSecret
+  ## @param rfc2136.secretName When using the rfc2136 provider, specify the existing secret which contains your tsig secret. Disables the usage of `rfc2136.tsigSecret` (optional)
   ##
   secretName:
-  ## @param rfc2136.tsigSecretAlg !!!!!
+  ## @param rfc2136.tsigSecretAlg When using the rfc2136 provider, specify the tsig secret to enable security (optional)
   ##
   tsigSecretAlg: hmac-sha256
-  ## @param rfc2136.tsigKeyname !!!!!
+  ## @param rfc2136.tsigKeyname When using the rfc2136 provider, specify the tsig keyname to enable security (optional)
   ##
   tsigKeyname: externaldns-key
-  ## @param rfc2136.tsigAxfr !!!!!
+  ## @param rfc2136.tsigAxfr When using the rfc2136 provider, enable AFXR to enable security (optional)
   ##
   tsigAxfr: true
-  ## @param rfc2136.minTTL Possible units [ns, us, ms, s, m, h], see more https://golang.org/pkg/time/#ParseDuration
+  ## @param rfc2136.minTTL When using the rfc2136 provider, specify minimal TTL (in duration format) for records[ns, us, ms, s, m, h], see more https://golang.org/pkg/time/#ParseDuration
   ##
   minTTL: "0s"
 ## PowerDNS configuration to be set via arguments/env. variables
