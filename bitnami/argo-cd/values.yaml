@@ -586,7 +586,7 @@ server:
   ##     - profile
   ##     - email
   config:
-    ## Argo CD external base URL. Required when configuring SSO
+    ## Argo CD external base URL. Required when configuring SSO. Required when enabling dex.
     ## url: https://argocd.example.com
     ##
     url: ""
@@ -1964,8 +1964,9 @@ redis:
     ## Password key to be retrieved from Redis(TM) secret
     ##
     existingSecretPasswordKey: 'redis-password'
+
   ## Cluster settings
-  ## TODO(miguelaeh): We cannot support the HA architecture because we need a single entrypoint or HA-Proxy
+  ## TODO(miguelaeh): We need to test the chart with redis sentinel, it seems to be supported at: https://github.com/argoproj/argo-cd/blob/2a410187565e15633b6f2a8c8d8da22cf02b257d/util/cache/cache.go#L40
   ##
   architecture: standalone
 

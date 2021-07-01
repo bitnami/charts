@@ -77,6 +77,43 @@ spec:
         {{- if .Values.server.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.server.initContainers "context" $) | nindent 8 }}
         {{- end }}
+        - name: wait-for-redis
+          image: {{ include "common.images.image" (dict "imageRoot" .Values.redis.image "global" .Values.global) }}
+          imagePullPolicy: {{ .Values.redis.image.pullPolicy | quote }}
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - |
+                #!/bin/bash
+
+                set -o errexit
+                set -o nounset
+                set -o pipefail
+
+                . /opt/bitnami/scripts/libos.sh
+                . /opt/bitnami/scripts/liblog.sh
+
+                check_redis_connection() {
+                  local result="$(redis-cli -h {{ include "argocd.redisHost" . }} -p {{ include "argocd.redisPort" . }} PING)"
+                  if [[ "$result" != "PONG" ]]; then
+                    false
+                  fi
+                }
+
+                info "Checking redis connection..."
+                if ! retry_while "check_redis_connection"; then
+                    error "Could not connect to the Redis server"
+                    return 1
+                else
+                    info "Connected to the Redis instance"
+                fi
+          env:
+            - name: REDISCLI_AUTH
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "argocd.redis.secretName" . }}
+                  key: {{ include "argocd.redis.secretPasswordKey" . }}
       containers:
         - name: argocd-server
           image: {{ include "argocd.server.image" . }}
@@ -109,6 +146,7 @@ spec:
             - {{ .Values.server.logFormat }}
             - --loglevel
             - {{ .Values.server.logLevel }}
+            # TODO(miguelaeh): Test the chart using redis sentinel enabled: https://github.com/argoproj/argo-cd/blob/2a410187565e15633b6f2a8c8d8da22cf02b257d/util/cache/cache.go#L40
             - --redis
             - {{ include "argocd.redisHost" . }}:{{ include "argocd.redisPort" . }}
             {{- if .Values.server.insecure }}
