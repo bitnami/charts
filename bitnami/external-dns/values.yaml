@@ -249,13 +249,20 @@ designate:
   ## @param designate.userDomainName When using the Designate provider, specify the OpenStack user domain name. (optional)
   ## @param designate.projectName When using the Designate provider, specify the OpenStack project name. (optional)
   ## @param designate.username When using the Designate provider, specify the OpenStack authentication username. (optional)
+  ## e.g:
+  ##   username: "someuser"
+  ##   password: "p@55w0rd"
+  ##   authUrl: "https://mykeystone.example.net:5000/v3/"
+  ##   regionName: "dev"
+  ##   userDomainName: "development"
+  ##   projectName: "myteamname"
   ##
-  username: "someuser"
-  password: "p@55w0rd"
-  authUrl: "https://mykeystone.example.net:5000/v3/"
-  regionName: "dev"
-  userDomainName: "development"
-  projectName: "myteamname"
+  username:
+  password:
+  authUrl:
+  regionName:
+  userDomainName:
+  projectName:
   ## @param designate.customCAHostPath When using the Designate provider, use a CA file already on the host to validate Openstack APIs.  This conflicts with `designate.customCA.enabled`
   ## This conflicts setting the above customCA to true and chart rendering will fail if you set customCA to true and specify customCAHostPath
   ##
