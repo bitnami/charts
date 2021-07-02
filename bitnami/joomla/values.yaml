@@ -16,6 +16,29 @@ global:
   imagePullSecrets: []
   storageClass:
 
+## @section Common parameters
+
+## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
+##
+kubeVersion:
+## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
+##
+nameOverride:
+## @param fullnameOverride String to fully override common.names.fullname template
+##
+fullnameOverride:
+## @param commonAnnotations Common annotations to add to all Harbor resources (sub-charts are not considered). Evaluated as a template
+##
+commonAnnotations: {}
+## @param commonLabels Common labels to add to all Harbor resources (sub-charts are not considered). Evaluated as a template
+##
+commonLabels: {}
+## @param extraDeploy Array of extra objects to deploy with the release (evaluated as a template).
+##
+extraDeploy: []
+
+## @section Joomla! parameters
+
 ## Bitnami Joomla! image version
 ## ref: https://hub.docker.com/r/bitnami/joomla/tags/
 ## @param image.registry Joomla! image registry
@@ -42,77 +65,48 @@ image:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
-
   ## Set to true if you would like to see extra information on logs
   ##
   debug: false
-
-## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
-##
-kubeVersion:
-
-## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
-##
-nameOverride:
-
-## @param fullnameOverride String to fully override common.names.fullname template
-##
-fullnameOverride:
-
-## @param replicaCount Number of replicas (requires ReadWriteMany PVC support)
-##
-replicaCount: 1
-
-## @param hostAliases [array] Deployment pod host aliases
-## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
-##
-hostAliases:
-  # Necessary for apache-exporter to work
-  - ip: "127.0.0.1"
-    hostnames:
-      - "status.localhost"
-
 ## @param joomlaSkipInstall Skip Joomla! installation wizard. Useful for migrations and restoring from SQL dump
 ## ref: https://github.com/bitnami/bitnami-docker-joomla#configuration
 ##
 joomlaSkipInstall: "no"
-
 ## @param joomlaUsername User of the application
 ## ref: https://github.com/bitnami/bitnami-docker-joomla#configuration
 ##
 joomlaUsername: user
-
 ## @param joomlaPassword Application password
 ## Defaults to a random 10-character alphanumeric string if not set
 ## ref: https://github.com/bitnami/bitnami-docker-joomla#configuration
 ##
 joomlaPassword:
-
 ## @param joomlaEmail Admin email
 ## ref: https://github.com/bitnami/bitnami-docker-joomla#configuration
 ##
 joomlaEmail: user@example.com
-
 ## @param allowEmptyPassword Allow DB blank passwords
 ## ref: https://github.com/bitnami/bitnami-docker-joomla#environment-variables
 ##
 allowEmptyPassword: "no"
-
 ## @param command Override default container command (useful when using custom images)
 ##
 command:
 ## @param args Override default container args (useful when using custom images)
 ##
 args:
-
-## @param commonAnnotations Common annotations to add to all Harbor resources (sub-charts are not considered). Evaluated as a template
+## @param replicaCount Number of replicas (requires ReadWriteMany PVC support)
 ##
-commonAnnotations: {}
-
-## @param commonLabels Common labels to add to all Harbor resources (sub-charts are not considered). Evaluated as a template
+replicaCount: 1
+## @param hostAliases [array] Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
-commonLabels: {}
-
+hostAliases:
+  ## Necessary for apache-exporter to work
+  ##
+  - ip: "127.0.0.1"
+    hostnames:
+      - "status.localhost"
 ## @param updateStrategy.type Update strategy - only really applicable for deployments with RWO PVs attached
 ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
 ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
@@ -120,70 +114,33 @@ commonLabels: {}
 ##
 updateStrategy:
   type: RollingUpdate
-
 ## @param extraEnvVars Extra environment variables
 ## For example:
 ##  - name: BEARER_AUTH
 ##    value: true
 ##
 extraEnvVars: []
-
 ## @param extraEnvVarsCM ConfigMap containing extra env vars
 ##
 extraEnvVarsCM:
-
 ## @param extraEnvVarsSecret Secret containing extra env vars (in case of sensitive data)
 ##
 extraEnvVarsSecret:
-
 ## @param extraVolumes Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`
 ##
 extraVolumes: []
-
 ## @param extraVolumeMounts Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`
 ##
 extraVolumeMounts: []
-
 ## @param initContainers Add additional init containers to the pod (evaluated as a template)
 ##
 initContainers: []
-
 ## @param sidecars Attach additional containers to the pod (evaluated as a template)
 ##
 sidecars: []
-
 ## @param existingSecret Name of a secret with the application password
 ##
 existingSecret:
-
-##
-## External database configuration
-##
-externalDatabase:
-  ## @param externalDatabase.existingSecret Name of the database existing Secret Object
-  ## NOTE: When it's set, the `externalDatabase.password` parameter is ignored
-  existingSecret:
-
-  ## @param externalDatabase.host Host of the existing database
-  ##
-  host: ""
-
-  ## @param externalDatabase.port Port of the existing database
-  ##
-  port: 3306
-
-  ## @param externalDatabase.user Existing username in the external db
-  ##
-  user: bn_joomla
-
-  ## @param externalDatabase.password Password for the above username
-  ##
-  password: ""
-
-  ## @param externalDatabase.database Name of the existing database
-  ##
-  database: bitnami_joomla
-
 ## SMTP mail delivery configuration
 ## ref: https://github.com/bitnami/bitnami-docker-joomla/#smtp-configuration
 ## @param smtpHost SMTP host
@@ -197,77 +154,170 @@ smtpPort:
 smtpUser:
 smtpPassword:
 smtpProtocol:
-
-##
-## MariaDB chart configuration
-##
-## https://github.com/bitnami/charts/blob/master/bitnami/mariadb/values.yaml
-##
-mariadb:
-  ## @param mariadb.enabled Whether to deploy a mariadb server to satisfy the applications database requirements. To use an external database set this to false and configure the externalDatabase parameters
-  ##
-  enabled: true
-
-  ## @param mariadb.architecture MariaDB architecture (`standalone` or `replication`)
-  ##
-  architecture: standalone
-
-  ## MariaDB Authentication parameters
-  ##
-  auth:
-    ## @param mariadb.auth.rootPassword Password for the MariaDB `root` user
-    ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-the-root-password-on-first-run
-    ##
-    rootPassword: ""
-    ## @param mariadb.auth.database Database name to create
-    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-on-first-run
-    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-user-on-first-run
-    ##
-    database: bitnami_joomla
-    ## @param mariadb.auth.username Database user to create
-    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-on-first-run
-    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-user-on-first-run
-    ##
-    username: bn_joomla
-    ## @param mariadb.auth.password Password for the database
-    ##
-    password: ""
-
-  ## Enable persistence using Persistent Volume Claims
-  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
-  ## @param mariadb.primary.persistence.enabled Enable database persistence using PVC
-  ## @param mariadb.primary.persistence.storageClass PVC Storage Class
-  ## @param mariadb.primary.persistence.accessModes [array] Persistent Volume access modes
-  ## @param mariadb.primary.persistence.size Database Persistent Volume Size
-  ## @param mariadb.primary.persistence.hostPath Host mount path for MariaDB volume
-  ## @param mariadb.primary.persistence.existingClaim Enable persistence using an existing PVC
-  ##
-  primary:
-    persistence:
-      enabled: true
-      ## mariadb data Persistent Volume Storage Class
-      ## If defined, storageClassName: <storageClass>
-      ## If set to "-", storageClassName: "", which disables dynamic provisioning
-      ## If undefined (the default) or set to null, no storageClassName spec is
-      ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-      ##   GKE, AWS & OpenStack)
-      ##
-      storageClass:
-      accessModes:
-        - ReadWriteOnce
-      size: 8Gi
-      ## Set path in case you want to use local host path volumes (not recommended in production)
-      ##
-      hostPath:
-      ## Use an existing PVC
-      ##
-      existingClaim:
-
 ## @param containerPorts [object] Container ports
 ##
 containerPorts:
   http: 8080
   https: 8443
+## Enable persistence using Persistent Volume Claims
+## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+## @param persistence.enabled Enable persistence using PVC
+## @param persistence.storageClass PVC Storage Class for Joomla! volume
+## @param persistence.accessMode PVC Access Mode for Joomla! volume
+## @param persistence.size PVC Storage Request for Joomla! volume
+## @param persistence.existingClaim An Existing PVC name
+## @param persistence.hostPath Host mount path for Joomla! volume
+##
+persistence:
+  enabled: true
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
+  ##
+  storageClass: "-"
+  accessMode: ReadWriteOnce
+  size: 8Gi
+  ## Requires persistence.enabled: true
+  ## If defined, PVC must be created manually before volume will be bound
+  ##
+  existingClaim:
+  ## If defined, the joomla-data volume will mount to the specified hostPath.
+  ## Requires persistence.enabled: true
+  ## Requires persistence.existingClaim: nil|false
+  ## Default: nil.
+  ##
+  hostPath:
+## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+##
+podAffinityPreset: ""
+## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+##
+podAntiAffinityPreset: soft
+## Node affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+##
+nodeAffinityPreset:
+  ## @param nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ##
+  type: ""
+  ## @param nodeAffinityPreset.key Node label key to match Ignored if `affinity` is set.
+  ## E.g.
+  ## key: "kubernetes.io/e2e-az-name"
+  ##
+  key: ""
+  ## @param nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set.
+  ## E.g.
+  ## values:
+  ##   - e2e-az1
+  ##   - e2e-az2
+  ##
+  values: []
+## @param affinity Affinity for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
+##
+affinity: {}
+## @param nodeSelector Node labels for pod assignment
+## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+##
+nodeSelector: {}
+## @param tolerations Tolerations for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+##
+tolerations: []
+## Configure resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## We usually recommend not to specify default resources and to leave this as a conscious
+## choice for the user. This also increases chances charts run on environments with little
+## resources, such as Minikube. If you do want to specify resources, uncomment the following
+## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+## @param resources.limits The resources limits for the container
+## @param resources.requests [object] The requested resources for the container
+##
+resources:
+  ## Example:
+  ## limits:
+  ##    cpu: 100m
+  ##    memory: 128Mi
+  limits: {}
+  requests:
+    memory: 512Mi
+    cpu: 300m
+## Configure Pods Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+## @param podSecurityContext.enabled Enable Joomla! pods' Security Context
+## @param podSecurityContext.fsGroup Joomla! pods' group ID
+##
+podSecurityContext:
+  enabled: true
+  fsGroup: 1001
+## Configure Container Security Context (only main container)
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+## @param containerSecurityContext.enabled Enable Joomla! containers' Security Context
+## @param containerSecurityContext.runAsUser Joomla! containers' Security Context
+##
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1001
+## Configure extra options for liveness probe
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+## @param livenessProbe.enabled Enable livenessProbe
+## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+## @param livenessProbe.periodSeconds Period seconds for livenessProbe
+## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+## @param livenessProbe.failureThreshold Failure threshold for livenessProbe
+## @param livenessProbe.successThreshold Success threshold for livenessProbe
+##
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 600
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+## Configure extra options for readiness probe
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+## @param readinessProbe.enabled Enable readinessProbe
+## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+## @param readinessProbe.periodSeconds Period seconds for readinessProbe
+## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+## @param readinessProbe.failureThreshold Failure threshold for readinessProbe
+## @param readinessProbe.successThreshold Success threshold for readinessProbe
+##
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 30
+  periodSeconds: 5
+  timeoutSeconds: 3
+  failureThreshold: 6
+  successThreshold: 1
+## @param customLivenessProbe Override default liveness probe
+##
+customLivenessProbe: {}
+## @param customReadinessProbe Override default readiness probe
+##
+customReadinessProbe: {}
+## @param priorityClassName Define the priority class name to use for the joomla pods here.
+## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+##
+priorityClassName: ""
+## @param lifecycleHooks LifecycleHook to set additional configuration at startup Evaluated as a template
+##
+lifecycleHooks:
+## @param podAnnotations Pod annotations
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+##
+podAnnotations: {}
+## @param podLabels Add additional labels to the pod (evaluated as a template)
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
+podLabels: {}
+
+## @section Traffic Exposure Parameters
 
 ## Kubernetes configuration
 ## For minikube, set this to NodePort, for ingress ClusterIP, elsewhere use LoadBalancer
@@ -300,7 +350,6 @@ service:
   ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: Cluster
-
 ## Configure the ingress resource that allows you to access the
 ## Joomla! installation. Set up the URL
 ## ref: http://kubernetes.io/docs/user-guide/ingress/
@@ -309,28 +358,22 @@ ingress:
   ## @param ingress.enabled Enable ingress controller resource
   ##
   enabled: false
-
   ## @param ingress.certManager Add annotations for cert-manager
   ##
   certManager: false
-
   ## @param ingress.pathType Ingress Path type
   ##
   pathType: ImplementationSpecific
-
   ## @param ingress.apiVersion Override API Version (automatically detected if not set)
   ##
   apiVersion:
-
   ## @param ingress.hostname Default host for the ingress resource
   ##
   hostname: joomla.local
-
   ## @param ingress.path Default path for the ingress resource
   ## You may need to set this to '/*' in order to use this with ALB ingress controllers.
   ##
   path: /
-
   ## @param ingress.annotations Ingress annotations
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
@@ -338,13 +381,11 @@ ingress:
   ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
   ##
   annotations: {}
-
   ## @param ingress.tls Enable TLS configuration for the hostname defined at ingress.hostname parameter
   ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
   ## You can use the ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
   ##
   tls: false
-
   ## @param ingress.extraHosts The list of additional hostnames to be covered with this ingress record.
   ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
   ## extraHosts:
@@ -384,183 +425,89 @@ ingress:
   ##
   secrets: []
 
-## Enable persistence using Persistent Volume Claims
-## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
-## @param persistence.enabled Enable persistence using PVC
-## @param persistence.storageClass PVC Storage Class for Joomla! volume
-## @param persistence.accessMode PVC Access Mode for Joomla! volume
-## @param persistence.size PVC Storage Request for Joomla! volume
-## @param persistence.existingClaim An Existing PVC name
-## @param persistence.hostPath Host mount path for Joomla! volume
+## @section Database parameters
+
+## MariaDB chart configuration
+## https://github.com/bitnami/charts/blob/master/bitnami/mariadb/values.yaml
 ##
-persistence:
+mariadb:
+  ## @param mariadb.enabled Whether to deploy a mariadb server to satisfy the applications database requirements. To use an external database set this to false and configure the externalDatabase parameters
+  ##
   enabled: true
-  ## If defined, storageClassName: <storageClass>
-  ## If set to "-", storageClassName: "", which disables dynamic provisioning
-  ## If undefined (the default) or set to null, no storageClassName spec is
-  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-  ##   GKE, AWS & OpenStack)
+  ## @param mariadb.architecture MariaDB architecture (`standalone` or `replication`)
   ##
-  storageClass: "-"
-  accessMode: ReadWriteOnce
-  size: 8Gi
-
-  ## Requires persistence.enabled: true
-  ## If defined, PVC must be created manually before volume will be bound
+  architecture: standalone
+  ## MariaDB Authentication parameters
   ##
-  existingClaim:
-
-  ## If defined, the joomla-data volume will mount to the specified hostPath.
-  ## Requires persistence.enabled: true
-  ## Requires persistence.existingClaim: nil|false
-  ## Default: nil.
+  auth:
+    ## @param mariadb.auth.rootPassword Password for the MariaDB `root` user
+    ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-the-root-password-on-first-run
+    ##
+    rootPassword: ""
+    ## @param mariadb.auth.database Database name to create
+    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-on-first-run
+    ##
+    database: bitnami_joomla
+    ## @param mariadb.auth.username Database user to create
+    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-user-on-first-run
+    ##
+    username: bn_joomla
+    ## @param mariadb.auth.password Password for the database
+    ##
+    password: ""
+  ## Enable persistence using Persistent Volume Claims
+  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## @param mariadb.primary.persistence.enabled Enable database persistence using PVC
+  ## @param mariadb.primary.persistence.storageClass PVC Storage Class
+  ## @param mariadb.primary.persistence.accessModes [array] Persistent Volume access modes
+  ## @param mariadb.primary.persistence.size Database Persistent Volume Size
+  ## @param mariadb.primary.persistence.hostPath Host mount path for MariaDB volume
+  ## @param mariadb.primary.persistence.existingClaim Enable persistence using an existing PVC
   ##
-  hostPath:
-
-## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
-## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  primary:
+    persistence:
+      enabled: true
+      ## mariadb data Persistent Volume Storage Class
+      ## If defined, storageClassName: <storageClass>
+      ## If set to "-", storageClassName: "", which disables dynamic provisioning
+      ## If undefined (the default) or set to null, no storageClassName spec is
+      ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+      ##   GKE, AWS & OpenStack)
+      ##
+      storageClass:
+      accessModes:
+        - ReadWriteOnce
+      size: 8Gi
+      ## Set path in case you want to use local host path volumes (not recommended in production)
+      ##
+      hostPath:
+      ## Use an existing PVC
+      ##
+      existingClaim:
+## External database configuration
 ##
-podAffinityPreset: ""
-
-## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
-## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-##
-podAntiAffinityPreset: soft
-
-## Node affinity preset
-## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-##
-nodeAffinityPreset:
-  ## @param nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+externalDatabase:
+  ## @param externalDatabase.existingSecret Name of the database existing Secret Object
+  ## NOTE: When it's set, the `externalDatabase.password` parameter is ignored
+  existingSecret:
+  ## @param externalDatabase.host Host of the existing database
   ##
-  type: ""
-  ## @param nodeAffinityPreset.key Node label key to match Ignored if `affinity` is set.
-  ## E.g.
-  ## key: "kubernetes.io/e2e-az-name"
+  host: ""
+  ## @param externalDatabase.port Port of the existing database
   ##
-  key: ""
-  ## @param nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set.
-  ## E.g.
-  ## values:
-  ##   - e2e-az1
-  ##   - e2e-az2
+  port: 3306
+  ## @param externalDatabase.user Existing username in the external db
   ##
-  values: []
+  user: bn_joomla
+  ## @param externalDatabase.password Password for the above username
+  ##
+  password: ""
+  ## @param externalDatabase.database Name of the existing database
+  ##
+  database: bitnami_joomla
 
-## @param affinity Affinity for pod assignment
-## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
-##
-affinity: {}
+## @section Metrics parameters
 
-## @param nodeSelector Node labels for pod assignment
-## Ref: https://kubernetes.io/docs/user-guide/node-selection/
-##
-nodeSelector: {}
-
-## @param tolerations Tolerations for pod assignment
-## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-##
-tolerations: []
-
-## Configure resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-## We usually recommend not to specify default resources and to leave this as a conscious
-## choice for the user. This also increases chances charts run on environments with little
-## resources, such as Minikube. If you do want to specify resources, uncomment the following
-## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-## @param resources.limits The resources limits for the container
-## @param resources.requests [object] The requested resources for the container
-##
-resources:
-  ## Example:
-  ## limits:
-  ##    cpu: 100m
-  ##    memory: 128Mi
-  limits: {}
-  requests:
-    memory: 512Mi
-    cpu: 300m
-
-## Configure Pods Security Context
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-## @param podSecurityContext.enabled Enable Joomla! pods' Security Context
-## @param podSecurityContext.fsGroup Joomla! pods' group ID
-##
-podSecurityContext:
-  enabled: true
-  fsGroup: 1001
-
-## Configure Container Security Context (only main container)
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-## @param containerSecurityContext.enabled Enable Joomla! containers' Security Context
-## @param containerSecurityContext.runAsUser Joomla! containers' Security Context
-##
-containerSecurityContext:
-  enabled: true
-  runAsUser: 1001
-
-## Configure extra options for liveness probe
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
-## @param livenessProbe.enabled Enable livenessProbe
-## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
-## @param livenessProbe.periodSeconds Period seconds for livenessProbe
-## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
-## @param livenessProbe.failureThreshold Failure threshold for livenessProbe
-## @param livenessProbe.successThreshold Success threshold for livenessProbe
-##
-livenessProbe:
-  enabled: true
-  initialDelaySeconds: 600
-  periodSeconds: 10
-  timeoutSeconds: 5
-  failureThreshold: 6
-  successThreshold: 1
-## Configure extra options for readiness probe
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
-## @param readinessProbe.enabled Enable readinessProbe
-## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-## @param readinessProbe.periodSeconds Period seconds for readinessProbe
-## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
-## @param readinessProbe.failureThreshold Failure threshold for readinessProbe
-## @param readinessProbe.successThreshold Success threshold for readinessProbe
-##
-readinessProbe:
-  enabled: true
-  initialDelaySeconds: 30
-  periodSeconds: 5
-  timeoutSeconds: 3
-  failureThreshold: 6
-  successThreshold: 1
-
-## @param customLivenessProbe Override default liveness probe
-##
-customLivenessProbe: {}
-## @param customReadinessProbe Override default readiness probe
-##
-customReadinessProbe: {}
-
-## @param priorityClassName Define the priority class name to use for the joomla pods here.
-## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
-##
-priorityClassName: ""
-
-## @param lifecycleHooks LifecycleHook to set additional configuration at startup Evaluated as a template
-##
-lifecycleHooks:
-
-## @param podAnnotations Pod annotations
-## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-##
-podAnnotations: {}
-
-## @param podLabels Add additional labels to the pod (evaluated as a template)
-## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-##
-podLabels: {}
-
-## Prometheus Exporter / Metrics
-##
 metrics:
   ## @param metrics.enabled Start a side-car prometheus exporter
   ##
@@ -579,9 +526,11 @@ metrics:
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
     ##
-    pullSecrets:
-    #   - myRegistryKeySecretName
+    pullSecrets: []
   ## @param metrics.resources Exporter resource requests/limit
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -591,7 +540,3 @@ metrics:
   podAnnotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "9117"
-
-## @param extraDeploy Array of extra objects to deploy with the release (evaluated as a template).
-##
-extraDeploy: []
