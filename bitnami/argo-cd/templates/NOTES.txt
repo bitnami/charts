@@ -5,21 +5,9 @@
 {{- if .Values.server.ingress.enabled }}
   Connect to one of the following hosts:
   {{ if .Values.server.ingress.tls }}
-    {{- if .Values.server.ingress.hosts }}
-    {{- range .Values.server.ingress.hosts }}
-    - https://{{ . }}
-    {{- end }}
-    {{- else }}
-    {{ .Values.server.ingress.hostname }}
-    {{- end }}
+    https://{{ .Values.server.ingress.hostname }}
   {{- else }}
-    {{- if .Values.server.ingress.hosts }}
-    {{- range .Values.server.ingress.hosts }}
-    - http://{{ . }}
-    {{- end }}
-    {{- else }}
-    {{ .Values.server.ingress.hostname }}
-    {{- end }}
+    http://{{ .Values.server.ingress.hostname }}
   {{- end }}
 {{- else }}
   Execute the following commands:

@@ -17,9 +17,9 @@ metadata:
   {{- end }}
 type: Opaque
 stringData:
-  name: {{ required "A valid .Values.config.clusterCredentials[].name entry is required!" .name }}
-  server: {{ required "A valid .Values.config.clusterCredentials[].server entry is required!" .server }}
+  name: {{ .name }}
+  server: {{ .server }}
   namespaces: {{ .namespaces }}
   config: |
-    {{- required "A valid .Values.config.clusterCredentials[].config entry is required!" .config | toPrettyJson | nindent 4 }}
+    {{- .config | toPrettyJson | nindent 4 }}
 {{- end }}

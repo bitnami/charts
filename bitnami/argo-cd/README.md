@@ -77,7 +77,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.image.tag`                                   | Argo CD controller image tag (immutable tags are recommended)                                        | `2.0.3-debian-10-r3` |
 | `controller.image.pullPolicy`                            | Argo CD controller image pull policy                                                                 | `IfNotPresent`       |
 | `controller.image.pullSecrets`                           | Argo CD controller image pull secrets                                                                | `[]`                 |
-| `controller.image.debug`                                 | Enable image debug mode                                                                              | `false`              |
 | `controller.replicaCount`                                | Number of Argo CD replicas to deploy                                                                 | `1`                  |
 | `controller.livenessProbe.enabled`                       | Enable livenessProbe on Argo CD nodes                                                                | `true`               |
 | `controller.livenessProbe.initialDelaySeconds`           | Initial delay seconds for livenessProbe                                                              | `10`                 |
@@ -112,7 +111,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.service.type`                                | Argo CD service type                                                                                 | `ClusterIP`          |
 | `controller.service.port`                                | Argo CD application controller service port                                                          | `8082`               |
 | `controller.service.nodePort`                            | Node port for Argo CD application controller service                                                 | `nil`                |
-| `controller.service.clusterIP`                           | Argo CD application controller service Cluster IP                                                    | `nil`                |
 | `controller.service.loadBalancerIP`                      | Argo CD application controller service Load Balancer IP                                              | `nil`                |
 | `controller.service.loadBalancerSourceRanges`            | Argo CD application controller service Load Balancer sources                                         | `[]`                 |
 | `controller.service.externalTrafficPolicy`               | Argo CD application controller service external traffic policy                                       | `Cluster`            |
@@ -121,7 +119,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.metrics.service.type`                        | Argo CD application controller service type                                                          | `ClusterIP`          |
 | `controller.metrics.service.port`                        | Argo CD application controller metrics service port                                                  | `8082`               |
 | `controller.metrics.service.nodePort`                    | Node port for the application controller service                                                     | `nil`                |
-| `controller.metrics.service.clusterIP`                   | Argo CD application controller service Cluster IP                                                    | `nil`                |
 | `controller.metrics.service.loadBalancerIP`              | Argo CD application controller service Load Balancer IP                                              | `nil`                |
 | `controller.metrics.service.loadBalancerSourceRanges`    | Argo CD application controller service Load Balancer sources                                         | `[]`                 |
 | `controller.metrics.service.externalTrafficPolicy`       | Argo CD application controller service external traffic policy                                       | `Cluster`            |
@@ -132,13 +129,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.metrics.rules.spec`                          | Rules to render into the PrometheusRule object                                                       | `[]`                 |
 | `controller.metrics.rules.selector`                      | Selector for the PrometheusRule object                                                               | `{}`                 |
 | `controller.metrics.rules.namespace`                     | Namespace where to create the PrometheusRule object                                                  | `monitoring`         |
-| `controller.existingConfigmap`                           | The name of an existing ConfigMap with your custom configuration for Argo CD                         | `nil`                |
+| `controller.metrics.rules.additionalLabels`              | Additional lables to add to the PrometheusRule object                                                | `{}`                 |
 | `controller.command`                                     | Override default container command (useful when using custom images)                                 | `[]`                 |
 | `controller.defaultArgs.statusProcessors`                | Default status processors for Argo CD controller                                                     | `20`                 |
 | `controller.defaultArgs.operationProcessors`             | Default operation processors for Argo CD controller                                                  | `10`                 |
 | `controller.defaultArgs.appResyncPeriod`                 | Default application resync period for Argo CD controller                                             | `180`                |
 | `controller.defaultArgs.selfHealTimeout`                 | Default self heal timeout for Argo CD controller                                                     | `5`                  |
 | `controller.args`                                        | Override default container args (useful when using custom images). Overrides the defaultArgs.        | `[]`                 |
+| `controller.extraArgs`                                   | Add extra arguments to the default arguments for the Argo CD controller                              | `[]`                 |
 | `controller.hostAliases`                                 | Argo CD pods host aliases                                                                            | `[]`                 |
 | `controller.podLabels`                                   | Extra labels for Argo CD pods                                                                        | `{}`                 |
 | `controller.podAnnotations`                              | Annotations for Argo CD pods                                                                         | `{}`                 |
@@ -171,7 +169,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.image.tag`                                   | Argo CD server image tag (immutable tags are recommended)                                        | `2.0.3-debian-10-r3`     |
 | `server.image.pullPolicy`                            | Argo CD server image pull policy                                                                 | `IfNotPresent`           |
 | `server.image.pullSecrets`                           | Argo CD server image pull secrets                                                                | `[]`                     |
-| `server.image.debug`                                 | Enable image debug mode                                                                          | `false`                  |
 | `server.replicaCount`                                | Number of Argo CD server replicas to deploy                                                      | `1`                      |
 | `server.livenessProbe.enabled`                       | Enable livenessProbe on Argo CD server nodes                                                     | `true`                   |
 | `server.livenessProbe.initialDelaySeconds`           | Initial delay seconds for livenessProbe                                                          | `10`                     |
@@ -222,9 +219,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.metrics.enabled`                             | Enable metrics for the Argo CD server                                                            | `false`                  |
 | `server.metrics.service.type`                        | Argo CD server service type                                                                      | `ClusterIP`              |
 | `server.metrics.service.port`                        | Argo CD server metrics service port                                                              | `8084`                   |
-| `server.metrics.service.nodePorts.http`              | Node port for HTTP                                                                               | `nil`                    |
-| `server.metrics.service.nodePorts.https`             | Node port for HTTPS                                                                              | `nil`                    |
-| `server.metrics.service.clusterIP`                   | Argo CD server service Cluster IP                                                                | `nil`                    |
+| `server.metrics.service.nodePort`                    | Node port for Argo CD server metrics service                                                     | `nil`                    |
 | `server.metrics.service.loadBalancerIP`              | Argo CD server service Load Balancer IP                                                          | `nil`                    |
 | `server.metrics.service.loadBalancerSourceRanges`    | Argo CD server service Load Balancer sources                                                     | `[]`                     |
 | `server.metrics.service.externalTrafficPolicy`       | Argo CD server service external traffic policy                                                   | `Cluster`                |
@@ -251,12 +246,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.service.ports.https`                         | HTTPS port for the gRPC ingress when enabled                                                     | `443`                    |
 | `server.service.nodePorts.http`                      | Node port for HTTP                                                                               | `nil`                    |
 | `server.service.nodePorts.https`                     | Node port for HTTPS                                                                              | `nil`                    |
-| `server.service.clusterIP`                           | Argo CD service Cluster IP                                                                       | `nil`                    |
 | `server.service.loadBalancerIP`                      | Argo CD service Load Balancer IP                                                                 | `nil`                    |
 | `server.service.loadBalancerSourceRanges`            | Argo CD service Load Balancer sources                                                            | `[]`                     |
 | `server.service.externalTrafficPolicy`               | Argo CD service external traffic policy                                                          | `Cluster`                |
 | `server.service.annotations`                         | Additional custom annotations for Argo CD service                                                | `{}`                     |
-| `server.existingConfigmap`                           | The name of an existing ConfigMap with your custom configuration for Argo CD server              | `nil`                    |
 | `server.command`                                     | Override default container command (useful when using custom images)                             | `[]`                     |
 | `server.args`                                        | Override default container args (useful when using custom images)                                | `[]`                     |
 | `server.extraArgs`                                   | concat to the default args                                                                       | `[]`                     |
@@ -295,7 +288,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `repoServer.image.tag`                                   | Argo CD repo server image tag (immutable tags are recommended)                                       | `2.0.3-debian-10-r3` |
 | `repoServer.image.pullPolicy`                            | Argo CD repo server image pull policy                                                                | `IfNotPresent`       |
 | `repoServer.image.pullSecrets`                           | Argo CD repo server image pull secrets                                                               | `[]`                 |
-| `repoServer.image.debug`                                 | Enable image debug mode                                                                              | `false`              |
 | `repoServer.replicaCount`                                | Number of Argo CD repo server replicas to deploy                                                     | `1`                  |
 | `repoServer.livenessProbe.enabled`                       | Enable livenessProbe on Argo CD repo server nodes                                                    | `true`               |
 | `repoServer.livenessProbe.initialDelaySeconds`           | Initial delay seconds for livenessProbe                                                              | `10`                 |
@@ -320,7 +312,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `repoServer.service.type`                                | Repo server service type                                                                             | `ClusterIP`          |
 | `repoServer.service.port`                                | Repo server service port                                                                             | `8081`               |
 | `repoServer.service.nodePort`                            | Node port for the repo server service                                                                | `nil`                |
-| `repoServer.service.clusterIP`                           | Repo server service Cluster IP                                                                       | `nil`                |
 | `repoServer.service.loadBalancerIP`                      | Repo server service Load Balancer IP                                                                 | `nil`                |
 | `repoServer.service.loadBalancerSourceRanges`            | Repo server service Load Balancer sources                                                            | `[]`                 |
 | `repoServer.service.externalTrafficPolicy`               | Repo server service external traffic policy                                                          | `Cluster`            |
@@ -333,7 +324,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `repoServer.metrics.service.type`                        | Argo CD repo server service type                                                                     | `ClusterIP`          |
 | `repoServer.metrics.service.port`                        | Argo CD repo server metrics service port                                                             | `8084`               |
 | `repoServer.metrics.service.nodePort`                    | Node port for the repo server metrics service                                                        | `nil`                |
-| `repoServer.metrics.service.clusterIP`                   | Argo CD repo server service Cluster IP                                                               | `nil`                |
 | `repoServer.metrics.service.loadBalancerIP`              | Argo CD repo server service Load Balancer IP                                                         | `nil`                |
 | `repoServer.metrics.service.loadBalancerSourceRanges`    | Argo CD repo server service Load Balancer sources                                                    | `[]`                 |
 | `repoServer.metrics.service.externalTrafficPolicy`       | Argo CD repo server service external traffic policy                                                  | `Cluster`            |
@@ -348,9 +338,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `repoServer.serviceAccount.create`                       | Specifies whether a ServiceAccount for repo server should be created                                 | `true`               |
 | `repoServer.serviceAccount.name`                         | The name of the ServiceAccount for repo server to use.                                               | `""`                 |
 | `repoServer.serviceAccount.automountServiceAccountToken` | Automount service account token for the repo server service account                                  | `true`               |
-| `repoServer.existingConfigmap`                           | The name of an existing ConfigMap with your custom configuration for Argo CD repo server             | `nil`                |
 | `repoServer.command`                                     | Override default container command (useful when using custom images)                                 | `[]`                 |
 | `repoServer.args`                                        | Override default container args (useful when using custom images)                                    | `[]`                 |
+| `repoServer.extraArgs`                                   | Add extra args to the default repo server args                                                       | `[]`                 |
 | `repoServer.hostAliases`                                 | Argo CD repo server pods host aliases                                                                | `[]`                 |
 | `repoServer.podLabels`                                   | Extra labels for Argo CD repo server pods                                                            | `{}`                 |
 | `repoServer.podAnnotations`                              | Annotations for Argo CD repo server pods                                                             | `{}`                 |
@@ -383,7 +373,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dex.image.tag`                                   | Dex image tag (immutable tags are recommended)                                                | `2.28.1-debian-10-r4` |
 | `dex.image.pullPolicy`                            | Dex image pull policy                                                                         | `IfNotPresent`        |
 | `dex.image.pullSecrets`                           | Dex image pull secrets                                                                        | `[]`                  |
-| `dex.image.debug`                                 | Enable image debug mode                                                                       | `false`               |
 | `dex.enabled`                                     | Enable the creation of a Dex deployment for SSO                                               | `false`               |
 | `dex.replicaCount`                                | Number of Dex replicas to deploy                                                              | `1`                   |
 | `dex.livenessProbe.enabled`                       | Enable livenessProbe on Dex nodes                                                             | `true`                |
@@ -411,7 +400,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dex.service.ports.grpc`                          | Dex grpc service port                                                                         | `5557`                |
 | `dex.service.nodePorts.http`                      | HTTP node port for the Dex service                                                            | `nil`                 |
 | `dex.service.nodePorts.grpc`                      | gRPC node port for the Dex service                                                            | `nil`                 |
-| `dex.service.clusterIP`                           | Dex service Cluster IP                                                                        | `nil`                 |
 | `dex.service.loadBalancerIP`                      | Dex service Load Balancer IP                                                                  | `nil`                 |
 | `dex.service.loadBalancerSourceRanges`            | Dex service Load Balancer sources                                                             | `[]`                  |
 | `dex.service.externalTrafficPolicy`               | Dex service external traffic policy                                                           | `Cluster`             |
@@ -423,7 +411,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dex.metrics.service.type`                        | Dex service type                                                                              | `ClusterIP`           |
 | `dex.metrics.service.port`                        | Dex metrics service port                                                                      | `5558`                |
 | `dex.metrics.service.nodePort`                    | Node port for the Dex service                                                                 | `nil`                 |
-| `dex.metrics.service.clusterIP`                   | Dex service Cluster IP                                                                        | `nil`                 |
 | `dex.metrics.service.loadBalancerIP`              | Dex service Load Balancer IP                                                                  | `nil`                 |
 | `dex.metrics.service.loadBalancerSourceRanges`    | Dex service Load Balancer sources                                                             | `[]`                  |
 | `dex.metrics.service.externalTrafficPolicy`       | Dex service external traffic policy                                                           | `Cluster`             |
@@ -433,9 +420,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dex.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created for Dex                                  | `true`                |
 | `dex.serviceAccount.name`                         | The name of the ServiceAccount to use.                                                        | `""`                  |
 | `dex.serviceAccount.automountServiceAccountToken` | Automount service account token for the Dex service account                                   | `true`                |
-| `dex.existingConfigmap`                           | The name of an existing ConfigMap with your custom configuration for Dex                      | `nil`                 |
 | `dex.command`                                     | Override default container command (useful when using custom images)                          | `[]`                  |
 | `dex.args`                                        | Override default container args (useful when using custom images)                             | `[]`                  |
+| `dex.extraArgs`                                   | Add extra args to the default args for Dex                                                    | `[]`                  |
 | `dex.hostAliases`                                 | Dex pods host aliases                                                                         | `[]`                  |
 | `dex.podLabels`                                   | Extra labels for Dex pods                                                                     | `{}`                  |
 | `dex.podAnnotations`                              | Annotations for Dex pods                                                                      | `{}`                  |
@@ -461,24 +448,28 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Shared config for Argo CD components
 
-| Name                                           | Description                                                                | Value  |
-| ---------------------------------------------- | -------------------------------------------------------------------------- | ------ |
-| `config.extraKnownHosts`                       | Add extra known hosts to the known hosts list                              | `""`   |
-| `config.styles`                                | Custom CSS styles                                                          | `""`   |
-| `config.tlsCerts`                              | TLS certificates used to verify the authenticity of the repository servers | `{}`   |
-| `config.secret.createSecret`                   | Whether to create or not the secret                                        | `true` |
-| `config.secret.annotations`                    | General secret extra annotations                                           | `{}`   |
-| `config.secret.githubSecret`                   | GitHub secret to configure webhooks                                        | `""`   |
-| `config.secret.gitlabSecret`                   | GitLab secret to configure webhooks                                        | `""`   |
-| `config.secret.bitbucketServerSecret`          | BitBucket secret to configure webhooks                                     | `""`   |
-| `config.secret.bitbucketUUID`                  | BitBucket UUID to configure webhooks                                       | `""`   |
-| `config.secret.gogsSecret`                     | Gogs secret to configure webhooks                                          | `""`   |
-| `config.secret.extra`                          | Extra keys to add to the configuration secret.                             | `{}`   |
-| `config.secret.argocdServerTlsConfig`          | TLS config for the Argo CD config secret                                   | `{}`   |
-| `config.secret.argocdServerAdminPassword`      | Argo CD server admin password. Autogenerated by default.                   | `""`   |
-| `config.secret.argocdServerAdminPasswordMtime` | Argo CD server password modification time                                  | `""`   |
-| `config.secret.repositoryCredentials`          | Repository credentials to add to the Argo CD server confgi secret          | `{}`   |
-| `config.clusterCredentials`                    | Configure external cluster credentials                                     | `[]`   |
+| Name                                           | Description                                                                                           | Value  |
+| ---------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ------ |
+| `config.knownHosts`                            | Known hosts to be added to the known hosts list by default. Check the values to see the default value | `""`   |
+| `config.extraKnownHosts`                       | Add extra known hosts to the known hosts list                                                         | `""`   |
+| `config.createExtraKnownHosts`                 | Whether to create or not the extra known hosts configmap                                              | `true` |
+| `config.styles`                                | Custom CSS styles                                                                                     | `""`   |
+| `config.existingStylesConfigmap`               | Use an existing styles configmap                                                                      | `nil`  |
+| `config.tlsCerts`                              | TLS certificates used to verify the authenticity of the repository servers                            | `{}`   |
+| `config.secret.create`                         | Whether to create or not the secret                                                                   | `true` |
+| `config.secret.annotations`                    | General secret extra annotations                                                                      | `{}`   |
+| `config.secret.githubSecret`                   | GitHub secret to configure webhooks                                                                   | `""`   |
+| `config.secret.gitlabSecret`                   | GitLab secret to configure webhooks                                                                   | `""`   |
+| `config.secret.bitbucketServerSecret`          | BitBucket secret to configure webhooks                                                                | `""`   |
+| `config.secret.bitbucketUUID`                  | BitBucket UUID to configure webhooks                                                                  | `""`   |
+| `config.secret.gogsSecret`                     | Gogs secret to configure webhooks                                                                     | `""`   |
+| `config.secret.extra`                          | Extra keys to add to the configuration secret.                                                        | `{}`   |
+| `config.secret.argocdServerTlsConfig.key`      | TLS key for the Argo CD config secret                                                                 | `nil`  |
+| `config.secret.argocdServerTlsConfig.crt`      | TLS certificate for the Argo CD config secret                                                         | `nil`  |
+| `config.secret.argocdServerAdminPassword`      | Argo CD server admin password. Autogenerated by default.                                              | `""`   |
+| `config.secret.argocdServerAdminPasswordMtime` | Argo CD server password modification time                                                             | `""`   |
+| `config.secret.repositoryCredentials`          | Repository credentials to add to the Argo CD server confgi secret                                     | `{}`   |
+| `config.clusterCredentials`                    | Configure external cluster credentials                                                                | `[]`   |
 
 
 ### Init Container Parameters
@@ -507,7 +498,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `redis.auth.enabled`                      | Enable Redis dependency authentication                                      | `true`           |
 | `redis.auth.existingSecret`               | Existing secret to load redis dependency password                           | `nil`            |
 | `redis.auth.existingSecretPasswordKey`    | Pasword key name inside the existing secret                                 | `redis-password` |
-| `redis.architecture`                      | Redis dependency architecture. Either 'standalone' or 'replicaset'          | `standalone`     |
 | `externalRedis.host`                      | External Redis host                                                         | `""`             |
 | `externalRedis.port`                      | External Redis port                                                         | `6379`           |
 | `externalRedis.password`                  | External Redis password                                                     | `""`             |

@@ -64,9 +64,9 @@ spec:
             - /bin/bash
             - -ec
             - |
-              chown -R {{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }} /tmp
+              chown -R {{ .Values.repoServer.containerSecurityContext.runAsUser }}:{{ .Values.repoServer.containerSecurityContext.fsGroup }} /tmp
           securityContext:
-            runAsUser: 0
+            runAsUser: {{ .Values.volumePermissions.containerSecurityContext.runAsUser }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
           {{- end }}
@@ -135,9 +135,9 @@ spec:
           {{- else }}
           args:
             - --logformat
-            - {{ .Values.server.logFormat }}
+            - {{ .Values.repoServer.logFormat }}
             - --loglevel
-            - {{ .Values.server.logLevel }}
+            - {{ .Values.repoServer.logLevel }}
             - --redis
             - {{ include "argocd.redisHost" . }}:{{ include "argocd.redisPort" . }}
             {{- if .Values.repoServer.extraArgs }}

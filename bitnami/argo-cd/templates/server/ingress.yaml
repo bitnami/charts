@@ -9,13 +9,18 @@ metadata:
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-  {{- if or .Values.server.ingress.annotations .Values.commonAnnotations}}
+  {{- if or .Values.server.ingress.annotations .Values.commonAnnotations .Values.server.ingress.certManager }}
   annotations:
-    {{- include "common.tplvalues.render" ( dict "value" .Values.server.ingress.annotations "context" $ ) | nindent 4 }}
+    {{- if .Values.server.ingress.certManager }}
+    kubernetes.io/tls-acme: "true"
+    {{- end }}
+    {{- if .Values.server.ingress.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.server.ingress.annotations "context" $) | nindent 4 }}
+    {{- end }}
     {{- if .Values.commonAnnotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
   {{- end }}
-{{- end }}
 spec:
   rules:
     {{- if .Values.server.ingress.hostname }}

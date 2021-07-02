@@ -82,7 +82,11 @@ Create a default name for known hosts configmap.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "argocd.custom-styles.fullname" -}}
+{{- if .Values.config.existingStylesConfigmap -}}
+{{- .Values.config.existingStylesConfigmap -}}
+{{- else -}}
 {{- printf "%s-%s" .Release.Name "custom-styles" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
@@ -155,9 +159,9 @@ Return the Redis(TM) secret key
 */}}
 {{- define "argocd.redis.secretPasswordKey" -}}
 {{- if and .Values.redis.enabled .Values.redis.auth.existingSecret }}
-    {{- required "You need to provide existingSecretPasswordKey when an existingSecret is specified in redis" .Values.redis.auth.existingSecretPasswordKey | printf "%s" }}
+    {{- .Values.redis.auth.existingSecretPasswordKey | printf "%s" }}
 {{- else if and (not .Values.redis.enabled) .Values.externalRedis.existingSecret }}
-    {{- required "You need to provide existingSecretPasswordKey when an existingSecret is specified in redis" .Values.externalRedis.existingSecretPasswordKey | printf "%s" }}
+    {{- .Values.externalRedis.existingSecretPasswordKey | printf "%s" }}
 {{- else -}}
     {{- printf "redis-password" -}}
 {{- end -}}
@@ -188,14 +192,38 @@ Return the Redis(TM) port
 */}}
 {{- define "argocd.redisPort" -}}
 {{- if .Values.redis.enabled }}
-    {{- printf "6379" -}}
+    {{- .Values.redis.service.port -}}
 {{- else -}}
-    {{- required "If the redis dependency is disabled you need to add an external redis port" .Values.externalRedis.port -}}
+    {{- .Values.externalRedis.port -}}
 {{- end -}}
 {{- end -}}
 
 {{/*
-Validate Dex config when enabling Dex
+Validate Redis config
+*/}}
+{{- define "argocd.validateValues.redis" -}}
+{{- if and .Values.redis.enabled .Values.redis.auth.existingSecret }}
+    {{- if not .Values.redis.auth.existingSecretPasswordKey -}}
+Argo CD: You need to provide existingSecretPasswordKey when an existingSecret is specified in redis dependency
+    {{- end -}}
+{{- else if and (not .Values.redis.enabled) .Values.externalRedis.existingSecret }}
+    {{- if not .Values.externalRedis.existingSecretPasswordKey -}}
+Argo CD: You need to provide existingSecretPasswordKey when an existingSecret is specified in redis
+    {{- end }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate external Redis config
+*/}}
+{{- define "argocd.validateValues.externalRedis" -}}
+{{- if not .Values.redis.enabled -}}
+Argo CD: If the redis dependency is disabled you need to add an external redis port
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate Dex config
 */}}
 {{- define "argocd.validateValues.dex.config" -}}
 {{- if .Values.dex.enabled -}}
@@ -209,11 +237,31 @@ Argo CD: server.config.dex\.config must be set when enabling Dex for SSO. Please
 {{- end -}}
 
 {{/*
+Validate cluster credentials
+*/}}
+{{- define "argocd.validateValues.clusterCredentials" -}}
+{{- range .Values.config.clusterCredentials -}}
+{{- if not .name -}}
+Argo CD: A valid .name entry is required in all clusterCrendials objects!
+{{- end -}}
+{{- if not .server -}}
+Argo CD: A valid .server entry is required in all clusterCrendials objects!
+{{- end -}}
+{{- if not .config -}}
+Argo CD: A valid .config entry is required in all clusterCrendials objects!
+{{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Compile all warnings into a single message.
 */}}
 {{- define "argocd.validateValues" -}}
 {{- $messages := list -}}
 {{- $messages := append $messages (include "argocd.validateValues.dex.config" .) -}}
+{{- $messages := append $messages (include "argocd.validateValues.clusterCredentials" .) -}}
+{{- $messages := append $messages (include "argocd.validateValues.externalRedis" .) -}}
+{{- $messages := append $messages (include "argocd.validateValues.redis" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 {{- end -}}

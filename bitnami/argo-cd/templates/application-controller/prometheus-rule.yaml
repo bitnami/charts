@@ -20,5 +20,6 @@ metadata:
 spec:
   groups:
   - name: argocd
-    rules: {{- include "common.tplvalues.render" ( dict "value" .Values.controller.metrics.rules.spec "context" $ ) | nindent 4 }}
+    rules:
+    {{- include "common.tplvalues.render" ( dict "value" .Values.controller.metrics.rules.spec "context" $ ) | nindent 6 }}
 {{- end }}

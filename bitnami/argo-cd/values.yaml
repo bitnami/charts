@@ -52,7 +52,6 @@ controller:
   ## @param controller.image.tag Argo CD controller image tag (immutable tags are recommended)
   ## @param controller.image.pullPolicy Argo CD controller image pull policy
   ## @param controller.image.pullSecrets Argo CD controller image pull secrets
-  ## @param controller.image.debug Enable image debug mode
   ##
   image:
     registry: docker.io
@@ -71,9 +70,7 @@ controller:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-    ## Enable debug mode
-    ##
-    debug: false
+
   ## @param controller.replicaCount Number of Argo CD replicas to deploy
   ##
   replicaCount: 1
@@ -197,11 +194,7 @@ controller:
     ## NOTE: choose port between <30000-32767>
     ##
     nodePort:
-    ## @param controller.service.clusterIP Argo CD application controller service Cluster IP
-    ## e.g.:
-    ## clusterIP: None
-    ##
-    clusterIP:
+
     ## @param controller.service.loadBalancerIP Argo CD application controller service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
@@ -240,11 +233,7 @@ controller:
       ## NOTE: choose port between <30000-32767>
       ##
       nodePort:
-      ## @param controller.metrics.service.clusterIP Argo CD application controller service Cluster IP
-      ## e.g.:
-      ## clusterIP: None
-      ##
-      clusterIP:
+
       ## @param controller.metrics.service.loadBalancerIP Argo CD application controller service Load Balancer IP
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
       ##
@@ -277,6 +266,7 @@ controller:
     ## @param controller.metrics.rules.spec Rules to render into the PrometheusRule object
     ## @param controller.metrics.rules.selector Selector for the PrometheusRule object
     ## @param controller.metrics.rules.namespace Namespace where to create the PrometheusRule object
+    ## @param controller.metrics.rules.additionalLabels Additional lables to add to the PrometheusRule object
     ##
     rules:
       enabled: false
@@ -313,10 +303,8 @@ controller:
       ##
       selector: {}
       namespace: monitoring
+      additionalLabels: {}
 
-  ## @param controller.existingConfigmap The name of an existing ConfigMap with your custom configuration for Argo CD
-  ##
-  existingConfigmap:
   ## @param controller.command Override default container command (useful when using custom images)
   ##
   command: []
@@ -335,6 +323,9 @@ controller:
   ## @param controller.args Override default container args (useful when using custom images). Overrides the defaultArgs.
   ##
   args: []
+  ## @param controller.extraArgs Add extra arguments to the default arguments for the Argo CD controller
+  ##
+  extraArgs: []
   ## @param controller.hostAliases Argo CD pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -453,7 +444,6 @@ server:
   ## @param server.image.tag Argo CD server image tag (immutable tags are recommended)
   ## @param server.image.pullPolicy Argo CD server image pull policy
   ## @param server.image.pullSecrets Argo CD server image pull secrets
-  ## @param server.image.debug Enable image debug mode
   ##
   image:
     registry: docker.io
@@ -472,9 +462,7 @@ server:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-    ## Enable debug mode
-    ##
-    debug: false
+
   ## @param server.replicaCount Number of Argo CD server replicas to deploy
   ##
   replicaCount: 1
@@ -802,18 +790,11 @@ server:
       port: 8084
 
       ## Node ports to expose
-      ## @param server.metrics.service.nodePorts.http Node port for HTTP
-      ## @param server.metrics.service.nodePorts.https Node port for HTTPS
+      ## @param server.metrics.service.nodePort Node port for Argo CD server metrics service
       ## NOTE: choose port between <30000-32767>
       ##
-      nodePorts:
-        http:
-        https:
-      ## @param server.metrics.service.clusterIP Argo CD server service Cluster IP
-      ## e.g.:
-      ## clusterIP: None
-      ##
-      clusterIP:
+      nodePort:
+
       ## @param server.metrics.service.loadBalancerIP Argo CD server service Load Balancer IP
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
       ##
@@ -965,11 +946,7 @@ server:
     nodePorts:
       http:
       https:
-    ## @param server.service.clusterIP Argo CD service Cluster IP
-    ## e.g.:
-    ## clusterIP: None
-    ##
-    clusterIP:
+
     ## @param server.service.loadBalancerIP Argo CD service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
@@ -989,9 +966,6 @@ server:
     ##
     annotations: {}
 
-  ## @param server.existingConfigmap The name of an existing ConfigMap with your custom configuration for Argo CD server
-  ##
-  existingConfigmap:
   ## @param server.command Override default container command (useful when using custom images)
   ##
   command: []
@@ -1131,7 +1105,6 @@ repoServer:
   ## @param repoServer.image.tag Argo CD repo server image tag (immutable tags are recommended)
   ## @param repoServer.image.pullPolicy Argo CD repo server image pull policy
   ## @param repoServer.image.pullSecrets Argo CD repo server image pull secrets
-  ## @param repoServer.image.debug Enable image debug mode
   ##
   image:
     registry: docker.io
@@ -1150,9 +1123,7 @@ repoServer:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-    ## Enable debug mode
-    ##
-    debug: false
+
   ## @param repoServer.replicaCount Number of Argo CD repo server replicas to deploy
   ##
   replicaCount: 1
@@ -1232,11 +1203,6 @@ repoServer:
     ##
     nodePort:
 
-    ## @param repoServer.service.clusterIP Repo server service Cluster IP
-    ## e.g.:
-    ## clusterIP: None
-    ##
-    clusterIP:
     ## @param repoServer.service.loadBalancerIP Repo server service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
@@ -1294,11 +1260,6 @@ repoServer:
       ##
       nodePort:
 
-      ## @param repoServer.metrics.service.clusterIP Argo CD repo server service Cluster IP
-      ## e.g.:
-      ## clusterIP: None
-      ##
-      clusterIP:
       ## @param repoServer.metrics.service.loadBalancerIP Argo CD repo server service Load Balancer IP
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
       ##
@@ -1351,15 +1312,15 @@ repoServer:
     ## @param repoServer.serviceAccount.automountServiceAccountToken Automount service account token for the repo server service account
     automountServiceAccountToken: true
 
-  ## @param repoServer.existingConfigmap The name of an existing ConfigMap with your custom configuration for Argo CD repo server
-  ##
-  existingConfigmap:
   ## @param repoServer.command Override default container command (useful when using custom images)
   ##
   command: []
   ## @param repoServer.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param repoServer.extraArgs Add extra args to the default repo server args
+  ##
+  extraArgs: []
   ## @param repoServer.hostAliases Argo CD repo server pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1477,7 +1438,6 @@ dex:
   ## @param dex.image.tag Dex image tag (immutable tags are recommended)
   ## @param dex.image.pullPolicy Dex image pull policy
   ## @param dex.image.pullSecrets Dex image pull secrets
-  ## @param dex.image.debug Enable image debug mode
   ##
   image:
     registry: docker.io
@@ -1496,9 +1456,6 @@ dex:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-    ## Enable debug mode
-    ##
-    debug: false
 
   ## Enable Dex deployment
   ## @param dex.enabled Enable the creation of a Dex deployment for SSO
@@ -1589,11 +1546,7 @@ dex:
     nodePorts:
       http:
       grpc:
-    ## @param dex.service.clusterIP Dex service Cluster IP
-    ## e.g.:
-    ## clusterIP: None
-    ##
-    clusterIP:
+
     ## @param dex.service.loadBalancerIP Dex service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
@@ -1643,11 +1596,7 @@ dex:
       ## NOTE: choose port between <30000-32767>
       ##
       nodePort:
-      ## @param dex.metrics.service.clusterIP Dex service Cluster IP
-      ## e.g.:
-      ## clusterIP: None
-      ##
-      clusterIP:
+
       ## @param dex.metrics.service.loadBalancerIP Dex service Load Balancer IP
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
       ##
@@ -1686,15 +1635,15 @@ dex:
     ## @param dex.serviceAccount.automountServiceAccountToken Automount service account token for the Dex service account
     automountServiceAccountToken: true
 
-  ## @param dex.existingConfigmap The name of an existing ConfigMap with your custom configuration for Dex
-  ##
-  existingConfigmap:
   ## @param dex.command Override default container command (useful when using custom images)
   ##
   command: []
   ## @param dex.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param dex.extraArgs Add extra args to the default args for Dex
+  ##
+  extraArgs: []
   ## @param dex.hostAliases Dex pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1802,6 +1751,17 @@ dex:
 
 ## @section Shared config for Argo CD components
 config:
+  ## @param config.knownHosts [string] Known hosts to be added to the known hosts list by default. Check the values to see the default value
+  ##
+  knownHosts: |
+    bitbucket.org ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAubiN81eDcafrgMeLzaFPsw2kNvEcqTKl/VqLat/MaB33pZy0y3rJZtnqwR2qOOvbwKZYKiEO1O6VqNEBxKvJJelCq0dTXWT5pbO2gDXC6h6QDXCaHo6pOHGPUy+YBaGQRGuSusMEASYiWunYN0vCAI8QaXnWMXNMdFP3jHAJH0eDsoiGnLPBlBp4TNm6rYI74nMzgz3B9IikW4WVK+dc8KZJZWYjAuORU3jc1c/NPskD2ASinf8v3xnfXeukU0sJ5N6m5E8VLjObPEO+mN2t/FZTMZLiFqPWc/ALSqnMnnhwrNi2rbfg/rd/IpL8Le3pSBne8+seeFVBoGqzHM9yXw==
+    github.com ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==
+    gitlab.com ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBFSMqzJeV9rUzU4kWitGjeR4PWSa29SPqJ1fVkhtj3Hw9xjLVXVYrU9QlYWrOLXBpQ6KWjbjTDTdDkoohFzgbEY=
+    gitlab.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAfuCHKVTjquxvt6CM6tdG4SLp1Btn/nOeHHE5UOzRdf
+    gitlab.com ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCsj2bNKTBSpIYDEGk9KxsGh3mySTRgMtXL583qmBpzeQ+jqCMRgBqB98u3z++J1sKlXHWfM9dyhSevkMwSbhoR8XIq/U0tCNyokEi/ueaBMCvbcTHhO7FcwzY92WK4Yt0aGROY5qX2UKSeOvuP4D6TPqKF1onrSzH9bx9XUf2lEdWT/ia1NEKjunUqu1xOB/StKDHMoX4/OKyIzuS0q/T1zOATthvasJFoPrAjkohTyaDUz2LN5JoH839hViyEG82yB+MjcFV5MU3N1l1QL3cVUCh93xSaua1N85qivl+siMkPGbO5xR/En4iEY6K2XPASUEMaieWVNTRCtJ4S8H+9
+    ssh.dev.azure.com ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC7Hr1oTWqNqOlzGJOfGJ4NakVyIzf1rXYd4d7wo6jBlkLvCA4odBlL0mDUyZ0/QUfTTqeu+tm22gOsv+VrVTMk6vwRU75gY/y9ut5Mb3bR5BV58dKXyq9A9UeB5Cakehn5Zgm6x1mKoVyf+FFn26iYqXJRgzIZZcZ5V6hrE0Qg39kZm4az48o0AUbf6Sp4SLdvnuMa2sVNwHBboS7EJkm57XQPVU3/QpyNLHbWDdzwtrlS+ez30S3AdYhLKEOxAG8weOnyrtLJAUen9mTkol8oII1edf7mWWbWVf0nBmly21+nZcmCTISQBtdcyPaEno7fFQMDD26/s0lfKob4Kw8H
+    vs-ssh.visualstudio.com ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC7Hr1oTWqNqOlzGJOfGJ4NakVyIzf1rXYd4d7wo6jBlkLvCA4odBlL0mDUyZ0/QUfTTqeu+tm22gOsv+VrVTMk6vwRU75gY/y9ut5Mb3bR5BV58dKXyq9A9UeB5Cakehn5Zgm6x1mKoVyf+FFn26iYqXJRgzIZZcZ5V6hrE0Qg39kZm4az48o0AUbf6Sp4SLdvnuMa2sVNwHBboS7EJkm57XQPVU3/QpyNLHbWDdzwtrlS+ez30S3AdYhLKEOxAG8weOnyrtLJAUen9mTkol8oII1edf7mWWbWVf0nBmly21+nZcmCTISQBtdcyPaEno7fFQMDD26/s0lfKob4Kw8H
+
   ## @param config.extraKnownHosts Add extra known hosts to the known hosts list
   ## E.g.:
   ##   extraKnownHosts: |
@@ -1809,6 +1769,10 @@ config:
   ##     gitlab.com ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCsj2bNKTBSpIYDEGk9KxsGh3mySTRgMtXL583qmBpzeQ+jqCMRgBqB98u3z++J1sKlXHWfM9dyhSevkMwSbhoR8XIq/U0tCNyokEi/ueaBMCvbcTHhO7FcwzY92WK4Yt0aGROY5qX2UKSeOvuP4D6TPqKF1onrSzH9bx9XUf2lEdWT/ia1NEKjunUqu1xOB/StKDHMoX4/OKyIzuS0q/T1zOATthvasJFoPrAjkohTyaDUz2LN5JoH839hViyEG82yB+MjcFV5MU3N1l1QL3cVUCh93xSaua1N85qivl+siMkPGbO5xR/En4iEY6K2XPASUEMaieWVNTRCtJ4S8H+9
   ##
   extraKnownHosts: ""
+
+  ## @param config.createExtraKnownHosts Whether to create or not the extra known hosts configmap
+  ##
+  createExtraKnownHosts: true
 
   ## @param config.styles Custom CSS styles
   ## Ref: https://argo-cd.readthedocs.io/en/stable/operator-manual/custom-styles/
@@ -1819,6 +1783,10 @@ config:
   ##  }
   ##
   styles: ""
+
+  ## @param config.existingStylesConfigmap Use an existing styles configmap
+  ##
+  existingStylesConfigmap:
 
   ## @param config.tlsCerts TLS certificates used to verify the authenticity of the repository servers
   ## E.g:
@@ -1837,8 +1805,8 @@ config:
   ## Argo CD general secret configuration
   ##
   secret:
-    ## @param config.secret.createSecret Whether to create or not the secret
-    createSecret: true
+    ## @param config.secret.create Whether to create or not the secret
+    create: true
     ## Annotations to be added to argocd-secret
     ## @param config.secret.annotations General secret extra annotations
     ##
@@ -1867,7 +1835,8 @@ config:
     extra: {}
 
     ## Argo CD TLS Data.
-    ## @param config.secret.argocdServerTlsConfig TLS config for the Argo CD config secret
+    ## @param config.secret.argocdServerTlsConfig.key TLS key for the Argo CD config secret
+    ## @param config.secret.argocdServerTlsConfig.crt TLS certificate for the Argo CD config secret
     ## E.g:
     ##   key:
     ##   crt: |
@@ -1878,7 +1847,9 @@ config:
     ##     <ca cert data>
     ##     -----END CERTIFICATE-----
     ##
-    argocdServerTlsConfig: {}
+    argocdServerTlsConfig:
+      key:
+      crt:
 
     ## Argo admin password
     ## @param config.secret.argocdServerAdminPassword Argo CD server admin password. Autogenerated by default.
@@ -1994,6 +1965,7 @@ redis:
   ## @param redis.enabled Enable Redis dependency
   ##
   enabled: true
+
   ## @param redis.nameOverride Name override for the Redis dependency
   ##
   nameOverride: ""
@@ -2018,10 +1990,10 @@ redis:
     existingSecretPasswordKey: 'redis-password'
 
   ## Cluster settings
-  ## @param redis.architecture Redis dependency architecture. Either 'standalone' or 'replicaset'
+  ## @disabled-param redis.architecture Redis dependency architecture. Either 'standalone' or 'replicaset'
   ## TODO(miguelaeh): We need to test the chart with redis sentinel, it seems to be supported at: https://github.com/argoproj/argo-cd/blob/2a410187565e15633b6f2a8c8d8da22cf02b257d/util/cache/cache.go#L40
   ##
-  architecture: standalone
+  ## architecture: standalone
 
 ##
 ## External Redis(TM)

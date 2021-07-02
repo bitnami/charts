@@ -65,10 +65,10 @@ spec:
             - /bin/bash
             - -ec
             - |
-              chown -R {{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }} /shared
-              chown -R {{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }} /tmp
+              chown -R {{ .Values.dex.containerSecurityContext.runAsUser }}:{{ .Values.dex.containerSecurityContext.fsGroup }} /shared
+              chown -R {{ .Values.dex.containerSecurityContext.runAsUser }}:{{ .Values.dex.containerSecurityContext.fsGroup }} /tmp
           securityContext:
-            runAsUser: 0
+            runAsUser: {{ .Values.volumePermissions.containerSecurityContext.runAsUser }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
           {{- end }}

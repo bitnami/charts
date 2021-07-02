@@ -1,4 +1,4 @@
-{{- if .Values.config.styles }}
+{{- if and .Values.config.styles (not .Values.config.existingStylesConfigmap) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -16,5 +16,5 @@ metadata:
   {{- end }}
 data:
   custom.styles.css: |
-    {{- .Values.config.styles | nindent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.config.styles "context" $ ) | nindent 4 }}
 {{- end }}
