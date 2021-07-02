@@ -56,8 +56,8 @@ tempo:
 
   image:
     registry: docker.io
-    repository: grafana/tempo
-    tag: latest
+    repository: bitnami/grafana-tempo
+    tag: 1.0.1-debian-10-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1368,8 +1368,8 @@ queryFrontend:
     ##
     image:
       registry: docker.io
-      repository: grafana/tempo-query
-      tag: latest
+      repository: bitnami/grafana-tempo-query
+      tag: 1.0.1-debian-10-r0
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1544,8 +1544,8 @@ vulture:
 
   image:
     registry: docker.io
-    repository: grafana/tempo-vulture
-    tag: latest
+    repository: bitnami/grafana-tempo-vulture
+    tag: 1.0.1-debian-10-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
