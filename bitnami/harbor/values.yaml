@@ -55,7 +55,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r111
+    tag: 10-debian-10-r121
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -810,6 +810,9 @@ portal:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
+  ## @param portal.automountServiceAccountToken Automount service account token
+  ##
+  automountServiceAccountToken: false
   ## Harbor Portal containers' liveness probe
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ## @param portal.livenessProbe.enabled Enable livenessProbe
@@ -858,7 +861,7 @@ coreImage:
   ##
   registry: docker.io
   repository: bitnami/harbor-core
-  tag: 2.2.2-debian-10-r24
+  tag: 2.3.0-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1026,6 +1029,9 @@ core:
   ## @param core.lifecycleHooks LifecycleHook to set additional configuration at startup, e.g. LDAP settings via REST API. Evaluated as a template
   ##
   lifecycleHooks:
+  ## @param core.automountServiceAccountToken Automount service account token
+  ##
+  automountServiceAccountToken: false
   ## Harbor Core containers' liveness probe
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ## @param core.livenessProbe.enabled Enable livenessProbe
@@ -1248,6 +1254,9 @@ jobservice:
   ## Must be a string of 16 chars.
   ##
   secret: ''
+  ## @param jobservice.automountServiceAccountToken Automount service account token
+  ##
+  automountServiceAccountToken: false
   ## Harbor Jobservice containers' liveness probe
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ## @param jobservice.livenessProbe.enabled Enable livenessProbe
@@ -1588,6 +1597,9 @@ registry:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
+  ## @param registry.automountServiceAccountToken Automount service account token
+  ##
+  automountServiceAccountToken: false
   ## @param registry.secret Secret is used to secure the upload state from client and registry storage backend. See: https://github.com/docker/distribution/blob/master/docs/configuration.md
   ## and registry storage backend.
   ## See: https://github.com/docker/distribution/blob/master/docs/configuration.md#http
@@ -1844,6 +1856,9 @@ chartmuseum:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
+  ## @param chartmuseum.automountServiceAccountToken Automount service account token
+  ##
+  automountServiceAccountToken: false
   ## Chartmuseum containers' liveness probe
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ## @param chartmuseum.livenessProbe.enabled Enable livenessProbe
@@ -2197,6 +2212,9 @@ clair:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
+  ## @param clair.automountServiceAccountToken Automount service account token
+  ##
+  automountServiceAccountToken: false
 
 ## @section Notary Parameters
 
@@ -2421,6 +2439,9 @@ notary:
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
     ##
     podAnnotations: {}
+    ## @param notary.server.automountServiceAccountToken Automount service account token
+    ##
+    automountServiceAccountToken: false
   signer:
     ## @param notary.signer.command Override default container command (useful when using custom images)
     ##
@@ -2579,6 +2600,9 @@ notary:
     ## @param notary.signer.customReadinessProbe Override default readiness probe
     ##
     customReadinessProbe: {}
+    ## @param notary.signer.automountServiceAccountToken Automount service account token
+    ##
+    automountServiceAccountToken: false
   ## @param notary.secretName Fill the name of a kubernetes secret if you want to use your own TLS certificate authority, certificate and private key for notary communications. The secret must contain keys named `notary-signer-ca.crt`, `notary-signer.key` and `notary-signer.crt` that contain the CA, certificate and private key. They will be generated if not set.
   ## TLS certificate authority, certificate and private key for notary
   ## communications.
