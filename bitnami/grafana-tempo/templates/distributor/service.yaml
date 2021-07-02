@@ -1,0 +1,107 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "grafana-tempo.distributor.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: distributor
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if or .Values.commonAnnotations .Values.distributor.service.annotations }}
+  annotations:
+    {{- if .Values.distributor.service.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.distributor.service.annotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+spec:
+  type: {{ .Values.distributor.service.type }}
+  {{- if .Values.distributor.service.clusterIP }}
+  clusterIP: {{ .Values.distributor.service.clusterIP }}
+  {{- end }}
+  {{- if (or (eq .Values.distributor.service.type "LoadBalancer") (eq .Values.distributor.service.type "NodePort")) }}
+  externalTrafficPolicy: {{ .Values.distributor.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{ if eq .Values.distributor.service.type "LoadBalancer" }}
+  loadBalancerSourceRanges: {{ .Values.distributor.service.loadBalancerSourceRanges }}
+  {{ end }}
+  {{- if (and (eq .Values.distributor.service.type "LoadBalancer") (not (empty .Values.distributor.service.loadBalancerIP))) }}
+  loadBalancerIP: {{ .Values.distributor.service.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - name: http
+      port: {{ .Values.distributor.service.port }}
+      targetPort: http
+      protocol: TCP
+      {{- if (and (or (eq .Values.distributor.service.type "NodePort") (eq .Values.distributor.service.type "LoadBalancer")) (not (empty .Values.distributor.service.nodePorts.http))) }}
+      nodePort: {{ .Values.distributor.service.nodePorts.http }}
+      {{- else if eq .Values.distributor.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    - name: grpc
+      port: {{ .Values.distributor.service.grpcPort }}
+      protocol: TCP
+      targetPort: grpc
+      {{- if (and (or (eq .Values.distributor.service.type "NodePort") (eq .Values.distributor.service.type "LoadBalancer")) (not (empty .Values.distributor.service.nodePorts.grpc))) }}
+      nodePort: {{ .Values.distributor.service.nodePorts.grpc }}
+      {{- else if eq .Values.distributor.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    ## From here we use non-configurable, standard ports
+    {{- if .Values.tempo.traces.jaeger.thriftCompact }}
+    - name: distributor-jaeger-thrift-compact
+      port: 6831
+      protocol: UDP
+      targetPort: jaeger-compact
+    {{- end }}
+    {{- if .Values.tempo.traces.jaeger.thriftBinary }}
+    - name: distributor-jaeger-thrift-binary
+      port: 6832
+      protocol: UDP
+      targetPort: jaeger-binary
+    {{- end }}
+    {{- if .Values.tempo.traces.jaeger.thriftHttp }}
+    - name: distributor-jaeger-thrift-http
+      port: 14268
+      protocol: TCP
+      targetPort: jaeger-http
+    {{- end }}
+    {{- if .Values.tempo.traces.jaeger.grpc }}
+    - name: distributor-jaeger-grpc
+      port: 14250
+      protocol: TCP
+      targetPort: jaeger-grpc
+    {{- end }}
+    {{- if .Values.tempo.traces.zipkin }}
+    - name: distributor-zipkin
+      port: 9411
+      protocol: TCP
+      targetPort: zipkin
+    {{- end }}
+    {{- if .Values.tempo.traces.otlp.http }}
+    - name: distributor-otlp-http
+      port: 55681
+      protocol: TCP
+      targetPort: otlp-http
+    {{- end }}
+    {{- if .Values.tempo.traces.otlp.grpc }}
+    - name: distributor-otlp-grpc
+      port: 4317
+      protocol: TCP
+      targetPort: otlp-grpc
+    - name: distributor-otlp-legacy
+      port: 55680
+      protocol: TCP
+      targetPort: otlp-grpc
+    {{- end }}
+    {{- if .Values.tempo.traces.opencensus }}
+    - name: distributor-opencensus
+      port: 55678
+      protocol: TCP
+      targetPort: opencensus
+    {{- end }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: distributor
