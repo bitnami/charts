@@ -125,7 +125,7 @@ data:
         region: {{ .Values.persistence.imageChartStorage.oss.region }}
         bucket: {{ .Values.persistence.imageChartStorage.oss.bucket }}
         {{- if .Values.persistence.imageChartStorage.oss.endpoint }}
-        endpoint: {{ .Values.persistence.imageChartStorage.oss.endpoint }}
+        endpoint: {{ .Values.persistence.imageChartStorage.oss.bucket }}.{{ .Values.persistence.imageChartStorage.oss.endpoint }}
         {{- end }}
         {{- if .Values.persistence.imageChartStorage.oss.internal }}
         internal: {{ .Values.persistence.imageChartStorage.oss.internal }}
