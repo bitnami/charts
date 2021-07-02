@@ -40,19 +40,19 @@ clusterDomain: cluster.local
 ##
 extraDeploy: []
 
-## @section Argo CD Parameters
+## @section Argo CD application controller parameters
 
 ## Argo CD Controller
 ##
 controller:
   ## Bitnami Argo CD controller image
   ## ref: https://hub.docker.com/r/bitnami/redis/tags/
-  ## @param image.registry Argo CD controller image registry
-  ## @param image.repository Argo CD controller image repository
-  ## @param image.tag Argo CD controller image tag (immutable tags are recommended)
-  ## @param image.pullPolicy Argo CD controller image pull policy
-  ## @param image.pullSecrets Argo CD controller image pull secrets
-  ## @param image.debug Enable image debug mode
+  ## @param controller.image.registry Argo CD controller image registry
+  ## @param controller.image.repository Argo CD controller image repository
+  ## @param controller.image.tag Argo CD controller image tag (immutable tags are recommended)
+  ## @param controller.image.pullPolicy Argo CD controller image pull policy
+  ## @param controller.image.pullSecrets Argo CD controller image pull secrets
+  ## @param controller.image.debug Enable image debug mode
   ##
   image:
     registry: docker.io
@@ -175,6 +175,9 @@ controller:
   ##
   logLevel: info
 
+  ## Argo CD application controller ports
+  ## @param controller.ports.controller Argo CD application controller port number
+  ## @param controller.ports.metrics Argo CD application controller metrics port number
   ports:
     controller: 8082
     metrics: 8082
@@ -185,13 +188,12 @@ controller:
     ## @param controller.service.type Argo CD service type
     ##
     type: ClusterIP
-    ## @param controller.service.http HTTP port for the gRPC ingress when enabled
-    ## @param controller.service.https HTTPS port for the gRPC ingress when enabled
+    ## @param controller.service.port Argo CD application controller service port
     ##
     port: 8082
 
     ## Node ports to expose
-    ## @param controller.service.nodePorts.controller Node port for controller port
+    ## @param controller.service.nodePort Node port for Argo CD application controller service
     ## NOTE: choose port between <30000-32767>
     ##
     nodePort:
@@ -222,6 +224,8 @@ controller:
   ## Metrics configuration for Argo CD application controller
   ##
   metrics:
+    ## @param controller.metrics.enabled Enable Argo CD application controller metrics
+    ##
     enabled: false
     service:
       ## @param controller.metrics.service.type Argo CD application controller service type
@@ -232,7 +236,7 @@ controller:
       port: 8082
 
       ## Node ports to expose
-      ## @param controller.metrics.service.nodePortp Node port for the application controller service
+      ## @param controller.metrics.service.nodePort Node port for the application controller service
       ## NOTE: choose port between <30000-32767>
       ##
       nodePort:
@@ -316,7 +320,12 @@ controller:
   ## @param controller.command Override default container command (useful when using custom images)
   ##
   command: []
-  ## @param controller.defaultArgs Arguments that will be used by default for the application controller
+
+  ## Arguments that will be used by default for the application controller
+  ## @param controller.defaultArgs.statusProcessors Default status processors for Argo CD controller
+  ## @param controller.defaultArgs.operationProcessors Default operation processors for Argo CD controller
+  ## @param controller.defaultArgs.appResyncPeriod Default application resync period for Argo CD controller
+  ## @param controller.defaultArgs.selfHealTimeout Default self heal timeout for Argo CD controller
   ##
   defaultArgs:
     statusProcessors: "20"
@@ -439,12 +448,12 @@ controller:
 server:
   ## Bitnami Argo CD server image
   ## ref: https://hub.docker.com/r/bitnami/redis/tags/
-  ## @param image.registry Argo CD server image registry
-  ## @param image.repository Argo CD server image repository
-  ## @param image.tag Argo CD server image tag (immutable tags are recommended)
-  ## @param image.pullPolicy Argo CD server image pull policy
-  ## @param image.pullSecrets Argo CD server image pull secrets
-  ## @param image.debug Enable image debug mode
+  ## @param server.image.registry Argo CD server image registry
+  ## @param server.image.repository Argo CD server image repository
+  ## @param server.image.tag Argo CD server image tag (immutable tags are recommended)
+  ## @param server.image.pullPolicy Argo CD server image pull policy
+  ## @param server.image.pullSecrets Argo CD server image pull secrets
+  ## @param server.image.debug Enable image debug mode
   ##
   image:
     registry: docker.io
@@ -545,12 +554,14 @@ server:
     targetMemory: 50
 
   ## Redirect all request to https
+  ## @param server.insecure Disable HTTPS redirection for Argo CD server
+  ##
   insecure: false
 
   ## @param server.logFormat ArgoCD server logs format. Options: [text, json]
   ##
   logFormat: text
-  ## @param server.logFormat ArgoCD server logs format
+  ## @param server.logLevel ArgoCD server logs level
   ##
   logLevel: info
 
@@ -559,8 +570,8 @@ server:
   ## Ref: https://github.com/argoproj/argo-cd/blob/master/docs/operator-manual/argocd-cm.yaml
   ##
   configEnabled: true
+
   ## Argo CD server config. This object will be directly rendered
-  ## @param server.config Argo CD server config to render
   ## Ref: https://argoproj.github.io/argo-cd/operator-manual/user-management/
   ## E.g:
   ## repositories: |
@@ -599,16 +610,21 @@ server:
   ##          - name: your-github-org
   config:
     ## Argo CD external base URL. Required when configuring SSO. Required when enabling dex.
+    ## @param server.config.url Argo CD server url. Required when enabling dex.
+    ## E.g:
     ## url: https://argocd.example.com
     ##
     url: ""
     ## Argo CD instance label key
+    ## @param server.config.application.instanceLabelKey
     ##
     application.instanceLabelKey: argocd.argoproj.io/instance
     ## If Dex is enabled you need to add connectors here
-    ##
+    ## @param server.config.dex.config Dex config that will end in the argocd-cm
     ## dex.config: |
     ##  connectors: []
+    ##
+    dex.config:
 
   ## Additional applications to create
   ## @param server.additionalApplications Array of additional applications to create
@@ -678,12 +694,17 @@ server:
   ## Configure the ingress for the Argo CD server
   ## Ref: http://kubernetes.io/docs/user-guide/ingress/
   ## @param server.ingress.enabled Enable the creation of an ingress for the Argo CD server
-  ## @param server.ingress.annotations Annotations for the ingress
-  ## @param server.ingress.hosts Hosts array for the ingress
-  ## @param server.ingress.paths Paths array for the  ingress
-  ## @param server.ingress.extraPaths Extra paths for the ingress
-  ## @param server.ingress.tls TLS configuration for the ingress
-  ## @param server.ingress.https Enable HTTPS for the ingress
+  ## @param server.ingress.certManager Set to true to add certmanager annotations for Argo CD server ingress
+  ## @param server.ingress.pathType Path type for the Argo CD server ingress
+  ## @param server.ingress.apiVersion Ingress API version for the Argo CD server ingress
+  ## @param server.ingress.hostname Ingress hostname for the Argo CD server ingress
+  ## @param server.ingress.annotations Annotations for the Argo CD server ingress
+  ## @param server.ingress.tls Enable TLS for the Argo CD server ingress
+  ## @param server.ingress.extraHosts Extra hosts array for the Argo CD server ingress
+  ## @param server.ingress.path Path array for the Argo CD server ingress
+  ## @param server.ingress.extraPaths Extra paths for the Argo CD server ingress
+  ## @param server.ingress.extraTls Extra TLS configuration for the Argo CD server ingress
+  ## @param server.ingress.secrets Secrets array to mount into the Ingress
   ##
   ingress:
     ## Set to true to enable ingress record generation
@@ -706,7 +727,7 @@ server:
     ##
     hostname: argocd.server.local
 
-    ## The Path to Argo CD server gRPC API. You may need to set this to '/*' in order to use this
+    ## The Path to Argo CD server. You may need to set this to '/*' in order to use this
     ## with ALB ingress controllers.
     ##
     path: /
@@ -727,14 +748,14 @@ server:
 
     ## The list of additional hostnames to be covered with this ingress record.
     ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
-    ## extraHosts:
+    extraHosts:
     ## - name: argocd.server.local
     ##   path: /
     ##
 
     ## Any additional arbitrary paths that may need to be added to the ingress under the main host.
     ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
-    ## extraPaths:
+    extraPaths:
     ## - path: /*
     ##   backend:
     ##     serviceName: ssl-redirect
@@ -743,7 +764,7 @@ server:
 
     ## The tls configuration for additional hostnames to be covered with this ingress record.
     ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
-    ## extraTls:
+    extraTls:
     ## - hosts:
     ##     - argocd.server.local
     ##   secretName: argocd.server.local-tls
@@ -768,6 +789,9 @@ server:
   ## Metrics configuration for Argo CD server
   ##
   metrics:
+    ## Enable metrics for Argo CD server
+    ## @param server.metrics.enabled Enable metrics for the Argo CD server
+    ##
     enabled: false
     service:
       ## @param server.metrics.service.type Argo CD server service type
@@ -818,13 +842,18 @@ server:
   ## Configure the ingress resource that allows you to access the Argo CD gRPC API
   ## Ref: http://kubernetes.io/docs/user-guide/ingress/
   ## Ref: https://argoproj.github.io/argo-cd/operator-manual/ingress/
-  ## @param server.ingressGrpc.enabled Enable the creation of a dedicated Ingress for gRPC
-  ## @param server.ingressGrpc.annotations Annotations for the dedicated gRPC ingress
-  ## @param server.ingressGrpc.hosts Hosts array for the dedicated gRPC ingress
-  ## @param server.ingressGrpc.paths Paths array for the dedicated gRPC ingress
-  ## @param server.ingressGrpc.extraPaths Extra paths for the dedicated gRPC ingress
-  ## @param server.ingressGrpc.tls TLS configuration for the dedicated gRPC ingress
-  ## @param server.ingressGrpc.https Enable HTTPS for the dedicated gRPC ingress
+  ## @param server.ingressGrpc.enabled Enable the creation of an ingress for the Argo CD gRPC server
+  ## @param server.ingressGrpc.certManager Set to true to add certmanager annotations for Argo CD gRPC server ingress
+  ## @param server.ingressGrpc.pathType Path type for the Argo CD gRPC server ingress
+  ## @param server.ingressGrpc.apiVersion Ingress API version for the Argo CD gRPC server ingress
+  ## @param server.ingressGrpc.hostname Ingress hostname for the Argo CD gRPC server ingress
+  ## @param server.ingressGrpc.annotations Annotations for the Argo CD gRPC server ingress
+  ## @param server.ingressGrpc.tls Enable TLS for the Argo CD server ingress
+  ## @param server.ingressGrpc.extraHosts Extra hosts array for the Argo CD gRPC server ingress
+  ## @param server.ingressGrpc.path Path array for the Argo CD gRPC server ingress
+  ## @param server.ingressGrpc.extraPaths Extra paths for the Argo CD gRPC server ingress
+  ## @param server.ingressGrpc.extraTls Extra TLS configuration for the Argo CD gRPC server ingress
+  ## @param server.ingressGrpc.secrets Secrets array to mount into the Ingress
   ##
   ingressGrpc:
     ## Set to true to enable ingress record generation
@@ -868,14 +897,14 @@ server:
 
     ## The list of additional hostnames to be covered with this ingress record.
     ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
-    ## extraHosts:
+    extraHosts:
     ## - name: argocd.server.local
     ##   path: /
     ##
 
     ## Any additional arbitrary paths that may need to be added to the ingress under the main host.
     ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
-    ## extraPaths:
+    extraPaths:
     ## - path: /*
     ##   backend:
     ##     serviceName: ssl-redirect
@@ -884,7 +913,7 @@ server:
 
     ## The tls configuration for additional hostnames to be covered with this ingress record.
     ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
-    ## extraTls:
+    extraTls:
     ## - hosts:
     ##     - argocd.server.local
     ##   secretName: argocd.server.local-tls
@@ -908,6 +937,7 @@ server:
 
   ## Argo CD server container port
   ## @param server.ports.http Argo CD server HTTP container port
+  ## @param server.ports.https Argo CD server HTTPS container port
   ## @param server.ports.metrics Argo CD server metrics container port
   ports:
     http: 8080
@@ -920,8 +950,8 @@ server:
     ## @param server.service.type Argo CD service type
     ##
     type: ClusterIP
-    ## @param server.service.http HTTP port for the gRPC ingress when enabled
-    ## @param server.service.https HTTPS port for the gRPC ingress when enabled
+    ## @param server.service.ports.http HTTP port for the gRPC ingress when enabled
+    ## @param server.service.ports.https HTTPS port for the gRPC ingress when enabled
     ##
     ports:
       http: 80
@@ -968,7 +998,7 @@ server:
   ## @param server.args Override default container args (useful when using custom images)
   ##
   args: []
-  ## @param server.args concat to the default args
+  ## @param server.extraArgs concat to the default args
   ##
   extraArgs: []
   ## @param server.hostAliases Argo CD server pods host aliases
@@ -1096,12 +1126,12 @@ server:
 repoServer:
   ## Bitnami Argo CD repo server image
   ## ref: https://hub.docker.com/r/bitnami/redis/tags/
-  ## @param image.registry Argo CD repo server image registry
-  ## @param image.repository Argo CD repo server image repository
-  ## @param image.tag Argo CD repo server image tag (immutable tags are recommended)
-  ## @param image.pullPolicy Argo CD repo server image pull policy
-  ## @param image.pullSecrets Argo CD repo server image pull secrets
-  ## @param image.debug Enable image debug mode
+  ## @param repoServer.image.registry Argo CD repo server image registry
+  ## @param repoServer.image.repository Argo CD repo server image repository
+  ## @param repoServer.image.tag Argo CD repo server image tag (immutable tags are recommended)
+  ## @param repoServer.image.pullPolicy Argo CD repo server image pull policy
+  ## @param repoServer.image.pullSecrets Argo CD repo server image pull secrets
+  ## @param repoServer.image.debug Enable image debug mode
   ##
   image:
     registry: docker.io
@@ -1197,7 +1227,7 @@ repoServer:
     ##
     port: 8081
     ## Node ports to expose
-    ## @param repoServer.service.nodePorts.http Node port for the repo server service
+    ## @param repoServer.service.nodePort Node port for the repo server service
     ## NOTE: choose port between <30000-32767>
     ##
     nodePort:
@@ -1246,6 +1276,9 @@ repoServer:
   ## Metrics configuration for Argo CD repo server
   ##
   metrics:
+    ## Enable metrics for Argo CD repo server
+    ## @param repoServer.metrics.enabled Enable metrics for the Argo CD repo server
+    ##
     enabled: false
     service:
       ## @param repoServer.metrics.service.type Argo CD repo server service type
@@ -1256,7 +1289,7 @@ repoServer:
       port: 8084
 
       ## Node ports to expose
-      ## @param repoServer.metrics.service.nodePorts.http Node port for the repo server metrics service
+      ## @param repoServer.metrics.service.nodePort Node port for the repo server metrics service
       ## NOTE: choose port between <30000-32767>
       ##
       nodePort:
@@ -1439,12 +1472,12 @@ repoServer:
 dex:
   ## Bitnami Dex image
   ## ref: https://hub.docker.com/r/bitnami/redis/tags/
-  ## @param image.registry Dex image registry
-  ## @param image.repository Dex image repository
-  ## @param image.tag Dex image tag (immutable tags are recommended)
-  ## @param image.pullPolicy Dex image pull policy
-  ## @param image.pullSecrets Dex image pull secrets
-  ## @param image.debug Enable image debug mode
+  ## @param dex.image.registry Dex image registry
+  ## @param dex.image.repository Dex image repository
+  ## @param dex.image.tag Dex image tag (immutable tags are recommended)
+  ## @param dex.image.pullPolicy Dex image pull policy
+  ## @param dex.image.pullSecrets Dex image pull secrets
+  ## @param dex.image.debug Enable image debug mode
   ##
   image:
     registry: docker.io
@@ -1468,7 +1501,7 @@ dex:
     debug: false
 
   ## Enable Dex deployment
-  ## @params dex.enabled
+  ## @param dex.enabled Enable the creation of a Dex deployment for SSO
   ##
   enabled: false
   ## @param dex.replicaCount Number of Dex replicas to deploy
@@ -1541,7 +1574,8 @@ dex:
     ## @param dex.service.type Dex service type
     ##
     type: ClusterIP
-    ## @param dex.service.port Dex service port
+    ## @param dex.service.ports.http Dex HTTP service port
+    ## @param dex.service.ports.grpc Dex grpc service port
     ##
     ports:
       http: 5556
@@ -1592,46 +1626,49 @@ dex:
   ## Metrics configuration for Dex
   ##
   metrics:
+    ## Enable metrics for Argo Dex
+    ## @param dex.metrics.enabled Enable metrics for Dex
+    ##
     enabled: false
     service:
-      ## @param Dex.metrics.service.type Dex service type
+      ## @param dex.metrics.service.type Dex service type
       ##
       type: ClusterIP
-      ## @param Dex.metrics.service.port Dex metrics service port
+      ## @param dex.metrics.service.port Dex metrics service port
       ##
       port: 5558
 
       ## Node ports to expose
-      ## @param Dex.metrics.service.nodePortp Node port for the Dex service
+      ## @param dex.metrics.service.nodePort Node port for the Dex service
       ## NOTE: choose port between <30000-32767>
       ##
       nodePort:
-      ## @param Dex.metrics.service.clusterIP Dex service Cluster IP
+      ## @param dex.metrics.service.clusterIP Dex service Cluster IP
       ## e.g.:
       ## clusterIP: None
       ##
       clusterIP:
-      ## @param Dex.metrics.service.loadBalancerIP Dex service Load Balancer IP
+      ## @param dex.metrics.service.loadBalancerIP Dex service Load Balancer IP
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
       ##
       loadBalancerIP:
-      ## @param Dex.metrics.service.loadBalancerSourceRanges Dex service Load Balancer sources
+      ## @param dex.metrics.service.loadBalancerSourceRanges Dex service Load Balancer sources
       ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
       ## e.g:
       ## loadBalancerSourceRanges:
       ##   - 10.10.10.0/24
       ##
       loadBalancerSourceRanges: []
-      ## @param Dex.metrics.service.externalTrafficPolicy Dex service external traffic policy
+      ## @param dex.metrics.service.externalTrafficPolicy Dex service external traffic policy
       ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
       ##
       externalTrafficPolicy: Cluster
-      ## @param Dex.metrics.service.annotations Additional custom annotations for Dex service
+      ## @param dex.metrics.service.annotations Additional custom annotations for Dex service
       ##
       annotations: {}
     ## Dex metrics service monitor configuration
-    ## @param Dex.metrics.serviceMonitor.enabled Enable service monirot for Dex
-    ## @param Dex.metrics.serviceMonitor.interval Interval for the Dex service monitor
+    ## @param dex.metrics.serviceMonitor.enabled Enable service monirot for Dex
+    ## @param dex.metrics.serviceMonitor.interval Interval for the Dex service monitor
     serviceMonitor:
       enabled: false
       interval: 30s
@@ -1765,11 +1802,12 @@ dex:
 
 ## @section Shared config for Argo CD components
 config:
-  ## @param configs.extraKnownHosts Add extra known hosts to the known hosts list
+  ## @param config.extraKnownHosts Add extra known hosts to the known hosts list
   ## E.g.:
   ##   extraKnownHosts: |
   ##     gitlab.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAfuCHKVTjquxvt6CM6tdG4SLp1Btn/nOeHHE5UOzRdf
   ##     gitlab.com ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCsj2bNKTBSpIYDEGk9KxsGh3mySTRgMtXL583qmBpzeQ+jqCMRgBqB98u3z++J1sKlXHWfM9dyhSevkMwSbhoR8XIq/U0tCNyokEi/ueaBMCvbcTHhO7FcwzY92WK4Yt0aGROY5qX2UKSeOvuP4D6TPqKF1onrSzH9bx9XUf2lEdWT/ia1NEKjunUqu1xOB/StKDHMoX4/OKyIzuS0q/T1zOATthvasJFoPrAjkohTyaDUz2LN5JoH839hViyEG82yB+MjcFV5MU3N1l1QL3cVUCh93xSaua1N85qivl+siMkPGbO5xR/En4iEY6K2XPASUEMaieWVNTRCtJ4S8H+9
+  ##
   extraKnownHosts: ""
 
   ## @param config.styles Custom CSS styles
@@ -1819,8 +1857,9 @@ config:
     bitbucketUUID: ""
     gogsSecret: ""
 
-    ## Extra keys to add to the gneral config secret. Useful for injecting SSO secrets into environment variables.
+    ## Extra keys to add to the general config secret. Useful for injecting SSO secrets into environment variables.
     ## Ref: https://argoproj.github.io/argo-cd/operator-manual/sso/
+    ## @param config.secret.extra Extra keys to add to the configuration secret.
     ## All values must be non-empty.
     ## E.g:
     ##  LDAP_PASSWORD: "mypassword"
@@ -1828,7 +1867,7 @@ config:
     extra: {}
 
     ## Argo CD TLS Data.
-    ##
+    ## @param config.secret.argocdServerTlsConfig TLS config for the Argo CD config secret
     ## E.g:
     ##   key:
     ##   crt: |
@@ -1842,38 +1881,26 @@ config:
     argocdServerTlsConfig: {}
 
     ## Argo admin password
+    ## @param config.secret.argocdServerAdminPassword Argo CD server admin password. Autogenerated by default.
     ##
     argocdServerAdminPassword: ""
     ## Password modification time defaults to current time if not set
+    ## @param config.secret.argocdServerAdminPasswordMtime Argo CD server password modification time
     ## E.g:
     ## argocdServerAdminPasswordMtime: "2006-01-02T15:04:05Z"
     ##
     argocdServerAdminPasswordMtime: ""
 
     ## Create a secret with optional repository credentials
+    ## @param config.secret.repositoryCredentials Repository credentials to add to the Argo CD server confgi secret
     ## E.g.
     ## repositoryCredentials:
     ##   sample-ssh-key: |
     ##     -----BEGIN RSA PRIVATE KEY-----
     ##     <key content>
     ##     -----END RSA PRIVATE KEY-----
+    ##
     repositoryCredentials: {}
-    # sample-ssh-key: |
-    # -----BEGIN RSA PRIVATE KEY-----
-    # MIICXAIBAAKBgQCcmiVJXGUvL8zqWmRRETbCKgFadtjJ9WDQpSwiZzMiktpYBo0N
-    # z0cThzGQfWqvdiJYEy72MrKCaSYssV3eHP5zTffk4VBDktNfdl1kgkOpqnh7tQO4
-    # nBONRLzcK6KEbKUsmiTbW8Jb4UFYDhyyyveby7y3vYePmaRQIrlEenVfKwIDAQAB
-    # AoGAbbg+WZjnt9jYzHWKhZX29LDzg8ty9oT6URT4yB3gIOAdJMFqQHuyg8cb/e0x
-    # O0AcrfK623oHwgEj4vpeFwnfaBdtM5GfH9zaj6pnXV7VZc3oBHrBnHUgFT3NEYUe
-    # tt6rtatIguBH61Aj/pyij9sOfF0xDj0s1nwFTbdHtZR/31kCQQDIwcVTqhKkDNW6
-    # cvdz+Wt3v9x1wNg+VhZhyA/pKILz3+qtn3GogLrQqhpVi+Y7tdvEv9FvgKaCjUp8
-    # 6Lfp6dDFAkEAx7HpQbXFdrtcveOi9kosKRDX1PT4zdhB08jAXGlV8jr0jkrZazVM
-    # hV5rVCuu35Vh6x1fiyGwwiVsqhgWE+KPLwJAWrDemasM/LsnmjDxhJy6ZcBwsWlK
-    # xu5Q8h9UwLmiXtVayNBsofh1bGpLtzWZ7oN7ImidDkgJ8JQvgDoJS0xrGQJBALPJ
-    # FkMFnrjtqGqBVkc8shNqyZY90v6oM2OzupO4dht2PpUZCDPAMZtlTWXjSjabbCPc
-    # NxexBk1UmkdtFftjHxsCQGjG+nhRYH92MsmrbvZyFzgxg9SIOu6xel7D3Dq9l5Le
-    # XG+bpHPF4SiCpAxthP5WNa17zuvk+CDsMZgZNuhYNMo=
-    # -----END RSA PRIVATE KEY-----
 
   ## External Cluster Credentials
   ## Refs:
@@ -1964,12 +1991,21 @@ rbac:
 ## Redis parameters
 ##
 redis:
+  ## @param redis.enabled Enable Redis dependency
+  ##
   enabled: true
+  ## @param redis.nameOverride Name override for the Redis dependency
+  ##
   nameOverride: ""
+  ## @param redis.service.port Service port for Redis dependency
+  ##
   service:
     port: 6379
 
   ## Use password authentication
+  ## @param redis.auth.enabled Enable Redis dependency authentication
+  ## @param redis.auth.existingSecret Existing secret to load redis dependency password
+  ## @param redis.auth.existingSecretPasswordKey Pasword key name inside the existing secret
   ##
   auth:
     enabled: true
@@ -1982,6 +2018,7 @@ redis:
     existingSecretPasswordKey: 'redis-password'
 
   ## Cluster settings
+  ## @param redis.architecture Redis dependency architecture. Either 'standalone' or 'replicaset'
   ## TODO(miguelaeh): We need to test the chart with redis sentinel, it seems to be supported at: https://github.com/argoproj/argo-cd/blob/2a410187565e15633b6f2a8c8d8da22cf02b257d/util/cache/cache.go#L40
   ##
   architecture: standalone
@@ -1991,20 +2028,23 @@ redis:
 ##
 externalRedis:
   ## Redis(TM) host
+  ## @param externalRedis.host External Redis host
   ##
   host: ''
   ## Redis(TM) port
+  ## @param externalRedis.port External Redis port
   ##
   port: 6379
   ## Redis(TM) password for authentication
   ## Ignored if existingSecret is set
+  ## @param externalRedis.password External Redis password
   ##
   password: ''
-  ##
   ## Name of existing secret object containing the password
+  ## @param externalRedis.existingSecret Existing secret for the external redis
   ##
   existingSecret:
-  ##
   ## Password key to be retrieved from Redis(TM) secret
+  ## @param externalRedis.existingSecretPasswordKey Password key for the existing secret containing the external redis password
   ##
   existingSecretPasswordKey: 'redis-password'
