@@ -561,6 +561,7 @@ server:
   configEnabled: true
   ## Argo CD server config. This object will be directly rendered
   ## @param server.config Argo CD server config to render
+  ## Ref: https://argoproj.github.io/argo-cd/operator-manual/user-management/
   ## E.g:
   ## repositories: |
   ##   - url: git@github.com:group/repo.git
@@ -585,6 +586,17 @@ server:
   ##     - openid
   ##     - profile
   ##     - email
+  ## dex.config: |
+  ##    connectors:
+  ##      # GitHub example
+  ##      - type: github
+  ##        id: github
+  ##        name: GitHub
+  ##        config:
+  ##          clientID: aabbccddeeff00112233
+  ##          clientSecret: $dex.github.clientSecret
+  ##          orgs:
+  ##          - name: your-github-org
   config:
     ## Argo CD external base URL. Required when configuring SSO. Required when enabling dex.
     ## url: https://argocd.example.com
@@ -593,6 +605,10 @@ server:
     ## Argo CD instance label key
     ##
     application.instanceLabelKey: argocd.argoproj.io/instance
+    ## If Dex is enabled you need to add connectors here
+    ##
+    ## dex.config: |
+    ##  connectors: []
 
   ## Additional applications to create
   ## @param server.additionalApplications Array of additional applications to create
@@ -1454,7 +1470,7 @@ dex:
   ## Enable Dex deployment
   ## @params dex.enabled
   ##
-  enabled: true
+  enabled: false
   ## @param dex.replicaCount Number of Dex replicas to deploy
   ##
   replicaCount: 1

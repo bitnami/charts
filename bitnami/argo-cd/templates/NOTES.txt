@@ -57,3 +57,5 @@
 {{- include "common.warnings.rollingTag" .Values.controller.image }}
 {{- include "common.warnings.rollingTag" .Values.repoServer.image }}
 {{- include "common.warnings.rollingTag" .Values.dex.image }}
+
+{{- include "argocd.validateValues" . }}

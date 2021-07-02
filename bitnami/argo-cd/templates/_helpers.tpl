@@ -193,3 +193,27 @@ Return the Redis(TM) port
     {{- required "If the redis dependency is disabled you need to add an external redis port" .Values.externalRedis.port -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Validate Dex config when enabling Dex
+*/}}
+{{- define "argocd.validateValues.dex.config" -}}
+{{- if .Values.dex.enabled -}}
+{{- if not .Values.server.config.url -}}
+Argo CD: server.config.url must be set when enabling Dex for SSO. Please add `--set server.config.url=<your-argo-cd-url>` to the installation parameters.
+{{- end -}}
+{{- if not (index .Values "server" "config" "dex.config") -}}
+Argo CD: server.config.dex\.config must be set when enabling Dex for SSO. Please add `--set server.config.dex\.config=<your-dex-configuration>` to the installation parameters.
+{{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Compile all warnings into a single message.
+*/}}
+{{- define "argocd.validateValues" -}}
+{{- $messages := list -}}
+{{- $messages := append $messages (include "argocd.validateValues.dex.config" .) -}}
+{{- $messages := without $messages "" -}}
+{{- $message := join "\n" $messages -}}
+{{- end -}}

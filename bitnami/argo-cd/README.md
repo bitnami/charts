@@ -94,6 +94,14 @@ Apart from the Ingress TLS certificates, Argo CD repo server will auto-generate 
 The chart has hardcoded names for some ConfigMaps and Secrets like `argocd-ssh-known-hosts-cm`, `argocd-repo-server-tls` or `argocd-ssh-known-hosts-cm`. Argo CD will search for those specific names when the chart installed, so installing the chart twice in the same namespaces is not possible due to this restriction.
 For more information about each configmap or secret check the references at the corresponding YAML files.
 
+### Using SSO
+
+In order to use SSO you need to enable Dex by setting `dex.enabled=true`. You can follow [this guide](https://argoproj.github.io/argo-cd/operator-manual/user-management/#1-register-the-application-in-the-identity-provider) to configure your Argo CD deployment into your identity provider. After that, you need to configure Argo CD like described [here](https://argoproj.github.io/argo-cd/operator-manual/user-management/#2-configure-argo-cd-for-sso). You can set the Dex configuration at `server.config.dex\.config` that will populate the `argocd-cm` config map.
+
+> NOTE: `dex.config` is the key of the object. IF you are using the Helm CLI to set the parameter you need to scape the `.` like `--set server.config.dex\.config`.
+
+> IMPORTANT: if you enable Dex without configuring it you will get an error similar to `msg="dex is not configured"`, and the Dex pod will never reach the running state.
+
 ### Additional environment variables
 
 In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property.
