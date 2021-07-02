@@ -268,6 +268,34 @@ tolerations: []
 ## @param lifecycleHooks LifecycleHooks to set additional configuration at startup.
 ##
 lifecycleHooks: {}
+## @param extraVolumes Optionally specify extra list of additional volumes for Jasperreports pods
+##
+extraVolumes: []
+## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for Jasperreports container(s)
+##
+extraVolumeMounts: []
+## @param initContainers Add additional init containers to the Jasperreports pods
+## Example:
+## initContainers:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+initContainers: []
+## @param sidecars Add additional sidecar containers to the Jasperreports pods
+## Example:
+## sidecars:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+sidecars: []
 ## Enable persistence using Persistent Volume Claims
 ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
