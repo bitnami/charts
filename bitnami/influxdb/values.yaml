@@ -387,8 +387,10 @@ relay:
     [[http]]
     # Name of the HTTP server, used for display purposes only.
     name = "relay-server"
+
     # TCP address to bind to, for HTTP server.
     bind-addr = "0.0.0.0:9096"
+
     # Array of InfluxDB(TM) instances to use as backends for Relay.
     output = [
         {{- $influxdbReplicaCount := int .Values.influxdb.replicaCount }}
