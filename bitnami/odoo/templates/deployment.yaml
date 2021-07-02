@@ -62,8 +62,8 @@ spec:
       initContainers:
         {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
         - name: volume-permissions
-          image: {{ include "odoo.image" . | quote }}
-          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          image: {{ include "odoo.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           command:
             - sh
             - -c
