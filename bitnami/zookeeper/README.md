@@ -257,9 +257,13 @@ In order to remove that log noise so levels can be set to ‘INFO’, two change
 
 First, ensure that you are not getting metrics via the deprecated pattern of polling 'mntr' on the ZooKeeper client port. The preferred method of polling for Apache ZooKeeper metrics is the ZooKeeper metrics server. This is supported in this chart when setting `metrics.enabled` to `true`.
 
-Second, to avoid the connection/disconnection messages from the probes, you can set custom values for these checks which directly them to the ZooKeeper Admin Server instead of the client port. An example is given below which preserves default probe behavior of this chart. By default, an Admin Server will be started that listens on localhost at 8080 and if you have specified either of `zookeeper.admin.serverAddress` or `zookeeper.admin.serverPort` then change the values of the probe to match. The Admin Server is on by default and you must not have disabled it (via `zookeeper.admin.enableServer`) if you wish to use it for the probes.
+Second, to avoid the connection/disconnection messages from the probes, you can set custom values for these checks which direct them to the ZooKeeper Admin Server instead of the client port. By default, an Admin Server will be started that listens on `localhost` at port `8080`. The following is an example of this use of the Admin Server for probes:
 
 ```
+livenessProbe:
+  enabled: false
+readinessProbe:
+  enabled: false
 customLivenessProbe:
   exec:
     command: ['/bin/bash', '-c', 'curl -s -m 2 http://localhost:8080/commands/ruok | grep ruok']
