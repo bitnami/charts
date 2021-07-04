@@ -57,7 +57,7 @@ clusterDomain: cluster.local
 ##   kind: Service
 ##   metadata:
 ##     name: mongodb-primary
-##     namespace: the-mongodb-namespace
+##     namespace: '{{ .Release.Namespace }}'
 ##     labels:
 ##       app.kubernetes.io/component: mongodb
 ##       app.kubernetes.io/instance: mongodb
@@ -485,7 +485,7 @@ initContainers: {}
 ##     - name: LABEL_SELECTOR
 ##       value: "app.kubernetes.io/component=mongodb,app.kubernetes.io/instance=mongodb,app.kubernetes.io/name=mongodb"
 ##     - name: NAMESPACE
-##       value: "the-mongodb-namespace"
+##       value: '{{ .Release.Namespace }}'
 ##     - name: DEBUG
 ##       value: "true"
 ##
