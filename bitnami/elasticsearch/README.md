@@ -100,6 +100,7 @@ $ helm delete --purge my-release
 | Name                                        | Description                                                                                                                                                                                                                             | Value           |
 | ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
 | `master.name`                               | Master-eligible node pod name                                                                                                                                                                                                           | `master`        |
+| `master.fullnameOverride`                   | String to fully override elasticsearch.master.fullname template with a string                                                                                                                                                           | `nil`           |
 | `master.replicas`                           | Desired number of Elasticsearch master-eligible nodes. Consider using an odd number of master nodes to prevent "split brain" situation.  See: https://www.elastic.co/guide/en/elasticsearch/reference/7.x/modules-discovery-voting.html | `3`             |
 | `master.updateStrategy.type`                | Update strategy for Master statefulset                                                                                                                                                                                                  | `RollingUpdate` |
 | `master.hostAliases`                        | Add deployment host aliases                                                                                                                                                                                                             | `[]`            |
@@ -169,6 +170,7 @@ $ helm delete --purge my-release
 
 | Name                                              | Description                                                                                                               | Value           |
 | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | --------------- |
+| `coordinating.fullnameOverride`                   | String to fully override elasticsearch.coordinating.fullname template with a string                                       | `nil`           |
 | `coordinating.replicas`                           | Desired number of Elasticsearch coordinating-only nodes                                                                   | `2`             |
 | `coordinating.hostAliases`                        | Add deployment host aliases                                                                                               | `[]`            |
 | `coordinating.schedulerName`                      | Name of the k8s scheduler (other than default)                                                                            | `nil`           |
@@ -231,6 +233,7 @@ $ helm delete --purge my-release
 | Name                                         | Description                                                                                                                                       | Value           |
 | -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
 | `data.name`                                  | Data node pod name                                                                                                                                | `data`          |
+| `data.fullnameOverride`                      | String to fully override elasticsearch.data.fullname template with a string                                                                       | `nil`           |
 | `data.replicas`                              | Desired number of Elasticsearch data nodes                                                                                                        | `2`             |
 | `data.hostAliases`                           | Add deployment host aliases                                                                                                                       | `[]`            |
 | `data.schedulerName`                         | Name of the k8s scheduler (other than default)                                                                                                    | `nil`           |
@@ -298,6 +301,7 @@ $ helm delete --purge my-release
 | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------- | ----------- |
 | `ingest.enabled`                            | Enable ingest nodes                                                                                            | `false`     |
 | `ingest.name`                               | Ingest node pod name                                                                                           | `ingest`    |
+| `ingest.fullnameOverride`                   | String to fully override elasticsearch.ingest.fullname template with a string                                  | `nil`       |
 | `ingest.replicas`                           | Desired number of Elasticsearch ingest nodes                                                                   | `2`         |
 | `ingest.heapSize`                           | Ingest node heap size                                                                                          | `128m`      |
 | `ingest.podAnnotations`                     | Annotations for ingest pods.                                                                                   | `{}`        |
