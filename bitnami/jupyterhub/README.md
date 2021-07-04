@@ -174,7 +174,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------- | ----------------------------------------------------------------------------------------- | --------------------------------- |
 | `proxy.image.registry`                        | Proxy image registry                                                                      | `docker.io`                       |
 | `proxy.image.repository`                      | Proxy image repository                                                                    | `bitnami/configurable-http-proxy` |
-| `proxy.image.tag`                             | Proxy image tag (immutabe tags are recommended)                                           | `4.4.0-debian-10-r8`              |
+| `proxy.image.tag`                             | Proxy image tag (immutable tags are recommended)                                          | `4.4.0-debian-10-r8`              |
 | `proxy.image.pullPolicy`                      | Proxy image pull policy                                                                   | `IfNotPresent`                    |
 | `proxy.image.pullSecrets`                     | Proxy image pull secrets                                                                  | `[]`                              |
 | `proxy.image.debug`                           | Activate verbose output                                                                   | `false`                           |
@@ -239,35 +239,35 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Proxy Traffic Exposure Parameters
 
-| Name                                            | Description                                                                         | Value                    |
-| ----------------------------------------------- | ----------------------------------------------------------------------------------- | ------------------------ |
-| `proxy.networkPolicy.enabled`                   | Deploy Proxy network policies                                                       | `true`                   |
-| `proxy.networkPolicy.allowInterspaceAccess`     | Allow communication between pods in different namespaces                            | `true`                   |
-| `proxy.networkPolicy.extraIngress`              | Add extra ingress rules to the NetworkPolicy                                        | `{}`                     |
-| `proxy.networkPolicy.extraEgress`               | Add extra ingress rules to the NetworkPolicy                                        | `nil`                    |
-| `proxy.service.api.type`                        | API service type                                                                    | `ClusterIP`              |
-| `proxy.service.api.port`                        | API service port                                                                    | `8001`                   |
-| `proxy.service.api.loadBalancerIP`              | API service LoadBalancer IP (optional, cloud specific)                              | `nil`                    |
-| `proxy.service.api.loadBalancerSourceRanges`    | loadBalancerIP source ranges for the Service                                        | `[]`                     |
-| `proxy.service.api.nodePorts.http`              | NodePort for the HTTP endpoint                                                      | `""`                     |
-| `proxy.service.api.externalTrafficPolicy`       | External traffic policy for the service                                             | `Cluster`                |
-| `proxy.service.public.type`                     | Public service type                                                                 | `LoadBalancer`           |
-| `proxy.service.public.port`                     | Public service port                                                                 | `80`                     |
-| `proxy.service.public.loadBalancerIP`           | Public service LoadBalancer IP (optional, cloud specific)                           | `nil`                    |
-| `proxy.service.public.loadBalancerSourceRanges` | loadBalancerIP source ranges for the Service                                        | `[]`                     |
-| `proxy.service.public.nodePorts.http`           | NodePort for the HTTP endpoint                                                      | `""`                     |
-| `proxy.service.public.externalTrafficPolicy`    | External traffic policy for the service                                             | `Cluster`                |
-| `proxy.ingress.enabled`                         | Set to true to enable ingress record generation                                     | `false`                  |
-| `proxy.ingress.path`                            | Path to the Proxy pod.                                                              | `/`                      |
-| `proxy.ingress.pathType`                        | Ingress path type                                                                   | `ImplementationSpecific` |
-| `proxy.ingress.certManager`                     | Add cert-manager annotations to the Ingress object                                  | `false`                  |
-| `proxy.ingress.hostname`                        | Set ingress rule hostname                                                           | `jupyterhub.local`       |
-| `proxy.ingress.annotations`                     | Add annotations to the Ingress object                                               | `{}`                     |
-| `proxy.ingress.tls`                             | Enable ingress tls configuration for the hostname defined at proxy.ingress.hostname | `false`                  |
-| `proxy.ingress.extraHosts`                      | The list of additional hostnames to be covered with this ingress record.            | `[]`                     |
-| `proxy.ingress.extraTls`                        | Add extra tls configuration for additional hostnames                                | `[]`                     |
-| `proxy.ingress.extraPaths`                      | Add extra paths to the ingress rule                                                 | `[]`                     |
-| `proxy.ingress.secrets`                         | Add extra secrets for the tls configuration                                         | `[]`                     |
+| Name                                            | Description                                                                                  | Value                    |
+| ----------------------------------------------- | -------------------------------------------------------------------------------------------- | ------------------------ |
+| `proxy.networkPolicy.enabled`                   | Deploy Proxy network policies                                                                | `true`                   |
+| `proxy.networkPolicy.allowInterspaceAccess`     | Allow communication between pods in different namespaces                                     | `true`                   |
+| `proxy.networkPolicy.extraIngress`              | Add extra ingress rules to the NetworkPolicy                                                 | `{}`                     |
+| `proxy.networkPolicy.extraEgress`               | Add extra ingress rules to the NetworkPolicy                                                 | `nil`                    |
+| `proxy.service.api.type`                        | API service type                                                                             | `ClusterIP`              |
+| `proxy.service.api.port`                        | API service port                                                                             | `8001`                   |
+| `proxy.service.api.loadBalancerIP`              | API service LoadBalancer IP (optional, cloud specific)                                       | `nil`                    |
+| `proxy.service.api.loadBalancerSourceRanges`    | loadBalancerIP source ranges for the Service                                                 | `[]`                     |
+| `proxy.service.api.nodePorts.http`              | NodePort for the HTTP endpoint                                                               | `""`                     |
+| `proxy.service.api.externalTrafficPolicy`       | External traffic policy for the service                                                      | `Cluster`                |
+| `proxy.service.public.type`                     | Public service type                                                                          | `LoadBalancer`           |
+| `proxy.service.public.port`                     | Public service port                                                                          | `80`                     |
+| `proxy.service.public.loadBalancerIP`           | Public service LoadBalancer IP (optional, cloud specific)                                    | `nil`                    |
+| `proxy.service.public.loadBalancerSourceRanges` | loadBalancerIP source ranges for the Service                                                 | `[]`                     |
+| `proxy.service.public.nodePorts.http`           | NodePort for the HTTP endpoint                                                               | `""`                     |
+| `proxy.service.public.externalTrafficPolicy`    | External traffic policy for the service                                                      | `Cluster`                |
+| `proxy.ingress.enabled`                         | Set to true to enable ingress record generation                                              | `false`                  |
+| `proxy.ingress.path`                            | Path to the Proxy pod.                                                                       | `/`                      |
+| `proxy.ingress.pathType`                        | Ingress path type                                                                            | `ImplementationSpecific` |
+| `proxy.ingress.certManager`                     | Add cert-manager annotations to the Ingress object                                           | `false`                  |
+| `proxy.ingress.hostname`                        | Set ingress rule hostname                                                                    | `jupyterhub.local`       |
+| `proxy.ingress.annotations`                     | Add annotations to the Ingress object                                                        | `{}`                     |
+| `proxy.ingress.tls`                             | Enable ingress tls configuration for the hostname defined at proxy.ingress.hostname          | `false`                  |
+| `proxy.ingress.extraHosts`                      | The list of additional hostnames to be covered with this ingress record.                     | `[]`                     |
+| `proxy.ingress.extraTls`                        | The tls configuration for additional hostnames to be covered with this ingress record.       | `[]`                     |
+| `proxy.ingress.extraPaths`                      | Any additional arbitrary paths that may need to be added to the ingress under the main host. | `[]`                     |
+| `proxy.ingress.secrets`                         | Add extra secrets for the tls configuration                                                  | `[]`                     |
 
 
 ### Image puller deployment parameters
@@ -312,33 +312,33 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Singleuser deployment parameters
 
-| Name                                            | Description                                                                           | Value                                |
-| ----------------------------------------------- | ------------------------------------------------------------------------------------- | ------------------------------------ |
-| `singleuser.image.registry`                     | Single User image registry                                                            | `docker.io`                          |
-| `singleuser.image.repository`                   | Single User image repository                                                          | `bitnami/jupyter-base-notebook`      |
-| `singleuser.image.tag`                          | Single User image tag (immutabe tags are recommended)                                 | `1.4.1-debian-10-r18`                |
-| `singleuser.image.pullPolicy`                   | Single User image pull policy                                                         | `IfNotPresent`                       |
-| `singleuser.image.pullSecrets`                  | Single User image pull secrets                                                        | `[]`                                 |
-| `singleuser.command`                            | Override Single User default command                                                  | `[]`                                 |
-| `singleuser.tolerations`                        | Tolerations for pod assignment. Evaluated as a template.                              | `[]`                                 |
-| `singleuser.containerPort`                      | Single User container port                                                            | `8888`                               |
-| `singleuser.notebookDir`                        | Notebook directory (it will be the same as the PVC volume mount)                      | `/opt/bitnami/jupyterhub-singleuser` |
-| `singleuser.resources.limits`                   | The resources limits for the container                                                | `{}`                                 |
-| `singleuser.resources.requests`                 | The requested resources for the container                                             | `{}`                                 |
-| `singleuser.containerSecurityContext.enabled`   | Enabled Single User containers' Security Context                                      | `true`                               |
-| `singleuser.containerSecurityContext.runAsUser` | Set Single User container's Security Context runAsUser                                | `1001`                               |
-| `singleuser.podSecurityContext.enabled`         | Enabled Single User pods' Security Context                                            | `true`                               |
-| `singleuser.podSecurityContext.fsGroup`         | Set Single User pod's Security Context fsGroup                                        | `1001`                               |
-| `singleuser.nodeSelector`                       | Node labels for pod assignment. Evaluated as a template.                              | `{}`                                 |
-| `singleuser.podLabels`                          | Extra labels for Single User pods                                                     | `{}`                                 |
-| `singleuser.podAnnotations`                     | Annotations for Single User pods                                                      | `{}`                                 |
-| `singleuser.priorityClassName`                  | Single User pod priority class name                                                   | `nil`                                |
-| `singleuser.lifecycleHooks`                     | Add lifecycle hooks to the Single User deployment                                     | `{}`                                 |
-| `singleuser.extraEnvVars`                       | Add extra environment variables to the Single User container                          | `[]`                                 |
-| `singleuser.extraVolumes`                       | Optionally specify extra list of additional volumes for Single User pods              | `[]`                                 |
-| `singleuser.extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for Single User container(s) | `[]`                                 |
-| `singleuser.initContainers`                     | Add additional init containers to the Single User pods                                | `{}`                                 |
-| `singleuser.sidecars`                           | Add additional sidecar containers to the Single User pod                              | `{}`                                 |
+| Name                                            | Description                                                                                         | Value                                |
+| ----------------------------------------------- | --------------------------------------------------------------------------------------------------- | ------------------------------------ |
+| `singleuser.image.registry`                     | Single User image registry                                                                          | `docker.io`                          |
+| `singleuser.image.repository`                   | Single User image repository                                                                        | `bitnami/jupyter-base-notebook`      |
+| `singleuser.image.tag`                          | Single User image tag (immutabe tags are recommended)                                               | `1.4.1-debian-10-r18`                |
+| `singleuser.image.pullPolicy`                   | Single User image pull policy                                                                       | `IfNotPresent`                       |
+| `singleuser.image.pullSecrets`                  | Single User image pull secrets                                                                      | `[]`                                 |
+| `singleuser.command`                            | Override Single User default command                                                                | `[]`                                 |
+| `singleuser.tolerations`                        | Tolerations for pod assignment. Evaluated as a template.                                            | `[]`                                 |
+| `singleuser.containerPort`                      | Single User container port                                                                          | `8888`                               |
+| `singleuser.notebookDir`                        | Notebook directory (it will be the same as the PVC volume mount)                                    | `/opt/bitnami/jupyterhub-singleuser` |
+| `singleuser.resources.limits`                   | The resources limits for the container                                                              | `{}`                                 |
+| `singleuser.resources.requests`                 | The requested resources for the container                                                           | `{}`                                 |
+| `singleuser.containerSecurityContext.enabled`   | Enabled Single User containers' Security Context                                                    | `true`                               |
+| `singleuser.containerSecurityContext.runAsUser` | Set Single User container's Security Context runAsUser                                              | `1001`                               |
+| `singleuser.podSecurityContext.enabled`         | Enabled Single User pods' Security Context                                                          | `true`                               |
+| `singleuser.podSecurityContext.fsGroup`         | Set Single User pod's Security Context fsGroup                                                      | `1001`                               |
+| `singleuser.nodeSelector`                       | Node labels for pod assignment. Evaluated as a template.                                            | `{}`                                 |
+| `singleuser.podLabels`                          | Extra labels for Single User pods                                                                   | `{}`                                 |
+| `singleuser.podAnnotations`                     | Annotations for Single User pods                                                                    | `{}`                                 |
+| `singleuser.priorityClassName`                  | Single User pod priority class name                                                                 | `nil`                                |
+| `singleuser.lifecycleHooks`                     | Add lifecycle hooks to the Single User deployment to automate configuration before or after startup | `{}`                                 |
+| `singleuser.extraEnvVars`                       | Add extra environment variables to the Single User container                                        | `[]`                                 |
+| `singleuser.extraVolumes`                       | Optionally specify extra list of additional volumes for Single User pods                            | `[]`                                 |
+| `singleuser.extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for Single User container(s)               | `[]`                                 |
+| `singleuser.initContainers`                     | Add additional init containers to the Single User pods                                              | `{}`                                 |
+| `singleuser.sidecars`                           | Add additional sidecar containers to the Single User pod                                            | `{}`                                 |
 
 
 ### Single User RBAC parameters

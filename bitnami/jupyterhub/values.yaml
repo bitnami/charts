@@ -295,9 +295,8 @@ hub:
   ## @param hub.priorityClassName Hub pod priority class name
   ##
   priorityClassName:
-  ## Deployment pod host aliases
-  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ## @param hub.hostAliases Add deployment host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
   ## hub resource requests and limits
@@ -357,12 +356,10 @@ hub:
   ##
   nodeAffinityPreset:
     type: ""
-    ## Node label key to match
     ## E.g.
     ## key: "kubernetes.io/e2e-az-name"
     ##
     key: ""
-    ## Node label values to match
     ## E.g.
     ## values:
     ##   - e2e-az1
@@ -522,7 +519,7 @@ hub:
 proxy:
   ## @param proxy.image.registry Proxy image registry
   ## @param proxy.image.repository Proxy image repository
-  ## @param proxy.image.tag Proxy image tag (immutabe tags are recommended)
+  ## @param proxy.image.tag Proxy image tag (immutable tags are recommended)
   ## @param proxy.image.pullPolicy Proxy image pull policy
   ## @param proxy.image.pullSecrets Proxy image pull secrets
   ## @param proxy.image.debug Activate verbose output
@@ -741,7 +738,6 @@ proxy:
   ##   - name: FOO
   ##     value: "bar"
   ##
-  ##
   extraEnvVars: []
   ## @param proxy.extraEnvVarsCM Name of existing ConfigMap containing extra env vars
   ##
@@ -892,18 +888,16 @@ proxy:
     ##   path: /
     ##
     extraHosts: []
-    ## The tls configuration for additional hostnames to be covered with this ingress record.
+    ## @param proxy.ingress.extraTls The tls configuration for additional hostnames to be covered with this ingress record.
     ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
     ## extraTls:
     ## - hosts:
     ##     - aspnet-core.local
     ##   secretName: aspnet-core.local-tls
-    ## @param proxy.ingress.extraTls Add extra tls configuration for additional hostnames
     ##
     extraTls: []
-    ## Any additional arbitrary paths that may need to be added to the ingress under the main host.
+    ## @param proxy.ingress.extraPaths Any additional arbitrary paths that may need to be added to the ingress under the main host.
     ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
-    ## @param proxy.ingress.extraPaths Add extra paths to the ingress rule
     ##
     extraPaths: []
     ## @param proxy.ingress.secrets Add extra secrets for the tls configuration
@@ -1177,18 +1171,15 @@ singleuser:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
-  ## Annotations for server pods.
+  ## @param singleuser.podAnnotations Annotations for Single User pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-  ## @param singleuser.podAnnotations  Annotations for Single User pods
   ##
   podAnnotations: {}
-  ## singleuser pods' priority.
-  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ## @param singleuser.priorityClassName Single User pod priority class name
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
   priorityClassName:
-  ## lifecycleHooks for the singleuser container to automate configuration before or after startup.
-  ## @param singleuser.lifecycleHooks Add lifecycle hooks to the Single User deployment
+  ## @param singleuser.lifecycleHooks Add lifecycle hooks to the Single User deployment to automate configuration before or after startup
   ##
   lifecycleHooks: {}
   ## @param singleuser.extraEnvVars Add extra environment variables to the Single User container
@@ -1383,7 +1374,6 @@ postgresql:
     ## If undefined (the default) or set to null, no storageClassName spec is
     ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
     ##   GKE, AWS & OpenStack)
-    ##
     ##
     storageClass:
     ## @param postgresql.persistence.accessMode Access mode of the created PVCs
