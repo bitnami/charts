@@ -141,6 +141,9 @@ master:
   ## @param master.name Master-eligible node pod name
   ##
   name: master
+  ## @param master.fullnameOverride Fully override the deployment name
+  ##
+  fullnameOverride:
   ## @param master.replicas Desired number of Elasticsearch master-eligible nodes. Consider using an odd number of master nodes to prevent "split brain" situation.  See: https://www.elastic.co/guide/en/elasticsearch/reference/7.x/modules-discovery-voting.html
   ## https://www.elastic.co/guide/en/elasticsearch/reference/7.x/modules-discovery-voting.html#_even_numbers_of_master_eligible_nodes
   ## https://www.elastic.co/guide/en/elasticsearch/reference/7.x/modules-discovery-quorums.html#modules-discovery-quorums
@@ -389,6 +392,9 @@ master:
 ## Elasticsearch coordinating-only node parameters
 ##
 coordinating:
+  ## @param coordinating.fullnameOverride Fully override the deployment name
+  ##
+  fullnameOverride:
   ## @param coordinating.replicas Desired number of Elasticsearch coordinating-only nodes
   ##
   replicas: 2
@@ -599,6 +605,9 @@ data:
   ## @param data.name Data node pod name
   ##
   name: data
+  ## @param data.fullnameOverride Fully override the deployment name
+  ##
+  fullnameOverride:
   ## @param data.replicas Desired number of Elasticsearch data nodes
   ##
   replicas: 2
@@ -832,6 +841,9 @@ ingest:
   ## @param ingest.name Ingest node pod name
   ##
   name: ingest
+  ## @param ingest.fullnameOverride Fully override the deployment name
+  ##
+  fullnameOverride:
   ## @param ingest.replicas Desired number of Elasticsearch ingest nodes
   ##
   replicas: 2
