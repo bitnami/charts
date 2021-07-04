@@ -169,7 +169,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `operator.podSecurityContext.runAsGroup`                     | User ID for the pods                                                                                                   | `1001`                     |
 | `operator.podSecurityContext.runAsNonRoot`                   | Grafana Operator must run as nonRoot                                                                                   | `true`                     |
 | `operator.podSecurityContext.fsGroup`                        | Group ID for the pods                                                                                                  | `1001`                     |
-| `operator.podSecurityContext.supplementalGroups`             | Drop capabilities for the securityContext                                                                              | `[]`                       |
+| `operator.podSecurityContext.supplementalGroups`             | Which group IDs containers add                                                                                         | `[]`                       |
 | `operator.containerSecurityContext.enabled`                  | Enable container security context                                                                                      | `true`                     |
 | `operator.containerSecurityContext.runAsUser`                | User ID for the operator container                                                                                     | `1001`                     |
 | `operator.containerSecurityContext.runAsGroup`               | User ID for the operator container                                                                                     | `1001`                     |
@@ -220,7 +220,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `grafana.podSecurityContext.runAsGroup`                     | User ID for the pods                                                                          | `1001`               |
 | `grafana.podSecurityContext.runAsNonRoot`                   | Grafana Operator must run as nonRoot                                                          | `true`               |
 | `grafana.podSecurityContext.fsGroup`                        | Group ID for the pods                                                                         | `1001`               |
-| `grafana.podSecurityContext.supplementalGroups`             | Drop capabilities for the securityContext                                                     | `[]`                 |
+| `grafana.podSecurityContext.supplementalGroups`             | Which group IDs containers add                                                                | `[]`                 |
 | `grafana.containerSecurityContext.enabled`                  | Enable containers security context                                                            | `true`               |
 | `grafana.containerSecurityContext.runAsUser`                | User ID for the containers                                                                    | `1001`               |
 | `grafana.containerSecurityContext.runAsGroup`               | Group ID for the containers                                                                   | `1001`               |
