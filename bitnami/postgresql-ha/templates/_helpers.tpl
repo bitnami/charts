@@ -162,6 +162,8 @@ Also, we can't use a single if because lazy evaluation is not an option
     {{- else -}}
         {{- ternary (randAlphaNum 10) .Values.postgresql.password (empty .Values.postgresql.password) -}}
     {{- end -}}
+{{- else if .Values.postgresql.password -}}
+    {{- .Values.postgresql.password -}}
 {{- else -}}
     {{- ternary (randAlphaNum 10) .Values.postgresql.password (empty .Values.postgresql.password) -}}
 {{- end -}}
