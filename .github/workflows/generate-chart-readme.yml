@@ -9,6 +9,9 @@ on:
       - 'bitnami/dokuwiki/values.yaml'
       - 'bitnami/drupal/values.yaml'
       - 'bitnami/ejbca/values.yaml'
+      - 'bitnami/fluentd/values.yaml'
+      - 'bitnami/grafana/values.yaml'
+      - 'bitnami/grafana-operator/values.yaml'
 
 jobs:
   generate-chart-readme:
