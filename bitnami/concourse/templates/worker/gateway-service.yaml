@@ -1,0 +1,40 @@
+{{- if .Values.web.enabled -}}
+{{- $root := . -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "common.names.fullname" . }}-worker-gateway
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: worker
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.web.service.workerGateway.type }}
+  {{- if .Values.web.service.workerGateway.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges:
+    {{- range .Values.web.service.workerGateway.loadBalancerSourceRanges }}
+    - {{ . }}
+    {{- end }}
+  {{- end }}
+  {{- if and (eq "ClusterIP" .Values.web.service.workerGateway.type) .Values.web.service.workerGateway.clusterIP }}
+  {{ with .Values.web.service.workerGateway.clusterIP }}clusterIP: {{quote . }}{{ end}}
+  {{- end }}
+  {{- if and (eq "LoadBalancer" .Values.web.service.workerGateway.type) .Values.web.service.workerGateway.loadBalancerIP }}
+  loadBalancerIP: {{ .Values.web.service.workerGateway.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - name: worker-gateway
+      port: {{ .Values.web.tsa.bindPort }}
+      targetPort: tsa
+      {{- if and (eq "NodePort" .Values.web.service.workerGateway.type) .Values.web.service.workerGateway.NodePort }}
+      nodePort: {{ .Values.web.service.workerGateway.NodePort}}
+      {{- end }}
+  selector:
+    app: {{ template "common.names.fullname" . }}
+{{- end }}
+
