@@ -482,10 +482,10 @@ initContainers: {}
 ##   image: korenlev/k8s-mongo-labeler-sidecar
 ##   imagePullPolicy: Always
 ##   env:
-##     - name: LABEL_SELECTOR
-##       value: "app.kubernetes.io/component=mongodb,app.kubernetes.io/instance=mongodb,app.kubernetes.io/name=mongodb"
 ##     - name: NAMESPACE
 ##       value: '{{ .Release.Namespace }}'
+##     - name: LABEL_SELECTOR
+##       value: "app.kubernetes.io/component=mongodb,app.kubernetes.io/instance=$(NAMESPACE),app.kubernetes.io/name=mongodb"
 ##     - name: DEBUG
 ##       value: "true"
 ##
