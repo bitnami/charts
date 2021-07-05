@@ -80,6 +80,10 @@ clusterDomain: cluster.local
 ##
 extraDeploy: []
 
+## Add labels to all the deployed resources (sub-charts are not considered). Evaluated as a template
+##
+commonLabels: {}
+
 ## Common annotations to add to all Mongo resources (sub-charts are not considered). Evaluated as a template
 ##
 commonAnnotations: {}
