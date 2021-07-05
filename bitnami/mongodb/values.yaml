@@ -67,7 +67,7 @@ clusterDomain: cluster.local
 ##     type: NodePort
 ##     externalTrafficPolicy: Cluster
 ##     ports:
-##       - name: mongodb
+##       - name: mongodb-primary
 ##         port: 30001
 ##         nodePort: 30001
 ##         protocol: TCP
