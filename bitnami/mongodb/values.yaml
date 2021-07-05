@@ -60,7 +60,7 @@ clusterDomain: cluster.local
 ##     namespace: '{{ .Release.Namespace }}'
 ##     labels:
 ##       app.kubernetes.io/component: mongodb
-##       app.kubernetes.io/instance: mongodb
+##       app.kubernetes.io/instance: '{{ .Release.Namespace }}'
 ##       app.kubernetes.io/managed-by: Helm
 ##       app.kubernetes.io/name: mongodb
 ##   spec:
