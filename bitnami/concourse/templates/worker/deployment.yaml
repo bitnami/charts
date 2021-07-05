@@ -3,7 +3,7 @@
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ template "common.names.fullname" . }}-worker
+  name: {{ template "concourse.worker.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: worker
@@ -32,7 +32,7 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.worker.podLabels "context" $) | nindent 8 }}
         {{- end }}
     spec:
-      serviceAccountName: {{ template "common.names.fullname" . }}-worker
+      serviceAccountName: {{ template "concourse.worker.fullname" . }}
       {{- include "concourse.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.worker.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.worker.hostAliases "context" $) | nindent 8 }}
@@ -74,7 +74,7 @@ spec:
           {{- include "common.tplvalues.render" (dict "value" .Values.worker.initContainers "context" $) | nindent 8 }}
         {{- end }}
       containers:
-        - name: {{ template "common.names.fullname" . }}-worker
+        - name: {{ template "concourse.worker.fullname" . }}
           image: {{ template "concourse.image" . }}
           imagePullPolicy: {{ .Values.concourse.image.pullPolicy }}
           {{- if .Values.worker.lifecycleHooks }}
@@ -203,7 +203,7 @@ spec:
       volumes:
         - name: concourse-keys
           secret:
-            secretName: {{ template "common.names.fullname" . }}-worker
+            secretName: {{ template "concourse.worker.fullname" . }}
             defaultMode: 0400
             items:
               - key: host-key-pub

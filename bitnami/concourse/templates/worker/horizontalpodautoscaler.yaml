@@ -10,7 +10,7 @@ metadata:
       {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
     {{- end }}
 spec:
-   minReplicas: {{ .Values.worker.autoscaling.minReplicas }}
+  minReplicas: {{ .Values.worker.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.worker.autoscaling.maxReplicas }}
   metrics:
     {{- if .Values.worker.autoscaling.builtInMetrics }}

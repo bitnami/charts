@@ -1,11 +1,11 @@
 {{- if .Values.worker.enable }}
 {{- if .Values.rbac.create }}
-{{- if .Values.podSecurityPolicy.create }}
+{{- if .Values.podSecurityPolicy.enabled }}
 ---
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
-  name: {{ template "common.names.fullname" . }}
+  name: {{ template "concourse.worker.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app: concourse
@@ -28,7 +28,7 @@ rules:
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: RoleBinding
 metadata:
-  name: {{ template "common.names.fullname" . }}-psp
+  name:  {{ template "concourse.web.fullname" . }}-psp
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app: concourse

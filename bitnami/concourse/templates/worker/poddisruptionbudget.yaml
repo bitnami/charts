@@ -1,4 +1,4 @@
-{{- if .Values.worker.enabled -}}
+{{- if and .Values.worker.enabled .Values.worker.pdb.enabled -}}
 kind: PodDisruptionBudget
 apiVersion: policy/v1beta1
 metadata:
@@ -9,7 +9,7 @@ metadata:
       {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
     {{- end }}
 spec:
-  minAvailable: {{ .Values.worker.minAvailable }}
+  minAvailable: {{ .Values.worker.pdb.minAvailable }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: worker

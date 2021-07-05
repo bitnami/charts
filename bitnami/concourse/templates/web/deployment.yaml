@@ -2,7 +2,7 @@
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ template "common.names.fullname" . }}
+  name: {{ template "concourse.web.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: web
@@ -31,7 +31,7 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.web.podLabels "context" $) | nindent 8 }}
         {{- end }}
     spec:
-      serviceAccountName: {{ template "common.names.fullname" . }}
+      serviceAccountName: {{ template "concourse.web.fullname" . }}
       {{- include "concourse.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.web.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.web.hostAliases "context" $) | nindent 8 }}
@@ -77,7 +77,7 @@ spec:
           {{- include "common.tplvalues.render" (dict "value" .Values.web.initContainers "context" $) | nindent 8 }}
         {{- end }}
       containers:
-        - name: {{ template "common.names.fullname" . }}
+        - name: {{ template "concourse.web.fullname" . }}
           image: {{ template "concourse.image" . }}
           imagePullPolicy: {{ .Values.concourse.image.pullPolicy }}
           {{- if .Values.web.lifecycleHooks }}
@@ -138,7 +138,7 @@ spec:
             - name: CONCOURSE_ADD_LOCAL_USER
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "common.names.fullname" . }}
+                  name: {{ template "concourse.web.fullname" . }}
                   key: local-users
             {{- end }}
             {{- if .Values.web.clusterName }}
@@ -196,12 +196,12 @@ spec:
                   key: postgresql-password
             {{- end }}
           ports:
-            - name: atc
+            - name: http
               containerPort: {{ .Values.web.bindPort }}
             - name: tsa
               containerPort: {{ .Values.web.tsa.bindPort }}
             {{- if .Values.web.debugBindPort }}
-            - name: atc-debug
+            - name: http-debug
               containerPort: {{ .Values.web.debugBindPort }}
             {{- end }}
             {{- if .Values.web.tsa.bindDebugPort }}
@@ -224,7 +224,7 @@ spec:
           livenessProbe:
             httpGet:
               path: {{ .Values.web.baseUrl | trimSuffix "/" }}/api/v1/info
-              port: atc
+              port: http
             initialDelaySeconds: {{ .Values.web.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.web.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.web.livenessProbe.timeoutSeconds }}
@@ -237,7 +237,7 @@ spec:
           readinessProbe:
             httpGet:
               path: {{ .Values.web.baseUrl | trimSuffix "/" }}/api/v1/info
-              port: atc
+              port: http
             initialDelaySeconds: {{ .Values.web.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.web.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.web.readinessProbe.timeoutSeconds }}
@@ -264,7 +264,7 @@ spec:
       volumes:
         - name: concourse-keys
           secret:
-            secretName: {{ template "common.names.fullname" . }}
+            secretName: {{ template "concourse.web.fullname" . }}
             defaultMode: 0400
             items:
               - key: host-key
@@ -276,7 +276,7 @@ spec:
         {{- if .Values.secrets.teamAuthorizedKeys }}
         - name: team-authorized-keys
           secret:
-            secretName: {{ template "common.names.fullname" . }}
+            secretName: {{ template "concourse.web.fullname" . }}
             defaultMode: 0400
             items:
             {{- range .Values.secrets.teamAuthorizedKeys }}

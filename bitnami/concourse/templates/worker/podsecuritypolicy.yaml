@@ -1,9 +1,9 @@
 {{- if .Values.worker.enabled -}}
-{{- if .Values.podSecurityPolicy.create -}}
+{{- if .Values.worker.podSecurityPolicy.enabled -}}
 apiVersion: {{ include "podsecuritypolicy.apiVersion" . }}
 kind: PodSecurityPolicy
 metadata:
-  name: {{ template "common.names.fullname" . }}
+  name: {{ template "concourse.worker.fullname" . }}
   labels:
   {{- include "common.labels.standard" . | nindent 4 }}
   {{- if .Values.commonAnnotations }}
@@ -30,4 +30,4 @@ spec:
     rule: 'RunAsAny'
   readOnlyRootFilesystem: false
 {{- end }}
-{{- end}}
+{{- end }}

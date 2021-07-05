@@ -1,9 +1,8 @@
 {{- if .Values.web.enabled -}}
-{{- $root := . -}}
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "common.names.fullname" . }}-worker-gateway
+  name: {{ template "concourse.worker.fullname" . }}-gateway
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: worker
@@ -35,6 +34,6 @@ spec:
       nodePort: {{ .Values.web.service.workerGateway.NodePort}}
       {{- end }}
   selector:
-    app: {{ template "common.names.fullname" . }}
+    app: {{ template "concourse.web.fullname" . }}
 {{- end }}
 

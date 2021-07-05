@@ -4,7 +4,7 @@
 apiVersion: rbac.authorization.k8s.io/{{ .Values.rbac.apiVersion }}
 kind: ClusterRole
 metadata:
-  name: {{ template "common.names.fullname" . }}
+  name: {{ template "concourse.web.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app: concourse
@@ -19,12 +19,13 @@ rules:
   resources: ["secrets"]
   verbs: ["get"]
 {{- end }}
-{{- if .Values.podSecurityPolicy.create }}
+
 ---
-apiVersion: rbac.authorization.k8s.io/{{ .Values.rbac.apiVersion }}
+{{- if .Values.web.podSecurityPolicy.enabled }}
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
-  name: {{ template "concourse.web.fullname" . }}-psp
+  name: {{ template "concourse.web.fullname" . }}
   labels:
     app: {{ template "concourse.web.fullname" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
@@ -40,7 +41,7 @@ rules:
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: RoleBinding
 metadata:
-  name: {{ template "common.names.fullname" . }}
+  name: {{ template "concourse.web.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app: concourse
@@ -53,19 +54,19 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: {{ template "common.names.fullname" . }}
+  name: {{ template "concourse.web.fullname" . }}
 subjects:
   - kind: ServiceAccount
-    name: {{ template "common.names.fullname" . }}
+    name: {{ template "concourse.web.fullname" . }}
     namespace: {{ .Release.Namespace | quote }}
 ---
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: RoleBinding
 metadata:
-  name: {{ template "common.names.fullname" . }}-psp
+  name:  {{ template "concourse.web.fullname" . }}-psp
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
-    app: concourse
+    app.kubernetes.io/component: {{ template "concourse.web.fullname" . }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
@@ -75,10 +76,10 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: {{ template "common.names.fullname" . }}-psp
+  name:  {{ template "concourse.web.fullname" . }}-psp
 subjects:
   - kind: ServiceAccount
-    name: {{ template "common.names.fullname" . }}
+    name: {{ template "concourse.web.fullname" . }}
     namespace: {{ .Release.Namespace | quote }}
 {{- end }}
 {{- end -}}

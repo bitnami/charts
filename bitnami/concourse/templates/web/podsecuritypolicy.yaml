@@ -1,9 +1,8 @@
-{{- if .Values.web.enabled -}}
-{{- if .Values.podSecurityPolicy.create -}}
+{{- if and .Values.web.enabled  .Values.web.podSecurityPolicy.enabled -}}
 apiVersion: {{ include "podsecuritypolicy.apiVersion" . }}
 kind: PodSecurityPolicy
 metadata:
-  name: {{ template "common.names.fullname" . }}
+  name: {{ template "concourse.web.fullname" . }}
   labels:
   {{- include "common.labels.standard" . | nindent 4 }}
   {{- if .Values.commonAnnotations }}
@@ -36,4 +35,3 @@ spec:
         max: 65535
   readOnlyRootFilesystem: false
 {{- end }}
-{{- end}}

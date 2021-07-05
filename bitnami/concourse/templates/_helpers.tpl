@@ -19,24 +19,13 @@ Return the proper Docker Image Registry Secret Names
 {{- include "common.images.pullSecrets" (dict "images" (list .Values.concourse.image .Values.volumePermissions.image) "global" .Values.global) -}}
 {{- end -}}
 
-# {{/*
-# Create the name of the service account to use
-# */}}
-# {{- define "concourse.serviceAccountName" -}}
-# {{- if .Values.serviceAccount.create -}}
-#     {{ default (printf "%s-concourse" (include "common.names.fullname" .)) .Values.concourse.serviceAccount.name }}
-# {{- else -}}
-#     {{ default "default" .Values.serviceAccount.name }}
-# {{- end -}}
-# {{- end -}}
 
 {{/*
 Compile all warnings into a single message.
 */}}
 {{- define "concourse.validateValues" -}}
 {{- $messages := list -}}
-{{- $messages := append $messages (include "concourse.validateValues.foo" .) -}}
-{{- $messages := append $messages (include "concourse.validateValues.bar" .) -}}
+{{- $messages := append $messages (include "concourse.web.worker.enabeled" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -46,9 +35,12 @@ Compile all warnings into a single message.
 {{- end -}}
 
 {{/* Check if web or worker are enable */}}
+{{- define "concourse.web.worker.enabeled" }}
 {{ if not (or .Values.web.enabled .Values.worker.enabled) }}
-{{- required "Must set either web.enabled or worker.enabled to create a concourse deployment" "" }}
+concourse: enabeled
+  Must set either web.enabled or worker.enabled to create a concourse deployment
 {{ end }}
+{{- end -}}
 
 {{/*
 Return the appropriate apiVersion for deployment.
@@ -61,6 +53,32 @@ to strip that out.
 {{- print "extensions/v1beta1" -}}
 {{- else -}}
 {{- print "apps/v1" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create a default fully qualified web node(s) name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+*/}}
+{{- define "concourse.web.fullname" -}}
+{{- $name := default "web" .Values.web.nameOverride -}}
+{{- if .Values.fullnameOverride -}}
+{{- printf "%s-%s" .Values.fullnameOverride $name | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create a default fully qualified worker node(s) name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+*/}}
+{{- define "concourse.worker.fullname" -}}
+{{- $name := default "worker" .Values.worker.nameOverride -}}
+{{- if .Values.fullnameOverride -}}
+{{- printf "%s-%s" .Values.fullnameOverride $name | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 {{- end -}}
 
@@ -95,7 +113,7 @@ Creates the address of the TSA service.
 */}}
 {{- define "concourse.web.tsa.address" -}}
 {{- $port := .Values.web.tsa.bindPort -}}
-{{ template "common.names.fullname" . }}-worker-gateway:{{- print $port -}}
+{{ template "concourse.worker.fullname" . }}-gateway:{{- print $port -}}
 {{- end -}}
 
 {{/*
