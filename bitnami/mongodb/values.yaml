@@ -74,7 +74,7 @@ clusterDomain: cluster.local
 ##         targetPort: mongodb
 ##     selector:
 ##       app.kubernetes.io/component: mongodb
-##       app.kubernetes.io/instance: mongodb
+##       app.kubernetes.io/instance: '{{ .Release.Namespace }}'
 ##       app.kubernetes.io/name: mongodb
 ##       primary: "true"
 ##
