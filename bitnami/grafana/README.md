@@ -156,7 +156,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | ---------------------------------- | --------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`                   | Grafana image registry                                                            | `docker.io`          |
 | `image.repository`                 | Grafana image repository                                                          | `bitnami/grafana`    |
-| `image.tag`                        | Grafana image tag (immutable tags are recommended)                                | `8.0.3-debian-10-r0` |
+| `image.tag`                        | Grafana image tag (immutable tags are recommended)                                | `8.0.4-debian-10-r0` |
 | `image.pullPolicy`                 | Grafana image pull policy                                                         | `IfNotPresent`       |
 | `image.pullSecrets`                | Grafana image pull secrets                                                        | `[]`                 |
 | `hostAliases`                      | Add deployment host aliases                                                       | `[]`                 |
@@ -194,6 +194,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `updateStrategy.type`                | Set up update strategy for Grafana installation.                                          | `RollingUpdate` |
 | `schedulerName`                      | Alternative scheduler                                                                     | `nil`           |
 | `priorityClassName`                  | Priority class name                                                                       | `""`            |
+| `podLabels`                          | Extra labels for Grafana pods                                                             | `{}`            |
 | `podAnnotations`                     | Grafana Pod annotations                                                                   | `{}`            |
 | `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
 | `podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`          |
@@ -291,7 +292,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `imageRenderer.enabled`                              | Enable using a remote rendering service to render PNG images                                           | `false`                          |
 | `imageRenderer.image.registry`                       | Grafana Image Renderer image registry                                                                  | `docker.io`                      |
 | `imageRenderer.image.repository`                     | Grafana Image Renderer image repository                                                                | `bitnami/grafana-image-renderer` |
-| `imageRenderer.image.tag`                            | Grafana Image Renderer image tag (immutable tags are recommended)                                      | `3.0.1-debian-10-r5`             |
+| `imageRenderer.image.tag`                            | Grafana Image Renderer image tag (immutable tags are recommended)                                      | `3.0.1-debian-10-r6`             |
 | `imageRenderer.image.pullPolicy`                     | Grafana Image Renderer image pull policy                                                               | `IfNotPresent`                   |
 | `imageRenderer.image.pullSecrets`                    | Grafana image Renderer pull secrets                                                                    | `[]`                             |
 | `imageRenderer.replicaCount`                         | Number of Grafana Image Renderer Pod replicas                                                          | `1`                              |
