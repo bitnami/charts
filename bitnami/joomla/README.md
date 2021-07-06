@@ -81,7 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.debug`                        | Specify if debug logs should be enabled                                                                              | `false`                |
 | `joomlaSkipInstall`                  | Skip Joomla! installation wizard. Useful for migrations and restoring from SQL dump                                  | `no`                   |
 | `joomlaUsername`                     | User of the application                                                                                              | `user`                 |
-| `joomlaPassword`                     | Application password                                                                                                 | `nil`                  |
+| `joomlaPassword`                     | Application password                                                                                                 | `""`                   |
 | `joomlaEmail`                        | Admin email                                                                                                          | `user@example.com`     |
 | `allowEmptyPassword`                 | Allow DB blank passwords                                                                                             | `no`                   |
 | `command`                            | Override default container command (useful when using custom images)                                                 | `nil`                  |

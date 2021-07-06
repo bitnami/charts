@@ -80,7 +80,7 @@ joomlaUsername: user
 ## Defaults to a random 10-character alphanumeric string if not set
 ## ref: https://github.com/bitnami/bitnami-docker-joomla#configuration
 ##
-joomlaPassword:
+joomlaPassword: ""
 ## @param joomlaEmail Admin email
 ## ref: https://github.com/bitnami/bitnami-docker-joomla#configuration
 ##
