@@ -217,7 +217,7 @@ spec:
                   if [[ -f "${MARIADB_ROOT_PASSWORD_FILE:-}" ]]; then
                       password_aux=$(cat "$MARIADB_ROOT_PASSWORD_FILE")
                   fi
-                  exec mysqladmin status -u"${MARIADB_ROOT_USER}" -p"${password_aux}"
+                  exec mysql -u"${MARIADB_ROOT_USER}" -p"${password_aux}" -e "select * from mysql.wsrep_cluster_members;"
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}

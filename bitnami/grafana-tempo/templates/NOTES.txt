@@ -1,0 +1,33 @@
+** Please be patient while the chart is being deployed **
+
+Installed components:
+
+  * ingester
+  * distributor
+  * querier
+  * query-frontend
+  * compactor
+  {{- if .Values.vulture.enabled }}
+  * vulture
+  {{- end }}
+
+1. Get the query-frontend URL by running these commands:
+
+{{- if contains "NodePort" .Values.queryFrontend.service.type }}
+    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "grafana-tempo.query-frontend.fullname" . }})
+    export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+    echo http://$NODE_IP:$NODE_PORT
+{{- else if contains "LoadBalancer" .Values.queryFrontend.service.type }}
+     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+           You can watch the status of by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ template "common.names.fullname" . }}
+    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+    echo http://$SERVICE_IP:{{ .Values.queryFrontend.service.port }}
+{{- else if contains "ClusterIP" .Values.queryFrontend.service.type }}
+    echo "The Query Frontend is available at http://127.0.0.1:{{ .Values.queryFrontend.service.port }}"
+    kubectl port-forward svc/{{ template "grafana-tempo.query-frontend.fullname" . }} {{ .Values.queryFrontend.service.port }}:{{ .Values.queryFrontend.service.port }} &
+{{- end }}
+
+{{- include "common.warnings.rollingTag" .Values.tempo.image }}
+{{- include "common.warnings.rollingTag" .Values.queryFrontend.query.image }}
+{{- include "common.warnings.rollingTag" .Values.vulture.image }}
+{{- include "grafana-tempo.validateValues" . }}
