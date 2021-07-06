@@ -529,6 +529,38 @@ $ helm upgrade my-release bitnami/postgresql \
 
 > Note: you need to substitute the placeholders _[POSTGRESQL_PASSWORD]_, and _[REPLICATION_PASSWORD]_ with the values obtained from instructions in the installation notes.
 
+### To 11.0.0
+
+This version updates PostgreSQL to its major version 13. In this version, the **chart is using PostgreSQL 13 instead of PostgreSQL 11**. You can check both PostgreSQL 12 and 13 releases notes and notable changes in the following links:
+
+- PostgreSQL 12: [https://www.postgresql.org/docs/12/release-12.html](https://www.postgresql.org/docs/12/release-12.html)
+- PostgreSQL 13: [https://www.postgresql.org/docs/13/release-13.html](https://www.postgresql.org/docs/13/release-13.html)
+- PostgreSQL's feature matrix: [https://www.postgresql.org/about/featurematrix/](https://www.postgresql.org/about/featurematrix/)
+
+For major releases of PostgreSQL, the internal data storage format is subject to change, thus complicating upgrades, you can see some errors like the following one in the logs:
+
+```console
+Welcome to the Bitnami postgresql container
+Subscribe to project updates by watching https://github.com/bitnami/bitnami-docker-postgresql
+Submit issues and feature requests at https://github.com/bitnami/bitnami-docker-postgresql/issues
+INFO  ==> ** Starting PostgreSQL setup **
+INFO  ==> Validating settings in POSTGRESQL_* env vars..
+INFO  ==> Loading custom pre-init scripts...
+INFO  ==> Initializing PostgreSQL database...
+INFO  ==> pg_hba.conf file not detected. Generating it...
+INFO  ==> Generating local authentication configuration
+INFO  ==> Deploying PostgreSQL with persisted data...
+INFO  ==> Configuring replication parameters
+INFO  ==> Configuring fsync
+INFO  ==> Loading custom scripts...
+INFO  ==> Enabling remote connections
+INFO  ==> ** PostgreSQL setup finished! **
+INFO  ==> ** Starting PostgreSQL **
+ GMT [1] FATAL:  database files are incompatible with server
+ GMT [1] DETAIL:  The data directory was initialized by PostgreSQL version 11, which is not compatible with this version 13.3.
+```
+In this case, you should migrate the data from the old chart to the new one following an approach similar to that described in [this section](https://www.postgresql.org/docs/current/upgrading.html#UPGRADING-VIA-PGDUMPALL) from the official documentation. As an overview, the process entails creating a database dump in the old chart, moving it to the new chart version's pod, and restoring it in there.
+
 ### To 10.0.0
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
