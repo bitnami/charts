@@ -51,10 +51,10 @@ Return the volume to use to mount the static site in the NGINX container
 emptyDir: {}
 {{- else if .Values.staticSiteConfigmap }}
 configMap:
-  name: {{ .Values.staticSiteConfigmap }}
+  name: {{- printf "%s" (tpl .Values.staticSiteConfigmap $) -}}
 {{- else if .Values.staticSitePVC }}
 persistentVolumeClaim:
-  claimName: {{ .Values.staticSitePVC }}
+  claimName: {{- printf "%s" (tpl .Values.staticSitePVC $) -}}
 {{- end }}
 {{- end -}}
 

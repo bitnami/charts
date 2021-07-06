@@ -55,9 +55,8 @@ spec:
       {{- if .Values.receive.priorityClassName }}
       priorityClassName: {{ .Values.receive.priorityClassName | quote }}
       {{- end }}
-      {{- if .Values.receive.securityContext.enabled }}
-      securityContext:
-        fsGroup: {{ .Values.receive.securityContext.fsGroup }}
+      {{- if .Values.receive.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.receive.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       containers:
         {{- if .Values.receive.extraContainers }}
@@ -66,9 +65,8 @@ spec:
         - name: receive
           image: {{ include "thanos.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-          {{- if .Values.receive.securityContext.enabled }}
-          securityContext:
-            runAsUser: {{ .Values.receive.securityContext.runAsUser }}
+          {{- if .Values.receive.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.receive.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           args:
             - receive
@@ -119,11 +117,27 @@ spec:
             - containerPort: 19291
               name: remote-write
               protocol: TCP
-          {{- if .Values.receive.livenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.receive.livenessProbe "context" $) | nindent 12 }}
+          {{- if .Values.receive.livenessProbe.enabled }}
+          livenessProbe: 
+            httpGet:
+              path: /-/healthy
+              port: http
+            initialDelaySeconds: {{ .Values.receive.livenessProbe.initialDelaySeconds }}
+            timeoutSeconds: {{ .Values.receive.livenessProbe.timeoutSeconds }}
+            periodSeconds: {{ .Values.receive.livenessProbe.periodSeconds }}
+            successThreshold: {{ .Values.receive.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.receive.livenessProbe.failureThreshold }}
           {{- end }}
-          {{- if .Values.receive.readinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.receive.readinessProbe "context" $) | nindent 12 }}
+          {{- if .Values.receive.readinessProbe.enabled }}
+          readinessProbe: 
+            httpGet:
+              path: /-/ready
+              port: http
+            initialDelaySeconds: {{ .Values.receive.readinessProbe.initialDelaySeconds }}
+            timeoutSeconds: {{ .Values.receive.readinessProbe.timeoutSeconds }}
+            periodSeconds: {{ .Values.receive.readinessProbe.periodSeconds }}
+            successThreshold: {{ .Values.receive.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.receive.readinessProbe.failureThreshold }}
           {{- end }}
           {{- if .Values.receive.resources }}
           resources: {{- toYaml .Values.receive.resources | nindent 12 }}

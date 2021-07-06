@@ -55,9 +55,8 @@ spec:
       {{- if .Values.storegateway.priorityClassName }}
       priorityClassName: {{ .Values.storegateway.priorityClassName | quote }}
       {{- end }}
-      {{- if .Values.storegateway.securityContext.enabled }}
-      securityContext:
-        fsGroup: {{ .Values.storegateway.securityContext.fsGroup }}
+      {{- if .Values.storegateway.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.storegateway.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       {{- if and .Values.volumePermissions.enabled .Values.storegateway.persistence.enabled }}
       initContainers:
@@ -69,7 +68,7 @@ spec:
             - -c
             - |
               mkdir -p /data
-              chown -R "{{ .Values.storegateway.securityContext.runAsUser }}:{{ .Values.storegateway.securityContext.fsGroup }}" /data
+              chown -R "{{ .Values.storegateway.podSecurityContext.runAsUser }}:{{ .Values.storegateway.podSecurityContext.fsGroup }}" /data
           securityContext:
             runAsUser: 0
           volumeMounts:
@@ -80,9 +79,8 @@ spec:
         - name: storegateway
           image: {{ include "thanos.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-          {{- if .Values.storegateway.securityContext.enabled }}
-          securityContext:
-            runAsUser: {{ .Values.storegateway.securityContext.runAsUser }}
+          {{- if .Values.storegateway.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.storegateway.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           args:
             - store
@@ -126,11 +124,27 @@ spec:
             - name: grpc
               containerPort: 10901
               protocol: TCP
-          {{- if .Values.storegateway.livenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.livenessProbe "context" $) | nindent 12 }}
+          {{- if .Values.storegateway.livenessProbe.enabled }}
+          livenessProbe: 
+            httpGet:
+              path: /-/healthy
+              port: http
+            initialDelaySeconds: {{ .Values.storegateway.livenessProbe.initialDelaySeconds }}
+            timeoutSeconds: {{ .Values.storegateway.livenessProbe.timeoutSeconds }}
+            periodSeconds: {{ .Values.storegateway.livenessProbe.periodSeconds }}
+            successThreshold: {{ .Values.storegateway.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.storegateway.livenessProbe.failureThreshold }}
           {{- end }}
-          {{- if .Values.storegateway.readinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.readinessProbe "context" $) | nindent 12 }}
+          {{- if .Values.storegateway.readinessProbe.enabled }}
+          readinessProbe: 
+            httpGet:
+              path: /-/ready
+              port: http
+            initialDelaySeconds: {{ .Values.storegateway.readinessProbe.initialDelaySeconds }}
+            timeoutSeconds: {{ .Values.storegateway.readinessProbe.timeoutSeconds }}
+            periodSeconds: {{ .Values.storegateway.readinessProbe.periodSeconds }}
+            successThreshold: {{ .Values.storegateway.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.storegateway.readinessProbe.failureThreshold }}
           {{- end }}
           {{- if .Values.storegateway.resources }}
           resources: {{- toYaml .Values.storegateway.resources | nindent 12 }}

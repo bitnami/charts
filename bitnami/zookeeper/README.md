@@ -251,7 +251,36 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### Configure log level
 
-You can configure the ZooKeeper log level using the `ZOO_LOG_LEVEL` environment variable. By default, it is set to `ERROR` because of each readiness probe produce an `INFO` message on connection and a `WARN` message on disconnection.
+You can configure the ZooKeeper log level using the `ZOO_LOG_LEVEL` environment variable or the parameter `logLevel`. By default, it is set to `ERROR` because each use of the liveness probe and the readiness probe produces an `INFO` message on connection and a `WARN` message on disconnection, generating a high volume of noise in your logs.
+
+In order to remove that log noise so levels can be set to ‘INFO’, two changes must be made.
+
+First, ensure that you are not getting metrics via the deprecated pattern of polling 'mntr' on the ZooKeeper client port. The preferred method of polling for Apache ZooKeeper metrics is the ZooKeeper metrics server. This is supported in this chart when setting `metrics.enabled` to `true`.
+
+Second, to avoid the connection/disconnection messages from the probes, you can set custom values for these checks which direct them to the ZooKeeper Admin Server instead of the client port. By default, an Admin Server will be started that listens on `localhost` at port `8080`. The following is an example of this use of the Admin Server for probes:
+
+```
+livenessProbe:
+  enabled: false
+readinessProbe:
+  enabled: false
+customLivenessProbe:
+  exec:
+    command: ['/bin/bash', '-c', 'curl -s -m 2 http://localhost:8080/commands/ruok | grep ruok']
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 6
+customReadinessProbe:
+  exec:
+    command: ['/bin/bash', '-c', 'curl -s -m 2 http://localhost:8080/commands/ruok | grep error | grep null']
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 6
+```
 
 ## Persistence
 
