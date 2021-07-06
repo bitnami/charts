@@ -16,38 +16,35 @@ global:
   imagePullSecrets: []
   storageClass:
 
+## @section Common parameters
+
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
 kubeVersion:
-
 ## @param nameOverride String to partially override keycloak.fullname
 ##
 nameOverride:
-
 ## @param fullnameOverride String to fully override keycloak.fullname
 ##
 fullnameOverride:
-
 ## @param hostAliases Add deployment host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
 hostAliases: []
-
 ## @param commonLabels Labels to add to all deployed objects
 ##
 commonLabels: {}
-
 ## @param commonAnnotations Annotations to add to all deployed objects
 ##
 commonAnnotations: {}
-
 ## @param clusterDomain Default Kubernetes cluster domain
 ##
 clusterDomain: cluster.local
-
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
+
+## @section Keycloak parameters
 
 ## Bitnami Keycloak image version
 ## ref: https://hub.docker.com/r/bitnami/keycloak/tags/
@@ -78,7 +75,6 @@ image:
   ## Set to true if you would like to see extra information on logs
   ##
   debug: false
-
 ## Keycloak authentication parameters
 ## ref: https://github.com/bitnami/bitnami-docker-keycloak#admin-credentials
 ##
@@ -159,7 +155,6 @@ auth:
     ## @param auth.tls.truststorePassword Password to access the truststore when it's password-protected
     ##
     truststorePassword: ""
-
     ## Init containers' resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
     ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -180,12 +175,10 @@ auth:
       ##    cpu: 100m
       ##    memory: 128Mi
       requests: {}
-
 ## @param proxyAddressForwarding Enable Proxy Address Forwarding
 ## ref: https://www.keycloak.org/docs/latest/server_installation/#_setting-up-a-load-balancer-or-proxy
 ##
 proxyAddressForwarding: false
-
 ## Keycloak Service Discovery settings
 ## ref: https://github.com/bitnami/bitnami-docker-keycloak#cluster-configuration
 ##
@@ -208,7 +201,6 @@ serviceDiscovery:
   ## @param serviceDiscovery.transportStack Transport stack for the discovery protocol set in `serviceDiscovery.protocol` parameter
   ##
   transportStack: tcp
-
 ## Keycloak cache settings
 ## ref: https://github.com/bitnami/bitnami-docker-keycloak#cluster-configuration
 ##
@@ -219,7 +211,6 @@ cache:
   ## @param cache.authOwnersCount Number of nodes that will replicate cached authentication data
   ##
   authOwnersCount: 1
-
 ## @param configuration Keycloak Configuration. Auto-generated based on other parameters when not specified
 ## Specify content for standalone-ha.xml
 ## NOTE: This will override configuring Keycloak based on environment variables (including those set by the chart)
@@ -231,16 +222,13 @@ cache:
 ##    baz:
 ##
 configuration:
-
 ## @param existingConfigmap Name of existing ConfigMap with Keycloak configuration
 ## NOTE: When it's set the configuration parameter is ignored
 ##
 existingConfigmap:
-
 ## @param extraStartupArgs Extra default startup args
 ##
 extraStartupArgs:
-
 ## @param initdbScripts Dictionary of initdb scripts
 ## Specify dictionary of scripts to be run at first boot
 ## ref: https://github.com/bitnami/bitnami-docker-keycloak#initializing-a-new-instance
@@ -251,18 +239,15 @@ extraStartupArgs:
 ##      echo "Do something."
 ##
 initdbScripts: {}
-
 ## @param initdbScriptsConfigMap ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)
 ##
 initdbScriptsConfigMap:
-
 ## @param command Override default container command (useful when using custom images)
 ##
 command: []
 ## @param args Override default container args (useful when using custom images)
 ##
 args: []
-
 ## @param extraEnvVars Extra environment variables to be set on Keycloak container
 ## Example:
 ## extraEnvVars:
@@ -270,25 +255,163 @@ args: []
 ##     value: "bar"
 ##
 extraEnvVars: []
-
 ## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars
 ##
 extraEnvVarsCM:
-
 ## @param extraEnvVarsSecret Name of existing Secret containing extra env vars
 ##
 extraEnvVarsSecret:
 
+## @section keycloak-config-cli parameters
+
+## Configuration for keycloak-config-cli
+## ref: https://github.com/adorsys/keycloak-config-cli
+##
+keycloakConfigCli:
+  ## @param keycloakConfigCli.enabled Whether to enable keycloak-config-cli
+  ##
+  enabled: false
+  ## Bitnami keycloak-config-cli image
+  ## ref: https://hub.docker.com/r/bitnami/keycloak-config-cli/tags/
+  ## @param keycloakConfigCli.image.registry keycloak-config-cli container image registry
+  ## @param keycloakConfigCli.image.repository keycloak-config-cli container image repository
+  ## @param keycloakConfigCli.image.tag keycloak-config-cli container image tag
+  ## @param keycloakConfigCli.image.pullPolicy keycloak-config-cli container image pull policy
+  ## @param keycloakConfigCli.image.pullSecrets keycloak-config-cli container image pull secrets
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/keycloak-config-cli
+    tag: 3.4.0-debian-10-r26
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## @param keycloakConfigCli.annotations [objects] Annotations for keycloak-config-cli job
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  annotations:
+    helm.sh/hook: "post-install,post-upgrade,post-rollback"
+    helm.sh/hook-delete-policy: "hook-succeeded,before-hook-creation"
+    helm.sh/hook-weight: "5"
+  ## @param keycloakConfigCli.command Command for running the container (set to default if not set). Use array form
+  ##
+  command: []
+  ## @param keycloakConfigCli.args Args for running the container (set to default if not set). Use array form
+  ##
+  args: []
+  ## @param keycloakConfigCli.hostAliases Job pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## Keycloak config CLI resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param keycloakConfigCli.resources.limits The resources limits for the keycloak-config-cli container
+  ## @param keycloakConfigCli.resources.requests The requested resources for the keycloak-config-cli container
+  ##
+  resources:
+    ## Example:
+    ## limits:
+    ##    cpu: 200m
+    ##    memory: 256Mi
+    limits: {}
+    ## Examples:
+    ## requests:
+    ##    cpu: 200m
+    ##    memory: 10Mi
+    requests: {}
+  ## keycloak-config-cli containers' Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param keycloakConfigCli.containerSecurityContext.enabled Enabled keycloak-config-cli containers' Security Context
+  ## @param keycloakConfigCli.containerSecurityContext.runAsUser Set keycloak-config-cli container's Security Context runAsUser
+  ## @param keycloakConfigCli.containerSecurityContext.runAsNonRoot Set keycloak-config-cli container's Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+  ## keycloak-config-cli pods' Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param keycloakConfigCli.podSecurityContext.enabled Enabled keycloak-config-cli pods' Security Context
+  ## @param keycloakConfigCli.podSecurityContext.fsGroup Set keycloak-config-cli pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+  ## @param keycloakConfigCli.backoffLimit Number of retries before considering a Job as failed
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy
+  ##
+  backoffLimit: 1
+  ## @param keycloakConfigCli.podLabels Pod extra labels
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param keycloakConfigCli.podAnnotations Annotations for job pod
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param keycloakConfigCli.extraEnvVars Additional environment variables to set
+  ## Example:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param keycloakConfigCli.extraEnvVarsCM ConfigMap with extra environment variables
+  ##
+  extraEnvVarsCM:
+  ## @param keycloakConfigCli.extraEnvVarsSecret Secret with extra environment variables
+  ##
+  extraEnvVarsSecret:
+  ## @param keycloakConfigCli.extraVolumes Extra volumes to add to the job
+  ##
+  extraVolumes: []
+  ## @param keycloakConfigCli.extraVolumeMounts Extra volume mounts to add to the container
+  ##
+  extraVolumeMounts: []
+  ## @param keycloakConfigCli.configuration keycloak-config-cli realms configuration
+  ## NOTE: nil keys will be considered files to import locally
+  ## Example:
+  ## configuration:
+  ##   realm1.json: |
+  ##     {
+  ##       "realm": "realm1",
+  ##       "clients": []
+  ##     }
+  ##   files/realm2.yaml:
+  ##   realm3.yaml: |
+  ##     realm: realm3
+  ##     clients: []
+  ##
+  configuration: {}
+  ## @param keycloakConfigCli.existingConfigmap ConfigMap with keycloak-config-cli configuration. This will override `keycloakConfigCli.config`
+  ## NOTE: This will override keycloakConfigCli.configuration
+  ##
+  existingConfigmap:
+
+## @section Keycloak deployment/statefulset parameters
+
 ## @param replicaCount Number of Keycloak replicas to deploy
 ##
 replicaCount: 1
-
 ## @param containerPorts [object] Keycloak container ports to open
 ##
 containerPorts:
   http: 8080
   https: 8443
-
 ## Keycloak containers' SecurityContext
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enabled Keykloak pods' Security Context
@@ -297,7 +420,6 @@ containerPorts:
 podSecurityContext:
   enabled: true
   fsGroup: 1001
-
 ## Keycloak pods' Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled Enabled Keykloak containers' Security Context
@@ -308,7 +430,6 @@ containerSecurityContext:
   enabled: true
   runAsUser: 1001
   runAsNonRoot: true
-
 ## Keycloak resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -329,7 +450,6 @@ resources:
   ##    cpu: 200m
   ##    memory: 10Mi
   requests: {}
-
 ## Configure extra options for liveness probe
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe
@@ -372,15 +492,12 @@ readinessProbe:
   timeoutSeconds: 1
   failureThreshold: 3
   successThreshold: 1
-
 ## @param customLivenessProbe Custom Liveness probes for Keycloak
 ##
 customLivenessProbe: {}
-
 ## @param customReadinessProbe Custom Rediness probes Keycloak
 ##
 customReadinessProbe: {}
-
 ## Strategy to use to update Pods
 ##
 updateStrategy:
@@ -388,17 +505,14 @@ updateStrategy:
   ## Can be set to RollingUpdate or OnDelete
   ##
   type: RollingUpdate
-
 ## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
 podAffinityPreset: ""
-
 ## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
 podAntiAffinityPreset: soft
-
 ## Node affinity preset
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
 ##
@@ -418,49 +532,39 @@ nodeAffinityPreset:
   ##   - e2e-az2
   ##
   values: []
-
 ## @param affinity Affinity for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ##
 affinity: {}
-
 ## @param nodeSelector Node labels for pod assignment
 ## ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
 nodeSelector: {}
-
 ## @param tolerations Tolerations for pod assignment
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
-
 ## @param podLabels Extra labels for Keycloak pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
 podLabels: {}
-
 ## @param podAnnotations Annotations for Keycloak pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
-
 ## @param priorityClassName Keycloak pods' priority.
 ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
 ##
 priorityClassName:
-
 ## @param lifecycleHooks LifecycleHooks to set additional configuration at startup
 ##
 lifecycleHooks: {}
-
 ## @param extraVolumes Optionally specify extra list of additional volumes for Keycloak pods
 ##
 extraVolumes: []
-
 ## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for Keycloak container(s)
 ##
 extraVolumeMounts: []
-
 ## @param initContainers Add additional init containers to the Keycloak pods
 ## Example:
 ## initContainers:
@@ -472,7 +576,6 @@ extraVolumeMounts: []
 ##         containerPort: 1234
 ##
 initContainers: {}
-
 ## @param sidecars Add additional sidecar containers to the Keycloak pods
 ## Example:
 ## sidecars:
@@ -484,6 +587,8 @@ initContainers: {}
 ##         containerPort: 1234
 ##
 sidecars: {}
+
+## @section Exposure parameters
 
 ## Service configuration
 ##
@@ -526,34 +631,27 @@ service:
   ## @param service.annotations Annotations for Keycloak service
   ##
   annotations: {}
-
 ## Ingress configuration
 ##
 ingress:
   ## @param ingress.enabled Enable ingress controller resource
   ##
   enabled: false
-
   ## @param ingress.certManager Add annotations for cert-manager
   ##
   certManager: false
-
   ## @param ingress.hostname Default host for the ingress resource
   ##
   hostname: keycloak.local
-
   ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
   ##
   apiVersion:
-
   ## @param ingress.path Ingress path
   ##
   path: /
-
   ## @param ingress.pathType Ingress path type
   ##
   pathType: ImplementationSpecific
-
   ## @param ingress.annotations Ingress annotations
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
@@ -561,14 +659,12 @@ ingress:
   ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
   ##
   annotations: {}
-
   ## @param ingress.tls Enable TLS configuration for the hostname defined at `ingress.hostname` parameter
   ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
   ## You can use the ingress.secrets parameter to create this TLS secret, relay on cert-manager to create it, or
   ## let the chart create self-signed certificates for you
   ##
   tls: false
-
   ## @param ingress.extraHosts The list of additional hostnames to be covered with this ingress record.
   ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
   ## Example:
@@ -577,7 +673,6 @@ ingress:
   ##     path: /
   ##
   extraHosts: []
-
   ## @param ingress.extraTls The tls configuration for additional hostnames to be covered with this ingress record.
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
   ## Example:
@@ -587,7 +682,6 @@ ingress:
   ##   secretName: keycloak.local-tls
   ##
   extraTls: []
-
   ## @param ingress.secrets If you're providing your own certificates, please use this to add the certificates as secrets
   ## key and certificate should start with -----BEGIN CERTIFICATE----- or -----BEGIN RSA PRIVATE KEY-----
   ## name should line up with a secretName set further up
@@ -604,12 +698,10 @@ ingress:
   ##     certificate: ""
   ##
   secrets: []
-
   ## @param ingress.servicePort Service port to be used
   ## Default is http. Alternative is https.
   ##
   servicePort: http
-
 ## Network Policy configuration
 ## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
 ##
@@ -638,6 +730,18 @@ networkPolicy:
   ##
   additionalRules: {}
 
+## @section RBAC parameters
+
+## Specifies whether a ServiceAccount should be created
+##
+serviceAccount:
+  ## @param serviceAccount.create Enable the creation of a ServiceAccount for Keycloak pods
+  ##
+  create: true
+  ## @param serviceAccount.name Name of the created ServiceAccount
+  ## If not set and create is true, a name is generated using the fullname template
+  ##
+  name: ""
 ## Specifies whether RBAC resources should be created
 ##
 rbac:
@@ -657,16 +761,7 @@ rbac:
   ##
   rules: []
 
-## Specifies whether a ServiceAccount should be created
-##
-serviceAccount:
-  ## @param serviceAccount.create Enable the creation of a ServiceAccount for Keycloak pods
-  ##
-  create: true
-  ## @param serviceAccount.name Name of the created ServiceAccount
-  ## If not set and create is true, a name is generated using the fullname template
-  ##
-  name: ""
+## @section Other parameters
 
 ## Keycloak Pod Disruption Budget configuration
 ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
@@ -681,7 +776,6 @@ pdb:
   ## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   maxUnavailable:
-
 ## Keycloak Autoscaling configuration
 ## @param autoscaling.enabled Enable autoscaling for Keycloak
 ## @param autoscaling.minReplicas Minimum number of Keycloak replicas
@@ -696,6 +790,8 @@ autoscaling:
   targetCPU:
   targetMemory:
 
+## @section Metrics parameters
+
 ## Metrics configuration
 ##
 metrics:
@@ -703,7 +799,6 @@ metrics:
   ## ref: https://github.com/bitnami/bitnami-docker-keycloak#enabling-statistics
   ##
   enabled: false
-
   ## Keycloak metrics service parameters
   ##
   service:
@@ -715,7 +810,6 @@ metrics:
     annotations:
       prometheus.io/scrape: "true"
       prometheus.io/port: "{{ .Values.metrics.service.port }}"
-
   ## Prometheus Operator ServiceMonitor configuration
   ##
   serviceMonitor:
@@ -747,6 +841,8 @@ metrics:
     ##
     additionalLabels: {}
 
+## @section Database parameters
+
 ## PostgreSQL chart configuration
 ## ref: https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
 ##
@@ -775,7 +871,6 @@ postgresql:
   ##
   persistence:
     enabled: true
-
 ## External database configuration
 ##
 externalDatabase:
@@ -797,158 +892,3 @@ externalDatabase:
   ## @param externalDatabase.existingSecret Use an existing secret file with the external PostgreSQL credentials
   ##
   existingSecret:
-
-## Configuration for keycloak-config-cli
-## ref: https://github.com/adorsys/keycloak-config-cli
-##
-keycloakConfigCli:
-  ## @param keycloakConfigCli.enabled Whether to enable keycloak-config-cli
-  ##
-  enabled: false
-
-  ## Bitnami keycloak-config-cli image
-  ## ref: https://hub.docker.com/r/bitnami/keycloak-config-cli/tags/
-  ## @param keycloakConfigCli.image.registry keycloak-config-cli container image registry
-  ## @param keycloakConfigCli.image.repository keycloak-config-cli container image repository
-  ## @param keycloakConfigCli.image.tag keycloak-config-cli container image tag
-  ## @param keycloakConfigCli.image.pullPolicy keycloak-config-cli container image pull policy
-  ## @param keycloakConfigCli.image.pullSecrets keycloak-config-cli container image pull secrets
-  ##
-  image:
-    registry: docker.io
-    repository: bitnami/keycloak-config-cli
-    tag: 3.4.0-debian-10-r26
-    ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-    ##
-    pullPolicy: IfNotPresent
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ## e.g:
-    ## pullSecrets:
-    ##   - myRegistryKeySecretName
-    ##
-    pullSecrets: []
-
-  ## @param keycloakConfigCli.annotations [objects] Annotations for keycloak-config-cli job
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-  ##
-  annotations:
-    helm.sh/hook: "post-install,post-upgrade,post-rollback"
-    helm.sh/hook-delete-policy: "hook-succeeded,before-hook-creation"
-    helm.sh/hook-weight: "5"
-
-  ## @param keycloakConfigCli.command Command for running the container (set to default if not set). Use array form
-  ##
-  command: []
-  ## @param keycloakConfigCli.args Args for running the container (set to default if not set). Use array form
-  ##
-  args: []
-
-  ## @param keycloakConfigCli.hostAliases Job pod host aliases
-  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
-  ##
-  hostAliases: []
-
-  ## Keycloak config CLI resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ## We usually recommend not to specify default resources and to leave this as a conscious
-  ## choice for the user. This also increases chances charts run on environments with little
-  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
-  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param keycloakConfigCli.resources.limits The resources limits for the keycloak-config-cli container
-  ## @param keycloakConfigCli.resources.requests The requested resources for the keycloak-config-cli container
-  ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 200m
-    ##    memory: 256Mi
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 200m
-    ##    memory: 10Mi
-    requests: {}
-
-  ## keycloak-config-cli containers' Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param keycloakConfigCli.containerSecurityContext.enabled Enabled keycloak-config-cli containers' Security Context
-  ## @param keycloakConfigCli.containerSecurityContext.runAsUser Set keycloak-config-cli container's Security Context runAsUser
-  ## @param keycloakConfigCli.containerSecurityContext.runAsNonRoot Set keycloak-config-cli container's Security Context runAsNonRoot
-  ##
-  containerSecurityContext:
-    enabled: true
-    runAsUser: 1001
-    runAsNonRoot: true
-
-  ## keycloak-config-cli pods' Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param keycloakConfigCli.podSecurityContext.enabled Enabled keycloak-config-cli pods' Security Context
-  ## @param keycloakConfigCli.podSecurityContext.fsGroup Set keycloak-config-cli pod's Security Context fsGroup
-  ##
-  podSecurityContext:
-    enabled: true
-    fsGroup: 1001
-
-  ## @param keycloakConfigCli.backoffLimit Number of retries before considering a Job as failed
-  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy
-  ##
-  backoffLimit: 1
-
-  ## @param keycloakConfigCli.podLabels Pod extra labels
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-  ##
-  podLabels: {}
-
-  ## @param keycloakConfigCli.podAnnotations Annotations for job pod
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-  ##
-  podAnnotations: {}
-
-  ## @param keycloakConfigCli.extraEnvVars Additional environment variables to set
-  ## Example:
-  ## extraEnvVars:
-  ##   - name: FOO
-  ##     value: "bar"
-  ##
-  extraEnvVars: []
-
-  ## @param keycloakConfigCli.extraEnvVarsCM ConfigMap with extra environment variables
-  ##
-  extraEnvVarsCM:
-
-  ## @param keycloakConfigCli.extraEnvVarsSecret Secret with extra environment variables
-  ##
-  extraEnvVarsSecret:
-
-  ## @param keycloakConfigCli.extraVolumes Extra volumes to add to the job
-  ##
-  extraVolumes: []
-
-  ## @param keycloakConfigCli.extraVolumeMounts Extra volume mounts to add to the container
-  ##
-  extraVolumeMounts: []
-
-  ## @param keycloakConfigCli.configuration keycloak-config-cli realms configuration
-  ## NOTE: nil keys will be considered files to import locally
-  ## Example:
-  ## configuration:
-  ##   realm1.json: |
-  ##     {
-  ##       "realm": "realm1",
-  ##       "clients": []
-  ##     }
-  ##   files/realm2.yaml:
-  ##   realm3.yaml: |
-  ##     realm: realm3
-  ##     clients: []
-  ##
-  configuration: {}
-
-  ## @param keycloakConfigCli.existingConfigmap ConfigMap with keycloak-config-cli configuration. This will override `keycloakConfigCli.config`
-  ## NOTE: This will override keycloakConfigCli.configuration
-  ##
-  existingConfigmap:
