@@ -102,7 +102,7 @@ server:
   ## @param server.priorityClassName Server priorityClassName
   ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
-  priorityClassName:
+  priorityClassName: ""
   ## Configure extra options for liveness probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param server.livenessProbe.enabled Enable livenessProbe
@@ -437,7 +437,7 @@ agent:
   ## @param agent.priorityClassName Server priorityClassName
   ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
-  priorityClassName:
+  priorityClassName: ""
   ## @param agent.allowRouteRegExp Regexp with the allowed paths for agents to redirect
   ##
   allowRouteRegExp:
