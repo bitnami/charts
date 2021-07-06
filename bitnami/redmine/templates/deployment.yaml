@@ -218,7 +218,7 @@ spec:
           {{- end }}
           volumeMounts:
             {{- include "certificates.volumeMount" . | indent 12 }}
-            {{- if or .Values.customPostInitScripts .Values.wordpressConfigureCache }}
+            {{- if .Values.customPostInitScripts }}
             - mountPath: /docker-entrypoint-init.d
               name: custom-postinit
             {{- end }}
@@ -239,7 +239,7 @@ spec:
           {{- else }}
           emptyDir: {}
           {{- end }}
-        {{- if or .Values.customPostInitScripts .Values.wordpressConfigureCache }}
+        {{- if .Values.customPostInitScripts }}
         - name: custom-postinit
           configMap:
             name: {{ printf "%s-postinit" (include "common.names.fullname" .) }}

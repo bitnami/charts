@@ -538,7 +538,15 @@ Find more information about how to deal with common errors related to Bitnami’
 
 The [Bitnami Redmine](https://github.com/bitnami/bitnami-docker-redmine) image was refactored and now the source code is published in GitHub in the [`rootfs`](https://github.com/bitnami/bitnami-docker-redmine/tree/master/4/debian-10/rootfs) folder of the container image repository.
 
-Full compatibility is not guaranteed due to the amount of involved changes, but in most scenarios, upgrades are expected to work as no breaking changes are expected.
+Upgrades from previous versions require to specify `--set volumePermissions.enabled=true` in order for all features to work properly:
+
+```console
+$ helm upgrade example bitnami/redmine --set redminePassword=$REDMINE_PASSWORD --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set volumePermissions.enabled=true
+```
+
+In addition, the `replicas` parameter was renamed to `replicaCount`.
+
+Full compatibility is not guaranteed due to the amount of involved changes, however no breaking changes are expected aside from the ones mentioned above.
 
 ### 15.0.0
 
