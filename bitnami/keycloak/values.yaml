@@ -805,7 +805,7 @@ metrics:
     ## @param metrics.service.port Service HTTP management port
     ##
     port: 9990
-    ## @param metrics.service.annotations Annotations for enabling prometheus to access the metrics endpoints
+    ## @param metrics.service.annotations [object] Annotations for enabling prometheus to access the metrics endpoints
     ##
     annotations:
       prometheus.io/scrape: "true"
