@@ -214,6 +214,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.certManager`              | Add annotations for cert-manager                                                              | `false`                  |
 | `ingress.hostname`                 | Default host for the ingress resource                                                         | `keycloak.local`         |
 | `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                 | `nil`                    |
+| `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                 | `nil`                    |
 | `ingress.path`                     | Ingress path                                                                                  | `/`                      |
 | `ingress.pathType`                 | Ingress path type                                                                             | `ImplementationSpecific` |
 | `ingress.annotations`              | Ingress annotations                                                                           | `{}`                     |
