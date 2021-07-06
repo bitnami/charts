@@ -20,6 +20,10 @@ global:
 ##
 commonLabels: {}
 
+## Add annotations to all the deployed resources
+##
+commonAnnotations: {}
+
 ## Deployment pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
