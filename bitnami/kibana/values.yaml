@@ -16,6 +16,20 @@ global:
   imagePullSecrets: []
   storageClass:
 
+## @section Common parameters
+
+## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
+##
+kubeVersion:
+## @param nameOverride String to partially override common.names.fullname template with a string (will prepend the release name)
+##
+nameOverride:
+## @param fullnameOverride String to fully override common.names.fullname template with a string
+##
+fullnameOverride:
+
+## @section Kibana parameters
+
 ## Bitnami Kibana image version
 ## ref: https://hub.docker.com/r/bitnami/kibana/tags/
 ## @param image.registry Kibana image registry
@@ -41,23 +55,9 @@ image:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
-
-## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
-##
-kubeVersion:
-
-## @param nameOverride String to partially override common.names.fullname template with a string (will prepend the release name)
-##
-nameOverride:
-
-## @param fullnameOverride String to fully override common.names.fullname template with a string
-##
-fullnameOverride:
-
 ## @param replicaCount Number of replicas of the Kibana Pod
 ##
 replicaCount: 1
-
 ## @param updateStrategy.type Set up update strategy for Kibana installation.
 ## Set to Recreate if you use persistent volume that cannot be mounted by more than one pods to makesure the pods are destroyed first.
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
@@ -70,24 +70,20 @@ replicaCount: 1
 ##
 updateStrategy:
   type: RollingUpdate
-
 ## @param schedulerName Alternative scheduler
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
 schedulerName:
-
 ## @param hostAliases Add deployment host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
 hostAliases: []
-
 ## @param plugins Array containing the Kibana plugins to be installed in deployment
 ## eg:
 ## plugins:
 ##   - https://github.com/fbaligand/kibana-enhanced-table/releases/download/v1.5.0/enhanced-table-1.5.0_7.3.2.zip
 ##
 plugins:
-
 ## Saved objects to import (NDJSON format)
 ##
 savedObjects:
@@ -100,15 +96,12 @@ savedObjects:
   ## @param savedObjects.configmap Configmap containing NDJSON files to be imported during Kibana initialization (evaluated as a template)
   ##
   configmap:
-
 ## @param extraConfiguration Extra settings to be added to the default kibana.yml configmap that the chart creates (unless replaced using `configurationCM`). Evaluated as a template
 ##
 extraConfiguration:
-
 ## @param configurationCM ConfigMap containing a kibana.yml file that will replace the default one specified in configuration.yaml
 ##
 configurationCM:
-
 ## @param extraEnvVars Array containing extra env vars to configure Kibana
 ## For example:
 ## extraEnvVars:
@@ -116,27 +109,22 @@ configurationCM:
 ##    value: test
 ##
 extraEnvVars:
-
 ## Array to add extra configmaps:
 ##
 ## extraEnvVarsCM:
 ##
-
 ## Array to add extra configmaps:
 ##
 ## extraEnvVarsSecret:
 ##
-
 ## Array to add extra volumes
 ##
 ## extraVolumes:
 ##
-
 ## Array to add extra mounts (normally used with extraVolumes)
 ##
 ## extraVolumeMounts: {}
 ##
-
 ##
 ## Init containers parameters:
 ## volumePermissions: Change the owner of the persist volume mountpoint to RunAsUser:fsGroup
@@ -170,7 +158,6 @@ volumePermissions:
   ##     memory: 128Mi
   ##     cpu: 100m
   resources: {}
-
 ## Enable persistence using Persistent Volume Claims
 ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
@@ -195,7 +182,6 @@ persistence:
   ## @param persistence.size Size for the PV
   ##
   size: 10Gi
-
 ## Configure extra options for liveness probe
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
 ## @param livenessProbe.enabled Enable/disable the Liveness probe
@@ -228,19 +214,15 @@ readinessProbe:
   timeoutSeconds: 5
   failureThreshold: 6
   successThreshold: 1
-
 ## @param forceInitScripts Force execution of init scripts
 ##
 forceInitScripts: false
-
 ## @param initScriptsCM Configmap with init scripts to execute
 ##
 initScriptsCM:
-
 ## @param initScriptsSecret Secret with init scripts to execute (for sensitive data)
 ##
 initScriptsSecret:
-
 ## Service configuration
 ##
 service:
@@ -254,7 +236,6 @@ service:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
   nodePort:
-
   ## @param service.externalTrafficPolicy Enable client source IP preservation
   ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
@@ -264,7 +245,6 @@ service:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
   annotations: {}
-
   ## @param service.loadBalancerIP loadBalancerIP if Kibana service type is `LoadBalancer`
   ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
   ##
@@ -272,7 +252,6 @@ service:
   ## @param service.extraPorts Extra ports to expose in the service (normally used with the `sidecar` value)
   ##
   extraPorts:
-
 ## Configure the ingress resource that allows you to access the
 ## Kibana installation. Set up the URL
 ## ref: http://kubernetes.io/docs/user-guide/ingress/
@@ -281,27 +260,21 @@ ingress:
   ## @param ingress.enabled Enable ingress controller resource
   ##
   enabled: false
-
   ## @param ingress.certManager Add annotations for cert-manager
   ##
   certManager: false
-
   ## @param ingress.pathType Ingress Path type
   ##
   pathType: ImplementationSpecific
-
   ## @param ingress.apiVersion Override API Version (automatically detected if not set)
   ##
   apiVersion:
-
   ## @param ingress.hostname Default host for the ingress resource. If specified as "*" no host rule is configured
   ##
   hostname: kibana.local
-
   ## @param ingress.path The Path to Kibana. You may need to set this to '/*' in order to use this with ALB ingress controllers.
   ##
   path: /
-
   ## @param ingress.annotations Ingress annotations
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
@@ -309,13 +282,11 @@ ingress:
   ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
   ##
   annotations: {}
-
   ## @param ingress.tls Enable TLS configuration for the hostname defined at ingress.hostname parameter
   ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
   ## You can use the ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
   ##
   tls: false
-
   ## @param ingress.extraHosts The list of additional hostnames to be covered with this ingress record.
   ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
   ## extraHosts:
@@ -355,11 +326,9 @@ ingress:
   ##   certificate:
   ##
   secrets: []
-
 ## @param containerPort Port to expose at container level
 ##
 containerPort: 5601
-
 ## @param securityContext.enabled Enable securityContext on for Kibana deployment
 ## @param securityContext.fsGroup Group to configure permissions for volumes
 ## @param securityContext.runAsUser User for the security context
@@ -370,7 +339,6 @@ securityContext:
   runAsUser: 1001
   fsGroup: 1001
   runAsNonRoot: true
-
 ## Kibana resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -391,17 +359,14 @@ resources:
   ##    cpu: 100m
   ##    memory: 256Mi
   requests: {}
-
 ## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
 podAffinityPreset: ""
-
 ## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
 podAntiAffinityPreset: soft
-
 ## Node affinity preset
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
 ## Allowed values: soft, hard
@@ -422,32 +387,26 @@ nodeAffinityPreset:
   ##   - e2e-az2
   ##
   values: []
-
 ## @param affinity Affinity for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
-
 ## @param nodeSelector Node labels for pod assignment
 ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
 nodeSelector: {}
-
 ## @param tolerations Tolerations for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
-
 ## @param podAnnotations Pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
-
 ## @param podLabels Extra labels to add to Pod
 ##
 podLabels: {}
-
 ## @param sidecars Attach additional containers to the pod
 ## e.g.
 ## - name: your-image-name
@@ -458,7 +417,6 @@ podLabels: {}
 ##    containerPort: 1234
 ##
 sidecars:
-
 ## @param initContainers Add additional init containers to the pod
 ## e.g.
 ## - name: your-image-name
@@ -469,14 +427,12 @@ sidecars:
 ##    containerPort: 1234
 ##
 initContainers:
-
 ## @param configuration [object] Kibana configuration
 ##
 configuration:
   server:
     basePath: ""
     rewriteBasePath: false
-
 ## Prometheus metrics (requires the kibana-prometheus-exporter plugin)
 ##
 metrics:
@@ -490,7 +446,6 @@ metrics:
       prometheus.io/scrape: "true"
       prometheus.io/port: "80"
       prometheus.io/path: "_prometheus/metrics"
-
   ## Prometheus Operator ServiceMonitor configuration
   ##
   serviceMonitor:
@@ -500,21 +455,18 @@ metrics:
     ## @param metrics.serviceMonitor.namespace Namespace in which Prometheus is running
     ##
     namespace:
-
     ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped.
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ## e.g:
     ##   interval: 10s
     ##
     interval:
-
     ## @param metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ## e.g:
     ##   scrapeTimeout: 10s
     ##
     scrapeTimeout:
-
     ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
     ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
     ## e.g:
@@ -522,7 +474,6 @@ metrics:
     ##   prometheus: my-prometheus
     ##
     selector: {}
-
 ## @param elasticsearch [object] Properties for Elasticsearch
 ##
 elasticsearch:
