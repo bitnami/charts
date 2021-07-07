@@ -14,27 +14,53 @@ global:
   ##
   imagePullSecrets: []
 
+## @section Common parameters
+
 ## @param nameOverride String to partially override kubernetes-event-exporter.fullname include (will maintain the release name)
 ##
 nameOverride:
-
 ## @param fullnameOverride String to fully override kubernetes-event-exporter.fullname template
 ##
 fullnameOverride:
-
 ## @param commonAnnotations Annotations to add to all deployed objects
 ##
 commonAnnotations: {}
-
 ## @param commonLabels Labels to add to all deployed objects
 ##
 commonLabels: {}
+## @param extraDeploy Array of extra objects to deploy with the release (evaluated as a template)
+##
+extraDeploy: []
 
+## @section Kubernetes Event Exporter parameters
+
+image:
+  ## @param image.registry Container image registry
+  ## @param image.repository Container image name
+  ## @param image.tag Container image tag
+  ## @param image.pullPolicy Container image pull policy
+  ## @param image.pullSecrets Specify docker-registry secret names as an array
+  ##
+  registry: docker.io
+  repository: bitnami/kubernetes-event-exporter
+  tag: 0.10.0-debian-10-r0
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## Example:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  pullSecrets: []
 ## @param hostAliases Add deployment host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
 hostAliases: []
-
 ## @param config.logLevel Verbosity of the logs (options: `fatal`, `error`, `warn`, `info` or `debug`)
 ## @param config.logFormat How the logs are formatted. Allowed values: `pretty` or `json`
 ## @param config.receivers [array] Array containing event receivers
@@ -61,12 +87,10 @@ config:
     routes:
       - match:
           - receiver: "dump"
-
 rbac:
   ## @param rbac.create Create the RBAC roles for API accessibility
   ##
   create: true
-
 serviceAccount:
   ## @param serviceAccount.create Create a serviceAccount for the pod
   ##
@@ -74,36 +98,10 @@ serviceAccount:
   ## @param serviceAccount.name Use the serviceAccount with the specified name
   ## If not set and create is true, a name is generated using the fullname template
   name: ""
-
-image:
-  ## @param image.registry Container image registry
-  ## @param image.repository Container image name
-  ## @param image.tag Container image tag
-  ## @param image.pullPolicy Container image pull policy
-  ## @param image.pullSecrets Specify docker-registry secret names as an array
-  ##
-  registry: docker.io
-  repository: bitnami/kubernetes-event-exporter
-  tag: 0.10.0-debian-10-r0
-  ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-  ##
-  pullPolicy: IfNotPresent
-  ## Optionally specify an array of imagePullSecrets.
-  ## Secrets must be manually created in the namespace.
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-  ## Example:
-  ## pullSecrets:
-  ##   - myRegistryKeySecretName
-  ##
-  pullSecrets: []
-
 ## @param podAnnotations Pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
-
 ## SecurityContext holds pod-level security attributes and common container settings.
 ## @param podSecurityContext.enabled Enable security context
 ## @param podSecurityContext.fsGroup Group ID for the container
@@ -111,7 +109,6 @@ podAnnotations: {}
 podSecurityContext:
   enabled: true
   fsGroup: 1001
-
 ## @param containerSecurityContext.enabled Enable container security context
 ## @param containerSecurityContext.capabilities.add [array] Add capabilities for the securityContext
 ## @param containerSecurityContext.capabilities.drop [array] Drop capabilities for the securityContext
@@ -128,7 +125,6 @@ containerSecurityContext:
   readOnlyRootFilesystem: true
   runAsNonRoot: true
   runAsUser: 1001
-
 ## Container resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -149,32 +145,26 @@ resources:
   ##    cpu: 100m
   ##    memory: 25Mi
   requests: {}
-
 ## @param nodeSelector Node labels for pod assignment
 ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
 nodeSelector: {}
-
 ## @param priorityClassName Set Priority Class Name to allow priority control over other pods
 ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
 ##
 priorityClassName: ""
-
 ## @param tolerations Tolerations for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
-
 ## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
 podAffinityPreset: ""
-
 ## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
 podAntiAffinityPreset: soft
-
 ## Node affinity preset
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
 ##
@@ -194,13 +184,11 @@ nodeAffinityPreset:
   ##   - e2e-az2
   ##
   values: []
-
 ## @param affinity Affinity for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
-
 ## @param extraEnvVars Array containing extra env vars to be added to all containers
 ## For example:
 ## extraEnvVars:
@@ -208,23 +196,18 @@ affinity: {}
 ##    value: env_var_value
 ##
 extraEnvVars: []
-
 ## @param extraEnvVarsConfigMap ConfigMap containing extra env vars to be added to all containers
 ##
 extraEnvVarsConfigMap: ""
-
 ## @param extraEnvVarsSecret Secret containing extra env vars to be added to all containers
 ##
 extraEnvVarsSecret: ""
-
 ## @param extraVolumeMounts Array to add extra mounts (normally used with extraVolumes)
 ##
 extraVolumeMounts: []
-
 ## @param extraVolumes Array to add extra volumes
 ##
 extraVolumes: []
-
 ## @param initContainers Attach additional init containers to pods
 ## For example:
 ## initContainers:
@@ -233,7 +216,3 @@ extraVolumes: []
 ##     imagePullPolicy: Always
 ##
 initContainers: []
-
-## @param extraDeploy Array of extra objects to deploy with the release (evaluated as a template)
-##
-extraDeploy: []
