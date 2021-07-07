@@ -22,6 +22,7 @@ metadata:
     {{- end }}
   {{- end }}
 spec:
+  replicas: 1
   {{- if .Values.useStatefulSet }}
   serviceName: {{ include "mongodb.fullname" . }}
   updateStrategy:
