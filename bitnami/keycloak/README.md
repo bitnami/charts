@@ -197,6 +197,7 @@ The following tables lists the configurable parameters of the Keycloak chart and
 | `service.annotations`              | Annotations for Keycloak service                                                  | `{}` (evaluated as a template) |
 | `ingress.enabled`                  | Enable ingress controller resource                                                | `false`                        |
 | `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                     | ``                             |
+| `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)     | `nil`                          |
 | `ingress.path`                     | Ingress path                                                                      | `/`                            |
 | `ingress.pathType`                 | Ingress path type                                                                 | `ImplementationSpecific`       |
 | `ingress.certManager`              | Add annotations for cert-manager                                                  | `false`                        |
