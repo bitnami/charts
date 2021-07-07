@@ -1,67 +1,77 @@
+## @section Global parameters
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
-## Current available global Docker image parameters: imageRegistry and imagePullSecrets
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
-  # imageRegistry: myRegistryName
-  # imagePullSecrets:
-  #   - myRegistryKeySecretName
-  # storageClass: myStorageClass
+  imageRegistry:
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+  storageClass:
 
-## String to partially override kube-state-metrics.fullname template (will maintain the release name)
+## @section Common parameters
+
+## @param nameOverride String to partially override `kube-state-metrics.name` template with a string (will prepend the release name)
 ##
-# nameOverride:
-
-## String to fully override kube-state-metrics.fullname template
+nameOverride:
+## @param fullnameOverride String to fully override `kube-state-metrics.fullname` template with a string
 ##
-# fullnameOverride:
-
-## Add labels to all the deployed resources
+fullnameOverride:
+## @param commonLabels Add labels to all the deployed resources
 ##
 commonLabels: {}
-
-## Add annotations to all the deployed resources
+## @param commonAnnotations Add annotations to all the deployed resources
 ##
 commonAnnotations: {}
 
-## Deployment pod host aliases
+## @section kube-state-metrics parameters
+
+## @param hostAliases Add deployment host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
 hostAliases: []
-
 ## Role Based Access
 ## ref: https://kubernetes.io/docs/admin/authorization/rbac/
 ##
 rbac:
+  ## @param rbac.create Whether to create & use RBAC resources or not
+  ##
   create: true
-
-  ## RBAC API version
+  ## @param rbac.apiVersion Version of the RBAC API
   ##
   apiVersion: v1beta1
-
-  ## Podsecuritypolicy
+  ## @param rbac.pspEnabled PodSecurityPolicy
   ##
   pspEnabled: true
-
 ## Service account for kube-state-metrics to use.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 ##
 serviceAccount:
-  ## Specifies whether a ServiceAccount should be created
+  ## @param serviceAccount.create Specify whether to create a ServiceAccount for kube-state-metrics
   ##
   create: true
-  ## The name of the ServiceAccount to use.
+  ## @param serviceAccount.name The name of the ServiceAccount to create
   ## If not set and create is true, a name is generated using the kube-state-metrics.fullname template
-  # name:
-
+  name:
 ## Bitnami kube-state-metrics image version
 ## ref: https://hub.docker.com/r/bitnami/kube-state-metrics/tags/
+## @param image.registry kube-state-metrics image registry
+## @param image.repository kube-state-metrics image repository
+## @param image.tag kube-state-metrics Image tag (immutable tags are recommended)
+## @param image.pullPolicy kube-state-metrics image pull policy
+## @param image.pullSecrets Specify docker-registry secret names as an array
 ##
 image:
   registry: docker.io
   repository: bitnami/kube-state-metrics
   tag: 2.1.0-debian-10-r0
-
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -70,18 +80,46 @@ image:
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## Example:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
   ##
-  # pullSecrets:
-  #   - myRegistryKeySecretName
-
-## Additional command line arguments to pass to kube-state-metrics
+  pullSecrets: []
+## @param extraArgs Additional command line arguments to pass to kube-state-metrics
 ##
 extraArgs: {}
-
-## Comma-separated list of namespaces to be enabled. Defaults to all namespaces
-# namespaces: ""
-
+## @param namespaces Comma-separated list of namespaces to be enabled. Defaults to all namespaces
+##
+namespaces:
 ## kube-state-metrics resources to be enabled
+## @param kubeResources.certificatesigningrequests Enable the `certificatesigningrequests` resource
+## @param kubeResources.configmaps Enable the `configmaps` resource
+## @param kubeResources.cronjobs Enable the `cronjobs` resource
+## @param kubeResources.daemonsets Enable the `daemonsets` resource
+## @param kubeResources.deployments Enable the `deployments` resource
+## @param kubeResources.endpoints Enable the `endpoints` resource
+## @param kubeResources.horizontalpodautoscalers Enable the `horizontalpodautoscalers` resource
+## @param kubeResources.ingresses Enable the `ingresses` resource
+## @param kubeResources.jobs Enable the `jobs` resource
+## @param kubeResources.limitranges Enable the `limitranges` resource
+## @param kubeResources.mutatingwebhookconfigurations Enable the `mutatingwebhookconfigurations` resource
+## @param kubeResources.namespaces Enable the `namespaces` resource
+## @param kubeResources.networkpolicies Enable the `networkpolicies` resource
+## @param kubeResources.nodes Enable the `nodes` resource
+## @param kubeResources.persistentvolumeclaims Enable the `persistentvolumeclaims` resource
+## @param kubeResources.persistentvolumes Enable the `persistentvolumes` resource
+## @param kubeResources.poddisruptionbudgets Enable the `poddisruptionbudgets` resource
+## @param kubeResources.pods Enable the `pods` resource
+## @param kubeResources.replicasets Enable the `replicasets` resource
+## @param kubeResources.replicationcontrollers Enable the `replicationcontrollers` resource
+## @param kubeResources.resourcequotas Enable the `resourcequotas` resource
+## @param kubeResources.secrets Enable the `secrets` resource
+## @param kubeResources.services Enable the `services` resource
+## @param kubeResources.statefulsets Enable the `statefulsets` resource
+## @param kubeResources.storageclasses Enable the `storageclasses` resource
+## @param kubeResources.verticalpodautoscalers Enable the `verticalpodautoscalers` resource
+## @param kubeResources.validatingwebhookconfigurations Enable the `validatingwebhookconfigurations` resource
+## @param kubeResources.volumeattachments Enable the `volumeattachments` resource
 ##
 kubeResources:
   certificatesigningrequests: true
@@ -112,144 +150,142 @@ kubeResources:
   verticalpodautoscalers: false
   validatingwebhookconfigurations: false
   volumeattachments: true
-
-## SecurityContext configuration
+## @param securityContext.enabled Enable security context
+## @param securityContext.fsGroup Group ID for the container filesystem
+## @param securityContext.runAsUser User ID for the container
 ##
 securityContext:
   enabled: true
   runAsUser: 1001
   fsGroup: 1001
-
 ## kube-state-metrics Service
 ##
 service:
-  ## Kubernetes service type and port number
+  ## @param service.type Kubernetes service type
   ##
   type: ClusterIP
-  port: 8080
-  # clusterIP: None
-
-  ## Specify the nodePort value for the LoadBalancer and NodePort service types.
-  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+  ## @param service.port kube-state-metrics service port
   ##
-  # nodePort: 30080
-
-  ## Set the LoadBalancer service type to internal only.
+  port: 8080
+  ## @param service.clusterIP Specific cluster IP when service type is cluster IP. Use `None` for headless service
+  ## e.g:
+  ## clusterIP: None
+  ##
+  clusterIP:
+  ## @param service.nodePort Specify the nodePort value for the LoadBalancer and NodePort service types.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+  ## e.g:
+  ## nodePort: 30080
+  ##
+  nodePort:
+  ## @param service.loadBalancerIP `loadBalancerIP` if service type is `LoadBalancer`
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
-  # loadBalancerIP:
-
-  ## Load Balancer sources
+  loadBalancerIP:
+  ## @param service.loadBalancerSourceRanges Address that are allowed when svc is `LoadBalancer`
   ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+  ## e.g:
+  ## loadBalancerSourceRanges:
+  ## - 10.10.10.0/24
   ##
-  # loadBalancerSourceRanges:
-  # - 10.10.10.0/24
-
-  ## Provide any additional service annotations
+  loadBalancerSourceRanges: []
+  ## @param service.annotations Additional annotations for kube-state-metrics service
   ##
   annotations: {}
-
-  ## Provide any additional service labels
+  ## @param service.labels Additional labels for kube-state-metrics service
   ##
   labels: {}
-
-# Enable hostNetwork mode
+## @param hostNetwork Enable hostNetwork mode
+##
 hostNetwork: false
-
-## Priority class assigned to the Pods
+## @param priorityClassName Priority class assigned to the Pods
 ##
 priorityClassName: ""
-
 ## Resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## choice for the user. This also increases chances charts run on environments with little
+## resources, such as Minikube. If you do want to specify resources, uncomment the following
+## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+## @param resources.limits The resources limits for the container
+## @param resources.requests The requested resources for the container
 ##
 resources:
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## Example:
+  ## limits:
+  ##    cpu: 100m
+  ##    memory: 128Mi
   limits: {}
-  #   cpu: 100m
-  #   memory: 128Mi
+  ## Examples:
+  ## requests:
+  ##    cpu: 100m
+  ##    memory: 128Mi
   requests: {}
-  #   cpu: 100m
-  #   memory: 128Mi
-
-## Number of replicas
+## @param replicaCount Desired number of controller pods
 ##
 replicaCount: 1
-
-## Pod labels
+## @param podLabels Pod labels
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
 podLabels: {}
-
-## Pod annotations
+## @param podAnnotations Pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
-
-## updateStrategy
+## @param updateStrategy Allows setting of `RollingUpdate` strategy
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
 ##
 updateStrategy: {}
-
-## minReadySeconds to avoid killing pods before we are ready
+## @param minReadySeconds How many seconds a pod needs to be ready before killing the next, during update
 ##
 minReadySeconds: 0
-
-## Pod affinity preset
+## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-## Allowed values: soft, hard
 ##
 podAffinityPreset: ""
-
-## Pod anti-affinity preset
+## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-## Allowed values: soft, hard
 ##
 podAntiAffinityPreset: soft
-
 ## Node affinity preset
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-## Allowed values: soft, hard
 ##
 nodeAffinityPreset:
-  ## Node affinity type
-  ## Allowed values: soft, hard
+  ## @param nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ##
   type: ""
-  ## Node label key to match
+  ## @param nodeAffinityPreset.key Node label key to match. Ignored if `affinity` is set.
   ## E.g.
   ## key: "kubernetes.io/e2e-az-name"
   ##
   key: ""
-  ## Node label values to match
+  ## @param nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set.
   ## E.g.
   ## values:
   ##   - e2e-az1
   ##   - e2e-az2
   ##
   values: []
-
-## Affinity for pod assignment. Evaluated as a template.
+## @param affinity Affinity for pod assignment
 ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ## Note: podAffinityPreset, podAntiAffinityPreset, and nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
-
-## Node labels for pod assignment. Evaluated as a template.
+## @param nodeSelector Node labels for pod assignment
 ## ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
 nodeSelector: {}
-
-## Tolerations for pod assignment. Evaluated as a template.
+## @param tolerations Tolerations for pod assignment
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
-
-## Configure extra options for liveness and readiness probes
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+## Configure extra options for liveness probe
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+## @param livenessProbe.enabled Turn on and off liveness probe
+## @param livenessProbe.initialDelaySeconds Delay before liveness probe is initiated
+## @param livenessProbe.periodSeconds How often to perform the probe
+## @param livenessProbe.timeoutSeconds When the probe times out
+## @param livenessProbe.failureThreshold Minimum consecutive failures for the probe
+## @param livenessProbe.successThreshold Minimum consecutive successes for the probe
 ##
 livenessProbe:
   enabled: true
@@ -258,7 +294,15 @@ livenessProbe:
   timeoutSeconds: 5
   failureThreshold: 6
   successThreshold: 1
-
+## Configure extra options for readiness probe
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+## @param readinessProbe.enabled Turn on and off readiness probe
+## @param readinessProbe.initialDelaySeconds Delay before readiness probe is initiated
+## @param readinessProbe.periodSeconds How often to perform the probe
+## @param readinessProbe.timeoutSeconds When the probe times out
+## @param readinessProbe.failureThreshold Minimum consecutive failures for the probe
+## @param readinessProbe.successThreshold Minimum consecutive successes for the probe
+##
 readinessProbe:
   enabled: true
   initialDelaySeconds: 30
@@ -266,45 +310,50 @@ readinessProbe:
   timeoutSeconds: 5
   failureThreshold: 6
   successThreshold: 1
-
 ## ServiceMonitor configuration
 ##
 serviceMonitor:
+  ## @param serviceMonitor.enabled Creates a ServiceMonitor to monitor kube-state-metrics
+  ##
   enabled: false
-  ## Namespace in which Prometheus is running
+  ## @param serviceMonitor.namespace Namespace in which Prometheus is running
+  ## e.g:
+  ## namespace: monitoring
   ##
-  # namespace: monitoring
-
-  ## The name of the label on the target service to use as the job name in prometheus
-  # jobLabel:
-
-  ## Interval at which metrics should be scraped.
+  namespace:
+  ## @param serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+  ##
+  jobLabel:
+  ## @param serviceMonitor.interval Scrape interval (use by default, falling back to Prometheus' default)
   ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+  ## e.g:
+  ## interval: 10s
   ##
-  # interval: 10s
-
-  ## Timeout after which the scrape is ended
+  interval:
+  ## @param serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
   ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+  ## e.g:
+  ## scrapeTimeout: 10s
   ##
-  # scrapeTimeout: 10s
-
-  ## ServiceMonitor selector labels
+  scrapeTimeout:
+  ## @param serviceMonitor.selector ServiceMonitor selector labels
   ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+  ## e.g:
+  ## selector:
+  ##   prometheus: my-prometheus
   ##
-  # selector:
-  #   prometheus: my-prometheus
-
-  ## Honor metric labels
+  selector: {}
+  ## @param serviceMonitor.honorLabels Honor metrics labels
   ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+  ## e.g:
+  ## honorLabels: false
   ##
-  # honorLabels: false
-
-  ## Relabeling (before scrape)
+  honorLabels:
+  ## @param serviceMonitor.relabelings ServiceMonitor relabelings
   ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
   ##
-  # relabelings: []
-
-  ## Metric relabeling
+  relabelings: []
+  ## @param serviceMonitor.metricRelabelings ServiceMonitor metricRelabelings
   ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
   ##
-  # metricRelabelings: []
+  metricRelabelings: []
