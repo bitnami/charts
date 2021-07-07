@@ -55,15 +55,16 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imageRegistry`    | Global Docker image registry                    | `nil` |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `nil` |
-| `global.labels`           | Additional labels to apply to all resources     | `{}`  |
 
 
 ### Common parameters
 
-| Name               | Description                                                                                                   | Value |
-| ------------------ | ------------------------------------------------------------------------------------------------------------- | ----- |
-| `nameOverride`     | String to partially override `kube-state-metrics.name` template with a string (will prepend the release name) | `nil` |
-| `fullnameOverride` | String to fully override `kube-state-metrics.fullname` template with a string                                 | `nil` |
+| Name                | Description                                                                                                   | Value |
+| ------------------- | ------------------------------------------------------------------------------------------------------------- | ----- |
+| `nameOverride`      | String to partially override `kube-state-metrics.name` template with a string (will prepend the release name) | `nil` |
+| `fullnameOverride`  | String to fully override `kube-state-metrics.fullname` template with a string                                 | `nil` |
+| `commonLabels`      | Add labels to all the deployed resources                                                                      | `{}`  |
+| `commonAnnotations` | Add annotations to all the deployed resources                                                                 | `{}`  |
 
 
 ### kube-state-metrics parameters

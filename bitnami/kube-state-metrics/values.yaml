@@ -6,7 +6,6 @@
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
-## @param global.labels Additional labels to apply to all resources
 ##
 global:
   imageRegistry:
