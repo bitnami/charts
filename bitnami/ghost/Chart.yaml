@@ -34,4 +34,3 @@ sources:
   - https://github.com/bitnami/bitnami-docker-ghost
   - http://www.ghost.org/
 version: 14.0.0
-
