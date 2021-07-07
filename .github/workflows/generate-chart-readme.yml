@@ -12,6 +12,9 @@ on:
       - 'bitnami/fluentd/values.yaml'
       - 'bitnami/grafana/values.yaml'
       - 'bitnami/grafana-operator/values.yaml'
+      - 'bitnami/kubernetes-event-exporter/values.yaml'
+      - 'bitnami/kubewatch/values.yaml'
+      - 'bitnami/logstash/values.yaml'
 
 jobs:
   generate-chart-readme:
