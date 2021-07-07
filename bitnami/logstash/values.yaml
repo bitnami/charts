@@ -14,6 +14,26 @@ global:
   ##
   imagePullSecrets: []
 
+## @section Common parameters
+
+## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
+##
+kubeVersion:
+## @param nameOverride String to partially override logstash.fullname template (will maintain the release name)
+##
+nameOverride:
+## @param fullnameOverride String to fully override logstash.fullname template
+##
+fullnameOverride:
+## @param clusterDomain Default Kubernetes cluster domain
+##
+clusterDomain: cluster.local
+## @param extraDeploy Array of extra objects to deploy with the release (evaluated as a template).
+##
+extraDeploy:
+
+## @section Logstash parameters
+
 ## Bitnami Logstash image
 ## ref: https://hub.docker.com/r/bitnami/logstash/tags/
 ## @param image.registry Logstash image registry
@@ -38,32 +58,13 @@ image:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
-
   ## Set to true if you would like to see extra information on logs
   ##
   debug: false
-
-## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
-##
-kubeVersion:
-
 ## @param hostAliases Add deployment host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
 hostAliases: []
-
-## @param nameOverride String to partially override logstash.fullname template (will maintain the release name)
-##
-nameOverride:
-
-## @param fullnameOverride String to fully override logstash.fullname template
-##
-fullnameOverride:
-
-## @param clusterDomain Default Kubernetes cluster domain
-##
-clusterDomain: cluster.local
-
 ## @param configFileName Logstash configuration file name. It must match the name of the configuration file mounted as a configmap.
 ##
 configFileName: logstash.conf
@@ -73,7 +74,6 @@ enableMonitoringAPI: true
 ## @param monitoringAPIPort Logstash Monitoring API Port
 ##
 monitoringAPIPort: 9600
-
 ## @param extraEnvVars Array containing extra env vars to configure Logstash
 ## For example:
 ## extraEnvVars:
@@ -81,13 +81,13 @@ monitoringAPIPort: 9600
 ##    value: "x.y.z"
 ##
 extraEnvVars:
-
-## To add secrets or configmaps to environment
-## extraEnvVarsSecret: "x"
-## extraEnvVarsCM: "y"
+## @param extraEnvVarsSecret To add secrets to environment
 ##
-
-## @param input Input Plugins configuration
+extraEnvVarsSecret:
+## @param extraEnvVarsCM To add configmaps to environment
+##
+extraEnvVarsCM:
+## @param input [string] Input Plugins configuration
 ## ref: https://www.elastic.co/guide/en/logstash/current/input-plugins.html
 ##
 input: |-
@@ -112,7 +112,7 @@ input: |-
 ##   }
 ##
 filter:
-## @param output Output Plugins configuration
+## @param output [string] Output Plugins configuration
 ## ref: https://www.elastic.co/guide/en/logstash/current/output-plugins.html
 ##
 output: |-
@@ -126,16 +126,13 @@ output: |-
   #   port => ${GRAYLOG_PORT}
   # }
   stdout {}
-
 ## @param existingConfiguration Name of existing ConfigMap object with the Logstash configuration (`input`, `filter`, and `output` will be ignored).
 ##
 existingConfiguration:
-
 ## @param enableMultiplePipelines Allows user to use multiple pipelines
 ## ref: https://www.elastic.co/guide/en/logstash/master/multiple-pipelines.html
 ##
 enableMultiplePipelines: false
-
 ## @param extraVolumes Array to add extra volumes (evaluated as a template)
 ## extraVolumes:
 ##   - name: myvolume
@@ -143,16 +140,13 @@ enableMultiplePipelines: false
 ##       name: myconfigmap
 ##
 extraVolumes: []
-
 ## @param extraVolumeMounts Array to add extra mounts (normally used with extraVolumes, evaluated as a template)
-##
 ## extraVolumeMounts:
 ##   - mountPath: /opt/bitnami/desired-path
 ##     name: myvolume
 ##     readOnly: true
 ##
 extraVolumeMounts: []
-
 ## @param containerPorts [array] Array containing the ports to open in the Logstash container
 ##
 containerPorts:
@@ -169,36 +163,29 @@ containerPorts:
   - name: monitoring
     containerPort: 9600
     protocol: TCP
-
 ## @param replicaCount Number of Logstash replicas to deploy
 ##
 replicaCount: 1
-
 ## @param updateStrategy Update strategy (`RollingUpdate`, or `OnDelete`)
 ## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#updating-statefulsets
 ##
 updateStrategy: RollingUpdate
-
 ## @param podManagementPolicy Pod management policy
 ## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
 ##
 podManagementPolicy: OrderedReady
-
 ## @param podAnnotations Pod annotations
 ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
-
 ## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
 podAffinityPreset: ""
-
 ## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
 podAntiAffinityPreset: soft
-
 ## Node affinity preset
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
 ##
@@ -218,28 +205,23 @@ nodeAffinityPreset:
   ##   - e2e-az2
   ##
   values: []
-
 ## @param affinity Affinity for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ## Note: podAffinityPreset, podAntiAffinityPreset, and nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
-
 ## @param nodeSelector Node labels for pod assignment
 ## ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
 nodeSelector: {}
-
 ## @param tolerations Tolerations for pod assignment
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
-
 ## @param priorityClassName Pod priority
 ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
 ##
 priorityClassName:
-
 ## K8s Security Context for Logstash pods
 ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 ## @param securityContext.enabled Enable security context for Logstash
@@ -250,7 +232,6 @@ securityContext:
   enabled: true
   fsGroup: 1001
   runAsUser: 1001
-
 ## Logstash containers' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -271,7 +252,6 @@ resources:
   ##    cpu: 100m
   ##    memory: 128Mi
   requests: {}
-
 ## Logstash pods' liveness probe
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param livenessProbe.httpGet.path Request path for livenessProbe
@@ -310,7 +290,6 @@ readinessProbe:
   timeoutSeconds:
   successThreshold:
   failureThreshold:
-
 ## @param lifecycle Logstash pods' lifecycle hooks
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/
 ## e.g:
@@ -322,7 +301,6 @@ readinessProbe:
 ##     command: ["/bin/sh", "-c", "echo Hello from the postStart handler > /usr/share/message"]
 ##
 lifecycle: {}
-
 ## Service parameters
 ##
 service:
@@ -359,7 +337,6 @@ service:
   ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: ""
-
   ## @param service.clusterIP Static clusterIP or None for headless services
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#choosing-your-own-ip-address
   ## e.g:
@@ -369,7 +346,6 @@ service:
   ## @param service.annotations Annotations for Logstash service
   ##
   annotations: {}
-
 ## Persistence parameters
 ##
 persistence:
@@ -401,7 +377,6 @@ persistence:
   ## @param persistence.mountPath Mount path of the Logstash data volume
   ##
   mountPath: /bitnami/logstash/data
-
 ## Init Container parameters
 ## Change the owner and group of the persistent volume(s) mountpoint(s) to 'runAsUser:fsGroup' on each component
 ## values from the securityContext section of the component
@@ -411,7 +386,7 @@ volumePermissions:
   ##
   enabled: false
   ## The security context for the volumePermissions init container
-  ## @param volumePermissions.securityContext.runAsUser !!!!!
+  ## @param volumePermissions.securityContext.runAsUser User ID for the volumePermissions init container
   ##
   securityContext:
     runAsUser: 0
@@ -457,7 +432,6 @@ volumePermissions:
     ##    cpu: 100m
     ##    memory: 128Mi
     requests: {}
-
 ## Configure the ingress resource that allows you to access the
 ## Logstash installation. Set up the URL
 ## ref: http://kubernetes.io/docs/user-guide/ingress/
@@ -466,27 +440,21 @@ ingress:
   ## @param ingress.enabled Enable ingress controller resource
   ##
   enabled: false
-
   ## @param ingress.certManager Set this to true in order to add the corresponding annotations for cert-manager
   ##
   certManager: false
-
   ## @param ingress.pathType Ingress Path type
   ##
   pathType: ImplementationSpecific
-
   ## @param ingress.apiVersion Override API Version (automatically detected if not set)
   ##
   apiVersion:
-
   ## @param ingress.hostname Default host for the ingress resource
   ##
   hostname: logstash.local
-
   ## @param ingress.path The Path to Logstash. You may need to set this to '/*' in order to use this with ALB ingress controllers.
   ##
   path: /
-
   ## @param ingress.annotations Ingress annotations
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
@@ -494,13 +462,11 @@ ingress:
   ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
   ##
   annotations: {}
-
   ## @param ingress.tls Enable TLS configuration for the hostname defined at ingress.hostname parameter
   ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
   ## You can use the ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
   ##
   tls: false
-
   ## @param ingress.extraHosts The list of additional hostnames to be covered with this ingress record.
   ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
   ## extraHosts:
@@ -508,7 +474,6 @@ ingress:
   ##   path: /
   ##
   extraHosts: []
-
   ## @param ingress.extraPaths Any additional arbitrary paths that may need to be added to the ingress under the main host.
   ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
   ## extraPaths:
@@ -518,7 +483,6 @@ ingress:
   ##     servicePort: use-annotation
   ##
   extraPaths: []
-
   ## @param ingress.extraTls The tls configuration for additional hostnames to be covered with this ingress record.
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
   ## extraTls:
@@ -527,7 +491,6 @@ ingress:
   ##   secretName: logstash.local-tls
   ##
   extraTls: []
-
   ## @param ingress.secrets If you're providing your own certificates, please use this to add the certificates as secrets
   ## key and certificate should start with -----BEGIN CERTIFICATE----- or
   ## -----BEGIN RSA PRIVATE KEY-----
@@ -543,7 +506,6 @@ ingress:
   ##   key:
   ##   certificate:
   ##
-
 ## Prometheus metrics
 ##
 metrics:
@@ -574,7 +536,6 @@ metrics:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-
   ## Logstash Prometheus Exporter containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -595,7 +556,6 @@ metrics:
     ##    cpu: 100m
     ##    memory: 128Mi
     requests: {}
-
   ## Prometheus Operator ServiceMonitor configuration
   ##
   serviceMonitor:
@@ -607,21 +567,18 @@ metrics:
     ## namespace: monitoring
     ##
     namespace:
-
     ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped.
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ## e.g:
     ## interval: 10s
     ##
     interval:
-
     ## @param metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ## e.g:
     ## scrapeTimeout: 10s
     ##
     scrapeTimeout:
-
     ## @param metrics.serviceMonitor.selector ServiceMonitor selector labels
     ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
     ## e.g:
@@ -629,7 +586,6 @@ metrics:
     ##   prometheus: my-prometheus
     ##
     selector: {}
-
   ## Logstash Prometheus Exporter containers' liveness probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param metrics.livenessProbe.httpGet.path Request path for livenessProbe
@@ -668,7 +624,6 @@ metrics:
     timeoutSeconds:
     successThreshold:
     failureThreshold:
-
   service:
     ## @param metrics.service.type Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)
     ##
@@ -701,7 +656,6 @@ metrics:
       prometheus.io/scrape: "true"
       prometheus.io/port: "9198"
       prometheus.io/path: "/metrics"
-
 ## Pod disruption budget configuration
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions/
 ## @param podDisruptionBudget.create If true, create a pod disruption budget for pods.
@@ -712,11 +666,6 @@ podDisruptionBudget:
   create: false
   minAvailable: 1
   maxUnavailable:
-
-## @param extraDeploy Array of extra objects to deploy with the release (evaluated as a template).
-##
-extraDeploy:
-
 ## @param initContainers Extra containers to run before logstash for initialization purposes like custom plugin install.
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
 ##
