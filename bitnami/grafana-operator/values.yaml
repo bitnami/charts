@@ -425,6 +425,8 @@ grafana:
   ##
   persistence:
     ## @param grafana.persistence.enabled Enable persistent storage for the grafana deployment
+    ## Note that you might also want to change the update strategy of the Deployment
+    ## in order to avoid deployment failure due to multi-attach of the same volume.
     ##
     enabled: false
     ## @param grafana.persistence.storageClass Define the storageClass for the persistent storage if not defined default is used
