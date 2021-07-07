@@ -532,7 +532,7 @@ persistence:
   size: 8Gi
 ## @param priorityClassName Priority Class Name for Statefulset
 ##
-priorityClassName: 'priorityClass'
+priorityClassName:
 ## @param extraInitContainers Additional init containers (this value is evaluated as a template)
 ## extraInitContainers:
 ## - name: do-something
