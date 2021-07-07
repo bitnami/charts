@@ -555,8 +555,7 @@ grafana:
   ##    maxSurge: 25%
   ##    maxUnavailable: 25%
   ##
-  updateStrategy:
-    type: Recreate
+  updateStrategy: {}
 
 ## @section PluginInit parameters
 
