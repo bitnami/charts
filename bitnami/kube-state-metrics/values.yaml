@@ -8,11 +8,6 @@ global:
   #   - myRegistryKeySecretName
   # storageClass: myStorageClass
 
-  ## Additional labels to apply to all resources
-  ##
-  labels: {}
-  #   foo: bar
-
 ## String to partially override kube-state-metrics.fullname template (will maintain the release name)
 ##
 # nameOverride:
@@ -20,6 +15,14 @@ global:
 ## String to fully override kube-state-metrics.fullname template
 ##
 # fullnameOverride:
+
+## Add labels to all the deployed resources
+##
+commonLabels: {}
+
+## Add annotations to all the deployed resources
+##
+commonAnnotations: {}
 
 ## Deployment pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
