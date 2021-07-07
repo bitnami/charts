@@ -14,7 +14,7 @@
 coreImage:
   registry: docker.io
   repository: bitnami/harbor-core
-  tag: 2.2.2-debian-10-r24
+  tag: 2.3.0-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -38,7 +38,7 @@ coreImage:
 portalImage:
   registry: docker.io
   repository: bitnami/harbor-portal
-  tag: 2.2.2-debian-10-r26
+  tag: 2.3.0-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -63,7 +63,7 @@ portalImage:
 jobserviceImage:
   registry: docker.io
   repository: bitnami/harbor-jobservice
-  tag: 2.2.2-debian-10-r25
+  tag: 2.3.0-debian-10-r7
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -87,7 +87,7 @@ jobserviceImage:
 chartMuseumImage:
   registry: docker.io
   repository: bitnami/chartmuseum
-  tag: 0.13.1-debian-10-r89
+  tag: 0.13.1-debian-10-r98
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -111,7 +111,7 @@ chartMuseumImage:
 registryImage:
   registry: docker.io
   repository: bitnami/harbor-registry
-  tag: 2.2.2-debian-10-r25
+  tag: 2.3.0-debian-10-r7
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -135,7 +135,7 @@ registryImage:
 registryctlImage:
   registry: docker.io
   repository: bitnami/harbor-registryctl
-  tag: 2.2.2-debian-10-r25
+  tag: 2.3.0-debian-10-r7
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -159,7 +159,7 @@ registryctlImage:
 trivyImage:
   registry: docker.io
   repository: bitnami/harbor-adapter-trivy
-  tag: 2.2.2-debian-10-r25
+  tag: 2.3.0-debian-10-r5
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -183,7 +183,7 @@ trivyImage:
 clairImage:
   registry: docker.io
   repository: bitnami/harbor-clair
-  tag: 2.2.2-debian-10-r25
+  tag: 2.3.0-debian-10-r8
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -208,7 +208,7 @@ clairImage:
 clairAdapterImage:
   registry: docker.io
   repository: bitnami/harbor-adapter-clair
-  tag: 2.2.2-debian-10-r25
+  tag: 2.3.0-debian-10-r7
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -232,7 +232,7 @@ clairAdapterImage:
 notaryServerImage:
   registry: docker.io
   repository: bitnami/harbor-notary-server
-  tag: 2.2.2-debian-10-r25
+  tag: 2.3.0-debian-10-r7
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -256,7 +256,7 @@ notaryServerImage:
 notarySignerImage:
   registry: docker.io
   repository: bitnami/harbor-notary-signer
-  tag: 2.2.2-debian-10-r25
+  tag: 2.3.0-debian-10-r7
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -280,7 +280,7 @@ notarySignerImage:
 nginxImage:
   registry: docker.io
   repository: bitnami/nginx
-  tag: 1.19.10-debian-10-r60
+  tag: 1.21.0-debian-10-r21
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -319,7 +319,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r111
+    tag: 10-debian-10-r121
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -969,6 +969,10 @@ portal:
   ##
   podAnnotations: {}
 
+  ## Automount service account token
+  ##
+  automountServiceAccountToken: false
+
   ## Harbor Portal containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
@@ -1171,6 +1175,10 @@ core:
   ##
   lifecycleHooks:
 
+  ## Automount service account token
+  ##
+  automountServiceAccountToken: false
+
   ## Harbor Core containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
@@ -1357,6 +1365,10 @@ jobservice:
   ## Must be a string of 16 chars.
   ##
   secret: ''
+
+  ## Automount service account token
+  ##
+  automountServiceAccountToken: false
 
   ## Harbor Jobservice containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
@@ -1612,6 +1624,10 @@ registry:
   ##
   podAnnotations: {}
 
+  ## Automount service account token
+  ##
+  automountServiceAccountToken: false
+
   ## Secret is used to secure the upload state from client
   ## and registry storage backend.
   ## See: https://github.com/docker/distribution/blob/master/docs/configuration.md#http
@@ -1821,6 +1837,10 @@ chartmuseum:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
+
+  ## Automount service account token
+  ##
+  automountServiceAccountToken: false
 
   ## Chartmuseum containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
@@ -2093,6 +2113,10 @@ clair:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
+
+  ## Automount service account token
+  ##
+  automountServiceAccountToken: false
 
 ## Trivy adapter parameters
 ##
@@ -2458,6 +2482,10 @@ notary:
     ##
     podAnnotations: {}
 
+    ## Automount service account token
+    ##
+    automountServiceAccountToken: false
+
   signer:
     ## Notary signer container command (using container default if not set)
     ##
@@ -2613,6 +2641,10 @@ notary:
     ## Custom Rediness probe
     ##
     customReadinessProbe: {}
+
+    ## Automount service account token
+    ##
+    automountServiceAccountToken: false
 
   ## Fill the name of a kubernetes secret if you want to use your own
   ## TLS certificate authority, certificate and private key for notary

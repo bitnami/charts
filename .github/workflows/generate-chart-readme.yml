@@ -9,6 +9,15 @@ on:
       - 'bitnami/apache/values.yaml'
       - 'bitnami/aspnet-core/values.yaml'
       - 'bitnami/cassandra/values.yaml'
+      - 'bitnami/dokuwiki/values.yaml'
+      - 'bitnami/drupal/values.yaml'
+      - 'bitnami/ejbca/values.yaml'
+      - 'bitnami/fluentd/values.yaml'
+      - 'bitnami/grafana/values.yaml'
+      - 'bitnami/grafana-operator/values.yaml'
+      - 'bitnami/kong/values.yaml'
+      - 'bitnami/kube-prometheus/values.yaml'
+      - 'bitnami/kube-state-metrics/values.yaml'
 
 jobs:
   generate-chart-readme:
