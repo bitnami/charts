@@ -1,15 +1,54 @@
+## @section Global parameters
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
-# global:
-#   imageRegistry: myRegistryName
-#   imagePullSecrets:
-#     - myRegistryKeySecretName
-#   storageClass: myStorageClass
+global:
+  imageRegistry:
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+  storageClass:
+
+## @section Common parameters
+
+## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
+##
+kubeVersion:
+## @param nameOverride String to partially override kong.fullname template with a string (will prepend the release name)
+##
+nameOverride:
+## @param fullnameOverride String to fully override kong.fullname template with a string
+##
+fullnameOverride:
+## @param commonAnnotations Common annotations to add to all Kong resources (sub-charts are not considered). Evaluated as a template
+##
+commonAnnotations: {}
+## @param commonLabels Common labels to add to all Kong resources (sub-charts are not considered). Evaluated as a template
+##
+commonLabels: {}
+## @param clusterDomain Kubernetes cluster domain
+##
+clusterDomain: cluster.local
+## @param extraDeploy Array of extra objects to deploy with the release (evaluated as a template).
+##
+extraDeploy: []
+
+## @section Deployment parameters
 
 ## Bitnami kong image version
 ## ref: https://hub.docker.com/r/bitnami/kong/tags/
+## @param image.registry kong image registry
+## @param image.repository kong image repository
+## @param image.tag kong image tag (immutable tags are recommended)
+## @param image.pullPolicy kong image pull policy
+## @param image.pullSecrets Specify docker-registry secret names as an array
 ##
 image:
   registry: docker.io
@@ -23,106 +62,330 @@ image:
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## Example:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
   ##
-  # pullSecrets:
-  #   - myRegistryKeySecretName
-
-## Force target Kubernetes version (using Helm capabilites if not set)
-##
-kubeVersion:
-
-## Select database: can be either postgresql or cassandra
+  pullSecrets: []
+## @param database Select which database backend Kong will use. Can be 'postgresql' or 'cassandra'
 ##
 database: postgresql
-
-## String to partially override kong.fullname template (will maintain the release name)
-##
-nameOverride:
-
-## String to fully override kong.fullname template
-##
-fullnameOverride:
-
-## Number of kong Pod replicas
+## @param replicaCount Number of replicas of the kong Pod
 ##
 replicaCount: 2
-
-## Deployment pod host aliases
+## @param hostAliases Add deployment host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
 hostAliases: []
-
-## Set up update strategy for kong installation. Set to Recreate if you use persistent volume that cannot be mounted by more than one pods to makesure the pods is destroyed first.
+## @param updateStrategy.type Set up update strategy for kong installation. Set to Recreate if you use persistent volume that cannot be mounted by more than one pods to makesure the pods is destroyed first.
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
 ## Example:
-# updateStrategy:
-#  type: RollingUpdate
-#  rollingUpdate:
-#    maxSurge: 25%
-#    maxUnavailable: 25%
+## updateStrategy:
+##  type: RollingUpdate
+##  rollingUpdate:
+##    maxSurge: 25%
+##    maxUnavailable: 25%
+##
 updateStrategy:
   type: RollingUpdate
-
-## Use an alternate scheduler, e.g. "stork".
+## @param schedulerName Alternative scheduler
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
 schedulerName:
-
-## Common annotations to add to all Kong resources (sub-charts are not considered). Evaluated as a template
-##
-commonAnnotations: {}
-
-## Common labels to add to all Kong resources (sub-charts are not considered). Evaluated as a template
-##
-commonLabels: {}
-
-## Use a daemonset instead of a deployment
+## @param useDaemonset Use a daemonset instead of a deployment. `replicaCount` will not take effect.
 ##
 useDaemonset: false
+## @param extraVolumes Array of extra volumes to be added to the Kong deployment deployment (evaluated as template). Requires setting `extraVolumeMounts`
+##
+extraVolumes: []
+## @param initContainers Add additional init containers to the pod (evaluated as a template)
+## e.g.
+## - name: your-image-name
+##   image: your-image
+##   imagePullPolicy: Always
+##   ports:
+##     - name: portname
+##        containerPort: 1234
+##
+initContainers:
+## @param sidecars Attach additional containers to the pod (evaluated as a template)
+## e.g.
+## - name: your-image-name
+##   image: your-image
+##   imagePullPolicy: Always
+##   ports:
+##     - name: portname
+##        containerPort: 1234
+##
+sidecars:
+## SecurityContext configuration
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+## @param containerSecurityContext.runAsUser Set Kong container's Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Set Kong container's Security Context runAsNonRoot
+##
+containerSecurityContext:
+  runAsUser: 1001
+  runAsNonRoot: true
+## @param podSecurityContext Pod security context
+##
+podSecurityContext: {}
+## @param nodeSelector Node labels for pod assignment
+## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+##
+nodeSelector: {}
+## @param tolerations Tolerations for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+##
+tolerations: []
+## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+##
+podAffinityPreset: ""
+## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+##
+podAntiAffinityPreset: soft
+## Node affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+##
+nodeAffinityPreset:
+  ## @param nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ##
+  type: ""
+  ## @param nodeAffinityPreset.key Node label key to match Ignored if `affinity` is set.
+  ## E.g.
+  ## key: "kubernetes.io/e2e-az-name"
+  ##
+  key: ""
+  ## @param nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set.
+  ## E.g.
+  ## values:
+  ##   - e2e-az1
+  ##   - e2e-az2
+  ##
+  values: []
+## @param affinity Affinity for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
+##
+affinity: {}
+## @param podAnnotations Pod annotations
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+##
+podAnnotations: {}
+## @param podLabels Pod labels
+## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
+podLabels: {}
+## Add an horizontal pod autoscaler
+## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+## @param autoscaling.enabled Deploy a HorizontalPodAutoscaler object for the Kong deployment
+## @param autoscaling.apiVersion API Version of the HPA object (for compatibility with Openshift)
+## @param autoscaling.minReplicas Minimum number of replicas to scale back
+## @param autoscaling.maxReplicas Maximum number of replicas to scale out
+## @param autoscaling.metrics [array] Metrics to use when deciding to scale the deployment (evaluated as a template)
+##
+autoscaling:
+  enabled: false
+  apiVersion: autoscaling/v2beta1
+  minReplicas: 2
+  maxReplicas: 5
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        targetAverageUtilization: 80
+## Kong Pod Disruption Budget
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions/
+## @param pdb.enabled Deploy a pdb object for the Kong pod
+## @param pdb.maxUnavailable Maximum unavailable Kong replicas (expressed in percentage)
+##
+pdb:
+  enabled: false
+  maxUnavailable: "50%"
+
+## @section Traffic Exposure Parameters
+
+## Service parameters
+##
+service:
+  ## @param service.type Kubernetes Service type
+  ##
+  type: ClusterIP
+  ## @param service.clusterIP Cluster internal IP of the service
+  ## This is the internal IP address of the service and is usually assigned randomly.
+  ## ref: https://kubernetes.io/docs/reference/kubernetes-api/service-resources/service-v1/#ServiceSpec
+  ##
+  clusterIP:
+  ## @param service.externalTrafficPolicy external traffic policy managing client source IP preservation
+  ## default to "Cluster"
+  ## set to "Local" in order to preserve the client source IP (only on service of type LoadBalancer or NodePort)
+  ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/
+  ##
+  externalTrafficPolicy:
+  ## @param service.proxyHttpPort kong proxy HTTP service port port
+  ##
+  proxyHttpPort: 80
+  ## @param service.proxyHttpsPort kong proxy HTTPS service port port
+  ##
+  proxyHttpsPort: 443
+  ## @param service.exposeAdmin Add the Kong Admin ports to the service
+  ##
+  exposeAdmin: false
+  ## @param service.adminHttpPort kong admin HTTPS service port (only if service.exposeAdmin=true)
+  ##
+  adminHttpPort: 8001
+  ## @param service.adminHttpsPort kong admin HTTPS service port (only if service.exposeAdmin=true)
+  ##
+  adminHttpsPort: 8444
+  ## Specify the nodePort value for the LoadBalancer and NodePort service types.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+  ## @param service.proxyHttpNodePort Port to bind to for NodePort service type (proxy HTTP)
+  ## @param service.proxyHttpsNodePort Port to bind to for NodePort service type (proxy HTTPS)
+  ## @param service.adminHttpNodePort Port to bind to for NodePort service type (admin HTTP)
+  ## @param service.adminHttpsNodePort Port to bind to for NodePort service type (admin HTTPS)
+  ##
+  proxyHttpNodePort:
+  proxyHttpsNodePort:
+  adminHttpNodePort:
+  adminHttpsNodePort:
+  ## @param service.loadBalancerIP loadBalancerIP if kong service type is `LoadBalancer`
+  ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+  ##
+  loadBalancerIP:
+  ## @param service.annotations Annotations for kong service
+  ## set the LoadBalancer service type to internal only.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+  ##
+  annotations: {}
+  ## @param service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+  ##
+  extraPorts:
+## Configure the ingress resource that allows you to access the
+## Kong installation. Set up the URL
+## ref: http://kubernetes.io/docs/user-guide/ingress/
+##
+ingress:
+  ## @param ingress.enabled Enable ingress controller resource
+  ##
+  enabled: false
+  ## @param ingress.certManager Add annotations for cert-manager
+  ##
+  certManager: false
+  ## @param ingress.pathType Ingress path type
+  ##
+  pathType: ImplementationSpecific
+  ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
+  ##
+  apiVersion:
+  ## @param ingress.hostname Default host for the ingress resource
+  ##
+  hostname: kong.local
+  ## @param ingress.path Ingress path
+  ## with ALB ingress controllers.
+  ##
+  path: /
+  ## @param ingress.annotations Ingress annotations
+  ## For a full list of possible ingress annotations, please see
+  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ##
+  ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+  ##
+  annotations: {}
+  ## @param ingress.tls Create TLS Secret
+  ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
+  ## You can use the ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
+  ##
+  tls: false
+  ## @param ingress.extraHosts The list of additional hostnames to be covered with this ingress record.
+  ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
+  ## extraHosts:
+  ## - name: kong.local
+  ##   path: /
+  ##
+  extraHosts: []
+  ## @param ingress.extraPaths Additional arbitrary path/backend objects
+  ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
+  ## extraPaths:
+  ## - path: /*
+  ##   backend:
+  ##     serviceName: ssl-redirect
+  ##     servicePort: use-annotation
+  ##
+  extraPaths: []
+  ## @param ingress.extraTls The tls configuration for additional hostnames to be covered with this ingress record.
+  ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ## extraTls:
+  ## - hosts:
+  ##     - kong.local
+  ##   secretName: kong.local-tls
+  ##
+  extraTls: []
+  ## @param ingress.secrets If you're providing your own certificates, please use this to add the certificates as secrets
+  ## key and certificate should start with -----BEGIN CERTIFICATE----- or
+  ## -----BEGIN RSA PRIVATE KEY-----
+  ##
+  ## name should line up with a tlsSecret set further up
+  ## If you're using cert-manager, this is unneeded, as it will create the secret for you if it is not set
+  ##
+  ## It is also possible to create and manage the certificates outside of this helm chart
+  ## Please see README.md for more information
+  ## e.g:
+  ## secrets:
+  ## - name: kong.local-tls
+  ##   key:
+  ##   certificate:
+  ##
+  ##
+  secrets: []
+
+## @section Kong Container Parameters
 
 kong:
-  ## Command and args for running the container (set to default if not set). Use array form
+  ## @param kong.command Override default container command (useful when using custom images)
   ##
   command:
+  ## @param kong.args Override default container args (useful when using custom images)
+  ##
   args:
-  ## Configmap with init scripts to execute
+  ## @param kong.initScriptsCM Configmap with init scripts to execute
+  ## ConfigMap containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time (evaluated as a template)
   ##
   initScriptsCM:
-
-  ## Secret with init scripts to execute (for sensitive data)
+  ## @param kong.initScriptsSecret Configmap with init scripts to execute
+  ## Secret containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time (that contain sensitive data). Evaluated as a template.
   ##
   initScriptsSecret:
-
-  ## An array to add extra env vars
+  ## @param kong.extraEnvVars Array containing extra env vars to configure Kong
   ## For example:
   ## extraEnvVars:
   ##  - name: GF_DEFAULT_INSTANCE_NAME
   ##    value: my-instance
   ##
   extraEnvVars: []
-
-  ## ConfigMap with extra env vars:
+  ## @param kong.extraEnvVarsCM ConfigMap containing extra env vars to configure Kong
   ##
   extraEnvVarsCM:
-
-  ## Secret with extra env vars:
+  ## @param kong.extraEnvVarsSecret Secret containing extra env vars to configure Kong (in case of sensitive data)
   ##
   extraEnvVarsSecret:
-  ## Array to add extra mounts (normally used with extraVolumes)
+  ## @param kong.extraVolumeMounts Array of extra volume mounts to be added to the Kong Container (evaluated as template). Normally used with `extraVolumes`.
   ##
   extraVolumeMounts: []
-
-  ## Custom Liveness probe
+  ## @param kong.customLivenessProbe Override default liveness probe (kong container)
   ##
   customLivenessProbe: {}
-
-  ## Custom Rediness probe
+  ## @param kong.customReadinessProbe Override default readiness probe (kong container)
   ##
   customReadinessProbe: {}
-
-  ##
-  ## Liveness and readiness probes
-  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## Configure extra options for liveness probe
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param kong.livenessProbe.enabled Enable livenessProbe
+  ## @param kong.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param kong.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param kong.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param kong.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param kong.livenessProbe.successThreshold Success threshold for livenessProbe
   ##
   livenessProbe:
     enabled: true
@@ -131,7 +394,15 @@ kong:
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
-
+  ## Configure extra options for readiness probe
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param kong.readinessProbe.enabled Enable readinessProbe
+  ## @param kong.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param kong.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param kong.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param kong.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param kong.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
   readinessProbe:
     enabled: true
     initialDelaySeconds: 30
@@ -139,30 +410,107 @@ kong:
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
-  ##
-  ## Container lifecycle hooks
+  ## @param kong.lifecycleHooks Lifecycle hooks (kong container)
   ## ref: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/
   ##
   lifecycleHooks: {}
-
   ## Container resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param kong.resources.limits The resources limits for the container
+  ## @param kong.resources.requests The requested resources for the container
   ##
   resources:
-    # We usually recommend not to specify default resources and to leave this as a conscious
-    # choice for the user. This also increases chances charts run on environments with little
-    # resources, such as Minikube. If you do want to specify resources, uncomment the following
-    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## Example:
+    ## limits:
+    ##    cpu: 500m
+    ##    memory: 1Gi
     limits: {}
-    #   cpu: 500m
-    #   memory: 1Gi
+    ## Examples:
+    ## requests:
+    ##    cpu: 100m
+    ##    memory: 128Mi
     requests: {}
-    #   cpu: 250m
-    #   memory: 256Mi
+
+## @section Kong Migration job Parameters
+
+migration:
+  ## In case you want to use a custom image for Kong migration, set this value
+  ## image:
+  ##   registry:
+  ##   repository:
+  ##   tag:
+  ##
+  ## @param migration.command Override default container command (useful when using custom images)
+  ##
+  command:
+  ## @param migration.args Override default container args (useful when using custom images)
+  ##
+  args:
+  ## @param migration.hostAliases Add deployment host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param migration.annotations [object] Add annotations to the job
+  ##
+  annotations:
+    helm.sh/hook: post-install, post-upgrade
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+  ## @param migration.extraEnvVars Array containing extra env vars to configure the Kong migration job
+  ## For example:
+  ## extraEnvVars:
+  ##  - name: GF_DEFAULT_INSTANCE_NAME
+  ##    value: my-instance
+  ##
+  extraEnvVars: []
+  ## @param migration.extraEnvVarsCM ConfigMap containing extra env vars to configure the Kong migration job
+  ##
+  extraEnvVarsCM:
+  ## @param migration.extraEnvVarsSecret Secret containing extra env vars to configure the Kong migration job (in case of sensitive data)
+  ##
+  extraEnvVarsSecret:
+  ## @param migration.extraVolumeMounts Array of extra volume mounts to be added to the Kong Container (evaluated as template). Normally used with `extraVolumes`.
+  ##
+  extraVolumeMounts:
+  ## Container resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param migration.resources.limits The resources limits for the container
+  ## @param migration.resources.requests The requested resources for the container
+  ##
+  resources:
+    ## Example:
+    ## limits:
+    ##    cpu: 500m
+    ##    memory: 1Gi
+    limits: {}
+    ## Examples:
+    ## requests:
+    ##    cpu: 250m
+    ##    memory: 256Mi
+    requests: {}
+
+## @section Kong Ingress Controller Container Parameters
 
 ingressController:
+  ## @param ingressController.enabled Enable/disable the Kong Ingress Controller
+  ##
   enabled: true
+  ## @param ingressController.customResourceDeletePolicy Add custom CRD resource delete policy (for Helm 2 support)
+  ##
   customResourceDeletePolicy: {}
+  ## @param ingressController.image.registry Kong Ingress Controller image registry
+  ## @param ingressController.image.repository Kong Ingress Controller image name
+  ## @param ingressController.image.tag Kong Ingress Controller image tag
+  ## @param ingressController.image.pullPolicy kong ingress controller image pull policy
+  ## @param ingressController.image.pullSecrets Specify docker-registry secret names as an array
+  ##
   image:
     registry: docker.io
     repository: bitnami/kong-ingress-controller
@@ -175,48 +523,59 @@ ingressController:
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## Example:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
     ##
-    # pullSecrets:
-    #   - myRegistryKeySecretName
+    pullSecrets: []
+  ## @param ingressController.proxyReadyTimeout Maximum time (in seconds) to wait for the Kong container to be ready
+  ##
   proxyReadyTimeout: 300
+  ## @param ingressController.rbac.create Create the necessary Service Accounts, Roles and Rolebindings for the Ingress Controller to work
+  ## @param ingressController.rbac.existingServiceAccount Use an existing service account for all the RBAC operations
+  ##
   rbac:
     create: true
     existingServiceAccount:
+  ## @param ingressController.ingressClass Name of the class to register Kong Ingress Controller (useful when having other Ingress Controllers in the cluster)
+  ##
   ingressClass: kong
-  ## Command and args for running the container (set to default if not set). Use array form
+  ## @param ingressController.command Override default container command (useful when using custom images)
   ##
   command:
+  ## @param ingressController.args Override default container args (useful when using custom images)
+  ##
   args:
-  ## An array to add extra env vars
+  ## @param ingressController.extraEnvVars Array containing extra env vars to configure Kong
   ## For example:
   ## extraEnvVars:
   ##  - name: GF_DEFAULT_INSTANCE_NAME
   ##    value: my-instance
   ##
   extraEnvVars: []
-
-  ## ConfigMap with extra env vars:
+  ## @param ingressController.extraEnvVarsCM ConfigMap containing extra env vars to configure Kong Ingress Controller
   ##
   extraEnvVarsCM:
-
-  ## Secret with extra env vars:
+  ## @param ingressController.extraEnvVarsSecret Secret containing extra env vars to configure Kong Ingress Controller (in case of sensitive data)
   ##
   extraEnvVarsSecret:
-  ## Array to add extra mounts (normally used with extraVolumes)
+  ## @param ingressController.extraVolumeMounts Array of extra volume mounts to be added to the Kong Ingress Controller container (evaluated as template). Normally used with `extraVolumes`.
   ##
   extraVolumeMounts: []
-
-  ## Custom Liveness probe
+  ## @param ingressController.customLivenessProbe Override default liveness probe (kong ingress controller container)
   ##
   customLivenessProbe: {}
-
-  ## Custom Rediness probe
+  ## @param ingressController.customReadinessProbe Override default readiness probe (kong ingress controller container)
   ##
   customReadinessProbe: {}
-
-  ##
-  ## Liveness and readiness probes
-  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## Configure extra options for liveness probe
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param ingressController.livenessProbe.enabled Enable livenessProbe
+  ## @param ingressController.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param ingressController.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param ingressController.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param ingressController.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param ingressController.livenessProbe.successThreshold Success threshold for livenessProbe
   ##
   livenessProbe:
     enabled: true
@@ -225,6 +584,15 @@ ingressController:
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
+  ## Configure extra options for readiness probe
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param ingressController.readinessProbe.enabled Enable readinessProbe
+  ## @param ingressController.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param ingressController.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param ingressController.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param ingressController.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param ingressController.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
   readinessProbe:
     enabled: true
     initialDelaySeconds: 30
@@ -234,325 +602,108 @@ ingressController:
     successThreshold: 1
   ## Container resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param ingressController.resources.limits The resources limits for the container
+  ## @param ingressController.resources.requests The requested resources for the container
   ##
   resources:
-    # We usually recommend not to specify default resources and to leave this as a conscious
-    # choice for the user. This also increases chances charts run on environments with little
-    # resources, such as Minikube. If you do want to specify resources, uncomment the following
-    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## Example:
+    ## limits:
+    ##    cpu: 500m
+    ##    memory: 1Gi
     limits: {}
-    #   cpu: 500m
-    #   memory: 1Gi
+    ## Examples:
+    ## requests:
+    ##    cpu: 250m
+    ##    memory: 256Mi
     requests: {}
-    #   cpu: 250m
-    #   memory: 256Mi
 
-migration:
-  ## In case you want to use a custom image for Kong migration, set this value
-  ##
-  # image:
-  #   registry:
-  #   repository:
-  #   tag:
-  ## Command and args for running the container (set to default if not set). Use array form
-  ##
-  command:
-  args:
+## @section PostgreSQL Parameters
 
-  ## Deployment pod host aliases
-  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
-  ##
-  hostAliases: []
-
-  ## Job annotation. By defeault set to post-install and post-upgrade
-  ##
-  annotations:
-    helm.sh/hook: post-install, post-upgrade
-    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
-
-  ## An array to add extra env vars
-  ## For example:
-  ## extraEnvVars:
-  ##  - name: GF_DEFAULT_INSTANCE_NAME
-  ##    value: my-instance
-  ##
-  extraEnvVars: []
-
-  ## ConfigMap with extra env vars:
-  ##
-  extraEnvVarsCM:
-
-  ## Secret with extra env vars:
-  ##
-  extraEnvVarsSecret:
-  ## Array to add extra mounts (normally used with extraVolumes)
-  ##
-  extraVolumeMounts:
-  ## Liveness and readiness probes
-  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
-  ##
-  ## Container resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ##
-  resources:
-    # We usually recommend not to specify default resources and to leave this as a conscious
-    # choice for the user. This also increases chances charts run on environments with little
-    # resources, such as Minikube. If you do want to specify resources, uncomment the following
-    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    limits: {}
-    #   cpu: 500m
-    #   memory: 1Gi
-    requests: {}
-    #   cpu: 250m
-    #   memory: 256Mi
-
-## Array to add extra volumes
+## PostgreSQL properties
 ##
-extraVolumes: []
+postgresql:
+  ## @param postgresql.enabled Deploy the PostgreSQL sub-chart
+  ##
+  enabled: true
+  ## @param postgresql.usePasswordFile Mount the PostgreSQL secret as a file
+  ##
+  usePasswordFile: false
+  ## Properties for using an existing PostgreSQL installation
+  ##
+  external:
+    ## @param postgresql.external.host Host of an external PostgreSQL installation
+    ##
+    host:
+    ## @param postgresql.external.user Username of the external PostgreSQL installation
+    ##
+    user:
+    ## @param postgresql.external.password Password of the external PostgreSQL installation
+    ##
+    password:
+  ## @param postgresql.existingSecret Use an existing secret file with the PostgreSQL password (can be used with the bundled chart or with an existing installation)
+  ##
+  existingSecret:
+  ## @param postgresql.postgresqlDatabase Database name to be used by Kong
+  ##
+  postgresqlDatabase: kong
+  ## @param postgresql.postgresqlUsername Username to be created by the PostgreSQL bundled chart
+  ##
+  postgresqlUsername: kong
 
-## Add init containers to the pod
+## @section Cassandra Parameters
+
+## Cassandra properties
 ##
-initContainers:
-## e.g.
-# - name: your-image-name
-# image: your-image
-# imagePullPolicy: Always
-# ports:
-# - name: portname
-#   containerPort: 1234
-
-## Add sidecar containers to the pod
-##
-sidecars:
-## e.g.
-# - name: your-image-name
-# image: your-image
-# imagePullPolicy: Always
-# ports:
-# - name: portname
-#   containerPort: 1234
-
-## Service parameters
-##
-service:
-  ## K8s service type
-  ##
-  type: ClusterIP
-
-  ## clusterIP for the service (optional)
-  ## This is the internal IP address of the service and is usually assigned randomly.
-  ## ref: https://kubernetes.io/docs/reference/kubernetes-api/service-resources/service-v1/#ServiceSpec
-  ##
-  clusterIP:
-
-  ## externalTrafficPolicy for the service
-  ## default to "Cluster"
-  ## set to "Local" in order to preserve the client source IP (only on service of type LoadBalancer or NodePort)
-  ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/
-  ##
-  externalTrafficPolicy:
-
-  ## kong proxy HTTP service port
-  ##
-  proxyHttpPort: 80
-  ## kong proxy HTTPS service port
-  ##
-  proxyHttpsPort: 443
-
-  ## Include the admin ports in the service
-  ##
-  exposeAdmin: false
-  ## kong proxy HTTP service port
-  ##
-  adminHttpPort: 8001
-  ## kong proxy HTTPS service port
-  ##
-  adminHttpsPort: 8444
-
-  ## Specify the nodePort value for the LoadBalancer and NodePort service types.
-  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
-  ##
-  # proxyHttpNodePort:
-  # proxyHttpsNodePort:
-  # adminHttpNodePort:
-  # adminHttpsNodePort:
-
-  ## loadBalancerIP for the Kong Service (optional, cloud specific)
-  ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
-  ##
-  loadBalancerIP:
-
-  ## Provide any additional annotations which may be required. This can be used to
-  ## set the LoadBalancer service type to internal only.
-  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
-  ##
-  annotations: {}
-  ## Extra ports to expose (normally used with the `sidecar` value)
-  # extraPorts:
-
-## Kong cluster domain
-##
-clusterDomain: cluster.local
-
-## Configure the ingress resource that allows you to access the
-## Kong installation. Set up the URL
-## ref: http://kubernetes.io/docs/user-guide/ingress/
-##
-ingress:
-  ## Set to true to enable ingress record generation
+cassandra:
+  ## @param cassandra.enabled Deploy the Cassandra sub-chart
   ##
   enabled: false
-
-  ## Set this to true in order to add the corresponding annotations for cert-manager
+  ## @param cassandra.dbUser.user Username to be created by the cassandra bundled chart
   ##
-  certManager: false
-
-  ## Ingress Path type
+  dbUser:
+    user: kong
+  ## @param cassandra.usePasswordFile Mount the Cassandra secret as a file
   ##
-  pathType: ImplementationSpecific
-
-  ## Override API Version (automatically detected if not set)
+  usePasswordFile: false
+  ## Properties for using an existing Cassandra installation
   ##
-  apiVersion:
-
-  ## When the ingress is enabled, a host pointing to this will be created
+  external:
+    ## @param cassandra.external.hosts Hosts of an external cassandra installation
+    ## e.g:
+    ## hosts:
+    ##   - host1
+    ##   - host2
+    ##
+    hosts: []
+    ## @param cassandra.external.port Port of an external cassandra installation
+    ##
+    port: 9042
+    ## @param cassandra.external.user Username of the external cassandra installation
+    ##
+    user:
+    ## @param cassandra.external.password Password of the external cassandra installation
+    ##
+    password:
+  ## @param cassandra.existingSecret Use an existing secret file with the Cassandra password (can be used with the bundled chart or with an existing installation)
   ##
-  hostname: kong.local
+  existingSecret:
 
-  ## The Path to Kong. You may need to set this to '/*' in order to use this
-  ## with ALB ingress controllers.
-  ##
-  path: /
-
-  ## Ingress annotations done as key:value pairs
-  ## For a full list of possible ingress annotations, please see
-  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
-  ##
-  ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
-  ##
-  annotations: {}
-
-  ## Enable TLS configuration for the hostname defined at ingress.hostname parameter
-  ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
-  ## You can use the ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
-  ##
-  tls: false
-
-  ## The list of additional hostnames to be covered with this ingress record.
-  ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
-  ## extraHosts:
-  ## - name: kong.local
-  ##   path: /
-  ##
-
-  ## Any additional arbitrary paths that may need to be added to the ingress under the main host.
-  ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
-  ## extraPaths:
-  ## - path: /*
-  ##   backend:
-  ##     serviceName: ssl-redirect
-  ##     servicePort: use-annotation
-  ##
-
-  ## The tls configuration for additional hostnames to be covered with this ingress record.
-  ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
-  ## extraTls:
-  ## - hosts:
-  ##     - kong.local
-  ##   secretName: kong.local-tls
-  ##
-
-  ## If you're providing your own certificates, please use this to add the certificates as secrets
-  ## key and certificate should start with -----BEGIN CERTIFICATE----- or
-  ## -----BEGIN RSA PRIVATE KEY-----
-  ##
-  ## name should line up with a tlsSecret set further up
-  ## If you're using cert-manager, this is unneeded, as it will create the secret for you if it is not set
-  ##
-  ## It is also possible to create and manage the certificates outside of this helm chart
-  ## Please see README.md for more information
-  ##
-  secrets: []
-  ## - name: kong.local-tls
-  ##   key:
-  ##   certificate:
-  ##
-
-## SecurityContext configuration
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-##
-containerSecurityContext:
-  runAsUser: 1001
-  runAsNonRoot: true
-
-podSecurityContext: {}
-
-## Node labels for pod assignment
-## Ref: https://kubernetes.io/docs/user-guide/node-selection/
-##
-nodeSelector: {}
-
-## Tolerations for pod assignment
-## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-##
-tolerations: []
-
-## Pod affinity preset
-## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-## Allowed values: soft, hard
-##
-podAffinityPreset: ""
-
-## Pod anti-affinity preset
-## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-## Allowed values: soft, hard
-##
-podAntiAffinityPreset: soft
-
-## Node affinity preset
-## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-## Allowed values: soft, hard
-##
-nodeAffinityPreset:
-  ## Node affinity type
-  ## Allowed values: soft, hard
-  ##
-  type: ""
-  ## Node label key to match
-  ## E.g.
-  ## key: "kubernetes.io/e2e-az-name"
-  ##
-  key: ""
-  ## Node label values to match
-  ## E.g.
-  ## values:
-  ##   - e2e-az1
-  ##   - e2e-az2
-  ##
-  values: []
-
-## Affinity for pod assignment
-## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
-##
-affinity: {}
-
-## Pod annotations
-## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-##
-podAnnotations: {}
-
-## Pod labels
-## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-##
-podLabels: {}
+## @section Metrics Parameters
 
 ## Prometheus metrics
 ##
 metrics:
+  ## @param metrics.enabled Enable the export of Prometheus metrics
+  ##
   enabled: false
-
   ## Kong metrics service configuration
+  ## @param metrics.service.annotations [object] Annotations for Prometheus metrics service
+  ## @param metrics.service.type Type of the Prometheus metrics service
+  ## @param metrics.service.port Port of the Prometheus metrics service
   ##
   service:
     annotations:
@@ -561,134 +712,43 @@ metrics:
       prometheus.io/path: "/metrics"
     type: ClusterIP
     port: 9119
-
   ## Kong ServiceMonitor configuration
   ##
   serviceMonitor:
+    ## @param metrics.serviceMonitor.enabled If `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)
+    ##
     enabled: false
-    ## Namespace in which Prometheus is running
+    ## @param metrics.serviceMonitor.namespace Namespace in which Prometheus is running
+    ## e.g:
+    ## namespace: monitoring
     ##
-    # namespace: monitoring
-
-    ## Service Account used by Prometheus
+    namespace:
+    ## @param metrics.serviceMonitor.serviceAccount Service account used by Prometheus
+    ## e.g:
+    ## serviceAccount: prometheus
     ##
-    # serviceAccount: prometheus
-
-    ## Interval at which metrics should be scraped.
+    serviceAccount:
+    ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped.
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ## e.g:
+    ## interval: 10s
     ##
-    # interval: 10s
-
-    ## Timeout after which the scrape is ended
+    interval:
+    ## @param metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ## e.g:
+    ## scrapeTimeout: 10s
     ##
-    # scrapeTimeout: 10s
-
-    ## ServiceMonitor selector labels
+    scrapeTimeout:
+    ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
     ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+    ## e.g:
+    ## selector:
+    ##   prometheus: my-prometheus
     ##
-    # selector:
-    #   prometheus: my-prometheus
-
-    ## If RBAC enabled on the cluster, Additional resources will be required
-    ## so Prometheus can reach kong's namespace
+    selector: {}
+    ## @param metrics.serviceMonitor.rbac.enabled Whether to enable RBAC
+    ## If RBAC is enabled on the cluster, additional resources will be required so Prometheus can reach kong's namespace
     ##
     rbac:
       enabled: true
-
-## Add an horizontal pod autoscaler
-## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
-##
-autoscaling:
-  enabled: false
-  apiVersion: autoscaling/v2beta1
-  minReplicas: 2
-  maxReplicas: 5
-  metrics:
-    - type: Resource
-      resource:
-        name: cpu
-        targetAverageUtilization: 80
-
-## Kong Pod Disruption Budget
-## ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions/
-##
-pdb:
-  enabled: false
-  maxUnavailable: "50%"
-
-## Extra objects to deploy (value evaluated as a template)
-##
-extraDeploy: []
-
-## PostgreSQL properties
-##
-postgresql:
-  ## Deploy the postgresql sub-chart
-  ##
-  enabled: true
-  ## Mounts secrets as a file
-  ##
-  usePasswordFile: false
-  ## Properties for using an existing PostgreSQL installation
-  ##
-  external:
-    ## Host of the external PostgreSQL installation
-    ##
-    host:
-    ## Username of the external PostgreSQL installation
-    ##
-    user:
-    ## Password of the external PostgreSQL installation
-    ##
-    password:
-
-  ## Use an existing secret with the PostgreSQL password
-  ##
-  existingSecret:
-
-  ## Name of the Database for Kong to access
-  ##
-  postgresqlDatabase: kong
-
-  ## Create a username in the bundled PostgreSQL installation
-  ##
-  postgresqlUsername: kong
-
-## Cassandra properties
-##
-cassandra:
-  ## Deploy the cassandra sub-chart
-  ##
-  enabled: false
-  ## Database user to create
-  ##
-  dbUser:
-    user: kong
-  ## Mount secrets as files
-  ##
-  usePasswordFile: false
-  ## Properties for using an existing Cassandra installation
-  ##
-  external:
-    ## Array with the contact points
-    ##
-    hosts: []
-    # - host1
-    #  - host2
-
-    ## Port for accessing the external cassandra installation
-    ##
-    port: 9042
-
-    ## Username of the external Cassandra installation
-    ##
-    user:
-
-    ## Password of the external Cassandra installation
-    ##
-    password:
-
-  ## Use an existing secret with the Cassandra password
-  ##
-  existingSecret:
