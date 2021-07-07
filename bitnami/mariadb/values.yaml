@@ -16,6 +16,33 @@ global:
   imagePullSecrets: []
   storageClass:
 
+## @section Common parameters
+
+## @param nameOverride String to partially override mariadb.fullname
+##
+nameOverride:
+## @param fullnameOverride String to fully override mariadb.fullname
+##
+fullnameOverride:
+## @param clusterDomain Default Kubernetes cluster domain
+##
+clusterDomain: cluster.local
+## @param commonAnnotations Common annotations to add to all MariaDB resources (sub-charts are not considered)
+##
+commonAnnotations: {}
+## @param commonLabels Common labels to add to all MariaDB resources (sub-charts are not considered)
+##
+commonLabels: {}
+## @param schedulerName Name of the scheduler (other than default) to dispatch pods
+## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+##
+schedulerName:
+## @param extraDeploy Array of extra objects to deploy with the release (evaluated as a template)
+##
+extraDeploy: []
+
+## @section MariaDB common parameters
+
 ## Bitnami MariaDB image
 ## ref: https://hub.docker.com/r/bitnami/mariadb/tags/
 ## @param image.registry MariaDB image registry
@@ -45,36 +72,9 @@ image:
   ## It turns BASH and/or NAMI debugging in the image
   ##
   debug: false
-
-## @param nameOverride String to partially override mariadb.fullname
-##
-nameOverride:
-
-## @param fullnameOverride String to fully override mariadb.fullname
-##
-fullnameOverride:
-
-## @param clusterDomain Default Kubernetes cluster domain
-##
-clusterDomain: cluster.local
-
-## @param commonAnnotations Common annotations to add to all MariaDB resources (sub-charts are not considered)
-##
-commonAnnotations: {}
-
-## @param commonLabels Common labels to add to all MariaDB resources (sub-charts are not considered)
-##
-commonLabels: {}
-
-## @param schedulerName Name of the scheduler (other than default) to dispatch pods
-## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
-##
-schedulerName:
-
 ## @param architecture MariaDB architecture (`standalone` or `replication`)
 ##
 architecture: standalone
-
 ## MariaDB Authentication parameters
 ##
 auth:
@@ -118,7 +118,6 @@ auth:
   ##   replicator: /vault/secrets/mariadb-replicator
   ##
   customPasswordFiles: {}
-
 ## @param initdbScripts Dictionary of initdb scripts
 ## Specify dictionary of scripts to be run at first boot
 ## Example:
@@ -128,10 +127,11 @@ auth:
 ##      echo "Do something."
 ##
 initdbScripts: {}
-
 ## @param initdbScriptsConfigMap ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)
 ##
 initdbScriptsConfigMap:
+
+## @section MariaDB Primary parameters
 
 ## Mariadb Primary parameters
 ##
@@ -142,12 +142,10 @@ primary:
   ## @param primary.args Override default container args on MariaDB Primary container(s) (useful when using custom images)
   ##
   args: []
-
   ## @param primary.hostAliases Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-
   ## @param primary.configuration MariaDB Primary configuration to be injected as ConfigMap
   ## ref: https://mysql.com/kb/en/mysql/configuring-mysql-with-mycnf/#example-of-configuration-file
   ##
@@ -177,37 +175,30 @@ primary:
     port=3306
     socket=/opt/bitnami/mariadb/tmp/mysql.sock
     pid-file=/opt/bitnami/mariadb/tmp/mysqld.pid
-
   ## @param primary.existingConfiguration Name of existing ConfigMap with MariaDB Primary configuration.
   ## NOTE: When it's set the 'configuration' parameter is ignored
   ##
   existingConfiguration:
-
   ## @param primary.updateStrategy Update strategy type for the MariaDB primary statefulset
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy: RollingUpdate
-
   ## @param primary.rollingUpdatePartition Partition update strategy for Mariadb Primary statefulset
   ## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
   ##
   rollingUpdatePartition:
-
   ## @param primary.podAnnotations Additional pod annotations for MariaDB primary pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
-
   ## @param primary.podAffinityPreset MariaDB primary pod affinity preset. Ignored if `primary.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAffinityPreset: ""
-
   ## @param primary.podAntiAffinityPreset MariaDB primary pod anti-affinity preset. Ignored if `primary.affinity` is set. Allowed values: `soft` or `hard`
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAntiAffinityPreset: soft
-
   ## Mariadb Primary node affinity preset
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
   ##
@@ -227,28 +218,23 @@ primary:
     ##   - e2e-az2
     ##
     values: []
-
   ## @param primary.affinity Affinity for MariaDB primary pods assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
-
   ## @param primary.nodeSelector Node labels for MariaDB primary pods assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-
   ## @param primary.tolerations Tolerations for MariaDB primary pods assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-
   ## @param primary.priorityClassName Priority class for MariaDB primary pods assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
   priorityClassName: ""
-
   ## MariaDB primary Pod security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param primary.podSecurityContext.enabled Enable security context for MariaDB primary pods
@@ -257,7 +243,6 @@ primary:
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-
   ## MariaDB primary container security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param primary.containerSecurityContext.enabled MariaDB primary container securityContext
@@ -266,7 +251,6 @@ primary:
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
-
   ## MariaDB primary container's resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -287,7 +271,6 @@ primary:
     ##    cpu: 100m
     ##    memory: 256Mi
     requests: {}
-
   ## Configure extra options for liveness probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param primary.livenessProbe.enabled Enable livenessProbe
@@ -320,15 +303,12 @@ primary:
     timeoutSeconds: 1
     failureThreshold: 3
     successThreshold: 1
-
   ## @param primary.customLivenessProbe Override default liveness probe for MariaDB primary containers
   ##
   customLivenessProbe: {}
-
   ## @param primary.customReadinessProbe Override default readiness probe for MariaDB primary containers
   ##
   customReadinessProbe: {}
-
   ## @param primary.startupWaitOptions Override default builtin startup wait check options for MariaDB primary containers
   ## `bitnami/mariadb` Docker image has built-in startup check mechanism,
   ## which periodically checks if MariaDB service has started up and stops it
@@ -340,14 +320,12 @@ primary:
   ##   waitTime: 2
   ##
   startupWaitOptions: {}
-
   ## @param primary.extraFlags MariaDB primary additional command line flags
   ## Can be used to specify command line flags, for example:
   ## E.g.
   ## extraFlags: "--max-connect-errors=1000 --max_connections=155"
   ##
   extraFlags: ""
-
   ## @param primary.extraEnvVars Extra environment variables to be set on MariaDB primary containers
   ## E.g.
   ## extraEnvVars:
@@ -355,15 +333,12 @@ primary:
   ##    value: "Europe/Paris"
   ##
   extraEnvVars: []
-
   ## @param primary.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for MariaDB primary containers
   ##
   extraEnvVarsCM: ""
-
   ## @param primary.extraEnvVarsSecret Name of existing Secret containing extra env vars for MariaDB primary containers
   ##
   extraEnvVarsSecret: ""
-
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
@@ -402,23 +377,18 @@ primary:
     ##     app: my-app
     ##
     selector: {}
-
   ## @param primary.extraVolumes Optionally specify extra list of additional volumes to the MariaDB Primary pod(s)
   ##
   extraVolumes: []
-
   ## @param primary.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the MariaDB Primary container(s)
   ##
   extraVolumeMounts: []
-
   ## @param primary.initContainers Add additional init containers for the MariaDB Primary pod(s)
   ##
   initContainers: []
-
   ## @param primary.sidecars Add additional sidecar containers for the MariaDB Primary pod(s)
   ##
   sidecars: []
-
   ## MariaDB Primary Service parameters
   ##
   service:
@@ -449,7 +419,6 @@ primary:
     ## @param primary.service.annotations Provide any additional annotations which may be required
     ##
     annotations: {}
-
   ## MariaDB primary Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
   ##
@@ -463,10 +432,11 @@ primary:
     ## @param primary.pdb.maxUnavailable Maximum number/percentage of MariaDB primary pods that can be unavailable after the eviction
     ##
     maxUnavailable:
-
   ## @param primary.revisionHistoryLimit Maximum number of revisions that will be maintained in the StatefulSet
   ##
   revisionHistoryLimit: 10
+
+## @section MariaDB Secondary parameters
 
 ## Mariadb Secondary parameters
 ##
@@ -474,19 +444,16 @@ secondary:
   ## @param secondary.replicaCount Number of MariaDB secondary replicas
   ##
   replicaCount: 1
-
   ## @param secondary.command Override default container command on MariaDB Secondary container(s) (useful when using custom images)
   ##
   command: []
   ## @param secondary.args Override default container args on MariaDB Secondary container(s) (useful when using custom images)
   ##
   args: []
-
   ## @param secondary.hostAliases Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-
   ## @param secondary.configuration MariaDB Secondary configuration to be injected as ConfigMap
   ## ref: https://mysql.com/kb/en/mysql/configuring-mysql-with-mycnf/#example-of-configuration-file
   ##
@@ -514,37 +481,30 @@ secondary:
     port=3306
     socket=/opt/bitnami/mariadb/tmp/mysql.sock
     pid-file=/opt/bitnami/mariadb/tmp/mysqld.pid
-
   ## @param secondary.existingConfiguration Name of existing ConfigMap with MariaDB Secondary configuration.
   ## NOTE: When it's set the 'configuration' parameter is ignored
   ##
   existingConfiguration:
-
   ## @param secondary.updateStrategy Update strategy type for the MariaDB secondary statefulset
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy: RollingUpdate
-
   ## @param secondary.rollingUpdatePartition Partition update strategy for Mariadb Secondary statefulset
   ## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
   ##
   rollingUpdatePartition:
-
   ## @param secondary.podAnnotations Additional pod annotations for MariaDB secondary pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
-
   ## @param secondary.podAffinityPreset MariaDB secondary pod affinity preset. Ignored if `secondary.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAffinityPreset: ""
-
   ## @param secondary.podAntiAffinityPreset MariaDB secondary pod anti-affinity preset. Ignored if `secondary.affinity` is set. Allowed values: `soft` or `hard`
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAntiAffinityPreset: soft
-
   ## Mariadb Secondary node affinity preset
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
   ##
@@ -564,28 +524,23 @@ secondary:
     ##   - e2e-az2
     ##
     values: []
-
   ## @param secondary.affinity Affinity for MariaDB secondary pods assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
-
   ## @param secondary.nodeSelector Node labels for MariaDB secondary pods assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-
   ## @param secondary.tolerations Tolerations for MariaDB secondary pods assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-
   ## @param secondary.priorityClassName Priority class for MariaDB secondary pods assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
   priorityClassName: ""
-
   ## MariaDB secondary Pod security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param secondary.podSecurityContext.enabled Enable security context for MariaDB secondary pods
@@ -594,7 +549,6 @@ secondary:
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-
   ## MariaDB secondary container security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param secondary.containerSecurityContext.enabled MariaDB secondary container securityContext
@@ -603,7 +557,6 @@ secondary:
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
-
   ## MariaDB secondary container's resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -624,7 +577,6 @@ secondary:
     ##    cpu: 100m
     ##    memory: 256Mi
     requests: {}
-
   ## Configure extra options for liveness probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param secondary.livenessProbe.enabled Enable livenessProbe
@@ -657,15 +609,12 @@ secondary:
     timeoutSeconds: 1
     failureThreshold: 3
     successThreshold: 1
-
   ## @param secondary.customLivenessProbe Override default liveness probe for MariaDB secondary containers
   ##
   customLivenessProbe: {}
-
   ## @param secondary.customReadinessProbe Override default readiness probe for MariaDB secondary containers
   ##
   customReadinessProbe: {}
-
   ## @param secondary.startupWaitOptions Override default builtin startup wait check options for MariaDB secondary containers
   ## `bitnami/mariadb` Docker image has built-in startup check mechanism,
   ## which periodically checks if MariaDB service has started up and stops it
@@ -677,14 +626,12 @@ secondary:
   ##   waitTime: 2
   ##
   startupWaitOptions: {}
-
   ## @param secondary.extraFlags MariaDB secondary additional command line flags
   ## Can be used to specify command line flags, for example:
   ## E.g.
   ## extraFlags: "--max-connect-errors=1000 --max_connections=155"
   ##
   extraFlags: ""
-
   ## @param secondary.extraEnvVars Extra environment variables to be set on MariaDB secondary containers
   ## E.g.
   ## extraEnvVars:
@@ -692,15 +639,12 @@ secondary:
   ##    value: "Europe/Paris"
   ##
   extraEnvVars: []
-
   ## @param secondary.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for MariaDB secondary containers
   ##
   extraEnvVarsCM: ""
-
   ## @param secondary.extraEnvVarsSecret Name of existing Secret containing extra env vars for MariaDB secondary containers
   ##
   extraEnvVarsSecret: ""
-
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
@@ -735,23 +679,18 @@ secondary:
     ##     app: my-app
     ##
     selector: {}
-
   ## @param secondary.extraVolumes Optionally specify extra list of additional volumes to the MariaDB secondary pod(s)
   ##
   extraVolumes: []
-
   ## @param secondary.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the MariaDB secondary container(s)
   ##
   extraVolumeMounts: []
-
   ## @param secondary.initContainers Add additional init containers for the MariaDB secondary pod(s)
   ##
   initContainers: []
-
   ## @param secondary.sidecars Add additional sidecar containers for the MariaDB secondary pod(s)
   ##
   sidecars: []
-
   ## MariaDB Secondary Service parameters
   ##
   service:
@@ -784,7 +723,6 @@ secondary:
     ## @param secondary.service.annotations Provide any additional annotations which may be required
     ##
     annotations: {}
-
   ## MariaDB secondary Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
   ##
@@ -798,10 +736,11 @@ secondary:
     ## @param secondary.pdb.maxUnavailable Maximum number/percentage of MariaDB secondary pods that may be made unavailable
     ##
     maxUnavailable:
-
   ## @param secondary.revisionHistoryLimit Maximum number of revisions that will be maintained in the StatefulSet
   ##
   revisionHistoryLimit: 10
+
+## @section RBAC parameters
 
 ## MariaDB pods ServiceAccount
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
@@ -817,7 +756,6 @@ serviceAccount:
   ## @param serviceAccount.annotations Annotations for MariaDB Service Account
   ##
   annotations: {}
-
 ## Role Based Access
 ## ref: https://kubernetes.io/docs/admin/authorization/rbac/
 ##
@@ -825,6 +763,8 @@ rbac:
   ## @param rbac.create Whether to create and use RBAC resources or not
   ##
   create: false
+
+## @section Volume Permissions parameters
 
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
@@ -858,6 +798,8 @@ volumePermissions:
     limits: {}
     requests: {}
 
+## @section Metrics parameters
+
 ## Mysqld Prometheus exporter parameters
 ##
 metrics:
@@ -882,13 +824,11 @@ metrics:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-
   ## @param metrics.annotations [object] Annotations for the Exporter pod
   ##
   annotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "9104"
-
   ## @param metrics.extraArgs [object] Extra args to be passed to mysqld_exporter
   ## ref: https://github.com/prometheus/mysqld_exporter/
   ## E.g.
@@ -930,7 +870,6 @@ metrics:
   extraArgs:
     primary: []
     secondary: []
-
   ## Mysqld Prometheus exporter resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -951,7 +890,6 @@ metrics:
     ##    cpu: 100m
     ##    memory: 256Mi
     requests: {}
-
   ## Configure extra options for liveness probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param metrics.livenessProbe.enabled Enable livenessProbe
@@ -984,7 +922,6 @@ metrics:
     timeoutSeconds: 1
     successThreshold: 1
     failureThreshold: 3
-
   ## Prometheus Service Monitor
   ## ref: https://github.com/coreos/prometheus-operator
   ##
@@ -1016,7 +953,3 @@ metrics:
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
     ##
     additionalLabels: {}
-
-## @param extraDeploy Array of extra objects to deploy with the release (evaluated as a template)
-##
-extraDeploy: []
