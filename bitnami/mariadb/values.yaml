@@ -146,7 +146,7 @@ primary:
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-  ## @param primary.configuration MariaDB Primary configuration to be injected as ConfigMap
+  ## @param primary.configuration [string] MariaDB Primary configuration to be injected as ConfigMap
   ## ref: https://mysql.com/kb/en/mysql/configuring-mysql-with-mycnf/#example-of-configuration-file
   ##
   configuration: |-
@@ -454,7 +454,7 @@ secondary:
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-  ## @param secondary.configuration MariaDB Secondary configuration to be injected as ConfigMap
+  ## @param secondary.configuration [string] MariaDB Secondary configuration to be injected as ConfigMap
   ## ref: https://mysql.com/kb/en/mysql/configuring-mysql-with-mycnf/#example-of-configuration-file
   ##
   configuration: |-
