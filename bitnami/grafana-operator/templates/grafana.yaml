@@ -87,9 +87,8 @@ spec:
       successThreshold: {{ .Values.grafana.readinessProbe.successThreshold }}
       failureThreshold: {{ .Values.grafana.readinessProbe.failureThreshold }}
     {{- end }}
-    {{- if .Values.grafana.persistence.enabled }}
-    strategy:
-      type: Recreate
+    {{- if .Values.grafana.updateStrategy }}
+    strategy: {{ toYaml .Values.grafana.updateStrategy | nindent 6 }}
     {{- end }}
   {{- if .Values.grafana.resources }}
   resources: {{- toYaml .Values.grafana.resources | nindent 4 }}
