@@ -73,30 +73,30 @@ The command removes all the Kubernetes components associated with the chart and 
 | `slack.channel`                          | Slack channel to notify                                              | `XXXX`                 |
 | `slack.token`                            | Slack API token                                                      | `XXXX`                 |
 | `hipchat.enabled`                        | Enable HipChat notifications                                         | `false`                |
-| `hipchat.room`                           | HipChat room to notify                                               | `""`                   |
-| `hipchat.token`                          | HipChat token                                                        | `""`                   |
-| `hipchat.url`                            | HipChat URL                                                          | `""`                   |
+| `hipchat.room`                           | HipChat room to notify                                               | `nil`                  |
+| `hipchat.token`                          | HipChat token                                                        | `nil`                  |
+| `hipchat.url`                            | HipChat URL                                                          | `nil`                  |
 | `mattermost.enabled`                     | Enable Mattermost notifications                                      | `false`                |
-| `mattermost.channel`                     | Mattermost channel to notify                                         | `""`                   |
-| `mattermost.url`                         | Mattermost URL                                                       | `""`                   |
-| `mattermost.username`                    | Mattermost user to notify                                            | `""`                   |
+| `mattermost.channel`                     | Mattermost channel to notify                                         | `nil`                  |
+| `mattermost.url`                         | Mattermost URL                                                       | `nil`                  |
+| `mattermost.username`                    | Mattermost user to notify                                            | `nil`                  |
 | `flock.enabled`                          | Enable Flock notifications                                           | `false`                |
-| `flock.url`                              | Flock URL                                                            | `""`                   |
+| `flock.url`                              | Flock URL                                                            | `nil`                  |
 | `msteams.enabled`                        | Enable Microsoft Teams notifications                                 | `false`                |
-| `msteams.webhookurl`                     | Microsoft Teams webhook URL                                          | `""`                   |
+| `msteams.webhookurl`                     | Microsoft Teams webhook URL                                          | `nil`                  |
 | `webhook.enabled`                        | Enable Webhook notifications                                         | `false`                |
-| `webhook.url`                            | Webhook URL                                                          | `""`                   |
+| `webhook.url`                            | Webhook URL                                                          | `nil`                  |
 | `smtp.enabled`                           | Enable SMTP (email) notifications                                    | `false`                |
-| `smtp.to`                                | Destination email address (required)                                 | `""`                   |
-| `smtp.from`                              | Source email address (required)                                      | `""`                   |
-| `smtp.hello`                             | SMTP hello field (optional)                                          | `""`                   |
-| `smtp.smarthost`                         | SMTP server address (name:port) (required)                           | `""`                   |
-| `smtp.subject`                           | Source email subject                                                 | `""`                   |
-| `smtp.auth.username`                     | Username for LOGIN and PLAIN auth mech                               | `""`                   |
-| `smtp.auth.password`                     | Password for LOGIN and PLAIN auth mech                               | `""`                   |
-| `smtp.auth.secret`                       | Secret for CRAM-MD5 auth mech                                        | `""`                   |
-| `smtp.auth.identity`                     | Identity for PLAIN auth mech                                         | `""`                   |
-| `smtp.requireTLS`                        | Force STARTTLS                                                       | `false`                |
+| `smtp.to`                                | Destination email address (required)                                 | `nil`                  |
+| `smtp.from`                              | Source email address (required)                                      | `nil`                  |
+| `smtp.hello`                             | SMTP hello field (optional)                                          | `nil`                  |
+| `smtp.smarthost`                         | SMTP server address (name:port) (required)                           | `nil`                  |
+| `smtp.subject`                           | Source email subject                                                 | `nil`                  |
+| `smtp.auth.username`                     | Username for LOGIN and PLAIN auth mech                               | `nil`                  |
+| `smtp.auth.password`                     | Password for LOGIN and PLAIN auth mech                               | `nil`                  |
+| `smtp.auth.secret`                       | Secret for CRAM-MD5 auth mech                                        | `nil`                  |
+| `smtp.auth.identity`                     | Identity for PLAIN auth mech                                         | `nil`                  |
+| `smtp.requireTLS`                        | Force STARTTLS. Set to `true` or `false`                             | `nil`                  |
 | `namespaceToWatch`                       | Namespace to watch, leave it empty for watching all                  | `""`                   |
 | `resourcesToWatch.deployment`            | Watch changes to Deployments                                         | `true`                 |
 | `resourcesToWatch.replicationcontroller` | Watch changes to ReplicationControllers                              | `false`                |

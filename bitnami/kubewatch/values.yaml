@@ -80,9 +80,9 @@ slack:
 ##
 hipchat:
   enabled: false
-  room: ""
-  token: ""
-  url: ""
+  room:
+  token:
+  url:
 ## @param mattermost.enabled Enable Mattermost notifications
 ## @param mattermost.channel Mattermost channel to notify
 ## @param mattermost.url Mattermost URL
@@ -90,59 +90,59 @@ hipchat:
 ##
 mattermost:
   enabled: false
-  channel: ""
-  url: ""
-  username: ""
+  channel:
+  url:
+  username:
 ## @param flock.enabled Enable Flock notifications
 ## @param flock.url Flock URL
 ##
 flock:
   enabled: false
-  url: ""
+  url:
 ## @param msteams.enabled Enable Microsoft Teams notifications
 ## @param msteams.webhookurl Microsoft Teams webhook URL
 ##
 msteams:
   enabled: false
-  webhookurl: ""
+  webhookurl:
 ## @param webhook.enabled Enable Webhook notifications
 ## @param webhook.url Webhook URL
 ##
 webhook:
   enabled: false
-  url: ""
+  url:
 smtp:
   ## @param smtp.enabled Enable SMTP (email) notifications
   ##
   enabled: false
   ## @param smtp.to Destination email address (required)
   ##
-  to: ""
+  to:
   ## @param smtp.from Source email address (required)
   ##
-  from: ""
+  from:
   ## @param smtp.hello SMTP hello field (optional)
   ##
-  hello: ""
+  hello:
   ## @param smtp.smarthost SMTP server address (name:port) (required)
   ##
-  smarthost: ""
+  smarthost:
   ## @param smtp.subject Source email subject
   ##
-  subject: ""
+  subject:
   ## @param smtp.auth.username Username for LOGIN and PLAIN auth mech
   ## @param smtp.auth.password Password for LOGIN and PLAIN auth mech
   ## @param smtp.auth.secret Secret for CRAM-MD5 auth mech
   ## @param smtp.auth.identity Identity for PLAIN auth mech
   ##
   auth:
-    username: ""
-    password: ""
-    secret: ""
-    identity: ""
-  ## @param smtp.requireTLS Force STARTTLS
+    username:
+    password:
+    secret:
+    identity:
+  ## @param smtp.requireTLS Force STARTTLS. Set to `true` or `false`
   ##
-  requireTLS: false
+  requireTLS:
 ## @param namespaceToWatch Namespace to watch, leave it empty for watching all
 ##
 namespaceToWatch: ""
