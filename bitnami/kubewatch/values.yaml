@@ -14,30 +14,25 @@ global:
   ##
   imagePullSecrets: []
 
+## @section Common parameters
+
 ## @param nameOverride String to partially override common.names.fullname template
 ##
 nameOverride:
-
 ## @param fullnameOverride String to fully override common.names.fullname template
 ##
 fullnameOverride:
-
 ## @param commonLabels Labels to add to all deployed objects
 ##
 commonLabels: {}
-
 ## @param commonAnnotations Annotations to add to all deployed objects
 ##
 commonAnnotations: {}
-
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
 
-## @param hostAliases Add deployment host aliases
-## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
-##
-hostAliases: []
+## @section Kubewatch parameters
 
 ## Bitnami Kubewatch image version
 ## ref: https://hub.docker.com/r/bitnami/kubewatch/tags/
@@ -64,7 +59,10 @@ image:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
-
+## @param hostAliases Add deployment host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
 ## @param slack.enabled Enable Slack notifications
 ## @param slack.channel Slack channel to notify
 ## @param slack.token Slack API token
@@ -75,7 +73,6 @@ slack:
   ## Create using: https://my.slack.com/services/new/bot and invite the bot to your channel using: /join @botname
   ##
   token: "XXXX"
-
 ## @param hipchat.enabled Enable HipChat notifications
 ## @param hipchat.room HipChat room to notify
 ## @param hipchat.token HipChat token
@@ -114,7 +111,6 @@ msteams:
 webhook:
   enabled: false
   url: ""
-
 smtp:
   ## @param smtp.enabled Enable SMTP (email) notifications
   ##
@@ -147,11 +143,9 @@ smtp:
   ## @param smtp.requireTLS Force STARTTLS
   ##
   requireTLS: false
-
 ## @param namespaceToWatch Namespace to watch, leave it empty for watching all
 ##
 namespaceToWatch: ""
-
 ## Resources to watch
 ## @param resourcesToWatch.deployment Watch changes to Deployments
 ## @param resourcesToWatch.replicationcontroller Watch changes to ReplicationControllers
@@ -171,14 +165,12 @@ resourcesToWatch:
   pod: true
   job: false
   persistentvolume: false
-
 ## @param command Override default container command (useful when using custom images)
 ##
 command: []
 ## @param args Override default container args (useful when using custom images)
 ##
 args: []
-
 ## @param extraEnvVars Extra environment variables to be set on Kubewatch container
 ## Example:
 ## extraEnvVars:
@@ -186,19 +178,18 @@ args: []
 ##     value: "bar"
 ##
 extraEnvVars: []
-
 ## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars
 ##
 extraEnvVarsCM:
-
 ## @param extraEnvVarsSecret Name of existing Secret containing extra env vars
 ##
 extraEnvVarsSecret:
 
+## @section Kubewatch deployment parameters
+
 ## @param replicaCount Number of Kubewatch replicas to deploy
 ##
 replicaCount: 1
-
 ## Kubewatch containers' SecurityContext
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enable Kubewatch containers' SecurityContext
@@ -207,7 +198,6 @@ replicaCount: 1
 podSecurityContext:
   enabled: false
   fsGroup:
-
 ## Kubewatch pods' Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled Enable Kubewatch pods' Security Context
@@ -218,7 +208,6 @@ containerSecurityContext:
   enabled: false
   runAsUser:
   runAsNonRoot:
-
 ## Kubewatch resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -239,7 +228,6 @@ resources:
   ##    cpu: 100m
   ##    memory: 10Mi
   requests: {}
-
 ## Configure extra options for liveness probe
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe
@@ -272,25 +260,20 @@ readinessProbe:
   timeoutSeconds: 1
   failureThreshold: 3
   successThreshold: 1
-
 ## @param customLivenessProbe Override default liveness probe
 ##
 customLivenessProbe: {}
-
 ## @param customReadinessProbe Override default readiness probe
 ##
 customReadinessProbe: {}
-
 ## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
 podAffinityPreset: ""
-
 ## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
 podAntiAffinityPreset: soft
-
 ## Node affinity preset
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
 ##
@@ -310,46 +293,37 @@ nodeAffinityPreset:
   ##   - e2e-az2
   ##
   values: []
-
 ## @param affinity Affinity for pod assignment
 ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ## Note: podAffinityPreset, podAntiAffinityPreset, and nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
-
 ## @param nodeSelector Node labels for pod assignment
 ## ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
 nodeSelector: {}
-
 ## @param tolerations Tolerations for pod assignment
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
-
 ## @param priorityClassName Controller priorityClassName
 ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
 ##
 priorityClassName:
-
 ## @param podLabels Extra labels for Kubewatch pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
 podLabels: {}
-
 ## @param podAnnotations Annotations for Kubewatch pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
-
 ## @param extraVolumes Optionally specify extra list of additional volumes for Kubewatch pods
 ##
 extraVolumes: []
-
 ## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for Kubewatch container(s)
 ##
 extraVolumeMounts: []
-
 ## @param initContainers Add additional init containers to the Kubewatch pods
 ## Example:
 ## initContainers:
@@ -361,7 +335,6 @@ extraVolumeMounts: []
 ##         containerPort: 1234
 ##
 initContainers: {}
-
 ## @param sidecars Add additional sidecar containers to the Kubewatch pods
 ## Example:
 ## sidecars:
@@ -374,11 +347,12 @@ initContainers: {}
 ##
 sidecars: {}
 
+## @section RBAC parameters
+
 ## @param rbac.create Whether to create & use RBAC resources or not
 ##
 rbac:
   create: false
-
 ## Specifies whether a ServiceAccount should be created
 ##
 serviceAccount:
