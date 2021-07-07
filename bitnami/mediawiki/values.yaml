@@ -16,6 +16,31 @@ global:
   imagePullSecrets: []
   storageClass:
 
+## @section Common parameters
+
+## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
+##
+kubeVersion:
+## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
+##
+nameOverride:
+## @param fullnameOverride String to fully override common.names.fullname template
+##
+fullnameOverride:
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+## @param clusterDomain Default Kubernetes cluster domain
+##
+clusterDomain: cluster.local
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
+
+## @section Mediawiki parameters
 
 ## Bitnami DokuWiki image version
 ## ref: https://hub.docker.com/r/bitnami/mediawiki/tags/
@@ -42,11 +67,6 @@ image:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
-
-## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
-##
-kubeVersion:
-
 ## @param hostAliases [array] Deployment pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -56,62 +76,31 @@ hostAliases:
   - ip: "127.0.0.1"
     hostnames:
       - "status.localhost"
-
-## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
-##
-nameOverride:
-
-## @param fullnameOverride String to fully override common.names.fullname template
-##
-fullnameOverride:
-
-## @param commonLabels Labels to add to all deployed objects
-##
-commonLabels: {}
-
-## @param commonAnnotations Annotations to add to all deployed objects
-##
-commonAnnotations: {}
-
-## @param clusterDomain Default Kubernetes cluster domain
-##
-clusterDomain: cluster.local
-
-## @param extraDeploy Array of extra objects to deploy with the release
-##
-extraDeploy: []
-
 ## @param mediawikiUser User of the application
 ## ref: https://github.com/bitnami/bitnami-docker-mediawiki#environment-variables
 ##
 mediawikiUser: user
-
 ## @param mediawikiPassword Application password
 ## Defaults to a random 10-character alphanumeric string if not set
 ## ref: https://github.com/bitnami/bitnami-docker-mediawiki#environment-variables
 ##
 mediawikiPassword:
-
 ## @param mediawikiEmail Admin email
 ## ref: https://github.com/bitnami/bitnami-docker-mediawiki#environment-variables
 ##
 mediawikiEmail: user@example.com
-
 ## @param mediawikiName Name for the wiki
 ## ref: https://github.com/bitnami/bitnami-docker-mediawiki#environment-variables
 ##
 mediawikiName: My Wiki
-
 ## @param mediawikiHost Mediawiki host to create application URLs
 ## ref: https://github.com/bitnami/bitnami-docker-mediawiki#configuration
 ##
 mediawikiHost:
-
 ## @param allowEmptyPassword Allow DB blank passwords
 ## ref: https://github.com/bitnami/bitnami-docker-mediawiki#environment-variables
 ##
 allowEmptyPassword: "yes"
-
 ## SMTP mail delivery configuration
 ## ref: https://github.com/bitnami/bitnami-docker-mediawiki#smtp-configuration
 ## @param smtpHost SMTP host
@@ -125,14 +114,12 @@ smtpPort:
 smtpHostID:
 smtpUser:
 smtpPassword:
-
 ## @param command Override default container command (useful when using custom images)
 ##
 command: []
 ## @param args Override default container args (useful when using custom images)
 ##
 args: []
-
 ## @param extraEnvVars Extra environment variables to be set on Mediawki container
 ## Example:
 ## extraEnvVars:
@@ -140,21 +127,20 @@ args: []
 ##     value: "bar"
 ##
 extraEnvVars: []
-
 ## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars
 ##
 extraEnvVarsCM:
-
 ## @param extraEnvVarsSecret Name of existing Secret containing extra env vars
 ##
 extraEnvVarsSecret:
 
+## @section Mediawiki deployment parameters
+
 ## Strategy to use to update Pods
-  ## @param updateStrategy.type StrategyType can be set to RollingUpdate or OnDelete
+## @param updateStrategy.type StrategyType can be set to RollingUpdate or OnDelete
 ##
 updateStrategy:
   type: RollingUpdate
-
 ## Mediawiki pods' Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param podSecurityContext.enabled Enable Mediawiki pods' Security Context
@@ -163,7 +149,6 @@ updateStrategy:
 podSecurityContext:
   enabled: true
   fsGroup: 1001
-
 ## Mediawiki containers' SecurityContext
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param containerSecurityContext.enabled Enable Mediawiki containers' SecurityContext
@@ -172,7 +157,6 @@ podSecurityContext:
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
-
 ## Mediawiki resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -191,7 +175,6 @@ resources:
   requests:
     memory: 512Mi
     cpu: 300m
-
 ## Mediawiki containers' liveness probe.
 ## Configure extra options for liveness probe
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
@@ -244,35 +227,28 @@ readinessProbe:
   timeoutSeconds: 5
   failureThreshold: 6
   successThreshold: 1
-
 ## @param customLivenessProbe Override default liveness probe
 ##
 customLivenessProbe: {}
-
 ## @param customReadinessProbe Override default readiness probe
 ##
 customReadinessProbe: {}
-
 ## @param podLabels Extra labels for Mediawki pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
 podLabels: {}
-
 ## @param podAnnotations Annotations for Mediawki pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
-
 ## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
 podAffinityPreset: ""
-
 ## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
 podAntiAffinityPreset: soft
-
 ## Node affinity preset
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
 ## Allowed values: soft, hard
@@ -293,31 +269,25 @@ nodeAffinityPreset:
   ##   - e2e-az2
   ##
   values: []
-
 ## @param affinity Affinity for pod assignment. Evaluated as a template.
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ## Note: podAffinityPreset, podAntiAffinityPreset, and nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
-
 ## @param nodeSelector Node labels for pod assignment. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
 nodeSelector: {}
-
 ## @param tolerations Tolerations for pod assignment. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
-
 ## @param extraVolumes Optionally specify extra list of additional volumes for Mediawki pods
 ##
 extraVolumes: []
-
 ## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for Mediawki container(s)
 ##
 extraVolumeMounts: []
-
 ## @param initContainers Add additional init containers to the Mediawki pods
 ## Example:
 ## initContainers:
@@ -329,7 +299,6 @@ extraVolumeMounts: []
 ##         containerPort: 1234
 ##
 initContainers: {}
-
 ## @param sidecars Add additional sidecar containers to the Mediawki pods
 ## Example:
 ## sidecars:
@@ -341,7 +310,6 @@ initContainers: {}
 ##         containerPort: 1234
 ##
 sidecars: {}
-
 ## Enable persistence using Persistent Volume Claims
 ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
@@ -357,7 +325,6 @@ persistence:
   ##   GKE, AWS & OpenStack)
   ##
   storageClass:
-
   ## @param persistence.existingClaim An Existing PVC name for MediaWiki volume
   ## Requires persistence.enabled: true
   ## If defined, PVC must be created manually before volume will be bound
@@ -369,6 +336,8 @@ persistence:
   ## @param persistence.size PVC Storage Request for MediaWiki volume
   ##
   size: 8Gi
+
+## @section Traffic Exposure parameters
 
 ## Kubernetes service configuration
 ## For minikube, set this to NodePort, elsewhere use LoadBalancer
@@ -403,7 +372,6 @@ service:
   ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: Cluster
-
 ## Configure the ingress resource that allows you to access the Mediawiki installation. Set up the URL
 ## ref: http://kubernetes.io/docs/user-guide/ingress/
 ##
@@ -411,27 +379,21 @@ ingress:
   ## @param ingress.enabled Set to true to enable ingress record generation
   ##
   enabled: false
-
   ## @param ingress.certManager Set this to true in order to add the corresponding annotations for cert-manager
   ##
   certManager: false
-
   ## @param ingress.pathType Ingress path type
   ##
   pathType: ImplementationSpecific
-
   ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
   ##
   apiVersion:
-
   ## @param ingress.hostname Default host for the ingress resource
   ##
   hostname: mediawiki.local
-
   ## @param ingress.path The Path to Mediawiki. You may need to set this to '/*' in order to use this with ALB ingress controllers.
   ##
   path: /
-
   ## @param ingress.annotations Ingress annotations
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
@@ -439,13 +401,11 @@ ingress:
   ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
   ##
   annotations: {}
-
   ## @param ingress.tls Enable TLS configuration for the hostname defined at ingress.hostname parameter
   ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
   ## You can use the ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
   ##
   tls: false
-
   ## @param ingress.extraHosts The list of additional hostnames to be covered with this ingress record.
   ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
   ## extraHosts:
@@ -462,7 +422,6 @@ ingress:
   ##     servicePort: use-annotation
   ##
   extraPaths: []
-
   ## @param ingress.extraTls The tls configuration for additional hostnames to be covered with this ingress record.
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
   ## extraTls:
@@ -487,103 +446,7 @@ ingress:
   ##
   secrets: []
 
-## Prometheus Exporter / Metrics
-##
-metrics:
-  ## @param metrics.enabled Start a side-car prometheus exporter
-  ##
-  enabled: false
-  ## @param metrics.image.registry Apache exporter image registry
-  ## @param metrics.image.repository Apache exporter image repository
-  ## @param metrics.image.tag Apache exporter image tag (immutable tags are recommended)
-  ## @param metrics.image.pullPolicy Image pull policy
-  ## @param metrics.image.pullSecrets Specify docker-registry secret names as an array
-  ##
-  image:
-    registry: docker.io
-    repository: bitnami/apache-exporter
-    tag: 0.9.0-debian-10-r14
-    pullPolicy: IfNotPresent
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ## e.g:
-    ## pullSecrets:
-    ##   - myRegistryKeySecretName
-    ##
-    pullSecrets: []
-
-  ## @param metrics.resources Exporter resource requests/limit
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ##
-  resources: {}
-  ## Metrics exporter pod Annotation and Labels
-  ##
-
-  ## @param metrics.port Metrics service port
-  ##
-  port: 9117
-  ## @param metrics.podAnnotations [object] Additional annotations for Metrics exporter pod
-  ##
-  podAnnotations:
-    prometheus.io/scrape: "true"
-    prometheus.io/port: "{{ .Values.metrics.port }}"
-
-  ## Prometheus Service Monitor
-  ## ref: https://github.com/coreos/prometheus-operator
-  ##      https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
-  ##
-  serviceMonitor:
-    ## @param metrics.serviceMonitor.enabled Create ServiceMonitor Resource for scraping metrics using PrometheusOperator
-    ##
-    enabled: true
-    ## @param metrics.serviceMonitor.namespace The namespace in which the ServiceMonitor will be created
-    ##
-    namespace:
-    ## @param metrics.serviceMonitor.interval The interval at which metrics should be scraped
-    ##
-    interval: 30s
-    ## @param metrics.serviceMonitor.scrapeTimeout The timeout after which the scrape is ended
-    ##
-    scrapeTimeout:
-    ## @param metrics.serviceMonitor.relabellings Metrics relabellings to add to the scrape endpoint
-    ##
-    relabellings:
-    ## @param metrics.serviceMonitor.honorLabels Labels to honor to add to the scrape endpoint
-    ##
-    honorLabels: false
-    ## @param metrics.serviceMonitor.additionalLabels Additional custom labels for the ServiceMonitor
-    ##
-    additionalLabels: {}
-
-## External database configuration
-##
-externalDatabase:
-  ## @param externalDatabase.existingSecret Use existing secret (ignores previous password)
-  ## Must contain key `mariadb-password`
-  ## NOTE: When it's set, the `externalDatabase.password` parameter is ignored
-  ##
-  existingSecret:
-
-  ## @param externalDatabase.host Host of the existing database
-  ##
-  host:
-
-  ## @param externalDatabase.port Port of the existing database
-  ##
-  port: 3306
-
-  ## @param externalDatabase.user Existing username in the external db
-  ##
-  user: bn_mediawiki
-
-  ## @param externalDatabase.password Password for the above username
-  ##
-  password:
-
-  ## @param externalDatabase.database Name of the existing database
-  ##
-  database: bitnami_mediawiki
+## @section Database parameters
 
 ## MariaDB chart configuration
 ## https://github.com/bitnami/charts/blob/master/bitnami/mariadb/values.yaml
@@ -593,11 +456,9 @@ mariadb:
   ## To use an external database set this to false and configure the externalDatabase parameters
   ##
   enabled: true
-
   ## @param mariadb.architecture MariaDB architecture (`standalone` or `replication`)
   ##
   architecture: standalone
-
   ## MariaDB Authentication parameters
   ##
   auth:
@@ -616,7 +477,6 @@ mariadb:
     ## @param mariadb.auth.password Password for the database
     ##
     password: ""
-
   primary:
     ## Enable persistence using Persistent Volume Claims
     ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
@@ -646,3 +506,94 @@ mariadb:
       ## Use an existing PVC
       ##
       existingClaim:
+## External database configuration
+##
+externalDatabase:
+  ## @param externalDatabase.existingSecret Use existing secret (ignores previous password)
+  ## Must contain key `mariadb-password`
+  ## NOTE: When it's set, the `externalDatabase.password` parameter is ignored
+  ##
+  existingSecret:
+  ## @param externalDatabase.host Host of the existing database
+  ##
+  host:
+  ## @param externalDatabase.port Port of the existing database
+  ##
+  port: 3306
+  ## @param externalDatabase.user Existing username in the external db
+  ##
+  user: bn_mediawiki
+  ## @param externalDatabase.password Password for the above username
+  ##
+  password:
+  ## @param externalDatabase.database Name of the existing database
+  ##
+  database: bitnami_mediawiki
+
+## @section Metrics parameters
+
+## Prometheus Exporter / Metrics
+##
+metrics:
+  ## @param metrics.enabled Start a side-car prometheus exporter
+  ##
+  enabled: false
+  ## @param metrics.image.registry Apache exporter image registry
+  ## @param metrics.image.repository Apache exporter image repository
+  ## @param metrics.image.tag Apache exporter image tag (immutable tags are recommended)
+  ## @param metrics.image.pullPolicy Image pull policy
+  ## @param metrics.image.pullSecrets Specify docker-registry secret names as an array
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/apache-exporter
+    tag: 0.9.0-debian-10-r14
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## @param metrics.resources Exporter resource requests/limit
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources: {}
+  ## Metrics exporter pod Annotation and Labels
+  ##
+  ## @param metrics.port Metrics service port
+  ##
+  port: 9117
+  ## @param metrics.podAnnotations [object] Additional annotations for Metrics exporter pod
+  ##
+  podAnnotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "{{ .Values.metrics.port }}"
+  ## Prometheus Service Monitor
+  ## ref: https://github.com/coreos/prometheus-operator
+  ##      https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+  ##
+  serviceMonitor:
+    ## @param metrics.serviceMonitor.enabled Create ServiceMonitor Resource for scraping metrics using PrometheusOperator
+    ##
+    enabled: true
+    ## @param metrics.serviceMonitor.namespace The namespace in which the ServiceMonitor will be created
+    ##
+    namespace:
+    ## @param metrics.serviceMonitor.interval The interval at which metrics should be scraped
+    ##
+    interval: 30s
+    ## @param metrics.serviceMonitor.scrapeTimeout The timeout after which the scrape is ended
+    ##
+    scrapeTimeout:
+    ## @param metrics.serviceMonitor.relabellings Metrics relabellings to add to the scrape endpoint
+    ##
+    relabellings:
+    ## @param metrics.serviceMonitor.honorLabels Labels to honor to add to the scrape endpoint
+    ##
+    honorLabels: false
+    ## @param metrics.serviceMonitor.additionalLabels Additional custom labels for the ServiceMonitor
+    ##
+    additionalLabels: {}
