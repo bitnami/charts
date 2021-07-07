@@ -37,6 +37,10 @@ image:
 ##
 # fullnameOverride:
 
+## Add labels to all the deployed resources
+##
+commonLabels: {}
+
 ## Kubernetes Cluster Domain
 ##
 clusterDomain: cluster.local
