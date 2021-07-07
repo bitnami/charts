@@ -15,6 +15,9 @@ on:
       - 'bitnami/kong/values.yaml'
       - 'bitnami/kube-prometheus/values.yaml'
       - 'bitnami/kube-state-metrics/values.yaml'
+      - 'bitnami/magento/values.yaml'
+      - 'bitnami/mariadb/values.yaml'
+      - 'bitnami/mariadb-galera/values.yaml'
 
 jobs:
   generate-chart-readme:
