@@ -270,6 +270,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `grafana.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                          | `1`                  |
 | `grafana.updateStrategy`                                    | Set up update strategy for Grafana installation.                                              | `{}`                 |
 
+
 ### PluginInit parameters
 
 | Name                                  | Description                            | Value                |
