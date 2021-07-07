@@ -109,23 +109,18 @@ configurationCM:
 ##    value: test
 ##
 extraEnvVars:
-## Array to add extra configmaps:
+## @param extraEnvVarsCM ConfigMap containing extra env vars to configure Kibana
 ##
-## extraEnvVarsCM:
+extraEnvVarsCM:
+## @param extraEnvVarsSecret Secret containing extra env vars to configure Kibana (in case of sensitive data)
 ##
-## Array to add extra configmaps:
+extraEnvVarsSecret:
+## @param extraVolumes Array to add extra volumes. Requires setting `extraVolumeMounts`
 ##
-## extraEnvVarsSecret:
+extraVolumes:
+## @param extraVolumeMounts Array to add extra mounts. Normally used with `extraVolumes`
 ##
-## Array to add extra volumes
-##
-## extraVolumes:
-##
-## Array to add extra mounts (normally used with extraVolumes)
-##
-## extraVolumeMounts: {}
-##
-##
+extraVolumeMounts:
 ## Init containers parameters:
 ## volumePermissions: Change the owner of the persist volume mountpoint to RunAsUser:fsGroup
 ##
