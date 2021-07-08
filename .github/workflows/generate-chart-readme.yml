@@ -18,6 +18,9 @@ on:
       - 'bitnami/kong/values.yaml'
       - 'bitnami/kube-prometheus/values.yaml'
       - 'bitnami/kube-state-metrics/values.yaml'
+      - 'bitnami/metrics-server/values.yaml'
+      - 'bitnami/minio/values.yaml'
+      - 'bitnami/mongodb/values.yaml'
 
 jobs:
   generate-chart-readme:
