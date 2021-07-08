@@ -98,6 +98,7 @@ The following tables lists the configurable parameters of the Metrics Server cha
 | `containerSecurityContext`           | Metrics Server containers' Security Context                                                                                                                                                                                   | Check `values.yaml` file                                |
 | `extraVolumes`                       | Extra volumes                                                                                                                                                                                                                 | `nil`                                                   |
 | `extraVolumeMounts`                  | Mount extra volume(s)                                                                                                                                                                                                         | `nil`                                                   |
+| `extraContainers  `                  | Run extra container(s)                                                                                                                                                                                                        | `nil`                                                   |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
