@@ -24,6 +24,32 @@ global:
   ##
   minio: {}
 
+## @section Common parameters
+
+## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
+##
+nameOverride:
+## @param fullnameOverride String to fully override common.names.fullname template
+##
+fullnameOverride:
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
+##
+kubeVersion:
+## @param clusterDomain Default Kubernetes cluster domain
+##
+clusterDomain: cluster.local
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
+
+## @section MinIO&reg; parameters
+
 ## Bitnami MinIO(R) image version
 ## ref: https://hub.docker.com/r/bitnami/minio/tags/
 ## @param image.registry MinIO&reg; image registry
@@ -53,7 +79,6 @@ image:
   ## Set to true if you would like to see extra information on logs
   ##
   debug: false
-
 ## Bitnami MinIO(R) Client image version
 ## ref: https://hub.docker.com/r/bitnami/minio-client/tags/
 ## @param clientImage.registry MinIO&reg; Client image registry
@@ -64,40 +89,10 @@ clientImage:
   registry: docker.io
   repository: bitnami/minio-client
   tag: 2021.6.13-debian-10-r3
-
-## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
-##
-nameOverride:
-
-## @param fullnameOverride String to fully override common.names.fullname template
-##
-fullnameOverride:
-
-## @param commonLabels Labels to add to all deployed objects
-##
-commonLabels: {}
-
-## @param commonAnnotations Annotations to add to all deployed objects
-##
-commonAnnotations: {}
-
-## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
-##
-kubeVersion:
-
-## @param clusterDomain Default Kubernetes cluster domain
-##
-clusterDomain: cluster.local
-
-## @param extraDeploy Array of extra objects to deploy with the release
-##
-extraDeploy: []
-
 ## @param mode MinIO&reg; server mode (`standalone` or `distributed`)
 ## ref: https://docs.minio.io/docs/distributed-minio-quickstart-guide
 ##
 mode: standalone
-
 ## MinIO(R) credentials
 ##
 accessKey:
@@ -118,30 +113,24 @@ secretKey:
   ## If it is not force, a random password will be generated.
   ##
   forcePassword: false
-
 ## @param existingSecret Use existing secret (ignores accessKey, and secretKey passwords)
 ##
 existingSecret:
-
 ## @param useCredentialsFile Mount MinIO&reg; secret as a file instead of passing environment variable
 ##
 useCredentialsFile: false
-
 ## @param forceNewKeys Force admin credentials (access and secret key) to be reconfigured every time they change in the secrets
 ##
 forceNewKeys: false
-
 ## @param defaultBuckets Comma, semi-colon or space separated list of buckets to create at initialization (only in standalone mode)
 ## e.g:
 ## defaultBuckets: "my-bucket, my-second-bucket"
 ##
 defaultBuckets:
-
 ## @param disableWebUI Disable MinIO&reg; Web UI
 ## ref: https://github.com/minio/minio/tree/master/docs/config/#browser
 ##
 disableWebUI: false
-
 ## Enable tls in front of MinIO(R) containers.
 ##
 tls:
@@ -158,7 +147,6 @@ tls:
   ## @param tls.mountPath The mount path where the secret will be located
   ## Custom mount path where the certificates will be located, if empty will default to /certs
   mountPath: ""
-
 ## @param extraEnv Extra environment variables to be set on MinIO&reg; container
 ## e.g:
 ## extraEnv:
@@ -166,15 +154,12 @@ tls:
 ##     value: "bar"
 ##
 extraEnv: {}
-
 ## @param extraEnvVarsCM ConfigMap with extra environment variables
 ##
 extraEnvVarsCM: ""
-
 ## @param extraEnvVarsSecret Secret with extra environment variables
 ##
 extraEnvVarsSecret: ""
-
 ## @param command Default container command (useful when using custom images). Use array form
 ##
 command: []
@@ -182,11 +167,12 @@ command: []
 ##
 args: []
 
+## @section MinIO&reg; deployment/statefulset parameters
+
 ## @param schedulerName Specifies the schedulerName, if it's nil uses kube-scheduler
 ## https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
 schedulerName:
-
 ## MinIO(R) deployment parameters
 ## Only when 'mode' is 'standalone' or 'gateway.enabled' is 'true'
 ##
@@ -202,7 +188,6 @@ deployment:
   ##
   updateStrategy:
     type: Recreate
-
 ## MinIO(R) statefulset parameters
 ## Only when mode is 'distributed'
 ##
@@ -211,33 +196,26 @@ statefulset:
   ## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#updating-statefulsets
   ##
   updateStrategy: RollingUpdate
-
   ## @param statefulset.podManagementPolicy StatefulSet controller supports relax its ordering guarantees while preserving its uniqueness and identity guarantees. There are two valid pod management policies: OrderedReady and Parallel
   ## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#pod-management-policy
   ##
   podManagementPolicy: Parallel
-
   ## @param statefulset.replicaCount Number of pods per zone (only for MinIO&reg; distributed mode). Should be even and `>= 4`
   ##
   replicaCount: 4
-
   ## @param statefulset.zones Number of zones (only for MinIO&reg; distributed mode)
   ##
   zones: 1
-
   ## @param statefulset.drivesPerNode Number of drives attached to every node (only for MinIO&reg; distributed mode)
   ##
   drivesPerNode: 1
-
 ## @param hostAliases MinIO&reg; pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
 hostAliases: []
-
 ## @param containerPort MinIO(R) container port to open
 ##
 containerPort: 9000
-
 ## MinIO(R) pod Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enable pod Security Context
@@ -246,7 +224,6 @@ containerPort: 9000
 podSecurityContext:
   enabled: true
   fsGroup: 1001
-
 ## MinIO(R) container Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled Enable container Security Context
@@ -257,27 +234,22 @@ containerSecurityContext:
   enabled: true
   runAsUser: 1001
   runAsNonRoot: true
-
 ## @param podLabels Extra labels for MinIO&reg; pods
 ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
 podLabels: {}
-
 ## @param podAnnotations Annotations for MinIO&reg; pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
-
 ## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
 podAffinityPreset: ""
-
 ## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
 podAntiAffinityPreset: soft
-
 ## Node affinity preset
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
 ##
@@ -297,23 +269,19 @@ nodeAffinityPreset:
   ##   - e2e-az2
   ##
   values: []
-
 ## @param affinity Affinity for pod assignment. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ## Note: podAffinityPreset, podAntiAffinityPreset, and nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
-
 ## @param nodeSelector Node labels for pod assignment. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
 nodeSelector: {}
-
 ## @param tolerations Tolerations for pod assignment. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
-
 ## MinIO(R) containers' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -334,7 +302,6 @@ resources:
   ##    cpu: 250m
   ##    memory: 256Mi
   requests: {}
-
 ## Configure extra options for liveness probe
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe
@@ -383,7 +350,6 @@ startupProbe:
   timeoutSeconds: 5
   successThreshold: 1
   failureThreshold: 60
-
 ## @param customLivenessProbe Override default liveness probe
 ##
 customLivenessProbe: {}
@@ -393,15 +359,12 @@ customReadinessProbe: {}
 ## @param customStartupProbe Override default startup probe
 ##
 customStartupProbe: {}
-
 ## @param extraVolumes Optionally specify extra list of additional volumes for MinIO&reg; pods
 ##
 extraVolumes: []
-
 ## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for MinIO&reg; container(s)
 ##
 extraVolumeMounts: []
-
 ## @param initContainers Add additional init containers to the MinIO&reg; pods
 ## e.g:
 ## initContainers:
@@ -413,7 +376,6 @@ extraVolumeMounts: []
 ##         containerPort: 1234
 ##
 initContainers: {}
-
 ## @param sidecars Add additional sidecar containers to the MinIO&reg; pods
 ## e.g:
 ## sidecars:
@@ -425,6 +387,8 @@ initContainers: {}
 ##         containerPort: 1234
 ##
 sidecars: {}
+
+## @section Traffic exposure parameters
 
 ## MinIO(R) Service properties
 ##
@@ -459,7 +423,6 @@ service:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
   annotations: {}
-
 ## Configure the ingress resource that allows you to access the
 ## MinIO(R) installation. Set up the URL
 ## ref: http://kubernetes.io/docs/user-guide/ingress/
@@ -468,32 +431,25 @@ ingress:
   ## @param ingress.enabled Enable ingress controller resource
   ##
   enabled: false
-
   ## @param ingress.certManager Set this to true in order to add the corresponding annotations for cert-manager
   ##
   certManager: false
-
   ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
   ##
   apiVersion:
-
   ## @param ingress.hostname Default host for the ingress resource
   ##
   hostname: minio.local
-
   ## @param ingress.path The Path to MinIO(R). You may need to set this to '/*' in order to use this with ALB ingress controllers.
   ##
   path: /
-
   ## @param ingress.pathType Ingress path type
   ##
   pathType: ImplementationSpecific
-
   ## @param ingress.servicePort Service port to be used
   ## Default is http. Alternative is https.
   ##
   servicePort: minio
-
   ## @param ingress.annotations Ingress annotations
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
@@ -501,13 +457,11 @@ ingress:
   ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
   ##
   annotations: {}
-
   ## @param ingress.tls Enable TLS configuration for the hostname defined at `ingress.hostname` parameter
   ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
   ## You can use the ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
   ##
   tls: false
-
   ## @param ingress.extraHosts The list of additional hostnames to be covered with this ingress record.
   ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
   ## e.g:
@@ -516,7 +470,6 @@ ingress:
   ##     path: /
   ##
   extraHosts: []
-
   ## @param ingress.extraPaths Any additional paths that may need to be added to the ingress under the main host
   ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
   ## extraPaths:
@@ -526,7 +479,6 @@ ingress:
   ##     servicePort: use-annotation
   ##
   extraPaths: []
-
   ## @param ingress.extraTls The tls configuration for additional hostnames to be covered with this ingress record.
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
   ## e.g:
@@ -536,7 +488,6 @@ ingress:
   ##   secretName: minio.local-tls
   ##
   extraTls: []
-
   ## @param ingress.secrets If you're providing your own certificates, please use this to add the certificates as secrets
   ## key and certificate are expected in PEM format
   ## name should line up with a secretName set further up
@@ -553,19 +504,19 @@ ingress:
   ##     certificate: ""
   ##
   secrets: []
-
 ## NetworkPolicy parameters
 ##
 networkPolicy:
   ## @param networkPolicy.enabled Enable the default NetworkPolicy policy
   ##
   enabled: false
-
   ## @param networkPolicy.allowExternal Don't require client label for connections
   ## When set to false, only pods with the correct client label will have network access to the port MinIO(R) is
   ## listening on. When true, MinIO(R) will accept connections from any source (with the correct destination port).
   ##
   allowExternal: true
+
+## @section Persistence parameters
 
 ## Enable persistence using Persistent Volume Claims
 ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
@@ -598,6 +549,8 @@ persistence:
   ## @param persistence.existingClaim Name of an existing PVC to use (only in `standalone` mode)
   ##
   existingClaim:
+
+## @section Volume Permissions parameters
 
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
@@ -649,6 +602,8 @@ volumePermissions:
   containerSecurityContext:
     runAsUser: 0
 
+## @section RBAC parameters
+
 ## Specifies whether a ServiceAccount should be created
 ##
 serviceAccount:
@@ -659,6 +614,8 @@ serviceAccount:
   ## If not set and create is true, a name is generated using the common.names.fullname template
   ##
   name: ""
+
+## @section Other parameters
 
 ## MinIO(R) Pod Disruption Budget configuration (only in distributed mode)
 ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
@@ -674,14 +631,13 @@ pdb:
   ##
   maxUnavailable:
 
-## Metrics configuration
-##
+## @section Metrics parameters
+
 metrics:
   ## @param metrics.prometheusAuthType Authentication mode for Prometheus (`jwt` or `public`)
   ## To allow public access without authentication for prometheus metrics set environment as follows.
   ##
   prometheusAuthType: public
-
   ## Prometheus Operator ServiceMonitor configuration
   ##
   serviceMonitor:
@@ -715,8 +671,8 @@ metrics:
     ##
     additionalLabels: {}
 
-## MinIO(R) Gateway configuration
-##
+## @section Gateway parameters
+
 gateway:
   ## @param gateway.enabled Use MinIO&reg; as Gateway for other storage systems
   ##
