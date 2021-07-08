@@ -125,9 +125,9 @@ auth:
   ## @param auth.password MongoDB&reg; custom user password
   ## @param auth.database MongoDB&reg; custom database
   ##
-  username:
-  password:
-  database:
+  username: ""
+  password: ""
+  database: ""
   ## @param auth.replicaSetKey Key used for authentication in the replicaset (only when `architecture=replicaset`)
   ##
   replicaSetKey: ""

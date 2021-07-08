@@ -95,9 +95,9 @@ Refer to the [chart documentation for more information on each of these architec
 | `useStatefulSet`         | Set to true to use a StatefulSet instead of a Deployment (only when `architecture=standalone`)                                | `false`                 |
 | `auth.enabled`           | Enable authentication                                                                                                         | `true`                  |
 | `auth.rootPassword`      | MongoDB&reg; root password                                                                                                    | `""`                    |
-| `auth.username`          | MongoDB&reg; custom user (mandatory if `auth.database` is set)                                                                | `nil`                   |
-| `auth.password`          | MongoDB&reg; custom user password                                                                                             | `nil`                   |
-| `auth.database`          | MongoDB&reg; custom database                                                                                                  | `nil`                   |
+| `auth.username`          | MongoDB&reg; custom user (mandatory if `auth.database` is set)                                                                | `""`                    |
+| `auth.password`          | MongoDB&reg; custom user password                                                                                             | `""`                    |
+| `auth.database`          | MongoDB&reg; custom database                                                                                                  | `""`                    |
 | `auth.replicaSetKey`     | Key used for authentication in the replicaset (only when `architecture=replicaset`)                                           | `""`                    |
 | `auth.existingSecret`    | Existing secret with MongoDB&reg; credentials (keys: `mongodb-password`, `mongodb-root-password`, ` mongodb-replica-set-key`) | `nil`                   |
 | `tls.enabled`            | Enable MongoDB&reg; TLS support between nodes in the cluster as well as between mongo clients and nodes                       | `false`                 |
