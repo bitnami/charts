@@ -14,6 +14,17 @@ global:
   ##
   imagePullSecrets: []
 
+## @section Common parameters
+
+## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
+##
+nameOverride:
+## @param fullnameOverride String to fully override common.names.fullname template
+##
+fullnameOverride:
+
+## @section Metrics Server parameters
+
 ## Bitnami Metrics Server image version
 ## ref: https://hub.docker.com/r/bitnami/metrics-server/tags/
 ## @param image.registry Metrics Server image registry
@@ -40,23 +51,13 @@ image:
   ##
   pullSecrets: []
 
-## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
-##
-nameOverride:
-
-## @param fullnameOverride String to fully override common.names.fullname template
-##
-fullnameOverride:
-
 ## @param hostAliases Add deployment host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
 hostAliases: []
-
 ## @param replicas Number of metrics-server nodes to deploy
 ##
 replicas: 1
-
 ## Role Based Access
 ## ref: https://kubernetes.io/docs/admin/authorization/rbac/
 ##
@@ -64,7 +65,6 @@ rbac:
   ## @param rbac.create Enable RBAC authentication
   ##
   create: true
-
 ## Pods Service Account
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 ##
@@ -79,8 +79,6 @@ serviceAccount:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/#use-the-default-service-account-to-access-the-api-server
   ##
   automountServiceAccountToken: true
-
-
 ## API service parameters
 ##
 apiService:
@@ -88,22 +86,18 @@ apiService:
   ## This is still necessary up to at least k8s version >= 1.21, but depends on vendors and cloud providers.
   ##
   create: false
-
 ## @param securePort Port where metrics-server will be running
 ##
 securePort: 8443
-
 ## @param hostNetwork Enable hostNetwork mode
 ## You would require this enabled if you use alternate overlay networking for pods and
 ## API server unable to communicate with metrics-server. As an example, this is required
 ## if you use Weave network on EKS
 ##
 hostNetwork: false
-
 ## @param command Override default container command (useful when using custom images)
 ##
 command: ["metrics-server"]
-
 ## @param extraArgs Extra arguments to pass to metrics-server on start up
 ## ref: https://github.com/kubernetes-incubator/metrics-server/blob/master/README.md#flags
 ##
@@ -112,31 +106,25 @@ command: ["metrics-server"]
 ##   kubelet-preferred-address-types: InternalIP
 ##
 extraArgs: {}
-
 ## @param podLabels Pod labels
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
 podLabels: {}
-
 ## @param podAnnotations Pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
-
 ## @param priorityClassName Priority class for pod scheduling
 ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
 priorityClassName:
-
 ## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
 podAffinityPreset: ""
-
 ## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
 podAntiAffinityPreset: soft
-
 ## Pod disruption budget
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets
 ## @param podDisruptionBudget.enabled Create a PodDisruptionBudget
@@ -147,7 +135,6 @@ podDisruptionBudget:
   enabled: false
   minAvailable:
   maxUnavailable:
-
 ## Node affinity preset
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
 ##
@@ -167,28 +154,23 @@ nodeAffinityPreset:
   ##   - e2e-az2
   ##
   values: []
-
 ## @param affinity Affinity for pod assignment
 ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ## Note: podAffinityPreset, podAntiAffinityPreset, and nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
-
 ## @param topologySpreadConstraints Topology spread constraints for pod
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints
 ##
 topologySpreadConstraints: []
-
 ## @param nodeSelector Node labels for pod assignment
 ## ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
 nodeSelector: {}
-
 ## @param tolerations Tolerations for pod assignment
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
-
 ##  Metrics Server K8s svc properties
 ##
 service:
@@ -198,33 +180,28 @@ service:
   ## @param service.port Kubernetes Service port
   ##
   port: 443
-
   ## @param service.nodePort Kubernetes Service port
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ## e.g:
   ## nodePort: 30001
   ##
   nodePort:
-
   ## @param service.loadBalancerIP LoadBalancer IP if Service type is `LoadBalancer`
   ## Set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
   loadBalancerIP:
-
   ## @param service.annotations Annotations for the Service
   ## set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
   annotations: {}
-
   ## @param service.labels Labels for the Service
   ## have metrics-server show up in `kubectl cluster-info`
   ##  kubernetes.io/cluster-service: "true"
   ##  kubernetes.io/name: "Metrics-server"
   ##
   labels: {}
-
 ## Metric Server containers' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -245,7 +222,6 @@ resources:
   ##    cpu: 250m
   ##    memory: 256Mi
   requests: {}
-
 ## Configure extra options for liveness probe
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe
@@ -280,15 +256,12 @@ readinessProbe:
     port: https
     scheme: HTTPS
   periodSeconds: 10
-
 ## @param customLivenessProbe Custom Liveness probes for metrics-server
 ##
 customLivenessProbe: {}
-
 ## @param customReadinessProbe Custom Readiness probes metrics-server
 ##
 customReadinessProbe: {}
-
 ## Container security context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled !!!!!
@@ -299,14 +272,12 @@ containerSecurityContext:
   enabled: true
   readOnlyRootFilesystem: false
   runAsNonRoot: true
-
 ## Pod security context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled !!!!!
 ##
 podSecurityContext:
   enabled: false
-
 ## Extra volumes to mount
 ## @param extraVolumes Extra volumes
 ## @param extraVolumeMounts Mount extra volume(s)
