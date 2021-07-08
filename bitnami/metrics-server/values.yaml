@@ -227,7 +227,7 @@ resources:
 ## @param livenessProbe.enabled Enable livenessProbe
 ## @param livenessProbe.httpGet.path Request path for livenessProbe
 ## @param livenessProbe.httpGet.port Port for livenessProbe
-## @param livenessProbe.httpGet.scheme !!!!!
+## @param livenessProbe.httpGet.scheme Scheme for livenessProbe
 ## @param livenessProbe.periodSeconds Period seconds for livenessProbe
 ## @param livenessProbe.failureThreshold Failure threshold for livenessProbe
 ##
@@ -244,7 +244,7 @@ livenessProbe:
 ## @param readinessProbe.enabled Enable readinessProbe
 ## @param readinessProbe.httpGet.path Request path for readinessProbe
 ## @param readinessProbe.httpGet.port Port for readinessProbe
-## @param readinessProbe.httpGet.scheme !!!!!
+## @param readinessProbe.httpGet.scheme Scheme for livenessProbe
 ## @param readinessProbe.periodSeconds Period seconds for readinessProbe
 ## @param readinessProbe.failureThreshold Failure threshold for readinessProbe
 ##
@@ -264,9 +264,9 @@ customLivenessProbe: {}
 customReadinessProbe: {}
 ## Container security context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-## @param containerSecurityContext.enabled !!!!!
-## @param containerSecurityContext.readOnlyRootFilesystem !!!!!
-## @param containerSecurityContext.runAsNonRoot !!!!!
+## @param containerSecurityContext.enabled Enable Container security context
+## @param containerSecurityContext.readOnlyRootFilesystem ReadOnlyRootFilesystem for the container
+## @param containerSecurityContext.runAsNonRoot Run containers as non-root users
 ##
 containerSecurityContext:
   enabled: true
@@ -274,7 +274,7 @@ containerSecurityContext:
   runAsNonRoot: true
 ## Pod security context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-## @param podSecurityContext.enabled !!!!!
+## @param podSecurityContext.enabled Pod security context
 ##
 podSecurityContext:
   enabled: false
