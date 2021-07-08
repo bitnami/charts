@@ -15,6 +15,9 @@ on:
       - 'bitnami/kong/values.yaml'
       - 'bitnami/kube-prometheus/values.yaml'
       - 'bitnami/kube-state-metrics/values.yaml'
+      - 'bitnami/mediawiki/values.yaml'
+      - 'bitnami/memcached/values.yaml'
+      - 'bitnami/metallb/values.yaml'
 
 jobs:
   generate-chart-readme:
