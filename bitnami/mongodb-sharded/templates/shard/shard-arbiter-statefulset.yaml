@@ -57,6 +57,9 @@ spec:
       {{- if $.Values.shardsvr.arbiter.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.arbiter.tolerations "context" $) | nindent 8 }}
       {{- end }}
+      {{- if $.Values.shardsvr.arbiter.priorityClassName }}
+      priorityClassName: {{ $.Values.shardsvr.arbiter.priorityClassName | quote }}
+      {{- end }}
       {{- if $.Values.securityContext.enabled }}
       securityContext:
         fsGroup: {{ $.Values.securityContext.fsGroup }}

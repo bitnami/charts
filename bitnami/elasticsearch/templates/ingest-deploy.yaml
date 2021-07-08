@@ -50,7 +50,7 @@ spec:
       securityContext:
         fsGroup: {{ .Values.ingest.securityContext.fsGroup }}
       {{- end }}
-      {{- if .Values.sysctlImage.enabled }}
+      {{- if or .Values.ingest.initContainers  .Values.sysctlImage.enabled }}
       ## Image that performs the sysctl operation to modify Kernel settings (needed sometimes to avoid boot errors)
       initContainers:
         - name: sysctl
@@ -66,6 +66,9 @@ spec:
           {{- if .Values.sysctlImage.resources }}
           resources: {{- toYaml .Values.sysctlImage.resources | nindent 12 }}
           {{- end }}
+        {{- if .Values.ingest.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.ingest.initContainers "context" $) | nindent 8 }}
+        {{- end }}
       {{- end }}
       containers:
         - name: elasticsearch
@@ -124,7 +127,7 @@ spec:
               path: /_cluster/health?local=true
               port: 9200
           {{- else if .Values.ingest.customStartupProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ingest.customStartupProbe "context" $) | nindent 12 }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ingest.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.ingest.livenessProbe.enabled }}
           livenessProbe:
@@ -161,6 +164,11 @@ spec:
               name: "config"
               subPath: elasticsearch.yml
             {{- end }}
+            {{- if .Values.extraConfig }}
+            - mountPath: /opt/bitnami/elasticsearch/config/my_elasticsearch.yml
+              name: config
+              subPath: my_elasticsearch.yml
+            {{- end }}
             - name: "data"
               mountPath: "/bitnami/elasticsearch/data/"
             {{- if .Values.extraVolumeMounts }}
@@ -178,8 +186,11 @@ spec:
             - name: custom-init-scripts-secret
               mountPath: /docker-entrypoint-initdb.d/init-scripts-secret
             {{- end }}
+        {{- if .Values.ingest.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.ingest.sidecars "context" $) | nindent 8 }}
+        {{- end }}
       volumes:
-        {{- if .Values.config }}
+        {{- if or .Values.config .Values.extraConfig }}
         - name: config
           configMap:
             name: {{ include "common.names.fullname" . }}

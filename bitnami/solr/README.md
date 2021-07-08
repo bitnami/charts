@@ -278,7 +278,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 $ helm install my-release \
-  --set solrCloud.enabled=true bitnami/solr
+  --set cloudEnabled=true bitnami/solr
 ```
 
 The above command enabled the Solr Cloud mode.
@@ -351,3 +351,9 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
+## Upgrading
+
+### To 1.0.0
+
+This major updates the Zookeeper subchart to it newest major, 7.0.0, which renames all TLS-related settings. For more information on this subchart's major, please refer to [zookeeper upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/zookeeper#to-700).
