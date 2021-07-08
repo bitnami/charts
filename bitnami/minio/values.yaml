@@ -665,7 +665,7 @@ metrics:
     honorLabels: false
     ## @param metrics.serviceMonitor.release Specify the release for ServiceMonitor. Sometimes it should be custom for prometheus operator to work
     ##
-    release: ""
+    release:
     ## @param metrics.serviceMonitor.additionalLabels Used to pass Labels that are required by the installed Prometheus Operator
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
     ##
