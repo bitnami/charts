@@ -43,68 +43,69 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## Parameters
 
-The following table lists the configurable parameters of the Kubernetes Event Exporter chart and their default values.
-
 ### Global parameters
 
-| Parameter                 | Description                                     | Default                                                 |
-|---------------------------|-------------------------------------------------|---------------------------------------------------------|
-| `global.imageRegistry`    | Global Docker image registry                    | `nil`                                                   |
-| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]` (does not add image pull secrets to deployed pods) |
+| Name                      | Description                                     | Value |
+| ------------------------- | ----------------------------------------------- | ----- |
+| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
+
 
 ### Common parameters
 
-| Parameter                                         | Description                                                                               | Default                                                  |
-|---------------------------------------------------|-------------------------------------------------------------------------------------------|----------------------------------------------------------|
-| `nameOverride`                                    | String to partially override kubernetes-event-exporter.fullname template                  | `nil`                                                    |
-| `fullnameOverride`                                | String to fully override kubernetes-event-exporter.fullname template                      | `nil`                                                    |
-| `affinity`                                        | Affinity for pod assignment                                                               | `{}` (evaluated as a template)                           |
-| `commonAnnotations`                               | Annotations to add to all deployed objects                                                | `{}` (evaluated as a template)                           |
-| `commonLabels`                                    | Labels to add to all deployed objects                                                     | `{}` (evaluated as a template)                           |
-| `containerSecurityContext.enabled`                | Enable container security context                                                         | `true`                                                   |
-| `containerSecurityContext.capabilities.drop`      | Drop capabilities for the securityContext                                                 | `["ALL"]`                                                |
-| `containerSecurityContext.capabilities.add`       | Add capabilities for the securityContext                                                  | `[]`                                                     |
-| `containerSecurityContext.readOnlyRootFilesystem` | Allows the pod to mount the RootFS as ReadOnly only                                       | `true`                                                   |
-| `containerSecurityContext.runAsNonRoot`           | If the pod should run as a non root container.                                            | `true`                                                   |
-| `containerSecurityContext.runAsUser`              | Define the uid with which the pod will run                                                | `1001`                                                   |
-| `hostAliases`                                     | Add deployment host aliases                                                               | `[]`                                                     |
-| `extraEnvVars`                                    | Array containing extra env vars to be added to all containers                             | `[]` (evaluated as a template)                           |
-| `extraEnvVarsConfigMap`                           | ConfigMap containing extra env vars to be added to all containers                         | `""` (evaluated as a template)                           |
-| `extraEnvVarsSecret`                              | Secret containing extra env vars to be added to all containers                            | `""` (evaluated as a template)                           |
-| `extraVolumeMounts`                               | Array to add extra mounts (normally used with extraVolumes)                               | `[]`                                                     |
-| `extraVolumes`                                    | Array to add extra volumes                                                                | `[]`                                                     |
-| `image.pullPolicy`                                | Container image pull policy                                                               | `IfNotPresent`                                           |
-| `image.pullSecrets`                               | Specify docker-registry secret names as an array                                          | `nil` (does not add image pull secrets to deployed pods) |
-| `image.registry`                                  | Container image registry                                                                  | `docker.io`                                              |
-| `image.repository`                                | Container image name                                                                      | `bitnami/kubernetes-event-exporter`                      |
-| `image.tag`                                       | Container image tag                                                                       | `0.9.0-debian-10-r0`                                     |
-| `initContainers`                                  | Attach additional init containers to pods                                                 | `[]` (evaluated as a template)                           |
-| `nodeAffinityPreset.key`                          | Node label key to match. Ignored if `affinity` is set.                                    | `""`                                                     |
-| `nodeAffinityPreset.type`                         | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                                                     |
-| `nodeAffinityPreset.values`                       | Node label values to match. Ignored if `affinity` is set.                                 | `[]`                                                     |
-| `nodeSelector`                                    | Node labels for pod assignment                                                            | `{}`                                                     |
-| `podAffinityPreset`                               | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                                                     |
-| `podAnnotations`                                  | Pod annotations                                                                           | `{}`                                                     |
-| `podAntiAffinityPreset`                           | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `"soft"`                                                 |
-| `podSecurityContext.enabled`                      | Enable security context                                                                   | `true`                                                   |
-| `podSecurityContext.fsGroup`                      | Group ID for the container                                                                | `1001`                                                   |
-| `priorityClassName`                               | priorityClassName of the pods                                                             | `""`                                                     |
-| `rbac.create`                                     | Create the RBAC roles for API accessibility                                               | `true`                                                   |
-| `resources.limits`                                | Specify resource limits which the container is not allowed to succeed.                    | `{}`                                                     |
-| `resources.requests`                              | Specify resource requests which the container needs to spawn.                             | `{}`                                                     |
-| `serviceAccount.create`                           | Create a serviceAccount for the pod                                                       | `true`                                                   |
-| `serviceAccount.name`                             | Use the serviceAccount with the specified name                                            | `""`                                                     |
-| `tolerations`                                     | Tolerations for pod assignment                                                            | `[]`                                                     |
-| `extraDeploy`                                     | Array of extra objects to deploy with the release (evaluated as a template).              | `nil`                                                    |
+| Name                | Description                                                                                              | Value |
+| ------------------- | -------------------------------------------------------------------------------------------------------- | ----- |
+| `nameOverride`      | String to partially override kubernetes-event-exporter.fullname include (will maintain the release name) | `nil` |
+| `fullnameOverride`  | String to fully override kubernetes-event-exporter.fullname template                                     | `nil` |
+| `commonAnnotations` | Annotations to add to all deployed objects                                                               | `{}`  |
+| `commonLabels`      | Labels to add to all deployed objects                                                                    | `{}`  |
+| `extraDeploy`       | Array of extra objects to deploy with the release (evaluated as a template)                              | `[]`  |
+
 
 ### Kubernetes Event Exporter parameters
 
-| Parameter             | Description                                                                  | Default                                                   |
-|-----------------------|------------------------------------------------------------------------------|-----------------------------------------------------------|
-| `config.logFormat`    | How the logs are formatted. Allowed values: `pretty` or `json`               | `pretty`                                                  |
-| `config.logLevel`     | Verbosity of the logs (options: `fatal`, `error`, `warn`, `info` or `debug`) | `debug`                                                   |
-| `config.receivers`    | Array containing event receivers                                             | `[ {"name": "dump", "file": { "path": "/dev/stdout" }} ]` |
-| `config.route.routes` | Array containing event route configuration                                   | `[ {"match": [ {"receiver": "dumps"} ]} ]`                |
+| Name                                              | Description                                                                               | Value                               |
+| ------------------------------------------------- | ----------------------------------------------------------------------------------------- | ----------------------------------- |
+| `image.registry`                                  | Container image registry                                                                  | `docker.io`                         |
+| `image.repository`                                | Container image name                                                                      | `bitnami/kubernetes-event-exporter` |
+| `image.tag`                                       | Container image tag                                                                       | `0.10.0-debian-10-r0`               |
+| `image.pullPolicy`                                | Container image pull policy                                                               | `IfNotPresent`                      |
+| `image.pullSecrets`                               | Specify docker-registry secret names as an array                                          | `[]`                                |
+| `hostAliases`                                     | Add deployment host aliases                                                               | `[]`                                |
+| `config.logLevel`                                 | Verbosity of the logs (options: `fatal`, `error`, `warn`, `info` or `debug`)              | `debug`                             |
+| `config.logFormat`                                | How the logs are formatted. Allowed values: `pretty` or `json`                            | `pretty`                            |
+| `config.receivers`                                | Array containing event receivers                                                          | `[]`                                |
+| `config.route.routes`                             | Array containing event route configuration                                                | `[]`                                |
+| `rbac.create`                                     | Create the RBAC roles for API accessibility                                               | `true`                              |
+| `serviceAccount.create`                           | Create a serviceAccount for the pod                                                       | `true`                              |
+| `serviceAccount.name`                             | Use the serviceAccount with the specified name                                            | `""`                                |
+| `podAnnotations`                                  | Pod annotations                                                                           | `{}`                                |
+| `podSecurityContext.enabled`                      | Enable security context                                                                   | `true`                              |
+| `podSecurityContext.fsGroup`                      | Group ID for the container                                                                | `1001`                              |
+| `containerSecurityContext.enabled`                | Enable container security context                                                         | `true`                              |
+| `containerSecurityContext.capabilities.add`       | Add capabilities for the securityContext                                                  | `[]`                                |
+| `containerSecurityContext.capabilities.drop`      | Drop capabilities for the securityContext                                                 | `[]`                                |
+| `containerSecurityContext.readOnlyRootFilesystem` | Allows the pod to mount the RootFS as ReadOnly only                                       | `true`                              |
+| `containerSecurityContext.runAsNonRoot`           | If the pod should run as a non root container.                                            | `true`                              |
+| `containerSecurityContext.runAsUser`              | Define the uid with which the pod will run                                                | `1001`                              |
+| `resources.limits`                                | Specify resource limits which the container is not allowed to succeed.                    | `{}`                                |
+| `resources.requests`                              | Specify resource requests which the container needs to spawn.                             | `{}`                                |
+| `nodeSelector`                                    | Node labels for pod assignment                                                            | `{}`                                |
+| `priorityClassName`                               | Set Priority Class Name to allow priority control over other pods                         | `""`                                |
+| `tolerations`                                     | Tolerations for pod assignment                                                            | `[]`                                |
+| `podAffinityPreset`                               | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                                |
+| `podAntiAffinityPreset`                           | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                              |
+| `nodeAffinityPreset.type`                         | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                                |
+| `nodeAffinityPreset.key`                          | Node label key to match. Ignored if `affinity` is set.                                    | `""`                                |
+| `nodeAffinityPreset.values`                       | Node label values to match. Ignored if `affinity` is set.                                 | `[]`                                |
+| `affinity`                                        | Affinity for pod assignment                                                               | `{}`                                |
+| `extraEnvVars`                                    | Array containing extra env vars to be added to all containers                             | `[]`                                |
+| `extraEnvVarsConfigMap`                           | ConfigMap containing extra env vars to be added to all containers                         | `""`                                |
+| `extraEnvVarsSecret`                              | Secret containing extra env vars to be added to all containers                            | `""`                                |
+| `extraVolumeMounts`                               | Array to add extra mounts (normally used with extraVolumes)                               | `[]`                                |
+| `extraVolumes`                                    | Array to add extra volumes                                                                | `[]`                                |
+| `initContainers`                                  | Attach additional init containers to pods                                                 | `[]`                                |
+
 
 ## Configuration and installation details
 

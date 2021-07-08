@@ -1,67 +1,46 @@
+## @section Global parameters
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
-## Current available global Docker image parameters: imageRegistry, imagePullSecrets
-##
-# global:
-#   imageRegistry: myRegistryName
-#   imagePullSecrets:
-#     - myRegistryKeySecretName
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
 
-## String to partially override kubernetes-event-exporter.fullname include (will maintain the release name)
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
 ##
-# nameOverride:
+global:
+  imageRegistry:
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
 
-## String to fully override kubernetes-event-exporter.fullname template
+## @section Common parameters
+
+## @param nameOverride String to partially override kubernetes-event-exporter.fullname include (will maintain the release name)
 ##
-# fullnameOverride:
-
-## Common annotations to add to all resources. Evaluated as a template
+nameOverride:
+## @param fullnameOverride String to fully override kubernetes-event-exporter.fullname template
+##
+fullnameOverride:
+## @param commonAnnotations Annotations to add to all deployed objects
 ##
 commonAnnotations: {}
-
-## Common labels to add to all resources. Evaluated as a template
+## @param commonLabels Labels to add to all deployed objects
 ##
 commonLabels: {}
-
-## Deployment pod host aliases
-## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+## @param extraDeploy Array of extra objects to deploy with the release (evaluated as a template)
 ##
-hostAliases: []
+extraDeploy: []
 
-config:
-  logLevel: debug
-  logFormat: pretty
-  receivers:
-    - name: "dump"
-      file:
-        path: "/dev/stdout"
-        # layout:
-        #   message: "{{ .Message }}"
-        #   reason: "{{ .Reason }}"
-        #   type: "{{ .Type }}"
-        #   count: "{{ .Count }}"
-        #   kind: "{{ .InvolvedObject.Kind }}"
-        #   name: "{{ .InvolvedObject.Name }}"
-        #   namespace: "{{ .Namespace }}"
-        #   component: "{{ .Source.Component }}"
-        #   host: "{{ .Source.Host }}"
-  route:
-    routes:
-      - match:
-          - receiver: "dump"
-
-rbac:
-  # create specifies whether to install and use RBAC rules.
-  create: true
-
-serviceAccount:
-  # Specifies whether a ServiceAccount should be created
-  create: true
-  # The name of the ServiceAccount to use.  If not set and create is
-  # true, a name is generated using the fullname template
-  name: ""
+## @section Kubernetes Event Exporter parameters
 
 image:
+  ## @param image.registry Container image registry
+  ## @param image.repository Container image name
+  ## @param image.tag Container image tag
+  ## @param image.pullPolicy Container image pull policy
+  ## @param image.pullSecrets Specify docker-registry secret names as an array
+  ##
   registry: docker.io
   repository: bitnami/kubernetes-event-exporter
   tag: 0.10.0-debian-10-r0
@@ -73,21 +52,73 @@ image:
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## Example:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
   ##
-  # pullSecrets:
-  #   - myRegistryKeySecretName
-
-## Pod annotations
+  pullSecrets: []
+## @param hostAliases Add deployment host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
+## @param config.logLevel Verbosity of the logs (options: `fatal`, `error`, `warn`, `info` or `debug`)
+## @param config.logFormat How the logs are formatted. Allowed values: `pretty` or `json`
+## @param config.receivers [array] Array containing event receivers
+## @param config.route.routes [array] Array containing event route configuration
+##
+config:
+  logLevel: debug
+  logFormat: pretty
+  receivers:
+    - name: "dump"
+      file:
+        path: "/dev/stdout"
+        ## Example:
+        ## layout:
+        ##   message: "{{ .Message }}"
+        ##   reason: "{{ .Reason }}"
+        ##   type: "{{ .Type }}"
+        ##   count: "{{ .Count }}"
+        ##   kind: "{{ .InvolvedObject.Kind }}"
+        ##   name: "{{ .InvolvedObject.Name }}"
+        ##   namespace: "{{ .Namespace }}"
+        ##   component: "{{ .Source.Component }}"
+        ##   host: "{{ .Source.Host }}"
+        ##
+        layout: {}
+  route:
+    routes:
+      - match:
+          - receiver: "dump"
+rbac:
+  ## @param rbac.create Create the RBAC roles for API accessibility
+  ##
+  create: true
+serviceAccount:
+  ## @param serviceAccount.create Create a serviceAccount for the pod
+  ##
+  create: true
+  ## @param serviceAccount.name Use the serviceAccount with the specified name
+  ## If not set and create is true, a name is generated using the fullname template
+  name: ""
+## @param podAnnotations Pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
-
 ## SecurityContext holds pod-level security attributes and common container settings.
+## @param podSecurityContext.enabled Enable security context
+## @param podSecurityContext.fsGroup Group ID for the container
 ##
 podSecurityContext:
   enabled: true
   fsGroup: 1001
-
+## @param containerSecurityContext.enabled Enable container security context
+## @param containerSecurityContext.capabilities.add [array] Add capabilities for the securityContext
+## @param containerSecurityContext.capabilities.drop [array] Drop capabilities for the securityContext
+## @param containerSecurityContext.readOnlyRootFilesystem Allows the pod to mount the RootFS as ReadOnly only
+## @param containerSecurityContext.runAsNonRoot If the pod should run as a non root container.
+## @param containerSecurityContext.runAsUser Define the uid with which the pod will run
+##
 containerSecurityContext:
   enabled: true
   capabilities:
@@ -97,103 +128,90 @@ containerSecurityContext:
   readOnlyRootFilesystem: true
   runAsNonRoot: true
   runAsUser: 1001
-
 ## Container resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## We usually recommend not to specify default resources and to leave this as a conscious
+## choice for the user. This also increases chances charts run on environments with little
+## resources, such as Minikube. If you do want to specify resources, uncomment the following
+## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+## @param resources.limits Specify resource limits which the container is not allowed to succeed.
+## @param resources.requests Specify resource requests which the container needs to spawn.
 ##
 resources:
-  ## We usually recommend not to specify default resources and to leave this as a conscious
-  ## choice for the user. This also increases chances charts run on environments with little
-  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
-  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ##
+  ## Example:
+  ## limits:
+  ##    cpu: 400m
+  ##    memory: 250Mi
   limits: {}
-  #   cpu: 400m
-  #   memory: 250Mi
+  ## Examples:
+  ## requests:
+  ##    cpu: 100m
+  ##    memory: 25Mi
   requests: {}
-  #   cpu: 100m
-  #   memory: 25Mi
-
-## Node labels for pod assignment
+## @param nodeSelector Node labels for pod assignment
 ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
 nodeSelector: {}
-
-## Set Priority Class Name to allow priority control over other pods
+## @param priorityClassName Set Priority Class Name to allow priority control over other pods
 ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
 ##
 priorityClassName: ""
-
-## Tolerations for pod assignment
+## @param tolerations Tolerations for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
-
-## Pod affinity preset
+## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-## Allowed values: soft, hard
 ##
 podAffinityPreset: ""
-
-## Pod anti-affinity preset
+## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-## Allowed values: soft, hard
 ##
 podAntiAffinityPreset: soft
-
 ## Node affinity preset
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-## Allowed values: soft, hard
 ##
 nodeAffinityPreset:
-  ## Node affinity type
-  ## Allowed values: soft, hard
+  ## @param nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ##
   type: ""
-  ## Node label key to match
+  ## @param nodeAffinityPreset.key Node label key to match. Ignored if `affinity` is set.
   ## E.g.
   ## key: "kubernetes.io/e2e-az-name"
   ##
   key: ""
-  ## Node label values to match
+  ## @param nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set.
   ## E.g.
   ## values:
   ##   - e2e-az1
   ##   - e2e-az2
   ##
   values: []
-
-## Affinity for pod assignment
+## @param affinity Affinity for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
-
-## An array to add extra env vars
+## @param extraEnvVars Array containing extra env vars to be added to all containers
 ## For example:
 ## extraEnvVars:
 ##  - name: MY_ENV_VAR
 ##    value: env_var_value
 ##
 extraEnvVars: []
-
-## Name of a ConfigMap containing extra env vars
+## @param extraEnvVarsConfigMap ConfigMap containing extra env vars to be added to all containers
 ##
 extraEnvVarsConfigMap: ""
-
-## Name of a Secret containing extra env vars
+## @param extraEnvVarsSecret Secret containing extra env vars to be added to all containers
 ##
 extraEnvVarsSecret: ""
-
-## Array to add extra mounts (normally used with extraVolumes)
+## @param extraVolumeMounts Array to add extra mounts (normally used with extraVolumes)
 ##
 extraVolumeMounts: []
-
-## Array to add extra volumes
+## @param extraVolumes Array to add extra volumes
 ##
 extraVolumes: []
-
-## Add init containers to the pod
+## @param initContainers Attach additional init containers to pods
 ## For example:
 ## initContainers:
 ##   - name: your-image-name
@@ -201,7 +219,3 @@ extraVolumes: []
 ##     imagePullPolicy: Always
 ##
 initContainers: []
-
-## Array with extra yaml to deploy with the chart. Evaluated as a template
-##
-extraDeploy: []
