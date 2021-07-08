@@ -11,9 +11,6 @@ dependencies:
   - name: postgresql
     repository: https://charts.bitnami.com/bitnami
     version: 10.x.x
-  - name: redis
-    repository: https://charts.bitnami.com/bitnami
-    version: 14.x.x
 description: Kubeapps is a dashboard for your Kubernetes cluster that makes it easy to deploy and manage applications in your cluster using Helm
 home: https://kubeapps.com
 icon: https://raw.githubusercontent.com/kubeapps/kubeapps/master/docs/img/logo.png
@@ -28,4 +25,4 @@ maintainers:
 name: kubeapps
 sources:
   - https://github.com/kubeapps/kubeapps
-version: 7.1.4-dev0
+version: 7.1.4

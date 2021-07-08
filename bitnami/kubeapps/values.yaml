@@ -1451,7 +1451,6 @@ clusters:
 ##
 featureFlags:
   invalidateCache: true
-  kubeappsAPIsServer: false
 ## RBAC configuration
 ##
 rbac:
