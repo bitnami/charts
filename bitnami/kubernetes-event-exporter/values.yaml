@@ -73,6 +73,7 @@ config:
     - name: "dump"
       file:
         path: "/dev/stdout"
+        ## Example:
         ## layout:
         ##   message: "{{ .Message }}"
         ##   reason: "{{ .Reason }}"
@@ -83,6 +84,8 @@ config:
         ##   namespace: "{{ .Namespace }}"
         ##   component: "{{ .Source.Component }}"
         ##   host: "{{ .Source.Host }}"
+        ##
+        layout: {}
   route:
     routes:
       - match:
