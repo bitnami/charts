@@ -139,6 +139,22 @@ data:
     {{- end }}
       }
 
+    {{- if .Values.featureFlags.kubeappsAPIsServer }}
+      location ~* /apis {
+        rewrite ^ $request_uri; # pass the encoded url downstream as is,
+        rewrite /apis([^?]*) $1?$args break;
+    {{- if .Values.frontend.proxypassExtraSetHeader }}
+        proxy_set_header {{ .Values.frontend.proxypassExtraSetHeader }};
+    {{- end }}
+        proxy_pass {{ include "kubeapps.kubeappsapis.proxy_pass" . -}};
+
+    {{- if .Values.frontend.proxypassAccessTokenAsBearer }}
+        # Google Kubernetes Engine requires the access_token as the Bearer when talking to the k8s api server.
+        proxy_set_header Authorization "Bearer $http_x_forwarded_access_token";
+    {{- end }}
+      }
+    {{- end }}
+
       # The route for the Kubeapps backend API is not prefixed.
       location ~* /api/ {
         rewrite /api/(.*) /backend/$1 break;
