@@ -292,3 +292,6 @@ extraVolumes: []
 ##    mountPath: /tmp
 ##
 extraVolumeMounts: []
+## @param extraContainers Extra containers to run within the pod
+##
+extraContainers: {}

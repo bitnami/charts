@@ -8,9 +8,6 @@ global:
   #   - myRegistryKeySecretName
   # storageClass: myStorageClass
 
-  labels: {}
-  #   foo: bar
-
 ## String to partially override common.names.fullname template (will maintain the release name)
 ##
 # nameOverride:
@@ -18,6 +15,10 @@ global:
 ## String to fully override common.names.fullname template
 ##
 # fullnameOverride:
+
+## Add labels to all the deployed resources
+##
+commonLabels: {}
 
 ## Deployment pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
