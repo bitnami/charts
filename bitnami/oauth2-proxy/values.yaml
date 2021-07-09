@@ -179,7 +179,6 @@ image:
 ## @param config.clientID OAuth client ID
 ## @param config.clientSecret OAuth client secret
 ## @param config.cookieSecret OAuth cookie secret
-## @param config.cookieName OAuth cookie name
 ## @param config.google Google service account
 ## @param config.configFile Default configuration
 ##
@@ -188,29 +187,20 @@ config:
   clientSecret: "XXXXXXXX"
   ## Create a new secret with the following command openssl rand -base64 32 | head -c 32 | base64
   ## Use an existing secret for OAuth2 credentials (see secret.yaml for required fields)
-  ## e.g:
-  ## existingSecret: secret
   ##
   cookieSecret: "XXXXXXXXXX"
-  ## The name of the cookie that oauth2-proxy will create
-  ## If left empty, it will default to the release name
-  ##
-  cookieName: ""
   ## e.g:
-  ## adminEmail: xxxx
-  ## serviceAccountJson: xxxx
-  ## Alternatively, use an existing secret (see google-secret.yaml for required fields)
-  ## e.g:
-  ## existingSecret: google-secret
+  ## google:
+  ##   adminEmail: xxxx
+  ##   serviceAccountJson: xxxx
+  ##   existingSecret: google-secret
+  ## Alternatively, use an existing secret (see secret-google.yaml for required fields)
   ##
   google: {}
   ## Custom configuration file: oauth2_proxy.cfg
   ## configFile: |-
   ##   pass_basic_auth = false
   ##   pass_access_token = true
-  ## Use an existing configmap (see configmap.yaml for required fields)
-  ## e.g:
-  ## existingConfig: config
   ##
   configFile: |-
     email_domains = [ "*" ]
@@ -420,6 +410,9 @@ priorityClassName: ""
 ## @param lifecycleHooks for the OAuth2 Proxy container(s) to automate configuration before or after startup
 ##
 lifecycleHooks: {}
+## @param proxyVarsAsSecrets Whether to use secrets instead of environment values for setting up OAUTH2_PROXY variables
+##
+proxyVarsAsSecrets: true
 ## @param extraEnvVars Array with extra environment variables to add to OAuth2 Proxy nodes
 ## e.g:
 ## extraEnvVars:

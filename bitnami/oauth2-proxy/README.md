@@ -114,7 +114,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `config.clientID`                           | OAuth client ID                   | `XXXXXXX`                                                    |
 | `config.clientSecret`                       | OAuth client secret               | `XXXXXXXX`                                                   |
 | `config.cookieSecret`                       | OAuth cookie secret               | `XXXXXXXXXX`                                                 |
-| `config.cookieName`                         | OAuth cookie name                 | `""`                                                         |
 | `config.google`                             | Google service account            | `undefined`                                                  |
 | `config.configFile`                         | Default configuration             | `email_domains = [ "*" ]
 upstreams = [ "file:///dev/null" ]` |
@@ -175,6 +174,7 @@ upstreams = [ "file:///dev/null" ]` |
 | `updateStrategy.type`                | OAuth2 Proxy statefulset strategy type                                                     | `RollingUpdate` |
 | `priorityClassName`                  | OAuth2 Proxy pods' priorityClassName                                                       | `""`            |
 | `lifecycleHooks`                     | for the OAuth2 Proxy container(s) to automate configuration before or after startup        | `undefined`     |
+| `proxyVarsAsSecrets`                 | Whether to use secrets instead of environment values for setting up OAUTH2_PROXY variables | `true`          |
 | `extraEnvVars`                       | Array with extra environment variables to add to OAuth2 Proxy nodes                        | `undefined`     |
 | `extraEnvVarsCM`                     | Name of existing ConfigMap containing extra env vars for OAuth2 Proxy nodes                | `nil`           |
 | `extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for OAuth2 Proxy nodes                   | `nil`           |

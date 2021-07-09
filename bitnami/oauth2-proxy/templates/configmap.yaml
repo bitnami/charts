@@ -13,5 +13,5 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 data:
-  oauth2_proxy.cfg: {{ .Values.config.configFile | quote }}
+  oauth2_proxy.cfg: {{- include "common.tplvalues.render" ( dict "value" .Values.config.configFile "context" $ ) | nindent 4 }}
 {{- end }}

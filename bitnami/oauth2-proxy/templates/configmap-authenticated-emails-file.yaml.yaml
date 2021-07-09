@@ -13,5 +13,5 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 data:
-  restricted_user_access: {{ .Values.authenticatedEmailsFile.restricted_access | quote }}
+  restricted_user_access: {{- include "common.tplvalues.render" ( dict "value" .Values.authenticatedEmailsFile.restricted_access "context" $ ) | nindent 4 }}
 {{- end }}
