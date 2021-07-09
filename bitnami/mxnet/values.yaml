@@ -16,13 +16,16 @@ global:
   imagePullSecrets: []
   storageClass:
 
+## @section Common parameters
+
 ## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
 ##
 nameOverride:
-
 ## @param fullnameOverride String to fully override common.names.fullname template
 ##
 fullnameOverride:
+
+## @section Common Mxnet parameters
 
 ## Bitnami Apache MXNet (Incubating) image version
 ## ref: https://hub.docker.com/r/bitnami/mxnet/tags/
@@ -54,7 +57,6 @@ image:
   ## It turns BASH and/or NAMI debugging in the image
   ##
   debug: false
-
 ## Bitnami git image version
 ## ref: https://hub.docker.com/r/bitnami/git/tags/
 ## @param git.registry Git image registry
@@ -76,7 +78,6 @@ git:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
-
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
 ##
@@ -123,7 +124,6 @@ volumePermissions:
     ##    cpu: 100m
     ##    memory: 128Mi
     requests: {}
-
 ## Service for the scheduler node
 ##
 service:
@@ -142,7 +142,6 @@ service:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
   annotations: {}
-
 ## @param entrypoint [object] The main entrypoint of your app, this will be executed as:
 ##   python [file] [args]
 ##
@@ -150,31 +149,25 @@ entrypoint:
   file:
   workDir: /app
   # args:
-
 ## @param mode Apache MXNet (Incubating) deployment mode. Can be `standalone` or `distributed`
 ##
 mode: standalone
-
 ## @param existingSecret Name of a secret with sensitive data to mount in the pods
 ##
 existingSecret:
-
 ## @param configMap Name of an existing config map containing all the files you want to load in Apache MXNet (Incubating)
 ##
 configMap:
-
 ## @param hostAliases Deployment pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
 hostAliases: []
-
 cloneFilesFromGit:
   ## @param cloneFilesFromGit.enabled Enable in order to download files from git repository
   ##
   enabled: false
   # repository:
   # revision: master
-
   ## @param cloneFilesFromGit.extraVolumeMounts Add extra volume mounts for the GIT container
   ## Useful to mount keys to connect through ssh. (normally used with extraVolumes)
   ## E.g:
@@ -183,7 +176,6 @@ cloneFilesFromGit:
   ##     mountPath: /.ssh/
   ##
   extraVolumeMounts: []
-
 ## @param commonExtraEnvVars Additional environment variables for all node types
 ## Example:
 ## commonExtraEnvVars:
@@ -191,21 +183,17 @@ cloneFilesFromGit:
 ##     value: "1"
 ##
 commonExtraEnvVars: []
-
 ## @param podManagementPolicy StatefulSet (worker and server nodes) pod management policy
 ##
 podManagementPolicy: Parallel
-
 ## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
 podAffinityPreset: ""
-
 ## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
 podAntiAffinityPreset: soft
-
 ## Node affinity preset
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
 ##
@@ -225,105 +213,141 @@ nodeAffinityPreset:
   ##   - e2e-az2
   ##
   values: []
-
 ## @param affinity Affinity for pod assignment. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ## Note: podAffinityPreset, podAntiAffinityPreset, and nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
-
 ## @param nodeSelector Node labels for pod assignment. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
 nodeSelector: {}
-
 ## @param tolerations Tolerations for pod assignment. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
-
-## Scheduler configuration (only for distributed mode)
+## Container resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## We usually recommend not to specify default resources and to leave this as a conscious
+## choice for the user. This also increases chances charts run on environments with little
+## resources, such as Minikube. If you do want to specify resources, uncomment the following
+## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+## @param resources.limits The resources limits for the Mxnet container
+## @param resources.requests The requested resources for the Mxnet container
 ##
-scheduler:
-  ## @param scheduler.port The port used to communicate with the scheduler
-  ## MASTER_PORT will be set to this value
-  ##
-  port: 9092
-  ## @param scheduler.hostAliases Deployment pod host aliases
-  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
-  ##
-  hostAliases: []
-  ## @param scheduler.extraEnvVars An array to add extra env vars
+resources:
   ## Example:
-  ## extraEnvVars:
-  ##   - name: FOO
-  ##     value: "bar"
-  ##
-  extraEnvVars: []
-  ## Container resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ## We usually recommend not to specify default resources and to leave this as a conscious
-  ## choice for the user. This also increases chances charts run on environments with little
-  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
-  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param scheduler.resources.limits The resources limits for the Mxnet Scheduler container
-  ## @param scheduler.resources.requests The requested resources for the Mxnet Scheduler container
-  ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 250m
-    ##    memory: 256Mi
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 250m
-    ##    memory: 256Mi
-    requests: {}
-  ## @param scheduler.podAffinityPreset Mxnet Scheduler pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ##
-  podAffinityPreset: ""
-  ## @param scheduler.podAntiAffinityPreset Mxnet Scheduler pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ##
-  podAntiAffinityPreset: soft
-  ## Node affinity preset
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ## Allowed values: soft, hard
-  ##
-  nodeAffinityPreset:
-    ## @param scheduler.nodeAffinityPreset.type Mxnet Scheduler node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
-    ##
-    type: ""
-    ## @param scheduler.nodeAffinityPreset.key Mxnet Scheduler node label key to match Ignored if `affinity` is set.
-    ## E.g.
-    ## key: "kubernetes.io/e2e-az-name"
-    ##
-    key: ""
-    ## @param scheduler.nodeAffinityPreset.values Mxnet Scheduler node label values to match. Ignored if `affinity` is set.
-    ## E.g.
-    ## values:
-    ##   - e2e-az1
-    ##   - e2e-az2
-    ##
-    values: []
-  ## @param scheduler.affinity Mxnet Scheduler affinity for pod assignment
-  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ## Note: configsvr.podAffinityPreset, configsvr.podAntiAffinityPreset, and configsvr.nodeAffinityPreset will be ignored when it's set
-  ##
-  affinity: {}
-  ## @param scheduler.nodeSelector Mxnet Scheduler node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
-  ##
-  nodeSelector: {}
-  ## @param scheduler.tolerations Mxnet Scheduler tolerations for pod assignment
-  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-  ##
-  tolerations: []
-
-## Server configuration (only for distributed mode)
+  ## limits:
+  ##    cpu: 250m
+  ##    memory: 256Mi
+  limits: {}
+  ## Examples:
+  ## requests:
+  ##    cpu: 250m
+  ##    memory: 256Mi
+  requests: {}
+## Pod Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+## @param securityContext.enabled Enable security context
+## @param securityContext.fsGroup Group ID for the container
+## @param securityContext.runAsUser User ID for the container
 ##
+securityContext:
+  enabled: true
+  fsGroup: 1001
+  runAsUser: 1001
+## Configure extra options for liveness probe
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+## @param livenessProbe.enabled Enable livenessProbe
+## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+## @param livenessProbe.periodSeconds Period seconds for livenessProbe
+## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+## @param livenessProbe.failureThreshold Failure threshold for livenessProbe
+## @param livenessProbe.successThreshold Success threshold for livenessProbe
+##
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 5
+  periodSeconds: 5
+  timeoutSeconds: 15
+  successThreshold: 1
+  failureThreshold: 5
+## Configure extra options for readiness probe
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+## @param readinessProbe.enabled Enable readinessProbe
+## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+## @param readinessProbe.periodSeconds Period seconds for readinessProbe
+## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+## @param readinessProbe.failureThreshold Failure threshold for readinessProbe
+## @param readinessProbe.successThreshold Success threshold for readinessProbe
+##
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 5
+  periodSeconds: 5
+  timeoutSeconds: 15
+  successThreshold: 1
+  failureThreshold: 5
+## Enable persistence using Persistent Volume Claims
+## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+##
+persistence:
+  ## @param persistence.enabled Use a PVC to persist data
+  ##
+  enabled: false
+  ## @param persistence.mountPath Path to mount the volume at
+  ##
+  mountPath: /bitnami/mxnet
+  ## @param persistence.accessModes Persistent Volume Access Mode
+  ##
+  accessModes:
+    - ReadWriteOnce
+  ## @param persistence.size Size of data volume
+  ##
+  size: 8Gi
+  ## Persistent Volume Storage Class
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
+  ##
+  # storageClass: "-"
+  ## @param persistence.annotations Persistent Volume annotations
+  ##
+  annotations: {}
+## @param sidecars Attach additional containers to the pods (scheduler, worker and server nodes)
+## e.g.
+## sidecars:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+sidecars: []
+## @param initContainers Attach additional init containers to the pods (scheduler, worker and server nodes)
+## e.g.
+## initContainers:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##     - name: portname
+##       containerPort: 1234
+##
+initContainers: []
+## @param extraVolumes Array to add extra volumes (evaluated as a template)
+##
+extraVolumes: []
+## @param extraVolumeMounts Array to add extra mounts (normally used with extraVolumes, evaluated as a template)
+##
+extraVolumeMounts: []
+
+
+## @section Mxnet Server parameters (only for distributed mode)
+
 server:
   ## @param server.replicaCount Number of Server nodes that will execute your code
   ##
@@ -401,8 +425,8 @@ server:
   ##
   tolerations: []
 
-## Worker configuration (only for distributed mode)
-##
+## @section Mxnet Worker parameters (only for distributed mode)
+
 worker:
   ## @param worker.replicaCount Number of Worker nodes that will execute your code
   ##
@@ -480,133 +504,82 @@ worker:
   ##
   tolerations: []
 
-## Container resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-## We usually recommend not to specify default resources and to leave this as a conscious
-## choice for the user. This also increases chances charts run on environments with little
-## resources, such as Minikube. If you do want to specify resources, uncomment the following
-## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-## @param resources.limits The resources limits for the Mxnet container
-## @param resources.requests The requested resources for the Mxnet container
-##
-resources:
+## @section Mxnet Scheduler parameters (only for distributed mode)
+
+scheduler:
+  ## @param scheduler.port The port used to communicate with the scheduler
+  ## MASTER_PORT will be set to this value
+  ##
+  port: 9092
+  ## @param scheduler.hostAliases Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param scheduler.extraEnvVars An array to add extra env vars
   ## Example:
-  ## limits:
-  ##    cpu: 250m
-  ##    memory: 256Mi
-  limits: {}
-  ## Examples:
-  ## requests:
-  ##    cpu: 250m
-  ##    memory: 256Mi
-  requests: {}
-
-## Pod Security Context
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-## @param securityContext.enabled Enable security context
-## @param securityContext.fsGroup Group ID for the container
-## @param securityContext.runAsUser User ID for the container
-##
-securityContext:
-  enabled: true
-  fsGroup: 1001
-  runAsUser: 1001
-
-## Configure extra options for liveness probe
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
-## @param livenessProbe.enabled Enable livenessProbe
-## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
-## @param livenessProbe.periodSeconds Period seconds for livenessProbe
-## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
-## @param livenessProbe.failureThreshold Failure threshold for livenessProbe
-## @param livenessProbe.successThreshold Success threshold for livenessProbe
-##
-livenessProbe:
-  enabled: true
-  initialDelaySeconds: 5
-  periodSeconds: 5
-  timeoutSeconds: 15
-  successThreshold: 1
-  failureThreshold: 5
-## Configure extra options for readiness probe
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
-## @param readinessProbe.enabled Enable readinessProbe
-## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-## @param readinessProbe.periodSeconds Period seconds for readinessProbe
-## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
-## @param readinessProbe.failureThreshold Failure threshold for readinessProbe
-## @param readinessProbe.successThreshold Success threshold for readinessProbe
-##
-readinessProbe:
-  enabled: true
-  initialDelaySeconds: 5
-  periodSeconds: 5
-  timeoutSeconds: 15
-  successThreshold: 1
-  failureThreshold: 5
-
-## Enable persistence using Persistent Volume Claims
-## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
-##
-persistence:
-  ## @param persistence.enabled Use a PVC to persist data
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
   ##
-  enabled: false
-
-  ## @param persistence.mountPath Path to mount the volume at
+  extraEnvVars: []
+  ## Container resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param scheduler.resources.limits The resources limits for the Mxnet Scheduler container
+  ## @param scheduler.resources.requests The requested resources for the Mxnet Scheduler container
   ##
-  mountPath: /bitnami/mxnet
-
-  ## @param persistence.accessModes Persistent Volume Access Mode
+  resources:
+    ## Example:
+    ## limits:
+    ##    cpu: 250m
+    ##    memory: 256Mi
+    limits: {}
+    ## Examples:
+    ## requests:
+    ##    cpu: 250m
+    ##    memory: 256Mi
+    requests: {}
+  ## @param scheduler.podAffinityPreset Mxnet Scheduler pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
-  accessModes:
-    - ReadWriteOnce
-
-  ## @param persistence.size Size of data volume
+  podAffinityPreset: ""
+  ## @param scheduler.podAntiAffinityPreset Mxnet Scheduler pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
-  size: 8Gi
-
-  ## Persistent Volume Storage Class
-  ## If defined, storageClassName: <storageClass>
-  ## If set to "-", storageClassName: "", which disables dynamic provisioning
-  ## If undefined (the default) or set to null, no storageClassName spec is
-  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-  ##   GKE, AWS & OpenStack)
+  podAntiAffinityPreset: soft
+  ## Node affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ## Allowed values: soft, hard
   ##
-  # storageClass: "-"
-
-  ## @param persistence.annotations Persistent Volume annotations
+  nodeAffinityPreset:
+    ## @param scheduler.nodeAffinityPreset.type Mxnet Scheduler node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param scheduler.nodeAffinityPreset.key Mxnet Scheduler node label key to match Ignored if `affinity` is set.
+    ## E.g.
+    ## key: "kubernetes.io/e2e-az-name"
+    ##
+    key: ""
+    ## @param scheduler.nodeAffinityPreset.values Mxnet Scheduler node label values to match. Ignored if `affinity` is set.
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param scheduler.affinity Mxnet Scheduler affinity for pod assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Note: configsvr.podAffinityPreset, configsvr.podAntiAffinityPreset, and configsvr.nodeAffinityPreset will be ignored when it's set
   ##
-  annotations: {}
-
-## @param sidecars Attach additional containers to the pods (scheduler, worker and server nodes)
-## e.g.
-## sidecars:
-##   - name: your-image-name
-##     image: your-image
-##     imagePullPolicy: Always
-##     ports:
-##       - name: portname
-##         containerPort: 1234
-##
-sidecars: []
-
-## @param initContainers Attach additional init containers to the pods (scheduler, worker and server nodes)
-## e.g.
-## initContainers:
-##   - name: your-image-name
-##     image: your-image
-##     imagePullPolicy: Always
-##     ports:
-##     - name: portname
-##       containerPort: 1234
-##
-initContainers: []
-
-## @param extraVolumes Array to add extra volumes (evaluated as a template)
-##
-extraVolumes: []
-
-## @param extraVolumeMounts Array to add extra mounts (normally used with extraVolumes, evaluated as a template)
-##
-extraVolumeMounts: []
+  affinity: {}
+  ## @param scheduler.nodeSelector Mxnet Scheduler node labels for pod assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ## @param scheduler.tolerations Mxnet Scheduler tolerations for pod assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
