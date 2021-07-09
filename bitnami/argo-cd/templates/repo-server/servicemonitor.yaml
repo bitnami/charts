@@ -1,0 +1,36 @@
+{{- if and .Values.repoServer.metrics.enabled .Values.repoServer.metrics.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ template "argo-cd.repoServer.fullname" . }}
+  {{- if .Values.repoServer.metrics.serviceMonitor.namespace }}
+  namespace: {{ .Values.repoServer.metrics.serviceMonitor.namespace }}
+  {{- else }}
+  namespace: {{ .Release.Namespace }}
+  {{- end }}
+  labels: {{- include "argo-cd.labels" . | nindent 4 }}
+    app.kubernetes.io/component: repo-server
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.repoServer.metrics.serviceMonitor.additionalLabels }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.metrics.serviceMonitor.additionalLabels "context" $) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  endpoints:
+    - port: metrics
+      {{- if .Values.repoServer.metrics.serviceMonitor.interval }}
+      interval: {{ .Values.repoServer.metrics.serviceMonitor.interval }}
+      {{- end }}
+      path: {{ .Values.repoServer.metrics.serviceMonitor.path }}
+      scrapeTimeout: {{ .Values.repoServer.metrics.serviceMonitor.scrapeTimeout }}
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: repo-server
+{{- end }}

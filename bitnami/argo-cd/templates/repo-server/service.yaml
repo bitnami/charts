@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "argo-cd.repoServer.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "argo-cd.labels" . | nindent 4 }}
+    app.kubernetes.io/component: repo-server
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.repoServer.service.type }}
+  {{- if (or (eq .Values.repoServer.service.type "LoadBalancer") (eq .Values.repoServer.service.type "NodePort")) }}
+  externalTrafficPolicy: {{ .Values.repoServer.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{ if eq .Values.repoServer.service.type "LoadBalancer" }}
+  loadBalancerSourceRanges: {{ .Values.repoServer.service.loadBalancerSourceRanges }}
+  {{ end }}
+  {{- if (and (eq .Values.repoServer.service.type "LoadBalancer") (not (empty .Values.repoServer.service.loadBalancerIP))) }}
+  loadBalancerIP: {{ .Values.repoServer.service.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - name: {{ .Values.repoServer.service.portName }}
+      protocol: TCP
+      port: {{ .Values.repoServer.service.port }}
+      targetPort: repo-server
+      {{- if and .Values.repoServer.service.nodePort (or (eq .Values.repoServer.service.type "NodePort") (eq .Values.repoServer.service.type "LoadBalancer")) }}
+      nodePort: {{ .Values.repoServer.service.nodePort }}
+      {{- else }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.repoServer.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: repo-server

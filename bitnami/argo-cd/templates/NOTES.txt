@@ -1,0 +1,5 @@
+%%Instructions to access the application depending on the serviceType and other considerations%%
+
+{{- include "common.warnings.rollingTag" .Values.image }}
+{{- include "common.warnings.rollingTag" .Values.dex.image }}
+{{/* {{- include "argo-cd.validateValues" . }} */}}

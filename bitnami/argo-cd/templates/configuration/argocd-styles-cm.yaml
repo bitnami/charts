@@ -1,0 +1,24 @@
+{{- if .Values.configuration.stylesCM.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-custom-styles
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "argo-cd.labels" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if or .Values.configuration.stylesCM.annotations .Values.commonAnnotations }}
+  annotations:
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.configuration.stylesCM.annotations }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.configuration.stylesCM.annotations "context" $) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+data:
+  {{- if .Values.configuration.stylesCM.data }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.configuration.stylesCM.data "context" $ ) | nindent 2 }}
+  {{- end }}
+{{- end }}

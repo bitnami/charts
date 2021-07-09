@@ -1,0 +1,36 @@
+{{- if and .Values.dex.metrics.enabled .Values.dex.metrics.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ template "argo-cd.dex.fullname" . }}
+  {{- if .Values.dex.metrics.serviceMonitor.namespace }}
+  namespace: {{ .Values.dex.metrics.serviceMonitor.namespace }}
+  {{- else }}
+  namespace: {{ .Release.Namespace }}
+  {{- end }}
+  labels: {{- include "argo-cd.labels" . | nindent 4 }}
+    app.kubernetes.io/component: dex
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.dex.metrics.serviceMonitor.additionalLabels }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.dex.metrics.serviceMonitor.additionalLabels "context" $) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  endpoints:
+    - port: metrics
+      {{- if .Values.dex.metrics.serviceMonitor.interval }}
+      interval: {{ .Values.dex.metrics.serviceMonitor.interval }}
+      {{- end }}
+      path: {{ .Values.dex.metrics.serviceMonitor.path }}
+      scrapeTimeout: {{ .Values.dex.metrics.serviceMonitor.scrapeTimeout }}
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: dex
+{{- end }}

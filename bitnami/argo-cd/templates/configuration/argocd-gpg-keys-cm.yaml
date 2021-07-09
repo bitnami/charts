@@ -1,0 +1,24 @@
+{{-  if .Values.configuration.gpgKeysCM.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-gpg-keys-cm
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "argo-cd.labels" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if or .Values.configuration.gpgKeysCM.annotations .Values.commonAnnotations }}
+  annotations:
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.configuration.gpgKeysCM.annotations }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.configuration.gpgKeysCM.annotations "context" $) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+data:
+  {{- if .Values.configuration.gpgKeysCM.data }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.configuration.gpgKeysCM.data "context" $ ) | nindent 2 }}
+  {{- end }}
+{{- end }}
