@@ -140,7 +140,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `initContainers`                        | Extra init containers                                                                     | `nil`   |
 | `pdb.create`                            | Created a PodDisruptionBudget                                                             | `false` |
 | `pdb.minAvailable`                      | Min number of pods that must still be available after the eviction                        | `1`     |
-| `pdb.maxUnavailable`                    | Max number of pods that can be unavailable after the eviction                             | `nil`   |
+| `pdb.maxUnavailable`                    | Max number of pods that can be unavailable after the eviction                             | `1`     |
 
 
 ### Custom NGINX application parameters
@@ -162,7 +162,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cloneStaticSiteFromGit.gitSync.args`      | Override default container args for git-repo-syncer                                               | `[]`                   |
 | `cloneStaticSiteFromGit.extraEnvVars`      | Additional environment variables to set for the in the containers that clone static site from git | `[]`                   |
 | `cloneStaticSiteFromGit.extraVolumeMounts` | Add extra volume mounts for the Git containers                                                    | `[]`                   |
-| `serverBlock`                              | Custom server block to be added to NGINX configuration                                            | `nil`                  |
+| `serverBlock`                              | Custom server block to be added to NGINX configuration                                            | `""`                   |
 | `existingServerBlockConfigmap`             | ConfigMap with custom server block to be added to NGINX configuration                             | `nil`                  |
 | `staticSiteConfigmap`                      | Name of existing ConfigMap with the server static site content                                    | `nil`                  |
 | `staticSitePVC`                            | Name of existing PVC with the server static site content                                          | `nil`                  |

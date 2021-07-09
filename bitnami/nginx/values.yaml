@@ -300,7 +300,7 @@ pdb:
   minAvailable: 1
   ## @param pdb.maxUnavailable Max number of pods that can be unavailable after the eviction
   ##
-  maxUnavailable:
+  maxUnavailable: 1
 
 ## @section Custom NGINX application parameters
 
@@ -394,7 +394,7 @@ cloneStaticSiteFromGit:
 ##     }
 ##   }
 ##
-serverBlock:
+serverBlock: ""
 ## @param existingServerBlockConfigmap ConfigMap with custom server block to be added to NGINX configuration
 ## NOTE: This will override serverBlock
 ##
