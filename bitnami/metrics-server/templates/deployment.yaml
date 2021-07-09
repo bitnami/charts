@@ -49,6 +49,9 @@ spec:
       hostNetwork: true
       {{- end }}
       containers:
+        {{- if .Values.extraContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.extraContainers "context" $) | nindent 8 }}
+        {{- end }}
         - name: metrics-server
           image: {{ template "metrics-server.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
