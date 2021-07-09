@@ -154,7 +154,7 @@ spec:
           {{- $clusterDomain:= .Values.clusterDomain }}
           env:
             - name: BITNAMI_DEBUG
-              value: {{ ternary "true" "false" (or .Values.postgresqlImage.debug .Values.diagnosticMode.enabled)| quote }}
+              value: {{ ternary "true" "false" (or .Values.postgresqlImage.debug .Values.diagnosticMode.enabled) | quote }}
             # PostgreSQL configuration
             - name: POSTGRESQL_VOLUME_DIR
               value: {{ .Values.persistence.mountPath | quote }}
