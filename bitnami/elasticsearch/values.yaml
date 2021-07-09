@@ -384,8 +384,8 @@ master:
     enabled: false
     minReplicas: 2
     maxReplicas: 11
-    targetCPU: 50
-    targetMemory: 50
+    targetCPU:
+    targetMemory:
 
 ## @section Coordinating parameters
 
@@ -594,8 +594,8 @@ coordinating:
     enabled: false
     minReplicas: 2
     maxReplicas: 11
-    targetCPU: 50
-    targetMemory: 50
+    targetCPU:
+    targetMemory:
 
 ## @section Data parameters
 
@@ -827,8 +827,8 @@ data:
     enabled: false
     minReplicas: 2
     maxReplicas: 11
-    targetCPU: 50
-    targetMemory: 50
+    targetCPU:
+    targetMemory:
 
 ## @section Ingest parameters
 
@@ -1438,15 +1438,19 @@ metrics:
     enabled: false
     ## @param metrics.serviceMonitor.namespace Namespace in which Prometheus is running
     ##
-    namespace: monitoring
+    namespace:
     ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped.
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ## e.g:
+    ## interval: 10s
     ##
-    interval: 10s
+    interval:
     ## @param metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ## e.g:
+    ## scrapeTimeout: 10s
     ##
-    scrapeTimeout: 10s
+    scrapeTimeout:
     ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
     ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
     ## selector:

@@ -76,7 +76,7 @@ $ helm delete --purge my-release
 | ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
 | `image.registry`        | Elasticsearch image registry                                                                                                                        | `docker.io`             |
 | `image.repository`      | Elasticsearch image repository                                                                                                                      | `bitnami/elasticsearch` |
-| `image.tag`             | Elasticsearch image tag (immutable tags are recommended)                                                                                            | `7.13.2-debian-10-r11`  |
+| `image.tag`             | Elasticsearch image tag (immutable tags are recommended)                                                                                            | `7.13.3-debian-10-r0`   |
 | `image.pullPolicy`      | Elasticsearch image pull policy                                                                                                                     | `IfNotPresent`          |
 | `image.pullSecrets`     | Elasticsearch image pull secrets                                                                                                                    | `[]`                    |
 | `image.debug`           | Enable image debug mode                                                                                                                             | `false`                 |
@@ -162,8 +162,8 @@ $ helm delete --purge my-release
 | `master.autoscaling.enabled`                | Enable autoscaling for master replicas                                                                                                                                                                                                  | `false`         |
 | `master.autoscaling.minReplicas`            | Minimum number of master replicas                                                                                                                                                                                                       | `2`             |
 | `master.autoscaling.maxReplicas`            | Maximum number of master replicas                                                                                                                                                                                                       | `11`            |
-| `master.autoscaling.targetCPU`              | Target CPU utilization percentage for master replica autoscaling                                                                                                                                                                        | `50`            |
-| `master.autoscaling.targetMemory`           | Target Memory utilization percentage for master replica autoscaling                                                                                                                                                                     | `50`            |
+| `master.autoscaling.targetCPU`              | Target CPU utilization percentage for master replica autoscaling                                                                                                                                                                        | `nil`           |
+| `master.autoscaling.targetMemory`           | Target Memory utilization percentage for master replica autoscaling                                                                                                                                                                     | `nil`           |
 
 
 ### Coordinating parameters
@@ -224,8 +224,8 @@ $ helm delete --purge my-release
 | `coordinating.autoscaling.enabled`                | Enable autoscaling for coordinating replicas                                                                              | `false`         |
 | `coordinating.autoscaling.minReplicas`            | Minimum number of coordinating replicas                                                                                   | `2`             |
 | `coordinating.autoscaling.maxReplicas`            | Maximum number of coordinating replicas                                                                                   | `11`            |
-| `coordinating.autoscaling.targetCPU`              | Target CPU utilization percentage for coordinating replica autoscaling                                                    | `50`            |
-| `coordinating.autoscaling.targetMemory`           | Target Memory utilization percentage for coordinating replica autoscaling                                                 | `50`            |
+| `coordinating.autoscaling.targetCPU`              | Target CPU utilization percentage for coordinating replica autoscaling                                                    | `nil`           |
+| `coordinating.autoscaling.targetMemory`           | Target Memory utilization percentage for coordinating replica autoscaling                                                 | `nil`           |
 
 
 ### Data parameters
@@ -291,8 +291,8 @@ $ helm delete --purge my-release
 | `data.autoscaling.enabled`                   | Enable autoscaling for data replicas                                                                                                              | `false`         |
 | `data.autoscaling.minReplicas`               | Minimum number of data replicas                                                                                                                   | `2`             |
 | `data.autoscaling.maxReplicas`               | Maximum number of data replicas                                                                                                                   | `11`            |
-| `data.autoscaling.targetCPU`                 | Target CPU utilization percentage for data replica autoscaling                                                                                    | `50`            |
-| `data.autoscaling.targetMemory`              | Target Memory utilization percentage for data replica autoscaling                                                                                 | `50`            |
+| `data.autoscaling.targetCPU`                 | Target CPU utilization percentage for data replica autoscaling                                                                                    | `nil`           |
+| `data.autoscaling.targetMemory`              | Target Memory utilization percentage for data replica autoscaling                                                                                 | `nil`           |
 
 
 ### Ingest parameters
@@ -359,7 +359,7 @@ $ helm delete --purge my-release
 | `curator.name`                               | Elasticsearch Curator pod name                                                                    | `curator`                       |
 | `curator.image.registry`                     | Elasticsearch Curator image registry                                                              | `docker.io`                     |
 | `curator.image.repository`                   | Elasticsearch Curator image repository                                                            | `bitnami/elasticsearch-curator` |
-| `curator.image.tag`                          | Elasticsearch Curator image tag                                                                   | `5.8.4-debian-10-r50`           |
+| `curator.image.tag`                          | Elasticsearch Curator image tag                                                                   | `5.8.4-debian-10-r57`           |
 | `curator.image.pullPolicy`                   | Elasticsearch Curator image pull policy                                                           | `IfNotPresent`                  |
 | `curator.image.pullSecrets`                  | Elasticsearch Curator image pull secrets                                                          | `[]`                            |
 | `curator.cronjob.schedule`                   | Schedule for the CronJob                                                                          | `0 1 * * *`                     |
@@ -407,7 +407,7 @@ $ helm delete --purge my-release
 | `metrics.name`                               | Metrics pod name                                                                                          | `metrics`                        |
 | `metrics.image.registry`                     | Metrics exporter image registry                                                                           | `docker.io`                      |
 | `metrics.image.repository`                   | Metrics exporter image repository                                                                         | `bitnami/elasticsearch-exporter` |
-| `metrics.image.tag`                          | Metrics exporter image tag                                                                                | `1.2.1-debian-10-r0`             |
+| `metrics.image.tag`                          | Metrics exporter image tag                                                                                | `1.2.1-debian-10-r7`             |
 | `metrics.image.pullPolicy`                   | Metrics exporter image pull policy                                                                        | `IfNotPresent`                   |
 | `metrics.image.pullSecrets`                  | Metrics exporter image pull secrets                                                                       | `[]`                             |
 | `metrics.extraArgs`                          | Extra arguments to add to the default exporter command                                                    | `[]`                             |
@@ -440,9 +440,9 @@ $ helm delete --purge my-release
 | `metrics.podAnnotations`                     | Metrics exporter pod Annotation and Labels                                                                | `{}`                             |
 | `metrics.podLabels`                          | Extra labels to add to Pod                                                                                | `{}`                             |
 | `metrics.serviceMonitor.enabled`             | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)    | `false`                          |
-| `metrics.serviceMonitor.namespace`           | Namespace in which Prometheus is running                                                                  | `monitoring`                     |
-| `metrics.serviceMonitor.interval`            | Interval at which metrics should be scraped.                                                              | `10s`                            |
-| `metrics.serviceMonitor.scrapeTimeout`       | Timeout after which the scrape is ended                                                                   | `10s`                            |
+| `metrics.serviceMonitor.namespace`           | Namespace in which Prometheus is running                                                                  | `nil`                            |
+| `metrics.serviceMonitor.interval`            | Interval at which metrics should be scraped.                                                              | `nil`                            |
+| `metrics.serviceMonitor.scrapeTimeout`       | Timeout after which the scrape is ended                                                                   | `nil`                            |
 | `metrics.serviceMonitor.selector`            | Prometheus instance selector labels                                                                       | `{}`                             |
 
 
@@ -453,7 +453,7 @@ $ helm delete --purge my-release
 | `sysctlImage.enabled`            | Enable kernel settings modifier image       | `true`                  |
 | `sysctlImage.registry`           | Kernel settings modifier image registry     | `docker.io`             |
 | `sysctlImage.repository`         | Kernel settings modifier image repository   | `bitnami/bitnami-shell` |
-| `sysctlImage.tag`                | Kernel settings modifier image tag          | `10-debian-10-r119`     |
+| `sysctlImage.tag`                | Kernel settings modifier image tag          | `10-debian-10-r127`     |
 | `sysctlImage.pullPolicy`         | Kernel settings modifier image pull policy  | `Always`                |
 | `sysctlImage.pullSecrets`        | Kernel settings modifier image pull secrets | `[]`                    |
 | `sysctlImage.resources.limits`   | The resources limits for the container      | `{}`                    |
@@ -467,7 +467,7 @@ $ helm delete --purge my-release
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r119`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r127`     |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `Always`                |
 | `volumePermissions.image.pullSecrets`  | Init container volume-permissions image pull secrets                                                                                                      | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                                                                                                    | `{}`                    |
