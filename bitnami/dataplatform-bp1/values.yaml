@@ -85,7 +85,7 @@ kafka:
   ## @param kafka.affinity.podAntiAffinity [object] Zookeeper pods Anti Affinity rules for best possible resiliency (evaluated as a template)
   ## @skip kafka.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution
   ## @param kafka.affinity.podAffinity [object] Zookeeper pods Affinity rules for best possible resiliency (evaluated as a template)
-  ## @param kafka.affinity.podAffinity.preferredDuringSchedulingIgnoredDuringExecution
+  ## @skip kafka.affinity.podAffinity.preferredDuringSchedulingIgnoredDuringExecution
   ##
   affinity:
     podAntiAffinity:

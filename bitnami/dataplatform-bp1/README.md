@@ -107,26 +107,25 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Kafka chart parameters
 
-| Name                                                                         | Description                                                                               | Value                 |
-| ---------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | --------------------- |
-| `kafka.enabled`                                                              | Switch to enable or disable the Kafka helm chart                                          | `true`                |
-| `kafka.replicaCount`                                                         | Number of Kafka replicas                                                                  | `3`                   |
-| `kafka.heapOpts`                                                             | Kafka's Java Heap size                                                                    | `-Xmx4096m -Xms4096m` |
-| `kafka.resources.limits`                                                     | The resources limits for Kafka containers                                                 | `{}`                  |
-| `kafka.resources.requests`                                                   | The requested resources for Kafka containers                                              | `{}`                  |
-| `kafka.affinity.podAntiAffinity`                                             | Zookeeper pods Anti Affinity rules for best possible resiliency (evaluated as a template) | `{}`                  |
-| `kafka.affinity.podAffinity`                                                 | Zookeeper pods Affinity rules for best possible resiliency (evaluated as a template)      | `{}`                  |
-| `kafka.affinity.podAffinity.preferredDuringSchedulingIgnoredDuringExecution` |                                                                                           | `[]`                  |
-| `kafka.metrics.kafka.enabled`                                                | Whether or not to create a standalone Kafka exporter to expose Kafka metrics              | `false`               |
-| `kafka.metrics.kafka.resources.limits`                                       | The resources limits for the container                                                    | `{}`                  |
-| `kafka.metrics.kafka.resources.requests`                                     | Kafka Exporter container resource requests                                                | `{}`                  |
-| `kafka.metrics.kafka.service.port`                                           | Kafka Exporter Prometheus port to be used in Wavefront configuration                      | `9308`                |
-| `kafka.metrics.jmx.enabled`                                                  | Whether or not to expose JMX metrics to Prometheus                                        | `false`               |
-| `kafka.metrics.jmx.resources.limits`                                         | The resources limits for the container                                                    | `{}`                  |
-| `kafka.metrics.jmx.resources.requests`                                       | JMX Exporter container resource requests                                                  | `{}`                  |
-| `kafka.metrics.jmx.service.port`                                             | JMX Exporter Prometheus port                                                              | `5556`                |
-| `kafka.zookeeper.enabled`                                                    | Switch to enable or disable the Zookeeper helm chart                                      | `false`               |
-| `kafka.externalZookeeper.servers`                                            | Server or list of external Zookeeper servers to use                                       | `[]`                  |
+| Name                                     | Description                                                                               | Value                 |
+| ---------------------------------------- | ----------------------------------------------------------------------------------------- | --------------------- |
+| `kafka.enabled`                          | Switch to enable or disable the Kafka helm chart                                          | `true`                |
+| `kafka.replicaCount`                     | Number of Kafka replicas                                                                  | `3`                   |
+| `kafka.heapOpts`                         | Kafka's Java Heap size                                                                    | `-Xmx4096m -Xms4096m` |
+| `kafka.resources.limits`                 | The resources limits for Kafka containers                                                 | `{}`                  |
+| `kafka.resources.requests`               | The requested resources for Kafka containers                                              | `{}`                  |
+| `kafka.affinity.podAntiAffinity`         | Zookeeper pods Anti Affinity rules for best possible resiliency (evaluated as a template) | `{}`                  |
+| `kafka.affinity.podAffinity`             | Zookeeper pods Affinity rules for best possible resiliency (evaluated as a template)      | `{}`                  |
+| `kafka.metrics.kafka.enabled`            | Whether or not to create a standalone Kafka exporter to expose Kafka metrics              | `false`               |
+| `kafka.metrics.kafka.resources.limits`   | The resources limits for the container                                                    | `{}`                  |
+| `kafka.metrics.kafka.resources.requests` | Kafka Exporter container resource requests                                                | `{}`                  |
+| `kafka.metrics.kafka.service.port`       | Kafka Exporter Prometheus port to be used in Wavefront configuration                      | `9308`                |
+| `kafka.metrics.jmx.enabled`              | Whether or not to expose JMX metrics to Prometheus                                        | `false`               |
+| `kafka.metrics.jmx.resources.limits`     | The resources limits for the container                                                    | `{}`                  |
+| `kafka.metrics.jmx.resources.requests`   | JMX Exporter container resource requests                                                  | `{}`                  |
+| `kafka.metrics.jmx.service.port`         | JMX Exporter Prometheus port                                                              | `5556`                |
+| `kafka.zookeeper.enabled`                | Switch to enable or disable the Zookeeper helm chart                                      | `false`               |
+| `kafka.externalZookeeper.servers`        | Server or list of external Zookeeper servers to use                                       | `[]`                  |
 
 
 ### Solr chart parameters
