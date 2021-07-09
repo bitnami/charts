@@ -136,9 +136,10 @@ kafka:
           cpu: 100m
           memory: 128Mi
       ## Service configuration
-      ## @param kafka.metrics.kafka.service.port Kafka Exporter Prometheus port to be used in Wavefront configuration
       ##
       service:
+        ## @param kafka.metrics.kafka.service.port Kafka Exporter Prometheus port to be used in Wavefront configuration
+        ##
         port: 9308
     ## Prometheus JMX Exporter: exposes the majority of Kafka's metrics
     ##
@@ -157,9 +158,10 @@ kafka:
           cpu: 100m
           memory: 128Mi
       ## Service configuration
-      ## @param kafka.metrics.jmx.service.port JMX Exporter Prometheus port
       ##
       service:
+        ## @param kafka.metrics.jmx.service.port JMX Exporter Prometheus port
+        ##
         port: 5556
   ## @param kafka.zookeeper.enabled Switch to enable or disable the Zookeeper helm chart
   ##
