@@ -504,7 +504,7 @@ customStartupProbe: {}
 ##       - name: portname
 ##         containerPort: 1234
 ##
-initContainers: {}
+initContainers: []
 
 ## Add sidecars to the pod.
 ## Example:
