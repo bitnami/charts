@@ -124,6 +124,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.enabled`                      | Pod security context                                                                                                                                                     | `false`                  |
 | `extraVolumes`                                    | Extra volumes                                                                                                                                                            | `[]`                     |
 | `extraVolumeMounts`                               | Mount extra volume(s)                                                                                                                                                    | `[]`                     |
+| `extraContainers`                                 | Extra containers to run within the pod                                                                                                                                   | `{}`                     |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
