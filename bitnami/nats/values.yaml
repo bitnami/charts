@@ -14,6 +14,32 @@ global:
   ##
   imagePullSecrets: []
 
+## @section Common parameters
+
+## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
+##
+kubeVersion:
+## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
+##
+nameOverride:
+## @param fullnameOverride String to fully override common.names.fullname template
+##
+fullnameOverride:
+## @param commonLabels Add labels to all the deployed resources
+##
+commonLabels: {}
+## @param commonAnnotations Add annotations to all the deployed resources
+##
+commonAnnotations: {}
+## @param clusterDomain Kubernetes Cluster Domain
+##
+clusterDomain: cluster.local
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
+
+## @section NATS parameters
+
 ## Bitnami NATS image version
 ## ref: https://hub.docker.com/r/bitnami/nats/tags/
 ## @param image.registry NATS image registry
@@ -38,35 +64,6 @@ image:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
-
-## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
-##
-kubeVersion:
-
-## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
-##
-nameOverride:
-
-## @param fullnameOverride String to fully override common.names.fullname template
-##
-fullnameOverride:
-
-## @param commonLabels Add labels to all the deployed resources
-##
-commonLabels: {}
-
-## @param commonAnnotations Add annotations to all the deployed resources
-##
-commonAnnotations: {}
-
-## @param clusterDomain Kubernetes Cluster Domain
-##
-clusterDomain: cluster.local
-
-## @param extraDeploy Array of extra objects to deploy with the release
-##
-extraDeploy: []
-
 ## Client Authentication
 ## ref: https://github.com/nats-io/gnatsd#authentication
 ## @param auth.enabled Switch to enable/disable client authentication
@@ -81,7 +78,6 @@ auth:
   password:
   token:
   timeout: 1
-
 ## Cluster Authentication
 ## ref: https://github.com/nats-io/gnatsd#authentication
 ## @param clusterAuth.enabled Switch to enable/disable cluster authentication
@@ -94,7 +90,6 @@ clusterAuth:
   user: nats_cluster
   password:
   token:
-
 ## Logging parameters
 ## ref: https://github.com/nats-io/gnatsd#command-line-arguments
 ## @param debug.enabled Switch to enable/disable debug on logging
@@ -105,7 +100,6 @@ debug:
   enabled: false
   trace: false
   logtime: false
-
 ## System override parameters
 ## ref: https://docs.nats.io/nats-server/configuration
 ## @param maxConnections Max. number of client connections
@@ -122,7 +116,6 @@ maxConnections:
 maxControlLine:
 maxPayload:
 writeDeadline:
-
 ## @param natsFilename Filename used by several NATS files (binary, configurarion file, and pid file)
 ## Nats filenames:
 ##  - For Nats 1.x.x version, some filenames (binary, configuration file, pid file) uses `gnatsd` as part of the name.
@@ -131,19 +124,16 @@ writeDeadline:
 ## to specify the proper filename according to the image version.
 ##
 natsFilename: nats-server
-
 ## @param command Override default container command (useful when using custom images)
 ##
 command: []
 ## @param args Override default container args (useful when using custom images)
 ##
 args: []
-
 ## @param hostAliases Deployment pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
 hostAliases: []
-
 ## @param extraFlags Extra flags to be passed to NATS
 ## Example:
 ## extraFlags:
@@ -151,7 +141,6 @@ hostAliases: []
 ##   web.telemetry-path: "/metrics"
 ##
 extraFlags: {}
-
 ## @param extraEnvVars Extra environment variables to be set on NATS container
 ## Example:
 ## extraEnvVars:
@@ -159,14 +148,14 @@ extraFlags: {}
 ##     value: "bar"
 ##
 extraEnvVars: []
-
 ## @param extraEnvVarsCM ConfigMap with extra environment variables
 ##
 extraEnvVarsCM:
-
 ## @param extraEnvVarsSecret Secret with extra environment variables
 ##
 extraEnvVarsSecret:
+
+## @section NATS deployment/statefulset parameters
 
 ## @param resourceType NATS cluster resource type under Kubernetes. Allowed values: `statefulset` (default) or `deployment`
 ## ref:
@@ -174,28 +163,23 @@ extraEnvVarsSecret:
 ## - https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
 ##
 resourceType: "statefulset"
-
 ## @param replicaCount Number of NATS nodes
 ##
 replicaCount: 1
-
 ## @param schedulerName Use an alternate scheduler, e.g. "stork".
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
 schedulerName:
-
 ## @param priorityClassName Name of pod priority class
 ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
 ##
 priorityClassName:
-
 ## Strategy to use to update Pods
 ##
 updateStrategy:
   ## @param updateStrategy.type StrategyType. Can be set to RollingUpdate or OnDelete
   ##
   type: RollingUpdate
-
 ## NATS pods' Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param podSecurityContext [object] NATS pods' Security Context
@@ -203,7 +187,6 @@ updateStrategy:
 podSecurityContext:
   enabled: false
   fsGroup:
-
 ## NATS containers' SecurityContext
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param containerSecurityContext [object] NATS containers' Security Context
@@ -212,7 +195,6 @@ containerSecurityContext:
   enabled: false
   runAsUser:
   runAsNonRoot:
-
 ## NATS resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -233,7 +215,6 @@ resources:
   ##   cpu: 200m
   ##   memory: 256Mi
   requests: {}
-
 ## NATS containers' liveness probe.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe
@@ -276,35 +257,28 @@ readinessProbe:
   timeoutSeconds: 5
   failureThreshold: 6
   successThreshold: 1
-
 ## @param customLivenessProbe Override default liveness probe
 ##
 customLivenessProbe: {}
-
 ## @param customReadinessProbe Override default readiness probe
 ##
 customReadinessProbe: {}
-
 ## @param podLabels Extra labels for NATS pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
 podLabels: {}
-
 ## @param podAnnotations Annotations for NATS pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
-
 ## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
 podAffinityPreset: ""
-
 ## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
 podAntiAffinityPreset: soft
-
 ## Node affinity preset
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
 ##
@@ -324,31 +298,25 @@ nodeAffinityPreset:
   ##   - e2e-az2
   ##
   values: []
-
 ## @param affinity Affinity for pod assignment. Evaluated as a template.
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ## Note: podAffinityPreset, podAntiAffinityPreset, and nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
-
 ## @param nodeSelector Node labels for pod assignment. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
 nodeSelector: {}
-
 ## @param tolerations Tolerations for pod assignment. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
-
 ## @param extraVolumes Optionally specify extra list of additional volumes for NATS pods
 ##
 extraVolumes: []
-
 ## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for NATS container(s)
 ##
 extraVolumeMounts: []
-
 ## @param initContainers Add additional init containers to the NATS pods
 ## Example:
 ## initContainers:
@@ -360,7 +328,6 @@ extraVolumeMounts: []
 ##         containerPort: 1234
 ##
 initContainers: {}
-
 ## @param sidecars Add additional sidecar containers to the NATS pods
 ## Example:
 ## sidecars:
@@ -372,6 +339,8 @@ initContainers: {}
 ##         containerPort: 1234
 ##
 sidecars: {}
+
+## @section Traffic Exposure parameters
 
 ## NATS svc used for client connections
 ## ref: https://github.com/nats-io/gnatsd#running
@@ -396,7 +365,6 @@ client:
     ## @param client.service.loadBalancerIP loadBalancerIP if NATS client service type is `LoadBalancer`, otherwise leave blank
     ##
     loadBalancerIP:
-
 ## Kubernetes svc used for clustering
 ## ref: https://github.com/nats-io/gnatsd#clustering
 ##
@@ -424,7 +392,6 @@ cluster:
     ## otherwise leave blank
     ##
     loadBalancerIP:
-
 ## NATS svc used for monitoring
 ## ref: https://github.com/nats-io/gnatsd#monitoring
 ##
@@ -448,7 +415,6 @@ monitoring:
     ## @param monitoring.service.loadBalancerIP Use loadBalancerIP to request a specific static IP, otherwise leave blank
     ##
     loadBalancerIP:
-
 ## Configure the ingress resource that allows you to access the
 ## NATS installation. Set up the URL
 ## ref: http://kubernetes.io/docs/user-guide/ingress/
@@ -457,27 +423,21 @@ ingress:
   ## @param ingress.enabled Set to true to enable ingress record generation
   ##
   enabled: false
-
   ## @param ingress.certManager Set this to true in order to add the corresponding annotations for cert-manager
   ##
   certManager: false
-
   ## @param ingress.pathType Ingress Path type
   ##
   pathType: ImplementationSpecific
-
   ## @param ingress.apiVersion Override API Version (automatically detected if not set)
   ##
   apiVersion:
-
   ## @param ingress.hostname When the ingress is enabled, a host pointing to this will be created
   ##
   hostname: nats.local
-
   ## @param ingress.path The Path to NATS. You may need to set this to '/*' in order to use this with ALB ingress controllers.
   ##
   path: /
-
   ## @param ingress.annotations Ingress annotations
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
@@ -485,13 +445,11 @@ ingress:
   ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
   ##
   annotations: {}
-
   ## @param ingress.tls Enable TLS configuration for the hostname defined at ingress.hostname parameter
   ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
   ## You can use the ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
   ##
   tls: false
-
   ## @param ingress.extraHosts The list of additional hostnames to be covered with this ingress record.
   ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
   ## extraHosts:
@@ -499,7 +457,6 @@ ingress:
   ##   path: /
   ##
   extraHosts: []
-
   ## @param ingress.extraPaths Any additional arbitrary paths that may need to be added to the ingress under the main host.
   ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
   ## extraPaths:
@@ -509,7 +466,6 @@ ingress:
   ##     servicePort: use-annotation
   ##
   extraPaths: []
-
   ## @param ingress.extraTls The tls configuration for additional hostnames to be covered with this ingress record.
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
   ## extraTls:
@@ -518,7 +474,6 @@ ingress:
   ##   secretName: nats.local-tls
   ##
   extraTls: []
-
   ## @param ingress.secrets If you're providing your own certificates, please use this to add the certificates as secrets
   ## key and certificate should start with -----BEGIN CERTIFICATE----- or
   ## -----BEGIN RSA PRIVATE KEY-----
@@ -534,7 +489,6 @@ ingress:
   ##   certificate:
   ##
   secrets: []
-
 ## Network Policy configuration
 ## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
 ##
@@ -560,19 +514,7 @@ networkPolicy:
   ##
   additionalRules: {}
 
-## NATS Pod Disruption Budget configuration
-## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
-##
-pdb:
-  ## @param pdb.create Enable/disable a Pod Disruption Budget creation
-  ##
-  create: false
-  ## @param pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
-  ##
-  minAvailable: 1
-  ## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
-  ##
-  maxUnavailable:
+## @section Metrics parameters
 
 ## Metrics / Prometheus NATS Exporter
 ## ref: https://github.com/nats-io/prometheus-nats-exporter
@@ -654,3 +596,19 @@ metrics:
     ##
     selector:
       prometheus: kube-prometheus
+
+## @section Other parameters
+
+## NATS Pod Disruption Budget configuration
+## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+##
+pdb:
+  ## @param pdb.create Enable/disable a Pod Disruption Budget creation
+  ##
+  create: false
+  ## @param pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ##
+  minAvailable: 1
+  ## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ##
+  maxUnavailable:
