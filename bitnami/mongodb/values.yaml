@@ -1,54 +1,35 @@
+## @section Global parameters
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
-## Current available global Docker image parameters: imageRegistry and imagePullSecrets
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.namespaceOverride Override the namespace for resource deployed by the chart, but can itself be overridden by the local namespaceOverride
 ##
-# global:
-#   imageRegistry: myRegistryName
-#   imagePullSecrets:
-#     - myRegistryKeySecretName
-#   storageClass: myStorageClass
-## Override the namespace for resource deployed by the chart, but can itself be overridden by the local namespaceOverride
-#   namespaceOverride: my-global-namespace
+global:
+  imageRegistry:
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+  storageClass:
+  namespaceOverride:
 
-image:
-  ## Bitnami MongoDB(R) registry
-  ##
-  registry: docker.io
-  ## Bitnami MongoDB(R) image name
-  ##
-  repository: bitnami/mongodb
-  ## Bitnami MongoDB(R) image tag
-  ## ref: https://hub.docker.com/r/bitnami/mongodb/tags/
-  ##
-  tag: 4.4.6-debian-10-r29
-  ## Specify a imagePullPolicy
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-  ##
-  pullPolicy: IfNotPresent
-  ## Optionally specify an array of imagePullSecrets.
-  ## Secrets must be manually created in the namespace.
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-  ##
-  # pullSecrets:
-  #   - myRegistryKeySecretName
+## @section Common parameters
 
-  ## Set to true if you would like to see extra information on logs
-  ##
-  debug: false
-
-## String to partially override mongodb.fullname template (will maintain the release name)
+## @param nameOverride String to partially override mongodb.fullname template (will maintain the release name)
 ##
-# nameOverride:
-
-## String to fully override mongodb.fullname template
+nameOverride:
+## @param fullnameOverride String to fully override mongodb.fullname template
 ##
-# fullnameOverride:
-
-## Kubernetes Cluster Domain
+fullnameOverride:
+## @param clusterDomain Default Kubernetes cluster domain
 ##
 clusterDomain: cluster.local
-
-## Extra objects to deploy (value evaluated as a template)
+## @param extraDeploy Array of extra objects to deploy with the release
 ## extraDeploy:
 ## This needs to be uncommented and added to 'extraDeploy' in order to use the replicaset 'mongo-labeler' sidecar
 ## for dynamically discovering the mongodb primary pod
@@ -79,125 +60,147 @@ clusterDomain: cluster.local
 ##       primary: "true"
 ##
 extraDeploy: []
-
-## Add labels to all the deployed resources (sub-charts are not considered). Evaluated as a template
+## @param commonLabels Add labels to all the deployed resources (sub-charts are not considered). Evaluated as a template
 ##
 commonLabels: {}
-
-## Common annotations to add to all Mongo resources (sub-charts are not considered). Evaluated as a template
+## @param commonAnnotations Common annotations to add to all Mongo resources (sub-charts are not considered). Evaluated as a template
 ##
 commonAnnotations: {}
 
-## Use an alternate scheduler, e.g. "stork".
+## @section MongoDB&reg; parameters
+
+## Bitnami MongoDB(R) image
+## ref: https://hub.docker.com/r/bitnami/mongodb/tags/
+## @param image.registry MongoDB&reg; image registry
+## @param image.repository MongoDB&reg; image registry
+## @param image.tag MongoDB&reg; image tag (immutable tags are recommended)
+## @param image.pullPolicy MongoDB&reg; image pull policy
+## @param image.pullSecrets Specify docker-registry secret names as an array
+## @param image.debug Set to true if you would like to see extra information on logs
+##
+image:
+  registry: docker.io
+  repository: bitnami/mongodb
+  tag: 4.4.6-debian-10-r29
+  ## Specify a imagePullPolicy
+  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  pullSecrets: []
+  ## Set to true if you would like to see extra information on logs
+  ##
+  debug: false
+
+## @param schedulerName Name of the scheduler (other than default) to dispatch pods
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
-# schedulerName:
-
-## MongoDB(R) architecture. Allowed values: standalone or replicaset
+schedulerName:
+## @param architecture MongoDB&reg; architecture (`standalone` or `replicaset`)
 ##
 architecture: standalone
-
-## Use StatefulSet instead of Deployment when deploying standalone
+## @param useStatefulSet Set to true to use a StatefulSet instead of a Deployment (only when `architecture=standalone`)
 ##
 useStatefulSet: false
-
 ## MongoDB(R) Authentication parameters
 ##
 auth:
-  ## Enable authentication
+  ## @param auth.enabled Enable authentication
   ## ref: https://docs.mongodb.com/manual/tutorial/enable-authentication/
   ##
   enabled: true
-  ## MongoDB(R) root password
+  ## @param auth.rootPassword MongoDB&reg; root password
   ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#setting-the-root-password-on-first-run
   ##
   rootPassword: ""
   ## MongoDB(R) custom user and database
   ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#creating-a-user-and-database-on-first-run
+  ## @param auth.username MongoDB&reg; custom user (mandatory if `auth.database` is set)
+  ## @param auth.password MongoDB&reg; custom user password
+  ## @param auth.database MongoDB&reg; custom database
   ##
-  # username: username
-  # password: password
-  # database: database
-  ## Key used for replica set authentication
-  ## Ignored when mongodb.architecture=standalone
+  username: ""
+  password: ""
+  database: ""
+  ## @param auth.replicaSetKey Key used for authentication in the replicaset (only when `architecture=replicaset`)
   ##
   replicaSetKey: ""
-
-  ## Existing secret with MongoDB(R) credentials
+  ## @param auth.existingSecret Existing secret with MongoDB&reg; credentials (keys: `mongodb-password`, `mongodb-root-password`, ` mongodb-replica-set-key`)
   ## NOTE: When it's set the previous parameters are ignored.
   ##
-  # existingSecret: name-of-existing-secret
-
+  existingSecret:
 tls:
-  ## Enable or disable MongoDB(R) TLS Support
+  ## @param tls.enabled Enable MongoDB&reg; TLS support between nodes in the cluster as well as between mongo clients and nodes
   ##
   enabled: false
-
-  ## Generate a custom CA and self-signed certificates.
+  ## @param tls.autoGenerated Generate a custom CA and self-signed certificates
   ##
   autoGenerated: true
-
-  ## Existing secret with MongoDB(R) TLS certificates
+  ## @param tls.existingSecret Existing secret with TLS certificates (keys: `mongodb-ca-cert`, `mongodb-ca-key`, `client-pem`)
   ## NOTE: When it's set it will disable certificate creation
   ##
-  # existingSecret: name-of-existing-secret
-
+  existingSecret:
   ## Add Custom CA certificate
-  # caCert: base64 encoded ca certificate
-  # caKey: base64 encoded private key
+  ## @param tls.caCert Custom CA certificated (base64 encoded)
+  ## @param tls.caKey CA certificate private key (base64 encoded)
   ##
+  caCert:
+  caKey:
   ## Bitnami Nginx image
+  ## @param tls.image.registry Init container TLS certs setup image registry
+  ## @param tls.image.repository Init container TLS certs setup image repository
+  ## @param tls.image.tag Init container TLS certs setup image tag (immutable tags are recommended)
+  ## @param tls.image.pullPolicy Init container TLS certs setup image pull policy
   ##
   image:
     registry: docker.io
     repository: bitnami/nginx
     tag: 1.19.10-debian-10-r63
     pullPolicy: IfNotPresent
-
-## Deployment pod host aliases
+## @param hostAliases Add deployment host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
 hostAliases: []
-
-## Name of the replica set
+## @param replicaSetName Name of the replica set (only when `architecture=replicaset`)
 ## Ignored when mongodb.architecture=standalone
 ##
 replicaSetName: rs0
-
-## Enable DNS hostnames in the replica set config
+## @param replicaSetHostnames Enable DNS hostnames in the replicaset config (only when `architecture=replicaset`)
 ## Ignored when mongodb.architecture=standalone
 ## Ignored when externalAccess.enabled=true
 ##
 replicaSetHostnames: true
-
-## Whether enable/disable IPv6 on MongoDB(R)
+## @param enableIPv6 Switch to enable/disable IPv6 on MongoDB&reg;
 ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#enabling/disabling-ipv6
 ##
 enableIPv6: false
-
-## Whether enable/disable DirectoryPerDB on MongoDB(R)
+## @param directoryPerDB Switch to enable/disable DirectoryPerDB on MongoDB&reg;
 ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#enabling/disabling-directoryperdb
 ##
 directoryPerDB: false
-
 ## MongoDB(R) System Log configuration
 ## ref: https://github.com/bitnami/bitnami-docker-mongodb#configuring-system-log-verbosity-level
+## @param systemLogVerbosity MongoDB&reg; system log verbosity level
+## @param disableSystemLog Switch to enable/disable MongoDB&reg; system log
 ##
 systemLogVerbosity: 0
 disableSystemLog: false
-
-## MongoDB(R) server-side JavaScript execution
+## @param disableJavascript Switch to enable/disable MongoDB&reg; server-side JavaScript execution
 ## ref: https://docs.mongodb.com/manual/core/server-side-javascript/
 ##
 disableJavascript: false
-
-## MongoDB(R) Journaling
+## @param enableJournal Switch to enable/disable MongoDB&reg; Journaling
 ## ref: https://docs.mongodb.com/manual/reference/configuration-options/#mongodb-setting-storage.journal.enabled
 ##
 enableJournal: true
-
-## MongoDB(R) configuration file for Primary and Secondary nodes. For documentation of all options, see:
-##   http://docs.mongodb.org/manual/reference/configuration-options/
+## @param configuration MongoDB&reg; configuration file to be used for Primary and Secondary nodes
+## For documentation of all options, see: http://docs.mongodb.org/manual/reference/configuration-options/
 ## Example:
 ## configuration: |-
 ##   # where and how to store data.
@@ -239,13 +242,11 @@ enableJournal: true
 ##     #keyFile: /opt/bitnami/mongodb/conf/keyfile
 ##
 configuration: ""
-
-## ConfigMap with MongoDB(R) configuration for Primary and Secondary nodes
+## @param existingConfigmap Name of existing ConfigMap with MongoDB&reg; configuration for Primary and Secondary nodes
 ## NOTE: When it's set the arbiter.configuration parameter is ignored
 ##
-# existingConfigmap:
-
-## initdb scripts
+existingConfigmap:
+## @param initdbScripts Dictionary of initdb scripts
 ## Specify dictionary of scripts to be run at first boot
 ## Example:
 ## initdbScripts:
@@ -254,128 +255,112 @@ configuration: ""
 ##      echo "Do something."
 ##
 initdbScripts: {}
-
-## Existing ConfigMap with custom init scripts
+## @param initdbScriptsConfigMap Existing ConfigMap with custom initdb scripts
 ##
-# initdbScriptsConfigMap:
-
+initdbScriptsConfigMap:
 ## Command and args for running the container (set to default if not set). Use array form
+## @param command Override default container command (useful when using custom images)
+## @param args Override default container args (useful when using custom images)
 ##
-# command:
-# args:
-
-## Additional command line flags
+command:
+args:
+## @param extraFlags MongoDB&reg; additional command line flags
 ## Example:
 ## extraFlags:
 ##  - "--wiredTigerCacheSizeGB=2"
 ##
 extraFlags: []
-
-## Additional environment variables to set
+## @param extraEnvVars Extra environment variables to add to MongoDB&reg; pods
 ## E.g:
 ## extraEnvVars:
 ##   - name: FOO
 ##     value: BAR
 ##
 extraEnvVars: []
-
-## ConfigMap with extra environment variables
+## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars
 ##
-# extraEnvVarsCM:
-
-## Secret with extra environment variables
+extraEnvVarsCM:
+## @param extraEnvVarsSecret Name of existing Secret containing extra env vars (in case of sensitive data)
 ##
-# extraEnvVarsSecret:
+extraEnvVarsSecret:
 
-## Annotations to be added to the MongoDB(R) statefulset. Evaluated as a template.
+## @section MongoDB&reg; statefulset parameters
+
+## @param annotations Additional labels to be added to the MongoDB&reg; statefulset. Evaluated as a template
 ##
 annotations: {}
-
-## Additional labels to be added to the MongoDB(R) statefulset. Evaluated as a template.
+## @param labels Annotations to be added to the MongoDB&reg; statefulset. Evaluated as a template
 ##
 labels: {}
-
-## Number of MongoDB(R) replicas to deploy.
+## @param replicaCount Number of MongoDB&reg; nodes (only when `architecture=replicaset`)
 ## Ignored when mongodb.architecture=standalone
 ##
 replicaCount: 2
-
-## StrategyType for MongoDB(R) statefulset
+## @param strategyType StrategyType for MongoDB&reg; statefulset
 ## It can be set to RollingUpdate or Recreate by default.
 ##
 strategyType: RollingUpdate
-
-## MongoDB(R) should be initialized one by one when building the replicaset for the first time.
+## @param podManagementPolicy Pod management policy for MongoDB&reg;
+## Should be initialized one by one when building the replicaset for the first time
 ##
 podManagementPolicy: OrderedReady
-
-## Pod affinity preset
+## @param podAffinityPreset MongoDB&reg; Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-## Allowed values: soft, hard
 ##
 podAffinityPreset: ""
-
-## Pod anti-affinity preset
+## @param podAntiAffinityPreset MongoDB&reg; Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-## Allowed values: soft, hard
 ##
 podAntiAffinityPreset: soft
-
 ## Node affinity preset
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-## Allowed values: soft, hard
 ##
 nodeAffinityPreset:
-  ## Node affinity type
-  ## Allowed values: soft, hard
+  ## @param nodeAffinityPreset.type MongoDB&reg; Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ##
   type: ""
-  ## Node label key to match
+  ## @param nodeAffinityPreset.key MongoDB&reg; Node label key to match Ignored if `affinity` is set.
   ## E.g.
   ## key: "kubernetes.io/e2e-az-name"
   ##
   key: ""
-  ## Node label values to match
+  ## @param nodeAffinityPreset.values MongoDB&reg; Node label values to match. Ignored if `affinity` is set.
   ## E.g.
   ## values:
   ##   - e2e-az1
   ##   - e2e-az2
   ##
   values: []
-
-## Affinity for pod assignment. Evaluated as a template.
+## @param affinity MongoDB&reg; Affinity for pod assignment
 ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ## Note: podAffinityPreset, podAntiAffinityPreset, and nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
-
-## Node labels for pod assignment. Evaluated as a template.
+## @param nodeSelector MongoDB&reg; Node labels for pod assignment
 ## ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
 nodeSelector: {}
-
-## Tolerations for pod assignment. Evaluated as a template.
+## @param tolerations MongoDB&reg; Tolerations for pod assignment
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
-
-## Labels for MongoDB(R) pods. Evaluated as a template.
+## @param podLabels MongoDB&reg; pod labels
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
 podLabels: {}
-
-## Annotations for MongoDB(R) pods. Evaluated as a template.
+## @param podAnnotations MongoDB&reg; Pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
-
-## MongoDB(R) pods' priority.
+## @param priorityClassName Name of the existing priority class to be used by MongoDB&reg; pod(s)
 ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
 ##
-# priorityClassName: ""
-
+priorityClassName:
 ## MongoDB(R) pods' Security Context.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+## @param podSecurityContext.enabled Enable MongoDB&reg; pod(s)' Security Context
+## @param podSecurityContext.fsGroup Group ID for the volumes of the MongoDB&reg; pod(s)
+## @param podSecurityContext.sysctls sysctl settings of the MongoDB&reg; pod(s)'
 ##
 podSecurityContext:
   enabled: true
@@ -387,32 +372,44 @@ podSecurityContext:
   ##   value: "10000"
   ##
   sysctls: []
-
 ## MongoDB(R) containers' Security Context (main and metrics container).
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+## @param containerSecurityContext.enabled Enable MongoDB&reg; container(s)' Security Context
+## @param containerSecurityContext.runAsUser User ID for the MongoDB&reg; container
+## @param containerSecurityContext.runAsNonRoot Set MongoDB&reg; container's Security Context runAsNonRoot
 ##
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
   runAsNonRoot: true
-
 ## MongoDB(R) containers' resource requests and limits.
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## We usually recommend not to specify default resources and to leave this as a conscious
+## choice for the user. This also increases chances charts run on environments with little
+## resources, such as Minikube. If you do want to specify resources, uncomment the following
+## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+## @param resources.limits The resources limits for MongoDB&reg; containers
+## @param resources.requests The requested resources for MongoDB&reg; containers
 ##
 resources:
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## Example:
+  ## limits:
+  ##    cpu: 100m
+  ##    memory: 128Mi
   limits: {}
-  #   cpu: 100m
-  #   memory: 128Mi
+  ## Examples:
+  ## requests:
+  ##    cpu: 100m
+  ##    memory: 128Mi
   requests: {}
-  #   cpu: 100m
-  #   memory: 128Mi
-
-## MongoDB(R) pods' liveness and readiness probes. Evaluated as a template.
+## MongoDB(R) pods' liveness probe. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+## @param livenessProbe.enabled Enable livenessProbe
+## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+## @param livenessProbe.periodSeconds Period seconds for livenessProbe
+## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+## @param livenessProbe.failureThreshold Failure threshold for livenessProbe
+## @param livenessProbe.successThreshold Success threshold for livenessProbe
 ##
 livenessProbe:
   enabled: true
@@ -421,6 +418,15 @@ livenessProbe:
   timeoutSeconds: 5
   failureThreshold: 6
   successThreshold: 1
+## MongoDB(R) pods' readiness probe. Evaluated as a template.
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+## @param readinessProbe.enabled Enable readinessProbe
+## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+## @param readinessProbe.periodSeconds Period seconds for readinessProbe
+## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+## @param readinessProbe.failureThreshold Failure threshold for readinessProbe
+## @param readinessProbe.successThreshold Success threshold for readinessProbe
+##
 readinessProbe:
   enabled: true
   initialDelaySeconds: 5
@@ -431,6 +437,12 @@ readinessProbe:
 ## Slow starting containers can be protected through startup probes
 ## Startup probes are available in Kubernetes version 1.16 and above
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-startup-probes
+## @param startupProbe.enabled Enable startupProbe
+## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+## @param startupProbe.periodSeconds Period seconds for startupProbe
+## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
+## @param startupProbe.failureThreshold Failure threshold for startupProbe
+## @param startupProbe.successThreshold Success threshold for startupProbe
 ##
 startupProbe:
   enabled: false
@@ -439,23 +451,19 @@ startupProbe:
   timeoutSeconds: 5
   successThreshold: 1
   failureThreshold: 30
-
-## Custom Liveness probes for MongoDB(R) pods
+## @param customLivenessProbe Override default liveness probe for MongoDB&reg; containers
 ## Ignored when livenessProbe.enabled=true
 ##
 customLivenessProbe: {}
-
-## Custom Rediness probes MongoDB(R) pods
+## @param customReadinessProbe Override default readiness probe for MongoDB&reg; containers
 ## Ignored when readinessProbe.enabled=true
 ##
 customReadinessProbe: {}
-
-## Custom Startup probes MongoDB(R) pods
+## @param customStartupProbe Override default startup probe for MongoDB&reg; containers
 ## Ignored when startupProbe.enabled=true
 ##
 customStartupProbe: {}
-
-## Add init containers to the MongoDB(R) pods.
+## @param initContainers Add additional init containers for the hidden node pod(s)
 ## Example:
 ## initContainers:
 ##   - name: your-image-name
@@ -466,8 +474,7 @@ customStartupProbe: {}
 ##         containerPort: 1234
 ##
 initContainers: {}
-
-## Add sidecars to the MongoDB(R) pods.
+## @param sidecars Add additional sidecar containers for the MongoDB&reg; pod(s)
 ## Example:
 ## sidecars:
 ##   - name: your-image-name
@@ -494,126 +501,78 @@ initContainers: {}
 ##       value: "true"
 ##
 sidecars: {}
-
-## extraVolumes and extraVolumeMounts allows you to mount other volumes on MongoDB(R) pods
+## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for the MongoDB&reg; container(s)
 ## Examples:
 ## extraVolumeMounts:
 ##   - name: extras
 ##     mountPath: /usr/share/extras
 ##     readOnly: true
+extraVolumeMounts: []
+## @param extraVolumes Optionally specify extra list of additional volumes to the MongoDB&reg; statefulset
 ## extraVolumes:
 ##   - name: extras
 ##     emptyDir: {}
 ##
-extraVolumeMounts: []
 extraVolumes: []
-
 ## MongoDB(R) Pod Disruption Budget configuration
 ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
 ##
 pdb:
+  ## @param pdb.create Enable/disable a Pod Disruption Budget creation for MongoDB&reg; pod(s)
+  ##
   create: false
-  ## Min number of pods that must still be available after the eviction
+  ## @param pdb.minAvailable Minimum number/percentage of MongoDB&reg; pods that must still be available after the eviction
   ##
   minAvailable: 1
-  ## Max number of pods that can be unavailable after the eviction
+  ## @param pdb.maxUnavailable Maximum number/percentage of MongoDB&reg; pods that may be made unavailable after the eviction
   ##
-  # maxUnavailable: 1
+  maxUnavailable:
 
-## Enable persistence using Persistent Volume Claims
-## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
-##
-persistence:
-  enabled: true
-  ## A manually managed Persistent Volume and Claim
-  ## Requires persistence.enabled: true
-  ## If defined, PVC must be created manually before volume will be bound
-  ## Ignored when mongodb.architecture=replicaset
-  ##
-  # existingClaim:
-  ## PV Storage Class
-  ## If defined, storageClassName: <storageClass>
-  ## If set to "-", storageClassName: "", which disables dynamic provisioning
-  ## If undefined (the default) or set to null, no storageClassName spec is
-  ## set, choosing the default provisioner.
-  ##
-  # storageClass: "-"
-  ## PV Access Mode
-  ##
-  accessModes:
-    - ReadWriteOnce
-  ## PVC size
-  ##
-  size: 8Gi
-  ## PVC annotations
-  ##
-  annotations: {}
-  ## The path the volume will be mounted at, useful when using different
-  ## MongoDB(R) images.
-  ##
-  mountPath: /bitnami/mongodb
-  ## The subdirectory of the volume to mount to, useful in dev environments
-  ## and one PV for multiple services.
-  ##
-  subPath: ""
-  ## Fine tuning for volumeClaimTemplates
-  ##
-  volumeClaimTemplates:
-    ## A label query over volumes to consider for binding (e.g. when using local volumes)
-    ## See https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#labelselector-v1-meta for more details
-    ##
-    selector:
-    ## Override the requests attribute
-    ## Sometime cloud providers use additional requests attributes to provision custom storage instance
-    ## See https://cloud.ibm.com/docs/containers?topic=containers-file_storage#file_dynamic_statefulset
-    ##
-    requests:
-    ## Set volumeClaimTemplate dataSource
-    ##
-    dataSource:
+## @section Traffic exposure parameters
 
 ## Service parameters
 ##
 service:
-  ## Service name
+  ## @param service.nameOverride MongoDB&reg; service name
   ##
   nameOverride: ""
-  ## Service type
+  ## @param service.type Kubernetes Service type
   ##
   type: ClusterIP
-  ## MongoDB(R) service port
+  ## @param service.port MongoDB&reg; service port
   ##
   port: 27017
-  ## MongoDB(R) service port name
+  ## @param service.portName MongoDB&reg; service port name
   ##
   portName: mongodb
-  ## Specify the nodePort value for the LoadBalancer and NodePort service types.
+  ## @param service.nodePort Port to bind to for NodePort and LoadBalancer service types
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
   nodePort: ""
-  ## MongoDB(R) service clusterIP IP
+  ## @param service.clusterIP MongoDB&reg; service cluster IP
+  ## e.g:
+  ## clusterIP: None
   ##
-  # clusterIP: None
-  ## Specify the externalIP value ClusterIP service type.
+  clusterIP:
+  ## @param service.externalIPs Specify the externalIP value ClusterIP service type.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#external-ips
   ##
   externalIPs: []
-  ## Specify the loadBalancerIP value for LoadBalancer service types.
+  ## @param service.loadBalancerIP loadBalancerIP for MongoDB&reg; Service
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#loadbalancer
   ##
-  # loadBalancerIP:
-  ## Specify the loadBalancerSourceRanges value for LoadBalancer service types.
+  loadBalancerIP:
+  ## @param service.loadBalancerSourceRanges Address(es) that are allowed when service is LoadBalancer
   ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
   ##
   loadBalancerSourceRanges: []
-  ## Provide any additional annotations which may be required. Evaluated as a template
+  ## @param service.annotations Provide any additional annotations that may be required
   ##
   annotations: {}
-
 ## External Access to MongoDB(R) nodes configuration
 ##
 externalAccess:
-  ## Enable Kubernetes external cluster access to MongoDB(R) nodes
+  ## @param externalAccess.enabled Enable Kubernetes external cluster access to MongoDB&reg; nodes
   ##
   enabled: false
   ## External IPs auto-discovery configuration
@@ -621,11 +580,16 @@ externalAccess:
   ## Note: RBAC might be required
   ##
   autoDiscovery:
-    ## Enable external IP/ports auto-discovery
+    ## @param externalAccess.autoDiscovery.enabled Enable using an init container to auto-detect external IPs by querying the K8s API
     ##
     enabled: false
     ## Bitnami Kubectl image
     ## ref: https://hub.docker.com/r/bitnami/kubectl/tags/
+    ## @param externalAccess.autoDiscovery.image.registry Init container auto-discovery image registry
+    ## @param externalAccess.autoDiscovery.image.repository Init container auto-discovery image repository
+    ## @param externalAccess.autoDiscovery.image.tag Init container auto-discovery image tag (immutable tags are recommended)
+    ## @param externalAccess.autoDiscovery.image.pullPolicy Init container auto-discovery image pull policy
+    ## @param externalAccess.autoDiscovery.image.pullSecrets Init container auto-discovery image pull secrets
     ##
     image:
       registry: docker.io
@@ -645,372 +609,195 @@ externalAccess:
       pullSecrets: []
     ## Init Container resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ## We usually recommend not to specify default resources and to leave this as a conscious
+    ## choice for the user. This also increases chances charts run on environments with little
+    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## @param externalAccess.autoDiscovery.resources.limits Init container auto-discovery resource limits
+    ## @param externalAccess.autoDiscovery.resources.requests Init container auto-discovery resource requests
     ##
     resources:
-      # We usually recommend not to specify default resources and to leave this as a conscious
-      # choice for the user. This also increases chances charts run on environments with little
-      # resources, such as Minikube. If you do want to specify resources, uncomment the following
-      # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+      ## Example:
+      ## limits:
+      ##    cpu: 100m
+      ##    memory: 128Mi
       limits: {}
-      #   cpu: 100m
-      #   memory: 128Mi
+      ## Examples:
+      ## requests:
+      ##    cpu: 100m
+      ##    memory: 128Mi
       requests: {}
-      #   cpu: 100m
-      #   memory: 128Mi
   ## Parameters to configure K8s service(s) used to externally access MongoDB(R)
   ## A new service per broker will be created
   ##
   service:
-    ## Service type. Allowed values: LoadBalancer, NodePort or ClusterIP
+    ## @param externalAccess.service.type Kubernetes Service type for external access. Allowed values: NodePort, LoadBalancer or ClusterIP
     ##
     type: LoadBalancer
-    ## Port used when service type is LoadBalancer
+    ## @param externalAccess.service.port MongoDB&reg; port used for external access when service type is LoadBalancer
     ##
     port: 27017
-    ## Array of load balancer IPs for each MongoDB(R) node. Length must be the same as replicaCount
+    ## @param externalAccess.service.loadBalancerIPs Array of load balancer IPs for MongoDB&reg; nodes
     ## Example:
     ## loadBalancerIPs:
     ##   - X.X.X.X
     ##   - Y.Y.Y.Y
     ##
     loadBalancerIPs: []
-    ## Load Balancer sources
+    ## @param externalAccess.service.loadBalancerSourceRanges Address(es) that are allowed when service is LoadBalancer
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## Example:
     ## loadBalancerSourceRanges:
     ## - 10.10.10.0/24
     ##
     loadBalancerSourceRanges: []
-    ## Array of node ports used for each MongoDB(R) nodes. Length must be the same as replicaCount
+    ## @param externalAccess.service.nodePorts Array of node ports used to configure MongoDB&reg; advertised hostname when service type is NodePort
     ## Example:
     ## nodePorts:
     ##   - 30001
     ##   - 30002
     ##
     nodePorts: []
-    ## When service type is NodePort, you can specify the domain used for MongoDB(R) advertised hostnames.
+    ## @param externalAccess.service.domain Domain or external IP used to configure MongoDB&reg; advertised hostname when service type is NodePort
     ## If not specified, the container will try to get the kubernetes node external IP
+    ## e.g:
+    ## domain: mydomain.com
     ##
-    # domain: mydomain.com
-    ## Provide any additional annotations which may be required. Evaluated as a template
+    domain:
+    ## @param externalAccess.service.annotations Service annotations for external access
     ##
     annotations: {}
   ## External Access to MongoDB(R) Hidden nodes configuration
   ##
   hidden:
-    ## Enable Kubernetes external cluster access to MongoDB(R) nodes
+    ## @param externalAccess.hidden.enabled Enable Kubernetes external cluster access to MongoDB&reg; hidden nodes
     ##
     enabled: false
     ## Parameters to configure K8s service(s) used to externally access MongoDB(R)
     ## A new service per broker will be created
     ##
     service:
-      ## Service type. Allowed values: LoadBalancer or NodePort
+      ## @param externalAccess.hidden.service.type Kubernetes Service type for external access. Allowed values: NodePort or LoadBalancer
       ##
       type: LoadBalancer
-      ## Port used when service type is LoadBalancer
+      ## @param externalAccess.hidden.service.port MongoDB&reg; port used for external access when service type is LoadBalancer
       ##
       port: 27017
-      ## Array of load balancer IPs for each MongoDB(R) node. Length must be the same as replicaCount
+      ## @param externalAccess.hidden.service.loadBalancerIPs Array of load balancer IPs for MongoDB&reg; nodes
       ## Example:
       ## loadBalancerIPs:
       ##   - X.X.X.X
       ##   - Y.Y.Y.Y
       ##
       loadBalancerIPs: []
-      ## Load Balancer sources
+      ## @param externalAccess.hidden.service.loadBalancerSourceRanges Address(es) that are allowed when service is LoadBalancer
       ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
       ## Example:
       ## loadBalancerSourceRanges:
       ## - 10.10.10.0/24
       ##
       loadBalancerSourceRanges: []
-      ## Array of node ports used for each MongoDB(R) nodes. Length must be the same as replicaCount
+      ## @param externalAccess.hidden.service.nodePorts Array of node ports used to configure MongoDB&reg; advertised hostname when service type is NodePort. Length must be the same as replicaCount
       ## Example:
       ## nodePorts:
       ##   - 30001
       ##   - 30002
       ##
       nodePorts: []
-      ## When service type is NodePort, you can specify the domain used for MongoDB(R) advertised hostnames.
+      ## @param externalAccess.hidden.service.domain Domain or external IP used to configure MongoDB&reg; advertised hostname when service type is NodePort
       ## If not specified, the container will try to get the kubernetes node external IP
+      ## e.g:
+      ## domain: mydomain.com
       ##
-      # domain: mydomain.com
-      ## Provide any additional annotations which may be required. Evaluated as a template
+      domain:
+      ## @param externalAccess.hidden.service.annotations Service annotations for external access
       ##
       annotations: {}
 
+## @section Persistence parameters
+
+## Enable persistence using Persistent Volume Claims
+## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
-## MongoDB(R) Arbiter parameters.
-##
-arbiter:
-  ## Enable deploying the MongoDB(R) Arbiter
-  ##   https://docs.mongodb.com/manual/tutorial/add-replica-set-arbiter/
+persistence:
+  ## @param persistence.enabled Enable MongoDB&reg; data persistence using PVC
   ##
   enabled: true
-
-  ## MongoDB(R) configuration file for the Arbiter. For documentation of all options, see:
-  ##   http://docs.mongodb.org/manual/reference/configuration-options/
+  ## @param persistence.existingClaim Provide an existing `PersistentVolumeClaim` (only when `architecture=standalone`)
+  ## Requires persistence.enabled: true
+  ## If defined, PVC must be created manually before volume will be bound
+  ## Ignored when mongodb.architecture=replicaset
   ##
-  configuration: ""
-
-  ## Deployment pod host aliases
-  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  existingClaim:
+  ## @param persistence.storageClass PVC Storage Class for MongoDB&reg; data volume
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ## set, choosing the default provisioner.
   ##
-  hostAliases: []
-
-  ## ConfigMap with MongoDB(R) configuration for the Arbiter
-  ## NOTE: When it's set the arbiter.configuration parameter is ignored
+  storageClass:
+  ## @param persistence.accessModes PV Access Mode
   ##
-  # existingConfigmap:
-
-  ## Command and args for running the container (set to default if not set). Use array form
+  accessModes:
+    - ReadWriteOnce
+  ## @param persistence.size PVC Storage Request for MongoDB&reg; data volume
   ##
-  # command:
-  # args:
-
-  ## Additional command line flags
-  ## Example:
-  ## extraFlags:
-  ##  - "--wiredTigerCacheSizeGB=2"
-  ##
-  extraFlags: []
-
-  ## Additional environment variables to set
-  ## E.g:
-  ## extraEnvVars:
-  ##   - name: FOO
-  ##     value: BAR
-  ##
-  extraEnvVars: []
-
-  ## ConfigMap with extra environment variables
-  ##
-  # extraEnvVarsCM:
-
-  ## Secret with extra environment variables
-  ##
-  # extraEnvVarsSecret:
-
-  ## Annotations to be added to the Arbiter statefulset. Evaluated as a template.
+  size: 8Gi
+  ## @param persistence.annotations PVC annotations
   ##
   annotations: {}
-
-  ## Additional to be added to the Arbiter statefulset. Evaluated as a template.
+  ## @param persistence.mountPath Path to mount the volume at
+  ## MongoDB(R) images.
   ##
-  labels: {}
-
-  ## Pod affinity preset
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
+  mountPath: /bitnami/mongodb
+  ## @param persistence.subPath Subdirectory of the volume to mount at
+  ## and one PV for multiple services.
   ##
-  podAffinityPreset: ""
-
-  ## Pod anti-affinity preset
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
+  subPath: ""
+  ## Fine tuning for volumeClaimTemplates
   ##
-  podAntiAffinityPreset: soft
-
-  ## Node affinity preset
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ## Allowed values: soft, hard
-  ##
-  nodeAffinityPreset:
-    ## Node affinity type
-    ## Allowed values: soft, hard
+  volumeClaimTemplates:
+    ## @param persistence.volumeClaimTemplates.selector A label query over volumes to consider for binding (e.g. when using local volumes)
+    ## A label query over volumes to consider for binding (e.g. when using local volumes)
+    ## See https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#labelselector-v1-meta for more details
     ##
-    type: ""
-    ## Node label key to match
-    ## E.g.
-    ## key: "kubernetes.io/e2e-az-name"
+    selector:
+    ## @param persistence.volumeClaimTemplates.requests Custom PVC requests attributes
+    ## Sometime cloud providers use additional requests attributes to provision custom storage instance
+    ## See https://cloud.ibm.com/docs/containers?topic=containers-file_storage#file_dynamic_statefulset
     ##
-    key: ""
-    ## Node label values to match
-    ## E.g.
-    ## values:
-    ##   - e2e-az1
-    ##   - e2e-az2
+    requests:
+    ## @param persistence.volumeClaimTemplates.dataSource Add dataSource to the VolumeClaimTemplate
     ##
-    values: []
+    dataSource:
 
-  ## Affinity for pod assignment
-  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ## Note: arbiter.podAffinityPreset, arbiter.podAntiAffinityPreset, and arbiter.nodeAffinityPreset will be ignored when it's set
-  ##
-  affinity: {}
-
-  ## Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
-  ##
-  nodeSelector: {}
-
-  ## Tolerations for pod assignment
-  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-  ##
-  tolerations: []
-
-  ## Labels for MongoDB(R) Arbiter pods. Evaluated as a template.
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-  ##
-  podLabels: {}
-
-  ## Annotations for MongoDB(R) Arbiter pods. Evaluated as a template.
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-  ##
-  podAnnotations: {}
-
-  ## MongoDB(R) Arbiter pods' priority.
-  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
-  ##
-  # priorityClassName: ""
-
-  ## MongoDB(R) Arbiter pods' Security Context.
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ##
-  podSecurityContext:
-    enabled: true
-    fsGroup: 1001
-    ## sysctl settings
-    ## Example:
-    ## sysctls:
-    ## - name: net.core.somaxconn
-    ##   value: "10000"
-    ##
-    sysctls: []
-
-  ## MongoDB(R) Arbiter containers' Security Context (only main container).
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ##
-  containerSecurityContext:
-    enabled: true
-    runAsUser: 1001
-
-  ## MongoDB(R) Arbiter containers' resource requests and limits.
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ##
-  resources:
-    # We usually recommend not to specify default resources and to leave this as a conscious
-    # choice for the user. This also increases chances charts run on environments with little
-    # resources, such as Minikube. If you do want to specify resources, uncomment the following
-    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    limits: {}
-    #   cpu: 100m
-    #   memory: 128Mi
-    requests: {}
-    #   cpu: 100m
-    #   memory: 128Mi
-
-  ## MongoDB(R) Arbiter pods' liveness and readiness probes. Evaluated as a template.
-  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
-  ##
-  livenessProbe:
-    enabled: true
-    initialDelaySeconds: 30
-    periodSeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 6
-    successThreshold: 1
-  readinessProbe:
-    enabled: true
-    initialDelaySeconds: 5
-    periodSeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 6
-    successThreshold: 1
-
-  ## Custom Liveness probes for MongoDB(R) Arbiter pods
-  ## Ignored when arbiter.livenessProbe.enabled=true
-  ##
-  customLivenessProbe: {}
-
-  ## Custom Rediness probes MongoDB(R) Arbiter pods
-  ## Ignored when arbiter.readinessProbe.enabled=true
-  ##
-  customReadinessProbe: {}
-
-  ## Add init containers to the MongoDB(R) Arbiter pods.
-  ## Example:
-  ## initContainers:
-  ##   - name: your-image-name
-  ##     image: your-image
-  ##     imagePullPolicy: Always
-  ##     ports:
-  ##       - name: portname
-  ##         containerPort: 1234
-  ##
-  initContainers: {}
-
-  ## Add sidecars to the MongoDB(R) Arbiter pods.
-  ## Example:
-  ## sidecars:
-  ##   - name: your-image-name
-  ##     image: your-image
-  ##     imagePullPolicy: Always
-  ##     ports:
-  ##       - name: portname
-  ##         containerPort: 1234
-  ##
-  sidecars: {}
-
-  ## extraVolumes and extraVolumeMounts allows you to mount other volumes on MongoDB(R) Arbiter pods
-  ## Examples:
-  ## extraVolumeMounts:
-  ##   - name: extras
-  ##     mountPath: /usr/share/extras
-  ##     readOnly: true
-  ## extraVolumes:
-  ##   - name: extras
-  ##     emptyDir: {}
-  ##
-  extraVolumeMounts: []
-  extraVolumes: []
-
-  ## MongoDB(R) Arbiter Pod Disruption Budget configuration
-  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
-  ##
-  pdb:
-    create: false
-    ## Min number of pods that must still be available after the eviction
-    ##
-    minAvailable: 1
-    ## Max number of pods that can be unavailable after the eviction
-    ##
-    # maxUnavailable: 1
-
-  ## MongoDB(R) Arbiter service parameters
-  ##
-  service:
-    ## Service name
-    ##
-    nameOverride: ""
+## @section RBAC parameters
 
 ## ServiceAccount
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 ##
 serviceAccount:
-  ## Specifies whether a ServiceAccount should be created
+  ## @param serviceAccount.create Enable creation of ServiceAccount for MongoDB&reg; pods
   ##
   create: true
-  ## The name of the ServiceAccount to use.
+  ## @param serviceAccount.name Name of the created serviceAccount
   ## If not set and create is true, a name is generated using the mongodb.fullname template
   ##
-  # name:
-  ## Annotations for the Service Account
+  name:
+  ## @param serviceAccount.annotations Additional Service Account annotations
   ##
   annotations: {}
-
 ## Role Based Access
 ## ref: https://kubernetes.io/docs/admin/authorization/rbac/
 ##
 rbac:
-  ## Specifies whether RBAC rules should be created
+  ## @param rbac.create Whether to create & use RBAC resources or not
   ## binding MongoDB(R) ServiceAccount to a role
   ## that allows MongoDB(R) pods querying the K8s API
   ## this needs to be set to 'true' to enable the mongo-labeler sidecar primary mongodb discovery
   create: false
   role:
-    ## Custom rules to create following the role specification
+    ## @param rbac.role.rules Custom rules to create following the role specification
     ## The example below needs to be uncommented to use the 'mongo-labeler' sidecar for dynamic discovery of the primary mongodb pod:
     ## rules:
     ##   - apiGroups:
@@ -1024,21 +811,23 @@ rbac:
     ##       - update
     ##
     rules: []
-
 ## PodSecurityPolicy configuration
-## Be sure to also set rbac.create to true, otherwise Role and RoleBinding
-## won't be created.
+## Be sure to also set rbac.create to true, otherwise Role and RoleBinding won't be created.
 ## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/
 ##
 podSecurityPolicy:
-  ## Specifies whether a PodSecurityPolicy should be created
+  ## @param podSecurityPolicy.create Whether to create & use PSP resource or not (Note: `rbac.create` needs to be `true`)
   ##
   create: false
-  ## You can either use predefined policy with some adjustments
+  ## @param podSecurityPolicy.allowPrivilegeEscalation Enable privilege escalation
+  ## Either use predefined policy with some adjustments or use `podSecurityPolicy.spec`
   ##
   allowPrivilegeEscalation: false
+  ## @param podSecurityPolicy.privileged Allow privileged
+  ##
   privileged: false
-  ## Or you can specifiy the full spec to use for PSP
+  ## @param podSecurityPolicy.spec Specify the full spec to use for Pod Security Policy
+  ## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/
   ## Defining a spec ignores the above values.
   ##
   spec: {}
@@ -1075,12 +864,22 @@ podSecurityPolicy:
   ##      - 'persistentVolumeClaim'
   ##
 
+## @section Volume Permissions parameters
+
 ## Init Container parameters
 ## Change the owner and group of the persistent volume(s) mountpoint(s) to 'runAsUser:fsGroup' on each component
 ## values from the securityContext section of the component
 ##
 volumePermissions:
+  ## @param volumePermissions.enabled Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`
+  ##
   enabled: false
+  ## @param volumePermissions.image.registry Init container volume-permissions image registry
+  ## @param volumePermissions.image.repository Init container volume-permissions image repository
+  ## @param volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
+  ## @param volumePermissions.image.pullSecrets Specify docker-registry secret names as an array
+  ##
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
@@ -1099,18 +898,24 @@ volumePermissions:
     pullSecrets: []
   ## Init Container resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param volumePermissions.resources.limits Init container volume-permissions resource limits
+  ## @param volumePermissions.resources.requests Init container volume-permissions resource requests
   ##
   resources:
-    # We usually recommend not to specify default resources and to leave this as a conscious
-    # choice for the user. This also increases chances charts run on environments with little
-    # resources, such as Minikube. If you do want to specify resources, uncomment the following
-    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## Example:
+    ## limits:
+    ##    cpu: 100m
+    ##    memory: 128Mi
     limits: {}
-    #   cpu: 100m
-    #   memory: 128Mi
+    ## Examples:
+    ## requests:
+    ##    cpu: 100m
+    ##    memory: 128Mi
     requests: {}
-    #   cpu: 100m
-    #   memory: 128Mi
   ## Init container Security Context
   ## Note: the chown of the data folder is done to containerSecurityContext.runAsUser
   ## and not the below volumePermissions.securityContext.runAsUser
@@ -1119,16 +924,524 @@ volumePermissions:
   ## "auto" is especially useful for OpenShift which has scc with dynamic userids (and 0 is not allowed).
   ## You may want to use this volumePermissions.securityContext.runAsUser="auto" in combination with
   ## podSecurityContext.enabled=false,containerSecurityContext.enabled=false and shmVolume.chmod.enabled=false
+  ## @param volumePermissions.securityContext.runAsUser User ID for the volumePermissions container
   ##
   securityContext:
     runAsUser: 0
 
-## Prometheus Exporter / Metrics
-##
+## @section Arbiter parameters
+
+arbiter:
+  ## @param arbiter.enabled Enable deploying the arbiter
+  ##   https://docs.mongodb.com/manual/tutorial/add-replica-set-arbiter/
+  ##
+  enabled: true
+  ## @param arbiter.configuration Arbiter configuration file to be used
+  ##   http://docs.mongodb.org/manual/reference/configuration-options/
+  ##
+  configuration: ""
+  ## @param arbiter.hostAliases Add deployment host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param arbiter.existingConfigmap Name of existing ConfigMap with Arbiter configuration
+  ## NOTE: When it's set the arbiter.configuration parameter is ignored
+  ##
+  existingConfigmap:
+  ## Command and args for running the container (set to default if not set). Use array form
+  ## @param arbiter.command Override default container command (useful when using custom images)
+  ## @param arbiter.args Override default container args (useful when using custom images)
+  command:
+  args:
+  ## @param arbiter.extraFlags Arbiter additional command line flags
+  ## Example:
+  ## extraFlags:
+  ##  - "--wiredTigerCacheSizeGB=2"
+  ##
+  extraFlags: []
+  ## @param arbiter.extraEnvVars Extra environment variables to add to Arbiter pods
+  ## E.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: BAR
+  ##
+  extraEnvVars: []
+  ## @param arbiter.extraEnvVarsCM Name of existing ConfigMap containing extra env vars
+  ##
+  extraEnvVarsCM:
+  ## @param arbiter.extraEnvVarsSecret Name of existing Secret containing extra env vars (in case of sensitive data)
+  ##
+  extraEnvVarsSecret:
+  ## @param arbiter.annotations Additional labels to be added to the Arbiter statefulset
+  ##
+  annotations: {}
+  ## @param arbiter.labels Annotations to be added to the Arbiter statefulset
+  ##
+  labels: {}
+  ## @param arbiter.podAffinityPreset Arbiter Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param arbiter.podAntiAffinityPreset Arbiter Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Node affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param arbiter.nodeAffinityPreset.type Arbiter Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param arbiter.nodeAffinityPreset.key Arbiter Node label key to match Ignored if `affinity` is set.
+    ## E.g.
+    ## key: "kubernetes.io/e2e-az-name"
+    ##
+    key: ""
+    ## @param arbiter.nodeAffinityPreset.values Arbiter Node label values to match. Ignored if `affinity` is set.
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param arbiter.affinity Arbiter Affinity for pod assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Note: arbiter.podAffinityPreset, arbiter.podAntiAffinityPreset, and arbiter.nodeAffinityPreset will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param arbiter.nodeSelector Arbiter Node labels for pod assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ## @param arbiter.tolerations Arbiter Tolerations for pod assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param arbiter.podLabels Arbiter pod labels
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param arbiter.podAnnotations Arbiter Pod annotations
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param arbiter.priorityClassName Name of the existing priority class to be used by Arbiter pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+  ##
+  priorityClassName:
+  ## MongoDB(R) Arbiter pods' Security Context.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param arbiter.podSecurityContext.enabled Enable Arbiter pod(s)' Security Context
+  ## @param arbiter.podSecurityContext.fsGroup Group ID for the volumes of the Arbiter pod(s)
+  ## @param arbiter.podSecurityContext.sysctls sysctl settings of the Arbiter pod(s)'
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+    ## sysctl settings
+    ## Example:
+    ## sysctls:
+    ## - name: net.core.somaxconn
+    ##   value: "10000"
+    ##
+    sysctls: []
+  ## MongoDB(R) Arbiter containers' Security Context (only main container).
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param arbiter.containerSecurityContext.enabled Enable Arbiter container(s)' Security Context
+  ## @param arbiter.containerSecurityContext.runAsUser User ID for the Arbiter container
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+  ## MongoDB(R) Arbiter containers' resource requests and limits.
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param arbiter.resources.limits The resources limits for Arbiter containers
+  ## @param arbiter.resources.requests The requested resources for Arbiter containers
+  ##
+  resources:
+    ## Example:
+    ## limits:
+    ##    cpu: 100m
+    ##    memory: 128Mi
+    limits: {}
+    ## Examples:
+    ## requests:
+    ##    cpu: 100m
+    ##    memory: 128Mi
+    requests: {}
+  ## MongoDB(R) Arbiter pods' liveness probe. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## @param arbiter.livenessProbe.enabled Enable livenessProbe
+  ## @param arbiter.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param arbiter.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param arbiter.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param arbiter.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param arbiter.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  ## MongoDB(R) Arbiter pods' readiness probe. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## @param arbiter.readinessProbe.enabled Enable readinessProbe
+  ## @param arbiter.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param arbiter.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param arbiter.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param arbiter.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param arbiter.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  ## @param arbiter.customLivenessProbe Override default liveness probe for Arbiter containers
+  ## Ignored when arbiter.livenessProbe.enabled=true
+  ##
+  customLivenessProbe: {}
+  ## @param arbiter.customReadinessProbe Override default readiness probe for Arbiter containers
+  ## Ignored when arbiter.readinessProbe.enabled=true
+  ##
+  customReadinessProbe: {}
+  ## @param arbiter.initContainers Add additional init containers for the Arbiter pod(s)
+  ## Example:
+  ## initContainers:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  initContainers: {}
+  ## @param arbiter.sidecars Add additional sidecar containers for the Arbiter pod(s)
+  ## Example:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: {}
+  ## @param arbiter.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Arbiter container(s)
+  ## Examples:
+  ## extraVolumeMounts:
+  ##   - name: extras
+  ##     mountPath: /usr/share/extras
+  ##     readOnly: true
+  extraVolumeMounts: []
+  ## @param arbiter.extraVolumes Optionally specify extra list of additional volumes to the Arbiter statefulset
+  ## extraVolumes:
+  ##   - name: extras
+  ##     emptyDir: {}
+  ##
+  extraVolumes: []
+  ## MongoDB(R) Arbiter Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+  ##
+  pdb:
+    ## @param arbiter.pdb.create Enable/disable a Pod Disruption Budget creation for Arbiter pod(s)
+    ##
+    create: false
+    ## @param arbiter.pdb.minAvailable Minimum number/percentage of Arbiter pods that should remain scheduled
+    ##
+    minAvailable: 1
+    ## @param arbiter.pdb.maxUnavailable Maximum number/percentage of Arbiter pods that may be made unavailable
+    ##
+    maxUnavailable:
+  ## MongoDB(R) Arbiter service parameters
+  ##
+  service:
+    ## @param arbiter.service.nameOverride The arbiter service name
+    ##
+    nameOverride: ""
+
+## @section Hidden Node parameters
+
+hidden:
+  ## @param hidden.enabled Enable deploying the hidden nodes
+  ##   https://docs.mongodb.com/manual/tutorial/configure-a-hidden-replica-set-member/
+  ##
+  enabled: false
+  ## @param hidden.configuration Hidden node configuration file to be used
+  ##   http://docs.mongodb.org/manual/reference/configuration-options/
+  ##
+  configuration: ""
+  ## @param hidden.existingConfigmap Name of existing ConfigMap with Hidden node configuration
+  ## NOTE: When it's set the hidden.configuration parameter is ignored
+  ##
+  existingConfigmap:
+  ## Command and args for running the container (set to default if not set). Use array form
+  ## @param hidden.command Override default container command (useful when using custom images)
+  ## @param hidden.args Override default container args (useful when using custom images)
+  ##
+  command:
+  args:
+  ## @param hidden.extraFlags Hidden node additional command line flags
+  ## Example:
+  ## extraFlags:
+  ##  - "--wiredTigerCacheSizeGB=2"
+  ##
+  extraFlags: []
+  ## @param hidden.extraEnvVars Extra environment variables to add to Hidden node pods
+  ## E.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: BAR
+  ##
+  extraEnvVars: []
+  ## @param hidden.extraEnvVarsCM Name of existing ConfigMap containing extra env vars
+  ##
+  extraEnvVarsCM:
+  ## @param hidden.extraEnvVarsSecret Name of existing Secret containing extra env vars (in case of sensitive data)
+  ##
+  extraEnvVarsSecret:
+  ## @param hidden.annotations Additional labels to be added to thehidden node statefulset
+  ##
+  annotations: {}
+  ## @param hidden.labels Annotations to be added to the hidden node statefulset
+  ##
+  labels: {}
+  ## @param hidden.replicaCount Number of hidden nodes (only when `architecture=replicaset`)
+  ## Ignored when mongodb.architecture=standalone
+  ##
+  replicaCount: 1
+  ## @param hidden.strategyType StrategyType for hidden node statefulset
+  ## It can be set to RollingUpdate or Recreate by default.
+  ##
+  strategyType: RollingUpdate
+  ## @param hidden.podManagementPolicy Pod management policy for hidden node
+  ##
+  podManagementPolicy: OrderedReady
+  ## @param hidden.podAffinityPreset Hidden node Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param hidden.podAntiAffinityPreset Hidden node Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Node affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ## Allowed values: soft, hard
+  ##
+  nodeAffinityPreset:
+    ## @param hidden.nodeAffinityPreset.type Hidden Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param hidden.nodeAffinityPreset.key Hidden Node label key to match Ignored if `affinity` is set.
+    ## E.g.
+    ## key: "kubernetes.io/e2e-az-name"
+    ##
+    key: ""
+    ## @param hidden.nodeAffinityPreset.values Hidden Node label values to match. Ignored if `affinity` is set.
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param hidden.affinity Hidden node Affinity for pod assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Note: podAffinityPreset, podAntiAffinityPreset, and nodeAffinityPreset will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param hidden.nodeSelector Hidden node Node labels for pod assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ## @param hidden.tolerations Hidden node Tolerations for pod assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param hidden.podLabels Hidden node pod labels
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param hidden.podAnnotations Hidden node Pod annotations
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param hidden.priorityClassName Name of the existing priority class to be used by hidden node pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+  ##
+  priorityClassName:
+  ## MongoDB(R) Hidden containers' resource requests and limits.
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param hidden.resources.limits The resources limits for hidden node containers
+  ## @param hidden.resources.requests The requested resources for hidden node containers
+  ##
+  resources:
+    ## Example:
+    ## limits:
+    ##    cpu: 100m
+    ##    memory: 128Mi
+    limits: {}
+    ## Examples:
+    ## requests:
+    ##    cpu: 100m
+    ##    memory: 128Mi
+    requests: {}
+  ## MongoDB(R) Hidden pods' liveness probe. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## @param hidden.livenessProbe.enabled Enable livenessProbe
+  ## @param hidden.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param hidden.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param hidden.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param hidden.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param hidden.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  ## MongoDB(R) Hidden pods' readiness probe. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## @param hidden.readinessProbe.enabled Enable readinessProbe
+  ## @param hidden.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param hidden.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param hidden.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param hidden.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param hidden.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  ## @param hidden.customLivenessProbe Override default liveness probe for hidden node containers
+  ## Ignored when livenessProbe.enabled=true
+  ##
+  customLivenessProbe: {}
+  ## @param hidden.customReadinessProbe Override default readiness probe for hidden node containers
+  ## Ignored when readinessProbe.enabled=true
+  ##
+  customReadinessProbe: {}
+  ## @param hidden.initContainers Add init containers to the MongoDB(R) Hidden pods.
+  ## Example:
+  ## initContainers:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  initContainers: {}
+  ## @param hidden.sidecars Add additional sidecar containers for the hidden node pod(s)
+  ## Example:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: {}
+  ## @param hidden.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the hidden node container(s)
+  ## Examples:
+  ## extraVolumeMounts:
+  ##   - name: extras
+  ##     mountPath: /usr/share/extras
+  ##     readOnly: true
+  extraVolumeMounts: []
+  ## @param hidden.extraVolumes Optionally specify extra list of additional volumes to the hidden node statefulset
+  ## extraVolumes:
+  ##   - name: extras
+  ##     emptyDir: {}
+  ##
+  extraVolumes: []
+  ## MongoDB(R) Hidden Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+  ##
+  pdb:
+    ## @param hidden.pdb.create Enable/disable a Pod Disruption Budget creation for hidden node pod(s)
+    ##
+    create: false
+    ## @param hidden.pdb.minAvailable Minimum number/percentage of hidden node pods that should remain scheduled
+    ##
+    minAvailable: 1
+    ## @param hidden.pdb.maxUnavailable Maximum number/percentage of hidden node pods that may be made unavailable
+    ##
+    maxUnavailable:
+  ## Enable persistence using Persistent Volume Claims
+  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+  ##
+  persistence:
+    ## @param hidden.persistence.enabled Enable hidden node data persistence using PVC
+    ##
+    enabled: true
+    ## @param hidden.persistence.storageClass PVC Storage Class for hidden node data volume
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ## set, choosing the default provisioner.
+    ##
+    storageClass:
+    ## @param hidden.persistence.accessModes PV Access Mode
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## @param hidden.persistence.size PVC Storage Request for hidden node data volume
+    ##
+    size: 8Gi
+    ## @param hidden.persistence.annotations PVC annotations
+    ##
+    annotations: {}
+    ## @param hidden.persistence.mountPath The path the volume will be mounted at, useful when using different MongoDB(R) images.
+    ##
+    mountPath: /bitnami/mongodb
+    ## @param hidden.persistence.subPath The subdirectory of the volume to mount to, useful in dev environments
+    ## and one PV for multiple services.
+    ##
+    subPath: ""
+    ## Fine tuning for volumeClaimTemplates
+    ##
+    volumeClaimTemplates:
+      ## @param hidden.persistence.volumeClaimTemplates.selector A label query over volumes to consider for binding (e.g. when using local volumes)
+      ## See https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#labelselector-v1-meta for more details
+      ##
+      selector:
+      ## @param hidden.persistence.volumeClaimTemplates.dataSource Set volumeClaimTemplate dataSource
+      ##
+      dataSource:
+
+## @section Metrics parameters
+
 metrics:
+  ## @param metrics.enabled Enable using a sidecar Prometheus exporter
+  ##
   enabled: false
   ## Bitnami MongoDB(R) Promtheus Exporter image
   ## ref: https://hub.docker.com/r/bitnami/mongodb-exporter/tags/
+  ## @param metrics.image.registry MongoDB&reg; Prometheus exporter image registry
+  ## @param metrics.image.repository MongoDB&reg; Prometheus exporter image repository
+  ## @param metrics.image.tag MongoDB&reg; Prometheus exporter image tag (immutable tags are recommended)
+  ## @param metrics.image.pullPolicy MongoDB&reg; Prometheus exporter image pull policy
+  ## @param metrics.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
     registry: docker.io
@@ -1138,54 +1451,66 @@ metrics:
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
     ##
-    # pullSecrets:
-    #   - myRegistryKeySecretName
-
-  ## String with extra flags to the metrics exporter
+    pullSecrets: []
+  ## @param metrics.extraFlags String with extra flags to the metrics exporter
   ## ref: https://github.com/percona/mongodb_exporter/blob/master/mongodb_exporter.go
   ##
   extraFlags: ""
-
-  ## String with additional URI options to the metrics exporter
+  ## @param metrics.extraUri Additional URI options of the metrics service
   ## ref: https://docs.mongodb.com/manual/reference/connection-string
   ##
   extraUri: ""
-
   ## Metrics exporter container resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param metrics.resources.limits The resources limits for Prometheus exporter containers
+  ## @param metrics.resources.requests The requested resources for Prometheus exporter containers
   ##
   resources:
-    # We usually recommend not to specify default resources and to leave this as a conscious
-    # choice for the user. This also increases chances charts run on environments with little
-    # resources, such as Minikube. If you do want to specify resources, uncomment the following
-    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## Example:
+    ## limits:
+    ##    cpu: 100m
+    ##    memory: 128Mi
     limits: {}
-    #   cpu: 100m
-    #   memory: 128Mi
+    ## Examples:
+    ## requests:
+    ##    cpu: 100m
+    ##    memory: 128Mi
     requests: {}
-    #   cpu: 100m
-    #   memory: 128Mi
-
-  ## Prometheus exporter container port
+  ## @param metrics.containerPort Port of the Prometheus metrics container
   ##
   containerPort: 9216
-
   ## Prometheus Exporter service configuration
   ##
   service:
-    ## Annotations for Prometheus Exporter pods. Evaluated as a template.
+    ## @param metrics.service.annotations [object] Annotations for Prometheus Exporter pods. Evaluated as a template.
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
     ##
     annotations:
       prometheus.io/scrape: "true"
       prometheus.io/port: "{{ .Values.metrics.service.port }}"
       prometheus.io/path: "/metrics"
+    ## @param metrics.service.type Type of the Prometheus metrics service
+    ##
     type: ClusterIP
+    ## @param metrics.service.port Port of the Prometheus metrics service
+    ##
     port: 9216
-
-  ## Metrics exporter liveness and readiness probes
+  ## Metrics exporter liveness probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+  ## @param metrics.livenessProbe.enabled Enable livenessProbe
+  ## @param metrics.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param metrics.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param metrics.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param metrics.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param metrics.livenessProbe.successThreshold Success threshold for livenessProbe
   ##
   livenessProbe:
     enabled: true
@@ -1194,6 +1519,15 @@ metrics:
     timeoutSeconds: 5
     failureThreshold: 3
     successThreshold: 1
+  ## Metrics exporter readiness probe
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+  ## @param metrics.readinessProbe.enabled Enable readinessProbe
+  ## @param metrics.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param metrics.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param metrics.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param metrics.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param metrics.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
   readinessProbe:
     enabled: true
     initialDelaySeconds: 5
@@ -1201,42 +1535,43 @@ metrics:
     timeoutSeconds: 1
     failureThreshold: 3
     successThreshold: 1
-
   ## Prometheus Service Monitor
   ## ref: https://github.com/coreos/prometheus-operator
   ##      https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md
   ##
   serviceMonitor:
-    ## If the operator is installed in your cluster, set to true to create a Service Monitor Entry
+    ## @param metrics.serviceMonitor.enabled Create ServiceMonitor Resource for scraping metrics using Prometheus Operator
     ##
     enabled: false
-
-    ## Specify the namespace where Prometheus Operator is running
+    ## @param metrics.serviceMonitor.namespace Namespace which Prometheus is running in
     ##
-    # namespace: monitoring
-
-    ## Specify the interval at which metrics should be scraped
+    namespace:
+    ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped
     ##
     interval: 30s
-    ## Specify the timeout after which the scrape is ended
+    ## @param metrics.serviceMonitor.scrapeTimeout Specify the timeout after which the scrape is ended
+    ## e.g:
+    ## scrapeTimeout: 30s
     ##
-    # scrapeTimeout: 30s
-    ## Used to pass Labels that are used by the Prometheus installed in your cluster to select Service Monitors to work with
+    scrapeTimeout:
+    ## @param metrics.serviceMonitor.additionalLabels Used to pass Labels that are used by the Prometheus installed in your cluster to select Service Monitors to work with
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
     ##
     additionalLabels: {}
-
   ## Custom PrometheusRule to be defined
   ## ref: https://github.com/coreos/prometheus-operator#customresourcedefinitions
   ##
   prometheusRule:
-    enabled: false
-    additionalLabels: {}
-    ## Specify the namespace where Prometheus Operator is running
+    ## @param metrics.prometheusRule.enabled Set this to true to create prometheusRules for Prometheus operator
     ##
-    # namespace: monitoring
-
-    ## Define individual alerting rules as required
+    enabled: false
+    ## @param metrics.prometheusRule.additionalLabels Additional labels that can be used so prometheusRules will be discovered by Prometheus
+    ##
+    additionalLabels: {}
+    ## @param metrics.prometheusRule.namespace Namespace where prometheusRules resource should be created
+    ##
+    namespace:
+    ## @param metrics.prometheusRule.rules Rules to be created, check values for an example
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#rulegroup
     ##      https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/
     ##
@@ -1252,270 +1587,3 @@ metrics:
     ##       summary: High request latency
     ##
     rules: {}
-
-##
-## MongoDB(R) Hidden node parameters.
-##
-hidden:
-  ## Enable deploying the MongoDB(R) Hidden Node
-  ##   https://docs.mongodb.com/manual/tutorial/configure-a-hidden-replica-set-member/
-  ##
-  enabled: false
-
-  ## MongoDB(R) configuration file for Hidden nodes. For documentation of all options, see:
-  ##   http://docs.mongodb.org/manual/reference/configuration-options/
-  ##
-  configuration: ""
-
-  ## ConfigMap with MongoDB(R) configuration for Hidden nodes
-  ## NOTE: When it's set the hidden.configuration parameter is ignored
-  ##
-  # existingConfigmap:
-
-  ## Command and args for running the container (set to default if not set). Use array form
-  ##
-  # command:
-  # args:
-
-  ## Additional command line flags
-  ## Example:
-  ## extraFlags:
-  ##  - "--wiredTigerCacheSizeGB=2"
-  ##
-  extraFlags: []
-
-  ## Additional environment variables to set
-  ## E.g:
-  ## extraEnvVars:
-  ##   - name: FOO
-  ##     value: BAR
-  ##
-  extraEnvVars: []
-
-  ## ConfigMap with extra environment variables
-  ##
-  # extraEnvVarsCM:
-
-  ## Secret with extra environment variables
-  ##
-  # extraEnvVarsSecret:
-
-  ## Annotations to be added to the MongoDB(R) Hidden statefulset. Evaluated as a template.
-  ##
-  annotations: {}
-
-  ## Additional labels to be added to the MongoDB(R) Hidden statefulset. Evaluated as a template.
-  ##
-  labels: {}
-
-  ## Number of MongoDB(R) Hidden replicas to deploy.
-  ## Ignored when mongodb.architecture=standalone
-  ##
-  replicaCount: 1
-
-  ## StrategyType for MongoDB(R) Hidden statefulset
-  ## It can be set to RollingUpdate or Recreate by default.
-  ##
-  strategyType: RollingUpdate
-
-  ## MongoDB(R) Hidden should be initialized one by one when building the replicaset for the first time.
-  ##
-  podManagementPolicy: OrderedReady
-
-  ## Pod affinity preset
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
-  ##
-  podAffinityPreset: ""
-
-  ## Pod anti-affinity preset
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
-  ##
-  podAntiAffinityPreset: soft
-
-  ## Node affinity preset
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ## Allowed values: soft, hard
-  ##
-  nodeAffinityPreset:
-    ## Node affinity type
-    ## Allowed values: soft, hard
-    ##
-    type: ""
-    ## Node label key to match
-    ## E.g.
-    ## key: "kubernetes.io/e2e-az-name"
-    ##
-    key: ""
-    ## Node label values to match
-    ## E.g.
-    ## values:
-    ##   - e2e-az1
-    ##   - e2e-az2
-    ##
-    values: []
-
-  ## Affinity for pod assignment. Evaluated as a template.
-  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ## Note: podAffinityPreset, podAntiAffinityPreset, and nodeAffinityPreset will be ignored when it's set
-  ##
-  affinity: {}
-
-  ## Node labels for pod assignment. Evaluated as a template.
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
-  ##
-  nodeSelector: {}
-
-  ## Tolerations for pod assignment. Evaluated as a template.
-  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-  ##
-  tolerations: []
-
-  ## Labels for MongoDB(R) Hidden pods. Evaluated as a template.
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-  ##
-  podLabels: {}
-
-  ## Annotations for MongoDB(R) Hidden pods. Evaluated as a template.
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-  ##
-  podAnnotations: {}
-
-  ## MongoDB(R) Hidden pods' priority.
-  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
-  ##
-  # priorityClassName: ""
-
-  ## MongoDB(R) Hidden containers' resource requests and limits.
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ##
-  resources:
-    # We usually recommend not to specify default resources and to leave this as a conscious
-    # choice for the user. This also increases chances charts run on environments with little
-    # resources, such as Minikube. If you do want to specify resources, uncomment the following
-    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    limits: {}
-    #   cpu: 100m
-    #   memory: 128Mi
-    requests: {}
-    #   cpu: 100m
-    #   memory: 128Mi
-
-  ## MongoDB(R) Hidden pods' liveness and readiness probes. Evaluated as a template.
-  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
-  ##
-  livenessProbe:
-    enabled: true
-    initialDelaySeconds: 30
-    periodSeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 6
-    successThreshold: 1
-  readinessProbe:
-    enabled: true
-    initialDelaySeconds: 5
-    periodSeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 6
-    successThreshold: 1
-
-  ## Custom Liveness probes for MongoDB(R) Hidden pods.
-  ## Ignored when livenessProbe.enabled=true
-  ##
-  customLivenessProbe: {}
-
-  ## Custom Rediness probes MongoDB(R) Hidden pods
-  ## Ignored when readinessProbe.enabled=true
-  ##
-  customReadinessProbe: {}
-
-  ## Add init containers to the MongoDB(R) Hidden pods.
-  ## Example:
-  ## initContainers:
-  ##   - name: your-image-name
-  ##     image: your-image
-  ##     imagePullPolicy: Always
-  ##     ports:
-  ##       - name: portname
-  ##         containerPort: 1234
-  ##
-  initContainers: {}
-
-  ## Add sidecars to the MongoDB(R) Hidden pods.
-  ## Example:
-  ## sidecars:
-  ##   - name: your-image-name
-  ##     image: your-image
-  ##     imagePullPolicy: Always
-  ##     ports:
-  ##       - name: portname
-  ##         containerPort: 1234
-  ##
-  sidecars: {}
-
-  ## extraVolumes and extraVolumeMounts allows you to mount other volumes on MongoDB(R) Hidden pods
-  ## Examples:
-  ## extraVolumeMounts:
-  ##   - name: extras
-  ##     mountPath: /usr/share/extras
-  ##     readOnly: true
-  ## extraVolumes:
-  ##   - name: extras
-  ##     emptyDir: {}
-  ##
-  extraVolumeMounts: []
-  extraVolumes: []
-
-  ## MongoDB(R) Hidden Pod Disruption Budget configuration
-  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
-  ##
-  pdb:
-    create: false
-    ## Min number of pods that must still be available after the eviction
-    ##
-    minAvailable: 1
-    ## Max number of pods that can be unavailable after the eviction
-    ##
-    # maxUnavailable: 1
-
-  ## Enable persistence using Persistent Volume Claims
-  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
-  ##
-  persistence:
-    enabled: true
-    ## PV Storage Class
-    ## If defined, storageClassName: <storageClass>
-    ## If set to "-", storageClassName: "", which disables dynamic provisioning
-    ## If undefined (the default) or set to null, no storageClassName spec is
-    ## set, choosing the default provisioner.
-    ##
-    # storageClass: "-"
-    ## PV Access Mode
-    ##
-    accessModes:
-      - ReadWriteOnce
-    ## PVC size
-    ##
-    size: 8Gi
-    ## PVC annotations
-    ##
-    annotations: {}
-    ## The path the volume will be mounted at, useful when using different
-    ## MongoDB(R) images.
-    ##
-    mountPath: /bitnami/mongodb
-    ## The subdirectory of the volume to mount to, useful in dev environments
-    ## and one PV for multiple services.
-    ##
-    subPath: ""
-    ## Fine tuning for volumeClaimTemplates
-    ##
-    volumeClaimTemplates:
-      ## A label query over volumes to consider for binding (e.g. when using local volumes)
-      ## See https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#labelselector-v1-meta for more details
-      ##
-      selector:
-      ## Set volumeClaimTemplate dataSource
-      ##
-      dataSource:
