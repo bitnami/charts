@@ -109,23 +109,20 @@ image:
 ##
 imagePullSecrets: []
 ## Discourse configuration parameters
+## ref: https://github.com/bitnami/bitnami-docker-discourse#configuration
 ##
 discourse:
   ## @param discourse.host Discourse host to create application URLs (include the port if =/= 80)
-  ## ref: https://github.com/bitnami/bitnami-docker-discourse#configuration
   ##
   host: ''
   ## @param discourse.siteName Discourse site name
-  ## ref: https://github.com/bitnami/bitnami-docker-discourse#environment-variables
   ##
   siteName: 'My Site!'
   ## @param discourse.username Admin user of the application
-  ## ref: https://github.com/bitnami/bitnami-docker-discourse#environment-variables
   ##
   username: user
   ## @param discourse.password password. WARNING: Minimum length of 10 characters
   ## Defaults to a random 10-character alphanumeric string if not set
-  ## ref: https://github.com/bitnami/bitnami-docker-discourse#environment-variables
   ##
   password:
   ## @param discourse.existingSecret Name of an existing secret containing the password (ignores previous password)
@@ -134,7 +131,6 @@ discourse:
   ##
   existingSecret:
   ## @param discourse.email Admin user email of the application
-  ## ref: https://github.com/bitnami/bitnami-docker-discourse#environment-variables
   ##
   email: user@example.com
   ## @param discourse.command Custom command to override image cmd
