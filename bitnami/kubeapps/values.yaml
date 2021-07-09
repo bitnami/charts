@@ -690,7 +690,7 @@ apprepository:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-  ## @param apprepository.initialRepos Initial chart repositories to configure
+  ## @param apprepository.initialRepos [array] Initial chart repositories to configure
   ## e.g:
   ## initialRepos:
   ## - name: chartmuseum
