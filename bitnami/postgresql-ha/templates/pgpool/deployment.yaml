@@ -120,7 +120,7 @@ spec:
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
-              value: {{ ternary "true" "false" .Values.pgpoolImage.debug | quote }}
+              value: {{ ternary "true" "false" (or .Values.pgpoolImage.debug .Values.diagnosticMode.enabled) | quote }}
             {{- if or .Values.pgpool.customUsersSecret .Values.pgpool.customUsers }}
             - name: PGPOOL_POSTGRES_CUSTOM_USERS
               valueFrom:

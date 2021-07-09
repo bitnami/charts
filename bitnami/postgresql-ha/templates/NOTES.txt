@@ -15,6 +15,16 @@ Access the pod you want to debug by executing
 
   kubectl exec --namespace {{ .Release.Namespace }} -ti <NAME OF THE POD> -- bash
 
+In order to replicate the container startup scripts, check the /opt/bitnami/scripts folder.
+
+  Default PostgreSQL startup command
+
+    /opt/bitnami/scripts/postgresql-repmgr/entrypoint.sh /opt/bitnami/scripts/postgresql-repmgr/run.sh
+
+  Default PgPool startup command
+
+    /opt/bitnami/scripts/pgpool/entrypoint.sh /opt/bitnami/scripts/pgpool/run.sh
+
 {{- else }}
 PostgreSQL can be accessed through Pgpool via port {{ .Values.service.port }} on the following DNS name from within your cluster:
 
