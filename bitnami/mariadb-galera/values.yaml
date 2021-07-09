@@ -737,3 +737,12 @@ metrics:
     #      severity: warning
     #      service: mariadb-galera
     #    for: 5m
+
+## Enable diagnostic mode in the deployment
+##
+diagnosticMode:
+  enabled: false
+  command:
+    - sleep
+  args:
+    - infinity
