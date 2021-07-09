@@ -305,30 +305,23 @@ $ helm install my-release -f values.yaml bitnami/keycloak
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
+Keycloak realms, users and clients can be created from the Keycloak administration panel. Refer to the [tutorial on adding user authentication to applications with Keycloak](https://docs.bitnami.com/tutorials/integrate-keycloak-authentication-kubernetes) for more details on these operations.
+
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling vs Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### Using an external database
+### Use an external database
 
-Sometimes you may want to have Keycloak connect to an external database rather than installing one inside your cluster, e.g. to use a managed database service, or use run a single database server for all your applications. To do this, the chart allows you to specify credentials for an external database under the [`externalDatabase` parameter](#database-parameters). You should also disable the PostgreSQL installation with the `postgresql.enabled` option. For example with the following parameters:
+Sometimes, you may want to have Keycloak connect to an external database rather than a database within your cluster - for example, when using a managed database service, or when running a single database server for all your applications. To do this, set the `postgresql.enabled` parameter to `false` and specify the credentials for the external database using the `externalDatabase.*` parameters.
 
-```console
-postgresql.enabled=false
-externalDatabase.host=myexternalhost
-externalDatabase.port=5432
-externalDatabase.user=myuser
-externalDatabase.password=mypassword
-externalDatabase.database=mydatabase
-```
+Refer to the [chart documentation on using an external database](https://docs.bitnami.com/kubernetes/apps/keycloak/configuration/use-external-database) for more details and an example.
 
-Note also that if you disable PostgreSQL per above you MUST supply values for the `externalDatabase` connection.
-
-### Adding extra environment variables
+### Add extra environment variables
 
 In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property.
 
@@ -340,31 +333,11 @@ extraEnvVars:
 
 Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
 
-### Sidecars and Init Containers
+### Use Sidecars and Init Containers
 
-If you have a need for additional containers to run within the same pod as the Keycloak app (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
+If additional containers are needed in the same pod (such as additional metrics or logging exporters), they can be defined using the `sidecars` config parameter. Similarly, extra init containers can be added using the `initContainers` parameter.
 
-```yaml
-sidecars:
-  - name: your-image-name
-    image: your-image
-    imagePullPolicy: Always
-    ports:
-      - name: portname
-       containerPort: 1234
-```
-
-Similarly, you can add extra init containers using the `initContainers` parameter.
-
-```yaml
-initContainers:
-  - name: your-image-name
-    image: your-image
-    imagePullPolicy: Always
-    ports:
-      - name: portname
-        containerPort: 1234
-```
+Refer to the chart documentation for more information on, and examples of, configuring and using [sidecars and init containers](https://docs.bitnami.com/kubernetes/apps/keycloak/configuration/configure-sidecar-init-containers/).
 
 ### Initialize a fresh instance
 
@@ -374,123 +347,36 @@ In addition to this option, you can also set an external ConfigMap with all the 
 
 The allowed extensions is `.sh`.
 
-### Deploying extra resources
+### Deploy extra resources
 
 There are cases where you may want to deploy extra objects, such a ConfigMap containing your app's configuration or some extra deployment with a micro service used by your app. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter.
 
-### Setting Pod's affinity
+### Set Pod affinity
 
 This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
-### Ingress
+### Configure Ingress
 
-This chart provides support for ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/master/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/master/bitnami/contour) you can utilize the ingress controller to serve your application.
+This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/master/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/master/bitnami/contour) you can utilize the ingress controller to serve your application.
 
-To enable ingress integration, please set `ingress.enabled` to `true`.
+To enable Ingress integration, set `ingress.enabled` to `true`. The `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host. [Learn more about configuring and using Ingress](https://docs.bitnami.com/kubernetes/apps/keycloak/configuration/configure-ingress/).
 
-#### Hosts
+### Configure TLS Secrets for use with Ingress
 
-Most likely you will only want to have one hostname that maps to this Keycloak installation. If that's your case, the property `ingress.hostname` will set it. However, it is possible to have more than one host. To facilitate this, the `ingress.extraHosts` object can be specified as an array. You can also use `ingress.extraTLS` to add the TLS configuration for extra hosts.
+The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/apps/keycloak/administration/enable-tls-ingress/).
 
-For each host indicated at `ingress.extraHosts`, please indicate a `name`, `path`, and any `annotations` that you may want the ingress controller to know about.
-
-For annotations, please see [this document](https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md). Not all annotations are supported by all ingress controllers, but this document does a good job of indicating which annotation is supported by many popular ingress controllers.
-
-### TLS Secrets
-
-This chart will facilitate the creation of TLS secrets for use with the ingress controller, however, this is not required. There are three common use cases:
-
-- Helm generates/manages certificate secrets.
-- User generates/manages certificates separately.
-- An additional tool (like [cert-manager](https://github.com/jetstack/cert-manager/)) manages the secrets for the application.
-
-In the first two cases, it's needed a certificate and a key. We would expect them to look like this:
-
-- certificate files should look like (and there can be more than one certificate if there is a certificate chain)
-
-  ```console
-  -----BEGIN CERTIFICATE-----
-  MIID6TCCAtGgAwIBAgIJAIaCwivkeB5EMA0GCSqGSIb3DQEBCwUAMFYxCzAJBgNV
-  ...
-  jScrvkiBO65F46KioCL9h5tDvomdU1aqpI/CBzhvZn1c0ZTf87tGQR8NK7v7
-  -----END CERTIFICATE-----
-  ```
-
-- keys should look like:
-
-  ```console
-  -----BEGIN RSA PRIVATE KEY-----
-  MIIEogIBAAKCAQEAvLYcyu8f3skuRyUgeeNpeDvYBCDcgq+LsWap6zbX5f8oLqp4
-  ...
-  wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
-  -----END RSA PRIVATE KEY-----
-  ```
-
-If you are going to use Helm to manage the certificates, please copy these values into the `certificate` and `key` values for a given `ingress.secrets` entry.
-
-If you are going to manage TLS secrets outside of Helm, please know that you can create a TLS secret (named `keycloak.local-tls` for example).
-
-### Secrets and passwords
+### Manage secrets and passwords
 
 This chart provides several ways to manage passwords:
-- Values passed to the chart
-- An existing secret with all the passwords
-- Passwords present among several secrets
 
-In the first case, a new Secret including all the passwords will be created during the chart installation. When upgrading it is necessary to provide the secrets using the `--set` option as shown below:
-For example:
-```console
-  $ helm upgrade keycloak bitnami/keycloak \
-      --set auth.adminPassword=$KEYCLOAK_ADMIN_PASSWORD \
-      --set auth.managementPassword=$KEYCLOAK_MANAGEMENT_PASSWORD \
-      --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD \
-      --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC
-```
+* Values passed to the chart
+* An existing secret with all the passwords (via the `existingSecret` parameter)
+* Multiple existing secrets with all the passwords (via the `existingSecretPerPassword` parameter)
 
-When installing using an existing secret, passwords can be stored in single secret or separeted into differect secrets.
+Refer to the [chart documentation on managing passwords](https://docs.bitnami.com/kubernetes/apps/keycloak/configuration/manage-passwords/) for examples of each method.
 
-To use a single existing secret `existingSecret` can be configured at values.yaml:
-
-```yaml
-    existingSecret:
-      name: mySecret
-      keyMapping:
-        admin-password: myPasswordKey
-        management-password: myManagementPasswordKey
-        database-password: myDatabasePasswordKey
-        tls-keystore-password: myTlsKeystorePasswordKey
-        tls-truststore-password: myTlsTruststorePasswordKey
-```
-
-The keyMapping links the passwords in the chart with the passwords stored in the existing Secret.
-
-Configuring multiple existing secrets can be done by using `auth.existingSecretPerPassword` instead:
-
-```yaml
-      existingSecretPerPassword:
-        keyMapping:
-          adminPassword: KEYCLOAK_ADMIN_PASSWORD
-          managementPassword: KEYCLOAK_MANAGEMENT_PASSWORD
-          databasePassword: password
-          tlsKeystorePassword: JKS_KEYSTORE_TRUSTSTORE_PASSWORD
-          tlsTruststorePassword: JKS_KEYSTORE_TRUSTSTORE_PASSWORD
-        adminPassword:
-          name: mySecret
-        managementPassword:
-          name: mySecret
-        databasePassword:
-          name: myOtherSecret
-        tlsKeystorePassword:
-          name: mySecret
-        tlsTruststorePassword:
-          name: mySecret
-```
-
-Additionally to the key mapping, a different Secret name can be configured per password.
-
-> NOTE: 'auth.existingSecretPerPassword' will overwrite the configuration at 'auth.existingSecret'
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
@@ -499,68 +385,6 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ### To 1.0.0
 
-[On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
+[On November 13, 2020, Helm v2 support formally ended](https://github.com/helm/charts#status-of-the-project). This major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
-**What changes were introduced in this major version?**
-
-- Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
-- Move dependency information from the _requirements.yaml_ to the _Chart.yaml_
-- After running `helm dependency update`, a _Chart.lock_ file is generated containing the same structure used in the previous _requirements.lock_
-- The different fields present in the _Chart.yaml_ file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
-- This chart depends on the **PostgreSQL 10** instead of **PostgreSQL 9**. Apart from the same changes that are described in this section, there are also other major changes due to the master/slave nomenclature was replaced by primary/readReplica. [Here](https://github.com/bitnami/charts/pull/4385) you can find more information about the changes introduced.
-
-**Considerations when upgrading to this version**
-
-- If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
-- If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
-- If you want to upgrade to this version from a previous one installed with Helm v3, it should be done reusing the PVC used to hold the PostgreSQL data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is `keycloak`):
-
-> NOTE: Please, create a backup of your database before running any of those actions.
-
-##### Export secrets and required values to update
-
-```console
-$ export KEYCLOAK_ADMIN_PASSWORD=$(kubectl get secret --namespace default keycloak-env-vars -o jsonpath="{.data.KEYCLOAK_ADMIN_PASSWORD}" | base64 --decode)
-$ export KEYCLOAK_MANAGEMENT_PASSWORD=$(kubectl get secret --namespace default keycloak-env-vars -o jsonpath="{.data.KEYCLOAK_MANAGEMENT_PASSWORD}" | base64 --decode)
-$ export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default keycloak-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
-$ export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=keycloak,app.kubernetes.io/name=postgresql,role=master -o jsonpath="{.items[0].metadata.name}")
-```
-
-##### Delete statefulsets
-
-Delete PostgreSQL statefulset. Notice the option `--cascade=false`:
-
-```
-$ kubectl delete statefulsets.apps keycloak-postgresql --cascade=false
-```
-
-##### Upgrade the chart release
-
-```console
-$ helm upgrade keycloak bitnami/keycloak \
-    --set auth.adminPassword=$KEYCLOAK_ADMIN_PASSWORD \
-    --set auth.managementPassword=$KEYCLOAK_MANAGEMENT_PASSWORD \
-    --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD \
-    --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC
-```
-
-##### Force new statefulset to create a new pod for postgresql
-
-```console
-$ kubectl delete pod keycloak-postgresql-0
-```
-
-Finally, you should see the lines below in MariaDB container logs:
-
-```console
-$ kubectl logs $(kubectl get pods -l app.kubernetes.io/instance=postgresql,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
-...
-postgresql 08:05:12.59 INFO  ==> Deploying PostgreSQL with persisted data...
-...
-```
-
-**Useful links**
-
-- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
-- https://helm.sh/docs/topics/v2_v3_migration/
-- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+[Learn more about this change and related upgrade considerations](https://docs.bitnami.com/kubernetes/apps/keycloak/administration/upgrade-helm3/).
