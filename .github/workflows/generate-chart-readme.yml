@@ -21,6 +21,9 @@ on:
       - 'bitnami/kubernetes-event-exporter/values.yaml'
       - 'bitnami/kubewatch/values.yaml'
       - 'bitnami/logstash/values.yaml'
+      - 'bitnami/mongodb-sharded/values.yaml'
+      - 'bitnami/moodle/values.yaml'
+      - 'bitnami/mxnet/values.yaml'
 
 jobs:
   generate-chart-readme:
