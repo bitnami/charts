@@ -99,7 +99,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | ------------------------------------------------ | ----------------------------------------------------------------------------------------- | ---------------------- |
 | `frontend.image.registry`                        | NGINX image registry                                                                      | `docker.io`            |
 | `frontend.image.repository`                      | NGINX image repository                                                                    | `bitnami/nginx`        |
-| `frontend.image.tag`                             | NGINX image tag (immutable tags are recommended)                                          | `1.20.1-debian-10-r32` |
+| `frontend.image.tag`                             | NGINX image tag (immutable tags are recommended)                                          | `1.21.1-debian-10-r01` |
 | `frontend.image.pullPolicy`                      | NGINX image pull policy                                                                   | `IfNotPresent`         |
 | `frontend.image.pullSecrets`                     | NGINX image pull secrets                                                                  | `[]`                   |
 | `frontend.image.debug`                           | Enable image debug mode                                                                   | `false`                |
@@ -386,7 +386,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `authProxy.enabled`                               | Specifies whether Kubeapps should configure OAuth login/logout                | `false`                |
 | `authProxy.image.registry`                        | OAuth2 Proxy image registry                                                   | `docker.io`            |
 | `authProxy.image.repository`                      | OAuth2 Proxy image repository                                                 | `bitnami/oauth2-proxy` |
-| `authProxy.image.tag`                             | OAuth2 Proxy image tag (immutable tags are recommended)                       | `7.1.3-debian-10-r58`  |
+| `authProxy.image.tag`                             | OAuth2 Proxy image tag (immutable tags are recommended)                       | `7.1.3-debian-10-r61`  |
 | `authProxy.image.pullPolicy`                      | OAuth2 Proxy image pull policy                                                | `IfNotPresent`         |
 | `authProxy.image.pullSecrets`                     | OAuth2 Proxy image pull secrets                                               | `[]`                   |
 | `authProxy.external`                              | Use an external Auth Proxy instead of deploying its own one                   | `false`                |
@@ -445,7 +445,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `rbac.create`             | Specifies whether RBAC resources should be created                            | `true`                 |
 | `testImage.registry`      | NGINX image registry                                                          | `docker.io`            |
 | `testImage.repository`    | NGINX image repository                                                        | `bitnami/nginx`        |
-| `testImage.tag`           | NGINX image tag (immutable tags are recommended)                              | `1.20.1-debian-10-r32` |
+| `testImage.tag`           | NGINX image tag (immutable tags are recommended)                              | `1.21.1-debian-10-r01` |
 | `testImage.pullPolicy`    | NGINX image pull policy                                                       | `IfNotPresent`         |
 | `testImage.pullSecrets`   | NGINX image pull secrets                                                      | `[]`                   |
 
