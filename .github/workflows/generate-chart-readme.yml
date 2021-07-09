@@ -18,6 +18,9 @@ on:
       - 'bitnami/kong/values.yaml'
       - 'bitnami/kube-prometheus/values.yaml'
       - 'bitnami/kube-state-metrics/values.yaml'
+      - 'bitnami/kubernetes-event-exporter/values.yaml'
+      - 'bitnami/kubewatch/values.yaml'
+      - 'bitnami/logstash/values.yaml'
 
 jobs:
   generate-chart-readme:

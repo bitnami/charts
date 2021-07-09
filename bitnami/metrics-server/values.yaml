@@ -274,3 +274,6 @@ podSecurityContext:
 #  extraVolumeMounts:
 #  - name: tmpdir
 #    mountPath: /tmp
+
+## Extra containers to run within the pod
+#  extraContainers: {}
