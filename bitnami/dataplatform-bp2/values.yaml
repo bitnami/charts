@@ -39,8 +39,10 @@ kafka:
       cpu: 250m
       memory: 5120Mi
   ## Anti Affinity rules set for resiliency and Affinity rules set for optimal performance
-  ## @param kafka.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution [object] Kafka anti affinity rules
-  ## @param kafka.affinity.podAffinity.preferredDuringSchedulingIgnoredDuringExecution [object] Kafka affinity rules
+  ## @param kafka.affinity.podAntiAffinity [object] Kafka anti affinity rules
+  ## @skip kafka.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution
+  ## @param kafka.affinity.podAffinity [object] Kafka affinity rules
+  ## @skip kafka.affinity.podAffinity.preferredDuringSchedulingIgnoredDuringExecution
   ##
   affinity:
     podAntiAffinity:
@@ -140,7 +142,8 @@ kafka:
         cpu: 250m
         memory: 5120Mi
     ## Anti Affinity rules set for resiliency
-    ## @param kafka.zookeeper.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution [object] Zookeeper pod anti affinity rules
+    ## @param kafka.zookeeper.affinity.podAntiAffinity [object] Zookeeper pod anti affinity rules
+    ## @skip kafka.zookeeper.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution
     ##
     affinity:
       podAntiAffinity:
@@ -175,7 +178,8 @@ spark:
   ## @param spark.master.resources.limits Spark master resource limits
   ## @param spark.master.resources.requests.cpu Spark master CPUs
   ## @param spark.master.resources.requests.memory Spark master requested memory
-  ## @param spark.master.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution [object] Anti affinity rules set for resiliency
+  ## @param spark.master.affinity.podAntiAffinity [object] Anti affinity rules set for resiliency
+  ## @skip spark.master.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution
   ##
   master:
     ## Spark container ports
@@ -208,7 +212,8 @@ spark:
   ## @param spark.worker.resources.limits Spark master resource limits
   ## @param spark.worker.resources.requests.cpu Spark master CPUs
   ## @param spark.worker.resources.requests.memory Spark master requested memory
-  ## @param spark.worker.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution [object] Anti affinity rules set for resiliency
+  ## @param spark.worker.affinity.podAntiAffinity [object] Anti affinity rules set for resiliency
+  ## @skip spark.worker.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution
   ##
   worker:
     replicaCount: 2
@@ -287,7 +292,8 @@ elasticsearch:
     ## Affinity for pod assignment
     ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
     ## Note: podAffinityPreset, podAntiAffinityPreset, and nodeAffinityPreset will be ignored when it's set
-    ## @param elasticsearch.master.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution [object] Anti affinity rules set for resiliency
+    ## @param elasticsearch.master.affinity.podAntiAffinity [object] Anti affinity rules set for resiliency
+    ## @skip elasticsearch.master.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution
     ##
     affinity:
       podAntiAffinity:
@@ -324,7 +330,8 @@ elasticsearch:
   ## @param elasticsearch.data.name Elasticsearch data node name
   ## @param elasticsearch.data.replicas Number of Elasticsearch replicas
   ## @param elasticsearch.data.heapSize Heap Size for Elasticsearch data node
-  ## @param elasticsearch.data.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution [object] Anti affinity rules set for resiliency
+  ## @param elasticsearch.data.affinity.podAntiAffinity [object] Anti affinity rules set for resiliency
+  ## @skip elasticsearch.data.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution
   ## @param elasticsearch.data.resources.limits Elasticsearch data node resource limits
   ## @param elasticsearch.data.resources.requests.cpu Elasticsearch data node CPUs
   ## @param elasticsearch.data.resources.requests.memory Elasticsearch data node requested memory
@@ -336,7 +343,7 @@ elasticsearch:
     heapSize: 2560m
     ## Affinity for pod assignment
     ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-    ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
+    ## Note: podAffinityPreset, podAntiAffinityPreset, and nodeAffinityPreset will be ignored when it's set
     ##
     affinity:
       podAntiAffinity:
@@ -368,7 +375,8 @@ elasticsearch:
   ## Elasticsearch coordinating-only node parameters
   ## @param elasticsearch.coordinating.replicas Number of Elasticsearch replicas
   ## @param elasticsearch.coordinating.heapSize Heap Size for Elasticsearch coordinating
-  ## @param elasticsearch.coordinating.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution [object] Anti affinity rules set for resiliency
+  ## @param elasticsearch.coordinating.affinity.podAntiAffinity [object] Anti affinity rules set for resiliency
+  ## @skip elasticsearch.coordinating.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution
   ## @param elasticsearch.coordinating.resources.limits Elasticsearch coordinating resource limits
   ## @param elasticsearch.coordinating.resources.requests.cpu Elasticsearch coordinating CPUs
   ## @param elasticsearch.coordinating.resources.requests.memory Elasticsearch coordinating requested memory
@@ -456,7 +464,8 @@ logstash:
   ## Affinity for pod assignment. Evaluated as a template.
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: podAffinityPreset, podAntiAffinityPreset, and nodeAffinityPreset will be ignored when it's set
-  ## @param logstash.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution [object] Logstash pod anti affinity
+  ## @param logstash.affinity.podAntiAffinity [object] Logstash pod anti affinity
+  ## @skip logstash.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution
   ##
   affinity:
     podAntiAffinity:

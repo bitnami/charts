@@ -40,7 +40,8 @@ zookeeper:
       cpu: 250m
       memory: 5120Mi
   ## Anti Affinity rules set for resiliency
-  ## @param zookeeper.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution [object] Zookeeper pods Anti Affinity rules for best possible resiliency (evaluated as a template)
+  ## @param zookeeper.affinity.podAntiAffinity [object] Zookeeper pods Anti Affinity rules for best possible resiliency (evaluated as a template)
+  ## @skip zookeeper.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution
   ##
   affinity:
     podAntiAffinity:
@@ -81,8 +82,10 @@ kafka:
       cpu: 250m
       memory: 5120Mi
   ## Anti Affinity rules set for resiliency and Affinity rules set for optimal performance
-  ## @param kafka.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution [object] Zookeeper pods Anti Affinity rules for best possible resiliency (evaluated as a template)
-  ## @param kafka.affinity.podAffinity.preferredDuringSchedulingIgnoredDuringExecution [object] Zookeeper pods Affinity rules for best possible resiliency (evaluated as a template)
+  ## @param kafka.affinity.podAntiAffinity [object] Zookeeper pods Anti Affinity rules for best possible resiliency (evaluated as a template)
+  ## @skip kafka.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution
+  ## @param kafka.affinity.podAffinity [object] Zookeeper pods Affinity rules for best possible resiliency (evaluated as a template)
+  ## @param kafka.affinity.podAffinity.preferredDuringSchedulingIgnoredDuringExecution
   ##
   affinity:
     podAntiAffinity:
@@ -190,7 +193,8 @@ solr:
   ##
   javaMem: -Xmx4096m -Xms4096m
   ## Anti affinity rules set for resiliency
-  ## @param solr.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution [object] Zookeeper pods Anti Affinity rules for best possible resiliency (evaluated as a template)
+  ## @param solr.affinity.podAntiAffinity [object] Zookeeper pods Anti Affinity rules for best possible resiliency (evaluated as a template)
+  ## @skip solr.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution
   ##
   affinity:
     podAntiAffinity:
@@ -224,7 +228,8 @@ solr:
     ## @param solr.exporter.port Solr exporter port
     ##
     port: 9983
-    ## @param solr.exporter.affinity.podAffinity.preferredDuringSchedulingIgnoredDuringExecution [object] Zookeeper pods Affinity rules for best possible resiliency (evaluated as a template)
+    ## @param solr.exporter.affinity.podAffinity [object] Zookeeper pods Affinity rules for best possible resiliency (evaluated as a template)
+    ## @skip solr.exporter.affinity.podAffinity.preferredDuringSchedulingIgnoredDuringExecution
     ##
     affinity:
       podAffinity:
@@ -289,7 +294,8 @@ spark:
         cpu: 250m
         memory: 5120Mi
     ## Anti affinity rules set for resiliency
-    ## @param spark.master.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution [object] Zookeeper pods Anti Affinity rules for best possible resiliency (evaluated as a template)
+    ## @param spark.master.affinity.podAntiAffinity [object] Zookeeper pods Anti Affinity rules for best possible resiliency (evaluated as a template)
+    ## @skip spark.master.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution
     ##
     affinity:
       podAntiAffinity:
@@ -315,7 +321,8 @@ spark:
     ##
     webPort: 8081
     ## Anti affinity rules set for resiliency
-    ## @param spark.worker.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution [object] Zookeeper pods Anti Affinity rules for best possible resiliency (evaluated as a template)
+    ## @param spark.worker.affinity.podAntiAffinity [object] Zookeeper pods Anti Affinity rules for best possible resiliency (evaluated as a template)
+    ## @skip spark.worker.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution
     ##
     affinity:
       podAntiAffinity:
