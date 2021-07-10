@@ -16,23 +16,24 @@ global:
   imagePullSecrets: []
   storageClass:
 
+## @section Common parameters
+
 ## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
 ##
 nameOverride:
-
 ## @param fullnameOverride String to fully override `common.names.fullname` template with a string
 ##
 fullnameOverride:
-
 ## @param commonLabels Add labels to all the deployed resources
 ##
 commonLabels: {}
+
+## @section Node Exporter parameters
 
 ## @param hostAliases Deployment pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
 hostAliases: []
-
 ## Role Based Access
 ## Ref: https://kubernetes.io/docs/admin/authorization/rbac/
 ##
@@ -40,15 +41,12 @@ rbac:
   ## @param rbac.create Whether to create and use RBAC resources or not
   ##
   create: true
-
   ## @param rbac.apiVersion Version of the RBAC API
   ##
   apiVersion: v1beta1
-
   ## @param rbac.pspEnabled Enable Pod Security Policy
   ##
   pspEnabled: true
-
 ## Service account for Node Exporter to use.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 ##
@@ -59,7 +57,6 @@ serviceAccount:
   ## @param serviceAccount.name The name of the ServiceAccount to create
   ## If not set and create is true, a name is generated using the common.names.fullname template
   name:
-
 ## Bitnami Node Exporter image version
 ## ref: https://hub.docker.com/r/bitnami/node-exporter/tags/
 ## @param image.registry Node Exporter image registry
@@ -67,13 +64,11 @@ serviceAccount:
 ## @param image.tag Node Exporter Image tag (immutable tags are recommended)
 ## @param image.pullPolicy Node Exporter image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
-
 ##
 image:
   registry: docker.io
   repository: bitnami/node-exporter
   tag: 1.1.2-debian-10-r90
-
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -87,28 +82,24 @@ image:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
-
 ## @param extraArgs Additional command line arguments to pass to node-exporter
 ## e.g:
 ##  collector.filesystem.ignored-mount-points: "^/(dev|proc|sys|var/lib/docker/.+)($|/)"
 ##  collector.filesystem.ignored-fs-types: "^(autofs|binfmt_misc|cgroup|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|mqueue|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|sysfs|tracefs)$"
 ##
 extraArgs: {}
-
 ## @param extraVolumes Additional volumes to the node-exporter pods
 ## e.g:
 ##  - name: copy-portal-skins
 ##    emptyDir: {}
 ##
 extraVolumes: []
-
 ## @param extraVolumeMounts Additional volumeMounts to the node-exporter container
 ## e.g:
 ##  - name: copy-portal-skins
 ##   mountPath: /var/lib/lemonldap-ng/portal/skins
 ##
 extraVolumeMounts: []
-
 ## SecurityContext configuration
 ## @param securityContext.enabled Enable security context
 ## @param securityContext.fsGroup Group ID for the container filesystem
@@ -118,7 +109,6 @@ securityContext:
   enabled: true
   runAsUser: 1001
   fsGroup: 1001
-
 ## Node Exporter Service
 ##
 service:
@@ -134,20 +124,17 @@ service:
   ## @param service.clusterIP Specific cluster IP when service type is cluster IP. Use `None` for headless service
   ##
   clusterIP:
-
   ## @param service.nodePort Specify the nodePort value for the LoadBalancer and NodePort service types
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ## e.g:
   ## nodePort: 30080
   ##
   nodePort:
-
   ## @param service.loadBalancerIP `loadBalancerIP` if service type is `LoadBalancer`
   ## Set the LoadBalancer service type to internal only
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
   loadBalancerIP:
-
   ## @param service.loadBalancerSourceRanges Address that are allowed when service is `LoadBalancer`
   ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
   ##
@@ -155,19 +142,15 @@ service:
   ## - 10.10.10.0/24
   ##
   loadBalancerSourceRanges: []
-
   ## @param service.addPrometheusScrapeAnnotation Add the `prometheus.io/scrape: "true"` annotation to the service
   ##
   addPrometheusScrapeAnnotation: true
-
   ## @param service.annotations Additional annotations for Node Exporter service
   ##
   annotations: {}
-
   ## @param service.labels Additional labels for Node Exporter service
   ##
   labels: {}
-
 ## @param updateStrategy.type The update strategy type to apply to the DaemonSet
 ## @param updateStrategy.rollingUpdate.maxUnavailable Maximum number of pods that may be made unavailable
 ##
@@ -175,18 +158,14 @@ updateStrategy:
   type: RollingUpdate
   rollingUpdate:
     maxUnavailable: 1
-
 ## @param hostNetwork Expose the service to the host network
 hostNetwork: true
-
 ## @param minReadySeconds `minReadySeconds` to avoid killing pods before we are ready
 ##
 minReadySeconds: 0
-
 ## @param priorityClassName Priority class assigned to the Pods
 ##
 priorityClassName: ""
-
 ## Resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -207,27 +186,22 @@ resources:
   ##    cpu: 100m
   ##    memory: 128Mi
   requests: {}
-
 ## @param podLabels Pod labels
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
 podLabels: {}
-
 ## @param podAnnotations Pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
-
 ## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
 podAffinityPreset: ""
-
 ## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
 podAntiAffinityPreset: soft
-
 ## Node affinity preset
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
 ##
@@ -247,23 +221,19 @@ nodeAffinityPreset:
   ##   - e2e-az2
   ##
   values: []
-
 ## @param affinity Affinity for pod assignment. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ## Note: podAffinityPreset, podAntiAffinityPreset, and nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
-
 ## @param nodeSelector Node labels for pod assignment. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
 nodeSelector: {}
-
 ## @param tolerations Tolerations for pod assignment. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
-
 ## Configure extra options for liveness probe
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
@@ -292,7 +262,6 @@ readinessProbe:
   timeoutSeconds: 5
   failureThreshold: 6
   successThreshold: 1
-
 ## ServiceMonitor configuration
 ##
 serviceMonitor:
@@ -302,25 +271,21 @@ serviceMonitor:
   ## @param serviceMonitor.namespace Namespace in which Prometheus is running
   ##
   namespace:
-
   ## @param serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
   ##
   jobLabel:
-
   ## @param serviceMonitor.interval Scrape interval (use by default, falling back to Prometheus' default)
   ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
   ## e.g:
   ## interval: 10s
   ##
   interval:
-
   ## @param serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
   ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
   ## e.g:
   ## scrapeTimeout: 10s
   ##
   scrapeTimeout:
-
   ## @param serviceMonitor.selector ServiceMonitor selector labels
   ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
   ##
@@ -328,12 +293,10 @@ serviceMonitor:
   ##   prometheus: my-prometheus
   ##
   selector: {}
-
   ## @param serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
   ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
   ##
   relabelings: []
-
   ## @param serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion
   ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
   ##
