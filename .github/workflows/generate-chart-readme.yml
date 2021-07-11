@@ -27,6 +27,9 @@ on:
       - 'bitnami/metrics-server/values.yaml'
       - 'bitnami/minio/values.yaml'
       - 'bitnami/mongodb/values.yaml'
+      - 'bitnami/opencart/values.yaml'
+      - 'bitnami/orangehrm/values.yaml'
+      - 'bitnami/owncloud/values.yaml'
 
 jobs:
   generate-chart-readme:
