@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: netbox
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  name: {{ template "common.names.fullname" . }}-envvars
+  namespace: {{ .Release.Namespace | quote }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+    # ALLOWED_HOSTS: 
+
+    DB_NAME: {{ include "netbox.database" . | quote }}
+    DB_USER: {{ include "netbox.database.username" . | quote }}
+    DB_HOST: {{ include "netbox.database.host" . | quote }}
+    DB_PORT: {{ include "netbox.database.port" . | quote }}
+    DB_SSLMODE: {{ include "netbox.database.sslmode" . | quote }}
+    {{- if .Values.netbox.dbConnMaxAge }}
+    DB_CONN_MAX_AGE: {{ .Values.netbox.dbConnMaxAge | quote }}
+    {{- end }}
+    REDIS_HOST: {{ include "netbox.redis.taskRedis.host" . | quote }}
+    REDIS_PORT: {{ include "netbox.redis.taskRedis.port" . | quote }}
+    REDIS_DATABASE: {{ include "netbox.redis.taskRedis.databaseIndex" . | quote }}
+    REDIS_SSL: {{ include "netbox.redis.taskRedis.ssl" . | quote }}
+    REDIS_CACHE_HOST: {{ include "netbox.redis.cachingRedis.host" . | quote }}
+    REDIS_CACHE_PORT: {{ include "netbox.redis.cachingRedis.port" . | quote }}
+    REDIS_CACHE_DATABASE: {{ include "netbox.redis.cachingRedis.databaseIndex" . | quote }}
+    REDIS_CACHE_SSL: {{ include "netbox.redis.cachingRedis.ssl" . | quote }}
+    SKIP_STARTUP_SCRIPTS: {{ .Values.netbox.skipStartupScripts | quote }}
+    DEBUG: {{ .Values.netbox.debug | quote }}
+    MAINTENANCE_MODE: {{ .Values.netbox.maintenanceMode | quote }}
