@@ -326,13 +326,13 @@ $ helm install my-release -f values.yaml bitnami/kiam
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling vs Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### Adding extra environment variables
+### Add extra environment variables
 
 In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `server.extraEnvVars` and `agent.extraEnvVars` property.
 
@@ -345,45 +345,23 @@ server:
 
 Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `server.extraEnvVarsCM`, `agent.extraEnvVarsCM` or the `server.extraEnvVarsSecret` and `agent.extraEnvVarsSecret` values.
 
-### Sidecars and Init Containers
+### Configure Sidecars and Init Containers
 
-If you have a need for additional containers to run within the same pod as the kiam app (e.g. an additional metrics or logging exporter), you can do so via the `server.sidecars` and `agent.sidecars` config parameters. Simply define your container according to the Kubernetes container spec.
+If additional containers are needed in the same pod as Kiam (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. Similarly, you can add extra init containers using the `initContainers` parameter.
 
-```yaml
-server:
-  sidecars:
-    - name: your-image-name
-      image: your-image
-      imagePullPolicy: Always
-      ports:
-        - name: portname
-        containerPort: 1234
-```
+[Learn more about configuring and using sidecar and init containers](https://docs.bitnami.com/kubernetes/infrastructure/kiam/configuration/configure-sidecar-init-containers/).
 
-Similarly, you can add extra init containers using the `server.initContainers` and `agent.initContainers` parameters.
-
-```yaml
-server:
-  initContainers:
-    - name: your-image-name
-      image: your-image
-      imagePullPolicy: Always
-      ports:
-        - name: portname
-          containerPort: 1234
-```
-
-### Deploying extra resources
+### Deploy extra resources
 
 There are cases where you may want to deploy extra objects, such a ConfigMap containing your app's configuration or some extra deployment with a micro service used by your app. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter.
 
-### Setting Pod's affinity
+### Set Pod affinity
 
-This chart allows you to set your custom affinity using the `server.affinity` and `agent.affinity` parameters. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+This chart allows you to set your custom affinity using the `server.affinity` and `agent.affinity` parameters. Find more information about Pod affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `server.podAffinityPreset`, `agent.podAffinityPreset`, `server.podAntiAffinityPreset`, `agent.podAntiAffinityPreset`, or `server.nodeAffinityPreset` and `agent.nodeAffinityPreset` parameters.
 
-### TLS Secrets
+### Configure TLS Secrets
 
 This chart will facilitate the creation of TLS secrets for use with kiam. There are three common use cases:
 
@@ -391,9 +369,9 @@ This chart will facilitate the creation of TLS secrets for use with kiam. There 
 - User specifies the certificates in the values.
 - User generates/manages certificates separately.
 
-By default the first use case will be applied. In second case, it's needed a certificate and a key. We would expect them to look like this:
+By default the first use case will be applied. In the second case, a certificate and a key are needed.
 
-- The certificate files should look like (there can be more than one certificate if there is a certificate chain)
+- The certificate files should look like the example below. There may be more than one certificate if there is a certificate chain.
 
     ```console
     -----BEGIN CERTIFICATE-----
@@ -403,7 +381,7 @@ By default the first use case will be applied. In second case, it's needed a cer
     -----END CERTIFICATE-----
     ```
 
-- The keys should look like this:
+- The certificate keys should look like this:
 
     ```console
     -----BEGIN RSA PRIVATE KEY-----
@@ -413,9 +391,9 @@ By default the first use case will be applied. In second case, it's needed a cer
     -----END RSA PRIVATE KEY-----
     ```
 
-If you are going to use the values file to manage the certificates, please copy these values into the `server.tlsFiles.cert`, `server.tlsFiles.ca` and `server.tlsFiles.key` or `agent.tlsFiles.cert`, `agent.tlsFiles.ca` and `agent.tlsFiles.key`.
+If using the values file to manage the certificates, copy the above values into the `server.tlsFiles.cert`, `server.tlsFiles.ca` and `server.tlsFiles.key` or `agent.tlsFiles.cert`, `agent.tlsFiles.ca` and `agent.tlsFiles.key` parameters respectively.
 
-If you are going to manage TLS secrets outside of Helm, please know that you can create a TLS secret (named `kiam.local-tls` for example) and set it using the `server.tlsSecret` or `agent.tlsSecret` values.
+If managing TLS secrets outside of Helm, it is possible to create a TLS secret (named `kiam.local-tls`, for example) and set it using the `server.tlsSecret` or `agent.tlsSecret` parameters.
 
 ## Troubleshooting
 

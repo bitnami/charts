@@ -1178,3 +1178,12 @@ networkPolicy:
 ## Array with extra yaml to deploy with the chart. Evaluated as a template
 ##
 extraDeploy: []
+
+## Enable diagnostic mode in the deployment
+##
+diagnosticMode:
+  enabled: false
+  command:
+    - sleep
+  args:
+    - infinity
