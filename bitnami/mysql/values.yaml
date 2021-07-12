@@ -881,7 +881,8 @@ metrics:
     annotations:
       prometheus.io/scrape: "true"
       prometheus.io/port: "{{ .Values.metrics.service.port }}"
-  ## @param metrics.extraArgs [object] Extra args to be passed to mysqld_exporter
+  ## @param metrics.extraArgs.primary Extra args to be passed to mysqld_exporter on Primary pods
+  ## @param metrics.extraArgs.secondary Extra args to be passed to mysqld_exporter on Secondary pods
   ## ref: https://github.com/prometheus/mysqld_exporter/
   ## E.g.
   ## - --collect.auto_increment.columns
