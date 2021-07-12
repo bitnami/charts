@@ -574,8 +574,8 @@ imageRenderer:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param resources.limits The resources limits for Grafana containers
-  ## @param resources.requests The requested resources for Grafana containers
+  ## @param imageRenderer.resources.limits The resources limits for Grafana containers
+  ## @param imageRenderer.resources.requests The requested resources for Grafana containers
   ##
   resources:
     ## Example:
