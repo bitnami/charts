@@ -65,6 +65,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `commonAnnotations` | Common annotations to add to all MySQL resources (sub-charts are not considered). Evaluated as a template | `{}`            |
 | `commonLabels`      | Common labels to add to all MySQL resources (sub-charts are not considered). Evaluated as a template      | `{}`            |
 | `extraDeploy`       | Array with extra yaml to deploy with the chart. Evaluated as a template                                   | `[]`            |
+| `schedulerName`     | Use an alternate scheduler, e.g. "stork".                                                                 | `nil`           |
 
 
 ### MySQL common parameters
@@ -77,7 +78,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.pullPolicy`         | MySQL image pull policy                                                                                                                                                             | `IfNotPresent`         |
 | `image.pullSecrets`        | Specify docker-registry secret names as an array                                                                                                                                    | `[]`                   |
 | `image.debug`              | Specify if debug logs should be enabled                                                                                                                                             | `false`                |
-| `schedulerName`            | Use an alternate scheduler, e.g. "stork".                                                                                                                                           | `nil`                  |
 | `architecture`             | MySQL architecture (`standalone` or `replication`)                                                                                                                                  | `standalone`           |
 | `auth.rootPassword`        | Password for the `root` user. Ignored if existing secret is provided                                                                                                                | `""`                   |
 | `auth.database`            | Name for a custom database to create                                                                                                                                                | `my_database`          |
@@ -290,7 +290,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.service.type`                       | Kubernetes service type for MySQL Prometheus Exporter                                                                 | `ClusterIP`               |
 | `metrics.service.port`                       | MySQL Prometheus Exporter service port                                                                                | `9104`                    |
 | `metrics.service.annotations`                | Prometheus exporter service annotations                                                                               | `{}`                      |
-| `metrics.extraArgs`                          | Extra args to be passed to mysqld_exporter                                                                            | `{}`                      |
+| `metrics.extraArgs.primary`                  | Extra args to be passed to mysqld_exporter on Primary pods                                                            | `[]`                      |
+| `metrics.extraArgs.secondary`                | Extra args to be passed to mysqld_exporter on Secondary pods                                                          | `[]`                      |
 | `metrics.resources.limits`                   | The resources limits for MySQL prometheus exporter containers                                                         | `{}`                      |
 | `metrics.resources.requests`                 | The requested resources for MySQL prometheus exporter containers                                                      | `{}`                      |
 | `metrics.livenessProbe.enabled`              | Enable livenessProbe                                                                                                  | `true`                    |
