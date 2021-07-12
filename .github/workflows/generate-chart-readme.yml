@@ -30,6 +30,9 @@ on:
       - 'bitnami/nginx-ingress-controller/values.yaml'
       - 'bitnami/node/values.yaml'
       - 'bitnami/node-exporter/values.yaml'
+      - 'bitnami/phpmyadmin/values.yaml'
+      - 'bitnami/postgresql/values.yaml'
+      - 'bitnami/node/postgresql-ha.yaml'
 
 jobs:
   generate-chart-readme:
