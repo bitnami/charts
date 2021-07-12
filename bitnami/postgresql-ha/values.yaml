@@ -43,6 +43,49 @@ global:
     adminPassword: ""
     existingSecret: ""
 
+## @section General parameters
+
+## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
+##
+nameOverride:
+## @param fullnameOverride String to fully override common.names.fullname template
+##
+fullnameOverride:
+## @param clusterDomain Kubernetes Cluster Domain
+##
+clusterDomain: cluster.local
+## @param commonAnnotations Common annotations to add to all resources (sub-charts are not considered). Evaluated as a template
+##
+commonAnnotations: {}
+## @param commonLabels Common labels to add to all resources (sub-charts are not considered). Evaluated as a template
+##
+commonLabels: {}
+## @param extraDeploy Array of extra objects to deploy with the release (evaluated as a template)
+##
+extraDeploy: []
+## Enable diagnostic mode in the deployment
+## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+## @param diagnosticMode.command [array] Command to override all containers in the deployment
+## @param diagnosticMode.args [array] Args to override all containers in the deployment
+##
+diagnosticMode:
+  enabled: false
+  command:
+    - sleep
+  args:
+    - infinity
+## Pod Service Account
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+serviceAccount:
+  ## @param serviceAccount.enabled Enable service account (Note: Service Account will only be automatically created if `serviceAccount.name` is not set)
+  ##
+  enabled: false
+  ## @param serviceAccount.name Name of an already existing service account. Setting this value disables the automatic service account creation
+  ##
+  name:
+
+## @section PostgreSQL with Repmgr parameters
+
 ## Bitnami PostgreSQL image
 ## ref: https://hub.docker.com/r/bitnami/postgresql/tags/
 ## @param postgresqlImage.registry PostgreSQL with Repmgr image registry
@@ -68,171 +111,45 @@ postgresqlImage:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
-
   ## Set to true if you would like to see extra information on logs
   ##
   debug: false
-
-## Bitnami Pgpool image
-## ref: https://hub.docker.com/r/bitnami/pgpool/tags/
-## @param pgpoolImage.registry Pgpool image registry
-## @param pgpoolImage.repository Pgpool image repository
-## @param pgpoolImage.tag Pgpool image tag
-## @param pgpoolImage.pullPolicy Pgpool image pull policy
-## @param pgpoolImage.pullSecrets Specify docker-registry secret names as an array
-## @param pgpoolImage.debug Specify if debug logs should be enabled
-##
-pgpoolImage:
-  registry: docker.io
-  repository: bitnami/pgpool
-  tag: 4.2.3-debian-10-r38
-  ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-  ##
-  pullPolicy: IfNotPresent
-  ## Optionally specify an array of imagePullSecrets.
-  ## Secrets must be manually created in the namespace.
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-  ## Example:
-  ## pullSecrets:
-  ##   - myRegistryKeySecretName
-  ##
-  pullSecrets: []
-
-  ## Set to true if you would like to see extra information on logs
-  ##
-  debug: false
-
-## Init containers parameters:
-## volumePermissions: Change the owner and group of the persistent volume mountpoint
-## @param volumePermissionsImage.registry Init container volume-permissions image registry
-## @param volumePermissionsImage.repository Init container volume-permissions image repository
-## @param volumePermissionsImage.tag Init container volume-permissions image tag
-## @param volumePermissionsImage.pullPolicy Init container volume-permissions image pull policy
-## @param volumePermissionsImage.pullSecrets Specify docker-registry secret names as an array
-##
-volumePermissionsImage:
-  registry: docker.io
-  repository: bitnami/bitnami-shell
-  tag: 10-debian-10-r125
-  ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-  ##
-  pullPolicy: Always
-  ## Optionally specify an array of imagePullSecrets.
-  ## Secrets must be manually created in the namespace.
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-  ## Example:
-  ## pullSecrets:
-  ##   - myRegistryKeySecretName
-  ##
-  pullSecrets: []
-
-## Bitnami PostgreSQL Prometheus exporter image
-## ref: https://hub.docker.com/r/bitnami/pgpool/tags/
-## @param metricsImage.registry PostgreSQL Prometheus exporter image registry
-## @param metricsImage.repository PostgreSQL Prometheus exporter image repository
-## @param metricsImage.tag PostgreSQL Prometheus exporter image tag
-## @param metricsImage.pullPolicy PostgreSQL Prometheus exporter image pull policy
-## @param metricsImage.pullSecrets Specify docker-registry secret names as an array
-## @param metricsImage.debug Specify if debug logs should be enabled
-##
-metricsImage:
-  registry: docker.io
-  repository: bitnami/postgres-exporter
-  tag: 0.9.0-debian-10-r108
-  ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-  ##
-  pullPolicy: IfNotPresent
-  ## Optionally specify an array of imagePullSecrets.
-  ## Secrets must be manually created in the namespace.
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-  ## Example:
-  ## pullSecrets:
-  ##   - myRegistryKeySecretName
-  ##
-  pullSecrets: []
-
-  ## Set to true if you would like to see extra information on logs
-  ##
-  debug: false
-
-## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
-##
-nameOverride:
-
-## @param fullnameOverride String to fully override common.names.fullname template
-##
-fullnameOverride:
-
-## @param clusterDomain Kubernetes Cluster Domain
-##
-clusterDomain: cluster.local
-
-## Pod Service Account
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
-serviceAccount:
-  ## @param serviceAccount.enabled Enable service account (Note: Service Account will only be automatically created if `serviceAccount.name` is not set)
-  ##
-  enabled: false
-  ## @param serviceAccount.name Name of an already existing service account. Setting this value disables the automatic service account creation
-  ##
-  name:
-
-## @param commonAnnotations Common annotations to add to all resources (sub-charts are not considered). Evaluated as a template
-##
-commonAnnotations: {}
-
-## @param commonLabels Common labels to add to all resources (sub-charts are not considered). Evaluated as a template
-##
-commonLabels: {}
-
 ## PostgreSQL parameters
 ##
 postgresql:
   ## @param postgresql.labels Labels to add to the StatefulSet. Evaluated as template
   ##
   labels: {}
-
   ## @param postgresql.podLabels Labels to add to the StatefulSet pods. Evaluated as template
   ##
   podLabels: {}
-
   ## @param postgresql.replicaCount Number of replicas to deploy
   ##
   replicaCount: 2
-
   ## @param postgresql.updateStrategyType Update strategy for PostgreSQL statefulset
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategyType: RollingUpdate
-
   ## @param postgresql.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-
   ## @param postgresql.podAnnotations Additional pod annotations
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
-
   ## @param postgresql.priorityClassName Pod priority class
   ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
   priorityClassName: ""
-
   ## @param postgresql.podAffinityPreset PostgreSQL pod affinity preset. Ignored if `postgresql.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAffinityPreset: ""
-
   ## @param postgresql.podAntiAffinityPreset PostgreSQL pod anti-affinity preset. Ignored if `postgresql.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAntiAffinityPreset: soft
-
   ## PostgreSQL node affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
   ##
@@ -252,23 +169,19 @@ postgresql:
     ##   - e2e-az2
     ##
     values: []
-
   ## @param postgresql.affinity Affinity for PostgreSQL pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: postgresql.podAffinityPreset, postgresql.podAntiAffinityPreset, and postgresql.nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
-
   ## @param postgresql.nodeSelector Node labels for PostgreSQL pods assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-
   ## @param postgresql.tolerations Tolerations for PostgreSQL pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-
   ## K8s Security Context
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param postgresql.securityContext.enabled Enable security context for PostgreSQL with Repmgr
@@ -277,7 +190,6 @@ postgresql:
   securityContext:
     enabled: true
     fsGroup: 1001
-
   ## Container Security Context
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param postgresql.containerSecurityContext.enabled Enable container security context
@@ -286,62 +198,48 @@ postgresql:
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
-
   ## @param postgresql.customLivenessProbe Override default liveness probe
   ##
   customLivenessProbe: {}
-
   ## @param postgresql.customReadinessProbe Override default readiness probe
   ##
   customReadinessProbe: {}
-
   ## @param postgresql.customStartupProbe Override default startup probe
   ##
   customStartupProbe: {}
-
   ## @param postgresql.command Override default container command (useful when using custom images)
   ##
   command:
-
   ## @param postgresql.args Override default container args (useful when using custom images)
   ##
   args:
-
   ## @param postgresql.lifecycleHooks LifecycleHook to set additional configuration at startup, e.g. LDAP settings via REST API. Evaluated as a template
   ##
   lifecycleHooks:
-
   ## @param postgresql.extraEnvVars Array containing extra environment variables
   ## For example:
   ##  - name: BEARER_AUTH
   ##    value: true
   ##
   extraEnvVars: []
-
   ## @param postgresql.extraEnvVarsCM ConfigMap with extra environment variables
   ##
   extraEnvVarsCM:
-
   ## @param postgresql.extraEnvVarsSecret Secret with extra environment variables
   ##
   extraEnvVarsSecret:
-
   ## @param postgresql.extraVolumes Extra volumes to add to the deployment
   ##
   extraVolumes: []
-
   ## @param postgresql.extraVolumeMounts Extra volume mounts to add to the container. Normally used with `extraVolumes`.
   ##
   extraVolumeMounts: []
-
   ## @param postgresql.initContainers Extra init containers to add to the deployment
   ##
   initContainers: []
-
   ## @param postgresql.sidecars Extra sidecar containers to add to the deployment
   ##
   sidecars: []
-
   ## PostgreSQL containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -362,7 +260,6 @@ postgresql:
     ##    cpu: 250m
     ##    memory: 256Mi
     requests: {}
-
   ## PostgreSQL container's liveness probe
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ## @param postgresql.livenessProbe.enabled Enable livenessProbe
@@ -411,7 +308,6 @@ postgresql:
     timeoutSeconds: 5
     successThreshold: 1
     failureThreshold: 10
-
   ## Pod disruption budget configuration
   ##
   pdb:
@@ -424,7 +320,6 @@ postgresql:
     ## @param postgresql.pdb.maxUnavailable Maximum number / percentage of pods that may be made unavailable
     ##
     maxUnavailable:
-
   ## PostgreSQL configuration parameters
   ## @param postgresql.username PostgreSQL username
   ## @param postgresql.password PostgreSQL password
@@ -433,42 +328,33 @@ postgresql:
   username: postgres
   password:
   database:
-
   ## @param postgresql.existingSecret PostgreSQL password using existing secret
   ##
   existingSecret:
-
   ## @param postgresql.postgresPassword PostgreSQL password for the `postgres` user when `username` is not `postgres`
   ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#creating-a-database-user-on-first-run (see note!)
   ##
   postgresPassword:
-
   ## @param postgresql.usePasswordFile Set to `true` to mount PostgreSQL secret as a file instead of passing environment variable
   ##
   usePasswordFile:
-
   ## @param postgresql.repmgrUsePassfile Set to `true` to configure repmgrl to use `passfile` instead of `password` vars*:*:*:username:password" and use it to configure Repmgr instead of using password (Requires Postgresql 10+, otherwise ignored)
   ## ref: https://repmgr.org/docs/current/configuration-password-management.html
   ##      https://www.postgresql.org/docs/current/libpq-pgpass.html
   ##
   repmgrUsePassfile:
-
   ## @param postgresql.repmgrPassfilePath Custom path where `passfile` will be stored
   ##
   repmgrPassfilePath:
-
   ## @param postgresql.upgradeRepmgrExtension Upgrade repmgr extension in the database
   ##
   upgradeRepmgrExtension: false
-
   ## @param postgresql.pgHbaTrustAll Configures PostgreSQL HBA to trust every user
   ##
   pgHbaTrustAll: false
-
   ## @param postgresql.syncReplication Make the replication synchronous. This will wait until the data is synchronized in all the replicas before other query can be run. This ensures the data availability at the expenses of speed.
   ##
   syncReplication: false
-
   ## Repmgr configuration parameters
   ## @param postgresql.repmgrUsername PostgreSQL Repmgr username
   ## @param postgresql.repmgrPassword PostgreSQL Repmgr password
@@ -485,7 +371,6 @@ postgresql:
   repmgrConnectTimeout: 5
   repmgrReconnectAttempts: 3
   repmgrReconnectInterval: 5
-
   ## Audit settings
   ## https://github.com/bitnami/bitnami-docker-postgresql#auditing
   ##
@@ -514,44 +399,34 @@ postgresql:
     ## @param postgresql.audit.logTimezone Timezone for the log timestamps
     ##
     logTimezone: ""
-
   ## @param postgresql.sharedPreloadLibraries Shared preload libraries (comma-separated list)
   ##
   sharedPreloadLibraries: "pgaudit, repmgr"
-
   ## @param postgresql.maxConnections Maximum total connections
   ##
   maxConnections:
-
   ## @param postgresql.postgresConnectionLimit Maximum connections for the postgres user
   ##
   postgresConnectionLimit:
-
   ## @param postgresql.dbUserConnectionLimit Maximum connections for the created user
   ##
   dbUserConnectionLimit:
-
   ## @param postgresql.tcpKeepalivesInterval TCP keepalives interval
   ##
   tcpKeepalivesInterval:
-
   ## @param postgresql.tcpKeepalivesIdle TCP keepalives idle
   ##
   tcpKeepalivesIdle:
-
   ## @param postgresql.tcpKeepalivesCount TCP keepalives count
   ##
   tcpKeepalivesCount:
-
   ## @param postgresql.statementTimeout Statement timeout
   ##
   statementTimeout:
-
   ## @param postgresql.pghbaRemoveFilters Comma-separated list of patterns to remove from the pg_hba.conf file
   ## (cannot be used with custom pg_hba.conf)
   ##
   pghbaRemoveFilters:
-
   ## @param postgresql.extraInitContainers Extra init containers
   ## Example:
   ## extraInitContainers:
@@ -560,7 +435,6 @@ postgresql:
   ##     command: ['do', 'something']
   ##
   extraInitContainers: []
-
   ## @param postgresql.repmgrConfiguration Repmgr configuration
   ## You can use this parameter to specify the content for repmgr.conf
   ## Otherwise, a repmgr.conf will be generated based on the environment variables
@@ -573,7 +447,6 @@ postgresql:
   ##   ...
   ##
   repmgrConfiguration: ""
-
   ## @param postgresql.configuration PostgreSQL configuration
   ## You can use this parameter to specify the content for postgresql.conf
   ## Otherwise, a repmgr.conf will be generated based on the environment variables
@@ -586,7 +459,6 @@ postgresql:
   ##   ...
   ##
   configuration: ""
-
   ## @param postgresql.pgHbaConfiguration PostgreSQL client authentication configuration
   ## You can use this parameter to specify the content for pg_hba.conf
   ## Otherwise, a repmgr.conf will be generated based on the environment variables
@@ -599,12 +471,10 @@ postgresql:
   ##   ...
   ##
   pgHbaConfiguration: ""
-
   ## @param postgresql.configurationCM Name of existing ConfigMap with configuration files
   ## NOTE: This will override postgresql.repmgrConfiguration, postgresql.configuration and postgresql.pgHbaConfiguration
   ##
   configurationCM:
-
   ## @param postgresql.extendedConf Extended PostgreSQL configuration (appended to main or default configuration). Implies `volumePermissions.enabled`.
   ## Similar to postgresql.configuration, but _appended_ to the main configuration
   ## ref: https://github.com/bitnami/bitnami-docker-postgresql-repmgr#allow-settings-to-be-loaded-from-files-other-than-the-default-postgresqlconf
@@ -615,12 +485,10 @@ postgresql:
   ##   ...
   ##
   extendedConf: ""
-
   ## @param postgresql.extendedConfCM ConfigMap with PostgreSQL extended configuration
   ## NOTE: This will override postgresql.extendedConf and implies `volumePermissions.enabled`
   ##
   extendedConfCM:
-
   ## @param postgresql.initdbScripts Dictionary of initdb scripts
   ## Specify dictionary of scripts to be run at first boot
   ## The allowed extensions are `.sh`, `.sql` and `.sql.gz`
@@ -640,7 +508,6 @@ postgresql:
   ## Note: can be used with initdbScriptsCM or initdbScripts
   ##
   initdbScriptsSecret:
-
   ## TLS configuration
   ##
   tls:
@@ -665,6 +532,36 @@ postgresql:
     ##
     certCAFilename:
 
+## @section Pgpool parameters
+
+## Bitnami Pgpool image
+## ref: https://hub.docker.com/r/bitnami/pgpool/tags/
+## @param pgpoolImage.registry Pgpool image registry
+## @param pgpoolImage.repository Pgpool image repository
+## @param pgpoolImage.tag Pgpool image tag
+## @param pgpoolImage.pullPolicy Pgpool image pull policy
+## @param pgpoolImage.pullSecrets Specify docker-registry secret names as an array
+## @param pgpoolImage.debug Specify if debug logs should be enabled
+##
+pgpoolImage:
+  registry: docker.io
+  repository: bitnami/pgpool
+  tag: 4.2.3-debian-10-r38
+  ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## Example:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  pullSecrets: []
+  ## Set to true if you would like to see extra information on logs
+  ##
+  debug: false
 ## Pgpool parameters
 ##
 pgpool:
@@ -678,118 +575,92 @@ pgpool:
   ## usernames: 'user01;user02'
   ##
   usernames:
-
   ## @param pgpool.passwords Comma or semicolon separated list of the associated passwords for the users above
   ## e.g:
   ## passwords: 'pass01;pass02'
   ##
   passwords:
-
   ## @param pgpool.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-
   ## @param pgpool.customUsersSecret Name of a secret containing the usernames and passwords of accounts that will be added to pgpool_passwd
   ## The secret must contain the keys "usernames" and "passwords" respectively.
   ##
   customUsersSecret:
-
   ## @param pgpool.srCheckDatabase Name of the database to perform streaming replication checks
   ##
   srCheckDatabase: postgres
-
   ## @param pgpool.labels Labels to add to the Deployment. Evaluated as template
   ##
   labels: {}
-
   ## @param pgpool.podLabels Labels to add to the pods. Evaluated as template
   ##
   podLabels: {}
-
   ## @param pgpool.serviceLabels Labels to add to the service. Evaluated as template
   ##
   serviceLabels: {}
-
   ## @param pgpool.customLivenessProbe Override default liveness probe
   ##
   customLivenessProbe: {}
-
   ## @param pgpool.customReadinessProbe Override default readiness probe
   ##
   customReadinessProbe: {}
-
   ## @param pgpool.customStartupProbe Override default startup probe
   ##
   customStartupProbe: {}
-
   ## @param pgpool.command Override default container command (useful when using custom images)
   ##
   command:
-
   ## @param pgpool.args Override default container args (useful when using custom images)
   ##
   args:
-
   ## @param pgpool.lifecycleHooks LifecycleHook to set additional configuration at startup, e.g. LDAP settings via REST API. Evaluated as a template
   ##
   lifecycleHooks:
-
   ## @param pgpool.extraEnvVars Array containing extra environment variables
   ## For example:
   ##  - name: BEARER_AUTH
   ##    value: true
   ##
   extraEnvVars: []
-
   ## @param pgpool.extraEnvVarsCM ConfigMap with extra environment variables
   ##
   extraEnvVarsCM:
-
   ## @param pgpool.extraEnvVarsSecret Secret with extra environment variables
   ##
   extraEnvVarsSecret:
-
   ## @param pgpool.extraVolumes Extra volumes to add to the deployment
   ##
   extraVolumes: []
-
   ## @param pgpool.extraVolumeMounts Extra volume mounts to add to the container. Normally used with `extraVolumes`
   ##
   extraVolumeMounts: []
-
   ## @param pgpool.initContainers Extra init containers to add to the deployment
   ##
   initContainers: []
-
   ## @param pgpool.sidecars Extra sidecar containers to add to the deployment
   ##
   sidecars: []
-
   ## @param pgpool.replicaCount The number of replicas to deploy
   ##
   replicaCount: 1
-
   ## @param pgpool.podAnnotations Additional pod annotations
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
-
   ## @param pgpool.priorityClassName Pod priority class
   ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
   priorityClassName: ""
-
   ## @param pgpool.podAffinityPreset Pgpool pod affinity preset. Ignored if `pgpool.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAffinityPreset: ""
-
   ## @param pgpool.podAntiAffinityPreset Pgpool pod anti-affinity preset. Ignored if `pgpool.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAntiAffinityPreset: soft
-
   ## Pgpool node affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
   ##
@@ -809,23 +680,19 @@ pgpool:
     ##   - e2e-az2
     ##
     values: []
-
   ## @param pgpool.affinity Affinity for Pgpool pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: pgpool.podAffinityPreset, pgpool.podAntiAffinityPreset, and pgpool.nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
-
   ## @param pgpool.nodeSelector Node labels for Pgpool pods assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-
   ## @param pgpool.tolerations Tolerations for Pgpool pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-
   ## K8s Security Context
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param pgpool.securityContext.enabled Enable security context for Pgpool
@@ -834,7 +701,6 @@ pgpool:
   securityContext:
     enabled: true
     fsGroup: 1001
-
   ## Container Security Context
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param pgpool.containerSecurityContext.enabled Enable container security context
@@ -843,7 +709,6 @@ pgpool:
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
-
   ## Pgpool containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -864,7 +729,6 @@ pgpool:
     ##    cpu: 250m
     ##    memory: 256Mi
     requests: {}
-
   ## Pgpool container's liveness probe
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ## @param pgpool.livenessProbe.enabled Enable livenessProbe
@@ -913,7 +777,6 @@ pgpool:
     timeoutSeconds: 5
     successThreshold: 1
     failureThreshold: 10
-
   ## Pod disruption budget configuration
   ##
   pdb:
@@ -926,84 +789,68 @@ pgpool:
     ## @param pgpool.pdb.maxUnavailable Maximum number / percentage of pods that may be made unavailable
     ##
     maxUnavailable:
-
   ## @param pgpool.updateStrategy Strategy used to replace old Pods by new ones
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
   ##
   updateStrategy: {}
-
   ## @param pgpool.minReadySeconds How many seconds a pod needs to be ready before killing the next, during update
   ##
   minReadySeconds:
-
   ## Credentials for the pgpool administrator
   ## @param pgpool.adminUsername Pgpool Admin username
   ## @param pgpool.adminPassword Pgpool Admin password
   ##
   adminUsername: admin
   adminPassword:
-
   ## @param pgpool.logConnections Log all client connections (PGPOOL_ENABLE_LOG_CONNECTIONS)
   ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
   ##
   logConnections: false
-
   ## @param pgpool.logHostname Log the client hostname instead of IP address (PGPOOL_ENABLE_LOG_HOSTNAME)
   ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
   ##
   logHostname: true
-
   ## @param pgpool.logPerNodeStatement Log every SQL statement for each DB node separately (PGPOOL_ENABLE_LOG_PER_NODE_STATEMENT)
   ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
   ##
   logPerNodeStatement: false
-
   ## @param pgpool.logLinePrefix Format of the log entry lines (PGPOOL_LOG_LINE_PREFIX)
   ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
   ## ref: https://www.pgpool.net/docs/latest/en/html/runtime-config-logging.html
   ##
   logLinePrefix:
-
   ## @param pgpool.clientMinMessages Log level for clients
   ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
   ##
   clientMinMessages: error
-
   ## @param pgpool.numInitChildren The number of preforked Pgpool-II server processes. It is also the concurrent
   ## connections limit to Pgpool-II from clients. Must be a positive integer. (PGPOOL_NUM_INIT_CHILDREN)
   ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
   ##
   numInitChildren:
-
   ## @param pgpool.maxPool The maximum number of cached connections in each child process (PGPOOL_MAX_POOL)
   ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
   ##
   maxPool:
-
   ## @param pgpool.childMaxConnections The maximum number of client connections in each child process (PGPOOL_CHILD_MAX_CONNECTIONS)
   ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
   ##
   childMaxConnections:
-
   ## @param pgpool.childLifeTime The time in seconds to terminate a Pgpool-II child process if it remains idle (PGPOOL_CHILD_LIFE_TIME)
   ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
   ##
   childLifeTime:
-
   ## @param pgpool.clientIdleLimit The time in seconds to disconnect a client if it remains idle since the last query (PGPOOL_CLIENT_IDLE_LIMIT)
   ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
   ##
   clientIdleLimit:
-
   ## @param pgpool.connectionLifeTime The time in seconds to terminate the cached connections to the PostgreSQL backend (PGPOOL_CONNECTION_LIFE_TIME)
   ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
   ##
   connectionLifeTime:
-
   ## @param pgpool.useLoadBalancing Use Pgpool Load-Balancing
   ##
   useLoadBalancing: true
-
   ## @param pgpool.configuration Pgpool configuration
   ## You can use this parameter to specify the content for pgpool.conf
   ## Otherwise, a repmgr.conf will be generated based on the environment variables
@@ -1016,13 +863,11 @@ pgpool:
   ##   ...
   ##
   configuration: ""
-
   ## @param pgpool.configurationCM ConfigMap with Pgpool configuration
   ## NOTE: This will override pgpool.configuration parameter
   ## The file used must be named `pgpool.conf`
   ##
   configurationCM:
-
   ## @param pgpool.initdbScripts Dictionary of initdb scripts
   ## Specify dictionary of scripts to be run every time Pgpool container is initialized
   ## The allowed extension is `.sh`
@@ -1034,17 +879,14 @@ pgpool:
   ##      echo "Do something."
   ##
   initdbScripts:
-
   ## @param pgpool.initdbScriptsCM ConfigMap with scripts to be run every time Pgpool container is initialized
   ## NOTE: This will override pgpool.initdbScripts
   ##
   initdbScriptsCM:
-
   ## @param pgpool.initdbScriptsSecret Secret with scripts to be run every time Pgpool container is initialized
   ## Note: can be used with initdbScriptsCM or initdbScripts
   ##
   initdbScriptsSecret:
-
   ##
   ## TLS configuration
   ##
@@ -1073,6 +915,8 @@ pgpool:
     ##
     certCAFilename:
 
+## @section LDAP parameters
+
 ## LDAP parameters
 ## @param ldap.enabled Enable LDAP support
 ## @param ldap.existingSecret Name of existing secret to use for LDAP passwords
@@ -1097,39 +941,36 @@ ldap:
   tlsReqcert:
   nssInitgroupsIgnoreusers: root,nslcd
 
-## Init Container parameters
-##
-volumePermissions:
-  ## @param volumePermissions.enabled Enable init container to adapt volume permissions
-  ##
-  enabled: false
-  ## K8s Security Context
-  ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-  ## @param volumePermissions.securityContext.runAsUser Init container volume-permissions User ID
-  ##
-  securityContext:
-    runAsUser: 0
-  ## Init container' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ## We usually recommend not to specify default resources and to leave this as a conscious
-  ## choice for the user. This also increases chances charts run on environments with little
-  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
-  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param volumePermissions.resources.limits The resources limits for the container
-  ## @param volumePermissions.resources.requests The requested resources for the container
-  ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    requests: {}
+## @section Metrics parameters
 
+## Bitnami PostgreSQL Prometheus exporter image
+## ref: https://hub.docker.com/r/bitnami/pgpool/tags/
+## @param metricsImage.registry PostgreSQL Prometheus exporter image registry
+## @param metricsImage.repository PostgreSQL Prometheus exporter image repository
+## @param metricsImage.tag PostgreSQL Prometheus exporter image tag
+## @param metricsImage.pullPolicy PostgreSQL Prometheus exporter image pull policy
+## @param metricsImage.pullSecrets Specify docker-registry secret names as an array
+## @param metricsImage.debug Specify if debug logs should be enabled
+##
+metricsImage:
+  registry: docker.io
+  repository: bitnami/postgres-exporter
+  tag: 0.9.0-debian-10-r108
+  ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## Example:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  pullSecrets: []
+  ## Set to true if you would like to see extra information on logs
+  ##
+  debug: false
 ## PostgreSQL Prometheus exporter parameters
 ##
 metrics:
@@ -1144,7 +985,6 @@ metrics:
   securityContext:
     enabled: true
     runAsUser: 1001
-
   ## Prometheus exporter containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -1165,7 +1005,6 @@ metrics:
     ##    cpu: 250m
     ##    memory: 256Mi
     requests: {}
-
   ## Prometheus exporter container's liveness probe
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ## @param metrics.livenessProbe.enabled Enable livenessProbe
@@ -1214,13 +1053,11 @@ metrics:
     timeoutSeconds: 5
     successThreshold: 1
     failureThreshold: 10
-
   ## @param metrics.annotations [object] Annotations for PostgreSQL Prometheus exporter service
   ##
   annotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "9187"
-
   ## @param metrics.customMetrics Additional custom metrics
   ## ref: https://github.com/wrouesnel/postgres_exporter#adding-new-metrics-via-a-config-file
   ## customMetrics:
@@ -1235,7 +1072,6 @@ metrics:
   ##           description: "Size of the database in bytes"
   ##
   customMetrics:
-
   ## @param metrics.extraEnvVars An array to add extra environment variables to configure postgres-exporter
   ## see: https://github.com/wrouesnel/postgres_exporter#environment-variables
   ## For example:
@@ -1244,14 +1080,12 @@ metrics:
   ##    value: "true"
   ##
   extraEnvVars: {}
-
   ## Enable this if you're using Prometheus Operator
   ##
   serviceMonitor:
     ## @param metrics.serviceMonitor.enabled if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)
     ##
     enabled: false
-
     ## @param metrics.serviceMonitor.namespace Optional namespace which Prometheus is running in
     ## Fallback to the prometheus default unless specified
     ##
@@ -1266,26 +1100,82 @@ metrics:
     ## scrapeTimeout: 10s
     ##
     scrapeTimeout:
-
     ## @param metrics.serviceMonitor.selector [object] Defaults to what's used if you follow CoreOS [Prometheus Install Instructions](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#tldr)
     ## [Prometheus Selector Label](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-operator-1)
     ## [Kube Prometheus Selector Label](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#exporters)
     ##
     selector:
       prometheus: kube-prometheus
-
     ## @param metrics.serviceMonitor.relabelings ServiceMonitor relabelings. Value is evaluated as a template
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
     ##
     relabelings: []
-
     ## @param metrics.serviceMonitor.metricRelabelings ServiceMonitor metricRelabelings. Value is evaluated as a template
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
     ##
     metricRelabelings: []
 
-## Persistence parameters
+## @section Volume permissions parameters
+
+## Init containers parameters:
+## volumePermissions: Change the owner and group of the persistent volume mountpoint
+## @param volumePermissionsImage.registry Init container volume-permissions image registry
+## @param volumePermissionsImage.repository Init container volume-permissions image repository
+## @param volumePermissionsImage.tag Init container volume-permissions image tag
+## @param volumePermissionsImage.pullPolicy Init container volume-permissions image pull policy
+## @param volumePermissionsImage.pullSecrets Specify docker-registry secret names as an array
 ##
+volumePermissionsImage:
+  registry: docker.io
+  repository: bitnami/bitnami-shell
+  tag: 10-debian-10-r125
+  ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: Always
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## Example:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  pullSecrets: []
+## Init Container parameters
+##
+volumePermissions:
+  ## @param volumePermissions.enabled Enable init container to adapt volume permissions
+  ##
+  enabled: false
+  ## K8s Security Context
+  ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ## @param volumePermissions.securityContext.runAsUser Init container volume-permissions User ID
+  ##
+  securityContext:
+    runAsUser: 0
+  ## Init container' resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param volumePermissions.resources.limits The resources limits for the container
+  ## @param volumePermissions.resources.requests The requested resources for the container
+  ##
+  resources:
+    ## Example:
+    ## limits:
+    ##    cpu: 100m
+    ##    memory: 128Mi
+    limits: {}
+    ## Examples:
+    ## requests:
+    ##    cpu: 100m
+    ##    memory: 128Mi
+    requests: {}
+
+## @section Persistence parameters
+
 persistence:
   ## @param persistence.enabled Enable data persistence
   ##
@@ -1322,6 +1212,8 @@ persistence:
   ##     app: my-app
   ##
   selector: {}
+
+## @section Traffic Exposure parameters
 
 ## PgPool service parameters
 ##
@@ -1370,14 +1262,12 @@ service:
   ## @param service.serviceLabels Labels for PostgreSQL service
   ##
   serviceLabels: {}
-
 ## NetworkPolicy parameters
 ##
 networkPolicy:
   ## @param networkPolicy.enabled Enable NetworkPolicy
   ##
   enabled: false
-
   ## @param networkPolicy.allowExternal Don't require client label for connections
   ## The Policy model to apply. When set to false, only pods with the correct
   ## client labels will have network access to the port PostgreSQL is listening
@@ -1385,19 +1275,3 @@ networkPolicy:
   ## (with the correct destination port).
   ##
   allowExternal: true
-
-## @param extraDeploy Array of extra objects to deploy with the release (evaluated as a template)
-##
-extraDeploy: []
-
-## Enable diagnostic mode in the deployment
-## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
-## @param diagnosticMode.command [array] Command to override all containers in the deployment
-## @param diagnosticMode.args [array] Args to override all containers in the deployment
-##
-diagnosticMode:
-  enabled: false
-  command:
-    - sleep
-  args:
-    - infinity
