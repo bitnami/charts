@@ -16,6 +16,17 @@ global:
   imagePullSecrets: []
   storageClass:
 
+## @section Common parameters
+
+## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
+##
+nameOverride:
+## @param fullnameOverride String to fully override common.names.fullname template
+##
+fullnameOverride:
+
+## @section PyTorch parameters
+
 ## Bitnami PyTorch image version
 ## ref: https://hub.docker.com/r/bitnami/pytorch/tags/
 ## @param image.registry PyTorch image registry
@@ -46,15 +57,6 @@ image:
   ## It turns BASH and/or NAMI debugging in the image
   ##
   debug: false
-
-## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
-##
-nameOverride:
-
-## @param fullnameOverride String to fully override common.names.fullname template
-##
-fullnameOverride:
-
 ## Bitnami git image version
 ## ref: https://hub.docker.com/r/bitnami/git/tags/
 ## @param git.registry Git image registry
@@ -76,7 +78,6 @@ git:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
-
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
 ##
@@ -123,7 +124,6 @@ volumePermissions:
     ##    cpu: 100m
     ##    memory: 128Mi
     requests: {}
-
 ## Service for the scheduler node
 ##
 service:
@@ -142,7 +142,6 @@ service:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
   annotations: {}
-
 ## PyTorch configuration. This will be executed as: python [file] [args]
 ## @param entrypoint.file Main entrypoint to your application
 ## @param entrypoint.args Args required by your entrypoint
@@ -150,29 +149,23 @@ service:
 entrypoint:
   file:
   args:
-
 ## @param mode Run PyTorch in standalone or distributed mode. Possible values: `standalone`, `distributed`
 ##
 mode: standalone
-
 ## @param hostAliases Deployment pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
 hostAliases: []
-
 ## @param worldSize Number of nodes that will run the code
 ## WORLD_SIZE will be set to this value
 ##
 worldSize:
-
 ## @param port PyTorch master port. `MASTER_PORT` will be set to this value
 ##
 port: 49875
-
 ## @param configMap Config map that contains the files you want to load in PyTorch
 ##
 configMap:
-
 ## Enable in order to download files from git repository.
 ##
 cloneFilesFromGit:
@@ -185,7 +178,6 @@ cloneFilesFromGit:
   ## @param cloneFilesFromGit.revision Revision from the repository to checkout
   ##
   revision: master
-
   ## @param cloneFilesFromGit.extraVolumeMounts Add extra volume mounts for the GIT container
   ## Useful to mount keys to connect through ssh. (normally used with extraVolumes)
   ## E.g:
@@ -194,7 +186,6 @@ cloneFilesFromGit:
   ##     mountPath: /.ssh/
   ##
   extraVolumeMounts: []
-
 ## @param extraEnvVars Additional environment variables
 ## e.g:
 ## extraEnvVars:
@@ -204,17 +195,14 @@ cloneFilesFromGit:
 ##     value: "ALL"
 ##
 extraEnvVars: []
-
 ## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
 podAffinityPreset: ""
-
 ## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
 podAntiAffinityPreset: soft
-
 ## Node affinity preset
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
 ##
@@ -234,23 +222,19 @@ nodeAffinityPreset:
   ##   - e2e-az2
   ##
   values: []
-
 ## @param affinity Affinity for pod assignment. Evaluated as a template.
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ## Note: podAffinityPreset, podAntiAffinityPreset, and nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
-
 ## @param nodeSelector Node labels for pod assignment. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
 nodeSelector: {}
-
 ## @param tolerations Tolerations for pod assignment. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
-
 ## Pod Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 ## @param securityContext.enabled Enable security context
@@ -261,7 +245,6 @@ securityContext:
   enabled: true
   fsGroup: 1001
   runAsUser: 1001
-
 ## Configure resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -282,7 +265,6 @@ resources:
   ##    cpu: 250m
   ##    memory: 256Mi
   requests: {}
-
 ## Configure extra options for liveness probe
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe
@@ -315,7 +297,6 @@ readinessProbe:
   timeoutSeconds: 1
   successThreshold: 1
   failureThreshold: 5
-
 ## Enable persistence using Persistent Volume Claims
 ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
@@ -323,20 +304,16 @@ persistence:
   ## @param persistence.enabled Use a Persistent Volume Claim to persist data
   ##
   enabled: true
-
   ## @param persistence.mountPath Data volume mount path
   ##
   mountPath: /bitnami/pytorch
-
   ## @param persistence.accessModes Persistent Volume Access Mode
   ##
   accessModes:
     - ReadWriteOnce
-
   ## @param persistence.size Size of data volume
   ##
   size: 8Gi
-
   ## @param persistence.storageClass Persistent Volume Storage Class
   ## If defined, storageClassName: <storageClass>
   ## If set to "-", storageClassName: "", which disables dynamic provisioning
@@ -345,15 +322,12 @@ persistence:
   ##   GKE, AWS & OpenStack)
   ##
   storageClass:
-
   ## @param persistence.annotations Persistent Volume Claim annotations
   ##
   annotations: {}
-
 ## @param extraVolumes Array to add extra volumes (evaluated as a template)
 ##
 extraVolumes: []
-
 ## @param extraVolumeMounts Array to add extra mounts (normally used with extraVolumes, evaluated as a template)
 ##
 extraVolumeMounts: []
