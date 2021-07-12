@@ -16,6 +16,29 @@ global:
   imagePullSecrets: []
   storageClass:
 
+## @section Common parameters
+
+## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
+##
+kubeVersion:
+## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
+##
+nameOverride:
+## @param fullnameOverride String to fully override common.names.fullname template
+##
+fullnameOverride:
+## @param commonAnnotations Common annotations to add to all phpBB resources (sub-charts are not considered). Evaluated as a template
+##
+commonAnnotations: {}
+## @param commonLabels Common labels to add to all phpBB resources (sub-charts are not considered). Evaluated as a template
+##
+commonLabels: {}
+## @param extraDeploy Array of extra objects to deploy with the release (evaluated as a template)
+##
+extraDeploy: []
+
+## @section phpBB parameters
+
 ## Bitnami phpBB image version
 ## ref: https://hub.docker.com/r/bitnami/phpbb/tags/
 ## @param image.registry phpBB image registry
@@ -42,65 +65,43 @@ image:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
-
   ## Set to true if you would like to see extra information on logs
   ##
   debug: false
-
-## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
-##
-kubeVersion:
-
-## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
-##
-nameOverride:
-
-## @param fullnameOverride String to fully override common.names.fullname template
-##
-fullnameOverride:
-
 ## @param replicaCount Number of replicas (requires ReadWriteMany PVC support)
 ##
 replicaCount: 1
-
 ## @param phpbbSkipInstall Skip phpBB installation wizard. Useful for migrations and restoring from SQL dump
 ## ref: https://github.com/bitnami/bitnami-docker-phpbb#configuration
 ##
 phpbbSkipInstall: "no"
-
 ## @param phpbbDisableSessionValidation Disable session validation
 ## ref: https://github.com/bitnami/bitnami-docker-phpbb#configuration
 ##
 phpbbDisableSessionValidation: "yes"
-
 ## @param phpbbUsername User of the application
 ## ref: https://github.com/bitnami/bitnami-docker-phpbb#configuration
 ##
 phpbbUsername: user
-
 ## @param phpbbPassword Application password
 ## Defaults to a random 10-character alphanumeric string if not set
 ## ref: https://github.com/bitnami/bitnami-docker-phpbb#configuration
 ##
 phpbbPassword:
-
 ## @param phpbbEmail Admin email
 ## ref: https://github.com/bitnami/bitnami-docker-phpbb#configuration
 ##
 phpbbEmail: user@example.com
-
 ## @param allowEmptyPassword Allow DB blank passwords
 ## ref: https://github.com/bitnami/bitnami-docker-phpbb#environment-variables
 ##
 allowEmptyPassword: "no"
-
 ## @param command Override default container command (useful when using custom images)
 ##
 command:
 ## @param args Override default container args (useful when using custom images)
 ##
 args:
-
 ## @param hostAliases [array] Add deployment host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -110,15 +111,6 @@ hostAliases:
   - ip: "127.0.0.1"
     hostnames:
       - "status.localhost"
-
-## @param commonAnnotations Common annotations to add to all phpBB resources (sub-charts are not considered). Evaluated as a template
-##
-commonAnnotations: {}
-
-## @param commonLabels Common labels to add to all phpBB resources (sub-charts are not considered). Evaluated as a template
-##
-commonLabels: {}
-
 ## @param updateStrategy.type Update strategy - only really applicable for deployments with RWO PVs attached
 ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
 ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
@@ -126,47 +118,37 @@ commonLabels: {}
 ##
 updateStrategy:
   type: RollingUpdate
-
 ## @param extraEnvVars An array to add extra env vars
 ## For example:
 ##  - name: BEARER_AUTH
 ##    value: true
 ##
 extraEnvVars: []
-
 ## @param extraEnvVarsCM ConfigMap with extra environment variables
 ##
 extraEnvVarsCM:
-
 ## @param extraEnvVarsSecret Secret with extra environment variables
 ##
 extraEnvVarsSecret:
-
 ## @param extraVolumes Extra volumes to add to the deployment. Requires setting `extraVolumeMounts`
 ##
 extraVolumes: []
-
 ## @param extraVolumeMounts Extra volume mounts to add to the container. Normally used with `extraVolumes`
 ##
 extraVolumeMounts: []
-
 ## @param initContainers Extra init containers to add to the deployment
 ##
 initContainers: []
-
 ## @param sidecars Extra sidecar containers to add to the deployment
 ##
 sidecars: []
-
 ## @param tolerations Tolerations for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
-
 ## @param existingSecret Use existing secret for the application password
 ##
 existingSecret:
-
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
 ##
@@ -213,35 +195,6 @@ volumePermissions:
     ##    cpu: 100m
     ##    memory: 128Mi
     requests: {}
-
-## External database configuration
-##
-externalDatabase:
-  ## @param externalDatabase.existingSecret Use existing secret (ignores previous password)
-  ## Must contain key `mariadb-password`
-  ## NOTE: When it's set, the `externalDatabase.password` parameter is ignored
-  existingSecret:
-
-  ## @param externalDatabase.host Host of the existing database
-  ##
-  host: ""
-
-  ## @param externalDatabase.port Port of the existing database
-  ##
-  port: 3306
-
-  ## @param externalDatabase.user Existing username in the external db
-  ##
-  user: bn_phpbb
-
-  ## @param externalDatabase.password Password for the above username
-  ##
-  password: ""
-
-  ## @param externalDatabase.database Name of the existing database
-  ##
-  database: bitnami_phpbb
-
 ## SMTP mail delivery configuration
 ## ref: https://github.com/bitnami/bitnami-docker-phpbb/#smtp-configuration
 ## @param smtpHost SMTP host
@@ -255,193 +208,11 @@ smtpPort:
 smtpUser:
 smtpPassword:
 smtpProtocol:
-
-## MariaDB chart configuration
-## https://github.com/bitnami/charts/blob/master/bitnami/mariadb/values.yaml
-##
-mariadb:
-  ## @param mariadb.enabled Whether to deploy a mariadb server to satisfy the applications database requirements
-  ## To use an external database set this to false and configure the externalDatabase parameters
-  ##
-  enabled: true
-
-  ## @param mariadb.architecture MariaDB architecture. Allowed values: `standalone` or `replication`
-  ##
-  architecture: standalone
-
-  ## MariaDB Authentication parameters
-  ##
-  auth:
-    ## @param mariadb.auth.rootPassword Password for the MariaDB `root` user
-    ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-the-root-password-on-first-run
-    ##
-    rootPassword: ""
-    ## @param mariadb.auth.database Database name to create
-    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-on-first-run
-    ##
-    database: bitnami_phpbb
-    ## @param mariadb.auth.username Database user to create
-    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-user-on-first-run
-    ##
-    username: bn_phpbb
-    ## @param mariadb.auth.password Password for the database
-    ##
-    password: ""
-
-  primary:
-    ## Enable persistence using Persistent Volume Claims
-    ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
-    ##
-    persistence:
-      ## @param mariadb.primary.persistence.enabled Enable database persistence using PVC
-      ##
-      enabled: true
-      ## @param mariadb.primary.persistence.storageClass MariaDB primary persistent volume storage Class
-      ## If defined, storageClassName: <storageClass>
-      ## If set to "-", storageClassName: "", which disables dynamic provisioning
-      ## If undefined (the default) or set to null, no storageClassName spec is
-      ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-      ##   GKE, AWS & OpenStack)
-      ##
-      storageClass:
-      ## @param mariadb.primary.persistence.accessModes PVC Access Modes for phpBB volume
-      ##
-      accessModes:
-        - ReadWriteOnce
-      ## @param mariadb.primary.persistence.size Database Persistent Volume Size
-      ##
-      size: 8Gi
-      ## @param mariadb.primary.persistence.hostPath Host mount path for MariaDB volume
-      ##
-      hostPath:
-      ## @param mariadb.primary.persistence.existingClaim Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas
-      ##
-      existingClaim:
-
 ## @param containerPorts [object] Container ports
 ##
 containerPorts:
   http: 8080
   https: 8443
-
-## Kubernetes configuration
-## For minikube, set this to NodePort, for ingress ClusterIP, elsewhere use LoadBalancer
-##
-service:
-  ## @param service.type Kubernetes Service type
-  ##
-  type: LoadBalancer
-  ## @param service.port Service HTTP port
-  ##
-  port: 80
-  ## @param service.httpsPort Service HTTPS port
-  ##
-  httpsPort: 443
-  ## loadBalancerIP for the phpBB Service (optional, cloud specific)
-  ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
-  ##
-  ## loadBalancerIP:
-
-  ## @param service.nodePorts.http Kubernetes HTTP node port
-  ## @param service.nodePorts.https Kubernetes HTTPS node port
-  ## nodePorts:
-  ##   http: <to set explicitly, choose port between 30000-32767>
-  ##   https: <to set explicitly, choose port between 30000-32767>
-  ##
-  nodePorts:
-    http: ""
-    https: ""
-  ## @param service.externalTrafficPolicy Enable client source IP preservation
-  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
-  ##
-  externalTrafficPolicy: Cluster
-
-## Configure the ingress resource that allows you to access the
-## phpBB installation. Set up the URL
-## ref: http://kubernetes.io/docs/user-guide/ingress/
-##
-ingress:
-  ## @param ingress.enabled Set to true to enable ingress record generation
-  ##
-  enabled: false
-
-  ## @param ingress.certManager Set this to true in order to add the corresponding annotations for cert-manager
-  ##
-  certManager: false
-
-  ## @param ingress.pathType Ingress path type
-  ##
-  pathType: ImplementationSpecific
-
-  ## @param ingress.apiVersion Override API Version (automatically detected if not set)
-  ##
-  apiVersion:
-
-  ## @param ingress.hostname Default host for the ingress resource
-  ##
-  hostname: phpbb.local
-
-  ## @param ingress.path The Path to phpBB. You may need to set this to '/*' in order to use this with ALB ingress controllers.
-  ##
-  path: /
-
-  ## @param ingress.annotations Ingress annotations
-  ## For a full list of possible ingress annotations, please see
-  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
-  ##
-  ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
-  ##
-  annotations: {}
-
-  ## @param ingress.tls Enable TLS configuration for the hostname defined at ingress.hostname parameter
-  ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
-  ## You can use the ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
-  ##
-  tls: false
-
-  ## @param ingress.extraHosts The list of additional hostnames to be covered with this ingress record.
-  ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
-  ## extraHosts:
-  ## - name: phpbb.local
-  ##   path: /
-  ##
-  extraHosts: []
-
-  ## @param ingress.extraPaths Any additional arbitrary paths that may need to be added to the ingress under the main host.
-  ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
-  ## extraPaths:
-  ## - path: /*
-  ##   backend:
-  ##     serviceName: ssl-redirect
-  ##     servicePort: use-annotation
-  ##
-  extraPaths: []
-
-  ## @param ingress.extraTls The tls configuration for additional hostnames to be covered with this ingress record.
-  ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
-  ## extraTls:
-  ## - hosts:
-  ##     - phpbb.local
-  ##   secretName: phpbb.local-tls
-  ##
-  extraTls: []
-
-  ## @param ingress.secrets If you're providing your own certificates, please use this to add the certificates as secrets
-  ## key and certificate should start with -----BEGIN CERTIFICATE----- or
-  ## -----BEGIN RSA PRIVATE KEY-----
-  ##
-  ## name should line up with a tlsSecret set further up
-  ## If you're using cert-manager, this is unneeded, as it will create the secret for you if it is not set
-  ##
-  ## It is also possible to create and manage the certificates outside of this helm chart
-  ## Please see README.md for more information
-  ## e.g:
-  ## - name: phpbb.local-tls
-  ##   key:
-  ##   certificate:
-  ##
-  secrets: []
-
 ## Enable persistence using Persistent Volume Claims
 ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
@@ -463,30 +234,25 @@ persistence:
   ## @param persistence.size PVC Storage Request for phpBB volume
   ##
   size: 8Gi
-
   ## @param persistence.existingClaim A manually managed Persistent Volume Claim
   ## Requires persistence.enabled: true
   ## If defined, PVC must be created manually before volume will be bound
   ##
   existingClaim:
-
   ## @param persistence.hostPath Host mount path for phpBB volume
   ## Requires persistence.enabled: true
   ## Requires persistence.existingClaim: nil|false
   ## Default: nil.
   ##
   hostPath:
-
 ## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
 podAffinityPreset: ""
-
 ## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
 podAntiAffinityPreset: soft
-
 ## Node affinity preset
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
 ##
@@ -506,17 +272,14 @@ nodeAffinityPreset:
   ##   - e2e-az2
   ##
   values: []
-
 ## @param affinity Affinity for pod assignment. Evaluated as a template.
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ##
 affinity: {}
-
 ## @param nodeSelector Node labels for pod assignment. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
 nodeSelector: {}
-
 ## Configure resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ## @param resources.requests [object] The requested resources for the container
@@ -525,7 +288,6 @@ resources:
   requests:
     memory: 512Mi
     cpu: 300m
-
 ## Configure Pods Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enable phpBB pods' Security Context
@@ -534,7 +296,6 @@ resources:
 podSecurityContext:
   enabled: true
   fsGroup: 1001
-
 ## Configure Container Security Context (only main container)
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled Enable phpBB containers' Security Context
@@ -543,7 +304,6 @@ podSecurityContext:
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
-
 ## Configure extra options for liveness probe
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe
@@ -576,33 +336,219 @@ readinessProbe:
   timeoutSeconds: 3
   failureThreshold: 6
   successThreshold: 1
-
 ## @param customLivenessProbe Override default liveness probe
 ##
 customLivenessProbe: {}
-
 ## @param customReadinessProbe Override default readiness probe
 ##
 customReadinessProbe: {}
-
 ## @param priorityClassName Define the priority class name to use for the phpbb pods
 ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
 ##
 priorityClassName:
-
 ## @param lifecycleHooks LifecycleHook to set additional configuration before or after startup
 ##
 lifecycleHooks:
-
 ## @param podAnnotations Pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
-
 ## @param podLabels Pod extra labels
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
 podLabels: {}
+
+## @section Traffic Exposure Parameters
+
+## Kubernetes configuration
+## For minikube, set this to NodePort, for ingress ClusterIP, elsewhere use LoadBalancer
+##
+service:
+  ## @param service.type Kubernetes Service type
+  ##
+  type: LoadBalancer
+  ## @param service.port Service HTTP port
+  ##
+  port: 80
+  ## @param service.httpsPort Service HTTPS port
+  ##
+  httpsPort: 443
+  ## loadBalancerIP for the phpBB Service (optional, cloud specific)
+  ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+  ##
+  ## loadBalancerIP:
+  ## @param service.nodePorts.http Kubernetes HTTP node port
+  ## @param service.nodePorts.https Kubernetes HTTPS node port
+  ## nodePorts:
+  ##   http: <to set explicitly, choose port between 30000-32767>
+  ##   https: <to set explicitly, choose port between 30000-32767>
+  ##
+  nodePorts:
+    http: ""
+    https: ""
+  ## @param service.externalTrafficPolicy Enable client source IP preservation
+  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ##
+  externalTrafficPolicy: Cluster
+## Configure the ingress resource that allows you to access the
+## phpBB installation. Set up the URL
+## ref: http://kubernetes.io/docs/user-guide/ingress/
+##
+ingress:
+  ## @param ingress.enabled Set to true to enable ingress record generation
+  ##
+  enabled: false
+  ## @param ingress.certManager Set this to true in order to add the corresponding annotations for cert-manager
+  ##
+  certManager: false
+  ## @param ingress.pathType Ingress path type
+  ##
+  pathType: ImplementationSpecific
+  ## @param ingress.apiVersion Override API Version (automatically detected if not set)
+  ##
+  apiVersion:
+  ## @param ingress.hostname Default host for the ingress resource
+  ##
+  hostname: phpbb.local
+  ## @param ingress.path The Path to phpBB. You may need to set this to '/*' in order to use this with ALB ingress controllers.
+  ##
+  path: /
+  ## @param ingress.annotations Ingress annotations
+  ## For a full list of possible ingress annotations, please see
+  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ##
+  ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+  ##
+  annotations: {}
+  ## @param ingress.tls Enable TLS configuration for the hostname defined at ingress.hostname parameter
+  ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
+  ## You can use the ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
+  ##
+  tls: false
+  ## @param ingress.extraHosts The list of additional hostnames to be covered with this ingress record.
+  ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
+  ## extraHosts:
+  ## - name: phpbb.local
+  ##   path: /
+  ##
+  extraHosts: []
+  ## @param ingress.extraPaths Any additional arbitrary paths that may need to be added to the ingress under the main host.
+  ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
+  ## extraPaths:
+  ## - path: /*
+  ##   backend:
+  ##     serviceName: ssl-redirect
+  ##     servicePort: use-annotation
+  ##
+  extraPaths: []
+  ## @param ingress.extraTls The tls configuration for additional hostnames to be covered with this ingress record.
+  ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ## extraTls:
+  ## - hosts:
+  ##     - phpbb.local
+  ##   secretName: phpbb.local-tls
+  ##
+  extraTls: []
+  ## @param ingress.secrets If you're providing your own certificates, please use this to add the certificates as secrets
+  ## key and certificate should start with -----BEGIN CERTIFICATE----- or
+  ## -----BEGIN RSA PRIVATE KEY-----
+  ##
+  ## name should line up with a tlsSecret set further up
+  ## If you're using cert-manager, this is unneeded, as it will create the secret for you if it is not set
+  ##
+  ## It is also possible to create and manage the certificates outside of this helm chart
+  ## Please see README.md for more information
+  ## e.g:
+  ## - name: phpbb.local-tls
+  ##   key:
+  ##   certificate:
+  ##
+  secrets: []
+
+## @section Database parameters
+
+## MariaDB chart configuration
+## https://github.com/bitnami/charts/blob/master/bitnami/mariadb/values.yaml
+##
+mariadb:
+  ## @param mariadb.enabled Whether to deploy a mariadb server to satisfy the applications database requirements
+  ## To use an external database set this to false and configure the externalDatabase parameters
+  ##
+  enabled: true
+  ## @param mariadb.architecture MariaDB architecture. Allowed values: `standalone` or `replication`
+  ##
+  architecture: standalone
+  ## MariaDB Authentication parameters
+  ##
+  auth:
+    ## @param mariadb.auth.rootPassword Password for the MariaDB `root` user
+    ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-the-root-password-on-first-run
+    ##
+    rootPassword: ""
+    ## @param mariadb.auth.database Database name to create
+    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-on-first-run
+    ##
+    database: bitnami_phpbb
+    ## @param mariadb.auth.username Database user to create
+    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-user-on-first-run
+    ##
+    username: bn_phpbb
+    ## @param mariadb.auth.password Password for the database
+    ##
+    password: ""
+  primary:
+    ## Enable persistence using Persistent Volume Claims
+    ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+    ##
+    persistence:
+      ## @param mariadb.primary.persistence.enabled Enable database persistence using PVC
+      ##
+      enabled: true
+      ## @param mariadb.primary.persistence.storageClass MariaDB primary persistent volume storage Class
+      ## If defined, storageClassName: <storageClass>
+      ## If set to "-", storageClassName: "", which disables dynamic provisioning
+      ## If undefined (the default) or set to null, no storageClassName spec is
+      ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+      ##   GKE, AWS & OpenStack)
+      ##
+      storageClass:
+      ## @param mariadb.primary.persistence.accessModes PVC Access Modes for phpBB volume
+      ##
+      accessModes:
+        - ReadWriteOnce
+      ## @param mariadb.primary.persistence.size Database Persistent Volume Size
+      ##
+      size: 8Gi
+      ## @param mariadb.primary.persistence.hostPath Host mount path for MariaDB volume
+      ##
+      hostPath:
+      ## @param mariadb.primary.persistence.existingClaim Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas
+      ##
+      existingClaim:
+## External database configuration
+##
+externalDatabase:
+  ## @param externalDatabase.existingSecret Use existing secret (ignores previous password)
+  ## Must contain key `mariadb-password`
+  ## NOTE: When it's set, the `externalDatabase.password` parameter is ignored
+  existingSecret:
+  ## @param externalDatabase.host Host of the existing database
+  ##
+  host: ""
+  ## @param externalDatabase.port Port of the existing database
+  ##
+  port: 3306
+  ## @param externalDatabase.user Existing username in the external db
+  ##
+  user: bn_phpbb
+  ## @param externalDatabase.password Password for the above username
+  ##
+  password: ""
+  ## @param externalDatabase.database Name of the existing database
+  ##
+  database: bitnami_phpbb
+
+## @section Metrics parameters
 
 ## Prometheus Exporter / Metrics
 ##
@@ -638,7 +584,3 @@ metrics:
   podAnnotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "9117"
-
-## @param extraDeploy Array of extra objects to deploy with the release (evaluated as a template)
-##
-extraDeploy: []
