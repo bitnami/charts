@@ -38,24 +38,24 @@ clusterDomain: cluster.local
 ##   kind: Service
 ##   metadata:
 ##     name: mongodb-primary
-##     namespace: the-mongodb-namespace
+##     namespace: '{{ .Release.Namespace }}'
 ##     labels:
 ##       app.kubernetes.io/component: mongodb
-##       app.kubernetes.io/instance: mongodb
+##       app.kubernetes.io/instance: '{{ .Release.Namespace }}'
 ##       app.kubernetes.io/managed-by: Helm
 ##       app.kubernetes.io/name: mongodb
 ##   spec:
 ##     type: NodePort
 ##     externalTrafficPolicy: Cluster
 ##     ports:
-##       - name: mongodb
+##       - name: mongodb-primary
 ##         port: 30001
 ##         nodePort: 30001
 ##         protocol: TCP
 ##         targetPort: mongodb
 ##     selector:
 ##       app.kubernetes.io/component: mongodb
-##       app.kubernetes.io/instance: mongodb
+##       app.kubernetes.io/instance: '{{ .Release.Namespace }}'
 ##       app.kubernetes.io/name: mongodb
 ##       primary: "true"
 ##
@@ -493,10 +493,10 @@ initContainers: {}
 ##   image: korenlev/k8s-mongo-labeler-sidecar
 ##   imagePullPolicy: Always
 ##   env:
-##     - name: LABEL_SELECTOR
-##       value: "app.kubernetes.io/component=mongodb,app.kubernetes.io/instance=mongodb,app.kubernetes.io/name=mongodb"
 ##     - name: NAMESPACE
-##       value: "the-mongodb-namespace"
+##       value: '{{ .Release.Namespace }}'
+##     - name: LABEL_SELECTOR
+##       value: "app.kubernetes.io/component=mongodb,app.kubernetes.io/instance=$(NAMESPACE),app.kubernetes.io/name=mongodb"
 ##     - name: DEBUG
 ##       value: "true"
 ##
