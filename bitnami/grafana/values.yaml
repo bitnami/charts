@@ -568,6 +568,26 @@ imageRenderer:
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ##
   affinity: {}
+  ## Grafana Image Renderer containers' resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param imageRenderer.resources.limits The resources limits for Grafana containers
+  ## @param imageRenderer.resources.requests The requested resources for Grafana containers
+  ##
+  resources:
+    ## Example:
+    ## limits:
+    ##    cpu: 500m
+    ##    memory: 1Gi
+    limits: {}
+    ## Examples:
+    ## requests:
+    ##    cpu: 250m
+    ##    memory: 256Mi
+    requests: {}
   ## SecurityContext configuration
   ## @param imageRenderer.securityContext.enabled Enable securityContext on for Grafana Image Renderer deployment
   ## @param imageRenderer.securityContext.fsGroup Group to configure permissions for volumes
