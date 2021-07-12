@@ -27,6 +27,9 @@ on:
       - 'bitnami/metrics-server/values.yaml'
       - 'bitnami/minio/values.yaml'
       - 'bitnami/mongodb/values.yaml'
+      - 'bitnami/nginx-ingress-controller/values.yaml'
+      - 'bitnami/node/values.yaml'
+      - 'bitnami/node-exporter/values.yaml'
 
 jobs:
   generate-chart-readme:
