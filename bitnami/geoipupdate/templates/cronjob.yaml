@@ -1,0 +1,116 @@
+{{- if eq .Values.cronJobType "cronJob" }}
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ include "geoipupdate.fullname" . }}
+  labels:
+    {{- include "geoipupdate.labels" . | nindent 4 }}
+spec:
+  schedule: {{ .Values.cronJob.schedule }}
+  concurrencyPolicy: {{ .Values.cronJob.concurrencyPolicy }}
+  successfulJobsHistoryLimit: {{ .Values.cronJob.successfulJobsHistoryLimit }}
+  failedJobsHistoryLimit: {{ .Values.cronJob.failedJobsHistoryLimit }}
+  jobTemplate:
+    metadata:
+      labels:
+        {{- include "geoipupdate.selectorLabels" . | nindent 8 }}
+    spec:
+      backoffLimit: {{ .Values.cronJob.backoffLimit }}
+      {{- if gt (int .Values.cronJob.activeDeadlineSeconds) 0 }}
+      activeDeadlineSeconds: {{ .Values.cronJob.activeDeadlineSeconds }}
+      {{- end }}
+      template:
+        metadata:
+          labels:
+            {{- include "geoipupdate.selectorLabels" . | nindent 12 }}
+        spec:
+          serviceAccountName: {{ include "geoipupdate.serviceAccountName" . }}
+          restartPolicy: {{ .Values.restartPolicy }}
+          terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+          {{- with .Values.affinity }}
+          affinity:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.tolerations }}
+          tolerations:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.podSecurityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumes:
+          {{- if and (not .Values.createConfig.enabled) (not .Values.extraVolumes) }}
+            []
+          {{- else }}
+          {{-   if .Values.createConfig.enabled }}
+            - name: config
+              emptyDir: {}
+          {{-   end }}
+          {{-   if .Values.extraVolumes }}
+          {{-     with .Values.extraVolumes }}
+            {{- toYaml . | nindent 12 }}
+          {{-     end }}
+          {{-   end }}
+          {{- end }}
+          initContainers:
+          {{- if and (not .Values.createConfig.enabled) (not .Values.extraInitContainers) }}
+            []
+          {{- else }}
+          {{-   if .Values.createConfig.enabled }}
+            - name: create-config
+              image: "{{ .Values.createConfig.image.repository }}:{{ .Values.createConfig.image.tag }}"
+              imagePullPolicy: {{ .Values.createConfig.image.pullPolicy }}
+              {{- with .Values.createConfig.command }}
+              command:
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+              {{- with .Values.createConfig.args }}
+              args:
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+              {{- with .Values.createConfig.securityContext }}
+              securityContext:
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+              volumeMounts:
+              - name: config
+                mountPath: /config
+          {{-   end }}
+          {{-   if .Values.extraInitContainers }}
+          {{-     with .Values.extraInitContainers }}
+            {{- toYaml . | nindent 12 }}
+          {{-     end }}
+          {{-   end }}
+          {{- end }}
+          containers:
+            - name: geoipupdate
+              image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+              imagePullPolicy: {{ .Values.image.pullPolicy }}
+              envFrom:
+                - secretRef:
+                    name: {{ include "geoipupdate.fullname" . }}
+              {{- with .Values.resources }}
+              resources:
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+              {{- with .Values.containerSecurityContext }}
+              securityContext:
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+              volumeMounts:
+              {{- if and (not .Values.createConfig.enabled) (not .Values.extraVolumeMounts) }}
+                []
+              {{- else }}
+              {{-   if .Values.createConfig.enabled }}
+                - name: config
+                  mountPath: /etc/GeoIP.conf
+                  subPath: GeoIP.conf
+              {{-   end }}
+              {{-   if .Values.extraVolumeMounts }}
+              {{-     with .Values.extraVolumeMounts }}
+                {{- toYaml . | nindent 16 }}
+              {{-     end }}
+              {{-   end }}
+              {{- end }}
+{{- end }}

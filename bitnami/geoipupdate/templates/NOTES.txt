@@ -1,0 +1,9 @@
+** Please be patient while the chart is being deployed **
+
+Watch the GeoIP Update {{ .Values.cronJobType }} status using the command:
+
+{{- if eq .Values.cronJobType "cronJob" }}
+    kubectl get cronjob -w --namespace {{ .Release.Namespace }} -l app.kubernetes.io/name={{ include "geoipupdate.name" . }},app.kubernetes.io/instance={{ .Release.Name }}
+{{- else if eq .Values.cronJobType "daemonSet" }}
+    kubectl get ds -w --namespace {{ .Release.Namespace }} -l app.kubernetes.io/name={{ include "geoipupdate.name" . }},app.kubernetes.io/instance={{ .Release.Name }}
+{{- end }}

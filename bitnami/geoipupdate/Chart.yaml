@@ -1,0 +1,26 @@
+annotations:
+  category: Analytics
+apiVersion: v2
+name: geoipupdate
+appVersion: 4.7.1
+dependencies:
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 1.x.x
+description: The GeoIP Update program performs automatic updates of GeoIP2 and GeoIP Legacy binary databases.
+home: https://github.com/maxmind/geoipupdate
+keywords:
+  - geoipupdate
+  - nginx
+  - monitoring
+  - logs
+  - logstash
+maintainers:
+  - name: LuciferInLove
+    email: lucifer.in.love@protonmail.com
+sources:
+  - https://github.com/maxmind/geoipupdate
+  - https://hub.docker.com/r/maxmindinc/geoipupdate
+version: 0.0.1

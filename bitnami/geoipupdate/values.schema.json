@@ -1,0 +1,220 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "type": "object",
+    "properties": {
+        "affinity": {
+            "type": "object"
+        },
+        "configSecret": {
+            "type": "object",
+            "properties": {
+                "annotations": {
+                    "type": "object"
+                },
+                "geoipupdateAccountID": {
+                    "type": "string"
+                },
+                "geoipupdateEditionIDs": {
+                    "type": "string"
+                },
+                "geoipupdateFrequency": {
+                    "type": "string"
+                },
+                "geoipupdateHost": {
+                    "type": "string"
+                },
+                "geoipupdateLicenseKey": {
+                    "type": "string"
+                },
+                "geoipupdateProxy": {
+                    "type": "string"
+                },
+                "geoipupdateProxyUserPassword": {
+                    "type": "string"
+                },
+                "geoipupdateVerbose": {
+                    "type": "string"
+                }
+            }
+        },
+        "containerSecurityContext": {
+            "type": "object",
+            "properties": {
+                "runAsGroup": {
+                    "type": "integer"
+                },
+                "runAsUser": {
+                    "type": "integer"
+                }
+            }
+        },
+        "createConfig": {
+            "type": "object",
+            "properties": {
+                "args": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "command": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "enabled": {
+                    "type": "boolean"
+                },
+                "image": {
+                    "type": "object",
+                    "properties": {
+                        "pullPolicy": {
+                            "type": "string"
+                        },
+                        "repository": {
+                            "type": "string"
+                        },
+                        "tag": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "securityContext": {
+                    "type": "object",
+                    "properties": {
+                        "runAsGroup": {
+                            "type": "integer"
+                        },
+                        "runAsUser": {
+                            "type": "integer"
+                        }
+                    }
+                }
+            }
+        },
+        "cronJob": {
+            "type": "object",
+            "properties": {
+                "activeDeadlineSeconds": {
+                    "type": "integer"
+                },
+                "backoffLimit": {
+                    "type": "integer"
+                },
+                "concurrencyPolicy": {
+                    "type": "string"
+                },
+                "failedJobsHistoryLimit": {
+                    "type": "integer"
+                },
+                "schedule": {
+                    "type": "string"
+                },
+                "successfulJobsHistoryLimit": {
+                    "type": "integer"
+                }
+            }
+        },
+        "cronJobType": {
+            "type": "string"
+        },
+        "extraInitContainers": {
+            "type": "array"
+        },
+        "extraVolumeMounts": {
+            "type": "array"
+        },
+        "extraVolumes": {
+            "type": "array"
+        },
+        "image": {
+            "type": "object",
+            "properties": {
+                "pullPolicy": {
+                    "type": "string"
+                },
+                "repository": {
+                    "type": "string"
+                },
+                "tag": {
+                    "type": "string"
+                }
+            }
+        },
+        "podSecurityContext": {
+            "type": "object",
+            "properties": {
+                "fsGroup": {
+                    "type": "integer"
+                }
+            }
+        },
+        "podSecurityPolicy": {
+            "type": "object",
+            "properties": {
+                "allowedHostPaths": {
+                    "type": "array"
+                },
+                "enabled": {
+                    "type": "boolean"
+                },
+                "fsGroup": {
+                    "type": "object",
+                    "properties": {
+                        "rule": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "runAsUser": {
+                    "type": "object",
+                    "properties": {
+                        "rule": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "seLinux": {
+                    "type": "object",
+                    "properties": {
+                        "rule": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "supplementalGroups": {
+                    "type": "object",
+                    "properties": {
+                        "rule": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "volumes": {
+                    "type": "array"
+                }
+            }
+        },
+        "resources": {
+            "type": "object"
+        },
+        "restartPolicy": {
+            "type": "string"
+        },
+        "serviceAccount": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "terminationGracePeriodSeconds": {
+            "type": "integer"
+        },
+        "tolerations": {
+            "type": "array"
+        }
+    }
+}
