@@ -36,6 +36,10 @@ commonLabels: {}
 ## @param extraDeploy Array with extra yaml to deploy with the chart. Evaluated as a template
 ##
 extraDeploy: []
+## @param schedulerName Use an alternate scheduler, e.g. "stork".
+## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+##
+schedulerName:
 
 ## @section MySQL common parameters
 
@@ -68,10 +72,6 @@ image:
   ## It turns BASH and/or NAMI debugging in the image
   ##
   debug: false
-## @param schedulerName Use an alternate scheduler, e.g. "stork".
-## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
-##
-schedulerName:
 ## @param architecture MySQL architecture (`standalone` or `replication`)
 ##
 architecture: standalone
