@@ -1,8 +1,8 @@
-{{- if and .Values.htpasswdFile.enabled (not .Values.htpasswdFile.existingSecret) }}
-apiVersion: v1
-kind: Secret
+{{- if .Values.pdb.create }}
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
 metadata:
-  name: {{ template "common.names.fullname" . }}-htpasswd-file
+  name: {{ template "common.names.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: oauth2-proxy
@@ -12,10 +12,14 @@ metadata:
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
-type: Opaque
-stringData:
-  users.txt: |-
-    {{- range $entries := .Values.htpasswdFile.entries }}
-    {{ $entries }}
-    {{- end -}}
+spec:
+  {{- if .Values.pdb.minAvailable }}
+  minAvailable: {{ .Values.pdb.minAvailable }}
+  {{- end }}
+  {{- if .Values.pdb.maxUnavailable }}
+  maxUnavailable: {{ .Values.pdb.maxUnavailable }}
+  {{- end }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: oauth2-proxy
 {{- end }}

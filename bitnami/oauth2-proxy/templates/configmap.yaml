@@ -1,4 +1,4 @@
-{{- if and (.Values.config.configFile) (not .Values.config.existingConfig) }}
+{{- if and (.Values.configuration.content) (not .Values.configuration.existingConfigmap) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -13,5 +13,5 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 data:
-  oauth2_proxy.cfg: {{- include "common.tplvalues.render" ( dict "value" .Values.config.configFile "context" $ ) | nindent 4 }}
+  oauth2_proxy.cfg: {{- include "common.tplvalues.render" ( dict "value" .Values.configuration.content "context" $ ) | nindent 4 }}
 {{- end }}

@@ -50,140 +50,160 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Global parameters
 
-| Name                      | Description                                     | Value       |
-| ------------------------- | ----------------------------------------------- | ----------- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil`       |
-| `global.imagePullSecrets` | Global Docker registry secret names as an array | `undefined` |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `nil`       |
-
+| Name                      | Description                                     | Value |
+|---------------------------|-------------------------------------------------|-------|
+| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `nil` |
 
 ### Common parameters
 
 | Name                | Description                                        | Value           |
-| ------------------- | -------------------------------------------------- | --------------- |
+|---------------------|----------------------------------------------------|-----------------|
 | `kubeVersion`       | Override Kubernetes version                        | `nil`           |
 | `nameOverride`      | String to partially override common.names.fullname | `nil`           |
 | `fullnameOverride`  | String to fully override common.names.fullname     | `nil`           |
-| `commonLabels`      | Labels to add to all deployed objects              | `undefined`     |
-| `commonAnnotations` | Annotations to add to all deployed objects         | `undefined`     |
+| `commonLabels`      | Labels to add to all deployed objects              | `{}`            |
+| `commonAnnotations` | Annotations to add to all deployed objects         | `{}`            |
 | `clusterDomain`     | Kubernetes cluster domain name                     | `cluster.local` |
-| `extraDeploy`       | Array of extra objects to deploy with the release  | `undefined`     |
-
+| `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`            |
 
 ### Traffic Exposure Parameters
 
 | Name                               | Description                                                                                           | Value                    |
-| ---------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------ |
+|------------------------------------|-------------------------------------------------------------------------------------------------------|--------------------------|
 | `service.type`                     | OAuth2 Proxy service type                                                                             | `LoadBalancer`           |
 | `service.port`                     | OAuth2 Proxy service HTTP port                                                                        | `8080`                   |
 | `service.nodePorts.http`           | Node port for HTTP                                                                                    | `nil`                    |
 | `service.clusterIP`                | OAuth2 Proxy service Cluster IP                                                                       | `nil`                    |
 | `service.loadBalancerIP`           | OAuth2 Proxy service Load Balancer IP                                                                 | `nil`                    |
-| `service.loadBalancerSourceRanges` | OAuth2 Proxy service Load Balancer sources                                                            | `undefined`              |
+| `service.loadBalancerSourceRanges` | OAuth2 Proxy service Load Balancer sources                                                            | `[]`                     |
 | `service.externalTrafficPolicy`    | OAuth2 Proxy service external traffic policy                                                          | `Cluster`                |
-| `service.annotations`              | Additional custom annotations for OAuth2 Proxy service                                                | `undefined`              |
+| `service.annotations`              | Additional custom annotations for OAuth2 Proxy service                                                | `{}`                     |
 | `ingress.enabled`                  | Enable ingress record generation for WordPress                                                        | `false`                  |
 | `ingress.certManager`              | Add the corresponding annotations for cert-manager integration                                        | `false`                  |
 | `ingress.pathType`                 | Ingress path type                                                                                     | `ImplementationSpecific` |
 | `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                         | `nil`                    |
 | `ingress.hostname`                 | Default host for the ingress record                                                                   | `oaut2-proxy.local`      |
 | `ingress.path`                     | Default path for the ingress record                                                                   | `ImplementationSpecific` |
-| `ingress.annotations`              | Additional custom annotations for the ingress record                                                  | `undefined`              |
+| `ingress.annotations`              | Additional custom annotations for the ingress record                                                  | `{}`                     |
 | `ingress.tls`                      | Enable TLS configuration for the host defined at `ingress.hostname` parameter                         | `false`                  |
-| `ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                            | `undefined`              |
-| `ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host | `undefined`              |
-| `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                   | `undefined`              |
-
+| `ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                            | `[]`                     |
+| `ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host | `[]`                     |
+| `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                   | `[]`                     |
 
 ### OAuth2 Proxy Image parameters
 
 | Name                | Description                                             | Value                  |
-| ------------------- | ------------------------------------------------------- | ---------------------- |
+|---------------------|---------------------------------------------------------|------------------------|
 | `image.registry`    | OAuth2 Proxy image registry                             | `docker.io`            |
 | `image.repository`  | OAuth2 Proxy image repository                           | `bitnami/oauth2-proxy` |
 | `image.tag`         | OAuth2 Proxy image tag (immutable tags are recommended) | `7.1.3-debian-10-r25`  |
 | `image.pullPolicy`  | OAuth2 Proxy image pull policy                          | `IfNotPresent`         |
-| `image.pullSecrets` | OAuth2 Proxy image pull secrets                         | `undefined`            |
+| `image.pullSecrets` | OAuth2 Proxy image pull secrets                         | `[]`                   |
 | `image.debug`       | Enable image debug mode                                 | `false`                |
 
+### OAuth2 Proxy configuration parameters
 
-### Oauth client configuration specifics
-
-| Name                                        | Description                       | Value                                                        |
-| ------------------------------------------- | --------------------------------- | ------------------------------------------------------------ |
-| `config.clientID`                           | OAuth client ID                   | `XXXXXXX`                                                    |
-| `config.clientSecret`                       | OAuth client secret               | `XXXXXXXX`                                                   |
-| `config.cookieSecret`                       | OAuth cookie secret               | `XXXXXXXXXX`                                                 |
-| `config.google`                             | Google service account            | `undefined`                                                  |
-| `config.configFile`                         | Default configuration             | `email_domains = [ "*" ]
-upstreams = [ "file:///dev/null" ]` |
-| `authenticatedEmailsFile.enabled`           | Enable authenticated emails file  | `false`                                                      |
-| `authenticatedEmailsFile.persistence`       | Defines file method               | `configmap`                                                  |
-| `authenticatedEmailsFile.restricted_access` | Restricted access list            | `foo`                                                        |
-| `authenticatedEmailsFile.template`          | Name of the configmap             | `""`                                                         |
-| `htpasswdFile.enabled`                      | Enable htpasswd file              | `false`                                                      |
-| `htpasswdFile.existingSecret`               | Existing secret for htpasswd file | `""`                                                         |
-| `htpasswdFile.entries`                      | htpasswd file entries             | `undefined`                                                  |
-
+| Name                                                   | Description                                         | Value                    |
+|--------------------------------------------------------|-----------------------------------------------------|--------------------------|
+| `configuration.clientID`                               | OAuth client ID                                     | `XXXXXXX`                |
+| `configuration.clientSecret`                           | OAuth client secret                                 | `XXXXXXXX`               |
+| `configuration.cookieSecret`                           | OAuth cookie secret                                 | `XXXXXXXXXX`             |
+| `configuration.existingSecret`                         | Secret with the client ID, secret and cookie secret | `nil`                    |
+| `configuration.google.enabled`                         | Enable Google service account                       | `nil`                    |
+| `configuration.google.adminEmail`                      | Google admin email                                  | `nil`                    |
+| `configuration.google.serviceAccountJson`              | Google Service account JSON                         | `nil`                    |
+| `configuration.google.existingSecret`                  | Existing secret containing Google Service Account   | `nil`                    |
+| `configuration.content`                                | Default configuration                               | `email_domains = [ "*" ] |
+| upstreams = [ "file:///dev/null" ]`                    |                                                     |                          |
+| `configuration.existingConfigmap`                      | Configmap with the OAuth2 Proxy configuration       | `nil`                    |
+| `configuration.authenticatedEmailsFile.enabled`        | Enable authenticated emails file                    | `false`                  |
+| `configuration.authenticatedEmailsFile.content`        | Restricted access list (one email per line)         | `nil`                    |
+| `configuration.authenticatedEmailsFile.existingSecret` | Secret with the authenticated emails file           | `nil`                    |
+| `configuration.htpasswdFile.enabled`                   | Enable htpasswd file                                | `false`                  |
+| `configuration.htpasswdFile.existingSecret`            | Existing secret for htpasswd file                   | `""`                     |
+| `configuration.htpasswdFile.content`                   | htpasswd file entries (one row per user)            | `nil`                    |
 
 ### OAuth2 Proxy deployment parameters
 
 | Name                                 | Description                                                                                | Value           |
-| ------------------------------------ | ------------------------------------------------------------------------------------------ | --------------- |
+|--------------------------------------|--------------------------------------------------------------------------------------------|-----------------|
+| `containerPort`                      | OAuth2 Proxy port number                                                                   | `4180`          |
 | `replicaCount`                       | Number of OAuth2 Proxy replicas to deploy                                                  | `1`             |
+| `extraArgs`                          | add extra args to the default command                                                      | `nil`           |
 | `livenessProbe.enabled`              | Enable livenessProbe on OAuth2 Proxy nodes                                                 | `true`          |
-| `livenessProbe.httpGet.path`         | httpGet path                                                                               | `/ping`         |
-| `livenessProbe.httpGet.port`         | httpGet port                                                                               | `http`          |
-| `livenessProbe.httpGet.scheme`       | httpGet scheme                                                                             | `HTTP`          |
 | `livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                    | `0`             |
 | `livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                           | `10`            |
 | `livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                          | `1`             |
 | `livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                        | `5`             |
 | `livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                        | `1`             |
 | `readinessProbe.enabled`             | Enable readinessProbe on OAuth2 Proxy nodes                                                | `true`          |
-| `readinessProbe.httpGet.path`        | httpGet path                                                                               | `/ping`         |
-| `readinessProbe.httpGet.port`        | httpGet port                                                                               | `http`          |
-| `readinessProbe.httpGet.scheme`      | httpGet scheme                                                                             | `HTTP`          |
 | `readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                   | `0`             |
 | `readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                          | `10`            |
 | `readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                         | `1`             |
 | `readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                       | `5`             |
 | `readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                       | `1`             |
-| `customLivenessProbe`                | Custom livenessProbe that overrides the default one                                        | `undefined`     |
-| `customReadinessProbe`               | Custom readinessProbe that overrides the default one                                       | `undefined`     |
-| `resources.limits`                   | The resources limits for the OAuth2 Proxy containers                                       | `undefined`     |
-| `resources.requests`                 | The requested resources for the OAuth2 Proxy containers                                    | `undefined`     |
-| `podDisruptionBudget`                | Configure pod disruptions                                                                  | `undefined`     |
+| `customLivenessProbe`                | Custom livenessProbe that overrides the default one                                        | `{}`            |
+| `customReadinessProbe`               | Custom readinessProbe that overrides the default one                                       | `{}`            |
+| `resources.limits`                   | The resources limits for the OAuth2 Proxy containers                                       | `{}`            |
+| `resources.requests`                 | The requested resources for the OAuth2 Proxy containers                                    | `{}`            |
+| `pdb.create`                         | Enable a Pod Disruption Budget creation                                                    | `false`         |
+| `pdb.minAvailable`                   | Minimum number/percentage of pods that should remain scheduled                             | `1`             |
+| `pdb.maxUnavailable`                 | Maximum number/percentage of pods that may be made unavailable                             | `1`             |
 | `podSecurityContext.enabled`         | Enabled OAuth2 Proxy pods' Security Context                                                | `true`          |
 | `podSecurityContext.fsGroup`         | Set OAuth2 Proxy pod's Security Context fsGroup                                            | `1001`          |
 | `containerSecurityContext.enabled`   | Enabled OAuth2 Proxy containers' Security Context                                          | `true`          |
 | `containerSecurityContext.runAsUser` | Set OAuth2 Proxy containers' Security Context runAsUser                                    | `1001`          |
-| `command`                            | Override default container command (useful when using custom images)                       | `undefined`     |
-| `args`                               | Override default container args (useful when using custom images)                          | `undefined`     |
-| `hostAliases`                        | OAuth2 Proxy pods host aliases                                                             | `undefined`     |
-| `podLabels`                          | Extra labels for OAuth2 Proxy pods                                                         | `undefined`     |
-| `podAnnotations`                     | Annotations for OAuth2 Proxy pods                                                          | `undefined`     |
+| `command`                            | Override default container command (useful when using custom images)                       | `[]`            |
+| `args`                               | Override default container args (useful when using custom images)                          | `[]`            |
+| `hostAliases`                        | OAuth2 Proxy pods host aliases                                                             | `[]`            |
+| `podLabels`                          | Extra labels for OAuth2 Proxy pods                                                         | `{}`            |
+| `podAnnotations`                     | Annotations for OAuth2 Proxy pods                                                          | `{}`            |
 | `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`        | `""`            |
 | `podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`   | `soft`          |
 | `nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `""`            |
 | `nodeAffinityPreset.key`             | Node label key to match. Ignored if `affinity` is set                                      | `""`            |
-| `nodeAffinityPreset.values`          | Node label values to match. Ignored if `affinity` is set                                   | `undefined`     |
-| `affinity`                           | Affinity for OAuth2 Proxy pods assignment                                                  | `undefined`     |
-| `nodeSelector`                       | Node labels for OAuth2 Proxy pods assignment                                               | `undefined`     |
-| `tolerations`                        | Tolerations for OAuth2 Proxy pods assignment                                               | `undefined`     |
+| `nodeAffinityPreset.values`          | Node label values to match. Ignored if `affinity` is set                                   | `[]`            |
+| `affinity`                           | Affinity for OAuth2 Proxy pods assignment                                                  | `{}`            |
+| `nodeSelector`                       | Node labels for OAuth2 Proxy pods assignment                                               | `{}`            |
+| `tolerations`                        | Tolerations for OAuth2 Proxy pods assignment                                               | `[]`            |
 | `updateStrategy.type`                | OAuth2 Proxy statefulset strategy type                                                     | `RollingUpdate` |
 | `priorityClassName`                  | OAuth2 Proxy pods' priorityClassName                                                       | `""`            |
-| `lifecycleHooks`                     | for the OAuth2 Proxy container(s) to automate configuration before or after startup        | `undefined`     |
-| `proxyVarsAsSecrets`                 | Whether to use secrets instead of environment values for setting up OAUTH2_PROXY variables | `true`          |
-| `extraEnvVars`                       | Array with extra environment variables to add to OAuth2 Proxy nodes                        | `undefined`     |
+| `lifecycleHooks`                     | for the OAuth2 Proxy container(s) to automate configuration before or after startup        | `{}`            |
+| `extraEnvVars`                       | Array with extra environment variables to add to OAuth2 Proxy nodes                        | `[]`            |
 | `extraEnvVarsCM`                     | Name of existing ConfigMap containing extra env vars for OAuth2 Proxy nodes                | `nil`           |
 | `extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for OAuth2 Proxy nodes                   | `nil`           |
-| `extraVolumes`                       | Optionally specify extra list of additional volumes for the OAuth2 Proxy pod(s)            | `undefined`     |
-| `extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for the OAuth2 Proxy container(s) | `undefined`     |
-| `sidecars`                           | Add additional sidecar containers to the OAuth2 Proxy pod(s)                               | `undefined`     |
-| `initContainers`                     | Add additional init containers to the OAuth2 Proxy pod(s)                                  | `undefined`     |
+| `extraVolumes`                       | Optionally specify extra list of additional volumes for the OAuth2 Proxy pod(s)            | `[]`            |
+| `extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for the OAuth2 Proxy container(s) | `[]`            |
+| `sidecars`                           | Add additional sidecar containers to the OAuth2 Proxy pod(s)                               | `{}`            |
+| `initContainers`                     | Add additional init containers to the OAuth2 Proxy pod(s)                                  | `{}`            |
 | `serviceAccount.create`              | Specifies whether a ServiceAccount should be created                                       | `true`          |
 | `serviceAccount.name`                | The name of the ServiceAccount to use                                                      | `""`            |
+
+### External Redis parameters
+
+| Name                           | Description                                           | Value  |
+|--------------------------------|-------------------------------------------------------|--------|
+| `externalRedis.host`           | External Redis server host                            | `nil`  |
+| `externalRedis.password`       | External Redis user password                          | `nil`  |
+| `externalRedis.port`           | External Redis server port                            | `6379` |
+| `externalRedis.existingSecret` | The name of an existing secret with Redis credentials | `nil`  |
+
+### Redis sub-chart parameters
+
+| Name                                   | Description                                           | Value      |
+|----------------------------------------|-------------------------------------------------------|------------|
+| `redis.enabled`                        | Deploy Redis sub-chart                                | `true`     |
+| `redis.master.service.port`            | Redis (without Sentinel) service port                 | `6379`     |
+| `redis.auth.enabled`                   | Enable Redis authentication                           | `true`     |
+| `redis.auth.existingSecret`            | Secret with Redis credentials                         | `nil`      |
+| `redis.auth.existingSecretPasswordKey` | Key inside the existing secret with Redis credentials | `nil`      |
+| `redis.auth.sentinel`                  | Enable authentication in the Sentinel nodes           | `true`     |
+| `redis.sentinel.enabled`               | Enable Redis sentinel in the deployment               | `false`    |
+| `redis.sentinel.masterSet`             | Name of the Redis Sentinel master set                 | `mymaster` |
+| `redis.sentinel.service.port`          | Redis (with Sentinel) service port                    | `6379`     |
+| `redis.sentinel.service.sentinelPort`  | Redis (with Sentinel) sentinel service port           | `26379`    |
 
 See https://github.com/bitnami-labs/readmenator to create the table
 

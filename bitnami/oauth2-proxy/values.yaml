@@ -2,6 +2,7 @@
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
@@ -17,6 +18,7 @@ global:
   storageClass:
 
 ## @section Common parameters
+##
 
 ## @param kubeVersion Override Kubernetes version
 ##
@@ -41,13 +43,14 @@ clusterDomain: cluster.local
 extraDeploy: []
 
 ## @section Traffic Exposure Parameters
+##
 
 ## OAuth2 Proxy service parameters
 ##
 service:
   ## @param service.type OAuth2 Proxy service type
   ##
-  type: LoadBalancer
+  type: ClusterIP
   ## @param service.port OAuth2 Proxy service HTTP port
   ##
   port: 8080
@@ -142,6 +145,7 @@ ingress:
   extraTls: []
 
 ## @section OAuth2 Proxy Image parameters
+##
 
 ## Bitnami OAuth2 Proxy image
 ## ref: https://hub.docker.com/r/bitnami/redis/tags/
@@ -173,22 +177,27 @@ image:
   ##
   debug: false
 
-## @section Oauth client configuration specifics
+## @section OAuth2 Proxy configuration parameters
+##
 
 ## Configuration section
-## @param config.clientID OAuth client ID
-## @param config.clientSecret OAuth client secret
-## @param config.cookieSecret OAuth cookie secret
-## @param config.google Google service account
-## @param config.configFile Default configuration
 ##
-config:
+configuration:
+  ## @param configuration.clientID OAuth client ID
+  ##
   clientID: "XXXXXXX"
+  ## @param configuration.clientSecret OAuth client secret
+  ##
   clientSecret: "XXXXXXXX"
   ## Create a new secret with the following command openssl rand -base64 32 | head -c 32 | base64
   ## Use an existing secret for OAuth2 credentials (see secret.yaml for required fields)
   ##
-  cookieSecret: "XXXXXXXXXX"
+  ## @param configuration.cookieSecret OAuth cookie secret
+  ##
+  cookieSecret: "XXXXXXXXXXXXXXXX"
+  ## @param configuration.existingSecret Secret with the client ID, secret and cookie secret
+  ##
+  existingSecret:
   ## e.g:
   ## google:
   ##   adminEmail: xxxx
@@ -196,68 +205,81 @@ config:
   ##   existingSecret: google-secret
   ## Alternatively, use an existing secret (see secret-google.yaml for required fields)
   ##
-  google: {}
+  ## @param configuration.google.enabled Enable Google service account
+  ## @param configuration.google.adminEmail Google admin email
+  ## @param configuration.google.serviceAccountJson Google Service account JSON
+  ## @param configuration.google.existingSecret Existing secret containing Google Service Account
+  ##
+  google:
+    enabled: false
+    adminEmail:
+    serviceAccountJson:
+    existingSecret:
   ## Custom configuration file: oauth2_proxy.cfg
-  ## configFile: |-
+  ## content: |-
   ##   pass_basic_auth = false
   ##   pass_access_token = true
   ##
-  configFile: |-
+  ## @param configuration.content Default configuration
+  ##
+  content: |-
     email_domains = [ "*" ]
     upstreams = [ "file:///dev/null" ]
 
-## Authorize individual email addresses
-## @param authenticatedEmailsFile.enabled Enable authenticated emails file
-## @param authenticatedEmailsFile.persistence Defines file method
-## @param authenticatedEmailsFile.restricted_access Restricted access list
-##
-authenticatedEmailsFile:
-  enabled: false
-  ## Defines how the email addresses file will be projected, via a configmap or secret
+  ## @param configuration.existingConfigmap Configmap with the OAuth2 Proxy configuration
   ##
-  persistence: configmap
-  ## @param authenticatedEmailsFile.template Name of the configmap
-  ## template is the name of the configmap what contains the email user list but has been configured without this chart
-  ## It's a simpler way to maintain only one configmap (user list) instead changing it for each oauth2-proxy service
-  ## Be aware the value name in the extern configmap in data needs to be named to "restricted_user_access"
+  existingConfigmap:
+  ## Authorize individual email addresses
+  ## @param configuration.authenticatedEmailsFile.enabled Enable authenticated emails file
+  ## @param configuration.authenticatedEmailsFile.content Restricted access list (one email per line)
+  ## @param configuration.authenticatedEmailsFile.existingSecret Secret with the authenticated emails file
   ##
-  template: ""
-  ## One email per line
-  ## e.g:
-  ## restricted_access: |-
-  ##   name1@domain
-  ##   name2@domain
-  ## If you override the config with restricted_access it will configure a user list within this chart what takes care of the configmap
-  ##
-  restricted_access: "foo"
+  authenticatedEmailsFile:
+    enabled: false
+    ## One email per line
+    ## e.g:
+    ## content: |-
+    ##   name1@domain
+    ##   name2@domain
+    ## If you override the config with restricted_access it will configure a user list within this chart what takes care of the configmap
+    ##
+    content:
+    existingSecret:
 
-## Additionally authenticate against a htpasswd file. Entries must be created with "htpasswd -s" for SHA encryption
-## @param htpasswdFile.enabled Enable htpasswd file
-## @param htpasswdFile.existingSecret Existing secret for htpasswd file
-## @param htpasswdFile.entries htpasswd file entries
-##
-htpasswdFile:
-  enabled: false
-  ## Alternatively supply an existing secret which contains the required information
+  ## Additionally authenticate against a htpasswd file. Entries must be created with "htpasswd -s" for SHA encryption
+  ## @param configuration.htpasswdFile.enabled Enable htpasswd file
+  ## @param configuration.htpasswdFile.existingSecret Existing secret for htpasswd file
+  ## @param configuration.htpasswdFile.content htpasswd file entries (one row per user)
   ##
-  existingSecret: ""
-  ## One row for each user
-  ## e.g:
-  ## entries:
-  ##  - testuser:{SHA}EWhzdhgoYJWy0z2gyzhRYlN9DSiv
-  entries: {}
+  htpasswdFile:
+    enabled: false
+    ## Alternatively supply an existing secret which contains the required information
+    ##
+    existingSecret: ""
+    ## One row for each user
+    ## e.g:
+    ## entries: |-
+    ##    testuser:{SHA}EWhzdhgoYJWy0z2gyzhRYlN9DSiv
+    ##
+    content:
 
 ## @section OAuth2 Proxy deployment parameters
+##
+
+## @param containerPort OAuth2 Proxy port number
+##
+containerPort: 4180
 
 ## @param replicaCount Number of OAuth2 Proxy replicas to deploy
 ##
 replicaCount: 1
+
+## @param extraArgs add extra args to the default command
+##
+extraArgs:
 ## Configure extra options for OAuth2 Proxy containers' liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe on OAuth2 Proxy nodes
-## @param livenessProbe.httpGet.path httpGet path
-## @param livenessProbe.httpGet.port httpGet port
-## @param livenessProbe.httpGet.scheme httpGet scheme
 ## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
 ## @param livenessProbe.periodSeconds Period seconds for livenessProbe
 ## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -266,19 +288,12 @@ replicaCount: 1
 ##
 livenessProbe:
   enabled: true
-  httpGet:
-    path: /ping
-    port: http
-    scheme: HTTP
   initialDelaySeconds: 0
   periodSeconds: 10
   timeoutSeconds: 1
   failureThreshold: 5
   successThreshold: 1
 ## @param readinessProbe.enabled Enable readinessProbe on OAuth2 Proxy nodes
-## @param readinessProbe.httpGet.path httpGet path
-## @param readinessProbe.httpGet.port httpGet port
-## @param readinessProbe.httpGet.scheme httpGet scheme
 ## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
 ## @param readinessProbe.periodSeconds Period seconds for readinessProbe
 ## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
@@ -287,10 +302,6 @@ livenessProbe:
 ##
 readinessProbe:
   enabled: true
-  httpGet:
-    path: /ping
-    port: http
-    scheme: HTTP
   initialDelaySeconds: 0
   periodSeconds: 10
   timeoutSeconds: 1
@@ -313,15 +324,18 @@ resources:
 
 ## Limits the number of pods of the replicated application that are down simultaneously from voluntary disruptions
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions
-## @param podDisruptionBudget Configure pod disruptions
 ## e.g:
 ## podDisruptionBudget:
 ##   minAvailable: 1
 ##   maxUnavailable: 1
+## @param pdb.create Enable a Pod Disruption Budget creation
+## @param pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
 ##
-podDisruptionBudget: {}
-##  minAvailable: 1
-##  maxUnavailable: 1
+pdb:
+  create: false
+  minAvailable: 1
+  maxUnavailable: 1
 
 ## Configure Pods Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
@@ -410,9 +424,6 @@ priorityClassName: ""
 ## @param lifecycleHooks for the OAuth2 Proxy container(s) to automate configuration before or after startup
 ##
 lifecycleHooks: {}
-## @param proxyVarsAsSecrets Whether to use secrets instead of environment values for setting up OAUTH2_PROXY variables
-##
-proxyVarsAsSecrets: true
 ## @param extraEnvVars Array with extra environment variables to add to OAuth2 Proxy nodes
 ## e.g:
 ## extraEnvVars:
@@ -464,3 +475,64 @@ serviceAccount:
   ## If not set and create is true, a name is generated using the common.names.fullname template
   ##
   name: ""
+
+## @section External Redis(TM) parameters
+##
+externalRedis:
+  ## @param externalRedis.host External Redis(TM) server host
+  ##
+  host:
+  ## @param externalRedis.password External Redis(TM) user password
+  ##
+  password:
+  ## @param externalRedis.port External Redis(TM) server port
+  ##
+  port: 6379
+  ## @param externalRedis.existingSecret The name of an existing secret with Redis(TM) credentials
+  ## NOTE: Must contain key `redis-password`
+  ## NOTE: When it's set, the `externalRedis.password` parameter is ignored
+  ##
+  existingSecret:
+
+## @section Redis(TM) sub-chart parameters
+##
+redis:
+  ## @param redis.enabled Deploy Redis(TM) sub-chart
+  ##
+  enabled: true
+  master:
+    ## @param redis.master.service.port Redis(TM) (without Sentinel) service port
+    ##
+    service:
+      port: 6379
+  replica:
+    ## @param redis.replica.replicaCount Number of Redis(TM) replicas
+    ##
+    replicaCount: 0
+  auth:
+    ## @param redis.auth.enabled Enable Redis(TM) authentication
+    ##
+    enabled: true
+    ## @param redis.auth.existingSecret Secret with Redis(TM) credentials
+    ##
+    existingSecret:
+    ## @param redis.auth.existingSecretPasswordKey Key inside the existing secret with Redis(TM) credentials
+    ##
+    existingSecretPasswordKey:
+    ## @param redis.auth.sentinel Enable authentication in the Sentinel nodes
+    ##
+    sentinel: true
+  sentinel:
+    ## @param redis.sentinel.enabled Enable Redis(TM) sentinel in the deployment
+    ##
+    enabled: false
+    ## @param redis.sentinel.masterSet Name of the Redis(TM) Sentinel master set
+    ##
+    masterSet: mymaster
+    service:
+      ## @param redis.sentinel.service.port Redis(TM) (with Sentinel) service port
+      ##
+      port: 6379
+      ## @param redis.sentinel.service.sentinelPort Redis(TM) (with Sentinel) sentinel service port
+      ##
+      sentinelPort: 26379

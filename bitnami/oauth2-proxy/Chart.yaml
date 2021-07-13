@@ -8,6 +8,10 @@ dependencies:
     tags:
       - bitnami-common
     version: 1.x.x
+  - name: redis
+    repository: https://charts.bitnami.com/bitnami
+    condition: redis.enabled
+    version: 14.x.x
 description: A reverse proxy and static file server that provides authentication using different providers
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/oauth2-proxy

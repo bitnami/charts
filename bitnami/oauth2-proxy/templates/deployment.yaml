@@ -56,8 +56,7 @@ spec:
       securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       {{- if .Values.initContainers }}
-      initContainers:
-        {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
+      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
       {{- end }}
       containers:
         - name: oauth2-proxy
@@ -74,10 +73,73 @@ spec:
           {{- end }}
           {{- if .Values.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            - --http-address=0.0.0.0:{{ .Values.containerPort }}
+            {{- if or .Values.configuration.existingConfigmap .Values.configuration.content }}
+            - --config=/bitnami/oauth2-proxy/conf/oauth2_proxy.cfg
+            {{- end }}
+            {{- if .Values.configuration.authenticatedEmailsFile.enabled }}
+            - --authenticated-emails-file=/bitnami/oauth2-proxy/conf/authenticated-emails/authenticated-emails-list
+            {{- end }}
+            {{- if .Values.configuration.google.enabled }}
+            - --google-admin-email={{ .Values.configuration.google.adminEmail }}
+            - --google-service-account-json=/bitnami/oauth2-proxy/conf/google/service-account.json
+            {{- end }}
+            {{- if .Values.configuration.htpasswdFile.enabled }}
+            - --htpasswd-file=/bitnami/oauth2-proxy/conf/htpasswd/users.txt
+            {{- end }}
+            {{- if .Values.extraArgs }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.extraArgs "context" $ ) | nindent 12 }}
+            {{- end }}
           {{- end }}
           env:
-            - name: foo
-              value: bar
+            - name: OAUTH2_PROXY_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "oauth2-proxy.secretName" . }}
+                  key: client-id
+            - name: OAUTH2_PROXY_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "oauth2-proxy.secretName" . }}
+                  key: client-secret
+            - name: OAUTH2_PROXY_COOKIE_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "oauth2-proxy.secretName" . }}
+                  key: cookie-secret
+            {{- if or .Values.redis.enabled .Values.externalRedis.host }}
+            - name: OAUTH2_PROXY_SESSION_STORE_TYPE
+              value: "redis"
+            {{- if or .Values.redis.auth.enabled .Values.externalRedis.password }}
+            - name: OAUTH2_PROXY_REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "oauth2-proxy.redis.secretName" . }}
+                  key: {{ include "oauth2-proxy.redis.secretPasswordKey" . }}
+            {{- end }}
+            - name: OAUTH2_PROXY_REDIS_CONNECTION_URL
+              value: {{ include "oauth2-proxy.redis.url" . }}
+            {{- if and .Values.redis.sentinel.enabled .Values.redis.enabled }}
+            - name: OAUTH2_PROXY_REDIS_USE_SENTINEL
+              value: "true"
+            - name: OAUTH2_PROXY_REDIS_SENTINEL_MASTER_NAME
+              value: {{ .Values.redis.sentinel.masterSet }}
+            - name: OAUTH2_PROXY_REDIS_SENTINEL_CONNECTION_URLS
+              value: {{ include "oauth2-proxy.redis.sentinelUrl" . }}
+            {{- if .Values.redis.auth.sentinel }}
+            - name: OAUTH2_PROXY_REDIS_SENTINEL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "oauth2-proxy.redis.secretName" . }}
+                  key: {{ include "oauth2-proxy.redis.secretPasswordKey" . }}
+            {{- end }}
+            {{- end }}
+            {{- else }}
+            - name: OAUTH2_PROXY_SESSION_STORE_TYPE
+              value: "cookie"
+            {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -91,25 +153,60 @@ spec:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsSecret "context" $) }}
             {{- end }}
           ports:
-            - containerPort: 4180
+            - containerPort: {{ .Values.containerPort }}
               name: http
               protocol: TCP
           {{- if .Values.resources }}
-          resources: {{- toYaml .Values.resources | nindent 12 }}
+          resources: {{ include "common.tplvalues.render" (dict "value" .Values.resources "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.livenessProbe.enabled }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.livenessProbe "enabled") "context" $) | nindent 12 }}
+          livenessProbe:
+            httpGet:
+              path: /ping
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
           {{- else if .Values.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.readinessProbe.enabled }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.readinessProbe "enabled") "context" $) | nindent 12 }}
+          readinessProbe:
+            httpGet:
+              path: /ping
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
           {{- else if .Values.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: foo
-              mountPath: bar
+          {{- if .Values.configuration.google.enabled }}
+            - name: google-secret
+              mountPath: /bitnami/oauth2-proxy/conf/google
+              readOnly: true
+          {{- end }}
+          {{- if or .Values.configuration.existingConfigmap .Values.configuration.content }}
+            - name: main-configuration
+              mountPath: /bitnami/oauth2-proxy/conf
+          {{- end }}
+          {{- if .Values.configuration.authenticatedEmailsFile.enabled }}
+            - name: authenticated-emails
+              mountPath: /bitnami/oauth2-proxy/conf/authenticated-emails
+              readOnly: true
+          {{- end }}
+          {{- if .Values.configuration.htpasswdFile.enabled }}
+            - name: htpasswd-file
+              mountPath: /bitnami/oauth2-proxy/conf/htpasswd
+              readOnly: true
+          {{- end }}
           {{- if .Values.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -117,9 +214,29 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        - name: foo
-          hostPath:
-            path: bar
+        {{- if .Values.configuration.google.enabled }}
+        - name: google-secret
+          secret:
+            secretName: {{ include "oauth2-proxy.googleSecret" . }}
+        {{- end }}
+        {{- if .Values.configuration.htpasswdFile.enabled }}
+        - name: htpasswd-file
+          secret:
+            secretName: {{ include "oauth2-proxy.httpasswdSecret" . }}
+        {{- end }}
+        {{- if .Values.configuration.authenticatedEmailsFile.enabled }}
+        - name: authenticated-emails
+          secret:
+            items:
+            - key: authenticated-emails-list
+            secretName: {{ include "oauth2-proxy.authenticatedEmailsSecret" . }}
+        {{- end }}
+        {{- if or .Values.configuration.existingConfigmap .Values.configuration.content }}
+        - name: main-configuration
+          configMap:
+            defaultMode: 420
+            name: {{ include "oauth2-proxy.configmapName" . }}
+        {{- end }}
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
