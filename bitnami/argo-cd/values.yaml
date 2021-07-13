@@ -612,7 +612,7 @@ server:
     ## dex.config: |
     ##  connectors: []
     ##
-    dex.config:
+    dex.config: ""
 
   ## Additional applications to create
   ## @param server.additionalApplications Array of additional applications to create
