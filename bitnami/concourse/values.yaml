@@ -31,58 +31,11 @@ commonLabels: {}
 ## @param commonAnnotations Annotations to add to all deployed objects
 ##
 commonAnnotations: {}
-## @param clusterDomain Kubernetes cluster domain name
-##
-clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
 
 ## @section Traffic Exposure Parameters
-
-## web service parameters
-##
-service:
-  ## @param service.type web service type
-  ##
-  type: ClusterIP
-  ## @param service.port web service HTTP port
-  ##
-  port: 80
-  ## @param service.httpsPort web service HTTPS port
-  ##
-  httpsPort: 443
-  ## Node ports to expose
-  ## @param service.nodePorts.http Node port for HTTP
-  ## @param service.nodePorts.https Node port for HTTPS
-  ## NOTE: choose port between <30000-32767>
-  ##
-  nodePorts:
-    http:
-    https:
-  ## @param service.clusterIP web service Cluster IP
-  ## e.g.:
-  ## clusterIP: None
-  ##
-  clusterIP:
-  ## @param service.loadBalancerIP web service Load Balancer IP
-  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
-  ##
-  loadBalancerIP:
-  ## @param service.loadBalancerSourceRanges web service Load Balancer sources
-  ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
-  ## e.g:
-  ## loadBalancerSourceRanges:
-  ##   - 10.10.10.0/24
-  ##
-  loadBalancerSourceRanges: []
-  ## @param service.externalTrafficPolicy web service external traffic policy
-  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
-  ##
-  externalTrafficPolicy: Cluster
-  ## @param service.annotations Additional custom annotations for web service
-  ##
-  annotations: {}
 
 ## @section consourse Parameters
 
@@ -94,7 +47,6 @@ concourse:
   ## @param concourse.image.tag image tag (immutable tags are recommended)
   ## @param concourse.image.pullPolicy image pull policy
   ## @param concourse.image.pullSecrets image pull secrets
-  ## @param concourse.image.debug Enable image debug mode
   ##
   image:
     registry: docker.io
@@ -113,9 +65,6 @@ concourse:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-    ## Enable debug mode
-    ##
-    debug: true
 
 web:
   ## @param web.enabled Enable web
@@ -138,30 +87,24 @@ web:
   ## @param web.clusterName A name for this Concourse cluster, to be displayed on the dashboard page.
   ##
   clusterName:
-  ## @param web.bindIp IP address on which to listen for HTTP traffic (web UI and API).
+  ## @param web.lisentIp IP address on which to listen for HTTP traffic (web UI and API).
   ##
-  bindIp: 0.0.0.0
+  lisentIp: 0.0.0.0
 
-  ## @param web.bindPort Port on which to listen for HTTP traffic (web UI and API).
+  ## @param web.containerPort Port on which to listen for HTTP traffic (web UI and API).
   ##
-  bindPort: 8080
+  containerPort: 8080
 
   ## @param web.nameOverride provide a name to substitute for the full names of resources
   nameOverride:
 
-  encryption:
-    ## @param web.encryption.enabled encryption of pipeline configuration. Encryption keys can be set via secrets
-    ## (`encryption-key` and `old-encryption-key` fields).
-    ## Ref: https://concourse-ci.org/encryption.html
-    ##
-    enabled: false
   ## @param web.externalUrl URL used to reach any ATC from the outside world.
   ## This is *very* important for a proper authentication workflow as
   ## browser redirects are based on the value set here.
   ##
   ## Example: http://ci.concourse-ci.org
   ##
-  externalUrl:
+  externalUrl: http://concourse.local
 
   ## Configure extra options for web containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
@@ -221,10 +164,10 @@ web:
     requests: {}
   
   ## @param web.tls.enabled enable serving HTTPS traffic directly through the web component.
-  ## @param web.tls.bindPort on which to listen for HTTPS traffic.
+  ## @param web.tls.containerPort on which to listen for HTTPS traffic.
   tls:
     enabled: false
-    bindPort: 443
+    containerPort: 443
 
   ## @param web.existingConfigmap The name of an existing ConfigMap with your custom configuration for web
   ##
@@ -267,53 +210,51 @@ web:
   podSecurityPolicy:
     enabled: false
 
-  ## @section service   
   service: 
-    api:
-      ## @param web.service.api.type For minAvailableikube, set this to ClusterIP, elsewhere use LoadBalancer or NodePort
-      ## Ref: https://kubernetes.io/docs/user-guide/services/#publishing-services---service-types
-      ##
-      type: ClusterIP
+    ## @param web.service.type For minAvailableikube, set this to ClusterIP, elsewhere use LoadBalancer or NodePort
+    ## Ref: https://kubernetes.io/docs/user-guide/services/#publishing-services---service-types
+    ##
+    type: ClusterIP
 
-      ## @param web.service.api.clusterIP When using `web.service.api.type: ClusterIP`, sets the user-specified cluster IP.
-      ## Example: 172.217.1.174
-      ##
-      clusterIP:
+    ## @param web.service.clusterIP When using `web.service.type: ClusterIP`, sets the user-specified cluster IP.
+    ## Example: 172.217.1.174
+    ##
+    clusterIP:
 
-      ## @param web.service.api.loadBalancerIP  When using `web.service.api.type: LoadBalancer`, sets the user-specified load balancer IP.
-      ## Example: 172.217.1.174
-      ##
-      loadBalancerIP:
+    ## @param web.service.loadBalancerIP  When using `web.service.type: LoadBalancer`, sets the user-specified load balancer IP.
+    ## Example: 172.217.1.174
+    ##
+    loadBalancerIP:
 
-      ## @param web.service.api.labels Additional Labels to be added to the web api service.
-      ##
-      labels:
+    ## @param web.service.labels Additional Labels to be added to the web api service.
+    ##
+    labels:
 
-      ## @param web.service.api.annotations Annotations to be added to the web api service.
-      ##
-      ##
-      ## When using `web.service.api.type: LoadBalancer` in AWS, enable HTTPS with an ACM cert:
-      ##
-      ##   service.beta.kubernetes.io/aws-load-balancer-ssl-cert: "arn:aws:acm:eu-west-1:123456789:certificate/abc123-abc123-abc123-abc123"
-      ##   service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "http"
-      ##   service.beta.kubernetes.io/aws-load-balancer-backend-port: "api"
-      ##   service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "443"
-      ##
-      annotations: {}
+    ## @param web.service.annotations Annotations to be added to the web api service.
+    ##
+    ##
+    ## When using `web.service.type: LoadBalancer` in AWS, enable HTTPS with an ACM cert:
+    ##
+    ##   service.beta.kubernetes.io/aws-load-balancer-ssl-cert: "arn:aws:acm:eu-west-1:123456789:certificate/abc123-abc123-abc123-abc123"
+    ##   service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "http"
+    ##   service.beta.kubernetes.io/aws-load-balancer-backend-port: "api"
+    ##   service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "443"
+    ##
+    annotations: {}
 
-      ## @param web.service.api.loadBalancerSourceRanges When using `web.service.api.type: LoadBalancer`, restrict access to the load balancer to particular IPs
-      ## Example:
-      ##   - 192.168.1.10/32
-      ##
-      loadBalancerSourceRanges:
+    ## @param web.service.loadBalancerSourceRanges When using `web.service.type: LoadBalancer`, restrict access to the load balancer to particular IPs
+    ## Example:
+    ##   - 192.168.1.10/32
+    ##
+    loadBalancerSourceRanges:
 
-      ## @param web.service.api.NodePort When using `web.service.api.type: NodePort`, sets the nodePort for api
-      ##
-      NodePort:
+    ## @param web.service.NodePort When using `web.service.type: NodePort`, sets the nodePort for api
+    ##
+    NodePort:
 
-      ## @param web.service.api.tlsNodePort When using `web.service.api.type: NodePort`, sets the nodePort for api tls
-      ##
-      tlsNodePort:
+    ## @param web.service.tlsNodePort When using `web.service.type: NodePort`, sets the nodePort for api tls
+    ##
+    tlsNodePort:
     
     workerGateway:
       ## @param web.service.workerGateway.type For minikube, set this to ClusterIP, elsewhere use LoadBalancer or NodePort
@@ -360,30 +301,25 @@ web:
     ## Enable this flag in order to customize the `client_id` and
     ## `client_secret` used when the TSA needs to communicate with the ATC.
     ##
-    ## @param web.tsa.clientConfig.enabled Enabling this requires setting `secrets.tsaClientId` and
-    ## `secrets.tsaClientSecret` (or filling the equivalent fields in the Secret).
-    ##
-    clientConfig:
-      enabled: false
     ## @param web.tsa.logLevel Minimum level of logs to see. Possible values: debug, info, error.
     ##
     logLevel: debug
 
-    ## @param web.tsa.bindIp IP address on which to listen for SSH.
+    ## @param web.tsa.lisentIp IP address on which to listen for SSH.
     ##
-    bindIp: 0.0.0.0
+    lisentIp: 0.0.0.0
 
-    ## @param web.tsa.bindPort Port on which to listen for SSH.
+    ## @param web.tsa.containerPort Port on which to listen for SSH.
     ##
-    bindPort: 2222
+    containerPort: 2222
 
-    ## @param web.tsa.debugBindIp IP address on which to listen for the pprof debugger endpoints (default: 127.0.0.1)
+    ## @param web.tsa.debugLisentIp IP address on which to listen for the pprof debugger endpoints (default: 127.0.0.1)
     ##
-    debugBindIp: 127.0.0.1
+    debugLisentIp: 127.0.0.1
 
-    ## @param web.tsa.debugBindPort Port on which to listen for TSA pprof server.
+    ## @param web.tsa.debugContainerPort Port on which to listen for TSA pprof server.
     ##
-    debugBindPort: 2221
+    debugContainerPort: 2221
 
     ## @param web.tsa.hostKey Path to private key to use for the SSH server.
     ##
@@ -436,12 +372,12 @@ web:
       ##
       localUser: "test"
 
-      ## @param web.auth.mainTeam.userIDFieldPerConnector Define how to display user ID for each authentication connector.
-      # Format is <connector>:<fieldname>. Valid field names are user_id,
-      # name, username and email, where name maps to claims field username,
-      # and username maps to claims field preferred username.
-      #
-      userIDFieldPerConnector: ""
+    ## @param web.auth.userIDFieldPerConnector Define how to display user ID for each authentication connector.
+    # Format is <connector>:<fieldname>. Valid field names are user_id,
+    # name, username and email, where name maps to claims field username,
+    # and username maps to claims field preferred username.
+    #
+    userIDFieldPerConnector: ""
 
   ## @section web.ingress
   ingress:
@@ -449,20 +385,23 @@ web:
     ## Ref: https://kubernetes.io/docs/user-guide/ingress/
     ##
     ## Enable Ingress.
-    enabled: false
+    enabled: true
 
     ## @param web.ingress.annotations Annotations to be added to the web ingress.
     ## Example:
     ##   kubernetes.io/ingress.class: nginx
     ##   kubernetes.io/tls-acme: 'true'
     annotations: {}
-
+    
     ## Hostnames.
     ## Either `hosts` or `rulesOverride` must be provided if Ingress is enabled.
     ## `hosts` sets up the Ingress with default rules per provided hostname.
-    ## @param web.ingress.hosts
-    hosts:
+    ## @param web.ingress.hostname
+    hostname: concourse.local
 
+    ## @param web.ingress.path The Path to Concourse
+    ##
+    path: /
     ## @param web.ingress.rulesOverride Ingress rules override
     ## Either `hosts` or `rulesOverride` must be provided if Ingress is enabled.
     ## `rulesOverride` allows the user to define the full set of ingress rules, for more complex Ingress setups.
@@ -474,7 +413,43 @@ web:
     ##   - secretName: concourse-web-tls
     ##     hosts:
     ##       - concourse.domain.com
-    tls:
+    tls: false
+
+    ## @param web.ingress.pathType Ingress Path type
+    pathType: ImplementationSpecific
+
+    ## @param web.ingress.extraHosts The list of additional hostnames to be covered with this ingress record.
+    ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
+    ## extraHosts:
+    ## - name: concourse.local
+    ##   path: /
+    extraHosts: []
+    
+    ## @param web.ingress.extraTls The tls configuration for additional hostnames to be covered with this ingress record.
+    ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+    ## extraTls:
+    ## - hosts:
+    ##     - concourse.local
+    ##   secretName: concourse.local-tls
+    extraTls: []
+    
+    ## @param web.ingress.secrets If you're providing your own certificates, please use this to add the certificates as secrets
+    ## key and certificate should start with -----BEGIN CERTIFICATE----- or
+    ## -----BEGIN RSA PRIVATE KEY-----
+    ##
+    ## name should line up with a tlsSecret set further up
+    ## If you're using cert-manager, this is unneeded, as it will create the secret for you if it is not set
+    ##
+    ## It is also possible to create and manage the certificates outside of this helm chart
+    ## Please see README.md for more information
+    ## Example:
+    ## - name: concourse.local-tls
+    ##   key:
+    ##   certificate:
+    ##
+    secrets: []
+    
+
 
   ## @param web.podAnnotations Annotations for web pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
@@ -616,18 +591,12 @@ worker:
   ## @param worker.args 
   args: ["worker"]
 
-  ## @param worker.bindIp IP address on which to listen for the Garden server.
+  ## @param worker.lisentIp IP address on which to listen for the Garden server.
 
-  bindIp: 127.0.0.1
+  lisentIp: 127.0.0.1
 
-  ## @param worker.bindPort Port on which to listen for the Garden server.
-  bindPort: 7777
-
-  ## @param worker.healthcheckBindIp IP address on which to listen for health checking requests.
-  healthcheckBindIp: 0.0.0.0
-
-  ## @param worker.healthcheckBindPort Port on which to listen for health checking requests.
-  healthcheckBindPort: 8888
+  ## @param worker.containerPort Port on which to listen for the Garden server.
+  containerPort: 7777
 
   ## Enable HorizontalPodAutoscaler for worker pods
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
@@ -672,20 +641,26 @@ worker:
   ## @param worker.livenessProbe.periodSeconds Period seconds for livenessProbe
   ## @param worker.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
   ## @param worker.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param worker.livenessProbe.successThreshold Failure threshold for livenessProbe
   livenessProbe:
     enabled: true
     failureThreshold: 5
     initialDelaySeconds: 10
     periodSeconds: 15
     timeoutSeconds: 3
-    httpGet:
-      path: /
-      port: worker-hc
+    successThreshold: 1
 
   ## @param worker.readinessProbe Configures the readiness probes.
   ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/
   ##
   readinessProbe: {}
+
+  ## @param worker.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param worker.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
 
   ## @param worker.resources.limits Configure resource limits.
   ## @param worker.resources.requests Configure resource request
@@ -742,6 +717,10 @@ worker:
   ##
   podAntiAffinityPreset: soft
 
+  ## @param worker.hostAliases Deployment pod host aliases
+  ##
+  hostAliases: []
+
   ##  Node affinity preset
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
   ## Allowed values: soft, hard
@@ -770,14 +749,17 @@ worker:
     ##
     affinity: {}
 
-    ## @param worker.nodeAffinityPreset.nodeSelector Node labels for pod assignment
-    ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
-    ##
-    nodeSelector: {}
-    ## @param worker.nodeAffinityPreset.tolerations Tolerations for web pods assignment
-    ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-    ##
-    tolerations: []
+  ## @param worker.nodeSelector Node labels for pod assignment
+  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+
+  ## @param worker.tolerations Tolerations for worker pod assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ## Note: this configuration supersedes the global tolerations configuration
+  ##
+  tolerations: []
+  
   ## @param worker.updateStrategy.type web statefulset strategy type
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
@@ -841,21 +823,21 @@ worker:
     ##
     logLevel: info
 
-    ## @param worker.baggageclaim.bindIp IP address on which to listen for API traffic.
+    ## @param worker.baggageclaim.lisentIp IP address on which to listen for API traffic.
     ##
-    bindIp: 127.0.0.1
+    lisentIp: 127.0.0.1
 
-    ## @param worker.baggageclaim.bindPort Port on which to listen for API traffic.
+    ## @param worker.baggageclaim.containerPort Port on which to listen for API traffic.
     ##
-    bindPort: 7788
+    containerPort: 7788
 
-    ## @param worker.baggageclaim.debugBindIp IP address on which to listen for the pprof debugger endpoints.
+    ## @param worker.baggageclaim.debugLisentIp IP address on which to listen for the pprof debugger endpoints.
     ##
-    debugBindIp: 127.0.0.1
+    debugLisentIp: 127.0.0.1
 
-    ## @param worker.baggageclaim.debugBindPort Port on which to listen for baggageclaim pprof server.
+    ## @param worker.baggageclaim.debugContainerPort Port on which to listen for baggageclaim pprof server.
     ##
-    debugBindPort: 7787
+    debugContainerPort: 7787
 
     ## @param worker.baggageclaim.disableUserNamespaces Disable remapping of user/group IDs in unprivileged volumes.
     ##
@@ -882,19 +864,6 @@ worker:
     ##
     overlaysDir:
 
-    ## @param worker.baggageclaim.reapInterval Interval on which to reap expired volumes.
-    ##
-    reapInterval: 10s
-
-    ## @param worker.baggageclaim.p2pInterfaceFamily 4 for IPv4 and 6 for IPv6
-    ##
-    p2pInterfaceFamily:
-
-    ## @param worker.baggageclaim.p2pInterfaceNamePattern Regular expression to match a network interface for p2p streaming
-    ## e.g. "eth0"
-    ##
-    p2pInterfaceNamePattern:
-    
   ## @param worker.additionalCertificates
   additionalCertificates: false
     
@@ -960,7 +929,7 @@ volumePermissions:
 rbac:
   ## @param rbac.create Specifies whether RBAC resources should be created
   ##
-  create: false
+  create: true
 
 
 ## For managing secrets using Helm
@@ -1007,18 +976,6 @@ secrets:
   ## For details of expected format, see https://concourse-ci.org/local-auth.html
   ##
   localUsers: "test:test"
-
-  ## @param secrets.webTlsCert The TLS certificate for the web component to be able to terminate
-  ## @param secrets.webTlsKey private key for the web component to be able to terminate
-  ## TLS connections.
-  ##
-  webTlsCert:
-  webTlsKey:
-
-  ## @param secrets.webTlsCaCert The TLS CA certificate for the web component to be able to terminate
-  ## TLS connections. Enables mTLS.
-  ##
-  webTlsCaCert:
 
   ## @param secrets.hostKey Concourse Host Keys.
   ## Ref: https://concourse-ci.org/install.html#generating-keys

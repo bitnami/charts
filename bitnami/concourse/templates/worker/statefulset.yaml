@@ -68,7 +68,7 @@ spec:
             - -c
             - |
               mkdir -p "/bitnami/concourse"
-              chown -R "{{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}" "/bitnami/concourse"
+              chown -R "{{ .Values.worker.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}" "/bitnami/concourse"
           {{- if .Values.worker.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.worker.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
@@ -89,9 +89,6 @@ spec:
           {{- end }}
           {{- if .Values.worker.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.worker.containerSecurityContext "enabled" | toYaml | nindent 12 }}
-          {{- end }}
-          {{- if .Values.worker.command }}
-          command: {{- include "common.tplvalues.render" (dict "value" .Values.worker.command "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.worker.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.worker.args "context" $) | nindent 12 }}
@@ -123,13 +120,13 @@ spec:
             - name: CONCOURSE_WORK_DIR
               value: {{ .Values.worker.workDir | quote }}
             {{- end }}
-            {{- if .Values.worker.bindIp }}
+            {{- if .Values.worker.lisentIp }}
             - name: CONCOURSE_BIND_IP
-              value: {{ .Values.worker.bindIp | quote }}
+              value: {{ .Values.worker.lisentIp | quote }}
             {{- end }}
-            {{- if .Values.worker.bindPort }}
+            {{- if .Values.worker.containerPort }}
             - name: CONCOURSE_BIND_PORT
-              value: {{ .Values.worker.bindPort | quote }}
+              value: {{ .Values.worker.containerPort | quote }}
             {{- end }}
             {{- if .Values.worker.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.worker.extraEnvVars "context" $) | nindent 12 }}
@@ -138,21 +135,21 @@ spec:
             - name: CONCOURSE_BAGGAGECLAIM_LOG_LEVEL
               value: {{ .Values.worker.baggageclaim.logLevel | quote }}
             {{- end }}
-            {{- if .Values.worker.baggageclaim.bindIp }}
+            {{- if .Values.worker.baggageclaim.lisentIp }}
             - name: CONCOURSE_BAGGAGECLAIM_BIND_IP
-              value: {{ .Values.worker.baggageclaim.bindIp | quote }}
+              value: {{ .Values.worker.baggageclaim.lisentIp | quote }}
             {{- end }}
-            {{- if .Values.worker.baggageclaim.bindPort }}
+            {{- if .Values.worker.baggageclaim.containerPort }}
             - name: CONCOURSE_BAGGAGECLAIM_BIND_PORT
-              value: {{ .Values.worker.baggageclaim.bindPort | quote }}
+              value: {{ .Values.worker.baggageclaim.containerPort | quote }}
             {{- end }}
-            {{- if .Values.worker.baggageclaim.debugBindIp }}
+            {{- if .Values.worker.baggageclaim.debugLisentIp }}
             - name: CONCOURSE_BAGGAGECLAIM_DEBUG_BIND_IP
-              value: {{ .Values.worker.baggageclaim.debugBindIp | quote }}
+              value: {{ .Values.worker.baggageclaim.debugLisentIp | quote }}
             {{- end }}
-            {{- if .Values.worker.baggageclaim.debugBindPort }}
+            {{- if .Values.worker.baggageclaim.debugContainerPort }}
             - name: CONCOURSE_BAGGAGECLAIM_DEBUG_BIND_PORT
-              value: {{ .Values.worker.baggageclaim.debugBindPort | quote }}
+              value: {{ .Values.worker.baggageclaim.debugContainerPort | quote }}
             {{- end }}
             {{- if .Values.worker.baggageclaim.volumes }}
             - name: CONCOURSE_BAGGAGECLAIM_VOLUMES
@@ -191,7 +188,15 @@ spec:
           resources: {{- toYaml .Values.worker.resources | nindent 12 }}
           {{- end }}
           {{- if .Values.worker.livenessProbe.enabled }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.worker.livenessProbe "enabled") "context" $) | nindent 12 }}
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.worker.livenessProbe.path }}
+              port: {{ .Values.worker.livenessProbe.port }}
+            initialDelaySeconds: {{ .Values.worker.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.worker.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.worker.livenessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.worker.livenessProbe.failureThreshold }}
+            successThreshold: {{ .Values.worker.livenessProbe.successThreshold }}
           {{- else if .Values.worker.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.worker.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}

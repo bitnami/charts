@@ -1,4 +1,4 @@
-{{- if .Values.web.enabled -}}
+{{- if and .Values.web.enabled (not .Values.web.existingConfigmap) -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:

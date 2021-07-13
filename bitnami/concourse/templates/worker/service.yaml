@@ -20,5 +20,5 @@ spec:
   ##
   ports: []
   selector:
-    app: {{ template "concourse.worker.fullname" . }}
+    app.kubernetes.io/component: worker
 {{- end }}

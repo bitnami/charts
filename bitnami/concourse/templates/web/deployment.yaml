@@ -66,7 +66,7 @@ spec:
             - -c
             - |
               mkdir -p "/bitnami/concourse"
-              chown -R "{{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}" "/bitnami/concourse"
+              chown -R "{{ .Values.web.containerSecurityContext.runAsUser }}:{{ .Values.web.podSecurityContext.fsGroup }}" "/bitnami/concourse"
           securityContext:
             runAsUser: 0
           {{- if .Values.volumePermissions.resources }}
@@ -97,19 +97,19 @@ spec:
             - name: CONCOURSE_TSA_LOG_LEVEL
               value: {{ .Values.web.tsa.logLevel | quote }}
             {{- end }}
-            {{- if .Values.web.tsa.bindIp }}
+            {{- if .Values.web.tsa.lisentIp }}
             - name: CONCOURSE_TSA_BIND_IP
-              value: {{ .Values.web.tsa.bindIp | quote }}
+              value: {{ .Values.web.tsa.lisentIp | quote }}
             {{- end }}
             - name: CONCOURSE_TSA_BIND_PORT
-              value: {{ .Values.web.tsa.bindPort | quote }}
-            {{- if .Values.web.tsa.debugBindIp }}
+              value: {{ .Values.web.tsa.containerPort | quote }}
+            {{- if .Values.web.tsa.debugLisentIp }}
             - name: CONCOURSE_TSA_DEBUG_BIND_IP
-              value: {{ .Values.web.tsa.debugBindIp | quote }}
+              value: {{ .Values.web.tsa.debugLisentIp | quote }}
             {{- end }}
-            {{- if .Values.web.tsa.debugBindPort }}
+            {{- if .Values.web.tsa.debugContainerPort }}
             - name: CONCOURSE_TSA_DEBUG_BIND_PORT
-              value: {{ .Values.web.tsa.debugBindPort | quote }}
+              value: {{ .Values.web.tsa.debugContainerPort | quote }}
             {{- end }}
             - name: CONCOURSE_TSA_HOST_KEY
               value: "{{ .Values.web.keySecretsPath }}/host_key"
@@ -120,6 +120,10 @@ spec:
             {{- if .Values.web.logLevel }}
             - name: CONCOURSE_LOG_LEVEL
               value: {{ .Values.web.logLevel | quote }}
+            {{- end }}
+            {{- if .Values.web.tsa.heartbeatInterval }}
+            - name: CONCOURSE_TSA_HEARTBEAT_INTERVAL
+              value: {{ .Values.web.tsa.heartbeatInterval | quote }}
             {{- end }}
             {{- if .Values.web.tls.enabled }}
             - name: CONCOURSE_EXTERNAL_URL
@@ -160,6 +164,10 @@ spec:
             - name: CONCOURSE_ENABLE_CACHE_STREAMED_VOLUMES
               value: {{ .Values.web.enableCacheStreamedVolumes | quote }}
             {{- end }}
+            {{- if .Values.web.tsa.gardenRequestTimeout }}
+            - name: CONCOURSE_TSA_GARDEN_REQUEST_TIMEOUT
+              value: {{ .Values.web.tsa.gardenRequestTimeout | quote }}
+            {{- end }}
             - name: CONCOURSE_POSTGRES_HOST
               value: {{ template "concourse.postgresql.fullname" . }}
             - name: CONCOURSE_POSTGRES_PASSWORD
@@ -197,16 +205,12 @@ spec:
             {{- end }}
           ports:
             - name: http
-              containerPort: {{ .Values.web.bindPort }}
+              containerPort: {{ .Values.web.containerPort }}
             - name: tsa
-              containerPort: {{ .Values.web.tsa.bindPort }}
-            {{- if .Values.web.debugBindPort }}
+              containerPort: {{ .Values.web.tsa.containerPort }}
+            {{- if .Values.web.debugContainerPort }}
             - name: http-debug
-              containerPort: {{ .Values.web.debugBindPort }}
-            {{- end }}
-            {{- if .Values.web.tsa.bindDebugPort }}
-            - name: tsa-debug
-              containerPort: {{ .Values.web.tsa.bindDebugPort }}
+              containerPort: {{ .Values.web.debugContainerPort }}
             {{- end }}
           envFrom:
             {{- if .Values.web.extraEnvVarsCM }}

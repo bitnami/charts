@@ -13,22 +13,22 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  type: {{ .Values.web.service.api.type }}
-  {{- if (or (eq .Values.service.type "LoadBalancer") (eq .Values.web.service.api.type "NodePort")) }}
-  externalTrafficPolicy: {{ .Values.service.externalTrafficPolicy | quote }}
+  type: {{ .Values.web.service.type }}
+  {{- if (or (eq .Values.web.service.type "LoadBalancer") (eq .Values.web.service.type "NodePort")) }}
+  externalTrafficPolicy: {{ .Values.web.service.externalTrafficPolicy | quote }}
   {{- end }}
-  {{ if eq .Values.service.type "LoadBalancer" }}
-  loadBalancerSourceRanges: {{ .Values.service.loadBalancerSourceRanges }}
+  {{ if eq .Values.web.service.type "LoadBalancer" }}
+  loadBalancerSourceRanges: {{ .Values.web.service.loadBalancerSourceRanges }}
   {{ end }}
-  {{- if (and (eq .Values.service.type "LoadBalancer") (not (empty .Values.service.loadBalancerIP))) }}
-  loadBalancerIP: {{ .Values.service.loadBalancerIP }}
+  {{- if (and (eq .Values.web.service.type "LoadBalancer") (not (empty .Values.web.service.loadBalancerIP))) }}
+  loadBalancerIP: {{ .Values.web.service.loadBalancerIP }}
   {{- end }}
   ports:
     - name: http
-      port: {{ .Values.web.bindPort }}
+      port: {{ .Values.web.containerPort }}
       targetPort: http
-      {{- if and (eq "NodePort" .Values.web.service.api.type) .Values.web.service.api.NodePort }}
-      nodePort: {{ .Values.web.service.api.NodePort}}
+      {{- if and (eq "NodePort" .Values.web.service.type) .Values.web.service.NodePort }}
+      nodePort: {{ .Values.web.service.NodePort}}
       {{- end }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: {{ template "concourse.web.fullname" . }}

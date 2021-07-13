@@ -25,7 +25,7 @@ Compile all warnings into a single message.
 */}}
 {{- define "concourse.validateValues" -}}
 {{- $messages := list -}}
-{{- $messages := append $messages (include "concourse.web.worker.enabeled" .) -}}
+{{- $messages := append $messages (include "concourse.validateValues.enabeled" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -35,7 +35,7 @@ Compile all warnings into a single message.
 {{- end -}}
 
 {{/* Check if web or worker are enable */}}
-{{- define "concourse.web.worker.enabeled" }}
+{{- define "concourse.validateValues.enabeled" }}
 {{ if not (or .Values.web.enabled .Values.worker.enabled) }}
 concourse: enabeled
   Must set either web.enabled or worker.enabled to create a concourse deployment
@@ -112,8 +112,8 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 Creates the address of the TSA service.
 */}}
 {{- define "concourse.web.tsa.address" -}}
-{{- $port := .Values.web.tsa.bindPort -}}
-{{ template "concourse.worker.fullname" . }}-gateway:{{- print $port -}}
+{{- $port := .Values.web.tsa.containerPort -}}
+{{ template "concourse.web.fullname" . }}-gateway:{{- print $port -}}
 {{- end -}}
 
 {{/*

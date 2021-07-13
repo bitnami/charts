@@ -3,7 +3,7 @@
 apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
-  name: {{ include "common.names.fullname" . }}
+  name: {{ template "concourse.web.fullname" . }}
   namespace: {{ .Release.Namespace }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
@@ -23,33 +23,39 @@ metadata:
   {{- end }}
 spec:
   rules:
+    {{- if .Values.web.ingress.rulesOverride }}
+    {{- toYaml .Values.web.ingress.rulesOverride | nindent 4 }}
+    {{- else }}
     {{- if .Values.web.ingress.hostname }}
-    - http:
+    - host: {{ .Values.web.ingress.hostname }}
+      http:
         paths:
           - path: {{ .Values.web.ingress.path }}
-            {{- if eq "true" (include "common.ingress.web.supportsPathType" .) }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
             pathType: {{ .Values.web.ingress.pathType }}
             {{- end }}
-            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" .) "servicePort" "http" "context" $)  | nindent 14 }}
-      {{- if ne .Values.web.ingress.hostname "*" }}
-      host: {{ .Values.web.ingress.hostname }}
-      {{- end }}
+            backend: 
+              serviceName: {{ template "concourse.web.fullname" . }}
+              servicePort: http
+    {{- end }}
     {{- end }}
     {{- range .Values.web.ingress.extraHosts }}
-    - host: {{ .name }}
+    - host: {{ .name | quote }}
       http:
         paths:
           - path: {{ default "/" .path }}
-            {{- if eq "true" (include "common.web.ingress.supportsPathType" $) }}
-            pathType: {{ default "ImplementationSpecific" .pathType }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
+            pathType: {{ .Values.web.ingress.pathType }}
             {{- end }}
-            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" $) "servicePort" "http" "context" $) | nindent 14 }}
+            backend: 
+              serviceName: {{ template "concourse.web.fullname" . }}
+              servicePort: http
     {{- end }}
   {{- if or .Values.web.ingress.tls .Values.web.ingress.extraTls }}
   tls:
     {{- if .Values.web.ingress.tls }}
     - hosts:
-        - {{ .Values.web.ingress.hostname }}
+      - {{ .Values.web.ingress.hostname }}
       secretName: {{ printf "%s-tls" .Values.web.ingress.hostname }}
     {{- end }}
     {{- if .Values.web.ingress.extraTls }}

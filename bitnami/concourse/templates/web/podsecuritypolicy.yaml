@@ -14,8 +14,6 @@ spec:
   allowPrivilegeEscalation: false
   requiredDropCapabilities:
     - ALL
-  volumes:
-   {{ toYaml .Values.podSecurityPolicy.allowedWebVolumes | indent 4 }}
   hostNetwork: false
   hostIPC: false
   hostPID: false
