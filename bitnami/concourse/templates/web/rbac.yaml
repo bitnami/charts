@@ -27,7 +27,7 @@ kind: ClusterRole
 metadata:
   name: {{ template "concourse.web.fullname" . }}
   labels:
-    app.kubernetes.io/component: web
+    app.kubernetes.io/component: {{ template "concourse.web.fullname" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}

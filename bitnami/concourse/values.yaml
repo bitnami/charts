@@ -97,6 +97,10 @@ web:
 
   ## @param web.nameOverride provide a name to substitute for the full names of resources
   nameOverride:
+  
+  ## @param web.perrAdress Network address of this web node, reachable by other web nodes. Used for forwarded worker addresses. (default: $POD_IP)
+  ##
+  peerAddress:
 
   ## @param web.externalUrl URL used to reach any ATC from the outside world.
   ## This is *very* important for a proper authentication workflow as
@@ -104,7 +108,7 @@ web:
   ##
   ## Example: http://ci.concourse-ci.org
   ##
-  externalUrl: http://concourse.local
+  externalUrl: 
 
   ## Configure extra options for web containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes

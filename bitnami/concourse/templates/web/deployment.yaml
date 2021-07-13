@@ -5,7 +5,7 @@ metadata:
   name: {{ template "concourse.web.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
-    app.kubernetes.io/component: web
+    app.kubernetes.io/component: {{ template "concourse.web.fullname" . }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
@@ -19,14 +19,14 @@ spec:
   {{- end }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
-      app.kubernetes.io/component: web
+      app.kubernetes.io/component: {{ template "concourse.web.fullname" . }}
   template:
     metadata:
       {{- if .Values.web.podAnnotations }}
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.web.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
-        app.kubernetes.io/component: web
+        app.kubernetes.io/component: {{ template "concourse.web.fullname" . }}
         {{- if .Values.web.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.web.podLabels "context" $) | nindent 8 }}
         {{- end }}
@@ -97,6 +97,10 @@ spec:
             - name: CONCOURSE_TSA_LOG_LEVEL
               value: {{ .Values.web.tsa.logLevel | quote }}
             {{- end }}
+            {{- if .Values.web.containerPort }}
+            - name: CONCOURSE_BIND_PORT
+              value: {{ .Values.web.containerPort | quote }}
+            {{- end }}
             {{- if .Values.web.tsa.lisentIp }}
             - name: CONCOURSE_TSA_BIND_IP
               value: {{ .Values.web.tsa.lisentIp | quote }}
@@ -133,6 +137,17 @@ spec:
             - name: CONCOURSE_EXTERNAL_URL
               value: {{ .Values.web.externalUrl | quote }}
             {{- end }}
+            {{- end }}
+            {{- if .Values.web.peerAddress }}
+            - name: CONCOURSE_PEER_ADDRESS
+              value: {{ .Values.web.peerAddress | quote }}
+            {{- else }}
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: CONCOURSE_PEER_ADDRESS
+              value: "$(POD_IP)"
             {{- end }}
             {{- if .Values.web.auth.mainTeam.localUser }}
             - name: CONCOURSE_MAIN_TEAM_LOCAL_USER

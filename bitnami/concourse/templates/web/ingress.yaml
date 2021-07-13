@@ -34,9 +34,7 @@ spec:
             {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
             pathType: {{ .Values.web.ingress.pathType }}
             {{- end }}
-            backend: 
-              serviceName: {{ template "concourse.web.fullname" . }}
-              servicePort: http
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "concourse.web.fullname" .) "servicePort" "http" "context" $)  | nindent 14 }}
     {{- end }}
     {{- end }}
     {{- range .Values.web.ingress.extraHosts }}
@@ -47,9 +45,7 @@ spec:
             {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
             pathType: {{ .Values.web.ingress.pathType }}
             {{- end }}
-            backend: 
-              serviceName: {{ template "concourse.web.fullname" . }}
-              servicePort: http
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "concourse.web.fullname" $) "servicePort" "http" "context" $) | nindent 14 }}
     {{- end }}
   {{- if or .Values.web.ingress.tls .Values.web.ingress.extraTls }}
   tls:
