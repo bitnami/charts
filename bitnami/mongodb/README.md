@@ -61,29 +61,30 @@ Refer to the [chart documentation for more information on each of these architec
 ### Global parameters
 
 | Name                       | Description                                                                                                            | Value |
-| -------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ----- |
+|----------------------------|------------------------------------------------------------------------------------------------------------------------|-------|
 | `global.imageRegistry`     | Global Docker image registry                                                                                           | `nil` |
 | `global.imagePullSecrets`  | Global Docker registry secret names as an array                                                                        | `[]`  |
 | `global.storageClass`      | Global StorageClass for Persistent Volume(s)                                                                           | `nil` |
 | `global.namespaceOverride` | Override the namespace for resource deployed by the chart, but can itself be overridden by the local namespaceOverride | `nil` |
 
-
 ### Common parameters
 
-| Name                | Description                                                                                               | Value           |
-| ------------------- | --------------------------------------------------------------------------------------------------------- | --------------- |
-| `nameOverride`      | String to partially override mongodb.fullname template (will maintain the release name)                   | `nil`           |
-| `fullnameOverride`  | String to fully override mongodb.fullname template                                                        | `nil`           |
-| `clusterDomain`     | Default Kubernetes cluster domain                                                                         | `cluster.local` |
-| `extraDeploy`       | Array of extra objects to deploy with the release                                                         | `[]`            |
-| `commonLabels`      | Add labels to all the deployed resources (sub-charts are not considered). Evaluated as a template         | `{}`            |
-| `commonAnnotations` | Common annotations to add to all Mongo resources (sub-charts are not considered). Evaluated as a template | `{}`            |
-
+| Name                     | Description                                                                                               | Value           |
+|--------------------------|-----------------------------------------------------------------------------------------------------------|-----------------|
+| `nameOverride`           | String to partially override mongodb.fullname template (will maintain the release name)                   | `nil`           |
+| `fullnameOverride`       | String to fully override mongodb.fullname template                                                        | `nil`           |
+| `clusterDomain`          | Default Kubernetes cluster domain                                                                         | `cluster.local` |
+| `extraDeploy`            | Array of extra objects to deploy with the release                                                         | `[]`            |
+| `commonLabels`           | Add labels to all the deployed resources (sub-charts are not considered). Evaluated as a template         | `{}`            |
+| `commonAnnotations`      | Common annotations to add to all Mongo resources (sub-charts are not considered). Evaluated as a template | `{}`            |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                   | `false`         |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                                      | `sleep`         |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                                         | `infinity`      |
 
 ### MongoDB&reg; parameters
 
 | Name                     | Description                                                                                                                   | Value                   |
-| ------------------------ | ----------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
+|--------------------------|-------------------------------------------------------------------------------------------------------------------------------|-------------------------|
 | `image.registry`         | MongoDB&reg; image registry                                                                                                   | `docker.io`             |
 | `image.repository`       | MongoDB&reg; image registry                                                                                                   | `bitnami/mongodb`       |
 | `image.tag`              | MongoDB&reg; image tag (immutable tags are recommended)                                                                       | `4.4.6-debian-10-r29`   |
@@ -129,11 +130,10 @@ Refer to the [chart documentation for more information on each of these architec
 | `extraEnvVarsCM`         | Name of existing ConfigMap containing extra env vars                                                                          | `nil`                   |
 | `extraEnvVarsSecret`     | Name of existing Secret containing extra env vars (in case of sensitive data)                                                 | `nil`                   |
 
-
 ### MongoDB&reg; statefulset parameters
 
 | Name                                    | Description                                                                                            | Value           |
-| --------------------------------------- | ------------------------------------------------------------------------------------------------------ | --------------- |
+|-----------------------------------------|--------------------------------------------------------------------------------------------------------|-----------------|
 | `annotations`                           | Additional labels to be added to the MongoDB&reg; statefulset. Evaluated as a template                 | `{}`            |
 | `labels`                                | Annotations to be added to the MongoDB&reg; statefulset. Evaluated as a template                       | `{}`            |
 | `replicaCount`                          | Number of MongoDB&reg; nodes (only when `architecture=replicaset`)                                     | `2`             |
@@ -187,11 +187,10 @@ Refer to the [chart documentation for more information on each of these architec
 | `pdb.minAvailable`                      | Minimum number/percentage of MongoDB&reg; pods that must still be available after the eviction         | `1`             |
 | `pdb.maxUnavailable`                    | Maximum number/percentage of MongoDB&reg; pods that may be made unavailable after the eviction         | `nil`           |
 
-
 ### Traffic exposure parameters
 
 | Name                                                     | Description                                                                                                                                   | Value                  |
-| -------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
+|----------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------|------------------------|
 | `service.nameOverride`                                   | MongoDB&reg; service name                                                                                                                     | `""`                   |
 | `service.type`                                           | Kubernetes Service type                                                                                                                       | `ClusterIP`            |
 | `service.port`                                           | MongoDB&reg; service port                                                                                                                     | `27017`                |
@@ -227,11 +226,10 @@ Refer to the [chart documentation for more information on each of these architec
 | `externalAccess.hidden.service.domain`                   | Domain or external IP used to configure MongoDB&reg; advertised hostname when service type is NodePort                                        | `nil`                  |
 | `externalAccess.hidden.service.annotations`              | Service annotations for external access                                                                                                       | `{}`                   |
 
-
 ### Persistence parameters
 
 | Name                                          | Description                                                                        | Value              |
-| --------------------------------------------- | ---------------------------------------------------------------------------------- | ------------------ |
+|-----------------------------------------------|------------------------------------------------------------------------------------|--------------------|
 | `persistence.enabled`                         | Enable MongoDB&reg; data persistence using PVC                                     | `true`             |
 | `persistence.existingClaim`                   | Provide an existing `PersistentVolumeClaim` (only when `architecture=standalone`)  | `nil`              |
 | `persistence.storageClass`                    | PVC Storage Class for MongoDB&reg; data volume                                     | `nil`              |
@@ -244,11 +242,10 @@ Refer to the [chart documentation for more information on each of these architec
 | `persistence.volumeClaimTemplates.requests`   | Custom PVC requests attributes                                                     | `nil`              |
 | `persistence.volumeClaimTemplates.dataSource` | Add dataSource to the VolumeClaimTemplate                                          | `nil`              |
 
-
 ### RBAC parameters
 
 | Name                                         | Description                                                                          | Value   |
-| -------------------------------------------- | ------------------------------------------------------------------------------------ | ------- |
+|----------------------------------------------|--------------------------------------------------------------------------------------|---------|
 | `serviceAccount.create`                      | Enable creation of ServiceAccount for MongoDB&reg; pods                              | `true`  |
 | `serviceAccount.name`                        | Name of the created serviceAccount                                                   | `nil`   |
 | `serviceAccount.annotations`                 | Additional Service Account annotations                                               | `{}`    |
@@ -259,11 +256,10 @@ Refer to the [chart documentation for more information on each of these architec
 | `podSecurityPolicy.privileged`               | Allow privileged                                                                     | `false` |
 | `podSecurityPolicy.spec`                     | Specify the full spec to use for Pod Security Policy                                 | `{}`    |
 
-
 ### Volume Permissions parameters
 
 | Name                                          | Description                                                                                                          | Value                   |
-| --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ----------------------- |
+|-----------------------------------------------|----------------------------------------------------------------------------------------------------------------------|-------------------------|
 | `volumePermissions.enabled`                   | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                     | `docker.io`             |
 | `volumePermissions.image.repository`          | Init container volume-permissions image repository                                                                   | `bitnami/bitnami-shell` |
@@ -274,11 +270,10 @@ Refer to the [chart documentation for more information on each of these architec
 | `volumePermissions.resources.requests`        | Init container volume-permissions resource requests                                                                  | `{}`                    |
 | `volumePermissions.securityContext.runAsUser` | User ID for the volumePermissions container                                                                          | `0`                     |
 
-
 ### Arbiter parameters
 
 | Name                                         | Description                                                                                       | Value   |
-| -------------------------------------------- | ------------------------------------------------------------------------------------------------- | ------- |
+|----------------------------------------------|---------------------------------------------------------------------------------------------------|---------|
 | `arbiter.enabled`                            | Enable deploying the arbiter                                                                      | `true`  |
 | `arbiter.configuration`                      | Arbiter configuration file to be used                                                             | `""`    |
 | `arbiter.hostAliases`                        | Add deployment host aliases                                                                       | `[]`    |
@@ -332,11 +327,10 @@ Refer to the [chart documentation for more information on each of these architec
 | `arbiter.pdb.maxUnavailable`                 | Maximum number/percentage of Arbiter pods that may be made unavailable                            | `nil`   |
 | `arbiter.service.nameOverride`               | The arbiter service name                                                                          | `""`    |
 
-
 ### Hidden Node parameters
 
 | Name                                                 | Description                                                                                          | Value              |
-| ---------------------------------------------------- | ---------------------------------------------------------------------------------------------------- | ------------------ |
+|------------------------------------------------------|------------------------------------------------------------------------------------------------------|--------------------|
 | `hidden.enabled`                                     | Enable deploying the hidden nodes                                                                    | `false`            |
 | `hidden.configuration`                               | Hidden node configuration file to be used                                                            | `""`               |
 | `hidden.existingConfigmap`                           | Name of existing ConfigMap with Hidden node configuration                                            | `nil`              |
@@ -395,11 +389,10 @@ Refer to the [chart documentation for more information on each of these architec
 | `hidden.persistence.volumeClaimTemplates.selector`   | A label query over volumes to consider for binding (e.g. when using local volumes)                   | `nil`              |
 | `hidden.persistence.volumeClaimTemplates.dataSource` | Set volumeClaimTemplate dataSource                                                                   | `nil`              |
 
-
 ### Metrics parameters
 
 | Name                                         | Description                                                                                                           | Value                      |
-| -------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+|----------------------------------------------|-----------------------------------------------------------------------------------------------------------------------|----------------------------|
 | `metrics.enabled`                            | Enable using a sidecar Prometheus exporter                                                                            | `false`                    |
 | `metrics.image.registry`                     | MongoDB&reg; Prometheus exporter image registry                                                                       | `docker.io`                |
 | `metrics.image.repository`                   | MongoDB&reg; Prometheus exporter image repository                                                                     | `bitnami/mongodb-exporter` |
@@ -435,7 +428,6 @@ Refer to the [chart documentation for more information on each of these architec
 | `metrics.prometheusRule.additionalLabels`    | Additional labels that can be used so prometheusRules will be discovered by Prometheus                                | `{}`                       |
 | `metrics.prometheusRule.namespace`           | Namespace where prometheusRules resource should be created                                                            | `nil`                      |
 | `metrics.prometheusRule.rules`               | Rules to be created, check values for an example                                                                      | `{}`                       |
-
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
