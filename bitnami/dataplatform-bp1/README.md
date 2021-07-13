@@ -234,6 +234,10 @@ In order to render complete information about the deployment including all the s
 
 ## Upgrading
 
+### To 6.0.0
+
+This major updates the Kafka subchart and the Solr subchart to their newest major, 13.0.0 and 1.0.0 respectively.
+
 ### To 5.0.0
 
 This major updates the Zookeeper subchart to it newest major, 7.0.0, which renames all TLS-related settings. For more information on this subchart's major, please refer to [zookeeper upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/zookeeper#to-700).
