@@ -1,15 +1,28 @@
+## @section Global parameters
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
-## Current available global Docker image parameters: imageRegistry and imagePullSecrets
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
-# global:
-#   imageRegistry: myRegistryName
-#   imagePullSecrets:
-#     - myRegistryKeySecretName
-#   storageClass: myStorageClass
+global:
+  imageRegistry:
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+  storageClass:
 
 ## Bitnami Redmine image version
 ## ref: https://hub.docker.com/r/bitnami/redmine/tags/
+## @param image.registry Redmine image registry
+## @param image.repository Redmine image repository
+## @param image.tag Redmine image tag (immutable tags are recommended)
+## @param image.pullPolicy Image pull policy
+## @param image.pullSecrets Image pull secrets
 ##
 image:
   registry: docker.io
@@ -23,28 +36,30 @@ image:
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
   ##
-  # pullSecrets:
-  #   - myRegistryKeySecretName
+  pullSecrets: []
 
-## Force target Kubernetes version (using Helm capabilites if not set)
+## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
 kubeVersion:
 
-## Deployment pod host aliases
+## @param hostAliases Deployment pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
 hostAliases: []
 
-## String to partially override redmine.fullname template (will maintain the release name)
+## @param nameOverride String to partially override redmine.fullname template (will maintain the release name)
 ##
-# nameOverride:
+nameOverride:
 
-## String to fully override redmine.fullname template
+## @param fullnameOverride String to fully override redmine.fullname template
 ##
-# fullnameOverride:
+fullnameOverride:
 
-## Update strategy for Deployments. Set to recreate if persistent volume cannot be mounted to move than one pod.
+## @param updateStrategy.type Update strategy for Deployments. Set to recreate if persistent volume cannot be mounted to move than one pod.
 ## Example:
 ## updateStrategy:
 ##  type: RollingUpdate
@@ -55,77 +70,87 @@ hostAliases: []
 updateStrategy:
   type: RollingUpdate
 
-## User of the application
+## @param redmineUsername User of the application
 ## ref: https://github.com/bitnami/bitnami-docker-redmine/#environment-variables
 ##
 redmineUsername: user
 
-## Application password
+## @param redminePassword Application password
 ## Defaults to a random 10-character alphanumeric string if not set
 ## ref: https://github.com/bitnami/bitnami-docker-redmine#environment-variables
 ##
-# redminePassword:
+redminePassword:
 
-## Admin email
+## @param redmineEmail Admin email
 ## ref: https://github.com/bitnami/bitnami-docker-redmine/#environment-variables
 ##
 redmineEmail: user@example.com
 
-## Redmine default data language
+## @param redmineLanguage Redmine default data language
 ## ref: https://github.com/bitnami/bitnami-docker-redmine/#environment-variables
 ##
 redmineLanguage: en
 
 ## SMTP mail delivery configuration
 ## ref: https://github.com/bitnami/bitnami-docker-redmine/#smtp-configuration
+## @param smtpHost SMTP host
+## @param smtpPort SMTP port
+## @param smtpUser SMTP user
+## @param smtpPassword SMTP password
+## @param smtpTls Use TLS encryption with SMTP
 ##
-# smtpHost:
-# smtpPort:
-# smtpUser:
-# smtpPassword:
-# smtpTls:
+smtpHost:
+smtpPort:
+smtpUser:
+smtpPassword:
+smtpTls:
 
-## Use an existing secret with keys "redmine-password" and "smtp-password".
+## @param existingSecret Use existing secret for password details (`redminePassword` and `smtpPassword` will be ignored). Must contain the keys `redmine-password` and `smtp-password`
 ## This ignores both redminePassword and smtpPassword properties.
-# existingSecret:
+existingSecret:
 
-## An array to add extra env vars
+## @param extraEnvVars Extra environment variables to be set on redmine container
 ## For example:
+##  - name: BEARER_AUTH
+##    value: true
 ##
 extraEnvVars: []
-#  - name: BEARER_AUTH
-#    value: true
 
-## ConfigMap with extra environment variables
+## @param extraEnvVarsCM Name of existing ConfigMap containing extra environment variables
 ##
 extraEnvVarsCM:
 
-## Secret with extra environment variables
+## @param extraEnvVarsSecret Name of existing Secret containing extra environment variables
 ##
 extraEnvVarsSecret:
 
-## Extra volumes to add to the deployment
+## @param extraVolumes Optionally specify extra list of additional volumes for redmine container
 ##
 extraVolumes: []
 
-## Extra volume mounts to add to the container
+## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for redmine container
 ##
 extraVolumeMounts: []
 
-## Command and args for running the Redmine container (set to default if not set). Use array form
+## @param command Override default container command (useful when using custom images)
 ##
 command: []
+## @param args Override default container args (useful when using custom images)
+##
 args: []
 
 ## Define a disruption budget
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions/
+## @param podDisruptionBudget.enabled Pod Disruption Budget toggle
+## @param podDisruptionBudget.minAvailable Minimum available pods
+## @param podDisruptionBudget.maxUnavailable Maximum unavailable pods
 ##
 podDisruptionBudget:
   enabled: false
-  # minAvailable: 1
-  # maxUnavailable: 1
+  minAvailable:
+  maxUnavailable:
 
-## Define the number of pods the deployment will create
+## @param replicas Define the number of pods the deployment will create
 ## Do not change unless your persistent volume allows more than one writer, ie NFS
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
 ##
@@ -133,104 +158,111 @@ replicas: 1
 
 ## SecurityContext configuration
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+## @param containerSecurityContext.enabled Redmine Container securityContext
+## @param containerSecurityContext.runAsUser User ID for the Redmine container
 ##
 containerSecurityContext:
   enabled: false
   runAsUser: 0
 
+## @param podSecurityContext.enabled Enable security context for Redmine pods
+## @param podSecurityContext.fsGroup Group ID for the volumes of the pod
+##
 podSecurityContext:
   enabled: false
   fsGroup: 0
 
 ## Redmine containers' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## We usually recommend not to specify default resources and to leave this as a conscious
+## choice for the user. This also increases chances charts run on environments with little
+## resources, such as Minikube. If you do want to specify resources, uncomment the following
+## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+## @param resources.limits The resources limits for the container
+## @param resources.requests The requested resources for the container
 ##
 resources:
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## Example:
+  ## limits:
+  ##    cpu: 2
+  ##    memory: 1Gi
   limits: {}
-  #  cpu: 2
-  #  memory: 1Gi
+  ## Examples:
+  ## requests:
+  ##    cpu: 1
+  ##    memory: 1Gi
   requests: {}
-  #  cpu: 1
-  #  memory: 1Gi
 
 ## Pods Service Account
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 ##
 serviceAccount:
-  ## Specifies whether a ServiceAccount should be created
+  ## @param serviceAccount.create Specifies whether a ServiceAccount should be created
   ##
   create: true
-  ## The name of the ServiceAccount to use.
+  ## @param serviceAccount.name The name of the ServiceAccount to create
   ## If not set and create is true, a name is generated using the redmine.fullname template
-  # name:
+  name:
 
-## Pod Security Context
+## @param securityContext Pod Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 ##
 securityContext: {}
 
-## Add labels to all the deployed resources
+## @param commonLabels Add labels to all the deployed resources
 ##
 commonLabels: {}
 
-## Add annotations to all the deployed resources
+## @param commonAnnotations Add annotations to all the deployed resources
 ##
 commonAnnotations: {}
 
-## Additional pod annotations
+## @param podAnnotations Additional pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
 
-## Additional pod labels
+## @param podLabels Additional pod labels
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
 podLabels: {}
 
-## lifecycleHooks for the Redmine container to automate configuration before or after startup.
+## @param lifecycleHooks lifecycleHooks for the Redmine container to automate configuration before or after startup.
 ##
 lifecycleHooks: {}
 
-## Redmine pods' priority.
+## @param priorityClassName Redmine pods' priority.
 ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
 ##
-# priorityClassName: ""
+priorityClassName: ""
 
-## Extra objects to deploy (value evaluated as a template)
+## @param extraDeploy Extra objects to deploy (value evaluated as a template)
 ##
 extraDeploy: []
 
-## Pod affinity preset
+## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-## Allowed values: soft, hard
 ##
 podAffinityPreset: ""
 
-## Pod anti-affinity preset
+## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-## Allowed values: soft, hard
 ##
 podAntiAffinityPreset: soft
 
 ## Node affinity preset
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-## Allowed values: soft, hard
 ##
 nodeAffinityPreset:
-  ## Node affinity type
-  ## Allowed values: soft, hard
+  ## @param nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ##
   type: ""
-  ## Node label key to match
+  ## @param nodeAffinityPreset.key Node label key to match Ignored if `affinity` is set.
   ## E.g.
   ## key: "kubernetes.io/e2e-az-name"
   ##
   key: ""
-  ## Node label values to match
+  ## @param nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set.
   ## E.g.
   ## values:
   ##   - e2e-az1
@@ -238,24 +270,31 @@ nodeAffinityPreset:
   ##
   values: []
 
-## Affinity for pod assignment
+## @param affinity Affinity for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
 
-## Node labels for pod assignment. Evaluated as a template.
+## @param nodeSelector Node labels for pod assignment. Evaluated as a template.
 ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
 nodeSelector: {}
 
-## Tolerations for pod assignment
+## @param tolerations Tolerations for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
 
-## Configure extra options for liveness and readiness probes
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+## Configure extra options for liveness probe
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+## @param livenessProbe.enabled Enable livenessProbe
+## @param livenessProbe.path The path against which to perform the livenessProbe
+## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+## @param livenessProbe.periodSeconds Period seconds for livenessProbe
+## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+## @param livenessProbe.failureThreshold Failure threshold for livenessProbe
+## @param livenessProbe.successThreshold Success threshold for livenessProbe
 ##
 livenessProbe:
   enabled: true
@@ -265,7 +304,16 @@ livenessProbe:
   timeoutSeconds: 5
   successThreshold: 1
   failureThreshold: 3
-
+## Configure extra options for readiness probe
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+## @param readinessProbe.enabled Enable readinessProbe
+## @param readinessProbe.path The path against which to perform the readinessProbe
+## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+## @param readinessProbe.periodSeconds Period seconds for readinessProbe
+## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+## @param readinessProbe.failureThreshold Failure threshold for readinessProbe
+## @param readinessProbe.successThreshold Success threshold for readinessProbe
+##
 readinessProbe:
   enabled: true
   path: /
@@ -275,15 +323,15 @@ readinessProbe:
   successThreshold: 1
   failureThreshold: 3
 
-## Custom Liveness probes for Redmine
+## @param customLivenessProbe Override default liveness probe
 ##
 customLivenessProbe: {}
 
-## Custom Rediness probes Redmine
+## @param customReadinessProbe Override default readiness probe
 ##
 customReadinessProbe: {}
 
-## Add init containers to the Redmine pods.
+## @param initContainers Add init containers to the Redmine pods.
 ## Example:
 ## initContainers:
 ##   - name: your-image-name
@@ -295,7 +343,7 @@ customReadinessProbe: {}
 ##
 initContainers: {}
 
-## Add sidecars to the Redmine pods.
+## @param sidecars Add sidecars to the Redmine pods.
 ## Example:
 ## sidecars:
 ##   - name: your-image-name
@@ -311,25 +359,31 @@ sidecars: {}
 ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
 persistence:
+  ## @param persistence.enabled Enable persistence using PVC
+  ##
   enabled: true
-  ## A manually manage Persistent Volume Claim
+  ## @param persistence.existingClaim The name of an existing PVC
   ## Requires persistence.enable: true
   ## If defined, PVC must be created manually before volume will be bound
-  # existingClaim:
+  existingClaim:
 
-  ## redmine data Persistent Volume Storage Class
+  ## @param persistence.storageClass PVC Storage Class
   ## If defined, storageClassName: <storageClass>
   ## If set to "-", storageClassName: "", which disables dynamic provisioning
   ## If undefined (the default) or set to null, no storageClassName spec is
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##   GKE, AWS & OpenStack)
   ##
-  # storageClass: "-"
+  storageClass:
+  ## @param persistence.accessModes PVC Access Modes
+  ##
   accessModes:
     - ReadWriteOnce
+  ## @param persistence.size PVC Storage Request
+  ##
   size: 8Gi
 
-## Database type. Allowed values: "mariadb" and "postgresql"
+## @param databaseType Database type. Allowed values: "mariadb" and "postgresql"
 ## ref: https://github.com/bitnami/bitnami-docker-redmine#run-the-application-using-postgresql-database
 ##
 databaseType: mariadb
@@ -339,69 +393,83 @@ databaseType: mariadb
 ## https://github.com/bitnami/charts/blob/master/bitnami/mariadb/values.yaml
 ##
 mariadb:
-  ## Whether to deploy a mariadb server to satisfy the applications database requirements. To use an external database set this to false and configure the externalDatabase parameters
+  ## @param mariadb.enabled Whether to deploy a MariaDB server to satisfy the database requirements
+  ## To use an external database set this to false and configure the externalDatabase parameters
   ##
   enabled: true
-  ## Disable MariaDB replication
+  ## @param mariadb.replication.enabled Enable/Disable MariaDB replication
   ##
   replication:
     enabled: false
 
-  ## Use existing secret (ignores root, auth and replication passwords)
+  ## @param mariadb.existingSecret Use existing secret (ignores root, auth and replication passwords)
   ##
-  # existingSecret:
+  existingSecret:
 
   ## Create a database and a database user
   ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-user-on-first-run
   ##
   auth:
-    database: bitnami_redmine
-    username: bn_redmine
-    ## If the password is not specified, mariadb will generate a random password
+    ## @param mariadb.auth.database MariaDB custom database
     ##
-    # password:
+    database: bitnami_redmine
+    ## @param mariadb.auth.username MariaDB custom user
+    ##
+    username: bn_redmine
+    ## @param mariadb.auth.password If the password is not specified, mariadb will generate a random password
+    ##
+    password: ""
 
-    ## MariaDB admin password
+    ## @param mariadb.auth.rootPassword MariaDB admin password
     ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#setting-the-root-password-on-first-run
     ##
-    # rootPassword:
+    rootPassword: ""
 
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
   primary:
     persistence:
+      ## @param mariadb.primary.persistence.enabled Enable persistence using Persistent Volume Claims
+      ##
       enabled: true
-      ## mariadb data Persistent Volume Storage Class
+      ## @param mariadb.primary.persistence.storageClass mariadb data Persistent Volume Storage Class
       ## If defined, storageClassName: <storageClass>
       ## If set to "-", storageClassName: "", which disables dynamic provisioning
       ## If undefined (the default) or set to null, no storageClassName spec is
       ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
       ##   GKE, AWS & OpenStack)
       ##
-      # storageClass: "-"
+      storageClass:
+      ## @param mariadb.primary.persistence.accessMode PVC Access Modes
+      ##
       accessMode: ReadWriteOnce
+      ## @param mariadb.primary.persistence.size PVC Storage Request
+      ##
       size: 8Gi
 
 ## PostgreSQL chart configuration
-##
 ## https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
 ##
 postgresql:
-  ## Whether to deploy a PostgreSQL server to satisfy the applications database requirements. To use an external database set this to false and configure the externalDatabase parameters
+  ## @param postgresql.enabled Whether to deploy a PostgreSQL server to satisfy the database requirements
+  ##  To use an external database set this to false and configure the externalDatabase parameters
   ##
   enabled: false
 
-  ## Create a database and a database user
+  ## @param postgresql.postgresqlDatabase PostgreSQL database
   ## ref: https://github.com/bitnami/bitnami-docker-postgresql/#creating-a-database-on-first-run
   ##
   postgresqlDatabase: bitnami_redmine
-  postgresqlUsername: bn_redmine
+  ## @param postgresql.postgresqlUsername PostgreSQL user
   ##
-  ## If the password is not specified, postgresql will generate a random password
-  # postgresqlPassword:
+  postgresqlUsername: bn_redmine
 
-  ## In case of postgresql.enabled = true, allow the usage of existing secrets for postgresql
+  ## @param postgresql.postgresqlPassword PostgreSQL password
+  ##
+  postgresqlPassword:
+
+  ## @param postgresql.existingSecret In case of postgresql.enabled = true, allow the usage of existing secrets for postgresql
   ##
   existingSecret: ""
 
@@ -409,21 +477,27 @@ postgresql:
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
   persistence:
+    ## @param postgresql.persistence.enabled Enable persistence using Persistent Volume Claims
+    ##
     enabled: true
-    ## A manually manage Persistent Volume Claim
+    ## @param postgresql.persistence.existingClaim A manually manage Persistent Volume Claim
     ## Requires postgresql.persistence.enable: true
     ## If defined, PVC must be created manually before volume will be bound
-    # existingClaim:
+    existingClaim:
 
-    ## postgresql data Persistent Volume Storage Class
+    ## @param postgresql.persistence.storageClass postgresql data Persistent Volume Storage Class
     ## If defined, storageClassName: <storageClass>
     ## If set to "-", storageClassName: "", which disables dynamic provisioning
     ## If undefined (the default) or set to null, no storageClassName spec is
     ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
     ##   GKE, AWS & OpenStack)
     ##
-    # storageClass: "-"
+    storageClass:
+    ## @param postgresql.persistence.accessMode PVC Access Modes
+    ##
     accessMode: ReadWriteOnce
+    ## @param postgresql.persistence.size PVC Storage Request
+    ##
     size: 8Gi
 
 ## All of these values are only used when:
@@ -431,32 +505,32 @@ postgresql:
 ## b) postgresql.enabled is set to false and databaseType=postgresql
 ##
 externalDatabase:
-  ## Database host
+  ## @param externalDatabase.host Host of the external database
   ##
   host: ""
 
-  ## Database name
+  ## @param externalDatabase.name Name of the external database
   ##
   name: bitnami_redmine
 
-  ## Database User
+  ## @param externalDatabase.user External db user
   ##
   user: bn_redmine
 
-  ## Database Password
+  ## @param externalDatabase.password Password for the db user
   ##
   password: ""
 
-  ## Database port number (use 5432 when using PostgreSQL)
+  ## @param externalDatabase.port Database port number
   ##
   port: 3306
 
-  ## Use existing secret containing the database password
+  ## @param externalDatabase.existingSecret Use existing secret containing the database password
   ## Must contain the key "postgresql-password" in case that databaseType=postgresql
   ## Must contain the key "mariadb-password" in case that databaseType=mariadb
-  # existingSecret:
+  existingSecret:
 
-## Container ports
+## @param containerPorts.http Redmine container HTTP port
 ##
 containerPorts:
   http: 3000
@@ -467,29 +541,32 @@ containerPorts:
 ##   elsewhere: LoadBalancer
 ##
 service:
+  ## @param service.type Kubernetes Service type
+  ##
   type: LoadBalancer
-  # HTTP Port
+  ## @param service.port Service HTTP port
+  ##
   port: 80
   ## clusterIP: ""
   ## loadBalancerIP for the Redmine Service (optional, cloud specific)
   ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
   ## loadBalancerIP:
-  ## Control hosts connecting to "LoadBalancer" only
+  ## @param service.loadBalancerSourceRanges An array of load balancer sources
   ##
   loadBalancerSourceRanges:
     - 0.0.0.0/0
-  ##
+  ## @param service.nodePorts.http Kubernetes http node port
   ## nodePorts:
   ##   http: <to set explicitly, choose port between 30000-32767>
   ##
   nodePorts:
     http: ""
-  ## Enable client source IP preservation
+  ## @param service.externalTrafficPolicy Enable client source IP preservation
   ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: Cluster
 
-  ## Control where client requests go, to the same pod or round-robin
+  ## @param service.sessionAffinity Control where client requests go, to the same pod or round-robin
   ## Values: ClientIP or None
   ## ref: https://kubernetes.io/docs/user-guide/services/
   ##
@@ -500,66 +577,68 @@ service:
 ## ref: http://kubernetes.io/docs/user-guide/ingress/
 ##
 ingress:
-  ## Set to true to enable ingress record generation
+  ## @param ingress.enabled Set to true to enable ingress record generation
   ##
   enabled: false
 
-  ## Set this to true in order to add the corresponding annotations for cert-manager
+  ## @param ingress.certManager Set this to true in order to add the corresponding annotations for cert-manager
   ##
   certManager: false
 
-  ## When the ingress is enabled, a host pointing to this will be created
+  ## @param ingress.hostname When the ingress is enabled, a host pointing to this will be created
   ##
   hostname: redmine.local
 
-  ## The Path to Redmine. You may need to set this to '/*' in order to use this
-  ## with ALB ingress controllers.
+  ## @param ingress.path The Path to Redmine. You may need to set this to '/*' in order to use this with ALB ingress controllers
   ##
   path: /
 
-  ## Ingress Path type
+  ## @param ingress.pathType Ingress path type
   ##
   pathType: ImplementationSpecific
 
-  ## Override API Version (automatically detected if not set)
+  ## @param ingress.apiVersion Override API Version (automatically detected if not set)
   ##
   apiVersion:
 
-  ## Enable TLS configuration for the hostname defined at ingress.hostname parameter
+  ## @param ingress.tls Enable TLS configuration
   ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
   ## You can use the ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
   ##
   tls: false
 
-  ## Ingress annotations done as key:value pairs
+  ## @param ingress.annotations [object] Ingress annotations
   ## For a full list of possible ingress annotations,
   ## please see https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
   ##
   ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+  ## e.g:
+  ## kubernetes.io/ingress.class: nginx
   ##
   annotations:
-    # kubernetes.io/ingress.class: nginx
     ## Keep the connection open with the API server even if idle (the default is 60 seconds)
     ## Setting it to 10 minutes which should be enough for our current use case of deploying/upgrading/deleting apps
     ##
     nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
 
-  ## The list of additional hostnames to be covered with this ingress record.
+  ## @param ingress.extraHosts The list of additional hostnames to be covered with this ingress record.
   ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
   ## extraHosts:
   ## - name: redmine.local
   ##   path: /
   ##
+  extraHosts: []
 
-  ## The tls configuration for additional hostnames to be covered with this ingress record.
+  ## @param ingress.extraTls The tls configuration for additional hostnames to be covered with this ingress record.
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
   ## extraTls:
   ## - hosts:
   ##     - redmine.local
   ##   secretName: redmine.local-tls
   ##
+  extraTls: []
 
-  ## If you're providing your own certificates, please use this to add the certificates as secrets
+  ## @param ingress.secrets If you're providing your own certificates, please use this to add the certificates as secrets
   ## key and certificate should start with -----BEGIN CERTIFICATE----- or
   ## -----BEGIN RSA PRIVATE KEY-----
   ##
@@ -568,29 +647,34 @@ ingress:
   ##
   ## It is also possible to create and manage the certificates outside of this helm chart
   ## Please see README.md for more information
-  ##
-  secrets: []
+  ## e.g:
   ## - name: redmine.local-tls
   ##   key:
   ##   certificate:
   ##
+  secrets: []
 
 ## Configure CronJob scheduler for receiving emails and converting them to tasks
 ## ref: http://www.redmine.org/projects/redmine/wiki/RedmineReceivingEmails
 ##
 mailReceiver:
-  ## Whether to enable scheduled task
+  ## @param mailReceiver.enabled Whether to enable scheduled mail-to-task CronJob
   ##
   enabled: false
 
-  ## CronJob schedule
+  ## @param mailReceiver.schedule Kubernetes CronJob schedule
   ##
   schedule: "*/5 * * * *"
 
-  ## CronJob suspend flag
+  ## @param mailReceiver.suspend Whether to create suspended CronJob
   ##
   suspend: true
 
+  ## @param mailReceiver.image.registry Mail to Task image registry
+  ## @param mailReceiver.image.repository Mail to Task image repository
+  ## @param mailReceiver.image.tag Mail to Task image tag
+  ## @param mailReceiver.image.pullPolicy Mail to Task image pull policy
+  ##
   image:
     registry: docker.io
     repository: bitnami/redmine
@@ -601,160 +685,169 @@ mailReceiver:
     ##
     pullPolicy: IfNotPresent
 
-  ## Additional pod annotations
+  ## @param mailReceiver.podAnnotations Additional pod annotations
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
 
-  ## Additional pod labels
+  ## @param mailReceiver.podLabels Additional pod labels
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
 
-  ## Redmine pods' priority.
+  ## @param mailReceiver.priorityClassName Redmine pods' priority.
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
-  # priorityClassName: ""
+  priorityClassName: ""
 
-  ## Protocol to use to get emails from configured server.
+  ## @param mailReceiver.mailProtocol Protocol to use to get emails from configured server
   ## Supported values are "IMAP" or "POP3"
   ##
   mailProtocol: IMAP
 
-  ## Server hostname to connect to
+  ## @param mailReceiver.host Server hostname to receive emails from
   ##
   host: ""
 
-  ## Server TCP port to connect to
+  ## @param mailReceiver.port TCP port on the `host`
   ##
   port: 993
 
-  ## Username to authenticate on server
+  ## @param mailReceiver.username Login to authenticate on the `host`
   ##
   username: ""
 
-  ## Password to authenticate on server
+  ## @param mailReceiver.password Password to authenticate on the `host`
   ##
   password: ""
 
-  ## ssl flag for redmine mail client
+  ## @param mailReceiver.ssl Whether use SSL/TLS to connect to the `host`
   ## If true then client will use SSL/TLS
   ##
   ssl: true
 
-  ## starttls flag for redmine mail client
+  ## @param mailReceiver.startTLS Whether use StartTLS to connect to the `host`
+  ## SSL flag for redmine mail client
   ## If true then client will use StartTLS
   ##
   startTLS: false
 
-  ## IMAP only. Folder to read emails from
+  ## @param mailReceiver.imapFolder IMAP only. Folder to read emails from
   ##
   imapFolder: "INBOX"
 
-  ## Folder on mail server to move correctly parsed emails to
+  ## @param mailReceiver.moveOnSuccess Folder on mail server to move correctly parsed emails to
   ## If empty - just leave emails as read
   ##
   moveOnSuccess: ""
 
-  ## Folder on mail server to move emails with parsing errors to
+  ## @param mailReceiver.moveOnFailure IMAP only. Folder on mail server to move emails with parsing errors to
   ## If empty - just leave emails as read
   ##
   moveOnFailure: ""
 
-  ## Action to perform for unknown email sender
+  ## @param mailReceiver.unknownUserAction Action to perform for unknown email sender
   ## ref: http://www.redmine.org/projects/redmine/wiki/RedmineReceivingEmails
   ##
   unknownUserAction: ignore
 
+  ## @param mailReceiver.noPermissionCheck Whether skip permission check during creating a new task
   ## If set to 1 then redmine does not check task creator (source email) permissions for creating a new task
   ## If set to 0 then task creator must have permission to create a new task
   ##
   noPermissionCheck: 0
 
-  ## Whether send a just created user (the creator of the task) email about his new account
+  ## @param mailReceiver.noAccountNotice Whether send a just created user (the creator of the task) email about his new account
   ## 0 - send, 1 - not send
   ##
   noAccountNotice: 1
 
-  ## Defines a group list to add created user to
+  ## @param mailReceiver.defaultGroup Defines a group list to add created user to
   ## Groups must be enumerated as names separated by comma without spaces
   ##
   defaultGroup: ""
 
-  ## Defines a project to create a new task in
+  ## @param mailReceiver.project Defines identifier of the target project for a new task
   ##
   project: ""
 
-  ## Defines an email to use as a base for getting project name for a new task
+  ## @param mailReceiver.projectFromSubaddress Defines email address to select project from subaddress
   ##
   projectFromSubaddress: ""
 
-  ## Defines a new task status
+  ## @param mailReceiver.status Defines a new task status
   ##
   status: ""
 
-  ## Defines a new task tracker
+  ## @param mailReceiver.tracker Defines a new task tracker
   ##
   tracker: ""
 
-  ## Defines a new task category
+  ## @param mailReceiver.category Defines a new task category
   ##
   category: ""
 
-  ## Defines a new task priority
+  ## @param mailReceiver.priority Defines a new task priority
   ##
   priority: ""
 
-  ## Defines a new task assignee
+  ## @param mailReceiver.assignedTo Defines a new task assignee
   ##
   assignedTo: ""
 
-  ## Defines a list of attributes which can be overridden by received email body
-  ## "all" means that all attributes can be overridden
+  ## @param mailReceiver.allowOverride Defines if email content is allowed to set attributes values. Values is a comma separated list of attributes or `all` to allow all attributes
   ##
   allowOverride: ""
 
-  ## An array to add extra env vars
+  ## @param mailReceiver.extraEnvVars Extra environment variables to be set on mailReceiver container
   ## For example:
+  ##  - name: BEARER_AUTH
+  ##    value: true
   ##
   extraEnvVars: []
-  #  - name: BEARER_AUTH
-  #    value: true
 
-  ## ConfigMap with extra environment variables
+  ## @param mailReceiver.extraEnvVarsCM Name of existing ConfigMap containing extra environment variables
   ##
   extraEnvVarsCM:
 
-  ## Secret with extra environment variables
+  ## @param mailReceiver.extraEnvVarsSecret Name of existing Secret containing extra environment variables
   ##
   extraEnvVarsSecret:
 
-  ## Extra volumes to add to the deployment
+  ## @param mailReceiver.extraVolumes Optionally specify extra list of additional volumes for mailReceiver container
   ##
   extraVolumes: []
 
-  ## Extra volume mounts to add to the container
+  ## @param mailReceiver.extraVolumeMounts Optionally specify extra list of additional volumeMounts for mailReceiver container
   ##
   extraVolumeMounts: []
 
-  ## Command and args for running the Redmine container (set to default if not set). Use array form
+  ## @param mailReceiver.command Override default container command (useful when using custom images)
   ##
   command: ["bash"]
+  ## @param mailReceiver.args Override default container args (useful when using custom images)
+  ##
   args: ["-c", "/cj/receive.sh"]
 
   ## SecurityContext configuration
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ## @param mailReceiver.containerSecurityContext.enabled mailReceiver Container securityContext
+  ## @param mailReceiver.containerSecurityContext.runAsUser User ID for the mailReceiver container
+  ## @param mailReceiver.containerSecurityContext.runAsNonRoot Set mailReceiver container's Security Context runAsNonRoot
   ##
   containerSecurityContext:
     enabled: false
     runAsUser: 1001
     runAsNonRoot: true
 
+  ## @param mailReceiver.podSecurityContext.enabled Enable security context for mailReceiver pods
+  ## @param mailReceiver.podSecurityContext.fsGroup Group ID for the volumes of the pod
+  ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
 
-  ## Add init containers to the Redmine pods.
+  ## @param mailReceiver.initContainers Add init containers to the Redmine pods
   ## Example:
   ## initContainers:
   ##   - name: your-image-name
@@ -766,7 +859,7 @@ mailReceiver:
   ##
   initContainers: {}
 
-  ## Add sidecars to the Redmine pods.
+  ## @param mailReceiver.sidecars Add sidecars to the Redmine pods
   ## Example:
   ## sidecars:
   ##   - name: your-image-name
@@ -778,33 +871,29 @@ mailReceiver:
   ##
   sidecars: {}
 
-  ## Pod affinity preset
+  ## @param mailReceiver.podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
   ##
   podAffinityPreset: ""
 
-  ## Pod anti-affinity preset
+  ## @param mailReceiver.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
   ##
   podAntiAffinityPreset: soft
 
   ## Node affinity preset
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ## Allowed values: soft, hard
   ##
   nodeAffinityPreset:
-    ## Node affinity type
-    ## Allowed values: soft, hard
+    ## @param mailReceiver.nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
     ##
     type: ""
-    ## Node label key to match
+    ## @param mailReceiver.nodeAffinityPreset.key Node label key to match Ignored if `affinity` is set.
     ## E.g.
     ## key: "kubernetes.io/e2e-az-name"
     ##
     key: ""
-    ## Node label values to match
+    ## @param mailReceiver.nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set.
     ## E.g.
     ## values:
     ##   - e2e-az1
@@ -812,18 +901,18 @@ mailReceiver:
     ##
     values: []
 
-  ## Affinity for pod assignment
+  ## @param mailReceiver.affinity Affinity for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
 
-  ## Node labels for pod assignment. Evaluated as a template.
+  ## @param mailReceiver.nodeSelector Node labels for pod assignment. Evaluated as a template.
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
 
-  ## Tolerations for pod assignment
+  ## @param mailReceiver.tolerations Tolerations for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
@@ -831,7 +920,15 @@ mailReceiver:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
 ##
 volumePermissions:
+  ## @param volumePermissions.enabled Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work)
+  ##
   enabled: false
+  ## @param volumePermissions.image.registry Init container volume-permissions image registry
+  ## @param volumePermissions.image.repository Init container volume-permissions image name
+  ## @param volumePermissions.image.tag Init container volume-permissions image tag
+  ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
+  ## @param volumePermissions.image.pullSecrets Specify docker-registry secret names as an array
+  ##
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
@@ -845,35 +942,55 @@ volumePermissions:
     ##   - myRegistryKeySecretName
   ## Init containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param volumePermissions.resources.limits The resources limits for the container
+  ## @param volumePermissions.resources.requests The requested resources for the container
   ##
   resources:
-    ## We usually recommend not to specify default resources and to leave this as a conscious
-    ## choice for the user. This also increases chances charts run on environments with little
-    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
-    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    ##
+    ## Example:
+    ## limits:
+    ##    cpu: 100m
+    ##    memory: 128Mi
     limits: {}
-    ##   cpu: 100m
-    ##   memory: 128Mi
-    ##
+    ## Examples:
+    ## requests:
+    ##    cpu: 100m
+    ##    memory: 128Mi
     requests: {}
-    ##   cpu: 100m
-    ##   memory: 128Mi
-    ##
 
-# Add custom certificates and certificate authorities to redmine container
+## Add custom certificates and certificate authorities to redmine container
+##
 certificates:
+  ## @param certificates.customCertificate.certificateSecret Secret containing the certificate and key to add
+  ## @param certificates.customCertificate.chainSecret.name Name of the secret containing the certificate chain
+  ## @param certificates.customCertificate.chainSecret.key Key of the certificate chain file inside the secret
+  ## @param certificates.customCertificate.certificateLocation Location in the container to store the certificate
+  ## @param certificates.customCertificate.keyLocation Location in the container to store the private key
+  ## @param certificates.customCertificate.chainLocation Location in the container to store the certificate chain
+  ##
   customCertificate:
     certificateSecret: ""
-    chainSecret: {}
-    # name: secret-name
-    # key: secret-key
+    chainSecret:
+      name:
+      key:
     certificateLocation: /etc/ssl/certs/ssl-cert-snakeoil.pem
     keyLocation: /etc/ssl/private/ssl-cert-snakeoil.key
     chainLocation: /etc/ssl/certs/mychain.pem
+  ## @param certificates.customCA Defines a list of secrets to import into the container trust store
+  ## e.g:
+  ## - secret: custom-CA
+  ## - secret: more-custom-CAs
+  ##
   customCA: []
-  # - secret: custom-CA
-  # - secret: more-custom-CAs
+  ## @param certificates.image.registry Container sidecar registry
+  ## @param certificates.image.repository Container sidecar image repository
+  ## @param certificates.image.tag Container sidecar image tag
+  ## @param certificates.image.pullPolicy Container sidecar image pull policy
+  ## @param certificates.image.pullSecrets Container sidecar image pull secrets
+  ##
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
@@ -883,9 +1000,17 @@ certificates:
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
     pullPolicy: IfNotPresent
-    # pullPolicy:
-    # pullSecrets
-    #   - myRegistryKeySecretName
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## @param certificates.extraEnvVars Container sidecar extra environment variables (eg proxy)
+  ## e.g:
+  ## - name: myvar
+  ##   value: myval
+  ##
   extraEnvVars: []
-  # - name: myvar
-  #   value: myval
