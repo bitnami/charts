@@ -53,7 +53,7 @@ service:
   type: ClusterIP
   ## @param service.port OAuth2 Proxy service HTTP port
   ##
-  port: 8080
+  port: 80
   ## Node ports to expose
   ## @param service.nodePorts.http Node port for HTTP
   ## NOTE: choose port between <30000-32767>

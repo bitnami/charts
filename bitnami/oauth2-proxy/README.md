@@ -75,7 +75,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                               | Description                                                                                           | Value                    |
 | ---------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------ |
 | `service.type`                     | OAuth2 Proxy service type                                                                             | `ClusterIP`              |
-| `service.port`                     | OAuth2 Proxy service HTTP port                                                                        | `8080`                   |
+| `service.port`                     | OAuth2 Proxy service HTTP port                                                                        | `80`                     |
 | `service.nodePorts.http`           | Node port for HTTP                                                                                    | `nil`                    |
 | `service.clusterIP`                | OAuth2 Proxy service Cluster IP                                                                       | `nil`                    |
 | `service.loadBalancerIP`           | OAuth2 Proxy service Load Balancer IP                                                                 | `nil`                    |
