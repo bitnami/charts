@@ -256,6 +256,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replica.service.loadBalancerSourceRanges`   | Redis(TM) replicas service Load Balancer sources                                                  | `[]`            |
 | `replica.service.annotations`                | Additional custom annotations for Redis(TM) replicas service                                      | `{}`            |
 | `replica.terminationGracePeriodSeconds`      | Integer setting the termination grace period for the redis-replicas pods                          | `30`            |
+| `replica.autoscaling.enabled`                | Enable autoscaling for replicas                                                                   | `false`         |
+| `replica.autoscaling.minReplicas`            | Minimum number of replicas                                                                        | `1`             |
+| `replica.autoscaling.maxReplicas`            | Maximum number of replicas                                                                        | `11`            |
+| `replica.autoscaling.targetCPU`              | Target CPU utilization percentage                                                                 | `nil`           |
+| `replica.autoscaling.targetMemory`           | Target Memory utilization percentage                                                              | `nil`           |
 
 
 ### Redis(TM) Sentinel configuration parameters
@@ -317,32 +322,33 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Other Parameters
 
-| Name                                    | Description                                                                                                         | Value   |
-| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------- |
-| `networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                                                                          | `false` |
-| `networkPolicy.allowExternal`           | Don't require client label for connections                                                                          | `true`  |
-| `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                                        | `[]`    |
-| `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                        | `[]`    |
-| `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                                              | `{}`    |
-| `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                                          | `{}`    |
-| `podSecurityPolicy.enabled`             | Enable PodSecurityPolicy                                                                                            | `false` |
-| `podSecurityPolicy.create`              | Specifies whether a PodSecurityPolicy should be created. You also need to set `podSecurityPolicy.enabled` to `true` | `false` |
-| `rbac.create`                           | Specifies whether RBAC resources should be created                                                                  | `false` |
-| `rbac.rules`                            | Custom RBAC rules to set                                                                                            | `[]`    |
-| `serviceAccount.create`                 | Specifies whether a ServiceAccount should be created                                                                | `true`  |
-| `serviceAccount.name`                   | The name of the ServiceAccount to use.                                                                              | `""`    |
-| `serviceAccount.annotations`            | Additional custom annotations for the ServiceAccount                                                                | `{}`    |
-| `pdb.create`                            | Specifies whether a ServiceAccount should be created                                                                | `false` |
-| `pdb.minAvailable`                      | Min number of pods that must still be available after the eviction                                                  | `1`     |
-| `pdb.maxUnavailable`                    | Max number of pods that can be unavailable after the eviction                                                       | `nil`   |
-| `tls.enabled`                           | Enable TLS traffic                                                                                                  | `false` |
-| `tls.authClients`                       | Require clients to authenticate                                                                                     | `true`  |
-| `tls.certificatesSecret`                | Then name of the existing secret that contains the TLS certificates                                                 | `nil`   |
-| `tls.certFilename`                      | Certificate filename                                                                                                | `nil`   |
-| `tls.certKeyFilename`                   | Certificate Key filename                                                                                            | `nil`   |
-| `tls.certCAFilename`                    | CA Certificate filename                                                                                             | `nil`   |
-| `tls.dhParamsFilename`                  | File containing DH params (in order to support DH based ciphers)                                                    | `nil`   |
-
+| Name                                          | Description                                                                                                         | Value   |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------- |
+| `networkPolicy.enabled`                       | Enable creation of NetworkPolicy resources                                                                          | `false` |
+| `networkPolicy.allowExternal`                 | Don't require client label for connections                                                                          | `true`  |
+| `networkPolicy.extraIngress`                  | Add extra ingress rules to the NetworkPolicy                                                                        | `[]`    |
+| `networkPolicy.extraEgress`                   | Add extra ingress rules to the NetworkPolicy                                                                        | `[]`    |
+| `networkPolicy.ingressNSMatchLabels`          | Labels to match to allow traffic from other namespaces                                                              | `{}`    |
+| `networkPolicy.ingressNSPodMatchLabels`       | Pod labels to match to allow traffic from other namespaces                                                          | `{}`    |
+| `podSecurityPolicy.enabled`                   | Enable PodSecurityPolicy                                                                                            | `false` |
+| `podSecurityPolicy.create`                    | Specifies whether a PodSecurityPolicy should be created. You also need to set `podSecurityPolicy.enabled` to `true` | `false` |
+| `rbac.create`                                 | Specifies whether RBAC resources should be created                                                                  | `false` |
+| `rbac.rules`                                  | Custom RBAC rules to set                                                                                            | `[]`    |
+| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                | `true`  |
+| `serviceAccount.automountServiceAccountToken` | Enable/disable auto mounting of service account token                                                               | `true`  |
+| `serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                              | `""`    |
+| `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                                | `{}`    |
+| `pdb.create`                                  | Specifies whether a PodDisruptionBudget should be created                                                           | `false` |
+| `pdb.minAvailable`                            | Min number of pods that must still be available after the eviction                                                  | `1`     |
+| `pdb.maxUnavailable`                          | Max number of pods that can be unavailable after the eviction                                                       | `nil`   |
+| `tls.enabled`                                 | Enable TLS traffic                                                                                                  | `false` |
+| `tls.authClients`                             | Require clients to authenticate                                                                                     | `true`  |
+| `tls.autoGenerated`                           | Generate automatically self-signed TLS certificates                                                                 | `false` |
+| `tls.existingSecret`                          | The name of the existing secret that contains the TLS certificates                                                  | `nil`   |
+| `tls.certFilename`                            | Certificate filename                                                                                                | `nil`   |
+| `tls.certKeyFilename`                         | Certificate Key filename                                                                                            | `nil`   |
+| `tls.certCAFilename`                          | CA Certificate filename                                                                                             | `nil`   |
+| `tls.dhParamsFilename`                        | File containing DH params (in order to support DH based ciphers)                                                    | `nil`   |
 
 ### Metrics Parameters
 
@@ -492,14 +498,14 @@ In case the current master crashes, the Sentinel containers will elect a new mas
 
 To use a password file for Redis<sup>TM</sup> you need to create a secret containing the password and then deploy the chart using that secret.
 
-Refer to the chart documentation for more information on [using a password file for Redis<sup>TM</sup>](https://docs.bitnami.com/kubernetes/infrastructure/redis/administration/use-password-file/). 
+Refer to the chart documentation for more information on [using a password file for Redis<sup>TM</sup>](https://docs.bitnami.com/kubernetes/infrastructure/redis/administration/use-password-file/).
 
 ### Securing traffic using TLS
 
 TLS support can be enabled in the chart by specifying the `tls.` parameters while creating a release. The following parameters should be configured to properly enable the TLS support in the chart:
 
 - `tls.enabled`: Enable TLS support. Defaults to `false`
-- `tls.certificatesSecret`: Name of the secret that contains the certificates. No defaults.
+- `tls.existingSecret`: Name of the secret that contains the certificates. No defaults.
 - `tls.certFilename`: Certificate filename. No defaults.
 - `tls.certKeyFilename`: Certificate key filename. No defaults.
 - `tls.certCAFilename`: CA Certificate filename. No defaults.
@@ -522,9 +528,9 @@ tls-ca-cert-file
 
 ### Host Kernel Settings
 
-Redis<sup>TM</sup> may require some changes in the kernel of the host machine to work as expected, in particular increasing the `somaxconn` value and disabling transparent huge pages. 
+Redis<sup>TM</sup> may require some changes in the kernel of the host machine to work as expected, in particular increasing the `somaxconn` value and disabling transparent huge pages.
 
-Refer to the chart documentation for more information on [configuring host kernel settings with an example](https://docs.bitnami.com/kubernetes/infrastructure/redis/administration/configure-kernel-settings/). 
+Refer to the chart documentation for more information on [configuring host kernel settings with an example](https://docs.bitnami.com/kubernetes/infrastructure/redis/administration/configure-kernel-settings/).
 
 ## Persistence
 
@@ -575,7 +581,7 @@ incompatible breaking change needing manual actions.
   - `sentinel.metrics.*` parameters are deprecated in favor of `metrics.sentinel.*` ones.
 - New parameters to add custom command, environment variables, sidecars, init containers, etc. were added.
 - Chart labels were adapted to follow the [Helm charts standard labels](https://helm.sh/docs/chart_best_practices/labels/#standard-labels).
-- values.yaml metadata was adapted to follow the format supported by [readmenator](https://github.com/bitnami-labs/readmenator).
+- values.yaml metadata was adapted to follow the format supported by [Readme Generator for Helm](https://github.com/bitnami-labs/readme-generator-for-helm).
 
 Consequences:
 

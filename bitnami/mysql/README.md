@@ -117,8 +117,10 @@ The following table lists the configurable parameters of the MySQL chart and the
 | `primary.containerSecurityContext.runAsUser` | User ID for the MySQL primary container                                                                         | `1001`                         |
 | `primary.livenessProbe`                      | Liveness probe configuration for MySQL primary containers                                                       | Check `values.yaml` file       |
 | `primary.readinessProbe`                     | Readiness probe configuration for MySQL primary containers                                                      | Check `values.yaml` file       |
+| `primary.startupProbe`                       | Startup probe configuration for MySQL primary containers                                                        | Check `values.yaml` file       |
 | `primary.customLivenessProbe`                | Override default liveness probe for MySQL primary containers                                                    | `nil`                          |
 | `primary.customReadinessProbe`               | Override default readiness probe for MySQL primary containers                                                   | `nil`                          |
+| `primary.customStartupProbe`                 | Override default startup probe for MySQL primary containers                                                     | `nil`                          |
 | `primary.resources.limits`                   | The resources limits for MySQL primary containers                                                               | `{}`                           |
 | `primary.resources.requests`                 | The requested resources for MySQL primary containers                                                            | `{}`                           |
 | `primary.extraEnvVars`                       | Extra environment variables to be set on MySQL primary containers                                               | `{}`                           |
@@ -174,8 +176,10 @@ The following table lists the configurable parameters of the MySQL chart and the
 | `secondary.containerSecurityContext.runAsUser` | User ID for the MySQL secondary container                                                                           | `1001`                         |
 | `secondary.livenessProbe`                      | Liveness probe configuration for MySQL secondary containers                                                         | Check `values.yaml` file       |
 | `secondary.readinessProbe`                     | Readiness probe configuration for MySQL secondary containers                                                        | Check `values.yaml` file       |
+| `secondary.startupProbe`                       | Startup probe configuration for MySQL secondary containers                                                          | Check `values.yaml` file       |
 | `secondary.customLivenessProbe`                | Override default liveness probe for MySQL secondary containers                                                      | `nil`                          |
 | `secondary.customReadinessProbe`               | Override default readiness probe for MySQL secondary containers                                                     | `nil`                          |
+| `secondary.customStartupProbe`                 | Override default startup probe for MySQL secondary containers                                                       | `nil`                          |
 | `secondary.resources.limits`                   | The resources limits for MySQL secondary containers                                                                 | `{}`                           |
 | `secondary.resources.requests`                 | The requested resources for MySQL secondary containers                                                              | `{}`                           |
 | `secondary.extraEnvVars`                       | Extra environment variables to be set on MySQL secondary containers                                                 | `{}`                           |
@@ -211,6 +215,13 @@ The following table lists the configurable parameters of the MySQL chart and the
 | `serviceAccount.name`        | Name of the created ServiceAccount                     | Generated using the `common.names.fullname` template |
 | `serviceAccount.annotations` | Annotations for MySQL Service Account                  | `{}` (evaluated as a template)                       |
 | `rbac.create`                | Whether to create & use RBAC resources or not          | `false`                                              |
+
+### Network Policy
+| Parameter                    | Description                                            | Default                                              |
+|------------------------------|--------------------------------------------------------|------------------------------------------------------|
+| `networkPolicy.enabled`                       | Enable MySQL NetworkPolicy                                                                                                                                                                                                                                                                                                                                                                                                                                                       | `false`                                                       |
+| `networkPolicy.allowExternal`                 | Don't require client label for MySQL connections                                                                                                                                                                                                                                                                                                                                                                                                                                 | `true`                                                        |
+| `networkPolicy.explicitNamespacesSelector`    | A Kubernetes LabelSelector to explicitly select namespaces from which ingress traffic could be allowed to MySQL                                                                                                                                                                                                                                                                                                                                                                     | `{}`                                                          |
 
 ### Volume Permissions parameters
 
@@ -288,7 +299,7 @@ To modify the MySQL version used in this chart you can specify a [valid image ta
 
 ### Customize a new MySQL instance
 
-The [Bitnami MySQL](https://github.com/bitnami/bitnami-docker-mysql) image allows you to use your custom scripts to initialize a fresh instance. In order to execute the scripts, they must be located inside the chart folder `files/docker-entrypoint-initdb.d` so they can be consumed as a ConfigMap.
+The [Bitnami MySQL](https://github.com/bitnami/bitnami-docker-mysql) image allows you to use your custom scripts to initialize a fresh instance. Custom scripts may be specified using the `initdbScripts` parameter. Alternatively, an external ConfigMap may be created with all the initialization scripts and the ConfigMap passed to the chart via the `initdbScriptsConfigMap` parameter. Note that this will override the `initdbScripts` parameter.
 
 The allowed extensions are `.sh`, `.sql` and `.sql.gz`.
 
@@ -330,6 +341,20 @@ The chart mounts a [Persistent Volume](https://kubernetes.io/docs/user-guide/per
 
 If you encounter errors when working with persistent volumes, refer to our [troubleshooting guide for persistent volumes](https://docs.bitnami.com/kubernetes/faq/troubleshooting/troubleshooting-persistence-volumes/).
 
+## Network Policy
+
+To enable network policy for MySQL, install [a networking plugin that implements the Kubernetes NetworkPolicy spec](https://kubernetes.io/docs/tasks/administer-cluster/declare-network-policy#before-you-begin), and set `networkPolicy.enabled` to `true`.
+
+For Kubernetes v1.5 & v1.6, you must also turn on NetworkPolicy by setting the DefaultDeny namespace annotation. Note: this will enforce policy for _all_ pods in the namespace:
+
+```console
+$ kubectl annotate namespace default "net.beta.kubernetes.io/network-policy={\"ingress\":{\"isolation\":\"DefaultDeny\"}}"
+```
+
+With NetworkPolicy enabled, traffic will be limited to just port 3306.
+
+For more precise policy, set `networkPolicy.allowExternal=false`. This will only allow pods with the generated client label to connect to MySQL.
+This label will be displayed in the output of a successful install.
 
 ## Pod affinity
 

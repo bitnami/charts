@@ -14,6 +14,7 @@ metadata:
   {{- end }}
 spec:
   replicas: {{ .Values.secondary.replicaCount }}
+  revisionHistoryLimit: {{ .Values.secondary.revisionHistoryLimit }}
   selector:
     matchLabels: {{ include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: secondary
@@ -147,6 +148,12 @@ spec:
             {{- if .Values.secondary.extraFlags }}
             - name: MARIADB_EXTRA_FLAGS
               value: "{{ .Values.secondary.extraFlags }}"
+            {{- end }}
+            {{- if .Values.secondary.startupWaitOptions }}
+            - name: MARIADB_STARTUP_WAIT_RETRIES
+              value: "{{ .Values.secondary.startupWaitOptions.retries | default 300 }}"
+            - name: MARIADB_STARTUP_WAIT_SLEEP_TIME
+              value: "{{ .Values.secondary.startupWaitOptions.sleepTime | default 2 }}"
             {{- end }}
             {{- if .Values.secondary.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.secondary.extraEnvVars "context" $) | nindent 12 }}

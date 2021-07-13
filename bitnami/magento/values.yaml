@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/magento
-  tag: 2.4.2-debian-10-r79
+  tag: 2.4.2-debian-10-r117
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -231,7 +231,7 @@ mariadb:
   image:
     registry: docker.io
     repository: bitnami/mariadb
-    tag: 10.3.29-debian-10-r13
+    tag: 10.3.30-debian-10-r14
 
   ## MariaDB architecture. Allowed values: standalone or replication
   ##
@@ -517,10 +517,17 @@ nodeSelector: {}
 ## Configure resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ##
-resources: {}
-#  requests:
-#    memory: 512Mi
-#    cpu: 300m
+resources:
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  limits: {}
+  #   cpu: 250m
+  #   memory: 256Mi
+  requests: {}
+  #   cpu: 250m
+  #   memory: 256Mi
 
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
@@ -530,7 +537,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: "10"
+    tag: 10-debian-10-r130
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -624,6 +631,15 @@ podAnnotations: {}
 ##
 podLabels: {}
 
+## Autoscaling configuration
+##
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 11
+  # targetCPU: 50
+  # targetMemory: 50
+
 ## Prometheus Exporter / Metrics
 ##
 metrics:
@@ -631,7 +647,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.8.0-debian-10-r388
+    tag: 0.9.0-debian-10-r28
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -649,7 +665,17 @@ metrics:
   ## Metrics exporter resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
-  resources: {}
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits: {}
+    #   cpu: 250m
+    #   memory: 256Mi
+    requests: {}
+    #   cpu: 250m
+    #   memory: 256Mi
 
   ## Prometheus exporter service parameters
   ##
@@ -698,7 +724,7 @@ certificates:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: "10"
+    tag: 10-debian-10-r130
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images

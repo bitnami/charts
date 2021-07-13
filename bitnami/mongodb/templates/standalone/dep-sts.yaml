@@ -9,6 +9,9 @@ metadata:
     {{- if .Values.labels }}
     {{- include "common.tplvalues.render" (dict "value" .Values.labels "context" $) | nindent 4 }}
     {{- end }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
   {{- if or .Values.annotations .Values.commonAnnotations }}
   annotations:
     {{- if .Values.annotations }}
@@ -19,6 +22,7 @@ metadata:
     {{- end }}
   {{- end }}
 spec:
+  replicas: 1
   {{- if .Values.useStatefulSet }}
   serviceName: {{ include "mongodb.fullname" . }}
   updateStrategy:
@@ -38,6 +42,9 @@ spec:
         app.kubernetes.io/component: mongodb
         {{- if .Values.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.commonLabels }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
         {{- end }}
       {{- if or (include "mongodb.createConfigmap" .) .Values.podAnnotations }}
       annotations:
@@ -411,7 +418,7 @@ spec:
           emptyDir: {}
         - name: certs-volume
           secret:
-            secretName: {{ template "mongodb.caSecretName" . }}
+            secretName: {{ template "mongodb.tlsSecretName" . }}
             items:
             - key: mongodb-ca-cert
               path: mongodb-ca-cert

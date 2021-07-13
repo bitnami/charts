@@ -9,6 +9,9 @@ metadata:
     {{- if .Values.arbiter.labels }}
     {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.labels "context" $) | nindent 4 }}
     {{- end }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
     {{- if .Values.arbiter.annotations }}
   annotations: {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.annotations "context" $) | nindent 4 }}
   {{- end }}
@@ -255,7 +258,7 @@ spec:
           emptyDir: {}
         - name: certs-volume
           secret:
-            secretName: {{ template "mongodb.caSecretName" . }}
+            secretName: {{ template "mongodb.tlsSecretName" . }}
             items:
             - key: mongodb-ca-cert
               path: mongodb-ca-cert
