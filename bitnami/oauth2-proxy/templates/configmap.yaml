@@ -13,5 +13,6 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 data:
-  oauth2_proxy.cfg: {{- include "common.tplvalues.render" ( dict "value" .Values.configuration.content "context" $ ) | nindent 4 }}
+  oauth2_proxy.cfg: |
+    {{- include "common.tplvalues.render" ( dict "value" .Values.configuration.content "context" $ ) | nindent 4 }}
 {{- end }}

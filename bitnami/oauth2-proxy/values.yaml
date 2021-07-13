@@ -212,13 +212,13 @@ configuration:
     serviceAccountJson:
     existingSecret:
   ## Custom configuration file: oauth2_proxy.cfg
-  ## content: |-
+  ## content: |
   ##   pass_basic_auth = false
   ##   pass_access_token = true
   ##
   ## @param configuration.content Default configuration
   ##
-  content: |-
+  content: |
     email_domains = [ "*" ]
     upstreams = [ "file:///dev/null" ]
 
@@ -254,7 +254,7 @@ configuration:
     existingSecret: ""
     ## One row for each user
     ## e.g:
-    ## entries: |-
+    ## entries: |
     ##    testuser:{SHA}EWhzdhgoYJWy0z2gyzhRYlN9DSiv
     ##
     content:
