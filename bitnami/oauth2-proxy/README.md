@@ -51,15 +51,16 @@ The command removes all the Kubernetes components associated with the chart and 
 ### Global parameters
 
 | Name                      | Description                                     | Value |
-|---------------------------|-------------------------------------------------|-------|
+| ------------------------- | ----------------------------------------------- | ----- |
 | `global.imageRegistry`    | Global Docker image registry                    | `nil` |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `nil` |
 
+
 ### Common parameters
 
 | Name                | Description                                        | Value           |
-|---------------------|----------------------------------------------------|-----------------|
+| ------------------- | -------------------------------------------------- | --------------- |
 | `kubeVersion`       | Override Kubernetes version                        | `nil`           |
 | `nameOverride`      | String to partially override common.names.fullname | `nil`           |
 | `fullnameOverride`  | String to fully override common.names.fullname     | `nil`           |
@@ -68,11 +69,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `clusterDomain`     | Kubernetes cluster domain name                     | `cluster.local` |
 | `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`            |
 
+
 ### Traffic Exposure Parameters
 
 | Name                               | Description                                                                                           | Value                    |
-|------------------------------------|-------------------------------------------------------------------------------------------------------|--------------------------|
-| `service.type`                     | OAuth2 Proxy service type                                                                             | `LoadBalancer`           |
+| ---------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                     | OAuth2 Proxy service type                                                                             | `ClusterIP`              |
 | `service.port`                     | OAuth2 Proxy service HTTP port                                                                        | `8080`                   |
 | `service.nodePorts.http`           | Node port for HTTP                                                                                    | `nil`                    |
 | `service.clusterIP`                | OAuth2 Proxy service Cluster IP                                                                       | `nil`                    |
@@ -92,10 +94,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host | `[]`                     |
 | `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                   | `[]`                     |
 
+
 ### OAuth2 Proxy Image parameters
 
 | Name                | Description                                             | Value                  |
-|---------------------|---------------------------------------------------------|------------------------|
+| ------------------- | ------------------------------------------------------- | ---------------------- |
 | `image.registry`    | OAuth2 Proxy image registry                             | `docker.io`            |
 | `image.repository`  | OAuth2 Proxy image repository                           | `bitnami/oauth2-proxy` |
 | `image.tag`         | OAuth2 Proxy image tag (immutable tags are recommended) | `7.1.3-debian-10-r25`  |
@@ -103,32 +106,34 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.pullSecrets` | OAuth2 Proxy image pull secrets                         | `[]`                   |
 | `image.debug`       | Enable image debug mode                                 | `false`                |
 
+
 ### OAuth2 Proxy configuration parameters
 
-| Name                                                   | Description                                         | Value                    |
-|--------------------------------------------------------|-----------------------------------------------------|--------------------------|
-| `configuration.clientID`                               | OAuth client ID                                     | `XXXXXXX`                |
-| `configuration.clientSecret`                           | OAuth client secret                                 | `XXXXXXXX`               |
-| `configuration.cookieSecret`                           | OAuth cookie secret                                 | `XXXXXXXXXX`             |
-| `configuration.existingSecret`                         | Secret with the client ID, secret and cookie secret | `nil`                    |
-| `configuration.google.enabled`                         | Enable Google service account                       | `nil`                    |
-| `configuration.google.adminEmail`                      | Google admin email                                  | `nil`                    |
-| `configuration.google.serviceAccountJson`              | Google Service account JSON                         | `nil`                    |
-| `configuration.google.existingSecret`                  | Existing secret containing Google Service Account   | `nil`                    |
-| `configuration.content`                                | Default configuration                               | `email_domains = [ "*" ] |
-| upstreams = [ "file:///dev/null" ]`                    |                                                     |                          |
-| `configuration.existingConfigmap`                      | Configmap with the OAuth2 Proxy configuration       | `nil`                    |
-| `configuration.authenticatedEmailsFile.enabled`        | Enable authenticated emails file                    | `false`                  |
-| `configuration.authenticatedEmailsFile.content`        | Restricted access list (one email per line)         | `nil`                    |
-| `configuration.authenticatedEmailsFile.existingSecret` | Secret with the authenticated emails file           | `nil`                    |
-| `configuration.htpasswdFile.enabled`                   | Enable htpasswd file                                | `false`                  |
-| `configuration.htpasswdFile.existingSecret`            | Existing secret for htpasswd file                   | `""`                     |
-| `configuration.htpasswdFile.content`                   | htpasswd file entries (one row per user)            | `nil`                    |
+| Name                                                   | Description                                         | Value                                                        |
+| ------------------------------------------------------ | --------------------------------------------------- | ------------------------------------------------------------ |
+| `configuration.clientID`                               | OAuth client ID                                     | `XXXXXXX`                                                    |
+| `configuration.clientSecret`                           | OAuth client secret                                 | `XXXXXXXX`                                                   |
+| `configuration.cookieSecret`                           | OAuth cookie secret                                 | `XXXXXXXXXXXXXXXX`                                           |
+| `configuration.existingSecret`                         | Secret with the client ID, secret and cookie secret | `nil`                                                        |
+| `configuration.google.enabled`                         | Enable Google service account                       | `false`                                                      |
+| `configuration.google.adminEmail`                      | Google admin email                                  | `nil`                                                        |
+| `configuration.google.serviceAccountJson`              | Google Service account JSON                         | `nil`                                                        |
+| `configuration.google.existingSecret`                  | Existing secret containing Google Service Account   | `nil`                                                        |
+| `configuration.content`                                | Default configuration                               | `email_domains = [ "*" ]
+upstreams = [ "file:///dev/null" ]` |
+| `configuration.existingConfigmap`                      | Configmap with the OAuth2 Proxy configuration       | `nil`                                                        |
+| `configuration.authenticatedEmailsFile.enabled`        | Enable authenticated emails file                    | `false`                                                      |
+| `configuration.authenticatedEmailsFile.content`        | Restricted access list (one email per line)         | `nil`                                                        |
+| `configuration.authenticatedEmailsFile.existingSecret` | Secret with the authenticated emails file           | `nil`                                                        |
+| `configuration.htpasswdFile.enabled`                   | Enable htpasswd file                                | `false`                                                      |
+| `configuration.htpasswdFile.existingSecret`            | Existing secret for htpasswd file                   | `""`                                                         |
+| `configuration.htpasswdFile.content`                   | htpasswd file entries (one row per user)            | `nil`                                                        |
+
 
 ### OAuth2 Proxy deployment parameters
 
 | Name                                 | Description                                                                                | Value           |
-|--------------------------------------|--------------------------------------------------------------------------------------------|-----------------|
+| ------------------------------------ | ------------------------------------------------------------------------------------------ | --------------- |
 | `containerPort`                      | OAuth2 Proxy port number                                                                   | `4180`          |
 | `replicaCount`                       | Number of OAuth2 Proxy replicas to deploy                                                  | `1`             |
 | `extraArgs`                          | add extra args to the default command                                                      | `nil`           |
@@ -181,29 +186,33 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.create`              | Specifies whether a ServiceAccount should be created                                       | `true`          |
 | `serviceAccount.name`                | The name of the ServiceAccount to use                                                      | `""`            |
 
-### External Redis parameters
 
-| Name                           | Description                                           | Value  |
-|--------------------------------|-------------------------------------------------------|--------|
-| `externalRedis.host`           | External Redis server host                            | `nil`  |
-| `externalRedis.password`       | External Redis user password                          | `nil`  |
-| `externalRedis.port`           | External Redis server port                            | `6379` |
-| `externalRedis.existingSecret` | The name of an existing secret with Redis credentials | `nil`  |
+### External Redis(TM) parameters
 
-### Redis sub-chart parameters
+| Name                           | Description                                               | Value  |
+| ------------------------------ | --------------------------------------------------------- | ------ |
+| `externalRedis.host`           | External Redis(TM) server host                            | `nil`  |
+| `externalRedis.password`       | External Redis(TM) user password                          | `nil`  |
+| `externalRedis.port`           | External Redis(TM) server port                            | `6379` |
+| `externalRedis.existingSecret` | The name of an existing secret with Redis(TM) credentials | `nil`  |
 
-| Name                                   | Description                                           | Value      |
-|----------------------------------------|-------------------------------------------------------|------------|
-| `redis.enabled`                        | Deploy Redis sub-chart                                | `true`     |
-| `redis.master.service.port`            | Redis (without Sentinel) service port                 | `6379`     |
-| `redis.auth.enabled`                   | Enable Redis authentication                           | `true`     |
-| `redis.auth.existingSecret`            | Secret with Redis credentials                         | `nil`      |
-| `redis.auth.existingSecretPasswordKey` | Key inside the existing secret with Redis credentials | `nil`      |
-| `redis.auth.sentinel`                  | Enable authentication in the Sentinel nodes           | `true`     |
-| `redis.sentinel.enabled`               | Enable Redis sentinel in the deployment               | `false`    |
-| `redis.sentinel.masterSet`             | Name of the Redis Sentinel master set                 | `mymaster` |
-| `redis.sentinel.service.port`          | Redis (with Sentinel) service port                    | `6379`     |
-| `redis.sentinel.service.sentinelPort`  | Redis (with Sentinel) sentinel service port           | `26379`    |
+
+### Redis(TM) sub-chart parameters
+
+| Name                                   | Description                                               | Value      |
+| -------------------------------------- | --------------------------------------------------------- | ---------- |
+| `redis.enabled`                        | Deploy Redis(TM) sub-chart                                | `true`     |
+| `redis.master.service.port`            | Redis(TM) (without Sentinel) service port                 | `6379`     |
+| `redis.replica.replicaCount`           | Number of Redis(TM) replicas                              | `0`        |
+| `redis.auth.enabled`                   | Enable Redis(TM) authentication                           | `true`     |
+| `redis.auth.existingSecret`            | Secret with Redis(TM) credentials                         | `nil`      |
+| `redis.auth.existingSecretPasswordKey` | Key inside the existing secret with Redis(TM) credentials | `nil`      |
+| `redis.auth.sentinel`                  | Enable authentication in the Sentinel nodes               | `true`     |
+| `redis.sentinel.enabled`               | Enable Redis(TM) sentinel in the deployment               | `false`    |
+| `redis.sentinel.masterSet`             | Name of the Redis(TM) Sentinel master set                 | `mymaster` |
+| `redis.sentinel.service.port`          | Redis(TM) (with Sentinel) service port                    | `6379`     |
+| `redis.sentinel.service.sentinelPort`  | Redis(TM) (with Sentinel) sentinel service port           | `26379`    |
+
 
 See https://github.com/bitnami-labs/readmenator to create the table
 
