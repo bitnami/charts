@@ -70,14 +70,17 @@ Refer to the [chart documentation for more information on each of these architec
 
 ### Common parameters
 
-| Name                | Description                                                                                               | Value           |
-| ------------------- | --------------------------------------------------------------------------------------------------------- | --------------- |
-| `nameOverride`      | String to partially override mongodb.fullname template (will maintain the release name)                   | `nil`           |
-| `fullnameOverride`  | String to fully override mongodb.fullname template                                                        | `nil`           |
-| `clusterDomain`     | Default Kubernetes cluster domain                                                                         | `cluster.local` |
-| `extraDeploy`       | Array of extra objects to deploy with the release                                                         | `[]`            |
-| `commonLabels`      | Add labels to all the deployed resources (sub-charts are not considered). Evaluated as a template         | `{}`            |
-| `commonAnnotations` | Common annotations to add to all Mongo resources (sub-charts are not considered). Evaluated as a template | `{}`            |
+| Name                     | Description                                                                                               | Value           |
+| ------------------------ | --------------------------------------------------------------------------------------------------------- | --------------- |
+| `nameOverride`           | String to partially override mongodb.fullname template (will maintain the release name)                   | `nil`           |
+| `fullnameOverride`       | String to fully override mongodb.fullname template                                                        | `nil`           |
+| `clusterDomain`          | Default Kubernetes cluster domain                                                                         | `cluster.local` |
+| `extraDeploy`            | Array of extra objects to deploy with the release                                                         | `[]`            |
+| `commonLabels`           | Add labels to all the deployed resources (sub-charts are not considered). Evaluated as a template         | `{}`            |
+| `commonAnnotations`      | Common annotations to add to all Mongo resources (sub-charts are not considered). Evaluated as a template | `{}`            |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                   | `false`         |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                                      | `[]`            |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                                         | `[]`            |
 
 
 ### MongoDB&reg; parameters

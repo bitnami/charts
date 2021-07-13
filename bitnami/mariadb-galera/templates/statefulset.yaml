@@ -232,8 +232,6 @@ spec:
             successThreshold: {{ .Values.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
           {{- end }}
-          {{- end }}
-          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.readinessProbe.enabled }}
           readinessProbe:
             exec:
@@ -252,8 +250,6 @@ spec:
             successThreshold: {{ .Values.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
           {{- end }}
-          {{- end }}
-          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.startupProbe.enabled }}
           startupProbe:
             exec:
@@ -350,8 +346,6 @@ spec:
               port: metrics
             initialDelaySeconds: 30
             timeoutSeconds: 5
-          {{- end }}
-          {{- if not .Values.diagnosticMode.enabled }}
           readinessProbe:
             httpGet:
               path: /
