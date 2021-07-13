@@ -154,7 +154,6 @@ ingress:
 ## @param image.tag OAuth2 Proxy image tag (immutable tags are recommended)
 ## @param image.pullPolicy OAuth2 Proxy image pull policy
 ## @param image.pullSecrets OAuth2 Proxy image pull secrets
-## @param image.debug Enable image debug mode
 ##
 image:
   registry: docker.io
@@ -173,9 +172,6 @@ image:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
-  ## Enable debug mode
-  ##
-  debug: false
 
 ## @section OAuth2 Proxy configuration parameters
 ##

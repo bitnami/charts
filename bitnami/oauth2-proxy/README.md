@@ -104,7 +104,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.tag`         | OAuth2 Proxy image tag (immutable tags are recommended) | `7.1.3-debian-10-r25`  |
 | `image.pullPolicy`  | OAuth2 Proxy image pull policy                          | `IfNotPresent`         |
 | `image.pullSecrets` | OAuth2 Proxy image pull secrets                         | `[]`                   |
-| `image.debug`       | Enable image debug mode                                 | `false`                |
 
 
 ### OAuth2 Proxy configuration parameters
