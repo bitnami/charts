@@ -191,7 +191,7 @@ postgresqlUsername: postgres
 ## @param postgresqlPassword PostgreSQL user password
 ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#setting-the-root-password-on-first-run
 ##
-postgresqlPassword:
+postgresqlPassword: ""
 ## @param existingSecret Name of existing secret to use for PostgreSQL passwords
 ## The secret has to contain the keys postgresql-password which is the password for postgresqlUsername when it is
 ## different of postgres, postgresql-postgres-password which will override postgresqlPassword,
