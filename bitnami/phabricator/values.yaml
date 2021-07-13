@@ -1,15 +1,55 @@
+## @section Global parameters
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
-## Current available global Docker image parameters: imageRegistry and imagePullSecrets
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
-# global:
-#   imageRegistry: myRegistryName
-#   imagePullSecrets:
-#     - myRegistryKeySecretName
-#   storageClass: myStorageClass
+global:
+  imageRegistry:
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+  storageClass:
+
+## @section Common parameters
+
+## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
+##
+nameOverride:
+## @param fullnameOverride String to fully override common.names.fullname template
+##
+fullnameOverride:
+## @param commonLabels Add labels to all the deployed resources
+##
+commonLabels: {}
+## @param commonAnnotations Add annotations to all the deployed resources
+##
+commonAnnotations: {}
+## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
+##
+kubeVersion:
+## @param clusterDomain Kubernetes Cluster Domain
+##
+clusterDomain: cluster.local
+## @param extraDeploy Extra objects to deploy (value evaluated as a template)
+##
+extraDeploy: []
+
+## @section Phabricator parameters
 
 ## Bitnami Phabricator image version
 ## ref: https://hub.docker.com/r/bitnami/phabricator/tags/
+## @param image.registry Phabricator image registry
+## @param image.repository Phabricator image repository
+## @param image.tag Phabricator image tag (immutable tags are recommended)
+## @param image.pullPolicy Image pull policy
+## @param image.pullSecrets Specify docker-registry secret names as an array
+## @param image.debug Specify if debug logs should be enabled
 ##
 image:
   registry: docker.io
@@ -31,176 +71,150 @@ image:
   ## Set to true if you would like to see extra information on logs
   ##
   debug: false
-
-## String to partially override common.names.fullname template (will maintain the release name)
-##
-# nameOverride:
-
-## String to fully override common.names.fullname template
-##
-# fullnameOverride:
-
-## Add labels to all the deployed resources
-##
-commonLabels: {}
-
-## Add annotations to all the deployed resources
-##
-commonAnnotations: {}
-
-## Force target Kubernetes version (using Helm capabilites if not set)
-##
-kubeVersion:
-
-## Kubernetes Cluster Domain
-##
-clusterDomain: cluster.local
-
-## Extra objects to deploy (value evaluated as a template)
-##
-extraDeploy: []
-
-## Phabricator admin user
+## @param phabricatorUsername Phabricator admin user
 ## ref: https://github.com/bitnami/bitnami-docker-phabricator#user-and-site-configuration
 ##
 phabricatorUsername: user
-
-## Admin user password
+## @param phabricatorPassword Admin user password
 ## Defaults to a random 10-character alphanumeric string if not set
 ## ref: https://github.com/bitnami/bitnami-docker-phabricator#user-and-site-configuration
 ##
-# phabricatorPassword:
-
-## Admin user email
+phabricatorPassword:
+## @param phabricatorEmail Admin user email
 ## ref: https://github.com/bitnami/bitnami-docker-phabricator#user-and-site-configuration
 ##
 phabricatorEmail: user@example.com
-
-## Admin user first name
+## @param phabricatorFirstName Admin user first name
 ## ref: https://github.com/bitnami/bitnami-docker-phabricator#user-and-site-configuration
 ##
 phabricatorFirstName: First Name
-
-## Admin user last name
+## @param phabricatorLastName Admin user last name
 ## ref: https://github.com/bitnami/bitnami-docker-phabricator#user-and-site-configuration
 phabricatorLastName: Last Name
-
-## Phabricator host to create application URLs
+## @param phabricatorHost Phabricator host to create application URLs
 ## ref: https://github.com/bitnami/bitnami-docker-phabricator#user-and-site-configuration
 ##
-# phabricatorHost:
-
-## Phabricator alternate domain to upload files
+phabricatorHost:
+## @param phabricatorAlternateFileDomain Phabricator alternate domain to upload files
 ## ref: https://github.com/bitnami/bitnami-docker-phabricator#user-and-site-configuration
 ##
-# phabricatorAlternateFileDomain:
-
-## Configure Phabricator to build application URLs using https
+phabricatorAlternateFileDomain:
+## @param phabricatorEnableHttps Configure Phabricator to build application URLs using https
 ## ref: https://github.com/bitnami/bitnami-docker-phabricator#user-and-site-configuration
 ## Note: Instead of yes/no use true/false
 ##
 phabricatorEnableHttps: true
-
-## Configure Phabricator to use GIT Large File Storage (LFS)
+## @param phabricatorUseLFS Configure Phabricator to use GIT Large File Storage (LFS)
 ## ref: https://github.com/bitnami/bitnami-docker-phabricator#user-and-site-configuration
 ## Note: Instead of yes/no use true/false
 ##
 phabricatorUseLFS: false
-
-## Configure a self-hosted GIT repository with SSH authentication
+## @param phabricatorGitSSH Configure a self-hosted GIT repository with SSH authentication
 ## ref: https://github.com/bitnami/bitnami-docker-phabricator#user-and-site-configuration
 ## Note: Instead of yes/no use true/false
 ##
 phabricatorGitSSH: false
-
-## Enable syntax highlighting using Pygments
+## @param phabricatorEnablePygments Enable syntax highlighting using Pygments
 ## ref: https://github.com/bitnami/bitnami-docker-phabricator#user-and-site-configuration
 ## Note: Instead of yes/no use true/false
 ##
 phabricatorEnablePygments: true
-
-## Skip the initial bootstrapping for the application
+## @param phabricatorSkipInstall Skip the initial bootstrapping for the application
 ## ref: https://github.com/bitnami/bitnami-docker-phabricator#user-and-site-configuration
 ## Note: Instead of yes/no use true/false
 ##
 phabricatorSkipInstall: false
-
 ## SMTP mail delivery configuration
 ## ref: https://github.com/bitnami/bitnami-docker-phabricator/#smtp-configuration
+## @param smtpHost SMTP mail delivery host
+## @param smtpPort SMTP mail delivery port
+## @param smtpUser SMTP mail delivery user
+## @param smtpPassword SMTP mail delivery password
+## @param smtpProtocol SMTP mail delivery protocol [`ssl`, `tls`]
 ##
-# smtpHost:
-# smtpPort:
-# smtpUser:
-# smtpPassword:
-# smtpProtocol:
-
-## Command and args for running the container (set to default if not set). Use array form
+smtpHost:
+smtpPort:
+smtpUser:
+smtpPassword:
+smtpProtocol:
+## @param command Override default container command (useful when using custom images)
 ##
 command: []
+## @param args Override default container args (useful when using custom images)
+##
 args: []
-
-## An array to add extra env vars
+## @param extraEnvVars An array to add extra env vars
 ## Example:
 ## extraEnvVars:
 ##   - name: FOO
 ##     value: "bar"
 ##
 extraEnvVars: []
-
-## ConfigMap with extra environment variables
+## @param extraEnvVarsCM Name of existing ConfigMap containing extra environment variables
 ##
 extraEnvVarsCM:
-
-## Secret with extra environment variables
+## @param extraEnvVarsSecret Name of existing Secret containing extra environment variables
 ##
 extraEnvVarsSecret:
+
+## @section Phabricator deployment parameters
 
 ## Strategy to use to update Pods
 ##
 updateStrategy:
-  ## StrategyType
+  ## @param updateStrategy.type StrategyType
   ## Can be set to RollingUpdate or OnDelete
   ##
   type: RollingUpdate
-
-## Phabricator container ports to open
+## @param containerPorts [object] Phabricator container ports to open
 ##
 containerPorts:
   http: 8080
   https: 8443
   ssh: 2222
-
 ## Phabricator pods' Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+## @param podSecurityContext.enabled Enable Phabricator pods' Security Context
+## @param podSecurityContext.fsGroup Group ID for the volumes of the pod
 ##
 podSecurityContext:
   enabled: true
   fsGroup: 1001
-
 ## Phabricator containers' SecurityContext
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+## @param containerSecurityContext.enabled Enable Phabricator containers' SecurityContext
+## @param containerSecurityContext.runAsUser User ID for the container
 ##
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
-
 ## Phabricator resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## We usually recommend not to specify default resources and to leave this as a conscious
+## choice for the user. This also increases chances charts run on environments with little
+## resources, such as Minikube. If you do want to specify resources, uncomment the following
+## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+## @param resources.limits The resources limits for the container
+## @param resources.requests [object] The requested resources for the container
 ##
 resources:
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## Example:
+  ## limits:
+  ##    cpu: 200m
+  ##    memory: 256Mi
   limits: {}
-  #   cpu: 200m
-  #   memory: 256Mi
   requests:
     memory: 512Mi
     cpu: 300m
-
-## Phabricator containers' liveness, readiness, and startup probes.
+## Configure extra options for liveness probe
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+## @param livenessProbe.enabled Enable livenessProbe
+## @param livenessProbe.path Request path for livenessProbe
+## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+## @param livenessProbe.periodSeconds Period seconds for livenessProbe
+## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+## @param livenessProbe.failureThreshold Failure threshold for livenessProbe
+## @param livenessProbe.successThreshold Success threshold for livenessProbe
 ##
 livenessProbe:
   enabled: true
@@ -210,6 +224,16 @@ livenessProbe:
   timeoutSeconds: 5
   failureThreshold: 6
   successThreshold: 1
+## Configure extra options for readiness probe
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+## @param readinessProbe.enabled Enable readinessProbe
+## @param readinessProbe.path Request path for readinessProbe
+## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+## @param readinessProbe.periodSeconds Period seconds for readinessProbe
+## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+## @param readinessProbe.failureThreshold Failure threshold for readinessProbe
+## @param readinessProbe.successThreshold Success threshold for readinessProbe
+##
 readinessProbe:
   enabled: true
   path: /auth/
@@ -218,6 +242,16 @@ readinessProbe:
   timeoutSeconds: 5
   failureThreshold: 6
   successThreshold: 1
+## Configure extra options for startupProbe probe
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+## @param startupProbe.enabled Enable startupProbe
+## @param startupProbe.path Request path for startupProbe
+## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+## @param startupProbe.periodSeconds Period seconds for startupProbe
+## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
+## @param startupProbe.failureThreshold Failure threshold for startupProbe
+## @param startupProbe.successThreshold Success threshold for startupProbe
+##
 startupProbe:
   enabled: false
   path: /auth/
@@ -226,87 +260,70 @@ startupProbe:
   timeoutSeconds: 3
   failureThreshold: 20
   successThreshold: 1
-
-## Custom Liveness probes for Phabricator
+## @param customLivenessProbe Override default liveness probe
 ##
 customLivenessProbe: {}
-
-## Custom Rediness probes for Phabricator
+## @param customReadinessProbe Override default readiness probe
 ##
 customReadinessProbe: {}
-
-## Custom Startup probe for Phabricator
+## @param customStartupProbe Custom Startup probe for Phabricator
 ##
 customStartupProbe: {}
-
-## Pod extra labels
+## @param podLabels Extra labels for Phabricator pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
 podLabels: {}
-
-## Annotations for server pods.
+## @param podAnnotations Annotations for Phabricator pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
-
-## Pod affinity preset
+## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-## Allowed values: soft, hard
 ##
 podAffinityPreset: ""
-
-## Pod anti-affinity preset
+## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-## Allowed values: soft, hard
 ##
 podAntiAffinityPreset: soft
-
 ## Node affinity preset
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-## Allowed values: soft, hard
 ##
 nodeAffinityPreset:
-  ## Node affinity type
-  ## Allowed values: soft, hard
+  ## @param nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ##
   type: ""
-  ## Node label key to match
+  ## @param nodeAffinityPreset.key Node label key to match. Ignored if `affinity` is set.
   ## E.g.
   ## key: "kubernetes.io/e2e-az-name"
   ##
   key: ""
-  ## Node label values to match
+  ## @param nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set.
   ## E.g.
   ## values:
   ##   - e2e-az1
   ##   - e2e-az2
   ##
   values: []
-
-## Affinity for pod assignment. Evaluated as a template.
+## @param affinity Affinity for pod assignment. Evaluated as a template.
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ## Note: podAffinityPreset, podAntiAffinityPreset, and nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
-
-## Node labels for pod assignment. Evaluated as a template.
+## @param nodeSelector Node labels for pod assignment. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
 nodeSelector: {}
-
-## Tolerations for pod assignment. Evaluated as a template.
+## @param tolerations Tolerations for pod assignment. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
-
-## Extra volumes to add to the deployment
+## @param extraVolumes Optionally specify extra list of additional volumes for Phabricator pods
 ##
 extraVolumes: []
-
-## Extra volume mounts to add to the container
+## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for Phabricator container(s)
 ##
 extraVolumeMounts: []
-
-## Add init containers to the Phabricator pods.
+## @param initContainers Add init containers to the Phabricator pods.
 ## Example:
 ## initContainers:
 ##   - name: your-image-name
@@ -317,8 +334,7 @@ extraVolumeMounts: []
 ##         containerPort: 1234
 ##
 initContainers: {}
-
-## Add sidecars to the Phabricator pods.
+## @param sidecars Add sidecars to the Phabricator pods
 ## Example:
 ## sidecars:
 ##   - name: your-image-name
@@ -329,53 +345,60 @@ initContainers: {}
 ##         containerPort: 1234
 ##
 sidecars: {}
-
 ## Enable persistence using Persistent Volume Claims
 ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
 persistence:
+  ## @param persistence.enabled Enable persistence using PVC
+  ##
   enabled: true
-  ## Phabricator data Persistent Volume Storage Class
+  ## @param persistence.storageClass PVC Storage Class for Phabricator volume
   ## If defined, storageClassName: <storageClass>
   ## If set to "-", storageClassName: "", which disables dynamic provisioning
   ## If undefined (the default) or set to null, no storageClassName spec is
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##   GKE, AWS & OpenStack)
   ##
-  # storageClass: "-"
-
+  storageClass:
+  ## @param persistence.accessMode PVC Access Mode for Phabricator volume
+  ##
   accessMode: ReadWriteOnce
+  ## @param persistence.size PVC Storage Request for Phabricator volume
+  ##
   size: 8Gi
-
-  ## A manually managed Persistent Volume Claim
+  ## @param persistence.existingClaim An Existing PVC name for Phabricator volume
   ## Requires persistence.enabled: true
   ## If defined, PVC must be created manually before volume will be bound
   ##
-  # existingClaim:
-
-  ## If defined, the phabricator-data volume will mount to the specified hostPath.
+  existingClaim:
+  ## @param persistence.hostPath Host mount path for Phabricator volume
   ## Requires persistence.enabled: true
   ## Requires persistence.existingClaim: nil|false
   ## Default: nil.
   ##
   hostPath:
 
-## K8s svc configuration
+## @section Traffic Exposure Parameters
+
+## Kubernetes service configuration
 ##
 service:
-  ## K8s svc type
+  ## @param service.type Kubernetes Service type
   ## For minikube, set this to NodePort, elsewhere use LoadBalancer
   ##
   type: LoadBalancer
-  ## HTTP Port
+  ## @param service.port Service HTTP port
   ##
   port: 80
-  ## HTTPS Port
+  ## @param service.httpsPort Service HTTP port
   ##
   httpsPort: 443
-  ## SSH Port
+  ## @param service.sshPort Service SSH port
   ##
   sshPort: 22
+  ## @param service.nodePorts.http Kubernetes HTTP node port
+  ## @param service.nodePorts.https Kubernetes HTTPS node port
+  ## @param service.nodePorts.ssh Kubernetes SSH node port
   ## nodePorts:
   ##   http: <to set explicitly, choose port between 30000-32767>
   ##   https: <to set explicitly, choose port between 30000-32767>
@@ -385,70 +408,59 @@ service:
     http: ""
     https: ""
     ssh: ""
-  ## Use serviceLoadBalancerIP to request a specific static IP,
-  ## otherwise leave blank
+  ## @param service.loadBalancerIP `loadBalancerIP` for the Phabricator Service
   ##
-  # loadBalancerIP:
-  ## Enable client source IP preservation
+  loadBalancerIP:
+  ## @param service.externalTrafficPolicy Enable client source IP preservation
   ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: Cluster
-  ## Provide any additional annotations which may be required (evaluated as a template).
+  ## @param service.annotations Service annotations
   ##
   annotations: {}
-
 ## Configure the ingress resource that allows you to access the
 ## Phabricator installation. Set up the URL
 ## ref: http://kubernetes.io/docs/user-guide/ingress/
 ##
 ingress:
-  ## Set to true to enable ingress record generation
+  ## @param ingress.enabled Set to true to enable ingress record generation
   ##
   enabled: false
-
-  ## Enable TLS configuration for the hostname defined at ingress.hostname parameter
+  ## @param ingress.tls Enable TLS configuration for the hostname defined at ingress.hostname parameter
   ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
   ## You can use the ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
   ##
   tls: false
-
-  ## Set this to true in order to add the corresponding annotations for cert-manager
+  ## @param ingress.certManager Set this to true in order to add the corresponding annotations for cert-manager
   ##
   certManager: false
-
-  ## Ingress Path type
+  ## @param ingress.pathType Ingress path type
   ##
   pathType: ImplementationSpecific
-
-  ## Override API Version (automatically detected if not set)
+  ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
   ##
   apiVersion:
-
-  ## When the ingress is enabled, a host pointing to this will be created
+  ## @param ingress.hostname Default host for the ingress resource
   ##
   hostname: phabricator.local
-
-  ## The Path to Phabricator. You may need to set this to '/*' in order to use this
-  ## with ALB ingress controllers.
+  ## @param ingress.path The Path to Phabricator. You may need to set this to '/*' in order to use this with ALB ingress controllers.
   ##
   path: /
-
-  ## Ingress annotations done as key:value pairs
+  ## @param ingress.annotations Ingress annotations
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
   ##
   ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
   ##
   annotations: {}
-
-  ## The list of additional hostnames to be covered with this ingress record.
+  ## @param ingress.extraHosts The list of additional hostnames to be covered with this ingress record.
   ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
   ## extraHosts:
   ## - name: phabricator.local
   ##   path: /
   ##
-
-  ## Any additional arbitrary paths that may need to be added to the ingress under the main host.
+  extraHosts: []
+  ## @param ingress.extraPaths Any additional arbitrary paths that may need to be added to the ingress under the main host.
   ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
   ## extraPaths:
   ## - path: /*
@@ -456,16 +468,16 @@ ingress:
   ##     serviceName: ssl-redirect
   ##     servicePort: use-annotation
   ##
-
-  ## The tls configuration for additional hostnames to be covered with this ingress record.
+  extraPaths: []
+  ## @param ingress.extraTls The tls configuration for additional hostnames to be covered with this ingress record.
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
   ## extraTls:
   ## - hosts:
   ##     - phabricator.local
   ##   secretName: phabricator.local-tls
   ##
-
-  ## If you're providing your own certificates, please use this to add the certificates as secrets
+  extraTls: []
+  ## @param ingress.secrets If you're providing your own certificates, please use this to add the certificates as secrets
   ## key and certificate should start with -----BEGIN CERTIFICATE----- or
   ## -----BEGIN RSA PRIVATE KEY-----
   ##
@@ -474,137 +486,36 @@ ingress:
   ##
   ## It is also possible to create and manage the certificates outside of this helm chart
   ## Please see README.md for more information
-  ##
-  secrets: []
+  ## e.g:
   ## - name: phabricator.local-tls
   ##   key:
   ##   certificate:
   ##
+  secrets: []
 
-## Init containers parameters:
-## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
-##
-volumePermissions:
-  enabled: false
-  image:
-    registry: docker.io
-    repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r127
-    pullPolicy: Always
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ## Example:
-    ## pullSecrets:
-    ##   - myRegistryKeySecretName
-    ##
-    pullSecrets: []
+## @section Database parameters
 
-  ## Init container' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ##
-  resources:
-    # We usually recommend not to specify default resources and to leave this as a conscious
-    # choice for the user. This also increases chances charts run on environments with little
-    # resources, such as Minikube. If you do want to specify resources, uncomment the following
-    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    limits: {}
-    #   cpu: 100m
-    #   memory: 128Mi
-    requests: {}
-    #   cpu: 100m
-    #   memory: 128Mi
-
-## Prometheus Exporter / Metrics
-##
-metrics:
-  enabled: false
-  image:
-    registry: docker.io
-    repository: bitnami/apache-exporter
-    tag: 0.9.0-debian-10-r24
-    pullPolicy: IfNotPresent
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ## Example:
-    ## pullSecrets:
-    ##   - myRegistryKeySecretName
-    ##
-    pullSecrets: []
-
-  ## Metrics exporter pod Annotation and Labels
-  ##
-  podAnnotations:
-    prometheus.io/scrape: "true"
-    prometheus.io/port: "9117"
-
-  ## Metrics exporter resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ##
-  resources:
-    # We usually recommend not to specify default resources and to leave this as a conscious
-    # choice for the user. This also increases chances charts run on environments with little
-    # resources, such as Minikube. If you do want to specify resources, uncomment the following
-    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    limits: {}
-    #   cpu: 100m
-    #   memory: 128Mi
-    requests: {}
-    #   cpu: 100m
-    #   memory: 128Mi
-
-##
-## External Database Configuration
-##
-## All of these values are only used when mariadb.enabled is set to false
-##
-externalDatabase:
-  ## Use existing secret (ignores previous password)
-  ## NOTE: must contain key `mariadb-root-password`
-  ## NOTE: When it's set, the `externalDatabase.rootPassword` parameter is ignored
-  ##
-  # existingSecret:
-
-  ## Database host
-  ##
-  host: localhost
-
-  ## Database port number
-  ##
-  port: 3306
-
-  ## root username of MariaDB
-  ##
-  rootUser: root
-
-  ## Database password
-  ##
-  rootPassword: ""
-
-##
 ## MariaDB chart configuration
-##
 ## https://github.com/bitnami/charts/blob/master/bitnami/mariadb/values.yaml
 ##
 mariadb:
-  ## Whether to deploy a MariaDB server to satisfy the applications database requirements. To use an external database set this to false and configure the externalDatabase parameters
+  ## @param mariadb.enabled Whether to use the MariaDB chart
+  ## deploy a MariaDB server to satisfy the applications database requirements
+  ## To use an external database set this to false and configure the externalDatabase parameters
   ##
   enabled: true
-
-  ## MariaDB architecture. Allowed values: standalone or replication
+  ## @param mariadb.architecture MariaDB architecture. Allowed values: `standalone` or `replication`
   ##
   architecture: standalone
-
   ## MariaDB Authentication parameters
   ##
   auth:
-    ## MariaDB root password
+    ## @param mariadb.auth.rootPassword Password for the MariaDB `root` user
     ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-the-root-password-on-first-run
     ##
     rootPassword: ""
-
   primary:
+    ## @param mariadb.primary.configuration [string] MariaDB Primary configuration to be injected as ConfigMap
     ## Improvements for better database performance on Phabricator
     ##
     configuration: |-
@@ -635,14 +546,17 @@ mariadb:
       port=3306
       socket=/opt/bitnami/mariadb/tmp/mysql.sock
       pid-file=/opt/bitnami/mariadb/tmp/mysqld.pid
+    ## @param mariadb.primary.extraFlags Additional command line flags
+    ##
     extraFlags: "--local-infile=0"
-
     ## Enable persistence using Persistent Volume Claims
     ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
     ##
     persistence:
+      ## @param mariadb.primary.persistence.enabled Enable database persistence using PVC
+      ##
       enabled: true
-      ## mariadb data Persistent Volume Storage Class
+      ## @param mariadb.primary.persistence.storageClass mariadb data Persistent Volume Storage Class
       ## If defined, storageClassName: <storageClass>
       ## If set to "-", storageClassName: "", which disables dynamic provisioning
       ## If undefined (the default) or set to null, no storageClassName spec is
@@ -650,12 +564,139 @@ mariadb:
       ##   GKE, AWS & OpenStack)
       ##
       storageClass:
+      ## @param mariadb.primary.persistence.accessModes Database Persistent Volume Access Modes
+      ##
       accessModes:
         - ReadWriteOnce
+      ## @param mariadb.primary.persistence.size Database Persistent Volume Size
+      ##
       size: 8Gi
-      ## Set path in case you want to use local host path volumes (not recommended in production)
+      ## @param mariadb.primary.persistence.hostPath Host mount path for MariaDB volume in case you want to use local host path volumes (not recommended in production)
       ##
       hostPath:
-      ## Use an existing PVC
+      ## @param mariadb.primary.persistence.existingClaim Enable persistence using an existing PVC
       ##
       existingClaim:
+## External Database Configuration
+## All of these values are only used when mariadb.enabled is set to false
+##
+externalDatabase:
+  ## @param externalDatabase.existingSecret Name of the database existing Secret Object
+  ## NOTE: must contain key `mariadb-root-password`
+  ## NOTE: When it's set, the `externalDatabase.rootPassword` parameter is ignored
+  ##
+  existingSecret:
+  ## @param externalDatabase.host Host of the existing database
+  ##
+  host: localhost
+  ## @param externalDatabase.port Port of the existing database
+  ##
+  port: 3306
+  ## @param externalDatabase.rootUser Username in the external db with root privileges
+  ##
+  rootUser: root
+  ## @param externalDatabase.rootPassword Password for the above username
+  ##
+  rootPassword: ""
+
+## @section Volume Permissions parameters
+
+## Init containers parameters:
+## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
+##
+volumePermissions:
+  ## @param volumePermissions.enabled Enable init container that changes volume permissions in the data directory (
+  ##
+  enabled: false
+  ## @param volumePermissions.image.registry Init container volume-permissions image registry
+  ## @param volumePermissions.image.repository Init container volume-permissions image repository
+  ## @param volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
+  ## @param volumePermissions.image.pullSecrets Specify docker-registry secret names as an array
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/bitnami-shell
+    tag: 10-debian-10-r127
+    pullPolicy: Always
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## Example:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## Init containers' resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param volumePermissions.resources.limits The resources limits for the container
+  ## @param volumePermissions.resources.requests The requested resources for the container
+  ##
+  resources:
+    ## Example:
+    ## limits:
+    ##    cpu: 100m
+    ##    memory: 128Mi
+    limits: {}
+    ## Examples:
+    ## requests:
+    ##    cpu: 100m
+    ##    memory: 128Mi
+    requests: {}
+
+## @section Metrics parameters
+
+## Prometheus Exporter / Metrics
+##
+metrics:
+  ## @param metrics.enabled Start a side-car prometheus exporter
+  ##
+  enabled: false
+  ## @param metrics.image.registry Apache exporter image registry
+  ## @param metrics.image.repository Apache exporter image repository
+  ## @param metrics.image.tag Apache exporter image tag (immutable tags are recommended)
+  ## @param metrics.image.pullPolicy Image pull policy
+  ## @param metrics.image.pullSecrets Specify docker-registry secret names as an array
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/apache-exporter
+    tag: 0.9.0-debian-10-r24
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## Example:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## @param metrics.podAnnotations [object] Additional annotations for Metrics exporter pod
+  ##
+  podAnnotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9117"
+  ## Metrics exporter resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param metrics.resources.limits The resources limits for the container
+  ## @param metrics.resources.requests The requested resources for the container
+  ##
+  resources:
+    ## Example:
+    ## limits:
+    ##    cpu: 100m
+    ##    memory: 128Mi
+    limits: {}
+    ## Examples:
+    ## requests:
+    ##    cpu: 100m
+    ##    memory: 128Mi
+    requests: {}
