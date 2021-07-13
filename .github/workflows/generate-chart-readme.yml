@@ -30,6 +30,9 @@ on:
       - 'bitnami/nginx-ingress-controller/values.yaml'
       - 'bitnami/node/values.yaml'
       - 'bitnami/node-exporter/values.yaml'
+      - 'bitnami/prestashop/values.yaml'
+      - 'bitnami/pytorch/values.yaml'
+      - 'bitnami/rabbitmq/values.yaml'
 
 jobs:
   generate-chart-readme:
