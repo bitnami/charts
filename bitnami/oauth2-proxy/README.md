@@ -198,19 +198,20 @@ upstreams = [ "file:///dev/null" ]` |
 
 ### Redis(TM) sub-chart parameters
 
-| Name                                   | Description                                               | Value      |
-| -------------------------------------- | --------------------------------------------------------- | ---------- |
-| `redis.enabled`                        | Deploy Redis(TM) sub-chart                                | `true`     |
-| `redis.master.service.port`            | Redis(TM) (without Sentinel) service port                 | `6379`     |
-| `redis.replica.replicaCount`           | Number of Redis(TM) replicas                              | `0`        |
-| `redis.auth.enabled`                   | Enable Redis(TM) authentication                           | `true`     |
-| `redis.auth.existingSecret`            | Secret with Redis(TM) credentials                         | `nil`      |
-| `redis.auth.existingSecretPasswordKey` | Key inside the existing secret with Redis(TM) credentials | `nil`      |
-| `redis.auth.sentinel`                  | Enable authentication in the Sentinel nodes               | `true`     |
-| `redis.sentinel.enabled`               | Enable Redis(TM) sentinel in the deployment               | `false`    |
-| `redis.sentinel.masterSet`             | Name of the Redis(TM) Sentinel master set                 | `mymaster` |
-| `redis.sentinel.service.port`          | Redis(TM) (with Sentinel) service port                    | `6379`     |
-| `redis.sentinel.service.sentinelPort`  | Redis(TM) (with Sentinel) sentinel service port           | `26379`    |
+| Name                                   | Description                                               | Value        |
+| -------------------------------------- | --------------------------------------------------------- | ------------ |
+| `redis.enabled`                        | Deploy Redis(TM) sub-chart                                | `true`       |
+| `redis.architecture`                   | Redis(TM) architecture                                    | `standalone` |
+| `redis.master.service.port`            | Redis(TM) (without Sentinel) service port                 | `6379`       |
+| `redis.replica.replicaCount`           | Number of Redis(TM) replicas                              | `3`          |
+| `redis.auth.enabled`                   | Enable Redis(TM) authentication                           | `true`       |
+| `redis.auth.existingSecret`            | Secret with Redis(TM) credentials                         | `nil`        |
+| `redis.auth.existingSecretPasswordKey` | Key inside the existing secret with Redis(TM) credentials | `nil`        |
+| `redis.auth.sentinel`                  | Enable authentication in the Sentinel nodes               | `true`       |
+| `redis.sentinel.enabled`               | Enable Redis(TM) sentinel in the deployment               | `false`      |
+| `redis.sentinel.masterSet`             | Name of the Redis(TM) Sentinel master set                 | `mymaster`   |
+| `redis.sentinel.service.port`          | Redis(TM) (with Sentinel) service port                    | `6379`       |
+| `redis.sentinel.service.sentinelPort`  | Redis(TM) (with Sentinel) sentinel service port           | `26379`      |
 
 
 See https://github.com/bitnami-labs/readmenator to create the table

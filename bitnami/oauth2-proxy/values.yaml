@@ -496,6 +496,9 @@ redis:
   ## @param redis.enabled Deploy Redis(TM) sub-chart
   ##
   enabled: true
+  ## @param redis.architecture Redis(TM) architecture
+  ##
+  architecture: "standalone"
   master:
     ## @param redis.master.service.port Redis(TM) (without Sentinel) service port
     ##
@@ -504,7 +507,7 @@ redis:
   replica:
     ## @param redis.replica.replicaCount Number of Redis(TM) replicas
     ##
-    replicaCount: 0
+    replicaCount: 3
   auth:
     ## @param redis.auth.enabled Enable Redis(TM) authentication
     ##
