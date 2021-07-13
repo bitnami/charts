@@ -489,20 +489,25 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Other Parameters
 
-| Name                                      | Description                                                                 | Value            |
-| ----------------------------------------- | --------------------------------------------------------------------------- | ---------------- |
-| `rbac.create`                             | Specifies whether RBAC resources should be created                          | `true`           |
-| `redis.enabled`                           | Enable Redis dependency                                                     | `true`           |
-| `redis.nameOverride`                      | Name override for the Redis dependency                                      | `""`             |
-| `redis.service.port`                      | Service port for Redis dependency                                           | `6379`           |
-| `redis.auth.enabled`                      | Enable Redis dependency authentication                                      | `true`           |
-| `redis.auth.existingSecret`               | Existing secret to load redis dependency password                           | `nil`            |
-| `redis.auth.existingSecretPasswordKey`    | Pasword key name inside the existing secret                                 | `redis-password` |
-| `externalRedis.host`                      | External Redis host                                                         | `""`             |
-| `externalRedis.port`                      | External Redis port                                                         | `6379`           |
-| `externalRedis.password`                  | External Redis password                                                     | `""`             |
-| `externalRedis.existingSecret`            | Existing secret for the external redis                                      | `nil`            |
-| `externalRedis.existingSecretPasswordKey` | Password key for the existing secret containing the external redis password | `redis-password` |
+| Name                                      | Description                                                                 | Value                 |
+| ----------------------------------------- | --------------------------------------------------------------------------- | --------------------- |
+| `rbac.create`                             | Specifies whether RBAC resources should be created                          | `true`                |
+| `redis.image.registry`                    | Argo CD controller image registry                                           | `docker.io`           |
+| `redis.image.repository`                  | Argo CD controller image repository                                         | `bitnami/redis`       |
+| `redis.image.tag`                         | Argo CD controller image tag (immutable tags are recommended)               | `6.2.4-debian-10-r13` |
+| `redis.image.pullPolicy`                  | Argo CD controller image pull policy                                        | `IfNotPresent`        |
+| `redis.image.pullSecrets`                 | Argo CD controller image pull secrets                                       | `[]`                  |
+| `redis.enabled`                           | Enable Redis dependency                                                     | `true`                |
+| `redis.nameOverride`                      | Name override for the Redis dependency                                      | `""`                  |
+| `redis.service.port`                      | Service port for Redis dependency                                           | `6379`                |
+| `redis.auth.enabled`                      | Enable Redis dependency authentication                                      | `true`                |
+| `redis.auth.existingSecret`               | Existing secret to load redis dependency password                           | `nil`                 |
+| `redis.auth.existingSecretPasswordKey`    | Pasword key name inside the existing secret                                 | `redis-password`      |
+| `externalRedis.host`                      | External Redis host                                                         | `""`                  |
+| `externalRedis.port`                      | External Redis port                                                         | `6379`                |
+| `externalRedis.password`                  | External Redis password                                                     | `""`                  |
+| `externalRedis.existingSecret`            | Existing secret for the external redis                                      | `nil`                 |
+| `externalRedis.existingSecretPasswordKey` | Password key for the existing secret containing the external redis password | `redis-password`      |
 
 
 The above parameters map to the env variables defined in [bitnami/argo-cd](http://github.com/bitnami/bitnami-docker-argo-cd). For more information please refer to the [bitnami/argo-cd](http://github.com/bitnami/bitnami-docker-argo-cd) image documentation.

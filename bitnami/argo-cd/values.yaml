@@ -46,7 +46,7 @@ extraDeploy: []
 ##
 controller:
   ## Bitnami Argo CD controller image
-  ## ref: https://hub.docker.com/r/bitnami/redis/tags/
+  ## ref: https://hub.docker.com/r/bitnami/argo-cd/tags/
   ## @param controller.image.registry Argo CD controller image registry
   ## @param controller.image.repository Argo CD controller image repository
   ## @param controller.image.tag Argo CD controller image tag (immutable tags are recommended)
@@ -438,7 +438,7 @@ controller:
 ##
 server:
   ## Bitnami Argo CD server image
-  ## ref: https://hub.docker.com/r/bitnami/redis/tags/
+  ## ref: https://hub.docker.com/r/bitnami/argo-cd/tags/
   ## @param server.image.registry Argo CD server image registry
   ## @param server.image.repository Argo CD server image repository
   ## @param server.image.tag Argo CD server image tag (immutable tags are recommended)
@@ -1099,7 +1099,7 @@ server:
 ##
 repoServer:
   ## Bitnami Argo CD repo server image
-  ## ref: https://hub.docker.com/r/bitnami/redis/tags/
+  ## ref: https://hub.docker.com/r/bitnami/argo-cd/tags/
   ## @param repoServer.image.registry Argo CD repo server image registry
   ## @param repoServer.image.repository Argo CD repo server image repository
   ## @param repoServer.image.tag Argo CD repo server image tag (immutable tags are recommended)
@@ -1432,7 +1432,7 @@ repoServer:
 ##
 dex:
   ## Bitnami Dex image
-  ## ref: https://hub.docker.com/r/bitnami/redis/tags/
+  ## ref: https://hub.docker.com/r/bitnami/argo-cd/tags/
   ## @param dex.image.registry Dex image registry
   ## @param dex.image.repository Dex image repository
   ## @param dex.image.tag Dex image tag (immutable tags are recommended)
@@ -1962,6 +1962,32 @@ rbac:
 ## Redis parameters
 ##
 redis:
+  ## Bitnami Redis image
+  ## ref: https://hub.docker.com/r/bitnami/redis/tags/
+  ## @param redis.image.registry Argo CD controller image registry
+  ## @param redis.image.repository Argo CD controller image repository
+  ## @param redis.image.tag Argo CD controller image tag (immutable tags are recommended)
+  ## @param redis.image.pullPolicy Argo CD controller image pull policy
+  ## @param redis.image.pullSecrets Argo CD controller image pull secrets
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/redis
+    tag: 6.2.4-debian-10-r13
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+
   ## @param redis.enabled Enable Redis dependency
   ##
   enabled: true
