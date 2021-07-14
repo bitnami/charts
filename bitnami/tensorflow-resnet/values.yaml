@@ -14,6 +14,17 @@ global:
   ##
   imagePullSecrets: []
 
+## @section Common parameters
+
+## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
+##
+nameOverride:
+## @param fullnameOverride String to fully override common.names.fullname template
+##
+fullnameOverride:
+
+## @section TensorFlow parameters
+
 ## TensorFlow Serving server image version
 ## ref: https://hub.docker.com/r/bitnami/tensorflow-serving/tags/
 ## @param server.image.registry TensorFlow Serving image registry
@@ -40,7 +51,6 @@ server:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-
 ## TensorFlow ResNet image version
 ## ref: https://hub.docker.com/r/bitnami/tensorflow-resnet/tags/
 ## @param client.image.registry TensorFlow ResNet image registry
@@ -67,20 +77,10 @@ client:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-
-## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
-##
-nameOverride:
-
-## @param fullnameOverride String to fully override common.names.fullname template
-##
-fullnameOverride:
-
 ## @param hostAliases Deployment pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
 hostAliases: []
-
 ## Container ports
 ## @param containerPorts.server Tensorflow server port
 ## @param containerPorts.restApi TensorFlow Serving Rest API Port
@@ -88,26 +88,21 @@ hostAliases: []
 containerPorts:
   server: 8500
   restApi: 8501
-
 ## @param replicaCount Number of replicas
 ##
 replicaCount: 1
-
 ## @param podAnnotations Pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
-
 ## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
 podAffinityPreset: ""
-
 ## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
 podAntiAffinityPreset: soft
-
 ## Node affinity preset
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
 ##
@@ -127,23 +122,19 @@ nodeAffinityPreset:
   ##   - e2e-az2
   ##
   values: []
-
 ## @param affinity Affinity for pod assignment. Evaluated as a template.
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ## Note: podAffinityPreset, podAntiAffinityPreset, and nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
-
 ## @param nodeSelector Node labels for pod assignment. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
 nodeSelector: {}
-
 ## @param tolerations Tolerations for pod assignment. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
-
 ## Containers' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -164,7 +155,6 @@ resources:
   ##    cpu: 250m
   ##    memory: 256Mi
   requests: {}
-
 ## Containers' liveness probe
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ## @param livenessProbe.enabled Enable livenessProbe
@@ -197,7 +187,6 @@ readinessProbe:
   timeoutSeconds: 5
   failureThreshold: 6
   successThreshold: 1
-
 ## Service for the scheduler node
 ##
 service:
@@ -227,7 +216,6 @@ service:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
   annotations: {}
-
 ## TensorFlow Serving Prometheus exporter configuration
 ##
 metrics:
