@@ -202,7 +202,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.config.url`                                  | Argo CD server url. Required when enabling dex.                                                  | `""`                     |
 | `server.config.application.instanceLabelKey`         |                                                                                                  | `undefined`              |
 | `server.config.dex.config`                           | Dex config that will end in the argocd-cm                                                        | `undefined`              |
-| `server.additionalProjects`                          | Array with additional projects to create                                                         | `[]`                     |
 | `server.ingress.enabled`                             | Enable the creation of an ingress for the Argo CD server                                         | `false`                  |
 | `server.ingress.certManager`                         | Set to true to add certmanager annotations for Argo CD server ingress                            | `false`                  |
 | `server.ingress.pathType`                            | Path type for the Argo CD server ingress                                                         | `ImplementationSpecific` |
