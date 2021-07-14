@@ -2,6 +2,7 @@
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
@@ -19,6 +20,7 @@ global:
   namespaceOverride:
 
 ## @section Common parameters
+##
 
 ## @param nameOverride String to partially override mongodb.fullname template (will maintain the release name)
 ##
@@ -67,7 +69,23 @@ commonLabels: {}
 ##
 commonAnnotations: {}
 
+## Enable diagnostic mode in the deployment
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the deployment
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the deployment
+  ##
+  args:
+    - infinity
+
 ## @section MongoDB&reg; parameters
+##
 
 ## Bitnami MongoDB(R) image
 ## ref: https://hub.docker.com/r/bitnami/mongodb/tags/
@@ -285,6 +303,7 @@ extraEnvVarsCM:
 extraEnvVarsSecret:
 
 ## @section MongoDB&reg; statefulset parameters
+##
 
 ## @param annotations Additional labels to be added to the MongoDB&reg; statefulset. Evaluated as a template
 ##
@@ -396,11 +415,13 @@ resources:
   ## limits:
   ##    cpu: 100m
   ##    memory: 128Mi
+  ##
   limits: {}
   ## Examples:
   ## requests:
   ##    cpu: 100m
   ##    memory: 128Mi
+  ##
   requests: {}
 ## MongoDB(R) pods' liveness probe. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
@@ -507,6 +528,7 @@ sidecars: {}
 ##   - name: extras
 ##     mountPath: /usr/share/extras
 ##     readOnly: true
+##
 extraVolumeMounts: []
 ## @param extraVolumes Optionally specify extra list of additional volumes to the MongoDB&reg; statefulset
 ## extraVolumes:
@@ -529,6 +551,7 @@ pdb:
   maxUnavailable:
 
 ## @section Traffic exposure parameters
+##
 
 ## Service parameters
 ##
@@ -621,11 +644,13 @@ externalAccess:
       ## limits:
       ##    cpu: 100m
       ##    memory: 128Mi
+      ##
       limits: {}
       ## Examples:
       ## requests:
       ##    cpu: 100m
       ##    memory: 128Mi
+      ##
       requests: {}
   ## Parameters to configure K8s service(s) used to externally access MongoDB(R)
   ## A new service per broker will be created
@@ -715,6 +740,7 @@ externalAccess:
       annotations: {}
 
 ## @section Persistence parameters
+##
 
 ## Enable persistence using Persistent Volume Claims
 ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
@@ -772,6 +798,7 @@ persistence:
     dataSource:
 
 ## @section RBAC parameters
+##
 
 ## ServiceAccount
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
@@ -795,6 +822,7 @@ rbac:
   ## binding MongoDB(R) ServiceAccount to a role
   ## that allows MongoDB(R) pods querying the K8s API
   ## this needs to be set to 'true' to enable the mongo-labeler sidecar primary mongodb discovery
+  ##
   create: false
   role:
     ## @param rbac.role.rules Custom rules to create following the role specification
@@ -865,6 +893,7 @@ podSecurityPolicy:
   ##
 
 ## @section Volume Permissions parameters
+##
 
 ## Init Container parameters
 ## Change the owner and group of the persistent volume(s) mountpoint(s) to 'runAsUser:fsGroup' on each component
@@ -910,11 +939,13 @@ volumePermissions:
     ## limits:
     ##    cpu: 100m
     ##    memory: 128Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##    cpu: 100m
     ##    memory: 128Mi
+    ##
     requests: {}
   ## Init container Security Context
   ## Note: the chown of the data folder is done to containerSecurityContext.runAsUser
@@ -930,6 +961,7 @@ volumePermissions:
     runAsUser: 0
 
 ## @section Arbiter parameters
+##
 
 arbiter:
   ## @param arbiter.enabled Enable deploying the arbiter
@@ -951,6 +983,7 @@ arbiter:
   ## Command and args for running the container (set to default if not set). Use array form
   ## @param arbiter.command Override default container command (useful when using custom images)
   ## @param arbiter.args Override default container args (useful when using custom images)
+  ##
   command:
   args:
   ## @param arbiter.extraFlags Arbiter additional command line flags
@@ -1068,11 +1101,13 @@ arbiter:
     ## limits:
     ##    cpu: 100m
     ##    memory: 128Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##    cpu: 100m
     ##    memory: 128Mi
+    ##
     requests: {}
   ## MongoDB(R) Arbiter pods' liveness probe. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
@@ -1142,6 +1177,7 @@ arbiter:
   ##   - name: extras
   ##     mountPath: /usr/share/extras
   ##     readOnly: true
+  ##
   extraVolumeMounts: []
   ## @param arbiter.extraVolumes Optionally specify extra list of additional volumes to the Arbiter statefulset
   ## extraVolumes:
@@ -1170,6 +1206,7 @@ arbiter:
     nameOverride: ""
 
 ## @section Hidden Node parameters
+##
 
 hidden:
   ## @param hidden.enabled Enable deploying the hidden nodes
@@ -1293,11 +1330,13 @@ hidden:
     ## limits:
     ##    cpu: 100m
     ##    memory: 128Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##    cpu: 100m
     ##    memory: 128Mi
+    ##
     requests: {}
   ## MongoDB(R) Hidden pods' liveness probe. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
@@ -1367,6 +1406,7 @@ hidden:
   ##   - name: extras
   ##     mountPath: /usr/share/extras
   ##     readOnly: true
+  ##
   extraVolumeMounts: []
   ## @param hidden.extraVolumes Optionally specify extra list of additional volumes to the hidden node statefulset
   ## extraVolumes:
@@ -1430,6 +1470,7 @@ hidden:
       dataSource:
 
 ## @section Metrics parameters
+##
 
 metrics:
   ## @param metrics.enabled Enable using a sidecar Prometheus exporter
@@ -1478,11 +1519,13 @@ metrics:
     ## limits:
     ##    cpu: 100m
     ##    memory: 128Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##    cpu: 100m
     ##    memory: 128Mi
+    ##
     requests: {}
   ## @param metrics.containerPort Port of the Prometheus metrics container
   ##
