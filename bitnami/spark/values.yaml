@@ -658,7 +658,7 @@ metrics:
     enabled: false
     ## @param metrics.prometheusRule.namespace Namespace where the prometheusRules resource should be created
     ##
-    namespace:
+    namespace: ''
     ## @param metrics.prometheusRule.additionalLabels Additional labels that can be used so prometheusRules will be discovered by Prometheus
     ##
     additionalLabels: {}
