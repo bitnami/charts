@@ -387,7 +387,7 @@ server:
     minAvailable: 1
     ## @param server.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
     ##
-    maxUnavailable: 1
+    maxUnavailable:
   ## Dataflow Server Autoscaling parameters.
   ##
   autoscaling:
@@ -709,10 +709,10 @@ skipper:
     ## @param skipper.autoscaling.targetMemory Target Memory utilization percentage
     ##
     enabled: false
-    minReplicas: 1
-    maxReplicas: 11
-    targetCPU: 50
-    targetMemory: 50
+    minReplicas:
+    maxReplicas:
+    targetCPU:
+    targetMemory:
   ## @param skipper.extraVolumes Extra Volumes to be set on the Skipper Pod
   ## e.g:
   ## extraVolumes:
@@ -988,10 +988,10 @@ metrics:
   ##
   autoscaling:
     enabled: false
-    minReplicas: 1
-    maxReplicas: 11
-    targetCPU: 50
-    targetMemory: 50
+    minReplicas:
+    maxReplicas:
+    targetCPU:
+    targetMemory:
 
 ## @section Init Container parameters
 
