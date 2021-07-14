@@ -228,7 +228,7 @@ spec:
         {{- if .Values.worker.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.worker.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
-  {{- if not .Values.persistence.enabled }}
+  {{- if not .Values.worker.persistence.enabled }}
           - name: data
            emptyDir: {}
   {{- else }}

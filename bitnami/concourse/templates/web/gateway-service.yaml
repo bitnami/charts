@@ -27,7 +27,7 @@ spec:
   loadBalancerIP: {{ .Values.web.service.workerGateway.loadBalancerIP }}
   {{- end }}
   ports:
-    - name: worker-gateway
+    - name: http-worker-gateway
       port: {{ .Values.web.tsa.containerPort }}
       targetPort: tsa
       {{- if and (eq "NodePort" .Values.web.service.workerGateway.type) .Values.web.service.workerGateway.NodePort }}

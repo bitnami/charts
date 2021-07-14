@@ -98,7 +98,8 @@ web:
   ## @param web.nameOverride provide a name to substitute for the full names of resources
   nameOverride:
   
-  ## @param web.perrAdress Network address of this web node, reachable by other web nodes. Used for forwarded worker addresses. (default: $POD_IP)
+  ## @param web.peerAddress Network address of this web node, reachable by other web nodes. 
+  ## Used for forwarded worker addresses. (default: $POD_IP)
   ##
   peerAddress:
 
@@ -210,9 +211,9 @@ web:
     enabled: true
     runAsUser: 1001
   
-  ## @param web.podSecurityPolicy.enabled Specifies whether a PodSecurityPolicy should be created (set `podSecurityPolicy.enabled` to `true` to enable it)
+  ## @param web.podSecurityPolicy.create Specifies whether a PodSecurityPolicy should be created (set `podSecurityPolicy.create` to `true` to enable it)
   podSecurityPolicy:
-    enabled: false
+    create: false
 
   service: 
     ## @param web.service.type For minAvailableikube, set this to ClusterIP, elsewhere use LoadBalancer or NodePort
@@ -605,8 +606,9 @@ worker:
   ## Enable HorizontalPodAutoscaler for worker pods
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
   ##
-  ## @param worker.autoscaling
-  autoscaling: {}
+  ## @param worker.autoscaling.enabled
+  autoscaling: 
+    enabled: false
   #      maxReplicas: 1
   #      minReplicas: 1
   #      builtInMetrics:
@@ -629,8 +631,8 @@ worker:
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions/
   ##
   pdb:
-    enabled: true 
-    ## @param worker.pdb.enabled 
+    create: true 
+    ## @param worker.pdb.create 
     ## @param worker.pdb.minAvailable Minimum number of workers available after an eviction
     
     ##
@@ -696,9 +698,9 @@ worker:
     enabled: true
     privileged: true
 
-  ## @param worker.podSecurityPolicy.enabled Specifies whether a PodSecurityPolicy should be created (set `podSecurityPolicy.enabled` to `true` to enable it)
+  ## @param worker.podSecurityPolicy.create Specifies whether a PodSecurityPolicy should be created (set `podSecurityPolicy.create` to `true` to enable it)
   podSecurityPolicy:
-    enabled: false
+    create: false
 
   ## @param worker.podLabels
   podLabels: {}
@@ -876,6 +878,32 @@ worker:
   ## Note: this configuration supersedes the global affinity configuration
   ##
   affinity: {}
+
+  ## If true, use a Persistent Volume Claim, If false, use emptyDir
+  ## @param worker.persistence.enabled Enable persistence using Persistent Volume Claims
+  persistence:
+    enabled: true
+    ## Persistent Volume Storage Class
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    ## @param worker.persistence.storageClass Persistent Volume storage class
+    storageClass:
+    ## @param worker.persistence.annotations Persistent Volume Claim annotations
+    ##
+    annotations: {}
+    ## Persistent Volume Access Mode
+    ##
+    ## @param worker.persistence.accessModes [array] Persistent Volume access modes
+    accessModes:
+      - ReadWriteOnce
+    ## Persistent Volume size
+    ##
+    ## @param worker.persistence.size Persistent Volume size
+    size: 8Gi
 
 ## @section Init Container Parameters
 
@@ -1085,34 +1113,6 @@ secrets:
   ## @param secrets.workerKeyPub Concourse Worker Keys.
   workerKeyPub: |-
     ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC496FSYFcBAKgDtMsBAJiF/6/NxlXKP5UZecyEsedYuTt1GOgJTwaA1qZ1LmHsbfLDE68oDdiM4uvxfI4wtLhz57w3u0jOUxZ2JeF7SVwEf1nVqLn4Gh/f8GUNQGSyIp1zUD5Bx9fq0PAyQ47mt7Ufi84rcf8LKl7nzAIHTcdg2BvTkQN9bUGPaq/Pb1W2bKPAQy4OzXTSIyrAJ89TH2jFeaZfyxQFGbD9jVHH/yl0oiMrDeaRYgccE5II+KY7WoLjsBry/9Qf2ERELKTK4UeIGIqWci9lab1ti+GxFPPiC3krNFjo4jShV4eUs4cNIrjwNrxVaKPXmU6o7Y3Hpayx Concourse
-
-
-persistence:
-  ## If true, use a Persistent Volume Claim, If false, use emptyDir
-  ## @param persistence.enabled Enable persistence using Persistent Volume Claims
-  enabled: true
-  worker: 
-    ## Persistent Volume Storage Class
-    ## If defined, storageClassName: <storageClass>
-    ## If set to "-", storageClassName: "", which disables dynamic provisioning
-    ## If undefined (the default) or set to null, no storageClassName spec is
-    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-    ##   GKE, AWS & OpenStack)
-    ##
-    ## @param persistence.worker.storageClass Persistent Volume storage class
-    storageClass:
-    ## @param persistence.worker.annotations Persistent Volume Claim annotations
-    ##
-    annotations: {}
-    ## Persistent Volume Access Mode
-    ##
-    ## @param persistence.worker.accessModes [array] Persistent Volume access modes
-    accessModes:
-      - ReadWriteOnce
-    ## Persistent Volume size
-    ##
-    ## @param persistence.worker.size Persistent Volume size
-    size: 8Gi
 
 ## PostgreSQL chart configuration
 ## ref: https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml

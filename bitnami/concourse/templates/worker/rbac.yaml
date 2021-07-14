@@ -1,6 +1,6 @@
 {{- if .Values.worker.enable }}
 {{- if .Values.rbac.create }}
-{{- if .Values.podSecurityPolicy.enabled }}
+{{- if .Values.podSecurityPolicy.create }}
 ---
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
