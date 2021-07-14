@@ -16,9 +16,28 @@ global:
   imagePullSecrets: []
   storageClass:
 
+## @section Common parameters
+
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
 kubeVersion:
+## @param nameOverride String to partially override testlink.fullname template (will maintain the release name)
+##
+nameOverride:
+## @param fullnameOverride String to fully override testlink.fullname template
+##
+fullnameOverride:
+## @param commonAnnotations Common annotations to add to all TestLink resources (sub-charts are not considered). Evaluated as a template
+##
+commonAnnotations: {}
+## @param commonLabels Common labels to add to all TestLink resources (sub-charts are not considered). Evaluated as a template
+##
+commonLabels: {}
+## @param extraDeploy Array with extra yaml to deploy with the chart. Evaluated as a template
+##
+extraDeploy: []
+
+## @section TestLink parameters
 
 ## Bitnami TestLink image version
 ## ref: https://hub.docker.com/r/bitnami/testlink/tags/
@@ -46,23 +65,12 @@ image:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
-
   ## Set to true if you would like to see extra information on logs
   ##
   debug: false
-
-## @param nameOverride String to partially override testlink.fullname template (will maintain the release name)
-##
-nameOverride:
-
-## @param fullnameOverride String to fully override testlink.fullname template
-##
-fullnameOverride:
-
 ## @param replicaCount Number of replicas (requires ReadWriteMany PVC support)
 ##
 replicaCount: 1
-
 ## @param hostAliases [array] Deployment pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -72,53 +80,37 @@ hostAliases:
   - ip: "127.0.0.1"
     hostnames:
       - "status.localhost"
-
 ## @param testlinkSkipInstall Skip TestLink installation wizard. Useful for migrations and restoring from SQL dump
 ## ref: https://github.com/bitnami/bitnami-docker-testlink#configuration
 ##
 testlinkSkipInstall: false
-
 ## @param testlinkUsername User of the application
 ## ref: https://github.com/bitnami/bitnami-docker-testlink#configuration
 ##
 testlinkUsername: user
-
 ## @param testlinkPassword Application password
 ## Defaults to a random 10-character alphanumeric string if not set
 ## ref: https://github.com/bitnami/bitnami-docker-testlink#configuration
 ##
 testlinkPassword:
-
 ## @param testlinkEmail Admin email
 ## ref: https://github.com/bitnami/bitnami-docker-testlink#configuration
 ##
 testlinkEmail: user@example.com
-
 ## @param testlinkLanguage Default language
 ## ref: https://github.com/bitnami/bitnami-docker-testlink#environment-variables
 ##
 testlinkLanguage: en_US
-
 ## @param allowEmptyPassword Allow DB blank passwords
 ## ref: https://github.com/bitnami/bitnami-docker-testlink#environment-variables
 ##
 allowEmptyPassword: true
-
 ## @param command Override default container command (useful when using custom images)
 ##
 command:
 ## @param args Override default container args (useful when using custom images)
 ##
 args:
-
-## @param commonAnnotations Common annotations to add to all TestLink resources (sub-charts are not considered). Evaluated as a template
-##
-commonAnnotations: {}
-
-## @param commonLabels Common labels to add to all TestLink resources (sub-charts are not considered). Evaluated as a template
-##
-commonLabels: {}
-
 ## @param updateStrategy.type Update strategy - only really applicable for deployments with RWO PVs attached
 ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
 ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
@@ -126,71 +118,37 @@ commonLabels: {}
 ##
 updateStrategy:
   type: RollingUpdate
-
 ## @param extraEnvVars An array to add extra environment variables
 ## For example:
 ##  - name: BEARER_AUTH
 ##    value: true
 ##
 extraEnvVars: []
-
 ## @param extraEnvVarsCM ConfigMap containing extra environment variables
 ##
 extraEnvVarsCM:
-
 ## @param extraEnvVarsSecret Secret containing extra environment variables
 ##
 extraEnvVarsSecret:
-
 ## @param extraVolumes Extra volumes to add to the deployment. Requires setting `extraVolumeMounts`
 ##
 extraVolumes: []
-
 ## @param extraVolumeMounts Extra volume mounts to add to the container. Normally used with `extraVolumes`
 ##
 extraVolumeMounts: []
-
 ## @param initContainers Extra init containers to add to the deployment
 ##
 initContainers: []
-
 ## @param sidecars Extra sidecar containers to add to the deployment
 ##
 sidecars: []
-
 ## @param tolerations Tolerations for pod assignment. Evaluated as a template.
 ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
-
 ## @param existingSecret Use existing secret for the application password
 ##
 existingSecret:
-
-##
-## External database configuration
-##
-externalDatabase:
-  ## @param externalDatabase.host Host of the existing database
-  ##
-  host:
-
-  ## @param externalDatabase.port Port of the existing database
-  ##
-  port: 3306
-
-  ## @param externalDatabase.user Existing username in the external database
-  ##
-  user: bn_testlink
-
-  ## @param externalDatabase.password Password for the above username
-  ##
-  password:
-
-  ## @param externalDatabase.database Name of the existing database
-  ##
-  database: bitnami_testlink
-
 ## SMTP mail delivery configuration
 ## ref: https://github.com/bitnami/bitnami-docker-testlink/#smtp-configuration
 ## @param smtpHost SMTP host
@@ -204,10 +162,273 @@ smtpPort:
 smtpUser:
 smtpPassword:
 smtpProtocol:
+## @param containerPorts [object] Container ports
+##
+containerPorts:
+  http: 8080
+  https: 8443
+## @param sessionAffinity Control where client requests go, to the same pod or round-robin
+## Values: ClientIP or None
+## ref: https://kubernetes.io/docs/user-guide/services/
+##
+sessionAffinity: "None"
+## Enable persistence using Persistent Volume Claims
+## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+##
+persistence:
+  ## @param persistence.enabled Enable persistence using PVC
+  ##
+  enabled: true
+  ## @param persistence.storageClass TestLink Data Persistent Volume Storage Class
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
+  ##
+  storageClass:
+  ## @param persistence.accessMode PVC Access Mode for TestLink volume
+  ## Requires persistence.enabled: true
+  ## If defined, PVC must be created manually before volume will be bound
+  ##
+  accessMode: ReadWriteOnce
+  ## @param persistence.size PVC Storage Request for TestLink volume
+  ##
+  size: 8Gi
+  ## @param persistence.existingClaim An Existing PVC name
+  ## Requires persistence.enabled: true
+  ## If defined, PVC must be created manually before volume will be bound
+  ##
+  existingClaim:
+  ## @param persistence.hostPath Host mount path for TestLink volume
+  ## If defined, the testlink-data volume will mount to the specified hostPath
+  ## Requires persistence.enabled: true
+  ## Requires persistence.existingClaim: nil|false
+  ## Default: nil.
+  ##
+  hostPath:
+## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+##
+podAffinityPreset: ""
+## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+##
+podAntiAffinityPreset: soft
+## Node affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+##
+nodeAffinityPreset:
+  ## @param nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ##
+  type: ""
+  ## @param nodeAffinityPreset.key Node label key to match Ignored if `affinity` is set.
+  ## E.g.
+  ## key: "kubernetes.io/e2e-az-name"
+  ##
+  key: ""
+  ## @param nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set.
+  ## E.g.
+  ## values:
+  ##   - e2e-az1
+  ##   - e2e-az2
+  ##
+  values: []
+## @param affinity Affinity for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
+##
+affinity: {}
+## @param nodeSelector Node labels for pod assignment. Evaluated as a template.
+## ref: https://kubernetes.io/docs/user-guide/node-selection/
+##
+nodeSelector: {}
+## Configure resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## @param resources.requests [object] The requested resources for the container
+##
+resources:
+  requests:
+    memory: 512Mi
+    cpu: 300m
+## Configure Pods Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+## @param podSecurityContext.enabled Enable TestLink pods' Security Context
+## @param podSecurityContext.fsGroup TestLink pods' group ID
+##
+podSecurityContext:
+  enabled: true
+  fsGroup: 1001
+## Configure Container Security Context (only main container)
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+## @param containerSecurityContext.enabled Enable TestLink containers' Security Context
+## @param containerSecurityContext.runAsUser TestLink containers' Security Context
+##
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1001
+## Configure extra options for liveness probe
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+## @param livenessProbe.enabled Enable livenessProbe
+## @param livenessProbe.path Request path for livenessProbe
+## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+## @param livenessProbe.periodSeconds Period seconds for livenessProbe
+## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+## @param livenessProbe.failureThreshold Failure threshold for livenessProbe
+## @param livenessProbe.successThreshold Success threshold for livenessProbe
+##
+livenessProbe:
+  enabled: true
+  path: "/login.php"
+  initialDelaySeconds: 120
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+## Configure extra options for readiness probe
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+## @param readinessProbe.enabled Enable readinessProbe
+## @param readinessProbe.path Request path for readinessProbe
+## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+## @param readinessProbe.periodSeconds Period seconds for readinessProbe
+## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+## @param readinessProbe.failureThreshold Failure threshold for readinessProbe
+## @param readinessProbe.successThreshold Success threshold for readinessProbe
+##
+readinessProbe:
+  enabled: true
+  path: "/login.php"
+  initialDelaySeconds: 30
+  periodSeconds: 5
+  timeoutSeconds: 3
+  failureThreshold: 6
+  successThreshold: 1
+## @param customLivenessProbe Override default liveness probe
+##
+customLivenessProbe: {}
+## @param customReadinessProbe Override default readiness probe
+##
+customReadinessProbe: {}
+## @param lifecycleHooks Lifecycle hooks for the container to automate configuration before or after startup
+##
+lifecycleHooks:
+## @param podAnnotations Pod annotations
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+##
+podAnnotations: {}
+## @param podLabels Pod extra labels
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
+podLabels: {}
 
+## @section Traffic Exposure Parameters
+
+## Kubernetes configuration
+## For minikube, set this to NodePort, elsewhere use LoadBalancer
 ##
+service:
+  ## @param service.type Kubernetes Service type
+  ##
+  type: LoadBalancer
+  ## @param service.port Service HTTP port
+  ##
+  port: 80
+  ## @param service.httpsPort Service HTTPS port
+  ##
+  httpsPort: 443
+  ## @param service.clusterIP Service cluster IP
+  ##
+  clusterIP:
+  ## @param service.loadBalancerSourceRanges Control hosts connecting to "LoadBalancer" only
+  ## loadBalancerSourceRanges:
+  ##   - 0.0.0.0/0
+  ##
+  loadBalancerSourceRanges: []
+  ## @param service.loadBalancerIP Load balancer IP for the TestLink Service (optional, cloud specific)
+  ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+  ##
+  loadBalancerIP:
+  ## @param service.nodePorts.http Kubernetes HTTP node port
+  ## @param service.nodePorts.https Kubernetes HTTPS node port
+  ## nodePorts:
+  ##   http: <to set explicitly, choose port between 30000-32767>
+  ##   https: <to set explicitly, choose port between 30000-32767>
+  ##
+  nodePorts:
+    http: ""
+    https: ""
+  ## @param service.externalTrafficPolicy Enable client source IP preservation
+  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ##
+  externalTrafficPolicy: Cluster
+## Configure the ingress resource that allows you to access the
+## TestLink installation. Set up the URL
+## ref: http://kubernetes.io/docs/user-guide/ingress/
+##
+ingress:
+  ## @param ingress.enabled Enable ingress controller resource
+  ##
+  enabled: false
+  ## @param ingress.certManager Add annotations for cert-manager
+  ##
+  certManager: false
+  ## @param ingress.hostname Default host for the ingress resource
+  ##
+  hostname: testlink.local
+  ## @param ingress.annotations Ingress annotations
+  ## For a full list of possible ingress annotations, please see
+  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ##
+  ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
+  ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
+  ## e.g:
+  ##  kubernetes.io/ingress.class: nginx
+  ##
+  annotations: {}
+  ## @param ingress.hosts The list of additional hostnames to be covered with this ingress record.
+  ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
+  ## hosts:
+  ## - name: testlink.local
+  ##   path: /
+  ##   pathType: ImplementationSpecific
+  ##
+  hosts:
+  ## @param ingress.tls The tls configuration for the ingress
+  ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ## tls:
+  ## - hosts:
+  ##     - testlink.local
+  ##   secretName: testlink.local-tls
+  ##
+  tls:
+  ## @param ingress.secrets If you're providing your own certificates, please use this to add the certificates as secrets
+  ## key and certificate should start with -----BEGIN CERTIFICATE----- or
+  ## -----BEGIN RSA PRIVATE KEY-----
+  ##
+  ## name should line up with a tlsSecret set further up
+  ## If you're using cert-manager, this is unneeded, as it will create the secret for you if it is not set
+  ##
+  ## It is also possible to create and manage the certificates outside of this helm chart
+  ## Please see README.md for more information
+  ## e.g:
+  ## - name: testlink.local-tls
+  ##   key:
+  ##   certificate:
+  ##
+  secrets:
+  ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
+  ##
+  apiVersion:
+  ## @param ingress.path Ingress path
+  ##
+  path: /
+  ## @param ingress.pathType Ingress path type
+  ##
+  pathType: ImplementationSpecific
+
+## @section Database parameters
+
 ## MariaDB chart configuration
-##
 ## https://github.com/bitnami/charts/blob/master/bitnami/mariadb/values.yaml
 ##
 mariadb:
@@ -215,11 +436,9 @@ mariadb:
   ## To use an external database set this to false and configure the externalDatabase parameters
   ##
   enabled: true
-
   ## @param mariadb.architecture MariaDB architecture. Allowed values: `standalone` or `replication`
   ##
   architecture: standalone
-
   ## MariaDB Authentication parameters
   ##
   auth:
@@ -238,7 +457,6 @@ mariadb:
     ## @param mariadb.auth.password Password for the database
     ##
     password: ""
-
   primary:
     ## Enable persistence using Persistent Volume Claims
     ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
@@ -268,170 +486,26 @@ mariadb:
       ## @param mariadb.primary.persistence.existingClaim Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas
       ##
       existingClaim:
-
-## @param containerPorts [object] Container ports
+## External database configuration
 ##
-containerPorts:
-  http: 8080
-  https: 8443
+externalDatabase:
+  ## @param externalDatabase.host Host of the existing database
+  ##
+  host:
+  ## @param externalDatabase.port Port of the existing database
+  ##
+  port: 3306
+  ## @param externalDatabase.user Existing username in the external database
+  ##
+  user: bn_testlink
+  ## @param externalDatabase.password Password for the above username
+  ##
+  password:
+  ## @param externalDatabase.database Name of the existing database
+  ##
+  database: bitnami_testlink
 
-## Kubernetes configuration
-## For minikube, set this to NodePort, elsewhere use LoadBalancer
-##
-service:
-  ## @param service.type Kubernetes Service type
-  ##
-  type: LoadBalancer
-  ## @param service.port Service HTTP port
-  ##
-  port: 80
-  ## @param service.httpsPort Service HTTPS port
-  ##
-  httpsPort: 443
-  ## @param service.clusterIP Service cluster IP
-  ##
-  clusterIP:
-  ## @param service.loadBalancerSourceRanges Control hosts connecting to "LoadBalancer" only
-  ## loadBalancerSourceRanges:
-  ##   - 0.0.0.0/0
-  ##
-  loadBalancerSourceRanges: []
-  ## @param service.loadBalancerIP Load balancer IP for the TestLink Service (optional, cloud specific)
-  ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
-  ##
-  loadBalancerIP:
-
-  ## @param service.nodePorts.http Kubernetes HTTP node port
-  ## @param service.nodePorts.https Kubernetes HTTPS node port
-  ## nodePorts:
-  ##   http: <to set explicitly, choose port between 30000-32767>
-  ##   https: <to set explicitly, choose port between 30000-32767>
-  ##
-  nodePorts:
-    http: ""
-    https: ""
-  ## @param service.externalTrafficPolicy Enable client source IP preservation
-  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
-  ##
-  externalTrafficPolicy: Cluster
-
-## Configure the ingress resource that allows you to access the
-## TestLink installation. Set up the URL
-## ref: http://kubernetes.io/docs/user-guide/ingress/
-##
-ingress:
-  ## @param ingress.enabled Enable ingress controller resource
-  ##
-  enabled: false
-
-  ## @param ingress.certManager Add annotations for cert-manager
-  ##
-  certManager: false
-
-  ## @param ingress.hostname Default host for the ingress resource
-  ##
-  hostname: testlink.local
-
-  ## @param ingress.annotations Ingress annotations
-  ## For a full list of possible ingress annotations, please see
-  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
-  ##
-  ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
-  ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
-  ## e.g:
-  ##  kubernetes.io/ingress.class: nginx
-  ##
-  annotations: {}
-
-  ## @param ingress.hosts The list of additional hostnames to be covered with this ingress record.
-  ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
-  ## hosts:
-  ## - name: testlink.local
-  ##   path: /
-  ##   pathType: ImplementationSpecific
-  ##
-  hosts:
-  ## @param ingress.tls The tls configuration for the ingress
-  ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
-  ## tls:
-  ## - hosts:
-  ##     - testlink.local
-  ##   secretName: testlink.local-tls
-  ##
-  tls:
-
-  ## @param ingress.secrets If you're providing your own certificates, please use this to add the certificates as secrets
-  ## key and certificate should start with -----BEGIN CERTIFICATE----- or
-  ## -----BEGIN RSA PRIVATE KEY-----
-  ##
-  ## name should line up with a tlsSecret set further up
-  ## If you're using cert-manager, this is unneeded, as it will create the secret for you if it is not set
-  ##
-  ## It is also possible to create and manage the certificates outside of this helm chart
-  ## Please see README.md for more information
-  ## e.g:
-  ## - name: testlink.local-tls
-  ##   key:
-  ##   certificate:
-  ##
-  secrets:
-
-  ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
-  ##
-  apiVersion:
-
-  ## @param ingress.path Ingress path
-  ##
-  path: /
-
-  ## @param ingress.pathType Ingress path type
-  ##
-  pathType: ImplementationSpecific
-
-## @param sessionAffinity Control where client requests go, to the same pod or round-robin
-## Values: ClientIP or None
-## ref: https://kubernetes.io/docs/user-guide/services/
-##
-sessionAffinity: "None"
-
-## Enable persistence using Persistent Volume Claims
-## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
-##
-persistence:
-  ## @param persistence.enabled Enable persistence using PVC
-  ##
-  enabled: true
-  ## @param persistence.storageClass TestLink Data Persistent Volume Storage Class
-  ## If defined, storageClassName: <storageClass>
-  ## If set to "-", storageClassName: "", which disables dynamic provisioning
-  ## If undefined (the default) or set to null, no storageClassName spec is
-  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-  ##   GKE, AWS & OpenStack)
-  ##
-  storageClass:
-
-  ## @param persistence.accessMode PVC Access Mode for TestLink volume
-  ## Requires persistence.enabled: true
-  ## If defined, PVC must be created manually before volume will be bound
-  ##
-  accessMode: ReadWriteOnce
-  ## @param persistence.size PVC Storage Request for TestLink volume
-  ##
-  size: 8Gi
-
-  ## @param persistence.existingClaim An Existing PVC name
-  ## Requires persistence.enabled: true
-  ## If defined, PVC must be created manually before volume will be bound
-  ##
-  existingClaim:
-
-  ## @param persistence.hostPath Host mount path for TestLink volume
-  ## If defined, the testlink-data volume will mount to the specified hostPath
-  ## Requires persistence.enabled: true
-  ## Requires persistence.existingClaim: nil|false
-  ## Default: nil.
-  ##
-  hostPath:
+## @section Volume Permissions parameters
 
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
@@ -480,132 +554,7 @@ volumePermissions:
     ##    memory: 128Mi
     requests: {}
 
-## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
-## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-##
-podAffinityPreset: ""
-
-## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
-## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-##
-podAntiAffinityPreset: soft
-
-## Node affinity preset
-## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-##
-nodeAffinityPreset:
-  ## @param nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
-  ##
-  type: ""
-  ## @param nodeAffinityPreset.key Node label key to match Ignored if `affinity` is set.
-  ## E.g.
-  ## key: "kubernetes.io/e2e-az-name"
-  ##
-  key: ""
-  ## @param nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set.
-  ## E.g.
-  ## values:
-  ##   - e2e-az1
-  ##   - e2e-az2
-  ##
-  values: []
-
-## @param affinity Affinity for pod assignment
-## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
-##
-affinity: {}
-
-## @param nodeSelector Node labels for pod assignment. Evaluated as a template.
-## ref: https://kubernetes.io/docs/user-guide/node-selection/
-##
-nodeSelector: {}
-
-## Configure resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-## @param resources.requests [object] The requested resources for the container
-##
-resources:
-  requests:
-    memory: 512Mi
-    cpu: 300m
-
-## Configure Pods Security Context
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-## @param podSecurityContext.enabled Enable TestLink pods' Security Context
-## @param podSecurityContext.fsGroup TestLink pods' group ID
-##
-podSecurityContext:
-  enabled: true
-  fsGroup: 1001
-
-## Configure Container Security Context (only main container)
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-## @param containerSecurityContext.enabled Enable TestLink containers' Security Context
-## @param containerSecurityContext.runAsUser TestLink containers' Security Context
-##
-containerSecurityContext:
-  enabled: true
-  runAsUser: 1001
-
-## Configure extra options for liveness probe
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
-## @param livenessProbe.enabled Enable livenessProbe
-## @param livenessProbe.path Request path for livenessProbe
-## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
-## @param livenessProbe.periodSeconds Period seconds for livenessProbe
-## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
-## @param livenessProbe.failureThreshold Failure threshold for livenessProbe
-## @param livenessProbe.successThreshold Success threshold for livenessProbe
-##
-livenessProbe:
-  enabled: true
-  path: "/login.php"
-  initialDelaySeconds: 120
-  periodSeconds: 10
-  timeoutSeconds: 5
-  failureThreshold: 6
-  successThreshold: 1
-## Configure extra options for readiness probe
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
-## @param readinessProbe.enabled Enable readinessProbe
-## @param readinessProbe.path Request path for readinessProbe
-## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-## @param readinessProbe.periodSeconds Period seconds for readinessProbe
-## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
-## @param readinessProbe.failureThreshold Failure threshold for readinessProbe
-## @param readinessProbe.successThreshold Success threshold for readinessProbe
-##
-readinessProbe:
-  enabled: true
-  path: "/login.php"
-  initialDelaySeconds: 30
-  periodSeconds: 5
-  timeoutSeconds: 3
-  failureThreshold: 6
-  successThreshold: 1
-
-## @param customLivenessProbe Override default liveness probe
-##
-customLivenessProbe: {}
-
-## @param customReadinessProbe Override default readiness probe
-##
-customReadinessProbe: {}
-
-## @param lifecycleHooks Lifecycle hooks for the container to automate configuration before or after startup
-##
-lifecycleHooks:
-
-## @param podAnnotations Pod annotations
-## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-##
-podAnnotations: {}
-
-## @param podLabels Pod extra labels
-## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-##
-podLabels: {}
+## @section Metrics parameters
 
 ## Prometheus Exporter / Metrics
 ##
@@ -642,6 +591,8 @@ metrics:
     prometheus.io/scrape: "true"
     prometheus.io/port: "9117"
 
+## @section Certificate injection parameters
+
 ## Add custom certificates and certificate authorities to redmine container
 ##
 certificates:
@@ -675,15 +626,12 @@ certificates:
   ## @param certificates.extraEnvVars Container sidecar extra environment variables (eg proxy)
   ##
   extraEnvVars: []
-
   ## @param certificates.extraEnvVarsCM ConfigMap containing extra env vars
   ##
   extraEnvVarsCM:
-
   ## @param certificates.extraEnvVarsSecret Secret containing extra env vars (in case of sensitive data)
   ##
   extraEnvVarsSecret:
-
   ## @param certificates.image.registry Container sidecar registry
   ## @param certificates.image.repository Container sidecar image repository
   ## @param certificates.image.tag Container sidecar image tag (immutable tags are recommended)
@@ -707,7 +655,3 @@ certificates:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-
-## @param extraDeploy Array with extra yaml to deploy with the chart. Evaluated as a template
-##
-extraDeploy: []
