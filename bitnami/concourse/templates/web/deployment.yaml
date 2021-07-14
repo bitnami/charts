@@ -5,7 +5,7 @@ metadata:
   name: {{ template "concourse.web.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
-    app.kubernetes.io/component: {{ template "concourse.web.fullname" . }}
+    app.kubernetes.io/component: web
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
@@ -19,14 +19,14 @@ spec:
   {{- end }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
-      app.kubernetes.io/component: {{ template "concourse.web.fullname" . }}
+      app.kubernetes.io/component: web
   template:
     metadata:
       {{- if .Values.web.podAnnotations }}
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.web.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
-        app.kubernetes.io/component: {{ template "concourse.web.fullname" . }}
+        app.kubernetes.io/component: web
         {{- if .Values.web.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.web.podLabels "context" $) | nindent 8 }}
         {{- end }}
@@ -244,9 +244,9 @@ spec:
             httpGet:
               path: {{ .Values.web.baseUrl | trimSuffix "/" }}/api/v1/info
               port: http
-            initialDelaySeconds: {{ .Values.web.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.web.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.web.livenessProbe.timeoutSeconds }}
+            initialDelaySeconds: 10
+            periodSeconds: 15
+            timeoutSeconds: 3
             failureThreshold: {{ .Values.web.livenessProbe.failureThreshold }}
             successThreshold: {{ .Values.web.livenessProbe.successThreshold }}
           {{- else if .Values.web.customLivenessProbe }}
@@ -257,9 +257,9 @@ spec:
             httpGet:
               path: {{ .Values.web.baseUrl | trimSuffix "/" }}/api/v1/info
               port: http
-            initialDelaySeconds: {{ .Values.web.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.web.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.web.readinessProbe.timeoutSeconds }}
+            initialDelaySeconds: 10
+            periodSeconds: 15
+            timeoutSeconds: 3
             failureThreshold: {{ .Values.web.readinessProbe.failureThreshold }}
             successThreshold: {{ .Values.web.readinessProbe.successThreshold }}
           {{- else if .Values.web.customReadinessProbe }}

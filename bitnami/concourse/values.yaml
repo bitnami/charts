@@ -115,25 +115,16 @@ web:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param web.livenessProbe.enabled Enable livenessProbe on web nodes
   ## @skip web.livenessProbe.httpGet
-  ## @param web.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
-  ## @param web.livenessProbe.periodSeconds Period seconds for livenessProbe
-  ## @param web.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
   ## @param web.livenessProbe.failureThreshold Failure threshold for livenessProbe
   ## @param web.livenessProbe.successThreshold Success threshold for livenessProbe
   ##
   livenessProbe:
     enabled: true
-    initialDelaySeconds: 30
-    periodSeconds: 15
-    timeoutSeconds: 3
     failureThreshold: 1
     successThreshold: 1
 
   ## @param web.readinessProbe.enabled Enable readinessProbe on web nodes
   ## @skip web.readinessProbe.httpGet
-  ## @param web.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-  ## @param web.readinessProbe.periodSeconds Period seconds for readinessProbe
-  ## @param web.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
   ## @param web.readinessProbe.failureThreshold Failure threshold for readinessProbe
   ## @param web.readinessProbe.successThreshold Success threshold for readinessProbe
   ##
@@ -142,9 +133,6 @@ web:
     httpGet:
       path: /api/v1/info
       port: http
-    initialDelaySeconds: 30
-    periodSeconds: 15
-    timeoutSeconds: 3
     failureThreshold: 1
     successThreshold: 1
 
@@ -643,17 +631,13 @@ worker:
   ##
   ## @param worker.livenessProbe.enabled Enable livenessProbe on worker nodes
   ## @skip worker.livenessProbe.httpGet
-  ## @param worker.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
   ## @param worker.livenessProbe.periodSeconds Period seconds for livenessProbe
-  ## @param worker.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
   ## @param worker.livenessProbe.failureThreshold Failure threshold for livenessProbe
   ## @param worker.livenessProbe.successThreshold Failure threshold for livenessProbe
   livenessProbe:
     enabled: true
     failureThreshold: 5
-    initialDelaySeconds: 10
     periodSeconds: 15
-    timeoutSeconds: 3
     successThreshold: 1
 
   ## @param worker.readinessProbe Configures the readiness probes.
@@ -767,12 +751,11 @@ worker:
   tolerations: []
   
   ## @param worker.updateStrategy.type web statefulset strategy type
+  ## StrategyType
+  ## Can be set to RollingUpdate or OnDelete
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
-  updateStrategy:
-    ## StrategyType
-    ## Can be set to RollingUpdate or OnDelete
-    ##
+  updateStrategy: 
     type: RollingUpdate
   ## @param worker.priorityClassName web pods' priorityClassName
   ##
@@ -907,9 +890,8 @@ worker:
 
 ## @section Init Container Parameters
 
-## 'volumePermissions' init container parameters
-## Changes the owner and group of the persistent volume mount point to runAsUser:fsGroup values
-##   based on the *podSecurityContext/*containerSecurityContext parameters
+## Init containers parameters:
+## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
 ##
 volumePermissions:
   ## @param volumePermissions.enabled Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`
@@ -954,10 +936,9 @@ volumePermissions:
   containerSecurityContext:
     runAsUser: 0
 
-## @section Other Parameters
 
+## @section Other Parameters
 ## RBAC configuration
-##
 rbac:
   ## @param rbac.create Specifies whether RBAC resources should be created
   ##

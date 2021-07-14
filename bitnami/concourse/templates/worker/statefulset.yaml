@@ -68,7 +68,7 @@ spec:
             - -c
             - |
               mkdir -p "/bitnami/concourse"
-              chown -R "{{ .Values.worker.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}" "/bitnami/concourse"
+              chown -R "{{ .Values.worker.containerSecurityContext.runAsUser }}:{{ .Values.web.podSecurityContext.fsGroup }}" "/bitnami/concourse"
           {{- if .Values.worker.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.worker.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
@@ -116,10 +116,6 @@ spec:
             - name: CONCOURSE_TSA_HOST
               value: "{{ template "concourse.web.tsa.address" . -}}"
             {{- end }}
-            {{- if .Values.worker.workDir }}
-            - name: CONCOURSE_WORK_DIR
-              value: {{ .Values.worker.workDir | quote }}
-            {{- end }}
             {{- if .Values.worker.lisentIp }}
             - name: CONCOURSE_BIND_IP
               value: {{ .Values.worker.lisentIp | quote }}
@@ -131,7 +127,7 @@ spec:
             {{- if .Values.worker.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.worker.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
-            {{- if .Values.concourse.worker.baggageclaim.logLevel }}
+            {{- if .Values.worker.baggageclaim.logLevel }}
             - name: CONCOURSE_BAGGAGECLAIM_LOG_LEVEL
               value: {{ .Values.worker.baggageclaim.logLevel | quote }}
             {{- end }}
@@ -192,9 +188,9 @@ spec:
             httpGet:
               path: {{ .Values.worker.livenessProbe.path }}
               port: {{ .Values.worker.livenessProbe.port }}
-            initialDelaySeconds: {{ .Values.worker.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.worker.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.worker.livenessProbe.timeoutSeconds }}
+            initialDelaySeconds: 10
+            periodSeconds: 15
+            timeoutSeconds: 3
             failureThreshold: {{ .Values.worker.livenessProbe.failureThreshold }}
             successThreshold: {{ .Values.worker.livenessProbe.successThreshold }}
           {{- else if .Values.worker.customLivenessProbe }}
@@ -237,12 +233,12 @@ spec:
         name: concourse-work-dir
       spec:
         accessModes:
-          - {{ .Values.persistence.worker.accessMode | quote }}
+          - {{ .Values.worker.persistence.accessMode | quote }}
         resources:
           requests:
-            storage: {{ .Values.persistence.worker.size | quote }}
-      {{- if .Values.persistence.worker.storageClass }}
-      {{- if (eq "-" .Values.persistence.worker.storageClass) }}
+            storage: {{ .Values.worker.persistence.size | quote }}
+      {{- if .Values.worker.persistence.storageClass }}
+      {{- if (eq "-" .Values.worker.persistence.storageClass) }}
         storageClassName: ""
       {{- else }}
         storageClassName: "{{ .Values.persistence.worker.storageClass }}"

@@ -25,7 +25,7 @@ Compile all warnings into a single message.
 */}}
 {{- define "concourse.validateValues" -}}
 {{- $messages := list -}}
-{{- $messages := append $messages (include "concourse.validateValues.enabeled" .) -}}
+{{- $messages := append $messages (include "concourse.validateValues.enabled" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -35,9 +35,10 @@ Compile all warnings into a single message.
 {{- end -}}
 
 {{/* Check if web or worker are enable */}}
-{{- define "concourse.validateValues.enabeled" }}
+{{- define "concourse.validateValues.enabled" }}
 {{ if not (or .Values.web.enabled .Values.worker.enabled) }}
-concourse: enabeled
+concourse: enabled
+concourse: enabled
   Must set either web.enabled or worker.enabled to create a concourse deployment
 {{ end }}
 {{- end -}}

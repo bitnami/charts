@@ -1,11 +1,11 @@
-{{- if  .Values.worker.autoscaling.enabeled }}
+{{- if  .Values.worker.autoscaling.enabled }}
 {{- if .Values.worker.autoscaling.maxReplicas }}
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ include "common.names.fullname" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
-    app.kubernetes.io/component: {{ template "concourse.worker.fullname" . }}
+    app.kubernetes.io/component: worker
     {{- if .Values.commonLabels }}
       {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
     {{- end }}

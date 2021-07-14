@@ -6,7 +6,7 @@ metadata:
   name: {{ template "concourse.worker.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
-    app.kubernetes.io/component: {{ template "concourse.worker.fullname" . }}
+    app.kubernetes.io/component: worker
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
@@ -20,14 +20,14 @@ spec:
   {{- end }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
-      app.kubernetes.io/component: {{ template "concourse.worker.fullname" . }}
+      app.kubernetes.io/component: worker
   template:
     metadata:
       {{- if .Values.worker.podAnnotations }}
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.worker.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
-        app.kubernetes.io/component: {{ template "concourse.worker.fullname" . }}
+        app.kubernetes.io/component: worker
         {{- if .Values.worker.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.worker.podLabels "context" $) | nindent 8 }}
         {{- end }}
@@ -58,7 +58,7 @@ spec:
       securityContext: {{- omit .Values.worker.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       initContainers:
-        {{- if and .Values.volumePermissions.enabled .Values.worker.persistence.enabled }}
+        {{- if and (.Values.volumePermissions.enabled) (.Values.worker.persistence.enabled) }}
         - name: volume-permissions
           image: {{ include "concourse.volumePermissions.image" . }}
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
@@ -67,7 +67,7 @@ spec:
             - -c
             - |
               mkdir -p "/bitnami/concourse"
-              chown -R "{{ .Values.worker.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}" "/bitnami/concourse"
+              chown -R "{{ .Values.worker.containerSecurityContext.runAsUser }}:{{ .Values.web.podSecurityContext.fsGroup }}" "/bitnami/concourse"
           securityContext:
             runAsUser: 0
           {{- if .Values.volumePermissions.resources }}
@@ -113,10 +113,6 @@ spec:
             {{- else }}
             - name: CONCOURSE_TSA_HOST
               value: "{{ template "concourse.web.tsa.address" . -}}"
-            {{- end }}
-            {{- if .Values.worker.workDir }}
-            - name: CONCOURSE_WORK_DIR
-              value: {{ .Values.worker.workDir | quote }}
             {{- end }}
             {{- if .Values.worker.lisentIp }}
             - name: CONCOURSE_BIND_IP
@@ -187,9 +183,9 @@ spec:
             httpGet:
               path: "/"
               port: worker-hc
-            initialDelaySeconds: {{ .Values.worker.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.worker.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.worker.livenessProbe.timeoutSeconds }}
+            initialDelaySeconds: 10
+            periodSeconds: 15
+            timeoutSeconds: 3
             failureThreshold: {{ .Values.worker.livenessProbe.failureThreshold }}
             successThreshold: {{ .Values.worker.livenessProbe.successThreshold }}
           {{- else if .Values.worker.customLivenessProbe }}
