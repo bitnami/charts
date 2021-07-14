@@ -14,7 +14,12 @@ metadata:
 spec:
   replicas: {{ .Values.controller.replicaCount }}
   {{- if .Values.controller.updateStrategy }}
-  strategy: {{- toYaml .Values.controller.updateStrategy | nindent 4 }}
+  {{- if .Values.controller.enableStatefulSet }}
+  updateStrategy:
+  {{- else }}
+  strategy:
+  {{- end -}}
+  {{- toYaml .Values.controller.updateStrategy | nindent 4 }}
   {{- end }}
   {{- if  .Values.controller.enableStatefulSet }}
   serviceName: {{ include "argocd.application-controller" . }}

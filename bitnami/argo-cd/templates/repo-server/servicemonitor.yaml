@@ -8,7 +8,7 @@ metadata:
     app.kubernetes.io/component: repo-server
 spec:
   endpoints:
-    - port: metrics
+    - port: http-metrics
       interval: {{ .Values.repoServer.metrics.serviceMonitor.interval }}
       path: /metrics
   namespaceSelector:

@@ -17,6 +17,6 @@ roleRef:
   name: {{ include "argocd.application-controller" . }}
 subjects:
   - kind: ServiceAccount
-    name: {{ include "argocd.application-controller" . }}
+    name: {{ include "argocd.application-controller.serviceAccountName" . }}
     namespace: {{ .Release.Namespace }}
 {{- end }}

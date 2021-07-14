@@ -8,7 +8,7 @@ metadata:
     app.kubernetes.io/component: controller
 spec:
   endpoints:
-    - port: metrics
+    - port: http-metrics
       interval: {{ .Values.controller.metrics.serviceMonitor.interval }}
       path: /metrics
   namespaceSelector:
