@@ -5,35 +5,38 @@ on:
     branches:
       - master
     paths:
-      - "bitnami/airflow/values.yaml"
-      - "bitnami/dokuwiki/values.yaml"
-      - "bitnami/drupal/values.yaml"
-      - "bitnami/ejbca/values.yaml"
-      - "bitnami/fluentd/values.yaml"
-      - "bitnami/grafana/values.yaml"
-      - "bitnami/grafana-operator/values.yaml"
-      - "bitnami/joomla/values.yaml"
-      - "bitnami/jupyterhub/values.yaml"
-      - "bitnami/kafka/values.yaml"
-      - "bitnami/keycloak/values.yaml"
-      - "bitnami/kiam/values.yaml"
-      - "bitnami/kibana/values.yaml"
-      - "bitnami/kong/values.yaml"
-      - "bitnami/kube-prometheus/values.yaml"
-      - "bitnami/kube-state-metrics/values.yaml"
-      - "bitnami/kubernetes-event-exporter/values.yaml"
-      - "bitnami/kubewatch/values.yaml"
-      - "bitnami/logstash/values.yaml"
-      - "bitnami/metrics-server/values.yaml"
-      - "bitnami/minio/values.yaml"
-      - "bitnami/mongodb/values.yaml"
-      - "bitnami/nginx-ingress-controller/values.yaml"
-      - "bitnami/node/values.yaml"
-      - "bitnami/node-exporter/values.yaml"
-      - "bitnami/oauth2-proxy/values.yaml"
-      - "bitnami/parse/values.yaml"
-      - "bitnami/phabricator/values.yaml"
-      - "bitnami/phpbb/values.yaml"
+      - 'bitnami/airflow/values.yaml'
+      - 'bitnami/dokuwiki/values.yaml'
+      - 'bitnami/drupal/values.yaml'
+      - 'bitnami/ejbca/values.yaml'
+      - 'bitnami/fluentd/values.yaml'
+      - 'bitnami/grafana/values.yaml'
+      - 'bitnami/grafana-operator/values.yaml'
+      - 'bitnami/joomla/values.yaml'
+      - 'bitnami/jupyterhub/values.yaml'
+      - 'bitnami/kafka/values.yaml'
+      - 'bitnami/keycloak/values.yaml'
+      - 'bitnami/kiam/values.yaml'
+      - 'bitnami/kibana/values.yaml'
+      - 'bitnami/kong/values.yaml'
+      - 'bitnami/kube-prometheus/values.yaml'
+      - 'bitnami/kube-state-metrics/values.yaml'
+      - 'bitnami/kubernetes-event-exporter/values.yaml'
+      - 'bitnami/kubewatch/values.yaml'
+      - 'bitnami/logstash/values.yaml'
+      - 'bitnami/magento/values.yaml'
+      - 'bitnami/mariadb/values.yaml'
+      - 'bitnami/mariadb-galera/values.yaml'
+      - 'bitnami/metrics-server/values.yaml'
+      - 'bitnami/minio/values.yaml'
+      - 'bitnami/mongodb/values.yaml'
+      - "bitnami/oauth2-proxy/values.yaml"      
+      - 'bitnami/nginx-ingress-controller/values.yaml'
+      - 'bitnami/node/values.yaml'
+      - 'bitnami/node-exporter/values.yaml'
+      - 'bitnami/parse/values.yaml'
+      - 'bitnami/phabricator/values.yaml'
+      - 'bitnami/phpbb/values.yaml'
 
 jobs:
   generate-chart-readme:
