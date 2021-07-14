@@ -88,7 +88,7 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `image.pullSecrets`  | Image pull secrets                                                                                                                                            | `[]`                  |
 | `hostAliases`        | Deployment pod host aliases                                                                                                                                   | `[]`                  |
 | `redmineUsername`    | User of the application                                                                                                                                       | `user`                |
-| `redminePassword`    | Application password                                                                                                                                          | `nil`                 |
+| `redminePassword`    | Application password                                                                                                                                          | `""`                  |
 | `redmineEmail`       | Admin email                                                                                                                                                   | `user@example.com`    |
 | `redmineLanguage`    | Redmine default data language                                                                                                                                 | `en`                  |
 | `smtpHost`           | SMTP host                                                                                                                                                     | `nil`                 |
