@@ -25,6 +25,8 @@
     kubectl port-forward --namespace {{ .Release.Namespace }} $POD_NAME 8080:{{ .Values.web.containerPort }}
     {{- end }}
 
+  echo Username : Password  $(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "concourse.secretName" . }} -o jsonpath="{.data.local-users}" | base64 --decode)
+
 {{ include "concourse.validateValues" . }}
 
 * If this is your first time using Concourse, follow the examples at https://concourse-ci.org/examples.html

@@ -98,6 +98,10 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
   {{- end -}}
 {{- end -}}
 
+{{/* Concourse credential secret name */}}
+{{- define "concourse.secretName" -}}
+{{- coalesce .Values.existingSecret (include "concourse.web.fullname" .) -}}
+{{- end -}}
 
 {{/*
 Creates the address of the TSA service.
