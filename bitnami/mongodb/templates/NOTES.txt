@@ -1,3 +1,23 @@
+{{- if .Values.diagnosticMode.enabled }}
+The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
+
+  command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 4 }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 4 }}
+
+Get the list of pods by executing:
+
+  kubectl get pods --namespace {{ .Release.Namespace }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Access the pod you want to debug by executing
+
+  kubectl exec --namespace {{ .Release.Namespace }} -ti <NAME OF THE POD> -- bash
+
+In order to replicate the container startup scripts execute this command:
+
+    /opt/bitnami/scripts/mongodb/entrypoint.sh /opt/bitnami/scripts/mongodb/run.sh
+
+{{- else }}
+
 {{- $replicaCount := int .Values.replicaCount }}
 {{- $portNumber := int .Values.service.port }}
 {{- $fullname := include "mongodb.fullname" . }}
@@ -164,7 +184,7 @@ To access the MongoDB(R) Prometheus metrics, get the MongoDB(R) Prometheus URL b
 Then, open the obtained URL in a browser.
 
 {{- end }}
-
+{{- end }}
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.metrics.image }}
 {{- include "common.warnings.rollingTag" .Values.externalAccess.autoDiscovery.image }}
