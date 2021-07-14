@@ -614,31 +614,6 @@ server:
     ##
     dex.config: ""
 
-  ## Additional applications to create
-  ## @param server.additionalApplications Array of additional applications to create
-  ## Ref: https://github.com/argoproj/argo-cd/blob/master/docs/operator-manual/
-  ## E.g:
-  ## - name: guestbook
-  ##   namespace: argocd
-  ##   additionalLabels: {}
-  ##   additionalAnnotations: {}
-  ##   project: guestbook
-  ##   source:
-  ##     repoURL: https://github.com/argoproj/argocd-example-apps.git
-  ##     targetRevision: HEAD
-  ##     path: guestbook
-  ##     directory:
-  ##       recurse: true
-  ##  destination:
-  ##     server: https://kubernetes.default.svc
-  ##     namespace: guestbook
-  ##  syncPolicy:
-  ##    automated:
-  ##      prune: false
-  ##      selfHeal: false
-  ##
-  additionalApplications: []
-
   ## Argo CD server projects to create
   ## @param server.additionalProjects Array with additional projects to create
   ## Ref: https://github.com/argoproj/argo-cd/blob/master/docs/operator-manual/
