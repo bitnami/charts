@@ -62,16 +62,17 @@ The command removes all the Kubernetes components associated with the chart and 
 ### Global parameters
 
 | Name                      | Description                                           | Value |
-|---------------------------|-------------------------------------------------------|-------|
+| ------------------------- | ----------------------------------------------------- | ----- |
 | `global.imageRegistry`    | Global Docker image registry                          | `nil` |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array       | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)          | `nil` |
 | `global.redis.password`   | Global Redis(TM) password (overrides `auth.password`) | `nil` |
 
+
 ### Common parameters
 
 | Name                     | Description                                                                             | Value           |
-|--------------------------|-----------------------------------------------------------------------------------------|-----------------|
+| ------------------------ | --------------------------------------------------------------------------------------- | --------------- |
 | `kubeVersion`            | Override Kubernetes version                                                             | `nil`           |
 | `nameOverride`           | String to partially override common.names.fullname                                      | `nil`           |
 | `fullnameOverride`       | String to fully override common.names.fullname                                          | `nil`           |
@@ -80,13 +81,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `clusterDomain`          | Kubernetes cluster domain name                                                          | `cluster.local` |
 | `extraDeploy`            | Array of extra objects to deploy with the release                                       | `[]`            |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                    | `sleep`         |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `infinity`      |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                    | `[]`            |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `[]`            |
+
 
 ### Redis(TM) Image parameters
 
 | Name                | Description                                          | Value                 |
-|---------------------|------------------------------------------------------|-----------------------|
+| ------------------- | ---------------------------------------------------- | --------------------- |
 | `image.registry`    | Redis(TM) image registry                             | `docker.io`           |
 | `image.repository`  | Redis(TM) image repository                           | `bitnami/redis`       |
 | `image.tag`         | Redis(TM) image tag (immutable tags are recommended) | `6.2.4-debian-10-r13` |
@@ -94,10 +96,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.pullSecrets` | Redis(TM) image pull secrets                         | `[]`                  |
 | `image.debug`       | Enable image debug mode                              | `false`               |
 
+
 ### Redis(TM) common configuration parameters
 
 | Name                             | Description                                                                          | Value         |
-|----------------------------------|--------------------------------------------------------------------------------------|---------------|
+| -------------------------------- | ------------------------------------------------------------------------------------ | ------------- |
 | `architecture`                   | Redis(TM) architecture. Allowed values: `standalone` or `replication`                | `replication` |
 | `auth.enabled`                   | Enable password authentication                                                       | `true`        |
 | `auth.sentinel`                  | Enable password authentication on sentinels too                                      | `true`        |
@@ -107,10 +110,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `auth.usePasswordFiles`          | Mount credentials as files instead of using an environment variable                  | `false`       |
 | `existingConfigmap`              | The name of an existing ConfigMap with your custom configuration for Redis(TM) nodes | `nil`         |
 
+
 ### Redis(TM) master configuration parameters
 
 | Name                                        | Description                                                                                      | Value           |
-|---------------------------------------------|--------------------------------------------------------------------------------------------------|-----------------|
+| ------------------------------------------- | ------------------------------------------------------------------------------------------------ | --------------- |
 | `master.configuration`                      | Configuration for Redis(TM) master nodes                                                         | `nil`           |
 | `master.disableCommands`                    | Array with Redis(TM) commands to disable on master nodes                                         | `[]`            |
 | `master.command`                            | Override default container command (useful when using custom images)                             | `[]`            |
@@ -181,10 +185,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `master.service.annotations`                | Additional custom annotations for Redis(TM) master service                                       | `{}`            |
 | `master.terminationGracePeriodSeconds`      | Integer setting the termination grace period for the redis-master pods                           | `30`            |
 
+
 ### Redis(TM) replicas configuration parameters
 
 | Name                                         | Description                                                                                       | Value           |
-|----------------------------------------------|---------------------------------------------------------------------------------------------------|-----------------|
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------- | --------------- |
 | `replica.replicaCount`                       | Number of Redis(TM) replicas to deploy                                                            | `3`             |
 | `replica.configuration`                      | Configuration for Redis(TM) replicas nodes                                                        | `nil`           |
 | `replica.disableCommands`                    | Array with Redis(TM) commands to disable on replicas nodes                                        | `[]`            |
@@ -260,10 +265,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replica.autoscaling.targetCPU`              | Percentage of CPU to consider when autoscaling                                                    | `nil`           |
 | `replica.autoscaling.targetMemory`           | Percentage of Memory to consider when autoscaling                                                 | `nil`           |
 
+
 ### Redis(TM) Sentinel configuration parameters
 
 | Name                                          | Description                                                                                      | Value                    |
-|-----------------------------------------------|--------------------------------------------------------------------------------------------------|--------------------------|
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------ | ------------------------ |
 | `sentinel.enabled`                            | Use Redis(TM) Sentinel on Redis(TM) pods.                                                        | `false`                  |
 | `sentinel.image.registry`                     | Redis(TM) Sentinel image registry                                                                | `docker.io`              |
 | `sentinel.image.repository`                   | Redis(TM) Sentinel image repository                                                              | `bitnami/redis-sentinel` |
@@ -316,10 +322,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sentinel.service.annotations`                | Additional custom annotations for Redis(TM) Sentinel service                                     | `{}`                     |
 | `sentinel.terminationGracePeriodSeconds`      | Integer setting the termination grace period for the redis-node pods                             | `30`                     |
 
+
 ### Other Parameters
 
 | Name                                          | Description                                                                                                      | Value   |
-|-----------------------------------------------|------------------------------------------------------------------------------------------------------------------|---------|
+| --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ------- |
 | `networkPolicy.enabled`                       | Enable creation of NetworkPolicy resources                                                                       | `false` |
 | `networkPolicy.allowExternal`                 | Don't require client label for connections                                                                       | `true`  |
 | `networkPolicy.extraIngress`                  | Add extra ingress rules to the NetworkPolicy                                                                     | `[]`    |
@@ -340,17 +347,18 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tls.enabled`                                 | Enable TLS traffic                                                                                               | `false` |
 | `tls.authClients`                             | Require clients to authenticate                                                                                  | `true`  |
 | `tls.autoGenerated`                           | Enable autogenerated certificates                                                                                | `false` |
-| `tls.existingSecret`                          | Then name of the existing secret that contains the TLS certificates                                              | `nil`   |
+| `tls.existingSecret`                          | The name of the existing secret that contains the TLS certificates                                               | `nil`   |
 | `tls.certificatesSecret`                      | DEPRECATED. Use existingSecret instead.                                                                          | `nil`   |
 | `tls.certFilename`                            | Certificate filename                                                                                             | `nil`   |
 | `tls.certKeyFilename`                         | Certificate Key filename                                                                                         | `nil`   |
 | `tls.certCAFilename`                          | CA Certificate filename                                                                                          | `nil`   |
 | `tls.dhParamsFilename`                        | File containing DH params (in order to support DH based ciphers)                                                 | `nil`   |
 
+
 ### Metrics Parameters
 
 | Name                                                  | Description                                                                                      | Value                             |
-|-------------------------------------------------------|--------------------------------------------------------------------------------------------------|-----------------------------------|
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------ | --------------------------------- |
 | `metrics.enabled`                                     | Start a sidecar prometheus exporter to expose Redis(TM) metrics                                  | `false`                           |
 | `metrics.image.registry`                              | Redis(TM) Exporter image registry                                                                | `docker.io`                       |
 | `metrics.image.repository`                            | Redis(TM) Exporter image repository                                                              | `bitnami/redis-exporter`          |
@@ -400,10 +408,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.prometheusRule.additionalLabels`             | Additional labels for the prometheusRule                                                         | `{}`                              |
 | `metrics.prometheusRule.rules`                        | Custom Prometheus rules                                                                          | `[]`                              |
 
+
 ### Init Container Parameters
 
 | Name                                                   | Description                                                                                     | Value                   |
-|--------------------------------------------------------|-------------------------------------------------------------------------------------------------|-------------------------|
+| ------------------------------------------------------ | ----------------------------------------------------------------------------------------------- | ----------------------- |
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
@@ -423,6 +432,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sysctl.mountHostSys`                                  | Mount the host `/sys` folder to `/host-sys`                                                     | `false`                 |
 | `sysctl.resources.limits`                              | The resources limits for the init container                                                     | `{}`                    |
 | `sysctl.resources.requests`                            | The requested resources for the init container                                                  | `{}`                    |
+
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
