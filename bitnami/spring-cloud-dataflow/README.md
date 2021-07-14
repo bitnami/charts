@@ -250,7 +250,7 @@ helm uninstall my-release
 | Name                    | Description                                                                         | Value  |
 | ----------------------- | ----------------------------------------------------------------------------------- | ------ |
 | `serviceAccount.create` | Enable the creation of a ServiceAccount for Dataflow server and Skipper server pods | `true` |
-| `serviceAccount.name`   | Name of the created serviceAccount                                                  | `nil`  |
+| `serviceAccount.name`   | Name of the created serviceAccount                                                  | `""`   |
 | `rbac.create`           | Whether to create and use RBAC resources or not                                     | `true` |
 
 
