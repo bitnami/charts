@@ -36,6 +36,10 @@ on:
       - 'bitnami/parse/values.yaml'
       - 'bitnami/phabricator/values.yaml'
       - 'bitnami/phpbb/values.yaml'
+      - 'bitnami/redis/values.yaml'
+      - 'bitnami/redis-cluster/values.yaml'
+      - 'bitnami/redmine/values.yaml'
+      - 'bitnami/solr/values.yaml'
 
 jobs:
   generate-chart-readme:
