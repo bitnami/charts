@@ -122,13 +122,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `master.extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for Redis(TM) master nodes                     | `nil`           |
 | `master.containerPort`                      | Container port to open on Redis(TM) master nodes                                                 | `6379`          |
 | `master.livenessProbe.enabled`              | Enable livenessProbe on Redis(TM) master nodes                                                   | `true`          |
-| `master.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                          | `5`             |
+| `master.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                          | `20`            |
 | `master.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                 | `5`             |
 | `master.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                | `5`             |
 | `master.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                              | `5`             |
 | `master.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                              | `1`             |
 | `master.readinessProbe.enabled`             | Enable readinessProbe on Redis(TM) master nodes                                                  | `true`          |
-| `master.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                         | `5`             |
+| `master.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                         | `20`            |
 | `master.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                | `5`             |
 | `master.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                               | `1`             |
 | `master.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                             | `5`             |
@@ -197,13 +197,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replica.extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for Redis(TM) replicas nodes                    | `nil`           |
 | `replica.containerPort`                      | Container port to open on Redis(TM) replicas nodes                                                | `6379`          |
 | `replica.livenessProbe.enabled`              | Enable livenessProbe on Redis(TM) replicas nodes                                                  | `true`          |
-| `replica.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                           | `5`             |
+| `replica.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                           | `20`            |
 | `replica.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                  | `5`             |
 | `replica.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                 | `5`             |
 | `replica.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                               | `5`             |
 | `replica.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                               | `1`             |
 | `replica.readinessProbe.enabled`             | Enable readinessProbe on Redis(TM) replicas nodes                                                 | `true`          |
-| `replica.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                          | `5`             |
+| `replica.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                          | `20`            |
 | `replica.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                 | `5`             |
 | `replica.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                | `1`             |
 | `replica.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                              | `5`             |
@@ -284,13 +284,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sentinel.preExecCmds`                        | Additional commands to run prior to starting Redis(TM) Sentinel                                  | `[]`                     |
 | `sentinel.containerPort`                      | Container port to open on Redis(TM) Sentinel nodes                                               | `26379`                  |
 | `sentinel.livenessProbe.enabled`              | Enable livenessProbe on Redis(TM) Sentinel nodes                                                 | `true`                   |
-| `sentinel.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                          | `5`                      |
+| `sentinel.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                          | `20`                     |
 | `sentinel.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                 | `5`                      |
 | `sentinel.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                | `5`                      |
 | `sentinel.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                              | `5`                      |
 | `sentinel.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                              | `1`                      |
 | `sentinel.readinessProbe.enabled`             | Enable readinessProbe on Redis(TM) Sentinel nodes                                                | `true`                   |
-| `sentinel.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                         | `5`                      |
+| `sentinel.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                         | `20`                     |
 | `sentinel.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                | `5`                      |
 | `sentinel.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                               | `1`                      |
 | `sentinel.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                             | `5`                      |

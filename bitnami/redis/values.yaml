@@ -195,7 +195,7 @@ master:
   ##
   livenessProbe:
     enabled: true
-    initialDelaySeconds: 5
+    initialDelaySeconds: 20
     periodSeconds: 5
     timeoutSeconds: 5
     successThreshold: 1
@@ -209,7 +209,7 @@ master:
   ##
   readinessProbe:
     enabled: true
-    initialDelaySeconds: 5
+    initialDelaySeconds: 20
     periodSeconds: 5
     timeoutSeconds: 1
     successThreshold: 1
@@ -496,7 +496,7 @@ replica:
   ##
   livenessProbe:
     enabled: true
-    initialDelaySeconds: 5
+    initialDelaySeconds: 20
     periodSeconds: 5
     timeoutSeconds: 5
     successThreshold: 1
@@ -510,7 +510,7 @@ replica:
   ##
   readinessProbe:
     enabled: true
-    initialDelaySeconds: 5
+    initialDelaySeconds: 20
     periodSeconds: 5
     timeoutSeconds: 1
     successThreshold: 1
@@ -845,7 +845,7 @@ sentinel:
   ##
   livenessProbe:
     enabled: true
-    initialDelaySeconds: 5
+    initialDelaySeconds: 20
     periodSeconds: 5
     timeoutSeconds: 5
     successThreshold: 1
@@ -859,7 +859,7 @@ sentinel:
   ##
   readinessProbe:
     enabled: true
-    initialDelaySeconds: 5
+    initialDelaySeconds: 20
     periodSeconds: 5
     timeoutSeconds: 1
     successThreshold: 1
