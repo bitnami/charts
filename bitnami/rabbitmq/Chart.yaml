@@ -24,3 +24,4 @@ sources:
   - https://github.com/bitnami/bitnami-docker-rabbitmq
   - https://www.rabbitmq.com
 version: 8.17.0
+
