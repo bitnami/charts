@@ -5,12 +5,21 @@ metadata:
   name: {{ template "concourse.web.fullname" . }}-gateway
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
-    app.kubernetes.io/component: worker
+    app.kubernetes.io/component: web
+    {{- if .Values.service.workerGateway.labels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.service.workerGateway.labels "context" $ ) | nindent 4 }}
+    {{- end }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-  {{- if .Values.commonAnnotations }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- if or .Values.commonAnnotations .Values.service.workerGateway.annotations }}
+  annotations:
+    {{- if .Values.service.workerGateway.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.service.workerGateway.annotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
   {{- end }}
 spec:
   type: {{ .Values.service.workerGateway.type }}
@@ -36,4 +45,3 @@ spec:
   selector:
     app.kubernetes.io/component: web
 {{- end }}
-

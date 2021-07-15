@@ -42,32 +42,31 @@ extraDeploy: []
 ## @section consourse Parameters
 ##
 
-concourse:
-  ## Bitnami Concour image
-  ## ref: https://hub.docker.com/r/bitnami/redis/tags/
-  ## @param concourse.image.registry image registry
-  ## @param concourse.image.repository image repository
-  ## @param concourse.image.tag image tag (immutable tags are recommended)
-  ## @param concourse.image.pullPolicy image pull policy
-  ## @param concourse.image.pullSecrets image pull secrets
+## Bitnami Concourse image
+## ref: https://hub.docker.com/r/bitnami/redis/tags/
+## @param image.registry image registry
+## @param image.repository image repository
+## @param image.tag image tag (immutable tags are recommended)
+## @param image.pullPolicy image pull policy
+## @param image.pullSecrets image pull secrets
+##
+image:
+  registry: docker.io
+  repository: bitnami/concourse
+  tag: 7.3.2-debian-10-r7
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
-  image:
-    registry: docker.io
-    repository: bitnami/concourse
-    tag: 7.3.2-debian-10-r7
-    ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-    ##
-    pullPolicy: IfNotPresent
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ## e.g:
-    ## pullSecrets:
-    ##   - myRegistryKeySecretName
-    ##
-    pullSecrets: []
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  pullSecrets: []
 
 web:
   ## @param web.enabled Enable web
@@ -77,9 +76,9 @@ web:
   ##
   replicaCount: 1
 
-  ## @param web.args Args of the startup command for the web component.
+  ## @param web.args Override default args of the startup command for the web component.
   ##
-  args: ["web"]
+  args:
 
   ## @param web.baseUrl url
   ##
@@ -92,17 +91,13 @@ web:
   ## @param web.clusterName A name for this Concourse cluster, to be displayed on the dashboard page.
   ##
   clusterName:
-  ## @param web.listenIp IP address on which to listen for HTTP traffic (web UI and API).
+  ## @param web.bindIp IP address on which to listen for HTTP traffic (web UI and API).
   ##
-  listenIp: 0.0.0.0
+  bindIp: 0.0.0.0
 
   ## @param web.containerPort Port on which to listen for HTTP traffic (web UI and API).
   ##
   containerPort: 8080
-
-  ## @param web.nameOverride provide a name to substitute for the full names of resources
-  ##
-  nameOverride:
 
   ## @param web.peerAddress Network address of this web node, reachable by other web nodes.
   ## Used for forwarded worker addresses. (default: $POD_IP)
@@ -129,10 +124,12 @@ web:
   ##
   enableCacheStreamedVolumes: false
 
+  ## @param
+  ##
+
   ## Configure extra options for web containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param web.livenessProbe.enabled Enable livenessProbe on web nodes
-  ## @skip web.livenessProbe.httpGet
   ## @param web.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
   ## @param web.livenessProbe.periodSeconds Period seconds for livenessProbe
   ## @param web.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -141,17 +138,13 @@ web:
   ##
   livenessProbe:
     enabled: true
-    httpGet:
-      path: /api/v1/info
-      port: http
-    initialDelaySeconds: 30
+    initialDelaySeconds: 10
     periodSeconds: 15
     timeoutSeconds: 3
     failureThreshold: 1
     successThreshold: 1
 
   ## @param web.readinessProbe.enabled Enable readinessProbe on web nodes
-  ## @skip web.readinessProbe.httpGet
   ## @param web.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
   ## @param web.readinessProbe.periodSeconds Period seconds for readinessProbe
   ## @param web.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
@@ -160,10 +153,7 @@ web:
   ##
   readinessProbe:
     enabled: true
-    httpGet:
-      path: /api/v1/info
-      port: http
-    initialDelaySeconds: 30
+    initialDelaySeconds: 10
     periodSeconds: 15
     timeoutSeconds: 3
     failureThreshold: 1
@@ -210,13 +200,6 @@ web:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
-  ## Where secrets should be mounted for the web container.
-  ##
-  ## @param web.keySecretsPath
-  ## @param web.teamSecretsPath
-  ##
-  keySecretsPath: "/concourse-keys"
-  teamSecretsPath: "/team-authorized-keys"
 
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
@@ -248,29 +231,21 @@ web:
     ##
     logLevel: debug
 
-    ## @param web.tsa.listenIp IP address on which to listen for SSH.
+    ## @param web.tsa.bindIp IP address on which to listen for SSH.
     ##
-    listenIp: 0.0.0.0
+    bindIp: 0.0.0.0
 
     ## @param web.tsa.containerPort Port on which to listen for SSH.
     ##
     containerPort: 2222
 
-    ## @param web.tsa.debugListenIp IP address on which to listen for the pprof debugger endpoints (default: 127.0.0.1)
+    ## @param web.tsa.debugbindIp IP address on which to listen for the pprof debugger endpoints (default: 127.0.0.1)
     ##
-    debugListenIp: 127.0.0.1
+    debugbindIp: 127.0.0.1
 
     ## @param web.tsa.debugContainerPort Port on which to listen for TSA pprof server.
     ##
     debugContainerPort: 2221
-
-    ## @param web.tsa.hostKey Path to private key to use for the SSH server.
-    ##
-    hostKey:
-
-    ## @param web.tsa.atcUrl ATC API endpoints to which workers will be registered.
-    ##
-    atcUrl:
 
     ## @param web.tsa.heartbeatInterval Interval on which to heartbeat workers to the ATC.
     ##
@@ -279,6 +254,10 @@ web:
     ## @param web.tsa.gardenRequestTimeout How long to wait for requests to Garden to complete. 0 means no timeout.
     ##
     gardenRequestTimeout:
+
+  ## @param web.configRBAC set RBAC configuration
+  ##
+  configRBAC:
 
   ## Force sending secure flag on http cookies
   ##
@@ -318,13 +297,6 @@ web:
       ## that the users were added (`secrets.localUsers`).
       ##
       localUser: "test"
-
-    ## @param web.auth.userIDFieldPerConnector Define how to display user ID for each authentication connector.
-    # Format is <connector>:<fieldname>. Valid field names are user_id,
-    # name, username and email, where name maps to claims field username,
-    # and username maps to claims field preferred username.
-    #
-    userIDFieldPerConnector: ""
 
   ## @section web.ingress
   ##
@@ -538,34 +510,36 @@ worker:
 
   mode: deployment
 
-  ## @param worker.workDir Directory in which to place container data.
-  ##
-  workDir: /opt/bitnami/concourse
-
-  ## @param worker.nameOverride provide a name to substitute for the full names of resources
-  ##
-  nameOverride:
-
   ## @param worker.logLevel Minimum level of logs to see. Possible options: debug, info, error
   ##
   logLevel: debug
 
-  ## @param worker.keySecretsPath For managing where secrets should be mounted for worker agents
+  ## @param worker.command Override default container command (useful when using custom images)
   ##
-  keySecretsPath: "/concourse-keys"
+  command: []
 
-  ## @param worker.args
+  ## @param worker.args Override worker default args
   ##
-  args: ["worker"]
+  args: []
 
-  ## @param worker.listenIp IP address on which to listen for the Garden server.
+  ## @param worker.bindIp IP address on which to listen for the Garden server.
   ##
 
-  listenIp: 127.0.0.1
+  bindIp: 127.0.0.1
 
   ## @param worker.containerPort Port on which to listen for the Garden server.
   ##
   containerPort: 7777
+
+  ## @param worker.healthCheckContainerPort Port on which to listen for the healh checks.
+  ##
+  healthCheckContainerPort: 8888
+
+  tsa:
+    ## @param worker.tsa.hosts TSA host(s) to forward the worker through.
+    ## Only used for worker-only deployments.
+    ##
+    hosts: []
 
   ## Enable HorizontalPodAutoscaler for worker pods
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
@@ -599,7 +573,6 @@ worker:
   ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/
   ##
   ## @param worker.livenessProbe.enabled Enable livenessProbe on worker nodes
-  ## @skip worker.livenessProbe.httpGet
   ## @param worker.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
   ## @param worker.livenessProbe.periodSeconds Period seconds for livenessProbe
   ## @param worker.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -613,14 +586,22 @@ worker:
     periodSeconds: 15
     timeoutSeconds: 3
     successThreshold: 1
-    httpGet:
-      path: /
-      port: worker-hc
 
-  ## @param worker.readinessProbe Configures the readiness probes.
+  ## @param worker.readinessProbe.enabled Enable readiness probe on worker nodes
+  ## @param worker.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param worker.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param worker.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param worker.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param worker.readinessProbe.successThreshold Success threshold for readinessProbe
   ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/
   ##
-  readinessProbe: {}
+  readinessProbe:
+    enabled: true
+    failureThreshold: 5
+    initialDelaySeconds: 10
+    periodSeconds: 15
+    timeoutSeconds: 3
+    successThreshold: 1
 
   ## @param worker.customLivenessProbe Custom livenessProbe that overrides the default one
   ##
@@ -644,20 +625,22 @@ worker:
 
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param worker.podSecurityContext.enabled Enabled web pods' Security Context
-  ## @param worker.podSecurityContext.fsGroup Set web pod's Security Context fsGroup
+  ## @param worker.podSecurityContext.enabled Enabled worker pods' Security Context
+  ## @param worker.podSecurityContext.fsGroup Set worker pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param worker.containerSecurityContext.enabled Enabled web containers' Security Context
-  ## @param worker.containerSecurityContext.privileged Set web containers' Security Context with privileged or not
+  ## @param worker.containerSecurityContext.enabled Enabled worker containers' Security Context
+  ## @param worker.containerSecurityContext.privileged Set worker containers' Security Context with privileged or not
+  ## @param worker.containerSecurityContext.runAsUser Set worker containers' Security Context user
   ##
   containerSecurityContext:
     enabled: true
     privileged: true
+    runAsUser: 0
 
   ## @param worker.psp.create Specifies whether a PodSecurityPolicy should be created (set `psp.create` to `true` to enable it)
   ##
@@ -667,11 +650,11 @@ worker:
   ## @param worker.podLabels
   ##
   podLabels: {}
-  ## @param worker.podAnnotations Annotations for web pods
+  ## @param worker.podAnnotations Annotations for worker pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
-  ## @param worker.podAffinityPreset Pod affinity preset. Ignored if `web.affinity` is set. Allowed values: `soft` or `hard`
+  ## @param worker.podAffinityPreset Pod affinity preset. Ignored if `worker.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   ## Pod affinity preset
@@ -712,11 +695,11 @@ worker:
     ##
     values: []
 
-    ## @param worker.nodeAffinityPreset.affinity Affinity for pod assignment
-    ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-    ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
-    ##
-    affinity: {}
+  ## @param worker.affinity Affinity for pod assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
+  ##
+  affinity: {}
 
   ## @param worker.nodeSelector Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
@@ -729,39 +712,39 @@ worker:
   ##
   tolerations: []
 
-  ## @param worker.updateStrategy.type web statefulset strategy type
+  ## @param worker.updateStrategy.type worker statefulset strategy type
   ## StrategyType
   ## Can be set to RollingUpdate or OnDelete
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
     type: RollingUpdate
-  ## @param worker.priorityClassName web pods' priorityClassName
+  ## @param worker.priorityClassName worker pods' priorityClassName
   ##
   priorityClassName: ""
-  ## @param worker.lifecycleHooks for the web container(s) to automate configuration before or after startup
+  ## @param worker.lifecycleHooks for the worker container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
-  ## @param worker.extraEnvVars Array with extra environment variables to add to web nodes
+  ## @param worker.extraEnvVars Array with extra environment variables to add to worker nodes
   ## e.g:
   ## extraEnvVars:
   ##   - name: FOO
   ##     value: "bar"
   ##
   extraEnvVars: []
-  ## @param worker.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for web nodes
+  ## @param worker.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for worker nodes
   ##
   extraEnvVarsCM:
-  ## @param worker.extraEnvVarsSecret Name of existing Secret containing extra env vars for web nodes
+  ## @param worker.extraEnvVarsSecret Name of existing Secret containing extra env vars for worker nodes
   ##
   extraEnvVarsSecret:
-  ## @param worker.extraVolumes Optionally specify extra list of additional volumes for the web pod(s)
+  ## @param worker.extraVolumes Optionally specify extra list of additional volumes for the worker pod(s)
   ##
   extraVolumes: []
-  ## @param worker.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the web container(s)
+  ## @param worker.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the worker container(s)
   ##
   extraVolumeMounts: []
-  ## @param worker.sidecars Add additional sidecar containers to the web pod(s)
+  ## @param worker.sidecars Add additional sidecar containers to the worker pod(s)
   ## e.g:
   ## sidecars:
   ##   - name: your-image-name
@@ -772,7 +755,7 @@ worker:
   ##         containerPort: 1234
   ##
   sidecars: {}
-  ## @param worker.initContainers Add additional init containers to the web pod(s)
+  ## @param worker.initContainers Add additional init containers to the worker pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
   ## initContainers:
@@ -792,17 +775,17 @@ worker:
     ##
     logLevel: info
 
-    ## @param worker.baggageclaim.listenIp IP address on which to listen for API traffic.
+    ## @param worker.baggageclaim.bindIp IP address on which to listen for API traffic.
     ##
-    listenIp: 127.0.0.1
+    bindIp: 127.0.0.1
 
     ## @param worker.baggageclaim.containerPort Port on which to listen for API traffic.
     ##
     containerPort: 7788
 
-    ## @param worker.baggageclaim.debugListenIp IP address on which to listen for the pprof debugger endpoints.
+    ## @param worker.baggageclaim.debugbindIp IP address on which to listen for the pprof debugger endpoints.
     ##
-    debugListenIp: 127.0.0.1
+    debugbindIp: 127.0.0.1
 
     ## @param worker.baggageclaim.debugContainerPort Port on which to listen for baggageclaim pprof server.
     ##
@@ -832,16 +815,6 @@ worker:
     ## @param worker.baggageclaim.overlaysDir Path to directory in which to store overlay data
     ##
     overlaysDir:
-
-  ## @param worker.additionalCertificates
-  ##
-  additionalCertificates: false
-
-  ## @param worker.affinity [array] Affinity for worker pod assignment
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ## Note: this configuration supersedes the global affinity configuration
-  ##
-  affinity: {}
 
   ## If true, use a Persistent Volume Claim, If false, use emptyDir
   ## @param worker.persistence.enabled Enable persistence using Persistent Volume Claims
@@ -881,12 +854,6 @@ worker:
     ##
     selector: {}
 
-    ## @param worker.persistence.existingClaim A manually managed Persistent Volume Claim
-    ## Requires persistence.enabled: true
-    ## If defined, PVC must be created manually before volume will be bound
-    ##
-    existingClaim:
-
 ## @section Service
 ##
 service:
@@ -894,11 +861,15 @@ service:
     ## @param service.web.type For minikube, set this to ClusterIP, elsewhere use LoadBalancer or NodePort
     ## Ref: https://kubernetes.io/docs/user-guide/services/#publishing-services---service-types
     ##
-    type: ClusterIP
+    type: LoadBalancer
 
     ## @param service.web.port  Service HTTP port
     ##
-    port: 8080
+    port: 80
+
+    ## @param service.web.tlsPort  Service HTTPS port
+    ##
+    tlsPort: 443
 
     ## @param service.web.clusterIP When using `service.web.type: ClusterIP`, sets the user-specified cluster IP.
     ## Example: 172.217.1.174
@@ -939,6 +910,10 @@ service:
     ## @param service.web.tlsNodePort When using `service.web.type: NodePort`, sets the nodePort for api tls
     ##
     tlsNodePort:
+
+    ## @param service.web.externalTrafficPolicy Set service externalTraffic policy
+    ##
+    externalTrafficPolicy:
 
   workerGateway:
     ## @param service.workerGateway.type For minikube, set this to ClusterIP, elsewhere use LoadBalancer or NodePort
@@ -1026,13 +1001,15 @@ volumePermissions:
     requests: {}
   ## Init container Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param volumePermissions.containerSecurityContext.enabled Enable init container's Security Context
   ## @param volumePermissions.containerSecurityContext.runAsUser Set init container's Security Context runAsUser
   ## NOTE: when runAsUser is set to special value "auto", init container will try to chown the
   ##   data folder to auto-determined user&group, using commands: `id -u`:`id -G | cut -d" " -f2`
   ##   "auto" is especially useful for OpenShift which has scc with dynamic user ids (and 0 is not allowed)
   ##
   containerSecurityContext:
-    runAsUser: 0
+    enabled: true
+    runAsUser: 1001
 
 ## @section Other Parameters
 ## RBAC configuration
@@ -1045,11 +1022,6 @@ rbac:
 ## For managing secrets using Helm
 ##
 secrets:
-  ## @param secrets.create Create the secret resource from the following values. Set this to
-  ## false to manage these secrets outside Helm.
-  ##
-  create: true
-
   localAuth:
     ## @param secrets.localAuth.enabled the use of local authentication (basic auth).
     ## Once enabled, users configured through `local-users` (secret)
@@ -1057,16 +1029,6 @@ secrets:
     ## Ref: https://concourse-ci.org/local-auth.html
     ##
     enabled: true
-
-  ## @param secrets.annotations Annotations to be added to the secrets.
-  ##
-  ## Example:
-  ##   key1: "value1"
-  ##   key2: "value2"
-  ##
-  ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-  ##
-  annotations: {}
 
   ## @param secrets.teamAuthorizedKeys [array] Array of team names and public keys for team external workers. A single
   ## team can have many keys defined in the key field.
@@ -1088,7 +1050,8 @@ secrets:
   ##
   localUsers: "test:test"
 
-  ## @param secrets.hostKey Concourse Host Keys.
+  ## @param secrets.hostKey [string] Concourse Host Keys.
+  ## Example value taken from https://github.com/concourse/concourse-chart/blob/master/values.yaml
   ## Ref: https://concourse-ci.org/install.html#generating-keys
   ##
   hostKey: |-
@@ -1125,7 +1088,8 @@ secrets:
   hostKeyPub: |-
     ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDYBQ9fG6IML+qsFaMh1Pl+81wyUwRilHdfhItAiAsLVQsOwI5+V4pn5aLhHPBuRQqIqYmbkZ7I1VUIN1+90PVJ3X7l9qqanb85AHMtLujw1j9u0zDyH2XHgpUloknUQzUSLIZjjU3Hn3Uo/XikF+vT8104isO7Ym8Xp7sIcRuvOQ3nuRsFVCRogxpLTVHD/k57rwYVqWWLaKLwvx01ZVXOq4GHk/BVaKa9ODC/dNgbZMfwvVVXuf7/NFGmSMyXb49Si4aoP4Gn7jAX6GngBbm/bgKqO0skQy/ggQm/YVF+s5q4EhleMBLVJKD1VpM5LeLDFpiu/y4bVd8wUcgK+QQ9 Concourse
 
-  ## @param secrets.sessionSigningKey Concourse Session Signing Keys.
+  ## @param secrets.sessionSigningKey [string] Concourse Session Signing Keys.
+  ## Example value taken from https://github.com/concourse/concourse-chart/blob/master/values.yaml
   ## Ref: https://concourse-ci.org/concourse-generate-key.html
   ##
   sessionSigningKey: |-
@@ -1157,7 +1121,8 @@ secrets:
     +p/KFAelHXJ2w/8yackAcarh35VP7ixhuvxswHNdgvfsBTFcjn30
     -----END RSA PRIVATE KEY-----
 
-  ## @param secrets.workerKey Concourse Worker Keys.
+  ## @param secrets.workerKey [string] Concourse Worker Keys.
+  ## Example value taken from https://github.com/concourse/concourse-chart/blob/master/values.yaml
   ## Ref: https://concourse-ci.org/concourse-generate-key.html
   ##
   workerKey: |-
@@ -1189,28 +1154,34 @@ secrets:
     DxpOSF+BR71Jx3sxvIdCODNTtm645j5yrZVnJAuMPofo5XFmunDoJA==
     -----END RSA PRIVATE KEY-----
 
-  ## @param secrets.workerKeyPub Concourse Worker Keys.
+  ## @param secrets.workerKeyPub [string] Concourse Worker Keys.
+  ## Example value taken from https://github.com/concourse/concourse-chart/blob/master/values.yaml
   ##
   workerKeyPub: |-
     ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC496FSYFcBAKgDtMsBAJiF/6/NxlXKP5UZecyEsedYuTt1GOgJTwaA1qZ1LmHsbfLDE68oDdiM4uvxfI4wtLhz57w3u0jOUxZ2JeF7SVwEf1nVqLn4Gh/f8GUNQGSyIp1zUD5Bx9fq0PAyQ47mt7Ufi84rcf8LKl7nzAIHTcdg2BvTkQN9bUGPaq/Pb1W2bKPAQy4OzXTSIyrAJ89TH2jFeaZfyxQFGbD9jVHH/yl0oiMrDeaRYgccE5II+KY7WoLjsBry/9Qf2ERELKTK4UeIGIqWci9lab1ti+GxFPPiC3krNFjo4jShV4eUs4cNIrjwNrxVaKPXmU6o7Y3Hpayx Concourse
 
+  ## @param secrets.workerAdditionalCerts Additional certificates to add to the worker nodes
+  ##
+  workerAdditionalCerts:
+
 ## PostgreSQL chart configuration
 ## ref: https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
 ## @param postgresql.enabled Switch to enable or disable the PostgreSQL helm chart
-## @param postgresql.postgresqlUsername Airflow Postgresql username
-## @param postgresql.postgresqlDatabase Airflow Postgresql database
+## @param postgresql.nameOverride Override Concourse Postgresql name
+## @param postgresql.postgresqlUsername Concourse Postgresql username
+## @param postgresql.postgresqlDatabase Concourse Postgresql database
 ## @param postgresql.existingSecret Name of an existing secret containing the PostgreSQL password ('postgresql-password' key)
 ##
 postgresql:
   enabled: true
+  nameOverride:
   postgresqlUsername: bn_concourse
-  # postgresqlPassword: bitnami1
   postgresqlDatabase: bitnami_concourse
   ## In case of postgresql.enabled = true, allow the usage of existing secrets for postgresql
   ##
   existingSecret:
 
-## External PostgreSQL configuration
+## @section External PostgreSQL configuration
 ## All of these values are only used when postgresql.enabled is set to false
 ## @param externalDatabase.host Database host
 ## @param externalDatabase.user non-root Username for Airflow Database

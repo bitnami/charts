@@ -1,4 +1,4 @@
-{{- if .Values.worker.enabled -}}
+{{- if and .Values.worker.enabled (or (not .Values.web.enabled) (include "concourse.host" .)) -}}
 {{- if eq .Values.worker.mode "deployment" }}
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
@@ -33,7 +33,7 @@ spec:
         {{- end }}
     spec:
       serviceAccountName: {{ template "concourse.worker.fullname" . }}
-      {{- include "concourse.imagePullSecrets" . | nindent 6 }}
+      {{- include "imagePullSecrets" . | nindent 6 }}
       {{- if .Values.worker.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.worker.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -68,8 +68,9 @@ spec:
             - |
               mkdir -p "/bitnami/concourse"
               chown -R "{{ .Values.worker.containerSecurityContext.runAsUser }}:{{ .Values.web.podSecurityContext.fsGroup }}" "/bitnami/concourse"
-          securityContext:
-            runAsUser: 0
+          {{- if .Values.volumePermissions.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.volumePermissions.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
           {{- end }}
@@ -79,44 +80,45 @@ spec:
           {{- include "common.tplvalues.render" (dict "value" .Values.worker.initContainers "context" $) | nindent 8 }}
         {{- end }}
       containers:
-        - name: {{ template "concourse.worker.fullname" . }}
+        - name: concourse
           image: {{ template "concourse.image" . }}
-          imagePullPolicy: {{ .Values.concourse.image.pullPolicy }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.worker.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.worker.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.worker.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.worker.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
+          {{- if .Values.worker.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.worker.command "context" $) | nindent 12 }}
+          {{- else }}
+          command:
+            - /opt/bitnami/concourse/bin/concourse
+          {{- end }}
           {{- if .Values.worker.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.worker.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            - worker
           {{- end }}
           env:
             - name: CONCOURSE_TSA_PUBLIC_KEY
-              value: "{{ .Values.worker.keySecretsPath }}/host_key.pub"
+              value: "/bitnami/concourse/concourse-keys/host_key.pub"
             - name: CONCOURSE_TSA_WORKER_PRIVATE_KEY
-              value: "{{ .Values.worker.keySecretsPath }}/worker_key"
-            {{- if .Values.worker.workDir }}
+              value: "/bitnami/concourse/concourse-keys/worker_key"
             - name: CONCOURSE_WORK_DIR
-              value: {{ .Values.worker.workDir | quote }}
-            {{- end }}
+              value: "/bitnami/concourse/workdir"
+            - name: CONCOURSE_HEALTHCHECK_BIND_PORT
+              value: {{ .Values.worker.healthCheckContainerPort | quote }}
             {{- if .Values.worker.logLevel }}
             - name: CONCOURSE_LOG_LEVEL
               value: {{ .Values.worker.logLevel | quote }}
             {{- end }}
-            {{- if .Values.worker.extraEnvVars }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.worker.extraEnvVars "context" $) | nindent 12 }}
-            {{- end }}
-            {{- if not .Values.web.enabled }}
             - name: CONCOURSE_TSA_HOST
-              value: "{{- range $i, $tsaHost := .Values.worker.tsa.hosts }}{{- if $i }},{{ end }}{{- $tsaHost }}{{- end -}}"
-            {{- else }}
-            - name: CONCOURSE_TSA_HOST
-              value: "{{ template "concourse.web.tsa.address" . -}}"
-            {{- end }}
-            {{- if .Values.worker.listenIp }}
+              value: {{ template "concourse.web.tsa.address" . }}
+            {{- if .Values.worker.bindIp }}
             - name: CONCOURSE_BIND_IP
-              value: {{ .Values.worker.listenIp | quote }}
+              value: {{ .Values.worker.bindIp | quote }}
             {{- end }}
             {{- if .Values.worker.containerPort }}
             - name: CONCOURSE_BIND_PORT
@@ -126,17 +128,17 @@ spec:
             - name: CONCOURSE_BAGGAGECLAIM_LOG_LEVEL
               value: {{ .Values.worker.baggageclaim.logLevel | quote }}
             {{- end }}
-            {{- if .Values.worker.baggageclaim.listenIp }}
+            {{- if .Values.worker.baggageclaim.bindIp }}
             - name: CONCOURSE_BAGGAGECLAIM_BIND_IP
-              value: {{ .Values.worker.baggageclaim.listenIp | quote }}
+              value: {{ .Values.worker.baggageclaim.bindIp | quote }}
             {{- end }}
             {{- if .Values.worker.baggageclaim.containerPort }}
             - name: CONCOURSE_BAGGAGECLAIM_BIND_PORT
               value: {{ .Values.worker.baggageclaim.containerPort | quote }}
             {{- end }}
-            {{- if .Values.worker.baggageclaim.debugListenIp }}
+            {{- if .Values.worker.baggageclaim.debugbindIp }}
             - name: CONCOURSE_BAGGAGECLAIM_DEBUG_BIND_IP
-              value: {{ .Values.worker.baggageclaim.debugListenIp | quote }}
+              value: {{ .Values.worker.baggageclaim.debugbindIp | quote }}
             {{- end }}
             {{- if .Values.worker.baggageclaim.debugContainerPort }}
             - name: CONCOURSE_BAGGAGECLAIM_DEBUG_BIND_PORT
@@ -166,6 +168,9 @@ spec:
             - name: CONCOURSE_BAGGAGECLAIM_DISABLE_USER_NAMESPACES
               value: {{ .Values.worker.baggageclaim.disableUserNamespaces | quote }}
             {{- end }}
+            {{- if .Values.worker.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.worker.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
           envFrom:
             {{- if .Values.worker.extraEnvVarsCM }}
             - configMapRef:
@@ -178,11 +183,16 @@ spec:
           {{- if .Values.worker.resources }}
           resources: {{- toYaml .Values.worker.resources | nindent 12 }}
           {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.worker.containerPort }}
+            - name: healthz
+              containerPort: {{ .Values.worker.healthCheckContainerPort }}
           {{- if .Values.worker.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
               path: "/"
-              port: worker-hc
+              port: healthz
             initialDelaySeconds: {{ .Values.worker.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.worker.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.worker.livenessProbe.timeoutSeconds }}
@@ -193,13 +203,23 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.worker.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.worker.readinessProbe.enabled }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.worker.readinessProbe "enabled") "context" $) | nindent 12 }}
+          readinessProbe:
+            httpGet:
+              path: "/"
+              port: healthz
+            initialDelaySeconds: {{ .Values.worker.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.worker.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.worker.readinessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.worker.readinessProbe.failureThreshold }}
+            successThreshold: {{ .Values.worker.readinessProbe.successThreshold }}
           {{- else if .Values.worker.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.worker.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: concourse-work-dir
+              mountPath: /bitnami/concourse/workdir
             - name: concourse-keys
-              mountPath: {{ .Values.worker.keySecretsPath | quote }}
+              mountPath: /bitnami/concourse/concourse-keys
               readOnly: true
           {{- if .Values.worker.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.worker.extraVolumeMounts "context" $) | nindent 12 }}
@@ -208,15 +228,13 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.worker.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        # In this kind of deployment, the state is ephemeral
+        - name: concourse-work-dir
+          emptyDir: {}
         - name: concourse-keys
           secret:
             secretName: {{ include "concourse.worker.secretName" . }}
             defaultMode: 0400
-            items:
-              - key: host-key-pub
-                path: host_key.pub
-              - key: worker-key
-                path: worker_key
         {{- if .Values.worker.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.worker.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

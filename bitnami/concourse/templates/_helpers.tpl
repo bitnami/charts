@@ -2,7 +2,7 @@
 Return the proper web image name
 */}}
 {{- define "concourse.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.concourse.image "global" .Values.global) }}
+{{ include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) }}
 {{- end -}}
 
 {{/*
@@ -15,10 +15,9 @@ Return the proper image name (for the init container volume-permissions image)
 {{/*
 Return the proper Docker Image Registry Secret Names
 */}}
-{{- define "concourse.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.concourse.image .Values.volumePermissions.image) "global" .Values.global) -}}
+{{- define "imagePullSecrets" -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.volumePermissions.image) "global" .Values.global) -}}
 {{- end -}}
-
 
 {{/*
 Compile all warnings into a single message.
@@ -28,19 +27,17 @@ Compile all warnings into a single message.
 {{- $messages := append $messages (include "concourse.validateValues.enabled" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
-
 {{- if $message -}}
-{{-   printf "\nVALUES VALIDATION:\n%s" $message -}}
+{{-   printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
 {{- end -}}
 {{- end -}}
 
 {{/* Check if web or worker are enable */}}
 {{- define "concourse.validateValues.enabled" }}
-{{ if not (or .Values.web.enabled .Values.worker.enabled) }}
+{{- if not (or .Values.web.enabled .Values.worker.enabled) -}}
 concourse: enabled
-concourse: enabled
-  Must set either web.enabled or worker.enabled to create a concourse deployment
-{{ end }}
+  Must set either web.enabled or worker.enabled to create a Concourse deployment
+{{- end -}}
 {{- end -}}
 
 {{/*
@@ -48,20 +45,6 @@ Return  the proper Storage Class
 */}}
 {{- define "concourse.storageClass" -}}
 {{- include "common.storage.class" ( dict "persistence" .Values.persistence "global" .Values.global ) -}}
-{{- end -}}
-
-{{/*
-Return the appropriate apiVersion for deployment.
-Sometimes GitVersion will contain a `v` so we need
-to strip that out.
-*/}}
-{{- define "concourse.deployment.apiVersion" -}}
-{{- $version := include "concourse.kubeVersion" . -}}
-{{- if semverCompare "<1.9-0" $version -}}
-{{- print "extensions/v1beta1" -}}
-{{- else -}}
-{{- print "apps/v1" -}}
-{{- end -}}
 {{- end -}}
 
 {{/*
@@ -105,10 +88,50 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
   {{- end -}}
 {{- end -}}
 
+{{/*
+Gets the host to be used for this application.
+If not using ClusterIP, or if a host or LoadBalancerIP is not defined, the value will be empty.
+When using Ingress, it will be set to the Ingress hostname.
+*/}}
+{{- define "concourse.host" -}}
+{{- if .Values.web.ingress.enabled }}
+{{- $host := .Values.web.ingress.hostname | default "" -}}
+{{- printf "%s://%s" (ternary "https" "http" .Values.web.tls.enabled) (default (include "concourse.serviceIP" .) $host) -}}
+{{- else if .Values.web.externalUrl -}}
+{{- $host := .Values.web.externalUrl | default "" -}}
+{{- printf "%s://%s" (ternary "https" "http" .Values.web.tls.enabled) $host -}}
+{{- else if (include "concourse.serviceIP" .) -}}
+{{- printf "%s://%s" (ternary "https" "http" .Values.web.tls.enabled) (include "concourse.serviceIP" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Get the user defined LoadBalancerIP for this release.
+Note, returns 127.0.0.1 if using ClusterIP.
+*/}}
+{{- define "concourse.serviceIP" -}}
+{{- if eq .Values.service.web.type "ClusterIP" -}}
+127.0.0.1
+{{- else -}}
+{{- .Values.service.web.loadBalancerIP | default "" -}}
+{{- end -}}
+{{- end -}}
+
 {{/* Concourse credential web secret name */}}
 {{- define "concourse.web.secretName" -}}
 {{- if .Values.web.existingSecret -}}
-  {{ .Values.web.existingSecret (include "concourse.web.fullname" .) -}}
+  {{- .Values.web.existingSecret -}}
+{{- else }}
+  {{- printf "%s" (include "concourse.web.fullname" . ) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+  Concourse configuration configmap name
+*/}}
+{{- define "concourse.web.configmapName" -}}
+{{- if .Values.web.existingConfigmap -}}
+  {{- .Values.web.existingConfigmap -}}
 {{- else }}
   {{- printf "%s" (include "concourse.web.fullname" . ) -}}
 {{- end -}}
@@ -117,7 +140,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{/* Concourse credential worker secret name */}}
 {{- define "concourse.worker.secretName" -}}
 {{- if .Values.worker.existingSecret -}}
-  {{ .Values.worker.existingSecret (include "concourse.worker.fullname" .) -}}
+  {{ .Values.worker.existingSecret -}}
 {{- else }}
   {{- printf "%s" (include "concourse.worker.fullname" . ) -}}
 {{- end -}}
@@ -127,8 +150,12 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 Creates the address of the TSA service.
 */}}
 {{- define "concourse.web.tsa.address" -}}
-{{- $port := .Values.web.tsa.containerPort -}}
-{{ template "concourse.web.fullname" . }}-gateway:{{- print $port -}}
+{{- if .Values.web.enabled }}
+{{- $port := printf "%v" .Values.web.tsa.containerPort -}}
+{{- printf "%s-gateway:%s" (include "concourse.web.fullname" .) $port -}}
+{{- else -}}
+{{- range $i, $tsaHost := .Values.worker.tsa.hosts }}{{- if $i }},{{ end }}{{- $tsaHost }}{{- end -}}
+{{- end -}}
 {{- end -}}
 
 {{/*

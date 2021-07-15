@@ -1,4 +1,4 @@
-{{- if  .Values.worker.autoscaling.enabled }}
+{{- if .Values.worker.autoscaling.enabled }}
 {{- if .Values.worker.autoscaling.maxReplicas }}
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
@@ -20,7 +20,7 @@ spec:
     {{- include "common.tplvalues.render" ( dict "value" .Values.worker.autoscaling.customMetrics "context" $) | nindent 4 }}
     {{- end }}
   scaleTargetRef:
-    apiVersion: {{ template "concourse.deployment.apiVersion" . }}
+    apiVersion: {{ template "common.capabilities.deployment.apiVersion" . }}
     kind: {{ .Values.worker.mode }}
     name: {{ include "common.names.fullname" . }}
 {{- end }}

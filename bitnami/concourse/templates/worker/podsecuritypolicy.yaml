@@ -1,6 +1,5 @@
-{{- if .Values.worker.enabled -}}
-{{- if .Values.worker.psp.create -}}
-apiVersion: {{ include "podsecuritypolicy.apiVersion" . }}
+{{- if and .Values.worker.enabled .Values.worker.psp.create -}}
+apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodSecurityPolicy
 metadata:
   name: {{ template "concourse.worker.fullname" . }}
@@ -11,7 +10,7 @@ metadata:
   {{- end }}
   namespace: {{ .Release.Namespace }}
 spec:
-  privileged: true
+  privileged: {{ .Values.worker.containerSecurityContext.privileged }}
   allowPrivilegeEscalation: false
   requiredDropCapabilities:
     - 'CAP_FOWNER'
@@ -27,5 +26,4 @@ spec:
   fsGroup:
     rule: 'RunAsAny'
   readOnlyRootFilesystem: false
-{{- end }}
 {{- end }}
