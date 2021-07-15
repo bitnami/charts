@@ -30,10 +30,13 @@ on:
       - 'bitnami/metrics-server/values.yaml'
       - 'bitnami/minio/values.yaml'
       - 'bitnami/mongodb/values.yaml'
-      - "bitnami/oauth2-proxy/values.yaml"      
+      - 'bitnami/mysql/values.yaml'
+      - 'bitnami/nats/values.yaml'
+      - 'bitnami/nginx/values.yaml'
       - 'bitnami/nginx-ingress-controller/values.yaml'
       - 'bitnami/node/values.yaml'
       - 'bitnami/node-exporter/values.yaml'
+      - 'bitnami/oauth2-proxy/values.yaml'
       - 'bitnami/parse/values.yaml'
       - 'bitnami/phabricator/values.yaml'
       - 'bitnami/phpbb/values.yaml'
@@ -52,7 +55,7 @@ jobs:
       - name: Checkout bitnami-labs/readme-generator-for-helm
         uses: actions/checkout@v2
         with:
-          repository: "bitnami-labs/readme-generator-for-helm"
+          repository: 'bitnami-labs/readme-generator-for-helm'
           path: readme-generator-for-helm
 
       - name: Cache node modules
@@ -78,7 +81,7 @@ jobs:
         id: pr-file-changes
         uses: trilom/file-changes-action@v1.2.3
         with:
-          fileOutput: " "
+          fileOutput: ' '
 
       - name: Prepare readme-generator-for-helm inputs
         run: |
