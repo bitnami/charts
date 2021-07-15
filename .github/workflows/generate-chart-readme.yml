@@ -5,50 +5,51 @@ on:
     branches:
       - master
     paths:
-      - 'bitnami/airflow/values.yaml'
-      - 'bitnami/dokuwiki/values.yaml'
-      - 'bitnami/drupal/values.yaml'
-      - 'bitnami/ejbca/values.yaml'
-      - 'bitnami/fluentd/values.yaml'
-      - 'bitnami/grafana/values.yaml'
-      - 'bitnami/grafana-operator/values.yaml'
-      - 'bitnami/joomla/values.yaml'
-      - 'bitnami/jupyterhub/values.yaml'
-      - 'bitnami/kafka/values.yaml'
-      - 'bitnami/keycloak/values.yaml'
-      - 'bitnami/kiam/values.yaml'
-      - 'bitnami/kibana/values.yaml'
-      - 'bitnami/kong/values.yaml'
-      - 'bitnami/kube-prometheus/values.yaml'
-      - 'bitnami/kube-state-metrics/values.yaml'
-      - 'bitnami/kubernetes-event-exporter/values.yaml'
-      - 'bitnami/kubewatch/values.yaml'
-      - 'bitnami/logstash/values.yaml'
-      - 'bitnami/magento/values.yaml'
-      - 'bitnami/mariadb/values.yaml'
-      - 'bitnami/mariadb-galera/values.yaml'
-      - 'bitnami/metrics-server/values.yaml'
-      - 'bitnami/minio/values.yaml'
-      - 'bitnami/mongodb/values.yaml'
-      - 'bitnami/mysql/values.yaml'
-      - 'bitnami/nats/values.yaml'
-      - 'bitnami/nginx/values.yaml'
-      - 'bitnami/nginx-ingress-controller/values.yaml'
-      - 'bitnami/node/values.yaml'
-      - 'bitnami/node-exporter/values.yaml'
-      - 'bitnami/oauth2-proxy/values.yaml'
-      - 'bitnami/parse/values.yaml'
-      - 'bitnami/phabricator/values.yaml'
-      - 'bitnami/phpbb/values.yaml'
-      - 'bitnami/phpmyadmin/values.yaml'
-      - 'bitnami/postgresql/values.yaml'
-      - 'bitnami/postgresql-ha/values.yaml'
-      - 'bitnami/prestashop/values.yaml'
-      - 'bitnami/pytorch/values.yaml'
-      - 'bitnami/rabbitmq/values.yaml'
-      - 'bitnami/spark/values.yaml'
-      - 'bitnami/spring-cloud-dataflow/values.yaml'
-      - 'bitnami/suitecrm/values.yaml'
+      - "bitnami/airflow/values.yaml"
+      - "bitnami/dokuwiki/values.yaml"
+      - "bitnami/concourse/values.yaml"
+      - "bitnami/drupal/values.yaml"
+      - "bitnami/ejbca/values.yaml"
+      - "bitnami/fluentd/values.yaml"
+      - "bitnami/grafana/values.yaml"
+      - "bitnami/grafana-operator/values.yaml"
+      - "bitnami/joomla/values.yaml"
+      - "bitnami/jupyterhub/values.yaml"
+      - "bitnami/kafka/values.yaml"
+      - "bitnami/keycloak/values.yaml"
+      - "bitnami/kiam/values.yaml"
+      - "bitnami/kibana/values.yaml"
+      - "bitnami/kong/values.yaml"
+      - "bitnami/kube-prometheus/values.yaml"
+      - "bitnami/kube-state-metrics/values.yaml"
+      - "bitnami/kubernetes-event-exporter/values.yaml"
+      - "bitnami/kubewatch/values.yaml"
+      - "bitnami/logstash/values.yaml"
+      - "bitnami/magento/values.yaml"
+      - "bitnami/mariadb/values.yaml"
+      - "bitnami/mariadb-galera/values.yaml"
+      - "bitnami/metrics-server/values.yaml"
+      - "bitnami/minio/values.yaml"
+      - "bitnami/mongodb/values.yaml"
+      - "bitnami/mysql/values.yaml"
+      - "bitnami/nats/values.yaml"
+      - "bitnami/nginx/values.yaml"
+      - "bitnami/nginx-ingress-controller/values.yaml"
+      - "bitnami/node/values.yaml"
+      - "bitnami/node-exporter/values.yaml"
+      - "bitnami/oauth2-proxy/values.yaml"
+      - "bitnami/parse/values.yaml"
+      - "bitnami/phabricator/values.yaml"
+      - "bitnami/phpbb/values.yaml"
+      - "bitnami/phpmyadmin/values.yaml"
+      - "bitnami/postgresql/values.yaml"
+      - "bitnami/postgresql-ha/values.yaml"
+      - "bitnami/prestashop/values.yaml"
+      - "bitnami/pytorch/values.yaml"
+      - "bitnami/rabbitmq/values.yaml"
+      - "bitnami/spark/values.yaml"
+      - "bitnami/spring-cloud-dataflow/values.yaml"
+      - "bitnami/suitecrm/values.yaml"
 
 jobs:
   generate-chart-readme:
@@ -58,7 +59,7 @@ jobs:
       - name: Checkout bitnami-labs/readme-generator-for-helm
         uses: actions/checkout@v2
         with:
-          repository: 'bitnami-labs/readme-generator-for-helm'
+          repository: "bitnami-labs/readme-generator-for-helm"
           path: readme-generator-for-helm
 
       - name: Cache node modules
@@ -84,7 +85,7 @@ jobs:
         id: pr-file-changes
         uses: trilom/file-changes-action@v1.2.3
         with:
-          fileOutput: ' '
+          fileOutput: " "
 
       - name: Prepare readme-generator-for-helm inputs
         run: |
