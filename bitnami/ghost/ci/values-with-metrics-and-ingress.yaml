@@ -5,7 +5,7 @@ service:
 ingress:
   enabled: true
   tls: true
-  hostname: jenkins.local
+  hostname: ghost.local
 volumePermissions:
   enabled: true
 metrics:
