@@ -999,7 +999,6 @@ metrics:
     ## @param metrics.prometheusRule.additionalLabels Additional labels that can be used so prometheusRules will be discovered by Prometheus
     ##
     additionalLabels: {}
-    
     ## @param metrics.prometheusRule.namespace namespace where prometheusRules resource should be created
     ##
     namespace: ""
