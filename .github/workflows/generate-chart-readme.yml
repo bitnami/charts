@@ -46,6 +46,9 @@ on:
       - 'bitnami/prestashop/values.yaml'
       - 'bitnami/pytorch/values.yaml'
       - 'bitnami/rabbitmq/values.yaml'
+      - 'bitnami/spark/values.yaml'
+      - 'bitnami/spring-cloud-dataflow/values.yaml'
+      - 'bitnami/suitecrm/values.yaml'
 
 jobs:
   generate-chart-readme:
