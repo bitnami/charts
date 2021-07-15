@@ -16,9 +16,25 @@ global:
   imagePullSecrets: []
   storageClass:
 
+## @section Common parameters
+
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
 kubeVersion:
+## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
+##
+nameOverride:
+## @param fullnameOverride String to fully override common.names.fullname template
+##
+fullnameOverride:
+## @param commonLabels Add labels to all the deployed resources
+##
+commonLabels: {}
+## @param clusterDomain Kubernetes Cluster Domain
+##
+clusterDomain: cluster.local
+
+## @section Thanos common parameters
 
 ## Bitnami Thanos image
 ## ref: https://hub.docker.com/r/bitnami/thanos/tags/
@@ -44,38 +60,18 @@ image:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
-
-## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
-##
-nameOverride:
-
-## @param fullnameOverride String to fully override common.names.fullname template
-##
-fullnameOverride:
-
-## @param commonLabels Add labels to all the deployed resources
-##
-commonLabels: {}
-
-## @param clusterDomain Kubernetes Cluster Domain
-##
-clusterDomain: cluster.local
-
-## @param objstoreConfig [Objstore configuration](https://thanos.io/storage.md/)
+## @param objstoreConfig The [objstore configuration](https://thanos.io/storage.md/)
 ## Specify content for objstore.yml
 ##
 objstoreConfig:
-
-## @param indexCacheConfig [Index cache configuration](https://thanos.io/components/store.md/)
+## @param indexCacheConfig The [index cache configuration](https://thanos.io/components/store.md/)
 ## Specify content for index-cache.yml
 ##
 indexCacheConfig:
-
-## @param bucketCacheConfig [Bucket cache configuration](https://thanos.io/components/store.md/)
+## @param bucketCacheConfig The [bucket cache configuration](https://thanos.io/components/store.md/)
 ## Specify content for bucket-cache.yml
 ##
 bucketCacheConfig:
-
 ## @param existingObjstoreSecret Secret with Objstore Configuration
 ## Note: This will override objstoreConfig
 ##
@@ -83,26 +79,22 @@ existingObjstoreSecret:
 ## @param existingObjstoreSecretItems Optional item list for specifying a custom Secret key. If so, path should be objstore.yml
 ##
 existingObjstoreSecretItems: []
-
 ## @param existingServiceAccount Provide a common service account to be shared with all components
 ##
 existingServiceAccount:
 
-## Thanos Query parameters
-##
+## @section Thanos Query parameters
+
 query:
   ## @param query.enabled Set to true to enable Thanos Query component
   ##
   enabled: true
-
   ## @param query.logLevel Thanos Query log level
   ##
   logLevel: info
-
   ## @param query.logFormat Thanos Query log format
   ##
   logFormat: logfmt
-
   serviceAccount:
     ## @param query.serviceAccount.annotations Annotations for Thanos Query Service Account
     ##
@@ -110,16 +102,13 @@ query:
     ## @param query.serviceAccount.existingServiceAccount Provide an existing service account for query
     ##
     existingServiceAccount:
-
   ## @param query.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-
   ## @param query.replicaLabel Replica indicator(s) along which data is deduplicated
   ##
   replicaLabel: [replica]
-
   ## Dynamically configure store APIs using DNS discovery
   ##
   dnsDiscovery:
@@ -138,21 +127,17 @@ query:
     ## sidecarsNamespace: "{{ .Release.Namespace }}"
     ##
     sidecarsNamespace:
-
   ## @param query.stores Statically configure store APIs to connect with Thanos Query
   ##
   stores: []
-
   ## @param query.sdConfig Query Service Discovery Configuration
   ## Specify content for servicediscovery.yml
   ##
   sdConfig:
-
   ## @param query.existingSDConfigmap Name of existing ConfigMap with Ruler configuration
   ## NOTE: This will override query.sdConfig
   ##
   existingSDConfigmap:
-
   ## @param query.extraContainers Extra containers running as sidecars to Thanos query
   ## Example:
   ## - name: oAuth2-proxy
@@ -175,7 +160,6 @@ query:
   ##       name: secret-proxy-tls
   ##
   extraContainers: []
-
   ## @param query.extraEnv Extra environment variables for Thanos query container
   ##
   ## extraEnv:
@@ -188,37 +172,29 @@ query:
   ##       key: varname2-key
   ##
   extraEnv: []
-
   ## @param query.extraVolumes Extra volumes to add to Thanos Query
   ##
   extraVolumes: []
-
   ## @param query.extraVolumeMounts Extra volume mounts to add to the query container
   ##
   extraVolumeMounts: []
-
   ## @param query.extraFlags Extra Flags to passed to Thanos Query
   ##
   extraFlags: []
-
   ## @param query.replicaCount Number of Thanos Query replicas to deploy
   ##
   replicaCount: 1
-
   ## @param query.strategyType Deployment Strategy Type, can be set to RollingUpdate or Recreate by default
   ##
   strategyType: RollingUpdate
-
   ## @param query.podAffinityPreset Thanos Query pod affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAffinityPreset: ""
-
   ## @param query.podAntiAffinityPreset Thanos Query pod anti-affinity preset. Ignored if `query.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAntiAffinityPreset: soft
-
   ## Thanos Query node affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
   ##
@@ -238,38 +214,31 @@ query:
     ##   - e2e-az2
     ##
     values: []
-
   ## @param query.affinity Thanos Query affinity for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: query.podAffinityPreset, query.podAntiAffinityPreset, and query.nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
-
   ## @param query.nodeSelector Thanos Query node labels for pod assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-
   ## @param query.tolerations Thanos Query tolerations for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-
   ## @param query.podLabels Thanos Query pod labels
   ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
-
   ## @param query.podAnnotations Annotations for Thanos Query pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
-
   ## @param query.priorityClassName Controller priorityClassName
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
   priorityClassName: ""
-
   ## K8s Pod Security Context for Thanos Query pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param query.podSecurityContext.enabled Enable security context for the Thanos Query pod
@@ -280,7 +249,6 @@ query:
     enabled: true
     fsGroup: 1001
     runAsUser: 1001
-
   ## K8s containers' Security Context for Thanos Query container
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param query.containerSecurityContext.enabled Enable container security context for Query container
@@ -293,16 +261,13 @@ query:
     runAsNonRoot: true
     allowPrivilegeEscalation: false
     readOnlyRootFilesystem: false
-
   ## @param query.rbac.create Create ClusterRole and ClusterRolebing for the Service account
   ##
   rbac:
     create: false
-
   ## @param query.pspEnabled Create PodSecurity Policy
   ##
   pspEnabled: false
-
   ## Thanos Query containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -323,7 +288,6 @@ query:
     ##    cpu: 100m
     ##    memory: 128Mi
     requests: {}
-
   ## Thanos Query pods' liveness probe. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ## @param query.livenessProbe.enabled Enable livenessProbe
@@ -356,7 +320,6 @@ query:
     periodSeconds: 10
     successThreshold: 1
     failureThreshold: 6
-
   ## Thanos Query GRPC TLS parameters
   ## to configure --grpc-server-tls-cert, --grpc-server-tls-key, --grpc-server-tls-client-ca, --grpc-client-tls-secure, --grpc-client-tls-cert, --grpc-client-tls-key, --grpc-client-tls-ca, --grpc-client-server-name
   ## ref: https://github.com/thanos-io/thanos/blob/master/docs/components/query.md#flags
@@ -390,7 +353,6 @@ query:
       ##     tls-key: key.pem
       ##
       existingSecret: {}
-
     ## TLS client side
     client:
       ## @param query.grpcTLS.client.secure Use TLS when talking to the gRPC server
@@ -420,7 +382,6 @@ query:
       ##     tls-key: key.pem
       ##
       existingSecret: {}
-
   ## Service parameters
   ##
   service:
@@ -473,7 +434,6 @@ query:
     ## @param query.service.labelSelectorsOverride Selector for Thanos query service
     ##
     labelSelectorsOverride: {}
-
   ## Autoscaling parameters
   ## @param query.autoscaling.enabled Enable autoscaling for Thanos Query
   ## @param query.autoscaling.minReplicas Minimum number of Thanos Query replicas
@@ -487,7 +447,6 @@ query:
     maxReplicas:
     targetCPU:
     targetMemory:
-
   ## Query Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
   ##
@@ -501,7 +460,6 @@ query:
     ## @param query.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
     ##
     maxUnavailable:
-
   ## Configure the ingress resource that allows you to access Thanos Query
   ## ref: http://kubernetes.io/docs/user-guide/ingress/
   ##
@@ -509,15 +467,12 @@ query:
     ## @param query.ingress.enabled Enable ingress controller resource
     ##
     enabled: false
-
     ## @param query.ingress.certManager Set this to true in order to add the corresponding annotations for cert-manager
     ##
     certManager: false
-
     ## @param query.ingress.hostname Default host for the ingress resource
     ##
     hostname: thanos.local
-
     ## @param query.ingress.annotations Ingress annotations
     ## For a full list of possible ingress annotations, please see
     ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
@@ -525,7 +480,6 @@ query:
     ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
     ##
     annotations: {}
-
     ## @param query.ingress.extraHosts The list of additional hostnames to be covered with this ingress record.
     ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
     ## extraHosts:
@@ -534,7 +488,6 @@ query:
     ##   pathType: ImplementationSpecific
     ##
     extraHosts: []
-
     ## @param query.ingress.extraTls The tls configuration for additional hostnames to be covered with this ingress record.
     ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
     ## extraTls:
@@ -543,7 +496,6 @@ query:
     ##   secretName: thanos.local-tls
     ##
     extraTls: []
-
     ## @param query.ingress.secrets If you're providing your own certificates, please use this to add the certificates as secrets
     ## key and certificate should start with -----BEGIN CERTIFICATE----- or
     ## -----BEGIN RSA PRIVATE KEY-----
@@ -559,24 +511,19 @@ query:
     ##   certificate:
     ##
     secrets: []
-
     ## @param query.ingress.tls Create ingress TLS section
     ## When specifying cert-manager.io/cluster-issuer: nameOfClusterIssuer annotation, enable tls for ingress
     ##
     tls: false
-
     ## @param query.ingress.apiVersion Force Ingress API version (automatically detected if not set)
     ##
     apiVersion:
-
     ## @param query.ingress.path Ingress path
     ##
     path: /
-
     ## @param query.ingress.pathType Ingress path type
     ##
     pathType: ImplementationSpecific
-
     ## Create an ingress object for the GRPC service. This requires an HTTP/2
     ## capable Ingress controller (eg. traefik using AWS NLB). Example annotations
     ## - ingress.kubernetes.io/protocol: h2c
@@ -600,7 +547,6 @@ query:
       ## @param query.ingress.grpc.annotations Ingress annotations (GRPC)
       ##
       annotations: {}
-
       ## @param query.ingress.grpc.extraHosts The list of additional hostnames to be covered with this ingress record.
       ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
       ## extraHosts:
@@ -608,7 +554,6 @@ query:
       ##   path: /
       ##
       extraHosts: []
-
       ## @param query.ingress.grpc.extraTls The tls configuration for additional hostnames to be covered with this ingress record.
       ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
       ## extraTls:
@@ -617,7 +562,6 @@ query:
       ##   secretName: thanos-grpc.local-tls
       ##
       extraTls: []
-
       ## @param query.ingress.grpc.secrets If you're providing your own certificates, please use this to add the certificates as secrets
       ## key and certificate should start with -----BEGIN CERTIFICATE----- or
       ## -----BEGIN RSA PRIVATE KEY-----
@@ -633,34 +577,28 @@ query:
       ##   certificate:
       ##
       secrets: []
-
       ## @param query.ingress.grpc.apiVersion Override API Version (automatically detected if not set)
       ##
       apiVersion:
-
       ## @param query.ingress.grpc.path Ingress Path
       ##
       path: /
-
       ## @param query.ingress.grpc.pathType Ingress Path type
       ##
       pathType: ImplementationSpecific
 
-## Thanos Query Frontend parameters
-##
+## @section Thanos Query Frontend parameters
+
 queryFrontend:
   ## @param queryFrontend.enabled Enable/disable Thanos Query Frontend component
   ##
   enabled: true
-
   ## @param queryFrontend.logLevel Thanos Query Frontend log level
   ##
   logLevel: info
-
   ## @param queryFrontend.logFormat Thanos Query Frontend log format
   ##
   logFormat: logfmt
-
   serviceAccount:
     ## @param queryFrontend.serviceAccount.annotations Annotations for Thanos Query Frontend Service Account
     ##
@@ -668,12 +606,10 @@ queryFrontend:
     ## @param queryFrontend.serviceAccount.existingServiceAccount Provide an existing service account for Query Frontend
     ##
     existingServiceAccount:
-
   ## @param queryFrontend.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-
   ## @param queryFrontend.extraContainers Extra containers running as sidecars to Thanos Query Frontend container
   ## Example:
   ## - name: oAuth2-proxy
@@ -696,7 +632,6 @@ queryFrontend:
   ##       name: secret-proxy-tls
   ##
   extraContainers: []
-
   ## @param queryFrontend.extraEnv Extra environment variables for Thanos Query Frontend container
   ##
   ## extraEnv:
@@ -709,47 +644,37 @@ queryFrontend:
   ##       key: varname2-key
   ##
   extraEnv: []
-
   ## @param queryFrontend.extraVolumes Extra volumes to add to Thanos Query Frontend
   ##
   extraVolumes: []
-
   ## @param queryFrontend.extraVolumeMounts Extra volume mounts to add to the query-frontend container
   ##
   extraVolumeMounts: []
-
   ## @param queryFrontend.extraFlags Extra Flags to passed to Thanos Query Frontend
   ##
   extraFlags: []
-
   ## @param queryFrontend.config Thanos Query Frontend cache configuration
   ## Specify content for config.yml
   ##
   config:
-
   ## @param queryFrontend.existingConfigmap Name of existing ConfigMap with Thanos Query Frontend cache configuration
   ## NOTE: This will override queryFrontend.config
   ##
   existingConfigmap:
-
   ## @param queryFrontend.replicaCount Number of Thanos Query Frontend replicas to deploy
   ##
   replicaCount: 1
-
   ## @param queryFrontend.strategyType Deployment Strategy Type, can be set to RollingUpdate or Recreate by default
   ##
   strategyType: RollingUpdate
-
   ## @param queryFrontend.podAffinityPreset Thanos Query Frontend pod affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAffinityPreset: ""
-
   ## @param queryFrontend.podAntiAffinityPreset Thanos Query Frontend pod anti-affinity preset. Ignored if `queryFrontend.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAntiAffinityPreset: soft
-
   ## Thanos Query Frontend node affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
   ##
@@ -769,38 +694,31 @@ queryFrontend:
     ##   - e2e-az2
     ##
     values: []
-
   ## @param queryFrontend.affinity Thanos Query Frontend affinity for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: queryFrontend.podAffinityPreset, queryFrontend.podAntiAffinityPreset, and queryFrontend.nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
-
   ## @param queryFrontend.nodeSelector Thanos Query Frontend node labels for pod assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-
   ## @param queryFrontend.tolerations Thanos Query Frontend tolerations for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-
   ## @param queryFrontend.podLabels Thanos Query Frontend pod labels
   ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
-
   ## @param queryFrontend.podAnnotations Annotations for Thanos Query Frontend pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
-
   ## @param queryFrontend.priorityClassName Controller priorityClassName
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
   priorityClassName: ""
-
   ## K8s Pod Security Context for Thanos Query Frontend pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param queryFrontend.podSecurityContext.enabled Enable security context for the Thanos Queryfrontend pod
@@ -811,7 +729,6 @@ queryFrontend:
     enabled: true
     fsGroup: 1001
     runAsUser: 1001
-
   ## K8s containers' Security Context for Thanos Query Frontend container
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param queryFrontend.containerSecurityContext.enabled Enable container security context for Queryfrontend container
@@ -824,15 +741,12 @@ queryFrontend:
     runAsNonRoot: true
     allowPrivilegeEscalation: false
     readOnlyRootFilesystem: false
-
   ## @param queryFrontend.rbac.create Create ClusterRole and ClusterRolebing for the Service account
   ##
   rbac:
     create: false
-
   ## @param queryFrontend.pspEnabled Create PodSecurity Policy
   pspEnabled: false
-
   ## Thanos Query Frontend containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -853,7 +767,6 @@ queryFrontend:
     ##    cpu: 100m
     ##    memory: 128Mi
     requests: {}
-
   ## Thanos Query Frontend pods' liveness probe. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ## @param queryFrontend.livenessProbe.enabled Enable livenessProbe
@@ -886,7 +799,6 @@ queryFrontend:
     periodSeconds: 10
     successThreshold: 1
     failureThreshold: 6
-
   ## Service parameters
   ##
   service:
@@ -931,7 +843,6 @@ queryFrontend:
     ## @param queryFrontend.service.labelSelectorsOverride Selector for Thanos query service
     ##
     labelSelectorsOverride: {}
-
   ## Autoscaling parameters
   ## @param queryFrontend.autoscaling.enabled Enable autoscaling for Thanos Query Frontend
   ## @param queryFrontend.autoscaling.minReplicas Minimum number of Thanos Query Frontend replicas
@@ -945,7 +856,6 @@ queryFrontend:
     maxReplicas:
     targetCPU:
     targetMemory:
-
   ## Query Frontend Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
   ##
@@ -959,7 +869,6 @@ queryFrontend:
     ## @param queryFrontend.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
     ##
     maxUnavailable:
-
   ## Configure the ingress resource that allows you to access Thanos Query Frontend
   ## ref: http://kubernetes.io/docs/user-guide/ingress/
   ##
@@ -967,15 +876,12 @@ queryFrontend:
     ## @param queryFrontend.ingress.enabled Enable ingress controller resource
     ##
     enabled: false
-
     ## @param queryFrontend.ingress.certManager Set this to true in order to add the corresponding annotations for cert-manager
     ##
     certManager: false
-
     ## @param queryFrontend.ingress.hostname Default host for the ingress resource
     ##
     hostname: thanos.local
-
     ## @param queryFrontend.ingress.annotations Ingress annotations
     ## For a full list of possible ingress annotations, please see
     ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
@@ -983,7 +889,6 @@ queryFrontend:
     ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
     ##
     annotations: {}
-
     ## @param queryFrontend.ingress.extraHosts The list of additional hostnames to be covered with this ingress record.
     ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
     ## extraHosts:
@@ -992,7 +897,6 @@ queryFrontend:
     ##   pathType: ImplementationSpecific
     ##
     extraHosts: []
-
     ## @param queryFrontend.ingress.extraTls The tls configuration for additional hostnames to be covered with this ingress record.
     ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
     ## extraTls:
@@ -1001,7 +905,6 @@ queryFrontend:
     ##   secretName: thanos.local-tls
     ##
     extraTls: []
-
     ## @param queryFrontend.ingress.secrets If you're providing your own certificates, please use this to add the certificates as secrets
     ## key and certificate should start with -----BEGIN CERTIFICATE----- or
     ## -----BEGIN RSA PRIVATE KEY-----
@@ -1017,39 +920,32 @@ queryFrontend:
     ##   certificate:
     ##
     secrets: [ ]
-
     ## @param queryFrontend.ingress.tls Create ingress TLS section
     ## When specifying cert-manager.io/cluster-issuer: nameOfClusterIssuer annotation, enable tls for ingress
     ##
     tls: false
-
     ## @param queryFrontend.ingress.apiVersion Force Ingress API version (automatically detected if not set)
     ##
     apiVersion:
-
     ## @param queryFrontend.ingress.path Ingress path
     ##
     path: /
-
     ## @param queryFrontend.ingress.pathType Ingress path type
     ##
     pathType: ImplementationSpecific
 
-## Thanos Bucket Web parameters
-##
+## @section Thanos Bucket Web parameters
+
 bucketweb:
   ## @param bucketweb.enabled Enable/disable Thanos Bucket Web component
   ##
   enabled: false
-
   ## @param bucketweb.logLevel Thanos Bucket Web log level
   ##
   logLevel: info
-
   ## @param bucketweb.logFormat Thanos Bucket Web log format
   ##
   logFormat: logfmt
-
   serviceAccount:
     ## @param bucketweb.serviceAccount.annotations Annotations for Thanos Bucket Web Service Account
     ##
@@ -1057,20 +953,16 @@ bucketweb:
     ## @param bucketweb.serviceAccount.existingServiceAccount Name for an existing Thanos Bucket Web Service Account
     ##
     existingServiceAccount:
-
   ## @param bucketweb.refresh Refresh interval to download metadata from remote storage
   ##
   refresh: 30m
-
   ## @param bucketweb.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-
   ## @param bucketweb.timeout Timeout to download metadata from remote storage
   ##
   timeout: 5m
-
   ## @param bucketweb.extraContainers Extra containers running as sidecars to Thanos Bucket Web container
   ## Example:
   ## - name: oAuth2-proxy
@@ -1093,7 +985,6 @@ bucketweb:
   ##       name: secret-proxy-tls
   ##
   extraContainers: []
-
   ## @param bucketweb.extraEnv Extra environment variables for Thanos Bucket Web container
   ##
   ## extraEnv:
@@ -1106,37 +997,29 @@ bucketweb:
   ##       key: varname2-key
   ##
   extraEnv: []
-
   ## @param bucketweb.extraVolumes Extra volumes to add to Bucket Web
   ##
   extraVolumes: []
-
   ## @param bucketweb.extraVolumeMounts Extra volume mounts to add to the bucketweb container
   ##
   extraVolumeMounts: []
-
   ## @param bucketweb.extraFlags Extra Flags to passed to Thanos Bucket Web
   ##
   extraFlags: []
-
   ## @param bucketweb.replicaCount Number of Thanos Bucket Web replicas to deploy
   ##
   replicaCount: 1
-
   ## @param bucketweb.strategyType Deployment Strategy Type, can be set to RollingUpdate or Recreate by default
   ##
   strategyType: RollingUpdate
-
   ## @param bucketweb.podAffinityPreset Thanos Bucket Web pod affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAffinityPreset: ""
-
   ## @param bucketweb.podAntiAffinityPreset Thanos Bucket Web pod anti-affinity preset. Ignored if `bucketweb.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAntiAffinityPreset: soft
-
   ## Thanos Bucket Web node affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
   ##
@@ -1156,38 +1039,31 @@ bucketweb:
     ##   - e2e-az2
     ##
     values: []
-
   ## @param bucketweb.affinity Thanos Bucket Web affinity for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: bucketweb.podAffinityPreset, bucketweb.podAntiAffinityPreset, and bucketweb.nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
-
   ## @param bucketweb.nodeSelector Thanos Bucket Web node labels for pod assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-
   ## @param bucketweb.tolerations Thanos Bucket Web tolerations for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-
   ## @param bucketweb.podLabels Thanos Bucket Web pod labels
   ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
-
   ## @param bucketweb.podAnnotations Annotations for Thanos Bucket Web pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
-
   ## @param bucketweb.priorityClassName Controller priorityClassName
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
   priorityClassName: ""
-
   ## K8s Pod Security Context for Thanos Bucket Web pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param bucketweb.podSecurityContext.enabled Enable security context for the Thanos Bucketweb pod
@@ -1198,7 +1074,6 @@ bucketweb:
     enabled: true
     fsGroup: 1001
     runAsUser: 1001
-
   ## K8s containers' Security Context for Thanos Bucket Web container
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param bucketweb.containerSecurityContext.enabled Enable container security context for Bucketweb container
@@ -1211,7 +1086,6 @@ bucketweb:
     runAsNonRoot: true
     allowPrivilegeEscalation: false
     readOnlyRootFilesystem: false
-
   ## Thanos Bucket Web containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -1232,7 +1106,6 @@ bucketweb:
     ##    cpu: 100m
     ##    memory: 128Mi
     requests: {}
-
   ## Thanos Bucket Web pods' liveness probe. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ## @param bucketweb.livenessProbe.enabled Enable livenessProbe
@@ -1265,7 +1138,6 @@ bucketweb:
     periodSeconds: 10
     successThreshold: 1
     failureThreshold: 6
-
   ## Service parameters
   ##
   service:
@@ -1308,7 +1180,6 @@ bucketweb:
     ## @param bucketweb.service.labelSelectorsOverride Selector for Thanos query service
     ##
     labelSelectorsOverride: {}
-
   ## Bucket Web Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
   ##
@@ -1322,7 +1193,6 @@ bucketweb:
     ## @param bucketweb.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
     ##
     maxUnavailable:
-
   ## Configure the ingress resource that allows you to access Thanos Bucketweb
   ## ref: http://kubernetes.io/docs/user-guide/ingress/
   ##
@@ -1330,15 +1200,12 @@ bucketweb:
     ## @param bucketweb.ingress.enabled Enable ingress controller resource
     ##
     enabled: false
-
     ## @param bucketweb.ingress.certManager Add annotations for cert-manager
     ##
     certManager: false
-
     ## @param bucketweb.ingress.hostname Default host for the ingress resource
     ##
     hostname: thanos-bucketweb.local
-
     ## @param bucketweb.ingress.annotations Ingress annotations
     ## For a full list of possible ingress annotations, please see
     ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
@@ -1346,7 +1213,6 @@ bucketweb:
     ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
     ##
     annotations: {}
-
     ## @param bucketweb.ingress.extraHosts The list of additional hostnames to be covered with this ingress record.
     ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
     ## extraHosts:
@@ -1355,7 +1221,6 @@ bucketweb:
     ##   pathType: ImplementationSpecific
     ##
     extraHosts: []
-
     ## @param bucketweb.ingress.extraTls The tls configuration for additional hostnames to be covered with this ingress record.
     ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
     ## extraTls:
@@ -1364,7 +1229,6 @@ bucketweb:
     ##   secretName: thanos-bucketweb.local-tls
     ##
     extraTls: []
-
     ## @param bucketweb.ingress.secrets If you're providing your own certificates, please use this to add the certificates as secrets
     ## key and certificate should start with -----BEGIN CERTIFICATE----- or
     ## -----BEGIN RSA PRIVATE KEY-----
@@ -1380,40 +1244,32 @@ bucketweb:
     ##   certificate:
     ##
     secrets: []
-
     ## @param bucketweb.ingress.tls Create ingress TLS section
     ## When specifying cert-manager.io/cluster-issuer: nameOfClusterIssuer annotation, enable tls for ingress
     ##
     tls: false
-
-
     ## @param bucketweb.ingress.apiVersion Force Ingress API version (automatically detected if not set)
     ##
     apiVersion:
-
     ## @param bucketweb.ingress.path Ingress path
     ##
     path: /
-
     ## @param bucketweb.ingress.pathType Ingress path type
     ##
     pathType: ImplementationSpecific
 
-## Thanos Compactor parameters
-##
+## @section Thanos Compactor parameters
+
 compactor:
   ## @param compactor.enabled Enable/disable Thanos Compactor component
   ##
   enabled: false
-
   ## @param compactor.logLevel Thanos Compactor log level
   ##
   logLevel: info
-
   ## @param compactor.logFormat Thanos Compactor log format
   ##
   logFormat: logfmt
-
   serviceAccount:
     ## @param compactor.serviceAccount.annotations Annotations for Thanos Compactor Service Account
     ##
@@ -1421,12 +1277,10 @@ compactor:
     ## @param compactor.serviceAccount.existingServiceAccount Name for an existing Thanos Compactor Service Account
     ##
     existingServiceAccount:
-
   ## @param compactor.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-
   ## Resolution and Retention flags
   ## @param compactor.retentionResolutionRaw Resolution and Retention flag
   ## @param compactor.retentionResolution5m Resolution and Retention flag
@@ -1435,11 +1289,9 @@ compactor:
   retentionResolutionRaw: 30d
   retentionResolution5m: 30d
   retentionResolution1h: 10y
-
   ## @param compactor.consistencyDelay Minimum age of fresh (non-compacted) blocks before they are being processed
   ##
   consistencyDelay: 30m
-
   ## @param compactor.extraEnv Extra environment variables for Thanos Compactor container
   ##
   ## extraEnv:
@@ -1452,33 +1304,26 @@ compactor:
   ##       key: varname2-key
   ##
   extraEnv: []
-
   ## @param compactor.extraVolumes Extra volumes to add to Thanos Compactor
   ##
   extraVolumes: []
-
   ## @param compactor.extraVolumeMounts Extra volume mounts to add to the compactor container
   ##
   extraVolumeMounts: []
-
   ## @param compactor.extraFlags Extra Flags to passed to Thanos Compactor
   ##
   extraFlags: []
-
   ## @param compactor.strategyType Deployment Strategy Type, can be set to RollingUpdate or Recreate by default
   ##
   strategyType: RollingUpdate
-
   ## @param compactor.podAffinityPreset Thanos Compactor pod affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAffinityPreset: ""
-
   ## @param compactor.podAntiAffinityPreset Thanos Compactor pod anti-affinity preset. Ignored if `compactor.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAntiAffinityPreset: soft
-
   ## Thanos Compactor node affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
   ##
@@ -1498,38 +1343,31 @@ compactor:
     ##   - e2e-az2
     ##
     values: []
-
   ## @param compactor.affinity Thanos Compactor affinity for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: compactor.podAffinityPreset, compactor.podAntiAffinityPreset, and compactor.nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
-
   ## @param compactor.nodeSelector Thanos Compactor node labels for pod assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-
   ## @param compactor.tolerations Thanos Compactor tolerations for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-
   ## @param compactor.podLabels Thanos Compactor pod labels
   ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
-
   ## @param compactor.podAnnotations Annotations for Thanos Compactor pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
-
   ## @param compactor.priorityClassName Controller priorityClassName
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
   priorityClassName: ""
-
   ## K8s Pod Security Context for Thanos Compactor pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param compactor.podSecurityContext.enabled Enable security context for the Thanos Compactor pod
@@ -1540,7 +1378,6 @@ compactor:
     enabled: true
     fsGroup: 1001
     runAsUser: 1001
-
   ## K8s containers' Security Context for Thanos Compactor container
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param compactor.containerSecurityContext.enabled Enable container security context for Compactor container
@@ -1553,7 +1390,6 @@ compactor:
     runAsNonRoot: true
     allowPrivilegeEscalation: false
     readOnlyRootFilesystem: false
-
   ## Thanos Compactor containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -1574,7 +1410,6 @@ compactor:
     ##    cpu: 100m
     ##    memory: 128Mi
     requests: {}
-
   ## Thanos Compactor pods' liveness probe. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ## @param compactor.livenessProbe.enabled Enable livenessProbe
@@ -1607,7 +1442,6 @@ compactor:
     periodSeconds: 10
     successThreshold: 1
     failureThreshold: 6
-
   ## Service parameters
   ##
   service:
@@ -1649,7 +1483,6 @@ compactor:
     ## @param compactor.service.labelSelectorsOverride Selector for Thanos query service
     ##
     labelSelectorsOverride: {}
-
   ## Persistence parameters
   ##
   persistence:
@@ -1676,21 +1509,18 @@ compactor:
     ##
     size: 8Gi
 
-## Thanos Store Gateway parameters
-##
+## @section Thanos Store Gateway parameters
+
 storegateway:
   ## @param storegateway.enabled Enable/disable Thanos Store Gateway component
   ##
   enabled: false
-
   ## @param storegateway.logLevel Thanos Store Gateway log level
   ##
   logLevel: info
-
   ## @param storegateway.logFormat Thanos Store Gateway log format
   ##
   logFormat: logfmt
-
   serviceAccount:
     ## @param storegateway.serviceAccount.annotations Annotations for Thanos Store Gateway Service Account
     ##
@@ -1698,12 +1528,10 @@ storegateway:
     ## @param storegateway.serviceAccount.existingServiceAccount Name for an existing Thanos Store Gateway Service Account
     ##
     existingServiceAccount:
-
   ## @param storegateway.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-
   ## @param storegateway.extraEnv Extra environment variables for Thanos Store Gateway container
   ##
   ## extraEnv:
@@ -1716,29 +1544,23 @@ storegateway:
   ##       key: varname2-key
   ##
   extraEnv: []
-
   ## @param storegateway.extraVolumes Extra volumes to add to Thanos Store Gateway
   ##
   extraVolumes: []
-
   ## @param storegateway.extraVolumeMounts Extra volume mounts to add to the storegateway container
   ##
   extraVolumeMounts: []
-
   ## @param storegateway.extraFlags Extra Flags to passed to Thanos Store Gateway
   ##
   extraFlags: []
-
   ## @param storegateway.config Thanos Store Gateway cache configuration
   ## Specify content for config.yml
   ##
   config:
-
   ## @param storegateway.existingConfigmap Name of existing ConfigMap with Thanos Store Gateway cache configuration
   ## NOTE: This will override storegateway.config
   ##
   existingConfigmap:
-
   ## Thanos Store GRPC server configuration
   ##
   grpc:
@@ -1771,30 +1593,24 @@ storegateway:
       ##     tls-key: key.pem
       ##
       existingSecret: {}
-
   ## @param storegateway.replicaCount Number of Thanos Store Gateway replicas to deploy
   ##
   replicaCount: 1
-
   ## @param storegateway.updateStrategyType Statefulset Update Strategy Type, can be set to RollingUpdate or OnDelete by default
   ##
   updateStrategyType: RollingUpdate
-
   ## @param storegateway.podManagementPolicy Statefulset Pod management policy: OrderedReady (default) or Parallel
   ## Ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
   ##
   podManagementPolicy: OrderedReady
-
   ## @param storegateway.podAffinityPreset Thanos Store Gateway pod affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAffinityPreset: ""
-
   ## @param storegateway.podAntiAffinityPreset Thanos Store Gateway pod anti-affinity preset. Ignored if `storegateway.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAntiAffinityPreset: soft
-
   ## Thanos Store Gateway node affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
   ##
@@ -1814,38 +1630,31 @@ storegateway:
     ##   - e2e-az2
     ##
     values: []
-
   ## @param storegateway.affinity Thanos Store Gateway affinity for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: storegateway.podAffinityPreset, storegateway.podAntiAffinityPreset, and storegateway.nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
-
   ## @param storegateway.nodeSelector Thanos Store Gateway node labels for pod assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-
   ## @param storegateway.tolerations Thanos Store Gateway tolerations for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-
   ## @param storegateway.podLabels Thanos Store Gateway pod labels
   ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
-
   ## @param storegateway.podAnnotations Annotations for Thanos Store Gateway pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
-
   ## @param storegateway.priorityClassName Controller priorityClassName
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
   priorityClassName: ""
-
   ## K8s Pod Security Context for Thanos Store Gateway pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param storegateway.podSecurityContext.enabled Enable security context for the Thanos Storegateway pod
@@ -1856,7 +1665,6 @@ storegateway:
     enabled: true
     fsGroup: 1001
     runAsUser: 1001
-
   ## K8s containers' Security Context for Thanos Store Gateway container
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param storegateway.containerSecurityContext.enabled Enable container security context for Storegateway container
@@ -1869,7 +1677,6 @@ storegateway:
     runAsNonRoot: true
     allowPrivilegeEscalation: false
     readOnlyRootFilesystem: false
-
   ## Thanos Store Gateway containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -1890,7 +1697,6 @@ storegateway:
     ##    cpu: 100m
     ##    memory: 128Mi
     requests: {}
-
   ## Thanos Store Gateway pods' liveness probe. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ## @param storegateway.livenessProbe.enabled Enable livenessProbe
@@ -1923,7 +1729,6 @@ storegateway:
     periodSeconds: 10
     successThreshold: 1
     failureThreshold: 6
-
   ## Service parameters
   ##
   service:
@@ -1975,11 +1780,9 @@ storegateway:
     ## @param storegateway.service.labelSelectorsOverride Selector for Thanos query service
     ##
     labelSelectorsOverride: {}
-
     ## @param storegateway.service.additionalHeadless Additional Headless service
     ##
     additionalHeadless: false
-
   ## Persistence parameters
   ##
   persistence:
@@ -2005,7 +1808,6 @@ storegateway:
     ## @param storegateway.persistence.size Size of data volume
     ##
     size: 8Gi
-
   ## Autoscaling parameters
   ## @param storegateway.autoscaling.enabled Enable autoscaling for Thanos Store Gateway
   ## @param storegateway.autoscaling.minReplicas Minimum number of Thanos Store Gateway replicas
@@ -2019,7 +1821,6 @@ storegateway:
     maxReplicas:
     targetCPU:
     targetMemory:
-
   ## Store Gateway Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
   ##
@@ -2034,25 +1835,21 @@ storegateway:
     ##
     maxUnavailable:
 
-## Thanos Ruler parameters
-##
+## @section Thanos Ruler parameters
+
 ruler:
   ## @param ruler.enabled Enable/disable Thanos Ruler component
   ##
   enabled: false
-
   ## @param ruler.logLevel Thanos Ruler log level
   ##
   logLevel: info
-
   ## @param ruler.logFormat Thanos Ruler log format
   ##
   logFormat: logfmt
-
   ## @param ruler.replicaLabel Label to treat as a replica indicator along which data is deduplicated
   ##
   replicaLabel: replica
-
   serviceAccount:
     ## @param ruler.serviceAccount.annotations Annotations for Thanos Ruler Service Account
     ##
@@ -2060,21 +1857,17 @@ ruler:
     ## @param ruler.serviceAccount.existingServiceAccount Name for an existing Thanos Ruler Service Account
     ##
     existingServiceAccount:
-
   ## @param ruler.hostAliases Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-
   ## @param ruler.dnsDiscovery.enabled Dynamically configure Query APIs using DNS discovery
   ##
   dnsDiscovery:
     enabled: true
-
   ## @param ruler.alertmanagers Alermanager URLs array
   ##
   alertmanagers: []
-
   ## @param ruler.alertmanagersConfig Alertmanagers Configuration
   ##
   ## Creates a secret from the config which is then mounted to the pod
@@ -2092,15 +1885,12 @@ ruler:
   ##    api_version: v2
   ##
   alertmanagersConfig:
-
   ## @param ruler.evalInterval The default evaluation interval to use
   ##
   evalInterval: 1m
-
   ## @param ruler.clusterName Used to set the 'ruler_cluster' label
   ##
   clusterName:
-
   ## @param ruler.extraContainers Extra containers running as sidecars to Thanos Ruler container
   ## Example:
   ## - name: oAuth2-proxy
@@ -2123,7 +1913,6 @@ ruler:
   ##       name: secret-proxy-tls
   ##
   extraContainers: []
-
   ## @param ruler.extraEnv Extra environment variables for Thanos Ruler container
   ##
   ## extraEnv:
@@ -2136,52 +1925,41 @@ ruler:
   ##       key: varname2-key
   ##
   extraEnv: []
-
   ## @param ruler.extraVolumes Extra volumes to add to Thanos Ruler
   ##
   extraVolumes: []
-
   ## @param ruler.extraVolumeMounts Extra volume mounts to add to the ruler container
   ##
   extraVolumeMounts: []
-
   ## @param ruler.extraFlags Extra Flags to passed to Thanos Ruler
   ##
   extraFlags: []
-
   ## @param ruler.config Ruler configuration
   ## Specify content for ruler.yml
   ##
   config:
-
   ## @param ruler.existingConfigmap Name of existing ConfigMap with Ruler configuration
   ## NOTE: This will override ruler.config
   ##
   existingConfigmap:
-
   ## @param ruler.replicaCount Number of Thanos Ruler replicas to deploy
   ##
   replicaCount: 1
-
   ## @param ruler.updateStrategyType Statefulset Update Strategy Type
   ##
   updateStrategyType: RollingUpdate
-
   ## @param ruler.podManagementPolicy Statefulset Pod Management Policy Type
   ## Ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
   ##
   podManagementPolicy: OrderedReady
-
   ## @param ruler.podAffinityPreset Thanos Ruler pod affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAffinityPreset: ""
-
   ## @param ruler.podAntiAffinityPreset Thanos Ruler pod anti-affinity preset. Ignored if `ruler.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAntiAffinityPreset: soft
-
   ## Thanos Ruler node affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
   ##
@@ -2201,38 +1979,31 @@ ruler:
     ##   - e2e-az2
     ##
     values: []
-
   ## @param ruler.affinity Thanos Ruler affinity for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: ruler.podAffinityPreset, ruler.podAntiAffinityPreset, and ruler.nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
-
   ## @param ruler.nodeSelector Thanos Ruler node labels for pod assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-
   ## @param ruler.tolerations Thanos Ruler tolerations for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-
   ## @param ruler.podLabels Thanos Ruler pod labels
   ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
-
   ## @param ruler.podAnnotations Annotations for Thanos Ruler pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
-
   ## @param ruler.priorityClassName Controller priorityClassName
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
   priorityClassName: ""
-
   ## K8s Pod Security Context for Thanos Ruler pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param ruler.podSecurityContext.enabled Enable security context for the Thanos Ruler pod
@@ -2243,7 +2014,6 @@ ruler:
     enabled: true
     fsGroup: 1001
     runAsUser: 1001
-
   ## K8s containers' Security Context for Thanos Ruler container
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param ruler.containerSecurityContext.enabled Enable container security context for Ruler container
@@ -2256,7 +2026,6 @@ ruler:
     runAsNonRoot: true
     allowPrivilegeEscalation: false
     readOnlyRootFilesystem: false
-
   ## Thanos Ruler containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -2277,7 +2046,6 @@ ruler:
     ##    cpu: 100m
     ##    memory: 128Mi
     requests: {}
-
   ## Thanos Ruler pods' liveness probe. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ## @param ruler.livenessProbe.enabled Enable livenessProbe
@@ -2310,7 +2078,6 @@ ruler:
     periodSeconds: 10
     successThreshold: 1
     failureThreshold: 6
-
   ## Service parameters
   ##
   service:
@@ -2363,11 +2130,9 @@ ruler:
     ## @param ruler.service.labelSelectorsOverride Selector for Thanos query service
     ##
     labelSelectorsOverride: {}
-
     ## @param ruler.service.additionalHeadless Additional Headless service
     ##
     additionalHeadless: false
-
   ## Persistence parameters
   ##
   persistence:
@@ -2393,7 +2158,6 @@ ruler:
     ## @param ruler.persistence.size Size of data volume
     ##
     size: 8Gi
-
   ## Ruler Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
   ##
@@ -2407,7 +2171,6 @@ ruler:
     ## @param ruler.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
     ##
     maxUnavailable:
-
   ## Configure the ingress resource that allows you to access Thanos Ruler
   ## ref: http://kubernetes.io/docs/user-guide/ingress/
   ##
@@ -2415,15 +2178,12 @@ ruler:
     ## @param ruler.ingress.enabled Enable ingress controller resource
     ##
     enabled: false
-
     ## @param ruler.ingress.certManager Add annotations for cert-manager
     ##
     certManager: false
-
     ## @param ruler.ingress.hostname Default host for the ingress resource
     ##
     hostname: thanos-ruler.local
-
     ## @param ruler.ingress.annotations Ingress annotations
     ## For a full list of possible ingress annotations, please see
     ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
@@ -2431,7 +2191,6 @@ ruler:
     ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
     ##
     annotations: {}
-
     ## @param ruler.ingress.extraHosts The list of additional hostnames to be covered with this ingress record.
     ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
     ## extraHosts:
@@ -2440,7 +2199,6 @@ ruler:
     ##   pathType: ImplementationSpecific
     ##
     extraHosts:
-
     ## @param ruler.ingress.extraTls The tls configuration for additional hostnames to be covered with this ingress record.
     ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
     ## extraTls:
@@ -2449,7 +2207,6 @@ ruler:
     ##   secretName: thanos.local-tls
     ##
     extraTls:
-
     ## @param ruler.ingress.secrets If you're providing your own certificates, please use this to add the certificates as secrets
     ## key and certificate should start with -----BEGIN CERTIFICATE----- or
     ## -----BEGIN RSA PRIVATE KEY-----
@@ -2465,45 +2222,37 @@ ruler:
     ##   certificate:
     ##
     secrets: []
-
     ## @param ruler.ingress.apiVersion Force Ingress API version (automatically detected if not set)
     ##
     apiVersion:
-
     ## @param ruler.ingress.path Ingress path
     ##
     path: /
-
     ## @param ruler.ingress.pathType Ingress path type
     ##
     pathType: ImplementationSpecific
 
-## Thanos Receive parameters
-##
+## @section Thanos Receive parameters
+
 receive:
   ## @param receive.enabled Enable/disable Thanos Receive component
   ##
   enabled: false
-
   ## @param receive.logLevel Thanos Receive log level
   ##
   logLevel: info
-
   ## @param receive.logFormat Thanos Receive log format
   ##
   logFormat: logfmt
-
   ## @param receive.tsdbRetention Thanos Receive TSDB retention period
   ##
   tsdbRetention: 15d
-
   ## @param receive.replicationFactor Thanos Receive replication-factor
   ##
   replicationFactor: 1
   ## @param receive.replicaLabel Label to treat as a replica indicator along which data is deduplicated
   ##
   replicaLabel: replica
-
   serviceAccount:
     ## @param receive.serviceAccount.annotations Annotations for Thanos Receive Service Account
     ##
@@ -2511,12 +2260,10 @@ receive:
     ## @param receive.serviceAccount.existingServiceAccount Name for an existing Thanos Receive Service Account
     ##
     existingServiceAccount:
-
   ## @param receive.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-
   ## @param receive.config Receive Hashring configuration
   ## json formatted string and yaml allowed.
   ## Specify content for receive hashring
@@ -2526,7 +2273,6 @@ receive:
   ##     - "127.0.0.1:10901"
   ##
   config: []
-
   ## @param receive.extraContainers Extra containers running as sidecars to Thanos Receive container
   ## Example:
   ## - name: oAuth2-proxy
@@ -2549,7 +2295,6 @@ receive:
   ##       name: secret-proxy-tls
   ##
   extraContainers: []
-
   ## @param receive.extraEnv Extra environment variables for Thanos Receive container
   ##
   ## extraEnv:
@@ -2562,42 +2307,33 @@ receive:
   ##       key: varname2-key
   ##
   extraEnv: []
-
   ## @param receive.extraVolumes Extra volumes to add to Thanos Receive
   ##
   extraVolumes: []
-
   ## @param receive.extraVolumeMounts Extra volume mounts to add to the receive container
   ##
   extraVolumeMounts: []
-
   ## @param receive.extraFlags Extra Flags to passed to Thanos Receive
   ##
   extraFlags: []
-
   ## @param receive.updateStrategyType Statefulset Update Strategy Type, can be set to RollingUpdate or OnDelete by default
   ##
   updateStrategyType: RollingUpdate
-
   ## @param receive.replicaCount Number of Thanos Receive replicas to deploy
   ##
   replicaCount: 1
-
   ## @param receive.strategyType StrategyType, can be set to RollingUpdate or Recreate by default.
   ##
   strategyType: RollingUpdate
-
   ## @param receive.podAffinityPreset Thanos Receive pod affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ## Allowed values: soft, hard
   ##
   podAffinityPreset: ""
-
   ## @param receive.podAntiAffinityPreset Thanos Receive pod anti-affinity preset. Ignored if `ruler.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAntiAffinityPreset: soft
-
   ## Thanos Receive node affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
   ##
@@ -2617,47 +2353,38 @@ receive:
     ##   - e2e-az2
     ##
     values: []
-
   ## @param receive.affinity Thanos Receive affinity for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: receive.podAffinityPreset, receive.podAntiAffinityPreset, and receive.nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
-
   ## @param receive.nodeSelector Thanos Receive node labels for pod assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-
   ## @param receive.tolerations Thanos Receive tolerations for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-
   ## @param receive.podLabels Thanos Receive pod labels
   ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
-
   ## @param receive.podAnnotations Annotations for Thanos Ruler pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
-
   ## @param receive.priorityClassName Controller priorityClassName
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
   priorityClassName: ""
-
   ## @param receive.rbac.create Create ClusterRole and ClusterRolebing for the Service account
   ##
   rbac:
     create: false
-
   ## @param receive.pspEnabled Create PodSecurity Policy
   ##
   pspEnabled: false
-
   ## Thanos Receive containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -2678,7 +2405,6 @@ receive:
     ##    cpu: 100m
     ##    memory: 128Mi
     requests: {}
-
   ## Thanos Receive pods' liveness probe. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ## @param receive.livenessProbe.enabled Enable livenessProbe
@@ -2711,7 +2437,6 @@ receive:
     periodSeconds: 10
     successThreshold: 1
     failureThreshold: 6
-
   ## K8s Security Context for Thanos Receive pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param receive.podSecurityContext.enabled Enable security context for the Thanos Receive pod
@@ -2722,7 +2447,6 @@ receive:
     enabled: true
     fsGroup: 1001
     runAsUser: 1001
-
   ## K8s containers' Security Context for Thanos Receive container
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param receive.containerSecurityContext.enabled Enable container security context for Receive container
@@ -2735,7 +2459,6 @@ receive:
     runAsNonRoot: true
     allowPrivilegeEscalation: false
     readOnlyRootFilesystem: false
-
   ## Thanos Receive GRPC TLS parameters
   ## ref: https://github.com/thanos-io/thanos/blob/master/docs/components/receive.md#flags
   ##
@@ -2758,7 +2481,6 @@ receive:
       ## @param receive.grpc.server.ca TLS CA to verify clients against. If no client CA is specified, there is no client verification on server side. (tls.NoClientCert)
       ##
       ca:
-
   ## Service parameters
   ##
   service:
@@ -2818,11 +2540,9 @@ receive:
     ## @param receive.service.labelSelectorsOverride Selector for Thanos receive service
     ##
     labelSelectorsOverride: {}
-
     ## @param receive.service.additionalHeadless Additional Headless service
     ##
     additionalHeadless: false
-
   ## @param receive.autoscaling.enabled Enable autoscaling for Thanos Receive
   ## @param receive.autoscaling.minReplicas Minimum number of Thanos Receive replicas
   ## @param receive.autoscaling.maxReplicas Maximum number of Thanos Receive replicas
@@ -2835,7 +2555,6 @@ receive:
     maxReplicas:
     targetCPU:
     targetMemory:
-
   ## Persistence parameters
   ##
   persistence:
@@ -2861,7 +2580,6 @@ receive:
     ## @param receive.persistence.size Size of data volume
     ##
     size: 8Gi
-
   ## Receive Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
   ##
@@ -2875,7 +2593,6 @@ receive:
     ## @param receive.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
     ##
     maxUnavailable:
-
   ## Configure the ingress resource that allows you to access Thanos Receive
   ## ref: http://kubernetes.io/docs/user-guide/ingress/
   ##
@@ -2883,15 +2600,12 @@ receive:
     ## @param receive.ingress.enabled Set to true to enable ingress record generation
     ##
     enabled: false
-
     ## @param receive.ingress.certManager Set this to true in order to add the corresponding annotations for cert-manager
     ##
     certManager: false
-
     ## @param receive.ingress.hostname When the ingress is enabled, a host pointing to this will be created
     ##
     hostname: thanos-receive.local
-
     ## @param receive.ingress.annotations Ingress annotations done as key:value pairs
     ## For a full list of possible ingress annotations, please see
     ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
@@ -2899,7 +2613,6 @@ receive:
     ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
     ##
     annotations: {}
-
     ## @param receive.ingress.extraHosts The list of additional hostnames to be covered with this ingress record.
     ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
     ## extraHosts:
@@ -2908,7 +2621,6 @@ receive:
     ##   pathType: ImplementationSpecific
     ##
     extraHosts:
-
     ## @param receive.ingress.extraTls The tls configuration for additional hostnames to be covered with this ingress record.
     ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
     ## extraTls:
@@ -2917,7 +2629,6 @@ receive:
     ##   secretName: thanos.local-tls
     ##
     extraTls: []
-
     ## @param receive.ingress.secrets If you're providing your own certificates, please use this to add the certificates as secrets
     ## key and certificate should start with -----BEGIN CERTIFICATE----- or
     ## -----BEGIN RSA PRIVATE KEY-----
@@ -2932,24 +2643,21 @@ receive:
     ##   key:
     ##   certificate:
     ##
-
     ## @param receive.ingress.tls When specifying cert-manager.io/cluster-issuer: nameOfClusterIssuer annotation, enable tls for ingress
     ##
     tls: false
-
     secrets: []
-
     ## @param receive.ingress.apiVersion Override API Version (automatically detected if not set)
     ##
     apiVersion:
-
     ## @param receive.ingress.path Ingress Path
     ##
     path: /
-
     ## @param receive.ingress.pathType Ingress Path type
     ##
     pathType: ImplementationSpecific
+
+## @section Metrics parameters
 
 ## Prometheus metrics
 ##
@@ -2957,7 +2665,6 @@ metrics:
   ## @param metrics.enabled Enable the export of Prometheus metrics
   ##
   enabled: false
-
   ## Prometheus Operator ServiceMonitor configuration
   ##
   serviceMonitor:
@@ -2982,6 +2689,8 @@ metrics:
     ## scrapeTimeout: 10s
     ##
     scrapeTimeout:
+
+## @section Volume Permissions parameters
 
 ## Init Container parameters
 ## Change the owner and group of the persistent volume(s) mountpoint(s) to 'runAsUser:fsGroup' on each component
@@ -3014,14 +2723,13 @@ volumePermissions:
     ##
     pullSecrets: []
 
-## MinIO(R) Chart configuration
-##
+## @section MinIO&reg; chart parameters
+
 minio:
   ## @param minio.enabled Enable/disable MinIO&reg; chart installation
   ## to be used as an objstore for Thanos
   ##
   enabled: false
-
   ## MinIO(R) credentials
   ## @param minio.accessKey.password MinIO&reg; Access Key
   ## @param minio.secretKey.password MinIO&reg; Secret Key
@@ -3030,7 +2738,6 @@ minio:
     password: ''
   secretKey:
     password: ''
-
   ## @param minio.defaultBuckets Comma, semi-colon or space separated list of MinIO&reg; buckets to create
   ##
   defaultBuckets: 'thanos'
