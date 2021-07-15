@@ -125,13 +125,13 @@ auth:
 ## @param logs Path of the RabbitMQ server's Erlang log file. Value for the `RABBITMQ_LOGS` environment variable
 ## ref: https://www.rabbitmq.com/logging.html#log-file-location
 ##
-logs: '-'
+logs: "-"
 
 ## @param ulimitNofiles RabbitMQ Max File Descriptors
 ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
 ## ref: https://www.rabbitmq.com/install-debian.html#kernel-resource-limits
 ##
-ulimitNofiles: '65536'
+ulimitNofiles: "65536"
 
 ## RabbitMQ maximum available scheduler threads and online scheduler threads. By default it will create a thread per CPU detected, with the following parameters you can tune it manually.
 ## ref: https://hamidreza-s.github.io/erlang/scheduling/real-time/preemptive/migration/2016/02/09/erlang-scheduler-details.html#scheduler-threads
@@ -152,7 +152,8 @@ memoryHighWatermark:
   enabled: false
   ## @param memoryHighWatermark.type Memory high watermark type. Either `absolute` or `relative`
   ##
-  type: 'relative'
+  type: "relative"
+  ## Memory high watermark value.
   ## @param memoryHighWatermark.value Memory high watermark value
   ## The default value of 0.4 stands for 40% of available RAM
   ## Note: the memory relative limit is applied to the resource.limits.memory to calculate the memory threshold
@@ -162,7 +163,7 @@ memoryHighWatermark:
 
 ## @param plugins List of default plugins to enable (should only be altered to remove defaults; for additional plugins use `extraPlugins`)
 ##
-plugins: 'rabbitmq_management rabbitmq_peer_discovery_k8s'
+plugins: "rabbitmq_management rabbitmq_peer_discovery_k8s"
 
 ## @param communityPlugins List of Community plugins (URLs) to be downloaded during container initialization
 ## Combine it with extraPlugins to also enable them.
@@ -172,7 +173,7 @@ communityPlugins:
 ## @param extraPlugins Extra plugins to enable (single string containing a space-separated list)
 ## Use this instead of `plugins` to add new plugins
 ##
-extraPlugins: 'rabbitmq_auth_backend_ldap'
+extraPlugins: "rabbitmq_auth_backend_ldap"
 
 ## Clustering settings
 ##
@@ -337,7 +338,8 @@ ldap:
   servers: []
   ## @param ldap.port LDAP servers port
   ##
-  port: '389'
+  port: "389"
+  ## Pattern used to translate the provided username into a value to be used for the LDAP bind
   ## @param ldap.user_dn_pattern Pattern used to translate the provided username into a value to be used for the LDAP bind
   ## ref: https://www.rabbitmq.com/ldap.html#usernames-and-dns
   ##
@@ -423,7 +425,7 @@ statefulsetLabels: {}
 ## @param priorityClassName Name of the priority class to be used by RabbitMQ pods, priority class needs to be created beforehand
 ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
 ##
-priorityClassName: ''
+priorityClassName: ""
 
 ## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
@@ -920,21 +922,29 @@ ingress:
   ##
   secrets: []
 
+  ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+  ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+  ##
+  ingressClassName:
+
 ## Prometheus Metrics
 ##
 metrics:
   ## @param metrics.enabled Enable exposing RabbitMQ metrics to be gathered by Prometheus
   ##
   enabled: false
+
   ## @param metrics.plugins Plugins to enable Prometheus metrics in RabbitMQ
   ##
-  plugins: 'rabbitmq_prometheus'
+  plugins: "rabbitmq_prometheus"
+  ## Prometheus pod annotations
   ## @param metrics.podAnnotations [object] Annotations for enabling prometheus to access the metrics endpoint
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations:
-    prometheus.io/scrape: 'true'
-    prometheus.io/port: '{{ .Values.service.metricsPort }}'
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "{{ .Values.service.metricsPort }}"
 
   ## Prometheus Service Monitor
   ## ref: https://github.com/coreos/prometheus-operator
@@ -991,7 +1001,8 @@ metrics:
     additionalLabels: {}
     ## @param metrics.prometheusRule.namespace namespace where prometheusRules resource should be created
     ##
-    namespace: ''
+    namespace: ""
+    ## List of rules, used as template by Helm.
     ## @param metrics.prometheusRule.rules List of rules, used as template by Helm.
     ## These are just examples rules inspired from https://awesome-prometheus-alerts.grep.to/rules.html
     ## rules:
