@@ -395,6 +395,7 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `ingress.secrets[0].name`          | TLS Secret Name                                                                   | `nil`                          |
 | `ingress.secrets[0].certificate`   | TLS Secret Certificate                                                            | `nil`                          |
 | `ingress.secrets[0].key`           | TLS Secret Key                                                                    | `nil`                          |
+| `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)     | `nil`                          |
 | `networkPolicy.enabled`            | Enable NetworkPolicy                                                              | `false`                        |
 | `networkPolicy.allowExternal`      | Don't require client label for connections                                        | `true`                         |
 | `networkPolicy.additionalRules`    | Additional NetworkPolicy rules                                                    | `nil`                          |

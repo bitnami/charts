@@ -204,7 +204,7 @@ web:
   image:
     registry: docker.io
     repository: bitnami/airflow
-    tag: 2.1.1-debian-10-r0
+    tag: 2.1.2-debian-10-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -392,7 +392,7 @@ scheduler:
   image:
     registry: docker.io
     repository: bitnami/airflow-scheduler
-    tag: 2.1.1-debian-10-r2
+    tag: 2.1.1-debian-10-r10
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -524,7 +524,7 @@ worker:
   image:
     registry: docker.io
     repository: bitnami/airflow-worker
-    tag: 2.1.1-debian-10-r2
+    tag: 2.1.1-debian-10-r9
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -732,7 +732,7 @@ git:
   image:
     registry: docker.io
     repository: bitnami/git
-    tag: 2.32.0-debian-10-r24
+    tag: 2.32.0-debian-10-r33
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1014,7 +1014,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/airflow-exporter
-    tag: 0.20210126.0-debian-10-r145
+    tag: 0.20210126.0-debian-10-r153
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
