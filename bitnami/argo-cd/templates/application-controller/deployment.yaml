@@ -1,5 +1,5 @@
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
-kind: {{ .Values.controller.enableStatefulSet | ternary "StatefulSet" "Deployment" }}
+kind: Deployment
 metadata:
   name: {{ include "argocd.application-controller" . }}
   namespace: {{ .Release.Namespace | quote }}
@@ -14,15 +14,7 @@ metadata:
 spec:
   replicas: {{ .Values.controller.replicaCount }}
   {{- if .Values.controller.updateStrategy }}
-  {{- if .Values.controller.enableStatefulSet }}
-  updateStrategy:
-  {{- else }}
-  strategy:
-  {{- end -}}
-  {{- toYaml .Values.controller.updateStrategy | nindent 4 }}
-  {{- end }}
-  {{- if  .Values.controller.enableStatefulSet }}
-  serviceName: {{ include "argocd.application-controller" . }}
+  strategy: {{- toYaml .Values.controller.updateStrategy | nindent 4 }}
   {{- end }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}

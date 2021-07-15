@@ -103,7 +103,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.serviceAccount.automountServiceAccountToken` | Automount service account token for the application controller service account                       | `true`               |
 | `controller.clusterAdminAccess`                          | Enable K8s cluster admin access for the application controller                                       | `true`               |
 | `controller.clusterRoleRules`                            | Use custom rules for the application controller's cluster role                                       | `[]`                 |
-| `controller.enableStatefulSet`                           | Use a Statefulset instead of a Deployment. Required for Ha capability.                               | `false`              |
 | `controller.logFormat`                                   | Format for the Argo CD application controller logs. Options: [text, json]                            | `text`               |
 | `controller.logLevel`                                    | Log level for the Argo CD application controller                                                     | `info`               |
 | `controller.ports.controller`                            | Argo CD application controller port number                                                           | `8082`               |

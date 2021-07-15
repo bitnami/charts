@@ -158,11 +158,6 @@ controller:
   ##
   clusterRoleRules: []
 
-  ## Deploy the application as a StatefulSet instead of a Deployment, required for HA capability.
-  ## @param controller.enableStatefulSet Use a Statefulset instead of a Deployment. Required for Ha capability.
-  ##
-  enableStatefulSet: false
-
   ## Argo CD application controller log format: text|json
   ## @param controller.logFormat Format for the Argo CD application controller logs. Options: [text, json]
   ##
