@@ -254,25 +254,12 @@ Argo CD: A valid .config entry is required in all clusterCrendials objects!
 {{- end -}}
 
 {{/*
-Validate secrets and configmaps
-*/}}
-{{- define "argocd.validateValues.configChecks" -}}
-{{- if not .Values.server.configEnabled -}}
-Argo CD: server.configEnabled is disabled, a config map called "argocd-cm" must exists in your namespace
-{{- end -}}
-{{- if not .Values.config.createExtraKnownHosts -}}
-Argo CD: config.createExtraKnownHosts is disabled, a secret called "argocd-ssh-known-hosts-cm" must exists in your namespace
-{{- end -}}
-{{- end -}}
-
-{{/*
 Compile all warnings into a single message.
 */}}
 {{- define "argocd.validateValues" -}}
 {{- $messages := list -}}
 {{- $messages := append $messages (include "argocd.validateValues.dex.config" .) -}}
 {{- $messages := append $messages (include "argocd.validateValues.clusterCredentials" .) -}}
-{{- $messages := append $messages (include "argocd.validateValues.configChecks" .) -}}
 {{- $messages := append $messages (include "argocd.validateValues.externalRedis" .) -}}
 {{- $messages := append $messages (include "argocd.validateValues.redis" .) -}}
 {{- $messages := without $messages "" -}}
