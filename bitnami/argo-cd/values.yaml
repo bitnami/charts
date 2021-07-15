@@ -168,9 +168,9 @@ controller:
   logLevel: info
 
   ## Argo CD application controller ports
-  ## @param controller.ports.controller Argo CD application controller port number
-  ## @param controller.ports.metrics Argo CD application controller metrics port number
-  ports:
+  ## @param controller.containerPorts.controller Argo CD application controller port number
+  ## @param controller.containerPorts.metrics Argo CD application controller metrics port number
+  containerPorts:
     controller: 8082
     metrics: 8082
 
@@ -855,10 +855,10 @@ server:
     ##
 
   ## Argo CD server container port
-  ## @param server.ports.http Argo CD server HTTP container port
-  ## @param server.ports.https Argo CD server HTTPS container port
-  ## @param server.ports.metrics Argo CD server metrics container port
-  ports:
+  ## @param server.containerPorts.http Argo CD server HTTP container port
+  ## @param server.containerPorts.https Argo CD server HTTPS container port
+  ## @param server.containerPorts.metrics Argo CD server metrics container port
+  containerPorts:
     http: 8080
     https: 8443
     metrics: 8083
@@ -1170,10 +1170,10 @@ repoServer:
   logLevel: info
 
   ## Argo CD repo server container port
-  ## @param repoServer.ports.repoServer Container port for Argo CD repo server
-  ## @param repoServer.ports.metrics Metrics port for Argo CD repo server
+  ## @param repoServer.containerPorts.repoServer Container port for Argo CD repo server
+  ## @param repoServer.containerPorts.metrics Metrics port for Argo CD repo server
   ##
-  ports:
+  containerPorts:
     repoServer: 8081
     metrics:
 
@@ -1505,11 +1505,11 @@ dex:
     annotations: {}
 
   ## Dex container ports
-  ## @param dex.ports.http Dex container HTTP port
-  ## @param dex.ports.grpc Dex gRPC port
-  ## @param dex.ports.metrics Dex metrics port
+  ## @param dex.containerPorts.http Dex container HTTP port
+  ## @param dex.containerPorts.grpc Dex gRPC port
+  ## @param dex.containerPorts.metrics Dex metrics port
   ##
-  ports:
+  containerPorts:
     http: 5556
     grpc: 5557
     metrics: 5558

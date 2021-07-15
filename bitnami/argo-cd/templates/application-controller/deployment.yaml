@@ -139,10 +139,10 @@ spec:
           {{- end }}
           ports:
             - name: controller
-              containerPort: {{ .Values.controller.ports.controller }}
+              containerPort: {{ .Values.controller.containerPorts.controller }}
               protocol: TCP
             - name: metrics
-              containerPort: {{ .Values.controller.ports.metrics }}
+              containerPort: {{ .Values.controller.containerPorts.metrics }}
               protocol: TCP
           env:
             {{- if and .Values.redis.enabled (include "argocd.redis.auth.enabled" .) }}
@@ -171,7 +171,7 @@ spec:
           livenessProbe:
             httpGet:
               path: /healthz
-              port: {{ .Values.controller.ports.controller }}
+              port: {{ .Values.controller.containerPorts.controller }}
             initialDelaySeconds: {{ .Values.controller.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.controller.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.controller.livenessProbe.timeoutSeconds }}
@@ -183,7 +183,7 @@ spec:
           {{- if .Values.controller.readinessProbe.enabled }}
           readinessProbe:
             tcpSocket:
-              port: {{ .Values.controller.ports.controller }}
+              port: {{ .Values.controller.containerPorts.controller }}
             initialDelaySeconds: {{ .Values.controller.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.controller.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.controller.readinessProbe.timeoutSeconds }}

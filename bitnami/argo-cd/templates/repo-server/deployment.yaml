@@ -146,11 +146,11 @@ spec:
           {{- end }}
           ports:
             - name: repo-server
-              containerPort: {{ .Values.repoServer.ports.repoServer }}
+              containerPort: {{ .Values.repoServer.containerPorts.repoServer }}
               protocol: TCP
             {{- if .Values.repoServer.metrics.enabled }}
             - name: metrics
-              containerPort: {{ .Values.repoServer.ports.metrics }}
+              containerPort: {{ .Values.repoServer.containerPorts.metrics }}
               protocol: TCP
             {{- end }}
           env:
@@ -179,7 +179,7 @@ spec:
           {{- if .Values.repoServer.livenessProbe.enabled }}
           livenessProbe:
             tcpSocket:
-              port: {{ .Values.repoServer.ports.repoServer }}
+              port: {{ .Values.repoServer.containerPorts.repoServer }}
             initialDelaySeconds: {{ .Values.repoServer.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.repoServer.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.repoServer.livenessProbe.timeoutSeconds }}
@@ -191,7 +191,7 @@ spec:
           {{- if .Values.repoServer.readinessProbe.enabled }}
           readinessProbe:
             tcpSocket:
-              port: {{ .Values.repoServer.ports.repoServer }}
+              port: {{ .Values.repoServer.containerPorts.repoServer }}
             initialDelaySeconds: {{ .Values.repoServer.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.repoServer.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.repoServer.readinessProbe.timeoutSeconds }}

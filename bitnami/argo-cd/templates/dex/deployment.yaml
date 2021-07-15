@@ -125,14 +125,14 @@ spec:
           {{- end }}
           ports:
             - name: http
-              containerPort: {{ .Values.dex.ports.http }}
+              containerPort: {{ .Values.dex.containerPorts.http }}
               protocol: TCP
             - name: grpc
-              containerPort: {{ .Values.dex.ports.grpc }}
+              containerPort: {{ .Values.dex.containerPorts.grpc }}
               protocol: TCP
             {{- if .Values.dex.metrics.enabled }}
             - name: metrics
-              containerPort: {{ .Values.dex.ports.metrics }}
+              containerPort: {{ .Values.dex.containerPorts.metrics }}
               protocol: TCP
             {{- end }}
           env:
@@ -155,7 +155,7 @@ spec:
           livenessProbe:
             httpGet:
               path: /healthz
-              port: {{ .Values.dex.ports.http }}
+              port: {{ .Values.dex.containerPorts.http }}
             initialDelaySeconds: {{ .Values.dex.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.dex.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.dex.livenessProbe.timeoutSeconds }}
@@ -168,7 +168,7 @@ spec:
           readinessProbe:
             httpGet:
               path: /healthz
-              port: {{ .Values.dex.ports.http }}
+              port: {{ .Values.dex.containerPorts.http }}
             initialDelaySeconds: {{ .Values.dex.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.dex.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.dex.readinessProbe.timeoutSeconds }}
