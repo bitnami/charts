@@ -919,7 +919,7 @@ queryFrontend:
     ##   key:
     ##   certificate:
     ##
-    secrets: [ ]
+    secrets: []
     ## @param queryFrontend.ingress.tls Create ingress TLS section
     ## When specifying cert-manager.io/cluster-issuer: nameOfClusterIssuer annotation, enable tls for ingress
     ##
