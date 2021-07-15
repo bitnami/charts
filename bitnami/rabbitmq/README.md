@@ -251,6 +251,7 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `clusterDomain`     | Default Kubernetes cluster domain                                    | `cluster.local`                |
 | `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set) | `nil`                          |
 | `commonAnnotations` | Annotations to add to all deployed objects                           | `{}` (evaluated as a template) |
+| `extraDeploy`       | Array of extra objects to deploy with the release                    | `[]`                           |
 
 ### RabbitMQ parameters
 
