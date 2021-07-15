@@ -2,6 +2,7 @@
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
@@ -36,8 +37,10 @@ commonAnnotations: {}
 extraDeploy: []
 
 ## @section Traffic Exposure Parameters
+##
 
 ## @section consourse Parameters
+##
 
 concourse:
   ## Bitnami Concour image
@@ -68,6 +71,7 @@ concourse:
 
 web:
   ## @param web.enabled Enable web
+  ##
   enabled: true
   ## @param web.replicaCount Number of web replicas to deploy
   ##
@@ -78,12 +82,13 @@ web:
   args: ["web"]
 
   ## @param web.baseUrl url
+  ##
   baseUrl: /
-  
+
   ## @param web.logLevel Minimum level of logs to see. Possible options: debug, info, error.
   ##
   logLevel: debug
-  
+
   ## @param web.clusterName A name for this Concourse cluster, to be displayed on the dashboard page.
   ##
   clusterName:
@@ -96,9 +101,10 @@ web:
   containerPort: 8080
 
   ## @param web.nameOverride provide a name to substitute for the full names of resources
+  ##
   nameOverride:
-  
-  ## @param web.peerAddress Network address of this web node, reachable by other web nodes. 
+
+  ## @param web.peerAddress Network address of this web node, reachable by other web nodes.
   ## Used for forwarded worker addresses. (default: $POD_IP)
   ##
   peerAddress:
@@ -109,7 +115,7 @@ web:
   ##
   ## Example: http://ci.concourse-ci.org
   ##
-  externalUrl: 
+  externalUrl:
 
   ## @param web.enableAcrossStep Enable the experimental across step to be used in jobs. The API is subject to change.
   ##
@@ -176,15 +182,17 @@ web:
   ## @param web.resources.requests The requested for the web containers
   ## resources:
   ##   limits: {}
-  ##   requests: 
+  ##   requests:
   ##     cpu: "100m"
   ##     memory: "128Mi"
+  ##
   resources:
     limits: {}
     requests: {}
-  
+
   ## @param web.tls.enabled enable serving HTTPS traffic directly through the web component.
   ## @param web.tls.containerPort on which to listen for HTTPS traffic.
+  ##
   tls:
     enabled: false
     containerPort: 443
@@ -204,8 +212,9 @@ web:
   podLabels: {}
   ## Where secrets should be mounted for the web container.
   ##
-  ## @param web.keySecretsPath 
+  ## @param web.keySecretsPath
   ## @param web.teamSecretsPath
+  ##
   keySecretsPath: "/concourse-keys"
   teamSecretsPath: "/team-authorized-keys"
 
@@ -225,8 +234,9 @@ web:
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
-  
+
   ## @param web.psp.create Specifies whether a PodSecurityPolicy should be created (set `psp.create` to `true` to enable it)
+  ##
   psp:
     create: false
 
@@ -271,17 +281,21 @@ web:
     gardenRequestTimeout:
 
   ## Force sending secure flag on http cookies
+  ##
   auth:
-    ## 
+    ##
     ## @param web.auth.cookieSecure use cookie secure true or flase
+    ##
     cookieSecure: false
 
     ## @param web.auth.duration Length of time for which tokens are valid. Afterwards, users will have to log back in.
     ## The value must be specified as Go duration values (e.g.: 30m or 24h).
+    ##
     duration: 24h
 
     ## @param web.auth.passwordConnector The connector to use for password authentication for `fly login -u ... -p ...`.
     ## Either "local" or "ldap". Defaults to "local".
+    ##
     passwordConnector:
 
     mainTeam:
@@ -313,11 +327,13 @@ web:
     userIDFieldPerConnector: ""
 
   ## @section web.ingress
+  ##
   ingress:
     ## @param web.ingress.enabled Ingress configuration enabled
     ## Ref: https://kubernetes.io/docs/user-guide/ingress/
     ##
     ## Enable Ingress.
+    ##
     enabled: false
 
     ## @param web.ingress.certManager Add annotations for cert-manager
@@ -328,12 +344,14 @@ web:
     ## Example:
     ##   kubernetes.io/ingress.class: nginx
     ##   kubernetes.io/tls-acme: 'true'
+    ##
     annotations: {}
-    
+
     ## Hostnames.
     ## Either `hosts` or `rulesOverride` must be provided if Ingress is enabled.
     ## `hosts` sets up the Ingress with default rules per provided hostname.
     ## @param web.ingress.hostname
+    ##
     hostname: concourse.local
 
     ## @param web.ingress.path The Path to Concourse
@@ -342,6 +360,7 @@ web:
     ## @param web.ingress.rulesOverride Ingress rules override
     ## Either `hosts` or `rulesOverride` must be provided if Ingress is enabled.
     ## `rulesOverride` allows the user to define the full set of ingress rules, for more complex Ingress setups.
+    ##
     rulesOverride:
 
     ## @param web.ingress.tls TLS configuration.
@@ -350,9 +369,11 @@ web:
     ##   - secretName: concourse-web-tls
     ##     hosts:
     ##       - concourse.domain.com
+    ##
     tls: false
 
     ## @param web.ingress.pathType Ingress Path type
+    ##
     pathType: ImplementationSpecific
 
     ## @param web.ingress.extraHosts The list of additional hostnames to be covered with this ingress record.
@@ -360,16 +381,18 @@ web:
     ## extraHosts:
     ## - name: concourse.local
     ##   path: /
+    ##
     extraHosts: []
-    
+
     ## @param web.ingress.extraTls The tls configuration for additional hostnames to be covered with this ingress record.
     ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
     ## extraTls:
     ## - hosts:
     ##     - concourse.local
     ##   secretName: concourse.local-tls
+    ##
     extraTls: []
-    
+
     ## @param web.ingress.secrets If you're providing your own certificates, please use this to add the certificates as secrets
     ## key and certificate should start with -----BEGIN CERTIFICATE----- or
     ## -----BEGIN RSA PRIVATE KEY-----
@@ -385,8 +408,6 @@ web:
     ##   certificate:
     ##
     secrets: []
-    
-
 
   ## @param web.podAnnotations Annotations for web pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
@@ -495,44 +516,55 @@ web:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: {}
-  
+
   ## @param web.existingSecret
+  ##
   existingSecret:
 
-
-## @section Worker 
+## @section Worker
+##
 worker:
   ## @param worker.enabled
+  ##
   enabled: true
-  
+
   ## @param worker.replicaCount
+  ##
   replicaCount: 2
   ## @param worker.mode Selects kind of Deployment. Valid Options are: statefulSet | deployment
   ## Using Deployment leads to ephemeral workers. Meaning workers do not
   ## share state between restarts
+  ##
 
   mode: deployment
 
   ## @param worker.workDir Directory in which to place container data.
+  ##
   workDir: /opt/bitnami/concourse
 
   ## @param worker.nameOverride provide a name to substitute for the full names of resources
+  ##
   nameOverride:
 
   ## @param worker.logLevel Minimum level of logs to see. Possible options: debug, info, error
+  ##
   logLevel: debug
 
   ## @param worker.keySecretsPath For managing where secrets should be mounted for worker agents
+  ##
   keySecretsPath: "/concourse-keys"
 
-  ## @param worker.args 
+  ## @param worker.args
+  ##
   args: ["worker"]
 
   ## @param worker.listenIp IP address on which to listen for the Garden server.
+  ##
 
   listenIp: 127.0.0.1
 
   ## @param worker.containerPort Port on which to listen for the Garden server.
+  ##
   containerPort: 7777
 
   ## Enable HorizontalPodAutoscaler for worker pods
@@ -543,21 +575,23 @@ worker:
   ## @param worker.autoscaling.minReplicas
   ## @param worker.autoscaling.builtInMetrics
   ## @param worker.autoscaling.customMetrics
-  autoscaling: 
+  ##
+  autoscaling:
     enabled: false
-    maxReplicas: 
+    maxReplicas:
     minReplicas:
     builtInMetrics: []
     customMetrics: []
-  
+
   ## Concourse Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions/
   ##
   pdb:
-    create: true 
-    ## @param worker.pdb.create 
+    create: true
+    ## @param worker.pdb.create
     ## @param worker.pdb.minAvailable Minimum number of workers available after an eviction
-    
+    ##
+
     ##
     minAvailable: 2
 
@@ -571,6 +605,7 @@ worker:
   ## @param worker.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
   ## @param worker.livenessProbe.failureThreshold Failure threshold for livenessProbe
   ## @param worker.livenessProbe.successThreshold Failure threshold for livenessProbe
+  ##
   livenessProbe:
     enabled: true
     failureThreshold: 5
@@ -625,10 +660,12 @@ worker:
     privileged: true
 
   ## @param worker.psp.create Specifies whether a PodSecurityPolicy should be created (set `psp.create` to `true` to enable it)
+  ##
   psp:
     create: false
 
   ## @param worker.podLabels
+  ##
   podLabels: {}
   ## @param worker.podAnnotations Annotations for web pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
@@ -641,7 +678,7 @@ worker:
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ## Allowed values: soft, hard
   ##
-  podAffinityPreset: ''
+  podAffinityPreset: ""
 
   ## @param worker.podAntiAffinityPreset Pod anti-affinity preset
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
@@ -661,12 +698,12 @@ worker:
     ## @param worker.nodeAffinityPreset.type Node affinity type
     ## Allowed values: soft, hard
     ##
-    type: ''
+    type: ""
     ## @param worker.nodeAffinityPreset.key Node label key to match
     ## E.g.
     ## key: "kubernetes.io/e2e-az-name"
     ##
-    key: ''
+    key: ""
     ## @param worker.nodeAffinityPreset.values [array] Node label values to match
     ## E.g.
     ## values:
@@ -691,13 +728,13 @@ worker:
   ## Note: this configuration supersedes the global tolerations configuration
   ##
   tolerations: []
-  
+
   ## @param worker.updateStrategy.type web statefulset strategy type
   ## StrategyType
   ## Can be set to RollingUpdate or OnDelete
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
-  updateStrategy: 
+  updateStrategy:
     type: RollingUpdate
   ## @param worker.priorityClassName web pods' priorityClassName
   ##
@@ -729,7 +766,7 @@ worker:
   ## sidecars:
   ##   - name: your-image-name
   ##     image: your-image
-  ##     imagePullPolicy: Always  
+  ##     imagePullPolicy: Always
   ##     ports:
   ##       - name: portname
   ##         containerPort: 1234
@@ -747,8 +784,9 @@ worker:
   initContainers: {}
 
   ## @param worker.existingSecret name of an existing secret resource containing the keys and the pub
-  existingSecret: 
-  
+  ##
+  existingSecret:
+
   baggageclaim:
     ## @param worker.baggageclaim.logLevel Minimum level of logs to see. Possible values: debug, info, error
     ##
@@ -796,8 +834,9 @@ worker:
     overlaysDir:
 
   ## @param worker.additionalCertificates
+  ##
   additionalCertificates: false
-    
+
   ## @param worker.affinity [array] Affinity for worker pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: this configuration supersedes the global affinity configuration
@@ -806,6 +845,7 @@ worker:
 
   ## If true, use a Persistent Volume Claim, If false, use emptyDir
   ## @param worker.persistence.enabled Enable persistence using Persistent Volume Claims
+  ##
   persistence:
     enabled: true
     ## Persistent Volume Storage Class
@@ -816,6 +856,7 @@ worker:
     ##   GKE, AWS & OpenStack)
     ##
     ## @param worker.persistence.storageClass Persistent Volume storage class
+    ##
     storageClass:
     ## @param worker.persistence.annotations Persistent Volume Claim annotations
     ##
@@ -823,13 +864,15 @@ worker:
     ## Persistent Volume Access Mode
     ##
     ## @param worker.persistence.accessModes [array] Persistent Volume access modes
+    ##
     accessModes:
       - ReadWriteOnce
     ## Persistent Volume size
     ##
     ## @param worker.persistence.size Persistent Volume size
+    ##
     size: 8Gi
-    
+
     ## @param worker.persistence.selector Additional labels to match for the PVC
     ## e.g:
     ## selector:
@@ -845,14 +888,16 @@ worker:
     existingClaim:
 
 ## @section Service
+##
 service:
-  web: 
+  web:
     ## @param service.web.type For minikube, set this to ClusterIP, elsewhere use LoadBalancer or NodePort
     ## Ref: https://kubernetes.io/docs/user-guide/services/#publishing-services---service-types
     ##
     type: ClusterIP
 
     ## @param service.web.port  Service HTTP port
+    ##
     port: 8080
 
     ## @param service.web.clusterIP When using `service.web.type: ClusterIP`, sets the user-specified cluster IP.
@@ -894,7 +939,7 @@ service:
     ## @param service.web.tlsNodePort When using `service.web.type: NodePort`, sets the nodePort for api tls
     ##
     tlsNodePort:
-    
+
   workerGateway:
     ## @param service.workerGateway.type For minikube, set this to ClusterIP, elsewhere use LoadBalancer or NodePort
     ## Ref: https://kubernetes.io/docs/user-guide/services/#publishing-services---service-types
@@ -905,8 +950,9 @@ service:
     ## Example: 172.217.1.174
     ##
     clusterIP:
-    
+
     ## @param service.workerGateway.port  Service HTTP port
+    ##
     port: 2222
 
     ## @param service.workerGateway.loadBalancerIP When using `service.workerGateway.type: LoadBalancer`, sets the user-specified load balancer IP.
@@ -940,6 +986,7 @@ service:
     nodePort:
 
 ## @section Init Container Parameters
+##
 
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
@@ -987,22 +1034,22 @@ volumePermissions:
   containerSecurityContext:
     runAsUser: 0
 
-
 ## @section Other Parameters
 ## RBAC configuration
+##
 rbac:
   ## @param rbac.create Specifies whether RBAC resources should be created
   ##
   create: true
 
-
 ## For managing secrets using Helm
+##
 secrets:
   ## @param secrets.create Create the secret resource from the following values. Set this to
   ## false to manage these secrets outside Helm.
   ##
   create: true
-  
+
   localAuth:
     ## @param secrets.localAuth.enabled the use of local authentication (basic auth).
     ## Once enabled, users configured through `local-users` (secret)
@@ -1074,6 +1121,7 @@ secrets:
     -----END RSA PRIVATE KEY-----
 
   ## @param secrets.hostKeyPub Concourse Host Keys.
+  ##
   hostKeyPub: |-
     ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDYBQ9fG6IML+qsFaMh1Pl+81wyUwRilHdfhItAiAsLVQsOwI5+V4pn5aLhHPBuRQqIqYmbkZ7I1VUIN1+90PVJ3X7l9qqanb85AHMtLujw1j9u0zDyH2XHgpUloknUQzUSLIZjjU3Hn3Uo/XikF+vT8104isO7Ym8Xp7sIcRuvOQ3nuRsFVCRogxpLTVHD/k57rwYVqWWLaKLwvx01ZVXOq4GHk/BVaKa9ODC/dNgbZMfwvVVXuf7/NFGmSMyXb49Si4aoP4Gn7jAX6GngBbm/bgKqO0skQy/ggQm/YVF+s5q4EhleMBLVJKD1VpM5LeLDFpiu/y4bVd8wUcgK+QQ9 Concourse
 
@@ -1141,8 +1189,8 @@ secrets:
     DxpOSF+BR71Jx3sxvIdCODNTtm645j5yrZVnJAuMPofo5XFmunDoJA==
     -----END RSA PRIVATE KEY-----
 
-  
   ## @param secrets.workerKeyPub Concourse Worker Keys.
+  ##
   workerKeyPub: |-
     ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC496FSYFcBAKgDtMsBAJiF/6/NxlXKP5UZecyEsedYuTt1GOgJTwaA1qZ1LmHsbfLDE68oDdiM4uvxfI4wtLhz57w3u0jOUxZ2JeF7SVwEf1nVqLn4Gh/f8GUNQGSyIp1zUD5Bx9fq0PAyQ47mt7Ufi84rcf8LKl7nzAIHTcdg2BvTkQN9bUGPaq/Pb1W2bKPAQy4OzXTSIyrAJ89TH2jFeaZfyxQFGbD9jVHH/yl0oiMrDeaRYgccE5II+KY7WoLjsBry/9Qf2ERELKTK4UeIGIqWci9lab1ti+GxFPPiC3krNFjo4jShV4eUs4cNIrjwNrxVaKPXmU6o7Y3Hpayx Concourse
 
@@ -1152,6 +1200,7 @@ secrets:
 ## @param postgresql.postgresqlUsername Airflow Postgresql username
 ## @param postgresql.postgresqlDatabase Airflow Postgresql database
 ## @param postgresql.existingSecret Name of an existing secret containing the PostgreSQL password ('postgresql-password' key)
+##
 postgresql:
   enabled: true
   postgresqlUsername: bn_concourse
@@ -1170,6 +1219,7 @@ postgresql:
 ## @param externalDatabase.existingSecretPasswordKey Name of an existing secret key containing the DB password
 ## @param externalDatabase.database Database name
 ## @param externalDatabase.port Database port number
+##
 externalDatabase:
   ## All of these values are only used when postgresql.enabled is set to false
   ## Database host
