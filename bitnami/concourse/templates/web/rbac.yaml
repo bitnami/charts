@@ -21,7 +21,7 @@ rules:
 {{- end }}
 
 ---
-{{- if .Values.web.podSecurityPolicy.create }}
+{{- if .Values.web.psp.create }}
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:

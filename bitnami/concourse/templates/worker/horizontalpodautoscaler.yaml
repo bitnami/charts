@@ -14,10 +14,10 @@ spec:
   maxReplicas: {{ .Values.worker.autoscaling.maxReplicas }}
   metrics:
     {{- if .Values.worker.autoscaling.builtInMetrics }}
-{{ toYaml .Values.worker.autoscaling.builtInMetrics | indent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.worker.autoscaling.builtInMetrics "context" $) | nindent 4 }}
     {{- end }}
     {{- if .Values.worker.autoscaling.customMetrics }}
-{{ toYaml .Values.worker.autoscaling.customMetrics | indent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.worker.autoscaling.customMetrics "context" $) | nindent 4 }}
     {{- end }}
   scaleTargetRef:
     apiVersion: {{ template "concourse.deployment.apiVersion" . }}

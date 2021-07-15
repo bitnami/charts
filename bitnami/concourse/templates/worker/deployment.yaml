@@ -114,9 +114,9 @@ spec:
             - name: CONCOURSE_TSA_HOST
               value: "{{ template "concourse.web.tsa.address" . -}}"
             {{- end }}
-            {{- if .Values.worker.lisentIp }}
+            {{- if .Values.worker.listenIp }}
             - name: CONCOURSE_BIND_IP
-              value: {{ .Values.worker.lisentIp | quote }}
+              value: {{ .Values.worker.listenIp | quote }}
             {{- end }}
             {{- if .Values.worker.containerPort }}
             - name: CONCOURSE_BIND_PORT
@@ -126,17 +126,17 @@ spec:
             - name: CONCOURSE_BAGGAGECLAIM_LOG_LEVEL
               value: {{ .Values.worker.baggageclaim.logLevel | quote }}
             {{- end }}
-            {{- if .Values.worker.baggageclaim.lisentIp }}
+            {{- if .Values.worker.baggageclaim.listenIp }}
             - name: CONCOURSE_BAGGAGECLAIM_BIND_IP
-              value: {{ .Values.worker.baggageclaim.lisentIp | quote }}
+              value: {{ .Values.worker.baggageclaim.listenIp | quote }}
             {{- end }}
             {{- if .Values.worker.baggageclaim.containerPort }}
             - name: CONCOURSE_BAGGAGECLAIM_BIND_PORT
               value: {{ .Values.worker.baggageclaim.containerPort | quote }}
             {{- end }}
-            {{- if .Values.worker.baggageclaim.debugLisentIp }}
+            {{- if .Values.worker.baggageclaim.debugListenIp }}
             - name: CONCOURSE_BAGGAGECLAIM_DEBUG_BIND_IP
-              value: {{ .Values.worker.baggageclaim.debugLisentIp | quote }}
+              value: {{ .Values.worker.baggageclaim.debugListenIp | quote }}
             {{- end }}
             {{- if .Values.worker.baggageclaim.debugContainerPort }}
             - name: CONCOURSE_BAGGAGECLAIM_DEBUG_BIND_PORT
@@ -183,9 +183,9 @@ spec:
             httpGet:
               path: "/"
               port: worker-hc
-            initialDelaySeconds: 10
-            periodSeconds: 15
-            timeoutSeconds: 3
+            initialDelaySeconds: {{ .Values.worker.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.worker.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.worker.livenessProbe.timeoutSeconds }}
             failureThreshold: {{ .Values.worker.livenessProbe.failureThreshold }}
             successThreshold: {{ .Values.worker.livenessProbe.successThreshold }}
           {{- else if .Values.worker.customLivenessProbe }}
@@ -210,7 +210,7 @@ spec:
       volumes:
         - name: concourse-keys
           secret:
-            secretName: {{ template "concourse.worker.fullname" . }}
+            secretName: {{ include "concourse.worker.secretName" . }}
             defaultMode: 0400
             items:
               - key: host-key-pub

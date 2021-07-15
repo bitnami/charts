@@ -7,25 +7,25 @@
 
 
   * From outside the cluster, run these commands in the same shell:
-    {{- if contains "NodePort" .Values.web.service.type }}
+    {{- if contains "nodePort" .Values.service.web.type }}
 
     export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "concourse.web.fullname" . }})
     export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
     echo http://$NODE_IP:$NODE_PORT
-    {{- else if contains "LoadBalancer" .Values.web.service.type }}
+    {{- else if contains "LoadBalancer" .Values.service.web.type }}
 
      NOTE: It may take a few minutes for the LoadBalancer IP to be available.
            You can watch the status of by running 'kubectl get svc -w {{ template "concourse.web.fullname" . }}'
 
     echo http://$SERVICE_IP:{{ .Values.web.containerPort }}
-    {{- else if contains "ClusterIP"  .Values.web.service.type }}
+    {{- else if contains "ClusterIP"  .Values.service.web.type }}
 
     export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app={{ template "concourse.web.fullname" . }}" -o jsonpath="{.items[0].metadata.name}")
     echo "Visit http://127.0.0.1:8080 to use Concourse"
     kubectl port-forward --namespace {{ .Release.Namespace }} $POD_NAME 8080:{{ .Values.web.containerPort }}
     {{- end }}
 
-  echo Username : Password  $(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "concourse.secretName" . }} -o jsonpath="{.data.local-users}" | base64 --decode)
+  echo Username : Password  $(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "concourse.web.secretName" . }} -o jsonpath="{.data.local-users}" | base64 --decode)
 
 {{ include "concourse.validateValues" . }}
 

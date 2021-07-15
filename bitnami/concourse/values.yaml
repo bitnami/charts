@@ -87,9 +87,9 @@ web:
   ## @param web.clusterName A name for this Concourse cluster, to be displayed on the dashboard page.
   ##
   clusterName:
-  ## @param web.lisentIp IP address on which to listen for HTTP traffic (web UI and API).
+  ## @param web.listenIp IP address on which to listen for HTTP traffic (web UI and API).
   ##
-  lisentIp: 0.0.0.0
+  listenIp: 0.0.0.0
 
   ## @param web.containerPort Port on which to listen for HTTP traffic (web UI and API).
   ##
@@ -111,20 +111,44 @@ web:
   ##
   externalUrl: 
 
+  ## @param web.enableAcrossStep Enable the experimental across step to be used in jobs. The API is subject to change.
+  ##
+  enableAcrossStep: false
+
+  ## @param web.enablePipelineInstances Enable the creation of instanced pipelines.
+  ##
+  enablePipelineInstances: false
+
+  ## @param web.enableCacheStreamedVolumes Enable caching streamed resource volumes on the destination worker.
+  ##
+  enableCacheStreamedVolumes: false
+
   ## Configure extra options for web containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param web.livenessProbe.enabled Enable livenessProbe on web nodes
   ## @skip web.livenessProbe.httpGet
+  ## @param web.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param web.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param web.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
   ## @param web.livenessProbe.failureThreshold Failure threshold for livenessProbe
   ## @param web.livenessProbe.successThreshold Success threshold for livenessProbe
   ##
   livenessProbe:
     enabled: true
+    httpGet:
+      path: /api/v1/info
+      port: http
+    initialDelaySeconds: 30
+    periodSeconds: 15
+    timeoutSeconds: 3
     failureThreshold: 1
     successThreshold: 1
 
   ## @param web.readinessProbe.enabled Enable readinessProbe on web nodes
   ## @skip web.readinessProbe.httpGet
+  ## @param web.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param web.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param web.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
   ## @param web.readinessProbe.failureThreshold Failure threshold for readinessProbe
   ## @param web.readinessProbe.successThreshold Success threshold for readinessProbe
   ##
@@ -133,6 +157,9 @@ web:
     httpGet:
       path: /api/v1/info
       port: http
+    initialDelaySeconds: 30
+    periodSeconds: 15
+    timeoutSeconds: 3
     failureThreshold: 1
     successThreshold: 1
 
@@ -199,96 +226,9 @@ web:
     enabled: true
     runAsUser: 1001
   
-  ## @param web.podSecurityPolicy.create Specifies whether a PodSecurityPolicy should be created (set `podSecurityPolicy.create` to `true` to enable it)
-  podSecurityPolicy:
+  ## @param web.psp.create Specifies whether a PodSecurityPolicy should be created (set `psp.create` to `true` to enable it)
+  psp:
     create: false
-
-  service: 
-    ## @param web.service.type For minAvailableikube, set this to ClusterIP, elsewhere use LoadBalancer or NodePort
-    ## Ref: https://kubernetes.io/docs/user-guide/services/#publishing-services---service-types
-    ##
-    type: ClusterIP
-
-    ## @param web.service.clusterIP When using `web.service.type: ClusterIP`, sets the user-specified cluster IP.
-    ## Example: 172.217.1.174
-    ##
-    clusterIP:
-
-    ## @param web.service.loadBalancerIP  When using `web.service.type: LoadBalancer`, sets the user-specified load balancer IP.
-    ## Example: 172.217.1.174
-    ##
-    loadBalancerIP:
-
-    ## @param web.service.labels Additional Labels to be added to the web api service.
-    ##
-    labels:
-
-    ## @param web.service.annotations Annotations to be added to the web api service.
-    ##
-    ##
-    ## When using `web.service.type: LoadBalancer` in AWS, enable HTTPS with an ACM cert:
-    ##
-    ##   service.beta.kubernetes.io/aws-load-balancer-ssl-cert: "arn:aws:acm:eu-west-1:123456789:certificate/abc123-abc123-abc123-abc123"
-    ##   service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "http"
-    ##   service.beta.kubernetes.io/aws-load-balancer-backend-port: "api"
-    ##   service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "443"
-    ##
-    annotations: {}
-
-    ## @param web.service.loadBalancerSourceRanges When using `web.service.type: LoadBalancer`, restrict access to the load balancer to particular IPs
-    ## Example:
-    ##   - 192.168.1.10/32
-    ##
-    loadBalancerSourceRanges:
-
-    ## @param web.service.NodePort When using `web.service.type: NodePort`, sets the nodePort for api
-    ##
-    NodePort:
-
-    ## @param web.service.tlsNodePort When using `web.service.type: NodePort`, sets the nodePort for api tls
-    ##
-    tlsNodePort:
-    
-    workerGateway:
-      ## @param web.service.workerGateway.type For minikube, set this to ClusterIP, elsewhere use LoadBalancer or NodePort
-      ## Ref: https://kubernetes.io/docs/user-guide/services/#publishing-services---service-types
-      ##
-      type: ClusterIP
-
-      ## @param web.service.workerGateway.clusterIP When using `web.service.workerGateway.type: ClusterIP`, sets the user-specified cluster IP.
-      ## Example: 172.217.1.174
-      ##
-      clusterIP:
-
-      ## @param web.service.workerGateway.loadBalancerIP When using `web.service.workerGateway.type: LoadBalancer`, sets the user-specified load balancer IP.
-      ## Example: 172.217.1.174
-      ##
-      loadBalancerIP:
-
-      ## @param web.service.workerGateway.labels Additional Labels to be added to the web workerGateway service.
-      ##
-      labels:
-
-      ## @param web.service.workerGateway.annotations Annotations to be added to the web workerGateway service.
-      ##
-      ## When using `web.service.workerGateway.type: LoadBalancer` in AWS, enable HTTPS with an ACM cert:
-      ##
-      ##   service.beta.kubernetes.io/aws-load-balancer-ssl-cert: "arn:aws:acm:eu-west-1:123456789:certificate/abc123-abc123-abc123-abc123"
-      ##   service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "http"
-      ##   service.beta.kubernetes.io/aws-load-balancer-backend-port: "http"
-      ##   service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "443"
-      ##
-      annotations: {}
-
-      ## @param web.service.workerGateway.loadBalancerSourceRanges  When using `web.service.workerGateway.type: LoadBalancer`, restrict access to the load balancer to particular IPs
-      ## Example:
-      ##   - 192.168.1.10/32
-      ##
-      loadBalancerSourceRanges:
-
-      ## @param web.service.workerGateway.NodePort When using `web.service.workerGateway.type: NodePort`, sets the nodePort for tsa
-      ##
-      NodePort:
 
   tsa:
     ## Enable this flag in order to customize the `client_id` and
@@ -298,17 +238,17 @@ web:
     ##
     logLevel: debug
 
-    ## @param web.tsa.lisentIp IP address on which to listen for SSH.
+    ## @param web.tsa.listenIp IP address on which to listen for SSH.
     ##
-    lisentIp: 0.0.0.0
+    listenIp: 0.0.0.0
 
     ## @param web.tsa.containerPort Port on which to listen for SSH.
     ##
     containerPort: 2222
 
-    ## @param web.tsa.debugLisentIp IP address on which to listen for the pprof debugger endpoints (default: 127.0.0.1)
+    ## @param web.tsa.debugListenIp IP address on which to listen for the pprof debugger endpoints (default: 127.0.0.1)
     ##
-    debugLisentIp: 127.0.0.1
+    debugListenIp: 127.0.0.1
 
     ## @param web.tsa.debugContainerPort Port on which to listen for TSA pprof server.
     ##
@@ -378,7 +318,11 @@ web:
     ## Ref: https://kubernetes.io/docs/user-guide/ingress/
     ##
     ## Enable Ingress.
-    enabled: true
+    enabled: false
+
+    ## @param web.ingress.certManager Add annotations for cert-manager
+    ##
+    certManager: false
 
     ## @param web.ingress.annotations Annotations to be added to the web ingress.
     ## Example:
@@ -584,9 +528,9 @@ worker:
   ## @param worker.args 
   args: ["worker"]
 
-  ## @param worker.lisentIp IP address on which to listen for the Garden server.
+  ## @param worker.listenIp IP address on which to listen for the Garden server.
 
-  lisentIp: 127.0.0.1
+  listenIp: 127.0.0.1
 
   ## @param worker.containerPort Port on which to listen for the Garden server.
   containerPort: 7777
@@ -595,25 +539,16 @@ worker:
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
   ##
   ## @param worker.autoscaling.enabled
+  ## @param worker.autoscaling.maxReplicas
+  ## @param worker.autoscaling.minReplicas
+  ## @param worker.autoscaling.builtInMetrics
+  ## @param worker.autoscaling.customMetrics
   autoscaling: 
     enabled: false
-  #      maxReplicas: 1
-  #      minReplicas: 1
-  #      builtInMetrics:
-  #        - type: Resource
-  #          resource:
-  #            name: cpu
-  #            target:
-  #              type: Utilization
-  #              averageUtilization: 80
-  #      customMetrics:
-  #        - type: Pods
-  #          pods:
-  #            metric:
-  #              name: concourse_workers_containers
-  #            target:
-  #              type: AverageValue
-  #              averageValue: 180
+    maxReplicas: 
+    minReplicas:
+    builtInMetrics: []
+    customMetrics: []
   
   ## Concourse Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions/
@@ -631,14 +566,21 @@ worker:
   ##
   ## @param worker.livenessProbe.enabled Enable livenessProbe on worker nodes
   ## @skip worker.livenessProbe.httpGet
+  ## @param worker.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
   ## @param worker.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param worker.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
   ## @param worker.livenessProbe.failureThreshold Failure threshold for livenessProbe
   ## @param worker.livenessProbe.successThreshold Failure threshold for livenessProbe
   livenessProbe:
     enabled: true
     failureThreshold: 5
+    initialDelaySeconds: 10
     periodSeconds: 15
+    timeoutSeconds: 3
     successThreshold: 1
+    httpGet:
+      path: /
+      port: worker-hc
 
   ## @param worker.readinessProbe Configures the readiness probes.
   ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/
@@ -682,8 +624,8 @@ worker:
     enabled: true
     privileged: true
 
-  ## @param worker.podSecurityPolicy.create Specifies whether a PodSecurityPolicy should be created (set `podSecurityPolicy.create` to `true` to enable it)
-  podSecurityPolicy:
+  ## @param worker.psp.create Specifies whether a PodSecurityPolicy should be created (set `psp.create` to `true` to enable it)
+  psp:
     create: false
 
   ## @param worker.podLabels
@@ -812,17 +754,17 @@ worker:
     ##
     logLevel: info
 
-    ## @param worker.baggageclaim.lisentIp IP address on which to listen for API traffic.
+    ## @param worker.baggageclaim.listenIp IP address on which to listen for API traffic.
     ##
-    lisentIp: 127.0.0.1
+    listenIp: 127.0.0.1
 
     ## @param worker.baggageclaim.containerPort Port on which to listen for API traffic.
     ##
     containerPort: 7788
 
-    ## @param worker.baggageclaim.debugLisentIp IP address on which to listen for the pprof debugger endpoints.
+    ## @param worker.baggageclaim.debugListenIp IP address on which to listen for the pprof debugger endpoints.
     ##
-    debugLisentIp: 127.0.0.1
+    debugListenIp: 127.0.0.1
 
     ## @param worker.baggageclaim.debugContainerPort Port on which to listen for baggageclaim pprof server.
     ##
@@ -887,6 +829,115 @@ worker:
     ##
     ## @param worker.persistence.size Persistent Volume size
     size: 8Gi
+    
+    ## @param worker.persistence.selector Additional labels to match for the PVC
+    ## e.g:
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    ##
+    selector: {}
+
+    ## @param worker.persistence.existingClaim A manually managed Persistent Volume Claim
+    ## Requires persistence.enabled: true
+    ## If defined, PVC must be created manually before volume will be bound
+    ##
+    existingClaim:
+
+## @section Service
+service:
+  web: 
+    ## @param service.web.type For minikube, set this to ClusterIP, elsewhere use LoadBalancer or NodePort
+    ## Ref: https://kubernetes.io/docs/user-guide/services/#publishing-services---service-types
+    ##
+    type: ClusterIP
+
+    ## @param service.web.port  Service HTTP port
+    port: 8080
+
+    ## @param service.web.clusterIP When using `service.web.type: ClusterIP`, sets the user-specified cluster IP.
+    ## Example: 172.217.1.174
+    ##
+    clusterIP:
+
+    ## @param service.web.loadBalancerIP  When using `service.web.type: LoadBalancer`, sets the user-specified load balancer IP.
+    ## Example: 172.217.1.174
+    ##
+    loadBalancerIP:
+
+    ## @param service.web.labels Additional Labels to be added to the web api service.
+    ##
+    labels:
+
+    ## @param service.web.annotations Annotations to be added to the web api service.
+    ##
+    ##
+    ## When using `service.web.type: LoadBalancer` in AWS, enable HTTPS with an ACM cert:
+    ##
+    ##   service.beta.kubernetes.io/aws-load-balancer-ssl-cert: "arn:aws:acm:eu-west-1:123456789:certificate/abc123-abc123-abc123-abc123"
+    ##   service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "http"
+    ##   service.beta.kubernetes.io/aws-load-balancer-backend-port: "api"
+    ##   service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "443"
+    ##
+    annotations: {}
+
+    ## @param service.web.loadBalancerSourceRanges When using `service.web.type: LoadBalancer`, restrict access to the load balancer to particular IPs
+    ## Example:
+    ##   - 192.168.1.10/32
+    ##
+    loadBalancerSourceRanges:
+
+    ## @param service.web.nodePort When using `service.web.type: NodePort`, sets the nodePort for api
+    ##
+    nodePort:
+
+    ## @param service.web.tlsNodePort When using `service.web.type: NodePort`, sets the nodePort for api tls
+    ##
+    tlsNodePort:
+    
+  workerGateway:
+    ## @param service.workerGateway.type For minikube, set this to ClusterIP, elsewhere use LoadBalancer or NodePort
+    ## Ref: https://kubernetes.io/docs/user-guide/services/#publishing-services---service-types
+    ##
+    type: ClusterIP
+
+    ## @param service.workerGateway.clusterIP When using `service.workerGateway.type: ClusterIP`, sets the user-specified cluster IP.
+    ## Example: 172.217.1.174
+    ##
+    clusterIP:
+    
+    ## @param service.workerGateway.port  Service HTTP port
+    port: 2222
+
+    ## @param service.workerGateway.loadBalancerIP When using `service.workerGateway.type: LoadBalancer`, sets the user-specified load balancer IP.
+    ## Example: 172.217.1.174
+    ##
+    loadBalancerIP:
+
+    ## @param service.workerGateway.labels Additional Labels to be added to the web workerGateway service.
+    ##
+    labels:
+
+    ## @param service.workerGateway.annotations Annotations to be added to the web workerGateway service.
+    ##
+    ## When using `service.workerGateway.type: LoadBalancer` in AWS, enable HTTPS with an ACM cert:
+    ##
+    ##   service.beta.kubernetes.io/aws-load-balancer-ssl-cert: "arn:aws:acm:eu-west-1:123456789:certificate/abc123-abc123-abc123-abc123"
+    ##   service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "http"
+    ##   service.beta.kubernetes.io/aws-load-balancer-backend-port: "http"
+    ##   service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "443"
+    ##
+    annotations: {}
+
+    ## @param service.workerGateway.loadBalancerSourceRanges  When using `service.workerGateway.type: LoadBalancer`, restrict access to the load balancer to particular IPs
+    ## Example:
+    ##   - 192.168.1.10/32
+    ##
+    loadBalancerSourceRanges:
+
+    ## @param service.workerGateway.nodePort When using `service.workerGateway.type: NodePort`, sets the nodePort for tsa
+    ##
+    nodePort:
 
 ## @section Init Container Parameters
 

@@ -59,7 +59,7 @@ spec:
       securityContext: {{- omit .Values.worker.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       initContainers:
-        {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
+        {{- if and .Values.volumePermissions.enabled .Values.worker.persistence.enabled }}
         - name: volume-permissions
           image: {{ include "concourse.volumePermissions.image" . }}
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
@@ -116,9 +116,9 @@ spec:
             - name: CONCOURSE_TSA_HOST
               value: "{{ template "concourse.web.tsa.address" . -}}"
             {{- end }}
-            {{- if .Values.worker.lisentIp }}
+            {{- if .Values.worker.listenIp }}
             - name: CONCOURSE_BIND_IP
-              value: {{ .Values.worker.lisentIp | quote }}
+              value: {{ .Values.worker.listenIp | quote }}
             {{- end }}
             {{- if .Values.worker.containerPort }}
             - name: CONCOURSE_BIND_PORT
@@ -131,9 +131,9 @@ spec:
             - name: CONCOURSE_BAGGAGECLAIM_LOG_LEVEL
               value: {{ .Values.worker.baggageclaim.logLevel | quote }}
             {{- end }}
-            {{- if .Values.worker.baggageclaim.lisentIp }}
+            {{- if .Values.worker.baggageclaim.listenIp }}
             - name: CONCOURSE_BAGGAGECLAIM_BIND_IP
-              value: {{ .Values.worker.baggageclaim.lisentIp | quote }}
+              value: {{ .Values.worker.baggageclaim.listenIp | quote }}
             {{- end }}
             {{- if .Values.worker.baggageclaim.containerPort }}
             - name: CONCOURSE_BAGGAGECLAIM_BIND_PORT
@@ -186,8 +186,8 @@ spec:
           {{- if .Values.worker.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
-              path: {{ .Values.worker.livenessProbe.path }}
-              port: {{ .Values.worker.livenessProbe.port }}
+              path: {{ .Values.worker.livenessProbe.httpGet.path }}
+              port: {{ .Values.worker.livenessProbe.httpGet.port }}
             initialDelaySeconds: 10
             periodSeconds: 15
             timeoutSeconds: 3
@@ -214,7 +214,7 @@ spec:
       volumes:
         - name: concourse-keys
           secret:
-            secretName: {{ template "concourse.worker.fullname" . }}
+            secretName: {{ include "concourse.worker.secretName" .}}
             defaultMode: 0400
             items:
               - key: host-key-pub
@@ -225,25 +225,24 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.worker.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
   {{- if not .Values.worker.persistence.enabled }}
-          - name: data
-           emptyDir: {}
+        - name: concourse-work-dir
+          emptyDir: {}
   {{- else }}
   volumeClaimTemplates:
     - metadata:
         name: concourse-work-dir
       spec:
         accessModes:
-          - {{ .Values.worker.persistence.accessMode | quote }}
+        {{- range .Values.worker.persistence.accessModes }}
+          - {{ . | quote }}
+        {{- end }}
         resources:
           requests:
             storage: {{ .Values.worker.persistence.size | quote }}
-      {{- if .Values.worker.persistence.storageClass }}
-      {{- if (eq "-" .Values.worker.persistence.storageClass) }}
-        storageClassName: ""
-      {{- else }}
-        storageClassName: "{{ .Values.persistence.worker.storageClass }}"
-      {{- end }}
-      {{- end }}
+        {{- if .Values.worker.persistence.selector }}
+        selector: {{- include "common.tplvalues.render" ( dict "value" .Values.worker.persistence.selector "context" $) | nindent 10 }}
+        {{- end }}
+        {{ include "common.storage.class" (dict "persistence" .Values.worker.persistence "global" .Values.global) }}
   {{- end }}
 {{- end }}
 {{- end }}

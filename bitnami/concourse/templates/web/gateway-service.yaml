@@ -13,25 +13,25 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  type: {{ .Values.web.service.workerGateway.type }}
-  {{- if .Values.web.service.workerGateway.loadBalancerSourceRanges }}
+  type: {{ .Values.service.workerGateway.type }}
+  {{- if .Values.service.workerGateway.loadBalancerSourceRanges }}
   loadBalancerSourceRanges:
-    {{- range .Values.web.service.workerGateway.loadBalancerSourceRanges }}
+    {{- range .Values.service.workerGateway.loadBalancerSourceRanges }}
     - {{ . }}
     {{- end }}
   {{- end }}
-  {{- if and (eq "ClusterIP" .Values.web.service.workerGateway.type) .Values.web.service.workerGateway.clusterIP }}
-  {{ with .Values.web.service.workerGateway.clusterIP }}clusterIP: {{quote . }}{{ end}}
+  {{- if and (eq "ClusterIP" .Values.service.workerGateway.type) .Values.service.workerGateway.clusterIP }}
+  {{ with .Values.service.workerGateway.clusterIP }}clusterIP: {{quote . }}{{ end}}
   {{- end }}
-  {{- if and (eq "LoadBalancer" .Values.web.service.workerGateway.type) .Values.web.service.workerGateway.loadBalancerIP }}
-  loadBalancerIP: {{ .Values.web.service.workerGateway.loadBalancerIP }}
+  {{- if and (eq "LoadBalancer" .Values.service.workerGateway.type) .Values.service.workerGateway.loadBalancerIP }}
+  loadBalancerIP: {{ .Values.service.workerGateway.loadBalancerIP }}
   {{- end }}
   ports:
     - name: http-worker-gateway
-      port: {{ .Values.web.tsa.containerPort }}
+      port: {{ .Values.service.workerGateway.port }}
       targetPort: tsa
-      {{- if and (eq "NodePort" .Values.web.service.workerGateway.type) .Values.web.service.workerGateway.NodePort }}
-      nodePort: {{ .Values.web.service.workerGateway.NodePort}}
+      {{- if and (eq "nodePort" .Values.service.workerGateway.type) .Values.service.workerGateway.nodePort }}
+      nodePort: {{ .Values.service.workerGateway.nodePort}}
       {{- end }}
   selector:
     app.kubernetes.io/component: web

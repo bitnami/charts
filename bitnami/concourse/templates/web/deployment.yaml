@@ -101,15 +101,15 @@ spec:
             - name: CONCOURSE_BIND_PORT
               value: {{ .Values.web.containerPort | quote }}
             {{- end }}
-            {{- if .Values.web.tsa.lisentIp }}
+            {{- if .Values.web.tsa.listenIp }}
             - name: CONCOURSE_TSA_BIND_IP
-              value: {{ .Values.web.tsa.lisentIp | quote }}
+              value: {{ .Values.web.tsa.listenIp | quote }}
             {{- end }}
             - name: CONCOURSE_TSA_BIND_PORT
               value: {{ .Values.web.tsa.containerPort | quote }}
-            {{- if .Values.web.tsa.debugLisentIp }}
+            {{- if .Values.web.tsa.debugListenIp }}
             - name: CONCOURSE_TSA_DEBUG_BIND_IP
-              value: {{ .Values.web.tsa.debugLisentIp | quote }}
+              value: {{ .Values.web.tsa.debugListenIp | quote }}
             {{- end }}
             {{- if .Values.web.tsa.debugContainerPort }}
             - name: CONCOURSE_TSA_DEBUG_BIND_PORT
@@ -189,7 +189,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "concourse.postgresql.secretName" . }}
-                  key: {{ include "concourse.database.existingsecret.key" . }}
+                  key: {{ include "concourse.database.existingsecret.key" .}}
             - name: CONCOURSE_POSTGRES_DATABASE
               value: {{ .Values.postgresql.postgresqlDatabase | quote }}
             {{- if and (not .Values.postgresql.enabled) (.Values.externalDatabase.host) }}
@@ -223,9 +223,9 @@ spec:
               containerPort: {{ .Values.web.containerPort }}
             - name: tsa
               containerPort: {{ .Values.web.tsa.containerPort }}
-            {{- if .Values.web.debugContainerPort }}
+            {{- if .Values.web.tsa.debugContainerPort }}
             - name: http-debug
-              containerPort: {{ .Values.web.debugContainerPort }}
+              containerPort: {{ .Values.web.tsa.debugContainerPort }}
             {{- end }}
           envFrom:
             {{- if .Values.web.extraEnvVarsCM }}
@@ -257,9 +257,9 @@ spec:
             httpGet:
               path: {{ .Values.web.baseUrl | trimSuffix "/" }}/api/v1/info
               port: http
-            initialDelaySeconds: 10
-            periodSeconds: 15
-            timeoutSeconds: 3
+            initialDelaySeconds: {{ .Values.web.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.web.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.web.readinessProbe.timeoutSeconds }}
             failureThreshold: {{ .Values.web.readinessProbe.failureThreshold }}
             successThreshold: {{ .Values.web.readinessProbe.successThreshold }}
           {{- else if .Values.web.customReadinessProbe }}
@@ -283,7 +283,7 @@ spec:
       volumes:
         - name: concourse-keys
           secret:
-            secretName: {{ template "concourse.web.fullname" . }}
+            secretName: {{ include "concourse.web.secretName" .}}
             defaultMode: 0400
             items:
               - key: host-key
@@ -295,7 +295,7 @@ spec:
         {{- if .Values.secrets.teamAuthorizedKeys }}
         - name: team-authorized-keys
           secret:
-            secretName: {{ template "concourse.web.fullname" . }}
+            secretName: {{ include "concourse.web.secretName" }}
             defaultMode: 0400
             items:
             {{- range .Values.secrets.teamAuthorizedKeys }}

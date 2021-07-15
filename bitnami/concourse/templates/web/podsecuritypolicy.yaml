@@ -1,4 +1,4 @@
-{{- if and .Values.web.enabled  .Values.web.podSecurityPolicy.create -}}
+{{- if and .Values.web.enabled  .Values.web.psp.create -}}
 apiVersion: {{ include "podsecuritypolicy.apiVersion" . }}
 kind: PodSecurityPolicy
 metadata:

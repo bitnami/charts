@@ -44,6 +44,13 @@ concourse: enabled
 {{- end -}}
 
 {{/*
+Return  the proper Storage Class
+*/}}
+{{- define "concourse.storageClass" -}}
+{{- include "common.storage.class" ( dict "persistence" .Values.persistence "global" .Values.global ) -}}
+{{- end -}}
+
+{{/*
 Return the appropriate apiVersion for deployment.
 Sometimes GitVersion will contain a `v` so we need
 to strip that out.
@@ -98,9 +105,22 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
   {{- end -}}
 {{- end -}}
 
-{{/* Concourse credential secret name */}}
-{{- define "concourse.secretName" -}}
-{{- coalesce .Values.existingSecret (include "concourse.web.fullname" .) -}}
+{{/* Concourse credential web secret name */}}
+{{- define "concourse.web.secretName" -}}
+{{- if .Values.web.existingSecret -}}
+  {{ .Values.web.existingSecret (include "concourse.web.fullname" .) -}}
+{{- else }}
+  {{- printf "%s" (include "concourse.web.fullname" . ) -}}
+{{- end -}}
+{{- end -}}
+
+{{/* Concourse credential worker secret name */}}
+{{- define "concourse.worker.secretName" -}}
+{{- if .Values.worker.existingSecret -}}
+  {{ .Values.worker.existingSecret (include "concourse.worker.fullname" .) -}}
+{{- else }}
+  {{- printf "%s" (include "concourse.worker.fullname" . ) -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
