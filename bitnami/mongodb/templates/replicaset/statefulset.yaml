@@ -145,7 +145,7 @@ spec:
               [alt_names]
               DNS.1 = $svc
               DNS.2 = $my_hostname
-              DNS.3 = $my_hostname.$svc.$MY_POD_NAMESPACE.svc.cluster.local
+              DNS.3 = $my_hostname.$svc.$MY_POD_NAMESPACE.svc.{{ .Values.clusterDomain }}
               DNS.4 = localhost
               DNS.5 = 127.0.0.1
               {{- if .Values.externalAccess.service.loadBalancerIPs }}
