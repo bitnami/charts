@@ -49,6 +49,9 @@ on:
       - 'bitnami/spark/values.yaml'
       - 'bitnami/spring-cloud-dataflow/values.yaml'
       - 'bitnami/suitecrm/values.yaml'
+      - 'bitnami/tensorflow-resnet/values.yaml'
+      - 'bitnami/testlink/values.yaml'
+      - 'bitnami/thanos/values.yaml'
 
 jobs:
   generate-chart-readme:
