@@ -468,9 +468,9 @@ volumePermissions:
     ## limits:
     ##    cpu: 100m
     ##    memory: 128Mi
-    limits: { }
+    limits: {}
     ## Examples:
     ## requests:
     ##    cpu: 100m
     ##    memory: 128Mi
-    requests: { }
+    requests: {}

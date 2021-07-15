@@ -299,12 +299,12 @@ collector:
     ## limits:
     ##    cpu: 200m
     ##    memory: 256Mi
-    limits: { }
+    limits: {}
     ## Examples:
     ## requests:
     ##    cpu: 200m
     ##    memory: 10Mi
-    requests: { }
+    requests: {}
   ## Container Security Context configuration
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param collector.containerSecurityContext.enabled Enable Container Security Context configuration
