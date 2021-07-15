@@ -59,15 +59,18 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                | Description                                        | Value           |
-| ------------------- | -------------------------------------------------- | --------------- |
-| `kubeVersion`       | Override Kubernetes version                        | `nil`           |
-| `nameOverride`      | String to partially override common.names.fullname | `nil`           |
-| `fullnameOverride`  | String to fully override common.names.fullname     | `nil`           |
-| `commonLabels`      | Labels to add to all deployed objects              | `{}`            |
-| `commonAnnotations` | Annotations to add to all deployed objects         | `{}`            |
-| `clusterDomain`     | Kubernetes cluster domain name                     | `cluster.local` |
-| `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`            |
+| Name                     | Description                                                                             | Value           |
+| ------------------------ | --------------------------------------------------------------------------------------- | --------------- |
+| `kubeVersion`            | Override Kubernetes version                                                             | `nil`           |
+| `nameOverride`           | String to partially override common.names.fullname                                      | `nil`           |
+| `fullnameOverride`       | String to fully override common.names.fullname                                          | `nil`           |
+| `commonLabels`           | Labels to add to all deployed objects                                                   | `{}`            |
+| `commonAnnotations`      | Annotations to add to all deployed objects                                              | `{}`            |
+| `clusterDomain`          | Kubernetes cluster domain name                                                          | `cluster.local` |
+| `extraDeploy`            | Array of extra objects to deploy with the release                                       | `[]`            |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                    | `[]`            |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `[]`            |
 
 
 ### Traffic Exposure Parameters
@@ -108,25 +111,26 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### OAuth2 Proxy configuration parameters
 
-| Name                                                   | Description                                         | Value                                                        |
-| ------------------------------------------------------ | --------------------------------------------------- | ------------------------------------------------------------ |
-| `configuration.clientID`                               | OAuth client ID                                     | `XXXXXXX`                                                    |
-| `configuration.clientSecret`                           | OAuth client secret                                 | `XXXXXXXX`                                                   |
-| `configuration.cookieSecret`                           | OAuth cookie secret                                 | `XXXXXXXXXXXXXXXX`                                           |
-| `configuration.existingSecret`                         | Secret with the client ID, secret and cookie secret | `nil`                                                        |
-| `configuration.google.enabled`                         | Enable Google service account                       | `false`                                                      |
-| `configuration.google.adminEmail`                      | Google admin email                                  | `nil`                                                        |
-| `configuration.google.serviceAccountJson`              | Google Service account JSON                         | `nil`                                                        |
-| `configuration.google.existingSecret`                  | Existing secret containing Google Service Account   | `nil`                                                        |
+| Name                                                   | Description                                         | Value                                                         |
+| ------------------------------------------------------ | --------------------------------------------------- | ------------------------------------------------------------- |
+| `configuration.clientID`                               | OAuth client ID                                     | `XXXXXXX`                                                     |
+| `configuration.clientSecret`                           | OAuth client secret                                 | `XXXXXXXX`                                                    |
+| `configuration.cookieSecret`                           | OAuth cookie secret                                 | `XXXXXXXXXXXXXXXX`                                            |
+| `configuration.existingSecret`                         | Secret with the client ID, secret and cookie secret | `nil`                                                         |
+| `configuration.google.enabled`                         | Enable Google service account                       | `false`                                                       |
+| `configuration.google.adminEmail`                      | Google admin email                                  | `nil`                                                         |
+| `configuration.google.serviceAccountJson`              | Google Service account JSON                         | `nil`                                                         |
+| `configuration.google.existingSecret`                  | Existing secret containing Google Service Account   | `nil`                                                         |
 | `configuration.content`                                | Default configuration                               | `email_domains = [ "*" ]
-upstreams = [ "file:///dev/null" ]` |
-| `configuration.existingConfigmap`                      | Configmap with the OAuth2 Proxy configuration       | `nil`                                                        |
-| `configuration.authenticatedEmailsFile.enabled`        | Enable authenticated emails file                    | `false`                                                      |
-| `configuration.authenticatedEmailsFile.content`        | Restricted access list (one email per line)         | `nil`                                                        |
-| `configuration.authenticatedEmailsFile.existingSecret` | Secret with the authenticated emails file           | `nil`                                                        |
-| `configuration.htpasswdFile.enabled`                   | Enable htpasswd file                                | `false`                                                      |
-| `configuration.htpasswdFile.existingSecret`            | Existing secret for htpasswd file                   | `""`                                                         |
-| `configuration.htpasswdFile.content`                   | htpasswd file entries (one row per user)            | `nil`                                                        |
+upstreams = [ "file:///dev/null" ]
+` |
+| `configuration.existingConfigmap`                      | Configmap with the OAuth2 Proxy configuration       | `nil`                                                         |
+| `configuration.authenticatedEmailsFile.enabled`        | Enable authenticated emails file                    | `false`                                                       |
+| `configuration.authenticatedEmailsFile.content`        | Restricted access list (one email per line)         | `nil`                                                         |
+| `configuration.authenticatedEmailsFile.existingSecret` | Secret with the authenticated emails file           | `nil`                                                         |
+| `configuration.htpasswdFile.enabled`                   | Enable htpasswd file                                | `false`                                                       |
+| `configuration.htpasswdFile.existingSecret`            | Existing secret for htpasswd file                   | `""`                                                          |
+| `configuration.htpasswdFile.content`                   | htpasswd file entries (one row per user)            | `nil`                                                         |
 
 
 ### OAuth2 Proxy deployment parameters
