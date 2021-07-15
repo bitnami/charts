@@ -47,7 +47,7 @@ clusterDomain: cluster.local
 image:
   registry: docker.io
   repository: bitnami/grafana
-  tag: 8.0.5-debian-10-r0
+  tag: 8.0.6-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -536,7 +536,7 @@ imageRenderer:
   image:
     registry: docker.io
     repository: bitnami/grafana-image-renderer
-    tag: 3.0.1-debian-10-r13
+    tag: 3.0.1-debian-10-r19
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -568,6 +568,26 @@ imageRenderer:
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ##
   affinity: {}
+  ## Grafana Image Renderer containers' resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param imageRenderer.resources.limits The resources limits for Grafana containers
+  ## @param imageRenderer.resources.requests The requested resources for Grafana containers
+  ##
+  resources:
+    ## Example:
+    ## limits:
+    ##    cpu: 500m
+    ##    memory: 1Gi
+    limits: {}
+    ## Examples:
+    ## requests:
+    ##    cpu: 250m
+    ##    memory: 256Mi
+    requests: {}
   ## SecurityContext configuration
   ## @param imageRenderer.securityContext.enabled Enable securityContext on for Grafana Image Renderer deployment
   ## @param imageRenderer.securityContext.fsGroup Group to configure permissions for volumes

@@ -1,8 +1,8 @@
 name: Generate Chart Readme
 
-on: 
+on:
   pull_request:
-    branches:    
+    branches:
       - master
     paths:
       - 'bitnami/airflow/values.yaml'
@@ -24,19 +24,34 @@ on:
       - 'bitnami/kubernetes-event-exporter/values.yaml'
       - 'bitnami/kubewatch/values.yaml'
       - 'bitnami/logstash/values.yaml'
+      - 'bitnami/magento/values.yaml'
+      - 'bitnami/mariadb/values.yaml'
+      - 'bitnami/mariadb-galera/values.yaml'
       - 'bitnami/metrics-server/values.yaml'
       - 'bitnami/minio/values.yaml'
       - 'bitnami/mongodb/values.yaml'
       - 'bitnami/mysql/values.yaml'
       - 'bitnami/nats/values.yaml'
       - 'bitnami/nginx/values.yaml'
+      - 'bitnami/nginx-ingress-controller/values.yaml'
+      - 'bitnami/node/values.yaml'
+      - 'bitnami/node-exporter/values.yaml'
+      - 'bitnami/oauth2-proxy/values.yaml'
+      - 'bitnami/parse/values.yaml'
+      - 'bitnami/phabricator/values.yaml'
+      - 'bitnami/phpbb/values.yaml'
+      - 'bitnami/phpmyadmin/values.yaml'
+      - 'bitnami/postgresql/values.yaml'
+      - 'bitnami/postgresql-ha/values.yaml'
+      - 'bitnami/prestashop/values.yaml'
+      - 'bitnami/pytorch/values.yaml'
+      - 'bitnami/rabbitmq/values.yaml'
 
 jobs:
   generate-chart-readme:
     runs-on: ubuntu-latest
 
     steps:
-
       - name: Checkout bitnami-labs/readme-generator-for-helm
         uses: actions/checkout@v2
         with:
