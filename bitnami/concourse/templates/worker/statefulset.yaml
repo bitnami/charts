@@ -1,4 +1,4 @@
-{{- if and .Values.worker.enabled (or ((not .Values.web.enabled) (include "concourse.host" .))) -}}
+{{- if and .Values.worker.enabled (or (not .Values.web.enabled) (include "concourse.host" .)) -}}
 {{- if eq .Values.worker.mode "statefulSet" }}
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
