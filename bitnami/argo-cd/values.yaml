@@ -554,10 +554,16 @@ server:
   ##
   configEnabled: true
 
+  ## Argo CD server URL
+  ## @param server.url Argo CD server base URL. Required when configuring SSO. Required when enabling dex.
+  ##
+  url: ""
+
   ## Argo CD server config. This object will be directly rendered
+  ## @param server.config [string] Argo CD server configuration that will end on the argocd-cm Config Map
   ## Ref: https://argoproj.github.io/argo-cd/operator-manual/user-management/
   ## E.g:
-  ## repositories: |
+  ## repositories:
   ##   - url: git@github.com:group/repo.git
   ##     sshPrivateKeySecret:
   ##       name: secret-name
@@ -568,7 +574,7 @@ server:
   ##   - type: helm
   ##     url: https://argoproj.github.io/argo-helm
   ##     name: argo
-  ## oidc.config: |
+  ## oidc.config:
   ##   name: AzureAD
   ##   issuer: https://login.microsoftonline.com/TENANT_ID/v2.0
   ##   clientID: CLIENT_ID
@@ -580,7 +586,7 @@ server:
   ##     - openid
   ##     - profile
   ##     - email
-  ## dex.config: |
+  ## dex.config:
   ##    connectors:
   ##      # GitHub example
   ##      - type: github
@@ -591,19 +597,19 @@ server:
   ##          clientSecret: $dex.github.clientSecret
   ##          orgs:
   ##          - name: your-github-org
-  config:
+  config: |
+    {{- if .Values.config.styles }}
+    ui.cssurl: "./custom/custom.styles.css"
+    {{- end }}
     ## Argo CD external base URL. Required when configuring SSO. Required when enabling dex.
-    ## @param server.config.url Argo CD server url. Required when enabling dex.
     ## E.g:
     ## url: https://argocd.example.com
     ##
-    url: ""
+    url: {{ .Values.server.url }}
     ## Argo CD instance label key
-    ## @param server.config.application.instanceLabelKey
     ##
     application.instanceLabelKey: argocd.argoproj.io/instance
     ## If Dex is enabled you need to add connectors here
-    ## @param server.config.dex.config Dex config that will end in the argocd-cm
     ## dex.config: |
     ##  connectors: []
     ##

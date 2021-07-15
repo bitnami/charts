@@ -198,9 +198,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.logFormat`                                   | ArgoCD server logs format. Options: [text, json]                                                 | `text`                   |
 | `server.logLevel`                                    | ArgoCD server logs level                                                                         | `info`                   |
 | `server.configEnabled`                               | Enable Argo CD server config                                                                     | `true`                   |
-| `server.config.url`                                  | Argo CD server url. Required when enabling dex.                                                  | `""`                     |
-| `server.config.application.instanceLabelKey`         |                                                                                                  | `undefined`              |
-| `server.config.dex.config`                           | Dex config that will end in the argocd-cm                                                        | `undefined`              |
+| `server.url`                                         | Argo CD server base URL. Required when configuring SSO. Required when enabling dex.              | `""`                     |
+| `server.config`                                      | Argo CD server configuration that will end on the argocd-cm Config Map                           | `""`                     |
 | `server.ingress.enabled`                             | Enable the creation of an ingress for the Argo CD server                                         | `false`                  |
 | `server.ingress.certManager`                         | Set to true to add certmanager annotations for Argo CD server ingress                            | `false`                  |
 | `server.ingress.pathType`                            | Path type for the Argo CD server ingress                                                         | `ImplementationSpecific` |
