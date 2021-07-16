@@ -2,7 +2,7 @@
 Return the proper web image name
 */}}
 {{- define "concourse.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) }}
+{{ include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
@@ -28,12 +28,12 @@ Compile all warnings into a single message.
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 {{- if $message -}}
-{{-   printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
+{{- printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
 {{- end -}}
 {{- end -}}
 
 {{/* Check if web or worker are enable */}}
-{{- define "concourse.validateValues.enabled" }}
+{{- define "concourse.validateValues.enabled" -}}
 {{- if not (or .Values.web.enabled .Values.worker.enabled) -}}
 concourse: enabled
   Must set either web.enabled or worker.enabled to create a Concourse deployment
@@ -68,9 +68,9 @@ Create the name of the service account to use (worker)
 */}}
 {{- define "concourse.worker.serviceAccountName" -}}
 {{- if .Values.worker.serviceAccount.create -}}
-    {{ default (include "concourse.worker.fullname" .) .Values.worker.serviceAccount.name }}
+    {{ default (include "concourse.worker.fullname" .) .Values.worker.serviceAccount.name -}}
 {{- else -}}
-    {{ default "default" .Values.worker.serviceAccount.name }}
+    {{ default "default" .Values.worker.serviceAccount.name -}}
 {{- end -}}
 {{- end -}}
 
@@ -79,9 +79,9 @@ Create the name of the service account to use (web)
 */}}
 {{- define "concourse.web.serviceAccountName" -}}
 {{- if .Values.web.serviceAccount.create -}}
-    {{ default (include "concourse.web.fullname" .) .Values.web.serviceAccount.name }}
+    {{ default (include "concourse.web.fullname" .) .Values.web.serviceAccount.name -}}
 {{- else -}}
-    {{ default "default" .Values.web.serviceAccount.name }}
+    {{ default "default" .Values.web.serviceAccount.name -}}
 {{- end -}}
 {{- end -}}
 
@@ -96,7 +96,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 
 {{- define "concourse.database.host" -}}
   {{- if eq .Values.postgresql.enabled true -}}
-    {{- template "concourse.postgresql.fullname" . }}
+    {{- template "concourse.postgresql.fullname" . -}}
   {{- else -}}
     {{- .Values.externalDatabase.host -}}
   {{- end -}}
@@ -116,7 +116,7 @@ If not using ClusterIP, or if a host or LoadBalancerIP is not defined, the value
 When using Ingress, it will be set to the Ingress hostname.
 */}}
 {{- define "concourse.host" -}}
-{{- if .Values.ingress.enabled }}
+{{- if .Values.ingress.enabled -}}
 {{- $host := .Values.ingress.hostname | default "" -}}
 {{- printf "%s://%s" (ternary "https" "http" .Values.web.tls.enabled) (default (include "concourse.serviceIP" .) $host) -}}
 {{- else if .Values.web.externalUrl -}}
@@ -143,7 +143,7 @@ Note, returns 127.0.0.1 if using ClusterIP.
 {{- define "concourse.web.secretName" -}}
 {{- if .Values.web.existingSecret -}}
   {{- .Values.web.existingSecret -}}
-{{- else }}
+{{- else -}}
   {{- printf "%s" (include "concourse.web.fullname" . ) -}}
 {{- end -}}
 {{- end -}}
@@ -154,7 +154,7 @@ Note, returns 127.0.0.1 if using ClusterIP.
 {{- define "concourse.web.configmapName" -}}
 {{- if .Values.web.existingConfigmap -}}
   {{- .Values.web.existingConfigmap -}}
-{{- else }}
+{{- else -}}
   {{- printf "%s" (include "concourse.web.fullname" . ) -}}
 {{- end -}}
 {{- end -}}
@@ -163,7 +163,7 @@ Note, returns 127.0.0.1 if using ClusterIP.
 {{- define "concourse.worker.secretName" -}}
 {{- if .Values.worker.existingSecret -}}
   {{ .Values.worker.existingSecret -}}
-{{- else }}
+{{- else -}}
   {{- printf "%s" (include "concourse.worker.fullname" . ) -}}
 {{- end -}}
 {{- end -}}
@@ -172,11 +172,11 @@ Note, returns 127.0.0.1 if using ClusterIP.
 Creates the address of the TSA service.
 */}}
 {{- define "concourse.web.tsa.address" -}}
-{{- if .Values.web.enabled }}
+{{- if .Values.web.enabled -}}
 {{- $port := printf "%v" .Values.web.tsa.containerPort -}}
 {{- printf "%s-gateway:%s" (include "concourse.web.fullname" .) $port -}}
 {{- else -}}
-{{- range $i, $tsaHost := .Values.worker.tsa.hosts }}{{- if $i }},{{ end }}{{- $tsaHost }}{{- end -}}
+{{- range $i, $tsaHost := .Values.worker.tsa.hosts -}}{{- if $i -}},{{ end -}}{{- $tsaHost -}}{{- end -}}
 {{- end -}}
 {{- end -}}
 
@@ -188,11 +188,11 @@ Get the Postgresql credentials secret.
     {{- printf "%s" (include "concourse.postgresql.fullname" .) -}}
 {{- else if and (.Values.postgresql.enabled) (.Values.postgresql.existingSecret) -}}
     {{- printf "%s" .Values.postgresql.existingSecret -}}
-{{- else }}
+{{- else -}}
     {{- if .Values.externalDatabase.existingSecret -}}
         {{- printf "%s" .Values.externalDatabase.existingSecret -}}
     {{- else -}}
-        {{ printf "%s-%s" .Release.Name "externaldb" }}
+        {{ printf "%s-%s" .Release.Name "externaldb" -}}
     {{- end -}}
 {{- end -}}
 {{- end -}}
