@@ -491,7 +491,7 @@ forwarder:
 ## Aggregator parameters
 ##
 aggregator:
-  ## @param aggregator.enabled Enable Fluentd aggregator daemonset
+  ## @param aggregator.enabled Enable Fluentd aggregator statefulset
   ##
   enabled: true
   ## @param aggregator.replicaCount Number of aggregator pods to deploy in the Stateful Set

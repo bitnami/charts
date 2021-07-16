@@ -48,137 +48,154 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## Parameters
 
-The following table lists the configurable parameters of the JasperReports chart and their default values per section/component:
-
 ### Global parameters
 
-| Parameter                 | Description                                     | Default                                                 |
-|---------------------------|-------------------------------------------------|---------------------------------------------------------|
-| `global.imageRegistry`    | Global Docker image registry                    | `nil`                                                   |
-| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]` (does not add image pull secrets to deployed pods) |
-| `global.storageClass`     | Global storage class for dynamic provisioning   | `nil`                                                   |
+| Name                      | Description                                     | Value |
+| ------------------------- | ----------------------------------------------- | ----- |
+| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `nil` |
+
 
 ### Common parameters
 
-| Parameter           | Description                                                          | Default                        |
-|---------------------|----------------------------------------------------------------------|--------------------------------|
-| `nameOverride`      | String to partially override common.names.fullname                   | `nil`                          |
-| `fullnameOverride`  | String to fully override common.names.fullname                       | `nil`                          |
-| `commonLabels`      | Labels to add to all deployed objects                                | `{}`                           |
-| `commonAnnotations` | Annotations to add to all deployed objects                           | `{}`                           |
-| `clusterDomain`     | Default Kubernetes cluster domain                                    | `cluster.local`                |
-| `extraDeploy`       | Array of extra objects to deploy with the release                    | `[]` (evaluated as a template) |
-| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set) | `nil`                          |
+| Name                | Description                                                          | Value           |
+| ------------------- | -------------------------------------------------------------------- | --------------- |
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set) | `nil`           |
+| `nameOverride`      | String to partially override common.names.fullname                   | `nil`           |
+| `fullnameOverride`  | String to fully override common.names.fullname                       | `nil`           |
+| `commonLabels`      | Labels to add to all deployed objects                                | `{}`            |
+| `commonAnnotations` | Annotations to add to all deployed objects                           | `{}`            |
+| `clusterDomain`     | Default Kubernetes cluster domain                                    | `cluster.local` |
+| `extraDeploy`       | Array of extra objects to deploy with the release                    | `[]`            |
+
 
 ### JasperReports parameters
 
-| Parameter               | Description                                                          | Default                                                 |
-|-------------------------|----------------------------------------------------------------------|---------------------------------------------------------|
-| `image.registry`        | JasperReports image registry                                         | `docker.io`                                             |
-| `image.repository`      | JasperReports image name                                             | `bitnami/jasperreports`                                 |
-| `image.tag`             | JasperReports image tag                                              | `{TAG_NAME}`                                            |
-| `image.pullPolicy`      | JasperReports image pull policy                                      | `IfNotPresent`                                          |
-| `image.pullSecrets`     | Specify docker-registry secret names as an array                     | `[]` (does not add image pull secrets to deployed pods) |
-| `jasperreportsUsername` | JasperReports user                                                   | `user`                                                  |
-| `jasperreportsPassword` | JasperReports password                                               | _random 10 character long alphanumeric string_          |
-| `jasperreportsEmail`    | JasperReports user email                                             | `user@example.com`                                      |
-| `smtpHost`              | SMTP host                                                            | `nil`                                                   |
-| `smtpPort`              | SMTP port                                                            | `nil`                                                   |
-| `smtpEmail`             | SMTP email                                                           | `nil`                                                   |
-| `smtpUser`              | SMTP user                                                            | `nil`                                                   |
-| `smtpPassword`          | SMTP password                                                        | `nil`                                                   |
-| `smtpProtocol`          | SMTP protocol [`ssl`, `none`]                                        | `nil`                                                   |
-| `command`               | Override default container command (useful when using custom images) | `nil`                                                   |
-| `args`                  | Override default container args (useful when using custom images)    | `nil`                                                   |
-| `extraEnvVars`          | Extra environment variables to be set on Jasperreports container     | `{}`                                                    |
-| `extraEnvVarsCM`        | Name of existing ConfigMap containing extra env vars                 | `nil`                                                   |
-| `extraEnvVarsSecret`    | Name of existing Secret containing extra env vars                    | `nil`                                                   |
+| Name                    | Description                                                            | Value                   |
+| ----------------------- | ---------------------------------------------------------------------- | ----------------------- |
+| `image.registry`        | JasperReports image registry                                           | `docker.io`             |
+| `image.repository`      | JasperReports image repository                                         | `bitnami/jasperreports` |
+| `image.tag`             | JasperReports image tag (immutable tags are recommended)               | `7.8.0-debian-10-r251`  |
+| `image.pullPolicy`      | JasperReports image pull policy                                        | `IfNotPresent`          |
+| `image.pullSecrets`     | Specify docker-registry secret names as an array                       | `[]`                    |
+| `jasperreportsUsername` | JasperReports user                                                     | `user`                  |
+| `jasperreportsPassword` | JasperReports password                                                 | `nil`                   |
+| `jasperreportsEmail`    | JasperReports user email                                               | `user@example.com`      |
+| `allowEmptyPassword`    | Set to `yes` to allow the container to be started with blank passwords | `yes`                   |
+| `smtpHost`              | SMTP host                                                              | `nil`                   |
+| `smtpPort`              | SMTP port                                                              | `nil`                   |
+| `smtpEmail`             | SMTP email                                                             | `nil`                   |
+| `smtpUser`              | SMTP user                                                              | `nil`                   |
+| `smtpPassword`          | SMTP password                                                          | `nil`                   |
+| `smtpProtocol`          | SMTP protocol [`ssl`, `none`]                                          | `nil`                   |
+| `command`               | Override default container command (useful when using custom images)   | `[]`                    |
+| `args`                  | Override default container args (useful when using custom images)      | `[]`                    |
+| `extraEnvVars`          | Extra environment variables to be set on Jasperreports container       | `[]`                    |
+| `extraEnvVarsCM`        | Name of existing ConfigMap containing extra env vars                   | `nil`                   |
+| `extraEnvVarsSecret`    | Name of existing Secret containing extra env vars                      | `nil`                   |
+| `updateStrategy.type`   | StrategyType                                                           | `RollingUpdate`         |
+
 
 ### Jasperreports deployment parameters
 
-| Parameter                   | Description                                                                               | Default                                     |
-|-----------------------------|-------------------------------------------------------------------------------------------|---------------------------------------------|
-| `containerPort`             | HTTP port to expose at container level                                                    | `8080`                                      |
-| `hostAliases`               | Add deployment host aliases                                                               | `[]`                                        |
-| `podSecurityContext`        | Jasperreports pods' Security Context                                                      | Check `values.yaml` file                    |
-| `containerSecurityContext`  | Jasperreports containers' Security Context                                                | Check `values.yaml` file                    |
-| `resources.limits`          | The resources limits for the Jasperreports container                                      | `{}`                                        |
-| `resources.requests`        | The requested resources for the Jasperreports container                                   | `{"memory": "512Mi", "cpu": "300m"}`        |
-| `livenessProbe`             | Liveness probe configuration for Jasperreports                                            | Check `values.yaml` file                    |
-| `readinessProbe`            | Readiness probe configuration for Jasperreports                                           | Check `values.yaml` file                    |
-| `customLivenessProbe`       | Override default liveness probe                                                           | `nil`                                       |
-| `customReadinessProbe`      | Override default readiness probe                                                          | `nil`                                       |
-| `updateStrategy`            | Strategy to use to update Pods                                                            | Check `values.yaml` file                    |
-| `podAffinityPreset`         | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                                        |
-| `podAntiAffinityPreset`     | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                                      |
-| `nodeAffinityPreset.type`   | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                                        |
-| `nodeAffinityPreset.key`    | Node label key to match. Ignored if `affinity` is set.                                    | `""`                                        |
-| `nodeAffinityPreset.values` | Node label values to match. Ignored if `affinity` is set.                                 | `[]`                                        |
-| `affinity`                  | Affinity for pod assignment                                                               | `{}` (evaluated as a template)              |
-| `nodeSelector`              | Node labels for pod assignment                                                            | `{}` (evaluated as a template)              |
-| `tolerations`               | Tolerations for pod assignment                                                            | `[]` (evaluated as a template)              |
-| `lifecycleHooks`            | LifecycleHooks to set additional configuration at startup.                                | `{}` (evaluated as a template)              |
-| `podLabels`                 | Extra labels for Jasperreports pods                                                       | `{}` (evaluated as a template)              |
-| `podAnnotations`            | Annotations for Jasperreports pods                                                        | `{}` (evaluated as a template)              |
-| `extraVolumeMounts`         | Optionally specify extra list of additional volumeMounts for Jasperreports container(s)   | `[]`                                        |
-| `extraVolumes`              | Optionally specify extra list of additional volumes for Jasperreports pods                | `[]`                                        |
-| `initContainers`            | Add additional init containers to the Jasperreports pods                                  | `{}` (evaluated as a template)              |
-| `sidecars`                  | Add additional sidecar containers to the Jasperreports pods                               | `{}` (evaluated as a template)              |
-| `persistence.enabled`       | Enable persistence using PVC                                                              | `true`                                      |
-| `persistence.storageClass`  | PVC Storage Class for Jasperreports volume                                                | `nil` (uses alpha storage class annotation) |
-| `persistence.existingClaim` | An Existing PVC name for Jasperreports volume                                             | `nil` (uses alpha storage class annotation) |
-| `persistence.accessMode`    | PVC Access Mode for Jasperreports volume                                                  | `ReadWriteOnce`                             |
-| `persistence.size`          | PVC Storage Request for Jasperreports volume                                              | `8Gi`                                       |
+| Name                                 | Description                                                                               | Value                      |
+| ------------------------------------ | ----------------------------------------------------------------------------------------- | -------------------------- |
+| `hostAliases`                        | Add deployment host aliases                                                               | `[]`                       |
+| `containerPort`                      | HTTP port to expose at container level                                                    | `8080`                     |
+| `podSecurityContext.enabled`         | Enable pod's Security Context                                                             | `true`                     |
+| `podSecurityContext.fsGroup`         | Set pod's Security Context fsGroup                                                        | `0`                        |
+| `containerSecurityContext.enabled`   | Enable container's Security Context                                                       | `true`                     |
+| `containerSecurityContext.runAsUser` | Set container's Security Context runAsUser                                                | `0`                        |
+| `resources.limits`                   | The resources limits for the Jasperreports container                                      | `{}`                       |
+| `resources.requests`                 | The requested resources for the Jasperreports container                                   | `{}`                       |
+| `livenessProbe.enabled`              | Enable livenessProbe                                                                      | `true`                     |
+| `livenessProbe.httpGet.path`         | Request path for livenessProbe                                                            | `/jasperserver/login.html` |
+| `livenessProbe.httpGet.port`         | Port for livenessProbe                                                                    | `http`                     |
+| `livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                   | `300`                      |
+| `livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                          | `10`                       |
+| `livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                         | `5`                        |
+| `livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                       | `6`                        |
+| `livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                       | `1`                        |
+| `readinessProbe.enabled`             | Enable readinessProbe                                                                     | `true`                     |
+| `readinessProbe.httpGet.path`        | Request path for readinessProbe                                                           | `/jasperserver/login.html` |
+| `readinessProbe.httpGet.port`        | Port for readinessProbe                                                                   | `http`                     |
+| `readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                  | `30`                       |
+| `readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                         | `10`                       |
+| `readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                        | `5`                        |
+| `readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                      | `6`                        |
+| `readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                      | `1`                        |
+| `customLivenessProbe`                | Override default liveness probe                                                           | `{}`                       |
+| `customReadinessProbe`               | Override default readiness probe                                                          | `{}`                       |
+| `podLabels`                          | Extra labels for Jasperreports pods                                                       | `{}`                       |
+| `podAnnotations`                     | Annotations for Jasperreports pods                                                        | `{}`                       |
+| `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                       |
+| `podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                     |
+| `nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                       |
+| `nodeAffinityPreset.key`             | Node label key to match. Ignored if `affinity` is set.                                    | `""`                       |
+| `nodeAffinityPreset.values`          | Node label values to match. Ignored if `affinity` is set.                                 | `[]`                       |
+| `affinity`                           | Affinity for pod assignment                                                               | `{}`                       |
+| `nodeSelector`                       | Node labels for pod assignment                                                            | `{}`                       |
+| `tolerations`                        | Tolerations for pod assignment                                                            | `[]`                       |
+| `lifecycleHooks`                     | LifecycleHooks to set additional configuration at startup.                                | `{}`                       |
+| `extraVolumes`                       | Optionally specify extra list of additional volumes for Jasperreports pods                | `[]`                       |
+| `extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for Jasperreports container(s)   | `[]`                       |
+| `initContainers`                     | Add additional init containers to the Jasperreports pods                                  | `[]`                       |
+| `sidecars`                           | Add additional sidecar containers to the Jasperreports pods                               | `[]`                       |
+| `persistence.enabled`                | Enable persistence using PVC                                                              | `true`                     |
+| `persistence.storageClass`           | PVC Storage Class for Jasperreports volume                                                | `nil`                      |
+| `persistence.accessModes`            | Persistent Volume Access Mode                                                             | `[]`                       |
+| `persistence.size`                   | PVC Storage Request for Jasperreports volume                                              | `8Gi`                      |
+| `persistence.existingClaim`          | An Existing PVC name for Jasperreports volume                                             | `""`                       |
+
 
 ### Exposure parameters
 
-| Parameter                        | Description                                                   | Default                        |
-|----------------------------------|---------------------------------------------------------------|--------------------------------|
-| `service.type`                   | Kubernetes Service type                                       | `LoadBalancer`                 |
-| `service.port`                   | Service HTTP port                                             | `80`                           |
-| `service.nodePort`               | Kubernetes http node port                                     | `""`                           |
-| `service.loadBalancerIP`         | Kubernetes LoadBalancerIP to request                          | `nil`                          |
-| `service.externalTrafficPolicy`  | Enable client source IP preservation                          | `Cluster`                      |
-| `service.annotations`            | Annotations for Jasperreports service                         | `{}` (evaluated as a template) |
-| `ingress.enabled`                | Enable ingress controller resource                            | `false`                        |
-| `ingress.certManager`            | Add annotations for cert-manager                              | `false`                        |
-| `ingress.hostname`               | Default host for the ingress resource                         | `jasperreports.local`          |
-| `ingress.apiVersion`             | Force Ingress API version (automatically detected if not set) | ``                             |
-| `ingress.path`                   | Ingress path                                                  | `/`                            |
-| `ingress.pathType`               | Ingress path type                                             | `ImplementationSpecific`       |
-| `ingress.tls`                    | Create TLS Secret                                             | `false`                        |
-| `ingress.annotations`            | Ingress annotations                                           | `[]` (evaluated as a template) |
-| `ingress.extraHosts[0].name`     | Additional hostnames to be covered                            | `nil`                          |
-| `ingress.extraHosts[0].path`     | Additional hostnames to be covered                            | `nil`                          |
-| `ingress.extraPaths`             | Additional arbitrary path/backend objects                     | `nil`                          |
-| `ingress.extraTls[0].hosts[0]`   | TLS configuration for additional hostnames to be covered      | `nil`                          |
-| `ingress.extraTls[0].secretName` | TLS configuration for additional hostnames to be covered      | `nil`                          |
-| `ingress.secrets[0].name`        | TLS Secret Name                                               | `nil`                          |
-| `ingress.secrets[0].certificate` | TLS Secret Certificate                                        | `nil`                          |
-| `ingress.secrets[0].key`         | TLS Secret Key                                                | `nil`                          |
+| Name                            | Description                                                                                   | Value                    |
+| ------------------------------- | --------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                  | Kubernetes Service type                                                                       | `LoadBalancer`           |
+| `service.port`                  | Service HTTP port                                                                             | `80`                     |
+| `service.nodePort`              | Kubernetes http node port                                                                     | `""`                     |
+| `service.loadBalancerIP`        | Kubernetes LoadBalancerIP to request                                                          | `nil`                    |
+| `service.externalTrafficPolicy` | Enable client source IP preservation                                                          | `Cluster`                |
+| `service.annotations`           | Annotations for Jasperreports service                                                         | `{}`                     |
+| `ingress.enabled`               | Enable ingress controller resource                                                            | `false`                  |
+| `ingress.certManager`           | Add annotations for cert-manager                                                              | `false`                  |
+| `ingress.pathType`              | Ingress path type                                                                             | `ImplementationSpecific` |
+| `ingress.apiVersion`            | Force Ingress API version (automatically detected if not set)                                 | `nil`                    |
+| `ingress.hostname`              | Default host for the ingress resource                                                         | `jasperreports.local`    |
+| `ingress.path`                  | Ingress path                                                                                  | `ImplementationSpecific` |
+| `ingress.annotations`           | Ingress annotations                                                                           | `{}`                     |
+| `ingress.tls`                   | Enable TLS configuration for the hostname defined at ingress.hostname parameter               | `false`                  |
+| `ingress.extraHosts`            | The list of additional hostnames to be covered with this ingress record.                      | `[]`                     |
+| `ingress.extraPaths`            | Any additional arbitrary paths that may need to be added to the ingress under the main host.  | `[]`                     |
+| `ingress.extraTls`              | The tls configuration for additional hostnames to be covered with this ingress record.        | `[]`                     |
+| `ingress.secrets`               | If you're providing your own certificates, please use this to add the certificates as secrets | `[]`                     |
+
 
 ### Database parameters
 
-| Parameter                                   | Description                                          | Default                                        |
-|---------------------------------------------|------------------------------------------------------|------------------------------------------------|
-| `mariadb.enabled`                           | Whether to use the MariaDB chart                     | `true`                                         |
-| `mariadb.architecture`                      | MariaDB architecture (`standalone` or `replication`) | `standalone`                                   |
-| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                 | _random 10 character alphanumeric string_      |
-| `mariadb.auth.database`                     | Database name to create                              | `bitnami_jasperreports`                        |
-| `mariadb.auth.username`                     | Database user to create                              | `bn_jasperreports`                             |
-| `mariadb.auth.password`                     | Password for the database                            | _random 10 character long alphanumeric string_ |
-| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                | `true`                                         |
-| `mariadb.primary.persistence.accessMode`    | Database Persistent Volume Access Modes              | `ReadWriteOnce`                                |
-| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                      | `8Gi`                                          |
-| `mariadb.primary.persistence.existingClaim` | Enable persistence using an existing PVC             | `nil`                                          |
-| `mariadb.primary.persistence.storageClass`  | PVC Storage Class                                    | `nil` (uses alpha storage class annotation)    |
-| `mariadb.primary.persistence.hostPath`      | Host mount path for MariaDB volume                   | `nil` (will not mount to a host path)          |
-| `externalDatabase.user`                     | Existing username in the external db                 | `bn_jasperreports`                             |
-| `externalDatabase.password`                 | Password for the above username                      | `nil`                                          |
-| `externalDatabase.database`                 | Name of the existing database                        | `bitnami_jasperreports`                        |
-| `externalDatabase.host`                     | Host of the existing database                        | `nil`                                          |
-| `externalDatabase.port`                     | Port of the existing database                        | `3306`                                         |
-| `externalDatabase.existingSecret`           | Name of the database existing Secret Object          | `nil`                                          |
+| Name                                        | Description                                          | Value                   |
+| ------------------------------------------- | ---------------------------------------------------- | ----------------------- |
+| `mariadb.enabled`                           | Whether to use the MariaDB chart                     | `true`                  |
+| `mariadb.architecture`                      | MariaDB architecture (`standalone` or `replication`) | `standalone`            |
+| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                 | `""`                    |
+| `mariadb.auth.database`                     | Database name to create                              | `bitnami_jasperreports` |
+| `mariadb.auth.username`                     | Database user to create                              | `bn_jasperreports`      |
+| `mariadb.auth.password`                     | Password for the database                            | `""`                    |
+| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                | `true`                  |
+| `mariadb.primary.persistence.storageClass`  | PVC Storage Class                                    | `nil`                   |
+| `mariadb.primary.persistence.accessModes`   | Access mode of persistent volume                     | `[]`                    |
+| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                      | `8Gi`                   |
+| `mariadb.primary.persistence.hostPath`      | Host mount path for MariaDB volume                   | `nil`                   |
+| `mariadb.primary.persistence.existingClaim` | Enable persistence using an existing PVC             | `nil`                   |
+| `externalDatabase.existingSecret`           | Name of the database existing Secret Object          | `nil`                   |
+| `externalDatabase.host`                     | Host of the existing database                        | `nil`                   |
+| `externalDatabase.port`                     | Port of the existing database                        | `3306`                  |
+| `externalDatabase.user`                     | Existing username in the external db                 | `bn_jasperreports`      |
+| `externalDatabase.password`                 | Password for the above username                      | `nil`                   |
+| `externalDatabase.database`                 | Name of the existing database                        | `bitnami_jasperreports` |
+
 
 The above parameters map to the env variables defined in [bitnami/jasperreports](http://github.com/bitnami/bitnami-docker-jasperreports). For more information please refer to the [bitnami/jasperreports](http://github.com/bitnami/bitnami-docker-jasperreports) image documentation.
 
