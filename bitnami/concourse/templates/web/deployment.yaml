@@ -48,7 +48,7 @@ spec:
       nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.web.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.web.tolerations }}
-      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.web.tolerations "context" .) | nindent 8 }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.web.tolerations "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.web.priorityClassName }}
       priorityClassName: {{ .Values.web.priorityClassName | quote }}
