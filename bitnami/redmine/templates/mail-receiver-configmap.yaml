@@ -3,6 +3,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ include "common.names.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: mail-receiver
     {{- if .Values.commonLabels }}
@@ -44,7 +45,7 @@ data:
     cd /opt/bitnami/redmine
 
     # Configuring Database connection
-    if [ $REDMINE_DB_MYSQL ]; then
+    if [ "$REDMINE_DATABASE_TYPE" = "mariadb" ]; then
     cat <<END > config/database.yml
         production:
             adapter: mysql2
@@ -64,7 +65,7 @@ data:
             port: <%= ENV["REDMINE_MAIL_RECEIVER_DB_PORT"] %>
             encoding: utf8
     END
-    elif [ $REDMINE_DB_POSTGRES ]; then
+    elif [ "$REDMINE_DATABASE_TYPE" = "postgresql" ]; then
     cat <<END > config/database.yml
         test:
             adapter: mysql2
