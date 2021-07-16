@@ -482,11 +482,11 @@ domainFilters: []
 ## @param excludeDomains Exclude subdomains (optional)
 ##
 excludeDomains: []
-## Limit possible target zones by regex domain suffix (optional)
+## @param regexDomainFilter Limit possible target zones by regex domain suffixes (optional)
 ## If regexDomainFilter is specified, domainFilters will be ignored
 ##
 regexDomainFilter: ""
-## Exclude subdomains by using regex pattern (optional)
+## @param regexDomainExclusion Exclude subdomains by using regex pattern (optional)
 ## If regexDomainFilter is specified, excludeDomains will be ignored and external-dns will use regexDomainExclusion even though regexDomainExclusion is empty
 ##
 regexDomainExclusion: ""
