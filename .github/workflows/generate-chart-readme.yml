@@ -7,6 +7,9 @@ on:
     paths:
       - 'bitnami/airflow/values.yaml'
       - 'bitnami/common/values.yaml'
+      - 'bitnami/dataplatform-bp1/values.yaml'
+      - 'bitnami/dataplatform-bp2/values.yaml'
+      - 'bitnami/discourse/values.yaml'
       - 'bitnami/dokuwiki/values.yaml'
       - 'bitnami/drupal/values.yaml'
       - 'bitnami/ejbca/values.yaml'
