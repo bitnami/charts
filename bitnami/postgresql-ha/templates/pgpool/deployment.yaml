@@ -103,18 +103,24 @@ spec:
           {{- if .Values.pgpool.securityContext.enabled }}
           securityContext: {{- omit .Values.pgpool.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
-          {{- if .Values.pgpool.command }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.pgpool.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.command "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.pgpool.args }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.pgpool.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.args "context" $) | nindent 12 }}
           {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.pgpool.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
+          {{- end }}
           env:
             - name: BITNAMI_DEBUG
-              value: {{ ternary "true" "false" .Values.pgpoolImage.debug | quote }}
+              value: {{ ternary "true" "false" (or .Values.pgpoolImage.debug .Values.diagnosticMode.enabled) | quote }}
             {{- if or .Values.pgpool.customUsersSecret .Values.pgpool.customUsers }}
             - name: PGPOOL_POSTGRES_CUSTOM_USERS
               valueFrom:
@@ -267,6 +273,7 @@ spec:
             - name: postgresql
               containerPort: 5432
               protocol: TCP
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.pgpool.livenessProbe.enabled }}
           livenessProbe:
             exec:
@@ -280,6 +287,8 @@ spec:
           {{- else if .Values.pgpool.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
+          {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.pgpool.readinessProbe.enabled }}
           readinessProbe:
             exec:
@@ -295,6 +304,8 @@ spec:
           {{- else if .Values.pgpool.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
+          {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.pgpool.startupProbe.enabled }}
           startupProbe:
             exec:
@@ -307,6 +318,7 @@ spec:
             failureThreshold: {{ .Values.pgpool.startupProbe.failureThreshold }}
           {{- else if .Values.pgpool.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
           {{- end }}
           {{- if .Values.pgpool.resources }}
           resources: {{- toYaml .Values.pgpool.resources | nindent 12 }}

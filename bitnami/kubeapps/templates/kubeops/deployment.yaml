@@ -127,16 +127,16 @@ spec:
           {{- end }}
           {{- if .Values.clusters }}
           volumeMounts:
-            - name: kubeops-config
+            - name: clusters-config
               mountPath: /config
             - name: ca-certs
               mountPath: /etc/additional-clusters-cafiles
           {{- end }}
       {{- if .Values.clusters }}
       volumes:
-        - name: kubeops-config
+        - name: clusters-config
           configMap:
-            name: {{ template "kubeapps.kubeops-config.fullname" . }}
+            name: {{ template "kubeapps.clusters-config.fullname" . }}
         - name: ca-certs
           emptyDir: {}
       {{- end }}

@@ -5,6 +5,9 @@ metadata:
   name: {{ include "common.names.fullname" . }}-receive
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: receive
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
   {{- if .Values.receive.service.annotations }}
   annotations: {{- include "common.tplvalues.render" (dict "value" .Values.receive.service.annotations "context" $) | nindent 4 }}
   {{- end }}
@@ -50,7 +53,7 @@ spec:
       {{- else if eq .Values.receive.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-  selector: 
+  selector:
     {{- if .Values.receive.service.labelSelectorsOverride }}
     {{- include "common.tplvalues.render" (dict "value" .Values.receive.service.labelSelectorsOverride "context" $) | nindent 4 }}
     {{- else }}
