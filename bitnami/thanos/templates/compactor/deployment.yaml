@@ -5,6 +5,9 @@ metadata:
   name: {{ include "common.names.fullname" . }}-compactor
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: compactor
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
 spec:
   replicas: 1
   strategy:
@@ -19,7 +22,10 @@ spec:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: compactor
-        {{- if and .Values.compactor.enabled .Values.compactor.podLabels }}
+        {{- if .Values.commonLabels }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.compactor.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.compactor.podLabels "context" $) | nindent 8 }}
         {{- end }}
       annotations:
@@ -101,7 +107,7 @@ spec:
               containerPort: 10902
               protocol: TCP
           {{- if .Values.compactor.livenessProbe.enabled }}
-          livenessProbe: 
+          livenessProbe:
             httpGet:
               path: /-/healthy
               port: http
@@ -112,7 +118,7 @@ spec:
             failureThreshold: {{ .Values.compactor.livenessProbe.failureThreshold }}
           {{- end }}
           {{- if .Values.compactor.readinessProbe.enabled }}
-          readinessProbe: 
+          readinessProbe:
             httpGet:
               path: /-/ready
               port: http
