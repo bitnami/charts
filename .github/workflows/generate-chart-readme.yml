@@ -1,17 +1,21 @@
 name: Generate Chart Readme
 
-on: 
+on:
   pull_request:
-    branches:    
+    branches:
       - master
     paths:
       - 'bitnami/airflow/values.yaml'
+      - 'bitnami/common/values.yaml'
       - 'bitnami/dokuwiki/values.yaml'
       - 'bitnami/drupal/values.yaml'
       - 'bitnami/ejbca/values.yaml'
       - 'bitnami/fluentd/values.yaml'
       - 'bitnami/grafana/values.yaml'
       - 'bitnami/grafana-operator/values.yaml'
+      - 'bitnami/joomla/values.yaml'
+      - 'bitnami/jupyterhub/values.yaml'
+      - 'bitnami/kafka/values.yaml'
       - 'bitnami/keycloak/values.yaml'
       - 'bitnami/kiam/values.yaml'
       - 'bitnami/kibana/values.yaml'
@@ -21,16 +25,48 @@ on:
       - 'bitnami/kubernetes-event-exporter/values.yaml'
       - 'bitnami/kubewatch/values.yaml'
       - 'bitnami/logstash/values.yaml'
+      - 'bitnami/magento/values.yaml'
+      - 'bitnami/mariadb/values.yaml'
+      - 'bitnami/mariadb-galera/values.yaml'
+      - 'bitnami/metrics-server/values.yaml'
+      - 'bitnami/minio/values.yaml'
+      - 'bitnami/mongodb/values.yaml'
       - 'bitnami/mongodb-sharded/values.yaml'
       - 'bitnami/moodle/values.yaml'
       - 'bitnami/mxnet/values.yaml'
+      - 'bitnami/mysql/values.yaml'
+      - 'bitnami/nats/values.yaml'
+      - 'bitnami/nginx/values.yaml'
+      - 'bitnami/nginx-ingress-controller/values.yaml'
+      - 'bitnami/node/values.yaml'
+      - 'bitnami/node-exporter/values.yaml'
+      - 'bitnami/oauth2-proxy/values.yaml'
+      - 'bitnami/parse/values.yaml'
+      - 'bitnami/phabricator/values.yaml'
+      - 'bitnami/phpbb/values.yaml'
+      - 'bitnami/phpmyadmin/values.yaml'
+      - 'bitnami/postgresql/values.yaml'
+      - 'bitnami/postgresql-ha/values.yaml'
+      - 'bitnami/prestashop/values.yaml'
+      - 'bitnami/pytorch/values.yaml'
+      - 'bitnami/rabbitmq/values.yaml'
+      - 'bitnami/spark/values.yaml'
+      - 'bitnami/spring-cloud-dataflow/values.yaml'
+      - 'bitnami/suitecrm/values.yaml'
+      - 'bitnami/tomcat/values.yaml'
+      - 'bitnami/wavefront/values.yaml'
+      - 'bitnami/wavefront-adapter-for-istio/values.yaml'
+      - 'bitnami/wavefront-hpa-adapter/values.yaml'
+      - 'bitnami/wavefront-prometheus-storage-adapter/values.yaml'
+      - 'bitnami/wildfly/values.yaml'
+      - 'bitnami/wordpress/values.yaml'
+      - 'bitnami/zookeeper/values.yaml'
 
 jobs:
   generate-chart-readme:
     runs-on: ubuntu-latest
 
     steps:
-
       - name: Checkout bitnami-labs/readme-generator-for-helm
         uses: actions/checkout@v2
         with:

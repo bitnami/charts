@@ -108,6 +108,7 @@ dokuwikiWikiName: My Wiki
 ## @param persistence.storageClass PVC Storage Class for DokuWiki volume
 ## @param persistence.accessMode PVC Access Mode for DokuWiki volume
 ## @param persistence.size PVC Storage Request for DokuWiki volume
+## @param persistence.existingClaim Name of an existing PVC to be used
 ##
 persistence:
   enabled: true
@@ -121,6 +122,7 @@ persistence:
   storageClass:
   accessMode: ReadWriteOnce
   size: 8Gi
+  existingClaim:
 ## @param podSecurityContext.enabled Enable securityContext on for DokuWiki deployment
 ## @param podSecurityContext.fsGroup Group to configure permissions for volumes
 ##
