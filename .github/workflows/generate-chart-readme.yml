@@ -6,7 +6,10 @@ on:
       - master
     paths:
       - 'bitnami/airflow/values.yaml'
+      - 'bitnami/cert-manager/values.yaml'
       - 'bitnami/common/values.yaml'
+      - 'bitnami/consul/values.yaml'
+      - 'bitnami/contour/values.yaml'
       - 'bitnami/dokuwiki/values.yaml'
       - 'bitnami/drupal/values.yaml'
       - 'bitnami/ejbca/values.yaml'
