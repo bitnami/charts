@@ -31,7 +31,7 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.web.podLabels "context" $) | nindent 8 }}
         {{- end }}
     spec:
-      serviceAccountName: {{ template "concourse.web.fullname" . }}
+      serviceAccountName: {{ template "concourse.web.serviceAccountName" . }}
       {{- include "imagePullSecrets" . | nindent 6 }}
       {{- if .Values.web.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.web.hostAliases "context" $) | nindent 8 }}

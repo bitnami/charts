@@ -1,5 +1,5 @@
 {{- if .Values.web.enable }}
-{{- if .Values.rbac.create -}}
+{{- if .Values.web.rbac.create -}}
 ---
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole

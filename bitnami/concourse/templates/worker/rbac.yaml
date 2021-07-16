@@ -1,5 +1,5 @@
 {{- if .Values.worker.enabled }}
-{{- if .Values.rbac.create }}
+{{- if .Values.worker.rbac.create }}
 {{- if .Values.worker.psp.create }}
 ---
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}

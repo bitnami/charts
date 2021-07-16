@@ -64,6 +64,28 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
+Create the name of the service account to use (worker)
+*/}}
+{{- define "concourse.worker.serviceAccountName" -}}
+{{- if .Values.worker.serviceAccount.create -}}
+    {{ default (include "concourse.worker.fullname" .) .Values.worker.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.worker.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the name of the service account to use (web)
+*/}}
+{{- define "concourse.web.serviceAccountName" -}}
+{{- if .Values.web.serviceAccount.create -}}
+    {{ default (include "concourse.web.fullname" .) .Values.web.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.web.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Create a default fully qualified postgresql name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
@@ -94,8 +116,8 @@ If not using ClusterIP, or if a host or LoadBalancerIP is not defined, the value
 When using Ingress, it will be set to the Ingress hostname.
 */}}
 {{- define "concourse.host" -}}
-{{- if .Values.web.ingress.enabled }}
-{{- $host := .Values.web.ingress.hostname | default "" -}}
+{{- if .Values.ingress.enabled }}
+{{- $host := .Values.ingress.hostname | default "" -}}
 {{- printf "%s://%s" (ternary "https" "http" .Values.web.tls.enabled) (default (include "concourse.serviceIP" .) $host) -}}
 {{- else if .Values.web.externalUrl -}}
 {{- $host := .Values.web.externalUrl | default "" -}}
