@@ -88,6 +88,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.storageClass`           | PVC Storage Class for DokuWiki volume                                                                                 | `nil`                         |
 | `persistence.accessMode`             | PVC Access Mode for DokuWiki volume                                                                                   | `ReadWriteOnce`               |
 | `persistence.size`                   | PVC Storage Request for DokuWiki volume                                                                               | `8Gi`                         |
+| `persistence.exitingClaim`           | Name of an existing PVC to be used                                                                                    | `nil`                         |
 | `podSecurityContext.enabled`         | Enable securityContext on for DokuWiki deployment                                                                     | `true`                        |
 | `podSecurityContext.fsGroup`         | Group to configure permissions for volumes                                                                            | `1001`                        |
 | `containerSecurityContext.enabled`   | Enable securityContext on for DokuWiki deployment                                                                     | `true`                        |

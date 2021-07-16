@@ -45,198 +45,196 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## Parameters
 
-The following tables lists the configurable parameters of the Apache Spark chart and their default values.
-
 ### Global parameters
 
-| Parameter                 | Description                                     | Default                                                 |
-|---------------------------|-------------------------------------------------|---------------------------------------------------------|
-| `global.imageRegistry`    | Global Docker image registry                    | `nil`                                                   |
-| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]` (does not add image pull secrets to deployed pods) |
+| Name                      | Description                                     | Value |
+| ------------------------- | ----------------------------------------------- | ----- |
+| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
+
 
 ### Common parameters
 
-| Parameter           | Description                                                                                               | Default                        |
-|---------------------|-----------------------------------------------------------------------------------------------------------|--------------------------------|
-| `nameOverride`      | String to partially override common.names.fullname template with a string (will prepend the release name) | `nil`                          |
-| `fullnameOverride`  | String to fully override common.names.fullname template with a string                                     | `nil`                          |
-| `commonLabels`      | Labels to add to all deployed objects                                                                     | `{}`                           |
-| `commonAnnotations` | Annotations to add to all deployed objects                                                                | `{}`                           |
-| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                                      | `nil`                          |
-| `extraDeploy`       | Array of extra objects to deploy with the release                                                         | `[]` (evaluated as a template) |
+| Name               | Description                                                                                  | Value |
+| ------------------ | -------------------------------------------------------------------------------------------- | ----- |
+| `kubeVersion`      | Force target Kubernetes version (using Helm capabilities if not set)                         | `nil` |
+| `nameOverride`     | String to partially override common.names.fullname template (will maintain the release name) | `nil` |
+| `fullnameOverride` | String to fully override common.names.fullname template                                      | `nil` |
+| `extraDeploy`      | Array of extra objects to deploy with the release                                            | `[]`  |
+
 
 ### Spark parameters
 
-| Parameter           | Description                                                                             | Default                                                 |
-|---------------------|-----------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `image.registry`    | spark image registry                                                                    | `docker.io`                                             |
-| `image.repository`  | spark Image name                                                                        | `bitnami/spark`                                         |
-| `image.tag`         | spark Image tag                                                                         | `{TAG_NAME}`                                            |
-| `image.pullPolicy`  | spark image pull policy                                                                 | `IfNotPresent`                                          |
-| `image.pullSecrets` | Specify docker-registry secret names as an array                                        | `[]` (does not add image pull secrets to deployed pods) |
-| `hostNetwork`       | Use Host-Network for the PODs (if true, also dnsPolicy: ClusterFirstWithHostNet is set) | `false`                                                 |
+| Name                | Description                                      | Value                 |
+| ------------------- | ------------------------------------------------ | --------------------- |
+| `image.registry`    | Spark image registry                             | `docker.io`           |
+| `image.repository`  | Spark image repository                           | `bitnami/spark`       |
+| `image.tag`         | Spark image tag (immutable tags are recommended) | `3.1.2-debian-10-r18` |
+| `image.pullPolicy`  | Spark image pull policy                          | `IfNotPresent`        |
+| `image.pullSecrets` | Specify docker-registry secret names as an array | `[]`                  |
+| `image.debug`       | Enable image debug mode                          | `false`               |
+| `hostNetwork`       | Enable HOST Network                              | `false`               |
+
 
 ### Spark master parameters
 
-| Parameter                                   | Description                                                                                                                                | Default                                     |
-|---------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------|
-| `master.debug`                              | Specify if debug values should be set on the master                                                                                        | `false`                                     |
-| `master.webPort`                            | Specify the port where the web interface will listen on the master                                                                         | `8080`                                      |
-| `master.clusterPort`                        | Specify the port where the master listens to communicate with workers                                                                      | `7077`                                      |
-| `master.hostAliases`                        | Add deployment host aliases                                                                                                                | `[]`                                        |
-| `master.daemonMemoryLimit`                  | Set the memory limit for the master daemon                                                                                                 | No default                                  |
-| `master.configOptions`                      | Optional configuration if the form `-Dx=y`                                                                                                 | No default                                  |
-| `master.securityContext.enabled`            | Enable security context                                                                                                                    | `true`                                      |
-| `master.securityContext.fsGroup`            | Group ID for the container                                                                                                                 | `1001`                                      |
-| `master.securityContext.runAsUser`          | User ID for the container                                                                                                                  | `1001`                                      |
-| `master.securityContext.runAsGroup`         | Group ID for the container                                                                                                                 | `0`                                         |
-| `master.securityContext.seLinuxOptions`     | SELinux options for the container                                                                                                          | `{}`                                        |
-| `master.podAnnotations`                     | Annotations for pods in StatefulSet                                                                                                        | `{}` (The value is evaluated as a template) |
-| `master.extraPodLabels`                     | Extra labels for pods in StatefulSet                                                                                                       | `{}` (The value is evaluated as a template) |
-| `master.podAffinityPreset`                  | Spark master pod affinity preset. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard`                                    | `""`                                        |
-| `master.podAntiAffinityPreset`              | Spark master pod anti-affinity preset. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard`                               | `soft`                                      |
-| `master.nodeAffinityPreset.type`            | Spark master node affinity preset type. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard`                              | `""`                                        |
-| `master.nodeAffinityPreset.key`             | Spark master node label key to match Ignored if `master.affinity` is set.                                                                  | `""`                                        |
-| `master.nodeAffinityPreset.values`          | Spark master node label values to match. Ignored if `master.affinity` is set.                                                              | `[]`                                        |
-| `master.affinity`                           | Spark master affinity for pod assignment                                                                                                   | `{}` (evaluated as a template)              |
-| `master.nodeSelector`                       | Spark master node labels for pod assignment                                                                                                | `{}` (evaluated as a template)              |
-| `master.tolerations`                        | Spark master tolerations for pod assignment                                                                                                | `[]` (evaluated as a template)              |
-| `master.resources`                          | CPU/Memory resource requests/limits                                                                                                        | `{}`                                        |
-| `master.extraEnvVars`                       | Extra environment variables to pass to the master container                                                                                | `{}`                                        |
-| `master.extraVolumes`                       | Array of extra volumes to be added to the Spark master deployment (evaluated as template). Requires setting `master.extraVolumeMounts`     | `nil`                                       |
-| `master.extraVolumeMounts`                  | Array of extra volume mounts to be added to the Spark master deployment (evaluated as template). Normally used with `master.extraVolumes`. | `nil`                                       |
-| `master.livenessProbe.enabled`              | Turn on and off liveness probe                                                                                                             | `true`                                      |
-| `master.livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated                                                                                                   | 10                                          |
-| `master.livenessProbe.periodSeconds`        | How often to perform the probe                                                                                                             | 10                                          |
-| `master.livenessProbe.timeoutSeconds`       | When the probe times out                                                                                                                   | 5                                           |
-| `master.livenessProbe.failureThreshold`     | Minimum consecutive failures for the probe to be considered failed after having succeeded.                                                 | 2                                           |
-| `master.livenessProbe.successThreshold`     | Minimum consecutive successes for the probe to be considered successful after having failed                                                | 1                                           |
-| `master.readinessProbe.enabled`             | Turn on and off readiness probe                                                                                                            | `true`                                      |
-| `master.readinessProbe.initialDelaySeconds` | Delay before liveness probe is initiated                                                                                                   | 5                                           |
-| `master.readinessProbe.periodSeconds`       | How often to perform the probe                                                                                                             | 10                                          |
-| `master.readinessProbe.timeoutSeconds`      | When the probe times out                                                                                                                   | 5                                           |
-| `master.readinessProbe.failureThreshold`    | Minimum consecutive failures for the probe to be considered failed after having succeeded.                                                 | 6                                           |
-| `master.readinessProbe.successThreshold`    | Minimum consecutive successes for the probe to be considered successful after having failed                                                | 1                                           |
+| Name                                        | Description                                                                                                   | Value  |
+| ------------------------------------------- | ------------------------------------------------------------------------------------------------------------- | ------ |
+| `master.configurationConfigMap`             | Set a custom configuration by using an existing configMap with the configuration file.                        | `nil`  |
+| `master.webPort`                            | Specify the port where the web interface will listen on the master                                            | `8080` |
+| `master.clusterPort`                        | Specify the port where the master listens to communicate with workers                                         | `7077` |
+| `master.hostAliases`                        | Deployment pod host aliases                                                                                   | `[]`   |
+| `master.daemonMemoryLimit`                  | Set the memory limit for the master daemon                                                                    | `nil`  |
+| `master.configOptions`                      | Use a string to set the config options for in the form "-Dx=y"                                                | `nil`  |
+| `master.extraEnvVars`                       | Extra environment variables to pass to the master container                                                   | `nil`  |
+| `master.securityContext.enabled`            | Enable security context                                                                                       | `true` |
+| `master.securityContext.fsGroup`            | Group ID for the container                                                                                    | `1001` |
+| `master.securityContext.runAsUser`          | User ID for the container                                                                                     | `1001` |
+| `master.securityContext.runAsGroup`         | Group ID for the container                                                                                    | `0`    |
+| `master.securityContext.seLinuxOptions`     | SELinux options for the container                                                                             | `{}`   |
+| `master.podAnnotations`                     | Annotations for pods in StatefulSet                                                                           | `{}`   |
+| `master.extraPodLabels`                     | Extra labels for pods in StatefulSet                                                                          | `{}`   |
+| `master.podAffinityPreset`                  | Spark master pod affinity preset. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard`       | `""`   |
+| `master.podAntiAffinityPreset`              | Spark master pod anti-affinity preset. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard`  | `soft` |
+| `master.nodeAffinityPreset.type`            | Spark master node affinity preset type. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard` | `""`   |
+| `master.nodeAffinityPreset.key`             | Spark master node label key to match Ignored if `master.affinity` is set.                                     | `""`   |
+| `master.nodeAffinityPreset.values`          | Spark master node label values to match. Ignored if `master.affinity` is set.                                 | `[]`   |
+| `master.affinity`                           | Spark master affinity for pod assignment                                                                      | `{}`   |
+| `master.nodeSelector`                       | Spark master node labels for pod assignment                                                                   | `{}`   |
+| `master.tolerations`                        | Spark master tolerations for pod assignment                                                                   | `[]`   |
+| `master.resources.limits`                   | The resources limits for the container                                                                        | `{}`   |
+| `master.resources.requests`                 | The requested resources for the container                                                                     | `{}`   |
+| `master.livenessProbe.enabled`              | Enable livenessProbe                                                                                          | `true` |
+| `master.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                       | `180`  |
+| `master.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                              | `20`   |
+| `master.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                             | `5`    |
+| `master.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                           | `6`    |
+| `master.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                           | `1`    |
+| `master.readinessProbe.enabled`             | Enable readinessProbe                                                                                         | `true` |
+| `master.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                                      | `30`   |
+| `master.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                             | `10`   |
+| `master.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                            | `5`    |
+| `master.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                          | `6`    |
+| `master.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                          | `1`    |
+| `master.initContainers`                     | Add initContainers to the master pods.                                                                        | `{}`   |
+
 
 ### Spark worker parameters
 
-| Parameter                                   | Description                                                                                                                                                                          | Default                                     |
-|---------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------|
-| `worker.debug`                              | Specify if debug values should be set on workers                                                                                                                                     | `false`                                     |
-| `worker.webPort`                            | Specify the port where the web interface will listen on the worker                                                                                                                   | `8080`                                      |
-| `worker.clusterPort`                        | Specify the port where the worker listens to communicate with the master                                                                                                             | `7077`                                      |
-| `worker.extraPorts`                         | Specify the port where the running jobs inside the workers listens, [ContainerPort spec](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#containerport-v1-core) | `[]`                                        |
-| `worker.daemonMemoryLimit`                  | Set the memory limit for the worker daemon                                                                                                                                           | No default                                  |
-| `worker.memoryLimit`                        | Set the maximum memory the worker is allowed to use                                                                                                                                  | No default                                  |
-| `worker.coreLimit`                          | Se the maximum number of cores that the worker can use                                                                                                                               | No default                                  |
-| `worker.dir`                                | Set a custom working directory for the application                                                                                                                                   | No default                                  |
-| `worker.hostAliases`                        | Add deployment host aliases                                                                                                                                                          | `[]`                                        |
-| `worker.javaOptions`                        | Set options for the JVM in the form `-Dx=y`                                                                                                                                          | No default                                  |
-| `worker.configOptions`                      | Set extra options to configure the worker in the form `-Dx=y`                                                                                                                        | No default                                  |
-| `worker.replicaCount`                       | Set the number of workers                                                                                                                                                            | `2`                                         |
-| `worker.podManagementPolicy`                | Statefulset Pod Management Policy Type                                                                                                                                               | `OrderedReady`                              |
-| `worker.autoscaling.enabled`                | Enable autoscaling depending on CPU                                                                                                                                                  | `false`                                     |
-| `worker.autoscaling.CpuTargetPercentage`    | k8s hpa cpu targetPercentage                                                                                                                                                         | `50`                                        |
-| `worker.autoscaling.replicasMax`            | Maximum number of workers when using autoscaling                                                                                                                                     | `5`                                         |
-| `worker.securityContext.enabled`            | Enable security context                                                                                                                                                              | `true`                                      |
-| `worker.securityContext.fsGroup`            | Group ID for the container                                                                                                                                                           | `1001`                                      |
-| `worker.securityContext.runAsUser`          | User ID for the container                                                                                                                                                            | `1001`                                      |
-| `worker.securityContext.runAsGroup`         | Group ID for the container                                                                                                                                                           | `0`                                         |
-| `worker.securityContext.seLinuxOptions`     | SELinux options for the container                                                                                                                                                    | `{}`                                        |
-| `worker.podAnnotations`                     | Annotations for pods in StatefulSet                                                                                                                                                  | `{}`                                        |
-| `worker.extraPodLabels`                     | Extra labels for pods in StatefulSet                                                                                                                                                 | `{}` (The value is evaluated as a template) |
-| `worker.podAffinityPreset`                  | Spark worker pod affinity preset. Ignored if `worker.affinity` is set. Allowed values: `soft` or `hard`                                                                              | `""`                                        |
-| `worker.podAntiAffinityPreset`              | Spark worker pod anti-affinity preset. Ignored if `worker.affinity` is set. Allowed values: `soft` or `hard`                                                                         | `soft`                                      |
-| `worker.nodeAffinityPreset.type`            | Spark worker node affinity preset type. Ignored if `worker.affinity` is set. Allowed values: `soft` or `hard`                                                                        | `""`                                        |
-| `worker.nodeAffinityPreset.key`             | Spark worker node label key to match Ignored if `worker.affinity` is set.                                                                                                            | `""`                                        |
-| `worker.nodeAffinityPreset.values`          | Spark worker node label values to match. Ignored if `worker.affinity` is set.                                                                                                        | `[]`                                        |
-| `worker.affinity`                           | Spark worker affinity for pod assignment                                                                                                                                             | `{}` (evaluated as a template)              |
-| `worker.nodeSelector`                       | Spark worker node labels for pod assignment                                                                                                                                          | `{}` (evaluated as a template)              |
-| `worker.tolerations`                        | Spark worker tolerations for pod assignment                                                                                                                                          | `[]` (evaluated as a template)              |
-| `worker.resources`                          | CPU/Memory resource requests/limits                                                                                                                                                  | Memory: `256Mi`, CPU: `250m`                |
-| `worker.livenessProbe.enabled`              | Turn on and off liveness probe                                                                                                                                                       | `true`                                      |
-| `worker.livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated                                                                                                                                             | 10                                          |
-| `worker.livenessProbe.periodSeconds`        | How often to perform the probe                                                                                                                                                       | 10                                          |
-| `worker.livenessProbe.timeoutSeconds`       | When the probe times out                                                                                                                                                             | 5                                           |
-| `worker.livenessProbe.failureThreshold`     | Minimum consecutive failures for the probe to be considered failed after having succeeded.                                                                                           | 2                                           |
-| `worker.livenessProbe.successThreshold`     | Minimum consecutive successes for the probe to be considered successful after having failed                                                                                          | 1                                           |
-| `worker.readinessProbe.enabled`             | Turn on and off readiness probe                                                                                                                                                      | `true`                                      |
-| `worker.readinessProbe.initialDelaySeconds` | Delay before liveness probe is initiated                                                                                                                                             | 5                                           |
-| `worker.readinessProbe.periodSeconds`       | How often to perform the probe                                                                                                                                                       | 10                                          |
-| `worker.readinessProbe.timeoutSeconds`      | When the probe times out                                                                                                                                                             | 5                                           |
-| `worker.readinessProbe.failureThreshold`    | Minimum consecutive failures for the probe to be considered failed after having succeeded.                                                                                           | 6                                           |
-| `worker.readinessProbe.successThreshold`    | Minimum consecutive successes for the probe to be considered successful after having failed                                                                                          | 1                                           |
-| `master.extraEnvVars`                       | Extra environment variables to pass to the worker container                                                                                                                          | `{}`                                        |
-| `worker.extraVolumes`                       | Array of extra volumes to be added to the Spark worker deployment (evaluated as template). Requires setting `worker.extraVolumeMounts`                                               | `nil`                                       |
-| `worker.extraVolumeMounts`                  | Array of extra volume mounts to be added to the Spark worker deployment (evaluated as template). Normally used with `worker.extraVolumes`.                                           | `nil`                                       |
+| Name                                        | Description                                                                                                   | Value          |
+| ------------------------------------------- | ------------------------------------------------------------------------------------------------------------- | -------------- |
+| `worker.configurationConfigMap`             | Set a custom configuration by using an existing configMap with the configuration file.                        | `nil`          |
+| `worker.webPort`                            | Specify the port where the web interface will listen on the worker                                            | `8081`         |
+| `worker.clusterPort`                        | Specify the port where the worker listens to communicate with the master                                      | `nil`          |
+| `worker.hostAliases`                        | Add deployment host aliases                                                                                   | `[]`           |
+| `worker.extraPorts`                         | Specify the port where the running jobs inside the workers listens                                            | `[]`           |
+| `worker.daemonMemoryLimit`                  | Set the memory limit for the worker daemon                                                                    | `nil`          |
+| `worker.memoryLimit`                        | Set the maximum memory the worker is allowed to use                                                           | `nil`          |
+| `worker.coreLimit`                          | Se the maximum number of cores that the worker can use                                                        | `nil`          |
+| `worker.dir`                                | Set a custom working directory for the application                                                            | `nil`          |
+| `worker.javaOptions`                        | Set options for the JVM in the form `-Dx=y`                                                                   | `nil`          |
+| `worker.configOptions`                      | Set extra options to configure the worker in the form `-Dx=y`                                                 | `nil`          |
+| `worker.extraEnvVars`                       | An array to add extra env vars                                                                                | `nil`          |
+| `worker.replicaCount`                       | Number of spark workers (will be the minimum number when autoscaling is enabled)                              | `2`            |
+| `worker.podManagementPolicy`                | Statefulset Pod Management Policy Type                                                                        | `OrderedReady` |
+| `worker.securityContext.enabled`            | Enable security context                                                                                       | `true`         |
+| `worker.securityContext.fsGroup`            | Group ID for the container                                                                                    | `1001`         |
+| `worker.securityContext.runAsUser`          | User ID for the container                                                                                     | `1001`         |
+| `worker.securityContext.runAsGroup`         | Group ID for the container                                                                                    | `0`            |
+| `worker.securityContext.seLinuxOptions`     | SELinux options for the container                                                                             | `{}`           |
+| `worker.podAnnotations`                     | Annotations for pods in StatefulSet                                                                           | `{}`           |
+| `worker.extraPodLabels`                     | Extra labels for pods in StatefulSet                                                                          | `{}`           |
+| `worker.podAffinityPreset`                  | Spark worker pod affinity preset. Ignored if `worker.affinity` is set. Allowed values: `soft` or `hard`       | `""`           |
+| `worker.podAntiAffinityPreset`              | Spark worker pod anti-affinity preset. Ignored if `worker.affinity` is set. Allowed values: `soft` or `hard`  | `soft`         |
+| `worker.nodeAffinityPreset.type`            | Spark worker node affinity preset type. Ignored if `worker.affinity` is set. Allowed values: `soft` or `hard` | `""`           |
+| `worker.nodeAffinityPreset.key`             | Spark worker node label key to match Ignored if `worker.affinity` is set.                                     | `""`           |
+| `worker.nodeAffinityPreset.values`          | Spark worker node label values to match. Ignored if `worker.affinity` is set.                                 | `[]`           |
+| `worker.affinity`                           | Spark worker affinity for pod assignment                                                                      | `{}`           |
+| `worker.nodeSelector`                       | Spark worker node labels for pod assignment                                                                   | `{}`           |
+| `worker.tolerations`                        | Spark worker tolerations for pod assignment                                                                   | `[]`           |
+| `worker.resources.limits`                   | The resources limits for the container                                                                        | `{}`           |
+| `worker.resources.requests`                 | The requested resources for the container                                                                     | `{}`           |
+| `worker.livenessProbe.enabled`              | Enable livenessProbe                                                                                          | `true`         |
+| `worker.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                       | `180`          |
+| `worker.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                              | `20`           |
+| `worker.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                             | `5`            |
+| `worker.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                           | `6`            |
+| `worker.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                           | `1`            |
+| `worker.readinessProbe.enabled`             | Enable readinessProbe                                                                                         | `true`         |
+| `worker.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                                      | `30`           |
+| `worker.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                             | `10`           |
+| `worker.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                            | `5`            |
+| `worker.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                          | `6`            |
+| `worker.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                          | `1`            |
+| `worker.initContainers`                     | Add initContainers to the master pods.                                                                        | `{}`           |
+| `worker.autoscaling.enabled`                | Enable replica autoscaling depending on CPU                                                                   | `false`        |
+| `worker.autoscaling.CpuTargetPercentage`    | Kubernetes HPA CPU target percentage                                                                          | `50`           |
+| `worker.autoscaling.replicasMax`            | Maximum number of workers when using autoscaling                                                              | `5`            |
+
 
 ### Security parameters
 
-| Parameter                            | Description                                                             | Default    |
-|--------------------------------------|-------------------------------------------------------------------------|------------|
-| `security.passwordsSecretName`       | Secret to use when using security configuration to set custom passwords | No default |
-| `security.rpc.authenticationEnabled` | Enable the RPC authentication                                           | `false`    |
-| `security.rpc.encryptionEnabled`     | Enable the encryption for RPC                                           | `false`    |
-| `security.storageEncryptionEnabled`  | Enable the encryption of the storage                                    | `false`    |
-| `security.ssl.enabled`               | Enable the SSL configuration                                            | `false`    |
-| `security.ssl.needClientAuth`        | Enable the client authentication                                        | `false`    |
-| `security.ssl.protocol`              | Set the SSL protocol                                                    | `TLSv1.2`  |
-| `security.ssl.existingSecret`        | Set the name of the secret that contains the certificates               | No default |
-| `security.ssl.keystorePassword`      | Set the password of the JKS Keystore                                    | No default |
-| `security.ssl.existingSecret`        | Set the password of the JKS Truststore                                  | No default |
-| `security.ssl.autoGenerated`         | Generate automatically self-signed TLS certificates                     | `false`    |
-| `security.ssl.resources.limits`      | The resources limits for the TLS                                        | `{}`       |
-| `security.ssl.resources.requests`    | The requested resources for the TLS init                                | `{}`       |
+| Name                                 | Description                                                                   | Value     |
+| ------------------------------------ | ----------------------------------------------------------------------------- | --------- |
+| `security.passwordsSecretName`       | Name of the secret that contains all the passwords                            | `nil`     |
+| `security.rpc.authenticationEnabled` | Enable the RPC authentication                                                 | `false`   |
+| `security.rpc.encryptionEnabled`     | Enable the encryption for RPC                                                 | `false`   |
+| `security.storageEncryptionEnabled`  | Enables local storage encryption                                              | `false`   |
+| `security.certificatesSecretName`    | Name of the secret that contains the certificates.                            | `nil`     |
+| `security.ssl.enabled`               | Enable the SSL configuration                                                  | `false`   |
+| `security.ssl.needClientAuth`        | Enable the client authentication                                              | `false`   |
+| `security.ssl.protocol`              | Set the SSL protocol                                                          | `TLSv1.2` |
+| `security.ssl.existingSecret`        | Name of the existing secret containing the TLS certificates                   | `nil`     |
+| `security.ssl.autoGenerated`         | Create self-signed TLS certificates. Currently only supports PEM certificates | `false`   |
+| `security.ssl.keystorePassword`      | Set the password of the JKS Keystore                                          | `nil`     |
+| `security.ssl.truststorePassword`    | Truststore password.                                                          | `nil`     |
+| `security.ssl.resources.limits`      | The resources limits for the container                                        | `{}`      |
+| `security.ssl.resources.requests`    | The requested resources for the container                                     | `{}`      |
 
-### Exposure parameters
 
-| Parameter                        | Description                                                   | Default                        |
-|----------------------------------|---------------------------------------------------------------|--------------------------------|
-| `service.type`                   | Kubernetes Service type                                       | `ClusterIP`                    |
-| `service.webPort`                | Spark client port                                             | `80`                           |
-| `service.clusterPort`            | Spark cluster port                                            | `7077`                         |
-| `service.nodePort`               | Port to bind to for NodePort service type (client port)       | `nil`                          |
-| `service.nodePorts.cluster`      | Kubernetes cluster node port                                  | `""`                           |
-| `service.nodePorts.web`          | Kubernetes web node port                                      | `""`                           |
-| `service.annotations`            | Annotations for spark service                                 | {}                             |
-| `service.loadBalancerIP`         | loadBalancerIP if spark service type is `LoadBalancer`        | `nil`                          |
-| `ingress.enabled`                | Enable ingress controller resource                            | `false`                        |
-| `ingress.certManager`            | Add annotations for cert-manager                              | `false`                        |
-| `ingress.hostname`               | Default host for the ingress resource                         | `spark.local`                  |
-| `ingress.path`                   | Default path for the ingress resource                         | `/`                            |
-| `ingress.tls`                    | Create TLS Secret                                             | `false`                        |
-| `ingress.annotations`            | Ingress annotations                                           | `[]` (evaluated as a template) |
-| `ingress.extraHosts[0].name`     | Additional hostnames to be covered                            | `nil`                          |
-| `ingress.extraHosts[0].path`     | Additional hostnames to be covered                            | `nil`                          |
-| `ingress.extraPaths`             | Additional arbitrary path/backend objects                     | `nil`                          |
-| `ingress.extraTls[0].hosts[0]`   | TLS configuration for additional hostnames to be covered      | `nil`                          |
-| `ingress.extraTls[0].secretName` | TLS configuration for additional hostnames to be covered      | `nil`                          |
-| `ingress.secrets[0].name`        | TLS Secret Name                                               | `nil`                          |
-| `ingress.secrets[0].certificate` | TLS Secret Certificate                                        | `nil`                          |
-| `ingress.secrets[0].key`         | TLS Secret Key                                                | `nil`                          |
-| `ingress.apiVersion`             | Force Ingress API version (automatically detected if not set) | ``                             |
-| `ingress.path`                   | Ingress path                                                  | `/`                            |
-| `ingress.pathType`               | Ingress path type                                             | `ImplementationSpecific`       |
+### Traffic Exposure parameters
+
+| Name                        | Description                                                                                            | Value                    |
+| --------------------------- | ------------------------------------------------------------------------------------------------------ | ------------------------ |
+| `service.type`              | Kubernetes Service type                                                                                | `ClusterIP`              |
+| `service.clusterPort`       | Spark cluster port                                                                                     | `7077`                   |
+| `service.webPort`           | Spark client port                                                                                      | `80`                     |
+| `service.nodePorts.cluster` | Kubernetes cluster node port                                                                           | `""`                     |
+| `service.nodePorts.web`     | Kubernetes web node port                                                                               | `""`                     |
+| `service.loadBalancerIP`    | Load balancer IP if spark service type is `LoadBalancer`                                               | `nil`                    |
+| `service.annotations`       | Annotations for spark service                                                                          | `{}`                     |
+| `ingress.enabled`           | Enable ingress controller resource                                                                     | `false`                  |
+| `ingress.certManager`       | Set this to true in order to add the corresponding annotations for cert-manager                        | `false`                  |
+| `ingress.pathType`          | Ingress path type                                                                                      | `ImplementationSpecific` |
+| `ingress.apiVersion`        | Force Ingress API version (automatically detected if not set)                                          | `nil`                    |
+| `ingress.hostname`          | Default host for the ingress resource                                                                  | `spark.local`            |
+| `ingress.path`              | The Path to Spark. You may need to set this to '/*' in order to use this with ALB ingress controllers. | `ImplementationSpecific` |
+| `ingress.annotations`       | Ingress annotations                                                                                    | `{}`                     |
+| `ingress.tls`               | Enable TLS configuration for the hostname defined at ingress.hostname parameter                        | `false`                  |
+| `ingress.extraHosts`        | The list of additional hostnames to be covered with this ingress record.                               | `[]`                     |
+| `ingress.extraPaths`        | Any additional arbitrary paths that may need to be added to the ingress under the main host.           | `[]`                     |
+| `ingress.extraTls`          | The tls configuration for additional hostnames to be covered with this ingress record.                 | `[]`                     |
+| `ingress.secrets`           | If you're providing your own certificates, please use this to add the certificates as secrets          | `[]`                     |
+
 
 ### Metrics parameters
 
-| Parameter                                  | Description                                                                                                                                                                                                  | Default                                                                                       |
-|--------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------|
-| `metrics.enabled`                          | Start a side-car prometheus exporter                                                                                                                                                                         | `false`                                                                                       |
-| `metrics.masterAnnotations`                | Annotations for enabling prometheus to access the metrics endpoint of the master nodes                                                                                                                       | `{prometheus.io/scrape: "true", prometheus.io/path: "/metrics/", prometheus.io/port: "8080"}` |
-| `metrics.workerAnnotations`                | Annotations for enabling prometheus to access the metrics endpoint of the worker nodes                                                                                                                       | `{prometheus.io/scrape: "true", prometheus.io/path: "/metrics/", prometheus.io/port: "8081"}` |
-| `metrics.resources.limits`                 | The resources limits for the metrics exporter container                                                                                                                                                      | `{}`                                                                                          |
-| `metrics.resources.requests`               | The requested resources for the metrics exporter container                                                                                                                                                   | `{}`                                                                                          |
-| `metrics.podMonitor.enabled`               | Create PodMonitor Resource for scraping metrics using PrometheusOperator                                                                                                                                     | `false`                                                                                       |
-| `metrics.podMonitor.extraMetricsEndpoints` | Add metrics endpoints for monitoring the jobs running in the worker nodes, [MetricsEndpoint](https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#podmetricsendpoint) | `[]`                                                                                          |
-| `metrics.podMonitor.namespace`             | Namespace where podmonitor resource should be created                                                                                                                                                        | `nil`                                                                                         |
-| `metrics.podMonitor.interval`              | Specify the interval at which metrics should be scraped                                                                                                                                                      | `30s`                                                                                         |
-| `metrics.podMonitor.scrapeTimeout`         | Specify the timeout after which the scrape is ended                                                                                                                                                          | `nil`                                                                                         |
-| `metrics.podMonitor.additionalLabels`      | Additional labels that can be used so PodMonitors will be discovered by Prometheus                                                                                                                           | `{}`                                                                                          |
-| `metrics.prometheusRule.enabled`           | Set this to true to create prometheusRules for Prometheus                                                                                                                                                    | `false`                                                                                       |
-| `metrics.prometheusRule.additionalLabels`  | Additional labels that can be used so prometheusRules will be discovered by Prometheus                                                                                                                       | `{}`                                                                                          |
-| `metrics.prometheusRule.namespace`         | namespace where prometheusRules resource should be created                                                                                                                                                   | the same namespace as spark                                                                   |
-| `metrics.prometheusRule.rules`             | [rules](https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/) to be created, check values for an example.                                                                              | `[]`                                                                                          |
+| Name                                       | Description                                                                                                                             | Value   |
+| ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `metrics.enabled`                          | Start a side-car prometheus exporter                                                                                                    | `false` |
+| `metrics.masterAnnotations`                | Annotations for the Prometheus metrics on master nodes                                                                                  | `{}`    |
+| `metrics.workerAnnotations`                | Annotations for the Prometheus metrics on worker nodes                                                                                  | `{}`    |
+| `metrics.podMonitor.enabled`               | If the operator is installed in your cluster, set to true to create a PodMonitor Resource for scraping metrics using PrometheusOperator | `false` |
+| `metrics.podMonitor.extraMetricsEndpoints` | Add metrics endpoints for monitoring the jobs running in the worker nodes                                                               | `[]`    |
+| `metrics.podMonitor.namespace`             | Specify the namespace in which the podMonitor resource will be created                                                                  | `""`    |
+| `metrics.podMonitor.interval`              | Specify the interval at which metrics should be scraped                                                                                 | `30s`   |
+| `metrics.podMonitor.scrapeTimeout`         | Specify the timeout after which the scrape is ended                                                                                     | `nil`   |
+| `metrics.podMonitor.additionalLabels`      | Additional labels that can be used so PodMonitors will be discovered by Prometheus                                                      | `{}`    |
+| `metrics.prometheusRule.enabled`           | Set this to true to create prometheusRules for Prometheus                                                                               | `false` |
+| `metrics.prometheusRule.namespace`         | Namespace where the prometheusRules resource should be created                                                                          | `""`    |
+| `metrics.prometheusRule.additionalLabels`  | Additional labels that can be used so prometheusRules will be discovered by Prometheus                                                  | `{}`    |
+| `metrics.prometheusRule.rules`             | Custom Prometheus [rules](https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/)                                   | `[]`    |
+
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

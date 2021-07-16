@@ -1,19 +1,55 @@
+## @section Global parameters
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
-## Current available global Docker image parameters: imageRegistry and imagePullSecrets
-##
-# global:
-#   imageRegistry: myRegistryName
-#   imagePullSecrets:
-#     - myRegistryKeySecretName
-#   storageClass: myStorageClass
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
 
-## Force target Kubernetes version (using Helm capabilites if not set)
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.storageClass Global StorageClass for Persistent Volume(s)
+##
+global:
+  imageRegistry:
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+  storageClass:
+
+## @section Common parameters
+
+## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
 kubeVersion:
+## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
+##
+nameOverride:
+## @param fullnameOverride String to fully override common.names.fullname template
+##
+fullnameOverride:
+## @param commonLabels Add labels to all the deployed resources
+##
+commonLabels: {}
+## @param commonAnnotations Add annotations to all the deployed resources
+##
+commonAnnotations: {}
+## @param clusterDomain Kubernetes Cluster Domain
+##
+clusterDomain: cluster.local
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
+
+## @section Tomcat parameters
 
 ## Bitnami Tomcat image version
 ## ref: https://hub.docker.com/r/bitnami/tomcat/tags/
+## @param image.registry Tomcat image registry
+## @param image.repository Tomcat image repository
+## @param image.tag Tomcat image tag (immutable tags are recommended)
+## @param image.pullPolicy Tomcat image pull policy
+## @param image.pullSecrets Specify docker-registry secret names as an array
+## @param image.debug Specify if debug logs should be enabled
 ##
 image:
   registry: docker.io
@@ -35,96 +71,64 @@ image:
   ## Set to true if you would like to see extra information on logs
   ##
   debug: false
-
-## String to partially override common.names.fullname template (will maintain the release name)
-##
-# nameOverride:
-
-## String to fully override common.names.fullname template
-##
-# fullnameOverride:
-
-## Add labels to all the deployed resources
-##
-commonLabels: {}
-
-## Add annotations to all the deployed resources
-##
-commonAnnotations: {}
-
-## Kubernetes Cluster Domain
-##
-clusterDomain: cluster.local
-
-## Extra objects to deploy (value evaluated as a template)
-##
-extraDeploy: []
-
-## Deployment pod host aliases
+## @param hostAliases Deployment pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
 hostAliases: []
-
-## Admin user
+## @param tomcatUsername Tomcat admin user
 ## ref: https://github.com/bitnami/bitnami-docker-tomcat#creating-a-custom-user
 ##
 tomcatUsername: user
-
-## Admin password
+## @param tomcatPassword Tomcat admin password
 ## ref: https://github.com/bitnami/bitnami-docker-tomcat#creating-a-custom-user
 ##
-# tomcatPassword:
-
-## Expose management services
+tomcatPassword:
+## @param tomcatAllowRemoteManagement Enable remote access to management interface
 ## ref: https://github.com/bitnami/charts/tree/master/bitnami/tomcat#configuration
 ##
 tomcatAllowRemoteManagement: 0
-
-## Command and args for running the container (set to default if not set). Use array form
+## @param command Override default container command (useful when using custom images)
 ##
 command: []
+## @param args Override default container args (useful when using custom images)
+##
 args: []
-
-## Additional environment variables to set
+## @param extraEnvVars Extra environment variables to be set on Tomcat container
 ## Example:
 ## extraEnvVars:
 ##   - name: FOO
 ##     value: "bar"
 ##
 extraEnvVars: []
-
-## ConfigMap with extra environment variables
+## @param extraEnvVarsCM Name of existing ConfigMap containing extra environment variables
 ##
 extraEnvVarsCM:
-
-## Secret with extra environment variables
+## @param extraEnvVarsSecret Name of existing Secret containing extra environment variables
 ##
 extraEnvVarsSecret:
 
-## Number of Tomcat replicas
+## @section Tomcat deployment parameters
+
+## @param replicaCount Specify number of Tomcat replicas
 ##
 replicaCount: 1
-
 ## Deployment
 ##
 deployment:
-  ## Deployment type: deployment or statefulset
+  ## @param deployment.type Use Deployment or StatefulSet
   ##
   type: deployment
-
 ## Strategy to use to update Pods
 ##
 updateStrategy:
-  ## StrategyType
+  ## @param updateStrategy.type StrategyType
   ## Can be set to RollingUpdate or OnDelete
   ##
   type: RollingUpdate
-
-## Tomcat container port to open
+## @param containerPort HTTP port to expose at container level
 ##
 containerPort: 8080
-
-## Tomcat container extra ports to open
+## @param containerExtraPorts Extra ports to expose at container level
 ##
 ## Example:
 ## containerExtraPorts:
@@ -132,38 +136,50 @@ containerPort: 8080
 ##    containerPort: 8081
 ##
 containerExtraPorts: {}
-
 ## Tomcat pods' Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+## @param podSecurityContext.enabled Enable Tomcat pods' Security Context
+## @param podSecurityContext.fsGroup Set Tomcat pod's Security Context fsGroup
 ##
 podSecurityContext:
   enabled: true
   fsGroup: 1001
-
 ## Tomcat containers' SecurityContext
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+## @param containerSecurityContext.enabled Enable Tomcat containers' SecurityContext
+## @param containerSecurityContext.runAsUser User ID for the Tomcat container
 ##
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
-
 ## Tomcat containers' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## We usually recommend not to specify default resources and to leave this as a conscious
+## choice for the user. This also increases chances charts run on environments with little
+## resources, such as Minikube. If you do want to specify resources, uncomment the following
+## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+## @param resources.limits The resources limits for the Tomcat container
+## @param resources.requests [object] The requested resources for the Tomcat container
 ##
 resources:
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## Example:
+  ## limits:
+  ##    cpu: 500m
+  ##    memory: 1Gi
   limits: {}
-  #   cpu: 500m
-  #   memory: 1Gi
   requests:
     cpu: 300m
     memory: 512Mi
-
-## Liveness and Readiness probes
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
+## Configure extra options for liveness probe
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+## @param livenessProbe.enabled Enable livenessProbe
+## @param livenessProbe.httpGet.path Request path for livenessProbe
+## @param livenessProbe.httpGet.port Port for livenessProbe
+## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+## @param livenessProbe.periodSeconds Period seconds for livenessProbe
+## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+## @param livenessProbe.failureThreshold Failure threshold for livenessProbe
+## @param livenessProbe.successThreshold Success threshold for livenessProbe
 ##
 livenessProbe:
   enabled: true
@@ -175,6 +191,17 @@ livenessProbe:
   failureThreshold: 6
   timeoutSeconds: 5
   successThreshold: 1
+## Configure extra options for readiness probe
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+## @param readinessProbe.enabled Enable readinessProbe
+## @param readinessProbe.httpGet.path Request path for readinessProbe
+## @param readinessProbe.httpGet.port Port for readinessProbe
+## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+## @param readinessProbe.periodSeconds Period seconds for readinessProbe
+## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+## @param readinessProbe.failureThreshold Failure threshold for readinessProbe
+## @param readinessProbe.successThreshold Success threshold for readinessProbe
+##
 readinessProbe:
   enabled: true
   httpGet:
@@ -185,88 +212,70 @@ readinessProbe:
   failureThreshold: 3
   timeoutSeconds: 3
   successThreshold: 1
-
-## Custom Liveness probes for Tomcat
+## @param customLivenessProbe Override default liveness probe
 ##
 customLivenessProbe: {}
-
-## Custom Rediness probes Tomcat
+## @param customReadinessProbe Override default readiness probe
 ##
 customReadinessProbe: {}
-
-## Additional pod labels
+## @param podLabels Extra labels for Tomcat pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
 podLabels: {}
-
-## Additional pod annotations
+## @param podAnnotations Annotations for Tomcat pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
-
-## Pod affinity preset
+## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-## Allowed values: soft, hard
 ##
 podAffinityPreset: ""
-
-## Pod anti-affinity preset
+## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-## Allowed values: soft, hard
 ##
 podAntiAffinityPreset: soft
-
 ## Node affinity preset
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-## Allowed values: soft, hard
 ##
 nodeAffinityPreset:
-  ## Node affinity type
-  ## Allowed values: soft, hard
+  ## @param nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ##
   type: ""
-  ## Node label key to match
+  ## @param nodeAffinityPreset.key Node label key to match. Ignored if `affinity` is set.
   ## E.g.
   ## key: "kubernetes.io/e2e-az-name"
   ##
   key: ""
-  ## Node label values to match
+  ## @param nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set.
   ## E.g.
   ## values:
   ##   - e2e-az1
   ##   - e2e-az2
   ##
   values: []
-
-## Affinity for pod assignment. Evaluated as a template.
+## @param affinity Affinity for pod assignment. Evaluated as a template.
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ## Note: podAffinityPreset, podAntiAffinityPreset, and nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
-
-## Node labels for pod assignment. Evaluated as a template.
+## @param nodeSelector Node labels for pod assignment. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
 nodeSelector: {}
-
-## Tolerations for pod assignment. Evaluated as a template.
+## @param tolerations Tolerations for pod assignment. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
-
-## Extra volumes to add to the deployment
+## @param extraVolumes Optionally specify extra list of additional volumes for Tomcat pods in Deployment
 ##
 extraVolumes: []
-
-## Extra volume claim templates to add to the statefulset
+## @param extraVolumeClaimTemplates Optionally specify extra list of additional volume claim templates for Tomcat pods in StatefulSet
 ##
 extraVolumeClaimTemplates: []
-
-## Extra volume mounts to add to the container
+## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for Tomcat container(s)
 ##
 extraVolumeMounts: []
-
-## Add init containers to the Tomcat pods.
+## @param initContainers Add init containers to the Tomcat pods.
 ## Example:
 ## initContainers:
 ##   - name: your-image-name
@@ -277,8 +286,7 @@ extraVolumeMounts: []
 ##         containerPort: 1234
 ##
 initContainers: {}
-
-## Add sidecars to the Tomcat pods.
+## @param sidecars Add sidecars to the Tomcat pods.
 ## Example:
 ## sidecars:
 ##   - name: your-image-name
@@ -289,99 +297,93 @@ initContainers: {}
 ##         containerPort: 1234
 ##
 sidecars: {}
-
 ## Enable persistence using Persistent Volume Claims
 ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
 persistence:
-  ## If true, use a Persistent Volume Claim, If false, use emptyDir
+  ## @param persistence.enabled Enable persistence
   ##
   enabled: true
-  ## Persistent Volume Storage Class
+  ## @param persistence.storageClass PVC Storage Class for Tomcat volume
   ## If defined, storageClassName: <storageClass>
   ## If set to "-", storageClassName: "", which disables dynamic provisioning
   ## If undefined (the default) or set to null, no storageClassName spec is
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##   GKE, AWS & OpenStack)
   ##
-  # storageClass: "-"
-  ## Persistent Volume Claim annotations
+  storageClass:
+  ## @param persistence.annotations Persistent Volume Claim annotations
   ##
   annotations:
-  ## Persistent Volume Access Mode
+  ## @param persistence.accessModes PVC Access Modes for Tomcat volume
   ##
   accessModes:
     - ReadWriteOnce
-  ## Persistent Volume size
+  ## @param persistence.size PVC Storage Request for Tomcat volume
   ##
   size: 8Gi
-  ## Name of an existing PVC
+  ## @param persistence.existingClaim An Existing PVC name for Tomcat volume
   ##
   existingClaim:
-  ## Selector labels to use in volume claim template in statefulset
+  ## @param persistence.selectorLabels Selector labels to use in volume claim template in statefulset
   ## Applicable when deployment.type is statefulset
   ##
   selectorLabels:
 
+## @section Traffic Exposure parameters
+
 ## Service parameters
 ##
 service:
-  ## Kubernetes svc type
+  ## @param service.type Kubernetes Service type
   ## For minikube, set this to NodePort, elsewhere use LoadBalancer
   ##
   type: LoadBalancer
-  ## HTTP Port
+  ## @param service.port Service HTTP port
   ##
   port: 80
-  ## Specify the nodePort(s) value(s) for the LoadBalancer and NodePort service types.
+  ## @param service.nodePort Kubernetes http node port
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
   nodePort: ""
-  ## Use serviceLoadBalancerIP to request a specific static IP,
-  ## otherwise leave blank
+  ## @param service.loadBalancerIP Port Use serviceLoadBalancerIP to request a specific static IP, otherwise leave blank
   ##
-  # loadBalancerIP:
-  ## Enable client source IP preservation
+  loadBalancerIP:
+  ## @param service.externalTrafficPolicy Enable client source IP preservation
   ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: Cluster
-  ## Provide any additional annotations which may be required. This can be used to
+  ## @param service.annotations Annotations for Tomcat service
   ## set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
   annotations: {}
-
 ## Ingress configuratiom
 ##
 ingress:
-  ## Set to true to enable ingress record generation
+  ## @param ingress.enabled Enable ingress controller resource
   ##
   enabled: false
-
-  ## Set this to true in order to add the corresponding annotations for cert-manager
+  ## @param ingress.certManager Set this to true in order to add the corresponding annotations for cert-manager
   ##
   certManager: false
-
-  ## When the ingress is enabled, a host pointing to this will be created
+  ## @param ingress.hostname Default host for the ingress resource
   ##
   hostname: tomcat.local
-
-  ## Ingress annotations done as key:value pairs
+  ## @param ingress.annotations Ingress annotations
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
   ##
   ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
   ##
   annotations: {}
-
-  ## Enable TLS configuration for the hostname defined at ingress.hostname parameter
+  ## @param ingress.tls Enable TLS configuration for the hostname defined at `ingress.hostname` parameter
   ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
   ## You can use the ingress.secrets parameter to create this TLS secret, relay on cert-manager to create it, or
   ## let the chart create self-signed certificates for you
   ##
   tls: false
-
-  ## The list of additional hostnames to be covered with this ingress record.
+  ## @param ingress.extraHosts The list of additional hostnames to be covered with this ingress record.
   ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
   ## Example:
   ## extraHosts:
@@ -389,8 +391,7 @@ ingress:
   ##     path: /
   ##
   extraHosts: []
-
-  ## The tls configuration for additional hostnames to be covered with this ingress record.
+  ## @param ingress.extraTls The tls configuration for additional hostnames to be covered with this ingress record.
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
   ## Example:
   ## extraTls:
@@ -399,8 +400,7 @@ ingress:
   ##   secretName: tomcat.local-tls
   ##
   extraTls: []
-
-  ## If you're providing your own certificates, please use this to add the certificates as secrets
+  ## @param ingress.secrets If you're providing your own certificates, please use this to add the certificates as secrets
   ## key and certificate should start with -----BEGIN CERTIFICATE----- or -----BEGIN RSA PRIVATE KEY-----
   ## name should line up with a secretName set further up
   ##
@@ -416,24 +416,31 @@ ingress:
   ##     certificate: ""
   ##
   secrets: []
-
-  ## Override API Version (automatically detected if not set)
+  ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
   ##
   apiVersion:
-
-  ## Ingress Path
+  ## @param ingress.path Ingress path
   ##
   path: /
-
-  ## Ingress Path type
+  ## @param ingress.pathType Ingress path type
   ##
   pathType: ImplementationSpecific
+
+## @section Volume Permissions parameters
 
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
 ##
 volumePermissions:
+  ## @param volumePermissions.enabled Enable init container that changes volume permissions in the data directory
+  ##
   enabled: false
+  ## @param volumePermissions.image.registry Init container volume-permissions image registry
+  ## @param volumePermissions.image.repository Init container volume-permissions image repository
+  ## @param volumePermissions.image.tag Init container volume-permissions image tag
+  ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
+  ## @param volumePermissions.image.pullSecrets Specify docker-registry secret names as an array
+  ##
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
@@ -447,18 +454,23 @@ volumePermissions:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-
   ## Init container' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param volumePermissions.resources.limits Init container volume-permissions resource  limits
+  ## @param volumePermissions.resources.requests Init container volume-permissions resource  requests
   ##
   resources:
-    # We usually recommend not to specify default resources and to leave this as a conscious
-    # choice for the user. This also increases chances charts run on environments with little
-    # resources, such as Minikube. If you do want to specify resources, uncomment the following
-    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## Example:
+    ## limits:
+    ##    cpu: 100m
+    ##    memory: 128Mi
     limits: {}
-    #   cpu: 100m
-    #   memory: 128Mi
+    ## Examples:
+    ## requests:
+    ##    cpu: 100m
+    ##    memory: 128Mi
     requests: {}
-    #   cpu: 100m
-    #   memory: 128Mi
