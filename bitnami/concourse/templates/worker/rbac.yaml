@@ -44,7 +44,7 @@ roleRef:
   name: {{ template "concourse.worker.fullname" . }}
 subjects:
 - kind: ServiceAccount
-  name: {{ template "concourse.worker.fullname" . }}
+  name: {{ template "concourse.worker.serviceAccountName" . }}
 {{- end }}
 {{- end }}
 {{- end }}

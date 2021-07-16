@@ -57,7 +57,7 @@ roleRef:
   name: {{ template "concourse.web.fullname" . }}
 subjects:
   - kind: ServiceAccount
-    name: {{ template "concourse.web.fullname" . }}
+    name: {{ template "concourse.web.serviceAccountName" . }}
     namespace: {{ .Release.Namespace | quote }}
 ---
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
@@ -79,7 +79,7 @@ roleRef:
   name:  {{ template "concourse.web.fullname" . }}-psp
 subjects:
   - kind: ServiceAccount
-    name: {{ template "concourse.web.fullname" . }}
+    name: {{ template "concourse.web.serviceAccountName" . }}
     namespace: {{ .Release.Namespace | quote }}
 {{- end }}
 {{- end -}}

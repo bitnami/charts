@@ -265,10 +265,7 @@ web:
   ##
   enableCacheStreamedVolumes: false
 
-  ## @param
-  ##
-
-  ## Configure extra options for web containers' liveness and readiness probes
+  ## Configure extra options for web container liveness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param web.livenessProbe.enabled Enable livenessProbe on web nodes
   ## @param web.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
@@ -285,7 +282,8 @@ web:
     failureThreshold: 1
     successThreshold: 1
 
-  ## @param web.readinessProbe.enabled Enable readinessProbe on web nodes
+  ## Configure extra options for web container readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes  ## @param web.readinessProbe.enabled Enable readinessProbe on web nodes
   ## @param web.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
   ## @param web.readinessProbe.periodSeconds Period seconds for readinessProbe
   ## @param web.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
@@ -583,7 +581,6 @@ worker:
   ## Using Deployment leads to ephemeral workers. Meaning workers do not
   ## share state between restarts
   ##
-
   mode: deployment
 
   ## @param worker.logLevel Minimum level of logs to see. Possible options: debug, info, error
@@ -657,8 +654,6 @@ worker:
     create: true
     ## @param worker.pdb.create Create Pod disruption budget object for worker nodes
     ## @param worker.pdb.minAvailable Minimum number of workers available after an eviction
-    ##
-
     ##
     minAvailable: 2
 
@@ -1019,7 +1014,7 @@ service:
     ##
     clusterIP:
 
-    ## @param service.workerGateway.port  Service HTTP port
+    ## @param service.workerGateway.port Service HTTP port
     ##
     port: 2222
 
