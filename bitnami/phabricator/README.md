@@ -48,174 +48,198 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## Parameters
 
-The following tables list the configurable parameters of the Phabricator chart and their default values per section/component:
-
 ### Global parameters
 
-| Parameter                        | Description                                                                                              | Default                                                      |
-|----------------------------------|----------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `global.imageRegistry`           | Global Docker image registry                                                                             | `nil`                                                        |
-| `global.imagePullSecrets`        | Global Docker registry secret names as an array                                                          | `[]` (does not add image pull secrets to deployed pods)      |
-| `global.storageClass`            | Global storage class for dynamic provisioning                                                            | `nil`                                                        |
+| Name                      | Description                                     | Value |
+| ------------------------- | ----------------------------------------------- | ----- |
+| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `nil` |
+
 
 ### Common parameters
 
-| Parameter                        | Description                                                                                              | Default                                                      |
-|----------------------------------|----------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `nameOverride`                   | String to partially override common.names.fullname template with a string (will prepend the release name)| `nil`                                                        |
-| `fullnameOverride`               | String to fully override common.names.fullname template with a string                                    | `nil`                                                        |
-| `commonLabels`                   | Labels to add to all deployed objects                                                                    | `{}`                                                         |
-| `commonAnnotations`              | Annotations to add to all deployed objects                                                               | `{}`                                                         |
-| `kubeVersion`                    | Force target Kubernetes version (using Helm capabilities if not set)                                     | `nil`                                                        |
-| `clusterDomain`                  | Default Kubernetes cluster domain                                                                        | `cluster.local`                                              |
-| `extraDeploy`                    | Array of extra objects to deploy with the release                                                        | `[]` (evaluated as a template)                               |
+| Name                | Description                                                                                  | Value           |
+| ------------------- | -------------------------------------------------------------------------------------------- | --------------- |
+| `nameOverride`      | String to partially override common.names.fullname template (will maintain the release name) | `nil`           |
+| `fullnameOverride`  | String to fully override common.names.fullname template                                      | `nil`           |
+| `commonLabels`      | Add labels to all the deployed resources                                                     | `{}`            |
+| `commonAnnotations` | Add annotations to all the deployed resources                                                | `{}`            |
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                         | `nil`           |
+| `clusterDomain`     | Kubernetes Cluster Domain                                                                    | `cluster.local` |
+| `extraDeploy`       | Extra objects to deploy (value evaluated as a template)                                      | `[]`            |
+
 
 ### Phabricator parameters
 
-| Parameter                        | Description                                                                                              | Default                                                      |
-|----------------------------------|----------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `image.registry`                 | Phabricator image registry                                                                               | `docker.io`                                                  |
-| `image.repository`               | Phabricator image name                                                                                   | `bitnami/phabricator`                                        |
-| `image.tag`                      | Phabricator image tag                                                                                    | `{TAG_NAME}`                                                 |
-| `image.pullPolicy`               | Image pull policy                                                                                        | `IfNotPresent`                                               |
-| `image.pullSecrets`              | Specify docker-registry secret names as an array                                                         | `[]` (does not add image pull secrets to deployed pods)      |
-| `image.debug`                    | Specify if debug logs should be enabled                                                                  | `false`                                                      |
-| `phabricatorUsername`            | User of the application                                                                                  | `user`                                                       |
-| `phabricatorPassword`            | Application password                                                                                     | _random 10 character long alphanumeric string_               |
-| `phabricatorEmail`               | Admin email                                                                                              | `user@example.com`                                           |
-| `phabricatorFirstName`           | First name                                                                                               | `First Name`                                                 |
-| `phabricatorLastName`            | Last name                                                                                                | `Last Name`                                                  |
-| `phabricatorHost`                | Phabricator host to create application URLs                                                              | `nil`                                                        |
-| `phabricatorAlternateFileDomain` | Phabricator alternate domain to upload files                                                             | `nil`                                                        |
-| `phabricatorEnableHttps`         | Configure Phabricator to build application URLs using https                                              | `true`                                                       |
-| `phabricatorUseLFS`              | Configure Phabricator to use GIT Large File Storage (LFS)                                                | `false`                                                      |
-| `phabricatorGitSSH`              | Configure a self-hosted GIT repository with SSH authentication                                           | `false`                                                      |
-| `phabricatorEnablePygments`      | Enable syntax highlighting using Pygments                                                                | `true`                                                       |
-| `phabricatorSkipInstall`         | Skip the initial bootstrapping for the application                                                       | `false`                                                      |
-| `smtpHost`                       | SMTP mail delivery host                                                                                  | `nil`                                                        |
-| `smtpPort`                       | SMTP mail delivery port                                                                                  | `nil`                                                        |
-| `smtpUser`                       | SMTP mail delivery user                                                                                  | `nil`                                                        |
-| `smtpPassword`                   | SMTP mail delivery password                                                                              | `nil`                                                        |
-| `smtpProtocol`                   | SMTP mail delivery protocol [`ssl`, `tls`]                                                               | `nil`                                                        |
-| `command`                        | Override default container command (useful when using custom images)                                     | `nil`                                                        |
-| `args`                           | Override default container args (useful when using custom images)                                        | `nil`                                                        |
-| `extraEnvVars`                   | Extra environment variables to be set on Phabricator container                                           | `{}`                                                         |
-| `extraEnvVarsCM`                 | Name of existing ConfigMap containing extra env vars                                                     | `nil`                                                        |
-| `extraEnvVarsSecret`             | Name of existing Secret containing extra env vars                                                        | `nil`                                                        |
+| Name                             | Description                                                          | Value                     |
+| -------------------------------- | -------------------------------------------------------------------- | ------------------------- |
+| `image.registry`                 | Phabricator image registry                                           | `docker.io`               |
+| `image.repository`               | Phabricator image repository                                         | `bitnami/phabricator`     |
+| `image.tag`                      | Phabricator image tag (immutable tags are recommended)               | `2021.26.0-debian-10-r11` |
+| `image.pullPolicy`               | Image pull policy                                                    | `IfNotPresent`            |
+| `image.pullSecrets`              | Specify docker-registry secret names as an array                     | `[]`                      |
+| `image.debug`                    | Specify if debug logs should be enabled                              | `false`                   |
+| `phabricatorUsername`            | Phabricator admin user                                               | `user`                    |
+| `phabricatorPassword`            | Admin user password                                                  | `nil`                     |
+| `phabricatorEmail`               | Admin user email                                                     | `user@example.com`        |
+| `phabricatorFirstName`           | Admin user first name                                                | `First Name`              |
+| `phabricatorLastName`            | Admin user last name                                                 | `Last Name`               |
+| `phabricatorHost`                | Phabricator host to create application URLs                          | `nil`                     |
+| `phabricatorAlternateFileDomain` | Phabricator alternate domain to upload files                         | `nil`                     |
+| `phabricatorEnableHttps`         | Configure Phabricator to build application URLs using https          | `true`                    |
+| `phabricatorUseLFS`              | Configure Phabricator to use GIT Large File Storage (LFS)            | `false`                   |
+| `phabricatorGitSSH`              | Configure a self-hosted GIT repository with SSH authentication       | `false`                   |
+| `phabricatorEnablePygments`      | Enable syntax highlighting using Pygments                            | `true`                    |
+| `phabricatorSkipInstall`         | Skip the initial bootstrapping for the application                   | `false`                   |
+| `smtpHost`                       | SMTP mail delivery host                                              | `nil`                     |
+| `smtpPort`                       | SMTP mail delivery port                                              | `nil`                     |
+| `smtpUser`                       | SMTP mail delivery user                                              | `nil`                     |
+| `smtpPassword`                   | SMTP mail delivery password                                          | `nil`                     |
+| `smtpProtocol`                   | SMTP mail delivery protocol [`ssl`, `tls`]                           | `nil`                     |
+| `command`                        | Override default container command (useful when using custom images) | `[]`                      |
+| `args`                           | Override default container args (useful when using custom images)    | `[]`                      |
+| `extraEnvVars`                   | An array to add extra env vars                                       | `[]`                      |
+| `extraEnvVarsCM`                 | Name of existing ConfigMap containing extra environment variables    | `nil`                     |
+| `extraEnvVarsSecret`             | Name of existing Secret containing extra environment variables       | `nil`                     |
+
 
 ### Phabricator deployment parameters
 
-| Parameter                        | Description                                                                                              | Default                                                 |
-|----------------------------------|----------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `containerPorts.http`            | HTTP port to expose at container level                                                                   | `8080`                                                  |
-| `containerPorts.https`           | HTTPS port to expose at container level                                                                  | `8443`                                                  |
-| `containerPorts.ssh`             | SSH port to expose at container level                                                                    | `2222`                                                  |
-| `podSecurityContext`             | Phabricator pods' Security Context                                                                       | Check `values.yaml` file                                |
-| `containerSecurityContext`       | Phabricator containers' Security Context                                                                 | Check `values.yaml` file                                |
-| `resources.limits`               | The resources limits for the Phabricator container                                                       | `{}`                                                    |
-| `resources.requests`             | The requested resources for the Phabricator container                                                    | `{"memory": "512Mi", "cpu": "300m"}`                    |
-| `livenessProbe`                  | Liveness probe configuration for Phabricator                                                             | Check `values.yaml` file                                |
-| `readinessProbe`                 | Readiness probe configuration for Phabricator                                                            | Check `values.yaml` file                                |
-| `customLivenessProbe`            | Override default liveness probe                                                                          | `nil`                                                   |
-| `customReadinessProbe`           | Override default readiness probe                                                                         | `nil`                                                   |
-| `updateStrategy`                 | Strategy to use to update Pods                                                                           | Check `values.yaml` file                                |
-| `podAffinityPreset`              | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                      | `""`                                                    |
-| `podAntiAffinityPreset`          | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                 | `soft`                                                  |
-| `nodeAffinityPreset.type`        | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                | `""`                                                    |
-| `nodeAffinityPreset.key`         | Node label key to match. Ignored if `affinity` is set.                                                   | `""`                                                    |
-| `nodeAffinityPreset.values`      | Node label values to match. Ignored if `affinity` is set.                                                | `[]`                                                    |
-| `affinity`                       | Affinity for pod assignment                                                                              | `{}` (evaluated as a template)                          |
-| `nodeSelector`                   | Node labels for pod assignment                                                                           | `{}` (evaluated as a template)                          |
-| `tolerations`                    | Tolerations for pod assignment                                                                           | `[]` (evaluated as a template)                          |
-| `podLabels`                      | Extra labels for Phabricator pods                                                                        | `{}` (evaluated as a template)                          |
-| `podAnnotations`                 | Annotations for Phabricator pods                                                                         | `{}` (evaluated as a template)                          |
-| `extraVolumeMounts`              | Optionally specify extra list of additional volumeMounts for Phabricator container(s)                    | `[]`                                                    |
-| `extraVolumes`                   | Optionally specify extra list of additional volumes for Phabricator pods                                 | `[]`                                                    |
-| `initContainers`                 | Add additional init containers to the Phabricator pods                                                   | `{}` (evaluated as a template)                          |
-| `sidecars`                       | Add additional sidecar containers to the Phabricator pods                                                | `{}` (evaluated as a template)                          |
-| `persistence.enabled`            | Enable persistence using PVC                                                                             | `true`                                                  |
-| `persistence.storageClass`       | PVC Storage Class for Phabricator volume                                                                 | `nil` (uses alpha storage class annotation)             |
-| `persistence.accessMode`         | PVC Access Mode for Phabricator volume                                                                   | `ReadWriteOnce`                                         |
-| `persistence.size`               | PVC Storage Request for Phabricator volume                                                               | `8Gi`                                                   |
-| `persistence.existingClaim`      | An Existing PVC name for Phabricator volume                                                              | `nil` (uses alpha storage class annotation)             |
-| `persistence.hostPath`           | Host mount path for Phabricator volume                                                                   | `nil` (will not mount to a host path)                   |
+| Name                                 | Description                                                                               | Value           |
+| ------------------------------------ | ----------------------------------------------------------------------------------------- | --------------- |
+| `updateStrategy.type`                | StrategyType                                                                              | `RollingUpdate` |
+| `containerPorts`                     | Phabricator container ports to open                                                       | `{}`            |
+| `podSecurityContext.enabled`         | Enable Phabricator pods' Security Context                                                 | `true`          |
+| `podSecurityContext.fsGroup`         | Group ID for the volumes of the pod                                                       | `1001`          |
+| `containerSecurityContext.enabled`   | Enable Phabricator containers' SecurityContext                                            | `true`          |
+| `containerSecurityContext.runAsUser` | User ID for the container                                                                 | `1001`          |
+| `resources.limits`                   | The resources limits for the container                                                    | `{}`            |
+| `resources.requests`                 | The requested resources for the container                                                 | `{}`            |
+| `livenessProbe.enabled`              | Enable livenessProbe                                                                      | `true`          |
+| `livenessProbe.path`                 | Request path for livenessProbe                                                            | `/auth/`        |
+| `livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                   | `180`           |
+| `livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                          | `10`            |
+| `livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                         | `5`             |
+| `livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                       | `6`             |
+| `livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                       | `1`             |
+| `readinessProbe.enabled`             | Enable readinessProbe                                                                     | `true`          |
+| `readinessProbe.path`                | Request path for readinessProbe                                                           | `/auth/`        |
+| `readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                  | `30`            |
+| `readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                         | `10`            |
+| `readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                        | `5`             |
+| `readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                      | `6`             |
+| `readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                      | `1`             |
+| `startupProbe.enabled`               | Enable startupProbe                                                                       | `false`         |
+| `startupProbe.path`                  | Request path for startupProbe                                                             | `/auth/`        |
+| `startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                    | `0`             |
+| `startupProbe.periodSeconds`         | Period seconds for startupProbe                                                           | `10`            |
+| `startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe                                                          | `3`             |
+| `startupProbe.failureThreshold`      | Failure threshold for startupProbe                                                        | `20`            |
+| `startupProbe.successThreshold`      | Success threshold for startupProbe                                                        | `1`             |
+| `customLivenessProbe`                | Override default liveness probe                                                           | `{}`            |
+| `customReadinessProbe`               | Override default readiness probe                                                          | `{}`            |
+| `customStartupProbe`                 | Custom Startup probe for Phabricator                                                      | `{}`            |
+| `podLabels`                          | Extra labels for Phabricator pods                                                         | `{}`            |
+| `podAnnotations`                     | Annotations for Phabricator pods                                                          | `{}`            |
+| `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
+| `podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`          |
+| `nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`            |
+| `nodeAffinityPreset.key`             | Node label key to match. Ignored if `affinity` is set.                                    | `""`            |
+| `nodeAffinityPreset.values`          | Node label values to match. Ignored if `affinity` is set.                                 | `[]`            |
+| `affinity`                           | Affinity for pod assignment. Evaluated as a template.                                     | `{}`            |
+| `nodeSelector`                       | Node labels for pod assignment. Evaluated as a template.                                  | `{}`            |
+| `tolerations`                        | Tolerations for pod assignment. Evaluated as a template.                                  | `[]`            |
+| `extraVolumes`                       | Optionally specify extra list of additional volumes for Phabricator pods                  | `[]`            |
+| `extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for Phabricator container(s)     | `[]`            |
+| `initContainers`                     | Add init containers to the Phabricator pods.                                              | `{}`            |
+| `sidecars`                           | Add sidecars to the Phabricator pods                                                      | `{}`            |
+| `persistence.enabled`                | Enable persistence using PVC                                                              | `true`          |
+| `persistence.storageClass`           | PVC Storage Class for Phabricator volume                                                  | `nil`           |
+| `persistence.accessMode`             | PVC Access Mode for Phabricator volume                                                    | `ReadWriteOnce` |
+| `persistence.size`                   | PVC Storage Request for Phabricator volume                                                | `8Gi`           |
+| `persistence.existingClaim`          | An Existing PVC name for Phabricator volume                                               | `nil`           |
+| `persistence.hostPath`               | Host mount path for Phabricator volume                                                    | `nil`           |
+
 
 ### Traffic Exposure Parameters
 
-| Parameter                        | Description                                                                                              | Default                                                 |
-|----------------------------------|----------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `service.type`                   | Kubernetes Service type                                                                                  | `LoadBalancer`                                          |
-| `service.port`                   | Service HTTP port                                                                                        | `80`                                                    |
-| `service.httpsPort`              | Service HTTP port                                                                                        | `443`                                                   |
-| `service.sshPort`                | Service SSH port                                                                                         | `22`                                                    |
-| `service.loadBalancerIP`         | `loadBalancerIP` for the Phabricator Service                                                             | `nil`                                                   |
-| `service.externalTrafficPolicy`  | Enable client source IP preservation                                                                     | `Cluster`                                               |
-| `service.nodePorts.http`         | Kubernetes http node port                                                                                | `""`                                                    |
-| `service.nodePorts.https`        | Kubernetes https node port                                                                               | `""`                                                    |
-| `service.nodePorts.ssh`          | Kubernetes ssh node port                                                                                 | `""`                                                    |
-| `service.annotations`            | Service annotations                                                                                      | `[]`                                                    |
-| `ingress.enabled`                | Enable ingress controller resource                                                                       | `false`                                                 |
-| `ingress.certManager`            | Add annotations for cert-manager                                                                         | `false`                                                 |
-| `ingress.hostname`               | Default host for the ingress resource                                                                    | `phabricator.local`                                     |
-| `ingress.apiVersion`             | Force Ingress API version (automatically detected if not set)                                            | `nil`                                                   |
-| `ingress.path`                   | Ingress path                                                                                             | `/`                                                     |
-| `ingress.pathType`               | Ingress path type                                                                                        | `ImplementationSpecific`                                |
-| `ingress.tls`                    | Create TLS Secret                                                                                        | `false`                                                 |
-| `ingress.annotations`            | Ingress annotations                                                                                      | `[]` (evaluated as a template)                          |
-| `ingress.extraHosts[0].name`     | Additional hostnames to be covered                                                                       | `nil`                                                   |
-| `ingress.extraHosts[0].path`     | Additional hostnames to be covered                                                                       | `nil`                                                   |
-| `ingress.extraPaths`             | Additional arbitrary path/backend objects                                                                | `nil`                                                   |
-| `ingress.extraTls[0].hosts[0]`   | TLS configuration for additional hostnames to be covered                                                 | `nil`                                                   |
-| `ingress.extraTls[0].secretName` | TLS configuration for additional hostnames to be covered                                                 | `nil`                                                   |
-| `ingress.secrets[0].name`        | TLS Secret Name                                                                                          | `nil`                                                   |
-| `ingress.secrets[0].certificate` | TLS Secret Certificate                                                                                   | `nil`                                                   |
-| `ingress.secrets[0].key`         | TLS Secret Key                                                                                           | `nil`                                                   |
+| Name                            | Description                                                                                                  | Value                    |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------ |
+| `service.type`                  | Kubernetes Service type                                                                                      | `LoadBalancer`           |
+| `service.port`                  | Service HTTP port                                                                                            | `80`                     |
+| `service.httpsPort`             | Service HTTP port                                                                                            | `443`                    |
+| `service.sshPort`               | Service SSH port                                                                                             | `22`                     |
+| `service.nodePorts.http`        | Kubernetes HTTP node port                                                                                    | `""`                     |
+| `service.nodePorts.https`       | Kubernetes HTTPS node port                                                                                   | `""`                     |
+| `service.nodePorts.ssh`         | Kubernetes SSH node port                                                                                     | `""`                     |
+| `service.loadBalancerIP`        | `loadBalancerIP` for the Phabricator Service                                                                 | `nil`                    |
+| `service.externalTrafficPolicy` | Enable client source IP preservation                                                                         | `Cluster`                |
+| `service.annotations`           | Service annotations                                                                                          | `{}`                     |
+| `ingress.enabled`               | Set to true to enable ingress record generation                                                              | `false`                  |
+| `ingress.tls`                   | Enable TLS configuration for the hostname defined at ingress.hostname parameter                              | `false`                  |
+| `ingress.certManager`           | Set this to true in order to add the corresponding annotations for cert-manager                              | `false`                  |
+| `ingress.pathType`              | Ingress path type                                                                                            | `ImplementationSpecific` |
+| `ingress.apiVersion`            | Force Ingress API version (automatically detected if not set)                                                | `nil`                    |
+| `ingress.hostname`              | Default host for the ingress resource                                                                        | `phabricator.local`      |
+| `ingress.path`                  | The Path to Phabricator. You may need to set this to '/*' in order to use this with ALB ingress controllers. | `ImplementationSpecific` |
+| `ingress.annotations`           | Ingress annotations                                                                                          | `{}`                     |
+| `ingress.extraHosts`            | The list of additional hostnames to be covered with this ingress record.                                     | `[]`                     |
+| `ingress.extraPaths`            | Any additional arbitrary paths that may need to be added to the ingress under the main host.                 | `[]`                     |
+| `ingress.extraTls`              | The tls configuration for additional hostnames to be covered with this ingress record.                       | `[]`                     |
+| `ingress.secrets`               | If you're providing your own certificates, please use this to add the certificates as secrets                | `[]`                     |
+
 
 ### Database parameters
 
-| Parameter                                  | Description                                                                                    | Default                                                 |
-|--------------------------------------------|------------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `mariadb.enabled`                          | Whether to use the MariaDB chart                                                               | `true`                                                  |
-| `mariadb.architecture`                     | MariaDB architecture (`standalone` or `replication`)                                           | `standalone`                                            |
-| `mariadb.auth.rootPassword`                | Password for the MariaDB `root` user                                                           | _random 10 character alphanumeric string_               |
-| `mariadb.primary.configuration`            | MariaDB Primary configuration to be injected as ConfigMap                                      | Check `values.yaml` file                                |
-| `mariadb.primary.extraFlags`               | Additional command line flags                                                                  | Check `values.yaml` file                                |
-| `mariadb.primary.persistence.enabled`      | Enable database persistence using PVC                                                          | `true`                                                  |
-| `mariadb.primary.persistence.accessMode`   | Database Persistent Volume Access Modes                                                        | `ReadWriteOnce`                                         |
-| `mariadb.primary.persistence.size`         | Database Persistent Volume Size                                                                | `8Gi`                                                   |
-| `mariadb.primary.persistence.existingClaim`| Enable persistence using an existing PVC                                                       | `nil`                                                   |
-| `mariadb.primary.persistence.storageClass` | PVC Storage Class                                                                              | `nil` (uses alpha storage class annotation)             |
-| `mariadb.primary.persistence.hostPath`     | Host mount path for MariaDB volume                                                             | `nil` (will not mount to a host path)                   |
-| `externalDatabase.host`                    | Host of the existing database                                                                  | `nil`                                                   |
-| `externalDatabase.port`                    | Port of the existing database                                                                  | `3306`                                                  |
-| `externalDatabase.rootUser`                | Username in the external db with root privileges                                               | `root`                                                  |
-| `externalDatabase.rootPassword`            | Password for the above username                                                                | `nil`                                                   |
-| `externalDatabase.existingSecret`          | Name of the database existing Secret Object                                                    | `nil`                                                   |
+| Name                                        | Description                                                                                                        | Value              |
+| ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | ------------------ |
+| `mariadb.enabled`                           | Whether to use the MariaDB chart                                                                                   | `true`             |
+| `mariadb.architecture`                      | MariaDB architecture. Allowed values: `standalone` or `replication`                                                | `standalone`       |
+| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                                                               | `""`               |
+| `mariadb.primary.configuration`             | MariaDB Primary configuration to be injected as ConfigMap                                                          | `""`               |
+| `mariadb.primary.extraFlags`                | Additional command line flags                                                                                      | `--local-infile=0` |
+| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                                              | `true`             |
+| `mariadb.primary.persistence.storageClass`  | mariadb data Persistent Volume Storage Class                                                                       | `nil`              |
+| `mariadb.primary.persistence.accessModes`   | Database Persistent Volume Access Modes                                                                            | `[]`               |
+| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                                                    | `8Gi`              |
+| `mariadb.primary.persistence.hostPath`      | Host mount path for MariaDB volume in case you want to use local host path volumes (not recommended in production) | `nil`              |
+| `mariadb.primary.persistence.existingClaim` | Enable persistence using an existing PVC                                                                           | `nil`              |
+| `externalDatabase.existingSecret`           | Name of the database existing Secret Object                                                                        | `nil`              |
+| `externalDatabase.host`                     | Host of the existing database                                                                                      | `localhost`        |
+| `externalDatabase.port`                     | Port of the existing database                                                                                      | `3306`             |
+| `externalDatabase.rootUser`                 | Username in the external db with root privileges                                                                   | `root`             |
+| `externalDatabase.rootPassword`             | Password for the above username                                                                                    | `""`               |
+
 
 ### Volume Permissions parameters
 
-| Parameter                                  | Description                                                                                    | Default                                                 |
-|--------------------------------------------|------------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `volumePermissions.enabled`                | Enable init container that changes volume permissions in the data directory (                  | `false`                                                 |
-| `volumePermissions.image.registry`         | Init container volume-permissions image registry                                               | `docker.io`                                             |
-| `volumePermissions.image.repository`       | Init container volume-permissions image name                                                   | `bitnami/bitnami-shell`                                 |
-| `volumePermissions.image.tag`              | Init container volume-permissions image tag                                                    | `"10"`                                                  |
-| `volumePermissions.image.pullSecrets`      | Specify docker-registry secret names as an array                                               | `[]` (does not add image pull secrets to deployed pods) |
-| `volumePermissions.image.pullPolicy`       | Init container volume-permissions image pull policy                                            | `Always`                                                |
-| `volumePermissions.resources`              | Init container resource requests/limit                                                         | `nil`                                                   |
+| Name                                   | Description                                                                   | Value                   |
+| -------------------------------------- | ----------------------------------------------------------------------------- | ----------------------- |
+| `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory ( | `false`                 |
+| `volumePermissions.image.registry`     | Init container volume-permissions image registry                              | `docker.io`             |
+| `volumePermissions.image.repository`   | Init container volume-permissions image repository                            | `bitnami/bitnami-shell` |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)  | `10-debian-10-r127`     |
+| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                           | `Always`                |
+| `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                              | `[]`                    |
+| `volumePermissions.resources.limits`   | The resources limits for the container                                        | `{}`                    |
+| `volumePermissions.resources.requests` | The requested resources for the container                                     | `{}`                    |
+
 
 ### Metrics parameters
 
-| Parameter                        | Description                                                                                              | Default                                                      |
-|----------------------------------|----------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `metrics.enabled`                | Start a side-car prometheus exporter                                                                     | `false`                                                      |
-| `metrics.image.registry`         | Apache exporter image registry                                                                           | `docker.io`                                                  |
-| `metrics.image.repository`       | Apache exporter image name                                                                               | `bitnami/apache-exporter`                                    |
-| `metrics.image.tag`              | Apache exporter image tag                                                                                | `{TAG_NAME}`                                                 |
-| `metrics.image.pullPolicy`       | Image pull policy                                                                                        | `IfNotPresent`                                               |
-| `metrics.image.pullSecrets`      | Specify docker-registry secret names as an array                                                         | `[]` (does not add image pull secrets to deployed pods)      |
-| `metrics.podAnnotations`         | Additional annotations for Metrics exporter pod                                                          | `{prometheus.io/scrape: "true", prometheus.io/port: "9117"}` |
-| `metrics.resources`              | Exporter resource requests/limit                                                                         | `{}`                                                         |
+| Name                         | Description                                                | Value                     |
+| ---------------------------- | ---------------------------------------------------------- | ------------------------- |
+| `metrics.enabled`            | Start a side-car prometheus exporter                       | `false`                   |
+| `metrics.image.registry`     | Apache exporter image registry                             | `docker.io`               |
+| `metrics.image.repository`   | Apache exporter image repository                           | `bitnami/apache-exporter` |
+| `metrics.image.tag`          | Apache exporter image tag (immutable tags are recommended) | `0.9.0-debian-10-r24`     |
+| `metrics.image.pullPolicy`   | Image pull policy                                          | `IfNotPresent`            |
+| `metrics.image.pullSecrets`  | Specify docker-registry secret names as an array           | `[]`                      |
+| `metrics.podAnnotations`     | Additional annotations for Metrics exporter pod            | `{}`                      |
+| `metrics.resources.limits`   | The resources limits for the container                     | `{}`                      |
+| `metrics.resources.requests` | The requested resources for the container                  | `{}`                      |
+
 
 The above parameters map to the env variables defined in [bitnami/phabricator](http://github.com/bitnami/bitnami-docker-phabricator). For more information please refer to the [bitnami/phabricator](http://github.com/bitnami/bitnami-docker-phabricator) image documentation.
 

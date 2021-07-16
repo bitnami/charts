@@ -276,10 +276,13 @@ Regular upgrade is compatible from previous versions.
 
 ## Upgrading
 
+### To 4.0.0
+
+This major updates the Kafka subchart to its newest major 13.0.0. For more information on this subchart's major, please refer to [kafka upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/kafka#to-1300).
+
 ### To 3.0.0
 
 This major version updates the prefixes of individual applications metrics in Wavefront Collectors which are fed to Tanzu observability in order to light up the individual dashboards of Kafka, Spark ElasticSearch and Logstash on Tanzu Observability platform.
-
 
 ### To 2.0.0
 
