@@ -23,4 +23,3 @@ spec:
     kind: {{ .Values.worker.mode }}
     name: {{ include "common.names.fullname" . }}
 {{- end }}
-{{- end }}
