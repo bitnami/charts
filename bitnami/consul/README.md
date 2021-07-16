@@ -77,7 +77,7 @@ $ helm delete --purge my-release
 | -------------------------- | -------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`           | HashiCorp Consul image registry                                                              | `docker.io`           |
 | `image.repository`         | HashiCorp Consul image repository                                                            | `bitnami/consul`      |
-| `image.tag`                | HashiCorp Consul image tag (immutable tags are recommended)                                  | `1.10.0-debian-10-r0` |
+| `image.tag`                | HashiCorp Consul image tag (immutable tags are recommended)                                  | `1.10.1-debian-10-r0` |
 | `image.pullPolicy`         | HashiCorp Consul image pull policy                                                           | `IfNotPresent`        |
 | `image.pullSecrets`        | HashiCorp Consul image pull secrets                                                          | `[]`                  |
 | `image.debug`              | Enable image debug mode                                                                      | `false`               |
@@ -189,7 +189,7 @@ $ helm delete --purge my-release
 | `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume | `false`                 |
 | `volumePermissions.image.registry`     | Bitnami Shell image registry                                                    | `docker.io`             |
 | `volumePermissions.image.repository`   | Bitnami Shell image repository                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Bitnami Shell image tag (immutable tags are recommended)                        | `10-debian-10-r115`     |
+| `volumePermissions.image.tag`          | Bitnami Shell image tag (immutable tags are recommended)                        | `10-debian-10-r133`     |
 | `volumePermissions.image.pullPolicy`   | Bitnami Shell image pull policy                                                 | `Always`                |
 | `volumePermissions.image.pullSecrets`  | Bitnami Shell image pull secrets                                                | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                          | `{}`                    |
@@ -203,7 +203,7 @@ $ helm delete --purge my-release
 | `metrics.enabled`                         | Start a side-car prometheus exporter                                                                                        | `false`                   |
 | `metrics.image.registry`                  | HashiCorp Consul Prometheus Exporter image registry                                                                         | `docker.io`               |
 | `metrics.image.repository`                | HashiCorp Consul Prometheus Exporter image repository                                                                       | `bitnami/consul-exporter` |
-| `metrics.image.tag`                       | HashiCorp Consul Prometheus Exporter image tag (immutable tags are recommended)                                             | `0.7.1-debian-10-r313`    |
+| `metrics.image.tag`                       | HashiCorp Consul Prometheus Exporter image tag (immutable tags are recommended)                                             | `0.7.1-debian-10-r331`    |
 | `metrics.image.pullPolicy`                | HashiCorp Consul Prometheus Exporter image pull policy                                                                      | `IfNotPresent`            |
 | `metrics.image.pullSecrets`               | HashiCorp Consul Prometheus Exporter image pull secrets                                                                     | `[]`                      |
 | `metrics.service.type`                    | Kubernetes Service type                                                                                                     | `ClusterIP`               |
