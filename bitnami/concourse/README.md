@@ -112,7 +112,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `web.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                 | `3`             |
 | `web.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                               | `1`             |
 | `web.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                               | `1`             |
-| `web.readinessProbe.enabled`             | Enable readinessProbe on web nodes                                                                | `true`          |
+| `web.readinessProbe.enabled`             | Enable readinessProbe                                                                             | `true`          |
 | `web.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                          | `10`            |
 | `web.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                 | `15`            |
 | `web.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                | `3`             |

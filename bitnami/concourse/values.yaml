@@ -284,6 +284,7 @@ web:
 
   ## Configure extra options for web container readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes  ## @param web.readinessProbe.enabled Enable readinessProbe on web nodes
+  ## @param web.readinessProbe.enabled Enable readinessProbe
   ## @param web.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
   ## @param web.readinessProbe.periodSeconds Period seconds for readinessProbe
   ## @param web.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
