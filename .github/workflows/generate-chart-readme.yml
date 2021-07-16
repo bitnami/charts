@@ -6,6 +6,7 @@ on:
       - master
     paths:
       - 'bitnami/airflow/values.yaml'
+      - 'bitnami/common/values.yaml'
       - 'bitnami/dokuwiki/values.yaml'
       - 'bitnami/drupal/values.yaml'
       - 'bitnami/ejbca/values.yaml'
@@ -49,6 +50,14 @@ on:
       - 'bitnami/spark/values.yaml'
       - 'bitnami/spring-cloud-dataflow/values.yaml'
       - 'bitnami/suitecrm/values.yaml'
+      - 'bitnami/tomcat/values.yaml'
+      - 'bitnami/wavefront/values.yaml'
+      - 'bitnami/wavefront-adapter-for-istio/values.yaml'
+      - 'bitnami/wavefront-hpa-adapter/values.yaml'
+      - 'bitnami/wavefront-prometheus-storage-adapter/values.yaml'
+      - 'bitnami/wildfly/values.yaml'
+      - 'bitnami/wordpress/values.yaml'
+      - 'bitnami/zookeeper/values.yaml'
 
 jobs:
   generate-chart-readme:
