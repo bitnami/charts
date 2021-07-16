@@ -6,6 +6,9 @@ metadata:
   name: {{ include "common.names.fullname" . }}-query-frontend
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: query-frontend
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
 spec:
   replicas: {{ .Values.queryFrontend.replicaCount }}
   strategy:
@@ -20,7 +23,10 @@ spec:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: query-frontend
-        {{- if and .Values.queryFrontend.enabled .Values.queryFrontend.podLabels }}
+        {{- if .Values.commonLabels }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.queryFrontend.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.podLabels "context" $) | nindent 8 }}
         {{- end }}
       {{- if or .Values.queryFrontend.podAnnotations (include "thanos.queryFrontend.createConfigmap" .) }}
@@ -61,7 +67,7 @@ spec:
       containers:
         {{- if .Values.queryFrontend.extraContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.extraContainers "context" $) | nindent 8 }}
-        {{- end }}           
+        {{- end }}
         - name: query-frontend
           image: {{ include "thanos.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
@@ -89,7 +95,7 @@ spec:
               containerPort: 10902
               protocol: TCP
           {{- if .Values.queryFrontend.livenessProbe.enabled }}
-          livenessProbe: 
+          livenessProbe:
             httpGet:
               path: /-/healthy
               port: http
@@ -100,7 +106,7 @@ spec:
             failureThreshold: {{ .Values.queryFrontend.livenessProbe.failureThreshold }}
           {{- end }}
           {{- if .Values.queryFrontend.readinessProbe.enabled }}
-          readinessProbe: 
+          readinessProbe:
             httpGet:
               path: /-/ready
               port: http

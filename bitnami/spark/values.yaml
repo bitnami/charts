@@ -1,14 +1,44 @@
+## @section Global parameters
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
-## Current available global Docker image parameters: imageRegistry and imagePullSecrets
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
 ##
-# global:
-#   imageRegistry: myRegistryName
-#   imagePullSecrets:
-#     - myRegistryKeySecretName
+global:
+  imageRegistry:
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+
+## @section Common parameters
+
+## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
+##
+kubeVersion:
+## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
+##
+nameOverride:
+## @param fullnameOverride String to fully override common.names.fullname template
+##
+fullnameOverride:
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
+
+## @section Spark parameters
 
 ## Bitnami Spark image version
 ## ref: https://hub.docker.com/r/bitnami/spark/tags/
+## @param image.registry Spark image registry
+## @param image.repository Spark image repository
+## @param image.tag Spark image tag (immutable tags are recommended)
+## @param image.pullPolicy Spark image pull policy
+## @param image.pullSecrets Specify docker-registry secret names as an array
+## @param image.debug Enable image debug mode
 ##
 image:
   registry: docker.io
@@ -19,68 +49,61 @@ image:
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
-
-  ## Pull secret for this image
-  # pullSecrets:
-  #   - myRegistryKeySecretName
-
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  pullSecrets: []
   ## Set to true if you would like to see extra information on logs
   ## It turns BASH and/or NAMI debugging in the image
   ##
   debug: false
-
-## Enable HOST Network
-## If hostNetwork true ->  dnsPolicy is set to ClusterFirstWithHostNet
+## @param hostNetwork Enable HOST Network
+## If hostNetwork is true, then  dnsPolicy is set to ClusterFirstWithHostNet
 ##
 hostNetwork: false
 
-## Force target Kubernetes version (using Helm capabilites if not set)
-##
-kubeVersion:
-
-## String to partially override common.names.fullname template (will maintain the release name)
-##
-# nameOverride:
-
-## String to fully override common.names.fullname template
-##
-# fullnameOverride:
+## @section Spark master parameters
 
 ## Spark master specific configuration
 ##
 master:
-  ## Set a custom configuration by using an existing configMap with the configuration file.
+  ## @param master.configurationConfigMap Set a custom configuration by using an existing configMap with the configuration file.
   ##
-  # configurationConfigMap:
-
-  ## Spark container ports
+  configurationConfigMap:
+  ## @param master.webPort Specify the port where the web interface will listen on the master
   ##
   webPort: 8080
+  ## @param master.clusterPort Specify the port where the master listens to communicate with workers
+  ##
   clusterPort: 7077
-
-  ## Deployment pod host aliases
+  ## @param master.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-
-  ## Set the master daemon memory limit.
+  ## @param master.daemonMemoryLimit Set the memory limit for the master daemon
   ##
-  # daemonMemoryLimit:
-
-  ## Use a string to set the config options for in the form "-Dx=y"
+  daemonMemoryLimit:
+  ## @param master.configOptions Use a string to set the config options for in the form "-Dx=y"
   ##
-  # configOptions:
-
-  ## An array to add extra env vars
+  configOptions:
+  ## @param master.extraEnvVars Extra environment variables to pass to the master container
   ## For example:
   ## extraEnvVars:
   ##  - name: SPARK_DAEMON_JAVA_OPTS
   ##    value: -Dx=y
   ##
-  # extraEnvVars:
-
+  extraEnvVars:
   ## Kubernetes Security Context
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ## @param master.securityContext.enabled Enable security context
+  ## @param master.securityContext.fsGroup Group ID for the container
+  ## @param master.securityContext.runAsUser User ID for the container
+  ## @param master.securityContext.runAsGroup Group ID for the container
+  ## @param master.securityContext.seLinuxOptions SELinux options for the container
   ##
   securityContext:
     enabled: true
@@ -88,84 +111,80 @@ master:
     runAsUser: 1001
     runAsGroup: 0
     seLinuxOptions: {}
-
-  ## Annotations to add to the statefulset
-  ##
+  ## @param master.podAnnotations Annotations for pods in StatefulSet
   ##
   podAnnotations: {}
-
-  ## Labes to add to the statefulset
-  ##
+  ## @param master.extraPodLabels Extra labels for pods in StatefulSet
   ##
   extraPodLabels: {}
-
-  ## Spark master pod affinity preset
+  ## @param master.podAffinityPreset Spark master pod affinity preset. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
   ##
   podAffinityPreset: ''
-
-  ## Spark master pod anti-affinity preset
+  ## @param master.podAntiAffinityPreset Spark master pod anti-affinity preset. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
   ##
   podAntiAffinityPreset: soft
-
   ## Spark master node affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ## Allowed values: soft, hard
   ##
   nodeAffinityPreset:
-    ## Node affinity type
-    ## Allowed values: soft, hard
+    ## @param master.nodeAffinityPreset.type Spark master node affinity preset type. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard`
     ##
     type: ''
-    ## Node label key to match
+    ## @param master.nodeAffinityPreset.key Spark master node label key to match Ignored if `master.affinity` is set.
     ## E.g.
     ## key: "kubernetes.io/e2e-az-name"
     ##
     key: ''
-    ## Node label values to match
+    ## @param master.nodeAffinityPreset.values Spark master node label values to match. Ignored if `master.affinity` is set.
     ## E.g.
     ## values:
     ##   - e2e-az1
     ##   - e2e-az2
     ##
     values: []
-
-  ## Affinity for Spark master pods assignment
+  ## @param master.affinity Spark master affinity for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: master.podAffinityPreset, master.podAntiAffinityPreset, and master.nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
-
-  ## Node labels for Spark master pods assignment
+  ## @param master.nodeSelector Spark master node labels for pod assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-
-  ## Tolerations for Spark master pods assignment
+  ## @param master.tolerations Spark master tolerations for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-
-  ## Configure resource requests and limits
+  ## Container resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param master.resources.limits The resources limits for the container
+  ## @param master.resources.requests The requested resources for the container
   ##
   resources:
-    # We usually recommend not to specify default resources and to leave this as a conscious
-    # choice for the user. This also increases chances charts run on environments with little
-    # resources, such as Minikube. If you do want to specify resources, uncomment the following
-    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## Example:
+    ## limits:
+    ##    cpu: 250m
+    ##    memory: 256Mi
     limits: {}
-    #   cpu: 250m
-    #   memory: 256Mi
+    ## Examples:
+    ## requests:
+    ##    cpu: 250m
+    ##    memory: 256Mi
     requests: {}
-    #   cpu: 250m
-    #   memory: 256Mi
-
-  ## Configure liveness and readiness probes
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+  ## Configure extra options for liveness probe
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param master.livenessProbe.enabled Enable livenessProbe
+  ## @param master.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param master.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param master.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param master.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param master.livenessProbe.successThreshold Success threshold for livenessProbe
   ##
   livenessProbe:
     enabled: true
@@ -174,6 +193,15 @@ master:
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
+  ## Configure extra options for readiness probe
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param master.readinessProbe.enabled Enable readinessProbe
+  ## @param master.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param master.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param master.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param master.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param master.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
   readinessProbe:
     enabled: true
     initialDelaySeconds: 30
@@ -181,8 +209,7 @@ master:
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
-
-  ## Add initContainers to the master pods.
+  ## @param master.initContainers Add initContainers to the master pods.
   ## Example:
   ## initContainers:
   ##   - name: your-image-name
@@ -194,73 +221,70 @@ master:
   ##
   initContainers: {}
 
+## @section Spark worker parameters
+
 ## Spark worker specific configuration
 ##
 worker:
-  ## Set a custom configuration by using an existing configMap with the configuration file.
+  ## @param worker.configurationConfigMap Set a custom configuration by using an existing configMap with the configuration file.
   ##
-  # configurationConfigMap:
-
-  ## Spark container ports
+  configurationConfigMap:
+  ## @param worker.webPort Specify the port where the web interface will listen on the worker
   ##
   webPort: 8081
-  # clusterPort:
-
-  ## Deployment pod host aliases
+  ## @param worker.clusterPort Specify the port where the worker listens to communicate with the master
+  ##
+  clusterPort:
+  ## @param worker.hostAliases Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-
-  ## Add ports for exposing jobs running inside the worker nodes
+  ## @param worker.extraPorts Specify the port where the running jobs inside the workers listens
   ## ref: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#containerport-v1-core
+  ## e.g:
+  ## - name: myapp
+  ##   containerPort: 8000
+  ##   protocol: TCP
   ##
   extraPorts: []
-  # - name: myapp
-  #   containerPort: 8000
-  #   protocol: TCP
-
-  ## Set the daemonMemoryLimit as the daemon max memory
+  ## @param worker.daemonMemoryLimit Set the memory limit for the worker daemon
   ##
-  # daemonMemoryLimit:
-
-  ## Set the worker memory limit
+  daemonMemoryLimit:
+  ## @param worker.memoryLimit Set the maximum memory the worker is allowed to use
   ##
-  # memoryLimit:
-
-  ## Set the maximum number of cores
+  memoryLimit:
+  ## @param worker.coreLimit Se the maximum number of cores that the worker can use
   ##
-  # coreLimit:
-
-  ## Working directory for the application
+  coreLimit:
+  ## @param worker.dir Set a custom working directory for the application
   ##
-  # dir:
-
-  ## Options for the JVM as "-Dx=y"
+  dir:
+  ## @param worker.javaOptions Set options for the JVM in the form `-Dx=y`
   ##
-  # javaOptions:
-
-  ## Configuration options in the form "-Dx=y"
+  javaOptions:
+  ## @param worker.configOptions Set extra options to configure the worker in the form `-Dx=y`
   ##
-  # configOptions:
-
-  ## An array to add extra env vars
+  configOptions:
+  ## @param worker.extraEnvVars An array to add extra env vars
   ## For example:
   ## extraEnvVars:
   ##  - name: SPARK_DAEMON_JAVA_OPTS
   ##    value: -Dx=y
-  # extraEnvVars:
-
-  ## Number of spark workers (will be the min number when autoscaling is enabled)
+  extraEnvVars:
+  ## @param worker.replicaCount Number of spark workers (will be the minimum number when autoscaling is enabled)
   ##
   replicaCount: 2
-
-  ## Pod management policy
+  ## @param worker.podManagementPolicy Statefulset Pod Management Policy Type
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
   ##
   podManagementPolicy: OrderedReady
-
   ## Kubernetes Security Context
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ## @param worker.securityContext.enabled Enable security context
+  ## @param worker.securityContext.fsGroup Group ID for the container
+  ## @param worker.securityContext.runAsUser User ID for the container
+  ## @param worker.securityContext.runAsGroup Group ID for the container
+  ## @param worker.securityContext.seLinuxOptions SELinux options for the container
   ##
   securityContext:
     enabled: true
@@ -268,84 +292,80 @@ worker:
     runAsUser: 1001
     runAsGroup: 0
     seLinuxOptions: {}
-
-  ## Annotations to add to the statefulset
-  ##
+  ## @param worker.podAnnotations Annotations for pods in StatefulSet
   ##
   podAnnotations: {}
-
-  ## Labes to add to the statefulset
-  ##
+  ## @param worker.extraPodLabels Extra labels for pods in StatefulSet
   ##
   extraPodLabels: {}
-
-  ## Spark worker pod affinity preset
+  ## @param worker.podAffinityPreset Spark worker pod affinity preset. Ignored if `worker.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
   ##
   podAffinityPreset: ''
-
-  ## Spark worker pod anti-affinity preset
+  ## @param worker.podAntiAffinityPreset Spark worker pod anti-affinity preset. Ignored if `worker.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
   ##
   podAntiAffinityPreset: soft
-
   ## Spark worker node affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ## Allowed values: soft, hard
   ##
   nodeAffinityPreset:
-    ## Node affinity type
-    ## Allowed values: soft, hard
+    ## @param worker.nodeAffinityPreset.type Spark worker node affinity preset type. Ignored if `worker.affinity` is set. Allowed values: `soft` or `hard`
     ##
     type: ''
-    ## Node label key to match
+    ## @param worker.nodeAffinityPreset.key Spark worker node label key to match Ignored if `worker.affinity` is set.
     ## E.g.
     ## key: "kubernetes.io/e2e-az-name"
     ##
     key: ''
-    ## Node label values to match
+    ## @param worker.nodeAffinityPreset.values Spark worker node label values to match. Ignored if `worker.affinity` is set.
     ## E.g.
     ## values:
     ##   - e2e-az1
     ##   - e2e-az2
     ##
     values: []
-
-  ## Affinity for Spark worker pods assignment
+  ## @param worker.affinity Spark worker affinity for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: worker.podAffinityPreset, worker.podAntiAffinityPreset, and worker.nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
-
-  ## Node labels for Spark worker pods assignment
+  ## @param worker.nodeSelector Spark worker node labels for pod assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-
-  ## Tolerations for Spark master worker assignment
+  ## @param worker.tolerations Spark worker tolerations for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-
-  ## Configure resource requests and limits
+  ## Container resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param worker.resources.limits The resources limits for the container
+  ## @param worker.resources.requests The requested resources for the container
   ##
   resources:
-    # We usually recommend not to specify default resources and to leave this as a conscious
-    # choice for the user. This also increases chances charts run on environments with little
-    # resources, such as Minikube. If you do want to specify resources, uncomment the following
-    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## Example:
+    ## limits:
+    ##    cpu: 250m
+    ##    memory: 256Mi
     limits: {}
-    #   cpu: 250m
-    #   memory: 256Mi
+    ## Examples:
+    ## requests:
+    ##    cpu: 250m
+    ##    memory: 256Mi
     requests: {}
-    #   cpu: 250m
-    #   memory: 256Mi
-
-  ## Configure liveness and readiness probes
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+  ## Configure extra options for liveness probe
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param worker.livenessProbe.enabled Enable livenessProbe
+  ## @param worker.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param worker.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param worker.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param worker.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param worker.livenessProbe.successThreshold Success threshold for livenessProbe
   ##
   livenessProbe:
     enabled: true
@@ -354,6 +374,15 @@ worker:
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
+  ## Configure extra options for readiness probe
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param worker.readinessProbe.enabled Enable readinessProbe
+  ## @param worker.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param worker.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param worker.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param worker.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param worker.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
   readinessProbe:
     enabled: true
     initialDelaySeconds: 30
@@ -361,8 +390,7 @@ worker:
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
-
-  ## Add initContainers to the master pods.
+  ## @param worker.initContainers Add initContainers to the master pods.
   ## Example:
   ## initContainers:
   ##   - name: your-image-name
@@ -373,7 +401,6 @@ worker:
   ##         containerPort: 1234
   ##
   initContainers: {}
-
   ## Array to add extra volumes
   ##
   ## extraVolumes:
@@ -383,156 +410,162 @@ worker:
   ## Autoscaling parameters
   ##
   autoscaling:
-    ## Enable replica autoscaling depending on CPU
+    ## @param worker.autoscaling.enabled Enable replica autoscaling depending on CPU
     ##
     enabled: false
+    ## @param worker.autoscaling.CpuTargetPercentage Kubernetes HPA CPU target percentage
+    ##
     CpuTargetPercentage: 50
-    ## Max number of workers when using autoscaling
+    ## @param worker.autoscaling.replicasMax Maximum number of workers when using autoscaling
     ##
     replicasMax: 5
+
+## @section Security parameters
 
 ## Security configuration
 ##
 security:
-  ## Name of the secret that contains all the passwords. This is optional, by default random passwords are generated.
+  ## @param security.passwordsSecretName Name of the secret that contains all the passwords
+  ## This is optional, by default random passwords are generated
   ##
-  # passwordsSecretName:
-
+  passwordsSecretName:
   ## RPC configuration
+  ## @param security.rpc.authenticationEnabled Enable the RPC authentication
+  ## @param security.rpc.encryptionEnabled Enable the encryption for RPC
   ##
   rpc:
     authenticationEnabled: false
     encryptionEnabled: false
-
-  ## Enables local storage encryption
+  ## @param security.storageEncryptionEnabled Enables local storage encryption
   ##
   storageEncryptionEnabled: false
-
-  ## Name of the secret that contains the certificates.
+  ## @param security.certificatesSecretName Name of the secret that contains the certificates.
   ## It should contains two keys called "spark-keystore.jks" and "spark-truststore.jks" with the files in JKS format.
   ## DEPRECATED. Use `security.ssl.existingSecret` instead
   ##
-  # certificatesSecretName:
-
+  certificatesSecretName:
   ## SSL configuration
   ##
   ssl:
+    ## @param security.ssl.enabled Enable the SSL configuration
+    ##
     enabled: false
+    ## @param security.ssl.needClientAuth Enable the client authentication
+    ##
     needClientAuth: false
+    ## @param security.ssl.protocol Set the SSL protocol
+    ##
     protocol: TLSv1.2
-    ## Name of the existing secret containing the TLS certificates.
+    ## @param security.ssl.existingSecret Name of the existing secret containing the TLS certificates
     ## It should contains two keys called "spark-keystore.jks" and "spark-truststore.jks" with the files in JKS format.
     ##
     existingSecret:
-    ## Create self-signed TLS certificates. Currently only supports PEM certificates.
+    ## @param security.ssl.autoGenerated Create self-signed TLS certificates. Currently only supports PEM certificates
     ## The Spark container will generate a JKS keystore and trustore using the PEM certificates.
     ##
     autoGenerated: false
-    ## Key, Keystore and Truststore passwords.
+    ## @param security.ssl.keystorePassword Set the password of the JKS Keystore
     ##
     keystorePassword:
+    ## @param security.ssl.truststorePassword Truststore password.
+    ##
     truststorePassword:
-
+    ## Container resource requests and limits
+    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ## We usually recommend not to specify default resources and to leave this as a conscious
+    ## choice for the user. This also increases chances charts run on environments with little
+    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## @param security.ssl.resources.limits The resources limits for the container
+    ## @param security.ssl.resources.requests The requested resources for the container
+    ##
     resources:
-      ## We usually recommend not to specify default resources and to leave this as a conscious
-      ## choice for the user. This also increases chances charts run on environments with little
-      ## resources, such as Minikube. If you do want to specify resources, uncomment the following
-      ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-      ##
+      ## Example:
+      ## limits:
+      ##    cpu: 100m
+      ##    memory: 128Mi
       limits: {}
-      ##   cpu: 100m
-      ##   memory: 128Mi
-      ##
+      ## Examples:
+      ## requests:
+      ##    cpu: 100m
+      ##    memory: 128Mi
       requests: {}
-      ##   cpu: 100m
-      ##   memory: 128Mi
-      ##
+
+## @section Traffic Exposure parameters
 
 ## Service parameters
 ##
 service:
-  ## Kubernetes service type
+  ## @param service.type Kubernetes Service type
   ##
   type: ClusterIP
-
-  ## Cluster Service port
+  ## @param service.clusterPort Spark cluster port
   ##
   clusterPort: 7077
-
-  ## Web Service port
+  ## @param service.webPort Spark client port
   ##
   webPort: 80
-
   ## Specify the nodePort(s) value(s) for the LoadBalancer and NodePort service types.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+  ## @param service.nodePorts.cluster Kubernetes cluster node port
+  ## @param service.nodePorts.web Kubernetes web node port
   ##
   nodePorts:
     cluster: ''
     web: ''
-
-  ## Set the LoadBalancer service type to internal only.
+  ## @param service.loadBalancerIP Load balancer IP if spark service type is `LoadBalancer`
+  ## Set the LoadBalancer service type to internal only
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
-  # loadBalancerIP:
-
-  ## Provide any additional annotations which may be required. This can be used to
-  ## set the LoadBalancer service type to internal only.
+  loadBalancerIP:
+  ## @param service.annotations Annotations for spark service
+  ## This can be used to set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
   annotations: {}
-
 ## Configure the ingress resource that allows you to access the
 ## Spark installation. Set up the URL
 ## ref: http://kubernetes.io/docs/user-guide/ingress/
 ##
 ingress:
-  ## Set to true to enable ingress record generation
+  ## @param ingress.enabled Enable ingress controller resource
   ##
   enabled: false
-
-  ## Set this to true in order to add the corresponding annotations for cert-manager
+  ## @param ingress.certManager Set this to true in order to add the corresponding annotations for cert-manager
   ##
   certManager: false
-
-  ## Ingress Path type
+  ## @param ingress.pathType Ingress path type
   ##
   pathType: ImplementationSpecific
-
-  ## Override API Version (automatically detected if not set)
+  ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
   ##
   apiVersion:
-
-  ## When the ingress is enabled, a host pointing to this will be created
+  ## @param ingress.hostname Default host for the ingress resource
   ##
   hostname: spark.local
-
-  ## The Path to Spark. You may need to set this to '/*' in order to use this
-  ## with ALB ingress controllers.
+  ## @param ingress.path The Path to Spark. You may need to set this to '/*' in order to use this with ALB ingress controllers.
   ##
   path: /
-
-  ## Ingress annotations done as key:value pairs
+  ## @param ingress.annotations Ingress annotations
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
   ##
   ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
   ##
   annotations: {}
-
-  ## Enable TLS configuration for the hostname defined at ingress.hostname parameter
+  ## @param ingress.tls Enable TLS configuration for the hostname defined at ingress.hostname parameter
   ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
   ## You can use the ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
   ##
   tls: false
-
-  ## The list of additional hostnames to be covered with this ingress record.
+  ## @param ingress.extraHosts The list of additional hostnames to be covered with this ingress record.
   ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
   ## extraHosts:
   ## - name: spark.local
   ##   path: /
   ##
-
-  ## Any additional arbitrary paths that may need to be added to the ingress under the main host.
+  extraHosts: []
+  ## @param ingress.extraPaths Any additional arbitrary paths that may need to be added to the ingress under the main host.
   ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
   ## extraPaths:
   ## - path: /*
@@ -540,16 +573,16 @@ ingress:
   ##     serviceName: ssl-redirect
   ##     servicePort: use-annotation
   ##
-
-  ## The tls configuration for additional hostnames to be covered with this ingress record.
+  extraPaths: []
+  ## @param ingress.extraTls The tls configuration for additional hostnames to be covered with this ingress record.
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
   ## extraTls:
   ## - hosts:
   ##     - spark.local
   ##   secretName: spark.local-tls
   ##
-
-  ## If you're providing your own certificates, please use this to add the certificates as secrets
+  extraTls: []
+  ## @param ingress.secrets If you're providing your own certificates, please use this to add the certificates as secrets
   ## key and certificate should start with -----BEGIN CERTIFICATE----- or
   ## -----BEGIN RSA PRIVATE KEY-----
   ##
@@ -558,67 +591,78 @@ ingress:
   ##
   ## It is also possible to create and manage the certificates outside of this helm chart
   ## Please see README.md for more information
-  ##
-  secrets: []
+  ## e.g:
   ## - name: spark.local-tls
   ##   key:
   ##   certificate:
   ##
+  secrets: []
+
+## @section Metrics parameters
 
 ## Metrics configuration
 ##
 metrics:
+  ## @param metrics.enabled Start a side-car prometheus exporter
+  ##
   enabled: false
-
-  ## Annotations for the Prometheus metrics on master nodes
+  ## @param metrics.masterAnnotations [object] Annotations for the Prometheus metrics on master nodes
   ##
   masterAnnotations:
     prometheus.io/scrape: 'true'
     prometheus.io/path: '/metrics/'
     prometheus.io/port: '{{ .Values.master.webPort }}'
-  ## Annotations for the Prometheus metrics on worker nodes
+  ## @param metrics.workerAnnotations [object] Annotations for the Prometheus metrics on worker nodes
   ##
   workerAnnotations:
     prometheus.io/scrape: 'true'
     prometheus.io/path: '/metrics/'
     prometheus.io/port: '{{ .Values.worker.webPort }}'
-
   ## Prometheus Service Monitor
   ## ref: https://github.com/coreos/prometheus-operator
   ##      https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
   ##
   podMonitor:
-    ## If the operator is installed in your cluster, set to true to create a PodMonitor entry
+    ## @param metrics.podMonitor.enabled If the operator is installed in your cluster, set to true to create a PodMonitor Resource for scraping metrics using PrometheusOperator
     ##
     enabled: false
-    ## Add metrics endpoints for monitoring the jobs running in the worker nodes
+    ## @param metrics.podMonitor.extraMetricsEndpoints Add metrics endpoints for monitoring the jobs running in the worker nodes
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#podmetricsendpoint
+    ## e.g:
+    ## - port: myapp
+    ##   path: /metrics/
     ##
     extraMetricsEndpoints: []
-    # - port: myapp
-    #   path: /metrics/
-    ## Specify the namespace in which the podMonitor resource will be created
+    ## @param metrics.podMonitor.namespace Specify the namespace in which the podMonitor resource will be created
     ##
-    # namespace: ""
-    ## Specify the interval at which metrics should be scraped
+    namespace: ""
+    ## @param metrics.podMonitor.interval Specify the interval at which metrics should be scraped
     ##
     interval: 30s
-    ## Specify the timeout after which the scrape is ended
+    ## @param metrics.podMonitor.scrapeTimeout Specify the timeout after which the scrape is ended
+    ## e.g:
+    ## scrapeTimeout: 30s
     ##
-    # scrapeTimeout: 30s
-    ## Used to pass Labels that are used by the Prometheus installed in your cluster to select PodMonitors to work with
+    scrapeTimeout:
+    ## @param metrics.podMonitor.additionalLabels Additional labels that can be used so PodMonitors will be discovered by Prometheus
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
     ##
     additionalLabels: {}
-
   ## Custom PrometheusRule to be defined
   ## The value is evaluated as a template, so, for example, the value can depend on .Release or .Chart
   ## ref: https://github.com/coreos/prometheus-operator#customresourcedefinitions
   ##
   prometheusRule:
+    ## @param metrics.prometheusRule.enabled Set this to true to create prometheusRules for Prometheus
+    ##
     enabled: false
-    additionalLabels: {}
+    ## @param metrics.prometheusRule.namespace Namespace where the prometheusRules resource should be created
+    ##
     namespace: ''
+    ## @param metrics.prometheusRule.additionalLabels Additional labels that can be used so prometheusRules will be discovered by Prometheus
+    ##
+    additionalLabels: {}
+    ## @param metrics.prometheusRule.rules Custom Prometheus [rules](https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/)
     ## These are just examples rules, please adapt them to your needs.
     ## Make sure to constraint the rules to the current postgresql service.
     ## rules:
@@ -632,7 +676,3 @@ metrics:
     ##       summary: PostgreSQL replication is lagging by {{ "{{ $value }}" }} hour(s).
     ##
     rules: []
-
-## Extra objects to deploy (value evaluated as a template)
-##
-extraDeploy: []

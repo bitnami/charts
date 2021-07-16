@@ -71,15 +71,18 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                | Description                                        | Value           |
-| ------------------- | -------------------------------------------------- | --------------- |
-| `kubeVersion`       | Override Kubernetes version                        | `nil`           |
-| `nameOverride`      | String to partially override common.names.fullname | `nil`           |
-| `fullnameOverride`  | String to fully override common.names.fullname     | `nil`           |
-| `commonLabels`      | Labels to add to all deployed objects              | `{}`            |
-| `commonAnnotations` | Annotations to add to all deployed objects         | `{}`            |
-| `clusterDomain`     | Kubernetes cluster domain name                     | `cluster.local` |
-| `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`            |
+| Name                     | Description                                                                             | Value           |
+| ------------------------ | --------------------------------------------------------------------------------------- | --------------- |
+| `kubeVersion`            | Override Kubernetes version                                                             | `nil`           |
+| `nameOverride`           | String to partially override common.names.fullname                                      | `nil`           |
+| `fullnameOverride`       | String to fully override common.names.fullname                                          | `nil`           |
+| `commonLabels`           | Labels to add to all deployed objects                                                   | `{}`            |
+| `commonAnnotations`      | Annotations to add to all deployed objects                                              | `{}`            |
+| `clusterDomain`          | Kubernetes cluster domain name                                                          | `cluster.local` |
+| `extraDeploy`            | Array of extra objects to deploy with the release                                       | `[]`            |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                    | `[]`            |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `[]`            |
 
 
 ### Redis(TM) Image parameters
@@ -88,7 +91,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ---------------------------------------------------- | --------------------- |
 | `image.registry`    | Redis(TM) image registry                             | `docker.io`           |
 | `image.repository`  | Redis(TM) image repository                           | `bitnami/redis`       |
-| `image.tag`         | Redis(TM) image tag (immutable tags are recommended) | `6.2.1-debian-10-r36` |
+| `image.tag`         | Redis(TM) image tag (immutable tags are recommended) | `6.2.4-debian-10-r13` |
 | `image.pullPolicy`  | Redis(TM) image pull policy                          | `IfNotPresent`        |
 | `image.pullSecrets` | Redis(TM) image pull secrets                         | `[]`                  |
 | `image.debug`       | Enable image debug mode                              | `false`               |
@@ -123,13 +126,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `master.extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for Redis(TM) master nodes                     | `nil`           |
 | `master.containerPort`                      | Container port to open on Redis(TM) master nodes                                                 | `6379`          |
 | `master.livenessProbe.enabled`              | Enable livenessProbe on Redis(TM) master nodes                                                   | `true`          |
-| `master.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                          | `5`             |
+| `master.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                          | `20`            |
 | `master.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                 | `5`             |
 | `master.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                | `5`             |
 | `master.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                              | `5`             |
 | `master.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                              | `1`             |
 | `master.readinessProbe.enabled`             | Enable readinessProbe on Redis(TM) master nodes                                                  | `true`          |
-| `master.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                         | `5`             |
+| `master.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                         | `20`            |
 | `master.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                | `5`             |
 | `master.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                               | `1`             |
 | `master.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                             | `5`             |
@@ -199,13 +202,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replica.extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for Redis(TM) replicas nodes                    | `nil`           |
 | `replica.containerPort`                      | Container port to open on Redis(TM) replicas nodes                                                | `6379`          |
 | `replica.livenessProbe.enabled`              | Enable livenessProbe on Redis(TM) replicas nodes                                                  | `true`          |
-| `replica.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                           | `5`             |
+| `replica.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                           | `20`            |
 | `replica.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                  | `5`             |
 | `replica.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                 | `5`             |
 | `replica.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                               | `5`             |
 | `replica.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                               | `1`             |
 | `replica.readinessProbe.enabled`             | Enable readinessProbe on Redis(TM) replicas nodes                                                 | `true`          |
-| `replica.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                          | `5`             |
+| `replica.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                          | `20`            |
 | `replica.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                 | `5`             |
 | `replica.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                | `1`             |
 | `replica.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                              | `5`             |
@@ -256,11 +259,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replica.service.loadBalancerSourceRanges`   | Redis(TM) replicas service Load Balancer sources                                                  | `[]`            |
 | `replica.service.annotations`                | Additional custom annotations for Redis(TM) replicas service                                      | `{}`            |
 | `replica.terminationGracePeriodSeconds`      | Integer setting the termination grace period for the redis-replicas pods                          | `30`            |
-| `replica.autoscaling.enabled`                | Enable autoscaling for replicas                                                                   | `false`         |
-| `replica.autoscaling.minReplicas`            | Minimum number of replicas                                                                        | `1`             |
-| `replica.autoscaling.maxReplicas`            | Maximum number of replicas                                                                        | `11`            |
-| `replica.autoscaling.targetCPU`              | Target CPU utilization percentage                                                                 | `nil`           |
-| `replica.autoscaling.targetMemory`           | Target Memory utilization percentage                                                              | `nil`           |
+| `replica.autoscaling.enabled`                | Enable replica autoscaling settings                                                               | `false`         |
+| `replica.autoscaling.minReplicas`            | Minimum replicas for the pod autoscaling                                                          | `1`             |
+| `replica.autoscaling.maxReplicas`            | Maximum replicas for the pod autoscaling                                                          | `11`            |
+| `replica.autoscaling.targetCPU`              | Percentage of CPU to consider when autoscaling                                                    | `nil`           |
+| `replica.autoscaling.targetMemory`           | Percentage of Memory to consider when autoscaling                                                 | `nil`           |
 
 
 ### Redis(TM) Sentinel configuration parameters
@@ -270,7 +273,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sentinel.enabled`                            | Use Redis(TM) Sentinel on Redis(TM) pods.                                                        | `false`                  |
 | `sentinel.image.registry`                     | Redis(TM) Sentinel image registry                                                                | `docker.io`              |
 | `sentinel.image.repository`                   | Redis(TM) Sentinel image repository                                                              | `bitnami/redis-sentinel` |
-| `sentinel.image.tag`                          | Redis(TM) Sentinel image tag (immutable tags are recommended)                                    | `6.0.9-debian-10-r38`    |
+| `sentinel.image.tag`                          | Redis(TM) Sentinel image tag (immutable tags are recommended)                                    | `6.2.4-debian-10-r14`    |
 | `sentinel.image.pullPolicy`                   | Redis(TM) Sentinel image pull policy                                                             | `IfNotPresent`           |
 | `sentinel.image.pullSecrets`                  | Redis(TM) Sentinel image pull secrets                                                            | `[]`                     |
 | `sentinel.image.debug`                        | Enable image debug mode                                                                          | `false`                  |
@@ -287,13 +290,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sentinel.preExecCmds`                        | Additional commands to run prior to starting Redis(TM) Sentinel                                  | `[]`                     |
 | `sentinel.containerPort`                      | Container port to open on Redis(TM) Sentinel nodes                                               | `26379`                  |
 | `sentinel.livenessProbe.enabled`              | Enable livenessProbe on Redis(TM) Sentinel nodes                                                 | `true`                   |
-| `sentinel.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                          | `5`                      |
+| `sentinel.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                          | `20`                     |
 | `sentinel.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                 | `5`                      |
 | `sentinel.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                | `5`                      |
 | `sentinel.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                              | `5`                      |
 | `sentinel.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                              | `1`                      |
 | `sentinel.readinessProbe.enabled`             | Enable readinessProbe on Redis(TM) Sentinel nodes                                                | `true`                   |
-| `sentinel.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                         | `5`                      |
+| `sentinel.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                         | `20`                     |
 | `sentinel.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                | `5`                      |
 | `sentinel.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                               | `1`                      |
 | `sentinel.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                             | `5`                      |
@@ -322,33 +325,35 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Other Parameters
 
-| Name                                          | Description                                                                                                         | Value   |
-| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------- |
-| `networkPolicy.enabled`                       | Enable creation of NetworkPolicy resources                                                                          | `false` |
-| `networkPolicy.allowExternal`                 | Don't require client label for connections                                                                          | `true`  |
-| `networkPolicy.extraIngress`                  | Add extra ingress rules to the NetworkPolicy                                                                        | `[]`    |
-| `networkPolicy.extraEgress`                   | Add extra ingress rules to the NetworkPolicy                                                                        | `[]`    |
-| `networkPolicy.ingressNSMatchLabels`          | Labels to match to allow traffic from other namespaces                                                              | `{}`    |
-| `networkPolicy.ingressNSPodMatchLabels`       | Pod labels to match to allow traffic from other namespaces                                                          | `{}`    |
-| `podSecurityPolicy.enabled`                   | Enable PodSecurityPolicy                                                                                            | `false` |
-| `podSecurityPolicy.create`                    | Specifies whether a PodSecurityPolicy should be created. You also need to set `podSecurityPolicy.enabled` to `true` | `false` |
-| `rbac.create`                                 | Specifies whether RBAC resources should be created                                                                  | `false` |
-| `rbac.rules`                                  | Custom RBAC rules to set                                                                                            | `[]`    |
-| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                | `true`  |
-| `serviceAccount.automountServiceAccountToken` | Enable/disable auto mounting of service account token                                                               | `true`  |
-| `serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                              | `""`    |
-| `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                                | `{}`    |
-| `pdb.create`                                  | Specifies whether a PodDisruptionBudget should be created                                                           | `false` |
-| `pdb.minAvailable`                            | Min number of pods that must still be available after the eviction                                                  | `1`     |
-| `pdb.maxUnavailable`                          | Max number of pods that can be unavailable after the eviction                                                       | `nil`   |
-| `tls.enabled`                                 | Enable TLS traffic                                                                                                  | `false` |
-| `tls.authClients`                             | Require clients to authenticate                                                                                     | `true`  |
-| `tls.autoGenerated`                           | Generate automatically self-signed TLS certificates                                                                 | `false` |
-| `tls.existingSecret`                          | The name of the existing secret that contains the TLS certificates                                                  | `nil`   |
-| `tls.certFilename`                            | Certificate filename                                                                                                | `nil`   |
-| `tls.certKeyFilename`                         | Certificate Key filename                                                                                            | `nil`   |
-| `tls.certCAFilename`                          | CA Certificate filename                                                                                             | `nil`   |
-| `tls.dhParamsFilename`                        | File containing DH params (in order to support DH based ciphers)                                                    | `nil`   |
+| Name                                          | Description                                                                                                      | Value   |
+| --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ------- |
+| `networkPolicy.enabled`                       | Enable creation of NetworkPolicy resources                                                                       | `false` |
+| `networkPolicy.allowExternal`                 | Don't require client label for connections                                                                       | `true`  |
+| `networkPolicy.extraIngress`                  | Add extra ingress rules to the NetworkPolicy                                                                     | `[]`    |
+| `networkPolicy.extraEgress`                   | Add extra ingress rules to the NetworkPolicy                                                                     | `[]`    |
+| `networkPolicy.ingressNSMatchLabels`          | Labels to match to allow traffic from other namespaces                                                           | `{}`    |
+| `networkPolicy.ingressNSPodMatchLabels`       | Pod labels to match to allow traffic from other namespaces                                                       | `{}`    |
+| `podSecurityPolicy.create`                    | Specifies whether a PodSecurityPolicy should be created (set `podSecurityPolicy.enabled` to `true` to enable it) | `false` |
+| `podSecurityPolicy.enabled`                   | Enable PodSecurityPolicy                                                                                         | `false` |
+| `rbac.create`                                 | Specifies whether RBAC resources should be created                                                               | `false` |
+| `rbac.rules`                                  | Custom RBAC rules to set                                                                                         | `[]`    |
+| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                             | `true`  |
+| `serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                           | `""`    |
+| `serviceAccount.automountServiceAccountToken` | Whether to auto mount the service account token                                                                  | `true`  |
+| `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                             | `{}`    |
+| `pdb.create`                                  | Specifies whether a ServiceAccount should be created                                                             | `false` |
+| `pdb.minAvailable`                            | Min number of pods that must still be available after the eviction                                               | `1`     |
+| `pdb.maxUnavailable`                          | Max number of pods that can be unavailable after the eviction                                                    | `nil`   |
+| `tls.enabled`                                 | Enable TLS traffic                                                                                               | `false` |
+| `tls.authClients`                             | Require clients to authenticate                                                                                  | `true`  |
+| `tls.autoGenerated`                           | Enable autogenerated certificates                                                                                | `false` |
+| `tls.existingSecret`                          | The name of the existing secret that contains the TLS certificates                                               | `nil`   |
+| `tls.certificatesSecret`                      | DEPRECATED. Use existingSecret instead.                                                                          | `nil`   |
+| `tls.certFilename`                            | Certificate filename                                                                                             | `nil`   |
+| `tls.certKeyFilename`                         | Certificate Key filename                                                                                         | `nil`   |
+| `tls.certCAFilename`                          | CA Certificate filename                                                                                          | `nil`   |
+| `tls.dhParamsFilename`                        | File containing DH params (in order to support DH based ciphers)                                                 | `nil`   |
+
 
 ### Metrics Parameters
 
@@ -357,7 +362,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                                     | Start a sidecar prometheus exporter to expose Redis(TM) metrics                                  | `false`                           |
 | `metrics.image.registry`                              | Redis(TM) Exporter image registry                                                                | `docker.io`                       |
 | `metrics.image.repository`                            | Redis(TM) Exporter image repository                                                              | `bitnami/redis-exporter`          |
-| `metrics.image.tag`                                   | Redis(TM) Redis(TM) Exporter image tag (immutable tags are recommended)                          | `1.20.0-debian-10-r16`            |
+| `metrics.image.tag`                                   | Redis(TM) Redis(TM) Exporter image tag (immutable tags are recommended)                          | `1.24.0-debian-10-r9`             |
 | `metrics.image.pullPolicy`                            | Redis(TM) Exporter image pull policy                                                             | `IfNotPresent`                    |
 | `metrics.image.pullSecrets`                           | Redis(TM) Exporter image pull secrets                                                            | `[]`                              |
 | `metrics.redisTargetHost`                             | A way to specify an alternative Redis(TM) hostname                                               | `localhost`                       |
@@ -377,7 +382,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.sentinel.enabled`                            | Start a sidecar prometheus exporter to expose Redis(TM) Sentinel metrics                         | `false`                           |
 | `metrics.sentinel.image.registry`                     | Redis(TM) Sentinel Exporter image registry                                                       | `docker.io`                       |
 | `metrics.sentinel.image.repository`                   | Redis(TM) Sentinel Exporter image repository                                                     | `bitnami/redis-sentinel-exporter` |
-| `metrics.sentinel.image.tag`                          | Redis(TM) Redis(TM) Sentinel Exporter image tag (immutable tags are recommended)                 | `1.7.1-debian-10-r109`            |
+| `metrics.sentinel.image.tag`                          | Redis(TM) Redis(TM) Sentinel Exporter image tag (immutable tags are recommended)                 | `1.7.1-debian-10-r161`            |
 | `metrics.sentinel.image.pullPolicy`                   | Redis(TM) Sentinel Exporter image pull policy                                                    | `IfNotPresent`                    |
 | `metrics.sentinel.image.pullSecrets`                  | Redis(TM) Sentinel Exporter image pull secrets                                                   | `[]`                              |
 | `metrics.sentinel.extraArgs`                          | Extra arguments for Redis(TM) Sentinel exporter, for example:                                    | `{}`                              |
@@ -411,7 +416,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10`                    |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r112`     |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `Always`                |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
@@ -420,7 +425,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sysctl.enabled`                                       | Enable init container to modify Kernel settings                                                 | `false`                 |
 | `sysctl.image.registry`                                | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `sysctl.image.repository`                              | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `sysctl.image.tag`                                     | Bitnami Shell image tag (immutable tags are recommended)                                        | `10`                    |
+| `sysctl.image.tag`                                     | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r112`     |
 | `sysctl.image.pullPolicy`                              | Bitnami Shell image pull policy                                                                 | `Always`                |
 | `sysctl.image.pullSecrets`                             | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `sysctl.command`                                       | Override default init-sysctl container command (useful when using custom images)                | `[]`                    |
