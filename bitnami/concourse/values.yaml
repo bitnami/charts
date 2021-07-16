@@ -1045,10 +1045,10 @@ secrets:
   ##
   teamAuthorizedKeys:
 
-  ## @param secrets.localUsers List of `username:password` or `username:bcrypted_password` combinations for all your local concourse users.
+  ## @param secrets.localUsers List of `username:password` or `username:bcrypted_password` combinations for all your local concourse users. Auto-generated if not set
   ## For details of expected format, see https://concourse-ci.org/local-auth.html
   ##
-  localUsers: "test:test"
+  localUsers:
 
   ## @param secrets.hostKey [string] Concourse Host Keys.
   ## Example value taken from https://github.com/concourse/concourse-chart/blob/master/values.yaml
