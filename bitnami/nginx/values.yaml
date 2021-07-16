@@ -300,7 +300,7 @@ pdb:
   minAvailable: 1
   ## @param pdb.maxUnavailable Max number of pods that can be unavailable after the eviction
   ##
-  maxUnavailable: 1
+  maxUnavailable: 0
 
 ## @section Custom NGINX application parameters
 
