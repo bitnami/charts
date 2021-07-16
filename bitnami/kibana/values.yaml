@@ -160,7 +160,7 @@ persistence:
   ## @param persistence.enabled Enable persistence
   ##
   enabled: true
-  ## @param persistence.storageClass wordpress data Persistent Volume Storage Class
+  ## @param persistence.storageClass Kibana data Persistent Volume Storage Class
   ## If defined, storageClassName: <storageClass>
   ## If set to "-", storageClassName: "", which disables dynamic provisioning
   ## If undefined (the default) or set to null, no storageClassName spec is
