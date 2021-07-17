@@ -484,6 +484,26 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `storegateway.pdb.create`                            | Enable/disable a Pod Disruption Budget creation                                                                                                               | `false`                        |
 | `storegateway.pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled                                                                                                | `1`                            |
 | `storegateway.pdb.maxUnavailable`                    | Maximum number/percentage of pods that may be made unavailable                                                                                                | `nil`                          |
+| `storegateway.hashPartioning.shards`                 | The number of shared used to partition the blocks based on the hashmod of the blocks. Can not be used with time partitioning                                                                   | `""` |
+| `storegateway.timePartioning`   |  list of min/max time for store partitions. See more details below. Setting this will create mutlipale thanos store deployments based on the number of items in the list  | [{min: "", max: ""}] |
+
+### Store time partions
+Thanos store supports partition based on time.
+Setting time partitions will create n number of store deployment based on the number of items in the list. Each item must contain min and max time for querying in the supported format (see details here See details at https://thanos.io/tip/components/store.md/#time-based-partioning ).
+Leaving this empty list ([]) will create a single store for all data.
+Example - This will create 3 stores:
+```yaml
+timePartioning:
+  # One store for data older than 6 weeks
+  - min: ""
+    max: -6w
+  # One store for data newer than 6 weeks and older than 2 weeks
+  - min: -6w
+    max: -2w
+  # One store for data newer than 2 weeks
+  - min: -2w
+    max: ""
+```
 
 ### Thanos Ruler parameters
 
@@ -841,6 +861,10 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 6.0.0
+
+This version introduces hash and time partioning for the store gateway.
 
 ### To 5.0.0
 
