@@ -1,4 +1,4 @@
-suite: test ingress
+suite: test configmap
 templates:
   - pgpool/configmap.yaml
 tests:
