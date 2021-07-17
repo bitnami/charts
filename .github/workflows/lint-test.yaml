@@ -30,6 +30,11 @@ jobs:
       - name: Set up chart-testing
         uses: helm/chart-testing-action@v2.1.0
 
+      - name: Install helm unittest plugin
+        run: |
+          helm env
+          helm plugin install https://github.com/quintush/helm-unittest --version 0.2.6
+
       - name: Create kind cluster
         uses: helm/kind-action@v1.2.0
 
