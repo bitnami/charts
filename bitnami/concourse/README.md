@@ -148,7 +148,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `web.auth.duration`                      | Length of time for which tokens are valid. Afterwards, users will have to log back in.            | `24h`           |
 | `web.auth.passwordConnector`             | The connector to use for password authentication for `fly login -u ... -p ...`.                   | `nil`           |
 | `web.auth.mainTeam.config`               | Configuration file for specifying the main teams params.                                          | `""`            |
-| `web.auth.mainTeam.localUser`            | Comma-separated list of local Concourse users to be included as members of the `main` team.       | `test`          |
+| `web.auth.mainTeam.localUser`            | Comma-separated list of local Concourse users to be included as members of the `main` team.       | `user`          |
 | `web.podAnnotations`                     | Annotations for web pods                                                                          | `{}`            |
 | `web.podAffinityPreset`                  | Pod affinity preset. Ignored if `web.affinity` is set. Allowed values: `soft` or `hard`           | `""`            |
 | `web.podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `web.affinity` is set. Allowed values: `soft` or `hard`      | `soft`          |
