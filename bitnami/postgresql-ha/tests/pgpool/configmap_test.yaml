@@ -1,0 +1,27 @@
+suite: test configmap
+templates:
+  - pgpool/configmap.yaml
+tests:
+  - it: should be empty if pgpool.configurationCM is specified
+    set:
+      pgpool.configurationCM: /some/path
+    asserts:
+      - hasDocuments:
+          count: 0
+  - it: should insert configuration pgpool.configuration is specified
+    set:
+      pgpool.configuration: |
+        the
+        multiline configuration
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: ConfigMap
+      - isAPIVersion:
+          of: v1
+      - equal:
+          path: "data.pgpool\\.conf"
+          value: |-
+            the
+            multiline configuration
