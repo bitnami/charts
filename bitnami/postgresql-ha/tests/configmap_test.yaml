@@ -1,0 +1,10 @@
+suite: test ingress
+templates:
+  - pgpool/configmap.yaml
+tests:
+  - it: should be empty if pgpool.configurationCM is specified
+    set:
+      pgpool.configurationCM: /some/path
+    asserts:
+      - hasDocuments:
+          count: 0

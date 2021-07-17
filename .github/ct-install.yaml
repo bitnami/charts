@@ -16,3 +16,6 @@ excluded-charts:
   - dataplatform-bp1
   - dataplatform-bp2
 remote: origin
+additional-commands:
+  - helm unittest --helm3 --strict --file tests/*.yaml {{ .Path }}
+  - helm unittest --helm3 --strict --file tests/**/*.yaml {{ .Path }}
