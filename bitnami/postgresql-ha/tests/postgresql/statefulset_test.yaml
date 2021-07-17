@@ -20,3 +20,11 @@ tests:
               secretKeyRef:
                 key: postgresql-password
                 name: my-secret
+      - contains:
+          path: "spec.template.spec.containers[0].env"
+          content:
+            name: REPMGR_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: repmgr-password
+                name: my-secret
