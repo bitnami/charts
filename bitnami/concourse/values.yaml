@@ -454,7 +454,7 @@ web:
       ## Make sure you have local users support enabled (`concourse.web.localAuth.enabled`) and
       ## that the users were added (`secrets.localUsers`).
       ##
-      localUser: "test"
+      localUser: "user"
 
   ## @param web.podAnnotations Annotations for web pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
