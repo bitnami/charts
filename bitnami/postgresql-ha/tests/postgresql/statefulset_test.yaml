@@ -1,0 +1,22 @@
+suite: test statefulset
+templates:
+  - postgresql/statefulset.yaml
+tests:
+  - it: should use secret values if postgresql.existingSecret is specified
+    set:
+      postgresql.existingSecret: my-secret
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: StatefulSet
+      - isAPIVersion:
+          of: apps/v1
+      - contains:
+          path: "spec.template.spec.containers[0].env"
+          content:
+            name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: postgresql-password
+                name: my-secret
