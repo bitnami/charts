@@ -531,6 +531,40 @@ tls-client-cert-file
 tls-ca-cert-file
 ```
 
+A custom Lua script can be added to the `redis-exporter` by way of the `metrics.extraArgs.script` parameter.  The pathname of the script *MUST* exist on the container, or the `redis_exporter` process (and therefore the whole pod) will refuse to start.  The script can be provided to the sidecar containers via the `extraVolumes` and `extraVolumeMounts` parameters:
+
+```
+my-redis-deploy:
+  master: &volumeConfigs
+    extraVolumeMounts:
+      - name: '{{ printf "%s-metrics-script-file" (include "common.names.fullname" .) }}'
+        mountPath: '{{ printf "/mnt/%s/" (include "common.names.name" .) }}'
+        readOnly: true
+    extraVolumes:
+      - name: '{{ printf "%s-metrics-script-file" (include "common.names.fullname" .) }}'
+        configMap:
+          name: '{{ printf "%s-metrics-script" (include "common.names.fullname" .) }}'
+  replica:
+    <<: *volumeConfigs
+```
+
+Then deploy the script into the correct location via `extraDeploy`:
+
+```
+my-redis-deploy:
+  metrics:
+    extraArgs:
+      script: "/mnt/my-redis-deploy/my_custom_metrics.lua"
+  extraDeploy:
+    - apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: '{{`{{ printf "%s-metrics-script" (include "common.names.fullname" .) }}`}}'
+      data:
+        my_custom_metrics.lua: |
+          -- a super-clever Lua script goes here
+```
+
 ### Host Kernel Settings
 
 Redis<sup>TM</sup> may require some changes in the kernel of the host machine to work as expected, in particular increasing the `somaxconn` value and disabling transparent huge pages.
