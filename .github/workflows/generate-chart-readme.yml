@@ -10,6 +10,7 @@ on:
       - 'bitnami/aspnet-core/values.yaml'
       - 'bitnami/cassandra/values.yaml'
       - 'bitnami/common/values.yaml'
+      - 'bitnami/concourse/values.yaml'      
       - 'bitnami/dokuwiki/values.yaml'
       - 'bitnami/drupal/values.yaml'
       - 'bitnami/ejbca/values.yaml'
@@ -83,7 +84,7 @@ jobs:
       - name: Checkout bitnami-labs/readme-generator-for-helm
         uses: actions/checkout@v2
         with:
-          repository: 'bitnami-labs/readme-generator-for-helm'
+          repository: "bitnami-labs/readme-generator-for-helm"
           path: readme-generator-for-helm
 
       - name: Cache node modules
@@ -109,7 +110,7 @@ jobs:
         id: pr-file-changes
         uses: trilom/file-changes-action@v1.2.3
         with:
-          fileOutput: ' '
+          fileOutput: " "
 
       - name: Prepare readme-generator-for-helm inputs
         run: |
