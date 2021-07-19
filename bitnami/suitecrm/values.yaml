@@ -23,7 +23,7 @@ global:
 kubeVersion: ""
 ## @param nameOverride String to partially override suitecrm.fullname template (will maintain the release name)
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override suitecrm.fullname template
 ##
 fullnameOverride:

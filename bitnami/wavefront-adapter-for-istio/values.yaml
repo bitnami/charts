@@ -23,7 +23,7 @@ kubeVersion: ""
 ## String to partially override common.names.fullname template (will maintain the release name)
 ## @param nameOverride String to partially override common.names.fullname
 ##
-nameOverride:
+nameOverride: ""
 
 ## String to fully override common.names.fullname template
 ## @param fullnameOverride String to fully override common.names.fullname

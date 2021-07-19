@@ -23,7 +23,7 @@ global:
 kubeVersion: ""
 ## @param nameOverride String to partially override airflow.fullname template with a string (will prepend the release name)
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override airflow.fullname template with a string
 ##
 fullnameOverride:

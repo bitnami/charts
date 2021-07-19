@@ -37,7 +37,7 @@ image:
 
 ## String to partially override testlink.fullname template (will maintain the release name)
 ##
-nameOverride:
+nameOverride: ""
 
 ## String to fully override testlink.fullname template
 ##
