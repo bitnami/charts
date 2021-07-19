@@ -446,46 +446,6 @@ spec:
               readOnly: true
             {{- end }}
         {{- end }}
-        {{- if .Values.metrics.sentinel.enabled }}
-        - name: sentinel-metrics
-          image: {{ include "redis.metrics.sentinel.image" . }}
-          imagePullPolicy: {{ .Values.metrics.sentinel.image.pullPolicy | quote }}
-          {{- if .Values.metrics.sentinel.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.metrics.sentinel.containerSecurityContext "enabled" | toYaml | nindent 12 }}
-          {{- end }}
-          {{- if .Values.diagnosticMode.enabled }}
-          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
-          {{- else }}
-          command:
-            - redis_sentinel_exporter{{- range $key, $value := .Values.metrics.sentinel.extraArgs }} --{{ $key }}={{ $value }}{{- end }}
-          {{- end }}
-          {{- if .Values.diagnosticMode.enabled }}
-          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
-          {{- end }}
-          env:
-            {{- if and .Values.auth.sentinel (and .Values.auth.enabled (not .Values.auth.usePasswordFiles)) }}
-            - name: SENTINEL_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "redis.secretName" . }}
-                  key: {{ include "redis.secretPasswordKey" . }}
-            {{- end }}
-            {{- if and .Values.auth.sentinel .Values.auth.enabled .Values.auth.usePasswordFiles }}
-            - name: SENTINEL_PASSWORD_FILE
-              value: /secrets/redis-password
-            {{- end }}
-          ports:
-            - name: sentinelmetrics
-              containerPort: 9355
-          {{- if .Values.metrics.sentinel.resources }}
-          resources: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.sentinel.resources "context" $) | nindent 12 }}
-          {{- end }}
-          {{- if and .Values.auth.sentinel .Values.auth.enabled .Values.auth.usePasswordFiles }}
-          volumeMounts:
-            - name: redis-password
-              mountPath: /secrets/
-          {{- end }}
-        {{- end }}
         {{- if .Values.replica.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.replica.sidecars "context" $) | nindent 8 }}
         {{- end }}
