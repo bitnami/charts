@@ -2621,6 +2621,34 @@ metrics:
     ##
     # scrapeTimeout: 10s
 
+  ## PrometheusRule CRD configuration
+  ##
+  prometheusRule:
+    enabled: false
+    ## Namespace in which the PrometheusRule CRD is created
+    ##
+    namespace:
+    ## Additional labels for the prometheusRule
+    ##
+    additionalLabels: {}
+    ## List of group of rules and their rules
+    ##
+    ## These are just examples rules, please adapt them to your needs.
+    ##    rules: |
+    ##      groups:
+    ##        - name: Compactor
+    ##          rules:
+    ##            - alert: ThanosCompactMultipleRunning
+    ##              annotations:
+    ##                description: No more than one Thanos Compact instance should be running at once. There are {{`{{`}}$value{{`}}`}} instances running.
+    ##                runbook_url: https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-thanoscompactmultiplerunning
+    ##                summary: Thanos Compact has multiple instances running.
+    ##              expr: sum by (job) (up{job=~"{{ template "common.names.fullname" . }}-compact.*"}) > 1
+    ##              for: 5m
+    ##              labels:
+    ##                severity: warning
+    rules: []
+
 ## Init Container parameters
 ## Change the owner and group of the persistent volume(s) mountpoint(s) to 'runAsUser:fsGroup' on each component
 ## values from the securityContext section of the component

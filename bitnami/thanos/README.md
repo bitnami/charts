@@ -646,6 +646,11 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `metrics.serviceMonitor.labels`        | Additional labels for ServiceMonitor                                                                   | `{}`                                      |
 | `metrics.serviceMonitor.interval`      | Interval at which metrics should be scraped.                                                           | `nil` (Prometheus Operator default value) |
 | `metrics.serviceMonitor.scrapeTimeout` | Timeout after which the scrape is ended                                                                | `nil` (Prometheus Operator default value) |
+| `metrics.prometheusRule.enabled`       | if `true`, creates a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true`) | `false`                                   |
+| `metrics.prometheusRule.namespace`     | Namespace in which the PrometheusRule will be created                                                    | `nil`                                     |
+| `metrics.prometheusRule.additionalLabels`      | Additional labels for the prometheusRule                                                        | `{}`                                      |
+| `metrics.prometheusRule.rules`          | Prometheus Rules for Thanos components                                                                         |                                     |
+
 
 ### Volume Permissions parameters
 
