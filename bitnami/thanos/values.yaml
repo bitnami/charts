@@ -2688,7 +2688,7 @@ metrics:
     ## e.g:
     ## scrapeTimeout: 10s
     ##
-    scrapeTimeout:
+    scrapeTimeout: ""
 
   ## PrometheusRule CRD configuration
   ##

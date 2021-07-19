@@ -747,7 +747,7 @@ metrics:
     interval: 30s
     ## @param metrics.serviceMonitor.scrapeTimeout The timeout after which the scrape is ended
     ##
-    scrapeTimeout:
+    scrapeTimeout: ""
     ## @param metrics.serviceMonitor.relabellings Metrics relabellings to add to the scrape endpoint
     ##
     relabellings:

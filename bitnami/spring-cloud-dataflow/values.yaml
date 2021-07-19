@@ -965,7 +965,7 @@ metrics:
     ## e.g:
     ## scrapeTimeout: 10s
     ##
-    scrapeTimeout:
+    scrapeTimeout: ""
   ## Prometheus Rsocket Proxy Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
   ##

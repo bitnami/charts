@@ -913,8 +913,8 @@ sentinel:
     ## NOTE: choose port between <30000-32767>
     ##
     nodePorts:
-      redis:
-      sentinel:
+      redis: ""
+      sentinel: ""
     ## @param sentinel.service.externalTrafficPolicy Redis(TM) Sentinel service external traffic policy
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
@@ -1070,19 +1070,19 @@ tls:
   existingSecret: ""
   ## @param tls.certificatesSecret DEPRECATED. Use existingSecret instead.
   ##
-  certificatesSecret:
+  certificatesSecret: ""
   ## @param tls.certFilename Certificate filename
   ##
-  certFilename:
+  certFilename: ""
   ## @param tls.certKeyFilename Certificate Key filename
   ##
-  certKeyFilename:
+  certKeyFilename: ""
   ## @param tls.certCAFilename CA Certificate filename
   ##
-  certCAFilename:
+  certCAFilename: ""
   ## @param tls.dhParamsFilename File containing DH params (in order to support DH based ciphers)
   ##
-  dhParamsFilename:
+  dhParamsFilename: ""
 
 ## @section Metrics Parameters
 ##
@@ -1267,7 +1267,7 @@ metrics:
     interval: 30s
     ## @param metrics.serviceMonitor.scrapeTimeout The timeout after which the scrape is ended
     ##
-    scrapeTimeout:
+    scrapeTimeout: ""
     ## @param metrics.serviceMonitor.relabellings Metrics relabellings to add to the scrape endpoint
     ##
     relabellings: []

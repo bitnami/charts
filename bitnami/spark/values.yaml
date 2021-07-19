@@ -643,7 +643,7 @@ metrics:
     ## e.g:
     ## scrapeTimeout: 30s
     ##
-    scrapeTimeout:
+    scrapeTimeout: ""
     ## @param metrics.podMonitor.additionalLabels Additional labels that can be used so PodMonitors will be discovered by Prometheus
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
     ##
