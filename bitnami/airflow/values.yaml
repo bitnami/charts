@@ -374,7 +374,7 @@ service:
   ##
   nodePort: ""
   ## Use loadBalancerIP to request a specific static IP,
-  # loadBalancerIP:
+  # loadBalancerIP: ""
   annotations:
 
 ## @section Airflow scheduler parameters

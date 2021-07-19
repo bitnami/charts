@@ -501,13 +501,21 @@ service:
   ## @param service.httpsPort Service HTTPS port
   ##
   httpsPort: 8443
-  ## clusterIP: ""
-  ## Control hosts connecting to "LoadBalancer" only
+  ## @param service.clusterIP Static clusterIP or None for headless services
+  ## e.g.:
+  ## clusterIP: None
+  ##
+  clusterIP: ""
+  ## @param service.loadBalancerSourceRanges Service Load Balancer sources
+  ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+  ## e.g:
   ## loadBalancerSourceRanges:
   ##   - 0.0.0.0/0
-  ## loadBalancerIP for the SuiteCRM Service (optional, cloud specific)
+  ##
+  loadBalancerSourceRanges: []
+  ## @param service.loadBalancerIP loadBalancerIP for the SuiteCRM Service (optional, cloud specific)
   ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
-  ## loadBalancerIP:
+  loadBalancerIP: ""
   ## @param service.nodePorts.http Kubernetes HTTP node port
   ## @param service.nodePorts.https Kubernetes HTTPS node port
   ## nodePorts:

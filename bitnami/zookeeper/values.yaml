@@ -343,7 +343,7 @@ service:
   ## @param service.loadBalancerIP Load balancer IP for the Zookeper Service (optional, cloud specific)
   ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
   ##
-  loadBalancerIP:
+  loadBalancerIP: ""
   ## @param service.port ZooKeeper port
   ##
   port: 2181

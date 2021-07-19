@@ -391,7 +391,7 @@ service:
   ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
   ## @param service.loadBalancerIP Adapter service LoadBalancer IP
   ##
-  loadBalancerIP:
+  loadBalancerIP: ""
   ## loadBalancerIP source ranges for the Service
   ## @param service.loadBalancerSourceRanges loadBalancerIP source ranges for the Service
   ##

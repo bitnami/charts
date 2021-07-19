@@ -465,10 +465,10 @@ service:
   ## @param service.labels Additional labels for solr service
   ##
   labels: {}
-  ## loadBalancerIP for the SuiteCRM Service (optional, cloud specific)
+  ## @param service.loadBalancerIP Load balancer IP for the Solr Service (optional, cloud specific)
   ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
   ##
-  ## loadBalancerIP:
+  loadBalancerIP: ""
   ## @param service.nodePorts.http Node ports for the HTTP service
   ## @param service.nodePorts.https Node ports for the HTTPS service
   ## nodePorts:
@@ -816,10 +816,10 @@ exporter:
     ## @param exporter.service.port Kubernetes Service port
     ##
     port: 9983
-    ## @param exporter.service.loadBalancerIP Load balancer IP for the SuiteCRM Service (optional, cloud specific)
+    ## @param exporter.service.loadBalancerIP Load balancer IP for the Solr Exporter Service (optional, cloud specific)
     ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
     ##
-    loadBalancerIP:
+    loadBalancerIP: ""
     ## @param exporter.service.nodePorts.http Node ports for the HTTP exporter service
     ## @param exporter.service.nodePorts.https Node ports for the HTTPS exporter service
     ## nodePorts:

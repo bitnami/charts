@@ -217,7 +217,7 @@ service:
   type: ClusterIP
   ## @param service.loadBalancerIP Load balancer IP if `service.type` is `LoadBalancer`
   ## If service.type is LoadBalancer, request a specific static IP address if supported by the cloud provider, otherwise leave blank
-  loadBalancerIP:
+  loadBalancerIP: ""
 ## Enable persistence using Persistent Volume Claims
 ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
@@ -771,7 +771,7 @@ metrics:
   ##
   service:
     type: ClusterIP
-    loadBalancerIP:
+    loadBalancerIP: ""
     annotations: {}
     labels: {}
 

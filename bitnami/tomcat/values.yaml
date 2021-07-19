@@ -348,7 +348,7 @@ service:
   nodePort: ""
   ## @param service.loadBalancerIP Port Use serviceLoadBalancerIP to request a specific static IP, otherwise leave blank
   ##
-  loadBalancerIP:
+  loadBalancerIP: ""
   ## @param service.externalTrafficPolicy Enable client source IP preservation
   ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##

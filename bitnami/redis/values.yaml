@@ -420,7 +420,7 @@ master:
     ## @param master.service.loadBalancerIP Redis(TM) master service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
-    loadBalancerIP:
+    loadBalancerIP: ""
     ## @param master.service.loadBalancerSourceRanges Redis(TM) master service Load Balancer sources
     ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g.
@@ -725,7 +725,7 @@ replica:
     ## @param replica.service.loadBalancerIP Redis(TM) replicas service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
-    loadBalancerIP:
+    loadBalancerIP: ""
     ## @param replica.service.loadBalancerSourceRanges Redis(TM) replicas service Load Balancer sources
     ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g.
@@ -925,7 +925,7 @@ sentinel:
     ## @param sentinel.service.loadBalancerIP Redis(TM) Sentinel service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
-    loadBalancerIP:
+    loadBalancerIP: ""
     ## @param sentinel.service.loadBalancerSourceRanges Redis(TM) Sentinel service Load Balancer sources
     ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g.
