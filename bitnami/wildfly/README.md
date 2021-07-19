@@ -51,33 +51,35 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `nil` |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
 
 ### Common parameters
 
 | Name                | Description                                        | Value           |
 | ------------------- | -------------------------------------------------- | --------------- |
-| `kubeVersion`       | Override Kubernetes version                        | `nil`           |
-| `nameOverride`      | String to partially override common.names.fullname | `nil`           |
-| `fullnameOverride`  | String to fully override common.names.fullname     | `nil`           |
+| `kubeVersion`       | Override Kubernetes version                        | `""`            |
+| `nameOverride`      | String to partially override common.names.fullname | `""`            |
+| `fullnameOverride`  | String to fully override common.names.fullname     | `""`            |
 | `commonLabels`      | Labels to add to all deployed objects              | `{}`            |
 | `commonAnnotations` | Annotations to add to all deployed objects         | `{}`            |
 | `clusterDomain`     | Kubernetes cluster domain name                     | `cluster.local` |
 | `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`            |
 
+
 ### WildFly Image parameters
 
-| Name                | Description                                        | Value                 |
-| ------------------- | -------------------------------------------------- | --------------------- |
-| `image.registry`    | WildFly image registry                             | `docker.io`           |
-| `image.repository`  | WildFly image repository                           | `bitnami/wildfly`     |
-| `image.tag`         | WildFly image tag (immutable tags are recommended) | `23.0.1-debian-10-r0` |
-| `image.pullPolicy`  | WildFly image pull policy                          | `IfNotPresent`        |
-| `image.pullSecrets` | WildFly image pull secrets                         | `[]`                  |
-| `image.debug`       | Enable image debug mode                            | `false`               |
+| Name                | Description                                        | Value                  |
+| ------------------- | -------------------------------------------------- | ---------------------- |
+| `image.registry`    | WildFly image registry                             | `docker.io`            |
+| `image.repository`  | WildFly image repository                           | `bitnami/wildfly`      |
+| `image.tag`         | WildFly image tag (immutable tags are recommended) | `24.0.0-debian-10-r10` |
+| `image.pullPolicy`  | WildFly image pull policy                          | `IfNotPresent`         |
+| `image.pullSecrets` | WildFly image pull secrets                         | `[]`                   |
+| `image.debug`       | Enable image debug mode                            | `false`                |
+
 
 ### WildFly Configuration parameters
 
@@ -88,8 +90,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `command`            | Override default container command (useful when using custom images)   | `[]`   |
 | `args`               | Override default container args (useful when using custom images)      | `[]`   |
 | `extraEnvVars`       | Array with extra environment variables to add to the WildFly container | `[]`   |
-| `extraEnvVarsCM`     | Name of existing ConfigMap containing extra env vars                   | `nil`  |
-| `extraEnvVarsSecret` | Name of existing Secret containing extra env vars                      | `nil`  |
+| `extraEnvVarsCM`     | Name of existing ConfigMap containing extra env vars                   | `""`   |
+| `extraEnvVarsSecret` | Name of existing Secret containing extra env vars                      | `""`   |
+
 
 ### WildFly deployment parameters
 
@@ -136,6 +139,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                       | `{}`            |
 | `customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                      | `{}`            |
 
+
 ### Traffic Exposure Parameters
 
 | Name                               | Description                                                                                           | Value                    |
@@ -143,10 +147,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.type`                     | WildFly service type                                                                                  | `LoadBalancer`           |
 | `service.port`                     | WildFly service HTTP port                                                                             | `80`                     |
 | `service.mgmtPort`                 | WildFly service management console port                                                               | `443`                    |
-| `service.nodePorts.http`           | Node port for HTTP                                                                                    | `nil`                    |
-| `service.nodePorts.mgmt`           | Node port for Management console                                                                      | `nil`                    |
-| `service.clusterIP`                | WildFly service Cluster IP                                                                            | `nil`                    |
-| `service.loadBalancerIP`           | WildFly service Load Balancer IP                                                                      | `nil`                    |
+| `service.nodePorts.http`           | Node port for HTTP                                                                                    | `""`                     |
+| `service.nodePorts.mgmt`           | Node port for Management console                                                                      | `""`                     |
+| `service.clusterIP`                | WildFly service Cluster IP                                                                            | `""`                     |
+| `service.loadBalancerIP`           | WildFly service Load Balancer IP                                                                      | `""`                     |
 | `service.loadBalancerSourceRanges` | WildFly service Load Balancer sources                                                                 | `[]`                     |
 | `service.externalTrafficPolicy`    | WildFly service external traffic policy                                                               | `Cluster`                |
 | `service.annotations`              | Additional custom annotations for WildFly service                                                     | `{}`                     |
@@ -154,9 +158,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.enabled`                  | Enable ingress record generation for WildFly                                                          | `false`                  |
 | `ingress.certManager`              | Add the corresponding annotations for cert-manager integration                                        | `false`                  |
 | `ingress.pathType`                 | Ingress path type                                                                                     | `ImplementationSpecific` |
-| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                         | `nil`                    |
+| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                         | `""`                     |
 | `ingress.hostname`                 | Default host for the ingress record                                                                   | `wildfly.local`          |
-| `ingress.path`                     | Default path for the ingress record                                                                   | `/`                      |
+| `ingress.path`                     | Default path for the ingress record                                                                   | `ImplementationSpecific` |
 | `ingress.annotations`              | Additional custom annotations for the ingress record                                                  | `{}`                     |
 | `ingress.tls`                      | Enable TLS configuration for the host defined at `ingress.hostname` parameter                         | `false`                  |
 | `ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                            | `[]`                     |
@@ -164,23 +168,25 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                   | `[]`                     |
 | `ingress.secrets`                  | Custom TLS certificates as secrets                                                                    | `[]`                     |
 
+
 ### Persistence Parameters
 
 | Name                                          | Description                                                                                     | Value                   |
 | --------------------------------------------- | ----------------------------------------------------------------------------------------------- | ----------------------- |
 | `persistence.enabled`                         | Enable persistence using Persistent Volume Claims                                               | `true`                  |
-| `persistence.storageClass`                    | Persistent Volume storage class                                                                 | `nil`                   |
+| `persistence.storageClass`                    | Persistent Volume storage class                                                                 | `""`                    |
 | `persistence.accessModes`                     | Persistent Volume access modes                                                                  | `[]`                    |
 | `persistence.size`                            | Persistent Volume size                                                                          | `8Gi`                   |
 | `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`            | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`          | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `10`                    |
+| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r125`     |
 | `volumePermissions.image.pullPolicy`          | Bitnami Shell image pull policy                                                                 | `Always`                |
 | `volumePermissions.image.pullSecrets`         | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`          | The resources limits for the init container                                                     | `{}`                    |
 | `volumePermissions.resources.requests`        | The requested resources for the init container                                                  | `{}`                    |
 | `volumePermissions.securityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`                     |
+
 
 The above parameters map to the env variables defined in [bitnami/wildfly](http://github.com/bitnami/bitnami-docker-wildfly). For more information please refer to the [bitnami/wildfly](http://github.com/bitnami/bitnami-docker-wildfly) image documentation.
 

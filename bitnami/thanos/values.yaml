@@ -2764,9 +2764,9 @@ minio:
   ## @param minio.secretKey.password MinIO&reg; Secret Key
   ##
   accessKey:
-    password: ''
+    password: ""
   secretKey:
-    password: ''
+    password: ""
   ## @param minio.defaultBuckets Comma, semi-colon or space separated list of MinIO&reg; buckets to create
   ##
   defaultBuckets: 'thanos'

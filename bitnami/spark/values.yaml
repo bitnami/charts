@@ -120,7 +120,7 @@ master:
   ## @param master.podAffinityPreset Spark master pod affinity preset. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
-  podAffinityPreset: ''
+  podAffinityPreset: ""
   ## @param master.podAntiAffinityPreset Spark master pod anti-affinity preset. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
@@ -131,12 +131,12 @@ master:
   nodeAffinityPreset:
     ## @param master.nodeAffinityPreset.type Spark master node affinity preset type. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard`
     ##
-    type: ''
+    type: ""
     ## @param master.nodeAffinityPreset.key Spark master node label key to match Ignored if `master.affinity` is set.
     ## E.g.
     ## key: "kubernetes.io/e2e-az-name"
     ##
-    key: ''
+    key: ""
     ## @param master.nodeAffinityPreset.values Spark master node label values to match. Ignored if `master.affinity` is set.
     ## E.g.
     ## values:
@@ -301,7 +301,7 @@ worker:
   ## @param worker.podAffinityPreset Spark worker pod affinity preset. Ignored if `worker.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
-  podAffinityPreset: ''
+  podAffinityPreset: ""
   ## @param worker.podAntiAffinityPreset Spark worker pod anti-affinity preset. Ignored if `worker.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
@@ -312,12 +312,12 @@ worker:
   nodeAffinityPreset:
     ## @param worker.nodeAffinityPreset.type Spark worker node affinity preset type. Ignored if `worker.affinity` is set. Allowed values: `soft` or `hard`
     ##
-    type: ''
+    type: ""
     ## @param worker.nodeAffinityPreset.key Spark worker node label key to match Ignored if `worker.affinity` is set.
     ## E.g.
     ## key: "kubernetes.io/e2e-az-name"
     ##
-    key: ''
+    key: ""
     ## @param worker.nodeAffinityPreset.values Spark worker node label values to match. Ignored if `worker.affinity` is set.
     ## E.g.
     ## values:
@@ -511,8 +511,8 @@ service:
   ## @param service.nodePorts.web Kubernetes web node port
   ##
   nodePorts:
-    cluster: ''
-    web: ''
+    cluster: ""
+    web: ""
   ## @param service.loadBalancerIP Load balancer IP if spark service type is `LoadBalancer`
   ## Set the LoadBalancer service type to internal only
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -658,7 +658,7 @@ metrics:
     enabled: false
     ## @param metrics.prometheusRule.namespace Namespace where the prometheusRules resource should be created
     ##
-    namespace: ''
+    namespace: ""
     ## @param metrics.prometheusRule.additionalLabels Additional labels that can be used so prometheusRules will be discovered by Prometheus
     ##
     additionalLabels: {}
