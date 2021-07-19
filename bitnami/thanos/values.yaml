@@ -2673,7 +2673,7 @@ metrics:
     enabled: false
     ## @param metrics.serviceMonitor.namespace Namespace in which Prometheus is running
     ##
-    namespace:
+    namespace: ""
     ## @param metrics.serviceMonitor.labels Additional labels for ServiceMonitor object
     ##
     labels:
@@ -2698,7 +2698,7 @@ metrics:
     enabled: false
     ## @param metrics.prometheusRule.namespace Namespace in which the PrometheusRule CRD is created
     ##
-    namespace:
+    namespace: ""
     ## @param metrics.prometheusRule.additionalLabels Additional labels for the prometheusRule
     ##
     additionalLabels: {}

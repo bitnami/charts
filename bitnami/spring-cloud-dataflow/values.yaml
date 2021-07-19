@@ -953,7 +953,7 @@ metrics:
     extraLabels: {}
     ## @param metrics.serviceMonitor.namespace Namespace in which ServiceMonitor is created if different from release
     ##
-    namespace:
+    namespace: ""
     ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped.
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ## e.g:
