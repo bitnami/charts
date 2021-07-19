@@ -180,7 +180,7 @@ master:
   extraEnvVarsCM: ""
   ## @param master.extraEnvVarsSecret Name of existing Secret containing extra env vars for Redis(TM) master nodes
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param master.containerPort Container port to open on Redis(TM) master nodes
   ##
   containerPort: 6379
@@ -481,7 +481,7 @@ replica:
   extraEnvVarsCM: ""
   ## @param replica.extraEnvVarsSecret Name of existing Secret containing extra env vars for Redis(TM) replicas nodes
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param replica.containerPort Container port to open on Redis(TM) replicas nodes
   ##
   containerPort: 6379

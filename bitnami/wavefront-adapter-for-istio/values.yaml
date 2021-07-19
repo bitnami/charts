@@ -290,7 +290,7 @@ extraEnvVarsCM: ""
 ## Secret with extra environment variables
 ## @param extraEnvVarsSecret Name of existing Secret containing extra env vars
 ##
-extraEnvVarsSecret:
+extraEnvVarsSecret: ""
 
 ## Extra volumes to add to the deployment
 ## @param extraVolumes  Optionally specify extra list of additional volumes for Adapter pods

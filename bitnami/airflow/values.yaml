@@ -66,7 +66,7 @@ extraEnvVars: []
 extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Secret containing extra env vars to add to web, worker and scheduler pods
 ##
-extraEnvVarsSecret:
+extraEnvVarsSecret: ""
 ## @param initContainers List of init containers to be added to the web, worker and scheduler pods
 ## Example:
 ## initContainers:
@@ -264,7 +264,7 @@ web:
   extraEnvVarsCM: ""
   ## @param web.extraEnvVarsSecret Secret containing extra environment variables (in case of sensitive data)
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## Web container' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -443,7 +443,7 @@ scheduler:
   extraEnvVarsCM: ""
   ## @param scheduler.extraEnvVarsSecret Secret with extra environment variables
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## Scheduler containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -585,7 +585,7 @@ worker:
   extraEnvVarsCM: ""
   ## @param worker.extraEnvVarsSecret Secret with extra environment variables
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## Worker containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -804,7 +804,7 @@ git:
     extraVolumeMounts:
     extraEnvVars:
     extraEnvVarsCM: ""
-    extraEnvVarsSecret:
+    extraEnvVarsSecret: ""
     ## Clone init container resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
     ##
@@ -826,7 +826,7 @@ git:
     extraVolumeMounts:
     extraEnvVars:
     extraEnvVarsCM: ""
-    extraEnvVarsSecret:
+    extraEnvVarsSecret: ""
     ## Sync sidecar container resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
     ##

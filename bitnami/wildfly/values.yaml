@@ -101,7 +101,7 @@ extraEnvVars: []
 extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Name of existing Secret containing extra env vars
 ##
-extraEnvVarsSecret:
+extraEnvVarsSecret: ""
 
 ## @section WildFly deployment parameters
 

@@ -215,7 +215,7 @@ extraEnvVars: []
 extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Name of existing Secret containing extra env vars
 ##
-extraEnvVarsSecret:
+extraEnvVarsSecret: ""
 
 ## @section WordPress Multisite Configuration parameters
 ## ref: https://github.com/bitnami/bitnami-docker-wordpress#multisite-configuration

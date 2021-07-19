@@ -144,7 +144,7 @@ extraEnvVars: []
 extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Name of existing Secret containing extra env vars
 ##
-extraEnvVarsSecret:
+extraEnvVarsSecret: ""
 
 ## @section Redmine deployment parameters
 
@@ -816,7 +816,7 @@ mailReceiver:
   extraEnvVarsCM: ""
   ## @param mailReceiver.extraEnvVarsSecret Name of existing Secret containing extra env vars
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param mailReceiver.extraVolumes Optionally specify extra list of additional volumes for mailReceiver container
   ##
   extraVolumes: []

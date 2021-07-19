@@ -378,7 +378,7 @@ redis:
   extraEnvVarsCM: ""
   ## @param redis.extraEnvVarsSecret Secret with extra environment variables
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param redis.podAnnotations Redis<sup>TM</sup> additional annotations
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
@@ -531,7 +531,7 @@ updateJob:
   extraEnvVarsCM: ""
   ## @param updateJob.extraEnvVarsSecret Secret containing extra environment variables
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param updateJob.extraVolumes Extra volumes to add to the deployment
   ##
   extraVolumes: []

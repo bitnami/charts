@@ -125,7 +125,7 @@ extraEnvVars: []
 extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Secret with extra environment variables
 ##
-extraEnvVarsSecret:
+extraEnvVarsSecret: ""
 
 ## @section Solr statefulset parameters
 
@@ -772,7 +772,7 @@ exporter:
   extraEnvVarsCM: ""
   ## @param exporter.extraEnvVarsSecret Secret with extra environment variables
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param exporter.extraVolumes Extra volumes to add to the deployment
   ##
   extraVolumes: []

@@ -123,7 +123,7 @@ extraEnvVarsCM: ""
 
 ## Secret with extra environment variables
 ##
-extraEnvVarsSecret:
+extraEnvVarsSecret: ""
 
 ## Extra volumes to add to the deployment
 ##
@@ -581,7 +581,7 @@ certificates:
 
   ## Secret with extra environment variables
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
 
   image:
     registry: docker.io

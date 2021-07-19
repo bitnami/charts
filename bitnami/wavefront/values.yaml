@@ -401,7 +401,7 @@ collector:
   extraEnvVarsCM: ""
   ## @param collector.extraEnvVarsSecret Name of existing Secret containing extra environment variables
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param collector.extraVolumes Optionally specify extra list of additional volumes for collector container
   ##
   extraVolumes: []
@@ -619,7 +619,7 @@ proxy:
   extraEnvVarsCM: ""
   ## @param proxy.extraEnvVarsSecret Name of existing Secret containing extra environment variables
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param proxy.extraVolumes Optionally specify extra list of additional volumes for proxy container
   ##
   extraVolumes: []

@@ -128,7 +128,7 @@ server:
   extraEnvVarsCM: ""
   ## @param server.extraEnvVarsSecret Secret with extra environment variables
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param server.replicaCount Number of Dataflow server replicas to deploy
   ##
   replicaCount: 1
@@ -502,7 +502,7 @@ skipper:
   extraEnvVarsCM: ""
   ## @param skipper.extraEnvVarsSecret Name of existing Secret containing extra environment variables
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param skipper.replicaCount Number of Skipper server replicas to deploy
   ##
   replicaCount: 1

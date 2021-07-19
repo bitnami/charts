@@ -105,7 +105,7 @@ extraEnvVars: []
 extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Name of existing Secret containing extra environment variables
 ##
-extraEnvVarsSecret:
+extraEnvVarsSecret: ""
 
 ## @section Tomcat deployment parameters
 
