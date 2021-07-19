@@ -364,6 +364,7 @@ web:
 ## @param service.type Airflow service type
 ## @param service.port Airflow service HTTP port
 ## @param service.nodePort Airflow service NodePort
+## @param service.loadBalancerIP loadBalancerIP if service type is `LoadBalancer` (optional, cloud specific)
 ## @param service.annotations Additional custom annotations for Airflow service
 ##
 service:
@@ -373,8 +374,7 @@ service:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
   nodePort: ""
-  ## Use loadBalancerIP to request a specific static IP,
-  # loadBalancerIP:
+  loadBalancerIP: ""
   annotations: {}
 
 ## @section Airflow scheduler parameters
