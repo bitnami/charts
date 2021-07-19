@@ -259,7 +259,7 @@ spec:
           resources: {{- toYaml .Values.sidekiq.resources | nindent 12 }}
           {{- end }}
         {{- if .Values.sidecars }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | indent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
         - name: discourse-data

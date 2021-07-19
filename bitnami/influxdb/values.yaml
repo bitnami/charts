@@ -1,88 +1,106 @@
+## @section Global parameters
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.storageClass Global storage class for dynamic provisioning
 ##
-# global:
-#   imageRegistry: myRegistryName
-#   imagePullSecrets:
-#     - myRegistryKeySecretName
-#   storageClass: myStorageClass
+global:
+  imageRegistry:
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+  storageClass:
 
-# Default values for influxdb.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
+## @section Common parameters
 
-## Force target Kubernetes version (using Helm capabilites if not set)
+## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
 kubeVersion:
+## @param nameOverride String to partially override influxdb.fullname template with a string (will prepend the release name)
+##
+nameOverride:
+## @param fullnameOverride String to fully override influxdb.fullname template with a string
+##
+fullnameOverride:
+## @param clusterDomain Default Kubernetes cluster domain
+##
+clusterDomain: cluster.local
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
+
+## @section InfluxDB<sup>TM</sup> parameters
 
 ## Bitnami InfluxDB(TM) image
 ## ref: https://hub.docker.com/r/bitnami/influxdb/tags/
+## @param image.registry InfluxDB<sup>TM</sup> image registry
+## @param image.repository InfluxDB<sup>TM</sup> image repository
+## @param image.tag InfluxDB<sup>TM</sup> image tag (immutable tags are recommended)
+## @param image.pullPolicy InfluxDB<sup>TM</sup> image pull policy
+## @param image.pullSecrets Specify docker-registry secret names as an array
+## @param image.debug Specify if debug logs should be enabled
 ##
 image:
   registry: docker.io
   repository: bitnami/influxdb
   tag: 2.0.7-debian-10-r10
-
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
-  ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
   ##
-  # pullSecrets:
-  #   - myRegistryKeySecretName
-
+  pullSecrets: []
   ## Set to true if you would like to see extra information on logs
   ##
   debug: false
-
-## String to partially override influxdb.fullname template (will maintain the release name)
-##
-# nameOverride:
-
-## String to fully override influxdb.fullname template
-##
-# fullnameOverride:
-
-## Kubernetes Cluster Domain
-##
-clusterDomain: cluster.local
-
-## Common annotations to add to all MySQL resources (sub-charts are not considered). Evaluated as a template
-##
-commonAnnotations: {}
-
-## Common labels to add to all MySQL resources (sub-charts are not considered). Evaluated as a template
-##
-commonLabels: {}
-
-## InfluxDB(TM) architecture. Allowed values: standalone or high-availability
+## @param architecture InfluxDB<sup>TM</sup> architecture (`standalone` or `high-availability`)
 ##
 architecture: standalone
-
 ## Authentication parameters
 ##
 auth:
-  ## Variable to keep compatibility with influxdb v1
+  ## @param auth.enabled Enable/disable authentication (Variable to keep compatibility with InfluxDB<sup>TM</sup> v1, in v2 it will be ignored)
+  ##
   enabled: true
-  ## Whether to use files to provide secrets instead of env vars.
+  ## @param auth.usePasswordFiles Whether to use files to provide secrets instead of env vars.
   ##
   usePasswordFiles: false
   ## InfluxDB(TM) admin credentials
   ##
   admin:
+    ## @param auth.admin.username InfluxDB<sup>TM</sup> admin user name
+    ##
     username: admin
+    ## @param auth.admin.password InfluxDB<sup>TM</sup> admin user's password
+    ##
     password:
+    ## @param auth.admin.token InfluxDB<sup>TM</sup> admin user's token. Only valid with InfluxDB<sup>TM</sup> v2
+    ##
     token:
-    ## Primary org name and id
+    ## @param auth.admin.org InfluxDB<sup>TM</sup> admin user's org. Only valid with InfluxDB<sup>TM</sup> v2
     ##
     org: primary
-    ## Primary bucket name and id
+    ## @param auth.admin.bucket InfluxDB<sup>TM</sup> admin user's bucket. Only valid with InfluxDB<sup>TM</sup> v2
     ##
     bucket: primary
-  ## Whether to automatically create users' tokens
+  ## @param auth.createUserToken Whether to create tokens for the different users. Take into account these tokens are going to be created by CLI randomly and they will not be accessible from a secret. See more influxdb 2.0 [auth ref](https://docs.influxdata.com/influxdb/v2.0/security/tokens/)
   ## You should take into account these tokens are going to be created by CLI
   ## so it is not possible to get them by k8s secrets nor to provide them though
   ## values
@@ -92,172 +110,168 @@ auth:
   ## InfluxDB(TM) credentials for user with 'admin' privileges on the db specified at 'database' parameter
   ##
   user:
+    ## @param auth.user.username Name for InfluxDB<sup>TM</sup> user with 'admin' privileges on the bucket specified at `auth.user.bucket` and `auth.user.org` or `auth.admin.org`
+    ##
     username:
+    ## @param auth.user.password InfluxDB<sup>TM</sup> password for `user.name` user
+    ##
     password:
-    ## Org where to create the user, Default: primary.org
+    ## @param auth.user.org Org to be created on first run
     ##
     org:
-    ## Whether to create a new bucket or use the primary bucket
+    ## @param auth.user.bucket Bucket to be created on first run
     ## already create. If it is not null a new bucket will be created.
     ##
     bucket:
   ## InfluxDB(TM) credentials for user with 'read' privileges on the db specified at 'database' parameter
+  ## @param auth.readUser.username Name for InfluxDB<sup>TM</sup> user with 'read' privileges on the bucket specified at `auth.user.bucket`
+  ## @param auth.readUser.password InfluxDB<sup>TM</sup> password for `auth.readUser.username` user
   ##
   readUser:
     username:
     password:
   ## InfluxDB(TM) credentials for user with 'write' privileges on the db specified at 'database' parameter
+  ## @param auth.writeUser.username Name for InfluxDB<sup>TM</sup> user with 'read' privileges on the bucket specified at `auth.user.bucket`
+  ## @param auth.writeUser.password InfluxDB<sup>TM</sup> password for `auth.writeUser.username` user
   ##
   writeUser:
     username:
     password:
-  ## Secret with InfluxDB(TM) credentials
-  ## NOTE: This will override the users/passwords defined at adminUser, user, readUser and writeUser
+  ## @param auth.existingSecret Name of existing Secret object with InfluxDB<sup>TM</sup> credentials (`auth.admin.password`, `auth.user.password`, `auth.readUser.password`, and `auth.writeUser.password` will be ignored and picked up from this secret)
   ##
   existingSecret:
-
 ## InfluxDB(TM) backend parameters
 ##
 influxdb:
-  ## InfluxDB(TM) Configuration
-  ## Specify content for influxdb.conf
+  ## @param influxdb.configuration Specify content for influxdb.conf
   ## Alternatively, you can put your influxdb.conf under the files/conf/ directory
   ##
-  # configuration: |-
-  #   reporting-disabled = false
-  #   bind-address = "127.0.0.1:8088"
-  #   [meta]
-  #   dir = "/bitnami/influxdb/meta"
-  #   ...
-
-  ## ConfigMap with InfluxDB(TM) configuration
-  ## NOTE: This will override influxdb.configuration
+  ## configuration: |-
+  ##   reporting-disabled = false
+  ##   bind-address = "127.0.0.1:8088"
+  ##   [meta]
+  ##   dir = "/bitnami/influxdb/meta"
+  ##   ...
   ##
-  # existingConfiguration:
-
-  ## initdb scripts
-  ## Specify dictionary of scripts to be run at first boot
+  configuration:
+  ## @param influxdb.existingConfiguration Name of existing ConfigMap object with the InfluxDB<sup>TM</sup> configuration (`influxdb.configuration` will be ignored).
+  ##
+  existingConfiguration:
+  ## @param influxdb.initdbScripts Dictionary of initdb scripts
   ## Alternatively, you can put your scripts under the files/docker-entrypoint-initdb.d directory
   ##
-  # initdbScripts:
-  #   my_init_script.sh: |
-  #      #!/bin/sh
-  #      echo "Do something."
-
-  ## ConfigMap with scripts to be run at first boot
-  ## NOTE: This will override initdbScripts
+  ## initdbScripts:
+  ##   my_init_script.sh: |
+  ##      #!/bin/sh
+  ##      echo "Do something."
+  initdbScripts:
+  ## @param influxdb.initdbScriptsCM Name of existing ConfigMap object with the initdb scripts (`influxdb.initdbScripts` will be ignored).
   ##
-  # initdbScriptsCM
-
-  ## Secret with scripts to be run at first boot (in case it contains sensitive information)
-  ## NOTE: This can work along initdbScripts or initdbScriptsCM
+  initdbScriptsCM:
+  ## @param influxdb.initdbScriptsSecret Secret with initdb scripts that contain sensitive information (Note: can be used with `initdbScriptsConfigMap` or `initdbScripts`)
   ##
-  # initdbScriptsSecret:
-
-  ## An array to add extra environment variables
+  initdbScriptsSecret:
+  ## @param influxdb.extraEnvVars Array containing extra env vars to configure InfluxDB<sup>TM</sup>
   ## For example:
   ## extraEnvVars:
   ##  - name: INFLUXDB_DATA_QUERY_LOG_ENABLED
   ##    value: "true"
   ##
-  # extraEnvVars:
-
-  ## Number of InfluxDB(TM) replicas to deploy
+  extraEnvVars:
+  ## @param influxdb.replicaCount The number of InfluxDB<sup>TM</sup> replicas to deploy
   ##
   replicaCount: 1
-
-  ## Update strategy, can be set to RollingUpdate or OnDelete by default.
+  ## @param influxdb.updateStrategy Update strategy, can be set to RollingUpdate or OnDelete by default.
   ## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#updating-statefulsets
   ##
   updateStrategy: RollingUpdate
-
-  ## Pod Management Policy can be OrderedReady or Parallel
+  ## @param influxdb.podManagementPolicy Pod Management Policy [`OrderedReady` or `Parallel`]
   ## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#parallel-pod-management
   ##
   podManagementPolicy: OrderedReady
-
-  ## Pod affinity preset
+  ## @param influxdb.podAffinityPreset InfluxDB<sup>TM</sup> Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
   ##
   podAffinityPreset: ""
-
-  ## Pod anti-affinity preset
+  ## @param influxdb.podAntiAffinityPreset InfluxDB<sup>TM</sup> Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
   ##
   podAntiAffinityPreset: soft
-
   ## Node affinity preset
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ## Allowed values: soft, hard
   ##
   nodeAffinityPreset:
-    ## Node affinity type
-    ## Allowed values: soft, hard
+    ## @param influxdb.nodeAffinityPreset.type InfluxDB<sup>TM</sup> Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
     type: ""
-    ## Node label key to match
+    ## @param influxdb.nodeAffinityPreset.key InfluxDB<sup>TM</sup> Node label key to match Ignored if `affinity` is set.
     ## E.g.
     ## key: "kubernetes.io/e2e-az-name"
     ##
     key: ""
-    ## Node label values to match
+    ## @param influxdb.nodeAffinityPreset.values InfluxDB<sup>TM</sup> Node label values to match. Ignored if `affinity` is set.
     ## E.g.
     ## values:
     ##   - e2e-az1
     ##   - e2e-az2
     ##
     values: []
-
-  ## Affinity for pod assignment
+  ## @param influxdb.affinity InfluxDB<sup>TM</sup> Affinity for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
-
-  ## Node labels for pod assignment
+  ## @param influxdb.nodeSelector InfluxDB<sup>TM</sup> Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-
-  ## Tolerations for pod assignment
+  ## @param influxdb.tolerations InfluxDB<sup>TM</sup> Tolerations for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-
-  ## Extra volumes to add to the deployment
+  ## @param influxdb.extraVolumes Array of extra volumes to be added to the deployment (evaluated as template). Requires setting extraVolumeMounts
   ##
   extraVolumes: []
-
-  ## Extra volume mounts to add to the container
+  ## @param influxdb.extraVolumeMounts Array of extra volume mounts to be added to the container (evaluated as template). Normally used with extraVolumes.
   ##
   extraVolumeMounts: []
-
   ## K8s Security Context for InfluxDB(TM) pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ## @param influxdb.securityContext.enabled Enable security context for InfluxDB<sup>TM</sup>
+  ## @param influxdb.securityContext.fsGroup Group ID for the InfluxDB<sup>TM</sup> filesystem
+  ## @param influxdb.securityContext.runAsUser User ID for the InfluxDB<sup>TM</sup> container
   ##
   securityContext:
     enabled: true
     fsGroup: 1001
     runAsUser: 1001
-
   ## InfluxDB(TM) pods' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param influxdb.resources.limits The resources limits for the container
+  ## @param influxdb.resources.requests The requested resources for the container
   ##
   resources:
-    # We usually recommend not to specify default resources and to leave this as a conscious
-    # choice for the user. This also increases chances charts run on environments with little
-    # resources, such as Minikube. If you do want to specify resources, uncomment the following
-    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## Example:
+    ## limits:
+    ##    cpu: 100m
+    ##    memory: 128Mi
     limits: {}
-    #   cpu: 100m
-    #   memory: 128Mi
+    ## Examples:
+    ## requests:
+    ##    cpu: 100m
+    ##    memory: 128Mi
     requests: {}
-    #   cpu: 100m
-    #   memory: 128Mi
-
-  ## InfluxDB(TM) pods' liveness and readiness probes
+  ## InfluxDB(TM) pods' liveness probe
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## @param influxdb.livenessProbe.enabled Enable livenessProbe
+  ## @param influxdb.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param influxdb.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param influxdb.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param influxdb.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param influxdb.livenessProbe.successThreshold Success threshold for livenessProbe
   ##
   livenessProbe:
     enabled: true
@@ -266,6 +280,15 @@ influxdb:
     timeoutSeconds: 30
     successThreshold: 1
     failureThreshold: 6
+  ## InfluxDB(TM) pods' readiness probe
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## @param influxdb.readinessProbe.enabled Enable readinessProbe
+  ## @param influxdb.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param influxdb.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param influxdb.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param influxdb.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param influxdb.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
   readinessProbe:
     enabled: true
     initialDelaySeconds: 60
@@ -273,102 +296,73 @@ influxdb:
     timeoutSeconds: 30
     successThreshold: 1
     failureThreshold: 6
-
-  ## Custom Liveness probe
+  ## @param influxdb.customLivenessProbe Override default liveness probe
   ##
   customLivenessProbe: {}
-
-  ## Custom Readiness probe
+  ## @param influxdb.customReadinessProbe Override default readiness probe
   ##
   customReadinessProbe: {}
-
-  ## Container ports
+  ## @param influxdb.containerPorts [object] Container ports
   ##
   containerPorts:
     http: 8086
     rpc: 8088
-
   ## Service parameters
   ##
   service:
-    ## Service type
+    ## @param influxdb.service.type Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)
     ##
     type: ClusterIP
-    ## InfluxDB(TM) HTTP Port
+    ## @param influxdb.service.port InfluxDB<sup>TM</sup> HTTP port
     ##
     port: 8086
-    ## InfluxDB(TM) RPC Port
+    ## @param influxdb.service.rpcPort InfluxDB<sup>TM</sup> RPC port
     ##
     rpcPort: 8088
-    ## Specify the nodePort(s) value for the LoadBalancer and NodePort service types.
+    ## @param influxdb.service.nodePorts [object] Specify the nodePort(s) value for the LoadBalancer and NodePort service types.
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ##
     nodePorts:
       http: ""
       rpc: ""
-    ## Set the LoadBalancer service type to internal only.
+    ## @param influxdb.service.loadBalancerIP loadBalancerIP if service type is `LoadBalancer`
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
-    # loadBalancerIP:
-    ## Load Balancer sources
+    loadBalancerIP:
+    ## @param influxdb.service.loadBalancerSourceRanges Address that are allowed when service is LoadBalancer
     ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ##
-    # loadBalancerSourceRanges:
-    # - 10.10.10.0/24
-    ## Set the Cluster IP to use
+    ## loadBalancerSourceRanges:
+    ## - 10.10.10.0/24
+    loadBalancerSourceRanges: []
+    ## @param influxdb.service.clusterIP Static clusterIP or None for headless services
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#choosing-your-own-ip-address
+    ## e.g:
+    ## clusterIP: None
     ##
-    # clusterIP: None
-    ## Provide any additional annotations which may be required
+    clusterIP:
+    ## @param influxdb.service.annotations Annotations for InfluxDB<sup>TM</sup> service
     ##
     annotations: {}
-
-    ## Set the service SessionAffinity for session stickiness
+    ## @param influxdb.service.sessionAffinity Session affinity for the InfluxDB<sup>TM</sup> service
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#proxy-mode-userspace
-    # sessionAffinity: ClientIP
+    sessionAffinity:
+    ## @param influxdb.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    sessionAffinityConfig: {}
 
-    ## Customize the SessionAffinity configuration. The default value for sessionAffinityConfig.clientIP.timeoutSeconds is 10800 (3 hours)
-    # sessionAffinityConfig:
-    #   clientIP:
-    #     timeoutSeconds: 300
+## @section InfluxDB Relay<sup>TM</sup> parameters
 
-collectd:
-  enabled: false
-  service:
-    ## Service type
-    ##
-    type: ClusterIP
-    ## InfluxDB(TM) collectd listener port
-    ## This requires corresponding configuration in influxdb.conf to enable
-    ## collectd block
-    ##
-    port: 25826
-    ## Specify the nodePort value for the LoadBalancer and NodePort service types.
-    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
-    ##
-    nodePort: ""
-    ## Set the LoadBalancer service type to internal only.
-    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
-    ##
-    # loadBalancerIP:
-    ## Load Balancer sources
-    ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
-    ##
-    # loadBalancerSourceRanges:
-    # - 10.10.10.0/24
-    ## Set the Cluster IP to use
-    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#choosing-your-own-ip-address
-    ##
-    # clusterIP: None
-    # annotations:
-    # Enable metallb annotations if you want to share the LB Ip between collectd and influx services
-    ##     metallb.universe.tf/allow-shared-ip: "true"
-
-## InfluxDB Relay(TM) parameters
-##
 relay:
   ## Bitnami InfluxDB Relay(TM) image
   ## ref: https://hub.docker.com/r/bitnami/influxdb-relay/tags/
+  ## @param relay.image.registry InfluxDB Relay<sup>TM</sup> image registry
+  ## @param relay.image.repository InfluxDB Relay<sup>TM</sup> image repository
+  ## @param relay.image.tag InfluxDB Relay<sup>TM</sup> image tag (immutable tags are recommended)
+  ## @param relay.image.pullPolicy InfluxDB Relay<sup>TM</sup> image pull policy
+  ## @param relay.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
     registry: docker.io
@@ -378,14 +372,15 @@ relay:
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
     pullPolicy: IfNotPresent
-    ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
     ##
-    # pullSecrets:
-    #   - myRegistryKeySecretName
-
-  ## InfluxDB Relay(TM) Configuration
-  ## Specify content for relay.toml
+    pullSecrets: []
+  ## @param relay.configuration [object] InfluxDB Relay(TM) Configuration. Specify content for relay.toml
   ## Alternatively, you can put your relay.toml under the files/conf/ directory
   ##
   configuration: |-
@@ -407,103 +402,100 @@ relay:
         { name="{{ $influxdbFullname }}-{{ $i }}", location="http://{{ $influxdbFullname }}-{{ $i }}.{{ $influxdbHeadlessServiceName }}.{{ $releaseName }}.svc.{{ $clusterDomain }}:8086/write", timeout="10s"},
         {{- end }}
     ]
-
-  ## ConfigMap with InfluxDB Relay(TM) configuration
+  ## @param relay.existingConfiguration Name of existing ConfigMap object with the InfluxDB Relay<sup>TM</sup> configuration (`relay.configuration` will be ignored)
   ## NOTE: This will override relay.configuration
   ##
-  # existingConfiguration:
-
-  ## Number of InfluxDB Relay(TM) replicas to deploy
+  existingConfiguration:
+  ## @param relay.replicaCount The number of InfluxDB Relay<sup>TM</sup> replicas to deploy
   ##
   replicaCount: 1
-
-  ## Update strategy, can be set to RollingUpdate or OnDelete by default.
+  ## @param relay.updateStrategy Update strategy, can be set to RollingUpdate or OnDelete by default.
   ## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#updating-statefulsets
   ##
   updateStrategy: RollingUpdate
-
-  ## Pod affinity preset
+  ## @param relay.podAffinityPreset InfluxDB Relay<sup>TM</sup> Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
   ##
   podAffinityPreset: ""
-
-  ## Pod anti-affinity preset
+  ## @param relay.podAntiAffinityPreset InfluxDB Relay<sup>TM</sup> Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
   ##
   podAntiAffinityPreset: soft
-
   ## Node affinity preset
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ## Allowed values: soft, hard
   ##
   nodeAffinityPreset:
-    ## Node affinity type
-    ## Allowed values: soft, hard
+    ## @param relay.nodeAffinityPreset.type InfluxDB Relay<sup>TM</sup> Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
     type: ""
-    ## Node label key to match
+    ## @param relay.nodeAffinityPreset.key InfluxDB Relay<sup>TM</sup> Node label key to match Ignored if `affinity` is set.
     ## E.g.
     ## key: "kubernetes.io/e2e-az-name"
     ##
     key: ""
-    ## Node label values to match
+    ## @param relay.nodeAffinityPreset.values InfluxDB Relay<sup>TM</sup> Node label values to match. Ignored if `affinity` is set.
     ## E.g.
     ## values:
     ##   - e2e-az1
     ##   - e2e-az2
     ##
     values: []
-
-  ## Affinity for pod assignment
+  ## @param relay.affinity InfluxDB Relay<sup>TM</sup> Affinity for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
-
-  ## Node labels for pod assignment
+  ## @param relay.nodeSelector InfluxDB Relay<sup>TM</sup> Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-
-  ## Tolerations for pod assignment
+  ## @param relay.tolerations InfluxDB Relay<sup>TM</sup> Tolerations for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-
-  ## Extra volumes to add to the deployment
+  ## @param relay.extraVolumes Array of extra volumes to be added to the deployment (evaluated as template). Requires setting extraVolumeMounts
   ##
   extraVolumes: []
-
-  ## Extra volume mounts to add to the container
+  ## @param relay.extraVolumeMounts Array of extra volume mounts to be added to the container (evaluated as template). Normally used with extraVolumes.
   ##
   extraVolumeMounts: []
-
   ## K8s Security Context for InfluxDB(TM) pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ## @param relay.securityContext.enabled Enable security context for InfluxDB Relay<sup>TM</sup>
+  ## @param relay.securityContext.fsGroup Group ID for the InfluxDB Relay<sup>TM</sup> filesystem
+  ## @param relay.securityContext.runAsUser User ID for the InfluxDB Relay<sup>TM</sup> container
   ##
   securityContext:
     enabled: true
     fsGroup: 1001
     runAsUser: 1001
-
   ## InfluxDB Relay(TM) pods' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param relay.resources.limits The resources limits for the container
+  ## @param relay.resources.requests The requested resources for the container
   ##
   resources:
-    # We usually recommend not to specify default resources and to leave this as a conscious
-    # choice for the user. This also increases chances charts run on environments with little
-    # resources, such as Minikube. If you do want to specify resources, uncomment the following
-    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## Example:
+    ## limits:
+    ##    cpu: 100m
+    ##    memory: 128Mi
     limits: {}
-    #   cpu: 100m
-    #   memory: 128Mi
+    ## Examples:
+    ## requests:
+    ##    cpu: 100m
+    ##    memory: 128Mi
     requests: {}
-    #   cpu: 100m
-    #   memory: 128Mi
-
-  ## InfluxDB Relay(TM) pods' liveness and readiness probes
+  ## InfluxDB Relay(TM) pods' liveness probe
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## @param relay.livenessProbe.enabled Enable livenessProbe
+  ## @param relay.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param relay.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param relay.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param relay.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param relay.livenessProbe.successThreshold Success threshold for livenessProbe
   ##
   livenessProbe:
     enabled: true
@@ -512,6 +504,15 @@ relay:
     timeoutSeconds: 5
     successThreshold: 1
     failureThreshold: 6
+  ## InfluxDB Relay(TM) pods' readiness probe
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## @param relay.readinessProbe.enabled Enable readinessProbe
+  ## @param relay.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param relay.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param relay.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param relay.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param relay.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
   readinessProbe:
     enabled: true
     initialDelaySeconds: 5
@@ -519,102 +520,135 @@ relay:
     timeoutSeconds: 5
     successThreshold: 1
     failureThreshold: 6
-
-  ## Custom Liveness probe
+  ## @param relay.customLivenessProbe Override default liveness probe
   ##
   customLivenessProbe: {}
-
-  ## Custom Readiness probe
+  ## @param relay.customReadinessProbe Override default readiness probe
   ##
   customReadinessProbe: {}
-
-  ## Container ports
+  ## @param relay.containerPorts [object] Container ports
   ##
   containerPorts:
     http: 9096
-
   ## Service parameters
   ##
   service:
-    ## Service type
+    ## @param relay.service.type Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)
     ##
     type: ClusterIP
-    ## InfluxDB Relay(TM) HTTP port
+    ## @param relay.service.port InfluxDB Relay<sup>TM</sup> HTTP port
     ##
     port: 9096
-    ## Specify the nodePort value for the LoadBalancer and NodePort service types.
+    ## @param relay.service.nodePort Kubernetes HTTP node port
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ##
     nodePort: ""
-    ## Set the LoadBalancer service type to internal only.
+    ## @param relay.service.loadBalancerIP loadBalancerIP if service type is `LoadBalancer`
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
-    # loadBalancerIP:
-    ## Load Balancer sources
+    loadBalancerIP:
+    ## @param relay.service.loadBalancerSourceRanges Address that are allowed when service is LoadBalancer
     ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ##
-    # loadBalancerSourceRanges:
-    # - 10.10.10.0/24
-    ## Set the Cluster IP to use
+    ## loadBalancerSourceRanges:
+    ## - 10.10.10.0/24
+    loadBalancerSourceRanges: []
+    ## @param relay.service.clusterIP Static clusterIP or None for headless services
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#choosing-your-own-ip-address
+    ## e.g:
+    ## clusterIP: None
     ##
-    # clusterIP: None
-    ## Provide any additional annotations which may be required
+    clusterIP:
+    ## @param relay.service.annotations Annotations for InfluxDB Relay<sup>TM</sup> service
     ##
     annotations: {}
+
+## @section InfluxDB Collectd<sup>TM</sup> parameters
+
+collectd:
+  ## @param collectd.enabled InfluxDB Collectd<sup>TM</sup> service enable
+  ##
+  enabled: false
+  service:
+    ## @param collectd.service.type Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)
+    ##
+    type: ClusterIP
+    ## @param collectd.service.port InfluxDB Collectd<sup>TM</sup> UDP port (should match with corresponding port in influxdb.conf)
+    ## This requires corresponding configuration in influxdb.conf to enable
+    ## collectd block
+    ##
+    port: 25826
+    ## @param collectd.service.nodePort Kubernetes HTTP node port
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ##
+    nodePort: ""
+    ## @param collectd.service.loadBalancerIP loadBalancerIP if service type is `LoadBalancer`
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+    ##
+    loadBalancerIP:
+    ## @param collectd.service.loadBalancerSourceRanges Address that are allowed when service is LoadBalancer
+    ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ##
+    ## loadBalancerSourceRanges:
+    ## - 10.10.10.0/24
+    loadBalancerSourceRanges: []
+    ## @param collectd.service.clusterIP Static clusterIP or None for headless services
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#choosing-your-own-ip-address
+    ## e.g:
+    ## clusterIP: None
+    ##
+    clusterIP:
+    ## @param collectd.service.annotations Annotations for InfluxDB Collectd<sup>TM</sup> service
+    ##   metallb.universe.tf/allow-shared-ip: "true"
+    ##
+    annotations: {}
+
+## @section Exposing parameters
 
 ## Configure the ingress resource that allows you to access the
 ## influxdb installation. Set up the URL
 ## ref: http://kubernetes.io/docs/user-guide/ingress/
 ##
 ingress:
-  ## Set to true to enable ingress record generation
+  ## @param ingress.enabled Enable ingress controller resource
   ##
   enabled: false
-
-  ## Enable TLS configuration for the hostname defined at ingress.hostname parameter
+  ## @param ingress.tls Create TLS Secret
   ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
   ## You can use the ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
   ##
   tls: false
-
-  ## Set this to true in order to add the corresponding annotations for cert-manager
+  ## @param ingress.certManager Add annotations for cert-manager
   ##
   certManager: false
-
-  ## Ingress Path type
+  ## @param ingress.pathType Ingress path type
   ##
   pathType: ImplementationSpecific
-
-  ## Override API Version (automatically detected if not set)
+  ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
   ##
   apiVersion:
-
-  ## When the ingress is enabled, a host pointing to this will be created
+  ## @param ingress.hostname Default host for the ingress resource
   ##
   hostname: influxdb.local
-
-  ## The Path to influxdb. You may need to set this to '/*' in order to use this
+  ## @param ingress.path Ingress path*' in order to use this
   ## with ALB ingress controllers.
   ##
   path: /*
-
-  ## Ingress annotations done as key:value pairs
+  ## @param ingress.annotations Ingress annotations
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
   ##
   ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
   ##
   annotations: {}
-
-  ## The list of additional hostnames to be covered with this ingress record.
+  ## @param ingress.extraHosts The list of additional hostnames to be covered with this ingress record.
   ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
   ## extraHosts:
   ## - name: influxdb.local
   ##   path: /
   ##
-
-  ## Any additional arbitrary paths that may need to be added to the ingress under the main host.
+  extraHosts: []
+  ## @param ingress.extraPaths Additional arbitrary path/backend objects
   ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
   ## extraPaths:
   ## - path: /*
@@ -622,16 +656,16 @@ ingress:
   ##     serviceName: ssl-redirect
   ##     servicePort: use-annotation
   ##
-
-  ## The tls configuration for additional hostnames to be covered with this ingress record.
+  extraPaths: []
+  ## @param ingress.extraTls The tls configuration for additional hostnames to be covered with this ingress record.
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
   ## extraTls:
   ## - hosts:
   ##     - influxdb.local
   ##   secretName: influxdb.local-tls
   ##
-
-  ## If you're providing your own certificates, please use this to add the certificates as secrets
+  extraTls: []
+  ## @param ingress.secrets If you're providing your own certificates, please use this to add the certificates as secrets
   ## key and certificate should start with -----BEGIN CERTIFICATE----- or
   ## -----BEGIN RSA PRIVATE KEY-----
   ##
@@ -640,115 +674,138 @@ ingress:
   ##
   ## It is also possible to create and manage the certificates outside of this helm chart
   ## Please see README.md for more information
-  ##
-  secrets: []
   ## - name: influxdb.local-tls
   ##   key:
   ##   certificate:
   ##
+  secrets: []
+
+## @section Metrics parameters
 
 ## Prometheus metrics
 ## ref: https://docs.influxdata.com/influxdb/v1.7/administration/server_monitoring/#influxdb-metrics-http-endpoint
 ##
 metrics:
+  ## @param metrics.enabled Enable the export of Prometheus metrics
+  ##
   enabled: false
   service:
-    ## Service type
+    ## @param metrics.service.type Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)
     ##
     type: ClusterIP
-    ## InfluxDB(TM) Prometheus port
+    ## @param metrics.service.port InfluxDB<sup>TM</sup> Prometheus port
     ##
     port: 9122
-    ## Specify the nodePort value for the LoadBalancer and NodePort service types.
+    ## @param metrics.service.nodePort Kubernetes HTTP node port
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ##
     nodePort: ""
-    ## Set the LoadBalancer service type to internal only.
+    ## @param metrics.service.loadBalancerIP loadBalancerIP if service type is `LoadBalancer`
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
-    # loadBalancerIP:
-    ## Load Balancer sources
+    loadBalancerIP:
+    ## @param metrics.service.loadBalancerSourceRanges Address that are allowed when service is LoadBalancer
     ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ##
-    # loadBalancerSourceRanges:
-    # - 10.10.10.0/24
-    ## Set the Cluster IP to use
+    ## loadBalancerSourceRanges:
+    ## - 10.10.10.0/24
+    loadBalancerSourceRanges: []
+    ## @param metrics.service.clusterIP Static clusterIP or None for headless services
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#choosing-your-own-ip-address
+    ## e.g:
+    ## clusterIP: None
     ##
-    # clusterIP: None
-    ## Annotations for the Prometheus metrics service
+    clusterIP:
+    ## @param metrics.service.annotations [object] Annotations for the Prometheus metrics service
     ##
     annotations:
       prometheus.io/scrape: "true"
       prometheus.io/port: "{{ .Values.influxdb.service.port }}"
       prometheus.io/path: "/metrics"
-
   ## Prometheus Operator ServiceMonitor configuration
   ##
   serviceMonitor:
+    ## @param metrics.serviceMonitor.enabled if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)
+    ##
     enabled: false
-    ## Namespace in which Prometheus is running
+    ## @param metrics.serviceMonitor.namespace Namespace in which Prometheus is running
+    ## e.g:
+    ## namespace: monitoring
     ##
-    # namespace: monitoring
-
-    ## Interval at which metrics should be scraped.
+    namespace:
+    ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped.
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ## e.g:
+    ## interval: 10s
     ##
-    # interval: 10s
-
-    ## Timeout after which the scrape is ended
+    interval:
+    ## @param metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ## e.g:
+    ## scrapeTimeout: 10s
     ##
-    # scrapeTimeout: 10s
-
-    ## ServiceMonitor selector labels
+    scrapeTimeout:
+    ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
     ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+    ## e.g:
+    ## selector:
+    ##   prometheus: my-prometheus
     ##
-    # selector:
-    #   prometheus: my-prometheus
-
+    selector: {}
 ## NetworkPolicy parameters
 ##
 networkPolicy:
+  ## @param networkPolicy.enabled Enable NetworkPolicy
+  ##
   enabled: false
-
-  ## The Policy model to apply. When set to false, only pods with the correct
+  ## @param networkPolicy.allowExternal Don't require client label for connections
   ## client labels will have network access to the ports InfluxDB(TM) is listening
   ## on. When true, InfluxDB(TM) will accept connections from any source
   ## (with the correct destination port).
   ##
   allowExternal: true
-
 ## Persistence parameters
 ##
 persistence:
+  ## @param persistence.enabled Enable data persistence
+  ##
   enabled: true
-  ## A manually managed Persistent Volume and Claim
+  ## @param persistence.existingClaim Use a existing PVC which must be created manually before bound
   ## If defined, PVC must be created manually before volume will be bound
   ## The value is evaluated as a template
   ##
-  # existingClaim:
-  ## Persistent Volume Storage Class
+  existingClaim:
+  ## @param persistence.storageClass Specify the `storageClass` used to provision the volume
   ## If defined, storageClassName: <storageClass>
   ## If set to "-", storageClassName: "", which disables dynamic provisioning
   ## If undefined (the default) or set to null, no storageClassName spec is
   ## set, choosing the default provisioner.
   ##
-  # storageClass: "-"
-  ## Persistent Volume Access Mode
+  storageClass:
+  ## @param persistence.accessModes Access mode of data volume
   ##
   accessModes:
     - ReadWriteOnce
-  ## Persistent Volume Claim size
+  ## @param persistence.size Size of data volume
   ##
   size: 8Gi
+
+## @section Volume permissions parameters
 
 ## Init Container parameters
 ## Change the owner and group of the persistent volume mountpoint to 'runAsUser:fsGroup'
 ## values from the securityContext section.
 ##
 volumePermissions:
+  ## @param volumePermissions.enabled Enable init container that changes the owner and group of the persistent volume mountpoint to `runAsUser:fsGroup`
+  ##
   enabled: false
+  ## @param volumePermissions.image.registry Init container volume-permissions image registry
+  ## @param volumePermissions.image.repository Init container volume-permissions image name
+  ## @param volumePermissions.image.tag Init container volume-permissions image tag
+  ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
+  ## @param volumePermissions.image.pullSecrets Specify docker-registry secret names as an array
+  ##
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
@@ -757,11 +814,14 @@ volumePermissions:
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
     pullPolicy: Always
-    ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
     ##
-    # pullSecrets:
-    #   - myRegistryKeySecretName
+    pullSecrets: []
   ## Init container Security Context
   ## Note: the chown of the data folder is done to securityContext.runAsUser
   ## and not the below volumePermissions.securityContext.runAsUser
@@ -770,86 +830,84 @@ volumePermissions:
   ## "auto" is especially useful for OpenShift which has scc with dynamic userids (and 0 is not allowed).
   ## You may want to use this volumePermissions.securityContext.runAsUser="auto" in combination with
   ## pod securityContext.enabled=false and shmVolume.chmod.enabled=false
+  ## @param volumePermissions.securityContext.runAsUser User ID for the init container (when facing issues in OpenShift or uid unknown, try value "auto")
   ##
   securityContext:
     runAsUser: 0
 
-## InfluxDB(TM) backup parameters
-##
+## @section InfluxDB<sup>TM</sup> backup parameters
+
 backup:
+  ## @param backup.enabled Enable InfluxDB<sup>TM</sup> backup
+  ##
   enabled: false
-  ## Directory where backups are stored
+  ## @param backup.directory Directory where backups are stored
   ##
   directory: "/backups"
-  ## Retention time in days for backups
+  ## @param backup.retentionDays Retention time in days for backups (older backups are deleted)
   ##
   retentionDays: 10
   ## Cronjob configuration
   ## This cronjob is used to create InfluxDB(TM) backups
   ##
   cronjob:
-    ## Schedule in Cron format to save snapshots
+    ## @param backup.cronjob.schedule Schedule in Cron format to save snapshots
     ## See https://en.wikipedia.org/wiki/Cron
     ##
     schedule: "0 2 * * *"
-    ## Number of successful finished jobs to retain
+    ## @param backup.cronjob.historyLimit Number of successful finished jobs to retain
     ##
     historyLimit: 1
-    ## Pod annotations
+    ## @param backup.cronjob.podAnnotations Pod annotations
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
     ##
     podAnnotations: {}
     ## K8s Security Context for Backup Cronjob pods
     ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+    ## @param backup.cronjob.securityContext.enabled Enable security context for InfluxDB<sup>TM</sup>
+    ## @param backup.cronjob.securityContext.fsGroup Group ID for the InfluxDB<sup>TM</sup> filesystem
+    ## @param backup.cronjob.securityContext.runAsUser Group ID for the InfluxDB<sup>TM</sup> filesystem
     ##
     securityContext:
       enabled: true
       fsGroup: 1001
       runAsUser: 1001
-  ## Pod affinity preset
+  ## @param backup.podAffinityPreset Backup <sup>TM</sup> Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
   ##
   podAffinityPreset: ""
-
-  ## Pod anti-affinity preset
+  ## @param backup.podAntiAffinityPreset Backup<sup>TM</sup> Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
   ##
   podAntiAffinityPreset: soft
-
   ## Node affinity preset
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ## Allowed values: soft, hard
   ##
   nodeAffinityPreset:
-    ## Node affinity type
-    ## Allowed values: soft, hard
+    ## @param backup.nodeAffinityPreset.type Backup<sup>TM</sup> Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
     type: ""
-    ## Node label key to match
+    ## @param backup.nodeAffinityPreset.key Backup<sup>TM</sup> Node label key to match Ignored if `affinity` is set.
     ## E.g.
     ## key: "kubernetes.io/e2e-az-name"
     ##
     key: ""
-    ## Node label values to match
+    ## @param backup.nodeAffinityPreset.values Backup<sup>TM</sup> Node label values to match. Ignored if `affinity` is set.
     ## E.g.
     ## values:
     ##   - e2e-az1
     ##   - e2e-az2
     ##
     values: []
-  ## Affinity for pod assignment
+  ## @param backup.affinity Backup<sup>TM</sup> Affinity for backup pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
-
-  ## Node labels for pod assignment
+  ## @param backup.nodeSelector Backup<sup>TM</sup> Node labels for backup pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-
-  ## Tolerations for pod assignment
+  ## @param backup.tolerations Backup<sup>TM</sup> Tolerations for backup pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
@@ -857,6 +915,11 @@ backup:
   ##
   uploadProviders:
     ## Google Storage Bucket configuration
+    ## @param backup.uploadProviders.google.enabled enable upload to google storage bucket
+    ## @param backup.uploadProviders.google.secret json secret with serviceaccount data to access Google storage bucket
+    ## @param backup.uploadProviders.google.secretKey service account secret key name
+    ## @param backup.uploadProviders.google.existingSecret Name of existing secret object with Google serviceaccount json credentials
+    ## @param backup.uploadProviders.google.bucketName google storage bucket name name
     ##
     google:
       enabled: false
@@ -866,24 +929,36 @@ backup:
       bucketName: "gs://bucket/influxdb"
       ## Bitnami Google Cloud SDK image
       ## ref: https://hub.docker.com/r/bitnami/google-cloud-sdk/tags/
+      ## @param backup.uploadProviders.google.image.registry Google Cloud SDK image registry
+      ## @param backup.uploadProviders.google.image.repository Google Cloud SDK image name
+      ## @param backup.uploadProviders.google.image.tag Google Cloud SDK image tag
+      ## @param backup.uploadProviders.google.image.pullPolicy Google Cloud SDK image pull policy
+      ## @param backup.uploadProviders.google.image.pullSecrets Specify docker-registry secret names as an array
       ##
       image:
         registry: docker.io
         repository: bitnami/google-cloud-sdk
         tag: 0.345.0-debian-10-r3
-
         ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
         ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
         ##
         pullPolicy: IfNotPresent
-        ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
+        ## Optionally specify an array of imagePullSecrets.
+        ## Secrets must be manually created in the namespace.
         ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+        ## e.g:
+        ## pullSecrets:
+        ##   - myRegistryKeySecretName
         ##
-        # pullSecrets:
-        #   - myRegistryKeySecretName
+        pullSecrets: []
     ## Azure Storage Container configuration
     ##
     azure:
+      ## @param backup.uploadProviders.azure.enabled Enable upload to azure storage container
+      ## @param backup.uploadProviders.azure.secret Secret with credentials to access Azure storage
+      ## @param backup.uploadProviders.azure.secretKey Service account secret key name
+      ## @param backup.uploadProviders.azure.existingSecret Name of existing secret object
+      ## @param backup.uploadProviders.azure.containerName Destination container
       enabled: false
       secret: ""
       secretKey: "connection-string"
@@ -891,22 +966,25 @@ backup:
       containerName: "influxdb-container"
       ## Bitnami Azure CLI image
       ## ref: https://hub.docker.com/r/bitnami/azure-cli/tags/
+      ## @param backup.uploadProviders.azure.image.registry Azure CLI image registry
+      ## @param backup.uploadProviders.azure.image.repository Azure CLI image repository
+      ## @param backup.uploadProviders.azure.image.tag Azure CLI image tag (immutable tags are recommended)
+      ## @param backup.uploadProviders.azure.image.pullPolicy Azure CLI image pull policy
+      ## @param backup.uploadProviders.azure.image.pullSecrets Specify docker-registry secret names as an array
       ##
       image:
         registry: docker.io
         repository: bitnami/azure-cli
         tag: 2.25.0-debian-10-r2
-
         ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
         ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
         ##
         pullPolicy: IfNotPresent
-        ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
+        ## Optionally specify an array of imagePullSecrets.
+        ## Secrets must be manually created in the namespace.
         ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+        ## e.g:
+        ## pullSecrets:
+        ##   - myRegistryKeySecretName
         ##
-        # pullSecrets:
-        #   - myRegistryKeySecretName
-
-## Array with extra yaml to deploy with the chart. Evaluated as a template
-##
-extraDeploy: []
+        pullSecrets: []

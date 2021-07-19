@@ -1,6 +1,31 @@
 {{- $clusterDomain:= .Values.clusterDomain }}
 ** Please be patient while the chart is being deployed **
 
+{{- if .Values.diagnosticMode.enabled }}
+The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
+
+  command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 4 }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 4 }}
+
+Get the list of pods by executing:
+
+  kubectl get pods --namespace {{ .Release.Namespace }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Access the pod you want to debug by executing
+
+  kubectl exec --namespace {{ .Release.Namespace }} -ti <NAME OF THE POD> -- bash
+
+In order to replicate the container startup scripts, check the /opt/bitnami/scripts folder.
+
+  Default PostgreSQL startup command
+
+    /opt/bitnami/scripts/postgresql-repmgr/entrypoint.sh /opt/bitnami/scripts/postgresql-repmgr/run.sh
+
+  Default PgPool startup command
+
+    /opt/bitnami/scripts/pgpool/entrypoint.sh /opt/bitnami/scripts/pgpool/run.sh
+
+{{- else }}
 PostgreSQL can be accessed through Pgpool via port {{ .Values.service.port }} on the following DNS name from within your cluster:
 
     {{ include "postgresql-ha.pgpool" . }}.{{ .Release.Namespace }}.svc.{{ $clusterDomain }}
@@ -47,6 +72,7 @@ To connect to your database from outside the cluster execute the following comma
     kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "postgresql-ha.pgpool" . }} {{ .Values.service.port }}:{{ .Values.service.port }} &
     psql -h 127.0.0.1 -p {{ .Values.service.port }} -U {{ include "postgresql-ha.postgresqlUsername" . }}{{- if not (empty (include "postgresql-ha.postgresqlDatabase" .)) }} -d {{ include "postgresql-ha.postgresqlDatabase" . }}{{- end }}
 
+{{- end }}
 {{- end }}
 
 {{- include "postgresql-ha.validateValues" . }}

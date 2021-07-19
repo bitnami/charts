@@ -282,7 +282,7 @@ spec:
         - name: dokuwiki-data
         {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:
-            claimName: {{ template "common.names.fullname" . }}
+            claimName: {{ default (include "common.names.fullname" .) .Values.persistence.existingClaim }}
         {{- else }}
           emptyDir: {}
         {{- end }}
