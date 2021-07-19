@@ -28,7 +28,7 @@ nameOverride: ""
 ## String to fully override common.names.fullname template
 ## @param fullnameOverride String to fully override common.names.fullname
 ##
-fullnameOverride:
+fullnameOverride: ""
 
 ## Add labels to all the deployed resources
 ## @param commonLabels  Labels to add to all deployed objects

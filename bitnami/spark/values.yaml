@@ -24,7 +24,7 @@ kubeVersion: ""
 nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname template
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []

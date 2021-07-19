@@ -26,7 +26,7 @@ kubeVersion: ""
 nameOverride: ""
 ## @param fullnameOverride String to fully override airflow.fullname template with a string
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param affinity Affinity for pod assignment (evaluated as a template)
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set

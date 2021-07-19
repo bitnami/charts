@@ -23,7 +23,7 @@ global:
 nameOverride: ""
 ## @param fullnameOverride String to fully override solr.fullname template
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param clusterDomain Kubernetes cluster domain
 ##
 clusterDomain: cluster.local

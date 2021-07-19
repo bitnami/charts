@@ -41,7 +41,7 @@ nameOverride: ""
 
 ## String to fully override testlink.fullname template
 ##
-fullnameOverride:
+fullnameOverride: ""
 
 ## Number of replicas (requires ReadWriteMany PVC support)
 ##

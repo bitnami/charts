@@ -26,7 +26,7 @@ kubeVersion: ""
 nameOverride: ""
 ## @param fullnameOverride String to fully override suitecrm.fullname template
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param extraDeploy Array with extra yaml to deploy with the chart. Evaluated as a template
 ##
 extraDeploy: []

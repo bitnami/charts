@@ -23,7 +23,7 @@ global:
 nameOverride: ""
 ## @param fullnameOverride String to fully override scdf.fullname template.
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
 kubeVersion: ""
