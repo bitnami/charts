@@ -117,16 +117,16 @@ wordpressSkipInstall: false
 ##   @ini_set( 'post_max_size', '128M');
 ##   @ini_set( 'memory_limit', '256M' );
 ##
-wordpressExtraConfigContent:
+wordpressExtraConfigContent: ""
 ## @param wordpressConfiguration The content for your custom wp-config.php file (advanced feature)
 ## NOTE: This will override configuring WordPress based on environment variables (including those set by the chart)
 ## NOTE: Currently only supported when `wordpressSkipInstall=true`
 ##
-wordpressConfiguration:
+wordpressConfiguration: ""
 ## @param existingWordPressConfigurationSecret The name of an existing secret with your custom wp-config.php file (advanced feature)
 ## NOTE: When it's set the `wordpressConfiguration` parameter is ignored
 ##
-existingWordPressConfigurationSecret:
+existingWordPressConfigurationSecret: ""
 ## @param wordpressConfigureCache Enable W3 Total Cache plugin and configure cache settings
 ## NOTE: useful if you deploy Memcached for caching database queries or you use an external cache server
 ##
@@ -140,11 +140,11 @@ wordpressAutoUpdateLevel: none
 wordpressPlugins: none
 ## @param apacheConfiguration The content for your custom httpd.conf file (advanced feature)
 ##
-apacheConfiguration:
+apacheConfiguration: ""
 ## @param existingApacheConfigurationConfigMap The name of an existing secret with your custom httpd.conf file (advanced feature)
 ## NOTE: When it's set the `apacheConfiguration` parameter is ignored
 ##
-existingApacheConfigurationConfigMap:
+existingApacheConfigurationConfigMap: ""
 ## @param customPostInitScripts Custom post-init.d user scripts
 ## ref: https://github.com/bitnami/bitnami-docker-wordpress/tree/master/5/debian-10/rootfs/post-init.d
 ## NOTE: supported formats are `.sh`, `.sql` or `.php`
@@ -196,7 +196,7 @@ htaccessPersistenceEnabled: false
 ## NOTE: Must contain key `wordpress-htaccess.conf` with the file content
 ## NOTE: Requires setting `allowOverrideNone=false`
 ##
-customHTAccessCM:
+customHTAccessCM: ""
 ## @param command Override default container command (useful when using custom images)
 ##
 command: []
@@ -464,8 +464,8 @@ service:
   ## NOTE: choose port between <30000-32767>
   ##
   nodePorts:
-    http:
-    https:
+    http: ""
+    https: ""
   ## @param service.clusterIP WordPress service Cluster IP
   ## e.g.:
   ## clusterIP: None
@@ -512,7 +512,7 @@ ingress:
   ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
   ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
   ##
-  ingressClassName:
+  ingressClassName: ""
   ## @param ingress.hostname Default host for the ingress record
   ##
   hostname: wordpress.local
@@ -750,7 +750,7 @@ metrics:
     scrapeTimeout: ""
     ## @param metrics.serviceMonitor.relabellings Metrics relabellings to add to the scrape endpoint
     ##
-    relabellings:
+    relabellings: []
     ## @param metrics.serviceMonitor.honorLabels Labels to honor to add to the scrape endpoint
     ##
     honorLabels: false

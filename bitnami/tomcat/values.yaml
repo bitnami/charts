@@ -82,7 +82,7 @@ tomcatUsername: user
 ## @param tomcatPassword Tomcat admin password
 ## ref: https://github.com/bitnami/bitnami-docker-tomcat#creating-a-custom-user
 ##
-tomcatPassword:
+tomcatPassword: ""
 ## @param tomcatAllowRemoteManagement Enable remote access to management interface
 ## ref: https://github.com/bitnami/charts/tree/master/bitnami/tomcat#configuration
 ##
@@ -314,7 +314,7 @@ persistence:
   storageClass: ""
   ## @param persistence.annotations Persistent Volume Claim annotations
   ##
-  annotations:
+  annotations: {}
   ## @param persistence.accessModes PVC Access Modes for Tomcat volume
   ##
   accessModes:
@@ -328,7 +328,7 @@ persistence:
   ## @param persistence.selectorLabels Selector labels to use in volume claim template in statefulset
   ## Applicable when deployment.type is statefulset
   ##
-  selectorLabels:
+  selectorLabels: {}
 
 ## @section Traffic Exposure parameters
 

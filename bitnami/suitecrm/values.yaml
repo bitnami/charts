@@ -82,7 +82,7 @@ suitecrmValidateUserIP: false
 ## @param suitecrmHost SuiteCRM host to create application URLs
 ## ref: https://github.com/bitnami/bitnami-docker-suitecrm#configuration
 ##
-suitecrmHost:
+suitecrmHost: ""
 ## @param suitecrmUsername User of the application
 ## ref: https://github.com/bitnami/bitnami-docker-suitecrm#configuration
 ##
@@ -91,7 +91,7 @@ suitecrmUsername: user
 ## Defaults to a random 10-character alphanumeric string if not set
 ## ref: https://github.com/bitnami/bitnami-docker-suitecrm#configuration
 ##
-suitecrmPassword:
+suitecrmPassword: ""
 ## @param suitecrmEmail Admin email
 ## ref: https://github.com/bitnami/bitnami-docker-suitecrm#configuration
 ##
@@ -163,13 +163,13 @@ existingSecret: ""
 ## @param suitecrmNotifyAddress SuiteCRM notify address
 ## @param suitecrmNotifyName SuiteCRM notify name
 ##
-suitecrmSmtpHost:
-suitecrmSmtpPort:
-suitecrmSmtpUser:
-suitecrmSmtpPassword:
-suitecrmSmtpProtocol:
-suitecrmNotifyAddress:
-suitecrmNotifyName:
+suitecrmSmtpHost: ""
+suitecrmSmtpPort: ""
+suitecrmSmtpUser: ""
+suitecrmSmtpPassword: ""
+suitecrmSmtpProtocol: ""
+suitecrmNotifyAddress: ""
+suitecrmNotifyName: ""
 ## @param containerPorts [object] Container ports
 ##
 containerPorts:
@@ -377,7 +377,7 @@ mariadb:
       size: 8Gi
       ## @param mariadb.primary.persistence.hostPath Set path in case you want to use local host path volumes (not recommended in production)
       ##
-      hostPath:
+      hostPath: ""
       ## @param mariadb.primary.persistence.existingClaim Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas
       ##
       existingClaim: ""
@@ -386,7 +386,7 @@ mariadb:
 externalDatabase:
   ## @param externalDatabase.host Host of the existing database
   ##
-  host:
+  host: ""
   ## @param externalDatabase.port Port of the existing database
   ##
   port: 3306
@@ -395,7 +395,7 @@ externalDatabase:
   user: bn_suitecrm
   ## @param externalDatabase.password Password for the above username
   ##
-  password:
+  password: ""
   ## @param externalDatabase.database Name of the existing database
   ##
   database: bitnami_suitecrm
@@ -437,7 +437,7 @@ persistence:
   ## Requires persistence.existingClaim: nil|false
   ## Default: nil.
   ##
-  hostPath:
+  hostPath: ""
 
 ## @section Volume Permissions parameters
 
@@ -559,7 +559,7 @@ ingress:
   ## - name: suitecrm.local
   ##   path: /
   ##
-  hosts:
+  hosts: []
   ## @param ingress.tls The tls configuration for the ingress
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
   ## tls:
@@ -567,7 +567,7 @@ ingress:
   ##     - suitecrm.local
   ##   secretName: suitecrm.local-tls
   ##
-  tls:
+  tls: []
   ## @param ingress.secrets If you're providing your own certificates, please use this to add the certificates as secrets
   ## key and certificate should start with -----BEGIN CERTIFICATE----- or
   ## -----BEGIN RSA PRIVATE KEY-----
@@ -582,7 +582,7 @@ ingress:
   ##   key:
   ##   certificate:
   ##
-  secrets:
+  secrets: []
   ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
   ##
   apiVersion: ""
@@ -645,8 +645,8 @@ certificates:
   customCertificate:
     certificateSecret: ""
     chainSecret:
-      name:
-      key:
+      name: ""
+      key: ""
     certificateLocation: /etc/ssl/certs/ssl-cert-snakeoil.pem
     keyLocation: /etc/ssl/private/ssl-cert-snakeoil.key
     chainLocation: /etc/ssl/certs/mychain.pem

@@ -107,10 +107,10 @@ server:
     containerRegistries: {}
     ## @param server.configuration.grafanaInfo Endpoint to the grafana instance (Deprecated: use the metricsDashboard instead)
     ##
-    grafanaInfo:
+    grafanaInfo: ""
     ## @param server.configuration.metricsDashboard Endpoint to the metricsDashboard instance
     ##
-    metricsDashboard:
+    metricsDashboard: ""
   ## @param server.existingConfigmap ConfigMap with Spring Cloud Dataflow Server Configuration
   ## NOTE: When it's set the server.configuration.* and deployer.*
   ##  parameters are ignored,
@@ -398,8 +398,8 @@ server:
     ## @param server.autoscaling.targetMemory Target Memory utilization percentage
     ##
     enabled: false
-    minReplicas:
-    maxReplicas:
+    minReplicas: ""
+    maxReplicas: ""
     targetCPU: ""
     targetMemory: ""
   ## @param server.extraVolumes Extra Volumes to be set on the Dataflow Server Pod
@@ -709,8 +709,8 @@ skipper:
     ## @param skipper.autoscaling.targetMemory Target Memory utilization percentage
     ##
     enabled: false
-    minReplicas:
-    maxReplicas:
+    minReplicas: ""
+    maxReplicas: ""
     targetCPU: ""
     targetMemory: ""
   ## @param skipper.extraVolumes Extra Volumes to be set on the Skipper Pod
@@ -959,7 +959,7 @@ metrics:
     ## e.g:
     ## interval: 10s
     ##
-    interval:
+    interval: ""
     ## @param metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ## e.g:
@@ -988,8 +988,8 @@ metrics:
   ##
   autoscaling:
     enabled: false
-    minReplicas:
-    maxReplicas:
+    minReplicas: ""
+    maxReplicas: ""
     targetCPU: ""
     targetMemory: ""
 
@@ -1104,19 +1104,19 @@ externalDatabase:
   port: 3306
   ## @param externalDatabase.driver The fully qualified name of the JDBC Driver class
   ##
-  driver:
+  driver: ""
   ## @param externalDatabase.scheme The scheme is a vendor-specific or shared protocol string that follows the "jdbc:" of the URL
   ##
-  scheme:
+  scheme: ""
   ## @param externalDatabase.password Password for the above username
   ##
   password: ''
   ## @param externalDatabase.existingPasswordSecret Existing secret with database password
   ##
-  existingPasswordSecret:
+  existingPasswordSecret: ""
   ## @param externalDatabase.existingPasswordKey Key of the existing secret with database password, defaults to `datasource-password`
   ##
-  existingPasswordKey:
+  existingPasswordKey: ""
   ## Data Flow user and database
   ##
   dataflow:
@@ -1188,10 +1188,10 @@ externalRabbitmq:
   ## e.g:
   ## vhost: /
   ##
-  vhost:
+  vhost: ""
   ## @param externalRabbitmq.existingPasswordSecret Existing secret with RabbitMQ password. It will be saved in a kubernetes secret
   ##
-  existingPasswordSecret:
+  existingPasswordSecret: ""
 
 ## @section Kafka chart parameters
 

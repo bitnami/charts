@@ -111,18 +111,18 @@ auth:
   enabled: false
   ## @param auth.clientUser User that will use ZooKeeper clients to auth
   ##
-  clientUser:
+  clientUser: ""
   ## @param auth.clientPassword Password that will use ZooKeeper clients to auth
   ##
-  clientPassword:
+  clientPassword: ""
   ## @param auth.serverUsers Comma, semicolon or whitespace separated list of user to be created
   ## Specify them as a string, for example: "user1,user2,admin"
   ##
-  serverUsers:
+  serverUsers: ""
   ## @param auth.serverPasswords Comma, semicolon or whitespace separated list of passwords to assign to users when created
   ## Specify them as a string, for example: "pass4user1, pass4user2, pass4admin"
   ##
-  serverPasswords:
+  serverPasswords: ""
 ## @param heapSize Size in MB for the Java Heap options (Xmx and XMs)
 ## This env var is ignored if Xmx an Xms are configured via JVMFLAGS
 ##
@@ -139,13 +139,13 @@ logLevel: ERROR
 dataLogDir: ""
 ## @param jvmFlags Default JVMFLAGS for the ZooKeeper process
 ##
-jvmFlags:
+jvmFlags: ""
 ## @param config Configure ZooKeeper with a custom zoo.cfg file
 ##
-config:
+config: ""
 ## @param namespaceOverride Namespace for ZooKeeper resources
 ##
-namespaceOverride:
+namespaceOverride: ""
 ## @param hostAliases Deployment pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -386,7 +386,7 @@ serviceAccount:
   create: false
   ## @param serviceAccount.name The name of the ServiceAccount to use.
   ## If not set and create is true, a name is generated using the common.names.fullname template
-  name:
+  name: ""
   ## @param serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
   ## Can be set to false if pods using this serviceAccount do not need to use K8s API
   automountServiceAccountToken: true
@@ -401,7 +401,7 @@ networkPolicy:
   ## When set to false, only pods with the correct client label will have network access to the port Redis(TM) is
   ## listening on. When true, zookeeper accept connections from any source (with the correct destination port).
   ##
-  allowExternal:
+  allowExternal: true
 
 ## @section Persistence parameters
 
@@ -532,7 +532,7 @@ metrics:
     ## e.g:
     ## interval: 10s
     ##
-    interval:
+    interval: ""
     ## @param metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ## e.g:
@@ -545,7 +545,7 @@ metrics:
     ## selector:
     ##   prometheus: my-prometheus
     ##
-    selector:
+    selector: {}
   ## Prometheus Operator PrometheusRule configuration
   ##
   prometheusRule:
@@ -561,7 +561,7 @@ metrics:
     ## selector:
     ##   prometheus: my-prometheus
     ##
-    selector:
+    selector: {}
     ## @param metrics.prometheusRule.rules Prometheus Rule definitions
     ##  - alert: ZookeeperSyncedFollowers
     ##    annotations:
@@ -604,7 +604,7 @@ tls:
     truststorePath: /opt/bitnami/zookeeper/config/certs/client/zookeeper.truststore.jks
     ## @param tls.client.passwordsSecretName Existing secret containing Keystore and truststore passwords
     ##
-    passwordsSecretName:
+    passwordsSecretName: ""
     ## @param tls.client.keystorePassword Password to access KeyStore if needed
     ##
     keystorePassword: ""
@@ -629,7 +629,7 @@ tls:
     truststorePath: /opt/bitnami/zookeeper/config/certs/quorum/zookeeper.truststore.jks
     ## @param tls.quorum.passwordsSecretName Existing secret containing Keystore and truststore passwords
     ##
-    passwordsSecretName:
+    passwordsSecretName: ""
     ## @param tls.quorum.keystorePassword Password to access KeyStore if needed
     ##
     keystorePassword: ""

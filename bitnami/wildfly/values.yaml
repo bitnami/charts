@@ -299,8 +299,8 @@ service:
   ## NOTE: choose port between <30000-32767>
   ##
   nodePorts:
-    http:
-    mgmt:
+    http: ""
+    mgmt: ""
   ## @param service.clusterIP WildFly service Cluster IP
   ## e.g.:
   ## clusterIP: None

@@ -334,7 +334,7 @@ sidecars: {}
 externalProxy:
   ## @param externalProxy.host Host of a wavefront-proxy instance (required if wavefront.enabled = false)
   ##
-  host:
+  host: ""
   ## @param externalProxy.port Host of a wavefront-proxy instance (required if wavefront.enabled = false)
   ##
   port: 2878
@@ -394,8 +394,12 @@ service:
   loadBalancerIP: ""
   ## loadBalancerIP source ranges for the Service
   ## @param service.loadBalancerSourceRanges loadBalancerIP source ranges for the Service
+  ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+  ## e.g:
+  ## loadBalancerSourceRanges:
+  ##   - 10.10.10.0/24
   ##
-  loadBalancerSourceRanges:
+  loadBalancerSourceRanges: []
   ##
   ## nodePorts:
   ##   http: <to set explicitly, choose port between 30000-32767>

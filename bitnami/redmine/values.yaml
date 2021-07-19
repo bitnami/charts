@@ -175,7 +175,7 @@ schedulerName: ""
 ##
 serviceAccount:
   create: false
-  name:
+  name: ""
 ## @param hostAliases [array] Redmine pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -611,7 +611,7 @@ mariadb:
       size: 8Gi
       ## @param mariadb.primary.persistence.hostPath Set path in case you want to use local host path volumes (not recommended in production)
       ##
-      hostPath:
+      hostPath: ""
 ## PostgreSQL chart configuration
 ## ref: https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
 ##
@@ -669,7 +669,7 @@ postgresql:
 externalDatabase:
   ## @param externalDatabase.host External Database server host
   ##
-  host:
+  host: ""
   ## @param externalDatabase.port External Database server port
   ##
   port: 5432
@@ -933,10 +933,10 @@ certificates:
     chainSecret:
       # e.g.:
       # name: secret-key
-      name:
+      name: ""
       # e.g.:
       # key: secret-key
-      key:
+      key: ""
     certificateLocation: /etc/ssl/certs/ssl-cert-snakeoil.pem
     keyLocation: /etc/ssl/private/ssl-cert-snakeoil.key
     chainLocation: /etc/ssl/certs/mychain.pem
