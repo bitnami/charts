@@ -446,7 +446,7 @@ query:
     minReplicas:
     maxReplicas:
     targetCPU:
-    targetMemory:
+    targetMemory: ""
   ## Query Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
   ##
@@ -855,7 +855,7 @@ queryFrontend:
     minReplicas:
     maxReplicas:
     targetCPU:
-    targetMemory:
+    targetMemory: ""
   ## Query Frontend Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
   ##
@@ -1820,7 +1820,7 @@ storegateway:
     minReplicas:
     maxReplicas:
     targetCPU:
-    targetMemory:
+    targetMemory: ""
   ## Store Gateway Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
   ##
@@ -2554,7 +2554,7 @@ receive:
     minReplicas:
     maxReplicas:
     targetCPU:
-    targetMemory:
+    targetMemory: ""
   ## Persistence parameters
   ##
   persistence:

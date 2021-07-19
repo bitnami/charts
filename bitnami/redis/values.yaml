@@ -756,7 +756,7 @@ replica:
     targetCPU: ""
     ## @param replica.autoscaling.targetMemory Percentage of Memory to consider when autoscaling
     ##
-    targetMemory:
+    targetMemory: ""
 
 ## @section Redis(TM) Sentinel configuration parameters
 ##
