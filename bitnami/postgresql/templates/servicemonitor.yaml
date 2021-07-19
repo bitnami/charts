@@ -6,12 +6,14 @@ metadata:
   {{- if .Values.metrics.serviceMonitor.namespace }}
   namespace: {{ .Values.metrics.serviceMonitor.namespace }}
   {{- end }}
-  labels:
-  {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
     {{- if .Values.metrics.serviceMonitor.additionalLabels }}
     {{- toYaml .Values.metrics.serviceMonitor.additionalLabels | nindent 4 }}
     {{- end }}
-  {{- if .Values.commonAnnotations }}
+  {{- if .Values.commonAnnotations | quote }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 

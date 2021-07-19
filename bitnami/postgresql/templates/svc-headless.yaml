@@ -2,8 +2,10 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ template "common.names.fullname" . }}-headless
-  labels:
-  {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -12,7 +14,7 @@ metadata:
     # field is broken in some versions of Kubernetes:
     # https://github.com/kubernetes/kubernetes/issues/58662
     service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace | quote }}
 spec:
   type: ClusterIP
   clusterIP: None
@@ -22,7 +24,7 @@ spec:
   publishNotReadyAddresses: true
   ports:
     - name: tcp-postgresql
-      port: {{ template "postgresql.port" . }}
+      port: {{ .Values.primary.service.port }}
       targetPort: tcp-postgresql
   selector:
   {{- include "common.labels.matchLabels" . | nindent 4 }}

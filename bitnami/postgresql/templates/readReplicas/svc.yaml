@@ -1,0 +1,39 @@
+{{- if eq .Values.architecture "replication" }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "common.names.fullname" . }}-read
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  annotations:
+  {{- if .Values.commonAnnotations }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.readReplicas.service.annotations }}
+  {{- include "common.tplvalues.render" (dict "value" .Values.readReplicas.service.annotations "context" $) | nindent 4 }}
+  {{- end }}
+  namespace: {{ .Release.Namespace | quote }}
+spec:
+  type: {{ .Values.readReplicas.service.type }}
+  {{- if and .Values.readReplicas.service.loadBalancerIP (eq .Values.readReplicas.service.type "LoadBalancer") }}
+  loadBalancerIP: {{ .Values.readReplicas.service.loadBalancerIP }}
+  {{- end }}
+  {{- if and (eq .Values.readReplicas.service.type "LoadBalancer") .Values.readReplicas.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges: {{- include "common.tplvalues.render" (dict "value" .Values.readReplicas.service.loadBalancerSourceRanges "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if and (eq .Values.readReplicas.service.type "ClusterIP") .Values.readReplicas.service.clusterIP }}
+  clusterIP: {{ .Values.readReplicas.service.clusterIP }}
+  {{- end }}
+  ports:
+    - name: tcp-postgresql
+      port: {{ .Values.readReplicas.service.port }}
+      targetPort: tcp-postgresql
+      {{- if .Values.readReplicas.service.nodePort }}
+      nodePort: {{ .Values.readReplicas.service.nodePort }}
+      {{- end }}
+  selector:
+  {{- include "common.labels.matchLabels" . | nindent 4 }}
+    role: read
+{{- end }}

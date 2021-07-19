@@ -1,14 +1,16 @@
-{{- if .Values.psp.create }}
-apiVersion: {{ include "podsecuritypolicy.apiVersion" . }}
+{{- if .Values.podSecurityPolicy.create }}
+apiVersion: {{ include "podSecurityPolicy.apiVersion" . }}
 kind: PodSecurityPolicy
 metadata:
   name: {{ template "common.names.fullname" . }}
-  labels:
-  {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace | quote }}
 spec:
   privileged: false
   volumes:

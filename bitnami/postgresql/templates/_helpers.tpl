@@ -14,7 +14,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- define "postgresql.primary.fullname" -}}
 {{- $name := default .Chart.Name .Values.nameOverride -}}
 {{- $fullname := default (printf "%s-%s" .Release.Name $name) .Values.fullnameOverride -}}
-{{- if .Values.replication.enabled -}}
+{{- if eq .Values.architecture "replication" -}}
 {{- printf "%s-%s" $fullname "primary" | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
 {{- printf "%s" $fullname | trunc 63 | trimSuffix "-" -}}
@@ -50,96 +50,11 @@ Return the proper Docker Image Registry Secret Names
 {{- end -}}
 
 {{/*
-Return PostgreSQL postgres user password
-*/}}
-{{- define "postgresql.postgres.password" -}}
-{{- if .Values.global.postgresql.postgresqlPostgresPassword }}
-    {{- .Values.global.postgresql.postgresqlPostgresPassword -}}
-{{- else if .Values.postgresqlPostgresPassword -}}
-    {{- .Values.postgresqlPostgresPassword -}}
-{{- else -}}
-    {{- randAlphaNum 10 -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return PostgreSQL password
-*/}}
-{{- define "postgresql.password" -}}
-{{- if .Values.global.postgresql.postgresqlPassword }}
-    {{- .Values.global.postgresql.postgresqlPassword -}}
-{{- else if .Values.postgresqlPassword -}}
-    {{- .Values.postgresqlPassword -}}
-{{- else -}}
-    {{- randAlphaNum 10 -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return PostgreSQL replication password
-*/}}
-{{- define "postgresql.replication.password" -}}
-{{- if .Values.global.postgresql.replicationPassword }}
-    {{- .Values.global.postgresql.replicationPassword -}}
-{{- else if .Values.replication.password -}}
-    {{- .Values.replication.password -}}
-{{- else -}}
-    {{- randAlphaNum 10 -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return PostgreSQL username
-*/}}
-{{- define "postgresql.username" -}}
-{{- if .Values.global.postgresql.postgresqlUsername }}
-    {{- .Values.global.postgresql.postgresqlUsername -}}
-{{- else -}}
-    {{- .Values.postgresqlUsername -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return PostgreSQL replication username
-*/}}
-{{- define "postgresql.replication.username" -}}
-{{- if .Values.global.postgresql.replicationUser }}
-    {{- .Values.global.postgresql.replicationUser -}}
-{{- else -}}
-    {{- .Values.replication.user -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return PostgreSQL port
-*/}}
-{{- define "postgresql.port" -}}
-{{- if .Values.global.postgresql.servicePort }}
-    {{- .Values.global.postgresql.servicePort -}}
-{{- else -}}
-    {{- .Values.service.port -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return PostgreSQL created database
-*/}}
-{{- define "postgresql.database" -}}
-{{- if .Values.global.postgresql.postgresqlDatabase }}
-    {{- .Values.global.postgresql.postgresqlDatabase -}}
-{{- else if .Values.postgresqlDatabase -}}
-    {{- .Values.postgresqlDatabase -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
 Get the password secret.
 */}}
 {{- define "postgresql.secretName" -}}
-{{- if .Values.global.postgresql.existingSecret }}
-    {{- printf "%s" (tpl .Values.global.postgresql.existingSecret $) -}}
-{{- else if .Values.existingSecret -}}
-    {{- printf "%s" (tpl .Values.existingSecret $) -}}
+{{- if .Values.auth.existingSecret -}}
+    {{- printf "%s" (tpl .Values.auth.existingSecret $) -}}
 {{- else -}}
     {{- printf "%s" (include "common.names.fullname" .) -}}
 {{- end -}}
@@ -149,7 +64,7 @@ Get the password secret.
 Return true if we should use an existingSecret.
 */}}
 {{- define "postgresql.useExistingSecret" -}}
-{{- if or .Values.global.postgresql.existingSecret .Values.existingSecret -}}
+{{- if .Values.auth.existingSecret -}}
     {{- true -}}
 {{- end -}}
 {{- end -}}
@@ -220,18 +135,25 @@ Get the metrics ConfigMap name.
 {{- end -}}
 
 {{/*
-Get the readiness probe command
+Get the readiness probe command for primary pods
 */}}
-{{- define "postgresql.readinessProbeCommand" -}}
-- |
-{{- if (include "postgresql.database" .) }}
-  exec pg_isready -U {{ include "postgresql.username" . | quote }} -d "dbname={{ include "postgresql.database" . }} {{- if .Values.tls.enabled }} sslcert={{ include "postgresql.tlsCert" . }} sslkey={{ include "postgresql.tlsCertKey" . }}{{- end }}" -h 127.0.0.1 -p {{ template "postgresql.port" . }}
+{{- define "postgresql.primary.probeCommand" -}}
+{{- if .Values.auth.database }}
+  exec pg_isready -U {{ .Values.auth.username | quote }} -d "dbname={{ .Values.auth.database }} {{- if .Values.tls.enabled }} sslcert={{ include "postgresql.tlsCert" . }} sslkey={{ include "postgresql.tlsCertKey" . }}{{- end }}" -h 127.0.0.1 -p {{ .Values.primary.service.port }}
 {{- else }}
-  exec pg_isready -U {{ include "postgresql.username" . | quote }} {{- if .Values.tls.enabled }} -d "sslcert={{ include "postgresql.tlsCert" . }} sslkey={{ include "postgresql.tlsCertKey" . }}"{{- end }} -h 127.0.0.1 -p {{ template "postgresql.port" . }}
+  exec pg_isready -U {{ .Values.auth.username | quote }} {{- if .Values.tls.enabled }} -d "sslcert={{ include "postgresql.tlsCert" . }} sslkey={{ include "postgresql.tlsCertKey" . }}"{{- end }} -h 127.0.0.1 -p {{ .Values.primary.service.port }}
 {{- end }}
-{{- if contains "bitnami/" .Values.image.repository }}
-  [ -f /opt/bitnami/postgresql/tmp/.initialized ] || [ -f /bitnami/postgresql/.initialized ]
 {{- end -}}
+
+{{/*
+Get the readiness probe command for replica pods
+*/}}
+{{- define "postgresql.readReplicas.probeCommand" -}}
+{{- if .Values.auth.database }}
+  exec pg_isready -U {{ .Values.auth.username | quote }} -d "dbname={{ .Values.auth.database }} {{- if .Values.tls.enabled }} sslcert={{ include "postgresql.tlsCert" . }} sslkey={{ include "postgresql.tlsCertKey" . }}{{- end }}" -h 127.0.0.1 -p {{ .Values.readReplicas.service.port }}
+{{- else }}
+  exec pg_isready -U {{ .Values.auth.username | quote }} {{- if .Values.tls.enabled }} -d "sslcert={{ include "postgresql.tlsCert" . }} sslkey={{ include "postgresql.tlsCertKey" . }}"{{- end }} -h 127.0.0.1 -p {{ .Values.readReplicas.service.port }}
+{{- end }}
 {{- end -}}
 
 {{/*
@@ -240,7 +162,7 @@ Compile all warnings into a single message, and call fail.
 {{- define "postgresql.validateValues" -}}
 {{- $messages := list -}}
 {{- $messages := append $messages (include "postgresql.validateValues.ldapConfigurationMethod" .) -}}
-{{- $messages := append $messages (include "postgresql.validateValues.psp" .) -}}
+{{- $messages := append $messages (include "postgresql.validateValues.podSecurityPolicy" .) -}}
 {{- $messages := append $messages (include "postgresql.validateValues.tls" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
@@ -265,9 +187,9 @@ postgresql: ldap.url, ldap.server
 {{/*
 Validate values of Postgresql - If PSP is enabled RBAC should be enabled too
 */}}
-{{- define "postgresql.validateValues.psp" -}}
-{{- if and .Values.psp.create (not .Values.rbac.create) }}
-postgresql: psp.create, rbac.create
+{{- define "postgresql.validateValues.podSecurityPolicy" -}}
+{{- if and .Values.podSecurityPolicy.create (not .Values.rbac.create) }}
+postgresql: podSecurityPolicy.create, rbac.create
     RBAC should be enabled if PSP is enabled in order for PSP to work.
     More info at https://kubernetes.io/docs/concepts/policy/pod-security-policy/#authorizing-policies
 {{- end -}}
@@ -276,7 +198,7 @@ postgresql: psp.create, rbac.create
 {{/*
 Return the appropriate apiVersion for podsecuritypolicy.
 */}}
-{{- define "podsecuritypolicy.apiVersion" -}}
+{{- define "podSecurityPolicy.apiVersion" -}}
 {{- if semverCompare "<1.10-0" .Capabilities.KubeVersion.GitVersion -}}
 {{- print "extensions/v1beta1" -}}
 {{- else -}}
@@ -365,5 +287,14 @@ Return the path to the CA cert file.
     {{- printf "%s-crt" (include "common.names.fullname" .) -}}
 {{- else -}}
     {{ required "A secret containing TLS certificates is required when TLS is enabled" .Values.tls.certificatesSecret }}
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of PostgreSQL - must provide a valid architecture */}}
+{{- define "postgresql.validateValues.architecture" -}}
+{{- if and (ne .Values.architecture "standalone") (ne .Values.architecture "replication") -}}
+postgresql: architecture
+    Invalid architecture selected. Valid values are "standalone" and
+    "replication". Please set a valid architecture (--set architecture="xxxx")
 {{- end -}}
 {{- end -}}
