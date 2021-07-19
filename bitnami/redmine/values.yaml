@@ -122,7 +122,7 @@ existingSecret: ""
 ## NOTE: Must contain key `smtp-password`
 ## NOTE: When it's set, the `smtpPassword` parameter is ignored
 ##
-smtpExistingSecret:
+smtpExistingSecret: ""
 ## @param allowEmptyPassword Allow the container to be started with blank passwords
 ##
 allowEmptyPassword: false
@@ -404,7 +404,7 @@ ingress:
   pathType: ImplementationSpecific
   ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
   ##
-  apiVersion:
+  apiVersion: ""
   ## @param ingress.hostname Default host for the ingress record
   ##
   hostname: redmine.local
@@ -532,7 +532,7 @@ volumePermissions:
 ##
 podDisruptionBudget:
   create: false
-  minAvailable:
+  minAvailable: ""
   maxUnavailable: ""
 
 ## Redmine Autoscaling configuration

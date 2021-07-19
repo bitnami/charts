@@ -17,7 +17,7 @@ global:
   imagePullSecrets: []
   storageClass: ""
   redis:
-    password:
+    password: ""
 
 ## @section Redis<sup>TM</sup> Cluster Common parameters
 
@@ -90,7 +90,7 @@ serviceAccount:
   ## @param serviceAccount.name The name of the ServiceAccount to create
   ## If not set and create is true, a name is generated using the fullname template
   ##
-  name:
+  name: ""
 rbac:
   ## @param rbac.create Specifies whether RBAC resources should be created
   ##
@@ -131,7 +131,7 @@ podSecurityContext:
 podDisruptionBudget: {}
 ## @param minAvailable Min number of pods that must still be available after the eviction
 ##
-minAvailable:
+minAvailable: ""
 ## @param maxUnavailable Max number of pods that can be unavailable after the eviction
 ##
 maxUnavailable: ""
@@ -163,7 +163,7 @@ password: ""
 existingSecret: ""
 ## @param existingSecretPasswordKey Name of key containing password to be retrieved from the existing secret
 ##
-existingSecretPasswordKey:
+existingSecretPasswordKey: ""
 ## @param usePasswordFile Mount passwords as files instead of environment variables
 ##
 usePasswordFile: false
@@ -185,19 +185,19 @@ tls:
   existingSecret: ""
   ## @param tls.certificatesSecret DEPRECATED. Use tls.existingSecret instead
   ##
-  certificatesSecret:
+  certificatesSecret: ""
   ## @param tls.certFilename Certificate filename
   ##
-  certFilename:
+  certFilename: ""
   ## @param tls.certKeyFilename Certificate key filename
   ##
-  certKeyFilename:
+  certKeyFilename: ""
   ## @param tls.certCAFilename CA Certificate filename
   ##
-  certCAFilename:
+  certCAFilename: ""
   ## @param tls.dhParamsFilename File containing DH params (in order to support DH based ciphers)
   ##
-  dhParamsFilename:
+  dhParamsFilename: ""
 ## Redis(TM) Service properties for standalone mode.
 ##
 service:
@@ -265,7 +265,7 @@ statefulset:
   ## @param statefulset.rollingUpdatePartition Partition update strategy
   ## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
   ##
-  rollingUpdatePartition:
+  rollingUpdatePartition: ""
 ## Init containers parameters:
 ## volumePermissions: Change the owner of the persist volume mountpoint to RunAsUser:fsGroup
 ##
@@ -339,7 +339,7 @@ redis:
   port: 6379
   ## @param redis.lifecycleHooks LifecycleHook to set additional configuration before or after startup. Evaluated as a template
   ##
-  lifecycleHooks:
+  lifecycleHooks: {}
   ## @param redis.extraVolumes Extra volumes to add to the deployment
   ##
   extraVolumes: []
@@ -368,7 +368,7 @@ redis:
   ## @param redis.configmap Additional Redis<sup>TM</sup> configuration for the nodes
   ## ref: https://redis.io/topics/config
   ##
-  configmap:
+  configmap: ""
   ## @param redis.extraEnvVars An array to add extra environment variables
   ## For example:
   ##  - name: BEARER_AUTH
@@ -718,7 +718,7 @@ metrics:
     namespace: ""
     ## @param metrics.serviceMonitor.interval How frequently to scrape metrics (use by default, falling back to Prometheus' default)
     ##
-    interval:
+    interval: ""
   ## Custom PrometheusRule to be defined
   ## The value is evaluated as a template, so, for example, the value can depend on .Release or .Chart
   ## ref: https://github.com/coreos/prometheus-operator#customresourcedefinitions

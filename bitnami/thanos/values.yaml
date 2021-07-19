@@ -517,7 +517,7 @@ query:
     tls: false
     ## @param query.ingress.apiVersion Force Ingress API version (automatically detected if not set)
     ##
-    apiVersion:
+    apiVersion: ""
     ## @param query.ingress.path Ingress path
     ##
     path: /
@@ -579,7 +579,7 @@ query:
       secrets: []
       ## @param query.ingress.grpc.apiVersion Override API Version (automatically detected if not set)
       ##
-      apiVersion:
+      apiVersion: ""
       ## @param query.ingress.grpc.path Ingress Path
       ##
       path: /
@@ -926,7 +926,7 @@ queryFrontend:
     tls: false
     ## @param queryFrontend.ingress.apiVersion Force Ingress API version (automatically detected if not set)
     ##
-    apiVersion:
+    apiVersion: ""
     ## @param queryFrontend.ingress.path Ingress path
     ##
     path: /
@@ -1250,7 +1250,7 @@ bucketweb:
     tls: false
     ## @param bucketweb.ingress.apiVersion Force Ingress API version (automatically detected if not set)
     ##
-    apiVersion:
+    apiVersion: ""
     ## @param bucketweb.ingress.path Ingress path
     ##
     path: /
@@ -2224,7 +2224,7 @@ ruler:
     secrets: []
     ## @param ruler.ingress.apiVersion Force Ingress API version (automatically detected if not set)
     ##
-    apiVersion:
+    apiVersion: ""
     ## @param ruler.ingress.path Ingress path
     ##
     path: /
@@ -2649,7 +2649,7 @@ receive:
     secrets: []
     ## @param receive.ingress.apiVersion Override API Version (automatically detected if not set)
     ##
-    apiVersion:
+    apiVersion: ""
     ## @param receive.ingress.path Ingress Path
     ##
     path: /

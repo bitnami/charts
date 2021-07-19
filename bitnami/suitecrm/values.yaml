@@ -311,7 +311,7 @@ customReadinessProbe: {}
 customStartupProbe: {}
 ## @param lifecycleHooks lifecycleHooks for the container to automate configuration before or after startup
 ##
-lifecycleHooks:
+lifecycleHooks: {}
 ## @param podAnnotations Pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
@@ -585,7 +585,7 @@ ingress:
   secrets:
   ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
   ##
-  apiVersion:
+  apiVersion: ""
   ## @param ingress.path Ingress path
   ##
   path: /

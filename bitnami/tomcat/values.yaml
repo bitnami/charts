@@ -418,7 +418,7 @@ ingress:
   secrets: []
   ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
   ##
-  apiVersion:
+  apiVersion: ""
   ## @param ingress.path Ingress path
   ##
   path: /

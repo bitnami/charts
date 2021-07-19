@@ -880,7 +880,7 @@ ldap:
 ##
 ingress:
   enabled: false
-  apiVersion:
+  apiVersion: ""
   pathType: ImplementationSpecific
   certManager: false
   ## For a full list of possible ingress annotations, please see
