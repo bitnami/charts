@@ -52,18 +52,18 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `nil` |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
 
 ### Common parameters
 
 | Name                | Description                                                                                                    | Value |
 | ------------------- | -------------------------------------------------------------------------------------------------------------- | ----- |
-| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                                           | `nil` |
-| `nameOverride`      | String to partially override prestashop.fullname template (will maintain the release name)                     | `nil` |
-| `fullnameOverride`  | String to fully override prestashop.fullname template                                                          | `nil` |
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                                           | `""`  |
+| `nameOverride`      | String to partially override prestashop.fullname template (will maintain the release name)                     | `""`  |
+| `fullnameOverride`  | String to fully override prestashop.fullname template                                                          | `""`  |
 | `commonAnnotations` | Common annotations to add to all PrestaShop resources (sub-charts are not considered). Evaluated as a template | `{}`  |
 | `commonLabels`      | Common labels to add to all PrestaShop resources (sub-charts are not considered). Evaluated as a template      | `{}`  |
 | `extraDeploy`       | Array with extra yaml to deploy with the chart. Evaluated as a template                                        | `[]`  |
@@ -71,92 +71,92 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### PrestaShop parameters
 
-| Name                                 | Description                                                                               | Value                  |
-| ------------------------------------ | ----------------------------------------------------------------------------------------- | ---------------------- |
-| `image.registry`                     | PrestaShop image registry                                                                 | `docker.io`            |
-| `image.repository`                   | PrestaShop image repository                                                               | `bitnami/prestashop`   |
-| `image.tag`                          | PrestaShop image tag (immutable tags are recommended)                                     | `1.7.7-5-debian-10-r0` |
-| `image.pullPolicy`                   | PrestaShop image pull policy                                                              | `IfNotPresent`         |
-| `image.pullSecrets`                  | Specify docker-registry secret names as an array                                          | `[]`                   |
-| `image.debug`                        | Specify if debug logs should be enabled                                                   | `false`                |
-| `hostAliases`                        | Deployment pod host aliases                                                               | `[]`                   |
-| `replicaCount`                       | Number of PrestaShop Pods to run (requires ReadWriteMany PVC support)                     | `1`                    |
-| `prestashopSkipInstall`              | Skip PrestaShop installation wizard. Useful for migrations and restoring from SQL dump    | `false`                |
-| `prestashopHost`                     | PrestaShop host to create application URLs (when ingress, it will be ignored)             | `nil`                  |
-| `prestashopUsername`                 | User of the application                                                                   | `user@example.com`     |
-| `prestashopPassword`                 | Application password                                                                      | `nil`                  |
-| `prestashopEmail`                    | Admin email                                                                               | `user@example.com`     |
-| `prestashopFirstName`                | First Name                                                                                | `Bitnami`              |
-| `prestashopLastName`                 | Last Name                                                                                 | `User`                 |
-| `prestashopCookieCheckIP`            | Whether to check the cookie's IP address or not                                           | `no`                   |
-| `prestashopCountry`                  | Default country of the store                                                              | `us`                   |
-| `prestashopLanguage`                 | Default language of the store (ISO code)                                                  | `en`                   |
-| `allowEmptyPassword`                 | Allow DB blank passwords                                                                  | `true`                 |
-| `command`                            | Override default container command (useful when using custom images)                      | `nil`                  |
-| `args`                               | Override default container args (useful when using custom images)                         | `nil`                  |
-| `updateStrategy.type`                | Update strategy - only really applicable for deployments with RWO PVs attached            | `RollingUpdate`        |
-| `extraEnvVars`                       | An array to add extra environment variables                                               | `[]`                   |
-| `extraEnvVarsCM`                     | ConfigMap with extra environment variables                                                | `nil`                  |
-| `extraEnvVarsSecret`                 | Secret with extra environment variables                                                   | `nil`                  |
-| `extraVolumes`                       | Extra volumes to add to the deployment. Requires setting `extraVolumeMounts`              | `[]`                   |
-| `extraVolumeMounts`                  | Extra volume mounts to add to the container. Normally used with `extraVolumes`            | `[]`                   |
-| `initContainers`                     | Extra init containers to add to the deployment                                            | `[]`                   |
-| `sidecars`                           | Extra sidecar containers to add to the deployment                                         | `[]`                   |
-| `tolerations`                        | Tolerations for pod assignment. Evaluated as a template.                                  | `[]`                   |
-| `existingSecret`                     | Use existing secret for the application password                                          | `nil`                  |
-| `smtpHost`                           | SMTP host                                                                                 | `nil`                  |
-| `smtpPort`                           | SMTP port                                                                                 | `nil`                  |
-| `smtpUser`                           | SMTP user                                                                                 | `nil`                  |
-| `smtpPassword`                       | SMTP password                                                                             | `nil`                  |
-| `smtpProtocol`                       | SMTP Protocol (options: ssl,tls, nil)                                                     | `nil`                  |
-| `containerPorts.http`                | Sets HTTP port inside NGINX container                                                     | `8080`                 |
-| `containerPorts.https`               | Sets HTTPS port inside NGINX container                                                    | `8443`                 |
-| `sessionAffinity`                    | Control where client requests go, to the same pod or round-robin                          | `None`                 |
-| `persistence.enabled`                | Enable persistence using PVC                                                              | `true`                 |
-| `persistence.storageClass`           | PrestaShop Data Persistent Volume Storage Class                                           | `nil`                  |
-| `persistence.accessMode`             | PVC Access Mode for PrestaShop volume                                                     | `ReadWriteOnce`        |
-| `persistence.size`                   | PVC Storage Request for PrestaShop volume                                                 | `8Gi`                  |
-| `persistence.existingClaim`          | An Existing PVC name                                                                      | `nil`                  |
-| `persistence.hostPath`               | If defined, the prestashop-data volume will mount to the specified hostPath               | `nil`                  |
-| `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                   |
-| `podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                 |
-| `nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                   |
-| `nodeAffinityPreset.key`             | Node label key to match Ignored if `affinity` is set.                                     | `""`                   |
-| `nodeAffinityPreset.values`          | Node label values to match. Ignored if `affinity` is set.                                 | `[]`                   |
-| `affinity`                           | Affinity for pod assignment                                                               | `{}`                   |
-| `nodeSelector`                       | Node labels for pod assignment. Evaluated as a template.                                  | `{}`                   |
-| `resources.requests`                 | The requested resources for the container                                                 | `{}`                   |
-| `podSecurityContext.enabled`         | Enable PrestaShop pods' Security Context                                                  | `true`                 |
-| `podSecurityContext.fsGroup`         | PrestaShop pods' group ID                                                                 | `1001`                 |
-| `containerSecurityContext.enabled`   | Enable PrestaShop containers' Security Context                                            | `true`                 |
-| `containerSecurityContext.runAsUser` | PrestaShop containers' Security Context                                                   | `1001`                 |
-| `livenessProbe.enabled`              | Enable livenessProbe                                                                      | `true`                 |
-| `livenessProbe.path`                 | Request path for livenessProbe                                                            | `/`                    |
-| `livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                   | `600`                  |
-| `livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                          | `10`                   |
-| `livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                         | `5`                    |
-| `livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                       | `6`                    |
-| `livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                       | `1`                    |
-| `readinessProbe.enabled`             | Enable readinessProbe                                                                     | `true`                 |
-| `readinessProbe.path`                | Request path for readinessProbe                                                           | `/`                    |
-| `readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                  | `30`                   |
-| `readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                         | `5`                    |
-| `readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                        | `3`                    |
-| `readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                      | `6`                    |
-| `readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                      | `1`                    |
-| `startupProbe.enabled`               | Enable startupProbe                                                                       | `false`                |
-| `startupProbe.path`                  | Request path for startupProbe                                                             | `/`                    |
-| `startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                    | `0`                    |
-| `startupProbe.periodSeconds`         | Period seconds for startupProbe                                                           | `10`                   |
-| `startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe                                                          | `3`                    |
-| `startupProbe.failureThreshold`      | Failure threshold for startupProbe                                                        | `60`                   |
-| `startupProbe.successThreshold`      | Success threshold for startupProbe                                                        | `1`                    |
-| `customLivenessProbe`                | Override default liveness probe                                                           | `{}`                   |
-| `customReadinessProbe`               | Override default readiness probe                                                          | `{}`                   |
-| `customStartupProbe`                 | Override default startup probe                                                            | `{}`                   |
-| `lifecycleHooks`                     | LifecycleHook to set additional configuration at startup Evaluated as a template          | `nil`                  |
-| `podAnnotations`                     | Pod annotations                                                                           | `{}`                   |
-| `podLabels`                          | Pod extra labels                                                                          | `{}`                   |
+| Name                                 | Description                                                                               | Value                   |
+| ------------------------------------ | ----------------------------------------------------------------------------------------- | ----------------------- |
+| `image.registry`                     | PrestaShop image registry                                                                 | `docker.io`             |
+| `image.repository`                   | PrestaShop image repository                                                               | `bitnami/prestashop`    |
+| `image.tag`                          | PrestaShop image tag (immutable tags are recommended)                                     | `1.7.7-5-debian-10-r23` |
+| `image.pullPolicy`                   | PrestaShop image pull policy                                                              | `IfNotPresent`          |
+| `image.pullSecrets`                  | Specify docker-registry secret names as an array                                          | `[]`                    |
+| `image.debug`                        | Specify if debug logs should be enabled                                                   | `false`                 |
+| `hostAliases`                        | Deployment pod host aliases                                                               | `[]`                    |
+| `replicaCount`                       | Number of PrestaShop Pods to run (requires ReadWriteMany PVC support)                     | `1`                     |
+| `prestashopSkipInstall`              | Skip PrestaShop installation wizard. Useful for migrations and restoring from SQL dump    | `false`                 |
+| `prestashopHost`                     | PrestaShop host to create application URLs (when ingress, it will be ignored)             | `""`                    |
+| `prestashopUsername`                 | User of the application                                                                   | `user@example.com`      |
+| `prestashopPassword`                 | Application password                                                                      | `""`                    |
+| `prestashopEmail`                    | Admin email                                                                               | `user@example.com`      |
+| `prestashopFirstName`                | First Name                                                                                | `Bitnami`               |
+| `prestashopLastName`                 | Last Name                                                                                 | `User`                  |
+| `prestashopCookieCheckIP`            | Whether to check the cookie's IP address or not                                           | `no`                    |
+| `prestashopCountry`                  | Default country of the store                                                              | `us`                    |
+| `prestashopLanguage`                 | Default language of the store (ISO code)                                                  | `en`                    |
+| `allowEmptyPassword`                 | Allow DB blank passwords                                                                  | `true`                  |
+| `command`                            | Override default container command (useful when using custom images)                      | `[]`                    |
+| `args`                               | Override default container args (useful when using custom images)                         | `[]`                    |
+| `updateStrategy.type`                | Update strategy - only really applicable for deployments with RWO PVs attached            | `RollingUpdate`         |
+| `extraEnvVars`                       | An array to add extra environment variables                                               | `[]`                    |
+| `extraEnvVarsCM`                     | ConfigMap with extra environment variables                                                | `""`                    |
+| `extraEnvVarsSecret`                 | Secret with extra environment variables                                                   | `""`                    |
+| `extraVolumes`                       | Extra volumes to add to the deployment. Requires setting `extraVolumeMounts`              | `[]`                    |
+| `extraVolumeMounts`                  | Extra volume mounts to add to the container. Normally used with `extraVolumes`            | `[]`                    |
+| `initContainers`                     | Extra init containers to add to the deployment                                            | `[]`                    |
+| `sidecars`                           | Extra sidecar containers to add to the deployment                                         | `[]`                    |
+| `tolerations`                        | Tolerations for pod assignment. Evaluated as a template.                                  | `[]`                    |
+| `existingSecret`                     | Use existing secret for the application password                                          | `""`                    |
+| `smtpHost`                           | SMTP host                                                                                 | `""`                    |
+| `smtpPort`                           | SMTP port                                                                                 | `""`                    |
+| `smtpUser`                           | SMTP user                                                                                 | `""`                    |
+| `smtpPassword`                       | SMTP password                                                                             | `""`                    |
+| `smtpProtocol`                       | SMTP Protocol (options: ssl,tls, nil)                                                     | `""`                    |
+| `containerPorts.http`                | Sets HTTP port inside NGINX container                                                     | `8080`                  |
+| `containerPorts.https`               | Sets HTTPS port inside NGINX container                                                    | `8443`                  |
+| `sessionAffinity`                    | Control where client requests go, to the same pod or round-robin                          | `None`                  |
+| `persistence.enabled`                | Enable persistence using PVC                                                              | `true`                  |
+| `persistence.storageClass`           | PrestaShop Data Persistent Volume Storage Class                                           | `""`                    |
+| `persistence.accessMode`             | PVC Access Mode for PrestaShop volume                                                     | `ReadWriteOnce`         |
+| `persistence.size`                   | PVC Storage Request for PrestaShop volume                                                 | `8Gi`                   |
+| `persistence.existingClaim`          | An Existing PVC name                                                                      | `""`                    |
+| `persistence.hostPath`               | If defined, the prestashop-data volume will mount to the specified hostPath               | `""`                    |
+| `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                    |
+| `podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                  |
+| `nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                    |
+| `nodeAffinityPreset.key`             | Node label key to match Ignored if `affinity` is set.                                     | `""`                    |
+| `nodeAffinityPreset.values`          | Node label values to match. Ignored if `affinity` is set.                                 | `[]`                    |
+| `affinity`                           | Affinity for pod assignment                                                               | `{}`                    |
+| `nodeSelector`                       | Node labels for pod assignment. Evaluated as a template.                                  | `{}`                    |
+| `resources.requests`                 | The requested resources for the container                                                 | `{}`                    |
+| `podSecurityContext.enabled`         | Enable PrestaShop pods' Security Context                                                  | `true`                  |
+| `podSecurityContext.fsGroup`         | PrestaShop pods' group ID                                                                 | `1001`                  |
+| `containerSecurityContext.enabled`   | Enable PrestaShop containers' Security Context                                            | `true`                  |
+| `containerSecurityContext.runAsUser` | PrestaShop containers' Security Context                                                   | `1001`                  |
+| `livenessProbe.enabled`              | Enable livenessProbe                                                                      | `true`                  |
+| `livenessProbe.path`                 | Request path for livenessProbe                                                            | `/`                     |
+| `livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                   | `600`                   |
+| `livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                          | `10`                    |
+| `livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                         | `5`                     |
+| `livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                       | `6`                     |
+| `livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                       | `1`                     |
+| `readinessProbe.enabled`             | Enable readinessProbe                                                                     | `true`                  |
+| `readinessProbe.path`                | Request path for readinessProbe                                                           | `/`                     |
+| `readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                  | `30`                    |
+| `readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                         | `5`                     |
+| `readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                        | `3`                     |
+| `readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                      | `6`                     |
+| `readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                      | `1`                     |
+| `startupProbe.enabled`               | Enable startupProbe                                                                       | `false`                 |
+| `startupProbe.path`                  | Request path for startupProbe                                                             | `/`                     |
+| `startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                    | `0`                     |
+| `startupProbe.periodSeconds`         | Period seconds for startupProbe                                                           | `10`                    |
+| `startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe                                                          | `3`                     |
+| `startupProbe.failureThreshold`      | Failure threshold for startupProbe                                                        | `60`                    |
+| `startupProbe.successThreshold`      | Success threshold for startupProbe                                                        | `1`                     |
+| `customLivenessProbe`                | Override default liveness probe                                                           | `{}`                    |
+| `customReadinessProbe`               | Override default readiness probe                                                          | `{}`                    |
+| `customStartupProbe`                 | Override default startup probe                                                            | `{}`                    |
+| `lifecycleHooks`                     | LifecycleHook to set additional configuration at startup Evaluated as a template          | `{}`                    |
+| `podAnnotations`                     | Pod annotations                                                                           | `{}`                    |
+| `podLabels`                          | Pod extra labels                                                                          | `{}`                    |
 
 
 ### Traffic Exposure Parameters
@@ -166,16 +166,16 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.type`                     | Kubernetes Service type                                                                       | `LoadBalancer`           |
 | `service.port`                     | Service HTTP port                                                                             | `80`                     |
 | `service.httpsPort`                | Service HTTPS port                                                                            | `443`                    |
-| `service.clusterIP`                | Service Cluster IP                                                                            | `nil`                    |
+| `service.clusterIP`                | Service Cluster IP                                                                            | `""`                     |
 | `service.loadBalancerSourceRanges` | Control hosts connecting to "LoadBalancer" only                                               | `[]`                     |
-| `service.loadBalancerIP`           | Load balancerIP for the PrestaShop Service (optional, cloud specific)                         | `nil`                    |
+| `service.loadBalancerIP`           | Load balancerIP for the PrestaShop Service (optional, cloud specific)                         | `""`                     |
 | `service.nodePorts.http`           | Kubernetes HTTP node port                                                                     | `""`                     |
 | `service.nodePorts.https`          | Kubernetes HTTPS node port                                                                    | `""`                     |
 | `service.externalTrafficPolicy`    | Enable client source IP preservation                                                          | `Cluster`                |
 | `ingress.enabled`                  | Enable ingress controller resource                                                            | `false`                  |
 | `ingress.certManager`              | Add annotations for cert-manager                                                              | `false`                  |
 | `ingress.pathType`                 | Ingress path type                                                                             | `ImplementationSpecific` |
-| `ingress.apiVersion`               | Override API Version (automatically detected if not set)                                      | `nil`                    |
+| `ingress.apiVersion`               | Override API Version (automatically detected if not set)                                      | `""`                     |
 | `ingress.hostname`                 | Default host for the ingress resource                                                         | `prestashop.local`       |
 | `ingress.path`                     | Default path for the ingress resource*' in order to use this                                  | `ImplementationSpecific` |
 | `ingress.annotations`              | Ingress annotations                                                                           | `{}`                     |
@@ -197,15 +197,15 @@ The command removes all the Kubernetes components associated with the chart and 
 | `mariadb.auth.username`                     | Database user to create                                                                  | `bn_prestashop`      |
 | `mariadb.auth.password`                     | Password for the database                                                                | `""`                 |
 | `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                    | `true`               |
-| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                          | `nil`                |
+| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                          | `""`                 |
 | `mariadb.primary.persistence.accessModes`   | Database Persistent Volume Access Modes                                                  | `[]`                 |
 | `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                          | `8Gi`                |
-| `mariadb.primary.persistence.hostPath`      | Set path in case you want to use local host path volumes (not recommended in production) | `nil`                |
-| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas                 | `nil`                |
-| `externalDatabase.host`                     | Host of the existing database                                                            | `nil`                |
+| `mariadb.primary.persistence.hostPath`      | Set path in case you want to use local host path volumes (not recommended in production) | `""`                 |
+| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas                 | `""`                 |
+| `externalDatabase.host`                     | Host of the existing database                                                            | `""`                 |
 | `externalDatabase.port`                     | Port of the existing database                                                            | `3306`               |
 | `externalDatabase.user`                     | Existing username in the existing database                                               | `bn_prestashop`      |
-| `externalDatabase.password`                 | Password for the above username                                                          | `nil`                |
+| `externalDatabase.password`                 | Password for the above username                                                          | `""`                 |
 | `externalDatabase.database`                 | Name of the existing database                                                            | `bitnami_prestashop` |
 
 
@@ -216,7 +216,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                                                        | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `10-debian-10-r106`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `10-debian-10-r132`     |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `Always`                |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                                                                                                    | `{}`                    |
@@ -230,7 +230,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`           | Start a side-car prometheus exporter                       | `false`                   |
 | `metrics.image.registry`    | Apache exporter image registry                             | `docker.io`               |
 | `metrics.image.repository`  | Apache exporter image repository                           | `bitnami/apache-exporter` |
-| `metrics.image.tag`         | Apache exporter image tag (immutable tags are recommended) | `0.9.0-debian-10-r5`      |
+| `metrics.image.tag`         | Apache exporter image tag (immutable tags are recommended) | `0.9.0-debian-10-r31`     |
 | `metrics.image.pullPolicy`  | Image pull policy                                          | `IfNotPresent`            |
 | `metrics.image.pullSecrets` | Specify docker-registry secret names as an array           | `[]`                      |
 | `metrics.resources`         | Metrics exporter resource requests and limits              | `{}`                      |
@@ -242,20 +242,20 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                                 | Description                                                          | Value                                    |
 | ---------------------------------------------------- | -------------------------------------------------------------------- | ---------------------------------------- |
 | `certificates.customCertificate.certificateSecret`   | Secret containing the certificate and key to add                     | `""`                                     |
-| `certificates.customCertificate.chainSecret.name`    | Name of the secret containing the certificate chain                  | `nil`                                    |
-| `certificates.customCertificate.chainSecret.key`     | Key of the certificate chain file inside the secret                  | `nil`                                    |
+| `certificates.customCertificate.chainSecret.name`    | Name of the secret containing the certificate chain                  | `""`                                     |
+| `certificates.customCertificate.chainSecret.key`     | Key of the certificate chain file inside the secret                  | `""`                                     |
 | `certificates.customCertificate.certificateLocation` | Location in the container to store the certificate                   | `/etc/ssl/certs/ssl-cert-snakeoil.pem`   |
 | `certificates.customCertificate.keyLocation`         | Location in the container to store the private key                   | `/etc/ssl/private/ssl-cert-snakeoil.key` |
 | `certificates.customCertificate.chainLocation`       | Location in the container to store the certificate chain             | `/etc/ssl/certs/mychain.pem`             |
 | `certificates.customCAs`                             | Defines a list of secrets to import into the container trust store   | `[]`                                     |
-| `certificates.command`                               | Override default container command (useful when using custom images) | `nil`                                    |
-| `certificates.args`                                  | Override default container args (useful when using custom images)    | `nil`                                    |
+| `certificates.command`                               | Override default container command (useful when using custom images) | `[]`                                     |
+| `certificates.args`                                  | Override default container args (useful when using custom images)    | `[]`                                     |
 | `certificates.extraEnvVars`                          | Container sidecar extra environment variables                        | `[]`                                     |
-| `certificates.extraEnvVarsCM`                        | ConfigMap with extra environment variables                           | `nil`                                    |
-| `certificates.extraEnvVarsSecret`                    | Secret with extra environment variables                              | `nil`                                    |
+| `certificates.extraEnvVarsCM`                        | ConfigMap with extra environment variables                           | `""`                                     |
+| `certificates.extraEnvVarsSecret`                    | Secret with extra environment variables                              | `""`                                     |
 | `certificates.image.registry`                        | Container sidecar registry                                           | `docker.io`                              |
 | `certificates.image.repository`                      | Container sidecar image repository                                   | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Container sidecar image tag (immutable tags are recommended)         | `10-debian-10-r106`                      |
+| `certificates.image.tag`                             | Container sidecar image tag (immutable tags are recommended)         | `10-debian-10-r132`                      |
 | `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                  | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                 | `[]`                                     |
 
