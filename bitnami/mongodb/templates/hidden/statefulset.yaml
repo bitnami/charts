@@ -191,18 +191,22 @@ spec:
           {{- if .Values.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
-          {{- if .Values.hidden.command }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.hidden.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.hidden.command "context" $) | nindent 12 }}
           {{- else }}
           command:
             - /scripts/setup-hidden.sh
           {{- end }}
-          {{- if .Values.hidden.args }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.hidden.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.hidden.args "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
-              value: {{ ternary "true" "false" .Values.image.debug | quote }}
+              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
             {{- if and .Values.externalAccess.hidden.enabled .Values.externalAccess.autoDiscovery.enabled (eq .Values.externalAccess.hidden.service.type "LoadBalancer") }}
             - name: SHARED_FILE
               value: "/shared/info.txt"
@@ -299,6 +303,7 @@ spec:
           ports:
             - containerPort: 27017
               name: mongodb
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.hidden.livenessProbe.enabled }}
           livenessProbe:
             exec:
@@ -339,6 +344,7 @@ spec:
           {{- else if .Values.hidden.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.hidden.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
+          {{- end }}
           {{- if .Values.hidden.resources }}
           resources: {{- toYaml .Values.hidden.resources | nindent 12 }}
           {{- end }}
@@ -376,12 +382,20 @@ spec:
           {{- if .Values.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else }}
           command:
             - /bin/bash
             - -ec
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else }}
           args:
             - |
               /bin/mongodb_exporter --mongodb.uri "{{ include "mongodb.mongodb_exporter.uri" . }}" {{ .Values.metrics.extraFlags }}
+          {{- end }}
           env:
           {{- if .Values.auth.enabled }}
           - name: MONGODB_ROOT_PASSWORD
@@ -398,6 +412,7 @@ spec:
           ports:
             - name: metrics
               containerPort: 9216
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.metrics.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
@@ -419,6 +434,7 @@ spec:
             timeoutSeconds: {{ .Values.metrics.readinessProbe.timeoutSeconds }}
             failureThreshold: {{ .Values.metrics.readinessProbe.failureThreshold }}
             successThreshold: {{ .Values.metrics.readinessProbe.successThreshold }}
+          {{- end }}
           {{- end }}
           {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}

@@ -59,10 +59,10 @@ Create name for kubeops based on the fullname
 {{- end -}}
 
 {{/*
-Create name for the kubeops config based on the fullname
+Create name for the clusters config based on the fullname
 */}}
-{{- define "kubeapps.kubeops-config.fullname" -}}
-{{- printf "%s-kubeops-config" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
+{{- define "kubeapps.clusters-config.fullname" -}}
+{{- printf "%s-clusters-config" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*

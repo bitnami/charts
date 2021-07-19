@@ -54,4 +54,7 @@ spec:
             - name: http
               containerPort: 8080
               protocol: TCP
+          {{- if .Values.imageRenderer.resources }}
+          resources: {{- toYaml .Values.imageRenderer.resources | nindent 12 }}
+          {{- end }}
 {{- end }}
