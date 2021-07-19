@@ -436,7 +436,6 @@ readReplicas:
   numSynchronousReplicas: 0
   ## @param readReplicas.applicationName Replication Cluster application name. Useful for defining multiple replication policies
   ##
-  numSynchronousReplicas: 0
   applicationName: my_application
   ## @param readReplicas.command Override default container command (useful when using custom images)
   ##
@@ -852,19 +851,6 @@ audit:
 ## @section LDAP configuration
 
 ## LDAP configuration
-## @param ldap.enabled Enable LDAP support
-## @param ldap.url LDAP URL beginning in the form `ldap[s]://host[:port]/basedn[
-## @param ldap.server IP address or name of the LDAP server.
-## @param ldap.port Port number on the LDAP server to connect to
-## @param ldap.prefix String to prepend to the user name when forming the DN to bind
-## @param ldap.suffix String to append to the user name when forming the DN to bind
-## @param ldap.baseDN Root DN to begin the search for the user in
-## @param ldap.bindDN DN of user to bind to LDAP
-## @param ldap.bind_password Password for the user to bind to LDAP
-## @param ldap.search_attr Attribute to match against the user name in the search
-## @param ldap.search_filter The search filter to use when doing search+bind authentication
-## @param ldap.scheme Set to `ldaps` to use LDAPS
-## @param ldap.tls Set to `1` to use TLS encryption
 ##
 ldap:
   ## @param ldap.enabled Enables LDAP
