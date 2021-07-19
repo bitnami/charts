@@ -5,6 +5,9 @@ metadata:
   name: {{ include "common.names.fullname" . }}-bucketweb
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: bucketweb
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
 spec:
   replicas: {{ .Values.bucketweb.replicaCount }}
   strategy:
@@ -19,7 +22,10 @@ spec:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: bucketweb
-        {{- if and .Values.bucketweb.enabled .Values.bucketweb.podLabels }}
+        {{- if .Values.commonLabels }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.bucketweb.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.bucketweb.podLabels "context" $) | nindent 8 }}
         {{- end }}
       annotations:
@@ -56,7 +62,7 @@ spec:
       containers:
         {{- if .Values.bucketweb.extraContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.bucketweb.extraContainers "context" $) | nindent 8 }}
-        {{- end }}      
+        {{- end }}
         - name: bucketweb
           image: {{ include "thanos.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
@@ -89,7 +95,7 @@ spec:
               containerPort: 8080
               protocol: TCP
           {{- if .Values.bucketweb.livenessProbe.enabled }}
-          livenessProbe: 
+          livenessProbe:
             httpGet:
               path: /-/healthy
               port: http
@@ -100,7 +106,7 @@ spec:
             failureThreshold: {{ .Values.bucketweb.livenessProbe.failureThreshold }}
           {{- end }}
           {{- if .Values.bucketweb.readinessProbe.enabled }}
-          readinessProbe: 
+          readinessProbe:
             httpGet:
               path: /-/ready
               port: http

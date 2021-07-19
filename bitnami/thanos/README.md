@@ -98,6 +98,7 @@ The following tables lists the configurable parameters of the Thanos chart and t
 | `image.pullSecrets`           | Specify docker-registry secret names as an array                                          | `[]` (does not add image pull secrets to deployed pods) |
 | `nameOverride`                | String to partially override common.names.fullname                                        | `nil`                                                   |
 | `fullnameOverride`            | String to fully override common.names.fullname                                            | `nil`                                                   |
+| `commonLabels`                | Labels to add to all deployed objects                                                     | `{}`                                                    |
 | `clusterDomain`               | Default Kubernetes cluster domain                                                         | `cluster.local`                                         |
 | `objstoreConfig`              | [Objstore configuration](https://thanos.io/storage.md/#configuration)                     | `nil`                                                   |
 | `indexCacheConfig`            | [Index cache configuration](https://thanos.io/components/store.md/#memcached-index-cache) | `nil`                                                   |
@@ -851,7 +852,7 @@ Please note if you have changes in the `securityContext` fields those need to be
 # ...
 - securityContext:
 + podSecurityContext:
-# ... 
+# ...
 ```
 
 Other than that a new `securityContext` interface for containers got introduced `containerSecurityContext`. It's default is enabled so if you do not need it you need to opt out of it.

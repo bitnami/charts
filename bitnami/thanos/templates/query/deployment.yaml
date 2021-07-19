@@ -6,6 +6,9 @@ metadata:
   name: {{ include "common.names.fullname" . }}-query
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: query
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
 spec:
   replicas: {{ $query.replicaCount }}
   strategy:
@@ -20,7 +23,10 @@ spec:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: query
-        {{- if and $query.enabled $query.podLabels }}
+        {{- if .Values.commonLabels }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
+        {{- end }}
+        {{- if $query.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" $query.podLabels "context" $) | nindent 8 }}
         {{- end }}
       {{- if or (include "thanos.query.createSDConfigmap" .) $query.existingSDConfigmap $query.podAnnotations }}
@@ -61,7 +67,7 @@ spec:
       containers:
         {{- if $query.extraContainers }}
         {{- include "common.tplvalues.render" (dict "value" $query.extraContainers "context" $) | nindent 8 }}
-        {{- end }}         
+        {{- end }}
         - name: query
           image: {{ include "thanos.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
@@ -149,7 +155,7 @@ spec:
               containerPort: 10901
               protocol: TCP
           {{- if $query.livenessProbe.enabled }}
-          livenessProbe: 
+          livenessProbe:
             httpGet:
               path: /-/healthy
               port: http
@@ -160,7 +166,7 @@ spec:
             failureThreshold: {{ $query.livenessProbe.failureThreshold }}
           {{- end }}
           {{- if $query.readinessProbe.enabled }}
-          readinessProbe: 
+          readinessProbe:
             httpGet:
               path: /-/ready
               port: http
