@@ -115,7 +115,7 @@ server:
   ## NOTE: When it's set the server.configuration.* and deployer.*
   ##  parameters are ignored,
   ##
-  existingConfigmap:
+  existingConfigmap: ""
   ## @param server.extraEnvVars Extra environment variables to be set on Dataflow server container
   ## E.g:
   ## extraEnvVars:
@@ -489,7 +489,7 @@ skipper:
   ## NOTE: When it's set the server.configuration.* and deployer.*
   ##  parameters are ignored,
   ##
-  existingConfigmap:
+  existingConfigmap: ""
   ## @param skipper.extraEnvVars Extra environment variables to be set on Skipper server container
   ## E.g:
   ## extraEnvVars:

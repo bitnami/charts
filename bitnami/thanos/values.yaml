@@ -660,7 +660,7 @@ queryFrontend:
   ## @param queryFrontend.existingConfigmap Name of existing ConfigMap with Thanos Query Frontend cache configuration
   ## NOTE: This will override queryFrontend.config
   ##
-  existingConfigmap:
+  existingConfigmap: ""
   ## @param queryFrontend.replicaCount Number of Thanos Query Frontend replicas to deploy
   ##
   replicaCount: 1
@@ -1560,7 +1560,7 @@ storegateway:
   ## @param storegateway.existingConfigmap Name of existing ConfigMap with Thanos Store Gateway cache configuration
   ## NOTE: This will override storegateway.config
   ##
-  existingConfigmap:
+  existingConfigmap: ""
   ## Thanos Store GRPC server configuration
   ##
   grpc:
@@ -1941,7 +1941,7 @@ ruler:
   ## @param ruler.existingConfigmap Name of existing ConfigMap with Ruler configuration
   ## NOTE: This will override ruler.config
   ##
-  existingConfigmap:
+  existingConfigmap: ""
   ## @param ruler.replicaCount Number of Thanos Ruler replicas to deploy
   ##
   replicaCount: 1

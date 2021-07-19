@@ -278,7 +278,7 @@ collector:
     config: []
   ## @param collector.existingConfigmap Name of existing ConfigMap with collector configuration
   ##
-  existingConfigmap:
+  existingConfigmap: ""
   ## @param collector.command Override default container command (useful when using custom images)
   ##
   command: []
@@ -740,7 +740,7 @@ proxy:
   heap:
   ## @param proxy.existingConfigmap Name of existing ConfigMap with Proxy preprocessor configuration
   ##
-  existingConfigmap:
+  existingConfigmap: ""
   ## @param proxy.preprocessor Preprocessor rules is a powerful way to apply filtering or to enhance metrics as they flow
   ## through the proxy. You can configure the rules here. By default a rule to drop Kubernetes
   ## generated labels is applied to remove unnecessary and often noisy tags.
