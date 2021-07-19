@@ -6,8 +6,12 @@ on:
       - master
     paths:
       - 'bitnami/airflow/values.yaml'
+      - 'bitnami/apache/values.yaml'
+      - 'bitnami/aspnet-core/values.yaml'
+      - 'bitnami/cassandra/values.yaml'
       - 'bitnami/cert-manager/values.yaml'
       - 'bitnami/common/values.yaml'
+      - 'bitnami/concourse/values.yaml'
       - 'bitnami/consul/values.yaml'
       - 'bitnami/contour/values.yaml'
       - 'bitnami/dokuwiki/values.yaml'
