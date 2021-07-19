@@ -2628,8 +2628,8 @@ metrics:
     ## Namespace in which the PrometheusRule CRD is created
     ##
     namespace:
-    ## Additional labels for the prometheusRule                          
-    ##                                                                                                                  
+    ## Additional labels for the prometheusRule
+    ##
     additionalLabels: {}
     ## List of group of rules and their rules
     ##
