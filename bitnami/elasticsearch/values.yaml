@@ -1558,9 +1558,11 @@ volumePermissions:
     ##    memory: 128Mi
     requests: {}
 
+## @section Kibana Parameters
+
 ## Bundled Kibana parameters
 ## @param kibana.elasticsearch.hosts [array] Array containing hostnames for the ES instances. Used to generate the URL
-## @param kibana.elasticsearch.port
+## @param kibana.elasticsearch.port Port to connect Kibana and ES instance. Used to generate the URL
 ##
 kibana:
   elasticsearch:

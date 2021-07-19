@@ -472,8 +472,14 @@ $ helm delete --purge my-release
 | `volumePermissions.image.pullSecrets`  | Init container volume-permissions image pull secrets                                                                                                      | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                                                                                                    | `{}`                    |
 | `volumePermissions.resources.requests` | The requested resources for the container                                                                                                                 | `{}`                    |
-| `kibana.elasticsearch.hosts`           | Array containing hostnames for the ES instances. Used to generate the URL                                                                                 | `[]`                    |
-| `kibana.elasticsearch.port`            |                                                                                                                                                           | `9200`                  |
+
+
+### Kibana Parameters
+
+| Name                         | Description                                                               | Value  |
+| ---------------------------- | ------------------------------------------------------------------------- | ------ |
+| `kibana.elasticsearch.hosts` | Array containing hostnames for the ES instances. Used to generate the URL | `[]`   |
+| `kibana.elasticsearch.port`  | Port to connect Kibana and ES instance. Used to generate the URL          | `9200` |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
