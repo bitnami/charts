@@ -240,7 +240,7 @@ web:
   command: []
   ## @param web.args Override default container args (useful when using custom images)
   ##
-  args:
+  args: []
   ## @param web.podLabels Add extra labels to the web's pods
   ##
   podLabels:
@@ -418,7 +418,7 @@ scheduler:
   command: []
   ## @param scheduler.args Override args
   ##
-  args:
+  args: []
   ## @param scheduler.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -564,7 +564,7 @@ worker:
   command: []
   ## @param worker.args Override args
   ##
-  args:
+  args: []
   ## @param worker.podAnnotations Add annotations to the worker pods
   ##
   podAnnotations: {}
@@ -800,7 +800,7 @@ git:
   ##
   clone:
     command: []
-    args:
+    args: []
     extraVolumeMounts:
     extraEnvVars:
     extraEnvVarsCM: ""
@@ -822,7 +822,7 @@ git:
   sync:
     interval: 60
     command: []
-    args:
+    args: []
     extraVolumeMounts:
     extraEnvVars:
     extraEnvVarsCM: ""

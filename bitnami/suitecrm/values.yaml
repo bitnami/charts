@@ -105,7 +105,7 @@ allowEmptyPassword: false
 command: []
 ## @param args Override default container args (useful when using custom images)
 ##
-args:
+args: []
 ## @param hostAliases [array] Deployment pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -661,7 +661,7 @@ certificates:
   ## - secret: custom-CA
   ## - secret: more-custom-CAs
   ##
-  args:
+  args: []
   ## @param certificates.extraEnvVars Container sidecar extra environment variables
   ##
   extraEnvVars: []

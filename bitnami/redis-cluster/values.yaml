@@ -505,7 +505,7 @@ updateJob:
   command: []
   ## @param updateJob.args Container args (using container default if not set)
   ##
-  args:
+  args: []
   ## @param updateJob.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##

@@ -731,7 +731,7 @@ proxy:
   ## Multiple properties can be specified separated by whitespace
   ## Ref: https://docs.wavefront.com/proxies_configuring.html
   ##
-  args:
+  args: []
   ## @param proxy.heap Wavefront proxy Java heap maximum usage (java -Xmx command line option)
   ## By default Java will consume up to 4G of heap memory
   ## e.g:
