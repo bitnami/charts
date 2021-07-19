@@ -1458,7 +1458,7 @@ metrics:
     ##
     selector: {}
 
-## @section VolumePermissions parameters
+## @section Sysctl Image parameters
 
 ## Kernel settings modifier image
 ##

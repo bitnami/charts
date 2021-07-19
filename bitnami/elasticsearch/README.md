@@ -446,7 +446,7 @@ $ helm delete --purge my-release
 | `metrics.serviceMonitor.selector`            | Prometheus instance selector labels                                                                       | `{}`                             |
 
 
-### VolumePermissions parameters
+### Sysctl Image parameters
 
 | Name                             | Description                                 | Value                   |
 | -------------------------------- | ------------------------------------------- | ----------------------- |
