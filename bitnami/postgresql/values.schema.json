@@ -2,78 +2,204 @@
   "$schema": "http://json-schema.org/schema#",
   "type": "object",
   "properties": {
-    "postgresqlUsername": {
+    "architecture": {
       "type": "string",
-      "title": "Admin user",
-      "form": true
+      "title": "PostgreSQL architecture",
+      "form": true,
+      "description": "Allowed values: `standalone` or `replication`"
     },
-    "postgresqlPassword": {
-      "type": "string",
-      "title": "Password",
-      "form": true
-    },
-    "persistence": {
+    "auth": {
       "type": "object",
+      "title": "Authentication configuration",
+      "form": true,
       "properties": {
-        "size": {
+        "rootPassword": {
           "type": "string",
-          "title": "Persistent Volume Size",
+          "title": "PostgreSQL root password",
           "form": true,
-          "render": "slider",
-          "sliderMin": 1,
-          "sliderMax": 100,
-          "sliderUnit": "Gi"
+          "description": "Defaults to a random 10-character alphanumeric string if not set"
+        },
+        "database": {
+          "type": "string",
+          "title": "PostgreSQL custom database",
+          "description": "Name of the custom database to be created during the 1st initialization of PostgreSQL",
+          "form": true
+        },
+        "username": {
+          "type": "string",
+          "title": "PostgreSQL custom user",
+          "description": "Name of the custom user to be created during the 1st initialization of PostgreSQL. This user only has permissions on the PostgreSQL custom database",
+          "form": true
+        },
+        "password": {
+          "type": "string",
+          "title": "Password for PostgreSQL custom user",
+          "description": "Defaults to a random 10-character alphanumeric string if not set",
+          "form": true,
+          "hidden": {
+            "value": false,
+            "path": "usePassword"
+          }
+        },
+        "replicationUser": {
+          "type": "string",
+          "title": "PostgreSQL replication user",
+          "description": "Name of user used to manage replication.",
+          "form": true,
+          "hidden": {
+            "value": "standalone",
+            "path": "architecture"
+          }
+        },
+        "replicationPassword": {
+          "type": "string",
+          "title": "Password for PostgreSQL replication user",
+          "description": "Defaults to a random 10-character alphanumeric string if not set",
+          "form": true,
+          "hidden": {
+            "value": "standalone",
+            "path": "architecture"
+          }
         }
       }
     },
-    "resources": {
+    "primary": {
       "type": "object",
-      "title": "Required Resources",
-      "description": "Configure resource requests",
+      "title": "Primary replicas settings",
       "form": true,
       "properties": {
-        "requests": {
+        "resources": {
           "type": "object",
+          "title": "Required Resources",
+          "description": "Configure resource requests",
+          "form": true,
           "properties": {
-            "memory": {
-              "type": "string",
+            "requests": {
+              "type": "object",
+              "properties": {
+                "memory": {
+                  "type": "string",
+                  "form": true,
+                  "render": "slider",
+                  "title": "Memory Request",
+                  "sliderMin": 10,
+                  "sliderMax": 2048,
+                  "sliderUnit": "Mi"
+                },
+                "cpu": {
+                  "type": "string",
+                  "form": true,
+                  "render": "slider",
+                  "title": "CPU Request",
+                  "sliderMin": 10,
+                  "sliderMax": 2000,
+                  "sliderUnit": "m"
+                }
+              }
+            }
+          }
+        },
+        "persistence": {
+          "type": "object",
+          "title": "Persistence for primary replicas",
+          "form": true,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
               "form": true,
-              "render": "slider",
-              "title": "Memory Request",
-              "sliderMin": 10,
-              "sliderMax": 2048,
-              "sliderUnit": "Mi"
+              "title": "Enable persistence",
+              "description": "Enable persistence using Persistent Volume Claims"
             },
-            "cpu": {
+            "size": {
               "type": "string",
+              "title": "Persistent Volume Size",
               "form": true,
               "render": "slider",
-              "title": "CPU Request",
-              "sliderMin": 10,
-              "sliderMax": 2000,
-              "sliderUnit": "m"
+              "sliderMin": 1,
+              "sliderMax": 100,
+              "sliderUnit": "Gi",
+              "hidden": {
+                "value": false,
+                "path": "persistence/enabled"
+              }
             }
           }
         }
       }
     },
-    "replication": {
+    "readReplicas": {
       "type": "object",
+      "title": "readReplicas settings",
       "form": true,
-      "title": "Replication Details",
+      "hidden": {
+        "value": false,
+        "path": "replication/enabled"
+      },
       "properties": {
-        "enabled": {
-          "type": "boolean",
-          "title": "Enable Replication",
-          "form": true
-        },
-        "readReplicas": {
+        "replicaCount": {
           "type": "integer",
           "title": "read Replicas",
           "form": true,
           "hidden": {
             "value": false,
             "path": "replication/enabled"
+          }
+        },
+        "resources": {
+          "type": "object",
+          "title": "Required Resources",
+          "description": "Configure resource requests",
+          "form": true,
+          "properties": {
+            "requests": {
+              "type": "object",
+              "properties": {
+                "memory": {
+                  "type": "string",
+                  "form": true,
+                  "render": "slider",
+                  "title": "Memory Request",
+                  "sliderMin": 10,
+                  "sliderMax": 2048,
+                  "sliderUnit": "Mi"
+                },
+                "cpu": {
+                  "type": "string",
+                  "form": true,
+                  "render": "slider",
+                  "title": "CPU Request",
+                  "sliderMin": 10,
+                  "sliderMax": 2000,
+                  "sliderUnit": "m"
+                }
+              }
+            }
+          }
+        },
+        "persistence": {
+          "type": "object",
+          "title": "Persistence for readReplicas",
+          "form": true,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "form": true,
+              "title": "Enable persistence",
+              "description": "Enable persistence using Persistent Volume Claims"
+            },
+            "size": {
+              "type": "string",
+              "title": "Persistent Volume Size",
+              "form": true,
+              "render": "slider",
+              "sliderMin": 1,
+              "sliderMax": 100,
+              "sliderUnit": "Gi",
+              "hidden": {
+                "value": false,
+                "path": "persistence/enabled"
+              }
+            }
           }
         }
       }
