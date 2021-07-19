@@ -64,6 +64,10 @@ kubeVersion:
 ##
 clusterDomain: cluster.local
 
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
+
 ## @param hostAliases Deployment pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
