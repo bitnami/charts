@@ -178,7 +178,7 @@ auth:
   username: user
 ## @param configurationConfigMap Name of an existing config map containing the Airflow config file
 ##
-configurationConfigMap:
+configurationConfigMap: ""
 ## @param executor Airflow executor, it should be one of 'SequentialExecutor', 'LocalExecutor', 'CeleryExecutor', 'KubernetesExecutor', 'CeleryKubernetesExecutor'
 ## ref: http://airflow.apache.org/docs/stable/executor/index.html
 ##
@@ -488,7 +488,7 @@ scheduler:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars:
+  sidecars: []
   ## @param scheduler.initContainers Add initContainers to the scheduler pods.
   ## Example:
   ## initContainers:
@@ -499,7 +499,7 @@ scheduler:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  initContainers:
+  initContainers: []
   ## @param scheduler.priorityClassName Priority Class Name
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   ##
@@ -880,7 +880,7 @@ ldap:
 ##
 ingress:
   enabled: false
-  apiVersion:
+  apiVersion: ""
   pathType: ImplementationSpecific
   certManager: false
   ## For a full list of possible ingress annotations, please see
@@ -891,7 +891,7 @@ ingress:
   ## Example:
   ## kubernetes.io/ingress.class: nginx
   ##
-  annotations:
+  annotations: {}
   ## Most likely this will be just one host, but in the event more hosts are needed, this is an array
   ##
   hosts:
