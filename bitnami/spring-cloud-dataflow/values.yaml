@@ -268,7 +268,7 @@ server:
     ## @param server.service.nodePort Specify the nodePort value for the LoadBalancer and NodePort service types
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ##
-    nodePort:
+    nodePort: ""
     ## @param server.service.clusterIP Dataflow server service cluster IP
     ## e.g:
     ## clusterIP: None
@@ -639,7 +639,7 @@ skipper:
     ## @param skipper.service.nodePort Service HTTP node port
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ##
-    nodePort:
+    nodePort: ""
     ## @param skipper.service.clusterIP Skipper server service cluster IP
     ## e.g:
     ## clusterIP: None

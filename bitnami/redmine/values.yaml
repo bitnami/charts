@@ -358,7 +358,7 @@ service:
   ## @param service.nodePort Node port for HTTP
   ## NOTE: choose port between <30000-32767>
   ##
-  nodePort:
+  nodePort: ""
   ## @param service.clusterIP Redmine service Cluster IP
   ## e.g.:
   ## clusterIP: None

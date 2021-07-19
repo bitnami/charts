@@ -400,7 +400,7 @@ query:
       ## @param query.service.http.nodePort Service HTTP node port
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
       ##
-      nodePort:
+      nodePort: ""
     ## @param query.service.targetPort Service targetPort override
     ##
     targetPort: http
@@ -411,7 +411,7 @@ query:
       ## @param query.service.grpc.nodePort Service GRPC node port
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
       ##
-      nodePort:
+      nodePort: ""
     ## @param query.service.loadBalancerIP Load balancer IP if service type is `LoadBalancer`
     ## Set the LoadBalancer service type to internal only
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -817,7 +817,7 @@ queryFrontend:
       ## @param queryFrontend.service.http.nodePort Service HTTP node port
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
       ##
-      nodePort:
+      nodePort: ""
     ## @param queryFrontend.service.targetPort Service targetPort override
     ##
     targetPort: http
@@ -1156,7 +1156,7 @@ bucketweb:
       ## @param bucketweb.service.http.nodePort Service HTTP node port
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
       ##
-      nodePort:
+      nodePort: ""
     ## @param bucketweb.service.targetPort Service targetPort override
     ##
     targetPort: http
@@ -1460,7 +1460,7 @@ compactor:
       ## @param compactor.service.http.nodePort Service HTTP node port
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
       ##
-      nodePort:
+      nodePort: ""
     ## @param compactor.service.loadBalancerIP Load balancer IP if service type is `LoadBalancer`
     ## Set the LoadBalancer service type to internal only
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -1748,7 +1748,7 @@ storegateway:
       ## Specify the nodePort value for the LoadBalancer and NodePort service types
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
       ##
-      nodePort:
+      nodePort: ""
     grpc:
       ## @param storegateway.service.grpc.port Service GRPC port
       ##
@@ -1757,7 +1757,7 @@ storegateway:
       ## Specify the nodePort value for the LoadBalancer and NodePort service types
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
       ##
-      nodePort:
+      nodePort: ""
     ## @param storegateway.service.loadBalancerIP Load balancer IP if service type is `LoadBalancer`
     ## Set the LoadBalancer service type to internal only
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -2096,7 +2096,7 @@ ruler:
       ## @param ruler.service.http.nodePort Service HTTP node port
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
       ##
-      nodePort:
+      nodePort: ""
     ## @param ruler.service.targetPort Service targetPort override
     ##
     targetPort: http
@@ -2107,7 +2107,7 @@ ruler:
       ## @param ruler.service.grpc.nodePort Service GRPC node port
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
       ##
-      nodePort:
+      nodePort: ""
     ## @param ruler.service.loadBalancerIP Load balancer IP if service type is `LoadBalancer`
     ## Set the LoadBalancer service type to internal only
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -2499,7 +2499,7 @@ receive:
       ## @param receive.service.http.nodePort Service HTTP node port
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
       ##
-      nodePort:
+      nodePort: ""
     ## @param receive.service.targetPort Service targetPort override
     ##
     targetPort: http
@@ -2510,7 +2510,7 @@ receive:
       ## @param receive.service.grpc.nodePort Service GRPC node port
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
       ##
-      nodePort:
+      nodePort: ""
     remoteWrite:
       ## @param receive.service.remoteWrite.port Service remote write port
       ##
@@ -2518,7 +2518,7 @@ receive:
       ## @param receive.service.remoteWrite.nodePort Service remote write node port
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
       ##
-      nodePort:
+      nodePort: ""
     ## @param receive.service.loadBalancerIP Load balancer IP if service type is `LoadBalancer`
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
