@@ -50,18 +50,18 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `nil` |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
 
 ### Common Parameters
 
 | Name                | Description                                                                                  | Value |
 | ------------------- | -------------------------------------------------------------------------------------------- | ----- |
-| `nameOverride`      | String to partially override common.names.fullname template (will maintain the release name) | `nil` |
-| `fullnameOverride`  | String to fully override common.names.fullname template                                      | `nil` |
-| `kubeVersion`       | Force target Kubernetes version (using Helm capabilites if not set)                          | `nil` |
+| `nameOverride`      | String to partially override common.names.fullname template (will maintain the release name) | `""`  |
+| `fullnameOverride`  | String to fully override common.names.fullname template                                      | `""`  |
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilites if not set)                          | `""`  |
 | `commonLabels`      | Add labels to all the deployed resources                                                     | `{}`  |
 | `commonAnnotations` | Add annotations to all the deployed resources                                                | `{}`  |
 | `extraDeploy`       | Array of extra objects to deploy with the release                                            | `[]`  |
@@ -83,13 +83,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.port`                               | Parse server port                                                                                      | `1337`                 |
 | `server.mountPath`                          | Parse server API mount path                                                                            | `/parse`               |
 | `server.appId`                              | Parse server App ID                                                                                    | `myappID`              |
-| `server.masterKey`                          | Parse server Master Key                                                                                | `nil`                  |
+| `server.masterKey`                          | Parse server Master Key                                                                                | `""`                   |
 | `server.extraEnvVars`                       | An array to add extra env vars                                                                         | `[]`                   |
-| `server.extraEnvVarsCM`                     | Name of a ConfigMap containing extra environment variables                                             | `nil`                  |
-| `server.extraEnvVarsSecret`                 | Name of a Secret containing extra environment variables                                                | `nil`                  |
+| `server.extraEnvVarsCM`                     | Name of a ConfigMap containing extra environment variables                                             | `""`                   |
+| `server.extraEnvVarsSecret`                 | Name of a Secret containing extra environment variables                                                | `""`                   |
 | `server.enableCloudCode`                    | Enable Parse Cloud Code                                                                                | `false`                |
 | `server.cloudCodeScripts`                   | Cloud Code scripts                                                                                     | `{}`                   |
-| `server.existingCloudCodeScriptsCM`         | ConfigMap with Cloud Code scripts (Note: Overrides `cloudCodeScripts`).                                | `nil`                  |
+| `server.existingCloudCodeScriptsCM`         | ConfigMap with Cloud Code scripts (Note: Overrides `cloudCodeScripts`).                                | `""`                   |
 | `server.resources`                          | Parse Server pods' resource requests and limits                                                        | `{}`                   |
 | `server.livenessProbe.enabled`              | Enable livenessProbe                                                                                   | `true`                 |
 | `server.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                | `120`                  |
@@ -124,7 +124,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.enabled`               | Set to true to enable ingress record generation                                                            | `false`                  |
 | `ingress.certManager`           | Set this to true in order to add the corresponding annotations for cert-manager                            | `false`                  |
 | `ingress.tls`                   | Enable TLS configuration for the hostname defined at ingress.hostname parameter                            | `false`                  |
-| `ingress.annotations`           | Ingress annotations                                                                                        | `nil`                    |
+| `ingress.annotations`           | Ingress annotations                                                                                        | `{}`                     |
 | `ingress.dashboard.hostname`    | Default host for the ingress resource                                                                      | `parse-dashboard.local`  |
 | `ingress.dashboard.path`        | The Path to WordPress. You may need to set this to '/*' in order to use this with ALB ingress controllers. | `/`                      |
 | `ingress.dashboard.pathType`    | Ingress path type                                                                                          | `ImplementationSpecific` |
@@ -136,7 +136,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.server.extraHosts`     | The list of additional hostnames to be covered with this ingress record.                                   | `[]`                     |
 | `ingress.server.extraPaths`     | Any additional arbitrary paths that may need to be added to the ingress under the main host.               | `[]`                     |
 | `ingress.extraTls`              | The tls configuration for additional hostnames to be covered with this ingress record.                     | `[]`                     |
-| `ingress.secrets`               | If you're providing your own certificates, please use this to add the certificates as secrets              | `nil`                    |
+| `ingress.secrets`               | If you're providing your own certificates, please use this to add the certificates as secrets              | `[]`                     |
 
 
 ### Persistence Parameters
@@ -144,7 +144,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                       | Description                          | Value           |
 | -------------------------- | ------------------------------------ | --------------- |
 | `persistence.enabled`      | Enable Parse persistence using PVC   | `true`          |
-| `persistence.storageClass` | PVC Storage Class for Parse volume   | `nil`           |
+| `persistence.storageClass` | PVC Storage Class for Parse volume   | `""`            |
 | `persistence.accessMode`   | PVC Access Mode for Parse volume     | `ReadWriteOnce` |
 | `persistence.size`         | PVC Storage Request for Parse volume | `8Gi`           |
 
@@ -164,7 +164,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dashboard.securityContext.fsGroup`            | Group ID for Dashboard container                                                                          | `1001`                    |
 | `dashboard.securityContext.runAsUser`          | User ID for Dashboard container                                                                           | `1001`                    |
 | `dashboard.username`                           | Parse Dashboard application username                                                                      | `user`                    |
-| `dashboard.password`                           | Parse Dashboard application password                                                                      | `nil`                     |
+| `dashboard.password`                           | Parse Dashboard application password                                                                      | `""`                      |
 | `dashboard.appName`                            | Parse Dashboard application name                                                                          | `MyDashboard`             |
 | `dashboard.resources`                          | Parse Dashboard pods' resource requests and limits                                                        | `{}`                      |
 | `dashboard.livenessProbe.enabled`              | Enable livenessProbe                                                                                      | `true`                    |
@@ -189,8 +189,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dashboard.tolerations`                        | Parse dashboard tolerations for pod assignment                                                            | `[]`                      |
 | `dashboard.parseServerUrlProtocol`             | Protocol used by Parse Dashboard to form the URLs to Parse server                                         | `http`                    |
 | `dashboard.extraEnvVars`                       | An array to add extra env vars                                                                            | `[]`                      |
-| `dashboard.extraEnvVarsCM`                     | Name of a ConfigMap containing extra environment variables                                                | `nil`                     |
-| `dashboard.extraEnvVarsSecret`                 | Name of a Secret containing extra environment variables                                                   | `nil`                     |
+| `dashboard.extraEnvVarsCM`                     | Name of a ConfigMap containing extra environment variables                                                | `""`                      |
+| `dashboard.extraEnvVarsSecret`                 | Name of a Secret containing extra environment variables                                                   | `""`                      |
 
 
 ### Volume Permissions parameters
@@ -217,7 +217,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `mongodb.auth.password`            | MongoDB&reg; user password                  | `""`            |
 | `mongodb.auth.database`            | MongoDB&reg; database                       | `bitnami_parse` |
 | `mongodb.persistence.enabled`      | Enable MongoDB&reg; persistence using PVC   | `true`          |
-| `mongodb.persistence.storageClass` | PVC Storage Class for MongoDB&reg; volume   | `nil`           |
+| `mongodb.persistence.storageClass` | PVC Storage Class for MongoDB&reg; volume   | `""`            |
 | `mongodb.persistence.accessMode`   | PVC Access Mode for MongoDB&reg; volume     | `ReadWriteOnce` |
 | `mongodb.persistence.size`         | PVC Storage Request for MongoDB&reg; volume | `8Gi`           |
 
