@@ -9,7 +9,7 @@
 ## @param global.redis.password Redis<sup>TM</sup> password (overrides `password`)
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName

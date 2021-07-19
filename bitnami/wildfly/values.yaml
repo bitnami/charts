@@ -8,7 +8,7 @@
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
