@@ -18,7 +18,7 @@ global:
   imagePullSecrets: []
   storageClass: ""
   redis:
-    password:
+    password: ""
 
 ## @section Common parameters
 ##
@@ -121,7 +121,7 @@ auth:
   ## @param auth.existingSecretPasswordKey Password key to be retrieved from existing secret
   ## NOTE: ignored unless `auth.existingSecret` parameter is set
   ##
-  existingSecretPasswordKey:
+  existingSecretPasswordKey: ""
   ## @param auth.usePasswordFiles Mount credentials as files instead of using an environment variable
   ##
   usePasswordFiles: false
@@ -144,7 +144,7 @@ master:
   ## @param master.configuration Configuration for Redis(TM) master nodes
   ## ref: https://redis.io/topics/config
   ##
-  configuration:
+  configuration: ""
   ## @param master.disableCommands [array] Array with Redis(TM) commands to disable on master nodes
   ## Commands will be completely disabled by renaming each to an empty string.
   ## ref: https://redis.io/topics/security#disabling-of-specific-commands
@@ -247,7 +247,7 @@ master:
   ## @param master.schedulerName Alternate scheduler for Redis(TM) master pods
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
-  schedulerName:
+  schedulerName: ""
   ## @param master.updateStrategy.type Redis(TM) master statefulset strategy type
   ## @skip master.updateStrategy.rollingUpdate
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
@@ -445,7 +445,7 @@ replica:
   ## @param replica.configuration Configuration for Redis(TM) replicas nodes
   ## ref: https://redis.io/topics/config
   ##
-  configuration:
+  configuration: ""
   ## @param replica.disableCommands [array] Array with Redis(TM) commands to disable on replicas nodes
   ## Commands will be completely disabled by renaming each to an empty string.
   ## ref: https://redis.io/topics/security#disabling-of-specific-commands
@@ -556,7 +556,7 @@ replica:
   ## @param replica.schedulerName Alternate scheduler for Redis(TM) replicas pods
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
-  schedulerName:
+  schedulerName: ""
   ## @param replica.updateStrategy.type Redis(TM) replicas statefulset strategy type
   ## @skip replica.updateStrategy.rollingUpdate
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
@@ -821,7 +821,7 @@ sentinel:
   ## @param sentinel.configuration Configuration for Redis(TM) Sentinel nodes
   ## ref: https://redis.io/topics/sentinel
   ##
-  configuration:
+  configuration: ""
   ## @param sentinel.command Override default container command (useful when using custom images)
   ##
   command: []

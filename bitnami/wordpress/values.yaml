@@ -254,7 +254,7 @@ updateStrategy:
 ## @param schedulerName Alternate scheduler
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
-schedulerName:
+schedulerName: ""
 ## @param serviceAccountName ServiceAccount name
 ##
 serviceAccountName: default

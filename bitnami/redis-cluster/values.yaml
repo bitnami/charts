@@ -402,7 +402,7 @@ redis:
   ## @param redis.schedulerName Use an alternate scheduler, e.g. "stork".
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
-  schedulerName:
+  schedulerName: ""
   ## @param redis.shareProcessNamespace Enable shared process namespace in a pod.
   ## If set to false (default), each container will run in separate namespace, redis will have PID=1.
   ## If set to true, the /pause will run as init process and will reap any zombie PIDs,
