@@ -20,7 +20,7 @@ global:
 
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
-kubeVersion:
+kubeVersion: ""
 ## @param nameOverride String to partially override airflow.fullname template with a string (will prepend the release name)
 ##
 nameOverride:
