@@ -130,7 +130,7 @@ updateStrategy:
 extraEnvVars: []
 ## @param extraEnvVarsCM ConfigMap containing extra environment variables
 ##
-extraEnvVarsCM:
+extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Secret containing extra environment variables
 ##
 extraEnvVarsSecret:
@@ -152,7 +152,7 @@ sidecars: []
 tolerations: []
 ## @param existingSecret Name of a secret with the application password
 ##
-existingSecret:
+existingSecret: ""
 ## SMTP mail delivery configuration
 ## ref: https://github.com/bitnami/bitnami-docker-suitecrm/#smtp-configuration
 ## @param suitecrmSmtpHost SMTP host
@@ -659,7 +659,7 @@ certificates:
   extraEnvVars: []
   ## @param certificates.extraEnvVarsCM ConfigMap containing extra environment variables
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param certificates.extraEnvVarsSecret Secret containing extra environment variables (in case of sensitive data)
   ##
   extraEnvVarsSecret:

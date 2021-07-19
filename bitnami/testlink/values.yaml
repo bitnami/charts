@@ -119,7 +119,7 @@ extraEnvVars: []
 
 ## ConfigMap with extra environment variables
 ##
-extraEnvVarsCM:
+extraEnvVarsCM: ""
 
 ## Secret with extra environment variables
 ##
@@ -148,7 +148,7 @@ tolerations: []
 
 ## Use existing secret for the application password
 ##
-existingSecret:
+existingSecret: ""
 
 ##
 ## External database configuration
@@ -577,7 +577,7 @@ certificates:
 
   ## ConfigMap with extra environment variables
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
 
   ## Secret with extra environment variables
   ##

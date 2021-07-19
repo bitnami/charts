@@ -87,7 +87,7 @@ wordpressPassword: ""
 ## NOTE: Must contain key `wordpress-password`
 ## NOTE: When it's set, the `wordpressPassword` parameter is ignored
 ##
-existingSecret:
+existingSecret: ""
 ## @param wordpressEmail WordPress user email
 ##
 wordpressEmail: user@example.com
@@ -212,7 +212,7 @@ args: []
 extraEnvVars: []
 ## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars
 ##
-extraEnvVarsCM:
+extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Name of existing Secret containing extra env vars
 ##
 extraEnvVarsSecret:
@@ -823,7 +823,7 @@ externalDatabase:
   ## NOTE: Must contain key `mariadb-password`
   ## NOTE: When it's set, the `externalDatabase.password` parameter is ignored
   ##
-  existingSecret:
+  existingSecret: ""
 ## Memcached chart configuration
 ## ref: https://github.com/bitnami/charts/blob/master/bitnami/memcached/values.yaml
 ##

@@ -63,7 +63,7 @@ extraDeploy: []
 extraEnvVars: []
 ## @param extraEnvVarsCM ConfigMap containing extra env vars to add to web, worker and scheduler pods
 ##
-extraEnvVarsCM:
+extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Secret containing extra env vars to add to web, worker and scheduler pods
 ##
 extraEnvVarsSecret:
@@ -164,7 +164,7 @@ tolerations: []
 ## @param auth.username Username to access web UI
 ##
 auth:
-  existingSecret:
+  existingSecret: ""
   ## More info about the fernet key at:
   ## - https://airflow.readthedocs.io/en/stable/howto/secure-connections.html
   ## - https://bcb.github.io/airflow/fernet-key
@@ -261,7 +261,7 @@ web:
   extraEnvVars:
   ## @param web.extraEnvVarsCM ConfigMap containing extra environment variables
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param web.extraEnvVarsSecret Secret containing extra environment variables (in case of sensitive data)
   ##
   extraEnvVarsSecret:
@@ -440,7 +440,7 @@ scheduler:
   extraEnvVars:
   ## @param scheduler.extraEnvVarsCM ConfigMap with extra environment variables
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param scheduler.extraEnvVarsSecret Secret with extra environment variables
   ##
   extraEnvVarsSecret:
@@ -582,7 +582,7 @@ worker:
   extraEnvVars:
   ## @param worker.extraEnvVarsCM ConfigMap with extra environment variables
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param worker.extraEnvVarsSecret Secret with extra environment variables
   ##
   extraEnvVarsSecret:
@@ -803,7 +803,7 @@ git:
     args:
     extraVolumeMounts:
     extraEnvVars:
-    extraEnvVarsCM:
+    extraEnvVarsCM: ""
     extraEnvVarsSecret:
     ## Clone init container resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -825,7 +825,7 @@ git:
     args:
     extraVolumeMounts:
     extraEnvVars:
-    extraEnvVarsCM:
+    extraEnvVarsCM: ""
     extraEnvVarsSecret:
     ## Sync sidecar container resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -940,7 +940,7 @@ postgresql:
   postgresqlDatabase: bitnami_airflow
   ## This secret is used in case of postgresql.enabled=true and we would like to specify password for newly created postgresql instance
   ##
-  existingSecret:
+  existingSecret: ""
 
 ## External PostgreSQL configuration
 ## All of these values are only used when postgresql.enabled is set to false
@@ -956,7 +956,7 @@ externalDatabase:
   host: localhost
   user: bn_airflow
   password:
-  existingSecret:
+  existingSecret: ""
   existingSecretPasswordKey:
   database: bitnami_airflow
   port: 5432
@@ -977,7 +977,7 @@ redis:
     ## with Airflow.
     ## The password value is ignored if existingSecret is set
     # password:
-    existingSecret:
+    existingSecret: ""
   architecture: standalone
 
 ## External Redis(TM) configuration
@@ -992,7 +992,7 @@ externalRedis:
   host: localhost
   port: 6379
   password:
-  existingSecret:
+  existingSecret: ""
   ## Most Redis(TM) implementnations do not require a username to authenticate
   ## and it should be enough with the password
   ##

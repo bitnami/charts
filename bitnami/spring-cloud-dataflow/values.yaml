@@ -125,7 +125,7 @@ server:
   extraEnvVars: []
   ## @param server.extraEnvVarsCM ConfigMap with extra environment variables
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param server.extraEnvVarsSecret Secret with extra environment variables
   ##
   extraEnvVarsSecret:
@@ -499,7 +499,7 @@ skipper:
   extraEnvVars: []
   ## @param skipper.extraEnvVarsCM Name of existing ConfigMap containing extra environment variables
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param skipper.extraEnvVarsSecret Name of existing Secret containing extra environment variables
   ##
   extraEnvVarsSecret:

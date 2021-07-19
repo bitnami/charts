@@ -41,7 +41,7 @@ clusterName: KUBERNETES_CLUSTER_NAME
 wavefront:
   url: https://YOUR_CLUSTER.wavefront.com
   token: YOUR_API_TOKEN
-  existingSecret:
+  existingSecret: ""
 ## @param podSecurityPolicy.create Specifies whether PodSecurityPolicy resources should be created
 ##
 podSecurityPolicy:
@@ -398,7 +398,7 @@ collector:
   extraEnvVars: []
   ## @param collector.extraEnvVarsCM Name of existing ConfigMap containing extra environment variables
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param collector.extraEnvVarsSecret Name of existing Secret containing extra environment variables
   ##
   extraEnvVarsSecret:
@@ -616,7 +616,7 @@ proxy:
   extraEnvVars: []
   ## @param proxy.extraEnvVarsCM Name of existing ConfigMap containing extra environment variables
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param proxy.extraEnvVarsSecret Name of existing Secret containing extra environment variables
   ##
   extraEnvVarsSecret:

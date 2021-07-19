@@ -117,7 +117,7 @@ smtpProtocol: ""
 ## NOTE: Must contain key `redmine-password`
 ## NOTE: When it's set, the `redminePassword` parameter is ignored
 ##
-existingSecret:
+existingSecret: ""
 ## @param smtpExistingSecret The name of an existing secret with SMTP credentials
 ## NOTE: Must contain key `smtp-password`
 ## NOTE: When it's set, the `smtpPassword` parameter is ignored
@@ -141,7 +141,7 @@ args: []
 extraEnvVars: []
 ## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars
 ##
-extraEnvVarsCM:
+extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Name of existing Secret containing extra env vars
 ##
 extraEnvVarsSecret:
@@ -580,7 +580,7 @@ mariadb:
     ## NOTE: When it's set the previous parameters are ignored.
     ##
     # existingSecret: my-secret
-    existingSecret:
+    existingSecret: ""
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
@@ -637,7 +637,7 @@ postgresql:
   ## postgresql-password (for the unprivileged user)
   ##
   # existingSecret: my-secret
-  existingSecret:
+  existingSecret: ""
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
@@ -685,7 +685,7 @@ externalDatabase:
   ## @param externalDatabase.existingSecret Use an existing secret for external db password. Must contain the keys `redmine-password` or `mariadb-password` depending on the DB type
   ##
   # existingSecret: my-secret
-  existingSecret:
+  existingSecret: ""
 
 ## @section Mail Receiver/Cron Job Parameters
 
@@ -813,7 +813,7 @@ mailReceiver:
   #    value: "true"
   ## @param mailReceiver.extraEnvVarsCM Name of existing ConfigMap containing extra env vars
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param mailReceiver.extraEnvVarsSecret Name of existing Secret containing extra env vars
   ##
   extraEnvVarsSecret:

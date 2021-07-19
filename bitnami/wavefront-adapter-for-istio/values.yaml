@@ -285,7 +285,7 @@ extraEnvVars: []
 ## ConfigMap with extra environment variables
 ## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars
 ##
-extraEnvVarsCM:
+extraEnvVarsCM: ""
 
 ## Secret with extra environment variables
 ## @param extraEnvVarsSecret Name of existing Secret containing extra env vars
