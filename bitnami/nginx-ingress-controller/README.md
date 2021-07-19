@@ -51,7 +51,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 
 
@@ -59,8 +59,8 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                | Description                                        | Value |
 | ------------------- | -------------------------------------------------- | ----- |
-| `nameOverride`      | String to partially override common.names.fullname | `nil` |
-| `fullnameOverride`  | String to fully override common.names.fullname     | `nil` |
+| `nameOverride`      | String to partially override common.names.fullname | `""`  |
+| `fullnameOverride`  | String to fully override common.names.fullname     | `""`  |
 | `commonLabels`      | Add labels to all the deployed resources           | `{}`  |
 | `commonAnnotations` | Add annotations to all the deployed resources      | `{}`  |
 | `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`  |
@@ -72,7 +72,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
 | `image.registry`              | Nginx Ingress Controller image registry                                                                                                            | `docker.io`                        |
 | `image.repository`            | Nginx Ingress Controller image repository                                                                                                          | `bitnami/nginx-ingress-controller` |
-| `image.tag`                   | Nginx Ingress Controller image tag (immutable tags are recommended)                                                                                | `0.47.0-debian-10-r25`             |
+| `image.tag`                   | Nginx Ingress Controller image tag (immutable tags are recommended)                                                                                | `0.48.1-debian-10-r0`              |
 | `image.pullPolicy`            | Nginx Ingress Controller image pull policy                                                                                                         | `IfNotPresent`                     |
 | `image.pullSecrets`           | Specify docker-registry secret names as an array                                                                                                   | `[]`                               |
 | `containerPorts`              | Controller container ports to open                                                                                                                 | `{}`                               |
@@ -91,15 +91,15 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tcpConfigMapNamespace`       | Allows customization of the tcp-services-configmap namespace                                                                                       | `""`                               |
 | `udpConfigMapNamespace`       | Allows customization of the udp-services-configmap namespace                                                                                       | `""`                               |
 | `maxmindLicenseKey`           | License key used to download Geolite2 database                                                                                                     | `""`                               |
-| `dhParam`                     | A base64ed Diffie-Hellman parameter                                                                                                                | `nil`                              |
+| `dhParam`                     | A base64ed Diffie-Hellman parameter                                                                                                                | `""`                               |
 | `tcp`                         | TCP service key:value pairs                                                                                                                        | `""`                               |
 | `udp`                         | UDP service key:value pairs                                                                                                                        | `""`                               |
 | `command`                     | Override default container command (useful when using custom images)                                                                               | `[]`                               |
 | `args`                        | Override default container args (useful when using custom images)                                                                                  | `[]`                               |
 | `extraArgs`                   | Additional command line arguments to pass to nginx-ingress-controller                                                                              | `{}`                               |
 | `extraEnvVars`                | Extra environment variables to be set on Nginx Ingress container                                                                                   | `[]`                               |
-| `extraEnvVarsCM`              | Name of a existing ConfigMap containing extra environment variables                                                                                | `nil`                              |
-| `extraEnvVarsSecret`          | Name of a existing Secret containing extra environment variables                                                                                   | `nil`                              |
+| `extraEnvVarsCM`              | Name of a existing ConfigMap containing extra environment variables                                                                                | `""`                               |
+| `extraEnvVarsSecret`          | Name of a existing Secret containing extra environment variables                                                                                   | `""`                               |
 
 
 ### Nginx Ingress deployment / daemonset parameters
@@ -159,8 +159,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tolerations`                                       | Tolerations for pod assignment. Evaluated as a template.                                                | `[]`           |
 | `extraVolumes`                                      | Optionally specify extra list of additional volumes for Controller pods                                 | `[]`           |
 | `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for Controller container(s)                    | `[]`           |
-| `initContainers`                                    | Add init containers to the controller pods                                                              | `{}`           |
-| `sidecars`                                          | Add sidecars to the controller pods.                                                                    | `{}`           |
+| `initContainers`                                    | Add init containers to the controller pods                                                              | `[]`           |
+| `sidecars`                                          | Add sidecars to the controller pods.                                                                    | `[]`           |
 | `customTemplate`                                    | Override NGINX template                                                                                 | `{}`           |
 | `topologySpreadConstraints`                         | Topology spread constraints rely on node labels to identify the topology domain(s) that each Node is in | `[]`           |
 | `podSecurityPolicy.enabled`                         | If true, create & use Pod Security Policy resources                                                     | `false`        |
@@ -174,7 +174,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `defaultBackend.hostAliases`                        | Add deployment host aliases                                                               | `[]`                  |
 | `defaultBackend.image.registry`                     | Default backend image registry                                                            | `docker.io`           |
 | `defaultBackend.image.repository`                   | Default backend image repository                                                          | `bitnami/nginx`       |
-| `defaultBackend.image.tag`                          | Default backend image tag (immutable tags are recommended)                                | `1.21.1-debian-10-r1` |
+| `defaultBackend.image.tag`                          | Default backend image tag (immutable tags are recommended)                                | `1.21.1-debian-10-r7` |
 | `defaultBackend.image.pullPolicy`                   | Image pull policy                                                                         | `IfNotPresent`        |
 | `defaultBackend.image.pullSecrets`                  | Specify docker-registry secret names as an array                                          | `[]`                  |
 | `defaultBackend.extraArgs`                          | Additional command line arguments to pass to Nginx container                              | `{}`                  |
@@ -220,7 +220,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `defaultBackend.service.port`                       | Default backend service port                                                              | `80`                  |
 | `defaultBackend.pdb.create`                         | Enable/disable a Pod Disruption Budget creation for Default backend                       | `false`               |
 | `defaultBackend.pdb.minAvailable`                   | Minimum number/percentage of Default backend pods that should remain scheduled            | `1`                   |
-| `defaultBackend.pdb.maxUnavailable`                 | Maximum number/percentage of Default backend pods that may be made unavailable            | `nil`                 |
+| `defaultBackend.pdb.maxUnavailable`                 | Maximum number/percentage of Default backend pods that may be made unavailable            | `""`                  |
 
 
 ### Traffic exposure parameters
@@ -233,9 +233,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.nodePorts`                | Specify the nodePort value(s) for the LoadBalancer and NodePort service types.                                                         | `{}`           |
 | `service.annotations`              | Annotations for controller service                                                                                                     | `{}`           |
 | `service.labels`                   | Labels for controller service                                                                                                          | `{}`           |
-| `service.clusterIP`                | Controller Internal Cluster Service IP (optional)                                                                                      | `nil`          |
+| `service.clusterIP`                | Controller Internal Cluster Service IP (optional)                                                                                      | `""`           |
 | `service.externalIPs`              | Controller Service external IP addresses                                                                                               | `[]`           |
-| `service.loadBalancerIP`           | Kubernetes LoadBalancerIP to request for Controller (optional, cloud specific)                                                         | `nil`          |
+| `service.loadBalancerIP`           | Kubernetes LoadBalancerIP to request for Controller (optional, cloud specific)                                                         | `""`           |
 | `service.loadBalancerSourceRanges` | List of IP CIDRs allowed access to load balancer (if supported)                                                                        | `[]`           |
 | `service.externalTrafficPolicy`    | Set external traffic policy to: "Local" to preserve source IP on providers supporting it                                               | `""`           |
 | `service.healthCheckNodePort`      | Set this to the managed health-check port the kube-proxy will expose. If blank, a random port in the `NodePort` range will be assigned | `0`            |
@@ -246,7 +246,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                         | Description                                                 | Value  |
 | ---------------------------- | ----------------------------------------------------------- | ------ |
 | `serviceAccount.create`      | Enable the creation of a ServiceAccount for Controller pods | `true` |
-| `serviceAccount.name`        | Name of the created ServiceAccount                          | `nil`  |
+| `serviceAccount.name`        | Name of the created ServiceAccount                          | `""`   |
 | `serviceAccount.annotations` | Annotations for service account.                            | `{}`   |
 | `rbac.create`                | Specifies whether RBAC rules should be created              | `true` |
 
@@ -257,12 +257,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------- | ------------------------------------------------------------------------- | ------- |
 | `pdb.create`               | Enable/disable a Pod Disruption Budget creation for Controller            | `false` |
 | `pdb.minAvailable`         | Minimum number/percentage of Controller pods that should remain scheduled | `1`     |
-| `pdb.maxUnavailable`       | Maximum number/percentage of Controller pods that may be made unavailable | `nil`   |
+| `pdb.maxUnavailable`       | Maximum number/percentage of Controller pods that may be made unavailable | `""`    |
 | `autoscaling.enabled`      | Enable autoscaling for Controller                                         | `false` |
 | `autoscaling.minReplicas`  | Minimum number of Controller replicas                                     | `1`     |
 | `autoscaling.maxReplicas`  | Maximum number of Controller replicas                                     | `11`    |
-| `autoscaling.targetCPU`    | Target CPU utilization percentage                                         | `nil`   |
-| `autoscaling.targetMemory` | Target Memory utilization percentage                                      | `nil`   |
+| `autoscaling.targetCPU`    | Target CPU utilization percentage                                         | `""`    |
+| `autoscaling.targetMemory` | Target Memory utilization percentage                                      | `""`    |
 
 
 ### Metrics parameters
@@ -274,9 +274,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.service.port`                    | Service HTTP management port                                                  | `9913`      |
 | `metrics.service.annotations`             | Annotations for the Prometheus exporter service                               | `{}`        |
 | `metrics.serviceMonitor.enabled`          | Create ServiceMonitor resource for scraping metrics using PrometheusOperator  | `false`     |
-| `metrics.serviceMonitor.namespace`        | Namespace in which Prometheus is running                                      | `nil`       |
+| `metrics.serviceMonitor.namespace`        | Namespace in which Prometheus is running                                      | `""`        |
 | `metrics.serviceMonitor.interval`         | Interval at which metrics should be scraped                                   | `30s`       |
-| `metrics.serviceMonitor.scrapeTimeout`    | Specify the timeout after which the scrape is ended                           | `nil`       |
+| `metrics.serviceMonitor.scrapeTimeout`    | Specify the timeout after which the scrape is ended                           | `""`        |
 | `metrics.serviceMonitor.selector`         | ServiceMonitor selector labels                                                | `{}`        |
 | `metrics.prometheusRule.enabled`          | Create PrometheusRules resource for scraping metrics using PrometheusOperator | `false`     |
 | `metrics.prometheusRule.additionalLabels` | Used to pass Labels that are required by the Installed Prometheus Operator    | `{}`        |
