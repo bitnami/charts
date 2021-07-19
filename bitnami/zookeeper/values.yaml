@@ -136,7 +136,7 @@ logLevel: ERROR
 ## Example:
 ## dataLogDir: /bitnami/zookeeper/dataLog
 ##
-dataLogDir: ''
+dataLogDir: ""
 ## @param jvmFlags Default JVMFLAGS for the ZooKeeper process
 ##
 jvmFlags:
@@ -227,7 +227,7 @@ initContainers: []
 ## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
-podAffinityPreset: ''
+podAffinityPreset: ""
 ## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
@@ -238,12 +238,12 @@ podAntiAffinityPreset: soft
 nodeAffinityPreset:
   ## @param nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ##
-  type: ''
+  type: ""
   ## @param nodeAffinityPreset.key Node label key to match Ignored if `affinity` is set.
   ## E.g.
   ## key: "kubernetes.io/e2e-az-name"
   ##
-  key: ''
+  key: ""
   ## @param nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set.
   ## E.g.
   ## values:
@@ -275,7 +275,7 @@ podAnnotations: {}
 ## @param priorityClassName Name of the existing priority class to be used by ZooKeeper pods, priority class needs to be created beforehand
 ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
 ##
-priorityClassName: ''
+priorityClassName: ""
 ## @param schedulerName Kubernetes pod scheduler registry
 ## https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
@@ -607,10 +607,10 @@ tls:
     passwordsSecretName:
     ## @param tls.client.keystorePassword Password to access KeyStore if needed
     ##
-    keystorePassword: ''
+    keystorePassword: ""
     ## @param tls.client.truststorePassword Password to access TrustStore if needed
     ##
-    truststorePassword: ''
+    truststorePassword: ""
   quorum:
     ## @param tls.quorum.enabled Enable TLS for quorum protocol
     ##
@@ -632,10 +632,10 @@ tls:
     passwordsSecretName:
     ## @param tls.quorum.keystorePassword Password to access KeyStore if needed
     ##
-    keystorePassword: ''
+    keystorePassword: ""
     ## @param tls.quorum.truststorePassword Password to access TrustStore if needed
     ##
-    truststorePassword: ''
+    truststorePassword: ""
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following

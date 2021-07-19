@@ -120,10 +120,11 @@ podSecurityContext:
   runAsUser: 1001
   ## Uncomment the setting below to increase the net.core.somaxconn value
   ## e.g:
-  ## - name: net.core.somaxconn
-  ##   value: "10000"
+  ## sysctls:
+  ##   - name: net.core.somaxconn
+  ##     value: "10000"
   ##
-  sysctls:
+  sysctls: []
 ## @param podDisruptionBudget Limits the number of pods of the replicated application that are down simultaneously from voluntary disruptions
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions
 ##
@@ -144,10 +145,11 @@ containerSecurityContext:
   runAsUser: 1001
   ## Uncomment the setting below to increase the net.core.somaxconn value
   ## e.g:
-  ## - name: net.core.somaxconn
-  ##   value: "10000"
+  ## sysctls:
+  ##   - name: net.core.somaxconn
+  ##     value: "10000"
   ##
-  sysctls:
+  sysctls: []
 ## @param usePassword Use password authentication
 ##
 usePassword: true
@@ -362,7 +364,7 @@ redis:
   podLabels: {}
   ## @param redis.priorityClassName Redis<sup>TM</sup> Master pod priorityClassName
   ##
-  priorityClassName:
+  priorityClassName: ""
   ## @param redis.configmap Additional Redis<sup>TM</sup> configuration for the nodes
   ## ref: https://redis.io/topics/config
   ##
@@ -583,7 +585,7 @@ updateJob:
   tolerations: []
   ## @param updateJob.priorityClassName Priority class name
   ##
-  priorityClassName:
+  priorityClassName: ""
   ## Container resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -763,7 +765,7 @@ metrics:
     rules: []
   ## @param metrics.priorityClassName Metrics exporter pod priorityClassName
   ##
-  priorityClassName: {}
+  priorityClassName: ""
   ## @param metrics.service.type Kubernetes Service type (redis metrics)
   ## @param metrics.service.loadBalancerIP Use serviceLoadBalancerIP to request a specific static IP, otherwise leave blank
   ## @param metrics.service.annotations Annotations for the services to monitor.
