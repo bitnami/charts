@@ -416,7 +416,7 @@ master:
     externalTrafficPolicy: Cluster
     ## @param master.service.clusterIP Redis(TM) master service Cluster IP
     ##
-    clusterIP:
+    clusterIP: ""
     ## @param master.service.loadBalancerIP Redis(TM) master service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
@@ -721,7 +721,7 @@ replica:
     externalTrafficPolicy: Cluster
     ## @param replica.service.clusterIP Redis(TM) replicas service Cluster IP
     ##
-    clusterIP:
+    clusterIP: ""
     ## @param replica.service.loadBalancerIP Redis(TM) replicas service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
@@ -921,7 +921,7 @@ sentinel:
     externalTrafficPolicy: Cluster
     ## @param sentinel.service.clusterIP Redis(TM) Sentinel service Cluster IP
     ##
-    clusterIP:
+    clusterIP: ""
     ## @param sentinel.service.loadBalancerIP Redis(TM) Sentinel service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##

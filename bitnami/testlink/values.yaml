@@ -338,7 +338,7 @@ service:
   httpsPort: 443
   ## @param service.clusterIP Service cluster IP
   ##
-  clusterIP:
+  clusterIP: ""
   ## @param service.loadBalancerSourceRanges Control hosts connecting to "LoadBalancer" only
   ## loadBalancerSourceRanges:
   ##   - 0.0.0.0/0

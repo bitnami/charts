@@ -392,7 +392,7 @@ query:
     ## e.g:
     ## clusterIP: None
     ##
-    clusterIP:
+    clusterIP: ""
     http:
       ## @param query.service.http.port Service HTTP port
       ##
@@ -809,7 +809,7 @@ queryFrontend:
     ## e.g:
     ## clusterIP: None
     ##
-    clusterIP:
+    clusterIP: ""
     http:
       ## @param queryFrontend.service.http.port Service HTTP port
       ##
@@ -1148,7 +1148,7 @@ bucketweb:
     ## e.g:
     ## clusterIP: None
     ##
-    clusterIP:
+    clusterIP: ""
     http:
       ## @param bucketweb.service.http.port Service HTTP port
       ##
@@ -1452,7 +1452,7 @@ compactor:
     ## e.g:
     ## clusterIP: None
     ##
-    clusterIP:
+    clusterIP: ""
     http:
       ## @param compactor.service.http.port Service HTTP port
       ##
@@ -1739,7 +1739,7 @@ storegateway:
     ## e.g:
     ## clusterIP: None
     ##
-    clusterIP:
+    clusterIP: ""
     http:
       ## @param storegateway.service.http.port Service HTTP port
       ##
@@ -2088,7 +2088,7 @@ ruler:
     ## e.g:
     ## clusterIP: None
     ##
-    clusterIP:
+    clusterIP: ""
     http:
       ## @param ruler.service.http.port Service HTTP port
       ##
@@ -2491,7 +2491,7 @@ receive:
     ## e.g:
     ## clusterIP: None
     ##
-    clusterIP:
+    clusterIP: ""
     http:
       ## @param receive.service.http.port Service HTTP port
       ##
