@@ -14,7 +14,7 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
 
 ## @section Common parameters
 
@@ -367,7 +367,7 @@ mariadb:
       ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
       ##   GKE, AWS & OpenStack)
       ##
-      storageClass:
+      storageClass: ""
       ## @param mariadb.primary.persistence.accessModes Database Persistent Volume Access Modes
       ##
       accessModes:
@@ -416,7 +416,7 @@ persistence:
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##   GKE, AWS & OpenStack)
   ##
-  storageClass:
+  storageClass: ""
   ## @param persistence.accessMode PVC Access Mode for SuiteCRM volume
   ## Requires persistence.enabled: true
   ## If defined, PVC must be created manually before volume will be bound

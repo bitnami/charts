@@ -16,7 +16,7 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
   redis:
     password:
 
@@ -374,7 +374,7 @@ master:
     ## If set to "-", storageClassName: "", which disables dynamic provisioning
     ## If undefined (the default) or set to null, no storageClassName spec is set, choosing the default provisioner
     ##
-    storageClass:
+    storageClass: ""
     ## @param master.persistence.accessModes [array] Persistent Volume access modes
     ##
     accessModes:
@@ -683,7 +683,7 @@ replica:
     ## If set to "-", storageClassName: "", which disables dynamic provisioning
     ## If undefined (the default) or set to null, no storageClassName spec is set, choosing the default provisioner
     ##
-    storageClass:
+    storageClass: ""
     ## @param replica.persistence.accessModes [array] Persistent Volume access modes
     ##
     accessModes:

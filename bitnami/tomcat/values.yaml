@@ -14,7 +14,7 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
 
 ## @section Common parameters
 
@@ -311,7 +311,7 @@ persistence:
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##   GKE, AWS & OpenStack)
   ##
-  storageClass:
+  storageClass: ""
   ## @param persistence.annotations Persistent Volume Claim annotations
   ##
   annotations:

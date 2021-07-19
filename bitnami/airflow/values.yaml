@@ -14,7 +14,7 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
 
 ## @section Common parameters
 

@@ -15,7 +15,7 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
   redis:
     password:
 
@@ -238,7 +238,7 @@ persistence:
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##   GKE, AWS & OpenStack)
   ##
-  storageClass:
+  storageClass: ""
   ## @param persistence.accessModes Persistent Volume Access Modes
   ##
   accessModes:

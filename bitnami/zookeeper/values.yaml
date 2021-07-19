@@ -14,7 +14,7 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
 
 ## @section Common parameters
 
@@ -423,7 +423,7 @@ persistence:
   enabled: true
   ## @param persistence.storageClass PVC Storage Class for ZooKeeper data volume
   ##
-  storageClass:
+  storageClass: ""
   ## @param persistence.accessModes PVC Access modes
   ##
   accessModes:
