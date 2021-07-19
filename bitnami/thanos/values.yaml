@@ -2627,7 +2627,10 @@ metrics:
     enabled: false
     ## Namespace in which the PrometheusRule CRD is created
     ##
-    namespace: monitoring
+    namespace:
+    ## Additional labels for the prometheusRule                          
+    ##                                                                                                                  
+    additionalLabels: {}
     ## List of group of rules and their rules
     ##
     ## These are just examples rules, please adapt them to your needs.
