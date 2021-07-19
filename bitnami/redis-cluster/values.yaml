@@ -133,7 +133,7 @@ podDisruptionBudget: {}
 minAvailable:
 ## @param maxUnavailable Max number of pods that can be unavailable after the eviction
 ##
-maxUnavailable:
+maxUnavailable: ""
 ## Containers Security Context
 ## @param containerSecurityContext.enabled Enable Containers' Security Context
 ## @param containerSecurityContext.runAsUser User ID for the containers.

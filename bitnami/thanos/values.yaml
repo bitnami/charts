@@ -459,7 +459,7 @@ query:
     minAvailable: 1
     ## @param query.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
     ##
-    maxUnavailable:
+    maxUnavailable: ""
   ## Configure the ingress resource that allows you to access Thanos Query
   ## ref: http://kubernetes.io/docs/user-guide/ingress/
   ##
@@ -868,7 +868,7 @@ queryFrontend:
     minAvailable: 1
     ## @param queryFrontend.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
     ##
-    maxUnavailable:
+    maxUnavailable: ""
   ## Configure the ingress resource that allows you to access Thanos Query Frontend
   ## ref: http://kubernetes.io/docs/user-guide/ingress/
   ##
@@ -1192,7 +1192,7 @@ bucketweb:
     minAvailable: 1
     ## @param bucketweb.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
     ##
-    maxUnavailable:
+    maxUnavailable: ""
   ## Configure the ingress resource that allows you to access Thanos Bucketweb
   ## ref: http://kubernetes.io/docs/user-guide/ingress/
   ##
@@ -1833,7 +1833,7 @@ storegateway:
     minAvailable: 1
     ## @param storegateway.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
     ##
-    maxUnavailable:
+    maxUnavailable: ""
 
 ## @section Thanos Ruler parameters
 
@@ -2170,7 +2170,7 @@ ruler:
     minAvailable: 1
     ## @param ruler.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
     ##
-    maxUnavailable:
+    maxUnavailable: ""
   ## Configure the ingress resource that allows you to access Thanos Ruler
   ## ref: http://kubernetes.io/docs/user-guide/ingress/
   ##
@@ -2592,7 +2592,7 @@ receive:
     minAvailable: 1
     ## @param receive.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
     ##
-    maxUnavailable:
+    maxUnavailable: ""
   ## Configure the ingress resource that allows you to access Thanos Receive
   ## ref: http://kubernetes.io/docs/user-guide/ingress/
   ##

@@ -387,7 +387,7 @@ server:
     minAvailable: 1
     ## @param server.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
     ##
-    maxUnavailable:
+    maxUnavailable: ""
   ## Dataflow Server Autoscaling parameters.
   ##
   autoscaling:
@@ -698,7 +698,7 @@ skipper:
     minAvailable: 1
     ## @param skipper.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
     ##
-    maxUnavailable:
+    maxUnavailable: ""
   ## Skipper Autoscaling parameters.
   ##
   autoscaling:
@@ -978,7 +978,7 @@ metrics:
     minAvailable: 1
     ## @param metrics.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
     ##
-    maxUnavailable:
+    maxUnavailable: ""
   ## Prometheus Rsocket Proxy Autoscaling parameters.
   ## @param metrics.autoscaling.enabled Enable autoscaling for Prometheus Rsocket Proxy
   ## @param metrics.autoscaling.minReplicas Minimum number of Prometheus Rsocket Proxy replicas

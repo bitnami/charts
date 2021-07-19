@@ -1052,7 +1052,7 @@ pdb:
   minAvailable: 1
   ## @param pdb.maxUnavailable Max number of pods that can be unavailable after the eviction
   ##
-  maxUnavailable:
+  maxUnavailable: ""
 ## TLS configuration
 ##
 tls:

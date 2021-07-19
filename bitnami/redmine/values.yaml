@@ -533,7 +533,7 @@ volumePermissions:
 podDisruptionBudget:
   create: false
   minAvailable:
-  maxUnavailable:
+  maxUnavailable: ""
 
 ## Redmine Autoscaling configuration
 ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
