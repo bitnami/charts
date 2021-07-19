@@ -8,25 +8,25 @@
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
-  imageRegistry: ""
+  imageRegistry:
   ## e.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass: ""
+  storageClass:
 
 ## @section Common parameters
 
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
-kubeVersion: ""
+kubeVersion:
 ## @param nameOverride String to partially override airflow.fullname template with a string (will prepend the release name)
 ##
-nameOverride: ""
+nameOverride:
 ## @param fullnameOverride String to fully override airflow.fullname template with a string
 ##
-fullnameOverride: ""
+fullnameOverride:
 ## @param affinity Affinity for pod assignment (evaluated as a template)
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
@@ -63,10 +63,10 @@ extraDeploy: []
 extraEnvVars: []
 ## @param extraEnvVarsCM ConfigMap containing extra env vars to add to web, worker and scheduler pods
 ##
-extraEnvVarsCM: ""
+extraEnvVarsCM:
 ## @param extraEnvVarsSecret Secret containing extra env vars to add to web, worker and scheduler pods
 ##
-extraEnvVarsSecret: ""
+extraEnvVarsSecret:
 ## @param initContainers List of init containers to be added to the web, worker and scheduler pods
 ## Example:
 ## initContainers:
@@ -164,7 +164,7 @@ tolerations: []
 ## @param auth.username Username to access web UI
 ##
 auth:
-  existingSecret: ""
+  existingSecret:
   ## More info about the fernet key at:
   ## - https://airflow.readthedocs.io/en/stable/howto/secure-connections.html
   ## - https://bcb.github.io/airflow/fernet-key
@@ -237,10 +237,10 @@ web:
   configMap:
   ## @param web.command Override default container command (useful when using custom images)
   ##
-  command: []
+  command:
   ## @param web.args Override default container args (useful when using custom images)
   ##
-  args: []
+  args:
   ## @param web.podLabels Add extra labels to the web's pods
   ##
   podLabels:
@@ -261,10 +261,10 @@ web:
   extraEnvVars:
   ## @param web.extraEnvVarsCM ConfigMap containing extra environment variables
   ##
-  extraEnvVarsCM: ""
+  extraEnvVarsCM:
   ## @param web.extraEnvVarsSecret Secret containing extra environment variables (in case of sensitive data)
   ##
-  extraEnvVarsSecret: ""
+  extraEnvVarsSecret:
   ## Web container' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -372,9 +372,9 @@ service:
   ## NodePort
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
-  nodePort: ""
+  nodePort:
   ## Use loadBalancerIP to request a specific static IP,
-  # loadBalancerIP: ""
+  # loadBalancerIP:
   annotations:
 
 ## @section Airflow scheduler parameters
@@ -415,10 +415,10 @@ scheduler:
   replicaCount: 1
   ## @param scheduler.command Override cmd
   ##
-  command: []
+  command:
   ## @param scheduler.args Override args
   ##
-  args: []
+  args:
   ## @param scheduler.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -440,10 +440,10 @@ scheduler:
   extraEnvVars:
   ## @param scheduler.extraEnvVarsCM ConfigMap with extra environment variables
   ##
-  extraEnvVarsCM: ""
+  extraEnvVarsCM:
   ## @param scheduler.extraEnvVarsSecret Secret with extra environment variables
   ##
-  extraEnvVarsSecret: ""
+  extraEnvVarsSecret:
   ## Scheduler containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -561,10 +561,10 @@ worker:
   podManagementPolicy:
   ## @param worker.command Override cmd
   ##
-  command: []
+  command:
   ## @param worker.args Override args
   ##
-  args: []
+  args:
   ## @param worker.podAnnotations Add annotations to the worker pods
   ##
   podAnnotations: {}
@@ -582,10 +582,10 @@ worker:
   extraEnvVars:
   ## @param worker.extraEnvVarsCM ConfigMap with extra environment variables
   ##
-  extraEnvVarsCM: ""
+  extraEnvVarsCM:
   ## @param worker.extraEnvVarsSecret Secret with extra environment variables
   ##
-  extraEnvVarsSecret: ""
+  extraEnvVarsSecret:
   ## Worker containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -799,12 +799,12 @@ git:
   ## @param git.clone.resources Clone init container resource requests and limits
   ##
   clone:
-    command: []
-    args: []
+    command:
+    args:
     extraVolumeMounts:
     extraEnvVars:
-    extraEnvVarsCM: ""
-    extraEnvVarsSecret: ""
+    extraEnvVarsCM:
+    extraEnvVarsSecret:
     ## Clone init container resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
     ##
@@ -821,12 +821,12 @@ git:
   ##
   sync:
     interval: 60
-    command: []
-    args: []
+    command:
+    args:
     extraVolumeMounts:
     extraEnvVars:
-    extraEnvVarsCM: ""
-    extraEnvVarsSecret: ""
+    extraEnvVarsCM:
+    extraEnvVarsSecret:
     ## Sync sidecar container resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
     ##
@@ -880,7 +880,7 @@ ldap:
 ##
 ingress:
   enabled: false
-  apiVersion: ""
+  apiVersion:
   pathType: ImplementationSpecific
   certManager: false
   ## For a full list of possible ingress annotations, please see
@@ -940,7 +940,7 @@ postgresql:
   postgresqlDatabase: bitnami_airflow
   ## This secret is used in case of postgresql.enabled=true and we would like to specify password for newly created postgresql instance
   ##
-  existingSecret: ""
+  existingSecret:
 
 ## External PostgreSQL configuration
 ## All of these values are only used when postgresql.enabled is set to false
@@ -956,7 +956,7 @@ externalDatabase:
   host: localhost
   user: bn_airflow
   password:
-  existingSecret: ""
+  existingSecret:
   existingSecretPasswordKey:
   database: bitnami_airflow
   port: 5432
@@ -977,7 +977,7 @@ redis:
     ## with Airflow.
     ## The password value is ignored if existingSecret is set
     # password:
-    existingSecret: ""
+    existingSecret:
   architecture: standalone
 
 ## External Redis(TM) configuration
@@ -992,7 +992,7 @@ externalRedis:
   host: localhost
   port: 6379
   password:
-  existingSecret: ""
+  existingSecret:
   ## Most Redis(TM) implementnations do not require a username to authenticate
   ## and it should be enough with the password
   ##
