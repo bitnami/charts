@@ -400,7 +400,7 @@ server:
     enabled: false
     minReplicas:
     maxReplicas:
-    targetCPU:
+    targetCPU: ""
     targetMemory:
   ## @param server.extraVolumes Extra Volumes to be set on the Dataflow Server Pod
   ## e.g:
@@ -711,7 +711,7 @@ skipper:
     enabled: false
     minReplicas:
     maxReplicas:
-    targetCPU:
+    targetCPU: ""
     targetMemory:
   ## @param skipper.extraVolumes Extra Volumes to be set on the Skipper Pod
   ## e.g:
@@ -990,7 +990,7 @@ metrics:
     enabled: false
     minReplicas:
     maxReplicas:
-    targetCPU:
+    targetCPU: ""
     targetMemory:
 
 ## @section Init Container parameters

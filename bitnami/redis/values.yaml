@@ -753,7 +753,7 @@ replica:
     maxReplicas: 11
     ## @param replica.autoscaling.targetCPU Percentage of CPU to consider when autoscaling
     ##
-    targetCPU:
+    targetCPU: ""
     ## @param replica.autoscaling.targetMemory Percentage of Memory to consider when autoscaling
     ##
     targetMemory:
