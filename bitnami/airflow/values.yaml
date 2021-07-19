@@ -237,7 +237,7 @@ web:
   configMap:
   ## @param web.command Override default container command (useful when using custom images)
   ##
-  command:
+  command: []
   ## @param web.args Override default container args (useful when using custom images)
   ##
   args:
@@ -415,7 +415,7 @@ scheduler:
   replicaCount: 1
   ## @param scheduler.command Override cmd
   ##
-  command:
+  command: []
   ## @param scheduler.args Override args
   ##
   args:
@@ -561,7 +561,7 @@ worker:
   podManagementPolicy:
   ## @param worker.command Override cmd
   ##
-  command:
+  command: []
   ## @param worker.args Override args
   ##
   args:
@@ -799,7 +799,7 @@ git:
   ## @param git.clone.resources Clone init container resource requests and limits
   ##
   clone:
-    command:
+    command: []
     args:
     extraVolumeMounts:
     extraEnvVars:
@@ -821,7 +821,7 @@ git:
   ##
   sync:
     interval: 60
-    command:
+    command: []
     args:
     extraVolumeMounts:
     extraEnvVars:

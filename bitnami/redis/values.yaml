@@ -53,7 +53,7 @@ diagnosticMode:
   enabled: false
   ## @param diagnosticMode.command Command to override all containers in the deployment
   ##
-  command:
+  command: []
     - sleep
   ## @param diagnosticMode.args Args to override all containers in the deployment
   ##
