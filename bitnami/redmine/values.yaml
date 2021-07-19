@@ -497,7 +497,7 @@ persistence:
   dataSource: {}
   ## @param persistence.existingClaim The name of an existing PVC to use for persistence
   ##
-  existingClaim:
+  existingClaim: ""
 
 ## 'volumePermissions' init container parameters
 ## Changes the owner and group of the persistent volume mount point to runAsUser:fsGroup values
@@ -592,7 +592,7 @@ mariadb:
       ## @param mariadb.primary.persistence.existingClaim Provide an existing `PersistentVolumeClaim`, the value is evaluated as a template
       ##
       # existingClaim: your-claim
-      existingClaim:
+      existingClaim: ""
       ## @param mariadb.primary.persistence.storageClass PVC Storage Class for MariaDB volume
       ## If defined, storageClassName: <storageClass>
       ## If set to "-", storageClassName: "", which disables dynamic provisioning
@@ -648,7 +648,7 @@ postgresql:
     ## @param postgresql.persistence.existingClaim Provide an existing `PersistentVolumeClaim`, the value is evaluated as a template
     ##
     # existingClaim: your-claim
-    existingClaim:
+    existingClaim: ""
     ## @param postgresql.persistence.storageClass PVC Storage Class for PostgreSQL volume
     ## If defined, storageClassName: <storageClass>
     ## If set to "-", storageClassName: "", which disables dynamic provisioning

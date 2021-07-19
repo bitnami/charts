@@ -324,7 +324,7 @@ persistence:
   size: 8Gi
   ## @param persistence.existingClaim An Existing PVC name for Tomcat volume
   ##
-  existingClaim:
+  existingClaim: ""
   ## @param persistence.selectorLabels Selector labels to use in volume claim template in statefulset
   ## Applicable when deployment.type is statefulset
   ##

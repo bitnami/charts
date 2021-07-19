@@ -417,7 +417,7 @@ persistence:
   ## If defined, PVC must be created manually before volume will be bound
   ## The value is evaluated as a template
   ##
-  existingClaim:
+  existingClaim: ""
   ## @param persistence.enabled Enable Zookeeper data persistence using PVC
   ##
   enabled: true
@@ -450,7 +450,7 @@ persistence:
     ## If defined, PVC must be created manually before volume will be bound
     ## The value is evaluated as a template
     ##
-    existingClaim:
+    existingClaim: ""
     ## @param persistence.dataLogDir.selector Selector to match an existing Persistent Volume for Zookeeper's Data log PVC
     ## If set, the PVC can't have a PV dynamically provisioned for it
     ## E.g.

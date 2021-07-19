@@ -373,7 +373,7 @@ persistence:
   ## If defined, PVC must be created manually before volume will be bound
   ## The value is evaluated as a template
   ##
-  existingClaim:
+  existingClaim: ""
   ## @param persistence.storageClass Storage class of backing PVC
   ## If defined, storageClassName: <storageClass>
   ## If set to "-", storageClassName: "", which disables dynamic provisioning

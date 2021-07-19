@@ -1493,7 +1493,7 @@ compactor:
     ## If defined, PVC must be created manually before volume will be bound
     ## The value is evaluated as a template
     ##
-    existingClaim:
+    existingClaim: ""
     ## @param compactor.persistence.storageClass Specify the `storageClass` used to provision the volume
     ## If defined, storageClassName: <storageClass>
     ## If set to "-", storageClassName: "", which disables dynamic provisioning
@@ -1793,7 +1793,7 @@ storegateway:
     ## If defined, PVC must be created manually before volume will be bound
     ## The value is evaluated as a template
     ##
-    existingClaim:
+    existingClaim: ""
     ## @param storegateway.persistence.storageClass Specify the `storageClass` used to provision the volume
     ## If defined, storageClassName: <storageClass>
     ## If set to "-", storageClassName: "", which disables dynamic provisioning
@@ -2143,7 +2143,7 @@ ruler:
     ## If defined, PVC must be created manually before volume will be bound
     ## The value is evaluated as a template
     ##
-    existingClaim:
+    existingClaim: ""
     ## @param ruler.persistence.storageClass Specify the `storageClass` used to provision the volume
     ## If defined, storageClassName: <storageClass>
     ## If set to "-", storageClassName: "", which disables dynamic provisioning
@@ -2565,7 +2565,7 @@ receive:
     ## If defined, PVC must be created manually before volume will be bound
     ## The value is evaluated as a template
     ##
-    existingClaim:
+    existingClaim: ""
     ## @param receive.persistence.storageClass Specify the `storageClass` used to provision the volume
     ## If defined, storageClassName: <storageClass>
     ## If set to "-", storageClassName: "", which disables dynamic provisioning

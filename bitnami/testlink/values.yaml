@@ -199,7 +199,7 @@ persistence:
   ## Requires persistence.enabled: true
   ## If defined, PVC must be created manually before volume will be bound
   ##
-  existingClaim:
+  existingClaim: ""
   ## @param persistence.hostPath Host mount path for TestLink volume
   ## If defined, the testlink-data volume will mount to the specified hostPath
   ## Requires persistence.enabled: true
@@ -485,7 +485,7 @@ mariadb:
       hostPath:
       ## @param mariadb.primary.persistence.existingClaim Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas
       ##
-      existingClaim:
+      existingClaim: ""
 ## External database configuration
 ##
 externalDatabase:

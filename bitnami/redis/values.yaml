@@ -395,7 +395,7 @@ master:
     ## @param master.persistence.existingClaim Use a existing PVC which must be created manually before bound
     ## NOTE: requires master.persistence.enabled: true
     ##
-    existingClaim:
+    existingClaim: ""
   ## Redis(TM) master service parameters
   ##
   service:
