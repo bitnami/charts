@@ -8,22 +8,22 @@
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
 
 ## @section Common parameters
 
 ## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override `common.names.fullname` template with a string
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param commonLabels Add labels to all the deployed resources
 ##
 commonLabels: {}
@@ -56,7 +56,7 @@ serviceAccount:
   create: true
   ## @param serviceAccount.name The name of the ServiceAccount to create
   ## If not set and create is true, a name is generated using the common.names.fullname template
-  name:
+  name: ""
 ## Bitnami Node Exporter image version
 ## ref: https://hub.docker.com/r/bitnami/node-exporter/tags/
 ## @param image.registry Node Exporter image registry
@@ -123,18 +123,18 @@ service:
   port: 9100
   ## @param service.clusterIP Specific cluster IP when service type is cluster IP. Use `None` for headless service
   ##
-  clusterIP:
+  clusterIP: ""
   ## @param service.nodePort Specify the nodePort value for the LoadBalancer and NodePort service types
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ## e.g:
   ## nodePort: 30080
   ##
-  nodePort:
+  nodePort: ""
   ## @param service.loadBalancerIP `loadBalancerIP` if service type is `LoadBalancer`
   ## Set the LoadBalancer service type to internal only
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
-  loadBalancerIP:
+  loadBalancerIP: ""
   ## @param service.loadBalancerSourceRanges Address that are allowed when service is `LoadBalancer`
   ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
   ##
@@ -270,22 +270,22 @@ serviceMonitor:
   enabled: false
   ## @param serviceMonitor.namespace Namespace in which Prometheus is running
   ##
-  namespace:
+  namespace: ""
   ## @param serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
   ##
-  jobLabel:
+  jobLabel: ""
   ## @param serviceMonitor.interval Scrape interval (use by default, falling back to Prometheus' default)
   ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
   ## e.g:
   ## interval: 10s
   ##
-  interval:
+  interval: ""
   ## @param serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
   ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
   ## e.g:
   ## scrapeTimeout: 10s
   ##
-  scrapeTimeout:
+  scrapeTimeout: ""
   ## @param serviceMonitor.selector ServiceMonitor selector labels
   ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
   ##
