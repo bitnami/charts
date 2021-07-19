@@ -76,7 +76,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.pullSecrets`  | Specify docker-registry secret names as an array                     | `[]`                  |
 | `command`            | Override default container command (useful when using custom images) | `[]`                  |
 | `args`               | Override default container args (useful when using custom images)    | `[]`                  |
-| `extraEnvVars`       | Extra environment variables to be set on PhpMyAdmin container        | `{}`                  |
+| `extraEnvVars`       | Extra environment variables to be set on PhpMyAdmin container        | `[]`                  |
 | `extraEnvVarsCM`     | Name of a existing ConfigMap containing extra env vars               | `""`                  |
 | `extraEnvVarsSecret` | Name of a existing Secret containing extra env vars                  | `""`                  |
 

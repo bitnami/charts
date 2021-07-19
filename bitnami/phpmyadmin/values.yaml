@@ -75,7 +75,7 @@ args: []
 ## - name: PHP_UPLOAD_MAX_FILESIZE
 ##   value: "80M"
 ##
-extraEnvVars: {}
+extraEnvVars: []
 ## @param extraEnvVarsCM Name of a existing ConfigMap containing extra env vars
 ##
 extraEnvVarsCM: ""
