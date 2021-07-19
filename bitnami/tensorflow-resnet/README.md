@@ -60,59 +60,73 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## Parameters
 
-The following tables lists the configurable parameters of the TensorFlow ResNet chart and their default values.
+### Global parameters
 
-| Parameter                            | Description                                                                                               | Default                                                                                                            |
-|--------------------------------------|-----------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
-| `global.imageRegistry`               | Global Docker image registry                                                                              | `nil`                                                                                                              |
-| `global.imagePullSecrets`            | Global Docker registry secret names as an array                                                           | `[]` (does not add image pull secrets to deployed pods)                                                            |
-| `server.image.registry`              | TensorFlow Serving image registry                                                                         | `docker.io`                                                                                                        |
-| `server.image.repository`            | TensorFlow Serving Image name                                                                             | `bitnami/tensorflow-serving`                                                                                       |
-| `server.image.tag`                   | TensorFlow Serving Image tag                                                                              | `{TAG_NAME}`                                                                                                       |
-| `server.image.pullPolicy`            | TensorFlow Serving image pull policy                                                                      | `IfNotPresent`                                                                                                     |
-| `server.image.pullSecrets`           | Specify docker-registry secret names as an array                                                          | `[]` (does not add image pull secrets to deployed pods)                                                            |
-| `client.image.registry`              | TensorFlow ResNet image registry                                                                          | `docker.io`                                                                                                        |
-| `client.image.repository`            | TensorFlow ResNet Image name                                                                              | `bitnami/tensorflow-resnet`                                                                                        |
-| `client.image.tag`                   | TensorFlow ResNet Image tag                                                                               | `{TAG_NAME}`                                                                                                       |
-| `client.image.pullPolicy`            | TensorFlow ResNet image pull policy                                                                       | `IfNotPresent`                                                                                                     |
-| `client.image.pullSecrets`           | Specify docker-registry secret names as an array                                                          | `[]` (does not add image pull secrets to deployed pods)                                                            |
-| `nameOverride`                       | String to partially override common.names.fullname template with a string (will prepend the release name) | `nil`                                                                                                              |
-| `fullnameOverride`                   | String to fully override common.names.fullname template with a string                                     | `nil`                                                                                                              |
-| `containerPorts.server`              | Tensorflow server port                                                                                    | `8500`                                                                                                             |
-| `containerPorts.restApi`             | TensorFlow Serving Rest API Port                                                                          | `8501`                                                                                                             |
-| `replicaCount`                       | Desired number of pods                                                                                    | `1`                                                                                                                |
-| `podAnnotations`                     | Pod annotations                                                                                           | `{}`                                                                                                               |
-| `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                       | `""`                                                                                                               |
-| `podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                  | `soft`                                                                                                             |
-| `nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                 | `""`                                                                                                               |
-| `nodeAffinityPreset.key`             | Node label key to match Ignored if `affinity` is set.                                                     | `""`                                                                                                               |
-| `nodeAffinityPreset.values`          | Node label values to match. Ignored if `affinity` is set.                                                 | `[]`                                                                                                               |
-| `affinity`                           | Affinity for pod assignment                                                                               | `{}` (evaluated as a template)                                                                                     |
-| `nodeSelector`                       | Node labels for pod assignment                                                                            | `{}` (evaluated as a template)                                                                                     |
-| `hostAliases`                        | Add deployment host aliases                                                                               | `[]`                                                                                                               |
-| `tolerations`                        | Tolerations for pod assignment                                                                            | `[]` (evaluated as a template)                                                                                     |
-| `resources`                          | Resource requests/limit                                                                                   | `{}`                                                                                                               |
-| `livenessProbe.enabled`              | Would you like a livessProbed to be enabled                                                               | `true`                                                                                                             |
-| `livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated                                                                  | 30                                                                                                                 |
-| `livenessProbe.periodSeconds`        | How often to perform the probe                                                                            | 5                                                                                                                  |
-| `livenessProbe.timeoutSeconds`       | When the probe times out                                                                                  | 5                                                                                                                  |
-| `livenessProbe.failureThreshold`     | Minimum consecutive failures for the probe to be considered failed after having succeeded                 | 6                                                                                                                  |
-| `livenessProbe.successThreshold`     | Minimum consecutive successes for the probe to be considered successful after having failed               | 1                                                                                                                  |
-| `readinessProbe.enabled`             | Would you like a readinessProbe to be enabled                                                             | `true`                                                                                                             |
-| `readinessProbe.initialDelaySeconds` | Delay before liveness probe is initiated                                                                  | 15                                                                                                                 |
-| `readinessProbe.periodSeconds`       | How often to perform the probe                                                                            | 5                                                                                                                  |
-| `readinessProbe.timeoutSeconds`      | When the probe times out                                                                                  | 5                                                                                                                  |
-| `readinessProbe.failureThreshold`    | Minimum consecutive failures for the probe to be considered failed after having succeeded                 | 6                                                                                                                  |
-| `readinessProbe.successThreshold`    | Minimum consecutive successes for the probe to be considered successful after having failed               | 1                                                                                                                  |
-| `service.type`                       | Kubernetes Service type                                                                                   | `LoadBalancer`                                                                                                     |
-| `service.port`                       | TensorFlow Serving server port                                                                            | `8500`                                                                                                             |
-| `service.restApiPort`                | TensorFlow Serving Rest API port                                                                          | `8501`                                                                                                             |
-| `service.nodePorts.server`           | Kubernetes server node port                                                                               | `""`                                                                                                               |
-| `service.nodePorts.restApi`          | Kubernetes Rest API node port                                                                             | `""`                                                                                                               |
-| `service.loadBalancerIP`             | LoadBalancer service IP address                                                                           | `""`                                                                                                               |
-| `service.annotations`                | Service annotations                                                                                       | `{}`                                                                                                               |
-| `metrics.enabled`                    | Enable Prometheus exporter to expose Tensorflow server metrics                                            | `false`                                                                                                            |
-| `metrics.podAnnotations`             | Additional annotations for Metrics exporter pod                                                           | `{prometheus.io/scrape: "true", prometheus.io/path: "/monitoring/prometheus/metrics", prometheus.io/port: "8501"}` |
+| Name                      | Description                                     | Value |
+| ------------------------- | ----------------------------------------------- | ----- |
+| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
+
+
+### Common parameters
+
+| Name               | Description                                                                                  | Value |
+| ------------------ | -------------------------------------------------------------------------------------------- | ----- |
+| `nameOverride`     | String to partially override common.names.fullname template (will maintain the release name) | `nil` |
+| `fullnameOverride` | String to fully override common.names.fullname template                                      | `nil` |
+
+
+### TensorFlow parameters
+
+| Name                                 | Description                                                                               | Value                        |
+| ------------------------------------ | ----------------------------------------------------------------------------------------- | ---------------------------- |
+| `server.image.registry`              | TensorFlow Serving image registry                                                         | `docker.io`                  |
+| `server.image.repository`            | TensorFlow Serving image repository                                                       | `bitnami/tensorflow-serving` |
+| `server.image.tag`                   | TensorFlow Serving Image tag (immutable tags are recommended)                             | `2.5.1-debian-10-r25`        |
+| `server.image.pullPolicy`            | TensorFlow Serving image pull policy                                                      | `IfNotPresent`               |
+| `server.image.pullSecrets`           | Specify docker-registry secret names as an array                                          | `[]`                         |
+| `client.image.registry`              | TensorFlow ResNet image registry                                                          | `docker.io`                  |
+| `client.image.repository`            | TensorFlow ResNet image repository                                                        | `bitnami/tensorflow-resnet`  |
+| `client.image.tag`                   | TensorFlow ResNet Image tag (immutable tags are recommended)                              | `2.5.1-debian-10-r17`        |
+| `client.image.pullPolicy`            | TensorFlow ResNet image pull policy                                                       | `IfNotPresent`               |
+| `client.image.pullSecrets`           | Specify docker-registry secret names as an array                                          | `[]`                         |
+| `hostAliases`                        | Deployment pod host aliases                                                               | `[]`                         |
+| `containerPorts.server`              | Tensorflow server port                                                                    | `8500`                       |
+| `containerPorts.restApi`             | TensorFlow Serving Rest API Port                                                          | `8501`                       |
+| `replicaCount`                       | Number of replicas                                                                        | `1`                          |
+| `podAnnotations`                     | Pod annotations                                                                           | `{}`                         |
+| `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                         |
+| `podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                       |
+| `nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                         |
+| `nodeAffinityPreset.key`             | Node label key to match Ignored if `affinity` is set.                                     | `""`                         |
+| `nodeAffinityPreset.values`          | Node label values to match. Ignored if `affinity` is set.                                 | `[]`                         |
+| `affinity`                           | Affinity for pod assignment. Evaluated as a template.                                     | `{}`                         |
+| `nodeSelector`                       | Node labels for pod assignment. Evaluated as a template.                                  | `{}`                         |
+| `tolerations`                        | Tolerations for pod assignment. Evaluated as a template.                                  | `[]`                         |
+| `resources.limits`                   | The resources limits for the container                                                    | `{}`                         |
+| `resources.requests`                 | The requested resources for the container                                                 | `{}`                         |
+| `livenessProbe.enabled`              | Enable livenessProbe                                                                      | `true`                       |
+| `livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                   | `30`                         |
+| `livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                          | `5`                          |
+| `livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                         | `5`                          |
+| `livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                       | `6`                          |
+| `livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                       | `1`                          |
+| `readinessProbe.enabled`             | Enable readinessProbe                                                                     | `true`                       |
+| `readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                  | `15`                         |
+| `readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                         | `5`                          |
+| `readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                        | `5`                          |
+| `readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                      | `6`                          |
+| `readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                      | `1`                          |
+| `service.type`                       | Kubernetes Service type                                                                   | `LoadBalancer`               |
+| `service.port`                       | TensorFlow Serving server port                                                            | `8500`                       |
+| `service.restApiPort`                | TensorFlow Serving Rest API port                                                          | `8501`                       |
+| `service.nodePorts.server`           | Kubernetes server node port                                                               | `""`                         |
+| `service.nodePorts.restApi`          | Kubernetes Rest API node port                                                             | `""`                         |
+| `service.loadBalancerIP`             | Set the LoadBalancer service type to internal only.                                       | `nil`                        |
+| `service.annotations`                | Service annotations                                                                       | `{}`                         |
+| `metrics.enabled`                    | Enable Prometheus exporter to expose Tensorflow server metrics                            | `false`                      |
+| `metrics.podAnnotations`             | Prometheus exporter pod annotations                                                       | `{}`                         |
+
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

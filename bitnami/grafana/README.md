@@ -300,6 +300,8 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `imageRenderer.nodeSelector`                         | Node labels for pod assignment                                                                         | `{}`                             |
 | `imageRenderer.tolerations`                          | Tolerations for pod assignment                                                                         | `[]`                             |
 | `imageRenderer.affinity`                             | Affinity for pod assignment                                                                            | `{}`                             |
+| `imageRenderer.resources.limits`                     | The resources limits for Grafana Image Renderer containers                                             | `{}`                             |
+| `imageRenderer.resources.requests`                   | The requested resources for Grafana Image Renderer containers                                          | `{}`                             |
 | `imageRenderer.securityContext.enabled`              | Enable securityContext on for Grafana Image Renderer deployment                                        | `true`                           |
 | `imageRenderer.securityContext.fsGroup`              | Group to configure permissions for volumes                                                             | `1001`                           |
 | `imageRenderer.securityContext.runAsUser`            | User for the security context                                                                          | `1001`                           |

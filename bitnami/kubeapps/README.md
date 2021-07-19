@@ -2,14 +2,18 @@
 
 [![CircleCI](https://circleci.com/gh/kubeapps/kubeapps/tree/master.svg?style=svg)](https://circleci.com/gh/kubeapps/kubeapps/tree/master)
 
-[Kubeapps](https://kubeapps.com) is a web-based UI for deploying and managing applications in Kubernetes clusters. Kubeapps allows you to:
+[Kubeapps](https://kubeapps.com) is an in-cluster web-based application that enables users with a one-time installation to deploy, manage, and upgrade applications on a Kubernetes cluster.
 
-- Browse and deploy [Helm](https://github.com/helm/helm) charts from chart repositories
-- Inspect, upgrade and delete Helm-based applications installed in the cluster
-- Add custom and private chart repositories (supports [ChartMuseum](https://github.com/helm/chartmuseum) and [JFrog Artifactory](https://www.jfrog.com/confluence/display/RTF/Helm+Chart+Repositories))
-- Browse and deploy [Kubernetes Operators](https://operatorhub.io/).
-- Secure authentication to Kubeapps using an [OAuth2/OIDC provider](https://github.com/kubeapps/kubeapps/blob/master/docs/user/using-an-OIDC-provider.md)
-- Secure authorization based on Kubernetes [Role-Based Access Control](https://github.com/kubeapps/kubeapps/blob/master/docs/user/access-control.md)
+With Kubeapps you can:
+
+- Customize deployments through an intuitive, form-based user interface
+- Inspect, upgrade and delete applications installed in the cluster
+- Browse and deploy [Helm](https://github.com/helm/helm) charts from public or private chart repositories (including [VMware Marketplace™](https://marketplace.cloud.vmware.com) and [Bitnami Application Catalog](https://bitnami.com/application-catalog))
+- Browse and deploy [Kubernetes Operators](https://operatorhub.io/)
+- Secure authentication to Kubeapps using a [standalone OAuth2/OIDC provider](./docs/user/using-an-OIDC-provider.md) or [using Pinniped](./docs/user/using-an-OIDC-provider-with-pinniped.md)
+- Secure authorization based on Kubernetes [Role-Based Access Control](./docs/user/access-control.md)
+
+**_Note:_** Kubeapps 2.0 and onwards supports Helm 3 only. While only the Helm 3 API is supported, in most cases, charts made for Helm 2 will still work.
 
 ## TL;DR
 

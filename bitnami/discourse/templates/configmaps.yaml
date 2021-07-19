@@ -11,7 +11,7 @@ metadata:
   {{- end }}
 data:
   {{- $port := .Values.service.port | toString }}
-  DISCOURSE_HOST: "{{ include "discourse.host" . }}{{- if ne $port "80" }}:{{ .Values.service.port }}{{ end }}"
+  DISCOURSE_HOST: "{{ include "discourse.host" . }}"
   DISCOURSE_SKIP_INSTALL: {{ ternary "yes" "no" .Values.discourse.skipInstall | quote }}
   DISCOURSE_SITE_NAME: {{ .Values.discourse.siteName | quote }}
   DISCOURSE_USERNAME: {{ .Values.discourse.username | quote }}
