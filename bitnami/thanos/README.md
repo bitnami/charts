@@ -735,18 +735,18 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 
 ### Metrics parameters
 
-| Parameter                              | Description                                                                                            | Default                                   |
-| -------------------------------------- | ------------------------------------------------------------------------------------------------------ | ----------------------------------------- |
-| `metrics.enabled`                      | Enable the export of Prometheus metrics                                                                | `false`                                   |
-| `metrics.serviceMonitor.enabled`       | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`) | `false`                                   |
-| `metrics.serviceMonitor.namespace`     | Namespace in which Prometheus is running                                                               | `nil`                                     |
-| `metrics.serviceMonitor.labels`        | Additional labels for ServiceMonitor                                                                   | `{}`                                      |
-| `metrics.serviceMonitor.interval`      | Interval at which metrics should be scraped.                                                           | `nil` (Prometheus Operator default value) |
-| `metrics.serviceMonitor.scrapeTimeout` | Timeout after which the scrape is ended                                                                | `nil` (Prometheus Operator default value) |
-| `metrics.prometheusRule.enabled`       | if `true`, creates a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true`) | `false`                                   |
-| `metrics.prometheusRule.namespace`     | Namespace in which the PrometheusRule will be created                                                    | `nil`                                     |
-| `metrics.prometheusRule.additionalLabels`      | Additional labels for the prometheusRule                                                        | `{}`                                      |
-| `metrics.prometheusRule.rules`          | Prometheus Rules for Thanos components                                                                         |                                     |
+| Name                                      | Description                                                                                            | Value   |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------------------ | ------- |
+| `metrics.enabled`                         | Enable the export of Prometheus metrics                                                                | `false` |
+| `metrics.serviceMonitor.enabled`          | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`) | `false` |
+| `metrics.serviceMonitor.namespace`        | Namespace in which Prometheus is running                                                               | `nil`   |
+| `metrics.serviceMonitor.labels`           | Additional labels for ServiceMonitor object                                                            | `nil`   |
+| `metrics.serviceMonitor.interval`         | Interval at which metrics should be scraped.                                                           | `nil`   |
+| `metrics.serviceMonitor.scrapeTimeout`    | Timeout after which the scrape is ended                                                                | `nil`   |
+| `metrics.prometheusRule.enabled`          | If `true`, creates a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true`) | `false` |
+| `metrics.prometheusRule.namespace`        | Namespace in which the PrometheusRule CRD is created                                                   | `nil`   |
+| `metrics.prometheusRule.additionalLabels` | Additional labels for the prometheusRule                                                               | `{}`    |
+| `metrics.prometheusRule.rules`            | Prometheus Rules for Thanos components                                                                 | `[]`    |
 
 
 ### Volume Permissions parameters
