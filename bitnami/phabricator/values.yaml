@@ -8,22 +8,22 @@
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
 
 ## @section Common parameters
 
 ## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname template
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param commonLabels Add labels to all the deployed resources
 ##
 commonLabels: {}
@@ -32,7 +32,7 @@ commonLabels: {}
 commonAnnotations: {}
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
-kubeVersion:
+kubeVersion: ""
 ## @param clusterDomain Kubernetes Cluster Domain
 ##
 clusterDomain: cluster.local
@@ -79,7 +79,7 @@ phabricatorUsername: user
 ## Defaults to a random 10-character alphanumeric string if not set
 ## ref: https://github.com/bitnami/bitnami-docker-phabricator#user-and-site-configuration
 ##
-phabricatorPassword:
+phabricatorPassword: ""
 ## @param phabricatorEmail Admin user email
 ## ref: https://github.com/bitnami/bitnami-docker-phabricator#user-and-site-configuration
 ##
@@ -94,11 +94,11 @@ phabricatorLastName: Last Name
 ## @param phabricatorHost Phabricator host to create application URLs
 ## ref: https://github.com/bitnami/bitnami-docker-phabricator#user-and-site-configuration
 ##
-phabricatorHost:
+phabricatorHost: ""
 ## @param phabricatorAlternateFileDomain Phabricator alternate domain to upload files
 ## ref: https://github.com/bitnami/bitnami-docker-phabricator#user-and-site-configuration
 ##
-phabricatorAlternateFileDomain:
+phabricatorAlternateFileDomain: ""
 ## @param phabricatorEnableHttps Configure Phabricator to build application URLs using https
 ## ref: https://github.com/bitnami/bitnami-docker-phabricator#user-and-site-configuration
 ## Note: Instead of yes/no use true/false
@@ -132,11 +132,11 @@ phabricatorSkipInstall: false
 ## @param smtpPassword SMTP mail delivery password
 ## @param smtpProtocol SMTP mail delivery protocol [`ssl`, `tls`]
 ##
-smtpHost:
-smtpPort:
-smtpUser:
-smtpPassword:
-smtpProtocol:
+smtpHost: ""
+smtpPort: ""
+smtpUser: ""
+smtpPassword: ""
+smtpProtocol: ""
 ## @param command Override default container command (useful when using custom images)
 ##
 command: []
@@ -152,10 +152,10 @@ args: []
 extraEnvVars: []
 ## @param extraEnvVarsCM Name of existing ConfigMap containing extra environment variables
 ##
-extraEnvVarsCM:
+extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Name of existing Secret containing extra environment variables
 ##
-extraEnvVarsSecret:
+extraEnvVarsSecret: ""
 
 ## @section Phabricator deployment parameters
 
@@ -333,7 +333,7 @@ extraVolumeMounts: []
 ##       - name: portname
 ##         containerPort: 1234
 ##
-initContainers: {}
+initContainers: []
 ## @param sidecars Add sidecars to the Phabricator pods
 ## Example:
 ## sidecars:
@@ -344,7 +344,7 @@ initContainers: {}
 ##       - name: portname
 ##         containerPort: 1234
 ##
-sidecars: {}
+sidecars: []
 ## Enable persistence using Persistent Volume Claims
 ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
@@ -359,7 +359,7 @@ persistence:
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##   GKE, AWS & OpenStack)
   ##
-  storageClass:
+  storageClass: ""
   ## @param persistence.accessMode PVC Access Mode for Phabricator volume
   ##
   accessMode: ReadWriteOnce
@@ -370,13 +370,13 @@ persistence:
   ## Requires persistence.enabled: true
   ## If defined, PVC must be created manually before volume will be bound
   ##
-  existingClaim:
+  existingClaim: ""
   ## @param persistence.hostPath Host mount path for Phabricator volume
   ## Requires persistence.enabled: true
   ## Requires persistence.existingClaim: nil|false
   ## Default: nil.
   ##
-  hostPath:
+  hostPath: ""
 
 ## @section Traffic Exposure Parameters
 
@@ -410,7 +410,7 @@ service:
     ssh: ""
   ## @param service.loadBalancerIP `loadBalancerIP` for the Phabricator Service
   ##
-  loadBalancerIP:
+  loadBalancerIP: ""
   ## @param service.externalTrafficPolicy Enable client source IP preservation
   ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
@@ -439,7 +439,7 @@ ingress:
   pathType: ImplementationSpecific
   ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
   ##
-  apiVersion:
+  apiVersion: ""
   ## @param ingress.hostname Default host for the ingress resource
   ##
   hostname: phabricator.local
@@ -563,7 +563,7 @@ mariadb:
       ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
       ##   GKE, AWS & OpenStack)
       ##
-      storageClass:
+      storageClass: ""
       ## @param mariadb.primary.persistence.accessModes Database Persistent Volume Access Modes
       ##
       accessModes:
@@ -573,10 +573,10 @@ mariadb:
       size: 8Gi
       ## @param mariadb.primary.persistence.hostPath Host mount path for MariaDB volume in case you want to use local host path volumes (not recommended in production)
       ##
-      hostPath:
+      hostPath: ""
       ## @param mariadb.primary.persistence.existingClaim Enable persistence using an existing PVC
       ##
-      existingClaim:
+      existingClaim: ""
 ## External Database Configuration
 ## All of these values are only used when mariadb.enabled is set to false
 ##
@@ -585,7 +585,7 @@ externalDatabase:
   ## NOTE: must contain key `mariadb-root-password`
   ## NOTE: When it's set, the `externalDatabase.rootPassword` parameter is ignored
   ##
-  existingSecret:
+  existingSecret: ""
   ## @param externalDatabase.host Host of the existing database
   ##
   host: localhost

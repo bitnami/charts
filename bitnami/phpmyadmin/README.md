@@ -48,7 +48,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 
 
@@ -56,9 +56,9 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                | Description                                                                                  | Value           |
 | ------------------- | -------------------------------------------------------------------------------------------- | --------------- |
-| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                         | `nil`           |
-| `nameOverride`      | String to partially override common.names.fullname template (will maintain the release name) | `nil`           |
-| `fullnameOverride`  | String to fully override common.names.fullname template                                      | `nil`           |
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                         | `""`            |
+| `nameOverride`      | String to partially override common.names.fullname template (will maintain the release name) | `""`            |
+| `fullnameOverride`  | String to fully override common.names.fullname template                                      | `""`            |
 | `commonLabels`      | Add labels to all the deployed resources                                                     | `{}`            |
 | `commonAnnotations` | Add annotations to all the deployed resources                                                | `{}`            |
 | `clusterDomain`     | Kubernetes Cluster Domain                                                                    | `cluster.local` |
@@ -76,9 +76,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.pullSecrets`  | Specify docker-registry secret names as an array                     | `[]`                  |
 | `command`            | Override default container command (useful when using custom images) | `[]`                  |
 | `args`               | Override default container args (useful when using custom images)    | `[]`                  |
-| `extraEnvVars`       | Extra environment variables to be set on PhpMyAdmin container        | `{}`                  |
-| `extraEnvVarsCM`     | Name of a existing ConfigMap containing extra env vars               | `nil`                 |
-| `extraEnvVarsSecret` | Name of a existing Secret containing extra env vars                  | `nil`                 |
+| `extraEnvVars`       | Extra environment variables to be set on PhpMyAdmin container        | `[]`                  |
+| `extraEnvVarsCM`     | Name of a existing ConfigMap containing extra env vars               | `""`                  |
+| `extraEnvVarsSecret` | Name of a existing Secret containing extra env vars                  | `""`                  |
 
 
 ### phpMyAdmin deployment parameters
@@ -125,8 +125,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tolerations`                        | Tolerations for pod assignment. Evaluated as a template.                                  | `[]`            |
 | `extraVolumes`                       | Optionally specify extra list of additional volumes for PhpMyAdmin pods                   | `[]`            |
 | `extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for PhpMyAdmin container(s)      | `[]`            |
-| `initContainers`                     | Add init containers to the PhpMyAdmin pods                                                | `{}`            |
-| `sidecars`                           | Add sidecar containers to the PhpMyAdmin pods                                             | `{}`            |
+| `initContainers`                     | Add init containers to the PhpMyAdmin pods                                                | `[]`            |
+| `sidecars`                           | Add sidecar containers to the PhpMyAdmin pods                                             | `[]`            |
 
 
 ### Traffic Exposure parameters
@@ -138,8 +138,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.httpsPort`                | Service HTTPS port                                                                            | `443`                    |
 | `service.nodePorts.http`           | Kubernetes http node port                                                                     | `""`                     |
 | `service.nodePorts.https`          | Kubernetes https node port                                                                    | `""`                     |
-| `service.clusterIP`                | PhpMyAdmin service clusterIP IP                                                               | `nil`                    |
-| `service.loadBalancerIP`           | Load balancer IP for the phpMyAdmin Service (optional, cloud specific)                        | `nil`                    |
+| `service.clusterIP`                | PhpMyAdmin service clusterIP IP                                                               | `""`                     |
+| `service.loadBalancerIP`           | Load balancer IP for the phpMyAdmin Service (optional, cloud specific)                        | `""`                     |
 | `service.loadBalancerSourceRanges` | Addresses that are allowed when service is LoadBalancer                                       | `[]`                     |
 | `service.externalTrafficPolicy`    | Enable client source IP preservation                                                          | `Cluster`                |
 | `service.annotations`              | Provide any additional annotations that may be required for the PhpMyAdmin service            | `{}`                     |
@@ -160,14 +160,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------- | ----------------------------------------------------------------- | ------- |
 | `db.allowArbitraryServer`  | Enable connection to arbitrary MySQL server                       | `true`  |
 | `db.port`                  | Database port to use to connect                                   | `3306`  |
-| `db.chartName`             | Database suffix if included in the same release                   | `nil`   |
-| `db.host`                  | Database Hostname. Ignored when `db.chartName` is set.            | `nil`   |
+| `db.chartName`             | Database suffix if included in the same release                   | `""`    |
+| `db.host`                  | Database Hostname. Ignored when `db.chartName` is set.            | `""`    |
 | `db.bundleTestDB`          | Deploy a MariaDB instance for testing purposes                    | `false` |
 | `db.enableSsl`             | Enable SSL for the connection between phpMyAdmin and the database | `false` |
 | `db.ssl.clientKey`         | Client key file when using SSL                                    | `""`    |
 | `db.ssl.clientCertificate` | Client certificate file when using SSL                            | `""`    |
 | `db.ssl.caCertificate`     | CA file when using SSL                                            | `""`    |
-| `db.ssl.ciphers`           | List of allowable ciphers for connections when using SSL          | `nil`   |
+| `db.ssl.ciphers`           | List of allowable ciphers for connections when using SSL          | `[]`    |
 | `db.ssl.verify`            | Enable SSL certificate validation                                 | `true`  |
 | `mariadb`                  | MariaDB chart configuration                                       | `{}`    |
 
@@ -186,14 +186,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.service.type`                     | Prometheus metrics service type                                                   | `ClusterIP`               |
 | `metrics.service.port`                     | Prometheus metrics service port                                                   | `9117`                    |
 | `metrics.service.annotations`              | Annotations for Prometheus metrics service                                        | `{}`                      |
-| `metrics.service.loadBalancerIP`           | Load Balancer IP if the Prometheus metrics server type is `LoadBalancer`          | `nil`                     |
+| `metrics.service.loadBalancerIP`           | Load Balancer IP if the Prometheus metrics server type is `LoadBalancer`          | `""`                      |
 | `metrics.serviceMonitor.enabled`           | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator      | `false`                   |
 | `metrics.serviceMonitor.namespace`         | Specify the namespace in which the serviceMonitor resource will be created        | `""`                      |
-| `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in prometheus. | `nil`                     |
+| `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in prometheus. | `""`                      |
 | `metrics.serviceMonitor.interval`          | Specify the interval at which metrics should be scraped                           | `30s`                     |
-| `metrics.serviceMonitor.scrapeTimeout`     | Specify the timeout after which the scrape is ended                               | `nil`                     |
-| `metrics.serviceMonitor.relabellings`      | Specify Relabellings to add to the scrape endpoint                                | `nil`                     |
-| `metrics.serviceMonitor.metricRelabelings` | Specify Metric Relabelings to add to the scrape endpoint                          | `nil`                     |
+| `metrics.serviceMonitor.scrapeTimeout`     | Specify the timeout after which the scrape is ended                               | `""`                      |
+| `metrics.serviceMonitor.relabellings`      | Specify Relabellings to add to the scrape endpoint                                | `[]`                      |
+| `metrics.serviceMonitor.metricRelabelings` | Specify Metric Relabelings to add to the scrape endpoint                          | `[]`                      |
 | `metrics.serviceMonitor.honorLabels`       | Specify honorLabels parameter to add the scrape endpoint                          | `false`                   |
 | `metrics.serviceMonitor.additionalLabels`  | Used to pass Labels that are required by the installed Prometheus Operator        | `{}`                      |
 

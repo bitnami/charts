@@ -8,13 +8,13 @@
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
   ## @param global.postgresql.postgresqlDatabase PostgreSQL database (overrides `postgresqlDatabase`)
   ## @param global.postgresql.postgresqlUsername PostgreSQL username (overrides `postgresqlUsername`)
   ## @param global.postgresql.existingSecret Name of existing secret to use for PostgreSQL passwords (overrides `existingSecret`)
@@ -23,21 +23,21 @@ global:
   ## @param global.postgresql.replicationPassword Replication user password (overrides `replication.password`)
   ##
   postgresql:
-    postgresqlDatabase:
-    postgresqlUsername:
-    existingSecret:
-    postgresqlPassword:
-    servicePort:
-    replicationPassword:
+    postgresqlDatabase: ""
+    postgresqlUsername: ""
+    existingSecret: ""
+    postgresqlPassword: ""
+    servicePort: ""
+    replicationPassword: ""
 
 ## @section Common parameters
 
 ## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname template
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param extraDeploy Array of extra objects to deploy with the release (evaluated as a template)
 ##
 extraDeploy: []
@@ -122,7 +122,7 @@ volumePermissions:
 ## @param schedulerName Use an alternate scheduler, e.g. "stork".
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
-schedulerName:
+schedulerName: ""
 ## Pod Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 ## @param securityContext.enabled Enable security context
@@ -148,7 +148,7 @@ serviceAccount:
   enabled: false
   ## @param serviceAccount.name Name of an already existing service account. Setting this value disables the automatic service account creation
   ##
-  name:
+  name: ""
   ## @param serviceAccount.autoMount Auto-mount the service account token in the pod
   ##
   autoMount: false
@@ -179,14 +179,14 @@ replication:
   readReplicas: 1
   ## ref: https://www.postgresql.org/docs/9.6/runtime-config-wal.html#GUC-WAL-LEVEL
   ##
-  synchronousCommit: 'off'
+  synchronousCommit: "off"
   ## NOTE: It cannot be > readReplicas
   ##
   numSynchronousReplicas: 0
   applicationName: my_application
 ## @param postgresqlPostgresPassword PostgreSQL admin password (used when `postgresqlUsername` is not `postgres`, in which case`postgres` is the admin username)
 ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#creating-a-database-user-on-first-run (see note!)
-postgresqlPostgresPassword:
+postgresqlPostgresPassword: ""
 ## @param postgresqlUsername PostgreSQL user (has superuser privileges if username is `postgres`)
 ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#setting-the-root-password-on-first-run
 ##
@@ -203,14 +203,14 @@ postgresqlPassword: ""
 ## e.g:
 ## existingSecret: secret
 ##
-existingSecret:
+existingSecret: ""
 ## @param usePasswordFile Mount PostgreSQL secret as a file instead of passing environment variable
 ##
 usePasswordFile: false
 ## @param postgresqlDatabase PostgreSQL database
 ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#creating-a-database-on-first-run
 ##
-postgresqlDatabase:
+postgresqlDatabase: ""
 ## @param postgresqlDataDir PostgreSQL data dir folder
 ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md
 ##
@@ -224,27 +224,27 @@ postgresqlDataDir: /bitnami/postgresql/data
 extraEnv: []
 ## @param extraEnvVarsCM Name of a Config Map containing extra environment variables
 ##
-extraEnvVarsCM:
+extraEnvVarsCM: ""
 ## @param postgresqlInitdbArgs PostgreSQL initdb extra arguments
 ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md
 ##
-postgresqlInitdbArgs:
+postgresqlInitdbArgs: ""
 ## @param postgresqlInitdbWalDir Specify a custom location for the PostgreSQL transaction log
 ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md
 ##
-postgresqlInitdbWalDir:
+postgresqlInitdbWalDir: ""
 ## @param postgresqlConfiguration PostgreSQL configuration
 ## Specify runtime configuration parameters as a dict, using camelCase, e.g.
 ## {"sharedBuffers": "500MB"}
 ## Alternatively, you can put your postgresql.conf under the files/ directory
 ## ref: https://www.postgresql.org/docs/current/static/runtime-config.html
 ##
-postgresqlConfiguration:
+postgresqlConfiguration: {}
 ## @param postgresqlExtendedConf Extended Runtime Config Parameters (appended to main or default configuration)
 ## Alternatively, you can put your *.conf under the files/conf.d/ directory
 ## https://github.com/bitnami/bitnami-docker-postgresql#allow-settings-to-be-loaded-from-files-other-than-the-default-postgresqlconf
 ##
-postgresqlExtendedConf:
+postgresqlExtendedConf: ""
 ## Configure current cluster's primary server to be the standby server in other cluster.
 ## This will allow cross cluster replication and provide cross cluster high availability.
 ## You will need to configure pgHbaConfiguration if you want to enable this feature with local cluster replication enabled.
@@ -254,8 +254,8 @@ postgresqlExtendedConf:
 ##
 primaryAsStandBy:
   enabled: false
-  primaryHost:
-  primaryPort:
+  primaryHost: ""
+  primaryPort: ""
 ## @param pgHbaConfiguration PostgreSQL client authentication configuration
 ## Specify content for pg_hba.conf
 ## Default: do not create pg_hba.conf
@@ -269,10 +269,10 @@ pgHbaConfiguration: ""
 ## @param configurationConfigMap ConfigMap with PostgreSQL configuration
 ## NOTE: This will override postgresqlConfiguration and pgHbaConfiguration
 ##
-configurationConfigMap:
+configurationConfigMap: ""
 ## @param extendedConfConfigMap ConfigMap with PostgreSQL extended configuration
 ##
-extendedConfConfigMap:
+extendedConfConfigMap: ""
 ## @param initdbScripts Dictionary of initdb scripts
 ## Specify dictionary of scripts to be run at first boot
 ## Alternatively, you can put your scripts under the files/docker-entrypoint-initdb.d directory
@@ -285,16 +285,16 @@ extendedConfConfigMap:
 initdbScripts: {}
 ## @param initdbScriptsConfigMap ConfigMap with scripts to be run at first boot
 ## NOTE: This will override initdbScripts
-initdbScriptsConfigMap:
+initdbScriptsConfigMap: ""
 ## @param initdbScriptsSecret Secret with scripts to be run at first boot (in case it contains sensitive information)
 ## NOTE: This can work along initdbScripts or initdbScriptsConfigMap
-initdbScriptsSecret:
+initdbScriptsSecret: ""
 ## @param initdbUser Specify the PostgreSQL username to execute the initdb scripts
 ##
-initdbUser:
+initdbUser: ""
 ## @param initdbPassword Specify the PostgreSQL password to execute the initdb scripts
 ##
-initdbPassword:
+initdbPassword: ""
 ## Audit settings
 ## https://github.com/bitnami/bitnami-docker-postgresql#auditing
 ##
@@ -328,35 +328,35 @@ audit:
 postgresqlSharedPreloadLibraries: "pgaudit"
 ## @param postgresqlMaxConnections Maximum total connections
 ##
-postgresqlMaxConnections:
+postgresqlMaxConnections: ""
 ## @param postgresqlPostgresConnectionLimit Maximum connections for the postgres user
 ##
-postgresqlPostgresConnectionLimit:
+postgresqlPostgresConnectionLimit: ""
 ## @param postgresqlDbUserConnectionLimit Maximum connections for the non-admin user
 ##
-postgresqlDbUserConnectionLimit:
+postgresqlDbUserConnectionLimit: ""
 ## @param postgresqlTcpKeepalivesInterval TCP keepalives interval
 ##
-postgresqlTcpKeepalivesInterval:
+postgresqlTcpKeepalivesInterval: ""
 ## @param postgresqlTcpKeepalivesIdle TCP keepalives idle
 ##
-postgresqlTcpKeepalivesIdle:
+postgresqlTcpKeepalivesIdle: ""
 ## @param postgresqlTcpKeepalivesCount TCP keepalives count
 ##
-postgresqlTcpKeepalivesCount:
+postgresqlTcpKeepalivesCount: ""
 ## @param postgresqlStatementTimeout Statement timeout
 ##
-postgresqlStatementTimeout:
+postgresqlStatementTimeout: ""
 ## @param postgresqlPghbaRemoveFilters Comma-separated list of patterns to remove from the pg_hba.conf file
 ## Cannot be used with custom pg_hba.conf
 ##
-postgresqlPghbaRemoveFilters:
+postgresqlPghbaRemoveFilters: ""
 ## @param terminationGracePeriodSeconds Seconds the pod needs to terminate gracefully
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
 ## e.g:
 ## terminationGracePeriodSeconds: 30
 ##
-terminationGracePeriodSeconds:
+terminationGracePeriodSeconds: ""
 ## LDAP configuration
 ## @param ldap.enabled Enable LDAP support
 ## @param ldap.url LDAP URL beginning in the form `ldap[s]://host[:port]/basedn[
@@ -374,18 +374,18 @@ terminationGracePeriodSeconds:
 ##
 ldap:
   enabled: false
-  url: ''
-  server: ''
-  port: ''
-  prefix: ''
-  suffix: ''
-  baseDN: ''
-  bindDN: ''
-  bind_password:
-  search_attr: ''
-  search_filter: ''
-  scheme: ''
-  tls: {}
+  url: ""
+  server: ""
+  port: ""
+  prefix: ""
+  suffix: ""
+  baseDN: ""
+  bindDN: ""
+  bind_password: ""
+  search_attr: ""
+  search_filter: ""
+  scheme: ""
+  tls: ""
 ## PostgreSQL service configuration
 ##
 service:
@@ -396,14 +396,14 @@ service:
   ## e.g:
   ## clusterIP: None
   ##
-  clusterIP:
+  clusterIP: ""
   ## @param service.port PostgreSQL port
   ##
   port: 5432
   ## @param service.nodePort Specify the nodePort value for the LoadBalancer and NodePort service types
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
-  nodePort:
+  nodePort: ""
   ## @param service.annotations Annotations for PostgreSQL service
   ##
   annotations: {}
@@ -411,7 +411,7 @@ service:
   ## Set the LoadBalancer service type to internal only
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
-  loadBalancerIP:
+  loadBalancerIP: ""
   ## @param service.loadBalancerSourceRanges Addresses that are allowed when service is LoadBalancer
   ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
   ##
@@ -439,7 +439,7 @@ shmVolume:
   ## e.g:
   ## sizeLimit: 1Gi
   ##
-  sizeLimit:
+  sizeLimit: ""
 persistence:
   ## @param persistence.enabled Enable persistence using PVC
   ##
@@ -448,7 +448,7 @@ persistence:
   ## If defined, PVC must be created manually before volume will be bound
   ## The value is evaluated as a template, so, for example, the name can depend on .Release or .Chart
   ##
-  existingClaim:
+  existingClaim: ""
   ## @param persistence.mountPath The path the volume will be mounted at, useful when using different
   ## PostgreSQL images.
   ##
@@ -456,7 +456,7 @@ persistence:
   ## @param persistence.subPath The subdirectory of the volume to mount to
   ## Useful in dev environments and one PV for multiple services
   ##
-  subPath: ''
+  subPath: ""
   ## @param persistence.storageClass PVC Storage Class for PostgreSQL volume
   ## If defined, storageClassName: <storageClass>
   ## If set to "-", storageClassName: "", which disables dynamic provisioning
@@ -464,7 +464,7 @@ persistence:
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##   GKE, AWS & OpenStack)
   ##
-  storageClass:
+  storageClass: ""
   ## @param persistence.accessModes PVC Access Mode for PostgreSQL volume
   ##
   accessModes:
@@ -542,7 +542,7 @@ primary:
   podAnnotations: {}
   ## @param primary.priorityClassName Priority Class to use for each pod (postgresql primary)
   ##
-  priorityClassName: ''
+  priorityClassName: ""
   ## @param primary.extraInitContainers Extra init containers to add to the pods (postgresql primary)
   ## Example
   ##
@@ -575,9 +575,9 @@ primary:
   ## @param primary.service.clusterIP Allows using a different clusterIP for primary
   ##
   service:
-    type:
-    nodePort:
-    clusterIP:
+    type: ""
+    nodePort: ""
+    clusterIP: ""
 ## PostgreSQL read only replica parameters
 ##
 readReplicas:
@@ -635,7 +635,7 @@ readReplicas:
   podAnnotations: {}
   ## @param readReplicas.priorityClassName Priority Class to use for each pod (postgresql readReplicas)
   ##
-  priorityClassName: ''
+  priorityClassName: ""
   ## @param readReplicas.extraInitContainers Extra init containers to add to the pods (postgresql readReplicas)
   ## Example
   ##
@@ -669,9 +669,9 @@ readReplicas:
   ## @param readReplicas.service.clusterIP Allows using a different clusterIP for readReplicas
   ##
   service:
-    type:
-    nodePort:
-    clusterIP:
+    type: ""
+    nodePort: ""
+    clusterIP: ""
   ## @param readReplicas.persistence.enabled Whether to enable PostgreSQL read replicas replicas persistence
   ##
   persistence:
@@ -784,21 +784,21 @@ tls:
   preferServerCiphers: true
   ## @param tls.certificatesSecret Name of an existing secret that contains the certificates
   ##
-  certificatesSecret: ''
+  certificatesSecret: ""
   ## @param tls.certFilename Certificate filename
   ##
-  certFilename: ''
+  certFilename: ""
   ## @param tls.certKeyFilename Certificate key filename
   ##
-  certKeyFilename: ''
+  certKeyFilename: ""
   ## @param tls.certCAFilename CA Certificate filename
   ## If provided, PostgreSQL will authenticate TLS/SSL clients by requesting them a certificate
   ## ref: https://www.postgresql.org/docs/9.6/auth-methods.html
   ##
-  certCAFilename:
+  certCAFilename: ""
   ## @param tls.crlFilename File containing a Certificate Revocation List
   ##
-  crlFilename:
+  crlFilename: ""
 ## Configure metrics exporter
 ##
 metrics:
@@ -815,9 +815,9 @@ metrics:
   service:
     type: ClusterIP
     annotations:
-      prometheus.io/scrape: 'true'
-      prometheus.io/port: '9187'
-    loadBalancerIP:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "9187"
+    loadBalancerIP: ""
   ## @param metrics.serviceMonitor.enabled Set this to `true` to create ServiceMonitor for Prometheus operator
   ## @param metrics.serviceMonitor.additionalLabels Additional labels that can be used so ServiceMonitor will be discovered by Prometheus
   ## @param metrics.serviceMonitor.namespace Optional namespace in which to create ServiceMonitor
@@ -827,9 +827,9 @@ metrics:
   serviceMonitor:
     enabled: false
     additionalLabels: {}
-    namespace:
-    interval:
-    scrapeTimeout:
+    namespace: ""
+    interval: ""
+    scrapeTimeout: ""
   ## Custom PrometheusRule to be defined
   ## The value is evaluated as a template, so, for example, the value can depend on .Release or .Chart
   ## ref: https://github.com/coreos/prometheus-operator#customresourcedefinitions
@@ -843,7 +843,7 @@ metrics:
     additionalLabels: {}
     ## @param metrics.prometheusRule.namespace namespace where prometheusRules resource should be created
     ##
-    namespace: ''
+    namespace: ""
     ## @param metrics.prometheusRule.rules [Rules](https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/) to be created
     ## Make sure to constraint the rules to the current postgresql service.
     ## rules:
@@ -897,7 +897,7 @@ metrics:
   ##  - name: PG_EXPORTER_DISABLE_DEFAULT_METRICS
   ##    value: "true"
   ##
-  extraEnvVars: {}
+  extraEnvVars: []
   ## Pod Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param metrics.securityContext.enabled Enable security context for metrics

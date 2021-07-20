@@ -52,18 +52,18 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `nil` |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
 
 ### Common parameters
 
 | Name                     | Description                                                                             | Value           |
 | ------------------------ | --------------------------------------------------------------------------------------- | --------------- |
-| `kubeVersion`            | Override Kubernetes version                                                             | `nil`           |
-| `nameOverride`           | String to partially override common.names.fullname                                      | `nil`           |
-| `fullnameOverride`       | String to fully override common.names.fullname                                          | `nil`           |
+| `kubeVersion`            | Override Kubernetes version                                                             | `""`            |
+| `nameOverride`           | String to partially override common.names.fullname                                      | `""`            |
+| `fullnameOverride`       | String to fully override common.names.fullname                                          | `""`            |
 | `commonLabels`           | Labels to add to all deployed objects                                                   | `{}`            |
 | `commonAnnotations`      | Annotations to add to all deployed objects                                              | `{}`            |
 | `clusterDomain`          | Kubernetes cluster domain name                                                          | `cluster.local` |
@@ -79,16 +79,16 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------ |
 | `service.type`                     | OAuth2 Proxy service type                                                                             | `ClusterIP`              |
 | `service.port`                     | OAuth2 Proxy service HTTP port                                                                        | `80`                     |
-| `service.nodePorts.http`           | Node port for HTTP                                                                                    | `nil`                    |
-| `service.clusterIP`                | OAuth2 Proxy service Cluster IP                                                                       | `nil`                    |
-| `service.loadBalancerIP`           | OAuth2 Proxy service Load Balancer IP                                                                 | `nil`                    |
+| `service.nodePorts.http`           | Node port for HTTP                                                                                    | `""`                     |
+| `service.clusterIP`                | OAuth2 Proxy service Cluster IP                                                                       | `""`                     |
+| `service.loadBalancerIP`           | OAuth2 Proxy service Load Balancer IP                                                                 | `""`                     |
 | `service.loadBalancerSourceRanges` | OAuth2 Proxy service Load Balancer sources                                                            | `[]`                     |
 | `service.externalTrafficPolicy`    | OAuth2 Proxy service external traffic policy                                                          | `Cluster`                |
 | `service.annotations`              | Additional custom annotations for OAuth2 Proxy service                                                | `{}`                     |
 | `ingress.enabled`                  | Enable ingress record generation for WordPress                                                        | `false`                  |
 | `ingress.certManager`              | Add the corresponding annotations for cert-manager integration                                        | `false`                  |
 | `ingress.pathType`                 | Ingress path type                                                                                     | `ImplementationSpecific` |
-| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                         | `nil`                    |
+| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                         | `""`                     |
 | `ingress.hostname`                 | Default host for the ingress record                                                                   | `oaut2-proxy.local`      |
 | `ingress.path`                     | Default path for the ingress record                                                                   | `ImplementationSpecific` |
 | `ingress.annotations`              | Additional custom annotations for the ingress record                                                  | `{}`                     |
@@ -104,7 +104,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ------------------------------------------------------- | ---------------------- |
 | `image.registry`    | OAuth2 Proxy image registry                             | `docker.io`            |
 | `image.repository`  | OAuth2 Proxy image repository                           | `bitnami/oauth2-proxy` |
-| `image.tag`         | OAuth2 Proxy image tag (immutable tags are recommended) | `7.1.3-debian-10-r25`  |
+| `image.tag`         | OAuth2 Proxy image tag (immutable tags are recommended) | `7.1.3-debian-10-r69`  |
 | `image.pullPolicy`  | OAuth2 Proxy image pull policy                          | `IfNotPresent`         |
 | `image.pullSecrets` | OAuth2 Proxy image pull secrets                         | `[]`                   |
 
@@ -116,22 +116,19 @@ The command removes all the Kubernetes components associated with the chart and 
 | `configuration.clientID`                               | OAuth client ID                                     | `XXXXXXX`                                                     |
 | `configuration.clientSecret`                           | OAuth client secret                                 | `XXXXXXXX`                                                    |
 | `configuration.cookieSecret`                           | OAuth cookie secret                                 | `XXXXXXXXXXXXXXXX`                                            |
-| `configuration.existingSecret`                         | Secret with the client ID, secret and cookie secret | `nil`                                                         |
+| `configuration.existingSecret`                         | Secret with the client ID, secret and cookie secret | `""`                                                          |
 | `configuration.google.enabled`                         | Enable Google service account                       | `false`                                                       |
-| `configuration.google.adminEmail`                      | Google admin email                                  | `nil`                                                         |
-| `configuration.google.serviceAccountJson`              | Google Service account JSON                         | `nil`                                                         |
-| `configuration.google.existingSecret`                  | Existing secret containing Google Service Account   | `nil`                                                         |
-| `configuration.content`                                | Default configuration                               | `email_domains = [ "*" ]
-upstreams = [ "file:///dev/null" ]
-` |
-| `configuration.existingConfigmap`                      | Configmap with the OAuth2 Proxy configuration       | `nil`                                                         |
+| `configuration.google.adminEmail`                      | Google admin email                                  | `""`                                                          |
+| `configuration.google.serviceAccountJson`              | Google Service account JSON                         | `""`                                                          |
+| `configuration.google.existingSecret`                  | Existing secret containing Google Service Account   | `""`                                                          |
+| `configuration.content`                                | Default configuration                               | `email_domains = [ "*" ] upstreams = [ "file:///dev/null" ]`  |
+| `configuration.existingConfigmap`                      | Configmap with the OAuth2 Proxy configuration       | `""`                                                          |
 | `configuration.authenticatedEmailsFile.enabled`        | Enable authenticated emails file                    | `false`                                                       |
-| `configuration.authenticatedEmailsFile.content`        | Restricted access list (one email per line)         | `nil`                                                         |
-| `configuration.authenticatedEmailsFile.existingSecret` | Secret with the authenticated emails file           | `nil`                                                         |
+| `configuration.authenticatedEmailsFile.content`        | Restricted access list (one email per line)         | `""`                                                          |
+| `configuration.authenticatedEmailsFile.existingSecret` | Secret with the authenticated emails file           | `""`                                                          |
 | `configuration.htpasswdFile.enabled`                   | Enable htpasswd file                                | `false`                                                       |
 | `configuration.htpasswdFile.existingSecret`            | Existing secret for htpasswd file                   | `""`                                                          |
-| `configuration.htpasswdFile.content`                   | htpasswd file entries (one row per user)            | `nil`                                                         |
-
+| `configuration.htpasswdFile.content`                   | htpasswd file entries (one row per user)            | `""`                                                          |
 
 ### OAuth2 Proxy deployment parameters
 
@@ -139,7 +136,7 @@ upstreams = [ "file:///dev/null" ]
 | ------------------------------------ | ------------------------------------------------------------------------------------------ | --------------- |
 | `containerPort`                      | OAuth2 Proxy port number                                                                   | `4180`          |
 | `replicaCount`                       | Number of OAuth2 Proxy replicas to deploy                                                  | `1`             |
-| `extraArgs`                          | add extra args to the default command                                                      | `nil`           |
+| `extraArgs`                          | add extra args to the default command                                                      | `[]`            |
 | `livenessProbe.enabled`              | Enable livenessProbe on OAuth2 Proxy nodes                                                 | `true`          |
 | `livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                    | `0`             |
 | `livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                           | `10`            |
@@ -180,8 +177,8 @@ upstreams = [ "file:///dev/null" ]
 | `priorityClassName`                  | OAuth2 Proxy pods' priorityClassName                                                       | `""`            |
 | `lifecycleHooks`                     | for the OAuth2 Proxy container(s) to automate configuration before or after startup        | `{}`            |
 | `extraEnvVars`                       | Array with extra environment variables to add to OAuth2 Proxy nodes                        | `[]`            |
-| `extraEnvVarsCM`                     | Name of existing ConfigMap containing extra env vars for OAuth2 Proxy nodes                | `nil`           |
-| `extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for OAuth2 Proxy nodes                   | `nil`           |
+| `extraEnvVarsCM`                     | Name of existing ConfigMap containing extra env vars for OAuth2 Proxy nodes                | `""`            |
+| `extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for OAuth2 Proxy nodes                   | `""`            |
 | `extraVolumes`                       | Optionally specify extra list of additional volumes for the OAuth2 Proxy pod(s)            | `[]`            |
 | `extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for the OAuth2 Proxy container(s) | `[]`            |
 | `sidecars`                           | Add additional sidecar containers to the OAuth2 Proxy pod(s)                               | `{}`            |
@@ -194,10 +191,10 @@ upstreams = [ "file:///dev/null" ]
 
 | Name                           | Description                                               | Value  |
 | ------------------------------ | --------------------------------------------------------- | ------ |
-| `externalRedis.host`           | External Redis(TM) server host                            | `nil`  |
-| `externalRedis.password`       | External Redis(TM) user password                          | `nil`  |
+| `externalRedis.host`           | External Redis(TM) server host                            | `""`   |
+| `externalRedis.password`       | External Redis(TM) user password                          | `""`   |
 | `externalRedis.port`           | External Redis(TM) server port                            | `6379` |
-| `externalRedis.existingSecret` | The name of an existing secret with Redis(TM) credentials | `nil`  |
+| `externalRedis.existingSecret` | The name of an existing secret with Redis(TM) credentials | `""`   |
 
 
 ### Redis(TM) sub-chart parameters
@@ -209,8 +206,8 @@ upstreams = [ "file:///dev/null" ]
 | `redis.master.service.port`            | Redis(TM) (without Sentinel) service port                 | `6379`       |
 | `redis.replica.replicaCount`           | Number of Redis(TM) replicas                              | `3`          |
 | `redis.auth.enabled`                   | Enable Redis(TM) authentication                           | `true`       |
-| `redis.auth.existingSecret`            | Secret with Redis(TM) credentials                         | `nil`        |
-| `redis.auth.existingSecretPasswordKey` | Key inside the existing secret with Redis(TM) credentials | `nil`        |
+| `redis.auth.existingSecret`            | Secret with Redis(TM) credentials                         | `""`         |
+| `redis.auth.existingSecretPasswordKey` | Key inside the existing secret with Redis(TM) credentials | `""`         |
 | `redis.auth.sentinel`                  | Enable authentication in the Sentinel nodes               | `true`       |
 | `redis.sentinel.enabled`               | Enable Redis(TM) sentinel in the deployment               | `false`      |
 | `redis.sentinel.masterSet`             | Name of the Redis(TM) Sentinel master set                 | `mymaster`   |
