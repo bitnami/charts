@@ -590,7 +590,7 @@ metrics:
     scrapeTimeout: ""
     ## @param metrics.serviceMonitor.relabellings Metrics relabellings to add to the scrape endpoint
     ##
-    relabellings: ""
+    relabellings: []
     ## @param metrics.serviceMonitor.honorLabels Labels to honor to add to the scrape endpoint
     ##
     honorLabels: false
