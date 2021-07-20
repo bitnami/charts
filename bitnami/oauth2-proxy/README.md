@@ -124,11 +124,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `configuration.content`                                | Default configuration                               | `email_domains = [ "*" ] upstreams = [ "file:///dev/null" ]`  |
 | `configuration.existingConfigmap`                      | Configmap with the OAuth2 Proxy configuration       | `""`                                                          |
 | `configuration.authenticatedEmailsFile.enabled`        | Enable authenticated emails file                    | `false`                                                       |
-| `configuration.authenticatedEmailsFile.content`        | Restricted access list (one email per line)         | `{}`                                                          |
+| `configuration.authenticatedEmailsFile.content`        | Restricted access list (one email per line)         | `""`                                                          |
 | `configuration.authenticatedEmailsFile.existingSecret` | Secret with the authenticated emails file           | `""`                                                          |
 | `configuration.htpasswdFile.enabled`                   | Enable htpasswd file                                | `false`                                                       |
 | `configuration.htpasswdFile.existingSecret`            | Existing secret for htpasswd file                   | `""`                                                          |
-| `configuration.htpasswdFile.content`                   | htpasswd file entries (one row per user)            | `{}`                                                          |
+| `configuration.htpasswdFile.content`                   | htpasswd file entries (one row per user)            | `""`                                                          |
 
 ### OAuth2 Proxy deployment parameters
 
