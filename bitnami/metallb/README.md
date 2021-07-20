@@ -49,61 +49,57 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Global parameters
 
-| Name                      | Description                                     | Value |
-| ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
-| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
+| Name                      | Description                                     | Value       |
+| ------------------------- | ----------------------------------------------- | ----------- |
+| `global.imagePullSecrets` | Global Docker registry secret names as an array | `undefined` |
 
 
 ### Common parameters
 
-| Name                | Description                                                                            | Value |
-| ------------------- | -------------------------------------------------------------------------------------- | ----- |
-| `nameOverride`      | String to partially override metallb.fullname include (will maintain the release name) | `nil` |
-| `fullnameOverride`  | String to fully override metallb.fullname template                                     | `nil` |
-| `commonLabels`      | Add labels to all the deployed resources                                               | `{}`  |
-| `commonAnnotations` | Add annotations to all the deployed resources                                          | `{}`  |
+| Name                | Description                                        | Value       |
+| ------------------- | -------------------------------------------------- | ----------- |
+| `fullnameOverride`  | String to fully override metallb.fullname template | `""`        |
+| `commonLabels`      | Add labels to all the deployed resources           | `undefined` |
+| `commonAnnotations` | Add annotations to all the deployed resources      | `undefined` |
 
 
 ### MetalLB parameters
 
-| Name                                    | Description                                                                                                                                 | Value   |
-| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `existingConfigMap`                     | Specify the name of an externally-defined ConfigMap to use as the configuration. This is mutually exclusive with the `configInline` option. | `nil`   |
-| `configInline`                          | Specifies MetalLB's configuration directly, in yaml format.                                                                                 | `{}`    |
-| `rbac.create`                           | Specifies whether to install and use RBAC rules                                                                                             | `true`  |
-| `psp.create`                            | create specifies whether to install Pod Security Policies.                                                                                  | `false` |
-| `networkPolicy.enabled`                 | Enable NetworkPolicy                                                                                                                        | `false` |
-| `networkPolicy.ingressNSMatchLabels`    | Allow connections from other namespaces                                                                                                     | `{}`    |
-| `networkPolicy.ingressNSPodMatchLabels` | For other namespaces match by pod labels and namespace labels                                                                               | `{}`    |
-| `prometheusRule.enabled`                | Prometheus Operator alertmanager alerts are created                                                                                         | `false` |
+| Name                                    | Description                                                   | Value       |
+| --------------------------------------- | ------------------------------------------------------------- | ----------- |
+| `configInline`                          | Specifies MetalLB's configuration directly, in yaml format.   | `undefined` |
+| `rbac.create`                           | Specifies whether to install and use RBAC rules               | `true`      |
+| `psp.create`                            | create specifies whether to install Pod Security Policies.    | `false`     |
+| `networkPolicy.enabled`                 | Enable NetworkPolicy                                          | `false`     |
+| `networkPolicy.ingressNSMatchLabels`    | Allow connections from other namespaces                       | `undefined` |
+| `networkPolicy.ingressNSPodMatchLabels` | For other namespaces match by pod labels and namespace labels | `undefined` |
+| `prometheusRule.enabled`                | Prometheus Operator alertmanager alerts are created           | `false`     |
 
 
 ### Controller parameters
 
 | Name                                                     | Description                                                                                                           | Value                        |
 | -------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
-| `controller.image.registry`                              | MetalLB Controller image registry                                                                                     | `docker.io`                  |
 | `controller.image.repository`                            | MetalLB Controller image repository                                                                                   | `bitnami/metallb-controller` |
-| `controller.image.tag`                                   | MetalLB Controller  image tag (immutable tags are recommended)                                                        | `0.10.2-debian-10-r0`        |
+| `controller.image.tag`                                   | MetalLB Controller  image tag (immutable tags are recommended)                                                        | `0.10.2-debian-10-r23`       |
 | `controller.image.pullPolicy`                            | MetalLB Controller image pull policy                                                                                  | `IfNotPresent`               |
-| `controller.image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                      | `[]`                         |
-| `controller.hostAliases`                                 | Deployment pod host aliases                                                                                           | `[]`                         |
+| `controller.image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                      | `undefined`                  |
+| `controller.hostAliases`                                 | Deployment pod host aliases                                                                                           | `undefined`                  |
 | `controller.rbac.create`                                 | create specifies whether to install and use RBAC rules.                                                               | `true`                       |
 | `controller.psp.create`                                  | create specifies whether to install Pod Security Policies.                                                            | `true`                       |
-| `controller.priorityClassName`                           | Set pod priorityClassName                                                                                             | `nil`                        |
-| `controller.resources.limits`                            | The resources limits for the container                                                                                | `{}`                         |
-| `controller.resources.requests`                          | The requested resources for the container                                                                             | `{}`                         |
-| `controller.nodeSelector`                                | Node labels for controller pod assignment                                                                             | `{}`                         |
-| `controller.tolerations`                                 | Tolerations for controller pod assignment                                                                             | `[]`                         |
-| `controller.affinity`                                    | Affinity for controller pod assignment                                                                                | `{}`                         |
-| `controller.podAnnotations`                              | Controller Pod annotations                                                                                            | `{}`                         |
-| `controller.podLabels`                                   | Controller Pod labels                                                                                                 | `{}`                         |
+| `controller.priorityClassName`                           | Set pod priorityClassName                                                                                             | `""`                         |
+| `controller.resources.limits`                            | The resources limits for the container                                                                                | `undefined`                  |
+| `controller.resources.requests`                          | The requested resources for the container                                                                             | `undefined`                  |
+| `controller.nodeSelector`                                | Node labels for controller pod assignment                                                                             | `undefined`                  |
+| `controller.tolerations`                                 | Tolerations for controller pod assignment                                                                             | `undefined`                  |
+| `controller.affinity`                                    | Affinity for controller pod assignment                                                                                | `undefined`                  |
+| `controller.podAnnotations`                              | Controller Pod annotations                                                                                            | `undefined`                  |
+| `controller.podLabels`                                   | Controller Pod labels                                                                                                 | `undefined`                  |
 | `controller.podAffinityPreset`                           | Controller Pod affinitypreset. Allowed values: soft, hard                                                             | `""`                         |
 | `controller.podAntiAffinityPreset`                       | Controller Pod anti affinitypreset. Allowed values: soft, hard                                                        | `soft`                       |
 | `controller.nodeAffinityPreset.type`                     | Controller Pod Node affinity preset. Allowed values: soft, hard                                                       | `""`                         |
 | `controller.nodeAffinityPreset.key`                      | Controller Pod Node affinity label key to match                                                                       | `""`                         |
-| `controller.nodeAffinityPreset.values`                   | Controller Pod Node affinity label values to match                                                                    | `[]`                         |
+| `controller.nodeAffinityPreset.values`                   | Controller Pod Node affinity label values to match                                                                    | `undefined`                  |
 | `controller.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                  | `true`                       |
 | `controller.serviceAccount.name`                         | The name of the ServiceAccount to use. If not set and create is true, a name is generated using the fullname template | `""`                         |
 | `controller.securityContext.enabled`                     | Enable pods' security context                                                                                         | `true`                       |
@@ -131,45 +127,44 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.prometheus.serviceMonitor.enabled`           | Specify if a servicemonitor will be deployed for prometheus-operator                                                  | `false`                      |
 | `controller.prometheus.serviceMonitor.jobLabel`          | Specify the jobLabel to use for the prometheus-operator                                                               | `app.kubernetes.io/name`     |
 | `controller.prometheus.serviceMonitor.interval`          | Scrape interval. If not set, the Prometheus default scrape interval is used                                           | `""`                         |
-| `controller.prometheus.serviceMonitor.metricRelabelings` | Specify additional relabeling of metrics                                                                              | `[]`                         |
-| `controller.prometheus.serviceMonitor.relabelings`       | Specify general relabeling                                                                                            | `[]`                         |
+| `controller.prometheus.serviceMonitor.metricRelabelings` | Specify additional relabeling of metrics                                                                              | `undefined`                  |
+| `controller.prometheus.serviceMonitor.relabelings`       | Specify general relabeling                                                                                            | `undefined`                  |
 
 
 ### Speaker parameters
 
 | Name                                                  | Description                                                                                                            | Value                     |
 | ----------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ------------------------- |
-| `speaker.image.registry`                              | MetalLB Speaker image registry                                                                                         | `docker.io`               |
 | `speaker.image.repository`                            | MetalLB Speaker image repository                                                                                       | `bitnami/metallb-speaker` |
-| `speaker.image.tag`                                   | MetalLB Speaker  image tag (immutable tags are recommended)                                                            | `0.10.2-debian-10-r0`     |
+| `speaker.image.tag`                                   | MetalLB Speaker  image tag (immutable tags are recommended)                                                            | `0.10.2-debian-10-r26`    |
 | `speaker.image.pullPolicy`                            | MetalLB Speaker image pull policy                                                                                      | `IfNotPresent`            |
-| `speaker.image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                       | `[]`                      |
+| `speaker.image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                       | `undefined`               |
 | `speaker.rbac.create`                                 | create specifies whether to install and use RBAC rules.                                                                | `true`                    |
-| `speaker.hostAliases`                                 | Deployment pod host aliases                                                                                            | `[]`                      |
+| `speaker.hostAliases`                                 | Deployment pod host aliases                                                                                            | `undefined`               |
 | `speaker.psp.create`                                  | create specifies whether to install Pod Security Policies.                                                             | `true`                    |
-| `speaker.priorityClassName`                           | Set pod priorityClassName.                                                                                             | `nil`                     |
-| `speaker.resources.limits`                            | The resources limits for the container                                                                                 | `{}`                      |
-| `speaker.resources.requests`                          | The requested resources for the container                                                                              | `{}`                      |
-| `speaker.nodeSelector`                                | Node labels for speaker pod assignment                                                                                 | `{}`                      |
-| `speaker.tolerations`                                 | Tolerations for speaker pod assignment                                                                                 | `[]`                      |
-| `speaker.affinity`                                    | Affinity for speaker pod assignment                                                                                    | `{}`                      |
-| `speaker.podAnnotations`                              | Speaker Pod annotations                                                                                                | `{}`                      |
-| `speaker.podLabels`                                   | Speaker Pod labels                                                                                                     | `{}`                      |
+| `speaker.priorityClassName`                           | Set pod priorityClassName.                                                                                             | `""`                      |
+| `speaker.resources.limits`                            | The resources limits for the container                                                                                 | `undefined`               |
+| `speaker.resources.requests`                          | The requested resources for the container                                                                              | `undefined`               |
+| `speaker.nodeSelector`                                | Node labels for speaker pod assignment                                                                                 | `undefined`               |
+| `speaker.tolerations`                                 | Tolerations for speaker pod assignment                                                                                 | `undefined`               |
+| `speaker.affinity`                                    | Affinity for speaker pod assignment                                                                                    | `undefined`               |
+| `speaker.podAnnotations`                              | Speaker Pod annotations                                                                                                | `undefined`               |
+| `speaker.podLabels`                                   | Speaker Pod labels                                                                                                     | `undefined`               |
 | `speaker.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                   | `true`                    |
 | `speaker.serviceAccount.name`                         | The name of the ServiceAccount to use.  If not set and create is true, a name is generated using the fullname template | `""`                      |
 | `speaker.daemonset.terminationGracePeriodSeconds`     | Configure the grace time period for sig term                                                                           | `2`                       |
 | `speaker.daemonset.hostPorts.metrics`                 | HTTP Metrics Endpoint                                                                                                  | `7472`                    |
-| `speaker.secretName`                                  | References a Secret name for the member secret outside of the helm chart                                               | `nil`                     |
-| `speaker.secretKey`                                   | References a Secret key the member secret outside of the helm chart                                                    | `nil`                     |
-| `speaker.secretValue`                                 | Custom value for `speaker.secretKey`                                                                                   | `nil`                     |
-| `speaker.initContainers`                              | Extra initContainers to add to the daemonset                                                                           | `[]`                      |
+| `speaker.secretName`                                  | References a Secret name for the member secret outside of the helm chart                                               | `""`                      |
+| `speaker.secretKey`                                   | References a Secret key the member secret outside of the helm chart                                                    | `""`                      |
+| `speaker.secretValue`                                 | Custom value for `speaker.secretKey`                                                                                   | `""`                      |
+| `speaker.initContainers`                              | Extra initContainers to add to the daemonset                                                                           | `undefined`               |
 | `speaker.securityContext.enabled`                     | Enable pods' security context                                                                                          | `true`                    |
 | `speaker.securityContext.runAsUser`                   | User ID for the pods.                                                                                                  | `0`                       |
 | `speaker.securityContext.allowPrivilegeEscalation`    | Enables privilege Escalation context for the pod.                                                                      | `false`                   |
 | `speaker.securityContext.readOnlyRootFilesystem`      | Allows the pod to mount the RootFS as ReadOnly                                                                         | `true`                    |
 | `speaker.securityContext.capabilities.drop`           | Drop capabilities for the securityContext                                                                              | `[]`                      |
 | `speaker.securityContext.capabilities.add`            | Add capabilities for the securityContext                                                                               | `[]`                      |
-| `speaker.extraEnvVars`                                | Extra environment variable to pass to the running container.                                                           | `[]`                      |
+| `speaker.extraEnvVars`                                | Extra environment variable to pass to the running container.                                                           | `undefined`               |
 | `speaker.livenessProbe.enabled`                       | Enable livenessProbe                                                                                                   | `true`                    |
 | `speaker.livenessProbe.initialDelaySeconds`           | Initial delay seconds for livenessProbe                                                                                | `10`                      |
 | `speaker.livenessProbe.periodSeconds`                 | Period seconds for livenessProbe                                                                                       | `10`                      |
@@ -185,8 +180,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `speaker.prometheus.serviceMonitor.enabled`           | Enable support for Prometheus Operator                                                                                 | `false`                   |
 | `speaker.prometheus.serviceMonitor.jobLabel`          | Job label for scrape target                                                                                            | `app.kubernetes.io/name`  |
 | `speaker.prometheus.serviceMonitor.interval`          | Scrape interval. If not set, the Prometheus default scrape interval is used                                            | `""`                      |
-| `speaker.prometheus.serviceMonitor.metricRelabelings` | Specify additional relabeling of metrics                                                                               | `[]`                      |
-| `speaker.prometheus.serviceMonitor.relabelings`       | Specify general relabeling                                                                                             | `[]`                      |
+| `speaker.prometheus.serviceMonitor.metricRelabelings` | Specify additional relabeling of metrics                                                                               | `undefined`               |
+| `speaker.prometheus.serviceMonitor.relabelings`       | Specify general relabeling                                                                                             | `undefined`               |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,

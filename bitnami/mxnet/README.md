@@ -49,66 +49,63 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Global parameters
 
-| Name                      | Description                                     | Value |
-| ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
-| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `nil` |
+| Name                      | Description                                     | Value       |
+| ------------------------- | ----------------------------------------------- | ----------- |
+| `global.imagePullSecrets` | Global Docker registry secret names as an array | `undefined` |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`        |
 
 
 ### Common parameters
 
-| Name               | Description                                                                                  | Value |
-| ------------------ | -------------------------------------------------------------------------------------------- | ----- |
-| `nameOverride`     | String to partially override common.names.fullname template (will maintain the release name) | `nil` |
-| `fullnameOverride` | String to fully override common.names.fullname template                                      | `nil` |
+| Name               | Description                                             | Value |
+| ------------------ | ------------------------------------------------------- | ----- |
+| `fullnameOverride` | String to fully override common.names.fullname template | `""`  |
 
 
 ### Common Mxnet parameters
 
 | Name                                   | Description                                                                                           | Value                   |
 | -------------------------------------- | ----------------------------------------------------------------------------------------------------- | ----------------------- |
-| `image.registry`                       | Apache MXNet (Incubating) image registry                                                              | `docker.io`             |
 | `image.repository`                     | Apache MXNet (Incubating) image repository                                                            | `bitnami/mxnet`         |
 | `image.tag`                            | Apache MXNet (Incubating) image tag (immutable tags are recommended)                                  | `1.8.0-debian-10-r83`   |
 | `image.pullPolicy`                     | Image pull policy                                                                                     | `IfNotPresent`          |
-| `image.pullSecrets`                    | Specify docker-registry secret names as an array                                                      | `[]`                    |
+| `image.pullSecrets`                    | Specify docker-registry secret names as an array                                                      | `undefined`             |
 | `image.debug`                          | Specify if debug logs should be enabled                                                               | `false`                 |
 | `git.registry`                         | Git image registry                                                                                    | `docker.io`             |
 | `git.repository`                       | Git image repository                                                                                  | `bitnami/git`           |
 | `git.tag`                              | Git image tag (immutable tags are recommended)                                                        | `2.32.0-debian-10-r12`  |
 | `git.pullPolicy`                       | Git image pull policy                                                                                 | `IfNotPresent`          |
-| `git.pullSecrets`                      | Specify docker-registry secret names as an array                                                      | `[]`                    |
+| `git.pullSecrets`                      | Specify docker-registry secret names as an array                                                      | `undefined`             |
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory                           | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                      | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                    | `bitnami/bitnami-shell` |
 | `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                          | `10-debian-10-r112`     |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                   | `Always`                |
-| `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                      | `[]`                    |
-| `volumePermissions.resources.limits`   | The resources limits for the container                                                                | `{}`                    |
-| `volumePermissions.resources.requests` | The requested resources for the container                                                             | `{}`                    |
+| `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                      | `undefined`             |
+| `volumePermissions.resources.limits`   | The resources limits for the container                                                                | `undefined`             |
+| `volumePermissions.resources.requests` | The requested resources for the container                                                             | `undefined`             |
 | `service.type`                         | Kubernetes service type                                                                               | `ClusterIP`             |
 | `service.port`                         | Scheduler Service port                                                                                | `9092`                  |
-| `service.annotations`                  | Provide any additional annotations which may be required.                                             | `{}`                    |
+| `service.annotations`                  | Provide any additional annotations which may be required.                                             | `undefined`             |
 | `entrypoint`                           | The main entrypoint of your app, this will be executed as:                                            | `{}`                    |
 | `mode`                                 | Apache MXNet (Incubating) deployment mode. Can be `standalone` or `distributed`                       | `standalone`            |
-| `existingSecret`                       | Name of a secret with sensitive data to mount in the pods                                             | `nil`                   |
-| `configMap`                            | Name of an existing config map containing all the files you want to load in Apache MXNet (Incubating) | `nil`                   |
-| `hostAliases`                          | Deployment pod host aliases                                                                           | `[]`                    |
+| `existingSecret`                       | Name of a secret with sensitive data to mount in the pods                                             | `""`                    |
+| `configMap`                            | Name of an existing config map containing all the files you want to load in Apache MXNet (Incubating) | `""`                    |
+| `hostAliases`                          | Deployment pod host aliases                                                                           | `undefined`             |
 | `cloneFilesFromGit.enabled`            | Enable in order to download files from git repository                                                 | `false`                 |
-| `cloneFilesFromGit.extraVolumeMounts`  | Add extra volume mounts for the GIT container                                                         | `[]`                    |
-| `commonExtraEnvVars`                   | Additional environment variables for all node types                                                   | `[]`                    |
+| `cloneFilesFromGit.extraVolumeMounts`  | Add extra volume mounts for the GIT container                                                         | `undefined`             |
+| `commonExtraEnvVars`                   | Additional environment variables for all node types                                                   | `undefined`             |
 | `podManagementPolicy`                  | StatefulSet (worker and server nodes) pod management policy                                           | `Parallel`              |
 | `podAffinityPreset`                    | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                   | `""`                    |
 | `podAntiAffinityPreset`                | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`              | `soft`                  |
 | `nodeAffinityPreset.type`              | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`             | `""`                    |
 | `nodeAffinityPreset.key`               | Node label key to match Ignored if `affinity` is set.                                                 | `""`                    |
-| `nodeAffinityPreset.values`            | Node label values to match. Ignored if `affinity` is set.                                             | `[]`                    |
-| `affinity`                             | Affinity for pod assignment. Evaluated as a template.                                                 | `{}`                    |
-| `nodeSelector`                         | Node labels for pod assignment. Evaluated as a template.                                              | `{}`                    |
-| `tolerations`                          | Tolerations for pod assignment. Evaluated as a template.                                              | `[]`                    |
-| `resources.limits`                     | The resources limits for the Mxnet container                                                          | `{}`                    |
-| `resources.requests`                   | The requested resources for the Mxnet container                                                       | `{}`                    |
+| `nodeAffinityPreset.values`            | Node label values to match. Ignored if `affinity` is set.                                             | `undefined`             |
+| `affinity`                             | Affinity for pod assignment. Evaluated as a template.                                                 | `undefined`             |
+| `nodeSelector`                         | Node labels for pod assignment. Evaluated as a template.                                              | `undefined`             |
+| `tolerations`                          | Tolerations for pod assignment. Evaluated as a template.                                              | `undefined`             |
+| `resources.limits`                     | The resources limits for the Mxnet container                                                          | `undefined`             |
+| `resources.requests`                   | The requested resources for the Mxnet container                                                       | `undefined`             |
 | `securityContext.enabled`              | Enable security context                                                                               | `true`                  |
 | `securityContext.fsGroup`              | Group ID for the container                                                                            | `1001`                  |
 | `securityContext.runAsUser`            | User ID for the container                                                                             | `1001`                  |
@@ -128,68 +125,65 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.mountPath`                | Path to mount the volume at                                                                           | `/bitnami/mxnet`        |
 | `persistence.accessModes`              | Persistent Volume Access Mode                                                                         | `[]`                    |
 | `persistence.size`                     | Size of data volume                                                                                   | `8Gi`                   |
-| `persistence.annotations`              | Persistent Volume annotations                                                                         | `{}`                    |
-| `sidecars`                             | Attach additional containers to the pods (scheduler, worker and server nodes)                         | `[]`                    |
-| `initContainers`                       | Attach additional init containers to the pods (scheduler, worker and server nodes)                    | `[]`                    |
-| `extraVolumes`                         | Array to add extra volumes (evaluated as a template)                                                  | `[]`                    |
-| `extraVolumeMounts`                    | Array to add extra mounts (normally used with extraVolumes, evaluated as a template)                  | `[]`                    |
+| `persistence.annotations`              | Persistent Volume annotations                                                                         | `undefined`             |
+| `sidecars`                             | Attach additional containers to the pods (scheduler, worker and server nodes)                         | `undefined`             |
+| `initContainers`                       | Attach additional init containers to the pods (scheduler, worker and server nodes)                    | `undefined`             |
+| `extraVolumes`                         | Array to add extra volumes (evaluated as a template)                                                  | `undefined`             |
+| `extraVolumeMounts`                    | Array to add extra mounts (normally used with extraVolumes, evaluated as a template)                  | `undefined`             |
 
 
 ### Mxnet Server parameters (only for distributed mode)
 
-| Name                               | Description                                                                                            | Value  |
-| ---------------------------------- | ------------------------------------------------------------------------------------------------------ | ------ |
-| `server.replicaCount`              | Number of Server nodes that will execute your code                                                     | `1`    |
-| `server.extraEnvVars`              | Extra environment variables to add to the Server nodes                                                 | `[]`   |
-| `server.hostAliases`               | Deployment pod host aliases                                                                            | `[]`   |
-| `server.resources.limits`          | The resources limits for the Mxnet Server container                                                    | `{}`   |
-| `server.resources.requests`        | The requested resources for the Mxnet Server container                                                 | `{}`   |
-| `server.podAffinityPreset`         | Mxnet Server pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`   |
-| `server.podAntiAffinityPreset`     | Mxnet Server pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft` |
-| `server.nodeAffinityPreset.type`   | Mxnet Server node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`   |
-| `server.nodeAffinityPreset.key`    | Mxnet Server node label key to match Ignored if `affinity` is set.                                     | `""`   |
-| `server.nodeAffinityPreset.values` | Mxnet Server node label values to match. Ignored if `affinity` is set.                                 | `[]`   |
-| `server.affinity`                  | Mxnet Server affinity for pod assignment                                                               | `{}`   |
-| `server.nodeSelector`              | Mxnet Server node labels for pod assignment                                                            | `{}`   |
-| `server.tolerations`               | Mxnet Server tolerations for pod assignment                                                            | `[]`   |
+| Name                               | Description                                                                                            | Value       |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------ | ----------- |
+| `server.extraEnvVars`              | Extra environment variables to add to the Server nodes                                                 | `undefined` |
+| `server.hostAliases`               | Deployment pod host aliases                                                                            | `undefined` |
+| `server.resources.limits`          | The resources limits for the Mxnet Server container                                                    | `undefined` |
+| `server.resources.requests`        | The requested resources for the Mxnet Server container                                                 | `undefined` |
+| `server.podAffinityPreset`         | Mxnet Server pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`        |
+| `server.podAntiAffinityPreset`     | Mxnet Server pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`      |
+| `server.nodeAffinityPreset.type`   | Mxnet Server node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`        |
+| `server.nodeAffinityPreset.key`    | Mxnet Server node label key to match Ignored if `affinity` is set.                                     | `""`        |
+| `server.nodeAffinityPreset.values` | Mxnet Server node label values to match. Ignored if `affinity` is set.                                 | `undefined` |
+| `server.affinity`                  | Mxnet Server affinity for pod assignment                                                               | `undefined` |
+| `server.nodeSelector`              | Mxnet Server node labels for pod assignment                                                            | `undefined` |
+| `server.tolerations`               | Mxnet Server tolerations for pod assignment                                                            | `undefined` |
 
 
 ### Mxnet Worker parameters (only for distributed mode)
 
-| Name                               | Description                                                                                            | Value  |
-| ---------------------------------- | ------------------------------------------------------------------------------------------------------ | ------ |
-| `worker.replicaCount`              | Number of Worker nodes that will execute your code                                                     | `1`    |
-| `worker.hostAliases`               | Add deployment host aliases                                                                            | `[]`   |
-| `worker.extraEnvVars`              | Extra environment variables to add to the Server nodes                                                 | `[]`   |
-| `worker.resources.limits`          | The resources limits for the Mxnet Worker container                                                    | `{}`   |
-| `worker.resources.requests`        | The requested resources for the Mxnet Worker container                                                 | `{}`   |
-| `worker.podAffinityPreset`         | Mxnet Worker pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`   |
-| `worker.podAntiAffinityPreset`     | Mxnet Worker pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft` |
-| `worker.nodeAffinityPreset.type`   | Mxnet Worker node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`   |
-| `worker.nodeAffinityPreset.key`    | Mxnet Worker node label key to match Ignored if `affinity` is set.                                     | `""`   |
-| `worker.nodeAffinityPreset.values` | Mxnet Worker node label values to match. Ignored if `affinity` is set.                                 | `[]`   |
-| `worker.affinity`                  | Mxnet Worker affinity for pod assignment                                                               | `{}`   |
-| `worker.nodeSelector`              | Mxnet Worker node labels for pod assignment                                                            | `{}`   |
-| `worker.tolerations`               | Mxnet Worker tolerations for pod assignment                                                            | `[]`   |
+| Name                               | Description                                                                                            | Value       |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------ | ----------- |
+| `worker.hostAliases`               | Add deployment host aliases                                                                            | `undefined` |
+| `worker.extraEnvVars`              | Extra environment variables to add to the Server nodes                                                 | `undefined` |
+| `worker.resources.limits`          | The resources limits for the Mxnet Worker container                                                    | `undefined` |
+| `worker.resources.requests`        | The requested resources for the Mxnet Worker container                                                 | `undefined` |
+| `worker.podAffinityPreset`         | Mxnet Worker pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`        |
+| `worker.podAntiAffinityPreset`     | Mxnet Worker pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`      |
+| `worker.nodeAffinityPreset.type`   | Mxnet Worker node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`        |
+| `worker.nodeAffinityPreset.key`    | Mxnet Worker node label key to match Ignored if `affinity` is set.                                     | `""`        |
+| `worker.nodeAffinityPreset.values` | Mxnet Worker node label values to match. Ignored if `affinity` is set.                                 | `undefined` |
+| `worker.affinity`                  | Mxnet Worker affinity for pod assignment                                                               | `undefined` |
+| `worker.nodeSelector`              | Mxnet Worker node labels for pod assignment                                                            | `undefined` |
+| `worker.tolerations`               | Mxnet Worker tolerations for pod assignment                                                            | `undefined` |
 
 
 ### Mxnet Scheduler parameters (only for distributed mode)
 
-| Name                                  | Description                                                                                               | Value  |
-| ------------------------------------- | --------------------------------------------------------------------------------------------------------- | ------ |
-| `scheduler.port`                      | The port used to communicate with the scheduler                                                           | `9092` |
-| `scheduler.hostAliases`               | Deployment pod host aliases                                                                               | `[]`   |
-| `scheduler.extraEnvVars`              | An array to add extra env vars                                                                            | `[]`   |
-| `scheduler.resources.limits`          | The resources limits for the Mxnet Scheduler container                                                    | `{}`   |
-| `scheduler.resources.requests`        | The requested resources for the Mxnet Scheduler container                                                 | `{}`   |
-| `scheduler.podAffinityPreset`         | Mxnet Scheduler pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`   |
-| `scheduler.podAntiAffinityPreset`     | Mxnet Scheduler pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft` |
-| `scheduler.nodeAffinityPreset.type`   | Mxnet Scheduler node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`   |
-| `scheduler.nodeAffinityPreset.key`    | Mxnet Scheduler node label key to match Ignored if `affinity` is set.                                     | `""`   |
-| `scheduler.nodeAffinityPreset.values` | Mxnet Scheduler node label values to match. Ignored if `affinity` is set.                                 | `[]`   |
-| `scheduler.affinity`                  | Mxnet Scheduler affinity for pod assignment                                                               | `{}`   |
-| `scheduler.nodeSelector`              | Mxnet Scheduler node labels for pod assignment                                                            | `{}`   |
-| `scheduler.tolerations`               | Mxnet Scheduler tolerations for pod assignment                                                            | `[]`   |
+| Name                                  | Description                                                                                               | Value       |
+| ------------------------------------- | --------------------------------------------------------------------------------------------------------- | ----------- |
+| `scheduler.hostAliases`               | Deployment pod host aliases                                                                               | `undefined` |
+| `scheduler.extraEnvVars`              | An array to add extra env vars                                                                            | `undefined` |
+| `scheduler.resources.limits`          | The resources limits for the Mxnet Scheduler container                                                    | `undefined` |
+| `scheduler.resources.requests`        | The requested resources for the Mxnet Scheduler container                                                 | `undefined` |
+| `scheduler.podAffinityPreset`         | Mxnet Scheduler pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`        |
+| `scheduler.podAntiAffinityPreset`     | Mxnet Scheduler pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`      |
+| `scheduler.nodeAffinityPreset.type`   | Mxnet Scheduler node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`        |
+| `scheduler.nodeAffinityPreset.key`    | Mxnet Scheduler node label key to match Ignored if `affinity` is set.                                     | `""`        |
+| `scheduler.nodeAffinityPreset.values` | Mxnet Scheduler node label values to match. Ignored if `affinity` is set.                                 | `undefined` |
+| `scheduler.affinity`                  | Mxnet Scheduler affinity for pod assignment                                                               | `undefined` |
+| `scheduler.nodeSelector`              | Mxnet Scheduler node labels for pod assignment                                                            | `undefined` |
+| `scheduler.tolerations`               | Mxnet Scheduler tolerations for pod assignment                                                            | `undefined` |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,

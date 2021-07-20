@@ -52,35 +52,32 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Global parameters
 
-| Name                      | Description                                     | Value |
-| ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
-| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global storage class for dynamic provisioning   | `nil` |
+| Name                      | Description                                     | Value       |
+| ------------------------- | ----------------------------------------------- | ----------- |
+| `global.imagePullSecrets` | Global Docker registry secret names as an array | `undefined` |
+| `global.storageClass`     | Global storage class for dynamic provisioning   | `""`        |
 
 
 ### Common parameters
 
-| Name               | Description                                                                             | Value           |
-| ------------------ | --------------------------------------------------------------------------------------- | --------------- |
-| `nameOverride`     | String to partially override mongodb.fullname template (will maintain the release name) | `nil`           |
-| `fullnameOverride` | String to fully override mongodb.fullname template                                      | `nil`           |
-| `clusterDomain`    | Kubernetes Cluster Domain                                                               | `cluster.local` |
+| Name               | Description                                        | Value           |
+| ------------------ | -------------------------------------------------- | --------------- |
+| `fullnameOverride` | String to fully override mongodb.fullname template | `""`            |
+| `clusterDomain`    | Kubernetes Cluster Domain                          | `cluster.local` |
 
 
 ### MongoDB&reg; Sharded parameters
 
 | Name                                  | Description                                                                                                                                               | Value                     |
 | ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
-| `image.registry`                      | MongoDB&reg; Sharded image registry                                                                                                                       | `docker.io`               |
 | `image.repository`                    | MongoDB&reg; Sharded Image name                                                                                                                           | `bitnami/mongodb-sharded` |
-| `image.tag`                           | MongoDB&reg; Sharded image tag (immutable tags are recommended)                                                                                           | `4.4.6-debian-10-r40`     |
+| `image.tag`                           | MongoDB&reg; Sharded image tag (immutable tags are recommended)                                                                                           | `4.4.7-debian-10-r5`      |
 | `image.pullPolicy`                    | MongoDB&reg; Sharded image pull policy                                                                                                                    | `IfNotPresent`            |
-| `image.pullSecrets`                   | Specify docker-registry secret names as an array                                                                                                          | `[]`                      |
+| `image.pullSecrets`                   | Specify docker-registry secret names as an array                                                                                                          | `undefined`               |
 | `image.debug`                         | Specify if debug logs should be enabled                                                                                                                   | `false`                   |
-| `mongodbRootPassword`                 | MongoDB&reg; root password                                                                                                                                | `nil`                     |
-| `replicaSetKey`                       | Replica Set key (shared for shards and config servers)                                                                                                    | `nil`                     |
-| `existingSecret`                      | Existing secret with MongoDB&reg; credentials                                                                                                             | `nil`                     |
+| `mongodbRootPassword`                 | MongoDB&reg; root password                                                                                                                                | `""`                      |
+| `replicaSetKey`                       | Replica Set key (shared for shards and config servers)                                                                                                    | `""`                      |
+| `existingSecret`                      | Existing secret with MongoDB&reg; credentials                                                                                                             | `""`                      |
 | `usePasswordFile`                     | Mount credentials as files instead of using environment variables                                                                                         | `false`                   |
 | `shards`                              | Number of shards to be created                                                                                                                            | `2`                       |
 | `common.useHostnames`                 | Enable DNS hostnames in the replica set config                                                                                                            | `true`                    |
@@ -89,41 +86,41 @@ The command removes all the Kubernetes components associated with the chart and 
 | `common.mongodbSystemLogVerbosity`    | MongoDB&reg; system log verbosity level                                                                                                                   | `0`                       |
 | `common.mongodbDisableSystemLog`      | Whether to disable MongoDB&reg; system log or not                                                                                                         | `false`                   |
 | `common.mongodbMaxWaitTimeout`        | Maximum time (in seconds) for MongoDB&reg; nodes to wait for another MongoDB&reg; node to be ready                                                        | `120`                     |
-| `common.initScriptsCM`                | Configmap with init scripts to execute                                                                                                                    | `nil`                     |
-| `common.initScriptsSecret`            | Secret with init scripts to execute (for sensitive data)                                                                                                  | `nil`                     |
-| `common.extraEnvVars`                 | An array to add extra env vars                                                                                                                            | `nil`                     |
-| `common.extraEnvVarsCM`               | Name of a ConfigMap containing extra env vars                                                                                                             | `nil`                     |
-| `common.extraEnvVarsSecret`           | Name of a Secret containing extra env vars                                                                                                                | `nil`                     |
-| `common.sidecars`                     | Add sidecars to the pod                                                                                                                                   | `[]`                      |
-| `common.initContainers`               | Add init containers to the pod                                                                                                                            | `[]`                      |
-| `common.podAnnotations`               | Additional pod annotations                                                                                                                                | `{}`                      |
-| `common.podLabels`                    | Additional pod labels                                                                                                                                     | `{}`                      |
-| `common.extraVolumes`                 | Array to add extra volumes                                                                                                                                | `[]`                      |
-| `common.extraVolumeMounts`            | Array to add extra mounts (normally used with extraVolumes)                                                                                               | `[]`                      |
+| `common.initScriptsCM`                | Configmap with init scripts to execute                                                                                                                    | `""`                      |
+| `common.initScriptsSecret`            | Secret with init scripts to execute (for sensitive data)                                                                                                  | `""`                      |
+| `common.extraEnvVars`                 | An array to add extra env vars                                                                                                                            | `undefined`               |
+| `common.extraEnvVarsCM`               | Name of a ConfigMap containing extra env vars                                                                                                             | `""`                      |
+| `common.extraEnvVarsSecret`           | Name of a Secret containing extra env vars                                                                                                                | `""`                      |
+| `common.sidecars`                     | Add sidecars to the pod                                                                                                                                   | `undefined`               |
+| `common.initContainers`               | Add init containers to the pod                                                                                                                            | `undefined`               |
+| `common.podAnnotations`               | Additional pod annotations                                                                                                                                | `undefined`               |
+| `common.podLabels`                    | Additional pod labels                                                                                                                                     | `undefined`               |
+| `common.extraVolumes`                 | Array to add extra volumes                                                                                                                                | `undefined`               |
+| `common.extraVolumeMounts`            | Array to add extra mounts (normally used with extraVolumes)                                                                                               | `undefined`               |
 | `common.serviceAccount.create`        | Whether to create a Service Account for all pods automatically                                                                                            | `false`                   |
-| `common.serviceAccount.name`          | Name of a Service Account to be used by all Pods                                                                                                          | `nil`                     |
+| `common.serviceAccount.name`          | Name of a Service Account to be used by all Pods                                                                                                          | `""`                      |
 | `volumePermissions.enabled`           | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                   |
 | `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                                                                          | `docker.io`               |
 | `volumePermissions.image.repository`  | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell`   |
-| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r126`       |
+| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r137`       |
 | `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                                                       | `Always`                  |
-| `volumePermissions.image.pullSecrets` | Init container volume-permissions image pull secrets                                                                                                      | `[]`                      |
-| `volumePermissions.resources`         | Init container resource requests/limit                                                                                                                    | `{}`                      |
+| `volumePermissions.image.pullSecrets` | Init container volume-permissions image pull secrets                                                                                                      | `undefined`               |
+| `volumePermissions.resources`         | Init container resource requests/limit                                                                                                                    | `undefined`               |
 | `securityContext.enabled`             | Enable security context                                                                                                                                   | `true`                    |
 | `securityContext.fsGroup`             | Group ID for the container                                                                                                                                | `1001`                    |
 | `securityContext.runAsUser`           | User ID for the container                                                                                                                                 | `1001`                    |
 | `securityContext.runAsNonRoot`        | Run containers as non-root users                                                                                                                          | `true`                    |
-| `service.name`                        | Specify an explicit service name                                                                                                                          | `nil`                     |
-| `service.annotations`                 | Additional service annotations (evaluate as a template)                                                                                                   | `{}`                      |
+| `service.name`                        | Specify an explicit service name                                                                                                                          | `""`                      |
+| `service.annotations`                 | Additional service annotations (evaluate as a template)                                                                                                   | `undefined`               |
 | `service.type`                        | Service type                                                                                                                                              | `ClusterIP`               |
 | `service.externalTrafficPolicy`       | External traffic policy                                                                                                                                   | `Cluster`                 |
 | `service.port`                        | MongoDB&reg; service port                                                                                                                                 | `27017`                   |
-| `service.clusterIP`                   | Static clusterIP or None for headless services                                                                                                            | `nil`                     |
-| `service.nodePort`                    | Specify the nodePort value for the LoadBalancer and NodePort service types.                                                                               | `nil`                     |
-| `service.externalIPs`                 | External IP list to use with ClusterIP service type                                                                                                       | `[]`                      |
-| `service.loadBalancerIP`              | Static IP Address to use for LoadBalancer service type                                                                                                    | `nil`                     |
-| `service.loadBalancerSourceRanges`    | List of IP ranges allowed access to load balancer (if supported)                                                                                          | `[]`                      |
-| `service.extraPorts`                  | Extra ports to expose (normally used with the `sidecar` value)                                                                                            | `[]`                      |
+| `service.clusterIP`                   | Static clusterIP or None for headless services                                                                                                            | `""`                      |
+| `service.nodePort`                    | Specify the nodePort value for the LoadBalancer and NodePort service types.                                                                               | `""`                      |
+| `service.externalIPs`                 | External IP list to use with ClusterIP service type                                                                                                       | `undefined`               |
+| `service.loadBalancerIP`              | Static IP Address to use for LoadBalancer service type                                                                                                    | `""`                      |
+| `service.loadBalancerSourceRanges`    | List of IP ranges allowed access to load balancer (if supported)                                                                                          | `undefined`               |
+| `service.extraPorts`                  | Extra ports to expose (normally used with the `sidecar` value)                                                                                            | `undefined`               |
 | `service.sessionAffinity`             | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                                                      | `None`                    |
 | `livenessProbe.enabled`               | Enable livenessProbe                                                                                                                                      | `true`                    |
 | `livenessProbe.initialDelaySeconds`   | Initial delay seconds for livenessProbe                                                                                                                   | `60`                      |
@@ -143,200 +140,194 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                  | Description                                                                                             | Value              |
 | ------------------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------ |
-| `configsvr.replicas`                  | Number of nodes in the replica set (the first node will be primary)                                     | `1`                |
-| `configsvr.resources`                 | Configure pod resources                                                                                 | `{}`               |
-| `configsvr.hostAliases`               | Deployment pod host aliases                                                                             | `[]`               |
-| `configsvr.mongodbExtraFlags`         | MongoDB&reg; additional command line flags                                                              | `[]`               |
-| `configsvr.priorityClassName`         | Pod priority class name                                                                                 | `nil`              |
+| `configsvr.resources`                 | Configure pod resources                                                                                 | `undefined`        |
+| `configsvr.hostAliases`               | Deployment pod host aliases                                                                             | `undefined`        |
+| `configsvr.mongodbExtraFlags`         | MongoDB&reg; additional command line flags                                                              | `undefined`        |
+| `configsvr.priorityClassName`         | Pod priority class name                                                                                 | `""`               |
 | `configsvr.podAffinityPreset`         | Config Server Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`               |
 | `configsvr.podAntiAffinityPreset`     | Config Server Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`             |
 | `configsvr.nodeAffinityPreset.type`   | Config Server Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`               |
 | `configsvr.nodeAffinityPreset.key`    | Config Server Node label key to match Ignored if `affinity` is set.                                     | `""`               |
-| `configsvr.nodeAffinityPreset.values` | Config Server Node label values to match. Ignored if `affinity` is set.                                 | `[]`               |
-| `configsvr.affinity`                  | Config Server Affinity for pod assignment                                                               | `{}`               |
-| `configsvr.nodeSelector`              | Config Server Node labels for pod assignment                                                            | `{}`               |
-| `configsvr.tolerations`               | Config Server Tolerations for pod assignment                                                            | `[]`               |
+| `configsvr.nodeAffinityPreset.values` | Config Server Node label values to match. Ignored if `affinity` is set.                                 | `undefined`        |
+| `configsvr.affinity`                  | Config Server Affinity for pod assignment                                                               | `undefined`        |
+| `configsvr.nodeSelector`              | Config Server Node labels for pod assignment                                                            | `undefined`        |
+| `configsvr.tolerations`               | Config Server Tolerations for pod assignment                                                            | `undefined`        |
 | `configsvr.podManagementPolicy`       | Statefulset's pod management policy, allows parallel startup of pods                                    | `OrderedReady`     |
 | `configsvr.updateStrategy.type`       | updateStrategy for MongoDB(R) Primary, Secondary and Arbiter statefulsets                               | `RollingUpdate`    |
-| `configsvr.config`                    | MongoDB&reg; configuration file                                                                         | `nil`              |
-| `configsvr.configCM`                  | ConfigMap name with Config Server configuration file (cannot be used with configsvr.config)             | `nil`              |
-| `configsvr.extraEnvVars`              | An array to add extra env vars                                                                          | `nil`              |
-| `configsvr.extraEnvVarsCM`            | Name of a ConfigMap containing extra env vars                                                           | `nil`              |
-| `configsvr.extraEnvVarsSecret`        | Name of a Secret containing extra env vars                                                              | `nil`              |
-| `configsvr.sidecars`                  | Add sidecars to the pod                                                                                 | `[]`               |
-| `configsvr.initContainers`            | Add init containers to the pod                                                                          | `[]`               |
-| `configsvr.podAnnotations`            | Additional pod annotations                                                                              | `{}`               |
-| `configsvr.podLabels`                 | Additional pod labels                                                                                   | `{}`               |
-| `configsvr.extraVolumes`              | Array to add extra volumes. Requires setting `extraVolumeMounts`                                        | `[]`               |
-| `configsvr.extraVolumeMounts`         | Array to add extra mounts (normally used with extraVolumes). Normally used with `extraVolumes`          | `[]`               |
-| `configsvr.schedulerName`             | Use an alternate scheduler, e.g. "stork".                                                               | `nil`              |
+| `configsvr.config`                    | MongoDB&reg; configuration file                                                                         | `""`               |
+| `configsvr.configCM`                  | ConfigMap name with Config Server configuration file (cannot be used with configsvr.config)             | `""`               |
+| `configsvr.extraEnvVars`              | An array to add extra env vars                                                                          | `undefined`        |
+| `configsvr.extraEnvVarsCM`            | Name of a ConfigMap containing extra env vars                                                           | `""`               |
+| `configsvr.extraEnvVarsSecret`        | Name of a Secret containing extra env vars                                                              | `""`               |
+| `configsvr.sidecars`                  | Add sidecars to the pod                                                                                 | `undefined`        |
+| `configsvr.initContainers`            | Add init containers to the pod                                                                          | `undefined`        |
+| `configsvr.podAnnotations`            | Additional pod annotations                                                                              | `undefined`        |
+| `configsvr.podLabels`                 | Additional pod labels                                                                                   | `undefined`        |
+| `configsvr.extraVolumes`              | Array to add extra volumes. Requires setting `extraVolumeMounts`                                        | `undefined`        |
+| `configsvr.extraVolumeMounts`         | Array to add extra mounts (normally used with extraVolumes). Normally used with `extraVolumes`          | `undefined`        |
+| `configsvr.schedulerName`             | Use an alternate scheduler, e.g. "stork".                                                               | `""`               |
 | `configsvr.pdb.enabled`               | Enable pod disruption budget                                                                            | `false`            |
 | `configsvr.pdb.minAvailable`          | Minimum number of available config pods allowed (`0` to disable)                                        | `0`                |
 | `configsvr.pdb.maxUnavailable`        | Maximum number of unavailable config pods allowed (`0` to disable)                                      | `1`                |
 | `configsvr.persistence.enabled`       | Use a PVC to persist data                                                                               | `true`             |
 | `configsvr.persistence.mountPath`     | Path to mount the volume at                                                                             | `/bitnami/mongodb` |
 | `configsvr.persistence.subPath`       | Subdirectory of the volume to mount at                                                                  | `""`               |
-| `configsvr.persistence.storageClass`  | Storage class of backing PVC                                                                            | `nil`              |
+| `configsvr.persistence.storageClass`  | Storage class of backing PVC                                                                            | `""`               |
 | `configsvr.persistence.accessModes`   | Use volume as ReadOnly or ReadWrite                                                                     | `[]`               |
 | `configsvr.persistence.size`          | PersistentVolumeClaim size                                                                              | `8Gi`              |
-| `configsvr.persistence.annotations`   | Persistent Volume annotations                                                                           | `{}`               |
+| `configsvr.persistence.annotations`   | Persistent Volume annotations                                                                           | `undefined`        |
 | `configsvr.serviceAccount.create`     | Specifies whether a ServiceAccount should be created for Config Server                                  | `false`            |
-| `configsvr.serviceAccount.name`       | Name of a Service Account to be used by Config Server                                                   | `nil`              |
-| `configsvr.external.host`             | Primary node of an external Config Server replicaset                                                    | `nil`              |
-| `configsvr.external.rootPassword`     | Root password of the external Config Server replicaset                                                  | `nil`              |
-| `configsvr.external.replicasetName`   | Replicaset name of an external Config Server                                                            | `nil`              |
-| `configsvr.external.replicasetKey`    | Replicaset key of an external Config Server                                                             | `nil`              |
+| `configsvr.serviceAccount.name`       | Name of a Service Account to be used by Config Server                                                   | `""`               |
+| `configsvr.external.host`             | Primary node of an external Config Server replicaset                                                    | `""`               |
+| `configsvr.external.rootPassword`     | Root password of the external Config Server replicaset                                                  | `""`               |
+| `configsvr.external.replicasetName`   | Replicaset name of an external Config Server                                                            | `""`               |
+| `configsvr.external.replicasetKey`    | Replicaset key of an external Config Server                                                             | `""`               |
 
 
 ### Mongos parameters
 
 | Name                                                | Description                                                                                      | Value           |
 | --------------------------------------------------- | ------------------------------------------------------------------------------------------------ | --------------- |
-| `mongos.replicas`                                   | Number of replicas                                                                               | `1`             |
-| `mongos.resources`                                  | Configure pod resources                                                                          | `{}`            |
-| `mongos.hostAliases`                                | Deployment pod host aliases                                                                      | `[]`            |
-| `mongos.mongodbExtraFlags`                          | MongoDB&reg; additional command line flags                                                       | `[]`            |
-| `mongos.priorityClassName`                          | Pod priority class name                                                                          | `nil`           |
+| `mongos.resources`                                  | Configure pod resources                                                                          | `undefined`     |
+| `mongos.hostAliases`                                | Deployment pod host aliases                                                                      | `undefined`     |
+| `mongos.mongodbExtraFlags`                          | MongoDB&reg; additional command line flags                                                       | `undefined`     |
+| `mongos.priorityClassName`                          | Pod priority class name                                                                          | `""`            |
 | `mongos.podAffinityPreset`                          | Mongos Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
 | `mongos.podAntiAffinityPreset`                      | Mongos Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`          |
 | `mongos.nodeAffinityPreset.type`                    | Mongos Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`            |
 | `mongos.nodeAffinityPreset.key`                     | Mongos Node label key to match Ignored if `affinity` is set.                                     | `""`            |
-| `mongos.nodeAffinityPreset.values`                  | Mongos Node label values to match. Ignored if `affinity` is set.                                 | `[]`            |
-| `mongos.affinity`                                   | Mongos Affinity for pod assignment                                                               | `{}`            |
-| `mongos.nodeSelector`                               | Mongos Node labels for pod assignment                                                            | `{}`            |
-| `mongos.tolerations`                                | Mongos Tolerations for pod assignment                                                            | `[]`            |
+| `mongos.nodeAffinityPreset.values`                  | Mongos Node label values to match. Ignored if `affinity` is set.                                 | `undefined`     |
+| `mongos.affinity`                                   | Mongos Affinity for pod assignment                                                               | `undefined`     |
+| `mongos.nodeSelector`                               | Mongos Node labels for pod assignment                                                            | `undefined`     |
+| `mongos.tolerations`                                | Mongos Tolerations for pod assignment                                                            | `undefined`     |
 | `mongos.podManagementPolicy`                        | Statefulsets pod management policy, allows parallel startup of pods                              | `OrderedReady`  |
 | `mongos.updateStrategy.type`                        | updateStrategy for MongoDB(R) Primary, Secondary and Arbiter statefulsets                        | `RollingUpdate` |
-| `mongos.config`                                     | MongoDB&reg; configuration file                                                                  | `nil`           |
-| `mongos.configCM`                                   | ConfigMap name with MongoDB&reg; configuration file (cannot be used with mongos.config)          | `nil`           |
-| `mongos.extraEnvVars`                               | An array to add extra env vars                                                                   | `nil`           |
-| `mongos.extraEnvVarsCM`                             | Name of a ConfigMap containing extra env vars                                                    | `nil`           |
-| `mongos.extraEnvVarsSecret`                         | Name of a Secret containing extra env vars                                                       | `nil`           |
-| `mongos.sidecars`                                   | Add sidecars to the pod                                                                          | `[]`            |
-| `mongos.initContainers`                             | Add init containers to the pod                                                                   | `[]`            |
-| `mongos.podAnnotations`                             | Additional pod annotations                                                                       | `{}`            |
-| `mongos.podLabels`                                  | Additional pod labels                                                                            | `{}`            |
-| `mongos.extraVolumes`                               | Array to add extra volumes. Requires setting `extraVolumeMounts`                                 | `[]`            |
-| `mongos.extraVolumeMounts`                          | Array to add extra volume mounts. Normally used with `extraVolumes`.                             | `[]`            |
-| `mongos.schedulerName`                              | Use an alternate scheduler, e.g. "stork".                                                        | `nil`           |
+| `mongos.config`                                     | MongoDB&reg; configuration file                                                                  | `""`            |
+| `mongos.configCM`                                   | ConfigMap name with MongoDB&reg; configuration file (cannot be used with mongos.config)          | `""`            |
+| `mongos.extraEnvVars`                               | An array to add extra env vars                                                                   | `undefined`     |
+| `mongos.extraEnvVarsCM`                             | Name of a ConfigMap containing extra env vars                                                    | `""`            |
+| `mongos.extraEnvVarsSecret`                         | Name of a Secret containing extra env vars                                                       | `""`            |
+| `mongos.sidecars`                                   | Add sidecars to the pod                                                                          | `undefined`     |
+| `mongos.initContainers`                             | Add init containers to the pod                                                                   | `undefined`     |
+| `mongos.podAnnotations`                             | Additional pod annotations                                                                       | `undefined`     |
+| `mongos.podLabels`                                  | Additional pod labels                                                                            | `undefined`     |
+| `mongos.extraVolumes`                               | Array to add extra volumes. Requires setting `extraVolumeMounts`                                 | `undefined`     |
+| `mongos.extraVolumeMounts`                          | Array to add extra volume mounts. Normally used with `extraVolumes`.                             | `undefined`     |
+| `mongos.schedulerName`                              | Use an alternate scheduler, e.g. "stork".                                                        | `""`            |
 | `mongos.useStatefulSet`                             | Use StatefulSet instead of Deployment                                                            | `false`         |
 | `mongos.servicePerReplica.enabled`                  | Create one service per mongos replica (must be used with statefulset)                            | `false`         |
-| `mongos.servicePerReplica.annotations`              | Additional service annotations (evaluate as a template)                                          | `{}`            |
+| `mongos.servicePerReplica.annotations`              | Additional service annotations (evaluate as a template)                                          | `undefined`     |
 | `mongos.servicePerReplica.type`                     | Service type                                                                                     | `ClusterIP`     |
 | `mongos.servicePerReplica.externalTrafficPolicy`    | External traffic policy                                                                          | `Cluster`       |
 | `mongos.servicePerReplica.port`                     | MongoDB&reg; service port                                                                        | `27017`         |
-| `mongos.servicePerReplica.clusterIP`                | Static clusterIP or None for headless services                                                   | `nil`           |
-| `mongos.servicePerReplica.nodePort`                 | Specify the nodePort value for the LoadBalancer and NodePort service types                       | `nil`           |
-| `mongos.servicePerReplica.externalIPs`              | External IP list to use with ClusterIP service type                                              | `[]`            |
-| `mongos.servicePerReplica.loadBalancerIP`           | Static IP Address to use for LoadBalancer service type                                           | `nil`           |
-| `mongos.servicePerReplica.loadBalancerSourceRanges` | List of IP ranges allowed access to load balancer (if supported)                                 | `[]`            |
-| `mongos.servicePerReplica.extraPorts`               | Extra ports to expose (normally used with the `sidecar` value)                                   | `[]`            |
+| `mongos.servicePerReplica.clusterIP`                | Static clusterIP or None for headless services                                                   | `""`            |
+| `mongos.servicePerReplica.nodePort`                 | Specify the nodePort value for the LoadBalancer and NodePort service types                       | `""`            |
+| `mongos.servicePerReplica.externalIPs`              | External IP list to use with ClusterIP service type                                              | `undefined`     |
+| `mongos.servicePerReplica.loadBalancerIP`           | Static IP Address to use for LoadBalancer service type                                           | `""`            |
+| `mongos.servicePerReplica.loadBalancerSourceRanges` | List of IP ranges allowed access to load balancer (if supported)                                 | `undefined`     |
+| `mongos.servicePerReplica.extraPorts`               | Extra ports to expose (normally used with the `sidecar` value)                                   | `undefined`     |
 | `mongos.servicePerReplica.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                             | `None`          |
 | `mongos.pdb.enabled`                                | Enable pod disruption budget                                                                     | `false`         |
 | `mongos.pdb.minAvailable`                           | Minimum number of available mongo pods allowed (`0` to disable)                                  | `0`             |
 | `mongos.pdb.maxUnavailable`                         | Maximum number of unavailable mongo pods allowed (`0` to disable)                                | `1`             |
 | `mongos.serviceAccount.create`                      | Whether to create a Service Account for mongos automatically                                     | `false`         |
-| `mongos.serviceAccount.name`                        | Name of a Service Account to be used by mongos                                                   | `nil`           |
+| `mongos.serviceAccount.name`                        | Name of a Service Account to be used by mongos                                                   | `""`            |
 
 
 ### Shard configuration: Data node parameters
 
 | Name                                          | Description                                                                                          | Value           |
 | --------------------------------------------- | ---------------------------------------------------------------------------------------------------- | --------------- |
-| `shardsvr.dataNode.replicas`                  | Number of nodes in each shard replica set (the first node will be primary)                           | `1`             |
-| `shardsvr.dataNode.resources`                 | Configure pod resources                                                                              | `{}`            |
-| `shardsvr.dataNode.mongodbExtraFlags`         | MongoDB&reg; additional command line flags                                                           | `[]`            |
-| `shardsvr.dataNode.priorityClassName`         | Pod priority class name                                                                              | `nil`           |
+| `shardsvr.dataNode.resources`                 | Configure pod resources                                                                              | `undefined`     |
+| `shardsvr.dataNode.mongodbExtraFlags`         | MongoDB&reg; additional command line flags                                                           | `undefined`     |
+| `shardsvr.dataNode.priorityClassName`         | Pod priority class name                                                                              | `""`            |
 | `shardsvr.dataNode.podAffinityPreset`         | Data nodes Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
 | `shardsvr.dataNode.podAntiAffinityPreset`     | Data nodes Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`          |
 | `shardsvr.dataNode.nodeAffinityPreset.type`   | Data nodes Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`            |
 | `shardsvr.dataNode.nodeAffinityPreset.key`    | Data nodes Node label key to match Ignored if `affinity` is set.                                     | `""`            |
-| `shardsvr.dataNode.nodeAffinityPreset.values` | Data nodes Node label values to match. Ignored if `affinity` is set.                                 | `[]`            |
-| `shardsvr.dataNode.affinity`                  | Data nodes Affinity for pod assignment                                                               | `{}`            |
-| `shardsvr.dataNode.nodeSelector`              | Data nodes Node labels for pod assignment                                                            | `{}`            |
-| `shardsvr.dataNode.tolerations`               | Data nodes Tolerations for pod assignment                                                            | `[]`            |
+| `shardsvr.dataNode.nodeAffinityPreset.values` | Data nodes Node label values to match. Ignored if `affinity` is set.                                 | `undefined`     |
+| `shardsvr.dataNode.affinity`                  | Data nodes Affinity for pod assignment                                                               | `undefined`     |
+| `shardsvr.dataNode.nodeSelector`              | Data nodes Node labels for pod assignment                                                            | `undefined`     |
+| `shardsvr.dataNode.tolerations`               | Data nodes Tolerations for pod assignment                                                            | `undefined`     |
 | `shardsvr.dataNode.podManagementPolicy`       | podManagementPolicy for the statefulset, allows parallel startup of pods                             | `OrderedReady`  |
 | `shardsvr.dataNode.updateStrategy.type`       | updateStrategy for MongoDB&reg; Primary, Secondary and Arbiter statefulsets                          | `RollingUpdate` |
-| `shardsvr.dataNode.hostAliases`               | Deployment pod host aliases                                                                          | `[]`            |
-| `shardsvr.dataNode.config`                    | Entries for the MongoDB&reg; config file                                                             | `nil`           |
-| `shardsvr.dataNode.configCM`                  | ConfigMap name with MongoDB&reg; configuration (cannot be used with shardsvr.dataNode.config)        | `nil`           |
-| `shardsvr.dataNode.extraEnvVars`              | An array to add extra env vars                                                                       | `[]`            |
-| `shardsvr.dataNode.extraEnvVarsCM`            | Name of a ConfigMap containing extra env vars                                                        | `nil`           |
-| `shardsvr.dataNode.extraEnvVarsSecret`        | Name of a Secret containing extra env vars                                                           | `nil`           |
-| `shardsvr.dataNode.sidecars`                  | Attach additional containers (evaluated as a template)                                               | `[]`            |
-| `shardsvr.dataNode.initContainers`            | Add init containers to the pod                                                                       | `[]`            |
-| `shardsvr.dataNode.podAnnotations`            | Additional pod annotations                                                                           | `{}`            |
-| `shardsvr.dataNode.podLabels`                 | Additional pod labels                                                                                | `{}`            |
-| `shardsvr.dataNode.extraVolumes`              | Array to add extra volumes. Requires setting `extraVolumeMounts`                                     | `[]`            |
-| `shardsvr.dataNode.extraVolumeMounts`         | Array to add extra mounts. Normally used with `extraVolumes`                                         | `[]`            |
-| `shardsvr.dataNode.schedulerName`             | Use an alternate scheduler, e.g. "stork".                                                            | `nil`           |
+| `shardsvr.dataNode.hostAliases`               | Deployment pod host aliases                                                                          | `undefined`     |
+| `shardsvr.dataNode.config`                    | Entries for the MongoDB&reg; config file                                                             | `""`            |
+| `shardsvr.dataNode.configCM`                  | ConfigMap name with MongoDB&reg; configuration (cannot be used with shardsvr.dataNode.config)        | `""`            |
+| `shardsvr.dataNode.extraEnvVars`              | An array to add extra env vars                                                                       | `undefined`     |
+| `shardsvr.dataNode.extraEnvVarsCM`            | Name of a ConfigMap containing extra env vars                                                        | `""`            |
+| `shardsvr.dataNode.extraEnvVarsSecret`        | Name of a Secret containing extra env vars                                                           | `""`            |
+| `shardsvr.dataNode.sidecars`                  | Attach additional containers (evaluated as a template)                                               | `undefined`     |
+| `shardsvr.dataNode.initContainers`            | Add init containers to the pod                                                                       | `undefined`     |
+| `shardsvr.dataNode.podAnnotations`            | Additional pod annotations                                                                           | `undefined`     |
+| `shardsvr.dataNode.podLabels`                 | Additional pod labels                                                                                | `undefined`     |
+| `shardsvr.dataNode.extraVolumes`              | Array to add extra volumes. Requires setting `extraVolumeMounts`                                     | `undefined`     |
+| `shardsvr.dataNode.extraVolumeMounts`         | Array to add extra mounts. Normally used with `extraVolumes`                                         | `undefined`     |
+| `shardsvr.dataNode.schedulerName`             | Use an alternate scheduler, e.g. "stork".                                                            | `""`            |
 | `shardsvr.dataNode.pdb.enabled`               | Enable pod disruption budget                                                                         | `false`         |
 | `shardsvr.dataNode.pdb.minAvailable`          | Minimum number of available data pods allowed (`0` to disable)                                       | `0`             |
 | `shardsvr.dataNode.pdb.maxUnavailable`        | Maximum number of unavailable data pods allowed (`0` to disable)                                     | `1`             |
 | `shardsvr.dataNode.serviceAccount.create`     | Specifies whether a ServiceAccount should be created for shardsvr                                    | `false`         |
-| `shardsvr.dataNode.serviceAccount.name`       | Name of a Service Account to be used by shardsvr data pods                                           | `nil`           |
+| `shardsvr.dataNode.serviceAccount.name`       | Name of a Service Account to be used by shardsvr data pods                                           | `""`            |
 
 
 ### Shard configuration: Persistence parameters
 
 | Name                                | Description                                                                              | Value              |
 | ----------------------------------- | ---------------------------------------------------------------------------------------- | ------------------ |
-| `shardsvr.persistence.enabled`      | Use a PVC to persist data                                                                | `true`             |
 | `shardsvr.persistence.mountPath`    | The path the volume will be mounted at, useful when using different MongoDB&reg; images. | `/bitnami/mongodb` |
 | `shardsvr.persistence.subPath`      | Subdirectory of the volume to mount at                                                   | `""`               |
-| `shardsvr.persistence.storageClass` | Storage class of backing PVC                                                             | `nil`              |
+| `shardsvr.persistence.storageClass` | Storage class of backing PVC                                                             | `""`               |
 | `shardsvr.persistence.accessModes`  | Use volume as ReadOnly or ReadWrite                                                      | `[]`               |
 | `shardsvr.persistence.size`         | PersistentVolumeClaim size                                                               | `8Gi`              |
-| `shardsvr.persistence.annotations`  | Additional volume annotations                                                            | `{}`               |
+| `shardsvr.persistence.annotations`  | Additional volume annotations                                                            | `undefined`        |
 
 
 ### Shard configuration: Arbiter parameters
 
 | Name                                         | Description                                                                                         | Value           |
 | -------------------------------------------- | --------------------------------------------------------------------------------------------------- | --------------- |
-| `shardsvr.arbiter.replicas`                  | Number of arbiters in each shard replica set (the first node will be primary)                       | `0`             |
-| `shardsvr.arbiter.hostAliases`               | Deployment pod host aliases                                                                         | `[]`            |
-| `shardsvr.arbiter.resources`                 | Configure pod resources                                                                             | `{}`            |
-| `shardsvr.arbiter.mongodbExtraFlags`         | MongoDB&reg; additional command line flags                                                          | `[]`            |
-| `shardsvr.arbiter.priorityClassName`         | Pod priority class name                                                                             | `nil`           |
+| `shardsvr.arbiter.hostAliases`               | Deployment pod host aliases                                                                         | `undefined`     |
+| `shardsvr.arbiter.resources`                 | Configure pod resources                                                                             | `undefined`     |
+| `shardsvr.arbiter.mongodbExtraFlags`         | MongoDB&reg; additional command line flags                                                          | `undefined`     |
+| `shardsvr.arbiter.priorityClassName`         | Pod priority class name                                                                             | `""`            |
 | `shardsvr.arbiter.podAffinityPreset`         | Arbiter's Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
 | `shardsvr.arbiter.podAntiAffinityPreset`     | Arbiter's Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`          |
 | `shardsvr.arbiter.nodeAffinityPreset.type`   | Arbiter's Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`            |
 | `shardsvr.arbiter.nodeAffinityPreset.key`    | Arbiter's Node label key to match Ignored if `affinity` is set.                                     | `""`            |
-| `shardsvr.arbiter.nodeAffinityPreset.values` | Arbiter's Node label values to match. Ignored if `affinity` is set.                                 | `[]`            |
-| `shardsvr.arbiter.affinity`                  | Arbiter's Affinity for pod assignment                                                               | `{}`            |
-| `shardsvr.arbiter.nodeSelector`              | Arbiter's Node labels for pod assignment                                                            | `{}`            |
-| `shardsvr.arbiter.tolerations`               | Arbiter's Tolerations for pod assignment                                                            | `[]`            |
+| `shardsvr.arbiter.nodeAffinityPreset.values` | Arbiter's Node label values to match. Ignored if `affinity` is set.                                 | `undefined`     |
+| `shardsvr.arbiter.affinity`                  | Arbiter's Affinity for pod assignment                                                               | `undefined`     |
+| `shardsvr.arbiter.nodeSelector`              | Arbiter's Node labels for pod assignment                                                            | `undefined`     |
+| `shardsvr.arbiter.tolerations`               | Arbiter's Tolerations for pod assignment                                                            | `undefined`     |
 | `shardsvr.arbiter.podManagementPolicy`       | Statefulset's pod management policy, allows parallel startup of pods                                | `OrderedReady`  |
 | `shardsvr.arbiter.updateStrategy.type`       | updateStrategy for MongoDB(R) Primary, Secondary and Arbiter statefulsets                           | `RollingUpdate` |
-| `shardsvr.arbiter.config`                    | MongoDB&reg; configuration file                                                                     | `nil`           |
-| `shardsvr.arbiter.configCM`                  | ConfigMap name with MongoDB&reg; configuration file (cannot be used with shardsvr.arbiter.config)   | `nil`           |
-| `shardsvr.arbiter.extraEnvVars`              | An array to add extra env vars                                                                      | `nil`           |
-| `shardsvr.arbiter.extraEnvVarsCM`            | Name of a ConfigMap containing extra env vars                                                       | `nil`           |
-| `shardsvr.arbiter.extraEnvVarsSecret`        | Name of a Secret containing extra env vars                                                          | `nil`           |
-| `shardsvr.arbiter.sidecars`                  | Add sidecars to the pod                                                                             | `[]`            |
-| `shardsvr.arbiter.initContainers`            | Add init containers to the pod                                                                      | `[]`            |
-| `shardsvr.arbiter.podAnnotations`            | Additional pod annotations                                                                          | `{}`            |
-| `shardsvr.arbiter.podLabels`                 | Additional pod labels                                                                               | `{}`            |
-| `shardsvr.arbiter.extraVolumes`              | Array to add extra volumes                                                                          | `[]`            |
-| `shardsvr.arbiter.extraVolumeMounts`         | Array to add extra mounts (normally used with extraVolumes)                                         | `[]`            |
-| `shardsvr.arbiter.schedulerName`             | Use an alternate scheduler, e.g. "stork".                                                           | `nil`           |
+| `shardsvr.arbiter.config`                    | MongoDB&reg; configuration file                                                                     | `""`            |
+| `shardsvr.arbiter.configCM`                  | ConfigMap name with MongoDB&reg; configuration file (cannot be used with shardsvr.arbiter.config)   | `""`            |
+| `shardsvr.arbiter.extraEnvVars`              | An array to add extra env vars                                                                      | `undefined`     |
+| `shardsvr.arbiter.extraEnvVarsCM`            | Name of a ConfigMap containing extra env vars                                                       | `""`            |
+| `shardsvr.arbiter.extraEnvVarsSecret`        | Name of a Secret containing extra env vars                                                          | `""`            |
+| `shardsvr.arbiter.sidecars`                  | Add sidecars to the pod                                                                             | `undefined`     |
+| `shardsvr.arbiter.initContainers`            | Add init containers to the pod                                                                      | `undefined`     |
+| `shardsvr.arbiter.podAnnotations`            | Additional pod annotations                                                                          | `undefined`     |
+| `shardsvr.arbiter.podLabels`                 | Additional pod labels                                                                               | `undefined`     |
+| `shardsvr.arbiter.extraVolumes`              | Array to add extra volumes                                                                          | `undefined`     |
+| `shardsvr.arbiter.extraVolumeMounts`         | Array to add extra mounts (normally used with extraVolumes)                                         | `undefined`     |
+| `shardsvr.arbiter.schedulerName`             | Use an alternate scheduler, e.g. "stork".                                                           | `""`            |
 | `shardsvr.arbiter.serviceAccount.create`     | Specifies whether a ServiceAccount should be created for shardsvr arbiter nodes                     | `false`         |
-| `shardsvr.arbiter.serviceAccount.name`       | Name of a Service Account to be used by shardsvr arbiter pods                                       | `nil`           |
+| `shardsvr.arbiter.serviceAccount.name`       | Name of a Service Account to be used by shardsvr arbiter pods                                       | `""`            |
 
 
 ### Metrics parameters
 
 | Name                                         | Description                                                                        | Value                      |
 | -------------------------------------------- | ---------------------------------------------------------------------------------- | -------------------------- |
-| `metrics.enabled`                            | Start a side-car prometheus exporter                                               | `false`                    |
 | `metrics.image.registry`                     | MongoDB&reg; exporter image registry                                               | `docker.io`                |
 | `metrics.image.repository`                   | MongoDB&reg; exporter image name                                                   | `bitnami/mongodb-exporter` |
-| `metrics.image.tag`                          | MongoDB&reg; exporter image tag                                                    | `0.11.2-debian-10-r212`    |
+| `metrics.image.tag`                          | MongoDB&reg; exporter image tag                                                    | `0.11.2-debian-10-r223`    |
 | `metrics.image.pullPolicy`                   | MongoDB&reg; exporter image pull policy                                            | `Always`                   |
-| `metrics.image.pullSecrets`                  | MongoDB&reg; exporter image pull secrets                                           | `[]`                       |
+| `metrics.image.pullSecrets`                  | MongoDB&reg; exporter image pull secrets                                           | `undefined`                |
 | `metrics.extraArgs`                          | String with extra arguments to the metrics exporter                                | `""`                       |
-| `metrics.resources`                          | Metrics exporter resource requests and limits                                      | `{}`                       |
+| `metrics.resources`                          | Metrics exporter resource requests and limits                                      | `undefined`                |
 | `metrics.livenessProbe.enabled`              | Enable livenessProbe                                                               | `false`                    |
 | `metrics.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                            | `15`                       |
 | `metrics.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                   | `5`                        |
@@ -354,8 +345,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.podMonitor.enabled`                 | Create PodMonitor Resource for scraping metrics using PrometheusOperator           | `false`                    |
 | `metrics.podMonitor.namespace`               | Namespace where podmonitor resource should be created                              | `monitoring`               |
 | `metrics.podMonitor.interval`                | Specify the interval at which metrics should be scraped                            | `30s`                      |
-| `metrics.podMonitor.scrapeTimeout`           | Specify the timeout after which the scrape is ended                                | `nil`                      |
-| `metrics.podMonitor.additionalLabels`        | Additional labels that can be used so PodMonitors will be discovered by Prometheus | `{}`                       |
+| `metrics.podMonitor.scrapeTimeout`           | Specify the timeout after which the scrape is ended                                | `""`                       |
+| `metrics.podMonitor.additionalLabels`        | Additional labels that can be used so PodMonitors will be discovered by Prometheus | `undefined`                |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
