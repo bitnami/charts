@@ -272,7 +272,7 @@ configuration:
     ## entries: |
     ##    testuser:{SHA}EWhzdhgoYJWy0z2gyzhRYlN9DSiv
     ##
-    content: {}
+    content: ""
 
 ## @section OAuth2 Proxy deployment parameters
 ##
