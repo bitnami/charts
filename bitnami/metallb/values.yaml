@@ -1,87 +1,95 @@
-## Default values for metallb.
-## This is a YAML-formatted file.
-## Declare variables to be passed into your templates.
-##
-
+## @section Global parameters
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
-## Current available global Docker image parameters: imageRegistry, imagePullSecrets
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
 ##
-# global:
-#   imageRegistry: myRegistryName
-#   imagePullSecrets:
-#     - myRegistryKeySecretName
+global:
+  imageRegistry:
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+
+## @section Common parameters
+
+## @param nameOverride String to partially override metallb.fullname include (will maintain the release name)
+##
+nameOverride:
+## @param fullnameOverride String to fully override metallb.fullname template
+##
+fullnameOverride:
+## @param commonLabels Add labels to all the deployed resources
+##
+commonLabels: {}
+## @param commonAnnotations Add annotations to all the deployed resources
+##
+commonAnnotations: {}
+
+## @section MetalLB parameters
 
 ## To configure MetalLB, you must specify ONE of the following two
 ## options.
-#
-## existingConfigMap specifies the name of an externally-defined
-## ConfigMap to use as the configuration. Helm will not manage the
-## contents of this ConfigMap, it is your responsibility to create it.
-#
-# existingConfigMap: metallb-config
-#
-## configInline specifies MetalLB's configuration directly, in yaml
-## format. When configInline is used, Helm manages MetalLB's
+## @param existingConfigMap Specify the name of an externally-defined ConfigMap to use as the configuration. This is mutually exclusive with the `configInline` option.
+## Helm will not manage the contents of this ConfigMap, it is your responsibility to create it.
+## e.g:
+## existingConfigMap: metallb-config
+##
+existingConfigMap:
+## @param configInline Specifies MetalLB's configuration directly, in yaml format.
+## When configInline is used, Helm manages MetalLB's
 ## configuration ConfigMap as part of the release, and
 ## existingConfigMap is ignored.
 ## Refer to https://metallb.universe.tf/configuration/ for
 ## available options.
-#
+##
 configInline: {}
-
-## String to partially override metallb.fullname include (will maintain the release name)
-##
-# nameOverride:
-
-## String to fully override metallb.fullname template
-##
-# fullnameOverride:
-
 ## RBAC creation for controller and speaker
 ##
 rbac:
-  ## create specifies whether to install and use RBAC rules.
+  ## @param rbac.create Specifies whether to install and use RBAC rules
   ##
   create: true
-
 ## PSP creation for controller and speaker
 ##
 psp:
-  ## create specifies whether to install Pod Security Policies.
+  ## @param psp.create create specifies whether to install Pod Security Policies.
   ##
   create: false
-
-# Prometheus Operator alertmanager alerts
+## Prometheus Operator alertmanager alerts
+##
 networkPolicy:
-  ## Specifies whether a NetworkPolicy should be created.
+  ## @param networkPolicy.enabled Enable NetworkPolicy
   ## Prometheus scraping of the controller
   ##
   enabled: false
-
-  ## Limit networkpolicy ingress (from)
+  ## @param networkPolicy.ingressNSMatchLabels Allow connections from other namespaces
   ## Set label for namespace and pods (optional).
   ##
   ingressNSMatchLabels: {}
+  ## @param networkPolicy.ingressNSPodMatchLabels For other namespaces match by pod labels and namespace labels
+  ##
   ingressNSPodMatchLabels: {}
-
-## Prometheus Operator alertmanager alerts are created.
+## @param prometheusRule.enabled Prometheus Operator alertmanager alerts are created
 ##
 prometheusRule:
   enabled: false
 
-## Add labels to all the deployed resources
-##
-commonLabels: {}
-
-## Add annotations to all the deployed resources
-##
-commonAnnotations: {}
+## @section Controller parameters
 
 ## Metallb Controller deployment.
 ## ref: https://hub.docker.com/r/bitnami/metallb-controller/tags
 ##
 controller:
+  ## @param controller.image.registry MetalLB Controller image registry
+  ## @param controller.image.repository MetalLB Controller image repository
+  ## @param controller.image.tag MetalLB Controller  image tag (immutable tags are recommended)
+  ## @param controller.image.pullPolicy MetalLB Controller image pull policy
+  ## @param controller.image.pullSecrets Specify docker-registry secret names as an array
+  ##
   image:
     registry: docker.io
     repository: bitnami/metallb-controller
@@ -94,118 +102,118 @@ controller:
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
     ##
-    # pullSecrets:
-    #   - myRegistryKeySecretName
-
-  ## Deployment pod host aliases
+    pullSecrets: []
+  ## @param controller.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-
   ## If global .Values.rbac.create is disabled no rbac is created.
   ## This value is then meaningless
   ## Defines if the controller rbac should be created.
   ##
   rbac:
-    ## create specifies whether to install and use RBAC rules.
+    ## @param controller.rbac.create create specifies whether to install and use RBAC rules.
     ##
     create: true
-
   ## If global .Values.psp.create is disabled no psp is created.
   ## This value is then meaningless
   ## Defines if the controller psp should be created.
   ##
   psp:
-    ## create specifies whether to install Pod Security Policies.
+    ## @param controller.psp.create create specifies whether to install Pod Security Policies.
     ##
     create: true
-
-  ## Set pod priorityClassName
-  # priorityClassName: ""
-
+  ## @param controller.priorityClassName Set pod priorityClassName
+  ##
+  priorityClassName:
   ## Controller container resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ##
-  resources: {}
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  #   limits:
-  #     cpu: 100m
-  #     memory: 100Mi
-  #   requests:
-  #     memory: 25Mi
-  #     cpu: 25m
-  ## Node labels for pod assignment
+  ## @param controller.resources.limits The resources limits for the container
+  ## @param controller.resources.requests The requested resources for the container
+  ##
+  resources:
+    ## Example:
+    ## limits:
+    ##    cpu: 100m
+    ##    memory: 100Mi
+    limits: {}
+    ## Examples:
+    ## requests:
+    ##    cpu: 25m
+    ##    memory: 25Mi
+    requests: {}
+  ## @param controller.nodeSelector Node labels for controller pod assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-
-  ## Tolerations for pod assignment
+  ## @param controller.tolerations Tolerations for controller pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-
-  ## Affinity for pod assignment
+  ## @param controller.affinity Affinity for controller pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ##
   affinity: {}
-
-  ## Pod annotations
+  ## @param controller.podAnnotations Controller Pod annotations
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
-
-  ## Additional pod labels
+  ## @param controller.podLabels Controller Pod labels
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
-
-  ## Pod affinity preset
+  ## @param controller.podAffinityPreset Controller Pod affinitypreset. Allowed values: soft, hard
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
   ##
   podAffinityPreset: ""
-
-  ## Pod anti-affinity preset
+  ## @param controller.podAntiAffinityPreset Controller Pod anti affinitypreset. Allowed values: soft, hard
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
   ##
   podAntiAffinityPreset: soft
-
   ## Node affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
   ## Allowed values: soft, hard
   ##
   nodeAffinityPreset:
-    ## Node affinity type
-    ## Allowed values: soft, hard
+    ## @param controller.nodeAffinityPreset.type Controller Pod Node affinity preset. Allowed values: soft, hard
     ##
     type: ""
-    ## Node label key to match
+    ## @param controller.nodeAffinityPreset.key Controller Pod Node affinity label key to match
     ## E.g.
     ## key: "kubernetes.io/e2e-az-name"
     ##
     key: ""
-    ## Node label values to match
+    ## @param controller.nodeAffinityPreset.values Controller Pod Node affinity label values to match
     ## E.g.
     ## values:
     ##   - e2e-az1
     ##   - e2e-az2
     ##
     values: []
-
   serviceAccount:
-    # Specifies whether a ServiceAccount should be created
+    ## @param controller.serviceAccount.create Specifies whether a ServiceAccount should be created
+    ##
     create: true
-    # The name of the ServiceAccount to use.  If not set and create is
-    # true, a name is generated using the fullname template
+    ## @param controller.serviceAccount.name The name of the ServiceAccount to use. If not set and create is true, a name is generated using the fullname template
+    ##
     name: ""
-
   ## Pod securityContext
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ## @param controller.securityContext.enabled Enable pods' security context
+  ## @param controller.securityContext.runAsNonRoot MetalLB Controller must runs as nonRoot.
+  ## @param controller.securityContext.runAsUser User ID for the pods.
+  ## @param controller.securityContext.fsGroup Group ID for the pods.
+  ## @param controller.securityContext.allowPrivilegeEscalation This defines if privilegeEscalation is allowed on that container
+  ## @param controller.securityContext.readOnlyRootFilesystem This defines if the container can read the root fs on the host
+  ## @param controller.securityContext.capabilities.drop [array] Drop capabilities for the securityContext
   ##
   securityContext:
     enabled: true
@@ -217,24 +225,26 @@ controller:
     capabilities:
       drop:
         - ALL
-
-  ## Configure the revisionHistoryLimit of the Controller deployment
+  ## @param controller.revisionHistoryLimit Configure the revisionHistoryLimit of the Controller deployment
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#revision-history-limit
   ##
   revisionHistoryLimit: 3
-
-  ## Configure the grace time period for sig term
+  ## @param controller.terminationGracePeriodSeconds Configure the grace time period for sig term
   ## ref: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#hook-handler-execution
   ##
   terminationGracePeriodSeconds: 0
-
-  ## Configures the ports the MetalLB Controller listens on for metrics
+  ## @param controller.containerPort.metrics Configures the ports the MetalLB Controller listens on for metrics
   ##
   containerPort:
     metrics: 7472
-
-  ## Liveness and readiness probe values
+  ## Liveness probe values
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## @param controller.livenessProbe.enabled Enable livenessProbe
+  ## @param controller.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param controller.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param controller.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param controller.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param controller.livenessProbe.successThreshold Success threshold for livenessProbe
   ##
   livenessProbe:
     enabled: true
@@ -243,6 +253,15 @@ controller:
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
+  ## Readiness probe values
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## @param controller.readinessProbe.enabled Enable readinessProbe
+  ## @param controller.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param controller.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param controller.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param controller.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param controller.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
   readinessProbe:
     enabled: true
     failureThreshold: 3
@@ -250,27 +269,38 @@ controller:
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
-
   prometheus:
     ## Prometheus Operator service monitors
     ##
     serviceMonitor:
-      ## enable support for Prometheus Operator
+      ## @param controller.prometheus.serviceMonitor.enabled Specify if a servicemonitor will be deployed for prometheus-operator
       ##
       enabled: false
-      ## Job label for scrape target
+      ## @param controller.prometheus.serviceMonitor.jobLabel Specify the jobLabel to use for the prometheus-operator
       ##
       jobLabel: "app.kubernetes.io/name"
-      ## Scrape interval. If not set, the Prometheus default scrape interval is used.
+      ## @param controller.prometheus.serviceMonitor.interval Scrape interval. If not set, the Prometheus default scrape interval is used
       ##
       interval: ""
+      ## @param controller.prometheus.serviceMonitor.metricRelabelings Specify additional relabeling of metrics
+      ##
       metricRelabelings: []
+      ## @param controller.prometheus.serviceMonitor.relabelings Specify general relabeling
+      ##
       relabelings: []
+
+## @section Speaker parameters
 
 ## Metallb Speaker daemonset.
 ## ref: https://hub.docker.com/r/bitnami/metallb-speaker/tags
 ##
 speaker:
+  ## @param speaker.image.registry MetalLB Speaker image registry
+  ## @param speaker.image.repository MetalLB Speaker image repository
+  ## @param speaker.image.tag MetalLB Speaker  image tag (immutable tags are recommended)
+  ## @param speaker.image.pullPolicy MetalLB Speaker image pull policy
+  ## @param speaker.image.pullSecrets Specify docker-registry secret names as an array
+  ##
   image:
     registry: docker.io
     repository: bitnami/metallb-speaker
@@ -283,111 +313,116 @@ speaker:
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
     ##
-    # pullSecrets:
-    #   - myRegistryKeySecretName
-
+    pullSecrets: []
   ## If global .Values.rbac.create is disabled no rbac is created.
   ## This value is then meaningless
   ## Defines if the speaker rbac should be created.
   ##
   rbac:
-    ## create specifies whether to install and use RBAC rules.
+    ## @param speaker.rbac.create create specifies whether to install and use RBAC rules.
     ##
     create: true
-
-  ## Deployment pod host aliases
+  ## @param speaker.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-
   ## If global .Values.psp.create is disabled no psp is created.
   ## This value is then meaningless
   ## Defines if the speaker psp should be created.
   ##
   psp:
-    ## create specifies whether to install Pod Security Policies.
+    ## @param speaker.psp.create create specifies whether to install Pod Security Policies.
     ##
     create: true
-
-  ## Set pod priorityClassName
-  # priorityClassName: ""
-
+  ## @param speaker.priorityClassName Set pod priorityClassName.
+  ##
+  priorityClassName:
   ## Speaker container resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ##
-  resources: {}
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  #   limits:
-  #     cpu: 100m
-  #     memory: 100Mi
-  #   requests:
-  #     memory: 25Mi
-  #     cpu: 25m
-  ## Node labels for pod assignment
+  ## @param speaker.resources.limits The resources limits for the container
+  ## @param speaker.resources.requests The requested resources for the container
+  ##
+  resources:
+    ## Example:
+    ## limits:
+    ##    cpu: 100m
+    ##    memory: 100Mi
+    limits: {}
+    ## Examples:
+    ## requests:
+    ##    cpu: 25m
+    ##    memory: 25Mi
+    requests: {}
+  ## @param speaker.nodeSelector Node labels for speaker pod assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-
-  ## Tolerations for pod assignment
+  ## @param speaker.tolerations Tolerations for speaker pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-
-  ## Affinity for pod assignment
+  ## @param speaker.affinity Affinity for speaker pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ##
   affinity: {}
-
-  ## Pod annotations
+  ## @param speaker.podAnnotations Speaker Pod annotations
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
-
-  ## Additional pod labels
+  ## @param speaker.podLabels Speaker Pod labels
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
-
   serviceAccount:
-    # Specifies whether a ServiceAccount should be created
+    ## @param speaker.serviceAccount.create Specifies whether a ServiceAccount should be created
+    ##
     create: true
-    # The name of the ServiceAccount to use.  If not set and create is
-    # true, a name is generated using the fullname template
+    ## @param speaker.serviceAccount.name The name of the ServiceAccount to use.  If not set and create is true, a name is generated using the fullname template
+    ##
     name: ""
-
   ## Daemonset configuration
   ##
   daemonset:
-    ## Configure the grace time period for sig term
+    ## @param speaker.daemonset.terminationGracePeriodSeconds Configure the grace time period for sig term
     ## ref: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#hook-handler-execution
     ##
     terminationGracePeriodSeconds: 2
-    ## HTTP Metrics Endpoint
+    ## @param speaker.daemonset.hostPorts.metrics HTTP Metrics Endpoint
     ##
     hostPorts:
       metrics: 7472
-
-  ## Defines a secret to use outside of the auto generated
+  ## Defines a secret to use outside of the auto generate
+  ## @param speaker.secretName References a Secret name for the member secret outside of the helm chart
+  ## @param speaker.secretKey References a Secret key the member secret outside of the helm chart
+  ## @param speaker.secretValue Custom value for `speaker.secretKey`
   ## Default: {{ randAlphaNum 256 | b64enc | quote }}
   ## The auto generated secret has:
   ## secretName: {{ "common.names.fullname" }}-memberlist
   ## secretKey: secretkey
   ## secretValue: random 256 character alphanumeric string
   ##
-  # secretName:
-  # secretKey:
-  # secretValue:
-
-  ## Extra containers to add before the speaker starts
+  secretName:
+  secretKey:
+  secretValue:
+  ## @param speaker.initContainers Extra initContainers to add to the daemonset
   ##
   initContainers: []
-
   ## Pod securityContext
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ## @param speaker.securityContext.enabled Enable pods' security context
+  ## @param speaker.securityContext.runAsUser User ID for the pods.
+  ## @param speaker.securityContext.allowPrivilegeEscalation Enables privilege Escalation context for the pod.
+  ## @param speaker.securityContext.readOnlyRootFilesystem Allows the pod to mount the RootFS as ReadOnly
+  ## @param speaker.securityContext.capabilities.drop [array] Drop capabilities for the securityContext
+  ## @param speaker.securityContext.capabilities.add [array] Add capabilities for the securityContext
   ##
   securityContext:
     enabled: true
@@ -401,17 +436,21 @@ speaker:
         - NET_ADMIN
         - NET_RAW
         - SYS_ADMIN
-
-  ## An array to add extra env vars
+  ## @param speaker.extraEnvVars Extra environment variable to pass to the running container.
   ## For example:
   ## extraEnvVars:
   ##  - name: MY_ENV_VAR
   ##    value: env_var_value
   ##
   extraEnvVars: []
-
-  ## Liveness and readiness probe values
+  ## Liveness probe values
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## @param speaker.livenessProbe.enabled Enable livenessProbe
+  ## @param speaker.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param speaker.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param speaker.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param speaker.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param speaker.livenessProbe.successThreshold Success threshold for livenessProbe
   ##
   livenessProbe:
     enabled: true
@@ -420,6 +459,15 @@ speaker:
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
+  ## Readiness probe values
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## @param speaker.readinessProbe.enabled Enable readinessProbe
+  ## @param speaker.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param speaker.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param speaker.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param speaker.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param speaker.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
   readinessProbe:
     enabled: true
     failureThreshold: 3
@@ -427,19 +475,22 @@ speaker:
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
-
   prometheus:
     ## Prometheus Operator service monitors
     ##
     serviceMonitor:
-      ## enable support for Prometheus Operator
+      ## @param speaker.prometheus.serviceMonitor.enabled Enable support for Prometheus Operator
       ##
       enabled: false
-      ## Job label for scrape target
+      ## @param speaker.prometheus.serviceMonitor.jobLabel Job label for scrape target
       ##
       jobLabel: "app.kubernetes.io/name"
-      ## Scrape interval. If not set, the Prometheus default scrape interval is used.
+      ## @param speaker.prometheus.serviceMonitor.interval Scrape interval. If not set, the Prometheus default scrape interval is used
       ##
       interval: ""
+      ## @param speaker.prometheus.serviceMonitor.metricRelabelings Specify additional relabeling of metrics
+      ##
       metricRelabelings: []
+      ## @param speaker.prometheus.serviceMonitor.relabelings Specify general relabeling
+      ##
       relabelings: []
