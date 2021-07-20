@@ -172,7 +172,7 @@ plugins: "rabbitmq_management rabbitmq_peer_discovery_k8s"
 ## @param communityPlugins List of Community plugins (URLs) to be downloaded during container initialization
 ## Combine it with extraPlugins to also enable them.
 ##
-communityPlugins: []
+communityPlugins: ""
 
 ## @param extraPlugins Extra plugins to enable (single string containing a space-separated list)
 ## Use this instead of `plugins` to add new plugins
