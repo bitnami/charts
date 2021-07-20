@@ -50,32 +50,35 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Global parameters
 
-| Name                      | Description                                     | Value       |
-| ------------------------- | ----------------------------------------------- | ----------- |
-| `global.imagePullSecrets` | Global Docker registry secret names as an array | `undefined` |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`        |
+| Name                      | Description                                     | Value |
+| ------------------------- | ----------------------------------------------- | ----- |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
+| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
 
 ### Common parameters
 
 | Name                | Description                                                                                  | Value           |
 | ------------------- | -------------------------------------------------------------------------------------------- | --------------- |
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                         | `""`            |
 | `nameOverride`      | String to partially override common.names.fullname template (will maintain the release name) | `""`            |
 | `fullnameOverride`  | String to fully override common.names.fullname template                                      | `""`            |
-| `commonLabels`      | Labels to add to all deployed objects                                                        | `undefined`     |
-| `commonAnnotations` | Annotations to add to all deployed objects                                                   | `undefined`     |
+| `commonLabels`      | Labels to add to all deployed objects                                                        | `{}`            |
+| `commonAnnotations` | Annotations to add to all deployed objects                                                   | `{}`            |
 | `clusterDomain`     | Default Kubernetes cluster domain                                                            | `cluster.local` |
-| `extraDeploy`       | Array of extra objects to deploy with the release                                            | `undefined`     |
+| `extraDeploy`       | Array of extra objects to deploy with the release                                            | `[]`            |
 
 
 ### Mediawiki parameters
 
 | Name                 | Description                                                          | Value                 |
 | -------------------- | -------------------------------------------------------------------- | --------------------- |
+| `image.registry`     | MediaWiki image registry                                             | `docker.io`           |
 | `image.repository`   | MediaWiki image repository                                           | `bitnami/mediawiki`   |
 | `image.tag`          | MediaWiki image tag (immutable tags are recommended)                 | `1.36.1-debian-10-r0` |
 | `image.pullPolicy`   | Image pull policy                                                    | `IfNotPresent`        |
-| `image.pullSecrets`  | Specify docker-registry secret names as an array                     | `undefined`           |
+| `image.pullSecrets`  | Specify docker-registry secret names as an array                     | `[]`                  |
 | `hostAliases`        | Deployment pod host aliases                                          | `[]`                  |
 | `mediawikiUser`      | User of the application                                              | `user`                |
 | `mediawikiPassword`  | Application password                                                 | `""`                  |
@@ -88,9 +91,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `smtpHostID`         | SMTP host ID                                                         | `""`                  |
 | `smtpUser`           | SMTP user                                                            | `""`                  |
 | `smtpPassword`       | SMTP password                                                        | `""`                  |
-| `command`            | Override default container command (useful when using custom images) | `undefined`           |
-| `args`               | Override default container args (useful when using custom images)    | `undefined`           |
-| `extraEnvVars`       | Extra environment variables to be set on Mediawki container          | `undefined`           |
+| `command`            | Override default container command (useful when using custom images) | `[]`                  |
+| `args`               | Override default container args (useful when using custom images)    | `[]`                  |
+| `extraEnvVars`       | Extra environment variables to be set on Mediawki container          | `[]`                  |
 | `extraEnvVarsCM`     | Name of existing ConfigMap containing extra env vars                 | `""`                  |
 | `extraEnvVarsSecret` | Name of existing Secret containing extra env vars                    | `""`                  |
 
@@ -99,11 +102,12 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                 | Description                                                                               | Value                                             |
 | ------------------------------------ | ----------------------------------------------------------------------------------------- | ------------------------------------------------- |
+| `updateStrategy.type`                | StrategyType can be set to RollingUpdate or OnDelete                                      | `RollingUpdate`                                   |
 | `podSecurityContext.enabled`         | Enable Mediawiki pods' Security Context                                                   | `true`                                            |
 | `podSecurityContext.fsGroup`         | Group ID for the volumes of the pod                                                       | `1001`                                            |
 | `containerSecurityContext.enabled`   | Enable Mediawiki containers' SecurityContext                                              | `true`                                            |
 | `containerSecurityContext.runAsUser` | User ID to run Mediawiki containers                                                       | `1001`                                            |
-| `resources.limits`                   | The resources limits for the Mediawki container                                           | `undefined`                                       |
+| `resources.limits`                   | The resources limits for the Mediawki container                                           | `{}`                                              |
 | `resources.requests`                 | The requested resources for the Mediawki container                                        | `{}`                                              |
 | `livenessProbe.enabled`              | Enable livenessProbe                                                                      | `true`                                            |
 | `livenessProbe.httpGet.path`         | Request path for livenessProbe                                                            | `/api.php?action=query&meta=siteinfo&format=none` |
@@ -123,22 +127,22 @@ The command removes all the Kubernetes components associated with the chart and 
 | `readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                        | `5`                                               |
 | `readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                      | `6`                                               |
 | `readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                      | `1`                                               |
-| `customLivenessProbe`                | Override default liveness probe                                                           | `undefined`                                       |
-| `customReadinessProbe`               | Override default readiness probe                                                          | `undefined`                                       |
-| `podLabels`                          | Extra labels for Mediawki pods                                                            | `undefined`                                       |
-| `podAnnotations`                     | Annotations for Mediawki pods                                                             | `undefined`                                       |
+| `customLivenessProbe`                | Override default liveness probe                                                           | `{}`                                              |
+| `customReadinessProbe`               | Override default readiness probe                                                          | `{}`                                              |
+| `podLabels`                          | Extra labels for Mediawki pods                                                            | `{}`                                              |
+| `podAnnotations`                     | Annotations for Mediawki pods                                                             | `{}`                                              |
 | `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                                              |
 | `podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                                            |
 | `nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                                              |
 | `nodeAffinityPreset.key`             | Node label key to match. Ignored if `affinity` is set.                                    | `""`                                              |
-| `nodeAffinityPreset.values`          | Node label values to match. Ignored if `affinity` is set.                                 | `undefined`                                       |
-| `affinity`                           | Affinity for pod assignment. Evaluated as a template.                                     | `undefined`                                       |
-| `nodeSelector`                       | Node labels for pod assignment. Evaluated as a template.                                  | `undefined`                                       |
-| `tolerations`                        | Tolerations for pod assignment. Evaluated as a template.                                  | `undefined`                                       |
-| `extraVolumes`                       | Optionally specify extra list of additional volumes for Mediawki pods                     | `undefined`                                       |
-| `extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for Mediawki container(s)        | `undefined`                                       |
-| `initContainers`                     | Add additional init containers to the Mediawki pods                                       | `undefined`                                       |
-| `sidecars`                           | Add additional sidecar containers to the Mediawki pods                                    | `undefined`                                       |
+| `nodeAffinityPreset.values`          | Node label values to match. Ignored if `affinity` is set.                                 | `[]`                                              |
+| `affinity`                           | Affinity for pod assignment. Evaluated as a template.                                     | `{}`                                              |
+| `nodeSelector`                       | Node labels for pod assignment. Evaluated as a template.                                  | `{}`                                              |
+| `tolerations`                        | Tolerations for pod assignment. Evaluated as a template.                                  | `[]`                                              |
+| `extraVolumes`                       | Optionally specify extra list of additional volumes for Mediawki pods                     | `[]`                                              |
+| `extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for Mediawki container(s)        | `[]`                                              |
+| `initContainers`                     | Add additional init containers to the Mediawki pods                                       | `[]`                                              |
+| `sidecars`                           | Add additional sidecar containers to the Mediawki pods                                    | `[]`                                              |
 | `persistence.enabled`                | Enable persistence using PVC                                                              | `true`                                            |
 | `persistence.storageClass`           | PVC Storage Class for MediaWiki volume                                                    | `""`                                              |
 | `persistence.existingClaim`          | An Existing PVC name for MediaWiki volume                                                 | `""`                                              |
@@ -150,6 +154,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                            | Description                                                                                                | Value                    |
 | ------------------------------- | ---------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                  | Kubernetes Service type                                                                                    | `LoadBalancer`           |
 | `service.loadBalancerIP`        | Use serviceLoadBalancerIP to request a specific static IP,                                                 | `""`                     |
 | `service.port`                  | Service HTTP port                                                                                          | `80`                     |
 | `service.httpsPort`             | HTTPS Port. Set this to any value (recommended: 443) to enable the https service port                      | `""`                     |
@@ -162,47 +167,49 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.apiVersion`            | Force Ingress API version (automatically detected if not set)                                              | `""`                     |
 | `ingress.hostname`              | Default host for the ingress resource                                                                      | `mediawiki.local`        |
 | `ingress.path`                  | The Path to Mediawiki. You may need to set this to '/*' in order to use this with ALB ingress controllers. | `ImplementationSpecific` |
-| `ingress.annotations`           | Ingress annotations                                                                                        | `undefined`              |
+| `ingress.annotations`           | Ingress annotations                                                                                        | `{}`                     |
 | `ingress.tls`                   | Enable TLS configuration for the hostname defined at ingress.hostname parameter                            | `false`                  |
-| `ingress.extraHosts`            | The list of additional hostnames to be covered with this ingress record.                                   | `undefined`              |
-| `ingress.extraPaths`            | Any additional arbitrary paths that may need to be added to the ingress under the main host.               | `undefined`              |
-| `ingress.extraTls`              | The tls configuration for additional hostnames to be covered with this ingress record.                     | `undefined`              |
-| `ingress.secrets`               | If you're providing your own certificates, please use this to add the certificates as secrets              | `undefined`              |
+| `ingress.extraHosts`            | The list of additional hostnames to be covered with this ingress record.                                   | `[]`                     |
+| `ingress.extraPaths`            | Any additional arbitrary paths that may need to be added to the ingress under the main host.               | `[]`                     |
+| `ingress.extraTls`              | The tls configuration for additional hostnames to be covered with this ingress record.                     | `[]`                     |
+| `ingress.secrets`               | If you're providing your own certificates, please use this to add the certificates as secrets              | `[]`                     |
 
 
 ### Database parameters
 
-| Name                                        | Description                                          | Value               |
-| ------------------------------------------- | ---------------------------------------------------- | ------------------- |
-| `mariadb.architecture`                      | MariaDB architecture (`standalone` or `replication`) | `standalone`        |
-| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                 | `""`                |
-| `mariadb.auth.database`                     | Database name to create                              | `bitnami_mediawiki` |
-| `mariadb.auth.username`                     | Database user to create                              | `bn_mediawiki`      |
-| `mariadb.auth.password`                     | Password for the database                            | `""`                |
-| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                | `true`              |
-| `mariadb.primary.persistence.storageClass`  | PVC Storage Class                                    | `""`                |
-| `mariadb.primary.persistence.accessModes`   | Persistent Volume Access Mode                        | `[]`                |
-| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                      | `8Gi`               |
-| `mariadb.primary.persistence.hostPath`      | Host mount path for MariaDB volume                   | `""`                |
-| `mariadb.primary.persistence.existingClaim` | Enable persistence using an existing PVC             | `""`                |
-| `externalDatabase.existingSecret`           | Use existing secret (ignores previous password)      | `""`                |
-| `externalDatabase.host`                     | Host of the existing database                        | `""`                |
-| `externalDatabase.port`                     | Port of the existing database                        | `3306`              |
-| `externalDatabase.user`                     | Existing username in the external db                 | `bn_mediawiki`      |
-| `externalDatabase.password`                 | Password for the above username                      | `""`                |
-| `externalDatabase.database`                 | Name of the existing database                        | `bitnami_mediawiki` |
+| Name                                        | Description                                                                           | Value               |
+| ------------------------------------------- | ------------------------------------------------------------------------------------- | ------------------- |
+| `mariadb.enabled`                           | Whether to deploy a mariadb server to satisfy the applications database requirements. | `true`              |
+| `mariadb.architecture`                      | MariaDB architecture (`standalone` or `replication`)                                  | `standalone`        |
+| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                                  | `""`                |
+| `mariadb.auth.database`                     | Database name to create                                                               | `bitnami_mediawiki` |
+| `mariadb.auth.username`                     | Database user to create                                                               | `bn_mediawiki`      |
+| `mariadb.auth.password`                     | Password for the database                                                             | `""`                |
+| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                 | `true`              |
+| `mariadb.primary.persistence.storageClass`  | PVC Storage Class                                                                     | `""`                |
+| `mariadb.primary.persistence.accessModes`   | Persistent Volume Access Mode                                                         | `[]`                |
+| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                       | `8Gi`               |
+| `mariadb.primary.persistence.hostPath`      | Host mount path for MariaDB volume                                                    | `""`                |
+| `mariadb.primary.persistence.existingClaim` | Enable persistence using an existing PVC                                              | `""`                |
+| `externalDatabase.existingSecret`           | Use existing secret (ignores previous password)                                       | `""`                |
+| `externalDatabase.host`                     | Host of the existing database                                                         | `""`                |
+| `externalDatabase.port`                     | Port of the existing database                                                         | `3306`              |
+| `externalDatabase.user`                     | Existing username in the external db                                                  | `bn_mediawiki`      |
+| `externalDatabase.password`                 | Password for the above username                                                       | `""`                |
+| `externalDatabase.database`                 | Name of the existing database                                                         | `bitnami_mediawiki` |
 
 
 ### Metrics parameters
 
 | Name                                      | Description                                                                  | Value                     |
 | ----------------------------------------- | ---------------------------------------------------------------------------- | ------------------------- |
+| `metrics.enabled`                         | Start a side-car prometheus exporter                                         | `false`                   |
 | `metrics.image.registry`                  | Apache exporter image registry                                               | `docker.io`               |
 | `metrics.image.repository`                | Apache exporter image repository                                             | `bitnami/apache-exporter` |
 | `metrics.image.tag`                       | Apache exporter image tag (immutable tags are recommended)                   | `0.9.0-debian-10-r14`     |
 | `metrics.image.pullPolicy`                | Image pull policy                                                            | `IfNotPresent`            |
-| `metrics.image.pullSecrets`               | Specify docker-registry secret names as an array                             | `undefined`               |
-| `metrics.resources`                       | Exporter resource requests/limit                                             | `undefined`               |
+| `metrics.image.pullSecrets`               | Specify docker-registry secret names as an array                             | `[]`                      |
+| `metrics.resources`                       | Exporter resource requests/limit                                             | `{}`                      |
 | `metrics.port`                            | Metrics service port                                                         | `9117`                    |
 | `metrics.podAnnotations`                  | Additional annotations for Metrics exporter pod                              | `{}`                      |
 | `metrics.serviceMonitor.enabled`          | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator | `true`                    |
@@ -211,7 +218,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.scrapeTimeout`    | The timeout after which the scrape is ended                                  | `""`                      |
 | `metrics.serviceMonitor.relabellings`     | Metrics relabellings to add to the scrape endpoint                           | `""`                      |
 | `metrics.serviceMonitor.honorLabels`      | Labels to honor to add to the scrape endpoint                                | `false`                   |
-| `metrics.serviceMonitor.additionalLabels` | Additional custom labels for the ServiceMonitor                              | `undefined`               |
+| `metrics.serviceMonitor.additionalLabels` | Additional custom labels for the ServiceMonitor                              | `{}`                      |
 
 
 The above parameters map to the env variables defined in [bitnami/mediawiki](http://github.com/bitnami/bitnami-docker-mediawiki). For more information please refer to the [bitnami/mediawiki](http://github.com/bitnami/bitnami-docker-mediawiki) image documentation.

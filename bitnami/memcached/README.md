@@ -47,40 +47,43 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Global parameters
 
-| Name                      | Description                                     | Value       |
-| ------------------------- | ----------------------------------------------- | ----------- |
-| `global.imagePullSecrets` | Global Docker registry secret names as an array | `undefined` |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`        |
+| Name                      | Description                                     | Value |
+| ------------------------- | ----------------------------------------------- | ----- |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
+| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
 
 ### Common parameters
 
-| Name                | Description                                             | Value           |
-| ------------------- | ------------------------------------------------------- | --------------- |
-| `fullnameOverride`  | String to fully override common.names.fullname template | `""`            |
-| `commonLabels`      | Labels to add to all deployed objects                   | `undefined`     |
-| `commonAnnotations` | Annotations to add to all deployed objects              | `undefined`     |
-| `clusterDomain`     | Default Kubernetes cluster domain                       | `cluster.local` |
-| `extraDeploy`       | Array of extra objects to deploy with the release       | `undefined`     |
+| Name                | Description                                                                                  | Value           |
+| ------------------- | -------------------------------------------------------------------------------------------- | --------------- |
+| `nameOverride`      | String to partially override common.names.fullname template (will maintain the release name) | `""`            |
+| `fullnameOverride`  | String to fully override common.names.fullname template                                      | `""`            |
+| `commonLabels`      | Labels to add to all deployed objects                                                        | `{}`            |
+| `commonAnnotations` | Annotations to add to all deployed objects                                                   | `{}`            |
+| `clusterDomain`     | Default Kubernetes cluster domain                                                            | `cluster.local` |
+| `extraDeploy`       | Array of extra objects to deploy with the release                                            | `[]`            |
 
 
 ### Memcached parameters
 
 | Name                                          | Description                                                                                     | Value                        |
 | --------------------------------------------- | ----------------------------------------------------------------------------------------------- | ---------------------------- |
+| `image.registry`                              | Memcached image registry                                                                        | `docker.io`                  |
 | `image.repository`                            | Memcached image repository                                                                      | `bitnami/memcached`          |
 | `image.tag`                                   | Memcached image tag (immutable tags are recommended)                                            | `1.6.9-debian-10-r194`       |
 | `image.pullPolicy`                            | Memcached image pull policy                                                                     | `IfNotPresent`               |
-| `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                | `undefined`                  |
+| `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                | `[]`                         |
 | `image.debug`                                 | Enable image debug mode                                                                         | `false`                      |
 | `architecture`                                | Memcached architecture. Allowed values: standalone or high-availability                         | `standalone`                 |
-| `hostAliases`                                 | Add deployment host aliases                                                                     | `undefined`                  |
+| `hostAliases`                                 | Add deployment host aliases                                                                     | `[]`                         |
 | `memcachedUsername`                           | Memcached admin user                                                                            | `""`                         |
 | `memcachedPassword`                           | Memcached admin password                                                                        | `""`                         |
 | `replicaCount`                                | Number of containers                                                                            | `1`                          |
-| `command`                                     | Default container command (useful when using custom images)                                     | `undefined`                  |
+| `command`                                     | Default container command (useful when using custom images)                                     | `[]`                         |
 | `arguments`                                   | Default container args (useful when using custom images)                                        | `[]`                         |
-| `extraEnv`                                    | Additional env vars to pass                                                                     | `undefined`                  |
+| `extraEnv`                                    | Additional env vars to pass                                                                     | `[]`                         |
 | `podDisruptionBudget.create`                  | Specifies whether a Pod disruption budget should be created                                     | `false`                      |
 | `podDisruptionBudget.minAvailable`            | Minimum number of pods that need to be available                                                | `""`                         |
 | `podDisruptionBudget.maxUnavailable`          | Maximum number of pods that can be unavailable                                                  | `1`                          |
@@ -88,34 +91,34 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.port`                                | Memcached service port                                                                          | `11211`                      |
 | `service.nodePort`                            | Kubernetes Service nodePort                                                                     | `""`                         |
 | `service.loadBalancerIP`                      | `loadBalancerIP` if service type is `LoadBalancer`                                              | `""`                         |
-| `service.annotations`                         | Additional annotations for Memcached service                                                    | `undefined`                  |
-| `resources.limits`                            | CPU/Memory resource limits                                                                      | `undefined`                  |
+| `service.annotations`                         | Additional annotations for Memcached service                                                    | `{}`                         |
+| `resources.limits`                            | CPU/Memory resource limits                                                                      | `{}`                         |
 | `resources.requests`                          | CPU/Memory resource requests                                                                    | `{}`                         |
 | `portName`                                    | Name of the main port exposed by memcached                                                      | `memcache`                   |
 | `securityContext.enabled`                     | Enable security context                                                                         | `true`                       |
 | `securityContext.fsGroup`                     | Group ID for the container                                                                      | `1001`                       |
 | `securityContext.runAsUser`                   | User ID for the container                                                                       | `1001`                       |
 | `securityContext.readOnlyRootFilesystem`      | Enable read-only filesystem                                                                     | `false`                      |
-| `podLabels`                                   | Pod extra labels                                                                                | `undefined`                  |
-| `podAnnotations`                              | Pod annotations                                                                                 | `undefined`                  |
+| `podLabels`                                   | Pod extra labels                                                                                | `{}`                         |
+| `podAnnotations`                              | Pod annotations                                                                                 | `{}`                         |
 | `podAffinityPreset`                           | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`             | `""`                         |
 | `podAntiAffinityPreset`                       | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`        | `soft`                       |
 | `nodeAffinityPreset.type`                     | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                         |
 | `nodeAffinityPreset.key`                      | Node label key to match. Ignored if `affinity` is set.                                          | `""`                         |
-| `nodeAffinityPreset.values`                   | Node label values to match. Ignored if `affinity` is set.                                       | `undefined`                  |
-| `affinity`                                    | Affinity for pod assignment                                                                     | `undefined`                  |
-| `nodeSelector`                                | Node labels for pod assignment                                                                  | `undefined`                  |
-| `tolerations`                                 | Tolerations for pod assignment                                                                  | `undefined`                  |
-| `topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains | `undefined`                  |
+| `nodeAffinityPreset.values`                   | Node label values to match. Ignored if `affinity` is set.                                       | `[]`                         |
+| `affinity`                                    | Affinity for pod assignment                                                                     | `{}`                         |
+| `nodeSelector`                                | Node labels for pod assignment                                                                  | `{}`                         |
+| `tolerations`                                 | Tolerations for pod assignment                                                                  | `[]`                         |
+| `topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains | `{}`                         |
 | `priorityClassName`                           | Pod priority                                                                                    | `""`                         |
-| `initContainers`                              | Add additional init containers to the Memcached pod                                             | `undefined`                  |
-| `sidecars`                                    | Add additional sidecar containers to the Memcached pod                                          | `undefined`                  |
+| `initContainers`                              | Add additional init containers to the Memcached pod                                             | `[]`                         |
+| `sidecars`                                    | Add additional sidecar containers to the Memcached pod                                          | `[]`                         |
 | `serviceAccount.create`                       | Enable creation of ServiceAccount for memcached pods                                            | `true`                       |
 | `serviceAccount.name`                         | The name of the ServiceAccount to use.                                                          | `""`                         |
 | `serviceAccount.automountServiceAccountToken` | Enable/disable auto mounting of the service account token                                       | `true`                       |
 | `persistence.enabled`                         | Enable persistence using PVC (Requires architecture: "high-availability")                       | `false`                      |
 | `persistence.storageClass`                    | PVC Storage Class for Memcached volume                                                          | `""`                         |
-| `persistence.annotations`                     | Persistent Volume Claim annotations                                                             | `undefined`                  |
+| `persistence.annotations`                     | Persistent Volume Claim annotations                                                             | `{}`                         |
 | `persistence.accessModes`                     | Persistent Volume Access Mode                                                                   | `[]`                         |
 | `persistence.size`                            | PVC Storage Request for Memcached volume                                                        | `8Gi`                        |
 | `metrics.enabled`                             | Start a side-car prometheus exporter                                                            | `false`                      |
@@ -123,11 +126,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.image.repository`                    | Memcached exporter image repository                                                             | `bitnami/memcached-exporter` |
 | `metrics.image.tag`                           | Memcached exporter image tag (immutable tags are recommended)                                   | `0.9.0-debian-10-r85`        |
 | `metrics.image.pullPolicy`                    | Image pull policy                                                                               | `IfNotPresent`               |
-| `metrics.image.pullSecrets`                   | Specify docker-registry secret names as an array                                                | `undefined`                  |
+| `metrics.image.pullSecrets`                   | Specify docker-registry secret names as an array                                                | `[]`                         |
 | `metrics.podAnnotations`                      | Metrics exporter pod Annotation and Labels                                                      | `{}`                         |
 | `metrics.portName`                            | Memcached exporter port name                                                                    | `metrics`                    |
-| `metrics.resources.limits`                    | The resources limits for the container                                                          | `undefined`                  |
-| `metrics.resources.requests`                  | The requested resources for the container                                                       | `undefined`                  |
+| `metrics.resources.limits`                    | The resources limits for the container                                                          | `{}`                         |
+| `metrics.resources.requests`                  | The requested resources for the container                                                       | `{}`                         |
 | `metrics.service.type`                        | Kubernetes service type for Prometheus metrics                                                  | `ClusterIP`                  |
 | `metrics.service.port`                        | Prometheus metrics service port                                                                 | `9150`                       |
 | `metrics.service.annotations`                 | Annotations for the Prometheus metrics service                                                  | `{}`                         |
@@ -135,16 +138,16 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.namespace`            | The namespace in which the ServiceMonitor will be created                                       | `""`                         |
 | `metrics.serviceMonitor.interval`             | The interval at which metrics should be scraped                                                 | `""`                         |
 | `metrics.serviceMonitor.scrapeTimeout`        | The timeout after which the scrape is ended                                                     | `""`                         |
-| `metrics.serviceMonitor.selector`             | Additional labels for ServiceMonitor resource                                                   | `undefined`                  |
-| `metrics.serviceMonitor.metricRelabelings`    | MetricRelabelConfigs to apply to samples before ingestion                                       | `undefined`                  |
-| `metrics.serviceMonitor.relabelings`          | Metrics relabelings to add to the scrape endpoint, applied before scraping                      | `undefined`                  |
+| `metrics.serviceMonitor.selector`             | Additional labels for ServiceMonitor resource                                                   | `{}`                         |
+| `metrics.serviceMonitor.metricRelabelings`    | MetricRelabelConfigs to apply to samples before ingestion                                       | `[]`                         |
+| `metrics.serviceMonitor.relabelings`          | Metrics relabelings to add to the scrape endpoint, applied before scraping                      | `[]`                         |
 | `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                | `docker.io`                  |
 | `volumePermissions.image.repository`          | Init container volume-permissions image repository                                              | `bitnami/bitnami-shell`      |
 | `volumePermissions.image.tag`                 | Init container volume-permissions image tag (immutable tags are recommended)                    | `10-debian-10-r120`          |
 | `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                             | `Always`                     |
-| `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                | `undefined`                  |
-| `volumePermissions.resources.limits`          | Init container volume-permissions resource limits                                               | `undefined`                  |
-| `volumePermissions.resources.requests`        | Init container volume-permissions resource requests                                             | `undefined`                  |
+| `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                | `[]`                         |
+| `volumePermissions.resources.limits`          | Init container volume-permissions resource limits                                               | `{}`                         |
+| `volumePermissions.resources.requests`        | Init container volume-permissions resource requests                                             | `{}`                         |
 
 
 The above parameters map to the environment variables defined in the [bitnami/memcached](http://github.com/bitnami/bitnami-docker-memcached) container image. For more information please refer to the [bitnami/memcached](http://github.com/bitnami/bitnami-docker-memcached) container image documentation.

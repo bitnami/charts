@@ -47,27 +47,30 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Global parameters
 
-| Name                      | Description                                     | Value       |
-| ------------------------- | ----------------------------------------------- | ----------- |
-| `global.imagePullSecrets` | Global Docker registry secret names as an array | `undefined` |
+| Name                      | Description                                     | Value |
+| ------------------------- | ----------------------------------------------- | ----- |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
+| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 
 
 ### Common parameters
 
-| Name               | Description                                             | Value |
-| ------------------ | ------------------------------------------------------- | ----- |
-| `fullnameOverride` | String to fully override common.names.fullname template | `""`  |
+| Name               | Description                                                                                  | Value |
+| ------------------ | -------------------------------------------------------------------------------------------- | ----- |
+| `nameOverride`     | String to partially override common.names.fullname template (will maintain the release name) | `""`  |
+| `fullnameOverride` | String to fully override common.names.fullname template                                      | `""`  |
 
 
 ### Metrics Server parameters
 
 | Name                                              | Description                                                                                                                                                              | Value                    |
 | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------ |
+| `image.registry`                                  | Metrics Server image registry                                                                                                                                            | `docker.io`              |
 | `image.repository`                                | Metrics Server image repository                                                                                                                                          | `bitnami/metrics-server` |
 | `image.tag`                                       | Metrics Server image tag (immutable tags are recommended)                                                                                                                | `0.5.0-debian-10-r32`    |
 | `image.pullPolicy`                                | Metrics Server image pull policy                                                                                                                                         | `IfNotPresent`           |
-| `image.pullSecrets`                               | Metrics Server image pull secrets                                                                                                                                        | `undefined`              |
-| `hostAliases`                                     | Add deployment host aliases                                                                                                                                              | `undefined`              |
+| `image.pullSecrets`                               | Metrics Server image pull secrets                                                                                                                                        | `[]`                     |
+| `hostAliases`                                     | Add deployment host aliases                                                                                                                                              | `[]`                     |
 | `replicas`                                        | Number of metrics-server nodes to deploy                                                                                                                                 | `1`                      |
 | `updateStrategy.type`                             | Set up update strategy for metrics-server installation.                                                                                                                  | `RollingUpdate`          |
 | `rbac.create`                                     | Enable RBAC authentication                                                                                                                                               | `true`                   |
@@ -78,9 +81,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `securePort`                                      | Port where metrics-server will be running                                                                                                                                | `8443`                   |
 | `hostNetwork`                                     | Enable hostNetwork mode                                                                                                                                                  | `false`                  |
 | `command`                                         | Override default container command (useful when using custom images)                                                                                                     | `[]`                     |
-| `extraArgs`                                       | Extra arguments to pass to metrics-server on start up                                                                                                                    | `undefined`              |
-| `podLabels`                                       | Pod labels                                                                                                                                                               | `undefined`              |
-| `podAnnotations`                                  | Pod annotations                                                                                                                                                          | `undefined`              |
+| `extraArgs`                                       | Extra arguments to pass to metrics-server on start up                                                                                                                    | `{}`                     |
+| `podLabels`                                       | Pod labels                                                                                                                                                               | `{}`                     |
+| `podAnnotations`                                  | Pod annotations                                                                                                                                                          | `{}`                     |
 | `priorityClassName`                               | Priority class for pod scheduling                                                                                                                                        | `""`                     |
 | `podAffinityPreset`                               | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                      | `""`                     |
 | `podAntiAffinityPreset`                           | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                 | `soft`                   |
@@ -89,19 +92,19 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podDisruptionBudget.maxUnavailable`              | Maximum unavailable instances                                                                                                                                            | `""`                     |
 | `nodeAffinityPreset.type`                         | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                | `""`                     |
 | `nodeAffinityPreset.key`                          | Node label key to match. Ignored if `affinity` is set.                                                                                                                   | `""`                     |
-| `nodeAffinityPreset.values`                       | Node label values to match. Ignored if `affinity` is set.                                                                                                                | `undefined`              |
-| `affinity`                                        | Affinity for pod assignment                                                                                                                                              | `undefined`              |
-| `topologySpreadConstraints`                       | Topology spread constraints for pod                                                                                                                                      | `undefined`              |
-| `nodeSelector`                                    | Node labels for pod assignment                                                                                                                                           | `undefined`              |
-| `tolerations`                                     | Tolerations for pod assignment                                                                                                                                           | `undefined`              |
+| `nodeAffinityPreset.values`                       | Node label values to match. Ignored if `affinity` is set.                                                                                                                | `[]`                     |
+| `affinity`                                        | Affinity for pod assignment                                                                                                                                              | `{}`                     |
+| `topologySpreadConstraints`                       | Topology spread constraints for pod                                                                                                                                      | `[]`                     |
+| `nodeSelector`                                    | Node labels for pod assignment                                                                                                                                           | `{}`                     |
+| `tolerations`                                     | Tolerations for pod assignment                                                                                                                                           | `[]`                     |
 | `service.type`                                    | Kubernetes Service type                                                                                                                                                  | `ClusterIP`              |
 | `service.port`                                    | Kubernetes Service port                                                                                                                                                  | `443`                    |
 | `service.nodePort`                                | Kubernetes Service port                                                                                                                                                  | `""`                     |
 | `service.loadBalancerIP`                          | LoadBalancer IP if Service type is `LoadBalancer`                                                                                                                        | `""`                     |
-| `service.annotations`                             | Annotations for the Service                                                                                                                                              | `undefined`              |
-| `service.labels`                                  | Labels for the Service                                                                                                                                                   | `undefined`              |
-| `resources.limits`                                | The resources limits for the container                                                                                                                                   | `undefined`              |
-| `resources.requests`                              | The requested resources for the container                                                                                                                                | `undefined`              |
+| `service.annotations`                             | Annotations for the Service                                                                                                                                              | `{}`                     |
+| `service.labels`                                  | Labels for the Service                                                                                                                                                   | `{}`                     |
+| `resources.limits`                                | The resources limits for the container                                                                                                                                   | `{}`                     |
+| `resources.requests`                              | The requested resources for the container                                                                                                                                | `{}`                     |
 | `livenessProbe.enabled`                           | Enable livenessProbe                                                                                                                                                     | `true`                   |
 | `livenessProbe.httpGet.path`                      | Request path for livenessProbe                                                                                                                                           | `/livez`                 |
 | `livenessProbe.httpGet.port`                      | Port for livenessProbe                                                                                                                                                   | `https`                  |
@@ -114,15 +117,15 @@ The command removes all the Kubernetes components associated with the chart and 
 | `readinessProbe.httpGet.scheme`                   | Scheme for livenessProbe                                                                                                                                                 | `HTTPS`                  |
 | `readinessProbe.periodSeconds`                    | Period seconds for readinessProbe                                                                                                                                        | `10`                     |
 | `readinessProbe.failureThreshold`                 | Failure threshold for readinessProbe                                                                                                                                     | `3`                      |
-| `customLivenessProbe`                             | Custom Liveness probes for metrics-server                                                                                                                                | `undefined`              |
-| `customReadinessProbe`                            | Custom Readiness probes metrics-server                                                                                                                                   | `undefined`              |
+| `customLivenessProbe`                             | Custom Liveness probes for metrics-server                                                                                                                                | `{}`                     |
+| `customReadinessProbe`                            | Custom Readiness probes metrics-server                                                                                                                                   | `{}`                     |
 | `containerSecurityContext.enabled`                | Enable Container security context                                                                                                                                        | `true`                   |
 | `containerSecurityContext.readOnlyRootFilesystem` | ReadOnlyRootFilesystem for the container                                                                                                                                 | `false`                  |
 | `containerSecurityContext.runAsNonRoot`           | Run containers as non-root users                                                                                                                                         | `true`                   |
 | `podSecurityContext.enabled`                      | Pod security context                                                                                                                                                     | `false`                  |
-| `extraVolumes`                                    | Extra volumes                                                                                                                                                            | `undefined`              |
-| `extraVolumeMounts`                               | Mount extra volume(s)                                                                                                                                                    | `undefined`              |
-| `extraContainers`                                 | Extra containers to run within the pod                                                                                                                                   | `undefined`              |
+| `extraVolumes`                                    | Extra volumes                                                                                                                                                            | `[]`                     |
+| `extraVolumeMounts`                               | Mount extra volume(s)                                                                                                                                                    | `[]`                     |
+| `extraContainers`                                 | Extra containers to run within the pod                                                                                                                                   | `{}`                     |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,

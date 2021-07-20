@@ -52,31 +52,34 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Global parameters
 
-| Name                      | Description                                     | Value       |
-| ------------------------- | ----------------------------------------------- | ----------- |
-| `global.imagePullSecrets` | Global Docker registry secret names as an array | `undefined` |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`        |
+| Name                      | Description                                     | Value |
+| ------------------------- | ----------------------------------------------- | ----- |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
+| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
 
 ### Common parameters
 
-| Name                | Description                                                                                                | Value       |
-| ------------------- | ---------------------------------------------------------------------------------------------------------- | ----------- |
-| `nameOverride`      | String to partially override moodle.fullname template                                                      | `""`        |
-| `fullnameOverride`  | String to fully override moodle.fullname template                                                          | `""`        |
-| `commonAnnotations` | Common annotations to add to all Harbor resources (sub-charts are not considered). Evaluated as a template | `undefined` |
-| `commonLabels`      | Common labels to add to all Harbor resources (sub-charts are not considered). Evaluated as a template      | `undefined` |
-| `extraDeploy`       | Array with extra yaml to deploy with the chart. Evaluated as a template                                    | `undefined` |
+| Name                | Description                                                                                                | Value |
+| ------------------- | ---------------------------------------------------------------------------------------------------------- | ----- |
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                                       | `""`  |
+| `nameOverride`      | String to partially override moodle.fullname template                                                      | `""`  |
+| `fullnameOverride`  | String to fully override moodle.fullname template                                                          | `""`  |
+| `commonAnnotations` | Common annotations to add to all Harbor resources (sub-charts are not considered). Evaluated as a template | `{}`  |
+| `commonLabels`      | Common labels to add to all Harbor resources (sub-charts are not considered). Evaluated as a template      | `{}`  |
+| `extraDeploy`       | Array with extra yaml to deploy with the chart. Evaluated as a template                                    | `[]`  |
 
 
 ### Moodle<sup>TM</sup> parameters
 
 | Name                                 | Description                                                                                                           | Value                 |
 | ------------------------------------ | --------------------------------------------------------------------------------------------------------------------- | --------------------- |
+| `image.registry`                     | Moodle image registry                                                                                                 | `docker.io`           |
 | `image.repository`                   | Moodle image repository                                                                                               | `bitnami/moodle`      |
 | `image.tag`                          | Moodle image tag (immutable tags are recommended)                                                                     | `3.11.1-debian-10-r0` |
 | `image.pullPolicy`                   | Moodle image pull policy                                                                                              | `IfNotPresent`        |
-| `image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                      | `undefined`           |
+| `image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                      | `[]`                  |
 | `image.debug`                        | Specify if debug logs should be enabled                                                                               | `false`               |
 | `replicaCount`                       | Number of Moodle replicas (requires ReadWriteMany PVC support)                                                        | `1`                   |
 | `moodleSkipInstall`                  | Skip Moodle(TM) installation wizard. Useful for migrations and restoring from SQL dump                                | `false`               |
@@ -85,17 +88,17 @@ The command removes all the Kubernetes components associated with the chart and 
 | `moodlePassword`                     | Application password                                                                                                  | `""`                  |
 | `moodleEmail`                        | Admin email                                                                                                           | `user@example.com`    |
 | `allowEmptyPassword`                 | Allow DB blank passwords                                                                                              | `true`                |
-| `command`                            | Override default container command (useful when using custom images)                                                  | `undefined`           |
-| `args`                               | Override default container args (useful when using custom images)                                                     | `undefined`           |
+| `command`                            | Override default container command (useful when using custom images)                                                  | `[]`                  |
+| `args`                               | Override default container args (useful when using custom images)                                                     | `[]`                  |
 | `updateStrategy.type`                | Update strategy - only really applicable for deployments with RWO PVs attached                                        | `RollingUpdate`       |
-| `extraEnvVars`                       | An array to add extra env vars                                                                                        | `undefined`           |
+| `extraEnvVars`                       | An array to add extra env vars                                                                                        | `[]`                  |
 | `extraEnvVarsCM`                     | ConfigMap with extra environment variables                                                                            | `""`                  |
 | `extraEnvVarsSecret`                 | Secret with extra environment variables (in case of sensitive data)                                                   | `""`                  |
-| `extraVolumes`                       | Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`    | `undefined`           |
-| `extraVolumeMounts`                  | Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`. | `undefined`           |
-| `initContainers`                     | Extra init containers to add to the deployment                                                                        | `undefined`           |
-| `sidecars`                           | Extra sidecar containers to add to the deployment                                                                     | `undefined`           |
-| `tolerations`                        | Tolerations for pod assignment                                                                                        | `undefined`           |
+| `extraVolumes`                       | Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`    | `[]`                  |
+| `extraVolumeMounts`                  | Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`. | `[]`                  |
+| `initContainers`                     | Extra init containers to add to the deployment                                                                        | `[]`                  |
+| `sidecars`                           | Extra sidecar containers to add to the deployment                                                                     | `[]`                  |
+| `tolerations`                        | Tolerations for pod assignment                                                                                        | `[]`                  |
 | `existingSecret`                     | Name of a secret with the application password                                                                        | `""`                  |
 | `smtpHost`                           | SMTP host                                                                                                             | `""`                  |
 | `smtpPort`                           | SMTP port                                                                                                             | `""`                  |
@@ -114,9 +117,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podAntiAffinityPreset`              | Pod anti-affinity preset                                                                                              | `soft`                |
 | `nodeAffinityPreset.type`            | Node affinity type                                                                                                    | `""`                  |
 | `nodeAffinityPreset.key`             | Node label key to match                                                                                               | `""`                  |
-| `nodeAffinityPreset.values`          | Node label values to match                                                                                            | `undefined`           |
-| `affinity`                           | Map of node/pod affinities                                                                                            | `undefined`           |
-| `nodeSelector`                       | Node labels for pod assignment                                                                                        | `undefined`           |
+| `nodeAffinityPreset.values`          | Node label values to match                                                                                            | `[]`                  |
+| `affinity`                           | Map of node/pod affinities                                                                                            | `{}`                  |
+| `nodeSelector`                       | Node labels for pod assignment                                                                                        | `{}`                  |
 | `resources.requests`                 | CPU/Memory resource requests/limits                                                                                   | `{}`                  |
 | `podSecurityContext.enabled`         | Enable Moodle<sup>TM</sup> pods' Security Context                                                                     | `true`                |
 | `podSecurityContext.fsGroup`         | Moodle<sup>TM</sup> pods' group ID                                                                                    | `1001`                |
@@ -136,21 +139,22 @@ The command removes all the Kubernetes components associated with the chart and 
 | `readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                                    | `3`                   |
 | `readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                                  | `6`                   |
 | `readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                                  | `1`                   |
-| `customLivenessProbe`                | Override default liveness probe                                                                                       | `undefined`           |
-| `customReadinessProbe`               | Override default readiness probe                                                                                      | `undefined`           |
+| `customLivenessProbe`                | Override default liveness probe                                                                                       | `{}`                  |
+| `customReadinessProbe`               | Override default readiness probe                                                                                      | `{}`                  |
 | `lifecycleHooks`                     | LifecycleHook to set additional configuration at startup Evaluated as a template                                      | `""`                  |
-| `podAnnotations`                     | Pod annotations                                                                                                       | `undefined`           |
-| `podLabels`                          | Add additional labels to the pod (evaluated as a template)                                                            | `undefined`           |
+| `podAnnotations`                     | Pod annotations                                                                                                       | `{}`                  |
+| `podLabels`                          | Add additional labels to the pod (evaluated as a template)                                                            | `{}`                  |
 
 
 ### Traffic Exposure Parameters
 
 | Name                               | Description                                                                                                 | Value                    |
 | ---------------------------------- | ----------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                     | Service type                                                                                                | `LoadBalancer`           |
 | `service.port`                     | Service HTTP port                                                                                           | `80`                     |
 | `service.httpsPort`                | Service HTTPS port                                                                                          | `443`                    |
 | `service.clusterIP`                | Service Cluster IP                                                                                          | `""`                     |
-| `service.loadBalancerSourceRanges` | Service load balancer source ranges                                                                         | `undefined`              |
+| `service.loadBalancerSourceRanges` | Service load balancer source ranges                                                                         | `[]`                     |
 | `service.loadBalancerIP`           | loadBalancerIP for the Moodle(TM) Service (optional, cloud specific)                                        | `""`                     |
 | `service.nodePorts.http`           | Kubernetes HTTP node port                                                                                   | `""`                     |
 | `service.nodePorts.https`          | Kubernetes HTTPS node port                                                                                  | `""`                     |
@@ -161,18 +165,19 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.apiVersion`               | Override API Version (automatically detected if not set)                                                    | `""`                     |
 | `ingress.hostname`                 | When the ingress is enabled, a host pointing to this will be created                                        | `minio.local`            |
 | `ingress.path`                     | The Path to Moodle(TM). You may need to set this to '/*' in order to use this with ALB ingress controllers. | `ImplementationSpecific` |
-| `ingress.annotations`              | Map of Ingress annotations                                                                                  | `undefined`              |
+| `ingress.annotations`              | Map of Ingress annotations                                                                                  | `{}`                     |
 | `ingress.tls`                      | Enable TLS configuration for the hostname defined at ingress.hostname parameter                             | `false`                  |
-| `ingress.extraHosts`               | The list of additional hostnames to be covered with this ingress record.                                    | `undefined`              |
-| `ingress.extraPaths`               | Any additional arbitrary paths that may need to be added to the ingress under the main host.                | `undefined`              |
-| `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                      | `undefined`              |
-| `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets               | `undefined`              |
+| `ingress.extraHosts`               | The list of additional hostnames to be covered with this ingress record.                                    | `[]`                     |
+| `ingress.extraPaths`               | Any additional arbitrary paths that may need to be added to the ingress under the main host.                | `[]`                     |
+| `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                      | `[]`                     |
+| `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets               | `[]`                     |
 
 
 ### Database parameters
 
 | Name                                        | Description                                                                              | Value            |
 | ------------------------------------------- | ---------------------------------------------------------------------------------------- | ---------------- |
+| `mariadb.enabled`                           | Whether to deploy a mariadb server to satisfy the applications database requirements     | `true`           |
 | `mariadb.architecture`                      | MariaDB architecture (`standalone` or `replication`)                                     | `standalone`     |
 | `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                                     | `""`             |
 | `mariadb.auth.database`                     | Database name to create                                                                  | `bitnami_moodle` |
@@ -193,31 +198,33 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Volume Permissions parameters
 
-| Name                                   | Description                                                                  | Value                   |
-| -------------------------------------- | ---------------------------------------------------------------------------- | ----------------------- |
-| `volumePermissions.image.registry`     | Init container volume-permissions image registry                             | `docker.io`             |
-| `volumePermissions.image.repository`   | Init container volume-permissions image repository                           | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended) | `10-debian-10-r130`     |
-| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                          | `Always`                |
-| `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                             | `undefined`             |
-| `volumePermissions.resources.limits`   | The resources limits for the container                                       | `undefined`             |
-| `volumePermissions.resources.requests` | The requested resources for the container                                    | `undefined`             |
+| Name                                   | Description                                                                                                                                               | Value                   |
+| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
+| `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
+| `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                                                        | `bitnami/bitnami-shell` |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `10-debian-10-r130`     |
+| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `Always`                |
+| `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
+| `volumePermissions.resources.limits`   | The resources limits for the container                                                                                                                    | `{}`                    |
+| `volumePermissions.resources.requests` | The requested resources for the container                                                                                                                 | `{}`                    |
 
 
 ### Metrics parameters
 
 | Name                             | Description                                                                                     | Value                     |
 | -------------------------------- | ----------------------------------------------------------------------------------------------- | ------------------------- |
+| `metrics.enabled`                | Start a side-car prometheus exporter                                                            | `false`                   |
 | `metrics.image.registry`         | Apache exporter image registry                                                                  | `docker.io`               |
 | `metrics.image.repository`       | Apache exporter image repository                                                                | `bitnami/apache-exporter` |
 | `metrics.image.tag`              | Apache exporter image tag (immutable tags are recommended)                                      | `0.9.0-debian-10-r28`     |
 | `metrics.image.pullPolicy`       | Image pull policy                                                                               | `IfNotPresent`            |
-| `metrics.image.pullSecrets`      | Specify docker-registry secret names as an array                                                | `undefined`               |
+| `metrics.image.pullSecrets`      | Specify docker-registry secret names as an array                                                | `[]`                      |
 | `metrics.service.type`           | Prometheus metrics service type                                                                 | `LoadBalancer`            |
 | `metrics.service.port`           | Prometheus metrics service port                                                                 | `9117`                    |
 | `metrics.service.loadBalancerIP` | Load Balancer IP if the Prometheus metrics server type is `LoadBalancer`, otherwise leave blank | `""`                      |
 | `metrics.service.annotations`    | Annotations for Prometheus Exporter pods. Evaluated as a template.                              | `{}`                      |
-| `metrics.resources`              | Exporter resource requests/limit                                                                | `undefined`               |
+| `metrics.resources`              | Exporter resource requests/limit                                                                | `{}`                      |
 | `metrics.podAnnotations`         | Metrics exporter pod Annotation and Labels                                                      | `{}`                      |
 
 
@@ -225,22 +232,23 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                                 | Description                                                          | Value                                    |
 | ---------------------------------------------------- | -------------------------------------------------------------------- | ---------------------------------------- |
+| `certificates.customCertificate.certificateSecret`   | Secret containing the certificate and key to add                     | `""`                                     |
 | `certificates.customCertificate.chainSecret.name`    | Name of the secret containing the certificate chain                  | `""`                                     |
 | `certificates.customCertificate.chainSecret.key`     | Key of the certificate chain file inside the secret                  | `""`                                     |
 | `certificates.customCertificate.certificateLocation` | Location in the container to store the certificate                   | `/etc/ssl/certs/ssl-cert-snakeoil.pem`   |
 | `certificates.customCertificate.keyLocation`         | Location in the container to store the private key                   | `/etc/ssl/private/ssl-cert-snakeoil.key` |
 | `certificates.customCertificate.chainLocation`       | Location in the container to store the certificate chain             | `/etc/ssl/certs/mychain.pem`             |
-| `certificates.customCAs`                             | Defines a list of secrets to import into the container trust store   | `undefined`                              |
-| `certificates.command`                               | Override default container command (useful when using custom images) | `undefined`                              |
-| `certificates.args`                                  | Override default container args (useful when using custom images)    | `undefined`                              |
-| `certificates.extraEnvVars`                          | Container sidecar extra environment variables (eg proxy)             | `undefined`                              |
+| `certificates.customCAs`                             | Defines a list of secrets to import into the container trust store   | `[]`                                     |
+| `certificates.command`                               | Override default container command (useful when using custom images) | `[]`                                     |
+| `certificates.args`                                  | Override default container args (useful when using custom images)    | `[]`                                     |
+| `certificates.extraEnvVars`                          | Container sidecar extra environment variables (eg proxy)             | `[]`                                     |
 | `certificates.extraEnvVarsCM`                        | ConfigMap with extra environment variables                           | `""`                                     |
 | `certificates.extraEnvVarsSecret`                    | Secret with extra environment variables                              | `""`                                     |
 | `certificates.image.registry`                        | Container sidecar registry                                           | `docker.io`                              |
 | `certificates.image.repository`                      | Container sidecar image repository                                   | `bitnami/bitnami-shell`                  |
 | `certificates.image.tag`                             | Container sidecar image tag (immutable tags are recommended)         | `10-debian-10-r130`                      |
 | `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                  | `IfNotPresent`                           |
-| `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                 | `undefined`                              |
+| `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                 | `[]`                                     |
 
 
 The above parameters map to the env variables defined in [bitnami/moodle](http://github.com/bitnami/bitnami-docker-moodle). For more information please refer to the [bitnami/moodle](http://github.com/bitnami/bitnami-docker-moodle) image documentation.
