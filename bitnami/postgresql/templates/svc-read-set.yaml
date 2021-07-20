@@ -1,9 +1,5 @@
 {{- if and .Values.replication.enabled .Values.replication.uniqueServices }}
 {{- $serviceAnnotations := coalesce .Values.readReplicas.service.annotations .Values.service.annotations -}}
-{{- $serviceType := coalesce .Values.readReplicas.service.type .Values.service.type -}}
-{{- $serviceLoadBalancerIP := coalesce .Values.readReplicas.service.loadBalancerIP .Values.service.loadBalancerIP -}}
-{{- $serviceLoadBalancerSourceRanges := coalesce .Values.readReplicas.service.loadBalancerSourceRanges .Values.service.loadBalancerSourceRanges -}}
-{{- $serviceNodePort := coalesce .Values.readReplicas.service.nodePort .Values.service.nodePort -}}
 
 {{- $fullName := include "common.names.fullname" . }}
 {{- $replicaCount := .Values.replication.readReplicas | int }}
