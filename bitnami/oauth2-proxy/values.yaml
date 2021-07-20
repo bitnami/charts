@@ -254,7 +254,7 @@ configuration:
     ##   name2@domain
     ## If you override the config with restricted_access it will configure a user list within this chart what takes care of the configmap
     ##
-    content: {}
+    content: ""
     existingSecret: ""
 
   ## Additionally authenticate against a htpasswd file. Entries must be created with "htpasswd -s" for SHA encryption
