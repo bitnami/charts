@@ -8,22 +8,22 @@
 ## @param global.storageClass Global storage class for dynamic provisioning
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
 
 ## @section Common parameters
 
 ## @param nameOverride String to partially override mongodb.fullname template (will maintain the release name)
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override mongodb.fullname template
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param clusterDomain Kubernetes Cluster Domain
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/dns-custom-nameservers/#introduction
 ##
@@ -67,17 +67,17 @@ image:
 ## e.g:
 ## mongodbRootPassword: password
 ##
-mongodbRootPassword:
+mongodbRootPassword: ""
 ## @param replicaSetKey Replica Set key (shared for shards and config servers)
 ## e.g:
 ## replicaSetKey: testkey123
 ##
-replicaSetKey:
+replicaSetKey: ""
 ## @param existingSecret Existing secret with MongoDB&reg; credentials
 ## e.g:
 ## existingSecret: name-of-existing-secret
 ##
-existingSecret:
+existingSecret: ""
 ## @param usePasswordFile Mount credentials as files instead of using environment variables
 ##
 usePasswordFile: false
@@ -112,23 +112,23 @@ common:
   mongodbMaxWaitTimeout: 120
   ## @param common.initScriptsCM Configmap with init scripts to execute
   ##
-  initScriptsCM:
+  initScriptsCM: ""
   ## @param common.initScriptsSecret Secret with init scripts to execute (for sensitive data)
   ##
-  initScriptsSecret:
+  initScriptsSecret: ""
   ## @param common.extraEnvVars An array to add extra env vars
   ## For example:
   ## extraEnvVars:
   ##  - name: KIBANA_ELASTICSEARCH_URL
   ##    value: test
   ##
-  extraEnvVars:
+  extraEnvVars: []
   ## @param common.extraEnvVarsCM Name of a ConfigMap containing extra env vars
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param common.extraEnvVarsSecret Name of a Secret containing extra env vars
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param common.sidecars Add sidecars to the pod
   ## For example:
   ## sidecars:
@@ -172,7 +172,7 @@ common:
     ## @param common.serviceAccount.name Name of a Service Account to be used by all Pods
     ## If not set and create is true, a name is generated using the XXX.fullname template
     ##
-    name:
+    name: ""
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
 ##
@@ -220,7 +220,7 @@ securityContext:
 service:
   ## @param service.name Specify an explicit service name
   ##
-  name:
+  name: ""
   ## @param service.annotations Additional service annotations (evaluate as a template)
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
@@ -240,11 +240,11 @@ service:
   ## @param service.clusterIP Static clusterIP or None for headless services
   ## ref: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.16/#servicespec-v1-core
   ##
-  clusterIP:
+  clusterIP: ""
   ## @param service.nodePort Specify the nodePort value for the LoadBalancer and NodePort service types.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
-  nodePort:
+  nodePort: ""
   ## @param service.externalIPs External IP list to use with ClusterIP service type
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#external-ips
   ##
@@ -252,7 +252,7 @@ service:
   ## @param service.loadBalancerIP Static IP Address to use for LoadBalancer service type
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#loadbalancer
   ##
-  loadBalancerIP:
+  loadBalancerIP: ""
   ## @param service.loadBalancerSourceRanges List of IP ranges allowed access to load balancer (if supported)
   ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
   ##
@@ -326,7 +326,7 @@ configsvr:
   ## @param configsvr.priorityClassName Pod priority class name
   ## https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
-  priorityClassName:
+  priorityClassName: ""
   ## @param configsvr.podAffinityPreset Config Server Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
@@ -379,24 +379,24 @@ configsvr:
   ## @param configsvr.config MongoDB&reg; configuration file
   ## ref: http://docs.mongodb.org/manual/reference/configuration-options/
   ##
-  config:
+  config: ""
   ## @param configsvr.configCM ConfigMap name with Config Server configuration file (cannot be used with configsvr.config)
   ## ref: http://docs.mongodb.org/manual/reference/configuration-options/
   ##
-  configCM:
+  configCM: ""
   ## @param configsvr.extraEnvVars An array to add extra env vars
   ## For example:
   ## extraEnvVars:
   ##  - name: KIBANA_ELASTICSEARCH_URL
   ##    value: test
   ##
-  extraEnvVars:
+  extraEnvVars: []
   ## @param configsvr.extraEnvVarsCM Name of a ConfigMap containing extra env vars
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param configsvr.extraEnvVarsSecret Name of a Secret containing extra env vars
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param configsvr.sidecars Add sidecars to the pod
   ## For example:
   ## sidecars:
@@ -433,7 +433,7 @@ configsvr:
   ## @param configsvr.schedulerName Use an alternate scheduler, e.g. "stork".
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
-  schedulerName:
+  schedulerName: ""
   ## Pod disruption budget
   ##
   pdb:
@@ -468,7 +468,7 @@ configsvr:
     ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
     ##   GKE, AWS & OpenStack)
     ##
-    storageClass:
+    storageClass: ""
     ## @param configsvr.persistence.accessModes Use volume as ReadOnly or ReadWrite
     ##
     accessModes:
@@ -490,22 +490,22 @@ configsvr:
     ## @param configsvr.serviceAccount.name Name of a Service Account to be used by Config Server
     ## If not set and create is true, a name is generated using the XXX.fullname template
     ##
-    name:
+    name: ""
   ## Use a external config server instead of deploying one
   ##
   external:
     ## @param configsvr.external.host Primary node of an external Config Server replicaset
     ##
-    host:
+    host: ""
     ## @param configsvr.external.rootPassword Root password of the external Config Server replicaset
     ##
-    rootPassword:
+    rootPassword: ""
     ## @param configsvr.external.replicasetName Replicaset name of an external Config Server
     ##
-    replicasetName:
+    replicasetName: ""
     ## @param configsvr.external.replicasetKey Replicaset key of an external Config Server
     ##
-    replicasetKey:
+    replicasetKey: ""
 
 ## @section Mongos parameters
 
@@ -533,7 +533,7 @@ mongos:
   ## @param mongos.priorityClassName Pod priority class name
   ## https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
-  priorityClassName:
+  priorityClassName: ""
   ## @param mongos.podAffinityPreset Mongos Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
@@ -586,24 +586,24 @@ mongos:
   ## @param mongos.config MongoDB&reg; configuration file
   ## ref: http://docs.mongodb.org/manual/reference/configuration-options/
   ##
-  config:
+  config: ""
   ## @param mongos.configCM ConfigMap name with MongoDB&reg; configuration file (cannot be used with mongos.config)
   ## ref: http://docs.mongodb.org/manual/reference/configuration-options/
   ##
-  configCM:
+  configCM: ""
   ## @param mongos.extraEnvVars An array to add extra env vars
   ## For example:
   ## extraEnvVars:
   ##  - name: KIBANA_ELASTICSEARCH_URL
   ##    value: test
   ##
-  extraEnvVars:
+  extraEnvVars: []
   ## @param mongos.extraEnvVarsCM Name of a ConfigMap containing extra env vars
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param mongos.extraEnvVarsSecret Name of a Secret containing extra env vars
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param mongos.sidecars Add sidecars to the pod
   ## For example:
   ## sidecars:
@@ -640,7 +640,7 @@ mongos:
   ## @param mongos.schedulerName Use an alternate scheduler, e.g. "stork".
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
-  schedulerName:
+  schedulerName: ""
   ## @param mongos.useStatefulSet Use StatefulSet instead of Deployment
   ##
   useStatefulSet: false
@@ -671,11 +671,11 @@ mongos:
     ## @param mongos.servicePerReplica.clusterIP Static clusterIP or None for headless services
     ## ref: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.16/#servicespec-v1-core
     ##
-    clusterIP:
+    clusterIP: ""
     ## @param mongos.servicePerReplica.nodePort Specify the nodePort value for the LoadBalancer and NodePort service types
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ##
-    nodePort:
+    nodePort: ""
     ## @param mongos.servicePerReplica.externalIPs External IP list to use with ClusterIP service type
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#external-ips
     ##
@@ -683,7 +683,7 @@ mongos:
     ## @param mongos.servicePerReplica.loadBalancerIP Static IP Address to use for LoadBalancer service type
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#loadbalancer
     ##
-    loadBalancerIP:
+    loadBalancerIP: ""
     ## @param mongos.servicePerReplica.loadBalancerSourceRanges List of IP ranges allowed access to load balancer (if supported)
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ##
@@ -718,7 +718,7 @@ mongos:
     ## @param mongos.serviceAccount.name Name of a Service Account to be used by mongos
     ## If not set and create is true, a name is generated using the XXX.fullname template
     ##
-    name:
+    name: ""
 
 ## @section Shard configuration: Data node parameters
 
@@ -745,7 +745,7 @@ shardsvr:
     ## @param shardsvr.dataNode.priorityClassName Pod priority class name
     ## https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
     ##
-    priorityClassName:
+    priorityClassName: ""
     ## @param shardsvr.dataNode.podAffinityPreset Data nodes Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
     ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
     ##
@@ -815,11 +815,11 @@ shardsvr:
     ## @param shardsvr.dataNode.config Entries for the MongoDB&reg; config file
     ## ref: http://docs.mongodb.org/manual/reference/configuration-options/
     ##
-    config:
+    config: ""
     ## @param shardsvr.dataNode.configCM ConfigMap name with MongoDB&reg; configuration (cannot be used with shardsvr.dataNode.config)
     ## ref: http://docs.mongodb.org/manual/reference/configuration-options/
     ##
-    configCM:
+    configCM: ""
     ## @param shardsvr.dataNode.extraEnvVars An array to add extra env vars
     ## For example:
     ## extraEnvVars:
@@ -829,10 +829,10 @@ shardsvr:
     extraEnvVars: []
     ## @param shardsvr.dataNode.extraEnvVarsCM Name of a ConfigMap containing extra env vars
     ##
-    extraEnvVarsCM:
+    extraEnvVarsCM: ""
     ## @param shardsvr.dataNode.extraEnvVarsSecret Name of a Secret containing extra env vars
     ##
-    extraEnvVarsSecret:
+    extraEnvVarsSecret: ""
     ## @param shardsvr.dataNode.sidecars Attach additional containers (evaluated as a template)
     ## For example:
     ## sidecars:
@@ -869,7 +869,7 @@ shardsvr:
     ## @param shardsvr.dataNode.schedulerName Use an alternate scheduler, e.g. "stork".
     ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
     ##
-    schedulerName:
+    schedulerName: ""
     ## Pod disruption budget
     ##
     pdb:
@@ -892,7 +892,7 @@ shardsvr:
       ## @param shardsvr.dataNode.serviceAccount.name Name of a Service Account to be used by shardsvr data pods
       ## If not set and create is true, a name is generated using the XXX.fullname template
       ##
-      name:
+      name: ""
 
   ## @section Shard configuration: Persistence parameters
 
@@ -917,7 +917,7 @@ shardsvr:
     ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
     ##   GKE, AWS & OpenStack)
     ##
-    storageClass:
+    storageClass: ""
     ## @param shardsvr.persistence.accessModes Use volume as ReadOnly or ReadWrite
     ##
     accessModes:
@@ -956,7 +956,7 @@ shardsvr:
     ## @param shardsvr.arbiter.priorityClassName Pod priority class name
     ## https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
     ##
-    priorityClassName:
+    priorityClassName: ""
     ## @param shardsvr.arbiter.podAffinityPreset Arbiter's Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
     ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
     ##
@@ -1014,24 +1014,24 @@ shardsvr:
     ## @param shardsvr.arbiter.config MongoDB&reg; configuration file
     ## ref: http://docs.mongodb.org/manual/reference/configuration-options/
     ##
-    config:
+    config: ""
     ## @param shardsvr.arbiter.configCM ConfigMap name with MongoDB&reg; configuration file (cannot be used with shardsvr.arbiter.config)
     ## ref: http://docs.mongodb.org/manual/reference/configuration-options/
     ##
-    configCM:
+    configCM: ""
     ## @param shardsvr.arbiter.extraEnvVars An array to add extra env vars
     ## For example:
     ## extraEnvVars:
     ##  - name: KIBANA_ELASTICSEARCH_URL
     ##    value: test
     ##
-    extraEnvVars:
+    extraEnvVars: []
     ## @param shardsvr.arbiter.extraEnvVarsCM Name of a ConfigMap containing extra env vars
     ##
-    extraEnvVarsCM:
+    extraEnvVarsCM: ""
     ## @param shardsvr.arbiter.extraEnvVarsSecret Name of a Secret containing extra env vars
     ##
-    extraEnvVarsSecret:
+    extraEnvVarsSecret: ""
     ## @param shardsvr.arbiter.sidecars Add sidecars to the pod
     ## For example:
     ## sidecars:
@@ -1068,7 +1068,7 @@ shardsvr:
     ## @param shardsvr.arbiter.schedulerName Use an alternate scheduler, e.g. "stork".
     ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
     ##
-    schedulerName:
+    schedulerName: ""
     ## K8s Service Account.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
     ##
@@ -1079,7 +1079,7 @@ shardsvr:
       ## @param shardsvr.arbiter.serviceAccount.name Name of a Service Account to be used by shardsvr arbiter pods
       ## If not set and create is true, a name is generated using the XXX.fullname template
       ##
-      name:
+      name: ""
 
 ## @section Metrics parameters
 
@@ -1172,7 +1172,7 @@ metrics:
     ## e.g:
     ## scrapeTimeout: 30s
     ##
-    scrapeTimeout:
+    scrapeTimeout: ""
     ## @param metrics.podMonitor.additionalLabels Additional labels that can be used so PodMonitors will be discovered by Prometheus
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
     ##

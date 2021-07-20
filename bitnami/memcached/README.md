@@ -49,17 +49,17 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `nil` |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
 
 ### Common parameters
 
 | Name                | Description                                                                                  | Value           |
 | ------------------- | -------------------------------------------------------------------------------------------- | --------------- |
-| `nameOverride`      | String to partially override common.names.fullname template (will maintain the release name) | `nil`           |
-| `fullnameOverride`  | String to fully override common.names.fullname template                                      | `nil`           |
+| `nameOverride`      | String to partially override common.names.fullname template (will maintain the release name) | `""`            |
+| `fullnameOverride`  | String to fully override common.names.fullname template                                      | `""`            |
 | `commonLabels`      | Labels to add to all deployed objects                                                        | `{}`            |
 | `commonAnnotations` | Annotations to add to all deployed objects                                                   | `{}`            |
 | `clusterDomain`     | Default Kubernetes cluster domain                                                            | `cluster.local` |
@@ -78,19 +78,19 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.debug`                                 | Enable image debug mode                                                                         | `false`                      |
 | `architecture`                                | Memcached architecture. Allowed values: standalone or high-availability                         | `standalone`                 |
 | `hostAliases`                                 | Add deployment host aliases                                                                     | `[]`                         |
-| `memcachedUsername`                           | Memcached admin user                                                                            | `nil`                        |
-| `memcachedPassword`                           | Memcached admin password                                                                        | `nil`                        |
+| `memcachedUsername`                           | Memcached admin user                                                                            | `""`                         |
+| `memcachedPassword`                           | Memcached admin password                                                                        | `""`                         |
 | `replicaCount`                                | Number of containers                                                                            | `1`                          |
 | `command`                                     | Default container command (useful when using custom images)                                     | `[]`                         |
 | `arguments`                                   | Default container args (useful when using custom images)                                        | `[]`                         |
 | `extraEnv`                                    | Additional env vars to pass                                                                     | `[]`                         |
 | `podDisruptionBudget.create`                  | Specifies whether a Pod disruption budget should be created                                     | `false`                      |
-| `podDisruptionBudget.minAvailable`            | Minimum number of pods that need to be available                                                | `nil`                        |
+| `podDisruptionBudget.minAvailable`            | Minimum number of pods that need to be available                                                | `""`                         |
 | `podDisruptionBudget.maxUnavailable`          | Maximum number of pods that can be unavailable                                                  | `1`                          |
 | `service.type`                                | Kubernetes service type for Memcached                                                           | `ClusterIP`                  |
 | `service.port`                                | Memcached service port                                                                          | `11211`                      |
 | `service.nodePort`                            | Kubernetes Service nodePort                                                                     | `""`                         |
-| `service.loadBalancerIP`                      | `loadBalancerIP` if service type is `LoadBalancer`                                              | `nil`                        |
+| `service.loadBalancerIP`                      | `loadBalancerIP` if service type is `LoadBalancer`                                              | `""`                         |
 | `service.annotations`                         | Additional annotations for Memcached service                                                    | `{}`                         |
 | `resources.limits`                            | CPU/Memory resource limits                                                                      | `{}`                         |
 | `resources.requests`                          | CPU/Memory resource requests                                                                    | `{}`                         |
@@ -110,14 +110,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `nodeSelector`                                | Node labels for pod assignment                                                                  | `{}`                         |
 | `tolerations`                                 | Tolerations for pod assignment                                                                  | `[]`                         |
 | `topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains | `{}`                         |
-| `priorityClassName`                           | Pod priority                                                                                    | `nil`                        |
-| `initContainers`                              | Add additional init containers to the Memcached pod                                             | `{}`                         |
-| `sidecars`                                    | Add additional sidecar containers to the Memcached pod                                          | `{}`                         |
+| `priorityClassName`                           | Pod priority                                                                                    | `""`                         |
+| `initContainers`                              | Add additional init containers to the Memcached pod                                             | `[]`                         |
+| `sidecars`                                    | Add additional sidecar containers to the Memcached pod                                          | `[]`                         |
 | `serviceAccount.create`                       | Enable creation of ServiceAccount for memcached pods                                            | `true`                       |
-| `serviceAccount.name`                         | The name of the ServiceAccount to use.                                                          | `nil`                        |
+| `serviceAccount.name`                         | The name of the ServiceAccount to use.                                                          | `""`                         |
 | `serviceAccount.automountServiceAccountToken` | Enable/disable auto mounting of the service account token                                       | `true`                       |
 | `persistence.enabled`                         | Enable persistence using PVC (Requires architecture: "high-availability")                       | `false`                      |
-| `persistence.storageClass`                    | PVC Storage Class for Memcached volume                                                          | `nil`                        |
+| `persistence.storageClass`                    | PVC Storage Class for Memcached volume                                                          | `""`                         |
 | `persistence.annotations`                     | Persistent Volume Claim annotations                                                             | `{}`                         |
 | `persistence.accessModes`                     | Persistent Volume Access Mode                                                                   | `[]`                         |
 | `persistence.size`                            | PVC Storage Request for Memcached volume                                                        | `8Gi`                        |
@@ -135,9 +135,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.service.port`                        | Prometheus metrics service port                                                                 | `9150`                       |
 | `metrics.service.annotations`                 | Annotations for the Prometheus metrics service                                                  | `{}`                         |
 | `metrics.serviceMonitor.enabled`              | Create ServiceMonitor resource(s) for scraping metrics using PrometheusOperator                 | `false`                      |
-| `metrics.serviceMonitor.namespace`            | The namespace in which the ServiceMonitor will be created                                       | `nil`                        |
-| `metrics.serviceMonitor.interval`             | The interval at which metrics should be scraped                                                 | `nil`                        |
-| `metrics.serviceMonitor.scrapeTimeout`        | The timeout after which the scrape is ended                                                     | `nil`                        |
+| `metrics.serviceMonitor.namespace`            | The namespace in which the ServiceMonitor will be created                                       | `""`                         |
+| `metrics.serviceMonitor.interval`             | The interval at which metrics should be scraped                                                 | `""`                         |
+| `metrics.serviceMonitor.scrapeTimeout`        | The timeout after which the scrape is ended                                                     | `""`                         |
 | `metrics.serviceMonitor.selector`             | Additional labels for ServiceMonitor resource                                                   | `{}`                         |
 | `metrics.serviceMonitor.metricRelabelings`    | MetricRelabelConfigs to apply to samples before ingestion                                       | `[]`                         |
 | `metrics.serviceMonitor.relabelings`          | Metrics relabelings to add to the scrape endpoint, applied before scraping                      | `[]`                         |

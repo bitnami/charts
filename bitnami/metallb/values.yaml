@@ -7,7 +7,7 @@
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
@@ -18,10 +18,10 @@ global:
 
 ## @param nameOverride String to partially override metallb.fullname include (will maintain the release name)
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override metallb.fullname template
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param commonLabels Add labels to all the deployed resources
 ##
 commonLabels: {}
@@ -38,7 +38,7 @@ commonAnnotations: {}
 ## e.g:
 ## existingConfigMap: metallb-config
 ##
-existingConfigMap:
+existingConfigMap: ""
 ## @param configInline Specifies MetalLB's configuration directly, in yaml format.
 ## When configInline is used, Helm manages MetalLB's
 ## configuration ConfigMap as part of the release, and
@@ -129,7 +129,7 @@ controller:
     create: true
   ## @param controller.priorityClassName Set pod priorityClassName
   ##
-  priorityClassName:
+  priorityClassName: ""
   ## Controller container resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -340,7 +340,7 @@ speaker:
     create: true
   ## @param speaker.priorityClassName Set pod priorityClassName.
   ##
-  priorityClassName:
+  priorityClassName: ""
   ## Speaker container resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -409,9 +409,9 @@ speaker:
   ## secretKey: secretkey
   ## secretValue: random 256 character alphanumeric string
   ##
-  secretName:
-  secretKey:
-  secretValue:
+  secretName: ""
+  secretKey: ""
+  secretValue: ""
   ## @param speaker.initContainers Extra initContainers to add to the daemonset
   ##
   initContainers: []
