@@ -7,7 +7,7 @@
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
@@ -18,13 +18,13 @@ global:
 
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
-kubeVersion:
+kubeVersion: ""
 ## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname template
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param commonLabels Add labels to all the deployed resources
 ##
 commonLabels: {}
@@ -75,8 +75,8 @@ image:
 auth:
   enabled: true
   user: nats_client
-  password:
-  token:
+  password: ""
+  token: ""
   timeout: 1
 ## Cluster Authentication
 ## ref: https://github.com/nats-io/gnatsd#authentication
@@ -88,8 +88,8 @@ auth:
 clusterAuth:
   enabled: true
   user: nats_cluster
-  password:
-  token:
+  password: ""
+  token: ""
 ## Logging parameters
 ## ref: https://github.com/nats-io/gnatsd#command-line-arguments
 ## @param debug.enabled Switch to enable/disable debug on logging
@@ -112,10 +112,10 @@ debug:
 ## maxPayload: 65536
 ## writeDeadline: "2s"
 ##
-maxConnections:
-maxControlLine:
-maxPayload:
-writeDeadline:
+maxConnections: ""
+maxControlLine: ""
+maxPayload: ""
+writeDeadline: ""
 ## @param natsFilename Filename used by several NATS files (binary, configurarion file, and pid file)
 ## Nats filenames:
 ##  - For Nats 1.x.x version, some filenames (binary, configuration file, pid file) uses `gnatsd` as part of the name.
@@ -150,10 +150,10 @@ extraFlags: {}
 extraEnvVars: []
 ## @param extraEnvVarsCM ConfigMap with extra environment variables
 ##
-extraEnvVarsCM:
+extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Secret with extra environment variables
 ##
-extraEnvVarsSecret:
+extraEnvVarsSecret: ""
 
 ## @section NATS deployment/statefulset parameters
 
@@ -169,11 +169,11 @@ replicaCount: 1
 ## @param schedulerName Use an alternate scheduler, e.g. "stork".
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
-schedulerName:
+schedulerName: ""
 ## @param priorityClassName Name of pod priority class
 ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
 ##
-priorityClassName:
+priorityClassName: ""
 ## Strategy to use to update Pods
 ##
 updateStrategy:
@@ -327,7 +327,7 @@ extraVolumeMounts: []
 ##       - name: portname
 ##         containerPort: 1234
 ##
-initContainers: {}
+initContainers: []
 ## @param sidecars Add additional sidecar containers to the NATS pods
 ## Example:
 ## sidecars:
@@ -338,7 +338,7 @@ initContainers: {}
 ##       - name: portname
 ##         containerPort: 1234
 ##
-sidecars: {}
+sidecars: []
 
 ## @section Traffic Exposure parameters
 
@@ -356,7 +356,7 @@ client:
     ## @param client.service.nodePort Port to bind to for the LoadBalancer and NodePort service type (NATS client)
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ##
-    nodePort:
+    nodePort: ""
     ## @param client.service.annotations Annotations for NATS client service
     ## This can be used to set the LoadBalancer service type to internal only.
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -364,14 +364,14 @@ client:
     annotations: {}
     ## @param client.service.loadBalancerIP loadBalancerIP if NATS client service type is `LoadBalancer`, otherwise leave blank
     ##
-    loadBalancerIP:
+    loadBalancerIP: ""
 ## Kubernetes svc used for clustering
 ## ref: https://github.com/nats-io/gnatsd#clustering
 ##
 cluster:
   ## @param cluster.connectRetries Configure number of connect retries for implicit routes, otherwise leave blank
   ##
-  connectRetries:
+  connectRetries: ""
   service:
     ## @param cluster.service.type Kubernetes Service type (NATS cluster)
     ##
@@ -382,7 +382,7 @@ cluster:
     ## @param cluster.service.nodePort Port to bind to for NodePort service type (NATS cluster)
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ##
-    nodePort:
+    nodePort: ""
     ## @param cluster.service.annotations Annotations for NATS cluster service
     ## set the LoadBalancer service type to internal only.
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -391,7 +391,7 @@ cluster:
     ## @param cluster.service.loadBalancerIP loadBalancerIP if NATS cluster service type is `LoadBalancer`
     ## otherwise leave blank
     ##
-    loadBalancerIP:
+    loadBalancerIP: ""
 ## NATS svc used for monitoring
 ## ref: https://github.com/nats-io/gnatsd#monitoring
 ##
@@ -406,7 +406,7 @@ monitoring:
     ## @param monitoring.service.nodePort Port to bind to for NodePort service type (NATS monitoring)
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ##
-    nodePort:
+    nodePort: ""
     ## @param monitoring.service.annotations Annotations for NATS monitoring service
     ## This can be used to set the LoadBalancer service type to internal only.
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -414,7 +414,7 @@ monitoring:
     annotations: {}
     ## @param monitoring.service.loadBalancerIP Use loadBalancerIP to request a specific static IP, otherwise leave blank
     ##
-    loadBalancerIP:
+    loadBalancerIP: ""
 ## Configure the ingress resource that allows you to access the
 ## NATS installation. Set up the URL
 ## ref: http://kubernetes.io/docs/user-guide/ingress/
@@ -431,7 +431,7 @@ ingress:
   pathType: ImplementationSpecific
   ## @param ingress.apiVersion Override API Version (automatically detected if not set)
   ##
-  apiVersion:
+  apiVersion: ""
   ## @param ingress.hostname When the ingress is enabled, a host pointing to this will be created
   ##
   hostname: nats.local
@@ -566,7 +566,7 @@ metrics:
     ##
     port: 7777
     ## @param metrics.service.loadBalancerIP Use serviceLoadBalancerIP to request a specific static IP, otherwise leave blank
-    loadBalancerIP:
+    loadBalancerIP: ""
     ## @param metrics.service.annotations [object] Annotations for Prometheus metrics service
     ##
     annotations:
@@ -583,12 +583,12 @@ metrics:
     enabled: false
     ## @param metrics.serviceMonitor.namespace Specify a namespace if needed. Fallback to the Prometheus default unless specified
     ##
-    namespace:
+    namespace: ""
     ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped.
     ## e.g:
     ## interval: 10s
     ##
-    interval:
+    interval: ""
     ## @param metrics.serviceMonitor.selector [object] Prometheus instance selector labels
     ## Defaults to what's used if you follow CoreOS [Prometheus Install Instructions](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#tldr)
     ## [Prometheus Selector Label](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-operator-1)
@@ -611,4 +611,4 @@ pdb:
   minAvailable: 1
   ## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
-  maxUnavailable:
+  maxUnavailable: ""

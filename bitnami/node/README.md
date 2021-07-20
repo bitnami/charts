@@ -55,18 +55,18 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `nil` |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
 
 ### Common parameters
 
 | Name                | Description                                                                          | Value |
 | ------------------- | ------------------------------------------------------------------------------------ | ----- |
-| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                 | `nil` |
-| `nameOverride`      | String to partially override node.fullname template (will maintain the release name) | `nil` |
-| `fullnameOverride`  | String to fully override node.fullname template                                      | `nil` |
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                 | `""`  |
+| `nameOverride`      | String to partially override node.fullname template (will maintain the release name) | `""`  |
+| `fullnameOverride`  | String to fully override node.fullname template                                      | `""`  |
 | `commonLabels`      | Add labels to all the deployed resources                                             | `{}`  |
 | `commonAnnotations` | Add annotations to all the deployed resources                                        | `{}`  |
 
@@ -79,8 +79,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `args`                                  | Override default container args (useful when using custom images)                                                    | `[]`              |
 | `hostAliases`                           | Deployment pod host aliases                                                                                          | `[]`              |
 | `extraEnvVars`                          | Extra environment variables to be set on Node container                                                              | `[]`              |
-| `extraEnvVarsCM`                        | Name of existing ConfigMap containing extra environment variables                                                    | `nil`             |
-| `extraEnvVarsSecret`                    | Name of existing Secret containing extra environment variables                                                       | `nil`             |
+| `extraEnvVarsCM`                        | Name of existing ConfigMap containing extra environment variables                                                    | `""`              |
+| `extraEnvVarsSecret`                    | Name of existing Secret containing extra environment variables                                                       | `""`              |
 | `mongodb.enabled`                       | Whether to install or not the MongoDB&reg; chart                                                                     | `true`            |
 | `mongodb.auth.enabled`                  | Whether to enable auth or not for the MongoDB&reg; chart                                                             | `true`            |
 | `mongodb.auth.rootPassword`             | MongoDB&reg; admin password                                                                                          | `""`              |
@@ -89,9 +89,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `mongodb.auth.password`                 | MongoDB&reg; custom password                                                                                         | `secret_password` |
 | `externaldb.enabled`                    | Enables or disables external database (ignored if `mongodb.enabled=true`)                                            | `false`           |
 | `externaldb.ssl`                        | Set to true if your external database has ssl enabled                                                                | `false`           |
-| `externaldb.secretName`                 | Secret containing existing database credentials                                                                      | `nil`             |
+| `externaldb.secretName`                 | Secret containing existing database credentials                                                                      | `""`              |
 | `externaldb.type`                       | Only if using Kubernetes Service Catalog you can specify the kind of broker used. Available options are osba|gce|aws | `osba`            |
-| `externaldb.broker.serviceInstanceName` | If you provide the serviceInstanceName, the chart will create a ServiceBinding for that ServiceInstance              | `nil`             |
+| `externaldb.broker.serviceInstanceName` | If you provide the serviceInstanceName, the chart will create a ServiceBinding for that ServiceInstance              | `""`              |
 
 
 ### Node deployment parameters
@@ -100,7 +100,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | ----------------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`                        | NodeJS image registry                                                                     | `docker.io`            |
 | `image.repository`                      | NodeJS image repository                                                                   | `bitnami/node`         |
-| `image.tag`                             | NodeJS image tag (immutable tags are recommended)                                         | `14.17.3-debian-10-r0` |
+| `image.tag`                             | NodeJS image tag (immutable tags are recommended)                                         | `14.17.3-debian-10-r6` |
 | `image.pullPolicy`                      | NodeJS image pull policy                                                                  | `IfNotPresent`         |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                          | `[]`                   |
 | `replicaCount`                          | Specify the number of replicas for the application                                        | `1`                    |
@@ -132,10 +132,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                      | `1`                    |
 | `customLivenessProbe`                   | Override default liveness probe                                                           | `{}`                   |
 | `customReadinessProbe`                  | Override default readiness probe                                                          | `{}`                   |
-| `priorityClassName`                     | Node priorityClassName                                                                    | `nil`                  |
+| `priorityClassName`                     | Node priorityClassName                                                                    | `""`                   |
 | `lifecycleHooks`                        | lifecycleHooks for the Node container to automate configuration before or after startup.  | `{}`                   |
-| `sidecars`                              | Add sidecars to the Node pods                                                             | `{}`                   |
-| `initContainers`                        | Add init containers to the Node pods                                                      | `{}`                   |
+| `sidecars`                              | Add sidecars to the Node pods                                                             | `[]`                   |
+| `initContainers`                        | Add init containers to the Node pods                                                      | `[]`                   |
 | `extraVolumes`                          | Extra volumes to add to the deployment                                                    | `[]`                   |
 | `extraVolumeMounts`                     | Extra volume mounts to add to the container                                               | `[]`                   |
 | `containerSecurityContext.enabled`      | Node Container securityContext                                                            | `true`                 |
@@ -153,7 +153,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------ | --------------------------------------------------- | -------------------------------------------- |
 | `git.image.registry`           | Git image registry                                  | `docker.io`                                  |
 | `git.image.repository`         | Git image repository                                | `bitnami/git`                                |
-| `git.image.tag`                | Git image tag (immutable tags are recommended)      | `2.32.0-debian-10-r24`                       |
+| `git.image.tag`                | Git image tag (immutable tags are recommended)      | `2.32.0-debian-10-r30`                       |
 | `git.image.pullPolicy`         | Git image pull policy                               | `IfNotPresent`                               |
 | `git.image.pullSecrets`        | Specify docker-registry secret names as an array    | `[]`                                         |
 | `git.extraVolumeMounts`        | Add extra volume mounts for the Git container       | `[]`                                         |
@@ -169,7 +169,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory  | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                             | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                           | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended) | `10-debian-10-r125`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended) | `10-debian-10-r131`     |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                          | `Always`                |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                             | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                       | `{}`                    |
@@ -182,7 +182,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------- | ------------------------------- | --------------- |
 | `persistence.enabled`      | Enable persistence using PVC    | `false`         |
 | `persistence.path`         | Path to persisted directory     | `/app/data`     |
-| `persistence.storageClass` | Persistent Volume Storage Class | `nil`           |
+| `persistence.storageClass` | Persistent Volume Storage Class | `""`            |
 | `persistence.accessMode`   | PVC Access Mode                 | `ReadWriteOnce` |
 | `persistence.size`         | PVC Storage Request             | `1Gi`           |
 
@@ -193,16 +193,16 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------- | ---------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `service.type`                     | Kubernetes Service type                                                                                    | `ClusterIP`              |
 | `service.port`                     | Kubernetes Service port                                                                                    | `80`                     |
-| `service.clusterIP`                | Service Cluster IP                                                                                         | `nil`                    |
+| `service.clusterIP`                | Service Cluster IP                                                                                         | `""`                     |
 | `service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                           | `None`                   |
-| `service.nodePort`                 | NodePort if Service type is `LoadBalancer` or `NodePort`                                                   | `nil`                    |
-| `service.loadBalancerIP`           | LoadBalancer IP if Service type is `LoadBalancer`                                                          | `nil`                    |
-| `service.loadBalancerSourceRanges` | In order to limit which client IP's can access the Network Load Balancer, specify loadBalancerSourceRanges | `nil`                    |
+| `service.nodePort`                 | NodePort if Service type is `LoadBalancer` or `NodePort`                                                   | `""`                     |
+| `service.loadBalancerIP`           | LoadBalancer IP if Service type is `LoadBalancer`                                                          | `""`                     |
+| `service.loadBalancerSourceRanges` | In order to limit which client IP's can access the Network Load Balancer, specify loadBalancerSourceRanges | `[]`                     |
 | `service.annotations`              | Annotations for the Service                                                                                | `{}`                     |
 | `ingress.enabled`                  | Set to true to enable ingress record generation                                                            | `false`                  |
 | `ingress.certManager`              | Set this to true in order to add the corresponding annotations for cert-manager                            | `false`                  |
 | `ingress.pathType`                 | Ingress path type                                                                                          | `ImplementationSpecific` |
-| `ingress.apiVersion`               | Override API Version (automatically detected if not set)                                                   | `nil`                    |
+| `ingress.apiVersion`               | Override API Version (automatically detected if not set)                                                   | `""`                     |
 | `ingress.hostname`                 | When the ingress is enabled, a host pointing to this will be created                                       | `node.local`             |
 | `ingress.path`                     | The Path to Node.js. You may need to set this to '/*' in order to use this with ALB ingress controllers.   | `ImplementationSpecific` |
 | `ingress.annotations`              | Ingress annotations                                                                                        | `{}`                     |

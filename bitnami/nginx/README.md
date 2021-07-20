@@ -51,7 +51,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 
 
@@ -59,9 +59,9 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                | Description                                                                           | Value           |
 | ------------------- | ------------------------------------------------------------------------------------- | --------------- |
-| `nameOverride`      | String to partially override nginx.fullname template (will maintain the release name) | `nil`           |
-| `fullnameOverride`  | String to fully override nginx.fullname template                                      | `nil`           |
-| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                  | `nil`           |
+| `nameOverride`      | String to partially override nginx.fullname template (will maintain the release name) | `""`            |
+| `fullnameOverride`  | String to fully override nginx.fullname template                                      | `""`            |
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                  | `""`            |
 | `clusterDomain`     | Kubernetes Cluster Domain                                                             | `cluster.local` |
 | `extraDeploy`       | Extra objects to deploy (value evaluated as a template)                               | `[]`            |
 | `commonLabels`      | Add labels to all the deployed resources                                              | `{}`            |
@@ -79,11 +79,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.pullSecrets`  | Specify docker-registry secret names as an array                     | `[]`                  |
 | `image.debug`        | Set to true if you would like to see extra information on logs       | `false`               |
 | `hostAliases`        | Deployment pod host aliases                                          | `[]`                  |
-| `command`            | Override default container command (useful when using custom images) | `nil`                 |
-| `args`               | Override default container args (useful when using custom images)    | `nil`                 |
+| `command`            | Override default container command (useful when using custom images) | `[]`                  |
+| `args`               | Override default container args (useful when using custom images)    | `[]`                  |
 | `extraEnvVars`       | Extra environment variables to be set on NGINX containers            | `[]`                  |
-| `extraEnvVarsCM`     | ConfigMap with extra environment variables                           | `nil`                 |
-| `extraEnvVarsSecret` | Secret with extra environment variables                              | `nil`                 |
+| `extraEnvVarsCM`     | ConfigMap with extra environment variables                           | `""`                  |
+| `extraEnvVarsSecret` | Secret with extra environment variables                              | `""`                  |
 
 
 ### NGINX deployment parameters
@@ -109,7 +109,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `containerSecurityContext.runAsUser`    | Set NGINX Core container's Security Context runAsUser                                     | `1001`  |
 | `containerSecurityContext.runAsNonRoot` | Set NGINX Core container's Security Context runAsNonRoot                                  | `true`  |
 | `containerPorts.http`                   | Sets http port inside NGINX container                                                     | `8080`  |
-| `containerPorts.https`                  | Sets https port inside NGINX container                                                    | `nil`   |
+| `containerPorts.https`                  | Sets https port inside NGINX container                                                    | `""`    |
 | `resources.limits`                      | The resources limits for the NGINX container                                              | `{}`    |
 | `resources.requests`                    | The requested resources for the NGINX container                                           | `{}`    |
 | `livenessProbe.enabled`                 | Enable livenessProbe                                                                      | `true`  |
@@ -127,21 +127,21 @@ The command removes all the Kubernetes components associated with the chart and 
 | `customLivenessProbe`                   | Override default liveness probe                                                           | `{}`    |
 | `customReadinessProbe`                  | Override default readiness probe                                                          | `{}`    |
 | `autoscaling.enabled`                   | Enable autoscaling for NGINX deployment                                                   | `false` |
-| `autoscaling.minReplicas`               | Minimum number of replicas to scale back                                                  | `nil`   |
-| `autoscaling.maxReplicas`               | Maximum number of replicas to scale out                                                   | `nil`   |
-| `autoscaling.targetCPU`                 | Target CPU utilization percentage                                                         | `nil`   |
-| `autoscaling.targetMemory`              | Target Memory utilization percentage                                                      | `nil`   |
+| `autoscaling.minReplicas`               | Minimum number of replicas to scale back                                                  | `""`    |
+| `autoscaling.maxReplicas`               | Maximum number of replicas to scale out                                                   | `""`    |
+| `autoscaling.targetCPU`                 | Target CPU utilization percentage                                                         | `""`    |
+| `autoscaling.targetMemory`              | Target Memory utilization percentage                                                      | `""`    |
 | `extraVolumes`                          | Array to add extra volumes                                                                | `[]`    |
 | `extraVolumeMounts`                     | Array to add extra mount                                                                  | `[]`    |
 | `serviceAccount.autoMount`              | Auto-mount the service account token in the pod                                           | `false` |
 | `serviceAccount.create`                 | Enable creation of ServiceAccount for nginx pod                                           | `false` |
-| `serviceAccount.name`                   | The name of the ServiceAccount to use.                                                    | `nil`   |
+| `serviceAccount.name`                   | The name of the ServiceAccount to use.                                                    | `""`    |
 | `serviceAccount.annotations`            | Annotations for service account. Evaluated as a template.                                 | `{}`    |
-| `sidecars`                              | Sidecar parameters                                                                        | `nil`   |
-| `initContainers`                        | Extra init containers                                                                     | `nil`   |
+| `sidecars`                              | Sidecar parameters                                                                        | `[]`    |
+| `initContainers`                        | Extra init containers                                                                     | `[]`    |
 | `pdb.create`                            | Created a PodDisruptionBudget                                                             | `false` |
 | `pdb.minAvailable`                      | Min number of pods that must still be available after the eviction                        | `1`     |
-| `pdb.maxUnavailable`                    | Max number of pods that can be unavailable after the eviction                             | `1`     |
+| `pdb.maxUnavailable`                    | Max number of pods that can be unavailable after the eviction                             | `0`     |
 
 
 ### Custom NGINX application parameters
@@ -154,19 +154,19 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cloneStaticSiteFromGit.image.tag`         | Git image tag (immutable tags are recommended)                                                    | `2.32.0-debian-10-r25` |
 | `cloneStaticSiteFromGit.image.pullPolicy`  | Git image pull policy                                                                             | `IfNotPresent`         |
 | `cloneStaticSiteFromGit.image.pullSecrets` | Specify docker-registry secret names as an array                                                  | `[]`                   |
-| `cloneStaticSiteFromGit.repository`        | Git Repository to clone static content from                                                       | `nil`                  |
-| `cloneStaticSiteFromGit.branch`            | Git branch to checkout                                                                            | `nil`                  |
+| `cloneStaticSiteFromGit.repository`        | Git Repository to clone static content from                                                       | `""`                   |
+| `cloneStaticSiteFromGit.branch`            | Git branch to checkout                                                                            | `""`                   |
 | `cloneStaticSiteFromGit.interval`          | Interval for sidecar container pull from the Git repository                                       | `60`                   |
 | `cloneStaticSiteFromGit.gitClone.command`  | Override default container command for git-clone-repository                                       | `[]`                   |
-| `cloneStaticSiteFromGit.gitClone.args`     | Override default container args for git-clone-repository                                          | `nil`                  |
+| `cloneStaticSiteFromGit.gitClone.args`     | Override default container args for git-clone-repository                                          | `[]`                   |
 | `cloneStaticSiteFromGit.gitSync.command`   | Override default container command for git-repo-syncer                                            | `[]`                   |
 | `cloneStaticSiteFromGit.gitSync.args`      | Override default container args for git-repo-syncer                                               | `[]`                   |
 | `cloneStaticSiteFromGit.extraEnvVars`      | Additional environment variables to set for the in the containers that clone static site from git | `[]`                   |
 | `cloneStaticSiteFromGit.extraVolumeMounts` | Add extra volume mounts for the Git containers                                                    | `[]`                   |
 | `serverBlock`                              | Custom server block to be added to NGINX configuration                                            | `""`                   |
-| `existingServerBlockConfigmap`             | ConfigMap with custom server block to be added to NGINX configuration                             | `nil`                  |
-| `staticSiteConfigmap`                      | Name of existing ConfigMap with the server static site content                                    | `nil`                  |
-| `staticSitePVC`                            | Name of existing PVC with the server static site content                                          | `nil`                  |
+| `existingServerBlockConfigmap`             | ConfigMap with custom server block to be added to NGINX configuration                             | `""`                   |
+| `staticSiteConfigmap`                      | Name of existing ConfigMap with the server static site content                                    | `""`                   |
+| `staticSitePVC`                            | Name of existing PVC with the server static site content                                          | `""`                   |
 
 
 ### LDAP parameters
@@ -187,7 +187,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ldapDaemon.ldapConfig.httpRealm`               | LDAP HTTP auth realm                                                                     | `""`                             |
 | `ldapDaemon.ldapConfig.httpCookieName`          | HTTP cookie name to be used in LDAP Auth                                                 | `""`                             |
 | `ldapDaemon.nginxServerBlock`                   | NGINX server block that configures LDAP communication. Overrides `ldapDaemon.ldapConfig` | `""`                             |
-| `ldapDaemon.existingNginxServerBlockSecret`     | Name of existing Secret with a NGINX server block to use for LDAP communication          | `nil`                            |
+| `ldapDaemon.existingNginxServerBlockSecret`     | Name of existing Secret with a NGINX server block to use for LDAP communication          | `""`                             |
 | `ldapDaemon.livenessProbe.enabled`              | Enable livenessProbe                                                                     | `true`                           |
 | `ldapDaemon.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                  | `30`                             |
 | `ldapDaemon.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                         | `10`                             |
@@ -213,13 +213,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.httpsPort`             | Service HTTPS port                                                                                     | `443`                    |
 | `service.nodePorts`             | Specify the nodePort(s) value(s) for the LoadBalancer and NodePort service types.                      | `{}`                     |
 | `service.targetPort`            | Target port reference value for the Loadbalancer service types can be specified explicitly.            | `{}`                     |
-| `service.loadBalancerIP`        | LoadBalancer service IP address                                                                        | `nil`                    |
+| `service.loadBalancerIP`        | LoadBalancer service IP address                                                                        | `""`                     |
 | `service.annotations`           | Service annotations                                                                                    | `{}`                     |
 | `service.externalTrafficPolicy` | Enable client source IP preservation                                                                   | `Cluster`                |
 | `ingress.enabled`               | Set to true to enable ingress record generation                                                        | `false`                  |
 | `ingress.certManager`           | Set this to true in order to add the corresponding annotations for cert-manager                        | `false`                  |
 | `ingress.pathType`              | Ingress path type                                                                                      | `ImplementationSpecific` |
-| `ingress.apiVersion`            | Force Ingress API version (automatically detected if not set)                                          | `nil`                    |
+| `ingress.apiVersion`            | Force Ingress API version (automatically detected if not set)                                          | `""`                     |
 | `ingress.hostname`              | Default host for the ingress resource                                                                  | `nginx.local`            |
 | `ingress.path`                  | The Path to Nginx. You may need to set this to '/*' in order to use this with ALB ingress controllers. | `ImplementationSpecific` |
 | `ingress.annotations`           | Ingress annotations                                                                                    | `{}`                     |
@@ -244,7 +244,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                   | Description                                                                                 | Value                    |
 | -------------------------------------- | ------------------------------------------------------------------------------------------- | ------------------------ |
 | `metrics.enabled`                      | Start a Prometheus exporter sidecar container                                               | `false`                  |
-| `metrics.port`                         | NGINX Container Status Port scraped by Prometheus Exporter                                  | `nil`                    |
+| `metrics.port`                         | NGINX Container Status Port scraped by Prometheus Exporter                                  | `""`                     |
 | `metrics.image.registry`               | NGINX Prometheus exporter image registry                                                    | `docker.io`              |
 | `metrics.image.repository`             | NGINX Prometheus exporter image repository                                                  | `bitnami/nginx-exporter` |
 | `metrics.image.tag`                    | NGINX Prometheus exporter image tag (immutable tags are recommended)                        | `0.9.0-debian-10-r93`    |
@@ -258,9 +258,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.resources.limits`             | The resources limits for the NGINX Prometheus exporter container                            | `{}`                     |
 | `metrics.resources.requests`           | The requested resources for the NGINX Prometheus exporter container                         | `{}`                     |
 | `metrics.serviceMonitor.enabled`       | Creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`) | `false`                  |
-| `metrics.serviceMonitor.namespace`     | Namespace in which Prometheus is running                                                    | `nil`                    |
-| `metrics.serviceMonitor.interval`      | Interval at which metrics should be scraped.                                                | `nil`                    |
-| `metrics.serviceMonitor.scrapeTimeout` | Timeout after which the scrape is ended                                                     | `nil`                    |
+| `metrics.serviceMonitor.namespace`     | Namespace in which Prometheus is running                                                    | `""`                     |
+| `metrics.serviceMonitor.interval`      | Interval at which metrics should be scraped.                                                | `""`                     |
+| `metrics.serviceMonitor.scrapeTimeout` | Timeout after which the scrape is ended                                                     | `""`                     |
 | `metrics.serviceMonitor.selector`      | Prometheus instance selector labels                                                         | `{}`                     |
 
 

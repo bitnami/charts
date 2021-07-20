@@ -8,25 +8,25 @@
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
 
 ## @section Common parameters
 
 ## @param kubeVersion Override Kubernetes version
 ##
-kubeVersion:
+kubeVersion: ""
 ## @param nameOverride String to partially override common.names.fullname
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param commonLabels Labels to add to all deployed objects
 ##
 commonLabels: {}
@@ -79,7 +79,7 @@ odooEmail: user@example.com
 ## Defaults to a random 10-character alphanumeric string if not set
 ## ref: https://github.com/bitnami/bitnami-docker-odoo#configuration
 ##
-odooPassword:
+odooPassword: ""
 ## @param loadDemoData Whether to load demo data for all modules during initialization
 ## ref: https://github.com/bitnami/bitnami-docker-odoo#configuration
 ##
@@ -113,12 +113,12 @@ smtpProtocol: ""
 ## NOTE: Must contain key `odoo-password`
 ## NOTE: When it's set, the `odooPassword` parameter is ignored
 ##
-existingSecret:
+existingSecret: ""
 ## @param smtpExistingSecret The name of an existing secret with SMTP credentials
 ## NOTE: Must contain key `smtp-password`
 ## NOTE: When it's set, the `smtpPassword` parameter is ignored
 ##
-smtpExistingSecret:
+smtpExistingSecret: ""
 ## @param allowEmptyPassword Allow the container to be started with blank passwords
 ##
 allowEmptyPassword: false
@@ -137,10 +137,10 @@ args: []
 extraEnvVars: []
 ## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars
 ##
-extraEnvVarsCM:
+extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Name of existing Secret containing extra env vars
 ##
-extraEnvVarsSecret:
+extraEnvVarsSecret: ""
 
 ## @section Odoo deployment parameters
 
@@ -165,13 +165,13 @@ updateStrategy:
 ## @param schedulerName Alternate scheduler
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
-schedulerName:
-## @param serviceAccount.name ServiceAccount name
-## @param serviceAccount.name Create the ServiceAccount
+schedulerName: ""
+## @param serviceAccount.create Specifies whether a ServiceAccount should be created
+## @param serviceAccount.name The name of the ServiceAccount to create
 ##
 serviceAccount:
   create: true
-  name:
+  name: ""
 ## @param hostAliases [array] Odoo pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -192,7 +192,7 @@ extraVolumeMounts: []
 ##       - name: portname
 ##         containerPort: 1234
 ##
-sidecars: {}
+sidecars: []
 ## @param initContainers Add additional init containers to the Odoo pods
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
 ## e.g:
@@ -202,7 +202,7 @@ sidecars: {}
 ##    imagePullPolicy: Always
 ##    command: ['sh', '-c', 'copy addons from git and push to /bitnami/odoo/addons. Should work with extraVolumeMounts and extraVolumes']
 ##
-initContainers: {}
+initContainers: []
 ## @param podLabels Extra labels for Odoo pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
@@ -354,16 +354,16 @@ service:
   ## @param service.nodePort Node port for HTTP
   ## NOTE: choose port between <30000-32767>
   ##
-  nodePort:
+  nodePort: ""
   ## @param service.clusterIP Odoo service Cluster IP
   ## e.g.:
   ## clusterIP: None
   ##
-  clusterIP:
+  clusterIP: ""
   ## @param service.loadBalancerIP Odoo service Load Balancer IP
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
   ##
-  loadBalancerIP:
+  loadBalancerIP: ""
   ## @param service.loadBalancerSourceRanges Odoo service Load Balancer sources
   ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
   ## e.g:
@@ -400,7 +400,7 @@ ingress:
   pathType: ImplementationSpecific
   ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
   ##
-  apiVersion:
+  apiVersion: ""
   ## @param ingress.hostname Default host for the ingress record
   ##
   hostname: odoo.local
@@ -480,7 +480,7 @@ persistence:
   ## If set to "-", storageClassName: "", which disables dynamic provisioning
   ## If undefined (the default) or set to null, no storageClassName spec is set, choosing the default provisioner
   ##
-  storageClass:
+  storageClass: ""
   ## @param persistence.accessModes [array] Persistent Volume access modes
   ##
   accessModes:
@@ -496,7 +496,7 @@ persistence:
   dataSource: {}
   ## @param persistence.existingClaim The name of an existing PVC to use for persistence
   ##
-  existingClaim:
+  existingClaim: ""
 
 ## 'volumePermissions' init container parameters
 ## Changes the owner and group of the persistent volume mount point to runAsUser:fsGroup values
@@ -532,7 +532,7 @@ volumePermissions:
 pdb:
   create: false
   minAvailable: 1
-  maxUnavailable:
+  maxUnavailable: ""
 
 ## Odoo Autoscaling configuration
 ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
@@ -576,7 +576,7 @@ postgresql:
   ## postgresql-password (for the unprivileged user)
   ##
   # existingSecret: my-secret
-  existingSecret:
+  existingSecret: ""
 
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
@@ -588,7 +588,7 @@ postgresql:
     ## @param postgresql.persistence.existingClaim Provide an existing `PersistentVolumeClaim`, the value is evaluated as a template
     ##
     # existingClaim: your-claim
-    existingClaim:
+    existingClaim: ""
 
     ## @param postgresql.persistence.storageClass PVC Storage Class for PostgreSQL volume
     ## If defined, storageClassName: <storageClass>
@@ -598,7 +598,7 @@ postgresql:
     ##   GKE, AWS & OpenStack)
     ##
     # storageClass: "-"
-    storageClass:
+    storageClass: ""
     ## @param postgresql.persistence.accessMode PVC Access Mode for PostgreSQL volume
     ##
     accessMode: ReadWriteOnce
@@ -611,7 +611,7 @@ postgresql:
 externalDatabase:
   ## @param externalDatabase.host External Database server host
   ##
-  host:
+  host: ""
   ## @param externalDatabase.port External Database server port
   ##
   port: 5432
@@ -640,4 +640,4 @@ externalDatabase:
   ## postgresql-password (for the unprivileged user)
   ##
   # existingSecret: my-secret
-  existingSecret:
+  existingSecret: ""

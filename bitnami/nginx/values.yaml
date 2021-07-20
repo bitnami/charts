@@ -7,7 +7,7 @@
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
@@ -18,13 +18,13 @@ global:
 
 ## @param nameOverride String to partially override nginx.fullname template (will maintain the release name)
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override nginx.fullname template
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
-kubeVersion:
+kubeVersion: ""
 ## @param clusterDomain Kubernetes Cluster Domain
 ##
 clusterDomain: cluster.local
@@ -77,8 +77,8 @@ hostAliases: []
 ## @param command Override default container command (useful when using custom images)
 ## @param args Override default container args (useful when using custom images)
 ##
-command:
-args:
+command: []
+args: []
 ## @param extraEnvVars Extra environment variables to be set on NGINX containers
 ## E.g:
 ## extraEnvVars:
@@ -88,10 +88,10 @@ args:
 extraEnvVars: []
 ## @param extraEnvVarsCM ConfigMap with extra environment variables
 ##
-extraEnvVarsCM:
+extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Secret with extra environment variables
 ##
-extraEnvVarsSecret:
+extraEnvVarsSecret: ""
 
 ## @section NGINX deployment parameters
 
@@ -182,7 +182,7 @@ containerSecurityContext:
 ##
 containerPorts:
   http: 8080
-  https:
+  https: ""
 ## NGINX containers' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -250,10 +250,10 @@ customReadinessProbe: {}
 ##
 autoscaling:
   enabled: false
-  minReplicas:
-  maxReplicas:
-  targetCPU:
-  targetMemory:
+  minReplicas: ""
+  maxReplicas: ""
+  targetCPU: ""
+  targetMemory: ""
 ## @param extraVolumes Array to add extra volumes
 ##
 extraVolumes: []
@@ -269,7 +269,7 @@ serviceAccount:
   create: false
   ## @param serviceAccount.name The name of the ServiceAccount to use.
   ## If not set and create is true, a name is generated using the `common.names.fullname` template
-  name:
+  name: ""
   ## @param serviceAccount.annotations Annotations for service account. Evaluated as a template.
   ## Only used if `create` is `true`.
   ##
@@ -287,10 +287,10 @@ serviceAccount:
 ##       - name: portname
 ##         containerPort: 1234
 ##
-sidecars:
+sidecars: []
 ## @param initContainers Extra init containers
 ##
-initContainers:
+initContainers: []
 ## Pod Disruption Budget configuration
 ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
 ##
@@ -341,10 +341,10 @@ cloneStaticSiteFromGit:
     pullSecrets: []
   ## @param cloneStaticSiteFromGit.repository Git Repository to clone static content from
   ##
-  repository:
+  repository: ""
   ## @param cloneStaticSiteFromGit.branch Git branch to checkout
   ##
-  branch:
+  branch: ""
   ## @param cloneStaticSiteFromGit.interval Interval for sidecar container pull from the Git repository
   ##
   interval: 60
@@ -356,7 +356,7 @@ cloneStaticSiteFromGit:
     command: []
     ## @param cloneStaticSiteFromGit.gitClone.args Override default container args for git-clone-repository
     ##
-    args:
+    args: []
   ## Additional configuration for the git-repo-syncer container
   ##
   gitSync:
@@ -401,14 +401,14 @@ serverBlock: ""
 ## @param existingServerBlockConfigmap ConfigMap with custom server block to be added to NGINX configuration
 ## NOTE: This will override serverBlock
 ##
-existingServerBlockConfigmap:
+existingServerBlockConfigmap: ""
 ## @param staticSiteConfigmap Name of existing ConfigMap with the server static site content
 ##
-staticSiteConfigmap:
+staticSiteConfigmap: ""
 ## @param staticSitePVC Name of existing PVC with the server static site content
 ## NOTE: This will override staticSiteConfigmap
 ##
-staticSitePVC:
+staticSitePVC: ""
 
 ## @section LDAP parameters
 
@@ -511,7 +511,7 @@ ldapDaemon:
   ## Use an existing Secret holding an NGINX Configuration file that configures LDAP requests
   ## If provided, both nginxServerBlock and ldapConfig properties are ignored.
   ##
-  existingNginxServerBlockSecret:
+  existingNginxServerBlockSecret: ""
   ## LDAP Auth Daemon containers' liveness probe.
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ## @param ldapDaemon.livenessProbe.enabled Enable livenessProbe
@@ -581,7 +581,7 @@ service:
   ## @param service.loadBalancerIP LoadBalancer service IP address
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
-  loadBalancerIP:
+  loadBalancerIP: ""
   ## @param service.annotations Service annotations
   ## This can be used to set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -607,7 +607,7 @@ ingress:
   pathType: ImplementationSpecific
   ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
   ##
-  apiVersion:
+  apiVersion: ""
   ## @param ingress.hostname Default host for the ingress resource
   ##
   hostname: nginx.local
@@ -737,7 +737,7 @@ metrics:
   enabled: false
   ## @param metrics.port NGINX Container Status Port scraped by Prometheus Exporter
   ## Defaults to specified http port
-  port:
+  port: ""
   ## Bitnami NGINX Prometheus Exporter image
   ## ref: https://hub.docker.com/r/bitnami/nginx-exporter/tags/
   ## @param metrics.image.registry NGINX Prometheus exporter image registry
@@ -810,19 +810,19 @@ metrics:
     enabled: false
     ## @param metrics.serviceMonitor.namespace Namespace in which Prometheus is running
     ##
-    namespace:
+    namespace: ""
     ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped.
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ## e.g:
     ## interval: 10s
     ##
-    interval:
+    interval: ""
     ## @param metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ## e.g:
     ## scrapeTimeout: 10s
     ##
-    scrapeTimeout:
+    scrapeTimeout: ""
     ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
     ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
     ##
