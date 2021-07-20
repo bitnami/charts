@@ -274,6 +274,9 @@ serviceAccount:
   ## Only used if `create` is `true`.
   ##
   annotations: {}
+  ## @param serviceAccount.autoMount Auto-mount the service account token in the pod
+  ##
+  autoMount: false
 ## @param sidecars Sidecar parameters
 ## e.g:
 ## sidecars:

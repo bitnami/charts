@@ -8,7 +8,7 @@ metadata:
     {{- end }}
     app.kubernetes.io/component: core
   {{- if .Values.commonAnnotations }}
-    annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 data:
   app.conf: |+
