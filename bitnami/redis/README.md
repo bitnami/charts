@@ -379,23 +379,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.service.loadBalancerIP`                      | Redis(TM) exporter service Load Balancer IP                                                      | `""`                              |
 | `metrics.service.loadBalancerSourceRanges`            | Redis(TM) exporter service Load Balancer sources                                                 | `[]`                              |
 | `metrics.service.annotations`                         | Additional custom annotations for Redis(TM) exporter service                                     | `{}`                              |
-| `metrics.sentinel.enabled`                            | Start a sidecar prometheus exporter to expose Redis(TM) Sentinel metrics                         | `false`                           |
-| `metrics.sentinel.image.registry`                     | Redis(TM) Sentinel Exporter image registry                                                       | `docker.io`                       |
-| `metrics.sentinel.image.repository`                   | Redis(TM) Sentinel Exporter image repository                                                     | `bitnami/redis-sentinel-exporter` |
-| `metrics.sentinel.image.tag`                          | Redis(TM) Redis(TM) Sentinel Exporter image tag (immutable tags are recommended)                 | `1.7.1-debian-10-r161`            |
-| `metrics.sentinel.image.pullPolicy`                   | Redis(TM) Sentinel Exporter image pull policy                                                    | `IfNotPresent`                    |
-| `metrics.sentinel.image.pullSecrets`                  | Redis(TM) Sentinel Exporter image pull secrets                                                   | `[]`                              |
-| `metrics.sentinel.extraArgs`                          | Extra arguments for Redis(TM) Sentinel exporter, for example:                                    | `{}`                              |
-| `metrics.sentinel.containerSecurityContext.enabled`   | Enabled Redis(TM) Sentinel exporter containers' Security Context                                 | `true`                            |
-| `metrics.sentinel.containerSecurityContext.runAsUser` | Set Redis(TM) Sentinel exporter containers' Security Context runAsUser                           | `1001`                            |
-| `metrics.sentinel.resources.limits`                   | The resources limits for the Redis(TM) Sentinel exporter container                               | `{}`                              |
-| `metrics.sentinel.resources.requests`                 | The requested resources for the Redis(TM) Sentinel exporter container                            | `{}`                              |
-| `metrics.sentinel.service.type`                       | Redis(TM) Sentinel exporter service type                                                         | `ClusterIP`                       |
-| `metrics.sentinel.service.port`                       | Redis(TM) Sentinel exporter service port                                                         | `9355`                            |
-| `metrics.sentinel.service.externalTrafficPolicy`      | Redis(TM) Sentinel exporter service external traffic policy                                      | `Cluster`                         |
-| `metrics.sentinel.service.loadBalancerIP`             | Redis(TM) Sentinel exporter service Load Balancer IP                                             | `""`                              |
-| `metrics.sentinel.service.loadBalancerSourceRanges`   | Redis(TM) Sentinel exporter service Load Balancer sources                                        | `[]`                              |
-| `metrics.sentinel.service.annotations`                | Additional custom annotations for Redis(TM) Sentinel exporter service                            | `{}`                              |
 | `metrics.serviceMonitor.enabled`                      | Create ServiceMonitor resource(s) for scraping metrics using PrometheusOperator                  | `false`                           |
 | `metrics.serviceMonitor.namespace`                    | The namespace in which the ServiceMonitor will be created                                        | `""`                              |
 | `metrics.serviceMonitor.interval`                     | The interval at which metrics should be scraped                                                  | `30s`                             |
@@ -573,8 +556,11 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ## Upgrading
 
-A major chart version change (like v1.2.3 -> v2.0.0) indicates that there is an
-incompatible breaking change needing manual actions.
+A major chart version change (like v1.2.3 -> v2.0.0) indicates that there is an incompatible breaking change needing manual actions.
+
+### To 14.8.0
+
+The Redis<sup>TM</sup> sentinel exporter was removed in this version because the upstream project was deprecated. The regular Redis<sup>TM</sup> exporter is included in the sentinel scenario as usual.
 
 ### To 14.0.0
 
