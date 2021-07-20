@@ -116,7 +116,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                        | Description                                                                                      | Value           |
 | ------------------------------------------- | ------------------------------------------------------------------------------------------------ | --------------- |
 | `master.configuration`                      | Configuration for Redis(TM) master nodes                                                         | `nil`           |
-| `master.disableCommands`                    | Array with Redis(TM) commands to disable on master nodes                                         | `[]`            |
+| `master.disableCommands`                    | Array with Redis(TM) commands to disable on master nodes                                         | `[FLUSHDB, FLUSHALL]`            |
 | `master.command`                            | Override default container command (useful when using custom images)                             | `[]`            |
 | `master.args`                               | Override default container args (useful when using custom images)                                | `[]`            |
 | `master.preExecCmds`                        | Additional commands to run prior to starting Redis(TM) master                                    | `[]`            |
@@ -192,7 +192,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------------- | ------------------------------------------------------------------------------------------------- | --------------- |
 | `replica.replicaCount`                       | Number of Redis(TM) replicas to deploy                                                            | `3`             |
 | `replica.configuration`                      | Configuration for Redis(TM) replicas nodes                                                        | `nil`           |
-| `replica.disableCommands`                    | Array with Redis(TM) commands to disable on replicas nodes                                        | `[]`            |
+| `replica.disableCommands`                    | Array with Redis(TM) commands to disable on replicas nodes                                        | `[FLUSHDB, FLUSHALL]`            |
 | `replica.command`                            | Override default container command (useful when using custom images)                              | `[]`            |
 | `replica.args`                               | Override default container args (useful when using custom images)                                 | `[]`            |
 | `replica.preExecCmds`                        | Additional commands to run prior to starting Redis(TM) replicas                                   | `[]`            |
