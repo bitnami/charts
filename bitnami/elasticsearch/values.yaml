@@ -10,13 +10,13 @@
 ## @param global.kibanaEnabled Whether or not to enable Kibana
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
   coordinating:
     name: coordinating-only
   kibanaEnabled: false
@@ -25,10 +25,10 @@ global:
 
 ## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname template
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param clusterDomain Kubernetes cluster domain
 ##
 clusterDomain: cluster.local
@@ -70,14 +70,14 @@ name: elastic
 ## @param plugins Comma, semi-colon or space separated list of plugins to install at initialization
 ## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
 ##
-plugins:
+plugins: ""
 ## @param snapshotRepoPath File System snapshot repository path
 ## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
 ##
-snapshotRepoPath:
+snapshotRepoPath: ""
 ## @param config Override elasticsearch configuration
 ##
-config:
+config: {}
 ## @param extraConfig Append extra configuration to the elasticsearch node configuration
 ## Use this instead of `config` to add more configuration
 ## See below example:
@@ -87,7 +87,7 @@ config:
 ##       allow_mmap: false
 ## ref: https://www.elastic.co/guide/en/elasticsearch/reference/current/settings.html
 ##
-extraConfig:
+extraConfig: {}
 ## @param extraVolumes A list of volumes to be added to the pod
 ## Example Use Case: mount ssl certificates when elasticsearch has tls enabled
 ## extraVolumes:
@@ -95,13 +95,13 @@ extraConfig:
 ##     secret:
 ##       defaultMode: 420
 ##       secretName: es-certs
-extraVolumes:
+extraVolumes: []
 ## @param extraVolumeMounts A list of volume mounts to be added to the pod
 ## extraVolumeMounts:
 ##   - name: es-certs
 ##     mountPath: /certs
 ##     readOnly: true
-extraVolumeMounts:
+extraVolumeMounts: []
 ## @param initScripts Dictionary of init scripts. Evaluated as a template.
 ## Specify dictionary of scripts to be run at first boot
 ## Alternatively, you can put your scripts under the files/docker-entrypoint-initdb.d directory
@@ -111,14 +111,14 @@ extraVolumeMounts:
 ##      #!/bin/sh
 ##      echo "Do something."
 ##
-initScripts:
+initScripts: {}
 ## @param initScriptsCM ConfigMap with the init scripts. Evaluated as a template.
 ## Note: This will override initScripts
 ##
-initScriptsCM:
+initScriptsCM: ""
 ## @param initScriptsSecret Secret containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time that contain sensitive data. Evaluated as a template.
 ##
-initScriptsSecret:
+initScriptsSecret: ""
 ## @param extraEnvVars Array containing extra env vars to be added to all pods (evaluated as a template)
 ## For example:
 ## extraEnvVars:
@@ -128,10 +128,10 @@ initScriptsSecret:
 extraEnvVars: []
 ## @param extraEnvVarsConfigMap ConfigMap containing extra env vars to be added to all pods (evaluated as a template)
 ##
-extraEnvVarsConfigMap:
+extraEnvVarsConfigMap: ""
 ## @param extraEnvVarsSecret Secret containing extra env vars to be added to all pods (evaluated as a template)
 ##
-extraEnvVarsSecret:
+extraEnvVarsSecret: ""
 
 ## @section Master parameters
 
@@ -143,7 +143,7 @@ master:
   name: master
   ## @param master.fullnameOverride String to fully override elasticsearch.master.fullname template with a string
   ##
-  fullnameOverride:
+  fullnameOverride: ""
   ## @param master.replicas Desired number of Elasticsearch master-eligible nodes. Consider using an odd number of master nodes to prevent "split brain" situation.  See: https://www.elastic.co/guide/en/elasticsearch/reference/7.x/modules-discovery-voting.html
   ## https://www.elastic.co/guide/en/elasticsearch/reference/7.x/modules-discovery-voting.html#_even_numbers_of_master_eligible_nodes
   ## https://www.elastic.co/guide/en/elasticsearch/reference/7.x/modules-discovery-quorums.html#modules-discovery-quorums
@@ -162,7 +162,7 @@ master:
   ## @param master.schedulerName Name of the k8s scheduler (other than default)
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
-  schedulerName:
+  schedulerName: ""
   ##
   ## @param master.heapSize Master-eligible node heap size
   ##
@@ -317,15 +317,15 @@ master:
     ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
     ##   GKE, AWS & OpenStack)
     ##
-    storageClass:
+    storageClass: ""
     ## @param master.persistence.existingClaim Existing Persistent Volume Claim
     ## then accept the value as an existing Persistent Volume Claim to which
     ## the container should be bound
     ##
-    existingClaim:
+    existingClaim: ""
     ## @param master.persistence.existingVolume Existing Persistent Volume for use as volume match label selector to the `volumeClaimTemplate`. Ignored when `master.persistence.selector` is set.
     ##
-    existingVolume:
+    existingVolume: ""
     ## @param master.persistence.selector Configure custom selector for existing Persistent Volume. Overwrites `master.persistence.existingVolume`
     ## selector:
     ##   matchLabels:
@@ -354,7 +354,7 @@ master:
     ## @param master.service.nodePort Kubernetes Service nodePort (master-eligible nodes)
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ##
-    nodePort:
+    nodePort: ""
     ## @param master.service.annotations Annotations for master-eligible nodes service
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
@@ -363,7 +363,7 @@ master:
     ## Set the LoadBalancer service type to internal only.
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
-    loadBalancerIP:
+    loadBalancerIP: ""
   ## Provide functionality to use RBAC
   ##
   serviceAccount:
@@ -372,7 +372,7 @@ master:
     create: false
     ## @param master.serviceAccount.name Name of the created serviceAccount
     ## If not set and create is true, a name is generated using the fullname template
-    name:
+    name: ""
   ## Autoscaling configuration
   ## @param master.autoscaling.enabled Enable autoscaling for master replicas
   ## @param master.autoscaling.minReplicas Minimum number of master replicas
@@ -384,8 +384,8 @@ master:
     enabled: false
     minReplicas: 2
     maxReplicas: 11
-    targetCPU:
-    targetMemory:
+    targetCPU: ""
+    targetMemory: ""
 
 ## @section Coordinating parameters
 
@@ -394,7 +394,7 @@ master:
 coordinating:
   ## @param coordinating.fullnameOverride String to fully override elasticsearch.coordinating.fullname template with a string
   ##
-  fullnameOverride:
+  fullnameOverride: ""
   ## @param coordinating.replicas Desired number of Elasticsearch coordinating-only nodes
   ##
   replicas: 2
@@ -405,7 +405,7 @@ coordinating:
   ## @param coordinating.schedulerName Name of the k8s scheduler (other than default)
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
-  schedulerName:
+  schedulerName: ""
   ## Update strategy for ElasticSearch coordinating deployment
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
   ## @param coordinating.updateStrategy.type Update strategy for Coordinating Deployment
@@ -563,7 +563,7 @@ coordinating:
     ## @param coordinating.service.nodePort Kubernetes Service nodePort (coordinating-only nodes)
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ##
-    nodePort:
+    nodePort: ""
     ## @param coordinating.service.annotations Annotations for coordinating-only nodes service
     ## Set the LoadBalancer service type to internal only.
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -572,7 +572,7 @@ coordinating:
     ## @param coordinating.service.loadBalancerIP loadBalancerIP if coordinating-only nodes service type is `LoadBalancer`
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
-    loadBalancerIP:
+    loadBalancerIP: ""
   ## Provide functionality to use RBAC
   ##
   serviceAccount:
@@ -582,7 +582,7 @@ coordinating:
     ## @param coordinating.serviceAccount.name Name of the created serviceAccount
     ## If not set and create is true, a name is generated using the fullname template
     ##
-    name:
+    name: ""
   ## Autoscaling configuration
   ## @param coordinating.autoscaling.enabled Enable autoscaling for coordinating replicas
   ## @param coordinating.autoscaling.minReplicas Minimum number of coordinating replicas
@@ -594,8 +594,8 @@ coordinating:
     enabled: false
     minReplicas: 2
     maxReplicas: 11
-    targetCPU:
-    targetMemory:
+    targetCPU: ""
+    targetMemory: ""
 
 ## @section Data parameters
 
@@ -607,7 +607,7 @@ data:
   name: data
   ## @param data.fullnameOverride String to fully override elasticsearch.data.fullname template with a string
   ##
-  fullnameOverride:
+  fullnameOverride: ""
   ## @param data.replicas Desired number of Elasticsearch data nodes
   ##
   replicas: 2
@@ -618,7 +618,7 @@ data:
   ## @param data.schedulerName Name of the k8s scheduler (other than default)
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
-  schedulerName:
+  schedulerName: ""
   ## Update strategy for ElasticSearch Data statefulset
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ## @param data.updateStrategy.type Update strategy for Data statefulset
@@ -626,7 +626,7 @@ data:
   ##
   updateStrategy:
     type: RollingUpdate
-    rollingUpdatePartition:
+    rollingUpdatePartition: ""
   ## @param data.heapSize Data node heap size
   ##
   heapSize: 1024m
@@ -781,16 +781,16 @@ data:
     ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
     ##   GKE, AWS & OpenStack)
     ##
-    storageClass:
+    storageClass: ""
     ## @param data.persistence.existingClaim Existing Persistent Volume Claim
     ## If persistence is enable, and this value is defined,
     ## then accept the value as an existing Persistent Volume Claim to which
     ## the container should be bound
     ##
-    existingClaim:
+    existingClaim: ""
     ## @param data.persistence.existingVolume Existing Persistent Volume for use as volume match label selector to the `volumeClaimTemplate`. Ignored when `data.persistence.selector` ist set.
     ##
-    existingVolume:
+    existingVolume: ""
     ## @param data.persistence.selector Configure custom selector for existing Persistent Volume. Overwrites `data.persistence.existingVolume`
     ## selector:
     ##   matchLabels:
@@ -815,7 +815,7 @@ data:
     ## @param data.serviceAccount.name Name of the created serviceAccount
     ## If not set and create is true, a name is generated using the fullname template
     ##
-    name:
+    name: ""
   ## Autoscaling configuration
   ## @param data.autoscaling.enabled Enable autoscaling for data replicas
   ## @param data.autoscaling.minReplicas Minimum number of data replicas
@@ -827,8 +827,8 @@ data:
     enabled: false
     minReplicas: 2
     maxReplicas: 11
-    targetCPU:
-    targetMemory:
+    targetCPU: ""
+    targetMemory: ""
 
 ## @section Ingest parameters
 
@@ -843,7 +843,7 @@ ingest:
   name: ingest
   ## @param ingest.fullnameOverride String to fully override elasticsearch.ingest.fullname template with a string
   ##
-  fullnameOverride:
+  fullnameOverride: ""
   ## @param ingest.replicas Desired number of Elasticsearch ingest nodes
   ##
   replicas: 2
@@ -860,7 +860,7 @@ ingest:
   ## @param ingest.schedulerName Name of the k8s scheduler (other than default)
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
-  schedulerName:
+  schedulerName: ""
   ## @param ingest.podLabels Extra labels to add to Pod
   ##
   podLabels: {}
@@ -1007,7 +1007,7 @@ ingest:
     ## @param ingest.service.nodePort Kubernetes Service nodePort (ingest nodes)
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ##
-    nodePort:
+    nodePort: ""
     ## @param ingest.service.annotations Annotations for ingest nodes service
     ## set the LoadBalancer service type to internal only.
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -1016,7 +1016,7 @@ ingest:
     ## @param ingest.service.loadBalancerIP loadBalancerIP if ingest nodes service type is `LoadBalancer`
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
-    loadBalancerIP:
+    loadBalancerIP: ""
 
 ## @section Curator parameters
 
@@ -1065,7 +1065,7 @@ curator:
   ## @param curator.schedulerName Name of the k8s scheduler (other than default)
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
-  schedulerName:
+  schedulerName: ""
   ## @param curator.podAnnotations Annotations to add to the pod
   ##
   podAnnotations: {}
@@ -1128,7 +1128,7 @@ curator:
     create: true
     ## If not set and create is true, a name is generated using the fullname template
     ##
-    name:
+    name: ""
   ## @param curator.psp.create Create pod security policy resources
   ##
   psp:
@@ -1316,7 +1316,7 @@ metrics:
   ## @param metrics.schedulerName Name of the k8s scheduler (other than default)
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
-  schedulerName:
+  schedulerName: ""
   ## Elasticsearch Prometheus exporter service type
   ##
   service:
@@ -1438,19 +1438,19 @@ metrics:
     enabled: false
     ## @param metrics.serviceMonitor.namespace Namespace in which Prometheus is running
     ##
-    namespace:
+    namespace: ""
     ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped.
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ## e.g:
     ## interval: 10s
     ##
-    interval:
+    interval: ""
     ## @param metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ## e.g:
     ## scrapeTimeout: 10s
     ##
-    scrapeTimeout:
+    scrapeTimeout: ""
     ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
     ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
     ## selector:
