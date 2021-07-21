@@ -132,7 +132,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 
 
@@ -140,8 +140,8 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 
 | Name                | Description                                                                                               | Value |
 | ------------------- | --------------------------------------------------------------------------------------------------------- | ----- |
-| `nameOverride`      | String to partially override common.names.fullname template with a string (will prepend the release name) | `nil` |
-| `fullnameOverride`  | String to fully override common.names.fullname template with a string                                     | `nil` |
+| `nameOverride`      | String to partially override common.names.fullname template with a string (will prepend the release name) | `""`  |
+| `fullnameOverride`  | String to fully override common.names.fullname template with a string                                     | `""`  |
 | `extraDeploy`       | Array of extra objects to deploy with the release                                                         | `[]`  |
 | `commonLabels`      | Common Labels which are applied to every resource deployed                                                | `{}`  |
 | `commonAnnotations` | Common Annotations which are applied to every ressource deployed                                          | `{}`  |
@@ -163,7 +163,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `operator.args.scanNamespaces`                               | Specify the namespaces which should be scanned for dashboards and datasources (Creates ClusterRole)                    | `[]`                       |
 | `operator.rbac.create`                                       | Create specifies whether to install and use RBAC rules                                                                 | `true`                     |
 | `operator.serviceAccount.create`                             | Specifies whether a service account should be created                                                                  | `true`                     |
-| `operator.serviceAccount.name`                               | The name of the service account to use. If not set and create is true, a name is generated using the fullname template | `nil`                      |
+| `operator.serviceAccount.name`                               | The name of the service account to use. If not set and create is true, a name is generated using the fullname template | `""`                       |
 | `operator.podSecurityContext.enabled`                        | Enable pods security context                                                                                           | `true`                     |
 | `operator.podSecurityContext.runAsUser`                      | User ID for the pods                                                                                                   | `1001`                     |
 | `operator.podSecurityContext.runAsGroup`                     | User ID for the pods                                                                                                   | `1001`                     |
@@ -248,7 +248,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `grafana.ingress.tls`                                       | This enables tls support for the ingress resource                                             | `false`              |
 | `grafana.ingress.tlsSecret`                                 | The name for the secret to use for the tls termination                                        | `grafana.local-tls`  |
 | `grafana.persistence.enabled`                               | Enable persistent storage for the grafana deployment                                          | `false`              |
-| `grafana.persistence.storageClass`                          | Define the storageClass for the persistent storage if not defined default is used             | `nil`                |
+| `grafana.persistence.storageClass`                          | Define the storageClass for the persistent storage if not defined default is used             | `""`                 |
 | `grafana.persistence.accessMode`                            | Define the accessMode for the persistent storage                                              | `ReadWriteOnce`      |
 | `grafana.persistence.size`                                  | Define the size of the PersistentVolumeClaim to request for                                   | `10Gi`               |
 | `grafana.config`                                            | grafana.ini configuration for the instance for this to configure please look at upstream docs | `{}`                 |
