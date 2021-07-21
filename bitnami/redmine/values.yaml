@@ -8,25 +8,25 @@
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
 
 ## @section Common parameters
 
 ## @param kubeVersion Override Kubernetes version
 ##
-kubeVersion:
+kubeVersion: ""
 ## @param nameOverride String to partially override common.names.fullname
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param commonLabels Labels to add to all deployed objects
 ##
 commonLabels: {}
@@ -117,12 +117,12 @@ smtpProtocol: ""
 ## NOTE: Must contain key `redmine-password`
 ## NOTE: When it's set, the `redminePassword` parameter is ignored
 ##
-existingSecret:
+existingSecret: ""
 ## @param smtpExistingSecret The name of an existing secret with SMTP credentials
 ## NOTE: Must contain key `smtp-password`
 ## NOTE: When it's set, the `smtpPassword` parameter is ignored
 ##
-smtpExistingSecret:
+smtpExistingSecret: ""
 ## @param allowEmptyPassword Allow the container to be started with blank passwords
 ##
 allowEmptyPassword: false
@@ -141,10 +141,10 @@ args: []
 extraEnvVars: []
 ## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars
 ##
-extraEnvVarsCM:
+extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Name of existing Secret containing extra env vars
 ##
-extraEnvVarsSecret:
+extraEnvVarsSecret: ""
 
 ## @section Redmine deployment parameters
 
@@ -169,13 +169,13 @@ updateStrategy:
 ## @param schedulerName Alternate scheduler
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
-schedulerName:
+schedulerName: ""
 ## @param serviceAccount.create Specifies whether a ServiceAccount should be created
 ## @param serviceAccount.name The name of the ServiceAccount to create. Defaults to the `redmine.fullname` macro
 ##
 serviceAccount:
   create: false
-  name:
+  name: ""
 ## @param hostAliases [array] Redmine pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -196,7 +196,7 @@ extraVolumeMounts: []
 #     ports:
 #       - name: portname
 #         containerPort: 1234
-sidecars: {}
+sidecars: []
 ## @param initContainers Add additional init containers to the Redmine pods
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
 ## e.g:
@@ -206,7 +206,7 @@ sidecars: {}
 #    image: your-image
 #    imagePullPolicy: Always
 #    command: ['sh', '-c', 'copy addons from git and push to /bitnami/redmine/plugins. Should work with extraVolumeMounts and extraVolumes']
-initContainers: {}
+initContainers: []
 ## @param podLabels Extra labels for Redmine pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
@@ -337,10 +337,10 @@ startupProbe:
 ##
 customLivenessProbe: {}
 ## @param customReadinessProbe Custom readinessProbe that overrides the default one
-#
+##
 customReadinessProbe: {}
 ## @param customStartupProbe Custom startupProbe that overrides the default one
-#
+##
 customStartupProbe: {}
 
 ## @section Traffic Exposure Parameters
@@ -358,16 +358,16 @@ service:
   ## @param service.nodePort Node port for HTTP
   ## NOTE: choose port between <30000-32767>
   ##
-  nodePort:
+  nodePort: ""
   ## @param service.clusterIP Redmine service Cluster IP
   ## e.g.:
   ## clusterIP: None
   ##
-  clusterIP:
+  clusterIP: ""
   ## @param service.loadBalancerIP Redmine service Load Balancer IP
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
   ##
-  loadBalancerIP:
+  loadBalancerIP: ""
   ## @param service.loadBalancerSourceRanges Redmine service Load Balancer sources
   ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
   ## e.g:
@@ -404,7 +404,7 @@ ingress:
   pathType: ImplementationSpecific
   ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
   ##
-  apiVersion:
+  apiVersion: ""
   ## @param ingress.hostname Default host for the ingress record
   ##
   hostname: redmine.local
@@ -484,7 +484,7 @@ persistence:
   ## If set to "-", storageClassName: "", which disables dynamic provisioning
   ## If undefined (the default) or set to null, no storageClassName spec is set, choosing the default provisioner
   ##
-  storageClass:
+  storageClass: ""
   ## @param persistence.accessModes [array] Persistent Volume access modes
   ##
   accessModes:
@@ -497,7 +497,7 @@ persistence:
   dataSource: {}
   ## @param persistence.existingClaim The name of an existing PVC to use for persistence
   ##
-  existingClaim:
+  existingClaim: ""
 
 ## 'volumePermissions' init container parameters
 ## Changes the owner and group of the persistent volume mount point to runAsUser:fsGroup values
@@ -532,8 +532,8 @@ volumePermissions:
 ##
 podDisruptionBudget:
   create: false
-  minAvailable:
-  maxUnavailable:
+  minAvailable: ""
+  maxUnavailable: ""
 
 ## Redmine Autoscaling configuration
 ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
@@ -580,7 +580,7 @@ mariadb:
     ## NOTE: When it's set the previous parameters are ignored.
     ##
     # existingSecret: my-secret
-    existingSecret:
+    existingSecret: ""
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
@@ -592,7 +592,7 @@ mariadb:
       ## @param mariadb.primary.persistence.existingClaim Provide an existing `PersistentVolumeClaim`, the value is evaluated as a template
       ##
       # existingClaim: your-claim
-      existingClaim:
+      existingClaim: ""
       ## @param mariadb.primary.persistence.storageClass PVC Storage Class for MariaDB volume
       ## If defined, storageClassName: <storageClass>
       ## If set to "-", storageClassName: "", which disables dynamic provisioning
@@ -601,7 +601,7 @@ mariadb:
       ##   GKE, AWS & OpenStack)
       ##
       # storageClass: "-"
-      storageClass:
+      storageClass: ""
       ## @param mariadb.primary.persistence.accessModes [array] PVC Access Mode for MariaDB volume
       ##
       accessModes:
@@ -611,7 +611,7 @@ mariadb:
       size: 8Gi
       ## @param mariadb.primary.persistence.hostPath Set path in case you want to use local host path volumes (not recommended in production)
       ##
-      hostPath:
+      hostPath: ""
 ## PostgreSQL chart configuration
 ## ref: https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
 ##
@@ -637,7 +637,7 @@ postgresql:
   ## postgresql-password (for the unprivileged user)
   ##
   # existingSecret: my-secret
-  existingSecret:
+  existingSecret: ""
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
@@ -648,7 +648,7 @@ postgresql:
     ## @param postgresql.persistence.existingClaim Provide an existing `PersistentVolumeClaim`, the value is evaluated as a template
     ##
     # existingClaim: your-claim
-    existingClaim:
+    existingClaim: ""
     ## @param postgresql.persistence.storageClass PVC Storage Class for PostgreSQL volume
     ## If defined, storageClassName: <storageClass>
     ## If set to "-", storageClassName: "", which disables dynamic provisioning
@@ -657,7 +657,7 @@ postgresql:
     ##   GKE, AWS & OpenStack)
     ##
     # storageClass: "-"
-    storageClass:
+    storageClass: ""
     ## @param postgresql.persistence.accessMode PVC Access Mode for PostgreSQL volume
     ##
     accessMode: ReadWriteOnce
@@ -669,7 +669,7 @@ postgresql:
 externalDatabase:
   ## @param externalDatabase.host External Database server host
   ##
-  host:
+  host: ""
   ## @param externalDatabase.port External Database server port
   ##
   port: 5432
@@ -685,7 +685,7 @@ externalDatabase:
   ## @param externalDatabase.existingSecret Use an existing secret for external db password. Must contain the keys `redmine-password` or `mariadb-password` depending on the DB type
   ##
   # existingSecret: my-secret
-  existingSecret:
+  existingSecret: ""
 
 ## @section Mail Receiver/Cron Job Parameters
 
@@ -813,10 +813,10 @@ mailReceiver:
   #    value: "true"
   ## @param mailReceiver.extraEnvVarsCM Name of existing ConfigMap containing extra env vars
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param mailReceiver.extraEnvVarsSecret Name of existing Secret containing extra env vars
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param mailReceiver.extraVolumes Optionally specify extra list of additional volumes for mailReceiver container
   ##
   extraVolumes: []
@@ -858,7 +858,7 @@ mailReceiver:
   #       - name: portname
   #         containerPort: 1234
   #
-  initContainers: {}
+  initContainers: []
   ## @param mailReceiver.sidecars Add additional sidecar containers to the mailReceiver pods
   ## Example:
   ##
@@ -870,7 +870,7 @@ mailReceiver:
   #       - name: portname
   #         containerPort: 1234
   #
-  sidecars: {}
+  sidecars: []
   ## @param mailReceiver.podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ## Allowed values: soft, hard
@@ -933,10 +933,10 @@ certificates:
     chainSecret:
       # e.g.:
       # name: secret-key
-      name:
+      name: ""
       # e.g.:
       # key: secret-key
-      key:
+      key: ""
     certificateLocation: /etc/ssl/certs/ssl-cert-snakeoil.pem
     keyLocation: /etc/ssl/private/ssl-cert-snakeoil.key
     chainLocation: /etc/ssl/certs/mychain.pem

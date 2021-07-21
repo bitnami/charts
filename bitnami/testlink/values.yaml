@@ -8,25 +8,25 @@
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
 
 ## @section Common parameters
 
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
-kubeVersion:
+kubeVersion: ""
 ## @param nameOverride String to partially override testlink.fullname template (will maintain the release name)
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override testlink.fullname template
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param commonAnnotations Common annotations to add to all TestLink resources (sub-charts are not considered). Evaluated as a template
 ##
 commonAnnotations: {}
@@ -92,7 +92,7 @@ testlinkUsername: user
 ## Defaults to a random 10-character alphanumeric string if not set
 ## ref: https://github.com/bitnami/bitnami-docker-testlink#configuration
 ##
-testlinkPassword:
+testlinkPassword: ""
 ## @param testlinkEmail Admin email
 ## ref: https://github.com/bitnami/bitnami-docker-testlink#configuration
 ##
@@ -107,10 +107,10 @@ testlinkLanguage: en_US
 allowEmptyPassword: true
 ## @param command Override default container command (useful when using custom images)
 ##
-command:
+command: []
 ## @param args Override default container args (useful when using custom images)
 ##
-args:
+args: []
 ## @param updateStrategy.type Update strategy - only really applicable for deployments with RWO PVs attached
 ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
 ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
@@ -126,10 +126,10 @@ updateStrategy:
 extraEnvVars: []
 ## @param extraEnvVarsCM ConfigMap containing extra environment variables
 ##
-extraEnvVarsCM:
+extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Secret containing extra environment variables
 ##
-extraEnvVarsSecret:
+extraEnvVarsSecret: ""
 ## @param extraVolumes Extra volumes to add to the deployment. Requires setting `extraVolumeMounts`
 ##
 extraVolumes: []
@@ -148,7 +148,7 @@ sidecars: []
 tolerations: []
 ## @param existingSecret Use existing secret for the application password
 ##
-existingSecret:
+existingSecret: ""
 ## SMTP mail delivery configuration
 ## ref: https://github.com/bitnami/bitnami-docker-testlink/#smtp-configuration
 ## @param smtpHost SMTP host
@@ -157,11 +157,11 @@ existingSecret:
 ## @param smtpPassword SMTP password
 ## @param smtpProtocol SMTP Protocol (options: ssl, tls, nil)
 ##
-smtpHost:
-smtpPort:
-smtpUser:
-smtpPassword:
-smtpProtocol:
+smtpHost: ""
+smtpPort: ""
+smtpUser: ""
+smtpPassword: ""
+smtpProtocol: ""
 ## @param containerPorts [object] Container ports
 ##
 containerPorts:
@@ -186,7 +186,7 @@ persistence:
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##   GKE, AWS & OpenStack)
   ##
-  storageClass:
+  storageClass: ""
   ## @param persistence.accessMode PVC Access Mode for TestLink volume
   ## Requires persistence.enabled: true
   ## If defined, PVC must be created manually before volume will be bound
@@ -199,14 +199,14 @@ persistence:
   ## Requires persistence.enabled: true
   ## If defined, PVC must be created manually before volume will be bound
   ##
-  existingClaim:
+  existingClaim: ""
   ## @param persistence.hostPath Host mount path for TestLink volume
   ## If defined, the testlink-data volume will mount to the specified hostPath
   ## Requires persistence.enabled: true
   ## Requires persistence.existingClaim: nil|false
   ## Default: nil.
   ##
-  hostPath:
+  hostPath: ""
 ## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
@@ -311,7 +311,7 @@ customLivenessProbe: {}
 customReadinessProbe: {}
 ## @param lifecycleHooks Lifecycle hooks for the container to automate configuration before or after startup
 ##
-lifecycleHooks:
+lifecycleHooks: {}
 ## @param podAnnotations Pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
@@ -338,7 +338,7 @@ service:
   httpsPort: 443
   ## @param service.clusterIP Service cluster IP
   ##
-  clusterIP:
+  clusterIP: ""
   ## @param service.loadBalancerSourceRanges Control hosts connecting to "LoadBalancer" only
   ## loadBalancerSourceRanges:
   ##   - 0.0.0.0/0
@@ -347,7 +347,7 @@ service:
   ## @param service.loadBalancerIP Load balancer IP for the TestLink Service (optional, cloud specific)
   ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
   ##
-  loadBalancerIP:
+  loadBalancerIP: ""
   ## @param service.nodePorts.http Kubernetes HTTP node port
   ## @param service.nodePorts.https Kubernetes HTTPS node port
   ## nodePorts:
@@ -392,7 +392,7 @@ ingress:
   ##   path: /
   ##   pathType: ImplementationSpecific
   ##
-  hosts:
+  hosts: []
   ## @param ingress.tls The tls configuration for the ingress
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
   ## tls:
@@ -400,7 +400,7 @@ ingress:
   ##     - testlink.local
   ##   secretName: testlink.local-tls
   ##
-  tls:
+  tls: []
   ## @param ingress.secrets If you're providing your own certificates, please use this to add the certificates as secrets
   ## key and certificate should start with -----BEGIN CERTIFICATE----- or
   ## -----BEGIN RSA PRIVATE KEY-----
@@ -415,10 +415,10 @@ ingress:
   ##   key:
   ##   certificate:
   ##
-  secrets:
+  secrets: []
   ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
   ##
-  apiVersion:
+  apiVersion: ""
   ## @param ingress.path Ingress path
   ##
   path: /
@@ -472,7 +472,7 @@ mariadb:
       ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
       ##   GKE, AWS & OpenStack)
       ##
-      storageClass:
+      storageClass: ""
       ## @param mariadb.primary.persistence.accessModes Database Persistent Volume Access Modes
       ##
       accessModes:
@@ -482,16 +482,16 @@ mariadb:
       size: 8Gi
       ## @param mariadb.primary.persistence.hostPath Set path in case you want to use local host path volumes (not recommended in production)
       ##
-      hostPath:
+      hostPath: ""
       ## @param mariadb.primary.persistence.existingClaim Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas
       ##
-      existingClaim:
+      existingClaim: ""
 ## External database configuration
 ##
 externalDatabase:
   ## @param externalDatabase.host Host of the existing database
   ##
-  host:
+  host: ""
   ## @param externalDatabase.port Port of the existing database
   ##
   port: 3306
@@ -500,7 +500,7 @@ externalDatabase:
   user: bn_testlink
   ## @param externalDatabase.password Password for the above username
   ##
-  password:
+  password: ""
   ## @param externalDatabase.database Name of the existing database
   ##
   database: bitnami_testlink
@@ -606,8 +606,8 @@ certificates:
   customCertificate:
     certificateSecret: ""
     chainSecret:
-      name:
-      key:
+      name: ""
+      key: ""
     certificateLocation: /etc/ssl/certs/ssl-cert-snakeoil.pem
     keyLocation: /etc/ssl/private/ssl-cert-snakeoil.key
     chainLocation: /etc/ssl/certs/mychain.pem
@@ -616,22 +616,22 @@ certificates:
   customCAs: []
   ## @param certificates.command Override default container command (useful when using custom images)
   ##
-  command:
+  command: []
   ## @param certificates.args Override default container args (useful when using custom images)
   ## e.g:
   ## - secret: custom-CA
   ## - secret: more-custom-CAs
   ##
-  args:
+  args: []
   ## @param certificates.extraEnvVars Container sidecar extra environment variables (eg proxy)
   ##
   extraEnvVars: []
   ## @param certificates.extraEnvVarsCM ConfigMap containing extra env vars
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param certificates.extraEnvVarsSecret Secret containing extra env vars (in case of sensitive data)
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param certificates.image.registry Container sidecar registry
   ## @param certificates.image.repository Container sidecar image repository
   ## @param certificates.image.tag Container sidecar image tag (immutable tags are recommended)

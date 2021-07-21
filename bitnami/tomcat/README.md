@@ -51,18 +51,18 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `nil` |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
 
 ### Common parameters
 
 | Name                | Description                                                                                  | Value           |
 | ------------------- | -------------------------------------------------------------------------------------------- | --------------- |
-| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                         | `nil`           |
-| `nameOverride`      | String to partially override common.names.fullname template (will maintain the release name) | `nil`           |
-| `fullnameOverride`  | String to fully override common.names.fullname template                                      | `nil`           |
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                         | `""`            |
+| `nameOverride`      | String to partially override common.names.fullname template (will maintain the release name) | `""`            |
+| `fullnameOverride`  | String to fully override common.names.fullname template                                      | `""`            |
 | `commonLabels`      | Add labels to all the deployed resources                                                     | `{}`            |
 | `commonAnnotations` | Add annotations to all the deployed resources                                                | `{}`            |
 | `clusterDomain`     | Kubernetes Cluster Domain                                                                    | `cluster.local` |
@@ -81,13 +81,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.debug`                 | Specify if debug logs should be enabled                              | `false`               |
 | `hostAliases`                 | Deployment pod host aliases                                          | `[]`                  |
 | `tomcatUsername`              | Tomcat admin user                                                    | `user`                |
-| `tomcatPassword`              | Tomcat admin password                                                | `nil`                 |
+| `tomcatPassword`              | Tomcat admin password                                                | `""`                  |
 | `tomcatAllowRemoteManagement` | Enable remote access to management interface                         | `0`                   |
 | `command`                     | Override default container command (useful when using custom images) | `[]`                  |
 | `args`                        | Override default container args (useful when using custom images)    | `[]`                  |
 | `extraEnvVars`                | Extra environment variables to be set on Tomcat container            | `[]`                  |
-| `extraEnvVarsCM`              | Name of existing ConfigMap containing extra environment variables    | `nil`                 |
-| `extraEnvVarsSecret`          | Name of existing Secret containing extra environment variables       | `nil`                 |
+| `extraEnvVarsCM`              | Name of existing ConfigMap containing extra environment variables    | `""`                  |
+| `extraEnvVarsSecret`          | Name of existing Secret containing extra environment variables       | `""`                  |
 
 
 ### Tomcat deployment parameters
@@ -136,15 +136,15 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraVolumes`                       | Optionally specify extra list of additional volumes for Tomcat pods in Deployment                 | `[]`            |
 | `extraVolumeClaimTemplates`          | Optionally specify extra list of additional volume claim templates for Tomcat pods in StatefulSet | `[]`            |
 | `extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for Tomcat container(s)                  | `[]`            |
-| `initContainers`                     | Add init containers to the Tomcat pods.                                                           | `{}`            |
-| `sidecars`                           | Add sidecars to the Tomcat pods.                                                                  | `{}`            |
+| `initContainers`                     | Add init containers to the Tomcat pods.                                                           | `[]`            |
+| `sidecars`                           | Add sidecars to the Tomcat pods.                                                                  | `[]`            |
 | `persistence.enabled`                | Enable persistence                                                                                | `true`          |
-| `persistence.storageClass`           | PVC Storage Class for Tomcat volume                                                               | `nil`           |
-| `persistence.annotations`            | Persistent Volume Claim annotations                                                               | `nil`           |
+| `persistence.storageClass`           | PVC Storage Class for Tomcat volume                                                               | `""`            |
+| `persistence.annotations`            | Persistent Volume Claim annotations                                                               | `{}`            |
 | `persistence.accessModes`            | PVC Access Modes for Tomcat volume                                                                | `[]`            |
 | `persistence.size`                   | PVC Storage Request for Tomcat volume                                                             | `8Gi`           |
-| `persistence.existingClaim`          | An Existing PVC name for Tomcat volume                                                            | `nil`           |
-| `persistence.selectorLabels`         | Selector labels to use in volume claim template in statefulset                                    | `nil`           |
+| `persistence.existingClaim`          | An Existing PVC name for Tomcat volume                                                            | `""`            |
+| `persistence.selectorLabels`         | Selector labels to use in volume claim template in statefulset                                    | `{}`            |
 
 
 ### Traffic Exposure parameters
@@ -154,7 +154,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.type`                  | Kubernetes Service type                                                                       | `LoadBalancer`           |
 | `service.port`                  | Service HTTP port                                                                             | `80`                     |
 | `service.nodePort`              | Kubernetes http node port                                                                     | `""`                     |
-| `service.loadBalancerIP`        | Port Use serviceLoadBalancerIP to request a specific static IP, otherwise leave blank         | `nil`                    |
+| `service.loadBalancerIP`        | Port Use serviceLoadBalancerIP to request a specific static IP, otherwise leave blank         | `""`                     |
 | `service.externalTrafficPolicy` | Enable client source IP preservation                                                          | `Cluster`                |
 | `service.annotations`           | Annotations for Tomcat service                                                                | `{}`                     |
 | `ingress.enabled`               | Enable ingress controller resource                                                            | `false`                  |
@@ -165,7 +165,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.extraHosts`            | The list of additional hostnames to be covered with this ingress record.                      | `[]`                     |
 | `ingress.extraTls`              | The tls configuration for additional hostnames to be covered with this ingress record.        | `[]`                     |
 | `ingress.secrets`               | If you're providing your own certificates, please use this to add the certificates as secrets | `[]`                     |
-| `ingress.apiVersion`            | Force Ingress API version (automatically detected if not set)                                 | `nil`                    |
+| `ingress.apiVersion`            | Force Ingress API version (automatically detected if not set)                                 | `""`                     |
 | `ingress.path`                  | Ingress path                                                                                  | `/`                      |
 | `ingress.pathType`              | Ingress path type                                                                             | `ImplementationSpecific` |
 

@@ -81,18 +81,18 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `nil` |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
 
 ### Common parameters
 
 | Name               | Description                                                                                  | Value           |
 | ------------------ | -------------------------------------------------------------------------------------------- | --------------- |
-| `kubeVersion`      | Force target Kubernetes version (using Helm capabilities if not set)                         | `nil`           |
-| `nameOverride`     | String to partially override common.names.fullname template (will maintain the release name) | `nil`           |
-| `fullnameOverride` | String to fully override common.names.fullname template                                      | `nil`           |
+| `kubeVersion`      | Force target Kubernetes version (using Helm capabilities if not set)                         | `""`            |
+| `nameOverride`     | String to partially override common.names.fullname template (will maintain the release name) | `""`            |
+| `fullnameOverride` | String to fully override common.names.fullname template                                      | `""`            |
 | `commonLabels`     | Add labels to all the deployed resources                                                     | `{}`            |
 | `clusterDomain`    | Kubernetes Cluster Domain                                                                    | `cluster.local` |
 
@@ -106,12 +106,12 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `image.tag`                   | Thanos image tag (immutable tags are recommended)                                         | `0.21.1-scratch-r2` |
 | `image.pullPolicy`            | Thanos image pull policy                                                                  | `IfNotPresent`      |
 | `image.pullSecrets`           | Specify docker-registry secret names as an array                                          | `[]`                |
-| `objstoreConfig`              | The [objstore configuration](https://thanos.io/storage.md/)                               | `nil`               |
-| `indexCacheConfig`            | The [index cache configuration](https://thanos.io/components/store.md/)                   | `nil`               |
-| `bucketCacheConfig`           | The [bucket cache configuration](https://thanos.io/components/store.md/)                  | `nil`               |
-| `existingObjstoreSecret`      | Secret with Objstore Configuration                                                        | `nil`               |
+| `objstoreConfig`              | The [objstore configuration](https://thanos.io/storage.md/)                               | `""`                |
+| `indexCacheConfig`            | The [index cache configuration](https://thanos.io/components/store.md/)                   | `""`                |
+| `bucketCacheConfig`           | The [bucket cache configuration](https://thanos.io/components/store.md/)                  | `""`                |
+| `existingObjstoreSecret`      | Secret with Objstore Configuration                                                        | `""`                |
 | `existingObjstoreSecretItems` | Optional item list for specifying a custom Secret key. If so, path should be objstore.yml | `[]`                |
-| `existingServiceAccount`      | Provide a common service account to be shared with all components                         | `nil`               |
+| `existingServiceAccount`      | Provide a common service account to be shared with all components                         | `""`                |
 
 
 ### Thanos Query parameters
@@ -122,15 +122,15 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `query.logLevel`                                          | Thanos Query log level                                                                                                    | `info`                   |
 | `query.logFormat`                                         | Thanos Query log format                                                                                                   | `logfmt`                 |
 | `query.serviceAccount.annotations`                        | Annotations for Thanos Query Service Account                                                                              | `{}`                     |
-| `query.serviceAccount.existingServiceAccount`             | Provide an existing service account for query                                                                             | `nil`                    |
+| `query.serviceAccount.existingServiceAccount`             | Provide an existing service account for query                                                                             | `""`                     |
 | `query.hostAliases`                                       | Deployment pod host aliases                                                                                               | `[]`                     |
 | `query.replicaLabel`                                      | Replica indicator(s) along which data is deduplicated                                                                     | `[]`                     |
 | `query.dnsDiscovery.enabled`                              | Enable store APIs discovery via DNS                                                                                       | `true`                   |
-| `query.dnsDiscovery.sidecarsService`                      | Sidecars service name to discover them using DNS discovery                                                                | `nil`                    |
-| `query.dnsDiscovery.sidecarsNamespace`                    | Sidecars namespace to discover them using DNS discovery                                                                   | `nil`                    |
+| `query.dnsDiscovery.sidecarsService`                      | Sidecars service name to discover them using DNS discovery                                                                | `""`                     |
+| `query.dnsDiscovery.sidecarsNamespace`                    | Sidecars namespace to discover them using DNS discovery                                                                   | `""`                     |
 | `query.stores`                                            | Statically configure store APIs to connect with Thanos Query                                                              | `[]`                     |
-| `query.sdConfig`                                          | Query Service Discovery Configuration                                                                                     | `nil`                    |
-| `query.existingSDConfigmap`                               | Name of existing ConfigMap with Ruler configuration                                                                       | `nil`                    |
+| `query.sdConfig`                                          | Query Service Discovery Configuration                                                                                     | `""`                     |
+| `query.existingSDConfigmap`                               | Name of existing ConfigMap with Ruler configuration                                                                       | `""`                     |
 | `query.extraContainers`                                   | Extra containers running as sidecars to Thanos query                                                                      | `[]`                     |
 | `query.extraEnv`                                          | Extra environment variables for Thanos query container                                                                    | `[]`                     |
 | `query.extraVolumes`                                      | Extra volumes to add to Thanos Query                                                                                      | `[]`                     |
@@ -174,37 +174,37 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `query.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                      | `1`                      |
 | `query.grpcTLS.server.secure`                             | Enable TLS for GRPC server                                                                                                | `false`                  |
 | `query.grpcTLS.server.autoGenerated`                      | Create self-signed TLS certificates. Currently only supports PEM certificates.                                            | `false`                  |
-| `query.grpcTLS.server.cert`                               | TLS Certificate for gRPC server, leave blank to disable TLS - ignored if existingSecret is provided                       | `nil`                    |
-| `query.grpcTLS.server.key`                                | TLS Key for the gRPC server, leave blank to disable TLS - ignored if existingSecret is provided                           | `nil`                    |
-| `query.grpcTLS.server.ca`                                 | TLS CA to verify clients against                                                                                          | `nil`                    |
+| `query.grpcTLS.server.cert`                               | TLS Certificate for gRPC server, leave blank to disable TLS - ignored if existingSecret is provided                       | `""`                     |
+| `query.grpcTLS.server.key`                                | TLS Key for the gRPC server, leave blank to disable TLS - ignored if existingSecret is provided                           | `""`                     |
+| `query.grpcTLS.server.ca`                                 | TLS CA to verify clients against                                                                                          | `""`                     |
 | `query.grpcTLS.server.existingSecret`                     | Existing secret containing your own TLS certificates.                                                                     | `{}`                     |
 | `query.grpcTLS.client.secure`                             | Use TLS when talking to the gRPC server                                                                                   | `false`                  |
 | `query.grpcTLS.client.autoGenerated`                      | Create self-signed TLS certificates. Currently only supports PEM certificates.                                            | `false`                  |
-| `query.grpcTLS.client.cert`                               | TLS Certificates to use to identify this client to the server - ignored if existingSecret is provided                     | `nil`                    |
-| `query.grpcTLS.client.key`                                | TLS Key for the client's certificate - ignored if existingSecret is provided                                              | `nil`                    |
-| `query.grpcTLS.client.ca`                                 | TLS CA Certificates to use to verify gRPC servers - ignored if existingSecret is provided                                 | `nil`                    |
-| `query.grpcTLS.client.servername`                         | Server name to verify the hostname on the returned gRPC certificates. See https://tools.ietf.org/html/rfc4366#section-3.1 | `nil`                    |
+| `query.grpcTLS.client.cert`                               | TLS Certificates to use to identify this client to the server - ignored if existingSecret is provided                     | `""`                     |
+| `query.grpcTLS.client.key`                                | TLS Key for the client's certificate - ignored if existingSecret is provided                                              | `""`                     |
+| `query.grpcTLS.client.ca`                                 | TLS CA Certificates to use to verify gRPC servers - ignored if existingSecret is provided                                 | `""`                     |
+| `query.grpcTLS.client.servername`                         | Server name to verify the hostname on the returned gRPC certificates. See https://tools.ietf.org/html/rfc4366#section-3.1 | `""`                     |
 | `query.grpcTLS.client.existingSecret`                     | Existing secret containing your own TLS certificates.                                                                     | `{}`                     |
 | `query.service.type`                                      | Kubernetes service type                                                                                                   | `ClusterIP`              |
-| `query.service.clusterIP`                                 | Thanos Query service clusterIP IP                                                                                         | `nil`                    |
+| `query.service.clusterIP`                                 | Thanos Query service clusterIP IP                                                                                         | `""`                     |
 | `query.service.http.port`                                 | Service HTTP port                                                                                                         | `9090`                   |
-| `query.service.http.nodePort`                             | Service HTTP node port                                                                                                    | `nil`                    |
+| `query.service.http.nodePort`                             | Service HTTP node port                                                                                                    | `""`                     |
 | `query.service.targetPort`                                | Service targetPort override                                                                                               | `http`                   |
 | `query.service.grpc.port`                                 | Service GRPC port                                                                                                         | `10901`                  |
-| `query.service.grpc.nodePort`                             | Service GRPC node port                                                                                                    | `nil`                    |
-| `query.service.loadBalancerIP`                            | Load balancer IP if service type is `LoadBalancer`                                                                        | `nil`                    |
+| `query.service.grpc.nodePort`                             | Service GRPC node port                                                                                                    | `""`                     |
+| `query.service.loadBalancerIP`                            | Load balancer IP if service type is `LoadBalancer`                                                                        | `""`                     |
 | `query.service.loadBalancerSourceRanges`                  | Address that are allowed when service is LoadBalancer                                                                     | `[]`                     |
 | `query.service.externalTrafficPolicy`                     | Thanos Query service externalTrafficPolicy                                                                                | `Cluster`                |
 | `query.service.annotations`                               | Annotations for Thanos Query service                                                                                      | `{}`                     |
 | `query.service.labelSelectorsOverride`                    | Selector for Thanos query service                                                                                         | `{}`                     |
 | `query.autoscaling.enabled`                               | Enable autoscaling for Thanos Query                                                                                       | `false`                  |
-| `query.autoscaling.minReplicas`                           | Minimum number of Thanos Query replicas                                                                                   | `nil`                    |
-| `query.autoscaling.maxReplicas`                           | Maximum number of Thanos Query replicas                                                                                   | `nil`                    |
-| `query.autoscaling.targetCPU`                             | Target CPU utilization percentage                                                                                         | `nil`                    |
-| `query.autoscaling.targetMemory`                          | Target Memory utilization percentage                                                                                      | `nil`                    |
+| `query.autoscaling.minReplicas`                           | Minimum number of Thanos Query replicas                                                                                   | `""`                     |
+| `query.autoscaling.maxReplicas`                           | Maximum number of Thanos Query replicas                                                                                   | `""`                     |
+| `query.autoscaling.targetCPU`                             | Target CPU utilization percentage                                                                                         | `""`                     |
+| `query.autoscaling.targetMemory`                          | Target Memory utilization percentage                                                                                      | `""`                     |
 | `query.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                           | `false`                  |
 | `query.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                            | `1`                      |
-| `query.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                                            | `nil`                    |
+| `query.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                                            | `""`                     |
 | `query.ingress.enabled`                                   | Enable ingress controller resource                                                                                        | `false`                  |
 | `query.ingress.certManager`                               | Set this to true in order to add the corresponding annotations for cert-manager                                           | `false`                  |
 | `query.ingress.hostname`                                  | Default host for the ingress resource                                                                                     | `thanos.local`           |
@@ -213,7 +213,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `query.ingress.extraTls`                                  | The tls configuration for additional hostnames to be covered with this ingress record.                                    | `[]`                     |
 | `query.ingress.secrets`                                   | If you're providing your own certificates, please use this to add the certificates as secrets                             | `[]`                     |
 | `query.ingress.tls`                                       | Create ingress TLS section                                                                                                | `false`                  |
-| `query.ingress.apiVersion`                                | Force Ingress API version (automatically detected if not set)                                                             | `nil`                    |
+| `query.ingress.apiVersion`                                | Force Ingress API version (automatically detected if not set)                                                             | `""`                     |
 | `query.ingress.path`                                      | Ingress path                                                                                                              | `/`                      |
 | `query.ingress.pathType`                                  | Ingress path type                                                                                                         | `ImplementationSpecific` |
 | `query.ingress.grpc.enabled`                              | Enable ingress controller resource (GRPC)                                                                                 | `false`                  |
@@ -223,7 +223,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `query.ingress.grpc.extraHosts`                           | The list of additional hostnames to be covered with this ingress record.                                                  | `[]`                     |
 | `query.ingress.grpc.extraTls`                             | The tls configuration for additional hostnames to be covered with this ingress record.                                    | `[]`                     |
 | `query.ingress.grpc.secrets`                              | If you're providing your own certificates, please use this to add the certificates as secrets                             | `[]`                     |
-| `query.ingress.grpc.apiVersion`                           | Override API Version (automatically detected if not set)                                                                  | `nil`                    |
+| `query.ingress.grpc.apiVersion`                           | Override API Version (automatically detected if not set)                                                                  | `""`                     |
 | `query.ingress.grpc.path`                                 | Ingress Path                                                                                                              | `/`                      |
 | `query.ingress.grpc.pathType`                             | Ingress Path type                                                                                                         | `ImplementationSpecific` |
 
@@ -236,15 +236,15 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `queryFrontend.logLevel`                                          | Thanos Query Frontend log level                                                                                               | `info`                   |
 | `queryFrontend.logFormat`                                         | Thanos Query Frontend log format                                                                                              | `logfmt`                 |
 | `queryFrontend.serviceAccount.annotations`                        | Annotations for Thanos Query Frontend Service Account                                                                         | `{}`                     |
-| `queryFrontend.serviceAccount.existingServiceAccount`             | Provide an existing service account for Query Frontend                                                                        | `nil`                    |
+| `queryFrontend.serviceAccount.existingServiceAccount`             | Provide an existing service account for Query Frontend                                                                        | `""`                     |
 | `queryFrontend.hostAliases`                                       | Deployment pod host aliases                                                                                                   | `[]`                     |
 | `queryFrontend.extraContainers`                                   | Extra containers running as sidecars to Thanos Query Frontend container                                                       | `[]`                     |
 | `queryFrontend.extraEnv`                                          | Extra environment variables for Thanos Query Frontend container                                                               | `[]`                     |
 | `queryFrontend.extraVolumes`                                      | Extra volumes to add to Thanos Query Frontend                                                                                 | `[]`                     |
 | `queryFrontend.extraVolumeMounts`                                 | Extra volume mounts to add to the query-frontend container                                                                    | `[]`                     |
 | `queryFrontend.extraFlags`                                        | Extra Flags to passed to Thanos Query Frontend                                                                                | `[]`                     |
-| `queryFrontend.config`                                            | Thanos Query Frontend cache configuration                                                                                     | `nil`                    |
-| `queryFrontend.existingConfigmap`                                 | Name of existing ConfigMap with Thanos Query Frontend cache configuration                                                     | `nil`                    |
+| `queryFrontend.config`                                            | Thanos Query Frontend cache configuration                                                                                     | `""`                     |
+| `queryFrontend.existingConfigmap`                                 | Name of existing ConfigMap with Thanos Query Frontend cache configuration                                                     | `""`                     |
 | `queryFrontend.replicaCount`                                      | Number of Thanos Query Frontend replicas to deploy                                                                            | `1`                      |
 | `queryFrontend.strategyType`                                      | Deployment Strategy Type, can be set to RollingUpdate or Recreate by default                                                  | `RollingUpdate`          |
 | `queryFrontend.podAffinityPreset`                                 | Thanos Query Frontend pod affinity preset                                                                                     | `""`                     |
@@ -282,23 +282,23 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `queryFrontend.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                          | `6`                      |
 | `queryFrontend.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                          | `1`                      |
 | `queryFrontend.service.type`                                      | Kubernetes service type                                                                                                       | `ClusterIP`              |
-| `queryFrontend.service.clusterIP`                                 | Thanos Query Frontend service clusterIP IP                                                                                    | `nil`                    |
+| `queryFrontend.service.clusterIP`                                 | Thanos Query Frontend service clusterIP IP                                                                                    | `""`                     |
 | `queryFrontend.service.http.port`                                 | Service HTTP port                                                                                                             | `9090`                   |
-| `queryFrontend.service.http.nodePort`                             | Service HTTP node port                                                                                                        | `nil`                    |
+| `queryFrontend.service.http.nodePort`                             | Service HTTP node port                                                                                                        | `""`                     |
 | `queryFrontend.service.targetPort`                                | Service targetPort override                                                                                                   | `http`                   |
-| `queryFrontend.service.loadBalancerIP`                            | Load balancer IP if service type is `LoadBalancer`                                                                            | `nil`                    |
+| `queryFrontend.service.loadBalancerIP`                            | Load balancer IP if service type is `LoadBalancer`                                                                            | `""`                     |
 | `queryFrontend.service.loadBalancerSourceRanges`                  | Address that are allowed when service is LoadBalancer                                                                         | `[]`                     |
 | `queryFrontend.service.externalTrafficPolicy`                     | Thanos Query Frontend service externalTrafficPolicy                                                                           | `Cluster`                |
 | `queryFrontend.service.annotations`                               | Annotations for Thanos Query Frontend service                                                                                 | `{}`                     |
 | `queryFrontend.service.labelSelectorsOverride`                    | Selector for Thanos query service                                                                                             | `{}`                     |
 | `queryFrontend.autoscaling.enabled`                               | Enable autoscaling for Thanos Query Frontend                                                                                  | `false`                  |
-| `queryFrontend.autoscaling.minReplicas`                           | Minimum number of Thanos Query Frontend replicas                                                                              | `nil`                    |
-| `queryFrontend.autoscaling.maxReplicas`                           | Maximum number of Thanos Query Frontend replicas                                                                              | `nil`                    |
-| `queryFrontend.autoscaling.targetCPU`                             | Target CPU utilization percentage                                                                                             | `nil`                    |
-| `queryFrontend.autoscaling.targetMemory`                          | Target Memory utilization percentage                                                                                          | `nil`                    |
+| `queryFrontend.autoscaling.minReplicas`                           | Minimum number of Thanos Query Frontend replicas                                                                              | `""`                     |
+| `queryFrontend.autoscaling.maxReplicas`                           | Maximum number of Thanos Query Frontend replicas                                                                              | `""`                     |
+| `queryFrontend.autoscaling.targetCPU`                             | Target CPU utilization percentage                                                                                             | `""`                     |
+| `queryFrontend.autoscaling.targetMemory`                          | Target Memory utilization percentage                                                                                          | `""`                     |
 | `queryFrontend.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                               | `false`                  |
 | `queryFrontend.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                | `1`                      |
-| `queryFrontend.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                                                | `nil`                    |
+| `queryFrontend.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                                                | `""`                     |
 | `queryFrontend.ingress.enabled`                                   | Enable ingress controller resource                                                                                            | `false`                  |
 | `queryFrontend.ingress.certManager`                               | Set this to true in order to add the corresponding annotations for cert-manager                                               | `false`                  |
 | `queryFrontend.ingress.hostname`                                  | Default host for the ingress resource                                                                                         | `thanos.local`           |
@@ -307,7 +307,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `queryFrontend.ingress.extraTls`                                  | The tls configuration for additional hostnames to be covered with this ingress record.                                        | `[]`                     |
 | `queryFrontend.ingress.secrets`                                   | If you're providing your own certificates, please use this to add the certificates as secrets                                 | `[]`                     |
 | `queryFrontend.ingress.tls`                                       | Create ingress TLS section                                                                                                    | `false`                  |
-| `queryFrontend.ingress.apiVersion`                                | Force Ingress API version (automatically detected if not set)                                                                 | `nil`                    |
+| `queryFrontend.ingress.apiVersion`                                | Force Ingress API version (automatically detected if not set)                                                                 | `""`                     |
 | `queryFrontend.ingress.path`                                      | Ingress path                                                                                                                  | `/`                      |
 | `queryFrontend.ingress.pathType`                                  | Ingress path type                                                                                                             | `ImplementationSpecific` |
 
@@ -320,7 +320,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `bucketweb.logLevel`                                          | Thanos Bucket Web log level                                                                                           | `info`                   |
 | `bucketweb.logFormat`                                         | Thanos Bucket Web log format                                                                                          | `logfmt`                 |
 | `bucketweb.serviceAccount.annotations`                        | Annotations for Thanos Bucket Web Service Account                                                                     | `{}`                     |
-| `bucketweb.serviceAccount.existingServiceAccount`             | Name for an existing Thanos Bucket Web Service Account                                                                | `nil`                    |
+| `bucketweb.serviceAccount.existingServiceAccount`             | Name for an existing Thanos Bucket Web Service Account                                                                | `""`                     |
 | `bucketweb.refresh`                                           | Refresh interval to download metadata from remote storage                                                             | `30m`                    |
 | `bucketweb.hostAliases`                                       | Deployment pod host aliases                                                                                           | `[]`                     |
 | `bucketweb.timeout`                                           | Timeout to download metadata from remote storage                                                                      | `5m`                     |
@@ -364,18 +364,18 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `bucketweb.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                  | `6`                      |
 | `bucketweb.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                  | `1`                      |
 | `bucketweb.service.type`                                      | Kubernetes service type                                                                                               | `ClusterIP`              |
-| `bucketweb.service.clusterIP`                                 | Thanos Bucket Web service clusterIP IP                                                                                | `nil`                    |
+| `bucketweb.service.clusterIP`                                 | Thanos Bucket Web service clusterIP IP                                                                                | `""`                     |
 | `bucketweb.service.http.port`                                 | Service HTTP port                                                                                                     | `8080`                   |
-| `bucketweb.service.http.nodePort`                             | Service HTTP node port                                                                                                | `nil`                    |
+| `bucketweb.service.http.nodePort`                             | Service HTTP node port                                                                                                | `""`                     |
 | `bucketweb.service.targetPort`                                | Service targetPort override                                                                                           | `http`                   |
-| `bucketweb.service.loadBalancerIP`                            | Load balancer IP if service type is `LoadBalancer`                                                                    | `nil`                    |
+| `bucketweb.service.loadBalancerIP`                            | Load balancer IP if service type is `LoadBalancer`                                                                    | `""`                     |
 | `bucketweb.service.loadBalancerSourceRanges`                  | Address that are allowed when service is LoadBalancer                                                                 | `[]`                     |
 | `bucketweb.service.externalTrafficPolicy`                     | Thanos Bucket Web service externalTrafficPolicy                                                                       | `Cluster`                |
 | `bucketweb.service.annotations`                               | Annotations for Thanos Bucket Web service                                                                             | `{}`                     |
 | `bucketweb.service.labelSelectorsOverride`                    | Selector for Thanos query service                                                                                     | `{}`                     |
 | `bucketweb.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                       | `false`                  |
 | `bucketweb.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                        | `1`                      |
-| `bucketweb.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                                        | `nil`                    |
+| `bucketweb.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                                        | `""`                     |
 | `bucketweb.ingress.enabled`                                   | Enable ingress controller resource                                                                                    | `false`                  |
 | `bucketweb.ingress.certManager`                               | Add annotations for cert-manager                                                                                      | `false`                  |
 | `bucketweb.ingress.hostname`                                  | Default host for the ingress resource                                                                                 | `thanos-bucketweb.local` |
@@ -384,7 +384,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `bucketweb.ingress.extraTls`                                  | The tls configuration for additional hostnames to be covered with this ingress record.                                | `[]`                     |
 | `bucketweb.ingress.secrets`                                   | If you're providing your own certificates, please use this to add the certificates as secrets                         | `[]`                     |
 | `bucketweb.ingress.tls`                                       | Create ingress TLS section                                                                                            | `false`                  |
-| `bucketweb.ingress.apiVersion`                                | Force Ingress API version (automatically detected if not set)                                                         | `nil`                    |
+| `bucketweb.ingress.apiVersion`                                | Force Ingress API version (automatically detected if not set)                                                         | `""`                     |
 | `bucketweb.ingress.path`                                      | Ingress path                                                                                                          | `/`                      |
 | `bucketweb.ingress.pathType`                                  | Ingress path type                                                                                                     | `ImplementationSpecific` |
 
@@ -397,7 +397,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `compactor.logLevel`                                          | Thanos Compactor log level                                                                                           | `info`          |
 | `compactor.logFormat`                                         | Thanos Compactor log format                                                                                          | `logfmt`        |
 | `compactor.serviceAccount.annotations`                        | Annotations for Thanos Compactor Service Account                                                                     | `{}`            |
-| `compactor.serviceAccount.existingServiceAccount`             | Name for an existing Thanos Compactor Service Account                                                                | `nil`           |
+| `compactor.serviceAccount.existingServiceAccount`             | Name for an existing Thanos Compactor Service Account                                                                | `""`            |
 | `compactor.hostAliases`                                       | Deployment pod host aliases                                                                                          | `[]`            |
 | `compactor.retentionResolutionRaw`                            | Resolution and Retention flag                                                                                        | `30d`           |
 | `compactor.retentionResolution5m`                             | Resolution and Retention flag                                                                                        | `30d`           |
@@ -441,17 +441,17 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `compactor.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                 | `6`             |
 | `compactor.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                 | `1`             |
 | `compactor.service.type`                                      | Kubernetes service type                                                                                              | `ClusterIP`     |
-| `compactor.service.clusterIP`                                 | Thanos Compactor service clusterIP IP                                                                                | `nil`           |
+| `compactor.service.clusterIP`                                 | Thanos Compactor service clusterIP IP                                                                                | `""`            |
 | `compactor.service.http.port`                                 | Service HTTP port                                                                                                    | `9090`          |
-| `compactor.service.http.nodePort`                             | Service HTTP node port                                                                                               | `nil`           |
-| `compactor.service.loadBalancerIP`                            | Load balancer IP if service type is `LoadBalancer`                                                                   | `nil`           |
+| `compactor.service.http.nodePort`                             | Service HTTP node port                                                                                               | `""`            |
+| `compactor.service.loadBalancerIP`                            | Load balancer IP if service type is `LoadBalancer`                                                                   | `""`            |
 | `compactor.service.loadBalancerSourceRanges`                  | Addresses that are allowed when service is LoadBalancer                                                              | `[]`            |
 | `compactor.service.externalTrafficPolicy`                     | Thanos Compactor service externalTrafficPolicy                                                                       | `Cluster`       |
 | `compactor.service.annotations`                               | Annotations for Thanos Compactor service                                                                             | `{}`            |
 | `compactor.service.labelSelectorsOverride`                    | Selector for Thanos query service                                                                                    | `{}`            |
 | `compactor.persistence.enabled`                               | Enable data persistence                                                                                              | `true`          |
-| `compactor.persistence.existingClaim`                         | Use a existing PVC which must be created manually before bound                                                       | `nil`           |
-| `compactor.persistence.storageClass`                          | Specify the `storageClass` used to provision the volume                                                              | `nil`           |
+| `compactor.persistence.existingClaim`                         | Use a existing PVC which must be created manually before bound                                                       | `""`            |
+| `compactor.persistence.storageClass`                          | Specify the `storageClass` used to provision the volume                                                              | `""`            |
 | `compactor.persistence.accessModes`                           | Access modes of data volume                                                                                          | `[]`            |
 | `compactor.persistence.size`                                  | Size of data volume                                                                                                  | `8Gi`           |
 
@@ -464,19 +464,19 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `storegateway.logLevel`                                          | Thanos Store Gateway log level                                                                                              | `info`          |
 | `storegateway.logFormat`                                         | Thanos Store Gateway log format                                                                                             | `logfmt`        |
 | `storegateway.serviceAccount.annotations`                        | Annotations for Thanos Store Gateway Service Account                                                                        | `{}`            |
-| `storegateway.serviceAccount.existingServiceAccount`             | Name for an existing Thanos Store Gateway Service Account                                                                   | `nil`           |
+| `storegateway.serviceAccount.existingServiceAccount`             | Name for an existing Thanos Store Gateway Service Account                                                                   | `""`            |
 | `storegateway.hostAliases`                                       | Deployment pod host aliases                                                                                                 | `[]`            |
 | `storegateway.extraEnv`                                          | Extra environment variables for Thanos Store Gateway container                                                              | `[]`            |
 | `storegateway.extraVolumes`                                      | Extra volumes to add to Thanos Store Gateway                                                                                | `[]`            |
 | `storegateway.extraVolumeMounts`                                 | Extra volume mounts to add to the storegateway container                                                                    | `[]`            |
 | `storegateway.extraFlags`                                        | Extra Flags to passed to Thanos Store Gateway                                                                               | `[]`            |
-| `storegateway.config`                                            | Thanos Store Gateway cache configuration                                                                                    | `nil`           |
-| `storegateway.existingConfigmap`                                 | Name of existing ConfigMap with Thanos Store Gateway cache configuration                                                    | `nil`           |
+| `storegateway.config`                                            | Thanos Store Gateway cache configuration                                                                                    | `""`            |
+| `storegateway.existingConfigmap`                                 | Name of existing ConfigMap with Thanos Store Gateway cache configuration                                                    | `""`            |
 | `storegateway.grpc.tls.enabled`                                  | Enable TLS encryption in the GRPC server                                                                                    | `false`         |
 | `storegateway.grpc.tls.autoGenerated`                            | Create self-signed TLS certificates. Currently only supports PEM certificates.                                              | `false`         |
-| `storegateway.grpc.tls.cert`                                     | TLS Certificate for gRPC server, leave blank to disable TLS - ignored if existingSecret is provided                         | `nil`           |
-| `storegateway.grpc.tls.key`                                      | TLS Key for gRPC server, leave blank to disable TLS - ignored if existingSecret is provided                                 | `nil`           |
-| `storegateway.grpc.tls.ca`                                       | TLS CA to verify clients against - ignored if existingSecret is provided                                                    | `nil`           |
+| `storegateway.grpc.tls.cert`                                     | TLS Certificate for gRPC server, leave blank to disable TLS - ignored if existingSecret is provided                         | `""`            |
+| `storegateway.grpc.tls.key`                                      | TLS Key for gRPC server, leave blank to disable TLS - ignored if existingSecret is provided                                 | `""`            |
+| `storegateway.grpc.tls.ca`                                       | TLS CA to verify clients against - ignored if existingSecret is provided                                                    | `""`            |
 | `storegateway.grpc.tls.existingSecret`                           | Existing secret containing your own TLS certificates.                                                                       | `{}`            |
 | `storegateway.replicaCount`                                      | Number of Thanos Store Gateway replicas to deploy                                                                           | `1`             |
 | `storegateway.updateStrategyType`                                | Statefulset Update Strategy Type, can be set to RollingUpdate or OnDelete by default                                        | `RollingUpdate` |
@@ -514,30 +514,30 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `storegateway.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                        | `6`             |
 | `storegateway.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                        | `1`             |
 | `storegateway.service.type`                                      | Kubernetes service type                                                                                                     | `ClusterIP`     |
-| `storegateway.service.clusterIP`                                 | Thanos Store Gateway service clusterIP IP                                                                                   | `nil`           |
+| `storegateway.service.clusterIP`                                 | Thanos Store Gateway service clusterIP IP                                                                                   | `""`            |
 | `storegateway.service.http.port`                                 | Service HTTP port                                                                                                           | `9090`          |
-| `storegateway.service.http.nodePort`                             | Service HTTP node port                                                                                                      | `nil`           |
+| `storegateway.service.http.nodePort`                             | Service HTTP node port                                                                                                      | `""`            |
 | `storegateway.service.grpc.port`                                 | Service GRPC port                                                                                                           | `10901`         |
-| `storegateway.service.grpc.nodePort`                             | Service GRPC node port                                                                                                      | `nil`           |
-| `storegateway.service.loadBalancerIP`                            | Load balancer IP if service type is `LoadBalancer`                                                                          | `nil`           |
+| `storegateway.service.grpc.nodePort`                             | Service GRPC node port                                                                                                      | `""`            |
+| `storegateway.service.loadBalancerIP`                            | Load balancer IP if service type is `LoadBalancer`                                                                          | `""`            |
 | `storegateway.service.loadBalancerSourceRanges`                  | Addresses that are allowed when service is LoadBalancer                                                                     | `[]`            |
 | `storegateway.service.externalTrafficPolicy`                     | Thanos Store Gateway service externalTrafficPolicy                                                                          | `Cluster`       |
 | `storegateway.service.annotations`                               | Annotations for Thanos Store Gateway service                                                                                | `{}`            |
 | `storegateway.service.labelSelectorsOverride`                    | Selector for Thanos query service                                                                                           | `{}`            |
 | `storegateway.service.additionalHeadless`                        | Additional Headless service                                                                                                 | `false`         |
 | `storegateway.persistence.enabled`                               | Enable data persistence                                                                                                     | `true`          |
-| `storegateway.persistence.existingClaim`                         | Use a existing PVC which must be created manually before bound                                                              | `nil`           |
-| `storegateway.persistence.storageClass`                          | Specify the `storageClass` used to provision the volume                                                                     | `nil`           |
+| `storegateway.persistence.existingClaim`                         | Use a existing PVC which must be created manually before bound                                                              | `""`            |
+| `storegateway.persistence.storageClass`                          | Specify the `storageClass` used to provision the volume                                                                     | `""`            |
 | `storegateway.persistence.accessModes`                           | Access modes of data volume                                                                                                 | `[]`            |
 | `storegateway.persistence.size`                                  | Size of data volume                                                                                                         | `8Gi`           |
 | `storegateway.autoscaling.enabled`                               | Enable autoscaling for Thanos Store Gateway                                                                                 | `false`         |
-| `storegateway.autoscaling.minReplicas`                           | Minimum number of Thanos Store Gateway replicas                                                                             | `nil`           |
-| `storegateway.autoscaling.maxReplicas`                           | Maximum number of Thanos Store Gateway replicas                                                                             | `nil`           |
-| `storegateway.autoscaling.targetCPU`                             | Target CPU utilization percentage                                                                                           | `nil`           |
-| `storegateway.autoscaling.targetMemory`                          | Target Memory utilization percentage                                                                                        | `nil`           |
+| `storegateway.autoscaling.minReplicas`                           | Minimum number of Thanos Store Gateway replicas                                                                             | `""`            |
+| `storegateway.autoscaling.maxReplicas`                           | Maximum number of Thanos Store Gateway replicas                                                                             | `""`            |
+| `storegateway.autoscaling.targetCPU`                             | Target CPU utilization percentage                                                                                           | `""`            |
+| `storegateway.autoscaling.targetMemory`                          | Target Memory utilization percentage                                                                                        | `""`            |
 | `storegateway.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                             | `false`         |
 | `storegateway.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                              | `1`             |
-| `storegateway.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                                              | `nil`           |
+| `storegateway.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                                              | `""`            |
 
 
 ### Thanos Ruler parameters
@@ -549,20 +549,20 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `ruler.logFormat`                                         | Thanos Ruler log format                                                                                      | `logfmt`                 |
 | `ruler.replicaLabel`                                      | Label to treat as a replica indicator along which data is deduplicated                                       | `replica`                |
 | `ruler.serviceAccount.annotations`                        | Annotations for Thanos Ruler Service Account                                                                 | `{}`                     |
-| `ruler.serviceAccount.existingServiceAccount`             | Name for an existing Thanos Ruler Service Account                                                            | `nil`                    |
+| `ruler.serviceAccount.existingServiceAccount`             | Name for an existing Thanos Ruler Service Account                                                            | `""`                     |
 | `ruler.hostAliases`                                       | Add deployment host aliases                                                                                  | `[]`                     |
 | `ruler.dnsDiscovery.enabled`                              | Dynamically configure Query APIs using DNS discovery                                                         | `true`                   |
 | `ruler.alertmanagers`                                     | Alermanager URLs array                                                                                       | `[]`                     |
-| `ruler.alertmanagersConfig`                               | Alertmanagers Configuration                                                                                  | `nil`                    |
+| `ruler.alertmanagersConfig`                               | Alertmanagers Configuration                                                                                  | `""`                     |
 | `ruler.evalInterval`                                      | The default evaluation interval to use                                                                       | `1m`                     |
-| `ruler.clusterName`                                       | Used to set the 'ruler_cluster' label                                                                        | `nil`                    |
+| `ruler.clusterName`                                       | Used to set the 'ruler_cluster' label                                                                        | `""`                     |
 | `ruler.extraContainers`                                   | Extra containers running as sidecars to Thanos Ruler container                                               | `[]`                     |
 | `ruler.extraEnv`                                          | Extra environment variables for Thanos Ruler container                                                       | `[]`                     |
 | `ruler.extraVolumes`                                      | Extra volumes to add to Thanos Ruler                                                                         | `[]`                     |
 | `ruler.extraVolumeMounts`                                 | Extra volume mounts to add to the ruler container                                                            | `[]`                     |
 | `ruler.extraFlags`                                        | Extra Flags to passed to Thanos Ruler                                                                        | `[]`                     |
-| `ruler.config`                                            | Ruler configuration                                                                                          | `nil`                    |
-| `ruler.existingConfigmap`                                 | Name of existing ConfigMap with Ruler configuration                                                          | `nil`                    |
+| `ruler.config`                                            | Ruler configuration                                                                                          | `""`                     |
+| `ruler.existingConfigmap`                                 | Name of existing ConfigMap with Ruler configuration                                                          | `""`                     |
 | `ruler.replicaCount`                                      | Number of Thanos Ruler replicas to deploy                                                                    | `1`                      |
 | `ruler.updateStrategyType`                                | Statefulset Update Strategy Type                                                                             | `RollingUpdate`          |
 | `ruler.podManagementPolicy`                               | Statefulset Pod Management Policy Type                                                                       | `OrderedReady`           |
@@ -599,34 +599,34 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `ruler.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                         | `6`                      |
 | `ruler.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                         | `1`                      |
 | `ruler.service.type`                                      | Kubernetes service type                                                                                      | `ClusterIP`              |
-| `ruler.service.clusterIP`                                 | Thanos Ruler service clusterIP IP                                                                            | `nil`                    |
+| `ruler.service.clusterIP`                                 | Thanos Ruler service clusterIP IP                                                                            | `""`                     |
 | `ruler.service.http.port`                                 | Service HTTP port                                                                                            | `9090`                   |
-| `ruler.service.http.nodePort`                             | Service HTTP node port                                                                                       | `nil`                    |
+| `ruler.service.http.nodePort`                             | Service HTTP node port                                                                                       | `""`                     |
 | `ruler.service.targetPort`                                | Service targetPort override                                                                                  | `http`                   |
 | `ruler.service.grpc.port`                                 | Service GRPC port                                                                                            | `10901`                  |
-| `ruler.service.grpc.nodePort`                             | Service GRPC node port                                                                                       | `nil`                    |
-| `ruler.service.loadBalancerIP`                            | Load balancer IP if service type is `LoadBalancer`                                                           | `nil`                    |
+| `ruler.service.grpc.nodePort`                             | Service GRPC node port                                                                                       | `""`                     |
+| `ruler.service.loadBalancerIP`                            | Load balancer IP if service type is `LoadBalancer`                                                           | `""`                     |
 | `ruler.service.loadBalancerSourceRanges`                  | Address that are allowed when service is LoadBalancer                                                        | `[]`                     |
 | `ruler.service.externalTrafficPolicy`                     | Thanos Ruler service externalTrafficPolicy                                                                   | `Cluster`                |
 | `ruler.service.annotations`                               | Annotations for Thanos Ruler service                                                                         | `{}`                     |
 | `ruler.service.labelSelectorsOverride`                    | Selector for Thanos query service                                                                            | `{}`                     |
 | `ruler.service.additionalHeadless`                        | Additional Headless service                                                                                  | `false`                  |
 | `ruler.persistence.enabled`                               | Enable data persistence                                                                                      | `true`                   |
-| `ruler.persistence.existingClaim`                         | Use a existing PVC which must be created manually before bound                                               | `nil`                    |
-| `ruler.persistence.storageClass`                          | Specify the `storageClass` used to provision the volume                                                      | `nil`                    |
+| `ruler.persistence.existingClaim`                         | Use a existing PVC which must be created manually before bound                                               | `""`                     |
+| `ruler.persistence.storageClass`                          | Specify the `storageClass` used to provision the volume                                                      | `""`                     |
 | `ruler.persistence.accessModes`                           | Access modes of data volume                                                                                  | `[]`                     |
 | `ruler.persistence.size`                                  | Size of data volume                                                                                          | `8Gi`                    |
 | `ruler.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                              | `false`                  |
 | `ruler.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                               | `1`                      |
-| `ruler.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                               | `nil`                    |
+| `ruler.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                               | `""`                     |
 | `ruler.ingress.enabled`                                   | Enable ingress controller resource                                                                           | `false`                  |
 | `ruler.ingress.certManager`                               | Add annotations for cert-manager                                                                             | `false`                  |
 | `ruler.ingress.hostname`                                  | Default host for the ingress resource                                                                        | `thanos-ruler.local`     |
 | `ruler.ingress.annotations`                               | Ingress annotations                                                                                          | `{}`                     |
-| `ruler.ingress.extraHosts`                                | The list of additional hostnames to be covered with this ingress record.                                     | `nil`                    |
-| `ruler.ingress.extraTls`                                  | The tls configuration for additional hostnames to be covered with this ingress record.                       | `nil`                    |
+| `ruler.ingress.extraHosts`                                | The list of additional hostnames to be covered with this ingress record.                                     | `[]`                     |
+| `ruler.ingress.extraTls`                                  | The tls configuration for additional hostnames to be covered with this ingress record.                       | `[]`                     |
 | `ruler.ingress.secrets`                                   | If you're providing your own certificates, please use this to add the certificates as secrets                | `[]`                     |
-| `ruler.ingress.apiVersion`                                | Force Ingress API version (automatically detected if not set)                                                | `nil`                    |
+| `ruler.ingress.apiVersion`                                | Force Ingress API version (automatically detected if not set)                                                | `""`                     |
 | `ruler.ingress.path`                                      | Ingress path                                                                                                 | `/`                      |
 | `ruler.ingress.pathType`                                  | Ingress path type                                                                                            | `ImplementationSpecific` |
 
@@ -642,7 +642,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `receive.replicationFactor`                                 | Thanos Receive replication-factor                                                                                                  | `1`                      |
 | `receive.replicaLabel`                                      | Label to treat as a replica indicator along which data is deduplicated                                                             | `replica`                |
 | `receive.serviceAccount.annotations`                        | Annotations for Thanos Receive Service Account                                                                                     | `{}`                     |
-| `receive.serviceAccount.existingServiceAccount`             | Name for an existing Thanos Receive Service Account                                                                                | `nil`                    |
+| `receive.serviceAccount.existingServiceAccount`             | Name for an existing Thanos Receive Service Account                                                                                | `""`                     |
 | `receive.hostAliases`                                       | Deployment pod host aliases                                                                                                        | `[]`                     |
 | `receive.config`                                            | Receive Hashring configuration                                                                                                     | `[]`                     |
 | `receive.extraContainers`                                   | Extra containers running as sidecars to Thanos Receive container                                                                   | `[]`                     |
@@ -689,46 +689,46 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `receive.containerSecurityContext.readOnlyRootFilesystem`   | mount / (root) as a readonly filesystem of Receive container                                                                       | `false`                  |
 | `receive.grpc.gracePeriod`                                  | Time to wait after an interrupt received for GRPC Server.                                                                          | `2m`                     |
 | `receive.grpc.server.secure`                                | enable TLS for GRPC server                                                                                                         | `false`                  |
-| `receive.grpc.server.cert`                                  | TLS Certificate for gRPC server, leave blank to disable TLS                                                                        | `nil`                    |
-| `receive.grpc.server.key`                                   | TLS Key for the gRPC server, leave blank to disable TLS                                                                            | `nil`                    |
-| `receive.grpc.server.ca`                                    | TLS CA to verify clients against. If no client CA is specified, there is no client verification on server side. (tls.NoClientCert) | `nil`                    |
+| `receive.grpc.server.cert`                                  | TLS Certificate for gRPC server, leave blank to disable TLS                                                                        | `""`                     |
+| `receive.grpc.server.key`                                   | TLS Key for the gRPC server, leave blank to disable TLS                                                                            | `""`                     |
+| `receive.grpc.server.ca`                                    | TLS CA to verify clients against. If no client CA is specified, there is no client verification on server side. (tls.NoClientCert) | `""`                     |
 | `receive.service.type`                                      | Kubernetes service type                                                                                                            | `ClusterIP`              |
-| `receive.service.clusterIP`                                 | Thanos Ruler service clusterIP IP                                                                                                  | `nil`                    |
+| `receive.service.clusterIP`                                 | Thanos Ruler service clusterIP IP                                                                                                  | `""`                     |
 | `receive.service.http.port`                                 | Service HTTP port                                                                                                                  | `10902`                  |
-| `receive.service.http.nodePort`                             | Service HTTP node port                                                                                                             | `nil`                    |
+| `receive.service.http.nodePort`                             | Service HTTP node port                                                                                                             | `""`                     |
 | `receive.service.targetPort`                                | Service targetPort override                                                                                                        | `http`                   |
 | `receive.service.grpc.port`                                 | Service GRPC port                                                                                                                  | `10901`                  |
-| `receive.service.grpc.nodePort`                             | Service GRPC node port                                                                                                             | `nil`                    |
+| `receive.service.grpc.nodePort`                             | Service GRPC node port                                                                                                             | `""`                     |
 | `receive.service.remoteWrite.port`                          | Service remote write port                                                                                                          | `19291`                  |
-| `receive.service.remoteWrite.nodePort`                      | Service remote write node port                                                                                                     | `nil`                    |
-| `receive.service.loadBalancerIP`                            | Load balancer IP if service type is `LoadBalancer`                                                                                 | `nil`                    |
+| `receive.service.remoteWrite.nodePort`                      | Service remote write node port                                                                                                     | `""`                     |
+| `receive.service.loadBalancerIP`                            | Load balancer IP if service type is `LoadBalancer`                                                                                 | `""`                     |
 | `receive.service.loadBalancerSourceRanges`                  | Addresses that are allowed when service is LoadBalancer                                                                            | `[]`                     |
 | `receive.service.externalTrafficPolicy`                     | Thanos Ruler service externalTrafficPolicy                                                                                         | `Cluster`                |
 | `receive.service.annotations`                               | Annotations for Thanos Receive service                                                                                             | `{}`                     |
 | `receive.service.labelSelectorsOverride`                    | Selector for Thanos receive service                                                                                                | `{}`                     |
 | `receive.service.additionalHeadless`                        | Additional Headless service                                                                                                        | `false`                  |
 | `receive.autoscaling.enabled`                               | Enable autoscaling for Thanos Receive                                                                                              | `false`                  |
-| `receive.autoscaling.minReplicas`                           | Minimum number of Thanos Receive replicas                                                                                          | `nil`                    |
-| `receive.autoscaling.maxReplicas`                           | Maximum number of Thanos Receive replicas                                                                                          | `nil`                    |
-| `receive.autoscaling.targetCPU`                             | Target CPU utilization percentage                                                                                                  | `nil`                    |
-| `receive.autoscaling.targetMemory`                          | Target Memory utilization percentage                                                                                               | `nil`                    |
+| `receive.autoscaling.minReplicas`                           | Minimum number of Thanos Receive replicas                                                                                          | `""`                     |
+| `receive.autoscaling.maxReplicas`                           | Maximum number of Thanos Receive replicas                                                                                          | `""`                     |
+| `receive.autoscaling.targetCPU`                             | Target CPU utilization percentage                                                                                                  | `""`                     |
+| `receive.autoscaling.targetMemory`                          | Target Memory utilization percentage                                                                                               | `""`                     |
 | `receive.persistence.enabled`                               | Enable data persistence                                                                                                            | `true`                   |
-| `receive.persistence.existingClaim`                         | Use a existing PVC which must be created manually before bound                                                                     | `nil`                    |
-| `receive.persistence.storageClass`                          | Specify the `storageClass` used to provision the volume                                                                            | `nil`                    |
+| `receive.persistence.existingClaim`                         | Use a existing PVC which must be created manually before bound                                                                     | `""`                     |
+| `receive.persistence.storageClass`                          | Specify the `storageClass` used to provision the volume                                                                            | `""`                     |
 | `receive.persistence.accessModes`                           | Access modes of data volume                                                                                                        | `[]`                     |
 | `receive.persistence.size`                                  | Size of data volume                                                                                                                | `8Gi`                    |
 | `receive.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                    | `false`                  |
 | `receive.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                     | `1`                      |
-| `receive.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                                                     | `nil`                    |
+| `receive.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                                                     | `""`                     |
 | `receive.ingress.enabled`                                   | Set to true to enable ingress record generation                                                                                    | `false`                  |
 | `receive.ingress.certManager`                               | Set this to true in order to add the corresponding annotations for cert-manager                                                    | `false`                  |
 | `receive.ingress.hostname`                                  | When the ingress is enabled, a host pointing to this will be created                                                               | `thanos-receive.local`   |
 | `receive.ingress.annotations`                               | Ingress annotations done as key:value pairs                                                                                        | `{}`                     |
-| `receive.ingress.extraHosts`                                | The list of additional hostnames to be covered with this ingress record.                                                           | `nil`                    |
+| `receive.ingress.extraHosts`                                | The list of additional hostnames to be covered with this ingress record.                                                           | `[]`                     |
 | `receive.ingress.extraTls`                                  | The tls configuration for additional hostnames to be covered with this ingress record.                                             | `[]`                     |
 | `receive.ingress.secrets`                                   | If you're providing your own certificates, please use this to add the certificates as secrets                                      | `[]`                     |
 | `receive.ingress.tls`                                       | When specifying cert-manager.io/cluster-issuer: nameOfClusterIssuer annotation, enable tls for ingress                             | `false`                  |
-| `receive.ingress.apiVersion`                                | Override API Version (automatically detected if not set)                                                                           | `nil`                    |
+| `receive.ingress.apiVersion`                                | Override API Version (automatically detected if not set)                                                                           | `""`                     |
 | `receive.ingress.path`                                      | Ingress Path                                                                                                                       | `/`                      |
 | `receive.ingress.pathType`                                  | Ingress Path type                                                                                                                  | `ImplementationSpecific` |
 
@@ -739,12 +739,12 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | ----------------------------------------- | ------------------------------------------------------------------------------------------------------ | ------- |
 | `metrics.enabled`                         | Enable the export of Prometheus metrics                                                                | `false` |
 | `metrics.serviceMonitor.enabled`          | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`) | `false` |
-| `metrics.serviceMonitor.namespace`        | Namespace in which Prometheus is running                                                               | `nil`   |
-| `metrics.serviceMonitor.labels`           | Additional labels for ServiceMonitor object                                                            | `nil`   |
-| `metrics.serviceMonitor.interval`         | Interval at which metrics should be scraped.                                                           | `nil`   |
-| `metrics.serviceMonitor.scrapeTimeout`    | Timeout after which the scrape is ended                                                                | `nil`   |
+| `metrics.serviceMonitor.namespace`        | Namespace in which Prometheus is running                                                               | `""`    |
+| `metrics.serviceMonitor.labels`           | Additional labels for ServiceMonitor object                                                            | `{}`    |
+| `metrics.serviceMonitor.interval`         | Interval at which metrics should be scraped.                                                           | `""`    |
+| `metrics.serviceMonitor.scrapeTimeout`    | Timeout after which the scrape is ended                                                                | `""`    |
 | `metrics.prometheusRule.enabled`          | If `true`, creates a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true`) | `false` |
-| `metrics.prometheusRule.namespace`        | Namespace in which the PrometheusRule CRD is created                                                   | `nil`   |
+| `metrics.prometheusRule.namespace`        | Namespace in which the PrometheusRule CRD is created                                                   | `""`    |
 | `metrics.prometheusRule.additionalLabels` | Additional labels for the prometheusRule                                                               | `{}`    |
 | `metrics.prometheusRule.rules`            | Prometheus Rules for Thanos components                                                                 | `[]`    |
 

@@ -49,7 +49,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 
 
@@ -57,9 +57,9 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name               | Description                                                                                  | Value |
 | ------------------ | -------------------------------------------------------------------------------------------- | ----- |
-| `kubeVersion`      | Force target Kubernetes version (using Helm capabilities if not set)                         | `nil` |
-| `nameOverride`     | String to partially override common.names.fullname template (will maintain the release name) | `nil` |
-| `fullnameOverride` | String to fully override common.names.fullname template                                      | `nil` |
+| `kubeVersion`      | Force target Kubernetes version (using Helm capabilities if not set)                         | `""`  |
+| `nameOverride`     | String to partially override common.names.fullname template (will maintain the release name) | `""`  |
+| `fullnameOverride` | String to fully override common.names.fullname template                                      | `""`  |
 | `extraDeploy`      | Array of extra objects to deploy with the release                                            | `[]`  |
 
 
@@ -80,13 +80,13 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                        | Description                                                                                                   | Value  |
 | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------- | ------ |
-| `master.configurationConfigMap`             | Set a custom configuration by using an existing configMap with the configuration file.                        | `nil`  |
+| `master.configurationConfigMap`             | Set a custom configuration by using an existing configMap with the configuration file.                        | `""`   |
 | `master.webPort`                            | Specify the port where the web interface will listen on the master                                            | `8080` |
 | `master.clusterPort`                        | Specify the port where the master listens to communicate with workers                                         | `7077` |
 | `master.hostAliases`                        | Deployment pod host aliases                                                                                   | `[]`   |
-| `master.daemonMemoryLimit`                  | Set the memory limit for the master daemon                                                                    | `nil`  |
-| `master.configOptions`                      | Use a string to set the config options for in the form "-Dx=y"                                                | `nil`  |
-| `master.extraEnvVars`                       | Extra environment variables to pass to the master container                                                   | `nil`  |
+| `master.daemonMemoryLimit`                  | Set the memory limit for the master daemon                                                                    | `""`   |
+| `master.configOptions`                      | Use a string to set the config options for in the form "-Dx=y"                                                | `""`   |
+| `master.extraEnvVars`                       | Extra environment variables to pass to the master container                                                   | `[]`   |
 | `master.securityContext.enabled`            | Enable security context                                                                                       | `true` |
 | `master.securityContext.fsGroup`            | Group ID for the container                                                                                    | `1001` |
 | `master.securityContext.runAsUser`          | User ID for the container                                                                                     | `1001` |
@@ -116,25 +116,25 @@ The command removes all the Kubernetes components associated with the chart and 
 | `master.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                            | `5`    |
 | `master.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                          | `6`    |
 | `master.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                          | `1`    |
-| `master.initContainers`                     | Add initContainers to the master pods.                                                                        | `{}`   |
+| `master.initContainers`                     | Add initContainers to the master pods.                                                                        | `[]`   |
 
 
 ### Spark worker parameters
 
 | Name                                        | Description                                                                                                   | Value          |
 | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------- | -------------- |
-| `worker.configurationConfigMap`             | Set a custom configuration by using an existing configMap with the configuration file.                        | `nil`          |
+| `worker.configurationConfigMap`             | Set a custom configuration by using an existing configMap with the configuration file.                        | `""`           |
 | `worker.webPort`                            | Specify the port where the web interface will listen on the worker                                            | `8081`         |
-| `worker.clusterPort`                        | Specify the port where the worker listens to communicate with the master                                      | `nil`          |
+| `worker.clusterPort`                        | Specify the port where the worker listens to communicate with the master                                      | `""`           |
 | `worker.hostAliases`                        | Add deployment host aliases                                                                                   | `[]`           |
 | `worker.extraPorts`                         | Specify the port where the running jobs inside the workers listens                                            | `[]`           |
-| `worker.daemonMemoryLimit`                  | Set the memory limit for the worker daemon                                                                    | `nil`          |
-| `worker.memoryLimit`                        | Set the maximum memory the worker is allowed to use                                                           | `nil`          |
-| `worker.coreLimit`                          | Se the maximum number of cores that the worker can use                                                        | `nil`          |
-| `worker.dir`                                | Set a custom working directory for the application                                                            | `nil`          |
-| `worker.javaOptions`                        | Set options for the JVM in the form `-Dx=y`                                                                   | `nil`          |
-| `worker.configOptions`                      | Set extra options to configure the worker in the form `-Dx=y`                                                 | `nil`          |
-| `worker.extraEnvVars`                       | An array to add extra env vars                                                                                | `nil`          |
+| `worker.daemonMemoryLimit`                  | Set the memory limit for the worker daemon                                                                    | `""`           |
+| `worker.memoryLimit`                        | Set the maximum memory the worker is allowed to use                                                           | `""`           |
+| `worker.coreLimit`                          | Se the maximum number of cores that the worker can use                                                        | `""`           |
+| `worker.dir`                                | Set a custom working directory for the application                                                            | `""`           |
+| `worker.javaOptions`                        | Set options for the JVM in the form `-Dx=y`                                                                   | `""`           |
+| `worker.configOptions`                      | Set extra options to configure the worker in the form `-Dx=y`                                                 | `""`           |
+| `worker.extraEnvVars`                       | An array to add extra env vars                                                                                | `[]`           |
 | `worker.replicaCount`                       | Number of spark workers (will be the minimum number when autoscaling is enabled)                              | `2`            |
 | `worker.podManagementPolicy`                | Statefulset Pod Management Policy Type                                                                        | `OrderedReady` |
 | `worker.securityContext.enabled`            | Enable security context                                                                                       | `true`         |
@@ -166,7 +166,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                            | `5`            |
 | `worker.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                          | `6`            |
 | `worker.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                          | `1`            |
-| `worker.initContainers`                     | Add initContainers to the master pods.                                                                        | `{}`           |
+| `worker.initContainers`                     | Add initContainers to the master pods.                                                                        | `[]`           |
 | `worker.autoscaling.enabled`                | Enable replica autoscaling depending on CPU                                                                   | `false`        |
 | `worker.autoscaling.CpuTargetPercentage`    | Kubernetes HPA CPU target percentage                                                                          | `50`           |
 | `worker.autoscaling.replicasMax`            | Maximum number of workers when using autoscaling                                                              | `5`            |
@@ -176,18 +176,18 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                 | Description                                                                   | Value     |
 | ------------------------------------ | ----------------------------------------------------------------------------- | --------- |
-| `security.passwordsSecretName`       | Name of the secret that contains all the passwords                            | `nil`     |
+| `security.passwordsSecretName`       | Name of the secret that contains all the passwords                            | `""`      |
 | `security.rpc.authenticationEnabled` | Enable the RPC authentication                                                 | `false`   |
 | `security.rpc.encryptionEnabled`     | Enable the encryption for RPC                                                 | `false`   |
 | `security.storageEncryptionEnabled`  | Enables local storage encryption                                              | `false`   |
-| `security.certificatesSecretName`    | Name of the secret that contains the certificates.                            | `nil`     |
+| `security.certificatesSecretName`    | Name of the secret that contains the certificates.                            | `""`      |
 | `security.ssl.enabled`               | Enable the SSL configuration                                                  | `false`   |
 | `security.ssl.needClientAuth`        | Enable the client authentication                                              | `false`   |
 | `security.ssl.protocol`              | Set the SSL protocol                                                          | `TLSv1.2` |
-| `security.ssl.existingSecret`        | Name of the existing secret containing the TLS certificates                   | `nil`     |
+| `security.ssl.existingSecret`        | Name of the existing secret containing the TLS certificates                   | `""`      |
 | `security.ssl.autoGenerated`         | Create self-signed TLS certificates. Currently only supports PEM certificates | `false`   |
-| `security.ssl.keystorePassword`      | Set the password of the JKS Keystore                                          | `nil`     |
-| `security.ssl.truststorePassword`    | Truststore password.                                                          | `nil`     |
+| `security.ssl.keystorePassword`      | Set the password of the JKS Keystore                                          | `""`      |
+| `security.ssl.truststorePassword`    | Truststore password.                                                          | `""`      |
 | `security.ssl.resources.limits`      | The resources limits for the container                                        | `{}`      |
 | `security.ssl.resources.requests`    | The requested resources for the container                                     | `{}`      |
 
@@ -201,12 +201,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.webPort`           | Spark client port                                                                                      | `80`                     |
 | `service.nodePorts.cluster` | Kubernetes cluster node port                                                                           | `""`                     |
 | `service.nodePorts.web`     | Kubernetes web node port                                                                               | `""`                     |
-| `service.loadBalancerIP`    | Load balancer IP if spark service type is `LoadBalancer`                                               | `nil`                    |
+| `service.loadBalancerIP`    | Load balancer IP if spark service type is `LoadBalancer`                                               | `""`                     |
 | `service.annotations`       | Annotations for spark service                                                                          | `{}`                     |
 | `ingress.enabled`           | Enable ingress controller resource                                                                     | `false`                  |
 | `ingress.certManager`       | Set this to true in order to add the corresponding annotations for cert-manager                        | `false`                  |
 | `ingress.pathType`          | Ingress path type                                                                                      | `ImplementationSpecific` |
-| `ingress.apiVersion`        | Force Ingress API version (automatically detected if not set)                                          | `nil`                    |
+| `ingress.apiVersion`        | Force Ingress API version (automatically detected if not set)                                          | `""`                     |
 | `ingress.hostname`          | Default host for the ingress resource                                                                  | `spark.local`            |
 | `ingress.path`              | The Path to Spark. You may need to set this to '/*' in order to use this with ALB ingress controllers. | `ImplementationSpecific` |
 | `ingress.annotations`       | Ingress annotations                                                                                    | `{}`                     |
@@ -228,7 +228,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.podMonitor.extraMetricsEndpoints` | Add metrics endpoints for monitoring the jobs running in the worker nodes                                                               | `[]`    |
 | `metrics.podMonitor.namespace`             | Specify the namespace in which the podMonitor resource will be created                                                                  | `""`    |
 | `metrics.podMonitor.interval`              | Specify the interval at which metrics should be scraped                                                                                 | `30s`   |
-| `metrics.podMonitor.scrapeTimeout`         | Specify the timeout after which the scrape is ended                                                                                     | `nil`   |
+| `metrics.podMonitor.scrapeTimeout`         | Specify the timeout after which the scrape is ended                                                                                     | `""`    |
 | `metrics.podMonitor.additionalLabels`      | Additional labels that can be used so PodMonitors will be discovered by Prometheus                                                      | `{}`    |
 | `metrics.prometheusRule.enabled`           | Set this to true to create prometheusRules for Prometheus                                                                               | `false` |
 | `metrics.prometheusRule.namespace`         | Namespace where the prometheusRules resource should be created                                                                          | `""`    |

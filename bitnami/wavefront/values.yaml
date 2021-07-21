@@ -8,13 +8,13 @@
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
 
 ## @section Common parameters
 
@@ -41,7 +41,7 @@ clusterName: KUBERNETES_CLUSTER_NAME
 wavefront:
   url: https://YOUR_CLUSTER.wavefront.com
   token: YOUR_API_TOKEN
-  existingSecret:
+  existingSecret: ""
 ## @param podSecurityPolicy.create Specifies whether PodSecurityPolicy resources should be created
 ##
 podSecurityPolicy:
@@ -57,7 +57,7 @@ serviceAccount:
   ## @param serviceAccount.name Name of Wavefront service account
   ## If not set and create is true, a name is generated using the fullname template
   ##
-  name:
+  name: ""
 ## @param projectPacific.enabled Enable and create role binding for Tanzu Kubernetes cluster
 ## If enabled, a role binding to handle pod security policy will be installed within the Kubernetes cluster
 ##
@@ -111,38 +111,36 @@ collector:
   ##
   useDaemonset: true
   ## @param collector.usePKSPrefix If installing into a TKGi/PKS environment, set this to true. Prefixes metrics with 'pks.kubernetes.'
-  ## e.g:
-  ## usePKSPrefix: false
   ##
-  usePKSPrefix:
+  usePKSPrefix: false
   ## @param collector.maxProcs Maximum number of CPUs that can be used simultaneously
   ## e.g:
   ## maxProcs: 0
   ##
-  maxProcs:
+  maxProcs: ""
   ## @param collector.logLevel Log level. Allowed values: `info`, `debug` or `trace`
   ##
-  logLevel:
+  logLevel: ""
   ## @param collector.interval Default metrics collection interval
   ## e.g:
   ## interval: 60s
   ##
-  interval:
+  interval: ""
   ## @param collector.flushInterval How often to force a metrics flush
   ## e.g:
   ## flushInterval: 10s
   ##
-  flushInterval:
+  flushInterval: ""
   ## @param collector.sinkDelay Timeout for exporting data
   ## e.g:
   ## sinkDelay: 20s
   ##
-  sinkDelay:
+  sinkDelay: ""
   ## @param collector.useReadOnlyPort Use un-authenticated port for kubelet
   ## If set to true, will use the unauthenticated real only port for the kubelet
   ## If set to false, will use the encrypted full access port for the kubelet (default false)
   ##
-  useReadOnlyPort:
+  useReadOnlyPort: false
   ## @param collector.useProxy Use a Wavefront Proxy to send metrics through
   ## When true you must either specify a value for `collector.proxyAddress` or set `proxy.enabled` to true
   ## If set to false, metrics will be sent to Wavefront via the Direct Ingestion API
@@ -154,14 +152,14 @@ collector:
   ## e.g:
   ## proxyAddress: wavefront-proxy:2878
   ##
-  proxyAddress:
+  proxyAddress: ""
   ## @param collector.kubernetesState Collect metrics about Kubernetes resource states
   ## These metrics are more efficient than kube-state-metrics
   ##
   kubernetesState: true
   ## @param collector.apiServerMetrics Collect metrics about Kubernetes API server
   ##
-  apiServerMetrics:
+  apiServerMetrics: false
   ## @param collector.tags Map of tags to apply to all metrics collected by the collector
   ## Sample tags to include (env, region)
   ## tags:
@@ -278,7 +276,7 @@ collector:
     config: []
   ## @param collector.existingConfigmap Name of existing ConfigMap with collector configuration
   ##
-  existingConfigmap:
+  existingConfigmap: ""
   ## @param collector.command Override default container command (useful when using custom images)
   ##
   command: []
@@ -398,10 +396,10 @@ collector:
   extraEnvVars: []
   ## @param collector.extraEnvVarsCM Name of existing ConfigMap containing extra environment variables
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param collector.extraEnvVarsSecret Name of existing Secret containing extra environment variables
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param collector.extraVolumes Optionally specify extra list of additional volumes for collector container
   ##
   extraVolumes: []
@@ -418,7 +416,7 @@ collector:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  initContainers: {}
+  initContainers: []
   ## @param collector.sidecars Add sidecars to the Wavefront proxy pods
   ## Example:
   ## sidecars:
@@ -429,7 +427,7 @@ collector:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
 
 ## @section Proxy parameters
 
@@ -616,10 +614,10 @@ proxy:
   extraEnvVars: []
   ## @param proxy.extraEnvVarsCM Name of existing ConfigMap containing extra environment variables
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param proxy.extraEnvVarsSecret Name of existing Secret containing extra environment variables
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param proxy.extraVolumes Optionally specify extra list of additional volumes for proxy container
   ##
   extraVolumes: []
@@ -636,7 +634,7 @@ proxy:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  initContainers: {}
+  initContainers: []
   ## @param proxy.sidecars Add sidecars to the Wavefront proxy pods
   ## Example:
   ## sidecars:
@@ -647,7 +645,7 @@ proxy:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## @param proxy.replicas Replicas to deploy for Wavefront proxy (usually 1)
   ##
   replicas: 1
@@ -658,89 +656,89 @@ proxy:
   ## e.g:
   ## tracePort: 30000
   ##
-  tracePort:
+  tracePort: ""
   ## @param proxy.jaegerPort The port number the proxy will listen on for tracing spans in Jaeger data format (usually 30001)
   ## e.g:
   ## jaegerPort: 30001
   ##
-  jaegerPort:
+  jaegerPort: ""
   ## @param proxy.traceJaegerHttpListenerPort TCP ports to receive Jaeger Thrift formatted data via HTTP. The data is then sent to Wavefront in Wavefront span format (usually 30080)
   ## e.g:
   ## traceJaegerHttpListenerPort: 30080
   ##
-  traceJaegerHttpListenerPort:
+  traceJaegerHttpListenerPort: ""
   ## @param proxy.traceJaegerGrpcListenerPort TCP ports to receive Jaeger GRPC formatted data via HTTP (usually 14250)
   ## e.g:
   ## traceJaegerGrpcListenerPort: 14250
   ##
-  traceJaegerGrpcListenerPort:
+  traceJaegerGrpcListenerPort: ""
   ## @param proxy.zipkinPort The port number the proxy will listen on for tracing spans in Zipkin data format (usually 9411)
   ## e.g:
   ## zipkinPort: 9411
   ##
-  zipkinPort:
+  zipkinPort: ""
   ## @param proxy.traceSamplingRate Sampling rate to apply to tracing spans sent to the proxy
   ## This rate is applied to all data formats the proxy is listening on.
   ## Value should be between 0.0 and 1.0
   ## e.g:
   ## traceSamplingRate: 0.25
   ##
-  traceSamplingRate:
+  traceSamplingRate: ""
   ## @param proxy.traceSamplingDuration When set to greater than 0, spans that exceed this duration will force trace to be sampled (ms)
   ## spans that are greater than or equal to this value will be sampled.
   ## e.g:
   ## traceSamplingDuration: 500
   ##
-  traceSamplingDuration:
+  traceSamplingDuration: ""
   ## @param proxy.traceJaegerApplicationName Custom application name for traces received on Jaeger's traceJaegerListenerPorts or traceJaegerHttpListenerPorts.
   ## e.g:
   ## traceJaegerApplicationName: MyJaegerDemo
   ##
-  traceJaegerApplicationName:
+  traceJaegerApplicationName: ""
   ## @param proxy.traceZipkinApplicationName Custom application name for traces received on Zipkin's traceZipkinListenerPorts.
   ## e.g:
   ## traceZipkinApplicationName: MyZipkinDemo
   ##
-  traceZipkinApplicationName:
+  traceZipkinApplicationName: ""
   ## @param proxy.histogramPort Port for histogram distribution format data (usually 40000)
   ## e.g:
   ## histogramPort: 40000
   ##
-  histogramPort:
+  histogramPort: ""
   ## @param proxy.histogramMinutePort Port to accumulate 1-minute based histograms on Wavefront data format (usually 40001)
   ## e.g:
   ## histogramMinutePort: 40001
   ##
-  histogramMinutePort:
+  histogramMinutePort: ""
   ## @param proxy.histogramHourPort Port to accumulate 1-hour based histograms on Wavefront data format (usually 40002)
   ## e.g:
   ## histogramHourPort: 40002
   ##
-  histogramHourPort:
+  histogramHourPort: ""
   ## @param proxy.histogramDayPort Port to accumulate 1-day based histograms on Wavefront data format (usually 40003)
   ## e.g:
   ## histogramDayPort: 40003
   ##
-  histogramDayPort:
+  histogramDayPort: ""
   ## @param proxy.deltaCounterPort Port to accumulate 1-minute delta counters on Wavefront data format (usually 50000)
   ## e.g:
   ## deltaCounterPort: 50000
   ##
-  deltaCounterPort:
+  deltaCounterPort: ""
   ## @param proxy.args Any configuration property can be passed to the proxy via command line args in the format: `--<property_name> <value>`
   ## Multiple properties can be specified separated by whitespace
   ## Ref: https://docs.wavefront.com/proxies_configuring.html
   ##
-  args:
+  args: []
   ## @param proxy.heap Wavefront proxy Java heap maximum usage (java -Xmx command line option)
   ## By default Java will consume up to 4G of heap memory
   ## e.g:
   ## heap: 1024m
   ##
-  heap:
+  heap: ""
   ## @param proxy.existingConfigmap Name of existing ConfigMap with Proxy preprocessor configuration
   ##
-  existingConfigmap:
+  existingConfigmap: ""
   ## @param proxy.preprocessor Preprocessor rules is a powerful way to apply filtering or to enhance metrics as they flow
   ## through the proxy. You can configure the rules here. By default a rule to drop Kubernetes
   ## generated labels is applied to remove unnecessary and often noisy tags.

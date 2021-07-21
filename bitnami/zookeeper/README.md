@@ -50,17 +50,17 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `nil` |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
 
 ### Common parameters
 
 | Name                | Description                                                                                  | Value           |
 | ------------------- | -------------------------------------------------------------------------------------------- | --------------- |
-| `nameOverride`      | String to partially override common.names.fullname template (will maintain the release name) | `nil`           |
-| `fullnameOverride`  | String to fully override common.names.fullname template                                      | `nil`           |
+| `nameOverride`      | String to partially override common.names.fullname template (will maintain the release name) | `""`            |
+| `fullnameOverride`  | String to fully override common.names.fullname template                                      | `""`            |
 | `clusterDomain`     | Kubernetes Cluster Domain                                                                    | `cluster.local` |
 | `extraDeploy`       | Extra objects to deploy (value evaluated as a template)                                      | `[]`            |
 | `commonLabels`      | Add labels to all the deployed resources                                                     | `{}`            |
@@ -87,18 +87,18 @@ The command removes all the Kubernetes components associated with the chart and 
 | `autopurge.snapRetainCount` | Retains the snapRetainCount most recent snapshots and the corresponding transaction logs and deletes the rest                            | `3`                   |
 | `autopurge.purgeInterval`   | The time interval in hours for which the purge task has to be triggered                                                                  | `0`                   |
 | `maxSessionTimeout`         | Maximum session timeout in milliseconds that the server will allow the client to negotiate                                               | `40000`               |
-| `auth.existingSecret`       | Use existing secret (ignores previous password)                                                                                          | `nil`                 |
+| `auth.existingSecret`       | Use existing secret (ignores previous password)                                                                                          | `""`                  |
 | `auth.enabled`              | Enable Zookeeper auth. It uses SASL/Digest-MD5                                                                                           | `false`               |
-| `auth.clientUser`           | User that will use ZooKeeper clients to auth                                                                                             | `nil`                 |
-| `auth.clientPassword`       | Password that will use ZooKeeper clients to auth                                                                                         | `nil`                 |
-| `auth.serverUsers`          | Comma, semicolon or whitespace separated list of user to be created                                                                      | `nil`                 |
-| `auth.serverPasswords`      | Comma, semicolon or whitespace separated list of passwords to assign to users when created                                               | `nil`                 |
+| `auth.clientUser`           | User that will use ZooKeeper clients to auth                                                                                             | `""`                  |
+| `auth.clientPassword`       | Password that will use ZooKeeper clients to auth                                                                                         | `""`                  |
+| `auth.serverUsers`          | Comma, semicolon or whitespace separated list of user to be created                                                                      | `""`                  |
+| `auth.serverPasswords`      | Comma, semicolon or whitespace separated list of passwords to assign to users when created                                               | `""`                  |
 | `heapSize`                  | Size in MB for the Java Heap options (Xmx and XMs)                                                                                       | `1024`                |
 | `logLevel`                  | Log level for the Zookeeper server. ERROR by default                                                                                     | `ERROR`               |
 | `dataLogDir`                | Data log directory. Specifying this option will direct zookeeper to write the transaction log to the dataLogDir rather than the dataDir. | `""`                  |
-| `jvmFlags`                  | Default JVMFLAGS for the ZooKeeper process                                                                                               | `nil`                 |
-| `config`                    | Configure ZooKeeper with a custom zoo.cfg file                                                                                           | `nil`                 |
-| `namespaceOverride`         | Namespace for ZooKeeper resources                                                                                                        | `nil`                 |
+| `jvmFlags`                  | Default JVMFLAGS for the ZooKeeper process                                                                                               | `""`                  |
+| `config`                    | Configure ZooKeeper with a custom zoo.cfg file                                                                                           | `""`                  |
+| `namespaceOverride`         | Namespace for ZooKeeper resources                                                                                                        | `""`                  |
 | `hostAliases`               | Deployment pod host aliases                                                                                                              | `[]`                  |
 
 
@@ -110,7 +110,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraVolumeMounts`                  | Mount extra volume(s)                                                                                                                                                                             | `[]`            |
 | `updateStrategy`                     | StatefulSet controller supports automated updates. There are two valid update strategies: `RollingUpdate` and `OnDelete`                                                                          | `RollingUpdate` |
 | `podDisruptionBudget.maxUnavailable` | Max number of pods down simultaneously                                                                                                                                                            | `1`             |
-| `rollingUpdatePartition`             | Partition update strategy                                                                                                                                                                         | `nil`           |
+| `rollingUpdatePartition`             | Partition update strategy                                                                                                                                                                         | `""`            |
 | `podManagementPolicy`                | StatefulSet controller supports relax its ordering guarantees while preserving its uniqueness and identity guarantees. There are two valid pod management policies: `OrderedReady` and `Parallel` | `Parallel`      |
 | `replicaCount`                       | Number of ZooKeeper nodes                                                                                                                                                                         | `1`             |
 | `minServerId`                        | Minimal SERVER_ID value, nodes increment their IDs respectively                                                                                                                                   | `1`             |
@@ -129,7 +129,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podLabels`                          | ZooKeeper pod labels                                                                                                                                                                              | `{}`            |
 | `podAnnotations`                     | ZooKeeper Pod annotations                                                                                                                                                                         | `{}`            |
 | `priorityClassName`                  | Name of the existing priority class to be used by ZooKeeper pods, priority class needs to be created beforehand                                                                                   | `""`            |
-| `schedulerName`                      | Kubernetes pod scheduler registry                                                                                                                                                                 | `nil`           |
+| `schedulerName`                      | Kubernetes pod scheduler registry                                                                                                                                                                 | `""`            |
 | `resources.requests`                 | The requested resources for the container                                                                                                                                                         | `{}`            |
 | `livenessProbe.enabled`              | Enable livenessProbe                                                                                                                                                                              | `true`          |
 | `livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                                                                                                           | `30`            |
@@ -154,7 +154,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                          | Description                                                                     | Value       |
 | --------------------------------------------- | ------------------------------------------------------------------------------- | ----------- |
 | `service.type`                                | Kubernetes Service type                                                         | `ClusterIP` |
-| `service.loadBalancerIP`                      | Load balancer IP for the Zookeper Service (optional, cloud specific)            | `nil`       |
+| `service.loadBalancerIP`                      | Load balancer IP for the Zookeper Service (optional, cloud specific)            | `""`        |
 | `service.port`                                | ZooKeeper port                                                                  | `2181`      |
 | `service.followerPort`                        | ZooKeeper follower port                                                         | `2888`      |
 | `service.electionPort`                        | ZooKeeper election port                                                         | `3888`      |
@@ -165,25 +165,25 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.annotations`                         | Annotations for the Service                                                     | `{}`        |
 | `service.headless.annotations`                | Annotations for the Headless Service                                            | `{}`        |
 | `serviceAccount.create`                       | Enable creation of ServiceAccount for Zookeeper pod                             | `false`     |
-| `serviceAccount.name`                         | The name of the ServiceAccount to use.                                          | `nil`       |
+| `serviceAccount.name`                         | The name of the ServiceAccount to use.                                          | `""`        |
 | `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created          | `true`      |
 | `networkPolicy.enabled`                       | Specifies whether a NetworkPolicy should be created                             | `false`     |
-| `networkPolicy.allowExternal`                 | Don't require client label for connections                                      | `nil`       |
+| `networkPolicy.allowExternal`                 | Don't require client label for connections                                      | `true`      |
 
 
 ### Persistence parameters
 
 | Name                                   | Description                                                                    | Value  |
 | -------------------------------------- | ------------------------------------------------------------------------------ | ------ |
-| `persistence.existingClaim`            | Provide an existing `PersistentVolumeClaim`                                    | `nil`  |
+| `persistence.existingClaim`            | Provide an existing `PersistentVolumeClaim`                                    | `""`   |
 | `persistence.enabled`                  | Enable Zookeeper data persistence using PVC                                    | `true` |
-| `persistence.storageClass`             | PVC Storage Class for ZooKeeper data volume                                    | `nil`  |
+| `persistence.storageClass`             | PVC Storage Class for ZooKeeper data volume                                    | `""`   |
 | `persistence.accessModes`              | PVC Access modes                                                               | `[]`   |
 | `persistence.size`                     | PVC Storage Request for ZooKeeper data volume                                  | `8Gi`  |
 | `persistence.annotations`              | Annotations for the PVC                                                        | `{}`   |
 | `persistence.selector`                 | Selector to match an existing Persistent Volume for Zookeeper's data PVC       | `{}`   |
 | `persistence.dataLogDir.size`          | PVC Storage Request for ZooKeeper's Data log directory                         | `8Gi`  |
-| `persistence.dataLogDir.existingClaim` | Provide an existing `PersistentVolumeClaim` for Zookeeper's Data log directory | `nil`  |
+| `persistence.dataLogDir.existingClaim` | Provide an existing `PersistentVolumeClaim` for Zookeeper's Data log directory | `""`   |
 | `persistence.dataLogDir.selector`      | Selector to match an existing Persistent Volume for Zookeeper's Data log PVC   | `{}`   |
 
 
@@ -210,13 +210,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.service.port`                 | Prometheus metrics service port                                                                                                           | `9141`      |
 | `metrics.service.annotations`          | Annotations for the Zookeeper to auto-discover the metrics endpoint                                                                       | `{}`        |
 | `metrics.serviceMonitor.enabled`       | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)                                    | `false`     |
-| `metrics.serviceMonitor.namespace`     | Namespace for the ServiceMonitor Resource (defaults to the Release Namespace)                                                             | `nil`       |
-| `metrics.serviceMonitor.interval`      | Interval at which metrics should be scraped.                                                                                              | `nil`       |
-| `metrics.serviceMonitor.scrapeTimeout` | Timeout after which the scrape is ended                                                                                                   | `nil`       |
-| `metrics.serviceMonitor.selector`      | Prometheus instance selector labels                                                                                                       | `nil`       |
+| `metrics.serviceMonitor.namespace`     | Namespace for the ServiceMonitor Resource (defaults to the Release Namespace)                                                             | `""`        |
+| `metrics.serviceMonitor.interval`      | Interval at which metrics should be scraped.                                                                                              | `""`        |
+| `metrics.serviceMonitor.scrapeTimeout` | Timeout after which the scrape is ended                                                                                                   | `""`        |
+| `metrics.serviceMonitor.selector`      | Prometheus instance selector labels                                                                                                       | `{}`        |
 | `metrics.prometheusRule.enabled`       | if `true`, creates a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true` and `metrics.prometheusRule.rules`) | `false`     |
-| `metrics.prometheusRule.namespace`     | Namespace for the PrometheusRule Resource (defaults to the Release Namespace)                                                             | `nil`       |
-| `metrics.prometheusRule.selector`      | Prometheus instance selector labels                                                                                                       | `nil`       |
+| `metrics.prometheusRule.namespace`     | Namespace for the PrometheusRule Resource (defaults to the Release Namespace)                                                             | `""`        |
+| `metrics.prometheusRule.selector`      | Prometheus instance selector labels                                                                                                       | `{}`        |
 | `metrics.prometheusRule.rules`         | Prometheus Rule definitions                                                                                                               | `[]`        |
 
 
@@ -226,18 +226,18 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------- | ---------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
 | `tls.client.enabled`             | Enable TLS for client connections                                                              | `false`                                                               |
 | `tls.client.autoGenerated`       | Generate automatically self-signed TLS certificates for Zookeeper client communications        | `false`                                                               |
-| `tls.client.existingSecret`      | Name of the existing secret containing the TLS certificates for Zookeper client communications | `nil`                                                                 |
+| `tls.client.existingSecret`      | Name of the existing secret containing the TLS certificates for Zookeper client communications | `""`                                                                  |
 | `tls.client.keystorePath`        | Location of the KeyStore file used for Client connections                                      | `/opt/bitnami/zookeeper/config/certs/client/zookeeper.keystore.jks`   |
 | `tls.client.truststorePath`      | Location of the TrustStore file used for Client connections                                    | `/opt/bitnami/zookeeper/config/certs/client/zookeeper.truststore.jks` |
-| `tls.client.passwordsSecretName` | Existing secret containing Keystore and truststore passwords                                   | `nil`                                                                 |
+| `tls.client.passwordsSecretName` | Existing secret containing Keystore and truststore passwords                                   | `""`                                                                  |
 | `tls.client.keystorePassword`    | Password to access KeyStore if needed                                                          | `""`                                                                  |
 | `tls.client.truststorePassword`  | Password to access TrustStore if needed                                                        | `""`                                                                  |
 | `tls.quorum.enabled`             | Enable TLS for quorum protocol                                                                 | `false`                                                               |
 | `tls.quorum.autoGenerated`       | Create self-signed TLS certificates. Currently only supports PEM certificates.                 | `false`                                                               |
-| `tls.quorum.existingSecret`      | Name of the existing secret containing the TLS certificates for Zookeper quorum protocol       | `nil`                                                                 |
+| `tls.quorum.existingSecret`      | Name of the existing secret containing the TLS certificates for Zookeper quorum protocol       | `""`                                                                  |
 | `tls.quorum.keystorePath`        | Location of the KeyStore file used for Quorum protocol                                         | `/opt/bitnami/zookeeper/config/certs/quorum/zookeeper.keystore.jks`   |
 | `tls.quorum.truststorePath`      | Location of the TrustStore file used for Quorum protocol                                       | `/opt/bitnami/zookeeper/config/certs/quorum/zookeeper.truststore.jks` |
-| `tls.quorum.passwordsSecretName` | Existing secret containing Keystore and truststore passwords                                   | `nil`                                                                 |
+| `tls.quorum.passwordsSecretName` | Existing secret containing Keystore and truststore passwords                                   | `""`                                                                  |
 | `tls.quorum.keystorePassword`    | Password to access KeyStore if needed                                                          | `""`                                                                  |
 | `tls.quorum.truststorePassword`  | Password to access TrustStore if needed                                                        | `""`                                                                  |
 | `tls.resources.limits`           | The resources limits for the TLS init container                                                | `{}`                                                                  |

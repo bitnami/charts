@@ -7,7 +7,7 @@
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
@@ -18,10 +18,10 @@ global:
 
 ## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname template
 ##
-fullnameOverride:
+fullnameOverride: ""
 
 ## @section TensorFlow parameters
 
@@ -210,7 +210,7 @@ service:
   ## @param service.loadBalancerIP Set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
-  loadBalancerIP:
+  loadBalancerIP: ""
   ## @param service.annotations Service annotations
   ## This can be used to set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
