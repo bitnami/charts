@@ -171,6 +171,8 @@ rbac:
 ## @param replication.synchronousCommit Set synchronous commit mode. Allowed values: `on`, `remote_apply`, `remote_write`, `local` and `off`
 ## @param replication.numSynchronousReplicas Number of replicas that will have synchronous replication. Note: Cannot be greater than `replication.readReplicas`.
 ## @param replication.applicationName Cluster application name. Useful for advanced replication settings
+## @param replication.singleService Create one service connecting to all read-replicas
+## @param replication.uniqueServices Create a unique service for each independent read-replica
 ##
 replication:
   enabled: false
@@ -184,6 +186,8 @@ replication:
   ##
   numSynchronousReplicas: 0
   applicationName: my_application
+  singleService: true
+  uniqueServices: false
 ## @param postgresqlPostgresPassword PostgreSQL admin password (used when `postgresqlUsername` is not `postgres`, in which case`postgres` is the admin username)
 ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#creating-a-database-user-on-first-run (see note!)
 postgresqlPostgresPassword: ""
