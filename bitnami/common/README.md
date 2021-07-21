@@ -58,6 +58,7 @@ The following table lists the helpers available in the library which are scoped 
 | `common.capabilities.ingress.apiVersion`     | Return the appropriate apiVersion for ingress.                                                 | `.` Chart context |
 | `common.capabilities.rbac.apiVersion`        | Return the appropriate apiVersion for RBAC resources.                                          | `.` Chart context |
 | `common.capabilities.crd.apiVersion`         | Return the appropriate apiVersion for CRDs.                                                    | `.` Chart context |
+| `common.capabilities.policy.apiVersion`      | Return the appropriate apiVersion for policy                                                   | `.` Chart context |
 | `common.capabilities.supportsHelmVersion`    | Returns true if the used Helm version is 3.3+                                                  | `.` Chart context |
 
 ### Errors
@@ -76,9 +77,11 @@ The following table lists the helpers available in the library which are scoped 
 
 ### Ingress
 
-| Helper identifier        | Description                                                          | Expected Input                                                                                                                                                                   |
-|--------------------------|----------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `common.ingress.backend` | Generate a proper Ingress backend entry depending on the API version | `dict "serviceName" "foo" "servicePort" "bar"`, see the [Ingress deprecation notice](https://kubernetes.io/blog/2019/07/18/api-deprecations-in-1-16/) for the syntax differences |
+| Helper identifier                         | Description                                                          | Expected Input                                                                                                                                                                   |
+|-------------------------------------------|----------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `common.ingress.backend`                  | Generate a proper Ingress backend entry depending on the API version | `dict "serviceName" "foo" "servicePort" "bar"`, see the [Ingress deprecation notice](https://kubernetes.io/blog/2019/07/18/api-deprecations-in-1-16/) for the syntax differences |
+| `common.ingress.supportsPathType`         | Prints "true" if the pathType field is supported                     | `.` Chart context                                                                                                                                                                |
+| `common.ingress.supportsIngressClassname` | Prints "true" if the ingressClassname field is supported             | `.` Chart context                                                                                                                                                                |
 
 ### Labels
 

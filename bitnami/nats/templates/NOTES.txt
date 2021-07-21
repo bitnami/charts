@@ -42,11 +42,16 @@ You can create a Golang pod to be used as a NATS client:
 
       kubectl run {{ include "common.names.fullname" . }}-client --restart='Never' --image docker.io/bitnami/golang --namespace {{ .Release.Namespace }} --command -- sleep infinity
       kubectl exec --tty -i {{ include "common.names.fullname" . }}-client --namespace {{ .Release.Namespace }} -- bash
-      go get github.com/nats-io/nats.go
+      GO111MODULE=off go get github.com/nats-io/nats.go
       cd $GOPATH/src/github.com/nats-io/nats.go/examples/nats-pub && go install && cd
       cd $GOPATH/src/github.com/nats-io/nats.go/examples/nats-echo && go install && cd
+      {{- if .Values.auth.enabled }}
+      nats-echo -s nats://NATS_USER:NATS_PASS@{{ template "common.names.fullname" . }}-client.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.client.service.port }} SomeSubject
+      nats-pub -s nats://NATS_USER:NATS_PASS@{{ template "common.names.fullname" . }}-client.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.client.service.port }} -reply Hi SomeSubject "Hi everyone"
+      {{- else }}
       nats-echo -s nats://{{ template "common.names.fullname" . }}-client.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.client.service.port }} SomeSubject
       nats-pub -s nats://{{ template "common.names.fullname" . }}-client.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.client.service.port }} -reply Hi SomeSubject "Hi everyone"
+      {{- end }}
 
 To access the Monitoring svc from outside the cluster, follow the steps below:
 

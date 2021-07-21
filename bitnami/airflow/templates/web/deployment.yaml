@@ -80,6 +80,8 @@ spec:
             {{- include "airflow.configure.database" . | nindent 12 }}
             {{- include "airflow.configure.redis" . | nindent 12 }}
             {{- include "airflow.configure.airflow.kubernetesExecutor" . | nindent 12 }}
+            - name: AIRFLOW_EXECUTOR
+              value: {{ .Values.executor }}
             - name: AIRFLOW_WEBSERVER_HOST
               value: '0.0.0.0'
             - name: AIRFLOW_WEBSERVER_PORT_NUMBER
@@ -113,7 +115,7 @@ spec:
             - name: AIRFLOW_LDAP_UID_FIELD
               value: {{ .Values.ldap.uidField }}
             - name: AIRFLOW_LDAP_USE_TLS
-              value: {{ ternary "yes" "no" .Values.ldap.tls.enabled | quote }}
+              value: {{ ternary "True" "False" .Values.ldap.tls.enabled | quote }}
             {{- if .Values.ldap.tls.enabled }}
             - name: AIRFLOW_LDAP_ALLOW_SELF_SIGNED
               value: {{ .Values.ldap.tls.allowSelfSigned }}

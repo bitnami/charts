@@ -1,0 +1,47 @@
+{{- if .Values.web.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "concourse.web.fullname" . }}-gateway
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: web
+    {{- if .Values.service.workerGateway.labels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.service.workerGateway.labels "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if or .Values.commonAnnotations .Values.service.workerGateway.annotations }}
+  annotations:
+    {{- if .Values.service.workerGateway.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.service.workerGateway.annotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+spec:
+  type: {{ .Values.service.workerGateway.type }}
+  {{- if .Values.service.workerGateway.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges:
+    {{- range .Values.service.workerGateway.loadBalancerSourceRanges }}
+    - {{ . }}
+    {{- end }}
+  {{- end }}
+  {{- if and (eq "ClusterIP" .Values.service.workerGateway.type) .Values.service.workerGateway.clusterIP }}
+  {{ with .Values.service.workerGateway.clusterIP }}clusterIP: {{quote . }}{{ end}}
+  {{- end }}
+  {{- if and (eq "LoadBalancer" .Values.service.workerGateway.type) .Values.service.workerGateway.loadBalancerIP }}
+  loadBalancerIP: {{ .Values.service.workerGateway.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - name: http-worker-gateway
+      port: {{ .Values.service.workerGateway.port }}
+      targetPort: tsa
+      {{- if and (eq "nodePort" .Values.service.workerGateway.type) .Values.service.workerGateway.nodePort }}
+      nodePort: {{ .Values.service.workerGateway.nodePort}}
+      {{- end }}
+  selector:
+    app.kubernetes.io/component: web
+{{- end }}

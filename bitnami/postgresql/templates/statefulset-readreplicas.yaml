@@ -63,6 +63,7 @@ spec:
       {{- if .Values.securityContext.enabled }}
       securityContext: {{- omit .Values.securityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
+      automountServiceAccountToken: {{ .Values.serviceAccount.autoMount }}
       {{- if .Values.serviceAccount.enabled }}
       serviceAccountName: {{ default (include "common.names.fullname" . ) .Values.serviceAccount.name}}
       {{- end }}
@@ -362,7 +363,7 @@ spec:
         {{- if  .Values.tls.enabled }}
         - name: raw-certificates
           secret:
-            secretName: {{ required "A secret containing TLS certificates is required when TLS is enabled" .Values.tls.certificatesSecret }}
+            secretName: {{ template "postgresql.tlsSecretName" . }}
         - name: postgresql-certificates
           emptyDir: {}
         {{- end }}
