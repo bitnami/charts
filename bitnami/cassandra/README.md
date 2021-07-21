@@ -249,6 +249,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tls.truststorePassword`  | Password for the truststore, if needed.                                                       | `""`    |
 | `tls.resources.limits`    | The resources limits for the TLS init container                                               | `{}`    |
 | `tls.resources.requests`  | The requested resources for the TLS init container                                            | `{}`    |
+| `diagnosticMode.enabled`  | Enable diagnostic mode (all probes will be disabled and the command will be overridden)       | `false` |
+| `diagnosticMode.command`  | Command to override all containers in the deployment                                          | `[]`    |
+| `diagnosticMode.args`     | Args to override all containers in the deployment                                             | `[]`    |
 
 
 The above parameters map to the env variables defined in [bitnami/cassandra](http://github.com/bitnami/bitnami-docker-cassandra). For more information please refer to the [bitnami/cassandra](http://github.com/bitnami/bitnami-docker-cassandra) image documentation.
