@@ -120,8 +120,8 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `hostAliases`                        | Redmine pod host aliases                                                                  | `[]`            |
 | `extraVolumes`                       | Optionally specify extra list of additional volumes for Redmine pods                      | `[]`            |
 | `extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for Redmine container(s)         | `[]`            |
-| `sidecars`                           | Add additional sidecar containers to the Redmine pod                                      | `{}`            |
-| `initContainers`                     | Add additional init containers to the Redmine pods                                        | `{}`            |
+| `sidecars`                           | Add additional sidecar containers to the Redmine pod                                      | `[]`            |
+| `initContainers`                     | Add additional init containers to the Redmine pods                                        | `[]`            |
 | `podLabels`                          | Extra labels for Redmine pods                                                             | `{}`            |
 | `podAnnotations`                     | Annotations for Redmine pods                                                              | `{}`            |
 | `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
@@ -307,8 +307,8 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `mailReceiver.containerSecurityContext.enabled`      | mailReceiver Container securityContext                                                                                                        | `false`               |
 | `mailReceiver.containerSecurityContext.runAsUser`    | User ID for the mailReceiver container                                                                                                        | `1001`                |
 | `mailReceiver.containerSecurityContext.runAsNonRoot` | Whether to run the mailReceiver container as a non-root user                                                                                  | `true`                |
-| `mailReceiver.initContainers`                        | Add additional init containers to the mailReceiver pods                                                                                       | `{}`                  |
-| `mailReceiver.sidecars`                              | Add additional sidecar containers to the mailReceiver pods                                                                                    | `{}`                  |
+| `mailReceiver.initContainers`                        | Add additional init containers to the mailReceiver pods                                                                                       | `[]`                  |
+| `mailReceiver.sidecars`                              | Add additional sidecar containers to the mailReceiver pods                                                                                    | `[]`                  |
 | `mailReceiver.podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                           | `""`                  |
 | `mailReceiver.podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                      | `soft`                |
 | `mailReceiver.nodeAffinityPreset.type`               | Node affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                          | `""`                  |

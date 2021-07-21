@@ -116,7 +116,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `master.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                            | `5`    |
 | `master.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                          | `6`    |
 | `master.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                          | `1`    |
-| `master.initContainers`                     | Add initContainers to the master pods.                                                                        | `{}`   |
+| `master.initContainers`                     | Add initContainers to the master pods.                                                                        | `[]`   |
 
 
 ### Spark worker parameters
@@ -166,7 +166,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                            | `5`            |
 | `worker.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                          | `6`            |
 | `worker.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                          | `1`            |
-| `worker.initContainers`                     | Add initContainers to the master pods.                                                                        | `{}`           |
+| `worker.initContainers`                     | Add initContainers to the master pods.                                                                        | `[]`           |
 | `worker.autoscaling.enabled`                | Enable replica autoscaling depending on CPU                                                                   | `false`        |
 | `worker.autoscaling.CpuTargetPercentage`    | Kubernetes HPA CPU target percentage                                                                          | `50`           |
 | `worker.autoscaling.replicasMax`            | Maximum number of workers when using autoscaling                                                              | `5`            |

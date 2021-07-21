@@ -136,8 +136,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraVolumes`                       | Optionally specify extra list of additional volumes for Tomcat pods in Deployment                 | `[]`            |
 | `extraVolumeClaimTemplates`          | Optionally specify extra list of additional volume claim templates for Tomcat pods in StatefulSet | `[]`            |
 | `extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for Tomcat container(s)                  | `[]`            |
-| `initContainers`                     | Add init containers to the Tomcat pods.                                                           | `{}`            |
-| `sidecars`                           | Add sidecars to the Tomcat pods.                                                                  | `{}`            |
+| `initContainers`                     | Add init containers to the Tomcat pods.                                                           | `[]`            |
+| `sidecars`                           | Add sidecars to the Tomcat pods.                                                                  | `[]`            |
 | `persistence.enabled`                | Enable persistence                                                                                | `true`          |
 | `persistence.storageClass`           | PVC Storage Class for Tomcat volume                                                               | `""`            |
 | `persistence.annotations`            | Persistent Volume Claim annotations                                                               | `{}`            |

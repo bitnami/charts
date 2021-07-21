@@ -127,8 +127,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars                                         | `""`                                  |
 | `extraVolumes`                          | Optionally specify extra list of additional volumes for Adapter pods                      | `[]`                                  |
 | `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for Adapter container(s)         | `[]`                                  |
-| `initContainers`                        | Add additional init containers to the Adapter pods                                        | `{}`                                  |
-| `sidecars`                              | Add additional sidecar containers to the Adapter pod                                      | `{}`                                  |
+| `initContainers`                        | Add additional init containers to the Adapter pods                                        | `[]`                                  |
+| `sidecars`                              | Add additional sidecar containers to the Adapter pod                                      | `[]`                                  |
 | `externalProxy.host`                    | Host of a wavefront-proxy instance (required if wavefront.enabled = false)                | `""`                                  |
 | `externalProxy.port`                    | Host of a wavefront-proxy instance (required if wavefront.enabled = false)                | `2878`                                |
 | `adapterLogLevel`                       | Adapter log level                                                                         | `info`                                |

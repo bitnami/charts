@@ -806,7 +806,7 @@ sentinel:
   ## @param sentinel.downAfterMilliseconds Timeout for detecting a Redis(TM) node is down
   ## @param sentinel.failoverTimeout Timeout for performing a election failover
   ## @param sentinel.cleanDelaySeconds Delay seconds when cleaning nodes IPs
-  #
+  ##
   downAfterMilliseconds: 60000
   failoverTimeout: 18000
   cleanDelaySeconds: 5

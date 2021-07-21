@@ -152,8 +152,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `collector.extraEnvVarsSecret`                    | Name of existing Secret containing extra environment variables                                                          | `""`                                     |
 | `collector.extraVolumes`                          | Optionally specify extra list of additional volumes for collector container                                             | `[]`                                     |
 | `collector.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for collector container                                        | `[]`                                     |
-| `collector.initContainers`                        | Add init containers to the Wavefront proxy pods                                                                         | `{}`                                     |
-| `collector.sidecars`                              | Add sidecars to the Wavefront proxy pods                                                                                | `{}`                                     |
+| `collector.initContainers`                        | Add init containers to the Wavefront proxy pods                                                                         | `[]`                                     |
+| `collector.sidecars`                              | Add sidecars to the Wavefront proxy pods                                                                                | `[]`                                     |
 
 
 ### Proxy parameters
@@ -206,8 +206,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `proxy.extraEnvVarsSecret`                    | Name of existing Secret containing extra environment variables                                                                          | `""`                      |
 | `proxy.extraVolumes`                          | Optionally specify extra list of additional volumes for proxy container                                                                 | `[]`                      |
 | `proxy.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for proxy container                                                            | `[]`                      |
-| `proxy.initContainers`                        | Add init containers to the Wavefront proxy pods                                                                                         | `{}`                      |
-| `proxy.sidecars`                              | Add sidecars to the Wavefront proxy pods                                                                                                | `{}`                      |
+| `proxy.initContainers`                        | Add init containers to the Wavefront proxy pods                                                                                         | `[]`                      |
+| `proxy.sidecars`                              | Add sidecars to the Wavefront proxy pods                                                                                                | `[]`                      |
 | `proxy.replicas`                              | Replicas to deploy for Wavefront proxy (usually 1)                                                                                      | `1`                       |
 | `proxy.port`                                  | The port number the proxy will listen on for metrics in Wavefront data format                                                           | `2878`                    |
 | `proxy.tracePort`                             | The port number the proxy will listen on for tracing spans in Wavefront trace data format (usually 30000)                               | `""`                      |

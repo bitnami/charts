@@ -164,8 +164,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `master.lifecycleHooks`                     | for the Redis(TM) master container(s) to automate configuration before or after startup          | `{}`            |
 | `master.extraVolumes`                       | Optionally specify extra list of additional volumes for the Redis(TM) master pod(s)              | `[]`            |
 | `master.extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for the Redis(TM) master container(s)   | `[]`            |
-| `master.sidecars`                           | Add additional sidecar containers to the Redis(TM) master pod(s)                                 | `{}`            |
-| `master.initContainers`                     | Add additional init containers to the Redis(TM) master pod(s)                                    | `{}`            |
+| `master.sidecars`                           | Add additional sidecar containers to the Redis(TM) master pod(s)                                 | `[]`            |
+| `master.initContainers`                     | Add additional init containers to the Redis(TM) master pod(s)                                    | `[]`            |
 | `master.persistence.enabled`                | Enable persistence on Redis(TM) master nodes using Persistent Volume Claims                      | `true`          |
 | `master.persistence.path`                   | The path the volume will be mounted at on Redis(TM) master containers                            | `/data`         |
 | `master.persistence.subPath`                | The subdirectory of the volume to mount on Redis(TM) master containers                           | `""`            |
@@ -240,8 +240,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replica.lifecycleHooks`                     | for the Redis(TM) replica container(s) to automate configuration before or after startup          | `{}`            |
 | `replica.extraVolumes`                       | Optionally specify extra list of additional volumes for the Redis(TM) replicas pod(s)             | `[]`            |
 | `replica.extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for the Redis(TM) replicas container(s)  | `[]`            |
-| `replica.sidecars`                           | Add additional sidecar containers to the Redis(TM) replicas pod(s)                                | `{}`            |
-| `replica.initContainers`                     | Add additional init containers to the Redis(TM) replicas pod(s)                                   | `{}`            |
+| `replica.sidecars`                           | Add additional sidecar containers to the Redis(TM) replicas pod(s)                                | `[]`            |
+| `replica.initContainers`                     | Add additional init containers to the Redis(TM) replicas pod(s)                                   | `[]`            |
 | `replica.persistence.enabled`                | Enable persistence on Redis(TM) replicas nodes using Persistent Volume Claims                     | `true`          |
 | `replica.persistence.path`                   | The path the volume will be mounted at on Redis(TM) replicas containers                           | `/data`         |
 | `replica.persistence.subPath`                | The subdirectory of the volume to mount on Redis(TM) replicas containers                          | `""`            |
@@ -357,39 +357,39 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Metrics Parameters
 
-| Name                                                  | Description                                                                                      | Value                             |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------ | --------------------------------- |
-| `metrics.enabled`                                     | Start a sidecar prometheus exporter to expose Redis(TM) metrics                                  | `false`                           |
-| `metrics.image.registry`                              | Redis(TM) Exporter image registry                                                                | `docker.io`                       |
-| `metrics.image.repository`                            | Redis(TM) Exporter image repository                                                              | `bitnami/redis-exporter`          |
-| `metrics.image.tag`                                   | Redis(TM) Redis(TM) Exporter image tag (immutable tags are recommended)                          | `1.24.0-debian-10-r9`             |
-| `metrics.image.pullPolicy`                            | Redis(TM) Exporter image pull policy                                                             | `IfNotPresent`                    |
-| `metrics.image.pullSecrets`                           | Redis(TM) Exporter image pull secrets                                                            | `[]`                              |
-| `metrics.redisTargetHost`                             | A way to specify an alternative Redis(TM) hostname                                               | `localhost`                       |
-| `metrics.extraArgs`                                   | Extra arguments for Redis(TM) exporter, for example:                                             | `{}`                              |
-| `metrics.containerSecurityContext.enabled`            | Enabled Redis(TM) exporter containers' Security Context                                          | `true`                            |
-| `metrics.containerSecurityContext.runAsUser`          | Set Redis(TM) exporter containers' Security Context runAsUser                                    | `1001`                            |
-| `metrics.resources.limits`                            | The resources limits for the Redis(TM) exporter container                                        | `{}`                              |
-| `metrics.resources.requests`                          | The requested resources for the Redis(TM) exporter container                                     | `{}`                              |
-| `metrics.podLabels`                                   | Extra labels for Redis(TM) exporter pods                                                         | `{}`                              |
-| `metrics.podAnnotations`                              | Annotations for Redis(TM) exporter pods                                                          | `{}`                              |
-| `metrics.service.type`                                | Redis(TM) exporter service type                                                                  | `ClusterIP`                       |
-| `metrics.service.port`                                | Redis(TM) exporter service port                                                                  | `9121`                            |
-| `metrics.service.externalTrafficPolicy`               | Redis(TM) exporter service external traffic policy                                               | `Cluster`                         |
-| `metrics.service.loadBalancerIP`                      | Redis(TM) exporter service Load Balancer IP                                                      | `""`                              |
-| `metrics.service.loadBalancerSourceRanges`            | Redis(TM) exporter service Load Balancer sources                                                 | `[]`                              |
-| `metrics.service.annotations`                         | Additional custom annotations for Redis(TM) exporter service                                     | `{}`                              |
-| `metrics.serviceMonitor.enabled`                      | Create ServiceMonitor resource(s) for scraping metrics using PrometheusOperator                  | `false`                           |
-| `metrics.serviceMonitor.namespace`                    | The namespace in which the ServiceMonitor will be created                                        | `""`                              |
-| `metrics.serviceMonitor.interval`                     | The interval at which metrics should be scraped                                                  | `30s`                             |
-| `metrics.serviceMonitor.scrapeTimeout`                | The timeout after which the scrape is ended                                                      | `""`                              |
-| `metrics.serviceMonitor.relabellings`                 | Metrics relabellings to add to the scrape endpoint                                               | `[]`                              |
-| `metrics.serviceMonitor.honorLabels`                  | Specify honorLabels parameter to add the scrape endpoint                                         | `false`                           |
-| `metrics.serviceMonitor.additionalLabels`             | Additional labels that can be used so ServiceMonitor resource(s) can be discovered by Prometheus | `{}`                              |
-| `metrics.prometheusRule.enabled`                      | Create a custom prometheusRule Resource for scraping metrics using PrometheusOperator            | `false`                           |
-| `metrics.prometheusRule.namespace`                    | The namespace in which the prometheusRule will be created                                        | `""`                              |
-| `metrics.prometheusRule.additionalLabels`             | Additional labels for the prometheusRule                                                         | `{}`                              |
-| `metrics.prometheusRule.rules`                        | Custom Prometheus rules                                                                          | `[]`                              |
+| Name                                         | Description                                                                                      | Value                    |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------ | ------------------------ |
+| `metrics.enabled`                            | Start a sidecar prometheus exporter to expose Redis(TM) metrics                                  | `false`                  |
+| `metrics.image.registry`                     | Redis(TM) Exporter image registry                                                                | `docker.io`              |
+| `metrics.image.repository`                   | Redis(TM) Exporter image repository                                                              | `bitnami/redis-exporter` |
+| `metrics.image.tag`                          | Redis(TM) Redis(TM) Exporter image tag (immutable tags are recommended)                          | `1.24.0-debian-10-r9`    |
+| `metrics.image.pullPolicy`                   | Redis(TM) Exporter image pull policy                                                             | `IfNotPresent`           |
+| `metrics.image.pullSecrets`                  | Redis(TM) Exporter image pull secrets                                                            | `[]`                     |
+| `metrics.redisTargetHost`                    | A way to specify an alternative Redis(TM) hostname                                               | `localhost`              |
+| `metrics.extraArgs`                          | Extra arguments for Redis(TM) exporter, for example:                                             | `{}`                     |
+| `metrics.containerSecurityContext.enabled`   | Enabled Redis(TM) exporter containers' Security Context                                          | `true`                   |
+| `metrics.containerSecurityContext.runAsUser` | Set Redis(TM) exporter containers' Security Context runAsUser                                    | `1001`                   |
+| `metrics.resources.limits`                   | The resources limits for the Redis(TM) exporter container                                        | `{}`                     |
+| `metrics.resources.requests`                 | The requested resources for the Redis(TM) exporter container                                     | `{}`                     |
+| `metrics.podLabels`                          | Extra labels for Redis(TM) exporter pods                                                         | `{}`                     |
+| `metrics.podAnnotations`                     | Annotations for Redis(TM) exporter pods                                                          | `{}`                     |
+| `metrics.service.type`                       | Redis(TM) exporter service type                                                                  | `ClusterIP`              |
+| `metrics.service.port`                       | Redis(TM) exporter service port                                                                  | `9121`                   |
+| `metrics.service.externalTrafficPolicy`      | Redis(TM) exporter service external traffic policy                                               | `Cluster`                |
+| `metrics.service.loadBalancerIP`             | Redis(TM) exporter service Load Balancer IP                                                      | `""`                     |
+| `metrics.service.loadBalancerSourceRanges`   | Redis(TM) exporter service Load Balancer sources                                                 | `[]`                     |
+| `metrics.service.annotations`                | Additional custom annotations for Redis(TM) exporter service                                     | `{}`                     |
+| `metrics.serviceMonitor.enabled`             | Create ServiceMonitor resource(s) for scraping metrics using PrometheusOperator                  | `false`                  |
+| `metrics.serviceMonitor.namespace`           | The namespace in which the ServiceMonitor will be created                                        | `""`                     |
+| `metrics.serviceMonitor.interval`            | The interval at which metrics should be scraped                                                  | `30s`                    |
+| `metrics.serviceMonitor.scrapeTimeout`       | The timeout after which the scrape is ended                                                      | `""`                     |
+| `metrics.serviceMonitor.relabellings`        | Metrics relabellings to add to the scrape endpoint                                               | `[]`                     |
+| `metrics.serviceMonitor.honorLabels`         | Specify honorLabels parameter to add the scrape endpoint                                         | `false`                  |
+| `metrics.serviceMonitor.additionalLabels`    | Additional labels that can be used so ServiceMonitor resource(s) can be discovered by Prometheus | `{}`                     |
+| `metrics.prometheusRule.enabled`             | Create a custom prometheusRule Resource for scraping metrics using PrometheusOperator            | `false`                  |
+| `metrics.prometheusRule.namespace`           | The namespace in which the prometheusRule will be created                                        | `""`                     |
+| `metrics.prometheusRule.additionalLabels`    | Additional labels for the prometheusRule                                                         | `{}`                     |
+| `metrics.prometheusRule.rules`               | Custom Prometheus rules                                                                          | `[]`                     |
 
 
 ### Init Container Parameters

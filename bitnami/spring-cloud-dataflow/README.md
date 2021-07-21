@@ -138,8 +138,8 @@ helm uninstall my-release
 | `server.ingress.extraHosts`                  | The list of additional hostnames to be covered with this ingress record.                                         | `[]`                                                 |
 | `server.ingress.extraTls`                    | The tls configuration for additional hostnames to be covered with this ingress record.                           | `[]`                                                 |
 | `server.ingress.secrets`                     | If you're providing your own certificates, please use this to add the certificates as secrets                    | `[]`                                                 |
-| `server.initContainers`                      | Add init containers to the Dataflow Server pods                                                                  | `{}`                                                 |
-| `server.sidecars`                            | Add sidecars to the Dataflow Server pods                                                                         | `{}`                                                 |
+| `server.initContainers`                      | Add init containers to the Dataflow Server pods                                                                  | `[]`                                                 |
+| `server.sidecars`                            | Add sidecars to the Dataflow Server pods                                                                         | `[]`                                                 |
 | `server.pdb.create`                          | Enable/disable a Pod Disruption Budget creation                                                                  | `false`                                              |
 | `server.pdb.minAvailable`                    | Minimum number/percentage of pods that should remain scheduled                                                   | `1`                                                  |
 | `server.pdb.maxUnavailable`                  | Maximum number/percentage of pods that may be made unavailable                                                   | `""`                                                 |
@@ -211,8 +211,8 @@ helm uninstall my-release
 | `skipper.service.loadBalancerIP`             | Load balancer IP if service type is `LoadBalancer`                                                        | `""`                           |
 | `skipper.service.loadBalancerSourceRanges`   | Address that are allowed when service is LoadBalancer                                                     | `[]`                           |
 | `skipper.service.annotations`                | Annotations for Skipper server service                                                                    | `{}`                           |
-| `skipper.initContainers`                     | Add init containers to the Dataflow Skipper pods                                                          | `{}`                           |
-| `skipper.sidecars`                           | Add sidecars to the Skipper pods                                                                          | `{}`                           |
+| `skipper.initContainers`                     | Add init containers to the Dataflow Skipper pods                                                          | `[]`                           |
+| `skipper.sidecars`                           | Add sidecars to the Skipper pods                                                                          | `[]`                           |
 | `skipper.pdb.create`                         | Enable/disable a Pod Disruption Budget creation                                                           | `false`                        |
 | `skipper.pdb.minAvailable`                   | Minimum number/percentage of pods that should remain scheduled                                            | `1`                            |
 | `skipper.pdb.maxUnavailable`                 | Maximum number/percentage of pods that may be made unavailable                                            | `""`                           |

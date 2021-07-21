@@ -337,10 +337,10 @@ startupProbe:
 ##
 customLivenessProbe: {}
 ## @param customReadinessProbe Custom readinessProbe that overrides the default one
-#
+##
 customReadinessProbe: {}
 ## @param customStartupProbe Custom startupProbe that overrides the default one
-#
+##
 customStartupProbe: {}
 
 ## @section Traffic Exposure Parameters

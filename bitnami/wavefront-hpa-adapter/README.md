@@ -52,6 +52,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------- | -------------------------------------------------- | --------------- |
 | `global.imageRegistry`    | Global Docker image registry                       | `""`            |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array    | `[]`            |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)       | `""`            |
 | `kubeVersion`             | Override Kubernetes version                        | `""`            |
 | `nameOverride`            | String to partially override common.names.fullname | `""`            |
 | `fullnameOverride`        | String to fully override common.names.fullname     | `""`            |
@@ -114,8 +115,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars                                         | `""`                                 |
 | `extraVolumes`                          | Optionally specify extra list of additional volumes for Adapter pods                      | `[]`                                 |
 | `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for Adapter container(s)         | `[]`                                 |
-| `initContainers`                        | Add additional init containers to the Adapter pods                                        | `{}`                                 |
-| `sidecars`                              | Add additional sidecar containers to the Adapter pod                                      | `{}`                                 |
+| `initContainers`                        | Add additional init containers to the Adapter pods                                        | `[]`                                 |
+| `sidecars`                              | Add additional sidecar containers to the Adapter pod                                      | `[]`                                 |
 | `adapterMetricPrefix`                   | Adapter metric `prefix` parameter                                                         | `kubernetes`                         |
 | `adapterAPIClientTimeout`               | Adapter API timeout                                                                       | `10s`                                |
 | `adapterMetricRelistInterval`           | Adapter metric relist interval                                                            | `10m`                                |

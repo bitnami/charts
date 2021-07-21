@@ -103,8 +103,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `hostAliases`                           | WildFly pod host aliases                                                                  | `[]`            |
 | `extraVolumes`                          | Optionally specify extra list of additional volumes for WildFly pods                      | `[]`            |
 | `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for WildFly container(s)         | `[]`            |
-| `sidecars`                              | Add additional sidecar containers to the WildFly pod                                      | `{}`            |
-| `initContainers`                        | Add additional init containers to the WildFly pods                                        | `{}`            |
+| `sidecars`                              | Add additional sidecar containers to the WildFly pod                                      | `[]`            |
+| `initContainers`                        | Add additional init containers to the WildFly pods                                        | `[]`            |
 | `podLabels`                             | Extra labels for WildFly pods                                                             | `{}`            |
 | `podAnnotations`                        | Annotations for WildFly pods                                                              | `{}`            |
 | `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
