@@ -159,7 +159,7 @@ collector:
   kubernetesState: true
   ## @param collector.apiServerMetrics Collect metrics about Kubernetes API server
   ##
-  apiServerMetrics:  false
+  apiServerMetrics: false
   ## @param collector.tags Map of tags to apply to all metrics collected by the collector
   ## Sample tags to include (env, region)
   ## tags:
@@ -416,7 +416,7 @@ collector:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  initContainers: {}
+  initContainers: []
   ## @param collector.sidecars Add sidecars to the Wavefront proxy pods
   ## Example:
   ## sidecars:
@@ -427,7 +427,7 @@ collector:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
 
 ## @section Proxy parameters
 
@@ -634,7 +634,7 @@ proxy:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  initContainers: {}
+  initContainers: []
   ## @param proxy.sidecars Add sidecars to the Wavefront proxy pods
   ## Example:
   ## sidecars:
@@ -645,7 +645,7 @@ proxy:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## @param proxy.replicas Replicas to deploy for Wavefront proxy (usually 1)
   ##
   replicas: 1

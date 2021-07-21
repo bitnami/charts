@@ -140,7 +140,7 @@ extraVolumeMounts: []
 ##       - name: portname
 ##         containerPort: 1234
 ##
-sidecars: {}
+sidecars: []
 ## @param initContainers Add additional init containers to the WildFly pods
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
 ## e.g:
@@ -152,7 +152,7 @@ sidecars: {}
 ##      - name: portname
 ##        containerPort: 1234
 ##
-initContainers: {}
+initContainers: []
 ## @param podLabels Extra labels for WildFly pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##

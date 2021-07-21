@@ -313,7 +313,7 @@ extraVolumeMounts: []
 ##         containerPort: 1234
 ## @param initContainers  Add additional init containers to the Adapter pods
 ##
-initContainers: {}
+initContainers: []
 
 ## Add sidecars to the wavefront-adapter-for-istio pods.
 ## Example:
@@ -327,7 +327,7 @@ initContainers: {}
 ##
 ## @param sidecars  Add additional sidecar containers to the Adapter pod
 ##
-sidecars: {}
+sidecars: []
 
 ## Use an external wavefront-proxy host
 ##

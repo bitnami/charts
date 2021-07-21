@@ -343,7 +343,7 @@ master:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## @param master.initContainers Add additional init containers to the Redis(TM) master pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
@@ -353,7 +353,7 @@ master:
   ##    imagePullPolicy: Always
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
-  initContainers: {}
+  initContainers: []
   ## Persistence parameters
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
@@ -652,7 +652,7 @@ replica:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## @param replica.initContainers Add additional init containers to the Redis(TM) replicas pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
@@ -662,7 +662,7 @@ replica:
   ##    imagePullPolicy: Always
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
-  initContainers: {}
+  initContainers: []
   ## Persistence Parameters
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
   ##

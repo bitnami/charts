@@ -363,7 +363,7 @@ server:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  initContainers: {}
+  initContainers: []
   ## @param server.sidecars Add sidecars to the Dataflow Server pods
   ## Example:
   ## sidecars:
@@ -374,7 +374,7 @@ server:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## Dataflow Server Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
   ##
@@ -674,7 +674,7 @@ skipper:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  initContainers: {}
+  initContainers: []
   ## @param skipper.sidecars Add sidecars to the Skipper pods
   ## Example:
   ## sidecars:
@@ -685,7 +685,7 @@ skipper:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## Skipper Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
   ##

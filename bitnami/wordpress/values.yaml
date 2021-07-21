@@ -282,7 +282,7 @@ extraVolumeMounts: []
 ##       - name: portname
 ##         containerPort: 1234
 ##
-sidecars: {}
+sidecars: []
 ## @param initContainers Add additional init containers to the WordPress pods
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
 ## e.g:
@@ -292,7 +292,7 @@ sidecars: {}
 ##    imagePullPolicy: Always
 ##    command: ['sh', '-c', 'copy themes and plugins from git and push to /bitnami/wordpress/wp-content. Should work with extraVolumeMounts and extraVolumes']
 ##
-initContainers: {}
+initContainers: []
 ## @param podLabels Extra labels for WordPress pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##

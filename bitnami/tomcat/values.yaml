@@ -285,7 +285,7 @@ extraVolumeMounts: []
 ##       - name: portname
 ##         containerPort: 1234
 ##
-initContainers: {}
+initContainers: []
 ## @param sidecars Add sidecars to the Tomcat pods.
 ## Example:
 ## sidecars:
@@ -296,7 +296,7 @@ initContainers: {}
 ##       - name: portname
 ##         containerPort: 1234
 ##
-sidecars: {}
+sidecars: []
 ## Enable persistence using Persistent Volume Claims
 ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
 ##

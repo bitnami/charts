@@ -308,7 +308,7 @@ extraVolumeMounts: []
 ##         containerPort: 1234
 ## @param initContainers  Add additional init containers to the Adapter pods
 ##
-initContainers: {}
+initContainers: []
 
 ## Add sidecars to the wavefront-hpa-adapter pods.
 ## Example:
@@ -322,7 +322,7 @@ initContainers: {}
 ##
 ## @param sidecars  Add additional sidecar containers to the Adapter pod
 ##
-sidecars: {}
+sidecars: []
 
 ## Adapter prefix parameter
 ## @param adapterMetricPrefix Adapter metric `prefix` parameter

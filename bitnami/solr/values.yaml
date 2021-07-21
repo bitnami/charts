@@ -309,7 +309,7 @@ initContainers: []
 ##       - name: portname
 ##         containerPort: 1234
 ##
-sidecars: {}
+sidecars: []
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
 ##
@@ -789,7 +789,7 @@ exporter:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  initContainers: {}
+  initContainers: []
   ## @param exporter.sidecars Add sidecars to the %%MAIN_CONTAINER_NAME%% pods
   ## Example:
   ## sidecars:
@@ -800,7 +800,7 @@ exporter:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## Service for the Solr exporter deployment
   ##
   service:

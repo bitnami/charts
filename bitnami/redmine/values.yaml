@@ -196,7 +196,7 @@ extraVolumeMounts: []
 #     ports:
 #       - name: portname
 #         containerPort: 1234
-sidecars: {}
+sidecars: []
 ## @param initContainers Add additional init containers to the Redmine pods
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
 ## e.g:
@@ -206,7 +206,7 @@ sidecars: {}
 #    image: your-image
 #    imagePullPolicy: Always
 #    command: ['sh', '-c', 'copy addons from git and push to /bitnami/redmine/plugins. Should work with extraVolumeMounts and extraVolumes']
-initContainers: {}
+initContainers: []
 ## @param podLabels Extra labels for Redmine pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
@@ -858,7 +858,7 @@ mailReceiver:
   #       - name: portname
   #         containerPort: 1234
   #
-  initContainers: {}
+  initContainers: []
   ## @param mailReceiver.sidecars Add additional sidecar containers to the mailReceiver pods
   ## Example:
   ##
@@ -870,7 +870,7 @@ mailReceiver:
   #       - name: portname
   #         containerPort: 1234
   #
-  sidecars: {}
+  sidecars: []
   ## @param mailReceiver.podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ## Allowed values: soft, hard
