@@ -51,16 +51,15 @@ The command removes all the Kubernetes components associated with the chart and 
 ### Global parameters
 
 | Name                      | Description                                     | Value |
-| ------------------------- | ----------------------------------------------- | ----- |
+|---------------------------|-------------------------------------------------|-------|
 | `global.imageRegistry`    | Global Docker image registry                    | `nil` |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `nil` |
 
-
 ### Common parameters
 
 | Name                | Description                                                          | Value           |
-| ------------------- | -------------------------------------------------------------------- | --------------- |
+|---------------------|----------------------------------------------------------------------|-----------------|
 | `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set) | `nil`           |
 | `nameOverride`      | String to partially override common.names.fullname                   | `nil`           |
 | `fullnameOverride`  | String to fully override common.names.fullname                       | `nil`           |
@@ -69,11 +68,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `clusterDomain`     | Default Kubernetes cluster domain                                    | `cluster.local` |
 | `extraDeploy`       | Array of extra objects to deploy with the release                    | `[]`            |
 
-
 ### JasperReports parameters
 
 | Name                    | Description                                                            | Value                   |
-| ----------------------- | ---------------------------------------------------------------------- | ----------------------- |
+|-------------------------|------------------------------------------------------------------------|-------------------------|
 | `image.registry`        | JasperReports image registry                                           | `docker.io`             |
 | `image.repository`      | JasperReports image repository                                         | `bitnami/jasperreports` |
 | `image.tag`             | JasperReports image tag (immutable tags are recommended)               | `7.8.0-debian-10-r251`  |
@@ -96,30 +94,27 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVarsSecret`    | Name of existing Secret containing extra env vars                      | `nil`                   |
 | `updateStrategy.type`   | StrategyType                                                           | `RollingUpdate`         |
 
-
 ### Jasperreports deployment parameters
 
 | Name                                 | Description                                                                               | Value                      |
-| ------------------------------------ | ----------------------------------------------------------------------------------------- | -------------------------- |
+|--------------------------------------|-------------------------------------------------------------------------------------------|----------------------------|
 | `hostAliases`                        | Add deployment host aliases                                                               | `[]`                       |
 | `containerPort`                      | HTTP port to expose at container level                                                    | `8080`                     |
 | `podSecurityContext.enabled`         | Enable pod's Security Context                                                             | `true`                     |
-| `podSecurityContext.fsGroup`         | Set pod's Security Context fsGroup                                                        | `0`                        |
+| `podSecurityContext.fsGroup`         | Set pod's Security Context fsGroup                                                        | `1001`                     |
 | `containerSecurityContext.enabled`   | Enable container's Security Context                                                       | `true`                     |
-| `containerSecurityContext.runAsUser` | Set container's Security Context runAsUser                                                | `0`                        |
+| `containerSecurityContext.runAsUser` | Set container's Security Context runAsUser                                                | `1001`                     |
 | `resources.limits`                   | The resources limits for the Jasperreports container                                      | `{}`                       |
 | `resources.requests`                 | The requested resources for the Jasperreports container                                   | `{}`                       |
 | `livenessProbe.enabled`              | Enable livenessProbe                                                                      | `true`                     |
-| `livenessProbe.httpGet.path`         | Request path for livenessProbe                                                            | `/jasperserver/login.html` |
-| `livenessProbe.httpGet.port`         | Port for livenessProbe                                                                    | `http`                     |
+| `livenessProbe.path`                 | Request path for livenessProbe                                                            | `/jasperserver/login.html` |
 | `livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                   | `300`                      |
 | `livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                          | `10`                       |
 | `livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                         | `5`                        |
 | `livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                       | `6`                        |
 | `livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                       | `1`                        |
 | `readinessProbe.enabled`             | Enable readinessProbe                                                                     | `true`                     |
-| `readinessProbe.httpGet.path`        | Request path for readinessProbe                                                           | `/jasperserver/login.html` |
-| `readinessProbe.httpGet.port`        | Port for readinessProbe                                                                   | `http`                     |
+| `readinessProbe.path`                | Request path for readinessProbe                                                           | `/jasperserver/login.html` |
 | `readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                  | `30`                       |
 | `readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                         | `10`                       |
 | `readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                        | `5`                        |
@@ -148,11 +143,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.size`                   | PVC Storage Request for Jasperreports volume                                              | `8Gi`                      |
 | `persistence.existingClaim`          | An Existing PVC name for Jasperreports volume                                             | `""`                       |
 
-
 ### Exposure parameters
 
 | Name                            | Description                                                                                   | Value                    |
-| ------------------------------- | --------------------------------------------------------------------------------------------- | ------------------------ |
+|---------------------------------|-----------------------------------------------------------------------------------------------|--------------------------|
 | `service.type`                  | Kubernetes Service type                                                                       | `LoadBalancer`           |
 | `service.port`                  | Service HTTP port                                                                             | `80`                     |
 | `service.nodePort`              | Kubernetes http node port                                                                     | `""`                     |
@@ -172,11 +166,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.extraTls`              | The tls configuration for additional hostnames to be covered with this ingress record.        | `[]`                     |
 | `ingress.secrets`               | If you're providing your own certificates, please use this to add the certificates as secrets | `[]`                     |
 
-
 ### Database parameters
 
 | Name                                        | Description                                          | Value                   |
-| ------------------------------------------- | ---------------------------------------------------- | ----------------------- |
+|---------------------------------------------|------------------------------------------------------|-------------------------|
 | `mariadb.enabled`                           | Whether to use the MariaDB chart                     | `true`                  |
 | `mariadb.architecture`                      | MariaDB architecture (`standalone` or `replication`) | `standalone`            |
 | `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                 | `""`                    |
@@ -195,7 +188,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.user`                     | Existing username in the external db                 | `bn_jasperreports`      |
 | `externalDatabase.password`                 | Password for the above username                      | `nil`                   |
 | `externalDatabase.database`                 | Name of the existing database                        | `bitnami_jasperreports` |
-
 
 The above parameters map to the env variables defined in [bitnami/jasperreports](http://github.com/bitnami/bitnami-docker-jasperreports). For more information please refer to the [bitnami/jasperreports](http://github.com/bitnami/bitnami-docker-jasperreports) image documentation.
 
@@ -283,6 +275,19 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 11.0.0
+
+The [Bitnami JasperReports](https://github.com/bitnami/bitnami-docker-jasperreports) image was migrated to a "non-root" user approach. Previously the container ran as the `root` user and the Tomcat daemon was started as the `tomcat` user. From now on, both the container and the Tomcat daemon run as user `1001`. You can revert this behavior by setting the parameters `containerSecurityContext.runAsUser` to `root`.
+
+Consequences:
+
+- The HTTP/HTTPS ports exposed by the container are now `8080/8443` instead of `80/443`.
+- Backwards compatibility is not guaranteed.
+
+To upgrade to `9.0.0`, backup JasperReports data and the previous MariaDB databases, install a new JasperReports chart and import the backups and data, ensuring the `1001` user has the appropriate permissions on the migrated volume.
+
+In addition to this, the image was refactored and now the source code is published in GitHub in the [`rootfs`](https://github.com/bitnami/bitnami-docker-jasperreports/tree/master/7/debian-10/rootfs) folder of the container image.
 
 ### To 10.0.0
 
