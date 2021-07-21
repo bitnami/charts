@@ -261,7 +261,7 @@ extraEnvVars:
     value: "x.y.z"
 ```
 
-To add extra environment variables from an external ConfigMap or secrets, use the `extraEnvVarsCM` and `extraEnvVarsSecret` properties. Note that the secret and ConfigMap should be already available in the namespace.
+To add extra environment variables from an external ConfigMap or secret, use the `extraEnvVarsCM` and `extraEnvVarsSecret` properties. Note that the secret and ConfigMap should be already available in the namespace.
 
 ```yaml
 extraEnvVarsSecret: logstash-secrets
