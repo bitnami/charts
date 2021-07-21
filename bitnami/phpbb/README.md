@@ -52,18 +52,18 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `nil` |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
 
 ### Common parameters
 
 | Name                | Description                                                                                               | Value |
 | ------------------- | --------------------------------------------------------------------------------------------------------- | ----- |
-| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                                      | `nil` |
-| `nameOverride`      | String to partially override common.names.fullname template (will maintain the release name)              | `nil` |
-| `fullnameOverride`  | String to fully override common.names.fullname template                                                   | `nil` |
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                                      | `""`  |
+| `nameOverride`      | String to partially override common.names.fullname template (will maintain the release name)              | `""`  |
+| `fullnameOverride`  | String to fully override common.names.fullname template                                                   | `""`  |
 | `commonAnnotations` | Common annotations to add to all phpBB resources (sub-charts are not considered). Evaluated as a template | `{}`  |
 | `commonLabels`      | Common labels to add to all phpBB resources (sub-charts are not considered). Evaluated as a template      | `{}`  |
 | `extraDeploy`       | Array of extra objects to deploy with the release (evaluated as a template)                               | `[]`  |
@@ -83,22 +83,22 @@ The command removes all the Kubernetes components associated with the chart and 
 | `phpbbSkipInstall`                     | Skip phpBB installation wizard. Useful for migrations and restoring from SQL dump                                                                         | `no`                    |
 | `phpbbDisableSessionValidation`        | Disable session validation                                                                                                                                | `yes`                   |
 | `phpbbUsername`                        | User of the application                                                                                                                                   | `user`                  |
-| `phpbbPassword`                        | Application password                                                                                                                                      | `nil`                   |
+| `phpbbPassword`                        | Application password                                                                                                                                      | `""`                    |
 | `phpbbEmail`                           | Admin email                                                                                                                                               | `user@example.com`      |
 | `allowEmptyPassword`                   | Allow DB blank passwords                                                                                                                                  | `no`                    |
-| `command`                              | Override default container command (useful when using custom images)                                                                                      | `nil`                   |
-| `args`                                 | Override default container args (useful when using custom images)                                                                                         | `nil`                   |
+| `command`                              | Override default container command (useful when using custom images)                                                                                      | `[]`                    |
+| `args`                                 | Override default container args (useful when using custom images)                                                                                         | `[]`                    |
 | `hostAliases`                          | Add deployment host aliases                                                                                                                               | `[]`                    |
 | `updateStrategy.type`                  | Update strategy - only really applicable for deployments with RWO PVs attached                                                                            | `RollingUpdate`         |
 | `extraEnvVars`                         | An array to add extra env vars                                                                                                                            | `[]`                    |
-| `extraEnvVarsCM`                       | ConfigMap with extra environment variables                                                                                                                | `nil`                   |
-| `extraEnvVarsSecret`                   | Secret with extra environment variables                                                                                                                   | `nil`                   |
+| `extraEnvVarsCM`                       | ConfigMap with extra environment variables                                                                                                                | `""`                    |
+| `extraEnvVarsSecret`                   | Secret with extra environment variables                                                                                                                   | `""`                    |
 | `extraVolumes`                         | Extra volumes to add to the deployment. Requires setting `extraVolumeMounts`                                                                              | `[]`                    |
 | `extraVolumeMounts`                    | Extra volume mounts to add to the container. Normally used with `extraVolumes`                                                                            | `[]`                    |
 | `initContainers`                       | Extra init containers to add to the deployment                                                                                                            | `[]`                    |
 | `sidecars`                             | Extra sidecar containers to add to the deployment                                                                                                         | `[]`                    |
 | `tolerations`                          | Tolerations for pod assignment                                                                                                                            | `[]`                    |
-| `existingSecret`                       | Use existing secret for the application password                                                                                                          | `nil`                   |
+| `existingSecret`                       | Use existing secret for the application password                                                                                                          | `""`                    |
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                                                        | `bitnami/bitnami-shell` |
@@ -107,18 +107,18 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                                                                                                    | `{}`                    |
 | `volumePermissions.resources.requests` | The requested resources for the container                                                                                                                 | `{}`                    |
-| `smtpHost`                             | SMTP host                                                                                                                                                 | `nil`                   |
-| `smtpPort`                             | SMTP port                                                                                                                                                 | `nil`                   |
-| `smtpUser`                             | SMTP user                                                                                                                                                 | `nil`                   |
-| `smtpPassword`                         | SMTP password                                                                                                                                             | `nil`                   |
-| `smtpProtocol`                         | SMTP Protocol (options: ssl,tls, nil)                                                                                                                     | `nil`                   |
+| `smtpHost`                             | SMTP host                                                                                                                                                 | `""`                    |
+| `smtpPort`                             | SMTP port                                                                                                                                                 | `""`                    |
+| `smtpUser`                             | SMTP user                                                                                                                                                 | `""`                    |
+| `smtpPassword`                         | SMTP password                                                                                                                                             | `""`                    |
+| `smtpProtocol`                         | SMTP Protocol (options: ssl,tls, nil)                                                                                                                     | `""`                    |
 | `containerPorts`                       | Container ports                                                                                                                                           | `{}`                    |
 | `persistence.enabled`                  | Enable persistence using PVC                                                                                                                              | `true`                  |
-| `persistence.storageClass`             | Database data Persistent Volume Storage Class                                                                                                             | `nil`                   |
+| `persistence.storageClass`             | Database data Persistent Volume Storage Class                                                                                                             | `""`                    |
 | `persistence.accessMode`               | PVC Access Mode for phpBB volume                                                                                                                          | `ReadWriteOnce`         |
 | `persistence.size`                     | PVC Storage Request for phpBB volume                                                                                                                      | `8Gi`                   |
-| `persistence.existingClaim`            | A manually managed Persistent Volume Claim                                                                                                                | `nil`                   |
-| `persistence.hostPath`                 | Host mount path for phpBB volume                                                                                                                          | `nil`                   |
+| `persistence.existingClaim`            | A manually managed Persistent Volume Claim                                                                                                                | `""`                    |
+| `persistence.hostPath`                 | Host mount path for phpBB volume                                                                                                                          | `""`                    |
 | `podAffinityPreset`                    | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                       | `""`                    |
 | `podAntiAffinityPreset`                | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                  | `soft`                  |
 | `nodeAffinityPreset.type`              | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                 | `""`                    |
@@ -145,8 +145,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `readinessProbe.successThreshold`      | Success threshold for readinessProbe                                                                                                                      | `1`                     |
 | `customLivenessProbe`                  | Override default liveness probe                                                                                                                           | `{}`                    |
 | `customReadinessProbe`                 | Override default readiness probe                                                                                                                          | `{}`                    |
-| `priorityClassName`                    | Define the priority class name to use for the phpbb pods                                                                                                  | `nil`                   |
-| `lifecycleHooks`                       | LifecycleHook to set additional configuration before or after startup                                                                                     | `nil`                   |
+| `priorityClassName`                    | Define the priority class name to use for the phpbb pods                                                                                                  | `""`                    |
+| `lifecycleHooks`                       | LifecycleHook to set additional configuration before or after startup                                                                                     | `{}`                    |
 | `podAnnotations`                       | Pod annotations                                                                                                                                           | `{}`                    |
 | `podLabels`                            | Pod extra labels                                                                                                                                          | `{}`                    |
 
@@ -164,7 +164,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.enabled`               | Set to true to enable ingress record generation                                                        | `false`                  |
 | `ingress.certManager`           | Set this to true in order to add the corresponding annotations for cert-manager                        | `false`                  |
 | `ingress.pathType`              | Ingress path type                                                                                      | `ImplementationSpecific` |
-| `ingress.apiVersion`            | Override API Version (automatically detected if not set)                                               | `nil`                    |
+| `ingress.apiVersion`            | Override API Version (automatically detected if not set)                                               | `""`                     |
 | `ingress.hostname`              | Default host for the ingress resource                                                                  | `phpbb.local`            |
 | `ingress.path`                  | The Path to phpBB. You may need to set this to '/*' in order to use this with ALB ingress controllers. | `ImplementationSpecific` |
 | `ingress.annotations`           | Ingress annotations                                                                                    | `{}`                     |
@@ -186,12 +186,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `mariadb.auth.username`                     | Database user to create                                                              | `bn_phpbb`      |
 | `mariadb.auth.password`                     | Password for the database                                                            | `""`            |
 | `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                | `true`          |
-| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                      | `nil`           |
+| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                      | `""`            |
 | `mariadb.primary.persistence.accessModes`   | PVC Access Modes for phpBB volume                                                    | `[]`            |
 | `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                      | `8Gi`           |
-| `mariadb.primary.persistence.hostPath`      | Host mount path for MariaDB volume                                                   | `nil`           |
-| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas             | `nil`           |
-| `externalDatabase.existingSecret`           | Use existing secret (ignores previous password)                                      | `nil`           |
+| `mariadb.primary.persistence.hostPath`      | Host mount path for MariaDB volume                                                   | `""`            |
+| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas             | `""`            |
+| `externalDatabase.existingSecret`           | Use existing secret (ignores previous password)                                      | `""`            |
 | `externalDatabase.host`                     | Host of the existing database                                                        | `""`            |
 | `externalDatabase.port`                     | Port of the existing database                                                        | `3306`          |
 | `externalDatabase.user`                     | Existing username in the external db                                                 | `bn_phpbb`      |

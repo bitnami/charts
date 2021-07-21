@@ -9,26 +9,26 @@
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
 
 ## @section Common parameters
 ##
 
 ## @param kubeVersion Override Kubernetes version
 ##
-kubeVersion:
+kubeVersion: ""
 ## @param nameOverride String to partially override common.names.fullname
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param commonLabels Labels to add to all deployed objects
 ##
 commonLabels: {}
@@ -74,16 +74,16 @@ service:
   ## NOTE: choose port between <30000-32767>
   ##
   nodePorts:
-    http:
+    http: ""
   ## @param service.clusterIP OAuth2 Proxy service Cluster IP
   ## e.g.:
   ## clusterIP: None
   ##
-  clusterIP:
+  clusterIP: ""
   ## @param service.loadBalancerIP OAuth2 Proxy service Load Balancer IP
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
   ##
-  loadBalancerIP:
+  loadBalancerIP: ""
   ## @param service.loadBalancerSourceRanges OAuth2 Proxy service Load Balancer sources
   ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
   ## e.g:
@@ -114,7 +114,7 @@ ingress:
   pathType: ImplementationSpecific
   ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
   ##
-  apiVersion:
+  apiVersion: ""
   ## @param ingress.hostname Default host for the ingress record
   ##
   hostname: oaut2-proxy.local
@@ -208,7 +208,7 @@ configuration:
   cookieSecret: "XXXXXXXXXXXXXXXX"
   ## @param configuration.existingSecret Secret with the client ID, secret and cookie secret
   ##
-  existingSecret:
+  existingSecret: ""
   ## e.g:
   ## google:
   ##   adminEmail: xxxx
@@ -223,9 +223,9 @@ configuration:
   ##
   google:
     enabled: false
-    adminEmail:
-    serviceAccountJson:
-    existingSecret:
+    adminEmail: ""
+    serviceAccountJson: ""
+    existingSecret: ""
   ## Custom configuration file: oauth2_proxy.cfg
   ## content: |
   ##   pass_basic_auth = false
@@ -239,7 +239,7 @@ configuration:
 
   ## @param configuration.existingConfigmap Configmap with the OAuth2 Proxy configuration
   ##
-  existingConfigmap:
+  existingConfigmap: ""
   ## Authorize individual email addresses
   ## @param configuration.authenticatedEmailsFile.enabled Enable authenticated emails file
   ## @param configuration.authenticatedEmailsFile.content Restricted access list (one email per line)
@@ -254,8 +254,8 @@ configuration:
     ##   name2@domain
     ## If you override the config with restricted_access it will configure a user list within this chart what takes care of the configmap
     ##
-    content:
-    existingSecret:
+    content: ""
+    existingSecret: ""
 
   ## Additionally authenticate against a htpasswd file. Entries must be created with "htpasswd -s" for SHA encryption
   ## @param configuration.htpasswdFile.enabled Enable htpasswd file
@@ -272,7 +272,7 @@ configuration:
     ## entries: |
     ##    testuser:{SHA}EWhzdhgoYJWy0z2gyzhRYlN9DSiv
     ##
-    content:
+    content: ""
 
 ## @section OAuth2 Proxy deployment parameters
 ##
@@ -287,7 +287,7 @@ replicaCount: 1
 
 ## @param extraArgs add extra args to the default command
 ##
-extraArgs:
+extraArgs: []
 ## Configure extra options for OAuth2 Proxy containers' liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe on OAuth2 Proxy nodes
@@ -444,10 +444,10 @@ lifecycleHooks: {}
 extraEnvVars: []
 ## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars for OAuth2 Proxy nodes
 ##
-extraEnvVarsCM:
+extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Name of existing Secret containing extra env vars for OAuth2 Proxy nodes
 ##
-extraEnvVarsSecret:
+extraEnvVarsSecret: ""
 ## @param extraVolumes Optionally specify extra list of additional volumes for the OAuth2 Proxy pod(s)
 ##
 extraVolumes: []
@@ -464,7 +464,7 @@ extraVolumeMounts: []
 ##       - name: portname
 ##         containerPort: 1234
 ##
-sidecars: {}
+sidecars: []
 ## @param initContainers Add additional init containers to the OAuth2 Proxy pod(s)
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
 ## e.g:
@@ -474,7 +474,7 @@ sidecars: {}
 ##    imagePullPolicy: Always
 ##    command: ['sh', '-c', 'echo "hello world"']
 ##
-initContainers: {}
+initContainers: []
 
 ## ServiceAccount configuration
 ##
@@ -492,10 +492,10 @@ serviceAccount:
 externalRedis:
   ## @param externalRedis.host External Redis(TM) server host
   ##
-  host:
+  host: ""
   ## @param externalRedis.password External Redis(TM) user password
   ##
-  password:
+  password: ""
   ## @param externalRedis.port External Redis(TM) server port
   ##
   port: 6379
@@ -503,7 +503,7 @@ externalRedis:
   ## NOTE: Must contain key `redis-password`
   ## NOTE: When it's set, the `externalRedis.password` parameter is ignored
   ##
-  existingSecret:
+  existingSecret: ""
 
 ## @section Redis(TM) sub-chart parameters
 ##
@@ -529,10 +529,10 @@ redis:
     enabled: true
     ## @param redis.auth.existingSecret Secret with Redis(TM) credentials
     ##
-    existingSecret:
+    existingSecret: ""
     ## @param redis.auth.existingSecretPasswordKey Key inside the existing secret with Redis(TM) credentials
     ##
-    existingSecretPasswordKey:
+    existingSecretPasswordKey: ""
     ## @param redis.auth.sentinel Enable authentication in the Sentinel nodes
     ##
     sentinel: true

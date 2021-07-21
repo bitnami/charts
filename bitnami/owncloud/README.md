@@ -52,18 +52,18 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `nil` |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
 
 ### Common parameters
 
 | Name               | Description                                                                              | Value |
 | ------------------ | ---------------------------------------------------------------------------------------- | ----- |
-| `kubeVersion`      | Force target Kubernetes version (using Helm capabilities if not set)                     | `nil` |
-| `nameOverride`     | String to partially override owncloud.fullname template (will maintain the release name) | `nil` |
-| `fullnameOverride` | String to fully override owncloud.fullname template                                      | `nil` |
+| `kubeVersion`      | Force target Kubernetes version (using Helm capabilities if not set)                     | `""`  |
+| `nameOverride`     | String to partially override owncloud.fullname template (will maintain the release name) | `""`  |
+| `fullnameOverride` | String to fully override owncloud.fullname template                                      | `""`  |
 | `extraDeploy`      | Array of extra objects to deploy with the release (evaluated as a template)              | `[]`  |
 
 
@@ -80,30 +80,30 @@ The command removes all the Kubernetes components associated with the chart and 
 | `hostAliases`                        | Deployment pod host aliases                                                                                  | `[]`                   |
 | `replicaCount`                       | Number of replicas (requires ReadWriteMany PVC support)                                                      | `1`                    |
 | `owncloudSkipInstall`                | Skip ownCloud installation wizard. Useful for migrations and restoring from SQL dump                         | `false`                |
-| `owncloudHost`                       | ownCloud host to create application URLs (when ingress, it will be ignored)                                  | `nil`                  |
+| `owncloudHost`                       | ownCloud host to create application URLs (when ingress, it will be ignored)                                  | `""`                   |
 | `owncloudUsername`                   | User of the application                                                                                      | `user`                 |
-| `owncloudPassword`                   | Application password                                                                                         | `nil`                  |
+| `owncloudPassword`                   | Application password                                                                                         | `""`                   |
 | `owncloudEmail`                      | Admin email                                                                                                  | `user@example.com`     |
 | `allowEmptyPassword`                 | Allow DB blank passwords                                                                                     | `false`                |
-| `command`                            | Override default container command (useful when using custom images)                                         | `nil`                  |
-| `args`                               | Override default container args (useful when using custom images)                                            | `nil`                  |
+| `command`                            | Override default container command (useful when using custom images)                                         | `[]`                   |
+| `args`                               | Override default container args (useful when using custom images)                                            | `[]`                   |
 | `commonAnnotations`                  | Common annotations to add to all ownCloud resources (sub-charts are not considered). Evaluated as a template | `{}`                   |
 | `commonLabels`                       | Common labels to add to all ownCloud resources (sub-charts are not considered). Evaluated as a template      | `{}`                   |
 | `updateStrategy.type`                | Update strategy - only really applicable for deployments with RWO PVs attached                               | `RollingUpdate`        |
 | `extraEnvVars`                       | An array to add extra env vars                                                                               | `[]`                   |
-| `extraEnvVarsCM`                     | ConfigMap with extra environment variables                                                                   | `nil`                  |
-| `extraEnvVarsSecret`                 | Secret with extra environment variables                                                                      | `nil`                  |
+| `extraEnvVarsCM`                     | ConfigMap with extra environment variables                                                                   | `""`                   |
+| `extraEnvVarsSecret`                 | Secret with extra environment variables                                                                      | `""`                   |
 | `extraVolumes`                       | Extra volumes to add to the deployment. Requires setting `extraVolumeMounts`                                 | `[]`                   |
 | `extraVolumeMounts`                  | Extra volume mounts to add to the container. Normally used with `extraVolumes`                               | `[]`                   |
 | `initContainers`                     | Extra init containers to add to the deployment                                                               | `[]`                   |
 | `sidecars`                           | Extra sidecar containers to add to the deployment                                                            | `[]`                   |
 | `tolerations`                        | Tolerations for pod assignment                                                                               | `[]`                   |
-| `existingSecret`                     | Name of a secret with the application password                                                               | `nil`                  |
-| `smtpHost`                           | SMTP host                                                                                                    | `nil`                  |
-| `smtpPort`                           | SMTP port                                                                                                    | `nil`                  |
-| `smtpUser`                           | SMTP user                                                                                                    | `nil`                  |
-| `smtpPassword`                       | SMTP password                                                                                                | `nil`                  |
-| `smtpProtocol`                       | SMTP Protocol (options: ssl,tls, nil)                                                                        | `nil`                  |
+| `existingSecret`                     | Name of a secret with the application password                                                               | `""`                   |
+| `smtpHost`                           | SMTP host                                                                                                    | `""`                   |
+| `smtpPort`                           | SMTP port                                                                                                    | `""`                   |
+| `smtpUser`                           | SMTP user                                                                                                    | `""`                   |
+| `smtpPassword`                       | SMTP password                                                                                                | `""`                   |
+| `smtpProtocol`                       | SMTP Protocol (options: ssl,tls, nil)                                                                        | `""`                   |
 | `containerPorts.http`                | Sets HTTP port inside NGINX container                                                                        | `8080`                 |
 | `containerPorts.https`               | Sets HTTPS port inside NGINX container                                                                       | `8443`                 |
 | `sessionAffinity`                    | Control where client requests go, to the same pod or round-robin                                             | `None`                 |
@@ -143,7 +143,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `customLivenessProbe`                | Override default liveness probe                                                                              | `{}`                   |
 | `customReadinessProbe`               | Override default readiness probe                                                                             | `{}`                   |
 | `customStartupProbe`                 | Override default startup probe                                                                               | `{}`                   |
-| `lifecycleHooks`                     | LifecycleHook to set additional configuration before or after startup                                        | `nil`                  |
+| `lifecycleHooks`                     | LifecycleHook to set additional configuration before or after startup                                        | `{}`                   |
 | `podAnnotations`                     | Pod annotations                                                                                              | `{}`                   |
 | `podLabels`                          | Pod extra labels                                                                                             | `{}`                   |
 
@@ -159,15 +159,15 @@ The command removes all the Kubernetes components associated with the chart and 
 | `mariadb.auth.username`                     | Database user to create                                                                  | `bn_owncloud`      |
 | `mariadb.auth.password`                     | Password for the database                                                                | `""`               |
 | `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                    | `true`             |
-| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                          | `nil`              |
+| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                          | `""`               |
 | `mariadb.primary.persistence.accessModes`   | Database Persistent Volume Access Modes                                                  | `[]`               |
 | `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                          | `8Gi`              |
-| `mariadb.primary.persistence.hostPath`      | Set path in case you want to use local host path volumes (not recommended in production) | `nil`              |
-| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas                 | `nil`              |
-| `externalDatabase.host`                     | Host of the existing database                                                            | `nil`              |
+| `mariadb.primary.persistence.hostPath`      | Set path in case you want to use local host path volumes (not recommended in production) | `""`               |
+| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas                 | `""`               |
+| `externalDatabase.host`                     | Host of the existing database                                                            | `""`               |
 | `externalDatabase.port`                     | Port of the existing database                                                            | `3306`             |
 | `externalDatabase.user`                     | Existing username in the external db                                                     | `bn_owncloud`      |
-| `externalDatabase.password`                 | Password for the above username                                                          | `nil`              |
+| `externalDatabase.password`                 | Password for the above username                                                          | `""`               |
 | `externalDatabase.database`                 | Name of the existing database                                                            | `bitnami_owncloud` |
 
 
@@ -176,11 +176,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                        | Description                                                                | Value           |
 | --------------------------- | -------------------------------------------------------------------------- | --------------- |
 | `persistence.enabled`       | Enable persistence using PVC                                               | `true`          |
-| `persistence.storageClass`  | PVC Storage Class for ownCloud volume                                      | `nil`           |
+| `persistence.storageClass`  | PVC Storage Class for ownCloud volume                                      | `""`            |
 | `persistence.accessMode`    | PVC Access Mode for ownCloud volume                                        | `ReadWriteOnce` |
 | `persistence.size`          | PVC Storage Request for ownCloud volume                                    | `8Gi`           |
-| `persistence.existingClaim` | An Existing PVC name for ownCloud volume                                   | `nil`           |
-| `persistence.hostPath`      | If defined, the owncloud-data volume will mount to the specified hostPath. | `nil`           |
+| `persistence.existingClaim` | An Existing PVC name for ownCloud volume                                   | `""`            |
+| `persistence.hostPath`      | If defined, the owncloud-data volume will mount to the specified hostPath. | `""`            |
 
 
 ### Volume Permissions parameters
@@ -204,9 +204,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.type`                     | Kubernetes Service type                                                                       | `LoadBalancer`           |
 | `service.port`                     | Service HTTP port                                                                             | `8080`                   |
 | `service.httpsPort`                | Service HTTPS port                                                                            | `8443`                   |
-| `service.clusterIP`                | Service cluster IP                                                                            | `nil`                    |
+| `service.clusterIP`                | Service cluster IP                                                                            | `""`                     |
 | `service.loadBalancerSourceRanges` | Control hosts connecting to "LoadBalancer" only                                               | `[]`                     |
-| `service.loadBalancerIP`           | Load balancer IP for the ownCloud Service (optional, cloud specific)                          | `nil`                    |
+| `service.loadBalancerIP`           | Load balancer IP for the ownCloud Service (optional, cloud specific)                          | `""`                     |
 | `service.nodePorts.http`           | Kubernetes HTTP node port                                                                     | `""`                     |
 | `service.nodePorts.https`          | Kubernetes HTTPS node port                                                                    | `""`                     |
 | `service.externalTrafficPolicy`    | Enable client source IP preservation                                                          | `Cluster`                |
@@ -216,9 +216,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.pathType`                 | Ingress path type                                                                             | `ImplementationSpecific` |
 | `ingress.annotations`              | Ingress annotations                                                                           | `{}`                     |
 | `ingress.tls`                      | Enable TLS configuration for the hostname defined at ingress.hostname parameter               | `false`                  |
-| `ingress.extraHosts`               | The list of additional hostnames to be covered with this ingress record.                      | `nil`                    |
+| `ingress.extraHosts`               | The list of additional hostnames to be covered with this ingress record.                      | `[]`                     |
 | `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.        | `[]`                     |
-| `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets | `nil`                    |
+| `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets | `[]`                     |
 
 
 ### Metrics parameters
@@ -242,17 +242,17 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                                 | Description                                                          | Value                                    |
 | ---------------------------------------------------- | -------------------------------------------------------------------- | ---------------------------------------- |
 | `certificates.customCertificate.certificateSecret`   | Secret containing the certificate and key to add                     | `""`                                     |
-| `certificates.customCertificate.chainSecret.name`    | Name of the secret containing the certificate chain                  | `nil`                                    |
-| `certificates.customCertificate.chainSecret.key`     | Key of the certificate chain file inside the secret                  | `nil`                                    |
+| `certificates.customCertificate.chainSecret.name`    | Name of the secret containing the certificate chain                  | `""`                                     |
+| `certificates.customCertificate.chainSecret.key`     | Key of the certificate chain file inside the secret                  | `""`                                     |
 | `certificates.customCertificate.certificateLocation` | Location in the container to store the certificate                   | `/etc/ssl/certs/ssl-cert-snakeoil.pem`   |
 | `certificates.customCertificate.keyLocation`         | Location in the container to store the private key                   | `/etc/ssl/private/ssl-cert-snakeoil.key` |
 | `certificates.customCertificate.chainLocation`       | Location in the container to store the certificate chain             | `/etc/ssl/certs/mychain.pem`             |
 | `certificates.customCAs`                             | Defines a list of secrets to import into the container trust store   | `[]`                                     |
-| `certificates.command`                               | Override default container command (useful when using custom images) | `nil`                                    |
-| `certificates.args`                                  | Override default container args (useful when using custom images)    | `nil`                                    |
+| `certificates.command`                               | Override default container command (useful when using custom images) | `[]`                                     |
+| `certificates.args`                                  | Override default container args (useful when using custom images)    | `[]`                                     |
 | `certificates.extraEnvVars`                          | Container sidecar extra environment variables                        | `[]`                                     |
-| `certificates.extraEnvVarsCM`                        | ConfigMap with extra environment variables                           | `nil`                                    |
-| `certificates.extraEnvVarsSecret`                    | Secret with extra environment variables                              | `nil`                                    |
+| `certificates.extraEnvVarsCM`                        | ConfigMap with extra environment variables                           | `""`                                     |
+| `certificates.extraEnvVarsSecret`                    | Secret with extra environment variables                              | `""`                                     |
 | `certificates.image.registry`                        | Container sidecar registry                                           | `docker.io`                              |
 | `certificates.image.repository`                      | Container sidecar image repository                                   | `bitnami/bitnami-shell`                  |
 | `certificates.image.tag`                             | Container sidecar image tag (immutable tags are recommended)         | `10-debian-10-r120`                      |

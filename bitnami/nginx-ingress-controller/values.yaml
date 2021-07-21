@@ -7,7 +7,7 @@
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
@@ -18,10 +18,10 @@ global:
 
 ## @param nameOverride String to partially override common.names.fullname
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param commonLabels Add labels to all the deployed resources
 ##
 commonLabels: {}
@@ -84,7 +84,7 @@ addHeaders: {}
 ## @param defaultBackendService Default 404 backend service; required only if `defaultBackend.enabled = false`
 ## Must be <namespace>/<service_name>
 ##
-defaultBackendService: ''
+defaultBackendService: ""
 ## @param electionID Election ID to use for status update
 ##
 electionID: ingress-controller-leader
@@ -106,7 +106,7 @@ publishService:
   ## @param publishService.pathOverride Allows overriding of the publish service to bind to
   ## Must be <namespace>/<service_name>
   ##
-  pathOverride: ''
+  pathOverride: ""
 ## @param scope.enabled Limit the scope of the controller. Defaults to `.Release.Namespace`
 ##
 scope:
@@ -114,22 +114,22 @@ scope:
 ## @param configMapNamespace Allows customization of the configmap / nginx-configmap namespace
 ## Defaults to .Release.Namespace
 ##
-configMapNamespace: ''
+configMapNamespace: ""
 ## @param tcpConfigMapNamespace Allows customization of the tcp-services-configmap namespace
 ## Defaults to .Release.Namespace
 ##
-tcpConfigMapNamespace: ''
+tcpConfigMapNamespace: ""
 ## @param udpConfigMapNamespace Allows customization of the udp-services-configmap namespace
 ## Defaults to .Release.Namespace
 ##
-udpConfigMapNamespace: ''
+udpConfigMapNamespace: ""
 ## @param maxmindLicenseKey License key used to download Geolite2 database
 ##
-maxmindLicenseKey: ''
+maxmindLicenseKey: ""
 ## @param dhParam A base64ed Diffie-Hellman parameter
 ## This can be generated with: openssl dhparam 4096 2> /
 ## Ref: https://github.com/krmichel/ingress-nginx/blob/master/docs/examples/customization/ssl-dh-param
-dhParam:
+dhParam: ""
 ## @param tcp TCP service key:value pairs
 ## ref: https://github.com/kubernetes/contrib/tree/master/ingress/controllers/nginx/examples/tcp
 ## e.g:
@@ -168,10 +168,10 @@ extraArgs: {}
 extraEnvVars: []
 ## @param extraEnvVarsCM Name of a existing ConfigMap containing extra environment variables
 ##
-extraEnvVarsCM:
+extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Name of a existing Secret containing extra environment variables
 ##
-extraEnvVarsSecret:
+extraEnvVarsSecret: ""
 
 ## @section Nginx Ingress deployment / daemonset parameters
 
@@ -311,7 +311,7 @@ podAnnotations: {}
 ## @param priorityClassName Controller priorityClassName
 ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
 ##
-priorityClassName: ''
+priorityClassName: ""
 ## @param hostNetwork If the Nginx deployment / daemonset should run on the host's network namespace
 ## Required on CNI based K8s installations, since CNI and hostport don't mix yet
 ## Can be deprecated once https://github.com/kubernetes/kubernetes/issues/23920 is merged
@@ -381,7 +381,7 @@ extraVolumeMounts: []
 ##       - name: portname
 ##         containerPort: 1234
 ##
-initContainers: {}
+initContainers: []
 ## @param sidecars Add sidecars to the controller pods.
 ## Example:
 ## sidecars:
@@ -392,12 +392,12 @@ initContainers: {}
 ##       - name: portname
 ##         containerPort: 1234
 ##
-sidecars: {}
+sidecars: []
 ## @param customTemplate [object] Override NGINX template
 ##
 customTemplate:
-  configMapName: ''
-  configMapKey: ''
+  configMapName: ""
+  configMapKey: ""
 ## @param topologySpreadConstraints Topology spread constraints rely on node labels to identify the topology domain(s) that each Node is in
 ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
 ##
@@ -566,7 +566,7 @@ defaultBackend:
   ## @param defaultBackend.priorityClassName priorityClassName
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   ##
-  priorityClassName: ''
+  priorityClassName: ""
   ## @param defaultBackend.podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
@@ -628,7 +628,7 @@ defaultBackend:
     minAvailable: 1
     ## @param defaultBackend.pdb.maxUnavailable Maximum number/percentage of Default backend pods that may be made unavailable
     ##
-    maxUnavailable:
+    maxUnavailable: ""
 
 ## @section Traffic exposure parameters
 
@@ -652,8 +652,8 @@ service:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
   nodePorts:
-    http: ''
-    https: ''
+    http: ""
+    https: ""
     tcp: {}
     udp: {}
   ## @param service.annotations Annotations for controller service
@@ -666,7 +666,7 @@ service:
   labels: {}
   ## @param service.clusterIP Controller Internal Cluster Service IP (optional)
   ##
-  clusterIP:
+  clusterIP: ""
   ## @param service.externalIPs Controller Service external IP addresses
   ## Ref: https://kubernetes.io/docs/user-guide/services/#external-ips
   ##
@@ -674,7 +674,7 @@ service:
   ## @param service.loadBalancerIP Kubernetes LoadBalancerIP to request for Controller (optional, cloud specific)
   ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
   ##
-  loadBalancerIP:
+  loadBalancerIP: ""
   ## @param service.loadBalancerSourceRanges List of IP CIDRs allowed access to load balancer (if supported)
   ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
   ##
@@ -683,7 +683,7 @@ service:
   ## Enable client source IP preservation
   ## Ref: https://kubernetes.io/docs/tutorials/services/source-ip/#source-ip-for-services-with-typeloadbalancer
   ##
-  externalTrafficPolicy: ''
+  externalTrafficPolicy: ""
   ## @param service.healthCheckNodePort Set this to the managed health-check port the kube-proxy will expose. If blank, a random port in the `NodePort` range will be assigned
   ##
   healthCheckNodePort: 0
@@ -699,7 +699,7 @@ serviceAccount:
   create: true
   ## @param serviceAccount.name Name of the created ServiceAccount
   ## If not set and create is true, a name is generated using the metrics-server.fullname template
-  name:
+  name: ""
   ## @param serviceAccount.annotations Annotations for service account.
   ## Only used if `create` is `true`.
   ##
@@ -726,7 +726,7 @@ pdb:
   minAvailable: 1
   ## @param pdb.maxUnavailable Maximum number/percentage of Controller pods that may be made unavailable
   ##
-  maxUnavailable:
+  maxUnavailable: ""
 ## Controller Autoscaling configuration
 ## @param autoscaling.enabled Enable autoscaling for Controller
 ## @param autoscaling.minReplicas Minimum number of Controller replicas
@@ -738,8 +738,8 @@ autoscaling:
   enabled: false
   minReplicas: 1
   maxReplicas: 11
-  targetCPU:
-  targetMemory:
+  targetCPU: ""
+  targetMemory: ""
 
 ## @section Metrics parameters
 
@@ -771,7 +771,7 @@ metrics:
     enabled: false
     ## @param metrics.serviceMonitor.namespace Namespace in which Prometheus is running
     ##
-    namespace:
+    namespace: ""
     ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
@@ -781,7 +781,7 @@ metrics:
     ## e.g:
     ## scrapeTimeout: 10s
     ##
-    scrapeTimeout:
+    scrapeTimeout: ""
     ## @param metrics.serviceMonitor.selector ServiceMonitor selector labels
     ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
     ## e.g:
@@ -797,5 +797,5 @@ metrics:
   prometheusRule:
     enabled: false
     additionalLabels: {}
-    namespace: ''
+    namespace: ""
     rules: []

@@ -8,22 +8,22 @@
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
 
 ## @section Common parameters
 
 ## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname template
 ##
-fullnameOverride:
+fullnameOverride: ""
 
 ## @section PyTorch parameters
 
@@ -136,7 +136,7 @@ service:
   ## @param service.nodePort Specify the nodePort value for the LoadBalancer and NodePort service types.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
-  nodePort:
+  nodePort: ""
   ## @param service.annotations Provide any additional annotations which may be required. This can be used to
   ## set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -147,8 +147,8 @@ service:
 ## @param entrypoint.args Args required by your entrypoint
 ##
 entrypoint:
-  file:
-  args:
+  file: ""
+  args: []
 ## @param mode Run PyTorch in standalone or distributed mode. Possible values: `standalone`, `distributed`
 ##
 mode: standalone
@@ -159,13 +159,13 @@ hostAliases: []
 ## @param worldSize Number of nodes that will run the code
 ## WORLD_SIZE will be set to this value
 ##
-worldSize:
+worldSize: ""
 ## @param port PyTorch master port. `MASTER_PORT` will be set to this value
 ##
 port: 49875
 ## @param configMap Config map that contains the files you want to load in PyTorch
 ##
-configMap:
+configMap: ""
 ## Enable in order to download files from git repository.
 ##
 cloneFilesFromGit:
@@ -174,10 +174,10 @@ cloneFilesFromGit:
   enabled: false
   ## @param cloneFilesFromGit.repository Repository that holds the files
   ##
-  repository:
+  repository: ""
   ## @param cloneFilesFromGit.revision Revision from the repository to checkout
   ##
-  revision:
+  revision: ""
   ## @param cloneFilesFromGit.extraVolumeMounts Add extra volume mounts for the Git container
   ## Useful to mount keys to connect through ssh. (normally used with extraVolumes)
   ## E.g:
@@ -321,7 +321,7 @@ persistence:
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##   GKE, AWS & OpenStack)
   ##
-  storageClass:
+  storageClass: ""
   ## @param persistence.annotations Persistent Volume Claim annotations
   ##
   annotations: {}

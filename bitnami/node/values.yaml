@@ -8,25 +8,25 @@
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
 
 ## @section Common parameters
 
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
-kubeVersion:
+kubeVersion: ""
 ## @param nameOverride String to partially override node.fullname template (will maintain the release name)
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override node.fullname template
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param commonLabels Add labels to all the deployed resources
 ##
 commonLabels: {}
@@ -54,10 +54,10 @@ hostAliases: []
 extraEnvVars: []
 ## @param extraEnvVarsCM Name of existing ConfigMap containing extra environment variables
 ##
-extraEnvVarsCM:
+extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Name of existing Secret containing extra environment variables
 ##
-extraEnvVarsSecret:
+extraEnvVarsSecret: ""
 ## MongoDB(R) chart configuration
 ## ref: https://github.com/bitnami/charts/blob/master/bitnami/mongodb/values.yaml
 ##
@@ -76,7 +76,7 @@ mongodb:
     ## @param mongodb.auth.rootPassword MongoDB&reg; admin password
     ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#setting-the-root-password-on-first-run
     ##
-    rootPassword: ''
+    rootPassword: ""
     ## @param mongodb.auth.username MongoDB&reg; custom user
     ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#creating-a-user-and-database-on-first-run
     ##
@@ -103,14 +103,14 @@ externaldb:
   ## @param externaldb.secretName Secret containing existing database credentials
   ## Please refer to the respective section in the README to know the details about this secret.
   ##
-  secretName:
+  secretName: ""
   ## @param externaldb.type Only if using Kubernetes Service Catalog you can specify the kind of broker used. Available options are osba|gce|aws
   ##
   type: osba
   ## @param externaldb.broker.serviceInstanceName If you provide the serviceInstanceName, the chart will create a ServiceBinding for that ServiceInstance
   ##
   broker:
-    serviceInstanceName:
+    serviceInstanceName: ""
 
 ## @section Node deployment parameters
 
@@ -148,7 +148,7 @@ applicationPort: 3000
 ## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
-podAffinityPreset: ''
+podAffinityPreset: ""
 ## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
@@ -159,12 +159,12 @@ podAntiAffinityPreset: soft
 nodeAffinityPreset:
   ## @param nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ##
-  type: ''
+  type: ""
   ## @param nodeAffinityPreset.key Node label key to match Ignored if `affinity` is set.
   ## E.g.
   ## key: "kubernetes.io/e2e-az-name"
   ##
-  key: ''
+  key: ""
   ## @param nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set.
   ## E.g.
   ## values:
@@ -240,7 +240,7 @@ customReadinessProbe: {}
 ## @param priorityClassName Node priorityClassName
 ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
 ##
-priorityClassName:
+priorityClassName: ""
 ## @param lifecycleHooks lifecycleHooks for the Node container to automate configuration before or after startup.
 ##
 lifecycleHooks: {}
@@ -254,7 +254,7 @@ lifecycleHooks: {}
 ##       - name: portname
 ##         containerPort: 1234
 ##
-sidecars: {}
+sidecars: []
 ## @param initContainers Add init containers to the Node pods
 ## Example:
 ## initContainers:
@@ -265,7 +265,7 @@ sidecars: {}
 ##       - name: portname
 ##         containerPort: 1234
 ##
-initContainers: {}
+initContainers: []
 ## @param extraVolumes Extra volumes to add to the deployment
 ##
 extraVolumes: []
@@ -427,7 +427,7 @@ persistence:
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##   GKE, AWS & OpenStack)
   ##
-  storageClass:
+  storageClass: ""
   ## @param persistence.accessMode PVC Access Mode
   ##
   accessMode: ReadWriteOnce
@@ -448,7 +448,7 @@ service:
   port: 80
   ## @param service.clusterIP Service Cluster IP
   ##
-  clusterIP:
+  clusterIP: ""
   ## @param service.sessionAffinity Control where client requests go, to the same pod or round-robin
   ## Values: ClientIP or None
   ## ref: https://kubernetes.io/docs/user-guide/services/
@@ -457,16 +457,16 @@ service:
   ## @param service.nodePort NodePort if Service type is `LoadBalancer` or `NodePort`
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
-  nodePort:
+  nodePort: ""
   ## @param service.loadBalancerIP LoadBalancer IP if Service type is `LoadBalancer`
   ## Set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
-  loadBalancerIP:
+  loadBalancerIP: ""
   ## @param service.loadBalancerSourceRanges In order to limit which client IP's can access the Network Load Balancer, specify loadBalancerSourceRanges
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#aws-nlb-support
   ##
-  loadBalancerSourceRanges:
+  loadBalancerSourceRanges: []
   ## @param service.annotations Annotations for the Service
   ## This can be used to set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -488,7 +488,7 @@ ingress:
   pathType: ImplementationSpecific
   ## @param ingress.apiVersion Override API Version (automatically detected if not set)
   ##
-  apiVersion:
+  apiVersion: ""
   ## @param ingress.hostname When the ingress is enabled, a host pointing to this will be created
   ##
   hostname: node.local
