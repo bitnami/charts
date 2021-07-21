@@ -137,7 +137,7 @@ serviceAccount:
   annotations: {}
   create: false
   ## The name of the service account to use. If not set and create is true, a name is generated using the fullname template.
-  # name:
+  name: ""
 ## @param sidecars List of sidecar containers to be added to web, worker and scheduler pods
 ## Example:
 ## sidecars:
@@ -324,11 +324,12 @@ web:
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
   ## @param web.podDisruptionBudget.enabled Enable PodDisruptionBudget for web pods
   ## @param web.podDisruptionBudget.minAvailable Minimum available instances; ignored if there is no PodDisruptionBudget
+  ## @param web.podDisruptionBudget.maxAvailable Maximum available instances; ignored if there is no PodDisruptionBudget
   ##
   podDisruptionBudget:
     enabled: false
     minAvailable: 1
-    # maxUnavailable: 1
+    maxUnavailable: ""
   ## @param web.sidecars Add sidecars to the Web pods
   ## Example:
   ## sidecars:
@@ -646,11 +647,12 @@ worker:
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
   ## @param worker.podDisruptionBudget.enabled Enable PodDisruptionBudget for worker pods
   ## @param worker.podDisruptionBudget.minAvailable Minimum available instances; ignored if there is no PodDisruptionBudget
+  ## @param worker.podDisruptionBudget.maxUnavailable Maximum available instances; ignored if there is no PodDisruptionBudget
   ##
   podDisruptionBudget:
     enabled: false
     minAvailable: 1
-    # maxUnavailable: 1
+    maxUnavailable: ""
   ## Enable HorizontalPodAutoscaler for worker pods
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
   ## @param worker.autoscaling.enabled Whether enable horizontal pod autoscale
@@ -930,13 +932,14 @@ ingress:
 ## ref: https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
 ## @param postgresql.enabled Switch to enable or disable the PostgreSQL helm chart
 ## @param postgresql.postgresqlUsername Airflow Postgresql username
+## @param postgresql.postgresqlPassword Airflow Postgresql password
 ## @param postgresql.postgresqlDatabase Airflow Postgresql database
 ## @param postgresql.existingSecret Name of an existing secret containing the PostgreSQL password ('postgresql-password' key)
 ##
 postgresql:
   enabled: true
   postgresqlUsername: bn_airflow
-  # postgresqlPassword:
+  postgresqlPassword: ""
   postgresqlDatabase: bitnami_airflow
   ## This secret is used in case of postgresql.enabled=true and we would like to specify password for newly created postgresql instance
   ##
@@ -965,6 +968,7 @@ externalDatabase:
 ## ref: https://github.com/bitnami/charts/blob/master/bitnami/redis/values.yaml
 ## @param redis.enabled Switch to enable or disable the Redis(TM) helm
 ## @param redis.auth.enabled Switch to enable or disable authentication
+## @param redis.auth.password Redis(TM) password
 ## @param redis.auth.existingSecret Name of existing secret object containing the password
 ## @param redis.architecture Cluster settings
 ##
@@ -976,7 +980,7 @@ redis:
     ## It should always be set using the password value or in the existingSecret to avoid issues
     ## with Airflow.
     ## The password value is ignored if existingSecret is set
-    # password:
+    password: ""
     existingSecret: ""
   architecture: standalone
 
@@ -1037,7 +1041,9 @@ metrics:
   serviceMonitor:
     enabled: false
     ## Namespace in which Prometheus is running
-    # namespace: monitoring
+    ## e.g:
+    ## namespace: monitoring
+    namespace: ""
     ## Interval at which metrics should be scraped.
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     interval: 60s
