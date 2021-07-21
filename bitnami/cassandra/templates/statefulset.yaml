@@ -374,7 +374,6 @@ spec:
           {{- else if .Values.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- end }}
           {{- if not .Values.persistence.enabled }}
           lifecycle:
             preStop:
@@ -383,6 +382,7 @@ spec:
                   - bash
                   - -ec
                   - nodetool decommission
+          {{- end }}
           {{- end }}
           ports:
             - name: intra
