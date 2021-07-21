@@ -445,6 +445,10 @@ spec:
         - name: metrics
           image: {{ include "cassandra.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.hostNetwork }}
           env:
             - name: CASSANDRA_EXPORTER_CONFIG_listenPort
@@ -467,6 +471,7 @@ spec:
           {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
           {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
           livenessProbe:
             tcpSocket:
               port: metrics
@@ -476,6 +481,7 @@ spec:
               port: metrics
             initialDelaySeconds: 20
             timeoutSeconds: 45
+          {{- end }}
         {{- end }}
         {{- if .Values.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
