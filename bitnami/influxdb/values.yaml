@@ -8,25 +8,25 @@
 ## @param global.storageClass Global storage class for dynamic provisioning
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
 
 ## @section Common parameters
 
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
-kubeVersion:
+kubeVersion: ""
 ## @param nameOverride String to partially override influxdb.fullname template with a string (will prepend the release name)
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override influxdb.fullname template with a string
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param clusterDomain Default Kubernetes cluster domain
 ##
 clusterDomain: cluster.local
@@ -90,10 +90,10 @@ auth:
     username: admin
     ## @param auth.admin.password InfluxDB<sup>TM</sup> admin user's password
     ##
-    password:
+    password: ""
     ## @param auth.admin.token InfluxDB<sup>TM</sup> admin user's token. Only valid with InfluxDB<sup>TM</sup> v2
     ##
-    token:
+    token: ""
     ## @param auth.admin.org InfluxDB<sup>TM</sup> admin user's org. Only valid with InfluxDB<sup>TM</sup> v2
     ##
     org: primary
@@ -112,34 +112,34 @@ auth:
   user:
     ## @param auth.user.username Name for InfluxDB<sup>TM</sup> user with 'admin' privileges on the bucket specified at `auth.user.bucket` and `auth.user.org` or `auth.admin.org`
     ##
-    username:
+    username: ""
     ## @param auth.user.password InfluxDB<sup>TM</sup> password for `user.name` user
     ##
-    password:
+    password: ""
     ## @param auth.user.org Org to be created on first run
     ##
-    org:
+    org: ""
     ## @param auth.user.bucket Bucket to be created on first run
     ## already create. If it is not null a new bucket will be created.
     ##
-    bucket:
+    bucket: ""
   ## InfluxDB(TM) credentials for user with 'read' privileges on the db specified at 'database' parameter
   ## @param auth.readUser.username Name for InfluxDB<sup>TM</sup> user with 'read' privileges on the bucket specified at `auth.user.bucket`
   ## @param auth.readUser.password InfluxDB<sup>TM</sup> password for `auth.readUser.username` user
   ##
   readUser:
-    username:
-    password:
+    username: ""
+    password: ""
   ## InfluxDB(TM) credentials for user with 'write' privileges on the db specified at 'database' parameter
   ## @param auth.writeUser.username Name for InfluxDB<sup>TM</sup> user with 'read' privileges on the bucket specified at `auth.user.bucket`
   ## @param auth.writeUser.password InfluxDB<sup>TM</sup> password for `auth.writeUser.username` user
   ##
   writeUser:
-    username:
-    password:
+    username: ""
+    password: ""
   ## @param auth.existingSecret Name of existing Secret object with InfluxDB<sup>TM</sup> credentials (`auth.admin.password`, `auth.user.password`, `auth.readUser.password`, and `auth.writeUser.password` will be ignored and picked up from this secret)
   ##
-  existingSecret:
+  existingSecret: ""
 ## InfluxDB(TM) backend parameters
 ##
 influxdb:
@@ -153,10 +153,10 @@ influxdb:
   ##   dir = "/bitnami/influxdb/meta"
   ##   ...
   ##
-  configuration:
+  configuration: ""
   ## @param influxdb.existingConfiguration Name of existing ConfigMap object with the InfluxDB<sup>TM</sup> configuration (`influxdb.configuration` will be ignored).
   ##
-  existingConfiguration:
+  existingConfiguration: ""
   ## @param influxdb.initdbScripts Dictionary of initdb scripts
   ## Alternatively, you can put your scripts under the files/docker-entrypoint-initdb.d directory
   ##
@@ -164,20 +164,20 @@ influxdb:
   ##   my_init_script.sh: |
   ##      #!/bin/sh
   ##      echo "Do something."
-  initdbScripts:
+  initdbScripts: {}
   ## @param influxdb.initdbScriptsCM Name of existing ConfigMap object with the initdb scripts (`influxdb.initdbScripts` will be ignored).
   ##
-  initdbScriptsCM:
+  initdbScriptsCM: ""
   ## @param influxdb.initdbScriptsSecret Secret with initdb scripts that contain sensitive information (Note: can be used with `initdbScriptsConfigMap` or `initdbScripts`)
   ##
-  initdbScriptsSecret:
+  initdbScriptsSecret: ""
   ## @param influxdb.extraEnvVars Array containing extra env vars to configure InfluxDB<sup>TM</sup>
   ## For example:
   ## extraEnvVars:
   ##  - name: INFLUXDB_DATA_QUERY_LOG_ENABLED
   ##    value: "true"
   ##
-  extraEnvVars:
+  extraEnvVars: []
   ## @param influxdb.replicaCount The number of InfluxDB<sup>TM</sup> replicas to deploy
   ##
   replicaCount: 1
@@ -328,7 +328,7 @@ influxdb:
     ## @param influxdb.service.loadBalancerIP loadBalancerIP if service type is `LoadBalancer`
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
-    loadBalancerIP:
+    loadBalancerIP: ""
     ## @param influxdb.service.loadBalancerSourceRanges Address that are allowed when service is LoadBalancer
     ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ##
@@ -340,13 +340,13 @@ influxdb:
     ## e.g:
     ## clusterIP: None
     ##
-    clusterIP:
+    clusterIP: ""
     ## @param influxdb.service.annotations Annotations for InfluxDB<sup>TM</sup> service
     ##
     annotations: {}
     ## @param influxdb.service.sessionAffinity Session affinity for the InfluxDB<sup>TM</sup> service
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#proxy-mode-userspace
-    sessionAffinity:
+    sessionAffinity: ""
     ## @param influxdb.service.sessionAffinityConfig Additional settings for the sessionAffinity
     ## sessionAffinityConfig:
     ##   clientIP:
@@ -405,7 +405,7 @@ relay:
   ## @param relay.existingConfiguration Name of existing ConfigMap object with the InfluxDB Relay<sup>TM</sup> configuration (`relay.configuration` will be ignored)
   ## NOTE: This will override relay.configuration
   ##
-  existingConfiguration:
+  existingConfiguration: ""
   ## @param relay.replicaCount The number of InfluxDB Relay<sup>TM</sup> replicas to deploy
   ##
   replicaCount: 1
@@ -546,7 +546,7 @@ relay:
     ## @param relay.service.loadBalancerIP loadBalancerIP if service type is `LoadBalancer`
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
-    loadBalancerIP:
+    loadBalancerIP: ""
     ## @param relay.service.loadBalancerSourceRanges Address that are allowed when service is LoadBalancer
     ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ##
@@ -558,7 +558,7 @@ relay:
     ## e.g:
     ## clusterIP: None
     ##
-    clusterIP:
+    clusterIP: ""
     ## @param relay.service.annotations Annotations for InfluxDB Relay<sup>TM</sup> service
     ##
     annotations: {}
@@ -585,7 +585,7 @@ collectd:
     ## @param collectd.service.loadBalancerIP loadBalancerIP if service type is `LoadBalancer`
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
-    loadBalancerIP:
+    loadBalancerIP: ""
     ## @param collectd.service.loadBalancerSourceRanges Address that are allowed when service is LoadBalancer
     ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ##
@@ -597,7 +597,7 @@ collectd:
     ## e.g:
     ## clusterIP: None
     ##
-    clusterIP:
+    clusterIP: ""
     ## @param collectd.service.annotations Annotations for InfluxDB Collectd<sup>TM</sup> service
     ##   metallb.universe.tf/allow-shared-ip: "true"
     ##
@@ -626,7 +626,7 @@ ingress:
   pathType: ImplementationSpecific
   ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
   ##
-  apiVersion:
+  apiVersion: ""
   ## @param ingress.hostname Default host for the ingress resource
   ##
   hostname: influxdb.local
@@ -703,7 +703,7 @@ metrics:
     ## @param metrics.service.loadBalancerIP loadBalancerIP if service type is `LoadBalancer`
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
-    loadBalancerIP:
+    loadBalancerIP: ""
     ## @param metrics.service.loadBalancerSourceRanges Address that are allowed when service is LoadBalancer
     ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ##
@@ -715,7 +715,7 @@ metrics:
     ## e.g:
     ## clusterIP: None
     ##
-    clusterIP:
+    clusterIP: ""
     ## @param metrics.service.annotations [object] Annotations for the Prometheus metrics service
     ##
     annotations:
@@ -732,19 +732,19 @@ metrics:
     ## e.g:
     ## namespace: monitoring
     ##
-    namespace:
+    namespace: ""
     ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped.
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ## e.g:
     ## interval: 10s
     ##
-    interval:
+    interval: ""
     ## @param metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ## e.g:
     ## scrapeTimeout: 10s
     ##
-    scrapeTimeout:
+    scrapeTimeout: ""
     ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
     ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
     ## e.g:
@@ -774,14 +774,14 @@ persistence:
   ## If defined, PVC must be created manually before volume will be bound
   ## The value is evaluated as a template
   ##
-  existingClaim:
+  existingClaim: ""
   ## @param persistence.storageClass Specify the `storageClass` used to provision the volume
   ## If defined, storageClassName: <storageClass>
   ## If set to "-", storageClassName: "", which disables dynamic provisioning
   ## If undefined (the default) or set to null, no storageClassName spec is
   ## set, choosing the default provisioner.
   ##
-  storageClass:
+  storageClass: ""
   ## @param persistence.accessModes Access mode of data volume
   ##
   accessModes:
