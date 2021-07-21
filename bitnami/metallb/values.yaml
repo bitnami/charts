@@ -368,9 +368,7 @@ speaker:
   ## @param speaker.tolerations Tolerations for speaker pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
-  tolerations:
-    - key: node-role.kubernetes.io/master
-      effect: NoSchedule
+  tolerations: []
   ## @param speaker.affinity Affinity for speaker pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ##
