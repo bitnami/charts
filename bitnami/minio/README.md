@@ -238,17 +238,17 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Metrics parameters
 
-| Name                                      | Description                                                                                           | Value                       |
-| ----------------------------------------- | ----------------------------------------------------------------------------------------------------- | --------------------------- |
-| `metrics.prometheusAuthType`              | Authentication mode for Prometheus (`jwt` or `public`)                                                | `public`                    |
-| `metrics.serviceMonitor.enabled`          | If the operator is installed in your cluster, set to true to create a Service Monitor Entry           | `false`                     |
-| `metrics.serviceMonitor.namespace`        | Namespace which Prometheus is running in                                                              | `""`                        |
-| `metrics.serviceMonitor.path`             | HTTP path to scrape for metrics                                                                       | `/minio/v2/metrics/cluster` |
-| `metrics.serviceMonitor.interval`         | Interval at which metrics should be scraped                                                           | `30s`                       |
-| `metrics.serviceMonitor.scrapeTimeout`    | Specify the timeout after which the scrape is ended                                                   | `""`                        |
-| `metrics.serviceMonitor.relabellings`     | Specify Metric Relabellings to add to the scrape endpoint                                             | `[]`                        |
-| `metrics.serviceMonitor.honorLabels`      | Specify honorLabels parameter to add the scrape endpoint                                              | `false`                     |
-| `metrics.serviceMonitor.additionalLabels` | Used to pass Labels that are required by the installed Prometheus Operator                            | `{}`                        |
+| Name                                      | Description                                                                                 | Value                       |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------- | --------------------------- |
+| `metrics.prometheusAuthType`              | Authentication mode for Prometheus (`jwt` or `public`)                                      | `public`                    |
+| `metrics.serviceMonitor.enabled`          | If the operator is installed in your cluster, set to true to create a Service Monitor Entry | `false`                     |
+| `metrics.serviceMonitor.namespace`        | Namespace which Prometheus is running in                                                    | `""`                        |
+| `metrics.serviceMonitor.path`             | HTTP path to scrape for metrics                                                             | `/minio/v2/metrics/cluster` |
+| `metrics.serviceMonitor.interval`         | Interval at which metrics should be scraped                                                 | `30s`                       |
+| `metrics.serviceMonitor.scrapeTimeout`    | Specify the timeout after which the scrape is ended                                         | `""`                        |
+| `metrics.serviceMonitor.relabellings`     | Specify Metric Relabellings to add to the scrape endpoint                                   | `[]`                        |
+| `metrics.serviceMonitor.honorLabels`      | Specify honorLabels parameter to add the scrape endpoint                                    | `false`                     |
+| `metrics.serviceMonitor.additionalLabels` | Used to pass Labels that are required by the installed Prometheus Operator                  | `{}`                        |
 
 
 ### Gateway parameters
