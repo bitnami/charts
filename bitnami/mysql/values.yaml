@@ -129,7 +129,7 @@ auth:
 initdbScripts: {}
 ## @param initdbScriptsConfigMap ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)
 ##
-initdbScriptsConfigMap: {}
+initdbScriptsConfigMap: ""
 
 ## @section MySQL Primary parameters
 
@@ -178,7 +178,7 @@ primary:
   ## @param primary.existingConfiguration Name of existing ConfigMap with MySQL Primary configuration.
   ## NOTE: When it's set the 'configuration' parameter is ignored
   ##
-  existingConfiguration: {}
+  existingConfiguration: ""
   ## @param primary.updateStrategy Update strategy type for the MySQL primary statefulset
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
@@ -492,7 +492,7 @@ secondary:
   ## @param secondary.existingConfiguration Name of existing ConfigMap with MySQL Secondary configuration.
   ## NOTE: When it's set the 'configuration' parameter is ignored
   ##
-  existingConfiguration: {}
+  existingConfiguration: ""
   ## @param secondary.updateStrategy Update strategy type for the MySQL secondary statefulset
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
@@ -999,9 +999,6 @@ metrics:
     ## @param metrics.serviceMonitor.honorLabels Specify honorLabels parameter to add the scrape endpoint
     ##
     honorLabels: false
-    ## @param metrics.serviceMonitor.release Specify the release for ServiceMonitor. Sometimes it should be custom for prometheus operator to work
-    ##
-    release: {}
     ## @param metrics.serviceMonitor.additionalLabels Used to pass Labels that are used by the Prometheus installed in your cluster to select Service Monitors to work with
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
     ##
