@@ -7,7 +7,7 @@
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
@@ -18,13 +18,13 @@ global:
 
 ## @param kubeVersion Override Kubernetes version
 ##
-kubeVersion:
+kubeVersion: ""
 ## @param nameOverride String to partially override aspnet-core.fullname
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override aspnet-core.fullname
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param commonLabels Labels to add to all deployed objects
 ##
 commonLabels: {}
@@ -83,10 +83,10 @@ bindURLs: http://+:8080
 extraEnvVars: []
 ## @param extraEnvVarsCM ConfigMap with extra environment variables
 ##
-extraEnvVarsCM:
+extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Secret with extra environment variables
 ##
-extraEnvVarsSecret:
+extraEnvVarsSecret: ""
 
 ## @section ASP.NET Core deployment parameters
 
@@ -277,7 +277,7 @@ customReadinessProbe: {}
 pdb:
   create: false
   minAvailable: 1
-  maxUnavailable:
+  maxUnavailable: ""
 ## ASP.NET Core Autoscaling parameters.
 ## @param autoscaling.enabled Enable autoscaling for ASP.NET Core
 ## @param autoscaling.minReplicas Minimum number of ASP.NET Core replicas
@@ -289,8 +289,8 @@ autoscaling:
   enabled: false
   minReplicas: 1
   maxReplicas: 11
-  targetCPU:
-  targetMemory:
+  targetCPU: ""
+  targetMemory: ""
 
 ## @section Custom ASP.NET Core application parameters
 
@@ -385,7 +385,7 @@ appFromExistingPVC:
   enabled: false
   ## PVC must be created manually before volume will be bound. The value is evaluated as a template
   ##
-  existingClaim:
+  existingClaim: ""
 
 ## @section Traffic Exposure Parameters
 
@@ -401,16 +401,16 @@ service:
   ## @param service.nodePort Node ports to expose
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
-  nodePort:
+  nodePort: ""
   ## @param service.clusterIP ASP.NET Core service Cluster IP
   ## e.g.:
   ## clusterIP: None
   ##
-  clusterIP:
+  clusterIP: ""
   ## @param service.loadBalancerIP ASP.NET Core service Load Balancer IP
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
   ##
-  loadBalancerIP:
+  loadBalancerIP: ""
   ## @param service.loadBalancerSourceRanges ASP.NET Core service Load Balancer sources
   ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
   ## e.g:
@@ -437,7 +437,7 @@ ingress:
   pathType: ImplementationSpecific
   ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
   ##
-  apiVersion:
+  apiVersion: ""
   ## @param ingress.hostname Default host for the ingress resource, a host pointing to this will be created
   ##
   hostname: aspnet-core.local
@@ -566,7 +566,7 @@ serviceAccount:
   ## @param serviceAccount.name The name of the ServiceAccount to use.
   ## If not set and create is true, a name is generated using the aspnet-core.fullname template
   ##
-  name:
+  name: ""
   ## @param serviceAccount.annotations Additional custom annotations for the ServiceAccount
   ##
   annotations: {}

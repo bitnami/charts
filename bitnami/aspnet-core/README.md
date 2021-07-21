@@ -51,7 +51,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 
 
@@ -59,9 +59,9 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                | Description                                       | Value           |
 | ------------------- | ------------------------------------------------- | --------------- |
-| `kubeVersion`       | Override Kubernetes version                       | `nil`           |
-| `nameOverride`      | String to partially override aspnet-core.fullname | `nil`           |
-| `fullnameOverride`  | String to fully override aspnet-core.fullname     | `nil`           |
+| `kubeVersion`       | Override Kubernetes version                       | `""`            |
+| `nameOverride`      | String to partially override aspnet-core.fullname | `""`            |
+| `fullnameOverride`  | String to fully override aspnet-core.fullname     | `""`            |
 | `commonLabels`      | Labels to add to all deployed objects             | `{}`            |
 | `commonAnnotations` | Annotations to add to all deployed objects        | `{}`            |
 | `clusterDomain`     | Kubernetes cluster domain name                    | `cluster.local` |
@@ -81,8 +81,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `args`               | Override default container args (useful when using custom images)    | `[]`                  |
 | `bindURLs`           | URLs to bind                                                         | `http://+:8080`       |
 | `extraEnvVars`       | Extra environment variables to be set on ASP.NET Core container      | `[]`                  |
-| `extraEnvVarsCM`     | ConfigMap with extra environment variables                           | `nil`                 |
-| `extraEnvVarsSecret` | Secret with extra environment variables                              | `nil`                 |
+| `extraEnvVarsCM`     | ConfigMap with extra environment variables                           | `""`                  |
+| `extraEnvVarsSecret` | Secret with extra environment variables                              | `""`                  |
 
 
 ### ASP.NET Core deployment parameters
@@ -130,12 +130,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `customReadinessProbe`               | Custom readinessProbe that overrides the default one                                      | `{}`            |
 | `pdb.create`                         | Enable/disable a Pod Disruption Budget creation                                           | `false`         |
 | `pdb.minAvailable`                   | Minimum number/percentage of pods that should remain scheduled                            | `1`             |
-| `pdb.maxUnavailable`                 | Maximum number/percentage of pods that may be made unavailable                            | `nil`           |
+| `pdb.maxUnavailable`                 | Maximum number/percentage of pods that may be made unavailable                            | `""`            |
 | `autoscaling.enabled`                | Enable autoscaling for ASP.NET Core                                                       | `false`         |
 | `autoscaling.minReplicas`            | Minimum number of ASP.NET Core replicas                                                   | `1`             |
 | `autoscaling.maxReplicas`            | Maximum number of ASP.NET Core replicas                                                   | `11`            |
-| `autoscaling.targetCPU`              | Target CPU utilization percentage                                                         | `nil`           |
-| `autoscaling.targetMemory`           | Target Memory utilization percentage                                                      | `nil`           |
+| `autoscaling.targetCPU`              | Target CPU utilization percentage                                                         | `""`            |
+| `autoscaling.targetMemory`           | Target Memory utilization percentage                                                      | `""`            |
 
 
 ### Custom ASP.NET Core application parameters
@@ -160,7 +160,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `appFromExternalRepo.publish.extraFlags`        | Extra flags to be appended to "dotnet publish" command                 | `[]`                                                                |
 | `appFromExternalRepo.startCommand`              | Command used to start ASP.NET Core app                                 | `[]`                                                                |
 | `appFromExistingPVC.enabled`                    | Enable mounting your ASP.NET Core app from an existing PVC             | `false`                                                             |
-| `appFromExistingPVC.existingClaim`              | A existing Persistent Volume Claim containing your ASP.NET Core app    | `nil`                                                               |
+| `appFromExistingPVC.existingClaim`              | A existing Persistent Volume Claim containing your ASP.NET Core app    | `""`                                                                |
 
 
 ### Traffic Exposure Parameters
@@ -169,15 +169,15 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------- | ----------------------------------------------------------------------------------- | ------------------------ |
 | `service.type`                     | ASP.NET Core service type                                                           | `ClusterIP`              |
 | `service.port`                     | ASP.NET Core service HTTP port                                                      | `80`                     |
-| `service.nodePort`                 | Node ports to expose                                                                | `nil`                    |
-| `service.clusterIP`                | ASP.NET Core service Cluster IP                                                     | `nil`                    |
-| `service.loadBalancerIP`           | ASP.NET Core service Load Balancer IP                                               | `nil`                    |
+| `service.nodePort`                 | Node ports to expose                                                                | `""`                     |
+| `service.clusterIP`                | ASP.NET Core service Cluster IP                                                     | `""`                     |
+| `service.loadBalancerIP`           | ASP.NET Core service Load Balancer IP                                               | `""`                     |
 | `service.loadBalancerSourceRanges` | ASP.NET Core service Load Balancer sources                                          | `[]`                     |
 | `service.externalTrafficPolicy`    | ASP.NET Core service external traffic policy                                        | `Cluster`                |
 | `service.annotations`              | Additional custom annotations for ASP.NET Core service                              | `{}`                     |
 | `ingress.enabled`                  | Enable ingress record generation for ASP.NET Core                                   | `false`                  |
 | `ingress.pathType`                 | Ingress path type                                                                   | `ImplementationSpecific` |
-| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                       | `nil`                    |
+| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                       | `""`                     |
 | `ingress.hostname`                 | Default host for the ingress resource, a host pointing to this will be created      | `aspnet-core.local`      |
 | `ingress.path`                     | Default path for the ingress record                                                 | `ImplementationSpecific` |
 | `ingress.annotations`              | Additional custom annotations for the ingress record                                | `{}`                     |
@@ -201,7 +201,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                         | Description                                          | Value  |
 | ---------------------------- | ---------------------------------------------------- | ------ |
 | `serviceAccount.create`      | Specifies whether a ServiceAccount should be created | `true` |
-| `serviceAccount.name`        | The name of the ServiceAccount to use.               | `nil`  |
+| `serviceAccount.name`        | The name of the ServiceAccount to use.               | `""`   |
 | `serviceAccount.annotations` | Additional custom annotations for the ServiceAccount | `{}`   |
 
 
