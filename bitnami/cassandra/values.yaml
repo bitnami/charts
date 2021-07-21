@@ -409,9 +409,9 @@ service:
   ## @param service.nodePorts.metrics Node port for metrics
   ##
   nodePorts:
-    cql: ''
-    thrift: ''
-    metrics: ''
+    cql: ""
+    thrift: ""
+    metrics: ""
   ## @param service.loadBalancerIP LoadBalancerIP if service type is `LoadBalancer`
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
