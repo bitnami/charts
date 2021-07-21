@@ -52,17 +52,17 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `nil` |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
 
 ### Common parameters
 
 | Name               | Description                                                                                  | Value |
 | ------------------ | -------------------------------------------------------------------------------------------- | ----- |
-| `nameOverride`     | String to partially override common.names.fullname template (will maintain the release name) | `nil` |
-| `fullnameOverride` | String to fully override `common.names.fullname` template with a string                      | `nil` |
+| `nameOverride`     | String to partially override common.names.fullname template (will maintain the release name) | `""`  |
+| `fullnameOverride` | String to fully override `common.names.fullname` template with a string                      | `""`  |
 | `commonLabels`     | Add labels to all the deployed resources                                                     | `{}`  |
 
 
@@ -75,10 +75,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rbac.apiVersion`                             | Version of the RBAC API                                                                   | `v1beta1`               |
 | `rbac.pspEnabled`                             | Enable Pod Security Policy                                                                | `true`                  |
 | `serviceAccount.create`                       | Specify whether to create a ServiceAccount for Node Exporter                              | `true`                  |
-| `serviceAccount.name`                         | The name of the ServiceAccount to create                                                  | `nil`                   |
+| `serviceAccount.name`                         | The name of the ServiceAccount to create                                                  | `""`                    |
 | `image.registry`                              | Node Exporter image registry                                                              | `docker.io`             |
 | `image.repository`                            | Node Exporter image repository                                                            | `bitnami/node-exporter` |
-| `image.tag`                                   | Node Exporter Image tag (immutable tags are recommended)                                  | `1.1.2-debian-10-r90`   |
+| `image.tag`                                   | Node Exporter Image tag (immutable tags are recommended)                                  | `1.1.2-debian-10-r116`  |
 | `image.pullPolicy`                            | Node Exporter image pull policy                                                           | `IfNotPresent`          |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                          | `[]`                    |
 | `extraArgs`                                   | Additional command line arguments to pass to node-exporter                                | `{}`                    |
@@ -90,9 +90,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.type`                                | Kubernetes service type                                                                   | `ClusterIP`             |
 | `service.targetPort`                          | Node Exporter container target port                                                       | `9100`                  |
 | `service.port`                                | Node Exporter service port                                                                | `9100`                  |
-| `service.clusterIP`                           | Specific cluster IP when service type is cluster IP. Use `None` for headless service      | `nil`                   |
-| `service.nodePort`                            | Specify the nodePort value for the LoadBalancer and NodePort service types                | `nil`                   |
-| `service.loadBalancerIP`                      | `loadBalancerIP` if service type is `LoadBalancer`                                        | `nil`                   |
+| `service.clusterIP`                           | Specific cluster IP when service type is cluster IP. Use `None` for headless service      | `""`                    |
+| `service.nodePort`                            | Specify the nodePort value for the LoadBalancer and NodePort service types                | `""`                    |
+| `service.loadBalancerIP`                      | `loadBalancerIP` if service type is `LoadBalancer`                                        | `""`                    |
 | `service.loadBalancerSourceRanges`            | Address that are allowed when service is `LoadBalancer`                                   | `[]`                    |
 | `service.addPrometheusScrapeAnnotation`       | Add the `prometheus.io/scrape: "true"` annotation to the service                          | `true`                  |
 | `service.annotations`                         | Additional annotations for Node Exporter service                                          | `{}`                    |
@@ -125,10 +125,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `readinessProbe.failureThreshold`             | Failure threshold for readinessProbe                                                      | `6`                     |
 | `readinessProbe.successThreshold`             | Success threshold for readinessProbe                                                      | `1`                     |
 | `serviceMonitor.enabled`                      | Creates a ServiceMonitor to monitor Node Exporter                                         | `false`                 |
-| `serviceMonitor.namespace`                    | Namespace in which Prometheus is running                                                  | `nil`                   |
-| `serviceMonitor.jobLabel`                     | The name of the label on the target service to use as the job name in prometheus.         | `nil`                   |
-| `serviceMonitor.interval`                     | Scrape interval (use by default, falling back to Prometheus' default)                     | `nil`                   |
-| `serviceMonitor.scrapeTimeout`                | Timeout after which the scrape is ended                                                   | `nil`                   |
+| `serviceMonitor.namespace`                    | Namespace in which Prometheus is running                                                  | `""`                    |
+| `serviceMonitor.jobLabel`                     | The name of the label on the target service to use as the job name in prometheus.         | `""`                    |
+| `serviceMonitor.interval`                     | Scrape interval (use by default, falling back to Prometheus' default)                     | `""`                    |
+| `serviceMonitor.scrapeTimeout`                | Timeout after which the scrape is ended                                                   | `""`                    |
 | `serviceMonitor.selector`                     | ServiceMonitor selector labels                                                            | `{}`                    |
 | `serviceMonitor.relabelings`                  | RelabelConfigs to apply to samples before scraping                                        | `[]`                    |
 | `serviceMonitor.metricRelabelings`            | MetricRelabelConfigs to apply to samples before ingestion                                 | `[]`                    |

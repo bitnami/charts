@@ -8,25 +8,25 @@
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
 
 ## @section Common Parameters
 
 ## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname template
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilites if not set)
 ##
-kubeVersion:
+kubeVersion: ""
 ## @param commonLabels Add labels to all the deployed resources
 ##
 commonLabels: {}
@@ -97,7 +97,7 @@ server:
   ## @param server.masterKey Parse server Master Key
   ## ref: https://github.com/bitnami/bitnami-docker-parse#configuration
   ##
-  masterKey:
+  masterKey: ""
   ## @param server.extraEnvVars An array to add extra env vars
   ## For example:
   ## extraEnvVars:
@@ -107,10 +107,10 @@ server:
   extraEnvVars: []
   ## @param server.extraEnvVarsCM Name of a ConfigMap containing extra environment variables
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param server.extraEnvVarsSecret Name of a Secret containing extra environment variables
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param server.enableCloudCode Enable Parse Cloud Code
   ## ref: https://github.com/bitnami/bitnami-docker-parse#how-to-deploy-your-cloud-functions-with-parse-cloud-code
   ##
@@ -129,7 +129,7 @@ server:
   ## @param server.existingCloudCodeScriptsCM ConfigMap with Cloud Code scripts (Note: Overrides `cloudCodeScripts`).
   ## NOTE: This will override cloudCodeScripts
   ##
-  existingCloudCodeScriptsCM:
+  existingCloudCodeScriptsCM: ""
   ## @param server.resources Parse Server pods' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -251,7 +251,7 @@ ingress:
   ## e.g:
   ##  kubernetes.io/ingress.class: nginx
   ##
-  annotations:
+  annotations: {}
   dashboard:
     ## @param ingress.dashboard.hostname Default host for the ingress resource
     ##
@@ -326,7 +326,7 @@ ingress:
   ##   key:
   ##   certificate:
   ##
-  secrets:
+  secrets: []
 
 ## @section Persistence Parameters
 
@@ -344,7 +344,7 @@ persistence:
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##   GKE, AWS & OpenStack)
   ##
-  storageClass:
+  storageClass: ""
   ## @param persistence.accessMode PVC Access Mode for Parse volume
   ##
   accessMode: ReadWriteOnce
@@ -405,7 +405,7 @@ dashboard:
   ## Defaults to a random 10-character alphanumeric string if not set
   ## ref: https://github.com/bitnami/bitnami-docker-parse-dashboard#configuration
   ##
-  password:
+  password: ""
   ## @param dashboard.appName Parse Dashboard application name
   ## ref: https://github.com/bitnami/bitnami-docker-parse-dashboard#configuration
   ##
@@ -499,10 +499,10 @@ dashboard:
   extraEnvVars: []
   ## @param dashboard.extraEnvVarsCM Name of a ConfigMap containing extra environment variables
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param dashboard.extraEnvVarsSecret Name of a Secret containing extra environment variables
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
 
 ## @section Volume Permissions parameters
 
@@ -582,7 +582,7 @@ mongodb:
     ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
     ##   GKE, AWS & OpenStack)
     ##
-    storageClass:
+    storageClass: ""
     ## @param mongodb.persistence.accessMode PVC Access Mode for MongoDB&reg; volume
     ##
     accessMode: ReadWriteOnce

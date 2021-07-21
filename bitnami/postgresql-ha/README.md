@@ -46,9 +46,9 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 
 | Name                               | Description                                                                                     | Value |
 | ---------------------------------- | ----------------------------------------------------------------------------------------------- | ----- |
-| `global.imageRegistry`             | Global Docker image registry                                                                    | `nil` |
+| `global.imageRegistry`             | Global Docker image registry                                                                    | `""`  |
 | `global.imagePullSecrets`          | Global Docker registry secret names as an array                                                 | `[]`  |
-| `global.storageClass`              | Global StorageClass for Persistent Volume(s)                                                    | `nil` |
+| `global.storageClass`              | Global StorageClass for Persistent Volume(s)                                                    | `""`  |
 | `global.postgresql.username`       | PostgreSQL username (overrides `postgresql.username`)                                           | `""`  |
 | `global.postgresql.password`       | PostgreSQL password (overrides `postgresql.password`)                                           | `""`  |
 | `global.postgresql.database`       | PostgreSQL database (overrides `postgresql.database`)                                           | `""`  |
@@ -67,8 +67,8 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 
 | Name                     | Description                                                                                                           | Value           |
 | ------------------------ | --------------------------------------------------------------------------------------------------------------------- | --------------- |
-| `nameOverride`           | String to partially override common.names.fullname template (will maintain the release name)                          | `nil`           |
-| `fullnameOverride`       | String to fully override common.names.fullname template                                                               | `nil`           |
+| `nameOverride`           | String to partially override common.names.fullname template (will maintain the release name)                          | `""`            |
+| `fullnameOverride`       | String to fully override common.names.fullname template                                                               | `""`            |
 | `clusterDomain`          | Kubernetes Cluster Domain                                                                                             | `cluster.local` |
 | `commonAnnotations`      | Common annotations to add to all resources (sub-charts are not considered). Evaluated as a template                   | `{}`            |
 | `commonLabels`           | Common labels to add to all resources (sub-charts are not considered). Evaluated as a template                        | `{}`            |
@@ -77,7 +77,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `diagnosticMode.command` | Command to override all containers in the deployment                                                                  | `[]`            |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                                                     | `[]`            |
 | `serviceAccount.enabled` | Enable service account (Note: Service Account will only be automatically created if `serviceAccount.name` is not set) | `false`         |
-| `serviceAccount.name`    | Name of an already existing service account. Setting this value disables the automatic service account creation       | `nil`           |
+| `serviceAccount.name`    | Name of an already existing service account. Setting this value disables the automatic service account creation       | `""`            |
 
 
 ### PostgreSQL with Repmgr parameters
@@ -112,12 +112,12 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `postgresql.customLivenessProbe`                | Override default liveness probe                                                                                                                                                                               | `{}`                        |
 | `postgresql.customReadinessProbe`               | Override default readiness probe                                                                                                                                                                              | `{}`                        |
 | `postgresql.customStartupProbe`                 | Override default startup probe                                                                                                                                                                                | `{}`                        |
-| `postgresql.command`                            | Override default container command (useful when using custom images)                                                                                                                                          | `nil`                       |
-| `postgresql.args`                               | Override default container args (useful when using custom images)                                                                                                                                             | `nil`                       |
-| `postgresql.lifecycleHooks`                     | LifecycleHook to set additional configuration at startup, e.g. LDAP settings via REST API. Evaluated as a template                                                                                            | `nil`                       |
+| `postgresql.command`                            | Override default container command (useful when using custom images)                                                                                                                                          | `[]`                        |
+| `postgresql.args`                               | Override default container args (useful when using custom images)                                                                                                                                             | `[]`                        |
+| `postgresql.lifecycleHooks`                     | LifecycleHook to set additional configuration at startup, e.g. LDAP settings via REST API. Evaluated as a template                                                                                            | `{}`                        |
 | `postgresql.extraEnvVars`                       | Array containing extra environment variables                                                                                                                                                                  | `[]`                        |
-| `postgresql.extraEnvVarsCM`                     | ConfigMap with extra environment variables                                                                                                                                                                    | `nil`                       |
-| `postgresql.extraEnvVarsSecret`                 | Secret with extra environment variables                                                                                                                                                                       | `nil`                       |
+| `postgresql.extraEnvVarsCM`                     | ConfigMap with extra environment variables                                                                                                                                                                    | `""`                        |
+| `postgresql.extraEnvVarsSecret`                 | Secret with extra environment variables                                                                                                                                                                       | `""`                        |
 | `postgresql.extraVolumes`                       | Extra volumes to add to the deployment                                                                                                                                                                        | `[]`                        |
 | `postgresql.extraVolumeMounts`                  | Extra volume mounts to add to the container. Normally used with `extraVolumes`.                                                                                                                               | `[]`                        |
 | `postgresql.initContainers`                     | Extra init containers to add to the deployment                                                                                                                                                                | `[]`                        |
@@ -144,20 +144,20 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `postgresql.startupProbe.successThreshold`      | Success threshold for startupProbe                                                                                                                                                                            | `1`                         |
 | `postgresql.pdb.create`                         | Specifies whether to create a Pod disruption budget for PostgreSQL with Repmgr                                                                                                                                | `false`                     |
 | `postgresql.pdb.minAvailable`                   | Minimum number / percentage of pods that should remain scheduled                                                                                                                                              | `1`                         |
-| `postgresql.pdb.maxUnavailable`                 | Maximum number / percentage of pods that may be made unavailable                                                                                                                                              | `nil`                       |
+| `postgresql.pdb.maxUnavailable`                 | Maximum number / percentage of pods that may be made unavailable                                                                                                                                              | `""`                        |
 | `postgresql.username`                           | PostgreSQL username                                                                                                                                                                                           | `postgres`                  |
-| `postgresql.password`                           | PostgreSQL password                                                                                                                                                                                           | `nil`                       |
-| `postgresql.database`                           | PostgreSQL database                                                                                                                                                                                           | `nil`                       |
-| `postgresql.existingSecret`                     | PostgreSQL password using existing secret                                                                                                                                                                     | `nil`                       |
-| `postgresql.postgresPassword`                   | PostgreSQL password for the `postgres` user when `username` is not `postgres`                                                                                                                                 | `nil`                       |
-| `postgresql.usePasswordFile`                    | Set to `true` to mount PostgreSQL secret as a file instead of passing environment variable                                                                                                                    | `nil`                       |
-| `postgresql.repmgrUsePassfile`                  | Set to `true` to configure repmgrl to use `passfile` instead of `password` vars*:*:*:username:password" and use it to configure Repmgr instead of using password (Requires Postgresql 10+, otherwise ignored) | `nil`                       |
-| `postgresql.repmgrPassfilePath`                 | Custom path where `passfile` will be stored                                                                                                                                                                   | `nil`                       |
+| `postgresql.password`                           | PostgreSQL password                                                                                                                                                                                           | `""`                        |
+| `postgresql.database`                           | PostgreSQL database                                                                                                                                                                                           | `""`                        |
+| `postgresql.existingSecret`                     | PostgreSQL password using existing secret                                                                                                                                                                     | `""`                        |
+| `postgresql.postgresPassword`                   | PostgreSQL password for the `postgres` user when `username` is not `postgres`                                                                                                                                 | `""`                        |
+| `postgresql.usePasswordFile`                    | Set to `true` to mount PostgreSQL secret as a file instead of passing environment variable                                                                                                                    | `""`                        |
+| `postgresql.repmgrUsePassfile`                  | Set to `true` to configure repmgrl to use `passfile` instead of `password` vars*:*:*:username:password" and use it to configure Repmgr instead of using password (Requires Postgresql 10+, otherwise ignored) | `""`                        |
+| `postgresql.repmgrPassfilePath`                 | Custom path where `passfile` will be stored                                                                                                                                                                   | `""`                        |
 | `postgresql.upgradeRepmgrExtension`             | Upgrade repmgr extension in the database                                                                                                                                                                      | `false`                     |
 | `postgresql.pgHbaTrustAll`                      | Configures PostgreSQL HBA to trust every user                                                                                                                                                                 | `false`                     |
 | `postgresql.syncReplication`                    | Make the replication synchronous. This will wait until the data is synchronized in all the replicas before other query can be run. This ensures the data availability at the expenses of speed.               | `false`                     |
 | `postgresql.repmgrUsername`                     | PostgreSQL Repmgr username                                                                                                                                                                                    | `repmgr`                    |
-| `postgresql.repmgrPassword`                     | PostgreSQL Repmgr password                                                                                                                                                                                    | `nil`                       |
+| `postgresql.repmgrPassword`                     | PostgreSQL Repmgr password                                                                                                                                                                                    | `""`                        |
 | `postgresql.repmgrDatabase`                     | PostgreSQL Repmgr database                                                                                                                                                                                    | `repmgr`                    |
 | `postgresql.repmgrLogLevel`                     | Repmgr log level (DEBUG, INFO, NOTICE, WARNING, ERROR, ALERT, CRIT or EMERG)                                                                                                                                  | `NOTICE`                    |
 | `postgresql.repmgrConnectTimeout`               | Repmgr backend connection timeout (in seconds)                                                                                                                                                                | `5`                         |
@@ -172,30 +172,30 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `postgresql.audit.logLinePrefix`                | Template string for the log line prefix                                                                                                                                                                       | `""`                        |
 | `postgresql.audit.logTimezone`                  | Timezone for the log timestamps                                                                                                                                                                               | `""`                        |
 | `postgresql.sharedPreloadLibraries`             | Shared preload libraries (comma-separated list)                                                                                                                                                               | `pgaudit, repmgr`           |
-| `postgresql.maxConnections`                     | Maximum total connections                                                                                                                                                                                     | `nil`                       |
-| `postgresql.postgresConnectionLimit`            | Maximum connections for the postgres user                                                                                                                                                                     | `nil`                       |
-| `postgresql.dbUserConnectionLimit`              | Maximum connections for the created user                                                                                                                                                                      | `nil`                       |
-| `postgresql.tcpKeepalivesInterval`              | TCP keepalives interval                                                                                                                                                                                       | `nil`                       |
-| `postgresql.tcpKeepalivesIdle`                  | TCP keepalives idle                                                                                                                                                                                           | `nil`                       |
-| `postgresql.tcpKeepalivesCount`                 | TCP keepalives count                                                                                                                                                                                          | `nil`                       |
-| `postgresql.statementTimeout`                   | Statement timeout                                                                                                                                                                                             | `nil`                       |
-| `postgresql.pghbaRemoveFilters`                 | Comma-separated list of patterns to remove from the pg_hba.conf file                                                                                                                                          | `nil`                       |
+| `postgresql.maxConnections`                     | Maximum total connections                                                                                                                                                                                     | `""`                        |
+| `postgresql.postgresConnectionLimit`            | Maximum connections for the postgres user                                                                                                                                                                     | `""`                        |
+| `postgresql.dbUserConnectionLimit`              | Maximum connections for the created user                                                                                                                                                                      | `""`                        |
+| `postgresql.tcpKeepalivesInterval`              | TCP keepalives interval                                                                                                                                                                                       | `""`                        |
+| `postgresql.tcpKeepalivesIdle`                  | TCP keepalives idle                                                                                                                                                                                           | `""`                        |
+| `postgresql.tcpKeepalivesCount`                 | TCP keepalives count                                                                                                                                                                                          | `""`                        |
+| `postgresql.statementTimeout`                   | Statement timeout                                                                                                                                                                                             | `""`                        |
+| `postgresql.pghbaRemoveFilters`                 | Comma-separated list of patterns to remove from the pg_hba.conf file                                                                                                                                          | `""`                        |
 | `postgresql.extraInitContainers`                | Extra init containers                                                                                                                                                                                         | `[]`                        |
 | `postgresql.repmgrConfiguration`                | Repmgr configuration                                                                                                                                                                                          | `""`                        |
 | `postgresql.configuration`                      | PostgreSQL configuration                                                                                                                                                                                      | `""`                        |
 | `postgresql.pgHbaConfiguration`                 | PostgreSQL client authentication configuration                                                                                                                                                                | `""`                        |
-| `postgresql.configurationCM`                    | Name of existing ConfigMap with configuration files                                                                                                                                                           | `nil`                       |
+| `postgresql.configurationCM`                    | Name of existing ConfigMap with configuration files                                                                                                                                                           | `""`                        |
 | `postgresql.extendedConf`                       | Extended PostgreSQL configuration (appended to main or default configuration). Implies `volumePermissions.enabled`.                                                                                           | `""`                        |
-| `postgresql.extendedConfCM`                     | ConfigMap with PostgreSQL extended configuration                                                                                                                                                              | `nil`                       |
+| `postgresql.extendedConfCM`                     | ConfigMap with PostgreSQL extended configuration                                                                                                                                                              | `""`                        |
 | `postgresql.initdbScripts`                      | Dictionary of initdb scripts                                                                                                                                                                                  | `{}`                        |
-| `postgresql.initdbScriptsCM`                    | ConfigMap with scripts to be run at first boot                                                                                                                                                                | `nil`                       |
-| `postgresql.initdbScriptsSecret`                | Secret with scripts to be run at first boot                                                                                                                                                                   | `nil`                       |
+| `postgresql.initdbScriptsCM`                    | ConfigMap with scripts to be run at first boot                                                                                                                                                                | `""`                        |
+| `postgresql.initdbScriptsSecret`                | Secret with scripts to be run at first boot                                                                                                                                                                   | `""`                        |
 | `postgresql.tls.enabled`                        | Enable TLS traffic support for end-client connections                                                                                                                                                         | `false`                     |
 | `postgresql.tls.preferServerCiphers`            | Whether to use the server's TLS cipher preferences rather than the client's                                                                                                                                   | `true`                      |
 | `postgresql.tls.certificatesSecret`             | Name of an existing secret that contains the certificates                                                                                                                                                     | `""`                        |
 | `postgresql.tls.certFilename`                   | Certificate filename                                                                                                                                                                                          | `""`                        |
 | `postgresql.tls.certKeyFilename`                | Certificate key filename                                                                                                                                                                                      | `""`                        |
-| `postgresql.tls.certCAFilename`                 | CA Certificate filename                                                                                                                                                                                       | `nil`                       |
+| `postgresql.tls.certCAFilename`                 | CA Certificate filename                                                                                                                                                                                       | `""`                        |
 
 
 ### Pgpool parameters
@@ -209,10 +209,10 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `pgpoolImage.pullSecrets`                   | Specify docker-registry secret names as an array                                                                   | `[]`                  |
 | `pgpoolImage.debug`                         | Specify if debug logs should be enabled                                                                            | `false`               |
 | `pgpool.customUsers`                        | Additional users that will be performing connections to the database using                                         | `{}`                  |
-| `pgpool.usernames`                          | Comma or semicolon separated list of postgres usernames                                                            | `nil`                 |
-| `pgpool.passwords`                          | Comma or semicolon separated list of the associated passwords for the users above                                  | `nil`                 |
+| `pgpool.usernames`                          | Comma or semicolon separated list of postgres usernames                                                            | `""`                  |
+| `pgpool.passwords`                          | Comma or semicolon separated list of the associated passwords for the users above                                  | `""`                  |
 | `pgpool.hostAliases`                        | Deployment pod host aliases                                                                                        | `[]`                  |
-| `pgpool.customUsersSecret`                  | Name of a secret containing the usernames and passwords of accounts that will be added to pgpool_passwd            | `nil`                 |
+| `pgpool.customUsersSecret`                  | Name of a secret containing the usernames and passwords of accounts that will be added to pgpool_passwd            | `""`                  |
 | `pgpool.srCheckDatabase`                    | Name of the database to perform streaming replication checks                                                       | `postgres`            |
 | `pgpool.labels`                             | Labels to add to the Deployment. Evaluated as template                                                             | `{}`                  |
 | `pgpool.podLabels`                          | Labels to add to the pods. Evaluated as template                                                                   | `{}`                  |
@@ -220,12 +220,12 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `pgpool.customLivenessProbe`                | Override default liveness probe                                                                                    | `{}`                  |
 | `pgpool.customReadinessProbe`               | Override default readiness probe                                                                                   | `{}`                  |
 | `pgpool.customStartupProbe`                 | Override default startup probe                                                                                     | `{}`                  |
-| `pgpool.command`                            | Override default container command (useful when using custom images)                                               | `nil`                 |
-| `pgpool.args`                               | Override default container args (useful when using custom images)                                                  | `nil`                 |
-| `pgpool.lifecycleHooks`                     | LifecycleHook to set additional configuration at startup, e.g. LDAP settings via REST API. Evaluated as a template | `nil`                 |
+| `pgpool.command`                            | Override default container command (useful when using custom images)                                               | `[]`                  |
+| `pgpool.args`                               | Override default container args (useful when using custom images)                                                  | `[]`                  |
+| `pgpool.lifecycleHooks`                     | LifecycleHook to set additional configuration at startup, e.g. LDAP settings via REST API. Evaluated as a template | `{}`                  |
 | `pgpool.extraEnvVars`                       | Array containing extra environment variables                                                                       | `[]`                  |
-| `pgpool.extraEnvVarsCM`                     | ConfigMap with extra environment variables                                                                         | `nil`                 |
-| `pgpool.extraEnvVarsSecret`                 | Secret with extra environment variables                                                                            | `nil`                 |
+| `pgpool.extraEnvVarsCM`                     | ConfigMap with extra environment variables                                                                         | `""`                  |
+| `pgpool.extraEnvVarsSecret`                 | Secret with extra environment variables                                                                            | `""`                  |
 | `pgpool.extraVolumes`                       | Extra volumes to add to the deployment                                                                             | `[]`                  |
 | `pgpool.extraVolumeMounts`                  | Extra volume mounts to add to the container. Normally used with `extraVolumes`                                     | `[]`                  |
 | `pgpool.initContainers`                     | Extra init containers to add to the deployment                                                                     | `[]`                  |
@@ -267,35 +267,35 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `pgpool.startupProbe.successThreshold`      | Success threshold for startupProbe                                                                                 | `1`                   |
 | `pgpool.pdb.create`                         | Specifies whether a Pod disruption budget should be created for Pgpool pods                                        | `false`               |
 | `pgpool.pdb.minAvailable`                   | Minimum number / percentage of pods that should remain scheduled                                                   | `1`                   |
-| `pgpool.pdb.maxUnavailable`                 | Maximum number / percentage of pods that may be made unavailable                                                   | `nil`                 |
+| `pgpool.pdb.maxUnavailable`                 | Maximum number / percentage of pods that may be made unavailable                                                   | `""`                  |
 | `pgpool.updateStrategy`                     | Strategy used to replace old Pods by new ones                                                                      | `{}`                  |
-| `pgpool.minReadySeconds`                    | How many seconds a pod needs to be ready before killing the next, during update                                    | `nil`                 |
+| `pgpool.minReadySeconds`                    | How many seconds a pod needs to be ready before killing the next, during update                                    | `""`                  |
 | `pgpool.adminUsername`                      | Pgpool Admin username                                                                                              | `admin`               |
-| `pgpool.adminPassword`                      | Pgpool Admin password                                                                                              | `nil`                 |
+| `pgpool.adminPassword`                      | Pgpool Admin password                                                                                              | `""`                  |
 | `pgpool.logConnections`                     | Log all client connections (PGPOOL_ENABLE_LOG_CONNECTIONS)                                                         | `false`               |
 | `pgpool.logHostname`                        | Log the client hostname instead of IP address (PGPOOL_ENABLE_LOG_HOSTNAME)                                         | `true`                |
 | `pgpool.logPerNodeStatement`                | Log every SQL statement for each DB node separately (PGPOOL_ENABLE_LOG_PER_NODE_STATEMENT)                         | `false`               |
-| `pgpool.logLinePrefix`                      | Format of the log entry lines (PGPOOL_LOG_LINE_PREFIX)                                                             | `nil`                 |
+| `pgpool.logLinePrefix`                      | Format of the log entry lines (PGPOOL_LOG_LINE_PREFIX)                                                             | `""`                  |
 | `pgpool.clientMinMessages`                  | Log level for clients                                                                                              | `error`               |
-| `pgpool.numInitChildren`                    | The number of preforked Pgpool-II server processes. It is also the concurrent                                      | `nil`                 |
-| `pgpool.maxPool`                            | The maximum number of cached connections in each child process (PGPOOL_MAX_POOL)                                   | `nil`                 |
-| `pgpool.childMaxConnections`                | The maximum number of client connections in each child process (PGPOOL_CHILD_MAX_CONNECTIONS)                      | `nil`                 |
-| `pgpool.childLifeTime`                      | The time in seconds to terminate a Pgpool-II child process if it remains idle (PGPOOL_CHILD_LIFE_TIME)             | `nil`                 |
-| `pgpool.clientIdleLimit`                    | The time in seconds to disconnect a client if it remains idle since the last query (PGPOOL_CLIENT_IDLE_LIMIT)      | `nil`                 |
-| `pgpool.connectionLifeTime`                 | The time in seconds to terminate the cached connections to the PostgreSQL backend (PGPOOL_CONNECTION_LIFE_TIME)    | `nil`                 |
+| `pgpool.numInitChildren`                    | The number of preforked Pgpool-II server processes. It is also the concurrent                                      | `""`                  |
+| `pgpool.maxPool`                            | The maximum number of cached connections in each child process (PGPOOL_MAX_POOL)                                   | `""`                  |
+| `pgpool.childMaxConnections`                | The maximum number of client connections in each child process (PGPOOL_CHILD_MAX_CONNECTIONS)                      | `""`                  |
+| `pgpool.childLifeTime`                      | The time in seconds to terminate a Pgpool-II child process if it remains idle (PGPOOL_CHILD_LIFE_TIME)             | `""`                  |
+| `pgpool.clientIdleLimit`                    | The time in seconds to disconnect a client if it remains idle since the last query (PGPOOL_CLIENT_IDLE_LIMIT)      | `""`                  |
+| `pgpool.connectionLifeTime`                 | The time in seconds to terminate the cached connections to the PostgreSQL backend (PGPOOL_CONNECTION_LIFE_TIME)    | `""`                  |
 | `pgpool.useLoadBalancing`                   | Use Pgpool Load-Balancing                                                                                          | `true`                |
-| `pgpool.configuration`                      | Pgpool configuration                                                                                               | `""`                  |
-| `pgpool.configurationCM`                    | ConfigMap with Pgpool configuration                                                                                | `nil`                 |
-| `pgpool.initdbScripts`                      | Dictionary of initdb scripts                                                                                       | `nil`                 |
-| `pgpool.initdbScriptsCM`                    | ConfigMap with scripts to be run every time Pgpool container is initialized                                        | `nil`                 |
-| `pgpool.initdbScriptsSecret`                | Secret with scripts to be run every time Pgpool container is initialized                                           | `nil`                 |
+| `pgpool.configuration`                      | Pgpool configuration                                                                                               | `{}`                  |
+| `pgpool.configurationCM`                    | ConfigMap with Pgpool configuration                                                                                | `""`                  |
+| `pgpool.initdbScripts`                      | Dictionary of initdb scripts                                                                                       | `{}`                  |
+| `pgpool.initdbScriptsCM`                    | ConfigMap with scripts to be run every time Pgpool container is initialized                                        | `""`                  |
+| `pgpool.initdbScriptsSecret`                | Secret with scripts to be run every time Pgpool container is initialized                                           | `""`                  |
 | `pgpool.tls.enabled`                        | Enable TLS traffic support for end-client connections                                                              | `false`               |
 | `pgpool.tls.autoGenerated`                  | Create self-signed TLS certificates. Currently only supports PEM certificates                                      | `false`               |
 | `pgpool.tls.preferServerCiphers`            | Whether to use the server's TLS cipher preferences rather than the client's                                        | `true`                |
 | `pgpool.tls.certificatesSecret`             | Name of an existing secret that contains the certificates                                                          | `""`                  |
 | `pgpool.tls.certFilename`                   | Certificate filename                                                                                               | `""`                  |
 | `pgpool.tls.certKeyFilename`                | Certificate key filename                                                                                           | `""`                  |
-| `pgpool.tls.certCAFilename`                 | CA Certificate filename                                                                                            | `nil`                 |
+| `pgpool.tls.certCAFilename`                 | CA Certificate filename                                                                                            | `""`                  |
 
 
 ### LDAP parameters
@@ -303,14 +303,14 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | Name                            | Description                                                  | Value        |
 | ------------------------------- | ------------------------------------------------------------ | ------------ |
 | `ldap.enabled`                  | Enable LDAP support                                          | `false`      |
-| `ldap.existingSecret`           | Name of existing secret to use for LDAP passwords            | `nil`        |
-| `ldap.uri`                      | LDAP URL beginning in the form `ldap[s]://<hostname>:<port>` | `nil`        |
-| `ldap.base`                     | LDAP base DN                                                 | `nil`        |
-| `ldap.binddn`                   | LDAP bind DN                                                 | `nil`        |
-| `ldap.bindpw`                   | LDAP bind password                                           | `nil`        |
-| `ldap.bslookup`                 | LDAP base lookup                                             | `nil`        |
-| `ldap.scope`                    | LDAP search scope                                            | `nil`        |
-| `ldap.tlsReqcert`               | LDAP TLS check on server certificates                        | `nil`        |
+| `ldap.existingSecret`           | Name of existing secret to use for LDAP passwords            | `""`         |
+| `ldap.uri`                      | LDAP URL beginning in the form `ldap[s]://<hostname>:<port>` | `""`         |
+| `ldap.base`                     | LDAP base DN                                                 | `""`         |
+| `ldap.binddn`                   | LDAP bind DN                                                 | `""`         |
+| `ldap.bindpw`                   | LDAP bind password                                           | `""`         |
+| `ldap.bslookup`                 | LDAP base lookup                                             | `""`         |
+| `ldap.scope`                    | LDAP search scope                                            | `""`         |
+| `ldap.tlsReqcert`               | LDAP TLS check on server certificates                        | `""`         |
 | `ldap.nssInitgroupsIgnoreusers` | LDAP ignored users                                           | `root,nslcd` |
 
 
@@ -348,12 +348,12 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `metrics.startupProbe.failureThreshold`      | Failure threshold for startupProbe                                                                     | `10`                        |
 | `metrics.startupProbe.successThreshold`      | Success threshold for startupProbe                                                                     | `1`                         |
 | `metrics.annotations`                        | Annotations for PostgreSQL Prometheus exporter service                                                 | `{}`                        |
-| `metrics.customMetrics`                      | Additional custom metrics                                                                              | `nil`                       |
+| `metrics.customMetrics`                      | Additional custom metrics                                                                              | `""`                        |
 | `metrics.extraEnvVars`                       | An array to add extra environment variables to configure postgres-exporter                             | `{}`                        |
 | `metrics.serviceMonitor.enabled`             | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`) | `false`                     |
-| `metrics.serviceMonitor.namespace`           | Optional namespace which Prometheus is running in                                                      | `nil`                       |
-| `metrics.serviceMonitor.interval`            | How frequently to scrape metrics (use by default, falling back to Prometheus' default)                 | `nil`                       |
-| `metrics.serviceMonitor.scrapeTimeout`       | Service monitor scrape timeout                                                                         | `nil`                       |
+| `metrics.serviceMonitor.namespace`           | Optional namespace which Prometheus is running in                                                      | `""`                        |
+| `metrics.serviceMonitor.interval`            | How frequently to scrape metrics (use by default, falling back to Prometheus' default)                 | `""`                        |
+| `metrics.serviceMonitor.scrapeTimeout`       | Service monitor scrape timeout                                                                         | `""`                        |
 | `metrics.serviceMonitor.selector`            | (https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#tldr)                       | `{}`                        |
 | `metrics.serviceMonitor.relabelings`         | ServiceMonitor relabelings. Value is evaluated as a template                                           | `[]`                        |
 | `metrics.serviceMonitor.metricRelabelings`   | ServiceMonitor metricRelabelings. Value is evaluated as a template                                     | `[]`                        |
@@ -379,8 +379,8 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | Name                        | Description                                                                             | Value                 |
 | --------------------------- | --------------------------------------------------------------------------------------- | --------------------- |
 | `persistence.enabled`       | Enable data persistence                                                                 | `true`                |
-| `persistence.existingClaim` | A manually managed Persistent Volume and Claim                                          | `nil`                 |
-| `persistence.storageClass`  | Persistent Volume Storage Class                                                         | `nil`                 |
+| `persistence.existingClaim` | A manually managed Persistent Volume and Claim                                          | `""`                  |
+| `persistence.storageClass`  | Persistent Volume Storage Class                                                         | `""`                  |
 | `persistence.mountPath`     | The path the volume will be mounted at, useful when using different PostgreSQL images.  | `/bitnami/postgresql` |
 | `persistence.accessModes`   | List of access modes of data volume                                                     | `[]`                  |
 | `persistence.size`          | Persistent Volume Claim size                                                            | `8Gi`                 |
@@ -394,10 +394,10 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | ---------------------------------- | ------------------------------------------------------------------- | ----------- |
 | `service.type`                     | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`) | `ClusterIP` |
 | `service.port`                     | PostgreSQL port                                                     | `5432`      |
-| `service.nodePort`                 | Kubernetes service nodePort                                         | `nil`       |
-| `service.loadBalancerIP`           | Load balancer IP if service type is `LoadBalancer`                  | `nil`       |
+| `service.nodePort`                 | Kubernetes service nodePort                                         | `""`        |
+| `service.loadBalancerIP`           | Load balancer IP if service type is `LoadBalancer`                  | `""`        |
 | `service.loadBalancerSourceRanges` | Addresses that are allowed when service is LoadBalancer             | `[]`        |
-| `service.clusterIP`                | Set the Cluster IP to use                                           | `nil`       |
+| `service.clusterIP`                | Set the Cluster IP to use                                           | `""`        |
 | `service.externalTrafficPolicy`    | Enable client source IP preservation                                | `Cluster`   |
 | `service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin    | `None`      |
 | `service.annotations`              | Provide any additional annotations for PostgreSQL service           | `{}`        |

@@ -48,7 +48,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 
 
@@ -56,9 +56,9 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                | Description                                                                                  | Value           |
 | ------------------- | -------------------------------------------------------------------------------------------- | --------------- |
-| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                         | `nil`           |
-| `nameOverride`      | String to partially override common.names.fullname template (will maintain the release name) | `nil`           |
-| `fullnameOverride`  | String to fully override common.names.fullname template                                      | `nil`           |
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                         | `""`            |
+| `nameOverride`      | String to partially override common.names.fullname template (will maintain the release name) | `""`            |
+| `fullnameOverride`  | String to fully override common.names.fullname template                                      | `""`            |
 | `commonLabels`      | Add labels to all the deployed resources                                                     | `{}`            |
 | `commonAnnotations` | Add annotations to all the deployed resources                                                | `{}`            |
 | `clusterDomain`     | Kubernetes Cluster Domain                                                                    | `cluster.local` |
@@ -76,28 +76,28 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.pullSecrets`    | Specify docker-registry secret names as an array                               | `[]`                 |
 | `auth.enabled`         | Switch to enable/disable client authentication                                 | `true`               |
 | `auth.user`            | Client authentication user                                                     | `nats_client`        |
-| `auth.password`        | Client authentication password                                                 | `nil`                |
-| `auth.token`           | Client authentication token                                                    | `nil`                |
+| `auth.password`        | Client authentication password                                                 | `""`                 |
+| `auth.token`           | Client authentication token                                                    | `""`                 |
 | `auth.timeout`         | Client authentication timeout (seconds)                                        | `1`                  |
 | `clusterAuth.enabled`  | Switch to enable/disable cluster authentication                                | `true`               |
 | `clusterAuth.user`     | Cluster authentication user                                                    | `nats_cluster`       |
-| `clusterAuth.password` | Cluster authentication password                                                | `nil`                |
-| `clusterAuth.token`    | Cluster authentication token                                                   | `nil`                |
+| `clusterAuth.password` | Cluster authentication password                                                | `""`                 |
+| `clusterAuth.token`    | Cluster authentication token                                                   | `""`                 |
 | `debug.enabled`        | Switch to enable/disable debug on logging                                      | `false`              |
 | `debug.trace`          | Switch to enable/disable trace debug level on logging                          | `false`              |
 | `debug.logtime`        | Switch to enable/disable logtime on logging                                    | `false`              |
-| `maxConnections`       | Max. number of client connections                                              | `nil`                |
-| `maxControlLine`       | Max. protocol control line                                                     | `nil`                |
-| `maxPayload`           | Max. payload                                                                   | `nil`                |
-| `writeDeadline`        | Duration the server can block on a socket write to a client                    | `nil`                |
+| `maxConnections`       | Max. number of client connections                                              | `""`                 |
+| `maxControlLine`       | Max. protocol control line                                                     | `""`                 |
+| `maxPayload`           | Max. payload                                                                   | `""`                 |
+| `writeDeadline`        | Duration the server can block on a socket write to a client                    | `""`                 |
 | `natsFilename`         | Filename used by several NATS files (binary, configurarion file, and pid file) | `nats-server`        |
 | `command`              | Override default container command (useful when using custom images)           | `[]`                 |
 | `args`                 | Override default container args (useful when using custom images)              | `[]`                 |
 | `hostAliases`          | Deployment pod host aliases                                                    | `[]`                 |
 | `extraFlags`           | Extra flags to be passed to NATS                                               | `{}`                 |
 | `extraEnvVars`         | Extra environment variables to be set on NATS container                        | `[]`                 |
-| `extraEnvVarsCM`       | ConfigMap with extra environment variables                                     | `nil`                |
-| `extraEnvVarsSecret`   | Secret with extra environment variables                                        | `nil`                |
+| `extraEnvVarsCM`       | ConfigMap with extra environment variables                                     | `""`                 |
+| `extraEnvVarsSecret`   | Secret with extra environment variables                                        | `""`                 |
 
 
 ### NATS deployment/statefulset parameters
@@ -106,8 +106,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------ | ---------------------------------------------------------------------------------------------------- | --------------- |
 | `resourceType`                       | NATS cluster resource type under Kubernetes. Allowed values: `statefulset` (default) or `deployment` | `statefulset`   |
 | `replicaCount`                       | Number of NATS nodes                                                                                 | `1`             |
-| `schedulerName`                      | Use an alternate scheduler, e.g. "stork".                                                            | `nil`           |
-| `priorityClassName`                  | Name of pod priority class                                                                           | `nil`           |
+| `schedulerName`                      | Use an alternate scheduler, e.g. "stork".                                                            | `""`            |
+| `priorityClassName`                  | Name of pod priority class                                                                           | `""`            |
 | `updateStrategy.type`                | StrategyType. Can be set to RollingUpdate or OnDelete                                                | `RollingUpdate` |
 | `podSecurityContext`                 | NATS pods' Security Context                                                                          | `{}`            |
 | `containerSecurityContext`           | NATS containers' Security Context                                                                    | `{}`            |
@@ -143,8 +143,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tolerations`                        | Tolerations for pod assignment. Evaluated as a template.                                             | `[]`            |
 | `extraVolumes`                       | Optionally specify extra list of additional volumes for NATS pods                                    | `[]`            |
 | `extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for NATS container(s)                       | `[]`            |
-| `initContainers`                     | Add additional init containers to the NATS pods                                                      | `{}`            |
-| `sidecars`                           | Add additional sidecar containers to the NATS pods                                                   | `{}`            |
+| `initContainers`                     | Add additional init containers to the NATS pods                                                      | `[]`            |
+| `sidecars`                           | Add additional sidecar containers to the NATS pods                                                   | `[]`            |
 
 
 ### Traffic Exposure parameters
@@ -153,24 +153,24 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------ |
 | `client.service.type`               | Kubernetes Service type (NATS client)                                                                 | `ClusterIP`              |
 | `client.service.port`               | NATS client port                                                                                      | `4222`                   |
-| `client.service.nodePort`           | Port to bind to for the LoadBalancer and NodePort service type (NATS client)                          | `nil`                    |
+| `client.service.nodePort`           | Port to bind to for the LoadBalancer and NodePort service type (NATS client)                          | `""`                     |
 | `client.service.annotations`        | Annotations for NATS client service                                                                   | `{}`                     |
-| `client.service.loadBalancerIP`     | loadBalancerIP if NATS client service type is `LoadBalancer`, otherwise leave blank                   | `nil`                    |
-| `cluster.connectRetries`            | Configure number of connect retries for implicit routes, otherwise leave blank                        | `nil`                    |
+| `client.service.loadBalancerIP`     | loadBalancerIP if NATS client service type is `LoadBalancer`, otherwise leave blank                   | `""`                     |
+| `cluster.connectRetries`            | Configure number of connect retries for implicit routes, otherwise leave blank                        | `""`                     |
 | `cluster.service.type`              | Kubernetes Service type (NATS cluster)                                                                | `ClusterIP`              |
 | `cluster.service.port`              | NATS cluster port                                                                                     | `6222`                   |
-| `cluster.service.nodePort`          | Port to bind to for NodePort service type (NATS cluster)                                              | `nil`                    |
+| `cluster.service.nodePort`          | Port to bind to for NodePort service type (NATS cluster)                                              | `""`                     |
 | `cluster.service.annotations`       | Annotations for NATS cluster service                                                                  | `{}`                     |
-| `cluster.service.loadBalancerIP`    | loadBalancerIP if NATS cluster service type is `LoadBalancer`                                         | `nil`                    |
+| `cluster.service.loadBalancerIP`    | loadBalancerIP if NATS cluster service type is `LoadBalancer`                                         | `""`                     |
 | `monitoring.service.type`           | Kubernetes Service type (NATS monitoring)                                                             | `ClusterIP`              |
 | `monitoring.service.port`           | NATS monitoring port                                                                                  | `8222`                   |
-| `monitoring.service.nodePort`       | Port to bind to for NodePort service type (NATS monitoring)                                           | `nil`                    |
+| `monitoring.service.nodePort`       | Port to bind to for NodePort service type (NATS monitoring)                                           | `""`                     |
 | `monitoring.service.annotations`    | Annotations for NATS monitoring service                                                               | `{}`                     |
-| `monitoring.service.loadBalancerIP` | Use loadBalancerIP to request a specific static IP, otherwise leave blank                             | `nil`                    |
+| `monitoring.service.loadBalancerIP` | Use loadBalancerIP to request a specific static IP, otherwise leave blank                             | `""`                     |
 | `ingress.enabled`                   | Set to true to enable ingress record generation                                                       | `false`                  |
 | `ingress.certManager`               | Set this to true in order to add the corresponding annotations for cert-manager                       | `false`                  |
 | `ingress.pathType`                  | Ingress Path type                                                                                     | `ImplementationSpecific` |
-| `ingress.apiVersion`                | Override API Version (automatically detected if not set)                                              | `nil`                    |
+| `ingress.apiVersion`                | Override API Version (automatically detected if not set)                                              | `""`                     |
 | `ingress.hostname`                  | When the ingress is enabled, a host pointing to this will be created                                  | `nats.local`             |
 | `ingress.path`                      | The Path to NATS. You may need to set this to '/*' in order to use this with ALB ingress controllers. | `ImplementationSpecific` |
 | `ingress.annotations`               | Ingress annotations                                                                                   | `{}`                     |
@@ -199,12 +199,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.flags`                    | Flags to be passed to Prometheus metrics                                                               | `[]`                    |
 | `metrics.service.type`             | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)                                    | `ClusterIP`             |
 | `metrics.service.port`             | Prometheus metrics service port                                                                        | `7777`                  |
-| `metrics.service.loadBalancerIP`   | Use serviceLoadBalancerIP to request a specific static IP, otherwise leave blank                       | `nil`                   |
+| `metrics.service.loadBalancerIP`   | Use serviceLoadBalancerIP to request a specific static IP, otherwise leave blank                       | `""`                    |
 | `metrics.service.annotations`      | Annotations for Prometheus metrics service                                                             | `{}`                    |
 | `metrics.service.labels`           | Labels for Prometheus metrics service                                                                  | `{}`                    |
 | `metrics.serviceMonitor.enabled`   | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`) | `false`                 |
-| `metrics.serviceMonitor.namespace` | Specify a namespace if needed. Fallback to the Prometheus default unless specified                     | `nil`                   |
-| `metrics.serviceMonitor.interval`  | Interval at which metrics should be scraped.                                                           | `nil`                   |
+| `metrics.serviceMonitor.namespace` | Specify a namespace if needed. Fallback to the Prometheus default unless specified                     | `""`                    |
+| `metrics.serviceMonitor.interval`  | Interval at which metrics should be scraped.                                                           | `""`                    |
 | `metrics.serviceMonitor.selector`  | Prometheus instance selector labels                                                                    | `{}`                    |
 
 
@@ -214,7 +214,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------- | -------------------------------------------------------------- | ------- |
 | `pdb.create`         | Enable/disable a Pod Disruption Budget creation                | `false` |
 | `pdb.minAvailable`   | Minimum number/percentage of pods that should remain scheduled | `1`     |
-| `pdb.maxUnavailable` | Maximum number/percentage of pods that may be made unavailable | `nil`   |
+| `pdb.maxUnavailable` | Maximum number/percentage of pods that may be made unavailable | `""`    |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,

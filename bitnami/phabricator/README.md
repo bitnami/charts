@@ -52,20 +52,20 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `nil` |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
 
 ### Common parameters
 
 | Name                | Description                                                                                  | Value           |
 | ------------------- | -------------------------------------------------------------------------------------------- | --------------- |
-| `nameOverride`      | String to partially override common.names.fullname template (will maintain the release name) | `nil`           |
-| `fullnameOverride`  | String to fully override common.names.fullname template                                      | `nil`           |
+| `nameOverride`      | String to partially override common.names.fullname template (will maintain the release name) | `""`            |
+| `fullnameOverride`  | String to fully override common.names.fullname template                                      | `""`            |
 | `commonLabels`      | Add labels to all the deployed resources                                                     | `{}`            |
 | `commonAnnotations` | Add annotations to all the deployed resources                                                | `{}`            |
-| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                         | `nil`           |
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                         | `""`            |
 | `clusterDomain`     | Kubernetes Cluster Domain                                                                    | `cluster.local` |
 | `extraDeploy`       | Extra objects to deploy (value evaluated as a template)                                      | `[]`            |
 
@@ -81,27 +81,27 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.pullSecrets`              | Specify docker-registry secret names as an array                     | `[]`                      |
 | `image.debug`                    | Specify if debug logs should be enabled                              | `false`                   |
 | `phabricatorUsername`            | Phabricator admin user                                               | `user`                    |
-| `phabricatorPassword`            | Admin user password                                                  | `nil`                     |
+| `phabricatorPassword`            | Admin user password                                                  | `""`                      |
 | `phabricatorEmail`               | Admin user email                                                     | `user@example.com`        |
 | `phabricatorFirstName`           | Admin user first name                                                | `First Name`              |
 | `phabricatorLastName`            | Admin user last name                                                 | `Last Name`               |
-| `phabricatorHost`                | Phabricator host to create application URLs                          | `nil`                     |
-| `phabricatorAlternateFileDomain` | Phabricator alternate domain to upload files                         | `nil`                     |
+| `phabricatorHost`                | Phabricator host to create application URLs                          | `""`                      |
+| `phabricatorAlternateFileDomain` | Phabricator alternate domain to upload files                         | `""`                      |
 | `phabricatorEnableHttps`         | Configure Phabricator to build application URLs using https          | `true`                    |
 | `phabricatorUseLFS`              | Configure Phabricator to use GIT Large File Storage (LFS)            | `false`                   |
 | `phabricatorGitSSH`              | Configure a self-hosted GIT repository with SSH authentication       | `false`                   |
 | `phabricatorEnablePygments`      | Enable syntax highlighting using Pygments                            | `true`                    |
 | `phabricatorSkipInstall`         | Skip the initial bootstrapping for the application                   | `false`                   |
-| `smtpHost`                       | SMTP mail delivery host                                              | `nil`                     |
-| `smtpPort`                       | SMTP mail delivery port                                              | `nil`                     |
-| `smtpUser`                       | SMTP mail delivery user                                              | `nil`                     |
-| `smtpPassword`                   | SMTP mail delivery password                                          | `nil`                     |
-| `smtpProtocol`                   | SMTP mail delivery protocol [`ssl`, `tls`]                           | `nil`                     |
+| `smtpHost`                       | SMTP mail delivery host                                              | `""`                      |
+| `smtpPort`                       | SMTP mail delivery port                                              | `""`                      |
+| `smtpUser`                       | SMTP mail delivery user                                              | `""`                      |
+| `smtpPassword`                   | SMTP mail delivery password                                          | `""`                      |
+| `smtpProtocol`                   | SMTP mail delivery protocol [`ssl`, `tls`]                           | `""`                      |
 | `command`                        | Override default container command (useful when using custom images) | `[]`                      |
 | `args`                           | Override default container args (useful when using custom images)    | `[]`                      |
 | `extraEnvVars`                   | An array to add extra env vars                                       | `[]`                      |
-| `extraEnvVarsCM`                 | Name of existing ConfigMap containing extra environment variables    | `nil`                     |
-| `extraEnvVarsSecret`             | Name of existing Secret containing extra environment variables       | `nil`                     |
+| `extraEnvVarsCM`                 | Name of existing ConfigMap containing extra environment variables    | `""`                      |
+| `extraEnvVarsSecret`             | Name of existing Secret containing extra environment variables       | `""`                      |
 
 
 ### Phabricator deployment parameters
@@ -152,14 +152,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tolerations`                        | Tolerations for pod assignment. Evaluated as a template.                                  | `[]`            |
 | `extraVolumes`                       | Optionally specify extra list of additional volumes for Phabricator pods                  | `[]`            |
 | `extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for Phabricator container(s)     | `[]`            |
-| `initContainers`                     | Add init containers to the Phabricator pods.                                              | `{}`            |
-| `sidecars`                           | Add sidecars to the Phabricator pods                                                      | `{}`            |
+| `initContainers`                     | Add init containers to the Phabricator pods.                                              | `[]`            |
+| `sidecars`                           | Add sidecars to the Phabricator pods                                                      | `[]`            |
 | `persistence.enabled`                | Enable persistence using PVC                                                              | `true`          |
-| `persistence.storageClass`           | PVC Storage Class for Phabricator volume                                                  | `nil`           |
+| `persistence.storageClass`           | PVC Storage Class for Phabricator volume                                                  | `""`            |
 | `persistence.accessMode`             | PVC Access Mode for Phabricator volume                                                    | `ReadWriteOnce` |
 | `persistence.size`                   | PVC Storage Request for Phabricator volume                                                | `8Gi`           |
-| `persistence.existingClaim`          | An Existing PVC name for Phabricator volume                                               | `nil`           |
-| `persistence.hostPath`               | Host mount path for Phabricator volume                                                    | `nil`           |
+| `persistence.existingClaim`          | An Existing PVC name for Phabricator volume                                               | `""`            |
+| `persistence.hostPath`               | Host mount path for Phabricator volume                                                    | `""`            |
 
 
 ### Traffic Exposure Parameters
@@ -173,14 +173,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.nodePorts.http`        | Kubernetes HTTP node port                                                                                    | `""`                     |
 | `service.nodePorts.https`       | Kubernetes HTTPS node port                                                                                   | `""`                     |
 | `service.nodePorts.ssh`         | Kubernetes SSH node port                                                                                     | `""`                     |
-| `service.loadBalancerIP`        | `loadBalancerIP` for the Phabricator Service                                                                 | `nil`                    |
+| `service.loadBalancerIP`        | `loadBalancerIP` for the Phabricator Service                                                                 | `""`                     |
 | `service.externalTrafficPolicy` | Enable client source IP preservation                                                                         | `Cluster`                |
 | `service.annotations`           | Service annotations                                                                                          | `{}`                     |
 | `ingress.enabled`               | Set to true to enable ingress record generation                                                              | `false`                  |
 | `ingress.tls`                   | Enable TLS configuration for the hostname defined at ingress.hostname parameter                              | `false`                  |
 | `ingress.certManager`           | Set this to true in order to add the corresponding annotations for cert-manager                              | `false`                  |
 | `ingress.pathType`              | Ingress path type                                                                                            | `ImplementationSpecific` |
-| `ingress.apiVersion`            | Force Ingress API version (automatically detected if not set)                                                | `nil`                    |
+| `ingress.apiVersion`            | Force Ingress API version (automatically detected if not set)                                                | `""`                     |
 | `ingress.hostname`              | Default host for the ingress resource                                                                        | `phabricator.local`      |
 | `ingress.path`                  | The Path to Phabricator. You may need to set this to '/*' in order to use this with ALB ingress controllers. | `ImplementationSpecific` |
 | `ingress.annotations`           | Ingress annotations                                                                                          | `{}`                     |
@@ -200,12 +200,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `mariadb.primary.configuration`             | MariaDB Primary configuration to be injected as ConfigMap                                                          | `""`               |
 | `mariadb.primary.extraFlags`                | Additional command line flags                                                                                      | `--local-infile=0` |
 | `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                                              | `true`             |
-| `mariadb.primary.persistence.storageClass`  | mariadb data Persistent Volume Storage Class                                                                       | `nil`              |
+| `mariadb.primary.persistence.storageClass`  | mariadb data Persistent Volume Storage Class                                                                       | `""`               |
 | `mariadb.primary.persistence.accessModes`   | Database Persistent Volume Access Modes                                                                            | `[]`               |
 | `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                                                    | `8Gi`              |
-| `mariadb.primary.persistence.hostPath`      | Host mount path for MariaDB volume in case you want to use local host path volumes (not recommended in production) | `nil`              |
-| `mariadb.primary.persistence.existingClaim` | Enable persistence using an existing PVC                                                                           | `nil`              |
-| `externalDatabase.existingSecret`           | Name of the database existing Secret Object                                                                        | `nil`              |
+| `mariadb.primary.persistence.hostPath`      | Host mount path for MariaDB volume in case you want to use local host path volumes (not recommended in production) | `""`               |
+| `mariadb.primary.persistence.existingClaim` | Enable persistence using an existing PVC                                                                           | `""`               |
+| `externalDatabase.existingSecret`           | Name of the database existing Secret Object                                                                        | `""`               |
 | `externalDatabase.host`                     | Host of the existing database                                                                                      | `localhost`        |
 | `externalDatabase.port`                     | Port of the existing database                                                                                      | `3306`             |
 | `externalDatabase.rootUser`                 | Username in the external db with root privileges                                                                   | `root`             |

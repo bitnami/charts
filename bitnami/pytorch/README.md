@@ -51,17 +51,17 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `nil` |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
 
 ### Common parameters
 
 | Name               | Description                                                                                  | Value |
 | ------------------ | -------------------------------------------------------------------------------------------- | ----- |
-| `nameOverride`     | String to partially override common.names.fullname template (will maintain the release name) | `nil` |
-| `fullnameOverride` | String to fully override common.names.fullname template                                      | `nil` |
+| `nameOverride`     | String to partially override common.names.fullname template (will maintain the release name) | `""`  |
+| `fullnameOverride` | String to fully override common.names.fullname template                                      | `""`  |
 
 
 ### PyTorch parameters
@@ -89,18 +89,18 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.resources.requests` | The requested resources for the container                                                                                                                 | `{}`                    |
 | `service.type`                         | Kubernetes service type                                                                                                                                   | `ClusterIP`             |
 | `service.port`                         | Scheduler Service port                                                                                                                                    | `49875`                 |
-| `service.nodePort`                     | Specify the nodePort value for the LoadBalancer and NodePort service types.                                                                               | `nil`                   |
+| `service.nodePort`                     | Specify the nodePort value for the LoadBalancer and NodePort service types.                                                                               | `""`                    |
 | `service.annotations`                  | Provide any additional annotations which may be required. This can be used to                                                                             | `{}`                    |
-| `entrypoint.file`                      | Main entrypoint to your application                                                                                                                       | `nil`                   |
-| `entrypoint.args`                      | Args required by your entrypoint                                                                                                                          | `nil`                   |
+| `entrypoint.file`                      | Main entrypoint to your application                                                                                                                       | `""`                    |
+| `entrypoint.args`                      | Args required by your entrypoint                                                                                                                          | `[]`                    |
 | `mode`                                 | Run PyTorch in standalone or distributed mode. Possible values: `standalone`, `distributed`                                                               | `standalone`            |
 | `hostAliases`                          | Deployment pod host aliases                                                                                                                               | `[]`                    |
-| `worldSize`                            | Number of nodes that will run the code                                                                                                                    | `nil`                   |
+| `worldSize`                            | Number of nodes that will run the code                                                                                                                    | `""`                    |
 | `port`                                 | PyTorch master port. `MASTER_PORT` will be set to this value                                                                                              | `49875`                 |
-| `configMap`                            | Config map that contains the files you want to load in PyTorch                                                                                            | `nil`                   |
+| `configMap`                            | Config map that contains the files you want to load in PyTorch                                                                                            | `""`                    |
 | `cloneFilesFromGit.enabled`            | Enable in order to download files from git repository                                                                                                     | `false`                 |
-| `cloneFilesFromGit.repository`         | Repository that holds the files                                                                                                                           | `nil`                   |
-| `cloneFilesFromGit.revision`           | Revision from the repository to checkout                                                                                                                  | `nil`                   |
+| `cloneFilesFromGit.repository`         | Repository that holds the files                                                                                                                           | `""`                    |
+| `cloneFilesFromGit.revision`           | Revision from the repository to checkout                                                                                                                  | `""`                    |
 | `cloneFilesFromGit.extraVolumeMounts`  | Add extra volume mounts for the Git container                                                                                                             | `[]`                    |
 | `extraEnvVars`                         | Additional environment variables                                                                                                                          | `[]`                    |
 | `podAffinityPreset`                    | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                       | `""`                    |
@@ -132,7 +132,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.mountPath`                | Data volume mount path                                                                                                                                    | `/bitnami/pytorch`      |
 | `persistence.accessModes`              | Persistent Volume Access Mode                                                                                                                             | `[]`                    |
 | `persistence.size`                     | Size of data volume                                                                                                                                       | `8Gi`                   |
-| `persistence.storageClass`             | Persistent Volume Storage Class                                                                                                                           | `nil`                   |
+| `persistence.storageClass`             | Persistent Volume Storage Class                                                                                                                           | `""`                    |
 | `persistence.annotations`              | Persistent Volume Claim annotations                                                                                                                       | `{}`                    |
 | `extraVolumes`                         | Array to add extra volumes (evaluated as a template)                                                                                                      | `[]`                    |
 | `extraVolumeMounts`                    | Array to add extra mounts (normally used with extraVolumes, evaluated as a template)                                                                      | `[]`                    |

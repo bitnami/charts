@@ -7,7 +7,7 @@
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
@@ -18,13 +18,13 @@ global:
 
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
-kubeVersion:
+kubeVersion: ""
 ## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname template
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param commonLabels Add labels to all the deployed resources
 ##
 commonLabels: {}
@@ -75,13 +75,13 @@ args: []
 ## - name: PHP_UPLOAD_MAX_FILESIZE
 ##   value: "80M"
 ##
-extraEnvVars: {}
+extraEnvVars: []
 ## @param extraEnvVarsCM Name of a existing ConfigMap containing extra env vars
 ##
-extraEnvVarsCM:
+extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Name of a existing Secret containing extra env vars
 ##
-extraEnvVarsSecret:
+extraEnvVarsSecret: ""
 
 ## @section phpMyAdmin deployment parameters
 
@@ -256,7 +256,7 @@ extraVolumeMounts: []
 ##       - name: portname
 ##         containerPort: 1234
 ##
-initContainers: {}
+initContainers: []
 ## @param sidecars Add sidecar containers to the PhpMyAdmin pods
 ## Example:
 ## sidecars:
@@ -267,7 +267,7 @@ initContainers: {}
 ##       - name: portname
 ##         containerPort: 1234
 ##
-sidecars: {}
+sidecars: []
 
 ## @section Traffic Exposure parameters
 
@@ -295,11 +295,11 @@ service:
   ## e.g:
   ## clusterIP: None
   ##
-  clusterIP:
+  clusterIP: ""
   ## @param service.loadBalancerIP Load balancer IP for the phpMyAdmin Service (optional, cloud specific)
   ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
   ##
-  loadBalancerIP:
+  loadBalancerIP: ""
   ## @param service.loadBalancerSourceRanges Addresses that are allowed when service is LoadBalancer
   ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
   ## Example:
@@ -395,12 +395,12 @@ db:
   ## e.g:
   ## chartName: mariadb
   ##
-  chartName:
+  chartName: ""
   ## @param db.host Database Hostname. Ignored when `db.chartName` is set.
   ## e.g:
   ## host: foo
   ##
-  host:
+  host: ""
   ## @param db.bundleTestDB Deploy a MariaDB instance for testing purposes
   ##
   bundleTestDB: false
@@ -419,7 +419,7 @@ db:
     caCertificate: |-
     ## @param db.ssl.ciphers List of allowable ciphers for connections when using SSL
     ##
-    ciphers:
+    ciphers: []
     ## @param db.ssl.verify Enable SSL certificate validation
     ##
     verify: true
@@ -476,7 +476,7 @@ metrics:
     ## @param metrics.service.loadBalancerIP Load Balancer IP if the Prometheus metrics server type is `LoadBalancer`
     ## Use serviceLoadBalancerIP to request a specific static IP, otherwise leave blank
     ##
-    loadBalancerIP:
+    loadBalancerIP: ""
   ## Prometheus Service Monitor
   ## ref: https://github.com/coreos/prometheus-operator
   ##      https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
@@ -490,7 +490,7 @@ metrics:
     namespace: ""
     ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
     ##
-    jobLabel:
+    jobLabel: ""
     ## @param metrics.serviceMonitor.interval Specify the interval at which metrics should be scraped
     ##
     interval: 30s
@@ -498,15 +498,15 @@ metrics:
     ## e.g:
     ## scrapeTimeout: 30s
     ##
-    scrapeTimeout:
+    scrapeTimeout: ""
     ## @param metrics.serviceMonitor.relabellings Specify Relabellings to add to the scrape endpoint
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
     ##
-    relabellings:
+    relabellings: []
     ## @param metrics.serviceMonitor.metricRelabelings Specify Metric Relabelings to add to the scrape endpoint
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
     ##
-    metricRelabelings:
+    metricRelabelings: []
     ## @param metrics.serviceMonitor.honorLabels Specify honorLabels parameter to add the scrape endpoint
     ##
     honorLabels: false
