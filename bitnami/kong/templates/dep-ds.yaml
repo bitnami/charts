@@ -85,22 +85,15 @@ spec:
           {{- if .Values.containerSecurityContext }}
           securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.kong.command }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.kong.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.kong.command "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.kong.args }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.kong.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.kong.args "context" $) | nindent 12 }}
-          {{- end }}
-          {{- if not .Values.kong.lifecycleHooks }}
-          lifecycle:
-            preStop:
-              exec:
-                command:
-                  - /bin/sh
-                  - -c
-                  - kong quit
-          {{ else }}
-          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.kong.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           env:
             {{- if .Values.service.exposeAdmin }}
@@ -181,6 +174,7 @@ spec:
               containerPort: {{ .Values.metrics.service.port }}
               protocol: TCP
             {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.kong.livenessProbe.enabled }}
           livenessProbe:
             exec:
@@ -210,6 +204,18 @@ spec:
             successThreshold: {{ .Values.kong.readinessProbe.successThreshold }}
           {{- else if .Values.kong.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.kong.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if not .Values.kong.lifecycleHooks }}
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - /bin/sh
+                  - -c
+                  - kong quit
+          {{ else }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.kong.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
           {{- end }}
           {{- if .Values.kong.resources }}
           resources: {{- toYaml .Values.kong.resources | nindent 12 }}
@@ -241,7 +247,9 @@ spec:
           {{- if .Values.containerSecurityContext }}
           securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.ingressController.args }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.ingressController.args }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.ingressController.command "context" $) | nindent 12 }}
           {{- else }}
           command:
@@ -249,7 +257,9 @@ spec:
             - -ec
             - /health/ingress-container-start.sh
           {{- end }}
-          {{- if .Values.ingressController.args }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.ingressController.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.ingressController.args "context" $) | nindent 12 }}
           {{- end }}
           env:
@@ -287,6 +297,7 @@ spec:
             - name: http-health
               containerPort: 10254
               protocol: TCP
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.ingressController.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
@@ -314,6 +325,7 @@ spec:
             successThreshold: {{ .Values.ingressController.readinessProbe.successThreshold }}
           {{- else if .Values.ingressController.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ingressController.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
           {{- end }}
           {{- if .Values.ingressController.resources }}
           resources: {{- toYaml .Values.ingressController.resources | nindent 12 }}

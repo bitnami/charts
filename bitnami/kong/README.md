@@ -55,15 +55,18 @@ To uninstall/delete the `my-release` deployment:
 
 ### Common parameters
 
-| Name                | Description                                                                                              | Value           |
-| ------------------- | -------------------------------------------------------------------------------------------------------- | --------------- |
-| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                                     | `nil`           |
-| `nameOverride`      | String to partially override kong.fullname template with a string (will prepend the release name)        | `nil`           |
-| `fullnameOverride`  | String to fully override kong.fullname template with a string                                            | `nil`           |
-| `commonAnnotations` | Common annotations to add to all Kong resources (sub-charts are not considered). Evaluated as a template | `{}`            |
-| `commonLabels`      | Common labels to add to all Kong resources (sub-charts are not considered). Evaluated as a template      | `{}`            |
-| `clusterDomain`     | Kubernetes cluster domain                                                                                | `cluster.local` |
-| `extraDeploy`       | Array of extra objects to deploy with the release (evaluated as a template).                             | `[]`            |
+| Name                     | Description                                                                                              | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------------------- | --------------- |
+| `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                                     | `nil`           |
+| `nameOverride`           | String to partially override kong.fullname template with a string (will prepend the release name)        | `nil`           |
+| `fullnameOverride`       | String to fully override kong.fullname template with a string                                            | `nil`           |
+| `commonAnnotations`      | Common annotations to add to all Kong resources (sub-charts are not considered). Evaluated as a template | `{}`            |
+| `commonLabels`           | Common labels to add to all Kong resources (sub-charts are not considered). Evaluated as a template      | `{}`            |
+| `clusterDomain`          | Kubernetes cluster domain                                                                                | `cluster.local` |
+| `extraDeploy`            | Array of extra objects to deploy with the release (evaluated as a template).                             | `[]`            |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                  | `false`         |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                                     | `[]`            |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                                        | `[]`            |
 
 
 ### Deployment parameters
@@ -72,7 +75,7 @@ To uninstall/delete the `my-release` deployment:
 | --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                        | kong image registry                                                                                                                                                              | `docker.io`           |
 | `image.repository`                      | kong image repository                                                                                                                                                            | `bitnami/kong`        |
-| `image.tag`                             | kong image tag (immutable tags are recommended)                                                                                                                                  | `2.4.1-debian-10-r34` |
+| `image.tag`                             | kong image tag (immutable tags are recommended)                                                                                                                                  | `2.5.0-debian-10-r0`  |
 | `image.pullPolicy`                      | kong image pull policy                                                                                                                                                           | `IfNotPresent`        |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                                                                                 | `[]`                  |
 | `database`                              | Select which database backend Kong will use. Can be 'postgresql' or 'cassandra'                                                                                                  | `postgresql`          |
@@ -194,7 +197,7 @@ To uninstall/delete the `my-release` deployment:
 | `ingressController.customResourceDeletePolicy`         | Add custom CRD resource delete policy (for Helm 2 support)                                                                                    | `{}`                              |
 | `ingressController.image.registry`                     | Kong Ingress Controller image registry                                                                                                        | `docker.io`                       |
 | `ingressController.image.repository`                   | Kong Ingress Controller image name                                                                                                            | `bitnami/kong-ingress-controller` |
-| `ingressController.image.tag`                          | Kong Ingress Controller image tag                                                                                                             | `1.3.1-debian-10-r24`             |
+| `ingressController.image.tag`                          | Kong Ingress Controller image tag                                                                                                             | `1.3.1-debian-10-r32`             |
 | `ingressController.image.pullPolicy`                   | kong ingress controller image pull policy                                                                                                     | `IfNotPresent`                    |
 | `ingressController.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                                              | `[]`                              |
 | `ingressController.proxyReadyTimeout`                  | Maximum time (in seconds) to wait for the Kong container to be ready                                                                          | `300`                             |
