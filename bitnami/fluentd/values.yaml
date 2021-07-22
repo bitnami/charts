@@ -93,6 +93,7 @@ forwarder:
   ## @param forwarder.containerSecurityContext.enabled Enable security context for the forwarder container
   ## @param forwarder.containerSecurityContext.privileged Run as privileged
   ## @param forwarder.containerSecurityContext.allowPrivilegeEscalation Allow Privilege Escalation
+  ## @param forwarder.containerSecurityContext.readOnlyRootFilesystem Require the use of a read only root file system
   ## @param forwarder.containerSecurityContext.capabilities.drop [array] Drop capabilities for the securityContext
   ##
   containerSecurityContext:
@@ -101,7 +102,7 @@ forwarder:
     allowPrivilegeEscalation: false
     ## Requires mounting an `extraVolume` of type `emptyDir` into /tmp
     ##
-    # readOnlyRootFilesystem: true
+    readOnlyRootFilesystem: ""
     capabilities:
       drop:
         - ALL
@@ -518,6 +519,7 @@ aggregator:
   ## @param aggregator.containerSecurityContext.enabled Enable security context for the aggregator container
   ## @param aggregator.containerSecurityContext.privileged Run as privileged
   ## @param aggregator.containerSecurityContext.allowPrivilegeEscalation Allow Privilege Escalation
+  ## @param aggregator.containerSecurityContext.readOnlyRootFilesystem Require the use of a read only root file system
   ## @param aggregator.containerSecurityContext.capabilities.drop [array] Drop capabilities for the securityContext
   ##
   containerSecurityContext:
@@ -526,7 +528,7 @@ aggregator:
     allowPrivilegeEscalation: false
     ## Requires mounting an `extraVolume` of type `emptyDir` into /tmp
     ##
-    # readOnlyRootFilesystem: true
+    readOnlyRootFilesystem: ""
     capabilities:
       drop:
         - ALL

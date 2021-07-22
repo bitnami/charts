@@ -34,6 +34,7 @@ clusterDomain: cluster.local
 ## @param image.repository ExternalDNS image repository
 ## @param image.tag ExternalDNS Image tag (immutable tags are recommended)
 ## @param image.pullPolicy ExternalDNS image pull policy
+## @param image.pullSecrets ExternalDNS image pull secrets
 ##
 image:
   registry: docker.io
@@ -47,9 +48,11 @@ image:
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
   ##
-  # pullSecrets:
-  #   - myRegistryKeySecretName
+  pullSecrets: []
 
 ## @param hostAliases Deployment pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
