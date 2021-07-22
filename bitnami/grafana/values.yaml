@@ -320,7 +320,7 @@ readinessProbe:
 ##       - name: portname
 ##         containerPort: 1234
 ##
-sidecars: {}
+sidecars: []
 ## @param extraVolumes Additional volumes for the Grafana pod
 ## Example:
 ## extraVolumes:

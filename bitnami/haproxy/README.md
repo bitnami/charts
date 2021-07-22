@@ -146,7 +146,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraVolumes`                       | Optionally specify extra list of additional volumes for the haproxy pod(s)                | `[]`                  |
 | `extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for the haproxy container(s)     | `[]`                  |
 | `sidecars`                           | Add additional sidecar containers to the haproxy pod(s)                                   | `[]`                  |
-| `initContainers`                     | Add additional init containers to the haproxy pod(s)                                      | `{}`                  |
+| `initContainers`                     | Add additional init containers to the haproxy pod(s)                                      | `[]`                  |
 
 
 ### Other Parameters

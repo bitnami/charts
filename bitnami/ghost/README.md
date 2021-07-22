@@ -119,8 +119,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `hostAliases`                           | Ghost pod host aliases                                                                    | `[]`            |
 | `extraVolumes`                          | Optionally specify extra list of additional volumes for Ghost pods                        | `[]`            |
 | `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for Ghost container(s)           | `[]`            |
-| `sidecars`                              | Add additional sidecar containers to the Ghost pod                                        | `{}`            |
-| `initContainers`                        | Add additional init containers to the Ghost pods                                          | `{}`            |
+| `sidecars`                              | Add additional sidecar containers to the Ghost pod                                        | `[]`            |
+| `initContainers`                        | Add additional init containers to the Ghost pods                                          | `[]`            |
 | `lifecycleHooks`                        | Add lifecycle hooks to the Ghost deployment                                               | `{}`            |
 | `podLabels`                             | Extra labels for Ghost pods                                                               | `{}`            |
 | `podAnnotations`                        | Annotations for Ghost pods                                                                | `{}`            |

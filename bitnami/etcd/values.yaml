@@ -333,7 +333,7 @@ extraVolumeMounts: []
 ##       - name: portname
 ##         containerPort: 1234
 ##
-initContainers: {}
+initContainers: []
 ## @param sidecars Add additional sidecar containers to the etcd pods
 ## e.g:
 ## sidecars:
@@ -344,7 +344,7 @@ initContainers: {}
 ##       - name: portname
 ##         containerPort: 1234
 ##
-sidecars: {}
+sidecars: []
 ## @param podAnnotations Annotations for etcd pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##

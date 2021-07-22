@@ -185,7 +185,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `pdb.create`                         | Enable/disable a Pod Disruption Budget creation                                                                                                                                               | `false`         |
 | `pdb.minAvailable`                   | Minimum number/percentage of pods that should remain scheduled                                                                                                                                | `""`            |
 | `pdb.maxUnavailable`                 | Maximum number/percentage of pods that may be made unavailable                                                                                                                                | `1`             |
-| `sidecars`                           | Attach additional sidecar containers to the Kafka pod                                                                                                                                         | `{}`            |
+| `sidecars`                           | Attach additional sidecar containers to the Kafka pod                                                                                                                                         | `[]`            |
 | `initContainers`                     | Add extra init containers                                                                                                                                                                     | `[]`            |
 
 
@@ -289,7 +289,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.kafka.affinity`                         | Affinity for Kafka Exporter pod assignment                                                                                       | `{}`                     |
 | `metrics.kafka.nodeSelector`                     | Node labels for Kafka Exporter pod assignment                                                                                    | `{}`                     |
 | `metrics.kafka.tolerations`                      | Tolerations for Kafka Exporter pod assignment                                                                                    | `[]`                     |
-| `metrics.kafka.initContainers`                   | Add init containers to the Kafka exporter pods                                                                                   | `{}`                     |
+| `metrics.kafka.initContainers`                   | Add init containers to the Kafka exporter pods                                                                                   | `[]`                     |
 | `metrics.kafka.service.type`                     | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`) for Kafka Exporter                                           | `ClusterIP`              |
 | `metrics.kafka.service.port`                     | Kafka Exporter Prometheus port                                                                                                   | `9308`                   |
 | `metrics.kafka.service.nodePort`                 | Kubernetes HTTP node port                                                                                                        | `""`                     |

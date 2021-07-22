@@ -193,8 +193,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `lifecycleHooks`                        | LifecycleHooks to set additional configuration at startup                                 | `{}`                  |
 | `extraVolumes`                          | Optionally specify extra list of additional volumes for Keycloak pods                     | `[]`                  |
 | `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for Keycloak container(s)        | `[]`                  |
-| `initContainers`                        | Add additional init containers to the Keycloak pods                                       | `{}`                  |
-| `sidecars`                              | Add additional sidecar containers to the Keycloak pods                                    | `{}`                  |
+| `initContainers`                        | Add additional init containers to the Keycloak pods                                       | `[]`                  |
+| `sidecars`                              | Add additional sidecar containers to the Keycloak pods                                    | `[]`                  |
 
 
 ### Exposure parameters

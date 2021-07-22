@@ -396,7 +396,7 @@ compactor:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## @param compactor.initContainers Add additional init containers to the compactor pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
@@ -406,7 +406,7 @@ compactor:
   ##    imagePullPolicy: Always
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
-  initContainers: {}
+  initContainers: []
   ## @section Compactor Traffic Exposure Parameters
   ##
 
@@ -615,7 +615,7 @@ distributor:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## @param distributor.initContainers Add additional init containers to the distributor pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
@@ -625,7 +625,7 @@ distributor:
   ##    imagePullPolicy: Always
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
-  initContainers: {}
+  initContainers: []
   ## @section Distributor Traffic Exposure Parameters
   ##
 
@@ -839,7 +839,7 @@ ingester:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## @param ingester.initContainers Add additional init containers to the ingester pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
@@ -849,7 +849,7 @@ ingester:
   ##    imagePullPolicy: Always
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
-  initContainers: {}
+  initContainers: []
 
   ## @section Ingester Persistence Parameters
   ##
@@ -1119,7 +1119,7 @@ querier:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## @param querier.initContainers Add additional init containers to the querier pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
@@ -1129,7 +1129,7 @@ querier:
   ##    imagePullPolicy: Always
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
-  initContainers: {}
+  initContainers: []
   ## @section Querier Traffic Exposure Parameters
   ##
 
@@ -1343,7 +1343,7 @@ queryFrontend:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## @param queryFrontend.initContainers Add additional init containers to the queryFrontend pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
@@ -1353,7 +1353,7 @@ queryFrontend:
   ##    imagePullPolicy: Always
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
-  initContainers: {}
+  initContainers: []
 
   ## Query sidecar settings
   ##
@@ -1727,7 +1727,7 @@ vulture:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## @param vulture.initContainers Add additional init containers to the vulture pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
@@ -1737,7 +1737,7 @@ vulture:
   ##    imagePullPolicy: Always
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
-  initContainers: {}
+  initContainers: []
   ## @section Vulture Traffic Exposure Parameters
   ##
 

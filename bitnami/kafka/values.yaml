@@ -570,7 +570,7 @@ pdb:
 ##       - name: portname
 ##         containerPort: 1234
 ##
-sidecars: {}
+sidecars: []
 ## @param initContainers Add extra init containers
 ##
 initContainers: []
@@ -976,7 +976,7 @@ metrics:
     ##       - name: portname
     ##         containerPort: 1234
     ##
-    initContainers: {}
+    initContainers: []
     ## Service configuration
     ##
     service:

@@ -575,7 +575,7 @@ extraVolumeMounts: []
 ##       - name: portname
 ##         containerPort: 1234
 ##
-initContainers: {}
+initContainers: []
 ## @param sidecars Add additional sidecar containers to the Keycloak pods
 ## Example:
 ## sidecars:
@@ -586,7 +586,7 @@ initContainers: {}
 ##       - name: portname
 ##         containerPort: 1234
 ##
-sidecars: {}
+sidecars: []
 
 ## @section Exposure parameters
 

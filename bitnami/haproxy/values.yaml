@@ -335,7 +335,7 @@ sidecars: []
 ##    imagePullPolicy: Always
 ##    command: ['sh', '-c', 'echo "hello world"']
 ##
-initContainers: {}
+initContainers: []
 
 ## @section Other Parameters
 ##

@@ -148,8 +148,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `compactor.extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for compactor nodes                               | `""`            |
 | `compactor.extraVolumes`                       | Optionally specify extra list of additional volumes for the compactor pod(s)                        | `[]`            |
 | `compactor.extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for the compactor container(s)             | `[]`            |
-| `compactor.sidecars`                           | Add additional sidecar containers to the compactor pod(s)                                           | `{}`            |
-| `compactor.initContainers`                     | Add additional init containers to the compactor pod(s)                                              | `{}`            |
+| `compactor.sidecars`                           | Add additional sidecar containers to the compactor pod(s)                                           | `[]`            |
+| `compactor.initContainers`                     | Add additional init containers to the compactor pod(s)                                              | `[]`            |
 
 
 ### Compactor Traffic Exposure Parameters
@@ -212,8 +212,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `distributor.extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for distributor nodes                               | `""`            |
 | `distributor.extraVolumes`                       | Optionally specify extra list of additional volumes for the distributor pod(s)                        | `[]`            |
 | `distributor.extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for the distributor container(s)             | `[]`            |
-| `distributor.sidecars`                           | Add additional sidecar containers to the distributor pod(s)                                           | `{}`            |
-| `distributor.initContainers`                     | Add additional init containers to the distributor pod(s)                                              | `{}`            |
+| `distributor.sidecars`                           | Add additional sidecar containers to the distributor pod(s)                                           | `[]`            |
+| `distributor.initContainers`                     | Add additional init containers to the distributor pod(s)                                              | `[]`            |
 
 
 ### Distributor Traffic Exposure Parameters
@@ -278,8 +278,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingester.extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for ingester nodes                               | `""`            |
 | `ingester.extraVolumes`                       | Optionally specify extra list of additional volumes for the ingester pod(s)                        | `[]`            |
 | `ingester.extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for the ingester container(s)             | `[]`            |
-| `ingester.sidecars`                           | Add additional sidecar containers to the ingester pod(s)                                           | `{}`            |
-| `ingester.initContainers`                     | Add additional init containers to the ingester pod(s)                                              | `{}`            |
+| `ingester.sidecars`                           | Add additional sidecar containers to the ingester pod(s)                                           | `[]`            |
+| `ingester.initContainers`                     | Add additional init containers to the ingester pod(s)                                              | `[]`            |
 
 
 ### Ingester Persistence Parameters
@@ -359,8 +359,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `querier.extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for querier nodes                               | `""`            |
 | `querier.extraVolumes`                       | Optionally specify extra list of additional volumes for the querier pod(s)                        | `[]`            |
 | `querier.extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for the querier container(s)             | `[]`            |
-| `querier.sidecars`                           | Add additional sidecar containers to the querier pod(s)                                           | `{}`            |
-| `querier.initContainers`                     | Add additional init containers to the querier pod(s)                                              | `{}`            |
+| `querier.sidecars`                           | Add additional sidecar containers to the querier pod(s)                                           | `[]`            |
+| `querier.initContainers`                     | Add additional init containers to the querier pod(s)                                              | `[]`            |
 
 
 ### Querier Traffic Exposure Parameters
@@ -425,8 +425,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryFrontend.extraEnvVarsSecret`                       | Name of existing Secret containing extra env vars for queryFrontend nodes                               | `""`                          |
 | `queryFrontend.extraVolumes`                             | Optionally specify extra list of additional volumes for the queryFrontend pod(s)                        | `[]`                          |
 | `queryFrontend.extraVolumeMounts`                        | Optionally specify extra list of additional volumeMounts for the queryFrontend container(s)             | `[]`                          |
-| `queryFrontend.sidecars`                                 | Add additional sidecar containers to the queryFrontend pod(s)                                           | `{}`                          |
-| `queryFrontend.initContainers`                           | Add additional init containers to the queryFrontend pod(s)                                              | `{}`                          |
+| `queryFrontend.sidecars`                                 | Add additional sidecar containers to the queryFrontend pod(s)                                           | `[]`                          |
+| `queryFrontend.initContainers`                           | Add additional init containers to the queryFrontend pod(s)                                              | `[]`                          |
 | `queryFrontend.query.image.registry`                     | Grafana Tempo Query image registry                                                                      | `docker.io`                   |
 | `queryFrontend.query.image.repository`                   | Grafana Tempo Query image repository                                                                    | `bitnami/grafana-tempo-query` |
 | `queryFrontend.query.image.tag`                          | Grafana Tempo Query image tag (immutable tags are recommended)                                          | `1.0.1-debian-10-r0`          |
@@ -532,8 +532,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `vulture.extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for vulture nodes                               | `""`                            |
 | `vulture.extraVolumes`                       | Optionally specify extra list of additional volumes for the vulture pod(s)                        | `[]`                            |
 | `vulture.extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for the vulture container(s)             | `[]`                            |
-| `vulture.sidecars`                           | Add additional sidecar containers to the vulture pod(s)                                           | `{}`                            |
-| `vulture.initContainers`                     | Add additional init containers to the vulture pod(s)                                              | `{}`                            |
+| `vulture.sidecars`                           | Add additional sidecar containers to the vulture pod(s)                                           | `[]`                            |
+| `vulture.initContainers`                     | Add additional init containers to the vulture pod(s)                                              | `[]`                            |
 
 
 ### Vulture Traffic Exposure Parameters

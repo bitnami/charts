@@ -139,8 +139,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `hub.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars                                         | `""`                 |
 | `hub.extraVolumes`                          | Optionally specify extra list of additional volumes for Hub pods                          | `[]`                 |
 | `hub.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for Hub container(s)             | `[]`                 |
-| `hub.initContainers`                        | Add additional init containers to the Hub pods                                            | `{}`                 |
-| `hub.sidecars`                              | Add additional sidecar containers to the Hub pod                                          | `{}`                 |
+| `hub.initContainers`                        | Add additional init containers to the Hub pods                                            | `[]`                 |
+| `hub.sidecars`                              | Add additional sidecar containers to the Hub pod                                          | `[]`                 |
 
 
 ### Hub RBAC parameters
@@ -233,8 +233,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `proxy.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars                                         | `""`                              |
 | `proxy.extraVolumes`                          | Optionally specify extra list of additional volumes for Proxy pods                        | `[]`                              |
 | `proxy.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for Proxy container(s)           | `[]`                              |
-| `proxy.initContainers`                        | Add additional init containers to the Proxy pods                                          | `{}`                              |
-| `proxy.sidecars`                              | Add additional sidecar containers to the Proxy pod                                        | `{}`                              |
+| `proxy.initContainers`                        | Add additional init containers to the Proxy pods                                          | `[]`                              |
+| `proxy.sidecars`                              | Add additional sidecar containers to the Proxy pod                                        | `[]`                              |
 
 
 ### Proxy Traffic Exposure Parameters
@@ -306,8 +306,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `imagePuller.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars                                         | `""`            |
 | `imagePuller.extraVolumes`                          | Optionally specify extra list of additional volumes for ImagePuller pods                  | `[]`            |
 | `imagePuller.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for ImagePuller container(s)     | `[]`            |
-| `imagePuller.initContainers`                        | Add additional init containers to the ImagePuller pods                                    | `{}`            |
-| `imagePuller.sidecars`                              | Add additional sidecar containers to the ImagePuller pod                                  | `{}`            |
+| `imagePuller.initContainers`                        | Add additional init containers to the ImagePuller pods                                    | `[]`            |
+| `imagePuller.sidecars`                              | Add additional sidecar containers to the ImagePuller pod                                  | `[]`            |
 
 
 ### Singleuser deployment parameters
@@ -337,8 +337,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `singleuser.extraEnvVars`                       | Add extra environment variables to the Single User container                                        | `[]`                                 |
 | `singleuser.extraVolumes`                       | Optionally specify extra list of additional volumes for Single User pods                            | `[]`                                 |
 | `singleuser.extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for Single User container(s)               | `[]`                                 |
-| `singleuser.initContainers`                     | Add additional init containers to the Single User pods                                              | `{}`                                 |
-| `singleuser.sidecars`                           | Add additional sidecar containers to the Single User pod                                            | `{}`                                 |
+| `singleuser.initContainers`                     | Add additional init containers to the Single User pods                                              | `[]`                                 |
+| `singleuser.sidecars`                           | Add additional sidecar containers to the Single User pod                                            | `[]`                                 |
 
 
 ### Single User RBAC parameters

@@ -164,7 +164,7 @@ sidecars: {}
 ##      - name: portname
 ##        containerPort: 1234
 ##
-initContainers: {}
+initContainers: []
 ## @param lifecycleHooks Add lifecycle hooks to the Jenkins deployment
 ##
 lifecycleHooks: {}

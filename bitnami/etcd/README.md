@@ -151,8 +151,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `customStartupProbe`                    | Override default startup probe                                                            | `{}`            |
 | `extraVolumes`                          | Optionally specify extra list of additional volumes for etcd pods                         | `[]`            |
 | `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for etcd container(s)            | `[]`            |
-| `initContainers`                        | Add additional init containers to the etcd pods                                           | `{}`            |
-| `sidecars`                              | Add additional sidecar containers to the etcd pods                                        | `{}`            |
+| `initContainers`                        | Add additional init containers to the etcd pods                                           | `[]`            |
+| `sidecars`                              | Add additional sidecar containers to the etcd pods                                        | `[]`            |
 | `podAnnotations`                        | Annotations for etcd pods                                                                 | `{}`            |
 | `podLabels`                             | Extra labels for etcd pods                                                                | `{}`            |
 | `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
