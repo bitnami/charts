@@ -85,76 +85,79 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### HAProxy Parameters
 
-| Name                                 | Description                                                                               | Value                |
-| ------------------------------------ | ----------------------------------------------------------------------------------------- | -------------------- |
-| `image.registry`                     | HAProxy image registry                                                                    | `docker.io`          |
-| `image.repository`                   | HAProxy image repository                                                                  | `bitnami/haproxy`    |
-| `image.tag`                          | HAProxy image tag (immutable tags are recommended)                                        | `2.4.0-debian-10-r0` |
-| `image.pullPolicy`                   | HAProxy image pull policy                                                                 | `IfNotPresent`       |
-| `image.pullSecrets`                  | HAProxy image pull secrets                                                                | `[]`                 |
-| `replicaCount`                       | Number of haproxy replicas to deploy                                                      | `1`                  |
-| `livenessProbe.enabled`              | Enable livenessProbe on haproxy nodes                                                     | `true`               |
-| `livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                   | `15`                 |
-| `livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                          | `10`                 |
-| `livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                         | `5`                  |
-| `livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                       | `5`                  |
-| `livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                       | `1`                  |
-| `readinessProbe.enabled`             | Enable readinessProbe on haproxy nodes                                                    | `true`               |
-| `readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                  | `15`                 |
-| `readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                         | `10`                 |
-| `readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                        | `5`                  |
-| `readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                      | `5`                  |
-| `readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                      | `1`                  |
-| `customLivenessProbe`                | Custom livenessProbe that overrides the default one                                       | `{}`                 |
-| `customReadinessProbe`               | Custom readinessProbe that overrides the default one                                      | `{}`                 |
-| `resources.limits`                   | The resources limits for the haproxy containers                                           | `{}`                 |
-| `resources.requests`                 | The requested resources for the haproxy containers                                        | `{}`                 |
-| `podSecurityContext.enabled`         | Enabled haproxy pods' Security Context                                                    | `true`               |
-| `podSecurityContext.fsGroup`         | Set haproxy pod's Security Context fsGroup                                                | `1001`               |
-| `containerSecurityContext.enabled`   | Enabled haproxy containers' Security Context                                              | `true`               |
-| `containerSecurityContext.runAsUser` | Set haproxy containers' Security Context runAsUser                                        | `1001`               |
-| `pdb.create`                         | Enable a Pod Disruption Budget creation                                                   | `false`              |
-| `pdb.minAvailable`                   | Minimum number/percentage of pods that should remain scheduled                            | `1`                  |
-| `pdb.maxUnavailable`                 | Maximum number/percentage of pods that may be made unavailable                            | `nil`                |
-| `autoscaling.enabled`                | Enable Horizontal POD autoscaling for HAProxy                                             | `false`              |
-| `autoscaling.minReplicas`            | Minimum number of HAProxy replicas                                                        | `1`                  |
-| `autoscaling.maxReplicas`            | Maximum number of HAProxy replicas                                                        | `11`                 |
-| `autoscaling.targetCPU`              | Target CPU utilization percentage                                                         | `50`                 |
-| `autoscaling.targetMemory`           | Target Memory utilization percentage                                                      | `50`                 |
-| `command`                            | Override default container command (useful when using custom images)                      | `[]`                 |
-| `args`                               | Override default container args (useful when using custom images)                         | `[]`                 |
-| `hostAliases`                        | haproxy pods host aliases                                                                 | `[]`                 |
-| `podLabels`                          | Extra labels for haproxy pods                                                             | `{}`                 |
-| `podAnnotations`                     | Annotations for haproxy pods                                                              | `{}`                 |
-| `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                 |
-| `podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`               |
-| `nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                 |
-| `nodeAffinityPreset.key`             | Node label key to match. Ignored if `affinity` is set                                     | `""`                 |
-| `nodeAffinityPreset.values`          | Node label values to match. Ignored if `affinity` is set                                  | `[]`                 |
-| `configuration`                      | haproxy configuration                                                                     | `""`                 |
-| `containerPorts`                     | List of container ports to enable in the haproxy container                                | `[]`                 |
-| `existingConfigmap`                  | configmap with HAProxy configuration                                                      | `""`                 |
-| `affinity`                           | Affinity for haproxy pods assignment                                                      | `{}`                 |
-| `nodeSelector`                       | Node labels for haproxy pods assignment                                                   | `{}`                 |
-| `tolerations`                        | Tolerations for haproxy pods assignment                                                   | `[]`                 |
-| `updateStrategy.type`                | haproxy statefulset strategy type                                                         | `RollingUpdate`      |
-| `priorityClassName`                  | haproxy pods' priorityClassName                                                           | `""`                 |
-| `lifecycleHooks`                     | for the haproxy container(s) to automate configuration before or after startup            | `{}`                 |
-| `extraEnvVars`                       | Array with extra environment variables to add to haproxy nodes                            | `[]`                 |
-| `extraEnvVarsCM`                     | Name of existing ConfigMap containing extra env vars for haproxy nodes                    | `nil`                |
-| `extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for haproxy nodes                       | `nil`                |
-| `extraVolumes`                       | Optionally specify extra list of additional volumes for the haproxy pod(s)                | `[]`                 |
-| `extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for the haproxy container(s)     | `[]`                 |
-| `sidecars`                           | Add additional sidecar containers to the haproxy pod(s)                                   | `[]`                 |
-| `initContainers`                     | Add additional init containers to the haproxy pod(s)                                      | `{}`                 |
+| Name                                 | Description                                                                               | Value                 |
+| ------------------------------------ | ----------------------------------------------------------------------------------------- | --------------------- |
+| `image.registry`                     | HAProxy image registry                                                                    | `docker.io`           |
+| `image.repository`                   | HAProxy image repository                                                                  | `bitnami/haproxy`     |
+| `image.tag`                          | HAProxy image tag (immutable tags are recommended)                                        | `2.4.0-debian-10-r28` |
+| `image.pullPolicy`                   | HAProxy image pull policy                                                                 | `IfNotPresent`        |
+| `image.pullSecrets`                  | HAProxy image pull secrets                                                                | `[]`                  |
+| `replicaCount`                       | Number of haproxy replicas to deploy                                                      | `1`                   |
+| `livenessProbe.enabled`              | Enable livenessProbe on haproxy nodes                                                     | `true`                |
+| `livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                   | `15`                  |
+| `livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                          | `10`                  |
+| `livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                         | `5`                   |
+| `livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                       | `5`                   |
+| `livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                       | `1`                   |
+| `readinessProbe.enabled`             | Enable readinessProbe on haproxy nodes                                                    | `true`                |
+| `readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                  | `15`                  |
+| `readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                         | `10`                  |
+| `readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                        | `5`                   |
+| `readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                      | `5`                   |
+| `readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                      | `1`                   |
+| `customLivenessProbe`                | Custom livenessProbe that overrides the default one                                       | `{}`                  |
+| `customReadinessProbe`               | Custom readinessProbe that overrides the default one                                      | `{}`                  |
+| `resources.limits`                   | The resources limits for the haproxy containers                                           | `{}`                  |
+| `resources.requests`                 | The requested resources for the haproxy containers                                        | `{}`                  |
+| `podSecurityContext.enabled`         | Enabled haproxy pods' Security Context                                                    | `true`                |
+| `podSecurityContext.fsGroup`         | Set haproxy pod's Security Context fsGroup                                                | `1001`                |
+| `containerSecurityContext.enabled`   | Enabled haproxy containers' Security Context                                              | `true`                |
+| `containerSecurityContext.runAsUser` | Set haproxy containers' Security Context runAsUser                                        | `1001`                |
+| `pdb.create`                         | Enable a Pod Disruption Budget creation                                                   | `false`               |
+| `pdb.minAvailable`                   | Minimum number/percentage of pods that should remain scheduled                            | `1`                   |
+| `pdb.maxUnavailable`                 | Maximum number/percentage of pods that may be made unavailable                            | `nil`                 |
+| `autoscaling.enabled`                | Enable Horizontal POD autoscaling for HAProxy                                             | `false`               |
+| `autoscaling.minReplicas`            | Minimum number of HAProxy replicas                                                        | `1`                   |
+| `autoscaling.maxReplicas`            | Maximum number of HAProxy replicas                                                        | `11`                  |
+| `autoscaling.targetCPU`              | Target CPU utilization percentage                                                         | `50`                  |
+| `autoscaling.targetMemory`           | Target Memory utilization percentage                                                      | `50`                  |
+| `command`                            | Override default container command (useful when using custom images)                      | `[]`                  |
+| `args`                               | Override default container args (useful when using custom images)                         | `[]`                  |
+| `hostAliases`                        | haproxy pods host aliases                                                                 | `[]`                  |
+| `podLabels`                          | Extra labels for haproxy pods                                                             | `{}`                  |
+| `podAnnotations`                     | Annotations for haproxy pods                                                              | `{}`                  |
+| `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                  |
+| `podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                |
+| `nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                  |
+| `nodeAffinityPreset.key`             | Node label key to match. Ignored if `affinity` is set                                     | `""`                  |
+| `nodeAffinityPreset.values`          | Node label values to match. Ignored if `affinity` is set                                  | `[]`                  |
+| `configuration`                      | haproxy configuration                                                                     | `""`                  |
+| `containerPorts`                     | List of container ports to enable in the haproxy container                                | `[]`                  |
+| `existingConfigmap`                  | configmap with HAProxy configuration                                                      | `""`                  |
+| `affinity`                           | Affinity for haproxy pods assignment                                                      | `{}`                  |
+| `nodeSelector`                       | Node labels for haproxy pods assignment                                                   | `{}`                  |
+| `tolerations`                        | Tolerations for haproxy pods assignment                                                   | `[]`                  |
+| `updateStrategy.type`                | haproxy statefulset strategy type                                                         | `RollingUpdate`       |
+| `priorityClassName`                  | haproxy pods' priorityClassName                                                           | `""`                  |
+| `lifecycleHooks`                     | for the haproxy container(s) to automate configuration before or after startup            | `{}`                  |
+| `extraEnvVars`                       | Array with extra environment variables to add to haproxy nodes                            | `[]`                  |
+| `extraEnvVarsCM`                     | Name of existing ConfigMap containing extra env vars for haproxy nodes                    | `nil`                 |
+| `extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for haproxy nodes                       | `nil`                 |
+| `extraVolumes`                       | Optionally specify extra list of additional volumes for the haproxy pod(s)                | `[]`                  |
+| `extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for the haproxy container(s)     | `[]`                  |
+| `sidecars`                           | Add additional sidecar containers to the haproxy pod(s)                                   | `[]`                  |
+| `initContainers`                     | Add additional init containers to the haproxy pod(s)                                      | `{}`                  |
 
 
 ### Other Parameters
 
-| Name                    | Description                                          | Value  |
-| ----------------------- | ---------------------------------------------------- | ------ |
-| `serviceAccount.create` | Specifies whether a ServiceAccount should be created | `true` |
-| `serviceAccount.name`   | The name of the ServiceAccount to use.               | `""`   |
+| Name                     | Description                                                                             | Value   |
+| ------------------------ | --------------------------------------------------------------------------------------- | ------- |
+| `serviceAccount.create`  | Specifies whether a ServiceAccount should be created                                    | `true`  |
+| `serviceAccount.name`    | The name of the ServiceAccount to use.                                                  | `""`    |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false` |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                    | `[]`    |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `[]`    |
 
 
 The above parameters map to the env variables defined in [bitnami/haproxy](http://github.com/bitnami/bitnami-docker-haproxy). For more information please refer to the [bitnami/haproxy](http://github.com/bitnami/bitnami-docker-haproxy) image documentation.
