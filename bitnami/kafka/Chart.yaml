@@ -29,4 +29,4 @@ name: kafka
 sources:
   - https://github.com/bitnami/bitnami-docker-kafka
   - https://kafka.apache.org/
-version: 13.0.3
+version: 13.1.0
