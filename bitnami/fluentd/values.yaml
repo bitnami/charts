@@ -43,6 +43,7 @@ extraDeploy: []
 ## @param image.tag Fluentd image tag (immutable tags are recommended)
 ## @param image.pullPolicy Fluentd image pull policy
 ## @param image.pullSecrets Fluentd image pull secrets
+## @param image.debug Enable image debug mode
 ##
 image:
   registry: docker.io
@@ -60,6 +61,9 @@ image:
   ## pullSecrets:
   ##   - myRegistryKeySecretName
   pullSecrets: []
+  ## Enable debug mode
+  ##
+  debug: false
 ## Forwarder parameters
 ##
 forwarder:
@@ -1036,3 +1040,18 @@ tls:
   ##
   aggregator:
     existingSecret:
+
+## Enable diagnostic mode in the deployment
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the deployment
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the deployment
+  ##
+  args:
+    - infinity

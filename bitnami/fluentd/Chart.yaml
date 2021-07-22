@@ -25,4 +25,4 @@ name: fluentd
 sources:
   - https://github.com/bitnami/bitnami-docker-fluentd
   - https://www.fluentd.org/
-version: 4.0.4
+version: 4.1.0
