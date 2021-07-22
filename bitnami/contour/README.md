@@ -401,6 +401,16 @@ Find more information about how to deal with common errors related to Bitnami’
 
 Please carefully read through the guide "Upgrading Contour" at https://projectcontour.io/resources/upgrading/.
 
+### To 5.0.0
+
+In this version it was synchronized CRD with the official [Contour repository](https://github.com/projectcontour/contour/blob/main/examples/render/contour.yaml)
+
+**Considerations when upgrading to this version**
+
+If you are installing a fresh chart, you can ignore this section.
+
+If you are upgrading from 4.x of this Helm chart, this is a breaking change as the new CRDs will not overwrite the existing ones. Therefore, you will need to delete the CRDs and let the chart recreate them. Make sure to back up any existing CRs (`kubectl get -o yaml extensionservice,httpproxy,tlscertificatedelegation -A > backup.yaml`) unless you have other ways of recreating them.
+
 ### To 4.0.0
 
 The 4.0 version of this chart introduces changes to handle Contour CRD upgrades. While Helm 3.x introduced the `crd` folder to place CRDs, Helm explicitly does not handle the [CRD upgrade scenario](https://helm.sh/docs/chart_best_practices/custom_resource_definitions/#some-caveats-and-explanations).
