@@ -76,6 +76,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.tag`                          | EJBCA image tag                                                                           | `6.15.2-6-debian-10-r294` |
 | `image.pullPolicy`                   | EJBCA image pull policy                                                                   | `IfNotPresent`            |
 | `image.pullSecrets`                  | Specify docker-registry secret names as an array                                          | `[]`                      |
+| `image.debug`                        | Enable image debug mode                                                                   | `false`                   |
 | `replicaCount`                       | Number of EJBCA replicas to deploy                                                        | `1`                       |
 | `extraVolumeMounts`                  | Additional volume mounts (used along with `extraVolumes`)                                 | `[]`                      |
 | `extraVolumes`                       | Array of extra volumes to be added deployment. Requires setting `extraVolumeMounts`       | `[]`                      |
@@ -186,6 +187,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.existingSecret`           | Name of an existing secret resource containing the DB password in a 'mariadb-password' key | `""`            |
 | `externalDatabase.database`                 | Name of the existing database                                                              | `bitnami_ejbca` |
 | `externalDatabase.port`                     | Database port number                                                                       | `3306`          |
+| `diagnosticMode.enabled`                    | Enable diagnostic mode (all probes will be disabled and the command will be overridden)    | `false`         |
+| `diagnosticMode.command`                    | Command to override all containers in the deployment                                       | `[]`            |
+| `diagnosticMode.args`                       | Args to override all containers in the deployment                                          | `[]`            |
 
 
 The above parameters map to the env variables defined in [bitnami/ejbca](http://github.com/bitnami/bitnami-docker-ejbca). For more information please refer to the [bitnami/ejbca](http://github.com/bitnami/bitnami-docker-ejbca) image documentation.
