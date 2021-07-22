@@ -614,10 +614,10 @@ certificates:
   customCAs: []
   ## @param certificates.command Override default container command (useful when using custom images)
   ##
-  command: ""
+  command: []
   ## @param certificates.args Override default container args (useful when using custom images)
   ##
-  args: ""
+  args: []
   ## @param certificates.extraEnvVars Container sidecar extra environment variables (eg proxy)
   ##
   extraEnvVars: []
