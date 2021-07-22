@@ -88,9 +88,9 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `nil` |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
 
 ### Zookeeper chart parameters
@@ -175,7 +175,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `wavefront.clusterName`                              | Unique name for the Kubernetes cluster (required)    | `KUBERNETES_CLUSTER_NAME`            |
 | `wavefront.wavefront.url`                            | Wavefront URL for your cluster (required)            | `https://YOUR_CLUSTER.wavefront.com` |
 | `wavefront.wavefront.token`                          | Wavefront API Token (required)                       | `YOUR_API_TOKEN`                     |
-| `wavefront.wavefront.existingSecret`                 | Name of an existing secret containing the token      | `nil`                                |
+| `wavefront.wavefront.existingSecret`                 | Name of an existing secret containing the token      | `""`                                 |
 | `wavefront.collector.resources.limits`               | The resources limits for the collector container     | `{}`                                 |
 | `wavefront.collector.resources.requests`             | The requested resources for the collector container  | `{}`                                 |
 | `wavefront.collector.discovery.enabled`              | Rules based and Prometheus endpoints auto-discovery  | `true`                               |

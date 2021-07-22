@@ -8,25 +8,25 @@
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
 
 ## @section Common parameters
 
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
-kubeVersion:
+kubeVersion: ""
 ## @param nameOverride String to partially override drupal.fullname template (will maintain the release name)
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override drupal.fullname template
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param commonAnnotations Common annotations to add to all Drupal resources (sub-charts are not considered). Evaluated as a template
 ##
 commonAnnotations: {}
@@ -98,10 +98,10 @@ drupalEmail: user@example.com
 allowEmptyPassword: true
 ## @param command Override default container command (useful when using custom images)
 ##
-command:
+command: []
 ## @param args Override default container args (useful when using custom images)
 ##
-args:
+args: []
 ## @param updateStrategy.type Update strategy - only really applicable for deployments with RWO PVs attached
 ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
 ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
@@ -126,10 +126,10 @@ extraEnvVars: []
 #    value: true
 ## @param extraEnvVarsCM ConfigMap containing extra env vars
 ##
-extraEnvVarsCM:
+extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Secret containing extra env vars (in case of sensitive data)
 ##
-extraEnvVarsSecret:
+extraEnvVarsSecret: ""
 ## @param extraVolumes Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`
 ##
 extraVolumes: []
@@ -148,7 +148,7 @@ sidecars: []
 tolerations: []
 ## @param existingSecret Name of a secret with the application password
 ##
-existingSecret:
+existingSecret: ""
 ## SMTP mail delivery configuration
 ## ref: https://github.com/bitnami/bitnami-docker-drupal/#smtp-configuration
 ## @param smtpHost SMTP host
@@ -157,11 +157,11 @@ existingSecret:
 ## @param smtpPassword SMTP password
 ## @param smtpProtocol SMTP Protocol (options: ssl,tls, nil)
 ##
-smtpHost:
-smtpPort:
-smtpUser:
-smtpPassword:
-smtpProtocol:
+smtpHost: ""
+smtpPort: ""
+smtpUser: ""
+smtpPassword: ""
+smtpProtocol: ""
 ## @param containerPorts [object] Container ports
 ##
 containerPorts:
@@ -185,7 +185,7 @@ persistence:
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##   GKE, AWS & OpenStack)
   ##
-  storageClass:
+  storageClass: ""
   ## @param persistence.accessMode PVC Access Mode for Drupal volume
   ## Requires persistence.enabled: true
   ## If defined, PVC must be created manually before volume will be bound
@@ -198,13 +198,13 @@ persistence:
   ## Requires persistence.enabled: true
   ## If defined, PVC must be created manually before volume will be bound
   ##
-  existingClaim:
+  existingClaim: ""
   ## @param persistence.hostPath If defined, the drupal-data volume will mount to the specified hostPath.
   ## Requires persistence.enabled: true
   ## Requires persistence.existingClaim: nil|false
   ## Default: nil.
   ##
-  hostPath:
+  hostPath: ""
 ## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
@@ -315,7 +315,7 @@ customLivenessProbe: {}
 customReadinessProbe: {}
 ## @param lifecycleHooks LifecycleHook to set additional configuration at startup Evaluated as a template
 ##
-lifecycleHooks:
+lifecycleHooks: {}
 ## @param podAnnotations Pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
@@ -347,7 +347,7 @@ service:
   loadBalancerSourceRanges: []
   ## @param service.loadBalancerIP loadBalancerIP for the Drupal Service (optional, cloud specific)
   ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
-  loadBalancerIP:
+  loadBalancerIP: ""
   ## @param service.nodePorts [object] Kubernetes node port
   ## nodePorts:
   ##   http: <to set explicitly, choose port between 30000-32767>
@@ -376,7 +376,7 @@ ingress:
   pathType: ImplementationSpecific
   ## @param ingress.apiVersion Override API Version (automatically detected if not set)
   ##
-  apiVersion:
+  apiVersion: ""
   ## @param ingress.hostname Default host for the ingress resource
   ##
   hostname: drupal.local
@@ -482,12 +482,12 @@ mariadb:
       ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
       ##   GKE, AWS & OpenStack)
       ##
-      storageClass:
+      storageClass: ""
       accessModes:
         - ReadWriteOnce
       size: 8Gi
-      hostPath:
-      existingClaim:
+      hostPath: ""
+      existingClaim: ""
 ## External database configuration
 ## @param externalDatabase.host Host of the existing database
 ## @param externalDatabase.port Port of the existing database
@@ -614,19 +614,19 @@ certificates:
   customCAs: []
   ## @param certificates.command Override default container command (useful when using custom images)
   ##
-  command:
+  command: []
   ## @param certificates.args Override default container args (useful when using custom images)
   ##
-  args:
+  args: []
   ## @param certificates.extraEnvVars Container sidecar extra environment variables (eg proxy)
   ##
   extraEnvVars: []
   ## @param certificates.extraEnvVarsCM ConfigMap containing extra env vars
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param certificates.extraEnvVarsSecret Secret containing extra env vars (in case of sensitive data)
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param certificates.image.registry Container sidecar registry
   ## @param certificates.image.repository Container sidecar image
   ## @param certificates.image.tag Container sidecar image tag

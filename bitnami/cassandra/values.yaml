@@ -8,22 +8,22 @@
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
 
 ## @section Common parameters
 
 ## @param nameOverride String to partially override common.names.fullname
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param commonLabels Labels to add to all deployed objects (sub-charts are not considered)
 ##
 commonLabels: {}
@@ -82,7 +82,7 @@ image:
 dbUser:
   user: cassandra
   forcePassword: false
-  password:
+  password: ""
   ## Use an existing secrets which already stores your password data.
   ## for backwards compatibility, existingSecret can be a simple string,
   ## referencing the secret by name.
@@ -95,17 +95,17 @@ dbUser:
   ##   ##
   ##   keyMapping:
   ##     cassandra-password: myCassandraPasswordKey
-  existingSecret:
+  existingSecret: ""
 
 ## @param initDBConfigMap ConfigMap with cql scripts. Useful for creating a keyspace and pre-populating data
 ##
-initDBConfigMap:
+initDBConfigMap: ""
 ## @param initDBSecret Secret with cql script (with sensitive data). Useful for creating a keyspace and pre-populating data
 ##
-initDBSecret:
+initDBSecret: ""
 ## @param existingConfiguration ConfigMap with custom cassandra configuration files. This overrides any other Cassandra configuration set in the chart
 ##
-existingConfiguration:
+existingConfiguration: ""
 ## Cluster parameters
 ## @param cluster.name Cassandra cluster name
 ## @param cluster.seedCount Number of seed nodes
@@ -141,19 +141,19 @@ cluster:
 ## @param jvm.newHeapSize Set Java Virtual Machine new heap size (HEAP_NEWSIZE). Calculated automatically if `nil`
 ##
 jvm:
-  extraOpts:
+  extraOpts: ""
   ## Memory settings: These are calculated automatically unless specified otherwise
   ## To run on environments with little resources (<= 8GB), tune your heap settings:
   ## - calculate 1/2 ram and cap to 1024MB
   ## - calculate 1/4 ram and cap to 8192MB
   ## - pick the max
-  maxHeapSize:
+  maxHeapSize: ""
   ## newHeapSize:
   ## A good guideline is 100 MB per CPU core.
   ## - min(100 * num_cores, 1/4 * heap size)
   ## ref: https://docs.datastax.com/en/archived/cassandra/2.0/cassandra/operations/ops_tune_jvm_c.html
   ##
-  newHeapSize:
+  newHeapSize: ""
 ## @param command Command for running the container (set to default if not set). Use array form
 ##
 command: []
@@ -168,10 +168,10 @@ args: []
 extraEnvVars: []
 ## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars
 ##
-extraEnvVarsCM:
+extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Name of existing Secret containing extra env vars
 ##
-extraEnvVarsSecret:
+extraEnvVarsSecret: ""
 
 ## @section Statefulset parameters
 
@@ -189,7 +189,7 @@ hostAliases: []
 ## @param rollingUpdatePartition Partition update strategy
 ## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
 ##
-rollingUpdatePartition:
+rollingUpdatePartition: ""
 ## @param podManagementPolicy StatefulSet pod management policy
 ##
 podManagementPolicy: OrderedReady
@@ -348,7 +348,7 @@ pdb:
   minAvailable: 1
   ## @param pdb.maxUnavailable Max number of pods that can be unavailable after the eviction
   ##
-  maxUnavailable:
+  maxUnavailable: ""
 ## @param hostNetwork Enable HOST Network
 ## If hostNetwork true ->  dnsPolicy is set to ClusterFirstWithHostNet
 ##
@@ -380,7 +380,7 @@ serviceAccount:
   ## @param serviceAccount.name The name of the ServiceAccount to use.
   ## If not set and create is true, a name is generated using the cassandra.fullname template
   ##
-  name:
+  name: ""
   ## @param serviceAccount.annotations Annotations for Cassandra Service Account
   ##
   annotations: {}
@@ -409,13 +409,13 @@ service:
   ## @param service.nodePorts.metrics Node port for metrics
   ##
   nodePorts:
-    cql: ''
-    thrift: ''
-    metrics: ''
+    cql: ""
+    thrift: ""
+    metrics: ""
   ## @param service.loadBalancerIP LoadBalancerIP if service type is `LoadBalancer`
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
-  loadBalancerIP:
+  loadBalancerIP: ""
   ## @param service.annotations Provide any additional annotations which may be required.
   ## This can be used to set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -452,7 +452,7 @@ persistence:
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##   GKE, AWS & OpenStack)
   ##
-  storageClass:
+  storageClass: ""
   ## @param persistence.commitStorageClass PVC Storage Class for Cassandra Commit Log volume
   ## Storage class to use with CASSANDRA_COMMITLOG_DIR to reduce the concurrence for writing data and commit logs
   ## ref: https://github.com/bitnami/bitnami-docker-cassandra
@@ -461,10 +461,10 @@ persistence:
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##   GKE, AWS & OpenStack)
   ##
-  commitStorageClass:
+  commitStorageClass: ""
   ## @param persistence.annotations Persistent Volume Claim annotations
   ##
-  annotations:
+  annotations: {}
   ## @param persistence.accessModes Persistent Volume Access Mode
   ##
   accessModes:
@@ -613,20 +613,20 @@ metrics:
     ## e.g:
     ## interval: 10s
     ##
-    interval:
+    interval: ""
     ## @param metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ## e.g:
     ## scrapeTimeout: 10s
     ##
-    scrapeTimeout:
+    scrapeTimeout: ""
     ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
     ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
     ## e.g:
     ## selector:
     ##   prometheus: my-prometheus
     ##
-    selector:
+    selector: {}
   ## Metrics container ports to open
   ## If hostNetwork true: the hostPort is set identical to the containerPort
   ## @param metrics.containerPorts.http HTTP Port on the Host and Container
@@ -653,10 +653,10 @@ tls:
   internodeEncryption: none
   clientEncryption: false
   autoGenerated: false
-  existingSecret:
-  passwordsSecret:
-  keystorePassword:
-  truststorePassword:
+  existingSecret: ""
+  passwordsSecret: ""
+  keystorePassword: ""
+  truststorePassword: ""
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following

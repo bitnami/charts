@@ -7,21 +7,21 @@
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
 
 ## @section Common parameters
 
 ## @param kubeVersion Override Kubernetes version
 ##
-kubeVersion:
+kubeVersion: ""
 ## @param nameOverride String to partially override common.names.fullname
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param commonLabels Labels to add to all deployed objects
 ##
 commonLabels: {}
@@ -182,7 +182,7 @@ controller:
   args: []
   ## @param controller.priorityClassName Controller pod priority class name
   ##
-  priorityClassName:
+  priorityClassName: ""
   ## @param controller.hostAliases Custom host aliases for Controller pods
   ## ref: https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -217,10 +217,10 @@ controller:
   extraEnvVars: []
   ## @param controller.extraEnvVarsCM Name of existing ConfigMap containing extra env vars
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param controller.extraEnvVarsSecret Name of existing Secret containing extra env vars
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param controller.extraVolumes Optionally specify extra list of additional volumes for Controller pods
   ##
   extraVolumes: []
@@ -238,7 +238,7 @@ controller:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  initContainers: {}
+  initContainers: []
   ## @param controller.sidecars Add additional sidecar containers to the Controller pod
   ## E.g:
   ## sidecars:
@@ -249,7 +249,7 @@ controller:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## ServiceAccount configuration
   ##
   serviceAccount:
@@ -421,7 +421,7 @@ webhook:
   customReadinessProbe: {}
   ## @param webhook.priorityClassName Webhook pod priority class name
   ##
-  priorityClassName:
+  priorityClassName: ""
   ## @param webhook.hostAliases Custom host aliases for Webhook pods
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -456,10 +456,10 @@ webhook:
   extraEnvVars: []
   ## @param webhook.extraEnvVarsCM Name of existing ConfigMap containing extra env vars
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param webhook.extraEnvVarsSecret Name of existing Secret containing extra env vars
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param webhook.extraVolumes Optionally specify extra list of additional volumes for Webhook pods
   ##
   extraVolumes: []
@@ -476,7 +476,7 @@ webhook:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  initContainers: {}
+  initContainers: []
   ## @param webhook.sidecars Add additional sidecar containers to the Webhook pod
   ## E.g:
   ## sidecars:
@@ -487,7 +487,7 @@ webhook:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## ServiceAccount configuration
   ##
   serviceAccount:
@@ -608,7 +608,7 @@ cainjector:
   args: []
   ## @param cainjector.priorityClassName CAInjector pod priority class name
   ##
-  priorityClassName:
+  priorityClassName: ""
   ## @param cainjector.hostAliases Custom host aliases for CAInjector pods
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -642,10 +642,10 @@ cainjector:
   extraEnvVars: []
   ## @param cainjector.extraEnvVarsCM Name of existing ConfigMap containing extra env vars
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param cainjector.extraEnvVarsSecret Name of existing Secret containing extra env vars
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param cainjector.extraVolumes Optionally specify extra list of additional volumes for CAInjector pods
   ##
   extraVolumes: []
@@ -662,7 +662,7 @@ cainjector:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  initContainers: {}
+  initContainers: []
   ## @param cainjector.sidecars Add additional sidecar containers to the CAInjector pod
   ## E.g:
   ## sidecars:
@@ -673,7 +673,7 @@ cainjector:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## ServiceAccount configuration
   ##
   serviceAccount:
@@ -714,7 +714,7 @@ metrics:
   ## @param metrics.serviceMonitor.additionalLabels Additional labels that can be used so ServiceMonitor resource(s) can be discovered by Prometheus
   serviceMonitor:
     enabled: false
-    namespace:
+    namespace: ""
     interval: 60s
     path: /metrics
     scrapeTimeout: 30s

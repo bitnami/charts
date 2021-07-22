@@ -7,7 +7,7 @@
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
@@ -18,17 +18,17 @@ global:
 
 ## @param nameOverride String to partially override contour.fullname include (will maintain the release name)
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override contour.fullname template
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
 ##
 ingress:
-  apiVersion:
+  apiVersion: ""
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
-kubeVersion:
+kubeVersion: ""
 
 ## @section Contour parameters
 
@@ -41,7 +41,7 @@ replicaCount: 2
 ## e.g:
 ##   existingConfigMap: contour
 ##
-existingConfigMap:
+existingConfigMap: ""
 ## configInline specifies Contour's configuration directly, in yaml format.
 ## When configInline is used, Helm manages
 ## Contour's configuration ConfigMap as part of the release, and existingConfigMap is ignored.
@@ -74,7 +74,7 @@ configInline:
     ##   name: fallback-secret-name
     ##   namespace: '{{ .Release.Namespace }}'
     ##
-    fallback-certificate:
+    fallback-certificate: {}
   ## The following config shows the defaults for the leader election.
   ##
   leaderelection:
@@ -193,7 +193,7 @@ contour:
   ## @param contour.podAffinityPreset Contour Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
-  podAffinityPreset: ''
+  podAffinityPreset: ""
   ## @param contour.podAntiAffinityPreset Contour Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
@@ -205,11 +205,11 @@ contour:
   ## @param contour.nodeAffinityPreset.values Contour Node label values to match. Ignored if `affinity` is set.
   ##
   nodeAffinityPreset:
-    type: ''
+    type: ""
     ## E.g.
     ## key: "kubernetes.io/e2e-az-name"
     ##
-    key: ''
+    key: ""
     ## E.g.
     ## values:
     ##   - e2e-az1
@@ -238,7 +238,7 @@ contour:
   ##
   serviceAccount:
     create: true
-    name: ''
+    name: ""
   ## @param contour.livenessProbe.enabled Enable/disable the Liveness probe
   ## @param contour.livenessProbe.initialDelaySeconds Delay before liveness probe is initiated
   ## @param contour.livenessProbe.periodSeconds How often to perform the probe
@@ -283,11 +283,11 @@ contour:
   certgen:
     serviceAccount:
       create: true
-      name: ''
+      name: ""
   ## @param contour.tlsExistingSecret Name of the existingSecret to be use in Contour deployment. If it is not nil `contour.certgen` will be disabled.
   ## It will override `tlsExistingSecret`
   ##
-  tlsExistingSecret:
+  tlsExistingSecret: ""
   ## Contour Service properties
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#multi-port-services
   ## @param contour.service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
@@ -317,10 +317,10 @@ contour:
   extraEnvVars: []
   ## @param contour.extraEnvVarsConfigMap ConfigMap containing extra env vars to be added to all Contour containers
   ##
-  extraEnvVarsConfigMap: ''
+  extraEnvVarsConfigMap: ""
   ## @param contour.extraEnvVarsSecret Secret containing extra env vars to be added to all Contour containers
   ##
-  extraEnvVarsSecret: ''
+  extraEnvVarsSecret: ""
   ## @param contour.ingressClass Name of the ingress class to route through this controller
   ##
   ingressClass: contour
@@ -387,12 +387,12 @@ envoy:
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ## Allowed values: soft, hard
   ##
-  podAffinityPreset: ''
+  podAffinityPreset: ""
   ## @param envoy.podAntiAffinityPreset Envoy Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ## Allowed values: soft, hard
   ##
-  podAntiAffinityPreset: ''
+  podAntiAffinityPreset: ""
   ## Node affinity preset
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
   ## @param envoy.nodeAffinityPreset.type Envoy Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
@@ -449,7 +449,7 @@ envoy:
   dnsPolicy: ClusterFirst
   ## @param envoy.tlsExistingSecret Name of the existingSecret to be use in Envoy deployment
   ##
-  tlsExistingSecret:
+  tlsExistingSecret: ""
   ## @param envoy.serviceAccount.create Specifies whether a ServiceAccount should be created
   ## @param envoy.serviceAccount.name The name of the ServiceAccount to use. If not set and create is true, a name is generated using the fullname template
   ## @param envoy.serviceAccount.automountServiceAccountToken Whether to auto mount API credentials for a service account
@@ -457,7 +457,7 @@ envoy:
   ##
   serviceAccount:
     create: true
-    name: ''
+    name: ""
     automountServiceAccountToken: false
   ## @param envoy.livenessProbe.enabled Enable livenessProbe
   ## @param envoy.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
@@ -532,8 +532,8 @@ envoy:
     ## @param envoy.service.nodePorts.https HTTPS Port. If `envoy.service.type` is NodePort and this is non-empty
     ##
     nodePorts:
-      http: ''
-      https: ''
+      http: ""
+      https: ""
     ## @param envoy.service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#multi-port-services
     ##
@@ -586,10 +586,10 @@ envoy:
   extraEnvVars: []
   ## @param envoy.extraEnvVarsConfigMap ConfigMap containing extra env vars to be added to all Envoy containers
   ##
-  extraEnvVarsConfigMap: ''
+  extraEnvVarsConfigMap: ""
   ## @param envoy.extraEnvVarsSecret Secret containing extra env vars to be added to all Envoy containers
   ##
-  extraEnvVarsSecret: ''
+  extraEnvVarsSecret: ""
 
 ## @section Default backend parameters
 
@@ -731,7 +731,7 @@ defaultBackend:
   ## @param defaultBackend.priorityClassName Priority class assigned to the pods
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   ##
-  priorityClassName: ''
+  priorityClassName: ""
   ## @param defaultBackend.podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ## Allowed values: soft, hard
@@ -780,14 +780,14 @@ defaultBackend:
   ## PodDisruptionBudget for default backend
   ## Default backend Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
-  ## @param defaultBackend.pdb.create
+  ## @param defaultBackend.pdb.create Enable Pod Disruption Budget configuration
   ## @param defaultBackend.pdb.minAvailable Minimum number/percentage of Default backend pods that should remain scheduled
   ## @param defaultBackend.pdb.maxUnavailable Maximum number/percentage of Default backend pods that should remain scheduled
   ##
   pdb:
     create: false
     minAvailable: 1
-    maxUnavailable:
+    maxUnavailable: ""
 
 ## @section Metrics parameters
 
@@ -801,10 +801,10 @@ defaultBackend:
 ##
 prometheus:
   serviceMonitor:
-    namespace:
+    namespace: ""
     enabled: false
     jobLabel: 'app.kubernetes.io/name'
-    interval: ''
+    interval: ""
     metricRelabelings: []
     relabelings: []
 
@@ -814,6 +814,6 @@ prometheus:
 ##
 rbac:
   create: true
-## @param tlsExistingSecret Name of the existing secret to be use in envoy deployment. It will override .tlsExistingSecret, if it is not nil `contour.certgen` will be disabled.
+## @param tlsExistingSecret Name of the existingSecret to be use in both contour and envoy. If it is not nil `contour.certgen` will be disabled.
 ##
-tlsExistingSecret:
+tlsExistingSecret: ""

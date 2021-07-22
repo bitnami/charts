@@ -50,18 +50,18 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `nil` |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
 
 ### Common parameters
 
 | Name                       | Description                                        | Value         |
 | -------------------------- | -------------------------------------------------- | ------------- |
-| `kubeVersion`              | Override Kubernetes version                        | `nil`         |
-| `nameOverride`             | String to partially override common.names.fullname | `nil`         |
-| `fullnameOverride`         | String to fully override common.names.fullname     | `nil`         |
+| `kubeVersion`              | Override Kubernetes version                        | `""`          |
+| `nameOverride`             | String to partially override common.names.fullname | `""`          |
+| `fullnameOverride`         | String to fully override common.names.fullname     | `""`          |
 | `commonLabels`             | Labels to add to all deployed objects              | `{}`          |
 | `commonAnnotations`        | Annotations to add to all deployed objects         | `{}`          |
 | `extraDeploy`              | Array of extra objects to deploy with the release  | `[]`          |
@@ -105,7 +105,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.containerPort`                         | Controller container port                                                                            | `9402`                 |
 | `controller.command`                               | Override Controller default command                                                                  | `[]`                   |
 | `controller.args`                                  | Override Controller default args                                                                     | `[]`                   |
-| `controller.priorityClassName`                     | Controller pod priority class name                                                                   | `nil`                  |
+| `controller.priorityClassName`                     | Controller pod priority class name                                                                   | `""`                   |
 | `controller.hostAliases`                           | Custom host aliases for Controller pods                                                              | `[]`                   |
 | `controller.tolerations`                           | Tolerations for pod assignment                                                                       | `[]`                   |
 | `controller.podLabels`                             | Extra labels for Controller pods                                                                     | `{}`                   |
@@ -114,12 +114,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.updateStrategy.type`                   | Controller deployment update strategy                                                                | `RollingUpdate`        |
 | `controller.updateStrategy.rollingUpdate`          | Controller deployment rolling update configuration parameters                                        | `{}`                   |
 | `controller.extraEnvVars`                          | Add extra environment variables to the Controller container                                          | `[]`                   |
-| `controller.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars                                                 | `nil`                  |
-| `controller.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars                                                    | `nil`                  |
+| `controller.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars                                                 | `""`                   |
+| `controller.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars                                                    | `""`                   |
 | `controller.extraVolumes`                          | Optionally specify extra list of additional volumes for Controller pods                              | `[]`                   |
 | `controller.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for Controller container(s)                 | `[]`                   |
-| `controller.initContainers`                        | Add additional init containers to the Controller pods                                                | `{}`                   |
-| `controller.sidecars`                              | Add additional sidecar containers to the Controller pod                                              | `{}`                   |
+| `controller.initContainers`                        | Add additional init containers to the Controller pods                                                | `[]`                   |
+| `controller.sidecars`                              | Add additional sidecar containers to the Controller pod                                              | `[]`                   |
 | `controller.serviceAccount.create`                 | Specifies whether a ServiceAccount should be created                                                 | `true`                 |
 | `controller.serviceAccount.name`                   | The name of the ServiceAccount to use.                                                               | `""`                   |
 | `controller.serviceAccount.annotations`            | Additional custom annotations for the ServiceAccount                                                 | `{}`                   |
@@ -171,7 +171,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `webhook.customStartupProbe`                    | Override default startup probe                                                                    | `{}`                           |
 | `webhook.customLivenessProbe`                   | Override default liveness probe                                                                   | `{}`                           |
 | `webhook.customReadinessProbe`                  | Override default readiness probe                                                                  | `{}`                           |
-| `webhook.priorityClassName`                     | Webhook pod priority class name                                                                   | `nil`                          |
+| `webhook.priorityClassName`                     | Webhook pod priority class name                                                                   | `""`                           |
 | `webhook.hostAliases`                           | Custom host aliases for Webhook pods                                                              | `[]`                           |
 | `webhook.tolerations`                           | Tolerations for pod assignment                                                                    | `[]`                           |
 | `webhook.podLabels`                             | Extra labels for Webhook pods                                                                     | `{}`                           |
@@ -180,12 +180,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `webhook.updateStrategy.type`                   | Webhook deployment update strategy                                                                | `RollingUpdate`                |
 | `webhook.updateStrategy.rollingUpdate`          | Controller deployment rolling update configuration parameters                                     | `{}`                           |
 | `webhook.extraEnvVars`                          | Add extra environment variables to the Webhook container                                          | `[]`                           |
-| `webhook.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars                                              | `nil`                          |
-| `webhook.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars                                                 | `nil`                          |
+| `webhook.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars                                              | `""`                           |
+| `webhook.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars                                                 | `""`                           |
 | `webhook.extraVolumes`                          | Optionally specify extra list of additional volumes for Webhook pods                              | `[]`                           |
 | `webhook.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for Webhook container                    | `[]`                           |
-| `webhook.initContainers`                        | Add additional init containers to the Webhook pods                                                | `{}`                           |
-| `webhook.sidecars`                              | Add additional sidecar containers to the Webhook pod                                              | `{}`                           |
+| `webhook.initContainers`                        | Add additional init containers to the Webhook pods                                                | `[]`                           |
+| `webhook.sidecars`                              | Add additional sidecar containers to the Webhook pod                                              | `[]`                           |
 | `webhook.serviceAccount.create`                 | Specifies whether a ServiceAccount should be created                                              | `true`                         |
 | `webhook.serviceAccount.name`                   | The name of the ServiceAccount to use.                                                            | `""`                           |
 | `webhook.serviceAccount.annotations`            | Additional custom annotations for the ServiceAccount                                              | `{}`                           |
@@ -218,7 +218,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cainjector.nodeSelector`                          | Node labels for pod assignment                                                                       | `{}`                  |
 | `cainjector.command`                               | Override CAInjector default command                                                                  | `[]`                  |
 | `cainjector.args`                                  | Override CAInjector default args                                                                     | `[]`                  |
-| `cainjector.priorityClassName`                     | CAInjector pod priority class name                                                                   | `nil`                 |
+| `cainjector.priorityClassName`                     | CAInjector pod priority class name                                                                   | `""`                  |
 | `cainjector.hostAliases`                           | Custom host aliases for CAInjector pods                                                              | `[]`                  |
 | `cainjector.tolerations`                           | Tolerations for pod assignment                                                                       | `[]`                  |
 | `cainjector.podLabels`                             | Extra labels for CAInjector pods                                                                     | `{}`                  |
@@ -227,12 +227,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cainjector.updateStrategy.type`                   | Controller deployment update strategy                                                                | `RollingUpdate`       |
 | `cainjector.updateStrategy.rollingUpdate`          | Controller deployment rolling update configuration parameters                                        | `{}`                  |
 | `cainjector.extraEnvVars`                          | Add extra environment variables to the CAInjector container                                          | `[]`                  |
-| `cainjector.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars                                                 | `nil`                 |
-| `cainjector.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars                                                    | `nil`                 |
+| `cainjector.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars                                                 | `""`                  |
+| `cainjector.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars                                                    | `""`                  |
 | `cainjector.extraVolumes`                          | Optionally specify extra list of additional volumes for CAInjector pods                              | `[]`                  |
 | `cainjector.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for CAInjector container(s)                 | `[]`                  |
-| `cainjector.initContainers`                        | Add additional init containers to the CAInjector pods                                                | `{}`                  |
-| `cainjector.sidecars`                              | Add additional sidecar containers to the CAInjector pod                                              | `{}`                  |
+| `cainjector.initContainers`                        | Add additional init containers to the CAInjector pods                                                | `[]`                  |
+| `cainjector.sidecars`                              | Add additional sidecar containers to the CAInjector pod                                              | `[]`                  |
 | `cainjector.serviceAccount.create`                 | Specifies whether a ServiceAccount should be created                                                 | `true`                |
 | `cainjector.serviceAccount.name`                   | The name of the ServiceAccount to use.                                                               | `""`                  |
 | `cainjector.serviceAccount.annotations`            | Additional custom annotations for the ServiceAccount                                                 | `{}`                  |
@@ -245,7 +245,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                         | Start metrics                                                                                    | `true`     |
 | `metrics.podAnnotations`                  | Annotations for Cert Manager exporter pods                                                       | `{}`       |
 | `metrics.serviceMonitor.enabled`          | Create ServiceMonitor resource(s) for scraping metrics using PrometheusOperator                  | `false`    |
-| `metrics.serviceMonitor.namespace`        | The namespace in which the ServiceMonitor will be created                                        | `nil`      |
+| `metrics.serviceMonitor.namespace`        | The namespace in which the ServiceMonitor will be created                                        | `""`       |
 | `metrics.serviceMonitor.interval`         | The interval at which metrics should be scraped                                                  | `60s`      |
 | `metrics.serviceMonitor.path`             | The path which the ServiceMonitor will monitor                                                   | `/metrics` |
 | `metrics.serviceMonitor.scrapeTimeout`    | The timeout after which the scrape is ended                                                      | `30s`      |
