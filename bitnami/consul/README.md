@@ -60,15 +60,18 @@ $ helm delete --purge my-release
 
 ### Common parameters
 
-| Name                | Description                                                                | Value           |
-| ------------------- | -------------------------------------------------------------------------- | --------------- |
-| `kubeVersion`       | Override Kubernetes version                                                | `""`            |
-| `nameOverride`      | String to partially override common.names.fullname                         | `""`            |
-| `fullnameOverride`  | String to fully override common.names.fullname                             | `""`            |
-| `commonLabels`      | Labels to add to all deployed objects (sub-charts are not considered)      | `{}`            |
-| `commonAnnotations` | Annotations to add to all deployed objects (sub-charts are not considered) | `{}`            |
-| `clusterDomain`     | Kubernetes cluster domain name                                             | `cluster.local` |
-| `extraDeploy`       | Array of extra objects to deploy with the release                          | `[]`            |
+| Name                     | Description                                                                             | Value           |
+| ------------------------ | --------------------------------------------------------------------------------------- | --------------- |
+| `kubeVersion`            | Override Kubernetes version                                                             | `""`            |
+| `nameOverride`           | String to partially override common.names.fullname                                      | `""`            |
+| `fullnameOverride`       | String to fully override common.names.fullname                                          | `""`            |
+| `commonLabels`           | Labels to add to all deployed objects (sub-charts are not considered)                   | `{}`            |
+| `commonAnnotations`      | Annotations to add to all deployed objects (sub-charts are not considered)              | `{}`            |
+| `clusterDomain`          | Kubernetes cluster domain name                                                          | `cluster.local` |
+| `extraDeploy`            | Array of extra objects to deploy with the release                                       | `[]`            |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                    | `[]`            |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `[]`            |
 
 
 ### HashiCorp Consul parameters
@@ -219,9 +222,6 @@ $ helm delete --purge my-release
 | `metrics.serviceMonitor.relabellings`     | Metrics relabellings to add to the scrape endpoint                                                                          | `[]`                      |
 | `metrics.serviceMonitor.honorLabels`      | Specify honorLabels parameter to add the scrape endpoint                                                                    | `false`                   |
 | `metrics.serviceMonitor.additionalLabels` | Used to pass Labels that are used by the Prometheus installed in your cluster to select Service Monitors to work with       | `{}`                      |
-| `diagnosticMode.enabled`                  | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                                     | `false`                   |
-| `diagnosticMode.command`                  | Command to override all containers in the deployment                                                                        | `[]`                      |
-| `diagnosticMode.args`                     | Args to override all containers in the deployment                                                                           | `[]`                      |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,

@@ -57,15 +57,18 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                | Description                                                                                  | Value           |
-| ------------------- | -------------------------------------------------------------------------------------------- | --------------- |
-| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                         | `""`            |
-| `nameOverride`      | String to partially override common.names.fullname template (will maintain the release name) | `nil`           |
-| `fullnameOverride`  | String to fully override common.names.fullname template                                      | `nil`           |
-| `commonLabels`      | Labels to add to all deployed objects                                                        | `{}`            |
-| `commonAnnotations` | Annotations to add to all deployed objects                                                   | `{}`            |
-| `clusterDomain`     | Default Kubernetes cluster domain                                                            | `cluster.local` |
-| `extraDeploy`       | Array of extra objects to deploy with the release                                            | `[]`            |
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
+| `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                         | `""`            |
+| `nameOverride`           | String to partially override common.names.fullname template (will maintain the release name) | `nil`           |
+| `fullnameOverride`       | String to fully override common.names.fullname template                                      | `nil`           |
+| `commonLabels`           | Labels to add to all deployed objects                                                        | `{}`            |
+| `commonAnnotations`      | Annotations to add to all deployed objects                                                   | `{}`            |
+| `clusterDomain`          | Default Kubernetes cluster domain                                                            | `cluster.local` |
+| `extraDeploy`            | Array of extra objects to deploy with the release                                            | `[]`            |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)      | `false`         |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                         | `[]`            |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                            | `[]`            |
 
 
 ### etcd parameters
@@ -255,14 +258,11 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Other parameters
 
-| Name                     | Description                                                                             | Value   |
-| ------------------------ | --------------------------------------------------------------------------------------- | ------- |
-| `pdb.create`             | Enable/disable a Pod Disruption Budget creation                                         | `false` |
-| `pdb.minAvailable`       | Minimum number/percentage of pods that should remain scheduled                          | `1`     |
-| `pdb.maxUnavailable`     | Maximum number/percentage of pods that may be made unavailable                          | `nil`   |
-| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false` |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                    | `[]`    |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `[]`    |
+| Name                 | Description                                                    | Value   |
+| -------------------- | -------------------------------------------------------------- | ------- |
+| `pdb.create`         | Enable/disable a Pod Disruption Budget creation                | `false` |
+| `pdb.minAvailable`   | Minimum number/percentage of pods that should remain scheduled | `1`     |
+| `pdb.maxUnavailable` | Maximum number/percentage of pods that may be made unavailable | `nil`   |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,

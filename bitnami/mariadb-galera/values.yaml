@@ -32,6 +32,21 @@ schedulerName:
 ##
 clusterDomain: cluster.local
 
+## Diagnostic mode in the deployment
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command [array] Command to override all containers in the deployment
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args [array] Args to override all containers in the deployment
+  ##
+  args:
+    - infinity
+
 ## @section MariaDB Galera parameters
 
 ## Bitnami MariaDB Galera image
@@ -788,18 +803,3 @@ metrics:
     ##    for: 5m
     ##
     rules: {}
-
-## Diagnostic mode in the deployment
-##
-diagnosticMode:
-  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
-  ##
-  enabled: false
-  ## @param diagnosticMode.command [array] Command to override all containers in the deployment
-  ##
-  command:
-    - sleep
-  ## @param diagnosticMode.args [array] Args to override all containers in the deployment
-  ##
-  args:
-    - infinity
