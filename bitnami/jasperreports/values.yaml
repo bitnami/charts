@@ -86,7 +86,7 @@ jasperreportsEmail: user@example.com
 ## @param allowEmptyPassword Set to `yes` to allow the container to be started with blank passwords
 ## ref: https://github.com/bitnami/bitnami-docker-jasperreports#environment-variables
 ##
-allowEmptyPassword: "yes"
+allowEmptyPassword: "no"
 ## SMTP mail delivery configuration
 ## ref: https://github.com/bitnami/bitnami-docker-jasperreports#smtp-configuration
 ## @param smtpHost SMTP host
@@ -187,7 +187,7 @@ resources:
 livenessProbe:
   enabled: true
   path: /jasperserver/login.html
-  initialDelaySeconds: 300
+  initialDelaySeconds: 450
   periodSeconds: 10
   timeoutSeconds: 5
   failureThreshold: 6

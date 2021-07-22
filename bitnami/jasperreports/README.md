@@ -82,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `jasperreportsUsername` | JasperReports user                                                     | `jasperadmin`           |
 | `jasperreportsPassword` | JasperReports password                                                 | `nil`                   |
 | `jasperreportsEmail`    | JasperReports user email                                               | `user@example.com`      |
-| `allowEmptyPassword`    | Set to `yes` to allow the container to be started with blank passwords | `yes`                   |
+| `allowEmptyPassword`    | Set to `yes` to allow the container to be started with blank passwords | `no`                    |
 | `smtpHost`              | SMTP host                                                              | `nil`                   |
 | `smtpPort`              | SMTP port                                                              | `nil`                   |
 | `smtpEmail`             | SMTP email                                                             | `nil`                   |
@@ -111,7 +111,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `resources.requests`                 | The requested resources for the Jasperreports container                                   | `{}`                       |
 | `livenessProbe.enabled`              | Enable livenessProbe                                                                      | `true`                     |
 | `livenessProbe.path`                 | Request path for livenessProbe                                                            | `/jasperserver/login.html` |
-| `livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                   | `300`                      |
+| `livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                   | `450`                      |
 | `livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                          | `10`                       |
 | `livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                         | `5`                        |
 | `livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                       | `6`                        |
