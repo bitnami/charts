@@ -93,8 +93,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.logJsonOutput`                           | Use JSON format for logs                                                                        | `true`           |
 | `server.logLevel`                                | Logging level                                                                                   | `info`           |
 | `server.sslCertHostPath`                         | Path to the host system SSL certificates (necessary for contacting the AWS metadata server)     | `/etc/ssl/certs` |
-| `server.podSecurityPolicy.create`                |                                                                                                 | `true`           |
-| `server.podSecurityPolicy.allowedHostPaths`      |                                                                                                 | `[]`             |
+| `server.podSecurityPolicy.create`                | Create a PodSecurityPolicy resource                                                             | `true`           |
+| `server.podSecurityPolicy.allowedHostPaths`      | Extra host paths to allow in the PodSecurityPolicy                                              | `[]`             |
 | `server.priorityClassName`                       | Server priorityClassName                                                                        | `""`             |
 | `server.livenessProbe.enabled`                   | Enable livenessProbe                                                                            | `true`           |
 | `server.livenessProbe.initialDelaySeconds`       | Initial delay seconds for livenessProbe                                                         | `5`              |
@@ -211,8 +211,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `agent.dnsPolicy`                               | Pod DNS policy                                                                             | `ClusterFirstWithHostNet` |
 | `agent.sslCertHostPath`                         | Path to the host system SSL certificates (necessary for contacting the AWS metadata agent) | `/etc/ssl/certs`          |
 | `agent.tlsFiles`                                | Base64-encoded PEM values for server's CA certificate(s), certificate and private key      | `{}`                      |
-| `agent.podSecurityPolicy.create`                | Create a PodSecurityPolicy resources                                                       | `true`                    |
-| `agent.podSecurityPolicy.allowedHostPaths`      | Extra host paths to allow in the PodSecurityPolicy                                         | `{}`                      |
+| `agent.podSecurityPolicy.create`                | Create a PodSecurityPolicy resource                                                        | `true`                    |
+| `agent.podSecurityPolicy.allowedHostPaths`      | Extra host paths to allow in the PodSecurityPolicy                                         | `[]`                      |
 | `agent.tlsSecret`                               | Name of a secret with TLS certificates for the container                                   | `""`                      |
 | `agent.useHostNetwork`                          | Use host networking (ports will be directly exposed in the host)                           | `true`                    |
 | `agent.tlsCerts`                                | Agent TLS Certificate filenames                                                            | `{}`                      |

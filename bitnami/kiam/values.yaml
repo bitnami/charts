@@ -93,8 +93,8 @@ server:
   ## @param server.sslCertHostPath Path to the host system SSL certificates (necessary for contacting the AWS metadata server)
   ##
   sslCertHostPath: /etc/ssl/certs
-  ## @param server.podSecurityPolicy.create
-  ## @param server.podSecurityPolicy.allowedHostPaths
+  ## @param server.podSecurityPolicy.create Create a PodSecurityPolicy resource
+  ## @param server.podSecurityPolicy.allowedHostPaths Extra host paths to allow in the PodSecurityPolicy
   ##
   podSecurityPolicy:
     create: true
@@ -484,12 +484,12 @@ agent:
     ca:
     cert:
     key:
-  ## @param agent.podSecurityPolicy.create Create a PodSecurityPolicy resources
+  ## @param agent.podSecurityPolicy.create Create a PodSecurityPolicy resource
   ## @param agent.podSecurityPolicy.allowedHostPaths Extra host paths to allow in the PodSecurityPolicy
   ##
   podSecurityPolicy:
     create: true
-    allowedHostPaths: {}
+    allowedHostPaths: []
   ## @param agent.tlsSecret Name of a secret with TLS certificates for the container
   ##
   tlsSecret: ""
