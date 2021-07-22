@@ -505,4 +505,3 @@ externalDatabase:
   existingSecret: ""
   database: bitnami_ejbca
   port: 3306
-
