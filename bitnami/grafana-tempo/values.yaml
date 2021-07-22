@@ -53,7 +53,6 @@ tempo:
   ## @param tempo.image.pullPolicy Grafana Tempo image pull policy
   ## @param tempo.image.pullSecrets Grafana Tempo image pull secrets
   ##
-
   image:
     registry: docker.io
     repository: bitnami/grafana-tempo
@@ -1541,7 +1540,6 @@ vulture:
   ## @param vulture.image.pullPolicy Grafana Vulture image pull policy
   ## @param vulture.image.pullSecrets Grafana Vulture image pull secrets
   ##
-
   image:
     registry: docker.io
     repository: bitnami/grafana-tempo-vulture
@@ -1843,6 +1841,21 @@ serviceAccount:
   ## If not set and create is true, a name is generated using the common.names.fullname template
   ##
   name: ""
+
+## Enable diagnostic mode in the deployment
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the deployment
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the deployment
+  ##
+  args:
+    - infinity
 
 ## @section Metrics Parameters
 ## Prometheus Exporter / Metrics
