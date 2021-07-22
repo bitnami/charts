@@ -1,6 +1,25 @@
 
 ** Please be patient while the chart is being deployed **
 
+{{- if .Values.diagnosticMode.enabled }}
+The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
+
+  command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 4 }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 4 }}
+
+Get the list of pods by executing:
+
+  kubectl get pods --namespace {{ .Release.Namespace }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Access the pod you want to debug by executing
+
+  kubectl exec --namespace {{ .Release.Namespace }} -ti <NAME OF THE POD> -- bash
+
+In order to replicate the container startup scripts execute this command:
+
+    /opt/bitnami/scripts/influxdb/entrypoint.sh /opt/bitnami/scripts/influxdb/run.sh
+
+{{- else }}
 
 InfluxDB(TM) can be accessed through following DNS names from within your cluster:
 
@@ -174,3 +193,5 @@ NOTE: When using "high-availability" it is recommended to configure 'influxdb.se
 
 {{- $passwordValidationErrors := include "common.validations.values.multiple.empty" (dict "required" $passwordValueConfigs "context" $) -}}
 {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}
+
+{{- end }}

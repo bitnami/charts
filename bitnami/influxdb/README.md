@@ -60,15 +60,18 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                | Description                                                                                           | Value           |
-| ------------------- | ----------------------------------------------------------------------------------------------------- | --------------- |
-| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                                  | `nil`           |
-| `nameOverride`      | String to partially override influxdb.fullname template with a string (will prepend the release name) | `nil`           |
-| `fullnameOverride`  | String to fully override influxdb.fullname template with a string                                     | `nil`           |
-| `clusterDomain`     | Default Kubernetes cluster domain                                                                     | `cluster.local` |
-| `commonAnnotations` | Annotations to add to all deployed objects                                                            | `{}`            |
-| `commonLabels`      | Labels to add to all deployed objects                                                                 | `{}`            |
-| `extraDeploy`       | Array of extra objects to deploy with the release                                                     | `[]`            |
+| Name                     | Description                                                                                           | Value           |
+| ------------------------ | ----------------------------------------------------------------------------------------------------- | --------------- |
+| `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                                  | `nil`           |
+| `nameOverride`           | String to partially override influxdb.fullname template with a string (will prepend the release name) | `nil`           |
+| `fullnameOverride`       | String to fully override influxdb.fullname template with a string                                     | `nil`           |
+| `clusterDomain`          | Default Kubernetes cluster domain                                                                     | `cluster.local` |
+| `commonAnnotations`      | Annotations to add to all deployed objects                                                            | `{}`            |
+| `commonLabels`           | Labels to add to all deployed objects                                                                 | `{}`            |
+| `extraDeploy`            | Array of extra objects to deploy with the release                                                     | `[]`            |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)               | `false`         |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                                  | `[]`            |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                                     | `[]`            |
 
 
 ### InfluxDB<sup>TM</sup> parameters
@@ -77,7 +80,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                              | InfluxDB<sup>TM</sup> image registry                                                                                                                                                                                                                                 | `docker.io`           |
 | `image.repository`                            | InfluxDB<sup>TM</sup> image repository                                                                                                                                                                                                                               | `bitnami/influxdb`    |
-| `image.tag`                                   | InfluxDB<sup>TM</sup> image tag (immutable tags are recommended)                                                                                                                                                                                                     | `2.0.7-debian-10-r10` |
+| `image.tag`                                   | InfluxDB<sup>TM</sup> image tag (immutable tags are recommended)                                                                                                                                                                                                     | `2.0.7-debian-10-r32` |
 | `image.pullPolicy`                            | InfluxDB<sup>TM</sup> image pull policy                                                                                                                                                                                                                              | `IfNotPresent`        |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                                                                                                                                                     | `[]`                  |
 | `image.debug`                                 | Specify if debug logs should be enabled                                                                                                                                                                                                                              | `false`               |
@@ -267,7 +270,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                   | Enable init container that changes the owner and group of the persistent volume mountpoint to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`          | Init container volume-permissions image name                                                                      | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Init container volume-permissions image tag                                                                       | `10-debian-10-r112`     |
+| `volumePermissions.image.tag`                 | Init container volume-permissions image tag                                                                       | `10-debian-10-r138`     |
 | `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                               | `Always`                |
 | `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                  | `[]`                    |
 | `volumePermissions.securityContext.runAsUser` | User ID for the init container (when facing issues in OpenShift or uid unknown, try value "auto")                 | `0`                     |
@@ -301,7 +304,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `backup.uploadProviders.google.bucketName`        | google storage bucket name name                                                                               | `gs://bucket/influxdb`     |
 | `backup.uploadProviders.google.image.registry`    | Google Cloud SDK image registry                                                                               | `docker.io`                |
 | `backup.uploadProviders.google.image.repository`  | Google Cloud SDK image name                                                                                   | `bitnami/google-cloud-sdk` |
-| `backup.uploadProviders.google.image.tag`         | Google Cloud SDK image tag                                                                                    | `0.345.0-debian-10-r3`     |
+| `backup.uploadProviders.google.image.tag`         | Google Cloud SDK image tag                                                                                    | `0.348.0-debian-10-r5`     |
 | `backup.uploadProviders.google.image.pullPolicy`  | Google Cloud SDK image pull policy                                                                            | `IfNotPresent`             |
 | `backup.uploadProviders.google.image.pullSecrets` | Specify docker-registry secret names as an array                                                              | `[]`                       |
 | `backup.uploadProviders.azure.enabled`            | Enable upload to azure storage container                                                                      | `false`                    |
@@ -311,7 +314,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `backup.uploadProviders.azure.containerName`      | Destination container                                                                                         | `influxdb-container`       |
 | `backup.uploadProviders.azure.image.registry`     | Azure CLI image registry                                                                                      | `docker.io`                |
 | `backup.uploadProviders.azure.image.repository`   | Azure CLI image repository                                                                                    | `bitnami/azure-cli`        |
-| `backup.uploadProviders.azure.image.tag`          | Azure CLI image tag (immutable tags are recommended)                                                          | `2.25.0-debian-10-r2`      |
+| `backup.uploadProviders.azure.image.tag`          | Azure CLI image tag (immutable tags are recommended)                                                          | `2.26.1-debian-10-r4`      |
 | `backup.uploadProviders.azure.image.pullPolicy`   | Azure CLI image pull policy                                                                                   | `IfNotPresent`             |
 | `backup.uploadProviders.azure.image.pullSecrets`  | Specify docker-registry secret names as an array                                                              | `[]`                       |
 
