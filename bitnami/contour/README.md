@@ -403,7 +403,7 @@ Please carefully read through the guide "Upgrading Contour" at https://projectco
 
 ### To 5.0.0
 
-In this version it was synchronized CRD with the official Contour repository https://github.com/projectcontour/contour/blob/main/examples/render/contour.yaml
+In this version it was synchronized CRD with the official [Contour repository](https://github.com/projectcontour/contour/blob/main/examples/render/contour.yaml)
 
 **Considerations when upgrading to this version**
 
