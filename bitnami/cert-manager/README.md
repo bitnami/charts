@@ -118,8 +118,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars                                                    | `""`                   |
 | `controller.extraVolumes`                          | Optionally specify extra list of additional volumes for Controller pods                              | `[]`                   |
 | `controller.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for Controller container(s)                 | `[]`                   |
-| `controller.initContainers`                        | Add additional init containers to the Controller pods                                                | `{}`                   |
-| `controller.sidecars`                              | Add additional sidecar containers to the Controller pod                                              | `{}`                   |
+| `controller.initContainers`                        | Add additional init containers to the Controller pods                                                | `[]`                   |
+| `controller.sidecars`                              | Add additional sidecar containers to the Controller pod                                              | `[]`                   |
 | `controller.serviceAccount.create`                 | Specifies whether a ServiceAccount should be created                                                 | `true`                 |
 | `controller.serviceAccount.name`                   | The name of the ServiceAccount to use.                                                               | `""`                   |
 | `controller.serviceAccount.annotations`            | Additional custom annotations for the ServiceAccount                                                 | `{}`                   |
@@ -184,8 +184,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `webhook.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars                                                 | `""`                           |
 | `webhook.extraVolumes`                          | Optionally specify extra list of additional volumes for Webhook pods                              | `[]`                           |
 | `webhook.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for Webhook container                    | `[]`                           |
-| `webhook.initContainers`                        | Add additional init containers to the Webhook pods                                                | `{}`                           |
-| `webhook.sidecars`                              | Add additional sidecar containers to the Webhook pod                                              | `{}`                           |
+| `webhook.initContainers`                        | Add additional init containers to the Webhook pods                                                | `[]`                           |
+| `webhook.sidecars`                              | Add additional sidecar containers to the Webhook pod                                              | `[]`                           |
 | `webhook.serviceAccount.create`                 | Specifies whether a ServiceAccount should be created                                              | `true`                         |
 | `webhook.serviceAccount.name`                   | The name of the ServiceAccount to use.                                                            | `""`                           |
 | `webhook.serviceAccount.annotations`            | Additional custom annotations for the ServiceAccount                                              | `{}`                           |
@@ -231,8 +231,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cainjector.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars                                                    | `""`                  |
 | `cainjector.extraVolumes`                          | Optionally specify extra list of additional volumes for CAInjector pods                              | `[]`                  |
 | `cainjector.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for CAInjector container(s)                 | `[]`                  |
-| `cainjector.initContainers`                        | Add additional init containers to the CAInjector pods                                                | `{}`                  |
-| `cainjector.sidecars`                              | Add additional sidecar containers to the CAInjector pod                                              | `{}`                  |
+| `cainjector.initContainers`                        | Add additional init containers to the CAInjector pods                                                | `[]`                  |
+| `cainjector.sidecars`                              | Add additional sidecar containers to the CAInjector pod                                              | `[]`                  |
 | `cainjector.serviceAccount.create`                 | Specifies whether a ServiceAccount should be created                                                 | `true`                |
 | `cainjector.serviceAccount.name`                   | The name of the ServiceAccount to use.                                                               | `""`                  |
 | `cainjector.serviceAccount.annotations`            | Additional custom annotations for the ServiceAccount                                                 | `{}`                  |

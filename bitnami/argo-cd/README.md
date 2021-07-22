@@ -155,8 +155,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.extraEnvVarsSecret`                          | Name of existing Secret containing extra env vars for Argo CD nodes                                  | `""`                  |
 | `controller.extraVolumes`                                | Optionally specify extra list of additional volumes for the Argo CD pod(s)                           | `[]`                  |
 | `controller.extraVolumeMounts`                           | Optionally specify extra list of additional volumeMounts for the Argo CD container(s)                | `[]`                  |
-| `controller.sidecars`                                    | Add additional sidecar containers to the Argo CD pod(s)                                              | `{}`                  |
-| `controller.initContainers`                              | Add additional init containers to the Argo CD pod(s)                                                 | `{}`                  |
+| `controller.sidecars`                                    | Add additional sidecar containers to the Argo CD pod(s)                                              | `[]`                  |
+| `controller.initContainers`                              | Add additional init containers to the Argo CD pod(s)                                                 | `[]`                  |
 
 
 ### Argo CD server Parameters
@@ -270,8 +270,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.extraEnvVarsSecret`                          | Name of existing Secret containing extra env vars for Argo CD server nodes                       | `""`                     |
 | `server.extraVolumes`                                | Optionally specify extra list of additional volumes for the Argo CD server pod(s)                | `[]`                     |
 | `server.extraVolumeMounts`                           | Optionally specify extra list of additional volumeMounts for the Argo CD server container(s)     | `[]`                     |
-| `server.sidecars`                                    | Add additional sidecar containers to the Argo CD server pod(s)                                   | `{}`                     |
-| `server.initContainers`                              | Add additional init containers to the Argo CD server pod(s)                                      | `{}`                     |
+| `server.sidecars`                                    | Add additional sidecar containers to the Argo CD server pod(s)                                   | `[]`                     |
+| `server.initContainers`                              | Add additional init containers to the Argo CD server pod(s)                                      | `[]`                     |
 | `server.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                             | `true`                   |
 | `server.serviceAccount.name`                         | The name of the ServiceAccount to use.                                                           | `""`                     |
 | `server.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                   | `true`                   |
@@ -358,8 +358,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `repoServer.extraEnvVarsSecret`                          | Name of existing Secret containing extra env vars for Argo CD repo server nodes                      | `""`                  |
 | `repoServer.extraVolumes`                                | Optionally specify extra list of additional volumes for the Argo CD repo server pod(s)               | `[]`                  |
 | `repoServer.extraVolumeMounts`                           | Optionally specify extra list of additional volumeMounts for the Argo CD repo server container(s)    | `[]`                  |
-| `repoServer.sidecars`                                    | Add additional sidecar containers to the Argo CD repo server pod(s)                                  | `{}`                  |
-| `repoServer.initContainers`                              | Add additional init containers to the Argo CD repo server pod(s)                                     | `{}`                  |
+| `repoServer.sidecars`                                    | Add additional sidecar containers to the Argo CD repo server pod(s)                                  | `[]`                  |
+| `repoServer.initContainers`                              | Add additional init containers to the Argo CD repo server pod(s)                                     | `[]`                  |
 
 
 ### Dex Parameters
@@ -440,8 +440,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dex.extraEnvVarsSecret`                          | Name of existing Secret containing extra env vars for Dex nodes                               | `""`                   |
 | `dex.extraVolumes`                                | Optionally specify extra list of additional volumes for the Dex pod(s)                        | `[]`                   |
 | `dex.extraVolumeMounts`                           | Optionally specify extra list of additional volumeMounts for the Dex container(s)             | `[]`                   |
-| `dex.sidecars`                                    | Add additional sidecar containers to the Dex pod(s)                                           | `{}`                   |
-| `dex.initContainers`                              | Add additional init containers to the Dex pod(s)                                              | `{}`                   |
+| `dex.sidecars`                                    | Add additional sidecar containers to the Dex pod(s)                                           | `[]`                   |
+| `dex.initContainers`                              | Add additional init containers to the Dex pod(s)                                              | `[]`                   |
 
 
 ### Shared config for Argo CD components

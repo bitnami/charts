@@ -96,8 +96,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.size`                   | Size of the PVC to request                                                                | `2Gi`                     |
 | `persistence.storageClass`           | PVC Storage Class                                                                         | `""`                      |
 | `persistence.existingClaim`          | Name of an existing PVC to reuse                                                          | `""`                      |
-| `sidecars`                           | Attach additional sidecar containers to the pod                                           | `{}`                      |
-| `initContainers`                     | Additional init containers to add to the pods                                             | `{}`                      |
+| `sidecars`                           | Attach additional sidecar containers to the pod                                           | `[]`                      |
+| `initContainers`                     | Additional init containers to add to the pods                                             | `[]`                      |
 | `hostAliases`                        | Add deployment host aliases                                                               | `[]`                      |
 | `ejbcaAdminUsername`                 | EJBCA administrator username                                                              | `bitnami`                 |
 | `ejbcaAdminPassword`                 | Password for the administrator account                                                    | `""`                      |

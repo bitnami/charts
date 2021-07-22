@@ -238,7 +238,7 @@ controller:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  initContainers: {}
+  initContainers: []
   ## @param controller.sidecars Add additional sidecar containers to the Controller pod
   ## E.g:
   ## sidecars:
@@ -249,7 +249,7 @@ controller:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## ServiceAccount configuration
   ##
   serviceAccount:
@@ -476,7 +476,7 @@ webhook:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  initContainers: {}
+  initContainers: []
   ## @param webhook.sidecars Add additional sidecar containers to the Webhook pod
   ## E.g:
   ## sidecars:
@@ -487,7 +487,7 @@ webhook:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## ServiceAccount configuration
   ##
   serviceAccount:
@@ -662,7 +662,7 @@ cainjector:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  initContainers: {}
+  initContainers: []
   ## @param cainjector.sidecars Add additional sidecar containers to the CAInjector pod
   ## E.g:
   ## sidecars:
@@ -673,7 +673,7 @@ cainjector:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## ServiceAccount configuration
   ##
   serviceAccount:

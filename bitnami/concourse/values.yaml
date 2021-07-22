@@ -552,7 +552,7 @@ web:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## @param web.initContainers Add additional init containers to the web pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
@@ -562,7 +562,7 @@ web:
   ##    imagePullPolicy: Always
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
-  initContainers: {}
+  initContainers: []
 
   ## @param web.existingSecret Use an existing secret for the Web service credentials
   ##
@@ -843,7 +843,7 @@ worker:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## @param worker.initContainers Add additional init containers to the worker pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
@@ -853,7 +853,7 @@ worker:
   ##    imagePullPolicy: Always
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
-  initContainers: {}
+  initContainers: []
 
   ## @param worker.existingSecret name of an existing secret resource containing the keys and the pub
   ##

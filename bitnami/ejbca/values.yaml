@@ -177,7 +177,7 @@ persistence:
 ##       - name: portname
 ##         containerPort: 1234
 ##
-sidecars: {}
+sidecars: []
 ## @param initContainers Additional init containers to add to the pods
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
 ## Example:
@@ -186,7 +186,7 @@ sidecars: {}
 ##    image: your-image
 ##    imagePullPolicy: Always
 ##
-initContainers: {}
+initContainers: []
 ## @param hostAliases Add deployment host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##

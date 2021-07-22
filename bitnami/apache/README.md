@@ -127,8 +127,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraVolumes`                         | Array to add extra volumes (evaluated as a template)                                      | `[]`                   |
 | `extraVolumeMounts`                    | Array to add extra mounts (normally used with extraVolumes, evaluated as a template)      | `[]`                   |
 | `extraEnvVars`                         | Array to add extra environment variables                                                  | `[]`                   |
-| `initContainers`                       | Add additional init containers to the Apache pods                                         | `{}`                   |
-| `sidecars`                             | Add additional sidecar containers to the Apache pods                                      | `{}`                   |
+| `initContainers`                       | Add additional init containers to the Apache pods                                         | `[]`                   |
+| `sidecars`                             | Add additional sidecar containers to the Apache pods                                      | `[]`                   |
 
 
 ### Traffic Exposure Parameters

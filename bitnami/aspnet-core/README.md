@@ -95,8 +95,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `hostAliases`                        | ASP.NET Core pod host aliases                                                             | `[]`            |
 | `extraVolumes`                       | Optionally specify extra list of additional volumes for ASP.NET Core pods                 | `[]`            |
 | `extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for ASP.NET Core container(s)    | `[]`            |
-| `sidecars`                           | Add additional sidecar containers to the ASP.NET Core pods                                | `{}`            |
-| `initContainers`                     | Add additional init containers to the ASP.NET Core pods                                   | `{}`            |
+| `sidecars`                           | Add additional sidecar containers to the ASP.NET Core pods                                | `[]`            |
+| `initContainers`                     | Add additional init containers to the ASP.NET Core pods                                   | `[]`            |
 | `lifecycleHooks`                     | Add lifecycle hooks to the ASP.NET Core deployment                                        | `{}`            |
 | `podAnnotations`                     | Annotations for ASP.NET Core pods                                                         | `{}`            |
 | `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`            |

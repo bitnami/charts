@@ -167,8 +167,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `web.extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for web nodes                                   | `""`            |
 | `web.extraVolumes`                       | Optionally specify extra list of additional volumes for the web pod(s)                            | `[]`            |
 | `web.extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for the web container(s)                 | `[]`            |
-| `web.sidecars`                           | Add additional sidecar containers to the web pod(s)                                               | `{}`            |
-| `web.initContainers`                     | Add additional init containers to the web pod(s)                                                  | `{}`            |
+| `web.sidecars`                           | Add additional sidecar containers to the web pod(s)                                               | `[]`            |
+| `web.initContainers`                     | Add additional init containers to the web pod(s)                                                  | `[]`            |
 | `web.existingSecret`                     | Use an existing secret for the Web service credentials                                            | `""`            |
 
 
@@ -237,8 +237,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.extraEnvVarsSecret`                  | Name of existing Secret containing extra env vars for worker nodes                                | `""`            |
 | `worker.extraVolumes`                        | Optionally specify extra list of additional volumes for the worker pod(s)                         | `[]`            |
 | `worker.extraVolumeMounts`                   | Optionally specify extra list of additional volumeMounts for the worker container(s)              | `[]`            |
-| `worker.sidecars`                            | Add additional sidecar containers to the worker pod(s)                                            | `{}`            |
-| `worker.initContainers`                      | Add additional init containers to the worker pod(s)                                               | `{}`            |
+| `worker.sidecars`                            | Add additional sidecar containers to the worker pod(s)                                            | `[]`            |
+| `worker.initContainers`                      | Add additional init containers to the worker pod(s)                                               | `[]`            |
 | `worker.existingSecret`                      | name of an existing secret resource containing the keys and the pub                               | `""`            |
 | `worker.baggageclaim.logLevel`               | Minimum level of logs to see. Possible values: debug, info, error                                 | `info`          |
 | `worker.baggageclaim.bindIp`                 | IP address on which to listen for API traffic.                                                    | `127.0.0.1`     |
