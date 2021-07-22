@@ -73,7 +73,7 @@ image:
 ## @param jasperreportsUsername JasperReports user
 ## ref: https://github.com/bitnami/bitnami-docker-jasperreports#configuration
 ##
-jasperreportsUsername: user
+jasperreportsUsername: jasperadmin
 ## @param jasperreportsPassword JasperReports password
 ## Defaults to a random 10-character alphanumeric string if not set
 ## ref: https://github.com/bitnami/bitnami-docker-jasperreports#configuration
