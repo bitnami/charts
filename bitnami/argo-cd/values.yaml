@@ -8,25 +8,25 @@
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
 
 ## @section Common parameters
 
 ## @param kubeVersion Override Kubernetes version
 ##
-kubeVersion:
+kubeVersion: ""
 ## @param nameOverride String to partially override common.names.fullname
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param commonLabels Labels to add to all deployed objects
 ##
 commonLabels: {}
@@ -188,12 +188,12 @@ controller:
     ## @param controller.service.nodePort Node port for Argo CD application controller service
     ## NOTE: choose port between <30000-32767>
     ##
-    nodePort:
+    nodePort: ""
 
     ## @param controller.service.loadBalancerIP Argo CD application controller service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
-    loadBalancerIP:
+    loadBalancerIP: ""
     ## @param controller.service.loadBalancerSourceRanges Argo CD application controller service Load Balancer sources
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g:
@@ -227,12 +227,12 @@ controller:
       ## @param controller.metrics.service.nodePort Node port for the application controller service
       ## NOTE: choose port between <30000-32767>
       ##
-      nodePort:
+      nodePort: ""
 
       ## @param controller.metrics.service.loadBalancerIP Argo CD application controller service Load Balancer IP
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
       ##
-      loadBalancerIP:
+      loadBalancerIP: ""
       ## @param controller.metrics.service.loadBalancerSourceRanges Argo CD application controller service Load Balancer sources
       ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
       ## e.g:
@@ -394,10 +394,10 @@ controller:
   extraEnvVars: []
   ## @param controller.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Argo CD nodes
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param controller.extraEnvVarsSecret Name of existing Secret containing extra env vars for Argo CD nodes
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param controller.extraVolumes Optionally specify extra list of additional volumes for the Argo CD pod(s)
   ##
   extraVolumes: []
@@ -414,7 +414,7 @@ controller:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## @param controller.initContainers Add additional init containers to the Argo CD pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
@@ -424,7 +424,7 @@ controller:
   ##    imagePullPolicy: Always
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
-  initContainers: {}
+  initContainers: []
 
 
 ## @section Argo CD server Parameters
@@ -649,7 +649,7 @@ server:
 
     ## Override API Version (automatically detected if not set)
     ##
-    apiVersion:
+    apiVersion: ""
 
     ## When the ingress is enabled, a host pointing to this will be created
     ##
@@ -676,14 +676,14 @@ server:
 
     ## The list of additional hostnames to be covered with this ingress record.
     ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
-    extraHosts:
+    extraHosts: []
     ## - name: argocd.server.local
     ##   path: /
     ##
 
     ## Any additional arbitrary paths that may need to be added to the ingress under the main host.
     ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
-    extraPaths:
+    extraPaths: []
     ## - path: /*
     ##   backend:
     ##     serviceName: ssl-redirect
@@ -692,7 +692,7 @@ server:
 
     ## The tls configuration for additional hostnames to be covered with this ingress record.
     ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
-    extraTls:
+    extraTls: []
     ## - hosts:
     ##     - argocd.server.local
     ##   secretName: argocd.server.local-tls
@@ -733,12 +733,12 @@ server:
       ## @param server.metrics.service.nodePort Node port for Argo CD server metrics service
       ## NOTE: choose port between <30000-32767>
       ##
-      nodePort:
+      nodePort: ""
 
       ## @param server.metrics.service.loadBalancerIP Argo CD server service Load Balancer IP
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
       ##
-      loadBalancerIP:
+      loadBalancerIP: ""
       ## @param server.metrics.service.loadBalancerSourceRanges Argo CD server service Load Balancer sources
       ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
       ## e.g:
@@ -795,7 +795,7 @@ server:
 
     ## Override API Version (automatically detected if not set)
     ##
-    apiVersion:
+    apiVersion: ""
 
     ## When the ingress is enabled, a host pointing to this will be created
     ##
@@ -822,14 +822,14 @@ server:
 
     ## The list of additional hostnames to be covered with this ingress record.
     ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
-    extraHosts:
+    extraHosts: []
     ## - name: argocd.server.local
     ##   path: /
     ##
 
     ## Any additional arbitrary paths that may need to be added to the ingress under the main host.
     ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
-    extraPaths:
+    extraPaths: []
     ## - path: /*
     ##   backend:
     ##     serviceName: ssl-redirect
@@ -838,7 +838,7 @@ server:
 
     ## The tls configuration for additional hostnames to be covered with this ingress record.
     ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
-    extraTls:
+    extraTls: []
     ## - hosts:
     ##     - argocd.server.local
     ##   secretName: argocd.server.local-tls
@@ -888,13 +888,13 @@ server:
     ## NOTE: choose port between <30000-32767>
     ##
     nodePorts:
-      http:
-      https:
+      http: ""
+      https: ""
 
     ## @param server.service.loadBalancerIP Argo CD service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
-    loadBalancerIP:
+    loadBalancerIP: ""
     ## @param server.service.loadBalancerSourceRanges Argo CD service Load Balancer sources
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g:
@@ -992,10 +992,10 @@ server:
   extraEnvVars: []
   ## @param server.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Argo CD server nodes
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param server.extraEnvVarsSecret Name of existing Secret containing extra env vars for Argo CD server nodes
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param server.extraVolumes Optionally specify extra list of additional volumes for the Argo CD server pod(s)
   ##
   extraVolumes: []
@@ -1012,7 +1012,7 @@ server:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## @param server.initContainers Add additional init containers to the Argo CD server pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
@@ -1022,7 +1022,7 @@ server:
   ##    imagePullPolicy: Always
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
-  initContainers: {}
+  initContainers: []
 
   ## ServiceAccount configuration for the Argo CD server
   ##
@@ -1145,12 +1145,12 @@ repoServer:
     ## @param repoServer.service.nodePort Node port for the repo server service
     ## NOTE: choose port between <30000-32767>
     ##
-    nodePort:
+    nodePort: ""
 
     ## @param repoServer.service.loadBalancerIP Repo server service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
-    loadBalancerIP:
+    loadBalancerIP: ""
     ## @param repoServer.service.loadBalancerSourceRanges Repo server service Load Balancer sources
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g:
@@ -1181,7 +1181,7 @@ repoServer:
   ##
   containerPorts:
     repoServer: 8081
-    metrics:
+    metrics: ""
 
   ## Metrics configuration for Argo CD repo server
   ##
@@ -1202,12 +1202,12 @@ repoServer:
       ## @param repoServer.metrics.service.nodePort Node port for the repo server metrics service
       ## NOTE: choose port between <30000-32767>
       ##
-      nodePort:
+      nodePort: ""
 
       ## @param repoServer.metrics.service.loadBalancerIP Argo CD repo server service Load Balancer IP
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
       ##
-      loadBalancerIP:
+      loadBalancerIP: ""
       ## @param repoServer.metrics.service.loadBalancerSourceRanges Argo CD repo server service Load Balancer sources
       ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
       ## e.g:
@@ -1338,10 +1338,10 @@ repoServer:
   extraEnvVars: []
   ## @param repoServer.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Argo CD repo server nodes
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param repoServer.extraEnvVarsSecret Name of existing Secret containing extra env vars for Argo CD repo server nodes
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param repoServer.extraVolumes Optionally specify extra list of additional volumes for the Argo CD repo server pod(s)
   ##
   extraVolumes: []
@@ -1358,7 +1358,7 @@ repoServer:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## @param repoServer.initContainers Add additional init containers to the Argo CD repo server pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
@@ -1368,7 +1368,7 @@ repoServer:
   ##    imagePullPolicy: Always
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
-  initContainers: {}
+  initContainers: []
 
 ## @section Dex Parameters
 
@@ -1488,13 +1488,13 @@ dex:
     ## NOTE: choose port between <30000-32767>
     ##
     nodePorts:
-      http:
-      grpc:
+      http: ""
+      grpc: ""
 
     ## @param dex.service.loadBalancerIP Dex service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
-    loadBalancerIP:
+    loadBalancerIP: ""
     ## @param dex.service.loadBalancerSourceRanges Dex service Load Balancer sources
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g:
@@ -1539,12 +1539,12 @@ dex:
       ## @param dex.metrics.service.nodePort Node port for the Dex service
       ## NOTE: choose port between <30000-32767>
       ##
-      nodePort:
+      nodePort: ""
 
       ## @param dex.metrics.service.loadBalancerIP Dex service Load Balancer IP
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
       ##
-      loadBalancerIP:
+      loadBalancerIP: ""
       ## @param dex.metrics.service.loadBalancerSourceRanges Dex service Load Balancer sources
       ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
       ## e.g:
@@ -1661,10 +1661,10 @@ dex:
   extraEnvVars: []
   ## @param dex.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Dex nodes
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param dex.extraEnvVarsSecret Name of existing Secret containing extra env vars for Dex nodes
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param dex.extraVolumes Optionally specify extra list of additional volumes for the Dex pod(s)
   ##
   extraVolumes: []
@@ -1681,7 +1681,7 @@ dex:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## @param dex.initContainers Add additional init containers to the Dex pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
@@ -1691,7 +1691,7 @@ dex:
   ##    imagePullPolicy: Always
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
-  initContainers: {}
+  initContainers: []
 
 ## @section Shared config for Argo CD components
 config:
@@ -1730,7 +1730,7 @@ config:
 
   ## @param config.existingStylesConfigmap Use an existing styles configmap
   ##
-  existingStylesConfigmap:
+  existingStylesConfigmap: ""
 
   ## @param config.tlsCerts TLS certificates used to verify the authenticity of the repository servers
   ## E.g:
@@ -1792,8 +1792,8 @@ config:
     ##     -----END CERTIFICATE-----
     ##
     argocdServerTlsConfig:
-      key:
-      crt:
+      key: ""
+      crt: ""
 
     ## Argo admin password
     ## @param config.secret.argocdServerAdminPassword Argo CD server admin password. Autogenerated by default.
@@ -1953,7 +1953,7 @@ redis:
     enabled: true
     ## Name of existing secret object containing the password
     ##
-    existingSecret:
+    existingSecret: ""
     ##
     ## Password key to be retrieved from Redis(TM) secret
     ##
@@ -1972,7 +1972,7 @@ externalRedis:
   ## Redis(TM) host
   ## @param externalRedis.host External Redis host
   ##
-  host: ''
+  host: ""
   ## Redis(TM) port
   ## @param externalRedis.port External Redis port
   ##
@@ -1981,11 +1981,11 @@ externalRedis:
   ## Ignored if existingSecret is set
   ## @param externalRedis.password External Redis password
   ##
-  password: ''
+  password: ""
   ## Name of existing secret object containing the password
   ## @param externalRedis.existingSecret Existing secret for the external redis
   ##
-  existingSecret:
+  existingSecret: ""
   ## Password key to be retrieved from Redis(TM) secret
   ## @param externalRedis.existingSecretPasswordKey Password key for the existing secret containing the external redis password
   ##

@@ -52,18 +52,18 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `nil` |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
 
 ### Common parameters
 
 | Name                | Description                                                                               | Value |
 | ------------------- | ----------------------------------------------------------------------------------------- | ----- |
-| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                      | `nil` |
-| `nameOverride`      | String to partially override discourse.fullname template (will maintain the release name) | `nil` |
-| `fullnameOverride`  | String to fully override discourse.fullname template                                      | `nil` |
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                      | `""`  |
+| `nameOverride`      | String to partially override discourse.fullname template (will maintain the release name) | `""`  |
+| `fullnameOverride`  | String to fully override discourse.fullname template                                      | `""`  |
 | `commonLabels`      | Labels to be added to all deployed resources                                              | `{}`  |
 | `commonAnnotations` | Annotations to be added to all deployed resources                                         | `{}`  |
 
@@ -74,12 +74,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------- | --------------------------------------------------------------- | -------------- |
 | `service.type`                     | Kubernetes Service type                                         | `LoadBalancer` |
 | `service.port`                     | Service HTTP port                                               | `80`           |
-| `service.nodePort`                 | Node Ports to expose                                            | `nil`          |
-| `service.loadBalancerIP`           | Use loadBalancerIP to request a specific static IP              | `nil`          |
+| `service.nodePort`                 | Node Ports to expose                                            | `""`           |
+| `service.loadBalancerIP`           | Use loadBalancerIP to request a specific static IP              | `""`           |
 | `service.externalTrafficPolicy`    | Enable client source IP preservation                            | `Cluster`      |
 | `service.annotations`              | Service annotations                                             | `{}`           |
 | `service.loadBalancerSourceRanges` | Limits which cidr blocks can connect to service's load balancer | `[]`           |
-| `service.extraPorts`               | Extra ports to expose (normally used with the `sidecar` value)  | `nil`          |
+| `service.extraPorts`               | Extra ports to expose (normally used with the `sidecar` value)  | `[]`           |
 | `service.nodePorts.http`           | Kubernetes http node port                                       | `""`           |
 
 
@@ -89,7 +89,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------------------- | --------------------------------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`                               | Discourse image registry                                                                                  | `docker.io`          |
 | `image.repository`                             | Discourse image repository                                                                                | `bitnami/discourse`  |
-| `image.tag`                                    | Discourse image tag                                                                                       | `2.7.4-debian-10-r0` |
+| `image.tag`                                    | Discourse image tag                                                                                       | `2.7.6-debian-10-r0` |
 | `image.pullPolicy`                             | Discourse image pull policy                                                                               | `IfNotPresent`       |
 | `image.pullSecrets`                            | Discourse image pull secrets                                                                              | `[]`                 |
 | `image.debug`                                  | Specify if debug logs should be enabled                                                                   | `false`              |
@@ -97,8 +97,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `discourse.host`                               | Discourse host to create application URLs (include the port if =/= 80)                                    | `""`                 |
 | `discourse.siteName`                           | Discourse site name                                                                                       | `My Site!`           |
 | `discourse.username`                           | Admin user of the application                                                                             | `user`               |
-| `discourse.password`                           | password. WARNING: Minimum length of 10 characters                                                        | `nil`                |
-| `discourse.existingSecret`                     | Name of an existing secret containing the password (ignores previous password)                            | `nil`                |
+| `discourse.password`                           | password. WARNING: Minimum length of 10 characters                                                        | `""`                 |
+| `discourse.existingSecret`                     | Name of an existing secret containing the password (ignores previous password)                            | `""`                 |
 | `discourse.email`                              | Admin user email of the application                                                                       | `user@example.com`   |
 | `discourse.command`                            | Custom command to override image cmd                                                                      | `[]`                 |
 | `discourse.args`                               | Custom args for the custom command                                                                        | `[]`                 |
@@ -138,12 +138,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `initContainers`                               | Additional init containers to add to the pods                                                             | `[]`                 |
 | `serviceAccount.create`                        | Whether the service account should be created                                                             | `false`              |
 | `serviceAccount.annotations`                   | Annotations to add to the service account                                                                 | `{}`                 |
-| `serviceAccount.name`                          | Name to be used for the service account                                                                   | `nil`                |
+| `serviceAccount.name`                          | Name to be used for the service account                                                                   | `""`                 |
 | `podSecurityContext`                           | Pod security context specification                                                                        | `{}`                 |
 | `hostAliases`                                  | Add deployment host aliases                                                                               | `[]`                 |
 | `persistence.enabled`                          | Whether to enable persistence based on Persistent Volume Claims                                           | `true`               |
-| `persistence.storageClass`                     | discourse & sidekiq data Persistent Volume Storage Class                                                  | `nil`                |
-| `persistence.existingClaim`                    | Use a existing PVC which must be created manually before bound                                            | `nil`                |
+| `persistence.storageClass`                     | discourse & sidekiq data Persistent Volume Storage Class                                                  | `""`                 |
+| `persistence.existingClaim`                    | Use a existing PVC which must be created manually before bound                                            | `""`                 |
 | `persistence.accessMode`                       | PVC Access Mode (RWO, ROX, RWX)                                                                           | `ReadWriteOnce`      |
 | `persistence.size`                             | Size of the PVC to request                                                                                | `10Gi`               |
 | `persistence.selector`                         | Selector to match an existing Persistent Volume (this value is evaluated as a template)                   | `{}`                 |
@@ -184,7 +184,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sidekiq.customReadinessProbe`               | Custom readiness probe to execute (when the main one is disabled) | `{}`   |
 | `sidekiq.extraEnvVars`                       | An array to add extra env vars                                    | `[]`   |
 | `sidekiq.extraEnvVarsCM`                     | Array to add extra configmaps                                     | `[]`   |
-| `sidekiq.extraEnvVarsSecret`                 | Name of the secret that holds extra env vars                      | `nil`  |
+| `sidekiq.extraEnvVarsSecret`                 | Name of the secret that holds extra env vars                      | `""`   |
 | `sidekiq.extraVolumeMounts`                  | Additional volume mounts                                          | `[]`   |
 
 
@@ -204,7 +204,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.enabled`     | Enable ingress controller resource                                                            | `false`                  |
 | `ingress.certManager` | Add annotations for cert-manager                                                              | `false`                  |
 | `ingress.hostname`    | Default host for the ingress resource                                                         | `discourse.local`        |
-| `ingress.apiVersion`  | Force Ingress API version (automatically detected if not set)                                 | `nil`                    |
+| `ingress.apiVersion`  | Force Ingress API version (automatically detected if not set)                                 | `""`                     |
 | `ingress.path`        | Ingress path                                                                                  | `/`                      |
 | `ingress.pathType`    | Ingress path type                                                                             | `ImplementationSpecific` |
 | `ingress.annotations` | Ingress annotations done as key:value pairs                                                   | `{}`                     |
@@ -220,9 +220,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------- | -------------------------------------------------------------------------------------------------- | --------------------- |
 | `postgresql.enabled`                          | Deploy PostgreSQL container(s)                                                                     | `true`                |
 | `postgresql.postgresqlUsername`               | PostgreSQL user to create (used by Discourse). Has superuser privileges if username is `postgres`. | `bn_discourse`        |
-| `postgresql.postgresqlPassword`               | PostgreSQL password                                                                                | `nil`                 |
+| `postgresql.postgresqlPassword`               | PostgreSQL password                                                                                | `""`                  |
 | `postgresql.postgresqlPostgresPassword`       | PostgreSQL admin password (used when `postgresqlUsername` is not `postgres`)                       | `bitnami`             |
-| `postgresql.existingSecret`                   | Name of existing secret object                                                                     | `nil`                 |
+| `postgresql.existingSecret`                   | Name of existing secret object                                                                     | `""`                  |
 | `postgresql.postgresqlDatabase`               | Name of the database to create                                                                     | `bitnami_application` |
 | `postgresql.persistence.enabled`              | Enable database persistence using PVC                                                              | `true`                |
 | `externalDatabase.host`                       | Host of the external database                                                                      | `""`                  |
@@ -232,7 +232,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.create`                     | PostgreSQL create user/database                                                                    | `true`                |
 | `externalDatabase.postgresqlPostgresUser`     | PostgreSQL admin user, used during the installation stage (when using an external db)              | `""`                  |
 | `externalDatabase.postgresqlPostgresPassword` | PostgreSQL admin password used in the installation stage (when using an external db)               | `""`                  |
-| `externalDatabase.existingSecret`             | Name of existing secret object                                                                     | `nil`                 |
+| `externalDatabase.existingSecret`             | Name of existing secret object                                                                     | `""`                  |
 | `externalDatabase.database`                   | Name of the existing database (when using an external db)                                          | `bitnami_application` |
 
 
@@ -242,15 +242,15 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
 | `redis.enabled`                           | Whether to deploy a redis server to satisfy the applications requirements. To use an external redis instance set this to false and configure the externalRedis parameters | `true`           |
 | `redis.auth.enabled`                      | Use password authentication                                                                                                                                               | `false`          |
-| `redis.auth.password`                     | Redis(TM) password (both master and replica)                                                                                                                              | `nil`            |
-| `redis.auth.existingSecret`               | Name of an existing Kubernetes secret object containing the password                                                                                                      | `nil`            |
+| `redis.auth.password`                     | Redis(TM) password (both master and replica)                                                                                                                              | `""`             |
+| `redis.auth.existingSecret`               | Name of an existing Kubernetes secret object containing the password                                                                                                      | `""`             |
 | `redis.auth.existingSecretPasswordKey`    | Name of the key pointing to the password in your Kubernetes secret                                                                                                        | `redis-password` |
 | `redis.architecture`                      | Cluster settings                                                                                                                                                          | `standalone`     |
 | `redis.master.persistence.enabled`        | Enable database persistence using PVC                                                                                                                                     | `true`           |
 | `externalRedis.host`                      | Host of the external database                                                                                                                                             | `""`             |
 | `externalRedis.port`                      | Database port number                                                                                                                                                      | `6379`           |
 | `externalRedis.password`                  | Password for the external Redis. Ignored if existingSecret is set                                                                                                         | `""`             |
-| `externalRedis.existingSecret`            | Name of an existing Kubernetes secret object containing the password                                                                                                      | `nil`            |
+| `externalRedis.existingSecret`            | Name of an existing Kubernetes secret object containing the password                                                                                                      | `""`             |
 | `externalRedis.existingSecretPasswordKey` | Name of the key pointing to the password in your Kubernetes secret                                                                                                        | `redis-password` |
 
 
