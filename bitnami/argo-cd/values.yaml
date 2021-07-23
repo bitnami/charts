@@ -56,7 +56,7 @@ controller:
   image:
     registry: docker.io
     repository: bitnami/argo-cd
-    tag: 2.0.4-debian-10-r19
+    tag: 2.0.4-debian-10-r21
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -443,7 +443,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/argo-cd
-    tag: 2.0.4-debian-10-r20
+    tag: 2.0.5-debian-10-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1053,7 +1053,7 @@ repoServer:
   image:
     registry: docker.io
     repository: bitnami/argo-cd
-    tag: 2.0.4-debian-10-r19
+    tag: 2.0.4-debian-10-r21
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1386,7 +1386,7 @@ dex:
   image:
     registry: docker.io
     repository: bitnami/dex
-    tag: 2.29.0-debian-10-r18
+    tag: 2.29.0-debian-10-r21
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1917,7 +1917,7 @@ redis:
   image:
     registry: docker.io
     repository: bitnami/redis
-    tag: 6.2.4-debian-10-r37
+    tag: 6.2.5-debian-10-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
