@@ -1042,6 +1042,13 @@ metrics:
       ##   - myRegistryKeySecretName
       ##
       pullSecrets: []
+    ## Specify the named port to bte referenced by JMX_PORT
+    ## Usually this will match metrics.jmx.prometheus.port
+    ## For Datadog Integration, use a different port than metrics.jmx.prometheus.port
+    port: 5556
+    ## Prometheus JMX Export port
+    prometheus:
+      port: 5556
     ## Prometheus JMX Exporter' resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
     ## We usually recommend not to specify default resources and to leave this as a conscious

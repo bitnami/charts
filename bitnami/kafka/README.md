@@ -303,10 +303,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.jmx.image.tag`                          | JMX exporter image tag (immutable tags are recommended)                                                                          | `0.15.0-debian-10-r135`  |
 | `metrics.jmx.image.pullPolicy`                   | JMX exporter image pull policy                                                                                                   | `IfNotPresent`           |
 | `metrics.jmx.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                                 | `[]`                     |
+| `metrics.jmx.port`                               | Specify port for named `metrics` port.                                                                                           | `5556`                   |
+| `metrics.jmx.prometheus.port`                    | Specify port launched by Prometheus Exporter. For Datadog Integration, this should NOT match `metrics.jmx.port`.                 | `5556`                   |
 | `metrics.jmx.resources.limits`                   | JMX Exporter container resource limits                                                                                           | `{}`                     |
 | `metrics.jmx.resources.requests`                 | JMX Exporter container resource requests                                                                                         | `{}`                     |
 | `metrics.jmx.service.type`                       | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`) for JMX Exporter                                             | `ClusterIP`              |
-| `metrics.jmx.service.port`                       | JMX Exporter Prometheus port                                                                                                     | `5556`                   |
+| `metrics.jmx.service.port`                       | JMX Exporter Prometheus Service Port                                                                                             | `5556`                   |
 | `metrics.jmx.service.nodePort`                   | Kubernetes HTTP node port                                                                                                        | `""`                     |
 | `metrics.jmx.service.loadBalancerIP`             | loadBalancerIP if service type is `LoadBalancer`                                                                                 | `nil`                    |
 | `metrics.jmx.service.loadBalancerSourceRanges`   | Load Balancer sources                                                                                                            | `[]`                     |
@@ -385,6 +387,37 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
+### Datadog Autodiscovery Integration
+```yaml
+# Kafka Values
+extraEnvVars:
+  - name: POD_IP
+    valueFrom:
+      fieldRef:
+        fieldPath: status.podIP
+  - name: KAFKA_JMX_OPTS
+    value: >-
+      -Dcom.sun.management.jmxremote
+      -Dcom.sun.management.jmxremote.authenticate=false
+      -Dcom.sun.management.jmxremote.ssl=false
+      -Dcom.sun.management.jmxremote.local.only=false
+      -Dcom.sun.management.jmxremote.port=5557
+      -Dcom.sun.management.jmxremote.rmi.port=5557
+      -Djava.rmi.server.hostname=$(POD_IP)
+
+metrics:
+  jmx:
+    enabled: true
+    port: 5557
+  service:
+    port: 5557 # This can be anything, it just matches the backend in this example.
+
+podAnnotations:
+  ad.datadoghq.com/jmx-exporter.check_names: '["kafka"]'
+  ad.datadoghq.com/jmx-exporter.init_configs: '[{"is_jmx": true, "collect_default_metrics": true}]'
+  ad.datadoghq.com/jmx-exporter.instances: '[{"host": "%%host%%","port":"5557","namespace":"kafka"}]'
+
+```
 ### Setting custom parameters
 
 Any environment variable beginning with `KAFKA_CFG_` will be mapped to its corresponding Kafka key. For example, use `KAFKA_CFG_BACKGROUND_THREADS` in order to set `background.threads`. In order to pass custom environment variables use the `extraEnvVars` property.
@@ -407,7 +440,7 @@ For more complex configurations, set the `listeners`, `advertisedListeners` and 
 You can configure different authentication protocols for each listener you configure in Kafka. For instance, you can use `sasl_tls` authentication for client communications, while using `tls` for inter-broker communications. This table shows the available protocols and the security they provide:
 
 | Method    | Authentication               | Encryption via TLS |
-|-----------|------------------------------|--------------------|
+| --------- | ---------------------------- | ------------------ |
 | plaintext | None                         | No                 |
 | tls       | None                         | Yes                |
 | mtls      | Yes (two-way authentication) | Yes                |
