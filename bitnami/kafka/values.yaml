@@ -1045,8 +1045,10 @@ metrics:
     ## Specify the named port to bte referenced by JMX_PORT
     ## Usually this will match metrics.jmx.prometheus.port
     ## For Datadog Integration, use a different port than metrics.jmx.prometheus.port
+    ## @param metrics.jmx.port Specify port for named `metrics` port.
     port: 5556
     ## Prometheus JMX Export port
+    ## @param metrics.jmx.prometheus.port Specify port launched by Prometheus Exporter. For Datadog Integration, this should NOT match `metrics.jmx.port`.
     prometheus:
       port: 5556
     ## Prometheus JMX Exporter' resource requests and limits
