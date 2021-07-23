@@ -267,11 +267,11 @@ configuration: ""
 replicaSetConfigurationSettings:
   enabled: false
   configuration:
-    chainingAllowed : false
-    heartbeatTimeoutSecs : 10
-    heartbeatIntervalMillis : 200
-    electionTimeoutMillis : 1000
-    catchUpTimeoutMillis : 30000
+##    chainingAllowed : false
+##    heartbeatTimeoutSecs : 10
+##    heartbeatIntervalMillis : 200
+##    electionTimeoutMillis : 1000
+##    catchUpTimeoutMillis : 30000
 ## @param existingConfigmap Name of existing ConfigMap with MongoDB&reg; configuration for Primary and Secondary nodes
 ## NOTE: When it's set the arbiter.configuration parameter is ignored
 ##
