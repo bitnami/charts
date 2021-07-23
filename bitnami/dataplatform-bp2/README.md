@@ -89,9 +89,9 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `nil` |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
 
 ### Kafka parameters
@@ -206,7 +206,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `wavefront.clusterName`                              | Cluster name                                   | `KUBERNETES_CLUSTER_NAME`            |
 | `wavefront.wavefront.url`                            | Tanzu Observability cluster URL                | `https://YOUR_CLUSTER.wavefront.com` |
 | `wavefront.wavefront.token`                          | Tanzu Observability access token               | `YOUR_API_TOKEN`                     |
-| `wavefront.wavefront.existingSecret`                 | Tanzu Observability existing secret            | `nil`                                |
+| `wavefront.wavefront.existingSecret`                 | Tanzu Observability existing secret            | `""`                                 |
 | `wavefront.collector.resources.limits`               | Wavefront collector metrics resource limits    | `{}`                                 |
 | `wavefront.collector.resources.requests.cpu`         | Wavefront collector metrics CPUs               | `200m`                               |
 | `wavefront.collector.resources.requests.memory`      | Wavefront collector metrics requested memory   | `10Mi`                               |

@@ -53,7 +53,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 
 
@@ -61,9 +61,9 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                | Description                                        | Value |
 | ------------------- | -------------------------------------------------- | ----- |
-| `kubeVersion`       | Override Kubernetes version                        | `nil` |
-| `nameOverride`      | String to partially override common.names.fullname | `nil` |
-| `fullnameOverride`  | String to fully override common.names.fullname     | `nil` |
+| `kubeVersion`       | Override Kubernetes version                        | `""`  |
+| `nameOverride`      | String to partially override common.names.fullname | `""`  |
+| `fullnameOverride`  | String to fully override common.names.fullname     | `""`  |
 | `commonLabels`      | Labels to add to all deployed objects              | `{}`  |
 | `commonAnnotations` | Annotations to add to all deployed objects         | `{}`  |
 | `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`  |
@@ -75,13 +75,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------- | ----------------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`                       | Apache image registry                                                                     | `docker.io`            |
 | `image.repository`                     | Apache image repository                                                                   | `bitnami/apache`       |
-| `image.tag`                            | Apache image tag (immutable tags are recommended)                                         | `2.4.48-debian-10-r15` |
+| `image.tag`                            | Apache image tag (immutable tags are recommended)                                         | `2.4.48-debian-10-r28` |
 | `image.pullPolicy`                     | Apache image pull policy                                                                  | `IfNotPresent`         |
 | `image.pullSecrets`                    | Apache image pull secrets                                                                 | `[]`                   |
 | `image.debug`                          | Enable image debug mode                                                                   | `false`                |
 | `git.registry`                         | Git image registry                                                                        | `docker.io`            |
 | `git.repository`                       | Git image name                                                                            | `bitnami/git`          |
-| `git.tag`                              | Git image tag                                                                             | `2.32.0-debian-10-r11` |
+| `git.tag`                              | Git image tag                                                                             | `2.32.0-debian-10-r26` |
 | `git.pullPolicy`                       | Git image pull policy                                                                     | `IfNotPresent`         |
 | `git.pullSecrets`                      | Specify docker-registry secret names as an array                                          | `[]`                   |
 | `replicaCount`                         | Number of replicas of the Apache deployment                                               | `1`                    |
@@ -94,15 +94,15 @@ The command removes all the Kubernetes components associated with the chart and 
 | `nodeSelector`                         | Node labels for pod assignment                                                            | `{}`                   |
 | `tolerations`                          | Tolerations for pod assignment                                                            | `[]`                   |
 | `cloneHtdocsFromGit.enabled`           | Get the server static content from a git repository                                       | `false`                |
-| `cloneHtdocsFromGit.repository`        | Repository to clone static content from                                                   | `nil`                  |
-| `cloneHtdocsFromGit.branch`            | Branch inside the git repository                                                          | `nil`                  |
+| `cloneHtdocsFromGit.repository`        | Repository to clone static content from                                                   | `""`                   |
+| `cloneHtdocsFromGit.branch`            | Branch inside the git repository                                                          | `""`                   |
 | `cloneHtdocsFromGit.interval`          | Interval for sidecar container pull from the repository                                   | `60`                   |
 | `cloneHtdocsFromGit.resources`         | Init container git resource requests                                                      | `{}`                   |
 | `cloneHtdocsFromGit.extraVolumeMounts` | Add extra volume mounts for the GIT containers                                            | `[]`                   |
-| `htdocsConfigMap`                      | Name of a config map with the server static content                                       | `nil`                  |
-| `htdocsPVC`                            | Name of a PVC with the server static content                                              | `nil`                  |
-| `vhostsConfigMap`                      | Name of a config map with the virtual hosts content                                       | `nil`                  |
-| `httpdConfConfigMap`                   | Name of a config map with the httpd.conf file contents                                    | `nil`                  |
+| `htdocsConfigMap`                      | Name of a config map with the server static content                                       | `""`                   |
+| `htdocsPVC`                            | Name of a PVC with the server static content                                              | `""`                   |
+| `vhostsConfigMap`                      | Name of a config map with the virtual hosts content                                       | `""`                   |
+| `httpdConfConfigMap`                   | Name of a config map with the httpd.conf file contents                                    | `""`                   |
 | `podLabels`                            | Extra labels for Apache pods                                                              | `{}`                   |
 | `podAnnotations`                       | Pod annotations                                                                           | `{}`                   |
 | `hostAliases`                          | Add deployment host aliases                                                               | `[]`                   |
@@ -127,8 +127,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraVolumes`                         | Array to add extra volumes (evaluated as a template)                                      | `[]`                   |
 | `extraVolumeMounts`                    | Array to add extra mounts (normally used with extraVolumes, evaluated as a template)      | `[]`                   |
 | `extraEnvVars`                         | Array to add extra environment variables                                                  | `[]`                   |
-| `initContainers`                       | Add additional init containers to the Apache pods                                         | `{}`                   |
-| `sidecars`                             | Add additional sidecar containers to the Apache pods                                      | `{}`                   |
+| `initContainers`                       | Add additional init containers to the Apache pods                                         | `[]`                   |
+| `sidecars`                             | Add additional sidecar containers to the Apache pods                                      | `[]`                   |
 
 
 ### Traffic Exposure Parameters
@@ -140,12 +140,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.httpsPort`             | Apache service HTTPS port                                                  | `443`                    |
 | `service.nodePorts.http`        | Node port for HTTP                                                         | `""`                     |
 | `service.nodePorts.https`       | Node port for HTTPS                                                        | `""`                     |
-| `service.loadBalancerIP`        | Apache service Load Balancer IP                                            | `nil`                    |
+| `service.loadBalancerIP`        | Apache service Load Balancer IP                                            | `""`                     |
 | `service.annotations`           | Additional custom annotations for Apache service                           | `{}`                     |
 | `service.externalTrafficPolicy` | Apache service external traffic policy                                     | `Cluster`                |
 | `ingress.enabled`               | Enable ingress record generation for Apache                                | `false`                  |
 | `ingress.pathType`              | Ingress path type                                                          | `ImplementationSpecific` |
-| `ingress.apiVersion`            | Force Ingress API version (automatically detected if not set)              | `nil`                    |
+| `ingress.apiVersion`            | Force Ingress API version (automatically detected if not set)              | `""`                     |
 | `ingress.hostname`              | Default host for the ingress record                                        | `example.local`          |
 | `ingress.path`                  | Default path for the ingress record                                        | `ImplementationSpecific` |
 | `ingress.annotations`           | Additional custom annotations for the ingress record                       | `{}`                     |
@@ -162,7 +162,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`            | Start a sidecar prometheus exporter to expose Apache metrics | `false`                   |
 | `metrics.image.registry`     | Apache Exporter image registry                               | `docker.io`               |
 | `metrics.image.repository`   | Apache Exporter image repository                             | `bitnami/apache-exporter` |
-| `metrics.image.tag`          | Apache Exporter image tag (immutable tags are recommended)   | `0.9.0-debian-10-r10`     |
+| `metrics.image.tag`          | Apache Exporter image tag (immutable tags are recommended)   | `0.9.0-debian-10-r25`     |
 | `metrics.image.pullPolicy`   | Apache Exporter image pull policy                            | `IfNotPresent`            |
 | `metrics.image.pullSecrets`  | Apache Exporter image pull secrets                           | `[]`                      |
 | `metrics.podAnnotations`     | Additional custom annotations for Apache exporter service    | `{}`                      |

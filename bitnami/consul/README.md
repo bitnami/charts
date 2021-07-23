@@ -53,18 +53,18 @@ $ helm delete --purge my-release
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `nil` |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
 
 ### Common parameters
 
 | Name                | Description                                                                | Value           |
 | ------------------- | -------------------------------------------------------------------------- | --------------- |
-| `kubeVersion`       | Override Kubernetes version                                                | `nil`           |
-| `nameOverride`      | String to partially override common.names.fullname                         | `nil`           |
-| `fullnameOverride`  | String to fully override common.names.fullname                             | `nil`           |
+| `kubeVersion`       | Override Kubernetes version                                                | `""`            |
+| `nameOverride`      | String to partially override common.names.fullname                         | `""`            |
+| `fullnameOverride`  | String to fully override common.names.fullname                             | `""`            |
 | `commonLabels`      | Labels to add to all deployed objects (sub-charts are not considered)      | `{}`            |
 | `commonAnnotations` | Annotations to add to all deployed objects (sub-charts are not considered) | `{}`            |
 | `clusterDomain`     | Kubernetes cluster domain name                                             | `cluster.local` |
@@ -84,17 +84,17 @@ $ helm delete --purge my-release
 | `datacenterName`           | Datacenter name for Consul. If not supplied, will use the Consul                             | `dc1`                 |
 | `domain`                   | Consul domain name                                                                           | `consul`              |
 | `raftMultiplier`           | Multiplier used to scale key Raft timing parameters                                          | `1`                   |
-| `gossipKey`                | Gossip key for all members. The key must be 16-bytes, can be generated with $(consul keygen) | `nil`                 |
-| `tlsEncryptionSecretName`  | Name of existing secret with TLS encryption data                                             | `nil`                 |
+| `gossipKey`                | Gossip key for all members. The key must be 16-bytes, can be generated with $(consul keygen) | `""`                  |
+| `tlsEncryptionSecretName`  | Name of existing secret with TLS encryption data                                             | `""`                  |
 | `hostAliases`              | Deployment pod host aliases                                                                  | `[]`                  |
 | `configuration`            | HashiCorp Consul configuration to be injected as ConfigMap                                   | `""`                  |
-| `existingConfigmap`        | ConfigMap with HashiCorp Consul configuration                                                | `nil`                 |
+| `existingConfigmap`        | ConfigMap with HashiCorp Consul configuration                                                | `""`                  |
 | `localConfig`              | Extra configuration that will be added to the default one                                    | `""`                  |
 | `command`                  | Command for running the container (set to default if not set). Use array form                | `[]`                  |
 | `args`                     | Args for running the container (set to default if not set). Use array form                   | `[]`                  |
 | `extraEnvVars`             | Extra environment variables to be set on HashiCorp Consul container                          | `[]`                  |
-| `extraEnvVarsCM`           | Name of existing ConfigMap containing extra env vars                                         | `nil`                 |
-| `extraEnvVarsSecret`       | Name of existing Secret containing extra env vars                                            | `nil`                 |
+| `extraEnvVarsCM`           | Name of existing ConfigMap containing extra env vars                                         | `""`                  |
+| `extraEnvVarsSecret`       | Name of existing Secret containing extra env vars                                            | `""`                  |
 | `containerPorts.http`      | Port to open for HTTP in Consul                                                              | `8500`                |
 | `containerPorts.dns`       | Port to open for DNS server in Consul                                                        | `8600`                |
 | `containerPorts.rpc`       | Port to open for RPC in Consul                                                               | `8400`                |
@@ -108,7 +108,7 @@ $ helm delete --purge my-release
 | ------------------------------------ | ----------------------------------------------------------------------------------------- | --------------- |
 | `replicaCount`                       | Number of HashiCorp Consul replicas to deploy                                             | `3`             |
 | `updateStrategy`                     | Update strategy type for the HashiCorp Consul statefulset                                 | `RollingUpdate` |
-| `rollingUpdatePartition`             | Partition update strategy                                                                 | `nil`           |
+| `rollingUpdatePartition`             | Partition update strategy                                                                 | `""`            |
 | `podManagementPolicy`                | StatefulSet pod management policy                                                         | `Parallel`      |
 | `podAnnotations`                     | Additional pod annotations                                                                | `{}`            |
 | `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
@@ -145,7 +145,7 @@ $ helm delete --purge my-release
 | `sidecars`                           | Add additional sidecar containers to the Hashicorp Consul pods                            | `[]`            |
 | `pdb.create`                         | Enable/disable a Pod Disruption Budget creation                                           | `false`         |
 | `pdb.minAvailable`                   | Minimum number of pods that must still be available after the eviction                    | `1`             |
-| `pdb.maxUnavailable`                 | Max number of pods that can be unavailable after the eviction                             | `nil`           |
+| `pdb.maxUnavailable`                 | Max number of pods that can be unavailable after the eviction                             | `""`            |
 
 
 ### Exposure parameters
@@ -160,14 +160,14 @@ $ helm delete --purge my-release
 | `service.annotations`    | Annotations for HashiCorp Consul UI service                                                   | `{}`                     |
 | `ingress.enabled`        | Enable ingress resource for Management console                                                | `false`                  |
 | `ingress.path`           | Path for the default host                                                                     | `/`                      |
-| `ingress.apiVersion`     | Override API Version (automatically detected if not set)                                      | `nil`                    |
+| `ingress.apiVersion`     | Override API Version (automatically detected if not set)                                      | `""`                     |
 | `ingress.pathType`       | Ingress path type                                                                             | `ImplementationSpecific` |
 | `ingress.certManager`    | Add annotations for cert-manager                                                              | `false`                  |
 | `ingress.hostname`       | Default host for the ingress resource, a host pointing to this will be created                | `consul-ui.local`        |
 | `ingress.annotations`    | Ingress annotations done as key:value pairs                                                   | `{}`                     |
 | `ingress.tls`            | Enable TLS configuration for the hostname defined at ingress.hostname parameter               | `false`                  |
-| `ingress.extraHosts`     | An array with additional hostname(s) to be covered with the ingress record                    | `nil`                    |
-| `ingress.extraTls`       | TLS configuration for additional hostname(s) to be covered with this ingress record           | `nil`                    |
+| `ingress.extraHosts`     | An array with additional hostname(s) to be covered with the ingress record                    | `[]`                     |
+| `ingress.extraTls`       | TLS configuration for additional hostname(s) to be covered with this ingress record           | `[]`                     |
 | `ingress.secrets`        | If you're providing your own certificates, please use this to add the certificates as secrets | `[]`                     |
 
 
@@ -176,7 +176,7 @@ $ helm delete --purge my-release
 | Name                       | Description                                                                                               | Value  |
 | -------------------------- | --------------------------------------------------------------------------------------------------------- | ------ |
 | `persistence.enabled`      | Enable HashiCorp Consul data persistence using PVC, use a Persistent Volume Claim, If false, use emptyDir | `true` |
-| `persistence.storageClass` | Persistent Volume storage class                                                                           | `nil`  |
+| `persistence.storageClass` | Persistent Volume storage class                                                                           | `""`   |
 | `persistence.annotations`  | Persistent Volume Claim annotations                                                                       | `{}`   |
 | `persistence.accessModes`  | Persistent Volume Access Mode                                                                             | `[]`   |
 | `persistence.size`         | PVC Storage Request for HashiCorp Consul data volume                                                      | `8Gi`  |
@@ -213,12 +213,11 @@ $ helm delete --purge my-release
 | `metrics.resources.limits`                | The resources limits for the container                                                                                      | `{}`                      |
 | `metrics.resources.requests`              | The requested resources for the container                                                                                   | `{}`                      |
 | `metrics.serviceMonitor.enabled`          | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator, set to true to create a Service Monitor Entry | `false`                   |
-| `metrics.serviceMonitor.namespace`        | The namespace in which the ServiceMonitor will be created                                                                   | `nil`                     |
+| `metrics.serviceMonitor.namespace`        | The namespace in which the ServiceMonitor will be created                                                                   | `""`                      |
 | `metrics.serviceMonitor.interval`         | Interval at which metrics should be scraped                                                                                 | `30s`                     |
-| `metrics.serviceMonitor.scrapeTimeout`    | The timeout after which the scrape is ended                                                                                 | `nil`                     |
-| `metrics.serviceMonitor.relabellings`     | Metrics relabellings to add to the scrape endpoint                                                                          | `nil`                     |
+| `metrics.serviceMonitor.scrapeTimeout`    | The timeout after which the scrape is ended                                                                                 | `""`                      |
+| `metrics.serviceMonitor.relabellings`     | Metrics relabellings to add to the scrape endpoint                                                                          | `[]`                      |
 | `metrics.serviceMonitor.honorLabels`      | Specify honorLabels parameter to add the scrape endpoint                                                                    | `false`                   |
-| `metrics.serviceMonitor.release`          | Specify the release for ServiceMonitor. Sometimes it should be custom for prometheus operator to work                       | `nil`                     |
 | `metrics.serviceMonitor.additionalLabels` | Used to pass Labels that are used by the Prometheus installed in your cluster to select Service Monitors to work with       | `{}`                      |
 
 
