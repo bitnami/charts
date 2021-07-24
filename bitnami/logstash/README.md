@@ -55,13 +55,16 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name               | Description                                                                              | Value           |
-| ------------------ | ---------------------------------------------------------------------------------------- | --------------- |
-| `kubeVersion`      | Force target Kubernetes version (using Helm capabilities if not set)                     | `nil`           |
-| `nameOverride`     | String to partially override logstash.fullname template (will maintain the release name) | `nil`           |
-| `fullnameOverride` | String to fully override logstash.fullname template                                      | `nil`           |
-| `clusterDomain`    | Default Kubernetes cluster domain                                                        | `cluster.local` |
-| `extraDeploy`      | Array of extra objects to deploy with the release (evaluated as a template).             | `nil`           |
+| Name                     | Description                                                                              | Value           |
+| ------------------------ | ---------------------------------------------------------------------------------------- | --------------- |
+| `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                     | `nil`           |
+| `nameOverride`           | String to partially override logstash.fullname template (will maintain the release name) | `nil`           |
+| `fullnameOverride`       | String to fully override logstash.fullname template                                      | `nil`           |
+| `clusterDomain`          | Default Kubernetes cluster domain                                                        | `cluster.local` |
+| `extraDeploy`            | Array of extra objects to deploy with the release (evaluated as a template).             | `nil`           |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)  | `false`         |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                     | `[]`            |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                        | `[]`            |
 
 
 ### Logstash parameters
@@ -70,7 +73,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | --------------------------- |
 | `image.registry`                              | Logstash image registry                                                                                              | `docker.io`                 |
 | `image.repository`                            | Logstash image repository                                                                                            | `bitnami/logstash`          |
-| `image.tag`                                   | Logstash image tag (immutable tags are recommended)                                                                  | `7.13.2-debian-10-r0`       |
+| `image.tag`                                   | Logstash image tag (immutable tags are recommended)                                                                  | `7.13.4-debian-10-r0`       |
 | `image.pullPolicy`                            | Logstash image pull policy                                                                                           | `IfNotPresent`              |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                     | `[]`                        |
 | `image.debug`                                 | Specify if debug logs should be enabled                                                                              | `false`                     |
@@ -140,7 +143,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.securityContext.runAsUser` | User ID for the volumePermissions init container                                                                     | `0`                         |
 | `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                     | `docker.io`                 |
 | `volumePermissions.image.repository`          | Init container volume-permissions image repository                                                                   | `bitnami/bitnami-shell`     |
-| `volumePermissions.image.tag`                 | Init container volume-permissions image tag (immutable tags are recommended)                                         | `10-debian-10-r107`         |
+| `volumePermissions.image.tag`                 | Init container volume-permissions image tag (immutable tags are recommended)                                         | `10-debian-10-r138`         |
 | `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                  | `Always`                    |
 | `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                     | `[]`                        |
 | `volumePermissions.resources.limits`          | Init container volume-permissions resource limits                                                                    | `{}`                        |
@@ -160,7 +163,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                             | Enable the export of Prometheus metrics                                                                              | `false`                     |
 | `metrics.image.registry`                      | Logstash Relay image registry                                                                                        | `docker.io`                 |
 | `metrics.image.repository`                    | Logstash Relay image repository                                                                                      | `bitnami/logstash-exporter` |
-| `metrics.image.tag`                           | Logstash Relay image tag (immutable tags are recommended)                                                            | `7.3.0-debian-10-r211`      |
+| `metrics.image.tag`                           | Logstash Relay image tag (immutable tags are recommended)                                                            | `7.3.0-debian-10-r242`      |
 | `metrics.image.pullPolicy`                    | Logstash Relay image pull policy                                                                                     | `IfNotPresent`              |
 | `metrics.image.pullSecrets`                   | Specify docker-registry secret names as an array                                                                     | `[]`                        |
 | `metrics.resources.limits`                    | The resources limits for the Logstash Prometheus Exporter container                                                  | `{}`                        |
