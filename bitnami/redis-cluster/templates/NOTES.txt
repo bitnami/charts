@@ -1,5 +1,6 @@
 {{- $secretName := include "redis-cluster.secretName" . -}}
 {{- $secretPasswordKey := include "redis-cluster.secretPasswordKey" . -}}
+
 ** Please be patient while the chart is being deployed **
 
 {{- if .Values.diagnosticMode.enabled }}
