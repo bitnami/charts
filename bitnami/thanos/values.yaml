@@ -1632,15 +1632,28 @@ storegateway:
     values: []
   ## @param storegateway.affinity Thanos Store Gateway affinity for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## If you have set storegateway.sharded.enabled: true you can set shardLoopId (or any other parameter) by setting the below code block under this 'affinity' section:
+  ## affinity:
+  ##   matchLabels:
+  ##     shard: "{{ .shardLoopId }}"
   ## Note: storegateway.podAffinityPreset, storegateway.podAntiAffinityPreset, and storegateway.nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
   ## @param storegateway.nodeSelector Thanos Store Gateway node labels for pod assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## If you have set storegateway.sharded.enabled: true you can set shardLoopId (or any other parameter) by setting the below code block under this 'nodeSelector' section:
+  ## nodeSelector: { shardId: "{{ .shardLoopId }}" }
   ##
   nodeSelector: {}
   ## @param storegateway.tolerations Thanos Store Gateway tolerations for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ## If you have set storegateway.sharded.enabled: true you can set shardLoopId (or any other parameter) by setting the below code block under this 'nodeSelector' section:
+  ## tolerations:
+  ## - key: "shardId"
+  ##   operator: "Equal"
+  ##   value: "{{ .shardLoopId }}"
+  ##   effect: "NoSchedule"
+  ##
   ##
   tolerations: []
   ## @param storegateway.podLabels Thanos Store Gateway pod labels
@@ -1834,7 +1847,19 @@ storegateway:
     ## @param storegateway.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
     ##
     maxUnavailable: ""
-
+  ## Sharded parameters
+  ## @param storegateway.sharded.enabled Enable sharding for Thanos Store Gateway
+  ## @param storegateway.sharded.hashPartioning.shards Setting hashPartioning will create multiple store deployments based on the number of shards specified using the hashmod of the blocks
+  ## @param storegateway.sharded.timePartioning [array] Setting time timePartioning will create multipale store deployments based on the number of partions
+  ##
+  sharded:
+    enabled: false
+    hashPartioning: 
+      shards: ""
+    timePartioning:
+      - min: ""
+        max: ""
+    
 ## @section Thanos Ruler parameters
 
 ruler:

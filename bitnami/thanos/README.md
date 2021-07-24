@@ -851,6 +851,29 @@ You can specify the Ruler configuration using the `ruler.config` parameter.
 
 In addition, you can also set an external ConfigMap with the configuration file. This is done by setting the `ruler.existingConfigmap` parameter. Note that this will override the previous option.
 
+### Store time partions
+
+Thanos store supports partition based on time.
+
+Setting time partitions will create n number of store deployment based on the number of items in the list. Each item must contain min and max time for querying in the supported format (see details here See details at https://thanos.io/tip/components/store.md/#time-based-partioning ).
+
+Leaving this empty list ([]) will create a single store for all data.
+
+Example - This will create 3 stores:
+
+```yaml
+timePartioning:
+  # One store for data older than 6 weeks
+  - min: ""
+    max: -6w
+  # One store for data newer than 6 weeks and older than 2 weeks
+  - min: -6w
+    max: -2w
+  # One store for data newer than 2 weeks
+  - min: -2w
+    max: ""
+```
+
 ### Integrate Thanos with Prometheus and Alertmanager
 
 You can intregrate Thanos with Prometheus & Alertmanager using this chart and the [Bitnami kube-prometheus chart](https://github.com/bitnami/charts/tree/master/bitnami/kube-prometheus) following the steps below:
@@ -945,6 +968,10 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 5.3.0
+
+This version introduces hash and time partioning for the store gateway.
 
 ### To 5.0.0
 
