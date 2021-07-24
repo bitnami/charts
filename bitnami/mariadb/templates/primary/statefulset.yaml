@@ -117,7 +117,7 @@ spec:
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
-              value: {{ ternary "true" "false" .Values.image.debug | quote }}
+              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
             {{- if .Values.auth.usePasswordFiles }}
             - name: MARIADB_ROOT_PASSWORD_FILE
               value: {{ default "/opt/bitnami/mariadb/secrets/mariadb-root-password" .Values.auth.customPasswordFiles.root }}

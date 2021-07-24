@@ -118,7 +118,7 @@ spec:
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
-              value: {{ ternary "true" "false" .Values.image.debug | quote }}
+              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
             - name: MARIADB_REPLICATION_MODE
               value: "slave"
             - name: MARIADB_MASTER_HOST
