@@ -78,13 +78,16 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Redis<sup>TM</sup> Cluster Common parameters
 
-| Name                | Description                                                                                  | Value |
-| ------------------- | -------------------------------------------------------------------------------------------- | ----- |
-| `nameOverride`      | String to partially override common.names.fullname template (will maintain the release name) | `""`  |
-| `fullnameOverride`  | String to fully override common.names.fullname template                                      | `""`  |
-| `commonAnnotations` | Annotations to add to all deployed objects                                                   | `{}`  |
-| `commonLabels`      | Labels to add to all deployed objects                                                        | `{}`  |
-| `extraDeploy`       | Array of extra objects to deploy with the release (evaluated as a template)                  | `[]`  |
+| Name                     | Description                                                                                  | Value   |
+| ------------------------ | -------------------------------------------------------------------------------------------- | ------- |
+| `nameOverride`           | String to partially override common.names.fullname template (will maintain the release name) | `""`    |
+| `fullnameOverride`       | String to fully override common.names.fullname template                                      | `""`    |
+| `commonAnnotations`      | Annotations to add to all deployed objects                                                   | `{}`    |
+| `commonLabels`           | Labels to add to all deployed objects                                                        | `{}`    |
+| `extraDeploy`            | Array of extra objects to deploy with the release (evaluated as a template)                  | `[]`    |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)      | `false` |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                         | `[]`    |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                            | `[]`    |
 
 
 ### Redis<sup>TM</sup> Cluster Common parameters
@@ -96,6 +99,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.tag`                             | Redis<sup>TM</sup> cluster image tag (immutable tags are recommended)                                                                               | `6.2.4-debian-10-r21`   |
 | `image.pullPolicy`                      | Redis<sup>TM</sup> cluster image pull policy                                                                                                        | `IfNotPresent`          |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                                                    | `[]`                    |
+| `image.debug`                           | Enable image debug mode                                                                                                                             | `false`                 |
 | `networkPolicy.enabled`                 | Enable NetworkPolicy                                                                                                                                | `false`                 |
 | `networkPolicy.allowExternal`           | The Policy model to apply. Don't require client label for connections                                                                               | `true`                  |
 | `networkPolicy.ingressNSMatchLabels`    | Allow connections from other namespacess. Just set label for namespace and set label for pods (optional).                                           | `{}`                    |

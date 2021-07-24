@@ -37,6 +37,21 @@ commonLabels: {}
 ##
 extraDeploy: []
 
+## Enable diagnostic mode in the deployment
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the deployment
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the deployment
+  ##
+  args:
+    - infinity
+
 ## @section Redis<sup>TM</sup> Cluster Common parameters
 
 ## Bitnami Redis(TM) image version
@@ -46,6 +61,7 @@ extraDeploy: []
 ## @param image.tag Redis<sup>TM</sup> cluster image tag (immutable tags are recommended)
 ## @param image.pullPolicy Redis<sup>TM</sup> cluster image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
+## @param image.debug Enable image debug mode
 ##
 image:
   registry: docker.io
@@ -67,6 +83,9 @@ image:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
+  ## Enable debug mode
+  ##
+  debug: false
 ## Network Policy
 ## @param networkPolicy.enabled Enable NetworkPolicy
 ## @param networkPolicy.allowExternal The Policy model to apply. Don't require client label for connections
