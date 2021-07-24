@@ -160,6 +160,7 @@ data:
     
     rsConfReadWriteAttempts=0
     rs_conf_configured_ok=unknown
+
     while $rs_conf_configured_ok -ne "true"; do
       
       # give the rs setup a chance to succeed before attempting to read or configure
@@ -172,13 +173,15 @@ data:
         sleep ${SLEEP_PERIOD}
       done
       
-      # can read rs.conf so read it again and store it
+      # can read rs.conf so read it again and store it. settings format is '"<key>" : <value>,'
       currentRsConf=$(mongo ${usernameAndPassword} --eval 'rs.conf()')
+      
+      # set up desiredRsConf list based on values.replicaSetConfigurationSettings.configuration
+      # desiredRsConfList settings are a 'key:value' pair list, not an array which makes iterating and string manipulation very easy
+      
       {{ range $setting, $value := .Values.replicaSetConfigurationSettings.configuration -}}
       desiredRsConfList="{{ printf "%s:%v " $setting $value }}
       {{- end }}"
-      # desiredRsConfList settings are a 'key:value' pair list, not an array which makes iterating and string manipulation very easy
-      # json format is '"<key>" : <value>,'
       
       desiredEqualsactual=unknown
       for keyValue in "${desiredRsConfList}"; do
@@ -193,6 +196,7 @@ data:
 
     if [ ${desiredEqualsactual} -ne "false" ]; then
       logger "replicaSetConfigurationSettings match the settings of the currently running rs"
+      desiredEqualsactual=true
       rs_conf_configured_ok=true
       logger "All settings as they should be after ${rsConfReadWriteAttempts} attempts to write to mongoDB rs configuration"
       exit
