@@ -55,12 +55,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name               | Description                                                                                  | Value |
-| ------------------ | -------------------------------------------------------------------------------------------- | ----- |
-| `kubeVersion`      | Force target Kubernetes version (using Helm capabilities if not set)                         | `""`  |
-| `nameOverride`     | String to partially override common.names.fullname template (will maintain the release name) | `""`  |
-| `fullnameOverride` | String to fully override common.names.fullname template                                      | `""`  |
-| `extraDeploy`      | Array of extra objects to deploy with the release                                            | `[]`  |
+| Name                     | Description                                                                                  | Value   |
+| ------------------------ | -------------------------------------------------------------------------------------------- | ------- |
+| `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                         | `""`    |
+| `nameOverride`           | String to partially override common.names.fullname template (will maintain the release name) | `""`    |
+| `fullnameOverride`       | String to fully override common.names.fullname template                                      | `""`    |
+| `extraDeploy`            | Array of extra objects to deploy with the release                                            | `[]`    |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)      | `false` |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                         | `[]`    |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                            | `[]`    |
 
 
 ### Spark parameters
