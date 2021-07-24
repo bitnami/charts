@@ -150,14 +150,6 @@ data:
       echo "$(date -u)  replicaSetConfigurationSettings.sh -- ${1}" >&1
     }
 
-    function killAllPids ()
-    {
-      logger "killAllPids function has been called"
-      for pid in $(ps -A -o pid | grep -v PID); do
-        kill -15 $pid
-      done
-    }
-
     SLEEP_PERIOD=10
 
     {{- if and .Values.auth.enabled .Values.auth.rootPassword}}
