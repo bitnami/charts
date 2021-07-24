@@ -64,6 +64,7 @@ diagnosticMode:
 ## @param image.tag kong image tag (immutable tags are recommended)
 ## @param image.pullPolicy kong image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
+## @param image.debug Enable image debug mode
 ##
 image:
   registry: docker.io
@@ -82,6 +83,9 @@ image:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
+  ## Enable debug mode
+  ##
+  debug: false
 ## @param database Select which database backend Kong will use. Can be 'postgresql' or 'cassandra'
 ##
 database: postgresql

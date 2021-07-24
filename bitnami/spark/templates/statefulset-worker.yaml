@@ -171,8 +171,8 @@ spec:
           env:
             - name: SPARK_MODE
               value: "worker"
-            - name: BASH_DEBUG
-              value: {{ ternary "1" "0" .Values.image.debug | quote }}
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
             - name: SPARK_DAEMON_MEMORY
               value: {{ .Values.worker.daemonMemoryLimit | quote }}
             {{- if .Values.metrics.enabled }}

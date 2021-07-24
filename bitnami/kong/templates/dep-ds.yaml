@@ -96,6 +96,8 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.kong.args "context" $) | nindent 12 }}
           {{- end }}
           env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
             {{- if .Values.service.exposeAdmin }}
             - name: KONG_ADMIN_LISTEN_ADDRESS
               value: "0.0.0.0"
