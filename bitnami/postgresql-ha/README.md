@@ -354,7 +354,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `metrics.serviceMonitor.namespace`           | Optional namespace which Prometheus is running in                                                      | `""`                        |
 | `metrics.serviceMonitor.interval`            | How frequently to scrape metrics (use by default, falling back to Prometheus' default)                 | `""`                        |
 | `metrics.serviceMonitor.scrapeTimeout`       | Service monitor scrape timeout                                                                         | `""`                        |
-| `metrics.serviceMonitor.selector`            | (https://github.com/bitnami/charts/tree/master/bitnami/kube-prometheus#tldr)                           | `{}`                        |
+| `metrics.serviceMonitor.selector`            | (https://github.com/bitnami/bitnami-docker-prometheus-operator#tldr)                                   | `{}`                        |
 | `metrics.serviceMonitor.relabelings`         | ServiceMonitor relabelings. Value is evaluated as a template                                           | `[]`                        |
 | `metrics.serviceMonitor.metricRelabelings`   | ServiceMonitor metricRelabelings. Value is evaluated as a template                                     | `[]`                        |
 
