@@ -144,8 +144,6 @@ data:
     # This script to be called when pod starts.
     # This script sets rs settings which can not be applied via conf file
 
-    JSON_STRIPPER='s/\w+\([^)]+\)/null/g'
-
     function logger ()
     #$1 is the line to be logged
     {
@@ -159,17 +157,16 @@ data:
         kill -15 $pid
       done
     }
-  
+
+    SLEEP_PERIOD=10
+
     {{- if and .Values.auth.enabled .Values.auth.rootPassword}}
     usernameAndPassword="-u root -p ${MONGODB_ROOT_PASSWORD}"
     {{- else }}
     usernameAndPassword=""
     {{- end }}
-
-    SLEEP_PERIOD=10
-
     
-    RS_CONF_READ_WRITE_ATTEMPTS=0
+    rsConfReadWriteAttempts=0
     rs_conf_configured_ok=unknown
     while $rs_conf_configured_ok -ne "true"; do
       
@@ -205,6 +202,7 @@ data:
     if [ ${desiredEqualsactual} -ne "false" ]; then
       logger "replicaSetConfigurationSettings match the settings of the currently running rs"
       rs_conf_configured_ok=true
+      logger "All settings as they should be after ${rsConfReadWriteAttempts} attempts to write to mongoDB rs configuration"
       exit
     fi
 
@@ -227,7 +225,7 @@ data:
           {{ printf "cfg.settings.%s = %v; " $setting $value }}
         {{- end }}
         rs.reconfig(cfg)'
-        RS_CONF_READ_WRITE_ATTEMPTS=$((${RS_CONF_READ_WRITE_ATTEMPTS} + 1 ))
+        rsConfReadWriteAttempts=$((${rsConfReadWriteAttempts} + 1 ))
       if [ $? -ne 0 ]; then
           logger "Failed to apply mongodb cfg.settings configuration"
       else 
