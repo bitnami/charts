@@ -138,18 +138,10 @@ maxUnavailable: ""
 ## Containers Security Context
 ## @param containerSecurityContext.enabled Enable Containers' Security Context
 ## @param containerSecurityContext.runAsUser User ID for the containers.
-## @param containerSecurityContext.sysctls Set namespaced sysctls for the containers.
 ##
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
-  ## Uncomment the setting below to increase the net.core.somaxconn value
-  ## e.g:
-  ## sysctls:
-  ##   - name: net.core.somaxconn
-  ##     value: "10000"
-  ##
-  sysctls: []
 ## @param usePassword Use password authentication
 ##
 usePassword: true
