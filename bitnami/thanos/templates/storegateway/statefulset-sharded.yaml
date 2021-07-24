@@ -4,11 +4,11 @@
 {{- $hashPartioning := false }}
 {{- $timePartioning := false }}
 
-{{- if .Values.storegateway..sharded.hashPartioning.shards }}
+{{- if .Values.storegateway.sharded.hashPartioning.shards }}
   {{- $shards = int .Values.storegateway.sharded.hashPartioning.shards }}
   {{- $hashPartioning = true }}
 {{- else }}
-  {{- $shards = len .Values.storegateway..sharded.timePartioning }}
+  {{- $shards = len .Values.storegateway.sharded.timePartioning }}
   {{- $timePartioning = true }}
 {{- end }}
 
@@ -61,7 +61,7 @@ spec:
       hostAliases: {{- include "common.tplvalues.render" (dict "value" $.Values.storegateway.hostAliases "context" $) | nindent 8 }}
       {{- end }}
       {{- if $.Values.storegateway.affinity }}
-      affinity: {{- include "common.tplvalues.render" (dict "value" $.Values.storegateway.affinity "context" (set $ "shardLoopId" $index)) ) | nindent 8 }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" $.Values.storegateway.affinity "context" (set $ "shardLoopId" $index)) | nindent 8 }}
       {{- else }}
       affinity:
         podAffinity: {{- include "common.affinities.pods" (dict "type" $.Values.storegateway.podAffinityPreset "component" "storegateway" "context" $) | nindent 10 }}
