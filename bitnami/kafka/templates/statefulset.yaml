@@ -405,7 +405,7 @@ spec:
             - /etc/jmx-kafka/jmx-kafka-prometheus.yml
           ports:
             - name: metrics
-              containerPort: {{ .Values.jmx.metrics.port }}
+              containerPort: {{ .Values.metrics.jmx.port }}
           {{- if .Values.metrics.jmx.resources }}
           resources: {{- toYaml .Values.metrics.jmx.resources | nindent 12 }}
           {{- end }}
