@@ -169,10 +169,11 @@ data:
       counter=0
       while ! mongo ${usernameAndPassword} --eval 'rs.conf()'; do
         counter=$((${counter} +1))
-        logger "not yet able to read rs.conf settings from the currently running rs. Tried ${counter} times."
+        logger "not yet able to read rs.conf settings from the currently running rs (after ${counter} attempts)"
         sleep ${SLEEP_PERIOD}
       done
       
+      logger "rs.conf settings have been read from the currently running rs (after ${counter} attempts)"
       # can read rs.conf so read it again and store it. settings format is '"<key>" : <value>,'
       currentRsConf=$(mongo ${usernameAndPassword} --eval 'rs.conf()')
       
