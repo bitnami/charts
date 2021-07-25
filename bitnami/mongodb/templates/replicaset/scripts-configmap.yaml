@@ -161,7 +161,7 @@ data:
     rsConfReadWriteAttempts=0
     rs_conf_configured_ok=unknown
 
-    while $rs_conf_configured_ok -ne "true"; do
+    while [ ${rs_conf_configured_ok} -ne "true" ]; do
       
       # give the rs setup a chance to succeed before attempting to read or configure
       sleep ${SLEEP_PERIOD}
