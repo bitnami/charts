@@ -223,7 +223,7 @@ podSecurityContext:
   ##   - name: net.core.somaxconn
   ##     value: "10000"
   ##
-  sysctls: {}
+  sysctls: []
 ## Configure Container Security Context (only main container)
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled Enabled ASP.NET Core containers' Security Context
