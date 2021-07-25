@@ -161,7 +161,7 @@ data:
     rsConfReadWriteAttempts=0
     rs_conf_configured_ok=unknown
 
-    while [[ "${rs_conf_configured_ok}" -ne "true" ]]; do
+    while [[ "${rs_conf_configured_ok}" != "true" ]]; do
       
       # give the rs setup a chance to succeed before attempting to read or configure
       sleep ${SLEEP_PERIOD}
@@ -198,7 +198,7 @@ data:
         fi
       done
 
-      if [[ "${desiredEqualsactual}" -ne "false" ]]; then
+      if [[ "${desiredEqualsactual}" != "false" ]]; then
         logger "replicaSetConfigurationSettings match the settings of the currently running rs"
         desiredEqualsactual=true
         rs_conf_configured_ok=true
@@ -217,7 +217,7 @@ data:
         logger "This node is PRIMARY"
       fi
 
-      if [[ "${isMaster}" -eq "true" ]]; then
+      if [[ "${isMaster}" == "true" ]]; then
         logger "This node is currently PRIMARY - will apply rs.conf settings"
 
         mongo ${usernameAndPassword} --eval 'cfg = rs.conf();
