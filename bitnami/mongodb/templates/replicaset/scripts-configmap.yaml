@@ -187,14 +187,14 @@ data:
       "
       
       desiredEqualsactual=unknown
-      for keyValue in "${desiredRsConfList}"; do
+      for keyValue in ${desiredRsConfList}; do
         key=$(echo "${keyValue}" | awk -F: '{print $1}')
         value=$(echo "${keyValue}" | awk -F: '{print $2}' | sed -E 's/[[:space:]]*$//')
         if ! $(echo "\"${currentRsConf}"\" | grep -q -e "\"${key}\" : ${value},"); then
            logger "current rs conf setting: ${key} value will be changed to: ${value}"
            desiredEqualsactual=false
         else 
-          echo "current rs conf: ${key} is already at desired value: ${value}"
+          logger "current rs conf: ${key} is already at desired value: ${value}"
         fi
       done
 
@@ -209,7 +209,7 @@ data:
       # apply the settings only if this member is currently the mongo replicaset PRIMARY
       # It might take a little time before any pod is PRIMARY
       isMaster=unknown
-      if ! mongo ${usernameAndPassword} --eval 'rs.isMaster()' | grep "ismaster\" : true"; then
+      if ! mongo ${usernameAndPassword} --eval 'rs.isMaster()' | grep -q "ismaster\" : true"; then
         isMaster=false
         logger "This node is not yet PRIMARY - replicaSetConfigurationSettings will only be set on the member that is currently PRIMARY"
       else
