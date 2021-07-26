@@ -388,6 +388,12 @@ It is strongly recommended to use immutable tags in a production environment. Th
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
 ### Datadog Autodiscovery Integration
+
+The code below will help expose an additional port (5557 in this case) within your pods.  Metrics were unable to be collected with the default, exposed port.  
+
+With the additional `podAnnotations`, Datadog will now be able to properly discover the pods and begin gathering metrics.
+
+For more information about Datadog Autodiscovery with JMX, click [here](https://docs.datadoghq.com/agent/guide/autodiscovery-with-jmx/?tab=containeragent).
 ```yaml
 # Kafka Values
 extraEnvVars:
