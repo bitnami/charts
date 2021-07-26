@@ -173,17 +173,17 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.livenessProbe.httpGet.path`          | Request path for livenessProbe                                                                                       | `/metrics`                  |
 | `metrics.livenessProbe.httpGet.port`          | Port for livenessProbe                                                                                               | `metrics`                   |
 | `metrics.livenessProbe.initialDelaySeconds`   | Initial delay seconds for livenessProbe                                                                              | `60`                        |
-| `metrics.livenessProbe.periodSeconds`         | Period seconds for readinessProbe                                                                                    | `""`                        |
-| `metrics.livenessProbe.timeoutSeconds`        | Timeout seconds for readinessProbe                                                                                   | `""`                        |
-| `metrics.livenessProbe.failureThreshold`      | Failure threshold for readinessProbe                                                                                 | `""`                        |
-| `metrics.livenessProbe.successThreshold`      | Success threshold for readinessProbe                                                                                 | `""`                        |
+| `metrics.livenessProbe.periodSeconds`         | Period seconds for readinessProbe                                                                                    | `10`                        |
+| `metrics.livenessProbe.timeoutSeconds`        | Timeout seconds for readinessProbe                                                                                   | `5`                         |
+| `metrics.livenessProbe.failureThreshold`      | Failure threshold for readinessProbe                                                                                 | `6`                         |
+| `metrics.livenessProbe.successThreshold`      | Success threshold for readinessProbe                                                                                 | `1`                         |
 | `metrics.readinessProbe.httpGet.path`         | Request path for readinessProbe                                                                                      | `/metrics`                  |
 | `metrics.readinessProbe.httpGet.port`         | Port for readinessProbe                                                                                              | `metrics`                   |
 | `metrics.readinessProbe.initialDelaySeconds`  | Initial delay seconds for readinessProbe                                                                             | `60`                        |
-| `metrics.readinessProbe.periodSeconds`        | Period seconds for readinessProbe                                                                                    | `""`                        |
-| `metrics.readinessProbe.timeoutSeconds`       | Timeout seconds for readinessProbe                                                                                   | `""`                        |
-| `metrics.readinessProbe.failureThreshold`     | Failure threshold for readinessProbe                                                                                 | `""`                        |
-| `metrics.readinessProbe.successThreshold`     | Success threshold for readinessProbe                                                                                 | `""`                        |
+| `metrics.readinessProbe.periodSeconds`        | Period seconds for readinessProbe                                                                                    | `10`                        |
+| `metrics.readinessProbe.timeoutSeconds`       | Timeout seconds for readinessProbe                                                                                   | `5`                         |
+| `metrics.readinessProbe.failureThreshold`     | Failure threshold for readinessProbe                                                                                 | `6`                         |
+| `metrics.readinessProbe.successThreshold`     | Success threshold for readinessProbe                                                                                 | `1`                         |
 | `metrics.service.type`                        | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)                                                  | `ClusterIP`                 |
 | `metrics.service.port`                        | Logstash Prometheus port                                                                                             | `9198`                      |
 | `metrics.service.nodePort`                    | Kubernetes HTTP node port                                                                                            | `""`                        |
