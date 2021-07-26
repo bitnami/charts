@@ -267,10 +267,10 @@ livenessProbe:
     path: /
     port: monitoring
   initialDelaySeconds: 60
-  periodSeconds: ""
-  timeoutSeconds: ""
-  successThreshold: ""
-  failureThreshold: ""
+  periodSeconds: 10
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 6
 ## Logstash pods' readiness probe
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param readinessProbe.httpGet.path Request path for readinessProbe
@@ -286,10 +286,10 @@ readinessProbe:
     path: /
     port: monitoring
   initialDelaySeconds: 60
-  periodSeconds: ""
-  timeoutSeconds: ""
-  successThreshold: ""
-  failureThreshold: ""
+  periodSeconds: 10
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 6
 ## @param lifecycle Logstash pods' lifecycle hooks
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/
 ## e.g:
