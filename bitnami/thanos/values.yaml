@@ -1854,12 +1854,12 @@ storegateway:
   ##
   sharded:
     enabled: false
-    hashPartioning: 
+    hashPartioning:
       shards: ""
     timePartioning:
       - min: ""
         max: ""
-    
+
 ## @section Thanos Ruler parameters
 
 ruler:
