@@ -1134,6 +1134,7 @@ metrics:
   ##
   extraVolumes: []
   ## @param metrics.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Redis(TM) metrics sidecar
+  ##
   extraVolumeMounts: []
   ## Redis(TM) exporter resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/

@@ -290,10 +290,8 @@ spec:
               mountPath: /opt/bitnami/redis/certs
               readOnly: true
             {{- end }}
-            {{- if .Values.metrics.extraArgs.script }}
-            - name: {{ printf "%s-metrics-script-file" (include "common.names.fullname" .) }}
-              mountPath: {{ printf "/mnt/%s/" (include "common.names.name" .) }}
-              readOnly: true
+            {{- if .Values.metrics.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.extraVolumeMounts "context" $ ) | nindent 12 }}
             {{- end }}
         {{- end }}
         {{- if .Values.master.sidecars }}
