@@ -183,9 +183,7 @@ data:
       logger "rs.conf settings have been read from the currently running rs (after ${counter} attempts)"
       # can read rs.conf so read it again and store it. settings format is '"<key>" : <value>,'
       currentRsConf=$(mongo ${usernameAndPassword} --eval 'rs.conf()')
-      
-      
-      
+
       desiredEqualsactual=unknown
       settingsToConfigure=""
       for key in ${!desiredRsConf[@]}; do
