@@ -1,8 +1,9 @@
-{{- if not .Values.existingSecret }}
+{{- if .Values.customPostInitScripts }}
 apiVersion: v1
-kind: Secret
+kind: ConfigMap
 metadata:
-  name: {{ include "common.names.fullname" . }}
+  name: {{ printf "%s-postinit" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -10,14 +11,8 @@ metadata:
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
-type: Opaque
 data:
-  {{- if .Values.suitecrmPassword }}
-  suitecrm-password: {{ default "" .Values.suitecrmPassword | b64enc | quote }}
-  {{- else }}
-  suitecrm-password: {{ randAlphaNum 10 | b64enc | quote }}
-  {{- end }}
-  {{- if .Values.suitecrmSmtpPassword }}
-  suitecrm-smtp-password: {{ .Values.suitecrmSmtpPassword | b64enc | quote }}
+  {{- if .Values.customPostInitScripts }}
+  {{- include "common.tplvalues.render" (dict "value" .Values.customPostInitScripts "context" $) | nindent 2 }}
   {{- end }}
 {{- end }}

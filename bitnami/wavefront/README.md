@@ -60,9 +60,9 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `nil` |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
 
 ### Common parameters
@@ -81,11 +81,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `clusterName`              | This is a unique name for the cluster (required)                                                                                     | `KUBERNETES_CLUSTER_NAME`            |
 | `wavefront.url`            | Wavefront URL for your cluster (required)                                                                                            | `https://YOUR_CLUSTER.wavefront.com` |
 | `wavefront.token`          | Wavefront API Token (required)                                                                                                       | `YOUR_API_TOKEN`                     |
-| `wavefront.existingSecret` | Name of an existing secret containing the token                                                                                      | `nil`                                |
+| `wavefront.existingSecret` | Name of an existing secret containing the token                                                                                      | `""`                                 |
 | `podSecurityPolicy.create` | Specifies whether PodSecurityPolicy resources should be created                                                                      | `false`                              |
 | `rbac.create`              | Specifies whether RBAC resources should be created                                                                                   | `true`                               |
 | `serviceAccount.create`    | Create Wavefront service account                                                                                                     | `true`                               |
-| `serviceAccount.name`      | Name of Wavefront service account                                                                                                    | `nil`                                |
+| `serviceAccount.name`      | Name of Wavefront service account                                                                                                    | `""`                                 |
 | `projectPacific.enabled`   | Enable and create role binding for Tanzu Kubernetes cluster                                                                          | `false`                              |
 | `tkgi.enabled`             | Properties for TKGI environments. If enabled, a role binding to handle pod security policy will be installed within the TKGI cluster | `false`                              |
 
@@ -102,17 +102,17 @@ The command removes all the Kubernetes components associated with the chart and 
 | `collector.image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                        | `[]`                                     |
 | `collector.hostAliases`                           | Deployment pod host aliases                                                                                             | `[]`                                     |
 | `collector.useDaemonset`                          | Use Wavefront collector in Daemonset mode                                                                               | `true`                                   |
-| `collector.usePKSPrefix`                          | If installing into a TKGi/PKS environment, set this to true. Prefixes metrics with 'pks.kubernetes.'                    | `nil`                                    |
-| `collector.maxProcs`                              | Maximum number of CPUs that can be used simultaneously                                                                  | `nil`                                    |
-| `collector.logLevel`                              | Log level. Allowed values: `info`, `debug` or `trace`                                                                   | `nil`                                    |
-| `collector.interval`                              | Default metrics collection interval                                                                                     | `nil`                                    |
-| `collector.flushInterval`                         | How often to force a metrics flush                                                                                      | `nil`                                    |
-| `collector.sinkDelay`                             | Timeout for exporting data                                                                                              | `nil`                                    |
-| `collector.useReadOnlyPort`                       | Use un-authenticated port for kubelet                                                                                   | `nil`                                    |
+| `collector.usePKSPrefix`                          | If installing into a TKGi/PKS environment, set this to true. Prefixes metrics with 'pks.kubernetes.'                    | `false`                                  |
+| `collector.maxProcs`                              | Maximum number of CPUs that can be used simultaneously                                                                  | `""`                                     |
+| `collector.logLevel`                              | Log level. Allowed values: `info`, `debug` or `trace`                                                                   | `""`                                     |
+| `collector.interval`                              | Default metrics collection interval                                                                                     | `""`                                     |
+| `collector.flushInterval`                         | How often to force a metrics flush                                                                                      | `""`                                     |
+| `collector.sinkDelay`                             | Timeout for exporting data                                                                                              | `""`                                     |
+| `collector.useReadOnlyPort`                       | Use un-authenticated port for kubelet                                                                                   | `false`                                  |
 | `collector.useProxy`                              | Use a Wavefront Proxy to send metrics through                                                                           | `true`                                   |
-| `collector.proxyAddress`                          | Can be used to specify a specific address for the Wavefront Proxy                                                       | `nil`                                    |
+| `collector.proxyAddress`                          | Can be used to specify a specific address for the Wavefront Proxy                                                       | `""`                                     |
 | `collector.kubernetesState`                       | Collect metrics about Kubernetes resource states                                                                        | `true`                                   |
-| `collector.apiServerMetrics`                      | Collect metrics about Kubernetes API server                                                                             | `nil`                                    |
+| `collector.apiServerMetrics`                      | Collect metrics about Kubernetes API server                                                                             | `false`                                  |
 | `collector.tags`                                  | Map of tags to apply to all metrics collected by the collector                                                          | `{}`                                     |
 | `collector.hostOSMetrics`                         | If set to true, host OS metrics will be collected                                                                       | `false`                                  |
 | `collector.filters.metricDenyList`                | Optimized metrics collection to omit peripheral metrics.                                                                | `[]`                                     |
@@ -122,7 +122,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `collector.discovery.annotationPrefix`            | When specified, this replaces `prometheus.io` as the prefix for annotations used to auto-discover Prometheus endpoints  | `""`                                     |
 | `collector.discovery.enableRuntimeConfigs`        | Whether to enable runtime discovery configurations                                                                      | `true`                                   |
 | `collector.discovery.config`                      | Configuration for rules based auto-discovery                                                                            | `[]`                                     |
-| `collector.existingConfigmap`                     | Name of existing ConfigMap with collector configuration                                                                 | `nil`                                    |
+| `collector.existingConfigmap`                     | Name of existing ConfigMap with collector configuration                                                                 | `""`                                     |
 | `collector.command`                               | Override default container command (useful when using custom images)                                                    | `[]`                                     |
 | `collector.args`                                  | Override default container args (useful when using custom images)                                                       | `[]`                                     |
 | `collector.resources.limits`                      | The resources limits for the collector container                                                                        | `{}`                                     |
@@ -148,12 +148,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `collector.customReadinessProbe`                  | Override default readiness probe                                                                                        | `{}`                                     |
 | `collector.updateStrategy.type`                   | Update strategy - only really applicable for deployments with RWO PVs attached                                          | `RollingUpdate`                          |
 | `collector.extraEnvVars`                          | Extra environment variables to be set on collector container                                                            | `[]`                                     |
-| `collector.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra environment variables                                                       | `nil`                                    |
-| `collector.extraEnvVarsSecret`                    | Name of existing Secret containing extra environment variables                                                          | `nil`                                    |
+| `collector.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra environment variables                                                       | `""`                                     |
+| `collector.extraEnvVarsSecret`                    | Name of existing Secret containing extra environment variables                                                          | `""`                                     |
 | `collector.extraVolumes`                          | Optionally specify extra list of additional volumes for collector container                                             | `[]`                                     |
 | `collector.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for collector container                                        | `[]`                                     |
-| `collector.initContainers`                        | Add init containers to the Wavefront proxy pods                                                                         | `{}`                                     |
-| `collector.sidecars`                              | Add sidecars to the Wavefront proxy pods                                                                                | `{}`                                     |
+| `collector.initContainers`                        | Add init containers to the Wavefront proxy pods                                                                         | `[]`                                     |
+| `collector.sidecars`                              | Add sidecars to the Wavefront proxy pods                                                                                | `[]`                                     |
 
 
 ### Proxy parameters
@@ -202,31 +202,31 @@ The command removes all the Kubernetes components associated with the chart and 
 | `proxy.customReadinessProbe`                  | Override default readiness probe                                                                                                        | `{}`                      |
 | `proxy.updateStrategy.type`                   | Update strategy - only really applicable for deployments with RWO PVs attached                                                          | `RollingUpdate`           |
 | `proxy.extraEnvVars`                          | Extra environment variables to be set on proxy container                                                                                | `[]`                      |
-| `proxy.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra environment variables                                                                       | `nil`                     |
-| `proxy.extraEnvVarsSecret`                    | Name of existing Secret containing extra environment variables                                                                          | `nil`                     |
+| `proxy.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra environment variables                                                                       | `""`                      |
+| `proxy.extraEnvVarsSecret`                    | Name of existing Secret containing extra environment variables                                                                          | `""`                      |
 | `proxy.extraVolumes`                          | Optionally specify extra list of additional volumes for proxy container                                                                 | `[]`                      |
 | `proxy.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for proxy container                                                            | `[]`                      |
-| `proxy.initContainers`                        | Add init containers to the Wavefront proxy pods                                                                                         | `{}`                      |
-| `proxy.sidecars`                              | Add sidecars to the Wavefront proxy pods                                                                                                | `{}`                      |
+| `proxy.initContainers`                        | Add init containers to the Wavefront proxy pods                                                                                         | `[]`                      |
+| `proxy.sidecars`                              | Add sidecars to the Wavefront proxy pods                                                                                                | `[]`                      |
 | `proxy.replicas`                              | Replicas to deploy for Wavefront proxy (usually 1)                                                                                      | `1`                       |
 | `proxy.port`                                  | The port number the proxy will listen on for metrics in Wavefront data format                                                           | `2878`                    |
-| `proxy.tracePort`                             | The port number the proxy will listen on for tracing spans in Wavefront trace data format (usually 30000)                               | `nil`                     |
-| `proxy.jaegerPort`                            | The port number the proxy will listen on for tracing spans in Jaeger data format (usually 30001)                                        | `nil`                     |
-| `proxy.traceJaegerHttpListenerPort`           | TCP ports to receive Jaeger Thrift formatted data via HTTP. The data is then sent to Wavefront in Wavefront span format (usually 30080) | `nil`                     |
-| `proxy.traceJaegerGrpcListenerPort`           | TCP ports to receive Jaeger GRPC formatted data via HTTP (usually 14250)                                                                | `nil`                     |
-| `proxy.zipkinPort`                            | The port number the proxy will listen on for tracing spans in Zipkin data format (usually 9411)                                         | `nil`                     |
-| `proxy.traceSamplingRate`                     | Sampling rate to apply to tracing spans sent to the proxy                                                                               | `nil`                     |
-| `proxy.traceSamplingDuration`                 | When set to greater than 0, spans that exceed this duration will force trace to be sampled (ms)                                         | `nil`                     |
-| `proxy.traceJaegerApplicationName`            | Custom application name for traces received on Jaeger's traceJaegerListenerPorts or traceJaegerHttpListenerPorts.                       | `nil`                     |
-| `proxy.traceZipkinApplicationName`            | Custom application name for traces received on Zipkin's traceZipkinListenerPorts.                                                       | `nil`                     |
-| `proxy.histogramPort`                         | Port for histogram distribution format data (usually 40000)                                                                             | `nil`                     |
-| `proxy.histogramMinutePort`                   | Port to accumulate 1-minute based histograms on Wavefront data format (usually 40001)                                                   | `nil`                     |
-| `proxy.histogramHourPort`                     | Port to accumulate 1-hour based histograms on Wavefront data format (usually 40002)                                                     | `nil`                     |
-| `proxy.histogramDayPort`                      | Port to accumulate 1-day based histograms on Wavefront data format (usually 40003)                                                      | `nil`                     |
-| `proxy.deltaCounterPort`                      | Port to accumulate 1-minute delta counters on Wavefront data format (usually 50000)                                                     | `nil`                     |
-| `proxy.args`                                  | Any configuration property can be passed to the proxy via command line args in the format: `--<property_name> <value>`                  | `nil`                     |
-| `proxy.heap`                                  | Wavefront proxy Java heap maximum usage (java -Xmx command line option)                                                                 | `nil`                     |
-| `proxy.existingConfigmap`                     | Name of existing ConfigMap with Proxy preprocessor configuration                                                                        | `nil`                     |
+| `proxy.tracePort`                             | The port number the proxy will listen on for tracing spans in Wavefront trace data format (usually 30000)                               | `""`                      |
+| `proxy.jaegerPort`                            | The port number the proxy will listen on for tracing spans in Jaeger data format (usually 30001)                                        | `""`                      |
+| `proxy.traceJaegerHttpListenerPort`           | TCP ports to receive Jaeger Thrift formatted data via HTTP. The data is then sent to Wavefront in Wavefront span format (usually 30080) | `""`                      |
+| `proxy.traceJaegerGrpcListenerPort`           | TCP ports to receive Jaeger GRPC formatted data via HTTP (usually 14250)                                                                | `""`                      |
+| `proxy.zipkinPort`                            | The port number the proxy will listen on for tracing spans in Zipkin data format (usually 9411)                                         | `""`                      |
+| `proxy.traceSamplingRate`                     | Sampling rate to apply to tracing spans sent to the proxy                                                                               | `""`                      |
+| `proxy.traceSamplingDuration`                 | When set to greater than 0, spans that exceed this duration will force trace to be sampled (ms)                                         | `""`                      |
+| `proxy.traceJaegerApplicationName`            | Custom application name for traces received on Jaeger's traceJaegerListenerPorts or traceJaegerHttpListenerPorts.                       | `""`                      |
+| `proxy.traceZipkinApplicationName`            | Custom application name for traces received on Zipkin's traceZipkinListenerPorts.                                                       | `""`                      |
+| `proxy.histogramPort`                         | Port for histogram distribution format data (usually 40000)                                                                             | `""`                      |
+| `proxy.histogramMinutePort`                   | Port to accumulate 1-minute based histograms on Wavefront data format (usually 40001)                                                   | `""`                      |
+| `proxy.histogramHourPort`                     | Port to accumulate 1-hour based histograms on Wavefront data format (usually 40002)                                                     | `""`                      |
+| `proxy.histogramDayPort`                      | Port to accumulate 1-day based histograms on Wavefront data format (usually 40003)                                                      | `""`                      |
+| `proxy.deltaCounterPort`                      | Port to accumulate 1-minute delta counters on Wavefront data format (usually 50000)                                                     | `""`                      |
+| `proxy.args`                                  | Any configuration property can be passed to the proxy via command line args in the format: `--<property_name> <value>`                  | `""`                      |
+| `proxy.heap`                                  | Wavefront proxy Java heap maximum usage (java -Xmx command line option)                                                                 | `""`                      |
+| `proxy.existingConfigmap`                     | Name of existing ConfigMap with Proxy preprocessor configuration                                                                        | `""`                      |
 | `proxy.preprocessor`                          | Preprocessor rules is a powerful way to apply filtering or to enhance metrics as they flow                                              | `{}`                      |
 
 

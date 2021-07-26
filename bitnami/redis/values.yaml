@@ -10,28 +10,28 @@
 ## @param global.redis.password Global Redis(TM) password (overrides `auth.password`)
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
   redis:
-    password:
+    password: ""
 
 ## @section Common parameters
 ##
 
 ## @param kubeVersion Override Kubernetes version
 ##
-kubeVersion:
+kubeVersion: ""
 ## @param nameOverride String to partially override common.names.fullname
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param commonLabels Labels to add to all deployed objects
 ##
 commonLabels: {}
@@ -75,7 +75,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/redis
-  tag: 6.2.4-debian-10-r13
+  tag: 6.2.5-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -117,11 +117,11 @@ auth:
   ## @param auth.existingSecret The name of an existing secret with Redis(TM) credentials
   ## NOTE: When it's set, the previous `auth.password` parameter is ignored
   ##
-  existingSecret:
+  existingSecret: ""
   ## @param auth.existingSecretPasswordKey Password key to be retrieved from existing secret
   ## NOTE: ignored unless `auth.existingSecret` parameter is set
   ##
-  existingSecretPasswordKey:
+  existingSecretPasswordKey: ""
   ## @param auth.usePasswordFiles Mount credentials as files instead of using an environment variable
   ##
   usePasswordFiles: false
@@ -135,7 +135,7 @@ commonConfiguration: |-
   save ""
 ## @param existingConfigmap The name of an existing ConfigMap with your custom configuration for Redis(TM) nodes
 ##
-existingConfigmap:
+existingConfigmap: ""
 
 ## @section Redis(TM) master configuration parameters
 ##
@@ -144,7 +144,7 @@ master:
   ## @param master.configuration Configuration for Redis(TM) master nodes
   ## ref: https://redis.io/topics/config
   ##
-  configuration:
+  configuration: ""
   ## @param master.disableCommands [array] Array with Redis(TM) commands to disable on master nodes
   ## Commands will be completely disabled by renaming each to an empty string.
   ## ref: https://redis.io/topics/security#disabling-of-specific-commands
@@ -177,10 +177,10 @@ master:
   extraEnvVars: []
   ## @param master.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Redis(TM) master nodes
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param master.extraEnvVarsSecret Name of existing Secret containing extra env vars for Redis(TM) master nodes
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param master.containerPort Container port to open on Redis(TM) master nodes
   ##
   containerPort: 6379
@@ -247,7 +247,7 @@ master:
   ## @param master.schedulerName Alternate scheduler for Redis(TM) master pods
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
-  schedulerName:
+  schedulerName: ""
   ## @param master.updateStrategy.type Redis(TM) master statefulset strategy type
   ## @skip master.updateStrategy.rollingUpdate
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
@@ -343,7 +343,7 @@ master:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## @param master.initContainers Add additional init containers to the Redis(TM) master pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
@@ -353,7 +353,7 @@ master:
   ##    imagePullPolicy: Always
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
-  initContainers: {}
+  initContainers: []
   ## Persistence parameters
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
@@ -374,7 +374,7 @@ master:
     ## If set to "-", storageClassName: "", which disables dynamic provisioning
     ## If undefined (the default) or set to null, no storageClassName spec is set, choosing the default provisioner
     ##
-    storageClass:
+    storageClass: ""
     ## @param master.persistence.accessModes [array] Persistent Volume access modes
     ##
     accessModes:
@@ -395,7 +395,7 @@ master:
     ## @param master.persistence.existingClaim Use a existing PVC which must be created manually before bound
     ## NOTE: requires master.persistence.enabled: true
     ##
-    existingClaim:
+    existingClaim: ""
   ## Redis(TM) master service parameters
   ##
   service:
@@ -409,18 +409,18 @@ master:
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ## NOTE: choose port between <30000-32767>
     ##
-    nodePort:
+    nodePort: ""
     ## @param master.service.externalTrafficPolicy Redis(TM) master service external traffic policy
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
     ## @param master.service.clusterIP Redis(TM) master service Cluster IP
     ##
-    clusterIP:
+    clusterIP: ""
     ## @param master.service.loadBalancerIP Redis(TM) master service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
-    loadBalancerIP:
+    loadBalancerIP: ""
     ## @param master.service.loadBalancerSourceRanges Redis(TM) master service Load Balancer sources
     ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g.
@@ -445,7 +445,7 @@ replica:
   ## @param replica.configuration Configuration for Redis(TM) replicas nodes
   ## ref: https://redis.io/topics/config
   ##
-  configuration:
+  configuration: ""
   ## @param replica.disableCommands [array] Array with Redis(TM) commands to disable on replicas nodes
   ## Commands will be completely disabled by renaming each to an empty string.
   ## ref: https://redis.io/topics/security#disabling-of-specific-commands
@@ -478,10 +478,10 @@ replica:
   extraEnvVars: []
   ## @param replica.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Redis(TM) replicas nodes
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param replica.extraEnvVarsSecret Name of existing Secret containing extra env vars for Redis(TM) replicas nodes
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param replica.containerPort Container port to open on Redis(TM) replicas nodes
   ##
   containerPort: 6379
@@ -556,7 +556,7 @@ replica:
   ## @param replica.schedulerName Alternate scheduler for Redis(TM) replicas pods
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
-  schedulerName:
+  schedulerName: ""
   ## @param replica.updateStrategy.type Redis(TM) replicas statefulset strategy type
   ## @skip replica.updateStrategy.rollingUpdate
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
@@ -652,7 +652,7 @@ replica:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## @param replica.initContainers Add additional init containers to the Redis(TM) replicas pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
@@ -662,7 +662,7 @@ replica:
   ##    imagePullPolicy: Always
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
-  initContainers: {}
+  initContainers: []
   ## Persistence Parameters
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
@@ -683,7 +683,7 @@ replica:
     ## If set to "-", storageClassName: "", which disables dynamic provisioning
     ## If undefined (the default) or set to null, no storageClassName spec is set, choosing the default provisioner
     ##
-    storageClass:
+    storageClass: ""
     ## @param replica.persistence.accessModes [array] Persistent Volume access modes
     ##
     accessModes:
@@ -714,18 +714,18 @@ replica:
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ## NOTE: choose port between <30000-32767>
     ##
-    nodePort:
+    nodePort: ""
     ## @param replica.service.externalTrafficPolicy Redis(TM) replicas service external traffic policy
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
     ## @param replica.service.clusterIP Redis(TM) replicas service Cluster IP
     ##
-    clusterIP:
+    clusterIP: ""
     ## @param replica.service.loadBalancerIP Redis(TM) replicas service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
-    loadBalancerIP:
+    loadBalancerIP: ""
     ## @param replica.service.loadBalancerSourceRanges Redis(TM) replicas service Load Balancer sources
     ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g.
@@ -753,10 +753,10 @@ replica:
     maxReplicas: 11
     ## @param replica.autoscaling.targetCPU Percentage of CPU to consider when autoscaling
     ##
-    targetCPU:
+    targetCPU: ""
     ## @param replica.autoscaling.targetMemory Percentage of Memory to consider when autoscaling
     ##
-    targetMemory:
+    targetMemory: ""
 
 ## @section Redis(TM) Sentinel configuration parameters
 ##
@@ -779,7 +779,7 @@ sentinel:
   image:
     registry: docker.io
     repository: bitnami/redis-sentinel
-    tag: 6.2.4-debian-10-r14
+    tag: 6.2.5-debian-10-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -806,7 +806,7 @@ sentinel:
   ## @param sentinel.downAfterMilliseconds Timeout for detecting a Redis(TM) node is down
   ## @param sentinel.failoverTimeout Timeout for performing a election failover
   ## @param sentinel.cleanDelaySeconds Delay seconds when cleaning nodes IPs
-  #
+  ##
   downAfterMilliseconds: 60000
   failoverTimeout: 18000
   cleanDelaySeconds: 5
@@ -821,7 +821,7 @@ sentinel:
   ## @param sentinel.configuration Configuration for Redis(TM) Sentinel nodes
   ## ref: https://redis.io/topics/sentinel
   ##
-  configuration:
+  configuration: ""
   ## @param sentinel.command Override default container command (useful when using custom images)
   ##
   command: []
@@ -913,19 +913,19 @@ sentinel:
     ## NOTE: choose port between <30000-32767>
     ##
     nodePorts:
-      redis:
-      sentinel:
+      redis: ""
+      sentinel: ""
     ## @param sentinel.service.externalTrafficPolicy Redis(TM) Sentinel service external traffic policy
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
     ## @param sentinel.service.clusterIP Redis(TM) Sentinel service Cluster IP
     ##
-    clusterIP:
+    clusterIP: ""
     ## @param sentinel.service.loadBalancerIP Redis(TM) Sentinel service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
-    loadBalancerIP:
+    loadBalancerIP: ""
     ## @param sentinel.service.loadBalancerSourceRanges Redis(TM) Sentinel service Load Balancer sources
     ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g.
@@ -1052,7 +1052,7 @@ pdb:
   minAvailable: 1
   ## @param pdb.maxUnavailable Max number of pods that can be unavailable after the eviction
   ##
-  maxUnavailable:
+  maxUnavailable: ""
 ## TLS configuration
 ##
 tls:
@@ -1067,22 +1067,22 @@ tls:
   autoGenerated: false
   ## @param tls.existingSecret The name of the existing secret that contains the TLS certificates
   ##
-  existingSecret:
+  existingSecret: ""
   ## @param tls.certificatesSecret DEPRECATED. Use existingSecret instead.
   ##
-  certificatesSecret:
+  certificatesSecret: ""
   ## @param tls.certFilename Certificate filename
   ##
-  certFilename:
+  certFilename: ""
   ## @param tls.certKeyFilename Certificate Key filename
   ##
-  certKeyFilename:
+  certKeyFilename: ""
   ## @param tls.certCAFilename CA Certificate filename
   ##
-  certCAFilename:
+  certCAFilename: ""
   ## @param tls.dhParamsFilename File containing DH params (in order to support DH based ciphers)
   ##
-  dhParamsFilename:
+  dhParamsFilename: ""
 
 ## @section Metrics Parameters
 ##
@@ -1102,7 +1102,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/redis-exporter
-    tag: 1.24.0-debian-10-r9
+    tag: 1.24.0-debian-10-r36
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1185,13 +1185,13 @@ metrics:
     enabled: false
     ## @param metrics.serviceMonitor.namespace The namespace in which the ServiceMonitor will be created
     ##
-    namespace:
+    namespace: ""
     ## @param metrics.serviceMonitor.interval The interval at which metrics should be scraped
     ##
     interval: 30s
     ## @param metrics.serviceMonitor.scrapeTimeout The timeout after which the scrape is ended
     ##
-    scrapeTimeout:
+    scrapeTimeout: ""
     ## @param metrics.serviceMonitor.relabellings Metrics relabellings to add to the scrape endpoint
     ##
     relabellings: []
@@ -1210,7 +1210,7 @@ metrics:
     enabled: false
     ## @param metrics.prometheusRule.namespace The namespace in which the prometheusRule will be created
     ##
-    namespace:
+    namespace: ""
     ## @param metrics.prometheusRule.additionalLabels Additional labels for the prometheusRule
     ##
     additionalLabels: {}
@@ -1273,7 +1273,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r112
+    tag: 10-debian-10-r139
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1319,7 +1319,7 @@ sysctl:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r112
+    tag: 10-debian-10-r139
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

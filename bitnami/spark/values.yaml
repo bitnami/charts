@@ -7,7 +7,7 @@
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
@@ -18,13 +18,13 @@ global:
 
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
-kubeVersion:
+kubeVersion: ""
 ## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname template
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
@@ -73,7 +73,7 @@ hostNetwork: false
 master:
   ## @param master.configurationConfigMap Set a custom configuration by using an existing configMap with the configuration file.
   ##
-  configurationConfigMap:
+  configurationConfigMap: ""
   ## @param master.webPort Specify the port where the web interface will listen on the master
   ##
   webPort: 8080
@@ -86,17 +86,17 @@ master:
   hostAliases: []
   ## @param master.daemonMemoryLimit Set the memory limit for the master daemon
   ##
-  daemonMemoryLimit:
+  daemonMemoryLimit: ""
   ## @param master.configOptions Use a string to set the config options for in the form "-Dx=y"
   ##
-  configOptions:
+  configOptions: ""
   ## @param master.extraEnvVars Extra environment variables to pass to the master container
   ## For example:
   ## extraEnvVars:
   ##  - name: SPARK_DAEMON_JAVA_OPTS
   ##    value: -Dx=y
   ##
-  extraEnvVars:
+  extraEnvVars: []
   ## Kubernetes Security Context
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param master.securityContext.enabled Enable security context
@@ -120,7 +120,7 @@ master:
   ## @param master.podAffinityPreset Spark master pod affinity preset. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
-  podAffinityPreset: ''
+  podAffinityPreset: ""
   ## @param master.podAntiAffinityPreset Spark master pod anti-affinity preset. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
@@ -131,12 +131,12 @@ master:
   nodeAffinityPreset:
     ## @param master.nodeAffinityPreset.type Spark master node affinity preset type. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard`
     ##
-    type: ''
+    type: ""
     ## @param master.nodeAffinityPreset.key Spark master node label key to match Ignored if `master.affinity` is set.
     ## E.g.
     ## key: "kubernetes.io/e2e-az-name"
     ##
-    key: ''
+    key: ""
     ## @param master.nodeAffinityPreset.values Spark master node label values to match. Ignored if `master.affinity` is set.
     ## E.g.
     ## values:
@@ -219,7 +219,7 @@ master:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  initContainers: {}
+  initContainers: []
 
 ## @section Spark worker parameters
 
@@ -228,13 +228,13 @@ master:
 worker:
   ## @param worker.configurationConfigMap Set a custom configuration by using an existing configMap with the configuration file.
   ##
-  configurationConfigMap:
+  configurationConfigMap: ""
   ## @param worker.webPort Specify the port where the web interface will listen on the worker
   ##
   webPort: 8081
   ## @param worker.clusterPort Specify the port where the worker listens to communicate with the master
   ##
-  clusterPort:
+  clusterPort: ""
   ## @param worker.hostAliases Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -249,28 +249,28 @@ worker:
   extraPorts: []
   ## @param worker.daemonMemoryLimit Set the memory limit for the worker daemon
   ##
-  daemonMemoryLimit:
+  daemonMemoryLimit: ""
   ## @param worker.memoryLimit Set the maximum memory the worker is allowed to use
   ##
-  memoryLimit:
+  memoryLimit: ""
   ## @param worker.coreLimit Se the maximum number of cores that the worker can use
   ##
-  coreLimit:
+  coreLimit: ""
   ## @param worker.dir Set a custom working directory for the application
   ##
-  dir:
+  dir: ""
   ## @param worker.javaOptions Set options for the JVM in the form `-Dx=y`
   ##
-  javaOptions:
+  javaOptions: ""
   ## @param worker.configOptions Set extra options to configure the worker in the form `-Dx=y`
   ##
-  configOptions:
+  configOptions: ""
   ## @param worker.extraEnvVars An array to add extra env vars
   ## For example:
   ## extraEnvVars:
   ##  - name: SPARK_DAEMON_JAVA_OPTS
   ##    value: -Dx=y
-  extraEnvVars:
+  extraEnvVars: []
   ## @param worker.replicaCount Number of spark workers (will be the minimum number when autoscaling is enabled)
   ##
   replicaCount: 2
@@ -301,7 +301,7 @@ worker:
   ## @param worker.podAffinityPreset Spark worker pod affinity preset. Ignored if `worker.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
-  podAffinityPreset: ''
+  podAffinityPreset: ""
   ## @param worker.podAntiAffinityPreset Spark worker pod anti-affinity preset. Ignored if `worker.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
@@ -312,12 +312,12 @@ worker:
   nodeAffinityPreset:
     ## @param worker.nodeAffinityPreset.type Spark worker node affinity preset type. Ignored if `worker.affinity` is set. Allowed values: `soft` or `hard`
     ##
-    type: ''
+    type: ""
     ## @param worker.nodeAffinityPreset.key Spark worker node label key to match Ignored if `worker.affinity` is set.
     ## E.g.
     ## key: "kubernetes.io/e2e-az-name"
     ##
-    key: ''
+    key: ""
     ## @param worker.nodeAffinityPreset.values Spark worker node label values to match. Ignored if `worker.affinity` is set.
     ## E.g.
     ## values:
@@ -400,7 +400,7 @@ worker:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  initContainers: {}
+  initContainers: []
   ## Array to add extra volumes
   ##
   ## extraVolumes:
@@ -428,7 +428,7 @@ security:
   ## @param security.passwordsSecretName Name of the secret that contains all the passwords
   ## This is optional, by default random passwords are generated
   ##
-  passwordsSecretName:
+  passwordsSecretName: ""
   ## RPC configuration
   ## @param security.rpc.authenticationEnabled Enable the RPC authentication
   ## @param security.rpc.encryptionEnabled Enable the encryption for RPC
@@ -443,7 +443,7 @@ security:
   ## It should contains two keys called "spark-keystore.jks" and "spark-truststore.jks" with the files in JKS format.
   ## DEPRECATED. Use `security.ssl.existingSecret` instead
   ##
-  certificatesSecretName:
+  certificatesSecretName: ""
   ## SSL configuration
   ##
   ssl:
@@ -459,17 +459,17 @@ security:
     ## @param security.ssl.existingSecret Name of the existing secret containing the TLS certificates
     ## It should contains two keys called "spark-keystore.jks" and "spark-truststore.jks" with the files in JKS format.
     ##
-    existingSecret:
+    existingSecret: ""
     ## @param security.ssl.autoGenerated Create self-signed TLS certificates. Currently only supports PEM certificates
     ## The Spark container will generate a JKS keystore and trustore using the PEM certificates.
     ##
     autoGenerated: false
     ## @param security.ssl.keystorePassword Set the password of the JKS Keystore
     ##
-    keystorePassword:
+    keystorePassword: ""
     ## @param security.ssl.truststorePassword Truststore password.
     ##
-    truststorePassword:
+    truststorePassword: ""
     ## Container resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
     ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -511,13 +511,13 @@ service:
   ## @param service.nodePorts.web Kubernetes web node port
   ##
   nodePorts:
-    cluster: ''
-    web: ''
+    cluster: ""
+    web: ""
   ## @param service.loadBalancerIP Load balancer IP if spark service type is `LoadBalancer`
   ## Set the LoadBalancer service type to internal only
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
-  loadBalancerIP:
+  loadBalancerIP: ""
   ## @param service.annotations Annotations for spark service
   ## This can be used to set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -539,7 +539,7 @@ ingress:
   pathType: ImplementationSpecific
   ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
   ##
-  apiVersion:
+  apiVersion: ""
   ## @param ingress.hostname Default host for the ingress resource
   ##
   hostname: spark.local
@@ -643,7 +643,7 @@ metrics:
     ## e.g:
     ## scrapeTimeout: 30s
     ##
-    scrapeTimeout:
+    scrapeTimeout: ""
     ## @param metrics.podMonitor.additionalLabels Additional labels that can be used so PodMonitors will be discovered by Prometheus
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
     ##
@@ -658,7 +658,7 @@ metrics:
     enabled: false
     ## @param metrics.prometheusRule.namespace Namespace where the prometheusRules resource should be created
     ##
-    namespace: ''
+    namespace: ""
     ## @param metrics.prometheusRule.additionalLabels Additional labels that can be used so prometheusRules will be discovered by Prometheus
     ##
     additionalLabels: {}

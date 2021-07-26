@@ -8,13 +8,13 @@
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
 
 ## Bitnami RabbitMQ image version
 ## ref: https://hub.docker.com/r/bitnami/rabbitmq/tags/
@@ -50,15 +50,15 @@ image:
   pullSecrets: []
 ## @param nameOverride String to partially override rabbitmq.fullname template (will maintain the release name)
 ##
-nameOverride:
+nameOverride: ""
 
 ## @param fullnameOverride String to fully override rabbitmq.fullname template
 ##
-fullnameOverride:
+fullnameOverride: ""
 
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
-kubeVersion:
+kubeVersion: ""
 
 ## @param clusterDomain Kubernetes Cluster Domain
 ##
@@ -91,17 +91,17 @@ auth:
   ## e.g:
   ## existingPasswordSecret: name-of-existing-secret
   ##
-  existingPasswordSecret:
+  existingPasswordSecret: ""
 
   ## @param auth.erlangCookie Erlang cookie to determine whether different nodes are allowed to communicate with each other
   ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
   ##
-  erlangCookie:
+  erlangCookie: ""
   ## @param auth.existingErlangSecret Existing secret with RabbitMQ Erlang cookie (must contain a value for `rabbitmq-erlang-cookie` key)
   ## e.g:
   ## existingErlangSecret: name-of-existing-secret
   ##
-  existingErlangSecret:
+  existingErlangSecret: ""
 
   ## Enable encryption to rabbitmq
   ## ref: https://www.rabbitmq.com/ssl.html
@@ -143,8 +143,8 @@ ulimitNofiles: "65536"
 ## @param maxAvailableSchedulers RabbitMQ maximum available scheduler threads
 ## @param onlineSchedulers RabbitMQ online scheduler threads
 ##
-maxAvailableSchedulers:
-onlineSchedulers:
+maxAvailableSchedulers: ""
+onlineSchedulers: ""
 
 ## The memory threshold under which RabbitMQ will stop reading from client network sockets, in order to avoid being killed by the OS
 ## ref: https://www.rabbitmq.com/alarms.html
@@ -172,7 +172,7 @@ plugins: "rabbitmq_management rabbitmq_peer_discovery_k8s"
 ## @param communityPlugins List of Community plugins (URLs) to be downloaded during container initialization
 ## Combine it with extraPlugins to also enable them.
 ##
-communityPlugins:
+communityPlugins: ""
 
 ## @param extraPlugins Extra plugins to enable (single string containing a space-separated list)
 ## Use this instead of `plugins` to add new plugins
@@ -209,13 +209,13 @@ loadDefinition:
   ## Can be templated if needed, e.g:
   ## existingSecret: "{{ .Release.Name }}-load-definition"
   ##
-  existingSecret:
+  existingSecret: ""
 
 ## @param command Override default container command (useful when using custom images)
 ##
-command:
+command: []
 ## @param args Override default container args (useful when using custom images)
-args:
+args: []
 
 ## @param terminationGracePeriodSeconds Default duration in seconds k8s waits for container to exit before sending kill signal.
 ## Any time in excess of 10 seconds will be spent waiting for any synchronization necessary for cluster not to lose data.
@@ -232,11 +232,11 @@ extraEnvVars: []
 
 ## @param extraEnvVarsCM Name of existing ConfigMap containing extra environment variables
 ##
-extraEnvVarsCM:
+extraEnvVarsCM: ""
 
 ## @param extraEnvVarsSecret Name of existing Secret containing extra environment variables (in case of sensitive data)
 ##
-extraEnvVarsSecret:
+extraEnvVarsSecret: ""
 
 ## @param extraContainerPorts Extra ports to be included in container spec, primarily informational
 ## E.g:
@@ -391,7 +391,7 @@ replicaCount: 1
 ## @param schedulerName Use an alternate scheduler, e.g. "stork".
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
-schedulerName:
+schedulerName: ""
 
 ## RabbitMQ should be initialized one by one when building cluster for the first time.
 ## Therefore, the default value of podManagementPolicy is 'OrderedReady'
@@ -592,7 +592,7 @@ initContainers: []
 ##       - name: portname
 ##         containerPort: 1234
 ##
-sidecars: {}
+sidecars: []
 
 ## RabbitMQ pods ServiceAccount
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
@@ -604,7 +604,7 @@ serviceAccount:
   ## @param serviceAccount.name Name of the created serviceAccount
   ## If not set and create is true, a name is generated using the rabbitmq.fullname template
   ##
-  name:
+  name: ""
 
 ## Role Based Access
 ## ref: https://kubernetes.io/docs/admin/authorization/rbac/
@@ -628,7 +628,7 @@ persistence:
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##   GKE, AWS & OpenStack)
   ##
-  storageClass:
+  storageClass: ""
   ## @param persistence.selector Selector to match an existing Persistent Volume
   ## selector:
   ##   matchLabels:
@@ -654,7 +654,7 @@ persistence:
   ##  - name: volume_name
   ##    emptyDir: {}
   ##
-  volumes:
+  volumes: []
 
 ## Pod Disruption Budget configuration
 ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
@@ -668,7 +668,7 @@ pdb:
   minAvailable: 1
   ## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
-  maxUnavailable:
+  maxUnavailable: ""
 
 ## Network Policy configuration
 ## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
@@ -725,13 +725,13 @@ service:
   ## e.g:
   ## nodePort: 30672
   ##
-  nodePort:
+  nodePort: ""
 
   ## @param service.tlsNodePort Node port override for `amqp-ssl` port, if serviceType is `NodePort` or `LoadBalancer`
   ## e.g:
   ## tlsNodePort: 30671
   ##
-  tlsNodePort:
+  tlsNodePort: ""
 
   ## @param service.distPort Erlang distribution server port
   ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
@@ -746,7 +746,7 @@ service:
   ## e.g:
   ## distNodePort: 30676
   ##
-  distNodePort:
+  distNodePort: ""
 
   ## @param service.managerPortEnabled RabbitMQ Manager port
   ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
@@ -765,7 +765,7 @@ service:
   ## e.g:
   ## managerNodePort: 30673
   ##
-  managerNodePort:
+  managerNodePort: ""
 
   ## @param service.metricsPort RabbitMQ Prometheues metrics port
   ##
@@ -779,13 +779,13 @@ service:
   ## e.g:
   ## metricsNodePort: 30674
   ##
-  metricsNodePort:
+  metricsNodePort: ""
 
   ## @param service.epmdNodePort Node port override for `epmd` port, if serviceType is `NodePort`
   ## e.g:
   ## epmdNodePort: 30675
   ##
-  epmdNodePort:
+  epmdNodePort: ""
 
   ## @param service.epmdPortName EPMD Discovery service port name
   ##
@@ -810,7 +810,7 @@ service:
 
   ## @param service.externalIPs Set the ExternalIPs
   ##
-  externalIPs:
+  externalIPs: []
 
   ## @param service.externalTrafficPolicy Enable client source IP preservation
   ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
@@ -819,7 +819,7 @@ service:
 
   ## @param service.loadBalancerIP Set the LoadBalancerIP
   ##
-  loadBalancerIP:
+  loadBalancerIP: ""
 
   ## @param service.labels Service labels. Evaluated as a template
   ##
@@ -930,7 +930,7 @@ ingress:
   ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
   ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
   ##
-  ingressClassName:
+  ingressClassName: ""
 
 ## Prometheus Metrics
 ##
@@ -967,10 +967,10 @@ metrics:
     ## e.g:
     ## scrapeTimeout: 30s
     ##
-    scrapeTimeout:
+    scrapeTimeout: ""
     ## @param metrics.serviceMonitor.relabellings Specify Metric Relabellings to add to the scrape endpoint
     ##
-    relabellings:
+    relabellings: []
     ## @param metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
     ##
     honorLabels: false
@@ -982,12 +982,12 @@ metrics:
     ## e.g:
     ## - app.kubernetes.io/name
     ##
-    targetLabels:
+    targetLabels: {}
     ## @param metrics.serviceMonitor.podTargetLabels Used to keep given pod's labels in target
     ## e.g:
     ## - app.kubernetes.io/name
     ##
-    podTargetLabels:
+    podTargetLabels: {}
     ## @param metrics.serviceMonitor.path Define the path used by ServiceMonitor to scrap metrics
     ## Could be /metrics for aggregated metrics or /metrics/per-object for more details
     path: ""

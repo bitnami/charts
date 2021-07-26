@@ -20,13 +20,13 @@
 ## @param global.pgpool.existingSecret Pgpool existing secret
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
   postgresql:
     username: ""
     password: ""
@@ -47,10 +47,10 @@ global:
 
 ## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname template
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param clusterDomain Kubernetes Cluster Domain
 ##
 clusterDomain: cluster.local
@@ -82,7 +82,7 @@ serviceAccount:
   enabled: false
   ## @param serviceAccount.name Name of an already existing service account. Setting this value disables the automatic service account creation
   ##
-  name:
+  name: ""
 
 ## @section PostgreSQL with Repmgr parameters
 
@@ -209,13 +209,13 @@ postgresql:
   customStartupProbe: {}
   ## @param postgresql.command Override default container command (useful when using custom images)
   ##
-  command:
+  command: []
   ## @param postgresql.args Override default container args (useful when using custom images)
   ##
-  args:
+  args: []
   ## @param postgresql.lifecycleHooks LifecycleHook to set additional configuration at startup, e.g. LDAP settings via REST API. Evaluated as a template
   ##
-  lifecycleHooks:
+  lifecycleHooks: {}
   ## @param postgresql.extraEnvVars Array containing extra environment variables
   ## For example:
   ##  - name: BEARER_AUTH
@@ -224,10 +224,10 @@ postgresql:
   extraEnvVars: []
   ## @param postgresql.extraEnvVarsCM ConfigMap with extra environment variables
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param postgresql.extraEnvVarsSecret Secret with extra environment variables
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param postgresql.extraVolumes Extra volumes to add to the deployment
   ##
   extraVolumes: []
@@ -319,33 +319,33 @@ postgresql:
     minAvailable: 1
     ## @param postgresql.pdb.maxUnavailable Maximum number / percentage of pods that may be made unavailable
     ##
-    maxUnavailable:
+    maxUnavailable: ""
   ## PostgreSQL configuration parameters
   ## @param postgresql.username PostgreSQL username
   ## @param postgresql.password PostgreSQL password
   ## @param postgresql.database PostgreSQL database
   ##
   username: postgres
-  password:
-  database:
+  password: ""
+  database: ""
   ## @param postgresql.existingSecret PostgreSQL password using existing secret
   ##
-  existingSecret:
+  existingSecret: ""
   ## @param postgresql.postgresPassword PostgreSQL password for the `postgres` user when `username` is not `postgres`
   ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#creating-a-database-user-on-first-run (see note!)
   ##
-  postgresPassword:
+  postgresPassword: ""
   ## @param postgresql.usePasswordFile Set to `true` to mount PostgreSQL secret as a file instead of passing environment variable
   ##
-  usePasswordFile:
+  usePasswordFile: ""
   ## @param postgresql.repmgrUsePassfile Set to `true` to configure repmgrl to use `passfile` instead of `password` vars*:*:*:username:password" and use it to configure Repmgr instead of using password (Requires Postgresql 10+, otherwise ignored)
   ## ref: https://repmgr.org/docs/current/configuration-password-management.html
   ##      https://www.postgresql.org/docs/current/libpq-pgpass.html
   ##
-  repmgrUsePassfile:
+  repmgrUsePassfile: ""
   ## @param postgresql.repmgrPassfilePath Custom path where `passfile` will be stored
   ##
-  repmgrPassfilePath:
+  repmgrPassfilePath: ""
   ## @param postgresql.upgradeRepmgrExtension Upgrade repmgr extension in the database
   ##
   upgradeRepmgrExtension: false
@@ -365,7 +365,7 @@ postgresql:
   ## @param postgresql.repmgrReconnectInterval Repmgr backend reconnection interval (in seconds)
   ##
   repmgrUsername: repmgr
-  repmgrPassword:
+  repmgrPassword: ""
   repmgrDatabase: repmgr
   repmgrLogLevel: NOTICE
   repmgrConnectTimeout: 5
@@ -404,29 +404,29 @@ postgresql:
   sharedPreloadLibraries: "pgaudit, repmgr"
   ## @param postgresql.maxConnections Maximum total connections
   ##
-  maxConnections:
+  maxConnections: ""
   ## @param postgresql.postgresConnectionLimit Maximum connections for the postgres user
   ##
-  postgresConnectionLimit:
+  postgresConnectionLimit: ""
   ## @param postgresql.dbUserConnectionLimit Maximum connections for the created user
   ##
-  dbUserConnectionLimit:
+  dbUserConnectionLimit: ""
   ## @param postgresql.tcpKeepalivesInterval TCP keepalives interval
   ##
-  tcpKeepalivesInterval:
+  tcpKeepalivesInterval: ""
   ## @param postgresql.tcpKeepalivesIdle TCP keepalives idle
   ##
-  tcpKeepalivesIdle:
+  tcpKeepalivesIdle: ""
   ## @param postgresql.tcpKeepalivesCount TCP keepalives count
   ##
-  tcpKeepalivesCount:
+  tcpKeepalivesCount: ""
   ## @param postgresql.statementTimeout Statement timeout
   ##
-  statementTimeout:
+  statementTimeout: ""
   ## @param postgresql.pghbaRemoveFilters Comma-separated list of patterns to remove from the pg_hba.conf file
   ## (cannot be used with custom pg_hba.conf)
   ##
-  pghbaRemoveFilters:
+  pghbaRemoveFilters: ""
   ## @param postgresql.extraInitContainers Extra init containers
   ## Example:
   ## extraInitContainers:
@@ -474,7 +474,7 @@ postgresql:
   ## @param postgresql.configurationCM Name of existing ConfigMap with configuration files
   ## NOTE: This will override postgresql.repmgrConfiguration, postgresql.configuration and postgresql.pgHbaConfiguration
   ##
-  configurationCM:
+  configurationCM: ""
   ## @param postgresql.extendedConf Extended PostgreSQL configuration (appended to main or default configuration). Implies `volumePermissions.enabled`.
   ## Similar to postgresql.configuration, but _appended_ to the main configuration
   ## ref: https://github.com/bitnami/bitnami-docker-postgresql-repmgr#allow-settings-to-be-loaded-from-files-other-than-the-default-postgresqlconf
@@ -488,7 +488,7 @@ postgresql:
   ## @param postgresql.extendedConfCM ConfigMap with PostgreSQL extended configuration
   ## NOTE: This will override postgresql.extendedConf and implies `volumePermissions.enabled`
   ##
-  extendedConfCM:
+  extendedConfCM: ""
   ## @param postgresql.initdbScripts Dictionary of initdb scripts
   ## Specify dictionary of scripts to be run at first boot
   ## The allowed extensions are `.sh`, `.sql` and `.sql.gz`
@@ -503,11 +503,11 @@ postgresql:
   ## @param postgresql.initdbScriptsCM ConfigMap with scripts to be run at first boot
   ## NOTE: This will override initdbScripts
   ##
-  initdbScriptsCM:
+  initdbScriptsCM: ""
   ## @param postgresql.initdbScriptsSecret Secret with scripts to be run at first boot
   ## Note: can be used with initdbScriptsCM or initdbScripts
   ##
-  initdbScriptsSecret:
+  initdbScriptsSecret: ""
   ## TLS configuration
   ##
   tls:
@@ -530,7 +530,7 @@ postgresql:
     ## If provided, PgPool will authenticate TLS/SSL clients by requesting them a certificate
     ## ref: https://www.pgpool.net/docs/latest/en/html/runtime-ssl.html
     ##
-    certCAFilename:
+    certCAFilename: ""
 
 ## @section Pgpool parameters
 
@@ -574,12 +574,12 @@ pgpool:
   ## e.g:
   ## usernames: 'user01;user02'
   ##
-  usernames:
+  usernames: ""
   ## @param pgpool.passwords Comma or semicolon separated list of the associated passwords for the users above
   ## e.g:
   ## passwords: 'pass01;pass02'
   ##
-  passwords:
+  passwords: ""
   ## @param pgpool.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -587,7 +587,7 @@ pgpool:
   ## @param pgpool.customUsersSecret Name of a secret containing the usernames and passwords of accounts that will be added to pgpool_passwd
   ## The secret must contain the keys "usernames" and "passwords" respectively.
   ##
-  customUsersSecret:
+  customUsersSecret: ""
   ## @param pgpool.srCheckDatabase Name of the database to perform streaming replication checks
   ##
   srCheckDatabase: postgres
@@ -611,13 +611,13 @@ pgpool:
   customStartupProbe: {}
   ## @param pgpool.command Override default container command (useful when using custom images)
   ##
-  command:
+  command: []
   ## @param pgpool.args Override default container args (useful when using custom images)
   ##
-  args:
+  args: []
   ## @param pgpool.lifecycleHooks LifecycleHook to set additional configuration at startup, e.g. LDAP settings via REST API. Evaluated as a template
   ##
-  lifecycleHooks:
+  lifecycleHooks: {}
   ## @param pgpool.extraEnvVars Array containing extra environment variables
   ## For example:
   ##  - name: BEARER_AUTH
@@ -626,10 +626,10 @@ pgpool:
   extraEnvVars: []
   ## @param pgpool.extraEnvVarsCM ConfigMap with extra environment variables
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param pgpool.extraEnvVarsSecret Secret with extra environment variables
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param pgpool.extraVolumes Extra volumes to add to the deployment
   ##
   extraVolumes: []
@@ -788,20 +788,20 @@ pgpool:
     minAvailable: 1
     ## @param pgpool.pdb.maxUnavailable Maximum number / percentage of pods that may be made unavailable
     ##
-    maxUnavailable:
+    maxUnavailable: ""
   ## @param pgpool.updateStrategy Strategy used to replace old Pods by new ones
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
   ##
   updateStrategy: {}
   ## @param pgpool.minReadySeconds How many seconds a pod needs to be ready before killing the next, during update
   ##
-  minReadySeconds:
+  minReadySeconds: ""
   ## Credentials for the pgpool administrator
   ## @param pgpool.adminUsername Pgpool Admin username
   ## @param pgpool.adminPassword Pgpool Admin password
   ##
   adminUsername: admin
-  adminPassword:
+  adminPassword: ""
   ## @param pgpool.logConnections Log all client connections (PGPOOL_ENABLE_LOG_CONNECTIONS)
   ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
   ##
@@ -818,7 +818,7 @@ pgpool:
   ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
   ## ref: https://www.pgpool.net/docs/latest/en/html/runtime-config-logging.html
   ##
-  logLinePrefix:
+  logLinePrefix: ""
   ## @param pgpool.clientMinMessages Log level for clients
   ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
   ##
@@ -827,27 +827,27 @@ pgpool:
   ## connections limit to Pgpool-II from clients. Must be a positive integer. (PGPOOL_NUM_INIT_CHILDREN)
   ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
   ##
-  numInitChildren:
+  numInitChildren: ""
   ## @param pgpool.maxPool The maximum number of cached connections in each child process (PGPOOL_MAX_POOL)
   ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
   ##
-  maxPool:
+  maxPool: ""
   ## @param pgpool.childMaxConnections The maximum number of client connections in each child process (PGPOOL_CHILD_MAX_CONNECTIONS)
   ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
   ##
-  childMaxConnections:
+  childMaxConnections: ""
   ## @param pgpool.childLifeTime The time in seconds to terminate a Pgpool-II child process if it remains idle (PGPOOL_CHILD_LIFE_TIME)
   ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
   ##
-  childLifeTime:
+  childLifeTime: ""
   ## @param pgpool.clientIdleLimit The time in seconds to disconnect a client if it remains idle since the last query (PGPOOL_CLIENT_IDLE_LIMIT)
   ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
   ##
-  clientIdleLimit:
+  clientIdleLimit: ""
   ## @param pgpool.connectionLifeTime The time in seconds to terminate the cached connections to the PostgreSQL backend (PGPOOL_CONNECTION_LIFE_TIME)
   ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
   ##
-  connectionLifeTime:
+  connectionLifeTime: ""
   ## @param pgpool.useLoadBalancing Use Pgpool Load-Balancing
   ##
   useLoadBalancing: true
@@ -862,12 +862,12 @@ pgpool:
   ##   port = '5432'
   ##   ...
   ##
-  configuration: ""
+  configuration: {}
   ## @param pgpool.configurationCM ConfigMap with Pgpool configuration
   ## NOTE: This will override pgpool.configuration parameter
   ## The file used must be named `pgpool.conf`
   ##
-  configurationCM:
+  configurationCM: ""
   ## @param pgpool.initdbScripts Dictionary of initdb scripts
   ## Specify dictionary of scripts to be run every time Pgpool container is initialized
   ## The allowed extension is `.sh`
@@ -878,15 +878,15 @@ pgpool:
   ##      #!/bin/sh
   ##      echo "Do something."
   ##
-  initdbScripts:
+  initdbScripts: {}
   ## @param pgpool.initdbScriptsCM ConfigMap with scripts to be run every time Pgpool container is initialized
   ## NOTE: This will override pgpool.initdbScripts
   ##
-  initdbScriptsCM:
+  initdbScriptsCM: ""
   ## @param pgpool.initdbScriptsSecret Secret with scripts to be run every time Pgpool container is initialized
   ## Note: can be used with initdbScriptsCM or initdbScripts
   ##
-  initdbScriptsSecret:
+  initdbScriptsSecret: ""
   ##
   ## TLS configuration
   ##
@@ -913,7 +913,7 @@ pgpool:
     ## If provided, PgPool will authenticate TLS/SSL clients by requesting them a certificate
     ## ref: https://www.pgpool.net/docs/latest/en/html/runtime-ssl.html
     ##
-    certCAFilename:
+    certCAFilename: ""
 
 ## @section LDAP parameters
 
@@ -931,14 +931,14 @@ pgpool:
 ##
 ldap:
   enabled: false
-  existingSecret:
-  uri:
-  base:
-  binddn:
-  bindpw:
-  bslookup:
-  scope:
-  tlsReqcert:
+  existingSecret: ""
+  uri: ""
+  base: ""
+  binddn: ""
+  bindpw: ""
+  bslookup: ""
+  scope: ""
+  tlsReqcert: ""
   nssInitgroupsIgnoreusers: root,nslcd
 
 ## @section Metrics parameters
@@ -1071,7 +1071,7 @@ metrics:
   ##           usage: "GAUGE"
   ##           description: "Size of the database in bytes"
   ##
-  customMetrics:
+  customMetrics: ""
   ## @param metrics.extraEnvVars An array to add extra environment variables to configure postgres-exporter
   ## see: https://github.com/wrouesnel/postgres_exporter#environment-variables
   ## For example:
@@ -1089,17 +1089,17 @@ metrics:
     ## @param metrics.serviceMonitor.namespace Optional namespace which Prometheus is running in
     ## Fallback to the prometheus default unless specified
     ##
-    namespace:
+    namespace: ""
     ## @param metrics.serviceMonitor.interval How frequently to scrape metrics (use by default, falling back to Prometheus' default)
     ## e.g:
     ## interval: 10s
     ##
-    interval:
+    interval: ""
     ## @param metrics.serviceMonitor.scrapeTimeout Service monitor scrape timeout
     ## e.g:
     ## scrapeTimeout: 10s
     ##
-    scrapeTimeout:
+    scrapeTimeout: ""
     ## @param metrics.serviceMonitor.selector [object] Defaults to what's used if you follow CoreOS [Prometheus Install Instructions](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#tldr)
     ## [Prometheus Selector Label](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-operator-1)
     ## [Kube Prometheus Selector Label](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#exporters)
@@ -1185,14 +1185,14 @@ persistence:
   ## All replicas will share this PVC, using existingClaim with replicas > 1 is only useful in very special use cases.
   ## The value is evaluated as a template.
   ##
-  existingClaim:
+  existingClaim: ""
   ## @param persistence.storageClass Persistent Volume Storage Class
   ## If defined, storageClassName: <storageClass>
   ## If set to "-", storageClassName: "", which disables dynamic provisioning
   ## If undefined (the default) or set to null, no storageClassName spec is
   ## set, choosing the default provisioner.
   ##
-  storageClass:
+  storageClass: ""
   ## @param persistence.mountPath The path the volume will be mounted at, useful when using different PostgreSQL images.
   ##
   mountPath: /bitnami/postgresql
@@ -1227,12 +1227,12 @@ service:
   ## @param service.nodePort Kubernetes service nodePort
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
-  nodePort:
+  nodePort: ""
   ## @param service.loadBalancerIP Load balancer IP if service type is `LoadBalancer`
   ## Set the LoadBalancer service type to internal only
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
-  loadBalancerIP:
+  loadBalancerIP: ""
   ## @param service.loadBalancerSourceRanges Addresses that are allowed when service is LoadBalancer
   ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
   ##
@@ -1246,7 +1246,7 @@ service:
   ## e.g:
   ## clusterIP: None
   ##
-  clusterIP:
+  clusterIP: ""
   ## @param service.externalTrafficPolicy Enable client source IP preservation
   ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##

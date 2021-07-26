@@ -8,22 +8,22 @@
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
 
 ## @section Common parameters
 
 ## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname template
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param clusterDomain Kubernetes Cluster Domain
 ##
 clusterDomain: cluster.local
@@ -51,7 +51,7 @@ commonAnnotations: {}
 image:
   registry: docker.io
   repository: bitnami/zookeeper
-  tag: 3.7.0-debian-10-r70
+  tag: 3.7.0-debian-10-r97
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -105,24 +105,24 @@ maxSessionTimeout: 40000
 auth:
   ## @param auth.existingSecret Use existing secret (ignores previous password)
   ##
-  existingSecret:
+  existingSecret: ""
   ## @param auth.enabled Enable Zookeeper auth. It uses SASL/Digest-MD5
   ##
   enabled: false
   ## @param auth.clientUser User that will use ZooKeeper clients to auth
   ##
-  clientUser:
+  clientUser: ""
   ## @param auth.clientPassword Password that will use ZooKeeper clients to auth
   ##
-  clientPassword:
+  clientPassword: ""
   ## @param auth.serverUsers Comma, semicolon or whitespace separated list of user to be created
   ## Specify them as a string, for example: "user1,user2,admin"
   ##
-  serverUsers:
+  serverUsers: ""
   ## @param auth.serverPasswords Comma, semicolon or whitespace separated list of passwords to assign to users when created
   ## Specify them as a string, for example: "pass4user1, pass4user2, pass4admin"
   ##
-  serverPasswords:
+  serverPasswords: ""
 ## @param heapSize Size in MB for the Java Heap options (Xmx and XMs)
 ## This env var is ignored if Xmx an Xms are configured via JVMFLAGS
 ##
@@ -136,16 +136,16 @@ logLevel: ERROR
 ## Example:
 ## dataLogDir: /bitnami/zookeeper/dataLog
 ##
-dataLogDir: ''
+dataLogDir: ""
 ## @param jvmFlags Default JVMFLAGS for the ZooKeeper process
 ##
-jvmFlags:
+jvmFlags: ""
 ## @param config Configure ZooKeeper with a custom zoo.cfg file
 ##
-config:
+config: ""
 ## @param namespaceOverride Namespace for ZooKeeper resources
 ##
-namespaceOverride:
+namespaceOverride: ""
 ## @param hostAliases Deployment pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -191,7 +191,7 @@ podDisruptionBudget:
 ## @param rollingUpdatePartition Partition update strategy
 ## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
 ##
-rollingUpdatePartition:
+rollingUpdatePartition: ""
 ## @param podManagementPolicy StatefulSet controller supports relax its ordering guarantees while preserving its uniqueness and identity guarantees. There are two valid pod management policies: `OrderedReady` and `Parallel`
 ## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#pod-management-policy
 ##
@@ -227,7 +227,7 @@ initContainers: []
 ## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
-podAffinityPreset: ''
+podAffinityPreset: ""
 ## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
@@ -238,12 +238,12 @@ podAntiAffinityPreset: soft
 nodeAffinityPreset:
   ## @param nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ##
-  type: ''
+  type: ""
   ## @param nodeAffinityPreset.key Node label key to match Ignored if `affinity` is set.
   ## E.g.
   ## key: "kubernetes.io/e2e-az-name"
   ##
-  key: ''
+  key: ""
   ## @param nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set.
   ## E.g.
   ## values:
@@ -275,11 +275,11 @@ podAnnotations: {}
 ## @param priorityClassName Name of the existing priority class to be used by ZooKeeper pods, priority class needs to be created beforehand
 ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
 ##
-priorityClassName: ''
+priorityClassName: ""
 ## @param schedulerName Kubernetes pod scheduler registry
 ## https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
-schedulerName:
+schedulerName: ""
 ## Configure resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ## @param resources.requests [object] The requested resources for the container
@@ -343,7 +343,7 @@ service:
   ## @param service.loadBalancerIP Load balancer IP for the Zookeper Service (optional, cloud specific)
   ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
   ##
-  loadBalancerIP:
+  loadBalancerIP: ""
   ## @param service.port ZooKeeper port
   ##
   port: 2181
@@ -386,7 +386,7 @@ serviceAccount:
   create: false
   ## @param serviceAccount.name The name of the ServiceAccount to use.
   ## If not set and create is true, a name is generated using the common.names.fullname template
-  name:
+  name: ""
   ## @param serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
   ## Can be set to false if pods using this serviceAccount do not need to use K8s API
   automountServiceAccountToken: true
@@ -401,7 +401,7 @@ networkPolicy:
   ## When set to false, only pods with the correct client label will have network access to the port Redis(TM) is
   ## listening on. When true, zookeeper accept connections from any source (with the correct destination port).
   ##
-  allowExternal:
+  allowExternal: true
 
 ## @section Persistence parameters
 
@@ -417,13 +417,13 @@ persistence:
   ## If defined, PVC must be created manually before volume will be bound
   ## The value is evaluated as a template
   ##
-  existingClaim:
+  existingClaim: ""
   ## @param persistence.enabled Enable Zookeeper data persistence using PVC
   ##
   enabled: true
   ## @param persistence.storageClass PVC Storage Class for ZooKeeper data volume
   ##
-  storageClass:
+  storageClass: ""
   ## @param persistence.accessModes PVC Access modes
   ##
   accessModes:
@@ -450,7 +450,7 @@ persistence:
     ## If defined, PVC must be created manually before volume will be bound
     ## The value is evaluated as a template
     ##
-    existingClaim:
+    existingClaim: ""
     ## @param persistence.dataLogDir.selector Selector to match an existing Persistent Volume for Zookeeper's Data log PVC
     ## If set, the PVC can't have a PV dynamically provisioned for it
     ## E.g.
@@ -478,7 +478,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r115
+    tag: 10-debian-10-r142
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -526,26 +526,26 @@ metrics:
     enabled: false
     ## @param metrics.serviceMonitor.namespace Namespace for the ServiceMonitor Resource (defaults to the Release Namespace)
     ##
-    namespace:
+    namespace: ""
     ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped.
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ## e.g:
     ## interval: 10s
     ##
-    interval:
+    interval: ""
     ## @param metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ## e.g:
     ## scrapeTimeout: 10s
     ##
-    scrapeTimeout:
+    scrapeTimeout: ""
     ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
     ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
     ## e.g:
     ## selector:
     ##   prometheus: my-prometheus
     ##
-    selector:
+    selector: {}
   ## Prometheus Operator PrometheusRule configuration
   ##
   prometheusRule:
@@ -554,14 +554,14 @@ metrics:
     enabled: false
     ## @param metrics.prometheusRule.namespace Namespace for the PrometheusRule Resource (defaults to the Release Namespace)
     ##
-    namespace:
+    namespace: ""
     ## @param metrics.prometheusRule.selector Prometheus instance selector labels
     ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
     ## e.g:
     ## selector:
     ##   prometheus: my-prometheus
     ##
-    selector:
+    selector: {}
     ## @param metrics.prometheusRule.rules Prometheus Rule definitions
     ##  - alert: ZookeeperSyncedFollowers
     ##    annotations:
@@ -595,7 +595,7 @@ tls:
     autoGenerated: false
     ## @param tls.client.existingSecret Name of the existing secret containing the TLS certificates for Zookeper client communications
     ##
-    existingSecret:
+    existingSecret: ""
     ## @param tls.client.keystorePath Location of the KeyStore file used for Client connections
     ##
     keystorePath: /opt/bitnami/zookeeper/config/certs/client/zookeeper.keystore.jks
@@ -604,13 +604,13 @@ tls:
     truststorePath: /opt/bitnami/zookeeper/config/certs/client/zookeeper.truststore.jks
     ## @param tls.client.passwordsSecretName Existing secret containing Keystore and truststore passwords
     ##
-    passwordsSecretName:
+    passwordsSecretName: ""
     ## @param tls.client.keystorePassword Password to access KeyStore if needed
     ##
-    keystorePassword: ''
+    keystorePassword: ""
     ## @param tls.client.truststorePassword Password to access TrustStore if needed
     ##
-    truststorePassword: ''
+    truststorePassword: ""
   quorum:
     ## @param tls.quorum.enabled Enable TLS for quorum protocol
     ##
@@ -620,7 +620,7 @@ tls:
     autoGenerated: false
     ## @param tls.quorum.existingSecret Name of the existing secret containing the TLS certificates for Zookeper quorum protocol
     ##
-    existingSecret:
+    existingSecret: ""
     ## @param tls.quorum.keystorePath Location of the KeyStore file used for Quorum protocol
     ##
     keystorePath: /opt/bitnami/zookeeper/config/certs/quorum/zookeeper.keystore.jks
@@ -629,13 +629,13 @@ tls:
     truststorePath: /opt/bitnami/zookeeper/config/certs/quorum/zookeeper.truststore.jks
     ## @param tls.quorum.passwordsSecretName Existing secret containing Keystore and truststore passwords
     ##
-    passwordsSecretName:
+    passwordsSecretName: ""
     ## @param tls.quorum.keystorePassword Password to access KeyStore if needed
     ##
-    keystorePassword: ''
+    keystorePassword: ""
     ## @param tls.quorum.truststorePassword Password to access TrustStore if needed
     ##
-    truststorePassword: ''
+    truststorePassword: ""
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following

@@ -8,25 +8,25 @@
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
 
 ## @section Common parameters
 
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
-kubeVersion:
+kubeVersion: ""
 ## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname template
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param commonLabels Add labels to all the deployed resources
 ##
 commonLabels: {}
@@ -82,7 +82,7 @@ tomcatUsername: user
 ## @param tomcatPassword Tomcat admin password
 ## ref: https://github.com/bitnami/bitnami-docker-tomcat#creating-a-custom-user
 ##
-tomcatPassword:
+tomcatPassword: ""
 ## @param tomcatAllowRemoteManagement Enable remote access to management interface
 ## ref: https://github.com/bitnami/charts/tree/master/bitnami/tomcat#configuration
 ##
@@ -102,10 +102,10 @@ args: []
 extraEnvVars: []
 ## @param extraEnvVarsCM Name of existing ConfigMap containing extra environment variables
 ##
-extraEnvVarsCM:
+extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Name of existing Secret containing extra environment variables
 ##
-extraEnvVarsSecret:
+extraEnvVarsSecret: ""
 
 ## @section Tomcat deployment parameters
 
@@ -285,7 +285,7 @@ extraVolumeMounts: []
 ##       - name: portname
 ##         containerPort: 1234
 ##
-initContainers: {}
+initContainers: []
 ## @param sidecars Add sidecars to the Tomcat pods.
 ## Example:
 ## sidecars:
@@ -296,7 +296,7 @@ initContainers: {}
 ##       - name: portname
 ##         containerPort: 1234
 ##
-sidecars: {}
+sidecars: []
 ## Enable persistence using Persistent Volume Claims
 ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
@@ -311,10 +311,10 @@ persistence:
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##   GKE, AWS & OpenStack)
   ##
-  storageClass:
+  storageClass: ""
   ## @param persistence.annotations Persistent Volume Claim annotations
   ##
-  annotations:
+  annotations: {}
   ## @param persistence.accessModes PVC Access Modes for Tomcat volume
   ##
   accessModes:
@@ -324,11 +324,11 @@ persistence:
   size: 8Gi
   ## @param persistence.existingClaim An Existing PVC name for Tomcat volume
   ##
-  existingClaim:
+  existingClaim: ""
   ## @param persistence.selectorLabels Selector labels to use in volume claim template in statefulset
   ## Applicable when deployment.type is statefulset
   ##
-  selectorLabels:
+  selectorLabels: {}
 
 ## @section Traffic Exposure parameters
 
@@ -348,7 +348,7 @@ service:
   nodePort: ""
   ## @param service.loadBalancerIP Port Use serviceLoadBalancerIP to request a specific static IP, otherwise leave blank
   ##
-  loadBalancerIP:
+  loadBalancerIP: ""
   ## @param service.externalTrafficPolicy Enable client source IP preservation
   ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
@@ -418,7 +418,7 @@ ingress:
   secrets: []
   ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
   ##
-  apiVersion:
+  apiVersion: ""
   ## @param ingress.path Ingress path
   ##
   path: /

@@ -8,25 +8,25 @@
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
 
 ## @section Common parameters
 
 ## @param nameOverride String to partially override scdf.fullname template (will maintain the release name).
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override scdf.fullname template.
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
-kubeVersion:
+kubeVersion: ""
 ## @param clusterDomain Default Kubernetes cluster domain
 ##
 clusterDomain: cluster.local
@@ -107,15 +107,15 @@ server:
     containerRegistries: {}
     ## @param server.configuration.grafanaInfo Endpoint to the grafana instance (Deprecated: use the metricsDashboard instead)
     ##
-    grafanaInfo:
+    grafanaInfo: ""
     ## @param server.configuration.metricsDashboard Endpoint to the metricsDashboard instance
     ##
-    metricsDashboard:
+    metricsDashboard: ""
   ## @param server.existingConfigmap ConfigMap with Spring Cloud Dataflow Server Configuration
   ## NOTE: When it's set the server.configuration.* and deployer.*
   ##  parameters are ignored,
   ##
-  existingConfigmap:
+  existingConfigmap: ""
   ## @param server.extraEnvVars Extra environment variables to be set on Dataflow server container
   ## E.g:
   ## extraEnvVars:
@@ -125,10 +125,10 @@ server:
   extraEnvVars: []
   ## @param server.extraEnvVarsCM ConfigMap with extra environment variables
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param server.extraEnvVarsSecret Secret with extra environment variables
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param server.replicaCount Number of Dataflow server replicas to deploy
   ##
   replicaCount: 1
@@ -268,12 +268,12 @@ server:
     ## @param server.service.nodePort Specify the nodePort value for the LoadBalancer and NodePort service types
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ##
-    nodePort:
+    nodePort: ""
     ## @param server.service.clusterIP Dataflow server service cluster IP
     ## e.g:
     ## clusterIP: None
     ##
-    clusterIP:
+    clusterIP: ""
     ## @param server.service.externalTrafficPolicy Enable client source IP preservation
     ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
@@ -282,7 +282,7 @@ server:
     ## Set the LoadBalancer service type to internal only
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
-    loadBalancerIP:
+    loadBalancerIP: ""
     ## @param server.service.loadBalancerSourceRanges Addresses that are allowed when service is LoadBalancer
     ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g:
@@ -363,7 +363,7 @@ server:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  initContainers: {}
+  initContainers: []
   ## @param server.sidecars Add sidecars to the Dataflow Server pods
   ## Example:
   ## sidecars:
@@ -374,7 +374,7 @@ server:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## Dataflow Server Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
   ##
@@ -387,7 +387,7 @@ server:
     minAvailable: 1
     ## @param server.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
     ##
-    maxUnavailable:
+    maxUnavailable: ""
   ## Dataflow Server Autoscaling parameters.
   ##
   autoscaling:
@@ -398,10 +398,10 @@ server:
     ## @param server.autoscaling.targetMemory Target Memory utilization percentage
     ##
     enabled: false
-    minReplicas:
-    maxReplicas:
-    targetCPU:
-    targetMemory:
+    minReplicas: ""
+    maxReplicas: ""
+    targetCPU: ""
+    targetMemory: ""
   ## @param server.extraVolumes Extra Volumes to be set on the Dataflow Server Pod
   ## e.g:
   ## extraVolumes:
@@ -489,7 +489,7 @@ skipper:
   ## NOTE: When it's set the server.configuration.* and deployer.*
   ##  parameters are ignored,
   ##
-  existingConfigmap:
+  existingConfigmap: ""
   ## @param skipper.extraEnvVars Extra environment variables to be set on Skipper server container
   ## E.g:
   ## extraEnvVars:
@@ -499,10 +499,10 @@ skipper:
   extraEnvVars: []
   ## @param skipper.extraEnvVarsCM Name of existing ConfigMap containing extra environment variables
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param skipper.extraEnvVarsSecret Name of existing Secret containing extra environment variables
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param skipper.replicaCount Number of Skipper server replicas to deploy
   ##
   replicaCount: 1
@@ -639,12 +639,12 @@ skipper:
     ## @param skipper.service.nodePort Service HTTP node port
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ##
-    nodePort:
+    nodePort: ""
     ## @param skipper.service.clusterIP Skipper server service cluster IP
     ## e.g:
     ## clusterIP: None
     ##
-    clusterIP:
+    clusterIP: ""
     ## @param skipper.service.externalTrafficPolicy Enable client source IP preservation
     ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
@@ -652,7 +652,7 @@ skipper:
     ## @param skipper.service.loadBalancerIP Load balancer IP if service type is `LoadBalancer`
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
-    loadBalancerIP:
+    loadBalancerIP: ""
     ## @param skipper.service.loadBalancerSourceRanges Address that are allowed when service is LoadBalancer
     ## Set the LoadBalancer service type to internal only
     ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
@@ -674,7 +674,7 @@ skipper:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  initContainers: {}
+  initContainers: []
   ## @param skipper.sidecars Add sidecars to the Skipper pods
   ## Example:
   ## sidecars:
@@ -685,7 +685,7 @@ skipper:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## Skipper Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
   ##
@@ -698,7 +698,7 @@ skipper:
     minAvailable: 1
     ## @param skipper.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
     ##
-    maxUnavailable:
+    maxUnavailable: ""
   ## Skipper Autoscaling parameters.
   ##
   autoscaling:
@@ -709,10 +709,10 @@ skipper:
     ## @param skipper.autoscaling.targetMemory Target Memory utilization percentage
     ##
     enabled: false
-    minReplicas:
-    maxReplicas:
-    targetCPU:
-    targetMemory:
+    minReplicas: ""
+    maxReplicas: ""
+    targetCPU: ""
+    targetMemory: ""
   ## @param skipper.extraVolumes Extra Volumes to be set on the Skipper Pod
   ## e.g:
   ## extraVolumes:
@@ -781,7 +781,7 @@ deployer:
   ## @param deployer.nodeSelector The node selectors to apply to the streaming applications deployments in "key:value" format
   ## Multiple node selectors are comma separated.
   ##
-  nodeSelector: ''
+  nodeSelector: ""
   ## @param deployer.tolerations Streaming applications tolerations
   ##
   tolerations: {}
@@ -794,7 +794,7 @@ deployer:
   ## @param deployer.environmentVariables Streaming applications environment variables
   ## RabbitMQ/Kafka envs. Multiple values are comma separated.
   ##
-  environmentVariables: ''
+  environmentVariables: ""
   ## Streams containers' Security Context. This security context will be use in every deployed stream.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param deployer.podSecurityContext.runAsUser Set Dataflow Streams container's Security Context runAsUser
@@ -953,19 +953,19 @@ metrics:
     extraLabels: {}
     ## @param metrics.serviceMonitor.namespace Namespace in which ServiceMonitor is created if different from release
     ##
-    namespace:
+    namespace: ""
     ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped.
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ## e.g:
     ## interval: 10s
     ##
-    interval:
+    interval: ""
     ## @param metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ## e.g:
     ## scrapeTimeout: 10s
     ##
-    scrapeTimeout:
+    scrapeTimeout: ""
   ## Prometheus Rsocket Proxy Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
   ##
@@ -978,7 +978,7 @@ metrics:
     minAvailable: 1
     ## @param metrics.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
     ##
-    maxUnavailable:
+    maxUnavailable: ""
   ## Prometheus Rsocket Proxy Autoscaling parameters.
   ## @param metrics.autoscaling.enabled Enable autoscaling for Prometheus Rsocket Proxy
   ## @param metrics.autoscaling.minReplicas Minimum number of Prometheus Rsocket Proxy replicas
@@ -988,10 +988,10 @@ metrics:
   ##
   autoscaling:
     enabled: false
-    minReplicas:
-    maxReplicas:
-    targetCPU:
-    targetMemory:
+    minReplicas: ""
+    maxReplicas: ""
+    targetCPU: ""
+    targetMemory: ""
 
 ## @section Init Container parameters
 
@@ -1063,7 +1063,7 @@ mariadb:
     ## @param mariadb.auth.rootPassword Password for the MariaDB `root` user
     ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-the-root-password-on-first-run
     ##
-    rootPassword: ''
+    rootPassword: ""
     ## @param mariadb.auth.username Username of new user to create
     ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-on-first-run
     ##
@@ -1104,19 +1104,19 @@ externalDatabase:
   port: 3306
   ## @param externalDatabase.driver The fully qualified name of the JDBC Driver class
   ##
-  driver:
+  driver: ""
   ## @param externalDatabase.scheme The scheme is a vendor-specific or shared protocol string that follows the "jdbc:" of the URL
   ##
-  scheme:
+  scheme: ""
   ## @param externalDatabase.password Password for the above username
   ##
-  password: ''
+  password: ""
   ## @param externalDatabase.existingPasswordSecret Existing secret with database password
   ##
-  existingPasswordSecret:
+  existingPasswordSecret: ""
   ## @param externalDatabase.existingPasswordKey Key of the existing secret with database password, defaults to `datasource-password`
   ##
-  existingPasswordKey:
+  existingPasswordKey: ""
   ## Data Flow user and database
   ##
   dataflow:
@@ -1150,7 +1150,7 @@ externalDatabase:
   ## @param externalDatabase.hibernateDialect Hibernate Dialect used by Dataflow/Skipper servers
   ## e.g: org.hibernate.dialect.MariaDB102Dialect
   ##
-  hibernateDialect: ''
+  hibernateDialect: ""
 
 ## @section RabbitMQ chart parameters
 
@@ -1188,10 +1188,10 @@ externalRabbitmq:
   ## e.g:
   ## vhost: /
   ##
-  vhost:
+  vhost: ""
   ## @param externalRabbitmq.existingPasswordSecret Existing secret with RabbitMQ password. It will be saved in a kubernetes secret
   ##
-  existingPasswordSecret:
+  existingPasswordSecret: ""
 
 ## @section Kafka chart parameters
 

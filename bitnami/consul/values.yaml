@@ -8,25 +8,25 @@
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
 
 ## @section Common parameters
 
 ## @param kubeVersion Override Kubernetes version
 ##
-kubeVersion:
+kubeVersion: ""
 ## @param nameOverride String to partially override common.names.fullname
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param commonLabels Labels to add to all deployed objects (sub-charts are not considered)
 ##
 commonLabels: {}
@@ -84,14 +84,14 @@ raftMultiplier: '1'
 ## Example:
 ## gossipKey: 887Syd/BOvbtvRAKviazMg==
 ##
-gossipKey:
+gossipKey: ""
 ## @param tlsEncryptionSecretName Name of existing secret with TLS encryption data
 ## Use TLS to verify the authenticity of servers and clients.
 ## Check README for more information.
 ## Example:
 ## tlsEncryptionSecretName: your-already-created-secret
 ##
-tlsEncryptionSecretName:
+tlsEncryptionSecretName: ""
 ## @param hostAliases Deployment pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -122,7 +122,7 @@ hostAliases: []
 configuration: ""
 ## @param existingConfigmap ConfigMap with HashiCorp Consul configuration
 ##
-existingConfigmap:
+existingConfigmap: ""
 ## @param localConfig Extra configuration that will be added to the default one
 ## Example:
 ## localConfig: |-
@@ -145,10 +145,10 @@ extraEnvVars: []
 #    value: BAR
 ## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars
 ##
-extraEnvVarsCM:
+extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Name of existing Secret containing extra env vars
 ##
-extraEnvVarsSecret:
+extraEnvVarsSecret: ""
 ## HashiCorp Consul container ports to open
 ## @param containerPorts.http Port to open for HTTP in Consul
 ## @param containerPorts.dns Port to open for DNS server in Consul
@@ -175,7 +175,7 @@ updateStrategy: RollingUpdate
 ## @param rollingUpdatePartition Partition update strategy
 ## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
 ##
-rollingUpdatePartition:
+rollingUpdatePartition: ""
 ## @param podManagementPolicy StatefulSet pod management policy
 ##
 podManagementPolicy: Parallel
@@ -319,7 +319,7 @@ pdb:
   minAvailable: 1
   ## @param pdb.maxUnavailable Max number of pods that can be unavailable after the eviction
   ##
-  maxUnavailable:
+  maxUnavailable: ""
 
 ## @section Exposure parameters
 
@@ -363,7 +363,7 @@ ingress:
   path: /
   ## @param ingress.apiVersion Override API Version (automatically detected if not set)
   ##
-  apiVersion:
+  apiVersion: ""
   ## @param ingress.pathType Ingress path type
   ##
   pathType: ImplementationSpecific
@@ -394,7 +394,7 @@ ingress:
   ## - name: consul-ui.local
   ##   path: /
   ##
-  extraHosts:
+  extraHosts: []
   ## @param ingress.extraTls TLS configuration for additional hostname(s) to be covered with this ingress record
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
   ## extraTls:
@@ -402,7 +402,7 @@ ingress:
   ##     - consul-ui.local
   ##   secretName: rconsul-ui.local-tls
   ##
-  extraTls:
+  extraTls: []
   ## @param ingress.secrets If you're providing your own certificates, please use this to add the certificates as secrets
   ## key and certificate should start with -----BEGIN CERTIFICATE----- or
   ## -----BEGIN RSA PRIVATE KEY-----
@@ -435,7 +435,7 @@ persistence:
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##   GKE, AWS & OpenStack)
   ##
-  storageClass:
+  storageClass: ""
   ## @param persistence.annotations Persistent Volume Claim annotations
   ##
   annotations: {}
@@ -571,22 +571,19 @@ metrics:
     enabled: false
     ## @param metrics.serviceMonitor.namespace The namespace in which the ServiceMonitor will be created
     ##
-    namespace:
+    namespace: ""
     ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped
     ##
     interval: 30s
     ## @param metrics.serviceMonitor.scrapeTimeout The timeout after which the scrape is ended
     ##
-    scrapeTimeout:
+    scrapeTimeout: ""
     ## @param metrics.serviceMonitor.relabellings Metrics relabellings to add to the scrape endpoint
     ##
-    relabellings:
+    relabellings: []
     ## @param metrics.serviceMonitor.honorLabels Specify honorLabels parameter to add the scrape endpoint
     ##
     honorLabels: false
-    ## @param metrics.serviceMonitor.release Specify the release for ServiceMonitor. Sometimes it should be custom for prometheus operator to work
-    ##
-    release:
     ## @param metrics.serviceMonitor.additionalLabels Used to pass Labels that are used by the Prometheus installed in your cluster to select Service Monitors to work with
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
     ##

@@ -54,9 +54,9 @@ $ helm delete --purge my-release
 
 | Name                       | Description                                                        | Value               |
 | -------------------------- | ------------------------------------------------------------------ | ------------------- |
-| `global.imageRegistry`     | Global Docker image registry                                       | `nil`               |
+| `global.imageRegistry`     | Global Docker image registry                                       | `""`                |
 | `global.imagePullSecrets`  | Global Docker registry secret names as an array                    | `[]`                |
-| `global.storageClass`      | Global StorageClass for Persistent Volume(s)                       | `nil`               |
+| `global.storageClass`      | Global StorageClass for Persistent Volume(s)                       | `""`                |
 | `global.coordinating.name` | Coordinating name to be used in the Kibana subchart (service name) | `coordinating-only` |
 | `global.kibanaEnabled`     | Whether or not to enable Kibana                                    | `false`             |
 
@@ -65,8 +65,8 @@ $ helm delete --purge my-release
 
 | Name               | Description                                                                                  | Value           |
 | ------------------ | -------------------------------------------------------------------------------------------- | --------------- |
-| `nameOverride`     | String to partially override common.names.fullname template (will maintain the release name) | `nil`           |
-| `fullnameOverride` | String to fully override common.names.fullname template                                      | `nil`           |
+| `nameOverride`     | String to partially override common.names.fullname template (will maintain the release name) | `""`            |
+| `fullnameOverride` | String to fully override common.names.fullname template                                      | `""`            |
 | `clusterDomain`    | Kubernetes cluster domain                                                                    | `cluster.local` |
 
 
@@ -76,23 +76,23 @@ $ helm delete --purge my-release
 | ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
 | `image.registry`        | Elasticsearch image registry                                                                                                                        | `docker.io`             |
 | `image.repository`      | Elasticsearch image repository                                                                                                                      | `bitnami/elasticsearch` |
-| `image.tag`             | Elasticsearch image tag (immutable tags are recommended)                                                                                            | `7.13.3-debian-10-r0`   |
+| `image.tag`             | Elasticsearch image tag (immutable tags are recommended)                                                                                            | `7.13.4-debian-10-r0`   |
 | `image.pullPolicy`      | Elasticsearch image pull policy                                                                                                                     | `IfNotPresent`          |
 | `image.pullSecrets`     | Elasticsearch image pull secrets                                                                                                                    | `[]`                    |
 | `image.debug`           | Enable image debug mode                                                                                                                             | `false`                 |
-| `name`                  | Elasticsearch cluster name                                                                                                                          | `nil`                   |
-| `plugins`               | Comma, semi-colon or space separated list of plugins to install at initialization                                                                   | `nil`                   |
-| `snapshotRepoPath`      | File System snapshot repository path                                                                                                                | `nil`                   |
-| `config`                | Override elasticsearch configuration                                                                                                                | `nil`                   |
-| `extraConfig`           | Append extra configuration to the elasticsearch node configuration                                                                                  | `nil`                   |
-| `extraVolumes`          | A list of volumes to be added to the pod                                                                                                            | `nil`                   |
-| `extraVolumeMounts`     | A list of volume mounts to be added to the pod                                                                                                      | `nil`                   |
-| `initScripts`           | Dictionary of init scripts. Evaluated as a template.                                                                                                | `nil`                   |
-| `initScriptsCM`         | ConfigMap with the init scripts. Evaluated as a template.                                                                                           | `nil`                   |
-| `initScriptsSecret`     | Secret containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time that contain sensitive data. Evaluated as a template. | `nil`                   |
+| `name`                  | Elasticsearch cluster name                                                                                                                          | `""`                    |
+| `plugins`               | Comma, semi-colon or space separated list of plugins to install at initialization                                                                   | `""`                    |
+| `snapshotRepoPath`      | File System snapshot repository path                                                                                                                | `""`                    |
+| `config`                | Override elasticsearch configuration                                                                                                                | `{}`                    |
+| `extraConfig`           | Append extra configuration to the elasticsearch node configuration                                                                                  | `{}`                    |
+| `extraVolumes`          | A list of volumes to be added to the pod                                                                                                            | `[]`                    |
+| `extraVolumeMounts`     | A list of volume mounts to be added to the pod                                                                                                      | `[]`                    |
+| `initScripts`           | Dictionary of init scripts. Evaluated as a template.                                                                                                | `{}`                    |
+| `initScriptsCM`         | ConfigMap with the init scripts. Evaluated as a template.                                                                                           | `""`                    |
+| `initScriptsSecret`     | Secret containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time that contain sensitive data. Evaluated as a template. | `""`                    |
 | `extraEnvVars`          | Array containing extra env vars to be added to all pods (evaluated as a template)                                                                   | `[]`                    |
-| `extraEnvVarsConfigMap` | ConfigMap containing extra env vars to be added to all pods (evaluated as a template)                                                               | `nil`                   |
-| `extraEnvVarsSecret`    | Secret containing extra env vars to be added to all pods (evaluated as a template)                                                                  | `nil`                   |
+| `extraEnvVarsConfigMap` | ConfigMap containing extra env vars to be added to all pods (evaluated as a template)                                                               | `""`                    |
+| `extraEnvVarsSecret`    | Secret containing extra env vars to be added to all pods (evaluated as a template)                                                                  | `""`                    |
 
 
 ### Master parameters
@@ -100,11 +100,11 @@ $ helm delete --purge my-release
 | Name                                        | Description                                                                                                                                                                                                                             | Value           |
 | ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
 | `master.name`                               | Master-eligible node pod name                                                                                                                                                                                                           | `master`        |
-| `master.fullnameOverride`                   | String to fully override elasticsearch.master.fullname template with a string                                                                                                                                                           | `nil`           |
+| `master.fullnameOverride`                   | String to fully override elasticsearch.master.fullname template with a string                                                                                                                                                           | `""`            |
 | `master.replicas`                           | Desired number of Elasticsearch master-eligible nodes. Consider using an odd number of master nodes to prevent "split brain" situation.  See: https://www.elastic.co/guide/en/elasticsearch/reference/7.x/modules-discovery-voting.html | `3`             |
 | `master.updateStrategy.type`                | Update strategy for Master statefulset                                                                                                                                                                                                  | `RollingUpdate` |
 | `master.hostAliases`                        | Add deployment host aliases                                                                                                                                                                                                             | `[]`            |
-| `master.schedulerName`                      | Name of the k8s scheduler (other than default)                                                                                                                                                                                          | `nil`           |
+| `master.schedulerName`                      | Name of the k8s scheduler (other than default)                                                                                                                                                                                          | `""`            |
 | `master.heapSize`                           | Master-eligible node heap size                                                                                                                                                                                                          | `128m`          |
 | `master.podAnnotations`                     | Annotations for master-eligible pods.                                                                                                                                                                                                   | `{}`            |
 | `master.podLabels`                          | Extra labels to add to Pod                                                                                                                                                                                                              | `{}`            |
@@ -145,35 +145,35 @@ $ helm delete --purge my-release
 | `master.initContainers`                     | Extra init containers to add to the Elasticsearch master-eligible pod(s)                                                                                                                                                                | `[]`            |
 | `master.sidecars`                           | Extra sidecar containers to add to the Elasticsearch master-eligible pod(s)                                                                                                                                                             | `[]`            |
 | `master.persistence.enabled`                | Enable persistence using a `PersistentVolumeClaim`                                                                                                                                                                                      | `true`          |
-| `master.persistence.storageClass`           | Persistent Volume Storage Class                                                                                                                                                                                                         | `nil`           |
-| `master.persistence.existingClaim`          | Existing Persistent Volume Claim                                                                                                                                                                                                        | `nil`           |
-| `master.persistence.existingVolume`         | Existing Persistent Volume for use as volume match label selector to the `volumeClaimTemplate`. Ignored when `master.persistence.selector` is set.                                                                                      | `nil`           |
+| `master.persistence.storageClass`           | Persistent Volume Storage Class                                                                                                                                                                                                         | `""`            |
+| `master.persistence.existingClaim`          | Existing Persistent Volume Claim                                                                                                                                                                                                        | `""`            |
+| `master.persistence.existingVolume`         | Existing Persistent Volume for use as volume match label selector to the `volumeClaimTemplate`. Ignored when `master.persistence.selector` is set.                                                                                      | `""`            |
 | `master.persistence.selector`               | Configure custom selector for existing Persistent Volume. Overwrites `master.persistence.existingVolume`                                                                                                                                | `{}`            |
 | `master.persistence.annotations`            | Persistent Volume Claim annotations                                                                                                                                                                                                     | `{}`            |
 | `master.persistence.accessModes`            | Persistent Volume Access Modes                                                                                                                                                                                                          | `[]`            |
 | `master.persistence.size`                   | Persistent Volume Size                                                                                                                                                                                                                  | `8Gi`           |
 | `master.service.type`                       | Kubernetes Service type (master-eligible nodes)                                                                                                                                                                                         | `ClusterIP`     |
 | `master.service.port`                       | Kubernetes Service port for Elasticsearch transport port (master-eligible nodes)                                                                                                                                                        | `9300`          |
-| `master.service.nodePort`                   | Kubernetes Service nodePort (master-eligible nodes)                                                                                                                                                                                     | `nil`           |
+| `master.service.nodePort`                   | Kubernetes Service nodePort (master-eligible nodes)                                                                                                                                                                                     | `""`            |
 | `master.service.annotations`                | Annotations for master-eligible nodes service                                                                                                                                                                                           | `{}`            |
-| `master.service.loadBalancerIP`             | loadBalancerIP if master-eligible nodes service type is `LoadBalancer`                                                                                                                                                                  | `nil`           |
+| `master.service.loadBalancerIP`             | loadBalancerIP if master-eligible nodes service type is `LoadBalancer`                                                                                                                                                                  | `""`            |
 | `master.serviceAccount.create`              | Enable creation of ServiceAccount for the master node                                                                                                                                                                                   | `false`         |
-| `master.serviceAccount.name`                | Name of the created serviceAccount                                                                                                                                                                                                      | `nil`           |
+| `master.serviceAccount.name`                | Name of the created serviceAccount                                                                                                                                                                                                      | `""`            |
 | `master.autoscaling.enabled`                | Enable autoscaling for master replicas                                                                                                                                                                                                  | `false`         |
 | `master.autoscaling.minReplicas`            | Minimum number of master replicas                                                                                                                                                                                                       | `2`             |
 | `master.autoscaling.maxReplicas`            | Maximum number of master replicas                                                                                                                                                                                                       | `11`            |
-| `master.autoscaling.targetCPU`              | Target CPU utilization percentage for master replica autoscaling                                                                                                                                                                        | `nil`           |
-| `master.autoscaling.targetMemory`           | Target Memory utilization percentage for master replica autoscaling                                                                                                                                                                     | `nil`           |
+| `master.autoscaling.targetCPU`              | Target CPU utilization percentage for master replica autoscaling                                                                                                                                                                        | `""`            |
+| `master.autoscaling.targetMemory`           | Target Memory utilization percentage for master replica autoscaling                                                                                                                                                                     | `""`            |
 
 
 ### Coordinating parameters
 
 | Name                                              | Description                                                                                                               | Value           |
 | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | --------------- |
-| `coordinating.fullnameOverride`                   | String to fully override elasticsearch.coordinating.fullname template with a string                                       | `nil`           |
+| `coordinating.fullnameOverride`                   | String to fully override elasticsearch.coordinating.fullname template with a string                                       | `""`            |
 | `coordinating.replicas`                           | Desired number of Elasticsearch coordinating-only nodes                                                                   | `2`             |
 | `coordinating.hostAliases`                        | Add deployment host aliases                                                                                               | `[]`            |
-| `coordinating.schedulerName`                      | Name of the k8s scheduler (other than default)                                                                            | `nil`           |
+| `coordinating.schedulerName`                      | Name of the k8s scheduler (other than default)                                                                            | `""`            |
 | `coordinating.updateStrategy.type`                | Update strategy for Coordinating Deployment                                                                               | `RollingUpdate` |
 | `coordinating.heapSize`                           | Coordinating-only node heap size                                                                                          | `128m`          |
 | `coordinating.podAnnotations`                     | Annotations for coordinating pods.                                                                                        | `{}`            |
@@ -216,16 +216,16 @@ $ helm delete --purge my-release
 | `coordinating.sidecars`                           | Extra sidecar containers to add to the Elasticsearch coordinating-only pod(s)                                             | `[]`            |
 | `coordinating.service.type`                       | Kubernetes Service type (coordinating-only nodes)                                                                         | `ClusterIP`     |
 | `coordinating.service.port`                       | Kubernetes Service port for REST API (coordinating-only nodes)                                                            | `9200`          |
-| `coordinating.service.nodePort`                   | Kubernetes Service nodePort (coordinating-only nodes)                                                                     | `nil`           |
+| `coordinating.service.nodePort`                   | Kubernetes Service nodePort (coordinating-only nodes)                                                                     | `""`            |
 | `coordinating.service.annotations`                | Annotations for coordinating-only nodes service                                                                           | `{}`            |
-| `coordinating.service.loadBalancerIP`             | loadBalancerIP if coordinating-only nodes service type is `LoadBalancer`                                                  | `nil`           |
+| `coordinating.service.loadBalancerIP`             | loadBalancerIP if coordinating-only nodes service type is `LoadBalancer`                                                  | `""`            |
 | `coordinating.serviceAccount.create`              | Enable creation of ServiceAccount for the coordinating-only node                                                          | `false`         |
-| `coordinating.serviceAccount.name`                | Name of the created serviceAccount                                                                                        | `nil`           |
+| `coordinating.serviceAccount.name`                | Name of the created serviceAccount                                                                                        | `""`            |
 | `coordinating.autoscaling.enabled`                | Enable autoscaling for coordinating replicas                                                                              | `false`         |
 | `coordinating.autoscaling.minReplicas`            | Minimum number of coordinating replicas                                                                                   | `2`             |
 | `coordinating.autoscaling.maxReplicas`            | Maximum number of coordinating replicas                                                                                   | `11`            |
-| `coordinating.autoscaling.targetCPU`              | Target CPU utilization percentage for coordinating replica autoscaling                                                    | `nil`           |
-| `coordinating.autoscaling.targetMemory`           | Target Memory utilization percentage for coordinating replica autoscaling                                                 | `nil`           |
+| `coordinating.autoscaling.targetCPU`              | Target CPU utilization percentage for coordinating replica autoscaling                                                    | `""`            |
+| `coordinating.autoscaling.targetMemory`           | Target Memory utilization percentage for coordinating replica autoscaling                                                 | `""`            |
 
 
 ### Data parameters
@@ -233,12 +233,12 @@ $ helm delete --purge my-release
 | Name                                         | Description                                                                                                                                       | Value           |
 | -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
 | `data.name`                                  | Data node pod name                                                                                                                                | `data`          |
-| `data.fullnameOverride`                      | String to fully override elasticsearch.data.fullname template with a string                                                                       | `nil`           |
+| `data.fullnameOverride`                      | String to fully override elasticsearch.data.fullname template with a string                                                                       | `""`            |
 | `data.replicas`                              | Desired number of Elasticsearch data nodes                                                                                                        | `2`             |
 | `data.hostAliases`                           | Add deployment host aliases                                                                                                                       | `[]`            |
-| `data.schedulerName`                         | Name of the k8s scheduler (other than default)                                                                                                    | `nil`           |
+| `data.schedulerName`                         | Name of the k8s scheduler (other than default)                                                                                                    | `""`            |
 | `data.updateStrategy.type`                   | Update strategy for Data statefulset                                                                                                              | `RollingUpdate` |
-| `data.updateStrategy.rollingUpdatePartition` | Partition update strategy for Data statefulset                                                                                                    | `nil`           |
+| `data.updateStrategy.rollingUpdatePartition` | Partition update strategy for Data statefulset                                                                                                    | `""`            |
 | `data.heapSize`                              | Data node heap size                                                                                                                               | `1024m`         |
 | `data.podAnnotations`                        | Annotations for data pods.                                                                                                                        | `{}`            |
 | `data.podLabels`                             | Extra labels to add to Pod                                                                                                                        | `{}`            |
@@ -279,20 +279,20 @@ $ helm delete --purge my-release
 | `data.initContainers`                        | Extra init containers to add to the Elasticsearch data pod(s)                                                                                     | `[]`            |
 | `data.sidecars`                              | Extra sidecar containers to add to the Elasticsearch data pod(s)                                                                                  | `[]`            |
 | `data.persistence.enabled`                   | Enable persistence using a `PersistentVolumeClaim`                                                                                                | `true`          |
-| `data.persistence.storageClass`              | Persistent Volume Storage Class                                                                                                                   | `nil`           |
-| `data.persistence.existingClaim`             | Existing Persistent Volume Claim                                                                                                                  | `nil`           |
-| `data.persistence.existingVolume`            | Existing Persistent Volume for use as volume match label selector to the `volumeClaimTemplate`. Ignored when `data.persistence.selector` ist set. | `nil`           |
+| `data.persistence.storageClass`              | Persistent Volume Storage Class                                                                                                                   | `""`            |
+| `data.persistence.existingClaim`             | Existing Persistent Volume Claim                                                                                                                  | `""`            |
+| `data.persistence.existingVolume`            | Existing Persistent Volume for use as volume match label selector to the `volumeClaimTemplate`. Ignored when `data.persistence.selector` ist set. | `""`            |
 | `data.persistence.selector`                  | Configure custom selector for existing Persistent Volume. Overwrites `data.persistence.existingVolume`                                            | `{}`            |
 | `data.persistence.annotations`               | Persistent Volume Claim annotations                                                                                                               | `{}`            |
 | `data.persistence.accessModes`               | Persistent Volume Access Modes                                                                                                                    | `[]`            |
 | `data.persistence.size`                      | Persistent Volume Size                                                                                                                            | `8Gi`           |
 | `data.serviceAccount.create`                 | Enable creation of ServiceAccount for the data node                                                                                               | `false`         |
-| `data.serviceAccount.name`                   | Name of the created serviceAccount                                                                                                                | `nil`           |
+| `data.serviceAccount.name`                   | Name of the created serviceAccount                                                                                                                | `""`            |
 | `data.autoscaling.enabled`                   | Enable autoscaling for data replicas                                                                                                              | `false`         |
 | `data.autoscaling.minReplicas`               | Minimum number of data replicas                                                                                                                   | `2`             |
 | `data.autoscaling.maxReplicas`               | Maximum number of data replicas                                                                                                                   | `11`            |
-| `data.autoscaling.targetCPU`                 | Target CPU utilization percentage for data replica autoscaling                                                                                    | `nil`           |
-| `data.autoscaling.targetMemory`              | Target Memory utilization percentage for data replica autoscaling                                                                                 | `nil`           |
+| `data.autoscaling.targetCPU`                 | Target CPU utilization percentage for data replica autoscaling                                                                                    | `""`            |
+| `data.autoscaling.targetMemory`              | Target Memory utilization percentage for data replica autoscaling                                                                                 | `""`            |
 
 
 ### Ingest parameters
@@ -301,12 +301,12 @@ $ helm delete --purge my-release
 | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------- | ----------- |
 | `ingest.enabled`                            | Enable ingest nodes                                                                                            | `false`     |
 | `ingest.name`                               | Ingest node pod name                                                                                           | `ingest`    |
-| `ingest.fullnameOverride`                   | String to fully override elasticsearch.ingest.fullname template with a string                                  | `nil`       |
+| `ingest.fullnameOverride`                   | String to fully override elasticsearch.ingest.fullname template with a string                                  | `""`        |
 | `ingest.replicas`                           | Desired number of Elasticsearch ingest nodes                                                                   | `2`         |
 | `ingest.heapSize`                           | Ingest node heap size                                                                                          | `128m`      |
 | `ingest.podAnnotations`                     | Annotations for ingest pods.                                                                                   | `{}`        |
 | `ingest.hostAliases`                        | Add deployment host aliases                                                                                    | `[]`        |
-| `ingest.schedulerName`                      | Name of the k8s scheduler (other than default)                                                                 | `nil`       |
+| `ingest.schedulerName`                      | Name of the k8s scheduler (other than default)                                                                 | `""`        |
 | `ingest.podLabels`                          | Extra labels to add to Pod                                                                                     | `{}`        |
 | `ingest.securityContext.enabled`            | Enable security context for ingest pods                                                                        | `true`      |
 | `ingest.securityContext.fsGroup`            | Group ID for the container for ingest pods                                                                     | `1001`      |
@@ -346,9 +346,9 @@ $ helm delete --purge my-release
 | `ingest.sidecars`                           | Extra sidecar containers to add to the Elasticsearch ingest pod(s)                                             | `[]`        |
 | `ingest.service.type`                       | Kubernetes Service type (ingest nodes)                                                                         | `ClusterIP` |
 | `ingest.service.port`                       | Kubernetes Service port Elasticsearch transport port (ingest nodes)                                            | `9300`      |
-| `ingest.service.nodePort`                   | Kubernetes Service nodePort (ingest nodes)                                                                     | `nil`       |
+| `ingest.service.nodePort`                   | Kubernetes Service nodePort (ingest nodes)                                                                     | `""`        |
 | `ingest.service.annotations`                | Annotations for ingest nodes service                                                                           | `{}`        |
-| `ingest.service.loadBalancerIP`             | loadBalancerIP if ingest nodes service type is `LoadBalancer`                                                  | `nil`       |
+| `ingest.service.loadBalancerIP`             | loadBalancerIP if ingest nodes service type is `LoadBalancer`                                                  | `""`        |
 
 
 ### Curator parameters
@@ -359,7 +359,7 @@ $ helm delete --purge my-release
 | `curator.name`                               | Elasticsearch Curator pod name                                                                    | `curator`                       |
 | `curator.image.registry`                     | Elasticsearch Curator image registry                                                              | `docker.io`                     |
 | `curator.image.repository`                   | Elasticsearch Curator image repository                                                            | `bitnami/elasticsearch-curator` |
-| `curator.image.tag`                          | Elasticsearch Curator image tag                                                                   | `5.8.4-debian-10-r57`           |
+| `curator.image.tag`                          | Elasticsearch Curator image tag                                                                   | `5.8.4-debian-10-r69`           |
 | `curator.image.pullPolicy`                   | Elasticsearch Curator image pull policy                                                           | `IfNotPresent`                  |
 | `curator.image.pullSecrets`                  | Elasticsearch Curator image pull secrets                                                          | `[]`                            |
 | `curator.cronjob.schedule`                   | Schedule for the CronJob                                                                          | `0 1 * * *`                     |
@@ -368,7 +368,7 @@ $ helm delete --purge my-release
 | `curator.cronjob.failedJobsHistoryLimit`     | Specify the number of failed Jobs to keep                                                         | `""`                            |
 | `curator.cronjob.successfulJobsHistoryLimit` | Specify the number of completed Jobs to keep                                                      | `""`                            |
 | `curator.cronjob.jobRestartPolicy`           | Control the Job restartPolicy                                                                     | `Never`                         |
-| `curator.schedulerName`                      | Name of the k8s scheduler (other than default)                                                    | `nil`                           |
+| `curator.schedulerName`                      | Name of the k8s scheduler (other than default)                                                    | `""`                            |
 | `curator.podAnnotations`                     | Annotations to add to the pod                                                                     | `{}`                            |
 | `curator.podLabels`                          | Extra labels to add to Pod                                                                        | `{}`                            |
 | `curator.podAffinityPreset`                  | Curator Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                            |
@@ -383,7 +383,7 @@ $ helm delete --purge my-release
 | `curator.tolerations`                        | Curator Tolerations for pod assignment                                                            | `[]`                            |
 | `curator.rbac.enabled`                       | Enable RBAC resources                                                                             | `false`                         |
 | `curator.serviceAccount.create`              | Create a default serviceaccount for elasticsearch curator                                         | `true`                          |
-| `curator.serviceAccount.name`                | Name for elasticsearch curator serviceaccount                                                     | `nil`                           |
+| `curator.serviceAccount.name`                | Name for elasticsearch curator serviceaccount                                                     | `""`                            |
 | `curator.psp.create`                         | Create pod security policy resources                                                              | `false`                         |
 | `curator.hooks`                              | Whether to run job on selected hooks                                                              | `{}`                            |
 | `curator.dryrun`                             | Run Curator in dry-run mode                                                                       | `false`                         |
@@ -407,12 +407,12 @@ $ helm delete --purge my-release
 | `metrics.name`                               | Metrics pod name                                                                                          | `metrics`                        |
 | `metrics.image.registry`                     | Metrics exporter image registry                                                                           | `docker.io`                      |
 | `metrics.image.repository`                   | Metrics exporter image repository                                                                         | `bitnami/elasticsearch-exporter` |
-| `metrics.image.tag`                          | Metrics exporter image tag                                                                                | `1.2.1-debian-10-r7`             |
+| `metrics.image.tag`                          | Metrics exporter image tag                                                                                | `1.2.1-debian-10-r19`            |
 | `metrics.image.pullPolicy`                   | Metrics exporter image pull policy                                                                        | `IfNotPresent`                   |
 | `metrics.image.pullSecrets`                  | Metrics exporter image pull secrets                                                                       | `[]`                             |
 | `metrics.extraArgs`                          | Extra arguments to add to the default exporter command                                                    | `[]`                             |
 | `metrics.hostAliases`                        | Add deployment host aliases                                                                               | `[]`                             |
-| `metrics.schedulerName`                      | Name of the k8s scheduler (other than default)                                                            | `nil`                            |
+| `metrics.schedulerName`                      | Name of the k8s scheduler (other than default)                                                            | `""`                             |
 | `metrics.service.type`                       | Metrics exporter endpoint service type                                                                    | `ClusterIP`                      |
 | `metrics.service.annotations`                | Provide any additional annotations which may be required.                                                 | `{}`                             |
 | `metrics.podAffinityPreset`                  | Metrics Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`               | `""`                             |
@@ -440,9 +440,9 @@ $ helm delete --purge my-release
 | `metrics.podAnnotations`                     | Metrics exporter pod Annotation and Labels                                                                | `{}`                             |
 | `metrics.podLabels`                          | Extra labels to add to Pod                                                                                | `{}`                             |
 | `metrics.serviceMonitor.enabled`             | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)    | `false`                          |
-| `metrics.serviceMonitor.namespace`           | Namespace in which Prometheus is running                                                                  | `nil`                            |
-| `metrics.serviceMonitor.interval`            | Interval at which metrics should be scraped.                                                              | `nil`                            |
-| `metrics.serviceMonitor.scrapeTimeout`       | Timeout after which the scrape is ended                                                                   | `nil`                            |
+| `metrics.serviceMonitor.namespace`           | Namespace in which Prometheus is running                                                                  | `""`                             |
+| `metrics.serviceMonitor.interval`            | Interval at which metrics should be scraped.                                                              | `""`                             |
+| `metrics.serviceMonitor.scrapeTimeout`       | Timeout after which the scrape is ended                                                                   | `""`                             |
 | `metrics.serviceMonitor.selector`            | Prometheus instance selector labels                                                                       | `{}`                             |
 
 
@@ -453,7 +453,7 @@ $ helm delete --purge my-release
 | `sysctlImage.enabled`            | Enable kernel settings modifier image       | `true`                  |
 | `sysctlImage.registry`           | Kernel settings modifier image registry     | `docker.io`             |
 | `sysctlImage.repository`         | Kernel settings modifier image repository   | `bitnami/bitnami-shell` |
-| `sysctlImage.tag`                | Kernel settings modifier image tag          | `10-debian-10-r127`     |
+| `sysctlImage.tag`                | Kernel settings modifier image tag          | `10-debian-10-r138`     |
 | `sysctlImage.pullPolicy`         | Kernel settings modifier image pull policy  | `Always`                |
 | `sysctlImage.pullSecrets`        | Kernel settings modifier image pull secrets | `[]`                    |
 | `sysctlImage.resources.limits`   | The resources limits for the container      | `{}`                    |
@@ -467,7 +467,7 @@ $ helm delete --purge my-release
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r127`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r138`     |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `Always`                |
 | `volumePermissions.image.pullSecrets`  | Init container volume-permissions image pull secrets                                                                                                      | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                                                                                                    | `{}`                    |

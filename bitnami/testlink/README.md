@@ -52,18 +52,18 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `nil` |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
 
 ### Common parameters
 
 | Name                | Description                                                                                                  | Value |
 | ------------------- | ------------------------------------------------------------------------------------------------------------ | ----- |
-| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                                         | `nil` |
-| `nameOverride`      | String to partially override testlink.fullname template (will maintain the release name)                     | `nil` |
-| `fullnameOverride`  | String to fully override testlink.fullname template                                                          | `nil` |
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                                         | `""`  |
+| `nameOverride`      | String to partially override testlink.fullname template (will maintain the release name)                     | `""`  |
+| `fullnameOverride`  | String to fully override testlink.fullname template                                                          | `""`  |
 | `commonAnnotations` | Common annotations to add to all TestLink resources (sub-charts are not considered). Evaluated as a template | `{}`  |
 | `commonLabels`      | Common labels to add to all TestLink resources (sub-charts are not considered). Evaluated as a template      | `{}`  |
 | `extraDeploy`       | Array with extra yaml to deploy with the chart. Evaluated as a template                                      | `[]`  |
@@ -83,35 +83,35 @@ The command removes all the Kubernetes components associated with the chart and 
 | `hostAliases`                        | Deployment pod host aliases                                                               | `[]`                    |
 | `testlinkSkipInstall`                | Skip TestLink installation wizard. Useful for migrations and restoring from SQL dump      | `false`                 |
 | `testlinkUsername`                   | User of the application                                                                   | `user`                  |
-| `testlinkPassword`                   | Application password                                                                      | `nil`                   |
+| `testlinkPassword`                   | Application password                                                                      | `""`                    |
 | `testlinkEmail`                      | Admin email                                                                               | `user@example.com`      |
 | `testlinkLanguage`                   | Default language                                                                          | `en_US`                 |
 | `allowEmptyPassword`                 | Allow DB blank passwords                                                                  | `true`                  |
-| `command`                            | Override default container command (useful when using custom images)                      | `nil`                   |
-| `args`                               | Override default container args (useful when using custom images)                         | `nil`                   |
+| `command`                            | Override default container command (useful when using custom images)                      | `[]`                    |
+| `args`                               | Override default container args (useful when using custom images)                         | `[]`                    |
 | `updateStrategy.type`                | Update strategy - only really applicable for deployments with RWO PVs attached            | `RollingUpdate`         |
 | `extraEnvVars`                       | An array to add extra environment variables                                               | `[]`                    |
-| `extraEnvVarsCM`                     | ConfigMap containing extra environment variables                                          | `nil`                   |
-| `extraEnvVarsSecret`                 | Secret containing extra environment variables                                             | `nil`                   |
+| `extraEnvVarsCM`                     | ConfigMap containing extra environment variables                                          | `""`                    |
+| `extraEnvVarsSecret`                 | Secret containing extra environment variables                                             | `""`                    |
 | `extraVolumes`                       | Extra volumes to add to the deployment. Requires setting `extraVolumeMounts`              | `[]`                    |
 | `extraVolumeMounts`                  | Extra volume mounts to add to the container. Normally used with `extraVolumes`            | `[]`                    |
 | `initContainers`                     | Extra init containers to add to the deployment                                            | `[]`                    |
 | `sidecars`                           | Extra sidecar containers to add to the deployment                                         | `[]`                    |
 | `tolerations`                        | Tolerations for pod assignment. Evaluated as a template.                                  | `[]`                    |
-| `existingSecret`                     | Use existing secret for the application password                                          | `nil`                   |
-| `smtpHost`                           | SMTP host                                                                                 | `nil`                   |
-| `smtpPort`                           | SMTP port                                                                                 | `nil`                   |
-| `smtpUser`                           | SMTP user                                                                                 | `nil`                   |
-| `smtpPassword`                       | SMTP password                                                                             | `nil`                   |
-| `smtpProtocol`                       | SMTP Protocol (options: ssl, tls, nil)                                                    | `nil`                   |
+| `existingSecret`                     | Use existing secret for the application password                                          | `""`                    |
+| `smtpHost`                           | SMTP host                                                                                 | `""`                    |
+| `smtpPort`                           | SMTP port                                                                                 | `""`                    |
+| `smtpUser`                           | SMTP user                                                                                 | `""`                    |
+| `smtpPassword`                       | SMTP password                                                                             | `""`                    |
+| `smtpProtocol`                       | SMTP Protocol (options: ssl, tls, nil)                                                    | `""`                    |
 | `containerPorts`                     | Container ports                                                                           | `{}`                    |
 | `sessionAffinity`                    | Control where client requests go, to the same pod or round-robin                          | `None`                  |
 | `persistence.enabled`                | Enable persistence using PVC                                                              | `true`                  |
-| `persistence.storageClass`           | TestLink Data Persistent Volume Storage Class                                             | `nil`                   |
+| `persistence.storageClass`           | TestLink Data Persistent Volume Storage Class                                             | `""`                    |
 | `persistence.accessMode`             | PVC Access Mode for TestLink volume                                                       | `ReadWriteOnce`         |
 | `persistence.size`                   | PVC Storage Request for TestLink volume                                                   | `8Gi`                   |
-| `persistence.existingClaim`          | An Existing PVC name                                                                      | `nil`                   |
-| `persistence.hostPath`               | Host mount path for TestLink volume                                                       | `nil`                   |
+| `persistence.existingClaim`          | An Existing PVC name                                                                      | `""`                    |
+| `persistence.hostPath`               | Host mount path for TestLink volume                                                       | `""`                    |
 | `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                    |
 | `podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                  |
 | `nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                    |
@@ -140,7 +140,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                      | `1`                     |
 | `customLivenessProbe`                | Override default liveness probe                                                           | `{}`                    |
 | `customReadinessProbe`               | Override default readiness probe                                                          | `{}`                    |
-| `lifecycleHooks`                     | Lifecycle hooks for the container to automate configuration before or after startup       | `nil`                   |
+| `lifecycleHooks`                     | Lifecycle hooks for the container to automate configuration before or after startup       | `{}`                    |
 | `podAnnotations`                     | Pod annotations                                                                           | `{}`                    |
 | `podLabels`                          | Pod extra labels                                                                          | `{}`                    |
 
@@ -152,9 +152,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.type`                     | Kubernetes Service type                                                                       | `LoadBalancer`           |
 | `service.port`                     | Service HTTP port                                                                             | `80`                     |
 | `service.httpsPort`                | Service HTTPS port                                                                            | `443`                    |
-| `service.clusterIP`                | Service cluster IP                                                                            | `nil`                    |
+| `service.clusterIP`                | Service cluster IP                                                                            | `""`                     |
 | `service.loadBalancerSourceRanges` | Control hosts connecting to "LoadBalancer" only                                               | `[]`                     |
-| `service.loadBalancerIP`           | Load balancer IP for the TestLink Service (optional, cloud specific)                          | `nil`                    |
+| `service.loadBalancerIP`           | Load balancer IP for the TestLink Service (optional, cloud specific)                          | `""`                     |
 | `service.nodePorts.http`           | Kubernetes HTTP node port                                                                     | `""`                     |
 | `service.nodePorts.https`          | Kubernetes HTTPS node port                                                                    | `""`                     |
 | `service.externalTrafficPolicy`    | Enable client source IP preservation                                                          | `Cluster`                |
@@ -162,10 +162,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.certManager`              | Add annotations for cert-manager                                                              | `false`                  |
 | `ingress.hostname`                 | Default host for the ingress resource                                                         | `testlink.local`         |
 | `ingress.annotations`              | Ingress annotations                                                                           | `{}`                     |
-| `ingress.hosts`                    | The list of additional hostnames to be covered with this ingress record.                      | `nil`                    |
-| `ingress.tls`                      | The tls configuration for the ingress                                                         | `nil`                    |
-| `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets | `nil`                    |
-| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                 | `nil`                    |
+| `ingress.hosts`                    | The list of additional hostnames to be covered with this ingress record.                      | `[]`                     |
+| `ingress.tls`                      | The tls configuration for the ingress                                                         | `[]`                     |
+| `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets | `[]`                     |
+| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                 | `""`                     |
 | `ingress.path`                     | Ingress path                                                                                  | `/`                      |
 | `ingress.pathType`                 | Ingress path type                                                                             | `ImplementationSpecific` |
 
@@ -181,15 +181,15 @@ The command removes all the Kubernetes components associated with the chart and 
 | `mariadb.auth.username`                     | Database user to create                                                                  | `bn_testlink`      |
 | `mariadb.auth.password`                     | Password for the database                                                                | `""`               |
 | `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                    | `true`             |
-| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                          | `nil`              |
+| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                          | `""`               |
 | `mariadb.primary.persistence.accessModes`   | Database Persistent Volume Access Modes                                                  | `[]`               |
 | `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                          | `8Gi`              |
-| `mariadb.primary.persistence.hostPath`      | Set path in case you want to use local host path volumes (not recommended in production) | `nil`              |
-| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas                 | `nil`              |
-| `externalDatabase.host`                     | Host of the existing database                                                            | `nil`              |
+| `mariadb.primary.persistence.hostPath`      | Set path in case you want to use local host path volumes (not recommended in production) | `""`               |
+| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas                 | `""`               |
+| `externalDatabase.host`                     | Host of the existing database                                                            | `""`               |
 | `externalDatabase.port`                     | Port of the existing database                                                            | `3306`             |
 | `externalDatabase.user`                     | Existing username in the external database                                               | `bn_testlink`      |
-| `externalDatabase.password`                 | Password for the above username                                                          | `nil`              |
+| `externalDatabase.password`                 | Password for the above username                                                          | `""`               |
 | `externalDatabase.database`                 | Name of the existing database                                                            | `bitnami_testlink` |
 
 
@@ -226,17 +226,17 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                                 | Description                                                          | Value                                    |
 | ---------------------------------------------------- | -------------------------------------------------------------------- | ---------------------------------------- |
 | `certificates.customCertificate.certificateSecret`   | Secret containing the certificate and key to add                     | `""`                                     |
-| `certificates.customCertificate.chainSecret.name`    | Name of the secret containing the certificate chain                  | `nil`                                    |
-| `certificates.customCertificate.chainSecret.key`     | Key of the certificate chain file inside the secret                  | `nil`                                    |
+| `certificates.customCertificate.chainSecret.name`    | Name of the secret containing the certificate chain                  | `""`                                     |
+| `certificates.customCertificate.chainSecret.key`     | Key of the certificate chain file inside the secret                  | `""`                                     |
 | `certificates.customCertificate.certificateLocation` | Location in the container to store the certificate                   | `/etc/ssl/certs/ssl-cert-snakeoil.pem`   |
 | `certificates.customCertificate.keyLocation`         | Location in the container to store the private key                   | `/etc/ssl/private/ssl-cert-snakeoil.key` |
 | `certificates.customCertificate.chainLocation`       | Location in the container to store the certificate chain             | `/etc/ssl/certs/mychain.pem`             |
 | `certificates.customCAs`                             | Defines a list of secrets to import into the container trust store   | `[]`                                     |
-| `certificates.command`                               | Override default container command (useful when using custom images) | `nil`                                    |
-| `certificates.args`                                  | Override default container args (useful when using custom images)    | `nil`                                    |
+| `certificates.command`                               | Override default container command (useful when using custom images) | `[]`                                     |
+| `certificates.args`                                  | Override default container args (useful when using custom images)    | `[]`                                     |
 | `certificates.extraEnvVars`                          | Container sidecar extra environment variables (eg proxy)             | `[]`                                     |
-| `certificates.extraEnvVarsCM`                        | ConfigMap containing extra env vars                                  | `nil`                                    |
-| `certificates.extraEnvVarsSecret`                    | Secret containing extra env vars (in case of sensitive data)         | `nil`                                    |
+| `certificates.extraEnvVarsCM`                        | ConfigMap containing extra env vars                                  | `""`                                     |
+| `certificates.extraEnvVarsSecret`                    | Secret containing extra env vars (in case of sensitive data)         | `""`                                     |
 | `certificates.image.registry`                        | Container sidecar registry                                           | `docker.io`                              |
 | `certificates.image.repository`                      | Container sidecar image repository                                   | `bitnami/bitnami-shell`                  |
 | `certificates.image.tag`                             | Container sidecar image tag (immutable tags are recommended)         | `10-debian-10-r120`                      |

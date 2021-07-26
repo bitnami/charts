@@ -8,25 +8,25 @@
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
 
 ## @section Common parameters
 
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
-kubeVersion:
+kubeVersion: ""
 ## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname template
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param commonAnnotations Common annotations to add to all phpBB resources (sub-charts are not considered). Evaluated as a template
 ##
 commonAnnotations: {}
@@ -51,7 +51,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/phpbb
-  tag: 3.3.4-debian-10-r45
+  tag: 3.3.4-debian-10-r69
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -87,7 +87,7 @@ phpbbUsername: user
 ## Defaults to a random 10-character alphanumeric string if not set
 ## ref: https://github.com/bitnami/bitnami-docker-phpbb#configuration
 ##
-phpbbPassword:
+phpbbPassword: ""
 ## @param phpbbEmail Admin email
 ## ref: https://github.com/bitnami/bitnami-docker-phpbb#configuration
 ##
@@ -98,10 +98,10 @@ phpbbEmail: user@example.com
 allowEmptyPassword: "no"
 ## @param command Override default container command (useful when using custom images)
 ##
-command:
+command: []
 ## @param args Override default container args (useful when using custom images)
 ##
-args:
+args: []
 ## @param hostAliases [array] Add deployment host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -126,10 +126,10 @@ updateStrategy:
 extraEnvVars: []
 ## @param extraEnvVarsCM ConfigMap with extra environment variables
 ##
-extraEnvVarsCM:
+extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Secret with extra environment variables
 ##
-extraEnvVarsSecret:
+extraEnvVarsSecret: ""
 ## @param extraVolumes Extra volumes to add to the deployment. Requires setting `extraVolumeMounts`
 ##
 extraVolumes: []
@@ -148,7 +148,7 @@ sidecars: []
 tolerations: []
 ## @param existingSecret Use existing secret for the application password
 ##
-existingSecret:
+existingSecret: ""
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
 ##
@@ -165,7 +165,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r115
+    tag: 10-debian-10-r141
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -203,11 +203,11 @@ volumePermissions:
 ## @param smtpPassword SMTP password
 ## @param smtpProtocol SMTP Protocol (options: ssl,tls, nil)
 ##
-smtpHost:
-smtpPort:
-smtpUser:
-smtpPassword:
-smtpProtocol:
+smtpHost: ""
+smtpPort: ""
+smtpUser: ""
+smtpPassword: ""
+smtpProtocol: ""
 ## @param containerPorts [object] Container ports
 ##
 containerPorts:
@@ -227,7 +227,7 @@ persistence:
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##   GKE, AWS & OpenStack)
   ##
-  storageClass:
+  storageClass: ""
   ## @param persistence.accessMode PVC Access Mode for phpBB volume
   ##
   accessMode: ReadWriteOnce
@@ -238,13 +238,13 @@ persistence:
   ## Requires persistence.enabled: true
   ## If defined, PVC must be created manually before volume will be bound
   ##
-  existingClaim:
+  existingClaim: ""
   ## @param persistence.hostPath Host mount path for phpBB volume
   ## Requires persistence.enabled: true
   ## Requires persistence.existingClaim: nil|false
   ## Default: nil.
   ##
-  hostPath:
+  hostPath: ""
 ## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
@@ -345,10 +345,10 @@ customReadinessProbe: {}
 ## @param priorityClassName Define the priority class name to use for the phpbb pods
 ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
 ##
-priorityClassName:
+priorityClassName: ""
 ## @param lifecycleHooks LifecycleHook to set additional configuration before or after startup
 ##
-lifecycleHooks:
+lifecycleHooks: {}
 ## @param podAnnotations Pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
@@ -406,7 +406,7 @@ ingress:
   pathType: ImplementationSpecific
   ## @param ingress.apiVersion Override API Version (automatically detected if not set)
   ##
-  apiVersion:
+  apiVersion: ""
   ## @param ingress.hostname Default host for the ingress resource
   ##
   hostname: phpbb.local
@@ -511,7 +511,7 @@ mariadb:
       ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
       ##   GKE, AWS & OpenStack)
       ##
-      storageClass:
+      storageClass: ""
       ## @param mariadb.primary.persistence.accessModes PVC Access Modes for phpBB volume
       ##
       accessModes:
@@ -521,17 +521,17 @@ mariadb:
       size: 8Gi
       ## @param mariadb.primary.persistence.hostPath Host mount path for MariaDB volume
       ##
-      hostPath:
+      hostPath: ""
       ## @param mariadb.primary.persistence.existingClaim Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas
       ##
-      existingClaim:
+      existingClaim: ""
 ## External database configuration
 ##
 externalDatabase:
   ## @param externalDatabase.existingSecret Use existing secret (ignores previous password)
   ## Must contain key `mariadb-password`
   ## NOTE: When it's set, the `externalDatabase.password` parameter is ignored
-  existingSecret:
+  existingSecret: ""
   ## @param externalDatabase.host Host of the existing database
   ##
   host: ""
@@ -565,7 +565,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.9.0-debian-10-r13
+    tag: 0.9.0-debian-10-r39
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

@@ -8,25 +8,25 @@
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
 
 ## @section Common parameters
 
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
-kubeVersion:
+kubeVersion: ""
 ## @param nameOverride String to partially override ebjca.fullname template (will maintain the release name)
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override ebjca.fullname template
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param commonLabels Add labels to all the deployed resources
 ##
 commonLabels: {}
@@ -159,12 +159,12 @@ persistence:
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##   GKE, AWS & OpenStack)
   ##
-  storageClass:
+  storageClass: ""
   ## If you want to reuse an existing claim, you can pass the name of the PVC using the existingClaim variable
   ## e.g:
   ## existingClaim: your-claim
   ##
-  existingClaim:
+  existingClaim: ""
   accessMode: ReadWriteOnce
   size: 2Gi
 ## @param sidecars Attach additional sidecar containers to the pod
@@ -177,7 +177,7 @@ persistence:
 ##       - name: portname
 ##         containerPort: 1234
 ##
-sidecars: {}
+sidecars: []
 ## @param initContainers Additional init containers to add to the pods
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
 ## Example:
@@ -186,7 +186,7 @@ sidecars: {}
 ##    image: your-image
 ##    imagePullPolicy: Always
 ##
-initContainers: {}
+initContainers: []
 ## @param hostAliases Add deployment host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -198,15 +198,15 @@ ejbcaAdminUsername: bitnami
 ## @param ejbcaAdminPassword Password for the administrator account
 ## If the password is not specified, a random one will be generated
 ##
-ejbcaAdminPassword:
+ejbcaAdminPassword: ""
 ## @param existingSecret Alternatively, you can provide the name of an existing secret containing
 ## a key named "ejbca-admin-password"
 ## NOTE: This will override the password defined at ejbcaAdminPassword
 ##
-existingSecret:
+existingSecret: ""
 ## @param ejbcaJavaOpts Options used to launch the WildFly server
 ## E.g. ejbcaJavaOpts: "-Xms2048m -Xmx2048m"
-ejbcaJavaOpts:
+ejbcaJavaOpts: ""
 ## Details regarding the CA that EJBCA will instantiate
 ## @param ejbcaCA.name Name of the CA EJBCA will instantiate by default
 ## @param ejbcaCA.baseDN Base DomainName of the CA EJBCA will instantiate by default
@@ -215,7 +215,7 @@ ejbcaCA:
   name: "ManagementCA"
   ## e.g. baseDN: "O=Example CA,C=SE,UID=c-5ca04c9328c8208704310f7c2ed16414"
   ##
-  baseDN:
+  baseDN: ""
 ## @param ejbcaKeystoreExistingSecret Name of an existing Secret containing a Keystore object
 ## to be imported by EBJCA.
 ##
@@ -224,7 +224,7 @@ ejbcaCA:
 ## "keystore.jks" --> The actual keystore object
 ## "keystore-password" --> Password used to encrypt keystore.jks
 ##
-ejbcaKeystoreExistingSecret:
+ejbcaKeystoreExistingSecret: ""
 ## @param extraEnv Additional container environment variables
 ## extraEnv:
 ##   - name:
@@ -341,7 +341,7 @@ service:
   loadBalancerSourceRanges: []
   ## @param service.extraPorts Extra ports to expose in the service (normally used with the `sidecar` value)
   ##
-  extraPorts:
+  extraPorts: []
 
 ## @section Ingress parameters
 
@@ -361,7 +361,7 @@ ingress:
   pathType: ImplementationSpecific
   ## @param ingress.apiVersion Override API Version (automatically detected if not set)
   ##
-  apiVersion:
+  apiVersion: ""
   ## @param ingress.hostname Default host for the ingress resource
   ##
   hostname: ejbca.local
@@ -467,11 +467,11 @@ mariadb:
       ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
       ##   GKE, AWS & OpenStack)
       ##
-      storageClass:
+      storageClass: ""
       accessMode: ReadWriteOnce
       size: 8Gi
-      hostPath:
-      existingClaim:
+      hostPath: ""
+      existingClaim: ""
 ## External Database Configuration
 ## All of these values are only used when mariadb.enabled is set to false
 ## @param externalDatabase.host Host of the external database

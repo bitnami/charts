@@ -1,10 +1,19 @@
 ** Please be patient while the chart is being deployed **
 
-PostgreSQL can be accessed via port {{ template "postgresql.port" . }} on the following DNS name from within your cluster:
+PostgreSQL can be accessed via port {{ template "postgresql.port" . }} on the following DNS names from within your cluster:
 
     {{ template "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local - Read/Write connection
 {{- if .Values.replication.enabled }}
+{{- if .Values.replication.singleService }}
     {{ template "common.names.fullname" . }}-read.{{ .Release.Namespace }}.svc.cluster.local - Read only connection
+{{- end }}
+{{- if .Values.replication.uniqueServices }}
+{{- $replicaCount := .Values.replication.readReplicas | int }}
+{{- $root := . }}
+{{- range $i, $e := until $replicaCount }}
+    {{ template "common.names.fullname" $root }}-read-{{ $i }}.{{ $root.Release.Namespace }}.svc.cluster.local - Read only connection to replica {{ $i }}
+{{- end }}
+{{- end }}
 {{- end }}
 
 {{- if not (eq (include "postgresql.username" .) "postgres")  }}

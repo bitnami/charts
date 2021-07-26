@@ -7,7 +7,7 @@
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
@@ -18,13 +18,13 @@ global:
 
 ## @param kubeVersion Override Kubernetes version
 ##
-kubeVersion:
+kubeVersion: ""
 ## @param nameOverride String to partially override common.names.fullname
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param commonLabels Labels to add to all deployed objects
 ##
 commonLabels: {}
@@ -138,8 +138,8 @@ tolerations: []
 ##
 cloneHtdocsFromGit:
   enabled: false
-  repository:
-  branch:
+  repository: ""
+  branch: ""
   interval: 60
   resources: {}
   ## Useful to mount keys to connect through ssh. (normally used with extraVolumes)
@@ -151,16 +151,16 @@ cloneHtdocsFromGit:
   extraVolumeMounts: []
 ## @param htdocsConfigMap Name of a config map with the server static content
 ##
-htdocsConfigMap:
+htdocsConfigMap: ""
 ## @param htdocsPVC Name of a PVC with the server static content
 ##
-htdocsPVC:
+htdocsPVC: ""
 ## @param vhostsConfigMap Name of a config map with the virtual hosts content
 ##
-vhostsConfigMap:
+vhostsConfigMap: ""
 ## @param httpdConfConfigMap Name of a config map with the httpd.conf file contents
 ##
-httpdConfConfigMap:
+httpdConfConfigMap: ""
 ## @param podLabels Extra labels for Apache pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
@@ -255,7 +255,7 @@ extraEnvVars: []
 ##       - name: portname
 ##         containerPort: 1234
 ##
-initContainers: {}
+initContainers: []
 ## @param sidecars Add additional sidecar containers to the Apache pods
 ## Example:
 ## sidecars:
@@ -266,7 +266,7 @@ initContainers: {}
 ##       - name: portname
 ##         containerPort: 1234
 ##
-sidecars: {}
+sidecars: []
 
 ## @section Traffic Exposure Parameters
 
@@ -292,7 +292,7 @@ service:
   ## @param service.loadBalancerIP Apache service Load Balancer IP
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
   ##
-  loadBalancerIP:
+  loadBalancerIP: ""
   ## @param service.annotations Additional custom annotations for Apache service
   ## This can be used to set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -314,7 +314,7 @@ ingress:
   pathType: ImplementationSpecific
   ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
   ##
-  apiVersion:
+  apiVersion: ""
   ## @param ingress.hostname Default host for the ingress record
   ##
   hostname: example.local

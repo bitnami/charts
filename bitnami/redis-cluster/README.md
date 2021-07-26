@@ -70,18 +70,18 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                      | Description                                        | Value |
 | ------------------------- | -------------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                       | `nil` |
+| `global.imageRegistry`    | Global Docker image registry                       | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array    | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)       | `nil` |
-| `global.redis.password`   | Redis<sup>TM</sup> password (overrides `password`) | `nil` |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)       | `""`  |
+| `global.redis.password`   | Redis<sup>TM</sup> password (overrides `password`) | `""`  |
 
 
 ### Redis<sup>TM</sup> Cluster Common parameters
 
 | Name                | Description                                                                                  | Value |
 | ------------------- | -------------------------------------------------------------------------------------------- | ----- |
-| `nameOverride`      | String to partially override common.names.fullname template (will maintain the release name) | `nil` |
-| `fullnameOverride`  | String to fully override common.names.fullname template                                      | `nil` |
+| `nameOverride`      | String to partially override common.names.fullname template (will maintain the release name) | `""`  |
+| `fullnameOverride`  | String to fully override common.names.fullname template                                      | `""`  |
 | `commonAnnotations` | Annotations to add to all deployed objects                                                   | `{}`  |
 | `commonLabels`      | Labels to add to all deployed objects                                                        | `{}`  |
 | `extraDeploy`       | Array of extra objects to deploy with the release (evaluated as a template)                  | `[]`  |
@@ -101,48 +101,47 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.ingressNSMatchLabels`    | Allow connections from other namespacess. Just set label for namespace and set label for pods (optional).                                           | `{}`                    |
 | `networkPolicy.ingressNSPodMatchLabels` | For other namespaces match by pod labels and namespace labels                                                                                       | `{}`                    |
 | `serviceAccount.create`                 | Specifies whether a ServiceAccount should be created                                                                                                | `false`                 |
-| `serviceAccount.name`                   | The name of the ServiceAccount to create                                                                                                            | `nil`                   |
+| `serviceAccount.name`                   | The name of the ServiceAccount to create                                                                                                            | `""`                    |
 | `rbac.create`                           | Specifies whether RBAC resources should be created                                                                                                  | `false`                 |
 | `rbac.role.rules`                       | Rules to create. It follows the role specification                                                                                                  | `[]`                    |
 | `podSecurityContext.enabled`            | Enable Redis<sup>TM</sup> pod Security Context                                                                                                      | `true`                  |
 | `podSecurityContext.fsGroup`            | Group ID for the pods                                                                                                                               | `1001`                  |
 | `podSecurityContext.runAsUser`          | User ID for the pods                                                                                                                                | `1001`                  |
-| `podSecurityContext.sysctls`            | Set namespaced sysctls for the pods                                                                                                                 | `nil`                   |
+| `podSecurityContext.sysctls`            | Set namespaced sysctls for the pods                                                                                                                 | `[]`                    |
 | `podDisruptionBudget`                   | Limits the number of pods of the replicated application that are down simultaneously from voluntary disruptions                                     | `{}`                    |
-| `minAvailable`                          | Min number of pods that must still be available after the eviction                                                                                  | `nil`                   |
-| `maxUnavailable`                        | Max number of pods that can be unavailable after the eviction                                                                                       | `nil`                   |
+| `minAvailable`                          | Min number of pods that must still be available after the eviction                                                                                  | `""`                    |
+| `maxUnavailable`                        | Max number of pods that can be unavailable after the eviction                                                                                       | `""`                    |
 | `containerSecurityContext.enabled`      | Enable Containers' Security Context                                                                                                                 | `true`                  |
 | `containerSecurityContext.runAsUser`    | User ID for the containers.                                                                                                                         | `1001`                  |
-| `containerSecurityContext.sysctls`      | Set namespaced sysctls for the containers.                                                                                                          | `nil`                   |
 | `usePassword`                           | Use password authentication                                                                                                                         | `true`                  |
 | `password`                              | Redis<sup>TM</sup> password (ignored if existingSecret set)                                                                                         | `""`                    |
-| `existingSecret`                        | Name of existing secret object (for password authentication)                                                                                        | `nil`                   |
-| `existingSecretPasswordKey`             | Name of key containing password to be retrieved from the existing secret                                                                            | `nil`                   |
+| `existingSecret`                        | Name of existing secret object (for password authentication)                                                                                        | `""`                    |
+| `existingSecretPasswordKey`             | Name of key containing password to be retrieved from the existing secret                                                                            | `""`                    |
 | `usePasswordFile`                       | Mount passwords as files instead of environment variables                                                                                           | `false`                 |
 | `tls.enabled`                           | Enable TLS support for replication traffic                                                                                                          | `false`                 |
 | `tls.authClients`                       | Require clients to authenticate or not                                                                                                              | `true`                  |
 | `tls.autoGenerated`                     | Generate automatically self-signed TLS certificates                                                                                                 | `false`                 |
-| `tls.existingSecret`                    | The name of the existing secret that contains the TLS certificates                                                                                  | `nil`                   |
-| `tls.certificatesSecret`                | DEPRECATED. Use tls.existingSecret instead                                                                                                          | `nil`                   |
-| `tls.certFilename`                      | Certificate filename                                                                                                                                | `nil`                   |
-| `tls.certKeyFilename`                   | Certificate key filename                                                                                                                            | `nil`                   |
-| `tls.certCAFilename`                    | CA Certificate filename                                                                                                                             | `nil`                   |
-| `tls.dhParamsFilename`                  | File containing DH params (in order to support DH based ciphers)                                                                                    | `nil`                   |
+| `tls.existingSecret`                    | The name of the existing secret that contains the TLS certificates                                                                                  | `""`                    |
+| `tls.certificatesSecret`                | DEPRECATED. Use tls.existingSecret instead                                                                                                          | `""`                    |
+| `tls.certFilename`                      | Certificate filename                                                                                                                                | `""`                    |
+| `tls.certKeyFilename`                   | Certificate key filename                                                                                                                            | `""`                    |
+| `tls.certCAFilename`                    | CA Certificate filename                                                                                                                             | `""`                    |
+| `tls.dhParamsFilename`                  | File containing DH params (in order to support DH based ciphers)                                                                                    | `""`                    |
 | `service.port`                          | Kubernetes Service port                                                                                                                             | `6379`                  |
 | `service.annotations`                   | Provide any additional annotations which may be required.                                                                                           | `{}`                    |
 | `service.labels`                        | Additional labels for redis service                                                                                                                 | `{}`                    |
 | `service.type`                          | Service type for default redis service                                                                                                              | `ClusterIP`             |
-| `service.loadBalancerIP`                | Load balancer IP if `service.type` is `LoadBalancer`                                                                                                | `nil`                   |
+| `service.loadBalancerIP`                | Load balancer IP if `service.type` is `LoadBalancer`                                                                                                | `""`                    |
 | `persistence.enabled`                   | Use a PVC to persist data.                                                                                                                          | `true`                  |
 | `persistence.path`                      | Path to mount the volume at, to use other images Redis<sup>TM</sup> images.                                                                         | `/bitnami/redis/data`   |
 | `persistence.subPath`                   | The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services                                             | `""`                    |
-| `persistence.storageClass`              | Storage class of backing PVC                                                                                                                        | `nil`                   |
+| `persistence.storageClass`              | Storage class of backing PVC                                                                                                                        | `""`                    |
 | `persistence.accessModes`               | Persistent Volume Access Modes                                                                                                                      | `[]`                    |
 | `persistence.size`                      | Size of data volume                                                                                                                                 | `8Gi`                   |
 | `persistence.matchLabels`               | Persistent Volume selectors                                                                                                                         | `{}`                    |
 | `persistence.matchExpressions`          | matchExpressions Persistent Volume selectors                                                                                                        | `{}`                    |
 | `statefulset.updateStrategy`            | Update strategy for StatefulSet                                                                                                                     | `RollingUpdate`         |
-| `statefulset.rollingUpdatePartition`    | Partition update strategy                                                                                                                           | `nil`                   |
+| `statefulset.rollingUpdatePartition`    | Partition update strategy                                                                                                                           | `""`                    |
 | `volumePermissions.enabled`             | Enable init container that changes volume permissions in the registry (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`      | Init container volume-permissions image registry                                                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`    | Init container volume-permissions image repository                                                                                                  | `bitnami/bitnami-shell` |
@@ -163,7 +162,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `redis.hostAliases`                        | Deployment pod host aliases                                                                                        | `[]`    |
 | `redis.useAOFPersistence`                  | Whether to use AOF Persistence mode or not                                                                         | `yes`   |
 | `redis.port`                               | Redis<sup>TM</sup> port                                                                                            | `6379`  |
-| `redis.lifecycleHooks`                     | LifecycleHook to set additional configuration before or after startup. Evaluated as a template                     | `nil`   |
+| `redis.lifecycleHooks`                     | LifecycleHook to set additional configuration before or after startup. Evaluated as a template                     | `{}`    |
 | `redis.extraVolumes`                       | Extra volumes to add to the deployment                                                                             | `[]`    |
 | `redis.extraVolumeMounts`                  | Extra volume mounts to add to the container                                                                        | `[]`    |
 | `redis.customLivenessProbe`                | Override default liveness probe                                                                                    | `{}`    |
@@ -171,15 +170,15 @@ The command removes all the Kubernetes components associated with the chart and 
 | `redis.initContainers`                     | Extra init containers to add to the deployment                                                                     | `[]`    |
 | `redis.sidecars`                           | Extra sidecar containers to add to the deployment                                                                  | `[]`    |
 | `redis.podLabels`                          | Additional labels for Redis<sup>TM</sup> pod                                                                       | `{}`    |
-| `redis.priorityClassName`                  | Redis<sup>TM</sup> Master pod priorityClassName                                                                    | `nil`   |
-| `redis.configmap`                          | Additional Redis<sup>TM</sup> configuration for the nodes                                                          | `nil`   |
+| `redis.priorityClassName`                  | Redis<sup>TM</sup> Master pod priorityClassName                                                                    | `""`    |
+| `redis.configmap`                          | Additional Redis<sup>TM</sup> configuration for the nodes                                                          | `""`    |
 | `redis.extraEnvVars`                       | An array to add extra environment variables                                                                        | `[]`    |
-| `redis.extraEnvVarsCM`                     | ConfigMap with extra environment variables                                                                         | `nil`   |
-| `redis.extraEnvVarsSecret`                 | Secret with extra environment variables                                                                            | `nil`   |
+| `redis.extraEnvVarsCM`                     | ConfigMap with extra environment variables                                                                         | `""`    |
+| `redis.extraEnvVarsSecret`                 | Secret with extra environment variables                                                                            | `""`    |
 | `redis.podAnnotations`                     | Redis<sup>TM</sup> additional annotations                                                                          | `{}`    |
 | `redis.resources.limits`                   | The resources limits for the container                                                                             | `{}`    |
 | `redis.resources.requests`                 | The requested resources for the container                                                                          | `{}`    |
-| `redis.schedulerName`                      | Use an alternate scheduler, e.g. "stork".                                                                          | `nil`   |
+| `redis.schedulerName`                      | Use an alternate scheduler, e.g. "stork".                                                                          | `""`    |
 | `redis.shareProcessNamespace`              | Enable shared process namespace in a pod.                                                                          | `false` |
 | `redis.livenessProbe.enabled`              | Enable livenessProbe                                                                                               | `true`  |
 | `redis.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                            | `5`     |
@@ -210,15 +209,15 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                  | Description                                                                                                    | Value  |
 | ------------------------------------- | -------------------------------------------------------------------------------------------------------------- | ------ |
 | `updateJob.activeDeadlineSeconds`     | Number of seconds the Job to create the cluster will be waiting for the Nodes to be ready.                     | `600`  |
-| `updateJob.command`                   | Container command (using container default if not set)                                                         | `nil`  |
-| `updateJob.args`                      | Container args (using container default if not set)                                                            | `nil`  |
+| `updateJob.command`                   | Container command (using container default if not set)                                                         | `[]`   |
+| `updateJob.args`                      | Container args (using container default if not set)                                                            | `[]`   |
 | `updateJob.hostAliases`               | Deployment pod host aliases                                                                                    | `[]`   |
 | `updateJob.annotations`               | Job annotations                                                                                                | `{}`   |
 | `updateJob.podAnnotations`            | Job pod annotations                                                                                            | `{}`   |
 | `updateJob.podLabels`                 | Pod extra labels                                                                                               | `{}`   |
 | `updateJob.extraEnvVars`              | An array to add extra environment variables                                                                    | `[]`   |
-| `updateJob.extraEnvVarsCM`            | ConfigMap containing extra environment variables                                                               | `nil`  |
-| `updateJob.extraEnvVarsSecret`        | Secret containing extra environment variables                                                                  | `nil`  |
+| `updateJob.extraEnvVarsCM`            | ConfigMap containing extra environment variables                                                               | `""`   |
+| `updateJob.extraEnvVarsSecret`        | Secret containing extra environment variables                                                                  | `""`   |
 | `updateJob.extraVolumes`              | Extra volumes to add to the deployment                                                                         | `[]`   |
 | `updateJob.extraVolumeMounts`         | Extra volume mounts to add to the container                                                                    | `[]`   |
 | `updateJob.initContainers`            | Extra init containers to add to the deployment                                                                 | `[]`   |
@@ -230,7 +229,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `updateJob.affinity`                  | Affinity for update job pods assignment                                                                        | `{}`   |
 | `updateJob.nodeSelector`              | Node labels for update job pods assignment                                                                     | `{}`   |
 | `updateJob.tolerations`               | Tolerations for update job pods assignment                                                                     | `[]`   |
-| `updateJob.priorityClassName`         | Priority class name                                                                                            | `nil`  |
+| `updateJob.priorityClassName`         | Priority class name                                                                                            | `""`   |
 | `updateJob.resources.limits`          | The resources limits for the container                                                                         | `{}`   |
 | `updateJob.resources.requests`        | The requested resources for the container                                                                      | `{}`   |
 
@@ -267,15 +266,15 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.podAnnotations`                  | Additional annotations for Metrics exporter pod                                                                          | `{}`                     |
 | `metrics.podLabels`                       | Additional labels for Metrics exporter pod                                                                               | `{}`                     |
 | `metrics.serviceMonitor.enabled`          | If `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)                   | `false`                  |
-| `metrics.serviceMonitor.namespace`        | Optional namespace which Prometheus is running in                                                                        | `nil`                    |
-| `metrics.serviceMonitor.interval`         | How frequently to scrape metrics (use by default, falling back to Prometheus' default)                                   | `nil`                    |
+| `metrics.serviceMonitor.namespace`        | Optional namespace which Prometheus is running in                                                                        | `""`                     |
+| `metrics.serviceMonitor.interval`         | How frequently to scrape metrics (use by default, falling back to Prometheus' default)                                   | `""`                     |
 | `metrics.prometheusRule.enabled`          | Set this to true to create prometheusRules for Prometheus operator                                                       | `false`                  |
 | `metrics.prometheusRule.additionalLabels` | Additional labels that can be used so prometheusRules will be discovered by Prometheus                                   | `{}`                     |
 | `metrics.prometheusRule.namespace`        | namespace where prometheusRules resource should be created                                                               | `""`                     |
 | `metrics.prometheusRule.rules`            | (https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/) to be created, check values for an example. | `[]`                     |
-| `metrics.priorityClassName`               | Metrics exporter pod priorityClassName                                                                                   | `{}`                     |
+| `metrics.priorityClassName`               | Metrics exporter pod priorityClassName                                                                                   | `""`                     |
 | `metrics.service.type`                    | Kubernetes Service type (redis metrics)                                                                                  | `ClusterIP`              |
-| `metrics.service.loadBalancerIP`          | Use serviceLoadBalancerIP to request a specific static IP, otherwise leave blank                                         | `nil`                    |
+| `metrics.service.loadBalancerIP`          | Use serviceLoadBalancerIP to request a specific static IP, otherwise leave blank                                         | `""`                     |
 | `metrics.service.annotations`             | Annotations for the services to monitor.                                                                                 | `{}`                     |
 | `metrics.service.labels`                  | Additional labels for the metrics service                                                                                | `{}`                     |
 

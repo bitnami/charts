@@ -60,24 +60,24 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `nil` |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
 
 ### Common parameters
 
 | Name                | Description                                        | Value                 |
 | ------------------- | -------------------------------------------------- | --------------------- |
-| `kubeVersion`       | Override Kubernetes version                        | `nil`                 |
-| `nameOverride`      | String to partially override common.names.fullname | `nil`                 |
-| `fullnameOverride`  | String to fully override common.names.fullname     | `nil`                 |
+| `kubeVersion`       | Override Kubernetes version                        | `""`                  |
+| `nameOverride`      | String to partially override common.names.fullname | `""`                  |
+| `fullnameOverride`  | String to fully override common.names.fullname     | `""`                  |
 | `commonLabels`      | Labels to add to all deployed objects              | `{}`                  |
 | `commonAnnotations` | Annotations to add to all deployed objects         | `{}`                  |
 | `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`                  |
 | `image.registry`    | Redmine image registry                             | `docker.io`           |
 | `image.repository`  | Redmine image repository                           | `bitnami/redmine`     |
-| `image.tag`         | Redmine image tag (immutable tags are recommended) | `4.2.1-debian-10-r48` |
+| `image.tag`         | Redmine image tag (immutable tags are recommended) | `4.2.1-debian-10-r71` |
 | `image.pullPolicy`  | Redmine image pull policy                          | `IfNotPresent`        |
 | `image.pullSecrets` | Redmine image pull secrets                         | `[]`                  |
 | `image.debug`       | Enable image debug mode                            | `false`               |
@@ -97,14 +97,14 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `smtpUser`              | SMTP username                                                          | `""`               |
 | `smtpPassword`          | SMTP user password                                                     | `""`               |
 | `smtpProtocol`          | SMTP protocol                                                          | `""`               |
-| `existingSecret`        | Name of existing secret containing Redmine credentials                 | `nil`              |
-| `smtpExistingSecret`    | The name of an existing secret with SMTP credentials                   | `nil`              |
+| `existingSecret`        | Name of existing secret containing Redmine credentials                 | `""`               |
+| `smtpExistingSecret`    | The name of an existing secret with SMTP credentials                   | `""`               |
 | `allowEmptyPassword`    | Allow the container to be started with blank passwords                 | `false`            |
 | `command`               | Override default container command (useful when using custom images)   | `[]`               |
 | `args`                  | Override default container args (useful when using custom images)      | `[]`               |
 | `extraEnvVars`          | Array with extra environment variables to add to the Redmine container | `[]`               |
-| `extraEnvVarsCM`        | Name of existing ConfigMap containing extra env vars                   | `nil`              |
-| `extraEnvVarsSecret`    | Name of existing Secret containing extra env vars                      | `nil`              |
+| `extraEnvVarsCM`        | Name of existing ConfigMap containing extra env vars                   | `""`               |
+| `extraEnvVarsSecret`    | Name of existing Secret containing extra env vars                      | `""`               |
 
 
 ### Redmine deployment parameters
@@ -114,14 +114,14 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `replicaCount`                       | Number of Redmine replicas to deploy                                                      | `1`             |
 | `updateStrategy.type`                | Redmine deployment strategy type                                                          | `RollingUpdate` |
 | `updateStrategy.rollingUpdate`       | Redmine deployment rolling update configuration parameters                                | `{}`            |
-| `schedulerName`                      | Alternate scheduler                                                                       | `nil`           |
+| `schedulerName`                      | Alternate scheduler                                                                       | `""`            |
 | `serviceAccount.create`              | Specifies whether a ServiceAccount should be created                                      | `false`         |
-| `serviceAccount.name`                | The name of the ServiceAccount to create. Defaults to the `redmine.fullname` macro        | `nil`           |
+| `serviceAccount.name`                | The name of the ServiceAccount to create. Defaults to the `redmine.fullname` macro        | `""`            |
 | `hostAliases`                        | Redmine pod host aliases                                                                  | `[]`            |
 | `extraVolumes`                       | Optionally specify extra list of additional volumes for Redmine pods                      | `[]`            |
 | `extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for Redmine container(s)         | `[]`            |
-| `sidecars`                           | Add additional sidecar containers to the Redmine pod                                      | `{}`            |
-| `initContainers`                     | Add additional init containers to the Redmine pods                                        | `{}`            |
+| `sidecars`                           | Add additional sidecar containers to the Redmine pod                                      | `[]`            |
+| `initContainers`                     | Add additional init containers to the Redmine pods                                        | `[]`            |
 | `podLabels`                          | Extra labels for Redmine pods                                                             | `{}`            |
 | `podAnnotations`                     | Annotations for Redmine pods                                                              | `{}`            |
 | `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
@@ -171,9 +171,9 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | ---------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------ |
 | `service.type`                     | Redmine service type                                                                                  | `LoadBalancer`           |
 | `service.port`                     | Redmine service HTTP port                                                                             | `80`                     |
-| `service.nodePort`                 | Node port for HTTP                                                                                    | `nil`                    |
-| `service.clusterIP`                | Redmine service Cluster IP                                                                            | `nil`                    |
-| `service.loadBalancerIP`           | Redmine service Load Balancer IP                                                                      | `nil`                    |
+| `service.nodePort`                 | Node port for HTTP                                                                                    | `""`                     |
+| `service.clusterIP`                | Redmine service Cluster IP                                                                            | `""`                     |
+| `service.loadBalancerIP`           | Redmine service Load Balancer IP                                                                      | `""`                     |
 | `service.loadBalancerSourceRanges` | Redmine service Load Balancer sources                                                                 | `[]`                     |
 | `service.externalTrafficPolicy`    | Redmine service external traffic policy                                                               | `Cluster`                |
 | `service.annotations`              | Additional custom annotations for Redmine service                                                     | `{}`                     |
@@ -182,7 +182,7 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `ingress.certManager`              | Add the corresponding annotations for cert-manager integration                                        | `false`                  |
 | `ingress.selfSigned`               | Create a TLS secret for this ingress record using self-signed certificates generated by Helm          | `false`                  |
 | `ingress.pathType`                 | Ingress path type                                                                                     | `ImplementationSpecific` |
-| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                         | `nil`                    |
+| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                         | `""`                     |
 | `ingress.hostname`                 | Default host for the ingress record                                                                   | `redmine.local`          |
 | `ingress.path`                     | Default path for the ingress record                                                                   | `ImplementationSpecific` |
 | `ingress.annotations`              | Additional custom annotations for the ingress record                                                  | `{}`                     |
@@ -198,11 +198,11 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | Name                                          | Description                                                                                     | Value   |
 | --------------------------------------------- | ----------------------------------------------------------------------------------------------- | ------- |
 | `persistence.enabled`                         | Enable persistence using Persistent Volume Claims                                               | `true`  |
-| `persistence.storageClass`                    | Persistent Volume storage class                                                                 | `nil`   |
+| `persistence.storageClass`                    | Persistent Volume storage class                                                                 | `""`    |
 | `persistence.accessModes`                     | Persistent Volume access modes                                                                  | `[]`    |
 | `persistence.size`                            | Persistent Volume size                                                                          | `8Gi`   |
 | `persistence.dataSource`                      | Custom PVC data source                                                                          | `{}`    |
-| `persistence.existingClaim`                   | The name of an existing PVC to use for persistence                                              | `nil`   |
+| `persistence.existingClaim`                   | The name of an existing PVC to use for persistence                                              | `""`    |
 | `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false` |
 | `volumePermissions.resources.limits`          | The resources limits for the init container                                                     | `{}`    |
 | `volumePermissions.resources.requests`        | The requested resources for the init container                                                  | `{}`    |
@@ -214,8 +214,8 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | Name                                 | Description                                                    | Value   |
 | ------------------------------------ | -------------------------------------------------------------- | ------- |
 | `podDisruptionBudget.create`         | Enable a Pod Disruption Budget creation                        | `false` |
-| `podDisruptionBudget.minAvailable`   | Minimum number/percentage of pods that should remain scheduled | `nil`   |
-| `podDisruptionBudget.maxUnavailable` | Maximum number/percentage of pods that may be made unavailable | `nil`   |
+| `podDisruptionBudget.minAvailable`   | Minimum number/percentage of pods that should remain scheduled | `""`    |
+| `podDisruptionBudget.maxUnavailable` | Maximum number/percentage of pods that may be made unavailable | `""`    |
 | `autoscaling.enabled`                | Enable Horizontal POD autoscaling for Redmine                  | `false` |
 | `autoscaling.minReplicas`            | Minimum number of Redmine replicas                             | `1`     |
 | `autoscaling.maxReplicas`            | Maximum number of Redmine replicas                             | `11`    |
@@ -233,29 +233,29 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `mariadb.auth.rootPassword`                 | MariaDB root password                                                                                                                    | `""`              |
 | `mariadb.auth.username`                     | MariaDB username                                                                                                                         | `bn_redmine`      |
 | `mariadb.auth.password`                     | MariaDB password                                                                                                                         | `""`              |
-| `mariadb.auth.existingSecret`               | Name of existing secret object                                                                                                           | `nil`             |
+| `mariadb.auth.existingSecret`               | Name of existing secret object                                                                                                           | `""`              |
 | `mariadb.primary.persistence.enabled`       | Enable MariaDB persistence using PVC                                                                                                     | `true`            |
-| `mariadb.primary.persistence.existingClaim` | Provide an existing `PersistentVolumeClaim`, the value is evaluated as a template                                                        | `nil`             |
-| `mariadb.primary.persistence.storageClass`  | PVC Storage Class for MariaDB volume                                                                                                     | `nil`             |
+| `mariadb.primary.persistence.existingClaim` | Provide an existing `PersistentVolumeClaim`, the value is evaluated as a template                                                        | `""`              |
+| `mariadb.primary.persistence.storageClass`  | PVC Storage Class for MariaDB volume                                                                                                     | `""`              |
 | `mariadb.primary.persistence.accessModes`   | PVC Access Mode for MariaDB volume                                                                                                       | `[]`              |
 | `mariadb.primary.persistence.size`          | PVC Storage Request for MariaDB volume                                                                                                   | `8Gi`             |
-| `mariadb.primary.persistence.hostPath`      | Set path in case you want to use local host path volumes (not recommended in production)                                                 | `nil`             |
+| `mariadb.primary.persistence.hostPath`      | Set path in case you want to use local host path volumes (not recommended in production)                                                 | `""`              |
 | `postgresql.enabled`                        | Whether to deploy a PostgreSQL server to satisfy the database requirements                                                               | `true`            |
 | `postgresql.postgresqlUsername`             | PostgreSQL username                                                                                                                      | `bn_redmine`      |
 | `postgresql.postgresqlPassword`             | PostgreSQL password                                                                                                                      | `""`              |
 | `postgresql.postgresqlDatabase`             | PostgreSQL database                                                                                                                      | `bitnami_redmine` |
-| `postgresql.existingSecret`                 | Name of existing secret object                                                                                                           | `nil`             |
+| `postgresql.existingSecret`                 | Name of existing secret object                                                                                                           | `""`              |
 | `postgresql.persistence.enabled`            | Enable PostgreSQL persistence using PVC                                                                                                  | `true`            |
-| `postgresql.persistence.existingClaim`      | Provide an existing `PersistentVolumeClaim`, the value is evaluated as a template                                                        | `nil`             |
-| `postgresql.persistence.storageClass`       | PVC Storage Class for PostgreSQL volume                                                                                                  | `nil`             |
+| `postgresql.persistence.existingClaim`      | Provide an existing `PersistentVolumeClaim`, the value is evaluated as a template                                                        | `""`              |
+| `postgresql.persistence.storageClass`       | PVC Storage Class for PostgreSQL volume                                                                                                  | `""`              |
 | `postgresql.persistence.accessMode`         | PVC Access Mode for PostgreSQL volume                                                                                                    | `ReadWriteOnce`   |
 | `postgresql.persistence.size`               | PVC Storage Request for PostgreSQL volume                                                                                                | `8Gi`             |
-| `externalDatabase.host`                     | External Database server host                                                                                                            | `nil`             |
+| `externalDatabase.host`                     | External Database server host                                                                                                            | `""`              |
 | `externalDatabase.port`                     | External Database server port                                                                                                            | `5432`            |
 | `externalDatabase.user`                     | External Database username                                                                                                               | `bn_redmine`      |
 | `externalDatabase.password`                 | External Database user password                                                                                                          | `""`              |
 | `externalDatabase.database`                 | External Database database name                                                                                                          | `bitnami_redmine` |
-| `externalDatabase.existingSecret`           | Use an existing secret for external db password. Must contain the keys `redmine-password` or `mariadb-password` depending on the DB type | `nil`             |
+| `externalDatabase.existingSecret`           | Use an existing secret for external db password. Must contain the keys `redmine-password` or `mariadb-password` depending on the DB type | `""`              |
 
 
 ### Mail Receiver/Cron Job Parameters
@@ -267,7 +267,7 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `mailReceiver.suspend`                               | Whether to create suspended CronJob                                                                                                           | `true`                |
 | `mailReceiver.image.registry`                        | Redmine MailReceiver image registry                                                                                                           | `docker.io`           |
 | `mailReceiver.image.repository`                      | Redmine MailReceiver image repository                                                                                                         | `bitnami/redmine`     |
-| `mailReceiver.image.tag`                             | Redmine MailReceiver image tag (immutable tags are recommended)                                                                               | `4.2.1-debian-10-r47` |
+| `mailReceiver.image.tag`                             | Redmine MailReceiver image tag (immutable tags are recommended)                                                                               | `4.2.1-debian-10-r70` |
 | `mailReceiver.image.pullPolicy`                      | Redmine MailReceiver image pull policy                                                                                                        | `IfNotPresent`        |
 | `mailReceiver.image.pullSecrets`                     | Redmine MailReceiver image pull secrets                                                                                                       | `[]`                  |
 | `mailReceiver.podAnnotations`                        | Additional pod annotations                                                                                                                    | `{}`                  |
@@ -296,8 +296,8 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `mailReceiver.assignedTo`                            | Defines a new task assignee                                                                                                                   | `""`                  |
 | `mailReceiver.allowOverride`                         | Defines if email content is allowed to set attributes values. Values is a comma separated list of attributes or `all` to allow all attributes | `""`                  |
 | `mailReceiver.extraEnvVars`                          | Extra environment variables to be set on mailReceiver container                                                                               | `[]`                  |
-| `mailReceiver.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars                                                                                          | `nil`                 |
-| `mailReceiver.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars                                                                                             | `nil`                 |
+| `mailReceiver.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars                                                                                          | `""`                  |
+| `mailReceiver.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars                                                                                             | `""`                  |
 | `mailReceiver.extraVolumes`                          | Optionally specify extra list of additional volumes for mailReceiver container                                                                | `[]`                  |
 | `mailReceiver.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for mailReceiver container                                                           | `[]`                  |
 | `mailReceiver.command`                               | Override default container command (useful when using custom images)                                                                          | `[]`                  |
@@ -307,8 +307,8 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `mailReceiver.containerSecurityContext.enabled`      | mailReceiver Container securityContext                                                                                                        | `false`               |
 | `mailReceiver.containerSecurityContext.runAsUser`    | User ID for the mailReceiver container                                                                                                        | `1001`                |
 | `mailReceiver.containerSecurityContext.runAsNonRoot` | Whether to run the mailReceiver container as a non-root user                                                                                  | `true`                |
-| `mailReceiver.initContainers`                        | Add additional init containers to the mailReceiver pods                                                                                       | `{}`                  |
-| `mailReceiver.sidecars`                              | Add additional sidecar containers to the mailReceiver pods                                                                                    | `{}`                  |
+| `mailReceiver.initContainers`                        | Add additional init containers to the mailReceiver pods                                                                                       | `[]`                  |
+| `mailReceiver.sidecars`                              | Add additional sidecar containers to the mailReceiver pods                                                                                    | `[]`                  |
 | `mailReceiver.podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                           | `""`                  |
 | `mailReceiver.podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                      | `soft`                |
 | `mailReceiver.nodeAffinityPreset.type`               | Node affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                          | `""`                  |
@@ -327,12 +327,12 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `certificates.customCertificate.certificateLocation` | Location in the container to store the certificate                 | `/etc/ssl/certs/ssl-cert-snakeoil.pem`   |
 | `certificates.customCertificate.keyLocation`         | Location in the container to store the private key                 | `/etc/ssl/private/ssl-cert-snakeoil.key` |
 | `certificates.customCertificate.chainLocation`       | Location in the container to store the certificate chain           | `/etc/ssl/certs/mychain.pem`             |
-| `certificates.customCertificate.chainSecret.name`    | Name of the secret containing the certificate chain                | `nil`                                    |
-| `certificates.customCertificate.chainSecret.key`     | Key of the certificate chain file inside the secret                | `nil`                                    |
+| `certificates.customCertificate.chainSecret.name`    | Name of the secret containing the certificate chain                | `""`                                     |
+| `certificates.customCertificate.chainSecret.key`     | Key of the certificate chain file inside the secret                | `""`                                     |
 | `certificates.customCA`                              | Defines a list of secrets to import into the container trust store | `[]`                                     |
 | `certificates.image.registry`                        | Redmine image registry                                             | `docker.io`                              |
 | `certificates.image.repository`                      | Redmine image repository                                           | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Redmine image tag (immutable tags are recommended)                 | `10-debian-10-r112`                      |
+| `certificates.image.tag`                             | Redmine image tag (immutable tags are recommended)                 | `10-debian-10-r133`                      |
 | `certificates.image.pullPolicy`                      | Redmine image pull policy                                          | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Redmine image pull secrets                                         | `[]`                                     |
 | `certificates.extraEnvVars`                          | Container sidecar extra environment variables (e.g. proxy)         | `[]`                                     |
