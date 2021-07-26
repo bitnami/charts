@@ -216,125 +216,44 @@ $ helm install my-release -f values.yaml bitnami/logstash
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling vs Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### Configure the way how to expose Logstash
+### Expose the Logstash service
 
-- **Ingress**: The ingress controller must be installed in the Kubernetes cluster. Set `ingress.enabled=true` to expose Logstash through Ingress.
-- **ClusterIP**: Exposes the service on a cluster-internal IP. Choosing this value makes the service only reachable from within the cluster. Set `service.type=ClusterIP` to choose this service type.
-- **NodePort**: Exposes the service on each Node's IP at a static port (the NodePort). You’ll be able to contact the NodePort service, from outside the cluster, by requesting `NodeIP:NodePort`. Set `service.type=NodePort` to choose this service type.
-- **LoadBalancer**: Exposes the service externally using a cloud provider's load balancer. Set `service.type=LoadBalancer` to choose this service type.
+The service(s) created by the deployment can be exposed within or outside the cluster using any of the following approaches:
 
-### Using custom configuration
+- **Ingress**: Set `ingress.enabled=true` to expose Logstash through Ingress.
+- **ClusterIP**: Set `service.type=ClusterIP` to choose this service type.
+- **NodePort**: Set `service.type=NodePort` to choose this service type.
+- **LoadBalancer**: Set `service.type=LoadBalancer` to choose this service type.
 
-By default, this Helm chart provides a very basic configuration for Logstash, which listen HTTP requests on port 8080 and writes them to stdout.
+For more information, refer to the [chart documentation on exposing the Logstash service](https://docs.bitnami.com/kubernetes/apps/logstash/get-started/expose-service/).
 
-You can achieve any Logstash configuration by providing your custom configuration files. To do so, this helm chart supports to customize every configuration file.
+### Use custom configuration
 
-You can specify the Logstash configuration using the `input`, `filter`, and `output` parameters. Each of them, allows you to specify the Input Plugins, Filter Plugins, and Output Plugins configuration, respectively.
+By default, this Helm chart provides a basic configuration for Logstash: listening to HTTP requests on port 8080 and writing them to the standard output.
 
-In addition to these options, you can also set an external ConfigMap with all the configuration files. This is done by setting the `existingConfiguration` parameter. Note that this will override the two previous options.
+This Logstash configuration can be adjusted using the *input*, *filter*, and *output* parameters, which allow specification of the input, filter and output plugins configuration respectively. In addition to these options, the chart also supports reading configuration from an external ConfigMap via the *existingConfiguration* parameter.
 
-### Using multiple pipelines
+Refer to the [chart documentation for more information on customizing the Logstash deployment](https://docs.bitnami.com/kubernetes/apps/logstash/configuration/customize-deployment/).
 
-You can use [multiple pipelines](https://www.elastic.co/guide/en/logstash/master/multiple-pipelines.html) by setting the `enableMultiplePipelines` parameter to `true`.
+### Create and use multiple pipelines
 
-In that case, you should place your `pipelines.yml` file in the "files/conf" directory (together with the rest of the desired configuration files). If the `enableMultiplePipelines` parameter is set to `true` but there is not any `pipelines.yml` file in the mounted volume, a dummy file is created using the default configuration file as a single pipeline.
+The chart supports the use of [multiple pipelines](https://www.elastic.co/guide/en/logstash/master/multiple-pipelines.html) by setting the *enableMultiplePipelines* parameter to *true*.
 
-You can also set an external ConfigMap with all the configuration files. This is done by setting the `existingConfiguration` parameter.
+To do this, place the *pipelines.yml* file in the *files/conf* directory, together with the rest of the desired configuration files. If the *enableMultiplePipelines* parameter is set to *true* but the *pipelines.yml* file does not exist in the mounted volume, a dummy file is created using the default configuration (a single pipeline).
 
-Find below a basic example placing the configuration files in the "files/conf" folder although the same approach can be followed by using a ConfigMap:
+The chart also supports setting an external ConfigMap with all the configuration files via the *existingConfiguration* parameter.
 
-- ConfigMap with the configuration files:
+For more information and an example, refer to the chart documentation on [using multiple pipelines](https://docs.bitnami.com/kubernetes/apps/logstash/configuration/use-multiple-pipelines/).
 
-```console
-$ cat bye.conf
-input {
-  file {
-    path => "/tmp/bye"
-  }
-}
-output {
-  stdout { }
-}
+### Add extra environment variables
 
-$ cat hello.conf
-input {
-  file {
-    path => "/tmp/hello"
-  }
-}
-output {
-  stdout { }
-}
-
-$ cat pipelines.yml
-- pipeline.id: hello
-  path.config: "/opt/bitnami/logstash/config/hello.conf"
-- pipeline.id: bye
-  path.config: "/opt/bitnami/logstash/config/bye.conf"
-
-$ kubectl create cm multipleconfig --from-file=pipelines.yml --from-file=hello.conf --from-file=bye.conf
-```
-
-- Deploy the Helm Chart with the `enableMultiplePipelines` parameter:
-
-```console
-$ helm install logstash . --set enableMultiplePipelines=true --set existingConfiguration=multipleconfig
-
-$ kubectl logs -f logstash-0
-logstash 12:57:43.51 INFO  ==> ** Starting Logstash setup **
-logstash 12:57:43.54 INFO  ==> Initializing Logstash server...
-logstash 12:57:43.56 INFO  ==> Mounted config directory detected
-logstash 12:57:43.62 INFO  ==> User's pipelines file detected.
-logstash 12:57:43.63 INFO  ==> ** Logstash setup finished! **
-logstash 12:57:43.64 INFO  ==> ** Starting Logstash **
-logstash 12:57:43.64 INFO  ==> Starting logstash using pipelines file (pipelines.yml)
-...
-[2020-11-25T12:58:23,802][INFO ][logstash.javapipeline    ][bye] Pipeline started {"pipeline.id"=>"bye"}
-[2020-11-25T12:58:23,810][INFO ][logstash.javapipeline    ][hello] Pipeline started {"pipeline.id"=>"hello"}
-[2020-11-25T12:58:23,931][INFO ][logstash.agent           ] Pipelines running {:count=>2, :running_pipelines=>[:bye, :hello], :non_running_pipelines=>[]}
-```
-
-- According to the previous logs, both pipelines are being taken into account. Let's create some events in the tracked files and see the result in the Logstash output:
-```console
-$ kubectl exec -ti logstash-0 -- bash -c 'echo hi >> /tmp/hello'
-$ kubectl exec -ti logstash-0 -- bash -c 'echo bye >> /tmp/bye'
-
-$ kubectl logs -f logstash-0
-...
-[2020-11-25T12:58:24,535][INFO ][logstash.agent           ] Successfully started Logstash API endpoint {:port=>9600}
-{
-      "@version" => "1",
-    "@timestamp" => 2020-11-25T12:59:39.624Z,
-          "path" => "/tmp/hello",
-          "host" => "logstash-0",
-       "message" => "hi"
-}
-{
-      "@version" => "1",
-    "@timestamp" => 2020-11-25T12:59:54.351Z,
-          "path" => "/tmp/bye",
-          "host" => "logstash-0",
-       "message" => "bye"
-}
-```
-### Adding extra environment variables
-
-In case you want to add extra environment variables from an external configmap or secrets, you can use the `extraEnvVarsCM` and `extraEnvVarsSecret` properties. Be aware that the secret and configmap should be already available in the namespace.
-
-```yaml
-extraEnvVarsSecret: logstash-secrets
-extraEnvVarsCM: logstash-configmap
-```
-
-### Adding extra environment variables
-
-In case you want to add extra environment variables, you can use the `extraEnvVars` property.
+To add extra environment variables, use the `extraEnvVars` property.
 
 ```yaml
 extraEnvVars:
@@ -342,17 +261,25 @@ extraEnvVars:
     value: "x.y.z"
 ```
 
-### Setting Pod's affinity
+To add extra environment variables from an external ConfigMap or secret, use the `extraEnvVarsCM` and `extraEnvVarsSecret` properties. Note that the secret and ConfigMap should be already available in the namespace.
 
-This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+```yaml
+extraEnvVarsSecret: logstash-secrets
+extraEnvVarsCM: logstash-configmap
+```
 
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+### Set Pod affinity
+
+This chart allows you to set custom Pod affinity using the `affinity` parameter. Find more information about Pod affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ## Persistence
 
 The [Bitnami Logstash](https://github.com/bitnami/bitnami-docker-logstash) image stores the Logstash data at the `/bitnami/logstash/data` path of the container.
 
-Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
+Persistent Volume Claims (PVCs) are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
+
 See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
 
 ## Troubleshooting
@@ -375,21 +302,6 @@ This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs
 
 ### To 1.0.0
 
-[On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
+[On November 13, 2020, Helm v2 support formally ended](https://github.com/helm/charts#status-of-the-project). Subsequently, a major version of the chart was released to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
-**What changes were introduced in this major version?**
-
-- Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
-- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
-
-**Considerations when upgrading to this version**
-
-- If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
-- If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
-- If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
-
-**Useful links**
-
-- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
-- https://helm.sh/docs/topics/v2_v3_migration/
-- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+[Learn more about this change and related upgrade considerations](https://docs.bitnami.com/kubernetes/apps/logstash/administration/upgrade-helm3/).
