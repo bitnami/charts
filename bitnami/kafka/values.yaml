@@ -526,9 +526,9 @@ livenessProbe:
   enabled: true
   initialDelaySeconds: 10
   timeoutSeconds: 5
-  failureThreshold: ""
-  periodSeconds: ""
-  successThreshold: ""
+  failureThreshold: 3
+  periodSeconds: 10
+  successThreshold: 1
 ## Kafka containers' readiness probe. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ## @param readinessProbe.enabled Enable readinessProbe
@@ -543,8 +543,8 @@ readinessProbe:
   initialDelaySeconds: 5
   failureThreshold: 6
   timeoutSeconds: 5
-  periodSeconds: ""
-  successThreshold: ""
+  periodSeconds: 10
+  successThreshold: 1
 ## @param customLivenessProbe Custom Liveness probe configuration for Kafka
 ##
 customLivenessProbe: {}
