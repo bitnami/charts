@@ -263,7 +263,7 @@ spec:
             {{- end }}
             {{- if .Values.metrics.jmx.enabled }}
             - name: JMX_PORT
-              value: "5555"
+              value: {{ .Values.metrics.jmx.port | quote }}
             {{- end }}
             - name: KAFKA_VOLUME_DIR
               value: {{ .Values.persistence.mountPath | quote }}
