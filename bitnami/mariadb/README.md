@@ -51,21 +51,21 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker Image registry                    | `nil` |
+| `global.imageRegistry`    | Global Docker Image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global storage class for dynamic provisioning   | `nil` |
+| `global.storageClass`     | Global storage class for dynamic provisioning   | `""`  |
 
 
 ### Common parameters
 
 | Name                | Description                                                                        | Value           |
 | ------------------- | ---------------------------------------------------------------------------------- | --------------- |
-| `nameOverride`      | String to partially override mariadb.fullname                                      | `nil`           |
-| `fullnameOverride`  | String to fully override mariadb.fullname                                          | `nil`           |
+| `nameOverride`      | String to partially override mariadb.fullname                                      | `""`            |
+| `fullnameOverride`  | String to fully override mariadb.fullname                                          | `""`            |
 | `clusterDomain`     | Default Kubernetes cluster domain                                                  | `cluster.local` |
 | `commonAnnotations` | Common annotations to add to all MariaDB resources (sub-charts are not considered) | `{}`            |
 | `commonLabels`      | Common labels to add to all MariaDB resources (sub-charts are not considered)      | `{}`            |
-| `schedulerName`     | Name of the scheduler (other than default) to dispatch pods                        | `nil`           |
+| `schedulerName`     | Name of the scheduler (other than default) to dispatch pods                        | `""`            |
 | `extraDeploy`       | Array of extra objects to deploy with the release (evaluated as a template)        | `[]`            |
 
 
@@ -86,12 +86,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `auth.password`            | Password for the new user. Ignored if existing secret is provided                                                                                                                                                                                                             | `""`                   |
 | `auth.replicationUser`     | MariaDB replication user                                                                                                                                                                                                                                                      | `replicator`           |
 | `auth.replicationPassword` | MariaDB replication user password. Ignored if existing secret is provided                                                                                                                                                                                                     | `""`                   |
-| `auth.existingSecret`      | Use existing secret for password details (`auth.rootPassword`, `auth.password`, `auth.replicationPassword` will be ignored and picked up from this secret). The secret has to contain the keys `mariadb-root-password`, `mariadb-replication-password` and `mariadb-password` | `nil`                  |
+| `auth.existingSecret`      | Use existing secret for password details (`auth.rootPassword`, `auth.password`, `auth.replicationPassword` will be ignored and picked up from this secret). The secret has to contain the keys `mariadb-root-password`, `mariadb-replication-password` and `mariadb-password` | `""`                   |
 | `auth.forcePassword`       | Force users to specify required passwords                                                                                                                                                                                                                                     | `false`                |
 | `auth.usePasswordFiles`    | Mount credentials as a files instead of using an environment variable                                                                                                                                                                                                         | `false`                |
 | `auth.customPasswordFiles` | Use custom password files when `auth.usePasswordFiles` is set to `true`. Define path for keys `root` and `user`, also define `replicator` if `architecture` is set to `replication`                                                                                           | `{}`                   |
 | `initdbScripts`            | Dictionary of initdb scripts                                                                                                                                                                                                                                                  | `{}`                   |
-| `initdbScriptsConfigMap`   | ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)                                                                                                                                                                                                           | `nil`                  |
+| `initdbScriptsConfigMap`   | ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)                                                                                                                                                                                                           | `""`                   |
 
 
 ### MariaDB Primary parameters
@@ -102,9 +102,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `primary.args`                               | Override default container args on MariaDB Primary container(s) (useful when using custom images)                 | `[]`            |
 | `primary.hostAliases`                        | Add deployment host aliases                                                                                       | `[]`            |
 | `primary.configuration`                      | MariaDB Primary configuration to be injected as ConfigMap                                                         | `""`            |
-| `primary.existingConfiguration`              | Name of existing ConfigMap with MariaDB Primary configuration.                                                    | `nil`           |
+| `primary.existingConfiguration`              | Name of existing ConfigMap with MariaDB Primary configuration.                                                    | `""`            |
 | `primary.updateStrategy`                     | Update strategy type for the MariaDB primary statefulset                                                          | `RollingUpdate` |
-| `primary.rollingUpdatePartition`             | Partition update strategy for Mariadb Primary statefulset                                                         | `nil`           |
+| `primary.rollingUpdatePartition`             | Partition update strategy for Mariadb Primary statefulset                                                         | `""`            |
 | `primary.podAnnotations`                     | Additional pod annotations for MariaDB primary pods                                                               | `{}`            |
 | `primary.podAffinityPreset`                  | MariaDB primary pod affinity preset. Ignored if `primary.affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
 | `primary.podAntiAffinityPreset`              | MariaDB primary pod anti-affinity preset. Ignored if `primary.affinity` is set. Allowed values: `soft` or `hard`  | `soft`          |
@@ -141,9 +141,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `primary.extraEnvVarsCM`                     | Name of existing ConfigMap containing extra env vars for MariaDB primary containers                               | `""`            |
 | `primary.extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for MariaDB primary containers                                  | `""`            |
 | `primary.persistence.enabled`                | Enable persistence on MariaDB primary replicas using a `PersistentVolumeClaim`. If false, use emptyDir            | `true`          |
-| `primary.persistence.existingClaim`          | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas                                          | `nil`           |
-| `primary.persistence.subPath`                | Subdirectory of the volume to mount at                                                                            | `nil`           |
-| `primary.persistence.storageClass`           | MariaDB primary persistent volume storage Class                                                                   | `nil`           |
+| `primary.persistence.existingClaim`          | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas                                          | `""`            |
+| `primary.persistence.subPath`                | Subdirectory of the volume to mount at                                                                            | `""`            |
+| `primary.persistence.storageClass`           | MariaDB primary persistent volume storage Class                                                                   | `""`            |
 | `primary.persistence.annotations`            | MariaDB primary persistent volume claim annotations                                                               | `{}`            |
 | `primary.persistence.accessModes`            | MariaDB primary persistent volume access Modes                                                                    | `[]`            |
 | `primary.persistence.size`                   | MariaDB primary persistent volume size                                                                            | `8Gi`           |
@@ -161,7 +161,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `primary.service.annotations`                | Provide any additional annotations which may be required                                                          | `{}`            |
 | `primary.pdb.enabled`                        | Enable/disable a Pod Disruption Budget creation for MariaDB primary pods                                          | `false`         |
 | `primary.pdb.minAvailable`                   | Minimum number/percentage of MariaDB primary pods that must still be available after the eviction                 | `1`             |
-| `primary.pdb.maxUnavailable`                 | Maximum number/percentage of MariaDB primary pods that can be unavailable after the eviction                      | `nil`           |
+| `primary.pdb.maxUnavailable`                 | Maximum number/percentage of MariaDB primary pods that can be unavailable after the eviction                      | `""`            |
 | `primary.revisionHistoryLimit`               | Maximum number of revisions that will be maintained in the StatefulSet                                            | `10`            |
 
 
@@ -174,9 +174,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `secondary.args`                               | Override default container args on MariaDB Secondary container(s) (useful when using custom images)                   | `[]`            |
 | `secondary.hostAliases`                        | Add deployment host aliases                                                                                           | `[]`            |
 | `secondary.configuration`                      | MariaDB Secondary configuration to be injected as ConfigMap                                                           | `""`            |
-| `secondary.existingConfiguration`              | Name of existing ConfigMap with MariaDB Secondary configuration.                                                      | `nil`           |
+| `secondary.existingConfiguration`              | Name of existing ConfigMap with MariaDB Secondary configuration.                                                      | `""`            |
 | `secondary.updateStrategy`                     | Update strategy type for the MariaDB secondary statefulset                                                            | `RollingUpdate` |
-| `secondary.rollingUpdatePartition`             | Partition update strategy for Mariadb Secondary statefulset                                                           | `nil`           |
+| `secondary.rollingUpdatePartition`             | Partition update strategy for Mariadb Secondary statefulset                                                           | `""`            |
 | `secondary.podAnnotations`                     | Additional pod annotations for MariaDB secondary pods                                                                 | `{}`            |
 | `secondary.podAffinityPreset`                  | MariaDB secondary pod affinity preset. Ignored if `secondary.affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
 | `secondary.podAntiAffinityPreset`              | MariaDB secondary pod anti-affinity preset. Ignored if `secondary.affinity` is set. Allowed values: `soft` or `hard`  | `soft`          |
@@ -213,8 +213,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `secondary.extraEnvVarsCM`                     | Name of existing ConfigMap containing extra env vars for MariaDB secondary containers                                 | `""`            |
 | `secondary.extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for MariaDB secondary containers                                    | `""`            |
 | `secondary.persistence.enabled`                | Enable persistence on MariaDB secondary replicas using a `PersistentVolumeClaim`                                      | `true`          |
-| `secondary.persistence.subPath`                | Subdirectory of the volume to mount at                                                                                | `nil`           |
-| `secondary.persistence.storageClass`           | MariaDB secondary persistent volume storage Class                                                                     | `nil`           |
+| `secondary.persistence.subPath`                | Subdirectory of the volume to mount at                                                                                | `""`            |
+| `secondary.persistence.storageClass`           | MariaDB secondary persistent volume storage Class                                                                     | `""`            |
 | `secondary.persistence.annotations`            | MariaDB secondary persistent volume claim annotations                                                                 | `{}`            |
 | `secondary.persistence.accessModes`            | MariaDB secondary persistent volume access Modes                                                                      | `[]`            |
 | `secondary.persistence.size`                   | MariaDB secondary persistent volume size                                                                              | `8Gi`           |
@@ -232,7 +232,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `secondary.service.annotations`                | Provide any additional annotations which may be required                                                              | `{}`            |
 | `secondary.pdb.enabled`                        | Enable/disable a Pod Disruption Budget creation for MariaDB secondary pods                                            | `false`         |
 | `secondary.pdb.minAvailable`                   | Minimum number/percentage of MariaDB secondary pods that should remain scheduled                                      | `1`             |
-| `secondary.pdb.maxUnavailable`                 | Maximum number/percentage of MariaDB secondary pods that may be made unavailable                                      | `nil`           |
+| `secondary.pdb.maxUnavailable`                 | Maximum number/percentage of MariaDB secondary pods that may be made unavailable                                      | `""`            |
 | `secondary.revisionHistoryLimit`               | Maximum number of revisions that will be maintained in the StatefulSet                                                | `10`            |
 
 
@@ -241,7 +241,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                         | Description                                              | Value   |
 | ---------------------------- | -------------------------------------------------------- | ------- |
 | `serviceAccount.create`      | Enable the creation of a ServiceAccount for MariaDB pods | `true`  |
-| `serviceAccount.name`        | Name of the created ServiceAccount                       | `nil`   |
+| `serviceAccount.name`        | Name of the created ServiceAccount                       | `""`    |
 | `serviceAccount.annotations` | Annotations for MariaDB Service Account                  | `{}`    |
 | `rbac.create`                | Whether to create and use RBAC resources or not          | `false` |
 
@@ -287,12 +287,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                | `3`                       |
 | `metrics.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                | `1`                       |
 | `metrics.serviceMonitor.enabled`             | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator        | `false`                   |
-| `metrics.serviceMonitor.namespace`           | Namespace which Prometheus is running in                                            | `nil`                     |
+| `metrics.serviceMonitor.namespace`           | Namespace which Prometheus is running in                                            | `""`                      |
 | `metrics.serviceMonitor.interval`            | Interval at which metrics should be scraped                                         | `30s`                     |
-| `metrics.serviceMonitor.scrapeTimeout`       | Specify the timeout after which the scrape is ended                                 | `nil`                     |
-| `metrics.serviceMonitor.relabellings`        | Specify Metric Relabellings to add to the scrape endpoint                           | `nil`                     |
+| `metrics.serviceMonitor.scrapeTimeout`       | Specify the timeout after which the scrape is ended                                 | `""`                      |
+| `metrics.serviceMonitor.relabellings`        | Specify Metric Relabellings to add to the scrape endpoint                           | `""`                      |
 | `metrics.serviceMonitor.honorLabels`         | honorLabels chooses the metric's labels on collisions with target labels.           | `false`                   |
-| `metrics.serviceMonitor.release`             | Used to pass Labels release that sometimes should be custom for Prometheus Operator | `nil`                     |
+| `metrics.serviceMonitor.release`             | Used to pass Labels release that sometimes should be custom for Prometheus Operator | `""`                      |
 | `metrics.serviceMonitor.additionalLabels`    | Used to pass Labels that are required by the Installed Prometheus Operator          | `{}`                      |
 
 

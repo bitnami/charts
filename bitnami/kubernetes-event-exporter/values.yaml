@@ -7,7 +7,7 @@
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
@@ -18,10 +18,10 @@ global:
 
 ## @param nameOverride String to partially override kubernetes-event-exporter.fullname include (will maintain the release name)
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override kubernetes-event-exporter.fullname template
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param commonAnnotations Annotations to add to all deployed objects
 ##
 commonAnnotations: {}

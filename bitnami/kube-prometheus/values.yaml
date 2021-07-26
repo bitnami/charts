@@ -9,23 +9,23 @@
 ## @param global.labels Additional labels to apply to all resources
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
   labels: {}
 
 ## @section Common parameters
 
 ## @param nameOverride String to partially override `kube-prometheus.name` template with a string (will prepend the release name)
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override `kube-prometheus.fullname` template with a string
 ##
-fullnameOverride:
+fullnameOverride: ""
 
 ## @section Prometheus Operator Parameters
 
@@ -71,11 +71,11 @@ operator:
     create: true
     ## @param operator.serviceAccount.name The name of the ServiceAccount to create
     ## If not set and create is true, a name is generated using the kube-prometheus.operator.fullname template
-    name:
+    name: ""
   ## @param operator.schedulerName Name of the Kubernetess scheduler (other than default)
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
-  schedulerName:
+  schedulerName: ""
   ## Prometheus Operator pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param operator.podSecurityContext.enabled Enable pod security context
@@ -115,17 +115,17 @@ operator:
     ## e.g:
     ## clusterIP: None
     ##
-    clusterIP:
+    clusterIP: ""
     ## @param operator.service.nodePort Kubernetes Service nodePort
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ## e.g:
     ## nodePort: 30080
     ##
-    nodePort:
+    nodePort: ""
     ## @param operator.service.loadBalancerIP `loadBalancerIP` if service type is `LoadBalancer`
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
-    loadBalancerIP:
+    loadBalancerIP: ""
     ## @param operator.service.loadBalancerSourceRanges Address that are allowed when svc is `LoadBalancer`
     ## Set the LoadBalancer service type to internal only
     ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
@@ -143,7 +143,7 @@ operator:
     ## @param operator.service.healthCheckNodePort Specifies the health check node port (numeric port number) for the service if `externalTrafficPolicy` is set to Local.
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
-    healthCheckNodePort:
+    healthCheckNodePort: ""
     ## @param operator.service.annotations Additional annotations for Prometheus Operator service
     ##
     annotations: {}
@@ -366,7 +366,7 @@ prometheus:
     create: true
     ## @param prometheus.serviceAccount.name The name of the ServiceAccount to create
     ## If not set and create is true, a name is generated using the kube-prometheus.prometheus.fullname template
-    name:
+    name: ""
     ## @param prometheus.serviceAccount.annotations Additional annotations for created Prometheus ServiceAccount
     ## annotations:
     ##   eks.amazonaws.com/role-arn: arn:aws:iam::ACCOUNT:role/prometheus
@@ -407,7 +407,7 @@ prometheus:
   podDisruptionBudget:
     enabled: false
     minAvailable: 1
-    maxUnavailable:
+    maxUnavailable: ""
   ## Prometheus Service
   ##
   service:
@@ -420,18 +420,18 @@ prometheus:
     ## @param prometheus.service.clusterIP Specific cluster IP when service type is cluster IP. Use `None` for headless service
     ## e.g: clusterIP: None
     ##
-    clusterIP:
+    clusterIP: ""
     ## @param prometheus.service.nodePort Specify the nodePort value for the LoadBalancer and NodePort service types.
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ## e.g:
     ## nodePort: 30090
     ##
-    nodePort:
+    nodePort: ""
     ## @param prometheus.service.loadBalancerIP `loadBalancerIP` if service type is `LoadBalancer`
     ## Set the LoadBalancer service type to internal only
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
-    loadBalancerIP:
+    loadBalancerIP: ""
     ## @param prometheus.service.loadBalancerSourceRanges Address that are allowed when service is `LoadBalancer`
     ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ##
@@ -449,10 +449,10 @@ prometheus:
     ## if externalTrafficPolicy is set to Local.
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
-    healthCheckNodePort:
+    healthCheckNodePort: ""
     ## @param prometheus.service.stickySessions Set stickySessions to `true` to enable Session Affinity
     ##
-    stickySessions:
+    stickySessions: ""
     ## @param prometheus.service.annotations Additional annotations for Prometheus service  (this value is evaluated as a template)
     ##
     annotations: {}
@@ -556,7 +556,7 @@ prometheus:
   ## let Prometheus know what its external URL is so that it can properly create links
   ## externalUrl: https://prometheus.example.com
   ##
-  externalUrl:
+  externalUrl: ""
   ## @param prometheus.resources CPU/Memory resource requests/limits for node
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -782,7 +782,7 @@ prometheus:
     ## If undefined (the default) or set to null, no storageClassName spec is
     ## set, choosing the default provisioner.
     ##
-    storageClass:
+    storageClass: ""
     ## @param prometheus.persistence.accessModes Persistent Volume Access Modes
     ##
     accessModes:
@@ -872,8 +872,8 @@ prometheus:
   ##
   additionalScrapeConfigsExternal:
     enabled: false
-    name:
-    key:
+    name: ""
+    key: ""
   ## Enable additional Prometheus alert relabel configs that are managed externally to this chart
   ## Note that the prometheus will fail to provision if the correct secret does not exist.
   ## @param prometheus.additionalAlertRelabelConfigsExternal.enabled Enable additional Prometheus alert relabel configs that are managed externally to this chart
@@ -882,8 +882,8 @@ prometheus:
   ##
   additionalAlertRelabelConfigsExternal:
     enabled: false
-    name:
-    key:
+    name: ""
+    key: ""
   ## Thanos sidecar container configuration
   ##
   thanos:
@@ -1020,19 +1020,19 @@ prometheus:
       ## e.g:
       ## nodePort: 30901
       ##
-      nodePort:
+      nodePort: ""
       ## @param prometheus.thanos.service.loadBalancerIP `loadBalancerIP` if service type is `LoadBalancer`
       ## Set the LoadBalancer service type to internal only
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
       ##
-      loadBalancerIP:
+      loadBalancerIP: ""
       ## @param prometheus.thanos.service.loadBalancerSourceRanges Address that are allowed when svc is `LoadBalancer`
       ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
       ## e.g:
       ## loadBalancerSourceRanges:
       ## - 10.10.10.0/24
       ##
-      loadBalancerSourceRanges:
+      loadBalancerSourceRanges: []
       ## @param prometheus.thanos.service.annotations Additional annotations for Prometheus service
       ##
       annotations: {}
@@ -1121,7 +1121,7 @@ alertmanager:
     create: true
     ## @param alertmanager.serviceAccount.name The name of the ServiceAccount to create
     ## If not set and create is true, a name is generated using the kube-prometheus.alertmanager.fullname template
-    name:
+    name: ""
   ## Prometheus Alertmanager pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param alertmanager.podSecurityContext.enabled Enable security context
@@ -1157,7 +1157,7 @@ alertmanager:
   podDisruptionBudget:
     enabled: false
     minAvailable: 1
-    maxUnavailable:
+    maxUnavailable: ""
   ## Alertmanager Service
   ##
   service:
@@ -1171,17 +1171,17 @@ alertmanager:
     ## e.g:
     ## clusterIP: None
     ##
-    clusterIP:
+    clusterIP: ""
     ## @param alertmanager.service.nodePort Specify the nodePort value for the LoadBalancer and NodePort service types.
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ## e.g:
     ## nodePort: 30903
     ##
-    nodePort:
+    nodePort: ""
     ## @param alertmanager.service.loadBalancerIP `loadBalancerIP` if service type is `LoadBalancer`
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
-    loadBalancerIP:
+    loadBalancerIP: ""
     ## @param alertmanager.service.loadBalancerSourceRanges Address that are allowed when svc is `LoadBalancer`
     ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g:
@@ -1198,10 +1198,10 @@ alertmanager:
     ## @param alertmanager.service.healthCheckNodePort Specifies the health check node port
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
-    healthCheckNodePort:
+    healthCheckNodePort: ""
     ## @param alertmanager.service.stickySessions Set stickySessions to `true` to enable Session Affinity
     ##
-    stickySessions:
+    stickySessions: ""
     ## @param alertmanager.service.annotations Additional annotations for Alertmanager service (this value is evaluated as a template)
     ##
     annotations: {}
@@ -1239,7 +1239,7 @@ alertmanager:
     pathType: ImplementationSpecific
     ## @param alertmanager.ingress.apiVersion Override API Version (automatically detected if not set)
     ##
-    apiVersion:
+    apiVersion: ""
     ## @param alertmanager.ingress.hostname Default host for the ingress resource
     ##
     hostname: alertmanager.local
@@ -1304,7 +1304,7 @@ alertmanager:
   ## e.g:
   ## externalUrl: https://alertmanager.example.com
   ##
-  externalUrl:
+  externalUrl: ""
   ## @param alertmanager.resources CPU/Memory resource requests/limits for node
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -1455,7 +1455,7 @@ alertmanager:
     ## If undefined (the default) or set to null, no storageClassName spec is
     ## set, choosing the default provisioner.
     ##
-    storageClass:
+    storageClass: ""
     ## @param alertmanager.persistence.accessModes Persistent Volume Access Modes
     ##
     accessModes:
@@ -1611,7 +1611,7 @@ kubeControllerManager:
     ## selector:
     ##   component: kube-controller-manager
     ##
-    selector:
+    selector: {}
   serviceMonitor:
     ## @param kubeControllerManager.serviceMonitor.interval Scrape interval (use by default, falling back to Prometheus' default)
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#endpoint
@@ -1623,9 +1623,9 @@ kubeControllerManager:
     https: false
     ## @param kubeControllerManager.serviceMonitor.insecureSkipVerify Skip TLS certificate validation when scraping
     ##
-    insecureSkipVerify: null
+    insecureSkipVerify: ""
     ## @param kubeControllerManager.serviceMonitor.serverName Name of the server to use when validating TLS certificate
-    serverName: null
+    serverName: ""
     ## @param kubeControllerManager.serviceMonitor.metricRelabelings Metric relabeling
     ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs
     ##
@@ -1663,7 +1663,7 @@ kubeScheduler:
     ## selector:
     ##   component: kube-scheduler
     ##
-    selector:
+    selector: {}
   serviceMonitor:
     ## @param kubeScheduler.serviceMonitor.interval Scrape interval (use by default, falling back to Prometheus' default)
     ##
@@ -1674,10 +1674,10 @@ kubeScheduler:
     https: false
     ## @param kubeScheduler.serviceMonitor.insecureSkipVerify Skip TLS certificate validation when scraping
     ##
-    insecureSkipVerify: null
+    insecureSkipVerify: ""
     ## @param kubeScheduler.serviceMonitor.serverName Name of the server to use when validating TLS certificate
     ##
-    serverName: null
+    serverName: ""
     ## @param kubeScheduler.serviceMonitor.metricRelabelings Metric relabeling
     ## metricRelabelings:
     ##  - action: keep
@@ -1717,7 +1717,7 @@ coreDns:
     ## selector:
     ##   component: kube-dns
     ##
-    selector:
+    selector: {}
   serviceMonitor:
     ## @param coreDns.serviceMonitor.interval Scrape interval. If not set, the Prometheus default scrape interval is used.
     ##
@@ -1768,7 +1768,7 @@ kubeProxy:
     ## selector:
     ##   k8s-app: kube-proxy
     ##
-    selector:
+    selector: {}
   serviceMonitor:
     ## @param kubeProxy.serviceMonitor.https Enable scraping kube-proxy over https.
     ## Requires proper certs (not self-signed) and delegated authentication/authorization checks
