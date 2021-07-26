@@ -268,7 +268,9 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `grafana.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                            | `5`                  |
 | `grafana.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                          | `6`                  |
 | `grafana.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                          | `1`                  |
-
+| `grafana.extraVolumes`                                      | Optionally specify extra list of additional volumes for the grafana pod(s)                    | `[]`                 |
+| `grafana.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the grafana container(s)         | `[]`                 |
+| `grafana.sidecars`                                          | Add additional sidecar containers to the grafana pod(s)                                       | `[]`                 |
 
 ### PluginInit parameters
 
