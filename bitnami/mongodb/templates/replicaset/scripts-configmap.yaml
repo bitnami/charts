@@ -158,6 +158,12 @@ data:
     usernameAndPassword=""
     {{- end }}
     
+    # load Values.replicaSetConfigurationSettings.configuration into associtive array which makes iterating and string manipulation easy      
+    declare -A desiredRsConf
+    {{ range $setting, $value := .Values.replicaSetConfigurationSettings.configuration -}}
+    {{ printf "desiredRsConf[%s]='%v'" $setting $value }}
+    {{ end }}
+
     rsConfReadWriteAttempts=0
     rs_conf_configured_ok=unknown
 
@@ -178,25 +184,18 @@ data:
       # can read rs.conf so read it again and store it. settings format is '"<key>" : <value>,'
       currentRsConf=$(mongo ${usernameAndPassword} --eval 'rs.conf()')
       
-      # set up desiredRsConf list based on values.replicaSetConfigurationSettings.configuration
-      # desiredRsConfList settings are a 'key:value' pair list, not an array which makes iterating and string manipulation very easy
       
-      
-      desiredRsConfList="
-      {{ range $setting, $value := .Values.replicaSetConfigurationSettings.configuration -}}
-      {{ printf "%s:%v " $setting $value }}
-      {{- end }}
-      "
       
       desiredEqualsactual=unknown
-      for keyValue in ${desiredRsConfList}; do
-        key=$(echo "${keyValue}" | awk -F: '{print $1}')
-        value=$(echo "${keyValue}" | awk -F: '{print $2}' | sed -E 's/[[:space:]]*$//')
+      settingsToConfigure=""
+      for key in ${!desiredRsConf[@]}; do
+        value=${desiredRsConf[$key]}
         if ! $(echo "\"${currentRsConf}"\" | grep -q -e "\"${key}\" : ${value},"); then
-           logger "current rs conf setting: ${key} value will be changed to: ${value}"
+           logger "rs conf setting: ${key} value will be set to: ${value}"
+           settingsToConfigure="${settingsToConfigure}cfg.settings.${key} = ${value}; "
            desiredEqualsactual=false
         else 
-          logger "current rs conf: ${key} is already at desired value: ${value}"
+          logger "rs conf: ${key} is already at desired value: ${value}"
         fi
       done
 
@@ -222,19 +221,20 @@ data:
       if [[ "${isMaster}" == "true" ]]; then
         logger "This node is currently PRIMARY - will apply rs.conf settings"
 
-        mongo ${usernameAndPassword} --eval 'cfg = rs.conf();
-          {{ range $setting, $value := .Values.replicaSetConfigurationSettings.configuration -}}
-            {{ printf "cfg.settings.%s = %v; " $setting $value }}
-          {{- end }}
-          rs.reconfig(cfg)'
-          rsConfReadWriteAttempts=$((${rsConfReadWriteAttempts} + 1 ))
+        # avoiding tricky string substitution with single quotes by making the eval string a set of vars
+        rsconf="cfg = rs.conf();"
+        rsreconf="rs.reconfig(cfg);"
+        rsCommand="${rsconf} ${settingsToConfigure} ${rsreconf}"
+
+        mongo ${usernameAndPassword} --eval "${rsCommand}"
         if [ $? -ne 0 ]; then
           logger "Failed to apply mongodb cfg.settings configuration"
         else 
           logger "mongodb replicaset cfg.settings configuration applied"
           logger "Will check rs conf"
-          # don't exit just yet - it's worth double checking
+          # don't exit just yet - the settings will be checked in the next loop
         fi
+        rsConfReadWriteAttempts=$((${rsConfReadWriteAttempts} + 1 ))
       fi
     done  
   {{- end }}
