@@ -201,7 +201,7 @@ data:
         logger "replicaSetConfigurationSettings match the settings of the currently running rs"
         desiredEqualsactual=true
         rs_conf_configured_ok=true
-        logger "Current settings match desired settings (There have bee ${rsConfWriteAttempts} attempts to write to mongoDB rs configuration)"
+        logger "Current settings match desired settings (There have been ${rsConfWriteAttempts} attempts to write to mongoDB rs configuration)"
         exit
       fi
 
