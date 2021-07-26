@@ -111,7 +111,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `resources.requests`                 | The requested resources for the ASP.NET Core container                                    | `{}`            |
 | `containerPort`                      | Port to expose at ASP.NET Core container level                                            | `8080`          |
 | `podSecurityContext.enabled`         | Enabled ASP.NET Core pods' Security Context                                               | `false`         |
-| `podSecurityContext.sysctls`         | Set namespaced sysctls for the ASP.NET Core pods                                          | `{}`            |
+| `podSecurityContext.sysctls`         | Set namespaced sysctls for the ASP.NET Core pods                                          | `[]`            |
 | `containerSecurityContext.enabled`   | Enabled ASP.NET Core containers' Security Context                                         | `false`         |
 | `containerSecurityContext.runAsUser` | Set ASP.NET Core container's Security Context runAsUser                                   | `0`             |
 | `livenessProbe.enabled`              | Enable livenessProbe                                                                      | `true`          |

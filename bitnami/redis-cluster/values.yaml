@@ -53,7 +53,7 @@ image:
   ## Bitnami Redis(TM) image tag
   ## ref: https://github.com/bitnami/bitnami-docker-redis#supported-tags-and-respective-dockerfile-links
   ##
-  tag: 6.2.4-debian-10-r21
+  tag: 6.2.5-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -138,18 +138,10 @@ maxUnavailable: ""
 ## Containers Security Context
 ## @param containerSecurityContext.enabled Enable Containers' Security Context
 ## @param containerSecurityContext.runAsUser User ID for the containers.
-## @param containerSecurityContext.sysctls Set namespaced sysctls for the containers.
 ##
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
-  ## Uncomment the setting below to increase the net.core.somaxconn value
-  ## e.g:
-  ## sysctls:
-  ##   - name: net.core.somaxconn
-  ##     value: "10000"
-  ##
-  sysctls: []
 ## @param usePassword Use password authentication
 ##
 usePassword: true
@@ -282,7 +274,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r120
+    tag: 10-debian-10-r141
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -681,7 +673,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/redis-exporter
-    tag: 1.24.0-debian-10-r17
+    tag: 1.24.0-debian-10-r38
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -797,7 +789,7 @@ sysctlImage:
   ##
   registry: docker.io
   repository: bitnami/bitnami-shell
-  tag: 10-debian-10-r120
+  tag: 10-debian-10-r141
   pullPolicy: Always
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
