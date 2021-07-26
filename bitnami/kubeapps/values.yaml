@@ -8,25 +8,25 @@
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
 
 ## @section Common parameters
 
 ## @param kubeVersion Override Kubernetes version
 ##
-kubeVersion:
+kubeVersion: ""
 ## @param nameOverride String to partially override common.names.fullname
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param commonLabels Labels to add to all deployed objects
 ##
 commonLabels: {}
@@ -51,7 +51,7 @@ ingress:
   enabled: false
   ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
   ##
-  apiVersion:
+  apiVersion: ""
   ## @param ingress.hostname Default host for the ingress record
   ##
   hostname: kubeapps.local
@@ -171,7 +171,7 @@ frontend:
   ## e.g:
   ## proxypassExtraSetHeader: Authorization "Bearer $cookie_sessionid";
   ##
-  proxypassExtraSetHeader:
+  proxypassExtraSetHeader: ""
   ## @param frontend.largeClientHeaderBuffers  Set large_client_header_buffers in NGINX config
   ## NOTE: Can be required when using OIDC or LDAP due to large cookies
   ##
@@ -202,10 +202,10 @@ frontend:
   extraEnvVars: []
   ## @param frontend.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for the NGINX container
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param frontend.extraEnvVarsSecret Name of existing Secret containing extra env vars for the NGINX container
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param frontend.containerPort NGINX HTTP container port
   ##
   containerPort: 8080
@@ -322,7 +322,7 @@ frontend:
   tolerations: []
   ## @param frontend.priorityClassName Priority class name for frontend pods
   ##
-  priorityClassName:
+  priorityClassName: ""
   ## @param frontend.hostAliases Custom host aliases for frontend pods
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -343,7 +343,7 @@ frontend:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## @param frontend.initContainers Add additional init containers to the frontend pods
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
@@ -353,7 +353,7 @@ frontend:
   ##    imagePullPolicy: Always
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
-  initContainers: {}
+  initContainers: []
   ## Frontend service parameters
   ##
   service:
@@ -366,16 +366,16 @@ frontend:
     ## @param frontend.service.nodePort Node port for HTTP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#nodeport
     ##
-    nodePort:
+    nodePort: ""
     ## @param frontend.service.clusterIP Frontend service Cluster IP
     ## e.g.:
     ## clusterIP: None
     ##
-    clusterIP:
+    clusterIP: ""
     ## @param frontend.service.loadBalancerIP Frontend service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
-    loadBalancerIP:
+    loadBalancerIP: ""
     ## @param frontend.service.loadBalancerSourceRanges Frontend service Load Balancer sources
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g:
@@ -457,10 +457,10 @@ dashboard:
   extraEnvVars: []
   ## @param dashboard.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for the Dashboard container
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param dashboard.extraEnvVarsSecret Name of existing Secret containing extra env vars for the Dashboard container
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param dashboard.containerPort Dashboard HTTP container port
   ##
   containerPort: 8080
@@ -593,7 +593,7 @@ dashboard:
   tolerations: []
   ## @param dashboard.priorityClassName Priority class name for Dashboard pods
   ##
-  priorityClassName:
+  priorityClassName: ""
   ## @param dashboard.hostAliases Custom host aliases for Dashboard pods
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -614,7 +614,7 @@ dashboard:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## @param dashboard.initContainers Add additional init containers to the Dasbhoard pods
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
@@ -624,7 +624,7 @@ dashboard:
   ##    imagePullPolicy: Always
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
-  initContainers: {}
+  initContainers: []
   ## Dasbhoard service parameters
   ##
   service:
@@ -719,14 +719,14 @@ apprepository:
   ##
   initialReposProxy:
     enabled: false
-    httpProxy:
-    httpsProxy:
-    noProxy:
+    httpProxy: ""
+    httpsProxy: ""
+    noProxy: ""
   ## @param apprepository.crontab Schedule for syncing App repositories (default to 10 minutes)
   ## e.g:
   ## crontab: "*/10 * * * *"
   ##
-  crontab:
+  crontab: ""
   ## @param apprepository.watchAllNamespaces Watch all namespaces to support separate AppRepositories per namespace
   ## Switch this off only if you require running multiple instances of Kubeapps in different namespaces
   ## without each instance watching AppRepositories of each other
@@ -819,7 +819,7 @@ apprepository:
   tolerations: []
   ## @param apprepository.priorityClassName Priority class name for AppRepository Controller pods
   ##
-  priorityClassName:
+  priorityClassName: ""
   ## @param apprepository.hostAliases Custom host aliases for AppRepository Controller pods
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -859,18 +859,18 @@ kubeops:
   ## e.g:
   ## namespaceHeaderName: X-Consumer-Groups
   ##
-  namespaceHeaderName:
+  namespaceHeaderName: ""
   ## @param kubeops.namespaceHeaderPattern Additional header pattern for trusted namespaces
   ## e.g:
   ## namespaceHeaderPattern: namespace:^([\w-]+):\w+$
   ##
-  namespaceHeaderPattern:
+  namespaceHeaderPattern: ""
   ## @param kubeops.qps Kubeops QPS (queries per second) rate
   ##
-  qps:
+  qps: ""
   ## @param kubeops.burst Kubeops burst rate
   ##
-  burst:
+  burst: ""
   ## @param kubeops.replicaCount Number of Kubeops replicas to deploy
   ##
   replicaCount: 2
@@ -887,10 +887,10 @@ kubeops:
   extraEnvVars: []
   ## @param kubeops.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for the Kubeops container
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param kubeops.extraEnvVarsSecret Name of existing Secret containing extra env vars for the Kubeops container
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param kubeops.containerPort Kubeops HTTP container port
   ##
   containerPort: 8080
@@ -1023,7 +1023,7 @@ kubeops:
   tolerations: []
   ## @param kubeops.priorityClassName Priority class name for Kubeops pods
   ##
-  priorityClassName:
+  priorityClassName: ""
   ## @param kubeops.hostAliases Custom host aliases for Kubeops pods
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1080,10 +1080,10 @@ assetsvc:
   extraEnvVars: []
   ## @param assetsvc.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for the Assetsvc container
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param assetsvc.extraEnvVarsSecret Name of existing Secret containing extra env vars for the Assetsvc container
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param assetsvc.containerPort Assetsvc HTTP container port
   ##
   containerPort: 8080
@@ -1216,7 +1216,7 @@ assetsvc:
   tolerations: []
   ## @param assetsvc.priorityClassName Priority class name for Assetsvc pods
   ##
-  priorityClassName:
+  priorityClassName: ""
   ## @param assetsvc.hostAliases Custom host aliases for Assetsvc pods
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
