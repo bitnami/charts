@@ -123,6 +123,10 @@ volumePermissions:
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
 schedulerName: ""
+## E.g.
+## - pg_ctl
+## - stop
+preStopHookCommand: []
 ## Pod Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 ## @param securityContext.enabled Enable security context
