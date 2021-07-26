@@ -52,24 +52,24 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `nil` |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
 
 ### Common parameters
 
 | Name                | Description                                        | Value                        |
 | ------------------- | -------------------------------------------------- | ---------------------------- |
-| `kubeVersion`       | Override Kubernetes version                        | `nil`                        |
-| `nameOverride`      | String to partially override common.names.fullname | `nil`                        |
-| `fullnameOverride`  | String to fully override common.names.fullname     | `nil`                        |
+| `kubeVersion`       | Override Kubernetes version                        | `""`                         |
+| `nameOverride`      | String to partially override common.names.fullname | `""`                         |
+| `fullnameOverride`  | String to fully override common.names.fullname     | `""`                         |
 | `commonLabels`      | Labels to add to all deployed objects              | `{}`                         |
 | `commonAnnotations` | Annotations to add to all deployed objects         | `{}`                         |
 | `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`                         |
 | `image.registry`    | Odoo image registry                                | `docker.io`                  |
 | `image.repository`  | Odoo image repository                              | `bitnami/odoo`               |
-| `image.tag`         | Odoo image tag (immutable tags are recommended)    | `14.0.20210610-debian-10-r1` |
+| `image.tag`         | Odoo image tag (immutable tags are recommended)    | `14.0.20210710-debian-10-r0` |
 | `image.pullPolicy`  | Odoo image pull policy                             | `IfNotPresent`               |
 | `image.pullSecrets` | Odoo image pull secrets                            | `[]`                         |
 | `image.debug`       | Enable image debug mode                            | `false`                      |
@@ -80,7 +80,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                    | Description                                                          | Value              |
 | ----------------------- | -------------------------------------------------------------------- | ------------------ |
 | `odooEmail`             | Odoo user email                                                      | `user@example.com` |
-| `odooPassword`          | Odoo user password                                                   | `nil`              |
+| `odooPassword`          | Odoo user password                                                   | `""`               |
 | `loadDemoData`          | Whether to load demo data for all modules during initialization      | `false`            |
 | `customPostInitScripts` | Custom post-init.d user scripts                                      | `{}`               |
 | `smtpHost`              | SMTP server host                                                     | `""`               |
@@ -88,14 +88,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `smtpUser`              | SMTP username                                                        | `""`               |
 | `smtpPassword`          | SMTP user password                                                   | `""`               |
 | `smtpProtocol`          | SMTP protocol                                                        | `""`               |
-| `existingSecret`        | Name of existing secret containing Odoo credentials                  | `nil`              |
-| `smtpExistingSecret`    | The name of an existing secret with SMTP credentials                 | `nil`              |
+| `existingSecret`        | Name of existing secret containing Odoo credentials                  | `""`               |
+| `smtpExistingSecret`    | The name of an existing secret with SMTP credentials                 | `""`               |
 | `allowEmptyPassword`    | Allow the container to be started with blank passwords               | `false`            |
 | `command`               | Override default container command (useful when using custom images) | `[]`               |
 | `args`                  | Override default container args (useful when using custom images)    | `[]`               |
 | `extraEnvVars`          | Array with extra environment variables to add to the Odoo container  | `[]`               |
-| `extraEnvVarsCM`        | Name of existing ConfigMap containing extra env vars                 | `nil`              |
-| `extraEnvVarsSecret`    | Name of existing Secret containing extra env vars                    | `nil`              |
+| `extraEnvVarsCM`        | Name of existing ConfigMap containing extra env vars                 | `""`               |
+| `extraEnvVarsSecret`    | Name of existing Secret containing extra env vars                    | `""`               |
 
 
 ### Odoo deployment parameters
@@ -105,13 +105,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replicaCount`                       | Number of Odoo replicas to deploy                                                         | `1`             |
 | `updateStrategy.type`                | Odoo deployment strategy type                                                             | `RollingUpdate` |
 | `updateStrategy.rollingUpdate`       | Odoo deployment rolling update configuration parameters                                   | `{}`            |
-| `schedulerName`                      | Alternate scheduler                                                                       | `nil`           |
-| `serviceAccountName`                 | ServiceAccount name                                                                       | `default`       |
+| `schedulerName`                      | Alternate scheduler                                                                       | `""`            |
+| `serviceAccount.create`              | Specifies whether a ServiceAccount should be created                                      | `true`          |
+| `serviceAccount.name`                | The name of the ServiceAccount to create                                                  | `""`            |
 | `hostAliases`                        | Odoo pod host aliases                                                                     | `[]`            |
 | `extraVolumes`                       | Optionally specify extra list of additional volumes for Odoo pods                         | `[]`            |
 | `extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for Odoo container(s)            | `[]`            |
-| `sidecars`                           | Add additional sidecar containers to the Odoo pod                                         | `{}`            |
-| `initContainers`                     | Add additional init containers to the Odoo pods                                           | `{}`            |
+| `sidecars`                           | Add additional sidecar containers to the Odoo pod                                         | `[]`            |
+| `initContainers`                     | Add additional init containers to the Odoo pods                                           | `[]`            |
 | `podLabels`                          | Extra labels for Odoo pods                                                                | `{}`            |
 | `podAnnotations`                     | Annotations for Odoo pods                                                                 | `{}`            |
 | `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
@@ -130,19 +131,29 @@ The command removes all the Kubernetes components associated with the chart and 
 | `containerSecurityContext.enabled`   | Enabled Odoo containers' Security Context                                                 | `false`         |
 | `containerSecurityContext.runAsUser` | Set Odoo container's Security Context runAsUser                                           | `1001`          |
 | `livenessProbe.enabled`              | Enable livenessProbe                                                                      | `true`          |
+| `livenessProbe.path`                 | Path for to check for livenessProbe                                                       | `/`             |
 | `livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                   | `600`           |
 | `livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                          | `30`            |
 | `livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                         | `5`             |
 | `livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                       | `6`             |
 | `livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                       | `1`             |
 | `readinessProbe.enabled`             | Enable readinessProbe                                                                     | `true`          |
+| `readinessProbe.path`                | Path to check for readinessProbe                                                          | `/`             |
 | `readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                  | `30`            |
 | `readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                         | `10`            |
 | `readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                        | `5`             |
 | `readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                      | `6`             |
 | `readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                      | `1`             |
+| `startupProbe.enabled`               | Enable startupProbe                                                                       | `false`         |
+| `startupProbe.path`                  | Path to check for startupProbe                                                            | `/`             |
+| `startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                    | `300`           |
+| `startupProbe.periodSeconds`         | Period seconds for startupProbe                                                           | `10`            |
+| `startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe                                                          | `5`             |
+| `startupProbe.failureThreshold`      | Failure threshold for startupProbe                                                        | `6`             |
+| `startupProbe.successThreshold`      | Success threshold for startupProbe                                                        | `1`             |
 | `customLivenessProbe`                | Custom livenessProbe that overrides the default one                                       | `{}`            |
 | `customReadinessProbe`               | Custom readinessProbe that overrides the default one                                      | `{}`            |
+| `customStartupProbe`                 | Custom startupProbe that overrides the default one                                        | `{}`            |
 
 
 ### Traffic Exposure Parameters
@@ -151,17 +162,18 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------ |
 | `service.type`                     | Odoo service type                                                                                     | `LoadBalancer`           |
 | `service.port`                     | Odoo service HTTP port                                                                                | `80`                     |
-| `service.nodePort`                 | Node port for HTTP                                                                                    | `nil`                    |
-| `service.clusterIP`                | Odoo service Cluster IP                                                                               | `nil`                    |
-| `service.loadBalancerIP`           | Odoo service Load Balancer IP                                                                         | `nil`                    |
+| `service.nodePort`                 | Node port for HTTP                                                                                    | `""`                     |
+| `service.clusterIP`                | Odoo service Cluster IP                                                                               | `""`                     |
+| `service.loadBalancerIP`           | Odoo service Load Balancer IP                                                                         | `""`                     |
 | `service.loadBalancerSourceRanges` | Odoo service Load Balancer sources                                                                    | `[]`                     |
 | `service.externalTrafficPolicy`    | Odoo service external traffic policy                                                                  | `Cluster`                |
 | `service.annotations`              | Additional custom annotations for Odoo service                                                        | `{}`                     |
 | `service.extraPorts`               | Extra port to expose on Odoo service                                                                  | `[]`                     |
 | `ingress.enabled`                  | Enable ingress record generation for Odoo                                                             | `false`                  |
 | `ingress.certManager`              | Add the corresponding annotations for cert-manager integration                                        | `false`                  |
+| `ingress.selfSigned`               | Create a TLS secret for this ingress record using self-signed certificates generated by Helm          | `false`                  |
 | `ingress.pathType`                 | Ingress path type                                                                                     | `ImplementationSpecific` |
-| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                         | `nil`                    |
+| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                         | `""`                     |
 | `ingress.hostname`                 | Default host for the ingress record                                                                   | `odoo.local`             |
 | `ingress.path`                     | Default path for the ingress record                                                                   | `ImplementationSpecific` |
 | `ingress.annotations`              | Additional custom annotations for the ingress record                                                  | `{}`                     |
@@ -177,12 +189,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                          | Description                                                                                     | Value   |
 | --------------------------------------------- | ----------------------------------------------------------------------------------------------- | ------- |
 | `persistence.enabled`                         | Enable persistence using Persistent Volume Claims                                               | `true`  |
-| `persistence.storageClass`                    | Persistent Volume storage class                                                                 | `nil`   |
+| `persistence.storageClass`                    | Persistent Volume storage class                                                                 | `""`    |
 | `persistence.accessModes`                     | Persistent Volume access modes                                                                  | `[]`    |
 | `persistence.accessMode`                      | Persistent Volume access mode (DEPRECATED: use `persistence.accessModes` instead)               | `[]`    |
 | `persistence.size`                            | Persistent Volume size                                                                          | `10Gi`  |
 | `persistence.dataSource`                      | Custom PVC data source                                                                          | `{}`    |
-| `persistence.existingClaim`                   | The name of an existing PVC to use for persistence                                              | `nil`   |
+| `persistence.existingClaim`                   | The name of an existing PVC to use for persistence                                              | `""`    |
 | `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false` |
 | `volumePermissions.resources.limits`          | The resources limits for the init container                                                     | `{}`    |
 | `volumePermissions.resources.requests`        | The requested resources for the init container                                                  | `{}`    |
@@ -195,7 +207,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------- | -------------------------------------------------------------- | ------- |
 | `pdb.create`               | Enable a Pod Disruption Budget creation                        | `false` |
 | `pdb.minAvailable`         | Minimum number/percentage of pods that should remain scheduled | `1`     |
-| `pdb.maxUnavailable`       | Maximum number/percentage of pods that may be made unavailable | `nil`   |
+| `pdb.maxUnavailable`       | Maximum number/percentage of pods that may be made unavailable | `""`    |
 | `autoscaling.enabled`      | Enable Horizontal POD autoscaling for Odoo                     | `false` |
 | `autoscaling.minReplicas`  | Minimum number of Odoo replicas                                | `1`     |
 | `autoscaling.maxReplicas`  | Maximum number of Odoo replicas                                | `11`    |
@@ -211,13 +223,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `postgresql.postgresqlUsername`               | PostgreSQL username                                                               | `bn_odoo`       |
 | `postgresql.postgresqlPassword`               | PostgreSQL password                                                               | `""`            |
 | `postgresql.postgresqlDatabase`               | PostgreSQL database                                                               | `bitnami_odoo`  |
-| `postgresql.existingSecret`                   | Name of existing secret object                                                    | `nil`           |
+| `postgresql.existingSecret`                   | Name of existing secret object                                                    | `""`            |
 | `postgresql.persistence.enabled`              | Enable PostgreSQL persistence using PVC                                           | `true`          |
-| `postgresql.persistence.existingClaim`        | Provide an existing `PersistentVolumeClaim`, the value is evaluated as a template | `nil`           |
-| `postgresql.persistence.storageClass`         | PVC Storage Class for PostgreSQL volume                                           | `nil`           |
+| `postgresql.persistence.existingClaim`        | Provide an existing `PersistentVolumeClaim`, the value is evaluated as a template | `""`            |
+| `postgresql.persistence.storageClass`         | PVC Storage Class for PostgreSQL volume                                           | `""`            |
 | `postgresql.persistence.accessMode`           | PVC Access Mode for PostgreSQL volume                                             | `ReadWriteOnce` |
 | `postgresql.persistence.size`                 | PVC Storage Request for PostgreSQL volume                                         | `8Gi`           |
-| `externalDatabase.host`                       | External Database server host                                                     | `nil`           |
+| `externalDatabase.host`                       | External Database server host                                                     | `""`            |
 | `externalDatabase.port`                       | External Database server port                                                     | `5432`          |
 | `externalDatabase.user`                       | External Database username                                                        | `bn_odoo`       |
 | `externalDatabase.password`                   | External Database user password                                                   | `""`            |
@@ -225,7 +237,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.create`                     | Enable PostgreSQL user and database creation (when using an external db)          | `true`          |
 | `externalDatabase.postgresqlPostgresUser`     | External Database admin username                                                  | `postgres`      |
 | `externalDatabase.postgresqlPostgresPassword` | External Database admin password                                                  | `""`            |
-| `externalDatabase.existingSecret`             | Name of existing secret object                                                    | `nil`           |
+| `externalDatabase.existingSecret`             | Name of existing secret object                                                    | `""`            |
 
 
 The above parameters map to the env variables defined in [bitnami/odoo](http://github.com/bitnami/bitnami-docker-odoo). For more information please refer to the [bitnami/odoo](http://github.com/bitnami/bitnami-docker-odoo) image documentation.

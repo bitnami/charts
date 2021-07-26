@@ -1,0 +1,33 @@
+annotations:
+  category: Infrastructure
+apiVersion: v2
+appVersion: 7.1.3
+dependencies:
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 1.x.x
+  - name: redis
+    repository: https://charts.bitnami.com/bitnami
+    condition: redis.enabled
+    version: 14.x.x
+description: A reverse proxy and static file server that provides authentication using different providers
+engine: gotpl
+home: https://github.com/bitnami/charts/tree/master/bitnami/oauth2-proxy
+icon: https://bitnami.com/assets/stacks/oauth2-proxy/img/oauth2-proxy-stack-220x234.png
+keywords:
+  - kubernetes
+  - oauth
+  - oauth2
+  - authentication
+  - google
+  - github
+maintainers:
+  - email: containers@bitnami.com
+    name: Bitnami
+name: oauth2-proxy
+sources:
+  - https://github.com/bitnami/bitnami-docker-oauth2-proxy
+  - https://github.com/oauth2-proxy/oauth2-proxy
+version: 0.1.2

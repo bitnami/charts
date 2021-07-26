@@ -89,6 +89,12 @@ spec:
             {{- range .Values.excludeDomains }}
             - --exclude-domains={{ . }}
             {{- end }}
+            {{- if .Values.regexDomainFilter }}
+            - --regex-domain-filter={{ .Values.regexDomainFilter }}
+            {{- end }}
+            {{- if .Values.regexDomainExclusion }}
+            - --regex-domain-exclusion={{ .Values.regexDomainExclusion }}
+            {{- end }}
             {{- range .Values.zoneNameFilters }}
             - --zone-name-filter={{ . }}
             {{- end }}

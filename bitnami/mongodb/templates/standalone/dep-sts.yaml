@@ -175,15 +175,19 @@ spec:
           {{- if .Values.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
-          {{- if .Values.command }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.args }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
-              value: {{ ternary "true" "false" .Values.image.debug | quote }}
+              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
             {{- if .Values.auth.username }}
             - name: MONGODB_USERNAME
               value: {{ .Values.auth.username | quote }}
@@ -249,6 +253,7 @@ spec:
           ports:
             - name: mongodb
               containerPort: 27017
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             exec:
@@ -270,6 +275,8 @@ spec:
           {{- else if .Values.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
+          {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.readinessProbe.enabled }}
           readinessProbe:
             exec:
@@ -299,6 +306,8 @@ spec:
           {{- else if .Values.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
+          {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.startupProbe.enabled }}
           startupProbe:
             exec:
@@ -317,6 +326,7 @@ spec:
             failureThreshold: {{ .Values.startupProbe.failureThreshold }}
           {{- else if .Values.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
           {{- end }}
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
@@ -370,6 +380,7 @@ spec:
           ports:
             - name: metrics
               containerPort: {{ .Values.metrics.containerPort }}
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.metrics.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
@@ -391,6 +402,7 @@ spec:
             timeoutSeconds: {{ .Values.metrics.readinessProbe.timeoutSeconds }}
             failureThreshold: {{ .Values.metrics.readinessProbe.failureThreshold }}
             successThreshold: {{ .Values.metrics.readinessProbe.successThreshold }}
+          {{- end }}
           {{- end }}
           {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}

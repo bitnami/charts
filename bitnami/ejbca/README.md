@@ -51,18 +51,18 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `nil` |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
 
 ### Common parameters
 
 | Name                | Description                                                                           | Value |
 | ------------------- | ------------------------------------------------------------------------------------- | ----- |
-| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                  | `nil` |
-| `nameOverride`      | String to partially override ebjca.fullname template (will maintain the release name) | `nil` |
-| `fullnameOverride`  | String to fully override ebjca.fullname template                                      | `nil` |
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                  | `""`  |
+| `nameOverride`      | String to partially override ebjca.fullname template (will maintain the release name) | `""`  |
+| `fullnameOverride`  | String to fully override ebjca.fullname template                                      | `""`  |
 | `commonLabels`      | Add labels to all the deployed resources                                              | `{}`  |
 | `commonAnnotations` | Annotations to be added to all deployed resources                                     | `{}`  |
 
@@ -73,7 +73,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------ | ----------------------------------------------------------------------------------------- | ------------------------- |
 | `image.registry`                     | EJBCA image registry                                                                      | `docker.io`               |
 | `image.repository`                   | EJBCA image name                                                                          | `bitnami/ejbca`           |
-| `image.tag`                          | EJBCA image tag                                                                           | `6.15.2-6-debian-10-r271` |
+| `image.tag`                          | EJBCA image tag                                                                           | `6.15.2-6-debian-10-r294` |
 | `image.pullPolicy`                   | EJBCA image pull policy                                                                   | `IfNotPresent`            |
 | `image.pullSecrets`                  | Specify docker-registry secret names as an array                                          | `[]`                      |
 | `replicaCount`                       | Number of EJBCA replicas to deploy                                                        | `1`                       |
@@ -94,18 +94,18 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.enabled`                | Whether to enable persistence based on Persistent Volume Claims                           | `true`                    |
 | `persistence.accessMode`             | PVC Access Mode (RWO, ROX, RWX)                                                           | `ReadWriteOnce`           |
 | `persistence.size`                   | Size of the PVC to request                                                                | `2Gi`                     |
-| `persistence.storageClass`           | PVC Storage Class                                                                         | `nil`                     |
-| `persistence.existingClaim`          | Name of an existing PVC to reuse                                                          | `nil`                     |
-| `sidecars`                           | Attach additional sidecar containers to the pod                                           | `{}`                      |
-| `initContainers`                     | Additional init containers to add to the pods                                             | `{}`                      |
+| `persistence.storageClass`           | PVC Storage Class                                                                         | `""`                      |
+| `persistence.existingClaim`          | Name of an existing PVC to reuse                                                          | `""`                      |
+| `sidecars`                           | Attach additional sidecar containers to the pod                                           | `[]`                      |
+| `initContainers`                     | Additional init containers to add to the pods                                             | `[]`                      |
 | `hostAliases`                        | Add deployment host aliases                                                               | `[]`                      |
 | `ejbcaAdminUsername`                 | EJBCA administrator username                                                              | `bitnami`                 |
-| `ejbcaAdminPassword`                 | Password for the administrator account                                                    | `nil`                     |
-| `existingSecret`                     | Alternatively, you can provide the name of an existing secret containing                  | `nil`                     |
-| `ejbcaJavaOpts`                      | Options used to launch the WildFly server                                                 | `nil`                     |
+| `ejbcaAdminPassword`                 | Password for the administrator account                                                    | `""`                      |
+| `existingSecret`                     | Alternatively, you can provide the name of an existing secret containing                  | `""`                      |
+| `ejbcaJavaOpts`                      | Options used to launch the WildFly server                                                 | `""`                      |
 | `ejbcaCA.name`                       | Name of the CA EJBCA will instantiate by default                                          | `ManagementCA`            |
-| `ejbcaCA.baseDN`                     | Base DomainName of the CA EJBCA will instantiate by default                               | `nil`                     |
-| `ejbcaKeystoreExistingSecret`        | Name of an existing Secret containing a Keystore object                                   | `nil`                     |
+| `ejbcaCA.baseDN`                     | Base DomainName of the CA EJBCA will instantiate by default                               | `""`                      |
+| `ejbcaKeystoreExistingSecret`        | Name of an existing Secret containing a Keystore object                                   | `""`                      |
 | `extraEnv`                           | Additional container environment variables                                                | `[]`                      |
 | `command`                            | Custom command to override image cmd                                                      | `[]`                      |
 | `args`                               | Custom args for the custom command                                                        | `[]`                      |
@@ -143,7 +143,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.externalTrafficPolicy`    | Enable client source IP preservation                                          | `Cluster`      |
 | `service.annotations`              | Service annotations                                                           | `{}`           |
 | `service.loadBalancerSourceRanges` | Limits which cidr blocks can connect to service's load balancer               | `[]`           |
-| `service.extraPorts`               | Extra ports to expose in the service (normally used with the `sidecar` value) | `nil`          |
+| `service.extraPorts`               | Extra ports to expose in the service (normally used with the `sidecar` value) | `[]`           |
 
 
 ### Ingress parameters
@@ -153,7 +153,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.enabled`     | Enable ingress controller resource                                                            | `false`                  |
 | `ingress.certManager` | Add annotations for cert-manager                                                              | `false`                  |
 | `ingress.pathType`    | Ingress Path type                                                                             | `ImplementationSpecific` |
-| `ingress.apiVersion`  | Override API Version (automatically detected if not set)                                      | `nil`                    |
+| `ingress.apiVersion`  | Override API Version (automatically detected if not set)                                      | `""`                     |
 | `ingress.hostname`    | Default host for the ingress resource                                                         | `ejbca.local`            |
 | `ingress.path`        | The Path to EJBCA. You may need to set this to '/*' in order to use this                      | `ImplementationSpecific` |
 | `ingress.annotations` | Ingress annotations done as key:value pairs                                                   | `{}`                     |
@@ -175,11 +175,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `mariadb.auth.username`                     | Database user to create                                                                    | `bn_ejbca`      |
 | `mariadb.auth.password`                     | Password for the database                                                                  | `""`            |
 | `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                      | `true`          |
-| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                            | `nil`           |
+| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                            | `""`            |
 | `mariadb.primary.persistence.accessMode`    | Persistent Volume access mode                                                              | `ReadWriteOnce` |
 | `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                            | `8Gi`           |
-| `mariadb.primary.persistence.hostPath`      | Set path in case you want to use local host path volumes (not recommended in production)   | `nil`           |
-| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas                   | `nil`           |
+| `mariadb.primary.persistence.hostPath`      | Set path in case you want to use local host path volumes (not recommended in production)   | `""`            |
+| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas                   | `""`            |
 | `externalDatabase.host`                     | Host of the external database                                                              | `localhost`     |
 | `externalDatabase.user`                     | non-root Username for EJBCA Database                                                       | `bn_ejbca`      |
 | `externalDatabase.password`                 | Password for the above username                                                            | `""`            |

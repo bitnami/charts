@@ -1,4 +1,4 @@
-{{- if .Values.replication.enabled }}
+{{- if and .Values.replication.enabled .Values.replication.singleService }}
 {{- $serviceAnnotations := coalesce .Values.readReplicas.service.annotations .Values.service.annotations -}}
 {{- $serviceType := coalesce .Values.readReplicas.service.type .Values.service.type -}}
 {{- $serviceLoadBalancerIP := coalesce .Values.readReplicas.service.loadBalancerIP .Values.service.loadBalancerIP -}}
