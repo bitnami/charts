@@ -164,7 +164,7 @@ data:
     {{ printf "desiredRsConf[%s]='%v'" $setting $value }}
     {{ end }}
 
-    rsConfReadWriteAttempts=0
+    rsConfWriteAttempts=0
     rs_conf_configured_ok=unknown
 
     while [[ "${rs_conf_configured_ok}" != "true" ]]; do
@@ -179,9 +179,9 @@ data:
         sleep ${SLEEP_PERIOD}
       done
       counter=$((${counter} +1))
-      
       logger "rs.conf settings have been read from the currently running rs (after ${counter} attempts)"
-      # can read rs.conf so read it again and store it. settings format is '"<key>" : <value>,'
+      
+      # read rs.conf again and store it. settings format is '"<key>" : <value>,'
       currentRsConf=$(mongo ${usernameAndPassword} --eval 'rs.conf()')
 
       desiredEqualsactual=unknown
@@ -201,12 +201,12 @@ data:
         logger "replicaSetConfigurationSettings match the settings of the currently running rs"
         desiredEqualsactual=true
         rs_conf_configured_ok=true
-        logger "All settings as they should be after ${rsConfReadWriteAttempts} attempts to write to mongoDB rs configuration"
+        logger "Current settings match desired settings (There have bee ${rsConfWriteAttempts} attempts to write to mongoDB rs configuration)"
         exit
       fi
 
       # apply the settings only if this member is currently the mongo replicaset PRIMARY
-      # It might take a little time before any pod is PRIMARY
+      # it might take a little time before any pod is PRIMARY
       isMaster=unknown
       if ! mongo ${usernameAndPassword} --eval 'rs.isMaster()' | grep -q "ismaster\" : true"; then
         isMaster=false
@@ -232,7 +232,7 @@ data:
           logger "Will check rs conf"
           # don't exit just yet - the settings will be checked in the next loop
         fi
-        rsConfReadWriteAttempts=$((${rsConfReadWriteAttempts} + 1 ))
+        rsConfWriteAttempts=$((${rsConfWriteAttempts} + 1 ))
       fi
     done  
   {{- end }}
