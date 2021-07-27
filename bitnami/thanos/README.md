@@ -857,7 +857,7 @@ Thanos store supports partition based on time.
 
 Setting time partitions will create N number of store deployment based on the number of items in the list. Each item must contain min and max time for querying in the supported format (see details at [Thanos documentation](https://thanos.io/tip/components/store.md/#time-based-partioning)).
 
-Leaving this empty list ([]) will create a single store for all data.
+> Note: leaving this empty list ([]) will create a single store for all data.
 
 Example - This will create 3 stores:
 
