@@ -654,7 +654,7 @@ externalDatabase:
   ##
   database: bitnami_application
 
-## @section Redis<sup>TM</sup> parameters
+## @section Redis&trade; parameters
 
 ## Redis(TM) chart configuration
 ## https://github.com/bitnami/charts/blob/master/bitnami/redis/values.yaml

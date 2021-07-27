@@ -2945,7 +2945,7 @@ externalDatabase:
   ##
   notarySignerPassword:
 
-## @section Redis<sup>TM</sup> Parameters
+## @section Redis&trade; Parameters
 
 ## Redis(TM) chart configuration
 ## ref: https://github.com/bitnami/charts/blob/master/bitnami/redis/values.yaml
