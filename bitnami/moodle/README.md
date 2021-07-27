@@ -77,7 +77,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------ | --------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                     | Moodle image registry                                                                                                 | `docker.io`           |
 | `image.repository`                   | Moodle image repository                                                                                               | `bitnami/moodle`      |
-| `image.tag`                          | Moodle image tag (immutable tags are recommended)                                                                     | `3.11.0-debian-10-r33`|
+| `image.tag`                          | Moodle image tag (immutable tags are recommended)                                                                     | `3.11.1-debian-10-r0` |
 | `image.pullPolicy`                   | Moodle image pull policy                                                                                              | `IfNotPresent`        |
 | `image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                      | `[]`                  |
 | `image.debug`                        | Specify if debug logs should be enabled                                                                               | `false`               |
@@ -124,7 +124,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.enabled`         | Enable Moodle&trade; pods' Security Context                                                                           | `true`                |
 | `podSecurityContext.fsGroup`         | Moodle&trade; pods' group ID                                                                                          | `1001`                |
 | `containerSecurityContext.enabled`   | Enable Moodle&trade; containers' Security Context                                                                     | `true`                |
-| `containerSecurityContext.runAsUser` | Moodle&trade; containers' Security Context                                                                       | `1001`                |
+| `containerSecurityContext.runAsUser` | Moodle&trade; containers' Security Context                                                                            | `1001`                |
 | `livenessProbe.enabled`              | Enable livenessProbe                                                                                                  | `true`                |
 | `livenessProbe.path`                 | Request path for livenessProbe                                                                                        | `/login/index.php`    |
 | `livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                               | `600`                 |

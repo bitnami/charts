@@ -61,11 +61,11 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name               | Description                                                                             | Value           |
-| ------------------ | --------------------------------------------------------------------------------------- | --------------- |
-| `nameOverride`     | String to partially override mongodb.fullname template (will maintain the release name) | `""`            |
-| `fullnameOverride` | String to fully override mongodb.fullname template                                      | `""`            |
-| `clusterDomain`    | Kubernetes Cluster Domain                                                               | `cluster.local` |
+| Name                     | Description                                                                             | Value           |
+| ------------------------ | --------------------------------------------------------------------------------------- | --------------- |
+| `nameOverride`           | String to partially override mongodb.fullname template (will maintain the release name) | `""`            |
+| `fullnameOverride`       | String to fully override mongodb.fullname template                                      | `""`            |
+| `clusterDomain`          | Kubernetes Cluster Domain                                                               | `cluster.local` |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `[]`            |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `[]`            |
