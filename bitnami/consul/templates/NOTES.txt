@@ -1,5 +1,25 @@
   ** Please be patient while the chart is being deployed **
 
+{{- if .Values.diagnosticMode.enabled }}
+The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
+
+  command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 4 }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 4 }}
+
+Get the list of pods by executing:
+
+  kubectl get pods --namespace {{ .Release.Namespace }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Access the pod you want to debug by executing
+
+  kubectl exec --namespace {{ .Release.Namespace }} -ti <NAME OF THE POD> -- bash
+
+In order to replicate the container startup scripts execute this command:
+
+    /opt/bitnami/scripts/consul/entrypoint.sh /opt/bitnami/scripts/consul/run.sh
+
+{{- else }}
+
   Consul can be accessed within the cluster on port {{ .Values.containerPorts.rpcServer }} at {{ printf "%s-headless" (include "common.names.fullname" .) }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
 
 {{- if .Values.service.enabled }}
@@ -54,7 +74,7 @@ Furthermore, to know which Consul node is the cluster leader run this other comm
     kubectl exec -it {{ template "common.names.fullname" . }}-0 -- consul operator raft list-peers
 
 {{- end }}
-
+{{- end }}
 
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.metrics.image }}

@@ -40,6 +40,21 @@ clusterDomain: cluster.local
 ##
 extraDeploy: []
 
+## Enable diagnostic mode in the deployment
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the deployment
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the deployment
+  ##
+  args:
+    - infinity
+
 ## @section Deployment parameters
 
 ## Bitnami kong image version
@@ -49,6 +64,7 @@ extraDeploy: []
 ## @param image.tag kong image tag (immutable tags are recommended)
 ## @param image.pullPolicy kong image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
+## @param image.debug Enable image debug mode
 ##
 image:
   registry: docker.io
@@ -67,6 +83,9 @@ image:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
+  ## Enable debug mode
+  ##
+  debug: false
 ## @param database Select which database backend Kong will use. Can be 'postgresql' or 'cassandra'
 ##
 database: postgresql

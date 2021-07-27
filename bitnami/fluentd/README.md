@@ -59,13 +59,16 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name               | Description                                                                                  | Value           |
-| ------------------ | -------------------------------------------------------------------------------------------- | --------------- |
-| `kubeVersion`      | Force target Kubernetes version (using Helm capabilities if not set)                         | `nil`           |
-| `nameOverride`     | String to partially override common.names.fullname template (will maintain the release name) | `nil`           |
-| `fullnameOverride` | String to fully override common.names.fullname template                                      | `nil`           |
-| `clusterDomain`    | Cluster Domain                                                                               | `cluster.local` |
-| `extraDeploy`      | Array of extra objects to deploy with the release                                            | `[]`            |
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
+| `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                         | `nil`           |
+| `nameOverride`           | String to partially override common.names.fullname template (will maintain the release name) | `nil`           |
+| `fullnameOverride`       | String to fully override common.names.fullname template                                      | `nil`           |
+| `clusterDomain`          | Cluster Domain                                                                               | `cluster.local` |
+| `extraDeploy`            | Array of extra objects to deploy with the release                                            | `[]`            |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)      | `false`         |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                         | `[]`            |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                            | `[]`            |
 
 
 ### Fluentd parameters
@@ -74,9 +77,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
 | `image.registry`                                               | Fluentd image registry                                                                                          | `docker.io`                                                |
 | `image.repository`                                             | Fluentd image repository                                                                                        | `bitnami/fluentd`                                          |
-| `image.tag`                                                    | Fluentd image tag (immutable tags are recommended)                                                              | `1.13.1-debian-10-r0`                                      |
+| `image.tag`                                                    | Fluentd image tag (immutable tags are recommended)                                                              | `1.13.2-debian-10-r0`                                      |
 | `image.pullPolicy`                                             | Fluentd image pull policy                                                                                       | `IfNotPresent`                                             |
 | `image.pullSecrets`                                            | Fluentd image pull secrets                                                                                      | `[]`                                                       |
+| `image.debug`                                                  | Enable image debug mode                                                                                         | `false`                                                    |
 | `forwarder.enabled`                                            | Enable forwarder daemonset                                                                                      | `true`                                                     |
 | `forwarder.daemonUser`                                         | Forwarder daemon user and group (set to root by default because it reads from host paths)                       | `root`                                                     |
 | `forwarder.daemonGroup`                                        | Fluentd forwarder daemon system group                                                                           | `root`                                                     |

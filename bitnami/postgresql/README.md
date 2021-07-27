@@ -71,12 +71,15 @@ $ kubectl delete pvc -l release=my-release
 
 ### Common parameters
 
-| Name                | Description                                                                                  | Value |
-| ------------------- | -------------------------------------------------------------------------------------------- | ----- |
-| `nameOverride`      | String to partially override common.names.fullname template (will maintain the release name) | `""`  |
-| `fullnameOverride`  | String to fully override common.names.fullname template                                      | `""`  |
-| `extraDeploy`       | Array of extra objects to deploy with the release (evaluated as a template)                  | `[]`  |
-| `commonAnnotations` | Add annotations to all the deployed resources                                                | `{}`  |
+| Name                     | Description                                                                                  | Value   |
+| ------------------------ | -------------------------------------------------------------------------------------------- | ------- |
+| `nameOverride`           | String to partially override common.names.fullname template (will maintain the release name) | `""`    |
+| `fullnameOverride`       | String to fully override common.names.fullname template                                      | `""`    |
+| `extraDeploy`            | Array of extra objects to deploy with the release (evaluated as a template)                  | `[]`    |
+| `commonAnnotations`      | Add annotations to all the deployed resources                                                | `{}`    |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)      | `false` |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                         | `[]`    |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                            | `[]`    |
 
 
 ### PostgreSQL parameters
@@ -114,9 +117,9 @@ $ kubectl delete pvc -l release=my-release
 | `replication.synchronousCommit`               | Set synchronous commit mode. Allowed values: `on`, `remote_apply`, `remote_write`, `local` and `off`                                                      | `off`                       |
 | `replication.numSynchronousReplicas`          | Number of replicas that will have synchronous replication. Note: Cannot be greater than `replication.readReplicas`.                                       | `0`                         |
 | `replication.applicationName`                 | Cluster application name. Useful for advanced replication settings                                                                                        | `my_application`            |
-| `replication.uniqueServices`                  | Create a unique service for each independent read-replica                                                                                                 | `false`                     |
 | `replication.singleService`                   | Create one service connecting to all read-replicas                                                                                                        | `true`                      |
-| `postgresqlPostgresPassword`                  | PostgreSQL admin password (used when `postgresqlUsername` is not `postgres`, in which case`postgres` is the admin username)                               | `nil`                       |
+| `replication.uniqueServices`                  | Create a unique service for each independent read-replica                                                                                                 | `false`                     |
+| `postgresqlPostgresPassword`                  | PostgreSQL admin password (used when `postgresqlUsername` is not `postgres`, in which case`postgres` is the admin username)                               | `""`                        |
 | `postgresqlUsername`                          | PostgreSQL user (has superuser privileges if username is `postgres`)                                                                                      | `postgres`                  |
 | `postgresqlPassword`                          | PostgreSQL user password                                                                                                                                  | `""`                        |
 | `existingSecret`                              | Name of existing secret to use for PostgreSQL passwords                                                                                                   | `""`                        |

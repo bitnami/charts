@@ -74,6 +74,9 @@ spec:
         - name: volume-permissions
           image: {{ include "cassandra.volumePermissions.image" . }}
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else }}
           command:
             - /bin/sh
             - -cx
@@ -113,6 +116,7 @@ spec:
               {{- end }}
               {{- end }}
               {{- end }}
+          {{- end}}
           {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
           securityContext: {{- omit .Values.volumePermissions.securityContext "runAsUser" | toYaml | nindent 12 }}
           {{- else }}
@@ -225,7 +229,9 @@ spec:
               fi
               /opt/bitnami/scripts/cassandra/entrypoint.sh /opt/bitnami/scripts/cassandra/run.sh
             {{- end }}
-          {{- if .Values.args }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
           {{- end }}
           image: {{ include "cassandra.image" . }}
@@ -235,7 +241,7 @@ spec:
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
-              value: {{ ternary "true" "false" .Values.image.debug | quote }}
+              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
             - name: CASSANDRA_CLUSTER_NAME
               value: {{ .Values.cluster.name }}
             - name: CASSANDRA_SEEDS
@@ -335,6 +341,7 @@ spec:
             - secretRef:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsSecret "context" $) }}
             {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             exec:
@@ -375,6 +382,7 @@ spec:
                   - bash
                   - -ec
                   - nodetool decommission
+          {{- end }}
           {{- end }}
           ports:
             - name: intra
@@ -437,6 +445,10 @@ spec:
         - name: metrics
           image: {{ include "cassandra.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.hostNetwork }}
           env:
             - name: CASSANDRA_EXPORTER_CONFIG_listenPort
@@ -459,6 +471,7 @@ spec:
           {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
           {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
           livenessProbe:
             tcpSocket:
               port: metrics
@@ -468,6 +481,7 @@ spec:
               port: metrics
             initialDelaySeconds: 20
             timeoutSeconds: 45
+          {{- end }}
         {{- end }}
         {{- if .Values.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
