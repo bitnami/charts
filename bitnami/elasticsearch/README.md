@@ -75,27 +75,44 @@ $ helm delete --purge my-release
 
 ### Elasticsearch parameters
 
-| Name                    | Description                                                                                                                                         | Value                   |
-| ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `image.registry`        | Elasticsearch image registry                                                                                                                        | `docker.io`             |
-| `image.repository`      | Elasticsearch image repository                                                                                                                      | `bitnami/elasticsearch` |
-| `image.tag`             | Elasticsearch image tag (immutable tags are recommended)                                                                                            | `7.13.4-debian-10-r0`   |
-| `image.pullPolicy`      | Elasticsearch image pull policy                                                                                                                     | `IfNotPresent`          |
-| `image.pullSecrets`     | Elasticsearch image pull secrets                                                                                                                    | `[]`                    |
-| `image.debug`           | Enable image debug mode                                                                                                                             | `false`                 |
-| `name`                  | Elasticsearch cluster name                                                                                                                          | `""`                    |
-| `plugins`               | Comma, semi-colon or space separated list of plugins to install at initialization                                                                   | `""`                    |
-| `snapshotRepoPath`      | File System snapshot repository path                                                                                                                | `""`                    |
-| `config`                | Override elasticsearch configuration                                                                                                                | `{}`                    |
-| `extraConfig`           | Append extra configuration to the elasticsearch node configuration                                                                                  | `{}`                    |
-| `extraVolumes`          | A list of volumes to be added to the pod                                                                                                            | `[]`                    |
-| `extraVolumeMounts`     | A list of volume mounts to be added to the pod                                                                                                      | `[]`                    |
-| `initScripts`           | Dictionary of init scripts. Evaluated as a template.                                                                                                | `{}`                    |
-| `initScriptsCM`         | ConfigMap with the init scripts. Evaluated as a template.                                                                                           | `""`                    |
-| `initScriptsSecret`     | Secret containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time that contain sensitive data. Evaluated as a template. | `""`                    |
-| `extraEnvVars`          | Array containing extra env vars to be added to all pods (evaluated as a template)                                                                   | `[]`                    |
-| `extraEnvVarsConfigMap` | ConfigMap containing extra env vars to be added to all pods (evaluated as a template)                                                               | `""`                    |
-| `extraEnvVarsSecret`    | Secret containing extra env vars to be added to all pods (evaluated as a template)                                                                  | `""`                    |
+| Name                                       | Description                                                                                                                                         | Value                          |
+| ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
+| `image.registry`                           | Elasticsearch image registry                                                                                                                        | `docker.io`                    |
+| `image.repository`                         | Elasticsearch image repository                                                                                                                      | `bitnami/elasticsearch`        |
+| `image.tag`                                | Elasticsearch image tag (immutable tags are recommended)                                                                                            | `7.13.4-debian-10-r0`          |
+| `image.pullPolicy`                         | Elasticsearch image pull policy                                                                                                                     | `IfNotPresent`                 |
+| `image.pullSecrets`                        | Elasticsearch image pull secrets                                                                                                                    | `[]`                           |
+| `image.debug`                              | Enable image debug mode                                                                                                                             | `false`                        |
+| `security.enabled`                         | Enable X-Pack Security settings                                                                                                                     | `false`                        |
+| `security.elasticPassword`                 | Password for 'elastic' user                                                                                                                         | `""`                           |
+| `security.existingSecret`                  | Name of the existing secret containing the Elasticsearch password                                                                                   | `""`                           |
+| `security.fipsMode`                        | Configure elasticsearch with FIPS 140 compliant mode                                                                                                | `false`                        |
+| `security.tls.restEncryption`              | Enable SSL/TLS encryption for Elasticsearch REST API.                                                                                               | `true`                         |
+| `security.tls.autoGenerated`               | Create self-signed TLS certificates.                                                                                                                | `false`                        |
+| `security.tls.verificationMode`            | Verification mode for SSL communications.                                                                                                           | `full`                         |
+| `security.tls.master.existingSecret`       | Existing secret containing the certificates for the master nodes                                                                                    | `nil`                          |
+| `security.tls.data.existingSecret`         | Existing secret containing the certificates for the data nodes                                                                                      | `nil`                          |
+| `security.tls.ingest.existingSecret`       | Existing secret containing the certificates for the ingest nodes                                                                                    | `nil`                          |
+| `security.tls.coordinating.existingSecret` | Existing secret containing the certificates for the coordinating nodes                                                                              | `nil`                          |
+| `security.tls.keystorePassword`            | Password to access the JKS/PKCS12 keystore or PEM key when they are password-protected.                                                             | `""`                           |
+| `security.tls.truststorePassword`          | Password to access the JKS/PKCS12 truststore when they are password-protected.                                                                      | `""`                           |
+| `security.tls.keystoreFilename`            | Name of the keystore file                                                                                                                           | `elasticsearch.keystore.jks`   |
+| `security.tls.truststoreFilename`          | Name of the truststore                                                                                                                              | `elasticsearch.truststore.jks` |
+| `security.tls.usePemCerts`                 | Use this variable if your secrets contain PEM certificates instead of JKS/PKCS12                                                                    | `false`                        |
+| `security.tls.keyPassword`                 | Password to access the PEM key when they are password-protected.                                                                                    | `""`                           |
+| `name`                                     | Elasticsearch cluster name                                                                                                                          | `""`                           |
+| `plugins`                                  | Comma, semi-colon or space separated list of plugins to install at initialization                                                                   | `""`                           |
+| `snapshotRepoPath`                         | File System snapshot repository path                                                                                                                | `""`                           |
+| `config`                                   | Override elasticsearch configuration                                                                                                                | `{}`                           |
+| `extraConfig`                              | Append extra configuration to the elasticsearch node configuration                                                                                  | `{}`                           |
+| `extraVolumes`                             | A list of volumes to be added to the pod                                                                                                            | `[]`                           |
+| `extraVolumeMounts`                        | A list of volume mounts to be added to the pod                                                                                                      | `[]`                           |
+| `initScripts`                              | Dictionary of init scripts. Evaluated as a template.                                                                                                | `{}`                           |
+| `initScriptsCM`                            | ConfigMap with the init scripts. Evaluated as a template.                                                                                           | `""`                           |
+| `initScriptsSecret`                        | Secret containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time that contain sensitive data. Evaluated as a template. | `""`                           |
+| `extraEnvVars`                             | Array containing extra env vars to be added to all pods (evaluated as a template)                                                                   | `[]`                           |
+| `extraEnvVarsConfigMap`                    | ConfigMap containing extra env vars to be added to all pods (evaluated as a template)                                                               | `""`                           |
+| `extraEnvVarsSecret`                       | Secret containing extra env vars to be added to all pods (evaluated as a template)                                                                  | `""`                           |
 
 
 ### Master parameters
@@ -351,7 +368,9 @@ $ helm delete --purge my-release
 | `ingest.service.port`                       | Kubernetes Service port Elasticsearch transport port (ingest nodes)                                            | `9300`      |
 | `ingest.service.nodePort`                   | Kubernetes Service nodePort (ingest nodes)                                                                     | `""`        |
 | `ingest.service.annotations`                | Annotations for ingest nodes service                                                                           | `{}`        |
-| `ingest.service.loadBalancerIP`             | loadBalancerIP if ingest nodes service type is `LoadBalancer`                                                  | `""`        |
+| `ingest.service.loadBalancerIP`             | loadBalancerIP if ingest nodes service type is `LoadBalancer`                                                  | `nil`       |
+| `ingest.serviceAccount.create`              | Create a default serviceaccount for elasticsearch curator                                                      | `false`     |
+| `ingest.serviceAccount.name`                | Name of the created serviceAccount                                                                             | `""`        |
 
 
 ### Curator parameters
