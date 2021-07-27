@@ -381,7 +381,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `hidden.readinessProbe.successThreshold`             | Success threshold for readinessProbe                                                                 | `1`                |
 | `hidden.customLivenessProbe`                         | Override default liveness probe for hidden node containers                                           | `{}`               |
 | `hidden.customReadinessProbe`                        | Override default readiness probe for hidden node containers                                          | `{}`               |
-| `hidden.initContainers`                              | Add init containers to the MongoDB(R) Hidden pods.                                                   | `[]`               |
+| `hidden.initContainers`                              | Add init containers to the MongoDB&reg; Hidden pods.                                                 | `[]`               |
 | `hidden.sidecars`                                    | Add additional sidecar containers for the hidden node pod(s)                                         | `[]`               |
 | `hidden.extraVolumeMounts`                           | Optionally specify extra list of additional volumeMounts for the hidden node container(s)            | `[]`               |
 | `hidden.extraVolumes`                                | Optionally specify extra list of additional volumes to the hidden node statefulset                   | `[]`               |
@@ -393,7 +393,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `hidden.persistence.accessModes`                     | PV Access Mode                                                                                       | `[]`               |
 | `hidden.persistence.size`                            | PVC Storage Request for hidden node data volume                                                      | `8Gi`              |
 | `hidden.persistence.annotations`                     | PVC annotations                                                                                      | `{}`               |
-| `hidden.persistence.mountPath`                       | The path the volume will be mounted at, useful when using different MongoDB(R) images.               | `/bitnami/mongodb` |
+| `hidden.persistence.mountPath`                       | The path the volume will be mounted at, useful when using different MongoDB&reg; images.             | `/bitnami/mongodb` |
 | `hidden.persistence.subPath`                         | The subdirectory of the volume to mount to, useful in dev environments                               | `""`               |
 | `hidden.persistence.volumeClaimTemplates.selector`   | A label query over volumes to consider for binding (e.g. when using local volumes)                   | `{}`               |
 | `hidden.persistence.volumeClaimTemplates.dataSource` | Set volumeClaimTemplate dataSource                                                                   | `{}`               |

@@ -538,7 +538,7 @@ volumePermissions:
 
 ## @section MongoDB&reg; Parameters
 
-## MongoDB(R) chart configuration
+## MongoDB&reg; chart configuration
 ## https://github.com/bitnami/charts/blob/master/bitnami/mongodb/values.yaml
 ##
 mongodb:
@@ -548,7 +548,7 @@ mongodb:
   ## are added (externalDB)
   ##
   enabled: true
-  ## MongoDB(R) Authentication parameters
+  ## MongoDB&reg; Authentication parameters
   ##
   auth:
     ## @param mongodb.auth.enabled Enable MongoDB&reg; password authentication

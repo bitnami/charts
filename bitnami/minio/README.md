@@ -56,7 +56,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imageRegistry`    | Global Docker image registry                    | `nil` |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `nil` |
-| `global.minio`            | Global MinIO(R) credentials                     | `{}`  |
+| `global.minio`            | Global MinIO&reg; credentials                   | `{}`  |
 
 
 ### Common parameters

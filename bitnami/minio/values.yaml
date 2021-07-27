@@ -6,7 +6,7 @@
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
-## @param global.minio Global MinIO(R) credentials
+## @param global.minio Global MinIO&reg; credentials
 ##
 global:
   imageRegistry:
@@ -50,7 +50,7 @@ extraDeploy: []
 
 ## @section MinIO&reg; parameters
 
-## Bitnami MinIO(R) image version
+## Bitnami MinIO&reg; image version
 ## ref: https://hub.docker.com/r/bitnami/minio/tags/
 ## @param image.registry MinIO&reg; image registry
 ## @param image.repository MinIO&reg; image repository
@@ -79,7 +79,7 @@ image:
   ## Set to true if you would like to see extra information on logs
   ##
   debug: false
-## Bitnami MinIO(R) Client image version
+## Bitnami MinIO&reg; Client image version
 ## ref: https://hub.docker.com/r/bitnami/minio-client/tags/
 ## @param clientImage.registry MinIO&reg; Client image registry
 ## @param clientImage.repository MinIO&reg; Client image repository
@@ -93,7 +93,7 @@ clientImage:
 ## ref: https://docs.minio.io/docs/distributed-minio-quickstart-guide
 ##
 mode: standalone
-## MinIO(R) credentials
+## MinIO&reg; credentials
 ##
 accessKey:
   ## @param accessKey.password MinIO&reg; Access Key. Ignored if existing secret is provided.
@@ -131,7 +131,7 @@ defaultBuckets:
 ## ref: https://github.com/minio/minio/tree/master/docs/config/#browser
 ##
 disableWebUI: false
-## Enable tls in front of MinIO(R) containers.
+## Enable tls in front of MinIO&reg; containers.
 ##
 tls:
   ## @param tls.enabled Enable tls in front of the container
@@ -173,7 +173,7 @@ args: []
 ## https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
 schedulerName:
-## MinIO(R) deployment parameters
+## MinIO&reg; deployment parameters
 ## Only when 'mode' is 'standalone' or 'gateway.enabled' is 'true'
 ##
 deployment:
@@ -188,7 +188,7 @@ deployment:
   ##
   updateStrategy:
     type: Recreate
-## MinIO(R) statefulset parameters
+## MinIO&reg; statefulset parameters
 ## Only when mode is 'distributed'
 ##
 statefulset:
@@ -216,7 +216,7 @@ hostAliases: []
 ## @param containerPort MinIO&reg; container port to open
 ##
 containerPort: 9000
-## MinIO(R) pod Security Context
+## MinIO&reg; pod Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enable pod Security Context
 ## @param podSecurityContext.fsGroup Group ID for the container
@@ -224,7 +224,7 @@ containerPort: 9000
 podSecurityContext:
   enabled: true
   fsGroup: 1001
-## MinIO(R) container Security Context
+## MinIO&reg; container Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled Enable container Security Context
 ## @param containerSecurityContext.runAsUser User ID for the container
@@ -282,7 +282,7 @@ nodeSelector: {}
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
-## MinIO(R) containers' resource requests and limits
+## MinIO&reg; containers' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious
 ## choice for the user. This also increases chances charts run on environments with little
@@ -390,7 +390,7 @@ sidecars: {}
 
 ## @section Traffic exposure parameters
 
-## MinIO(R) Service properties
+## MinIO&reg; Service properties
 ##
 service:
   ## @param service.type MinIO&reg; service type
@@ -424,7 +424,7 @@ service:
   ##
   annotations: {}
 ## Configure the ingress resource that allows you to access the
-## MinIO(R) installation. Set up the URL
+## MinIO&reg; installation. Set up the URL
 ## ref: http://kubernetes.io/docs/user-guide/ingress/
 ##
 ingress:
@@ -511,8 +511,8 @@ networkPolicy:
   ##
   enabled: false
   ## @param networkPolicy.allowExternal Don't require client label for connections
-  ## When set to false, only pods with the correct client label will have network access to the port MinIO(R) is
-  ## listening on. When true, MinIO(R) will accept connections from any source (with the correct destination port).
+  ## When set to false, only pods with the correct client label will have network access to the port MinIO&reg; is
+  ## listening on. When true, MinIO&reg; will accept connections from any source (with the correct destination port).
   ##
   allowExternal: true
 
@@ -617,7 +617,7 @@ serviceAccount:
 
 ## @section Other parameters
 
-## MinIO(R) Pod Disruption Budget configuration (only in distributed mode)
+## MinIO&reg; Pod Disruption Budget configuration (only in distributed mode)
 ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
 ##
 pdb:
