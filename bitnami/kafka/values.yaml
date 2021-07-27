@@ -1097,7 +1097,7 @@ metrics:
       ## @param metrics.jmx.service.type Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`) for JMX Exporter
       ##
       type: ClusterIP
-      ## @param metrics.jmx.service.port JMX Exporter Prometheus port
+      ## @param metrics.jmx.service.port JMX Exporter Prometheus Service Port 
       ##
       port: 5556
       ## @param metrics.jmx.service.nodePort Kubernetes HTTP node port
