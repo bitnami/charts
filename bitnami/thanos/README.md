@@ -859,7 +859,7 @@ Setting time partitions will create N number of store deployment based on the nu
 
 > Note: leaving this empty list ([]) will create a single store for all data.
 
-Example - This will create 3 stores:
+For instance, to use 3 stores you can use a **values.yaml** like the one below:
 
 ```yaml
 timePartioning:
