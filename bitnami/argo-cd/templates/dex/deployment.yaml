@@ -1,0 +1,199 @@
+{{- if .Values.dex.enabled }}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ include "argocd.dex" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: dex
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.dex.replicaCount }}
+  {{- if .Values.dex.updateStrategy }}
+  strategy: {{- toYaml .Values.dex.updateStrategy | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: dex
+  template:
+    metadata:
+      {{- if .Values.dex.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.dex.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app.kubernetes.io/component: dex
+        {{- if .Values.dex.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.dex.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+    spec:
+      serviceAccountName: {{ include "argocd.dex.serviceAccountName" . }}
+      {{- include "argocd.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.dex.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.dex.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.dex.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.dex.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.dex.podAffinityPreset "component" "dex" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.dex.podAntiAffinityPreset "component" "dex" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.dex.nodeAffinityPreset.type "key" .Values.dex.nodeAffinityPreset.key "values" .Values.dex.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.dex.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.dex.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.dex.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.dex.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.dex.priorityClassName }}
+      priorityClassName: {{ .Values.dex.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.dex.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.dex.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      initContainers:
+        {{- if .Values.volumePermissions.enabled }}
+        - name: volume-permissions
+          image: {{ include "argocd.volumePermissions.image" . }}
+          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          command:
+            - /bin/bash
+            - -ec
+            - |
+              chown -R {{ .Values.dex.containerSecurityContext.runAsUser }}:{{ .Values.dex.containerSecurityContext.fsGroup }} /shared
+              chown -R {{ .Values.dex.containerSecurityContext.runAsUser }}:{{ .Values.dex.containerSecurityContext.fsGroup }} /tmp
+          securityContext:
+            runAsUser: {{ .Values.volumePermissions.containerSecurityContext.runAsUser }}
+          {{- if .Values.volumePermissions.resources }}
+          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: static-files
+              mountPath: /shared
+            - name: tmp-dir
+              mountPath: /tmp
+        {{- end }}
+        - name: copyutil
+          image: {{ include "argocd.server.image" . }}
+          imagePullPolicy: {{ .Values.server.image.pullPolicy }}
+          {{- if .Values.dex.resources }}
+          resources:  {{- toYaml .Values.dex.resources | nindent 12 }}
+          {{- end }}
+          {{- if .Values.dex.containerSecurityContext }}
+          securityContext: {{- omit .Values.dex.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          command:
+            - cp
+            - -n
+            - /opt/bitnami/argo-cd/bin/argocd
+            - /shared/argocd-dex
+          volumeMounts:
+            - mountPath: /shared
+              name: static-files
+        {{- if .Values.dex.initContainers }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.dex.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: dex
+          image: {{ include "argocd.dex.image" . }}
+          imagePullPolicy: {{ .Values.dex.image.pullPolicy }}
+          {{- if .Values.dex.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.dex.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.dex.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.dex.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.dex.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.dex.command "context" $) | nindent 12 }}
+          {{- else }}
+          command:
+            - /shared/argocd-dex
+          {{- end }}
+          {{- if .Values.dex.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.dex.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            - rundex
+            {{- if .Values.dex.extraArgs }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.dex.extraArgs "context" $) | nindent 8 }}
+            {{- end }}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.dex.containerPorts.http }}
+              protocol: TCP
+            - name: grpc
+              containerPort: {{ .Values.dex.containerPorts.grpc }}
+              protocol: TCP
+            {{- if .Values.dex.metrics.enabled }}
+            - name: metrics
+              containerPort: {{ .Values.dex.containerPorts.metrics }}
+              protocol: TCP
+            {{- end }}
+          env:
+            {{- if .Values.dex.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.dex.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.dex.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.dex.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.dex.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.dex.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- if .Values.dex.resources }}
+          resources: {{- toYaml .Values.dex.resources | nindent 12 }}
+          {{- end }}
+          {{- if .Values.dex.livenessProbe.enabled }}
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: {{ .Values.dex.containerPorts.http }}
+            initialDelaySeconds: {{ .Values.dex.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.dex.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.dex.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.dex.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.dex.livenessProbe.failureThreshold }}
+          {{- else if .Values.dex.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dex.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.dex.readinessProbe.enabled }}
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: {{ .Values.dex.containerPorts.http }}
+            initialDelaySeconds: {{ .Values.dex.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.dex.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.dex.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.dex.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.dex.readinessProbe.failureThreshold }}
+          {{- else if .Values.dex.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.dex.readinessProbe "enabled") "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: static-files
+              mountPath: /shared
+            - name: tmp-dir
+              mountPath: /tmp
+          {{- if .Values.dex.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.dex.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.dex.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.dex.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: tmp-dir
+          emptyDir: {}
+        - name: static-files
+          emptyDir: {}
+        {{- if .Values.dex.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.dex.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+{{- end }}

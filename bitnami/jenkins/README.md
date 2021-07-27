@@ -51,18 +51,18 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `nil` |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
 
 ### Common parameters
 
 | Name                | Description                                        | Value           |
 | ------------------- | -------------------------------------------------- | --------------- |
-| `kubeVersion`       | Override Kubernetes version                        | `nil`           |
-| `nameOverride`      | String to partially override common.names.fullname | `nil`           |
-| `fullnameOverride`  | String to fully override common.names.fullname     | `nil`           |
+| `kubeVersion`       | Override Kubernetes version                        | `""`            |
+| `nameOverride`      | String to partially override common.names.fullname | `""`            |
+| `fullnameOverride`  | String to fully override common.names.fullname     | `""`            |
 | `commonLabels`      | Labels to add to all deployed objects              | `{}`            |
 | `commonAnnotations` | Annotations to add to all deployed objects         | `{}`            |
 | `clusterDomain`     | Kubernetes cluster domain name                     | `cluster.local` |
@@ -71,14 +71,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Jenkins Image parameters
 
-| Name                | Description                                        | Value                   |
-| ------------------- | -------------------------------------------------- | ----------------------- |
-| `image.registry`    | Jenkins image registry                             | `docker.io`             |
-| `image.repository`  | Jenkins image repository                           | `bitnami/jenkins`       |
-| `image.tag`         | Jenkins image tag (immutable tags are recommended) | `2.277.4-debian-10-r14` |
-| `image.pullPolicy`  | Jenkins image pull policy                          | `IfNotPresent`          |
-| `image.pullSecrets` | Jenkins image pull secrets                         | `[]`                    |
-| `image.debug`       | Enable image debug mode                            | `false`                 |
+| Name                | Description                                        | Value                  |
+| ------------------- | -------------------------------------------------- | ---------------------- |
+| `image.registry`    | Jenkins image registry                             | `docker.io`            |
+| `image.repository`  | Jenkins image repository                           | `bitnami/jenkins`      |
+| `image.tag`         | Jenkins image tag (immutable tags are recommended) | `2.289.2-debian-10-r0` |
+| `image.pullPolicy`  | Jenkins image pull policy                          | `IfNotPresent`         |
+| `image.pullSecrets` | Jenkins image pull secrets                         | `[]`                   |
+| `image.debug`       | Enable image debug mode                            | `false`                |
 
 
 ### Jenkins Configuration parameters
@@ -87,15 +87,15 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------- | ---------------------------------------------------------------------- | ----------------------- |
 | `jenkinsUser`           | Jenkins username                                                       | `user`                  |
 | `jenkinsPassword`       | Jenkins user password                                                  | `""`                    |
-| `jenkinsHost`           | Jenkins host to create application URLs                                | `nil`                   |
+| `jenkinsHost`           | Jenkins host to create application URLs                                | `""`                    |
 | `jenkinsHome`           | Jenkins home directory                                                 | `/bitnami/jenkins/home` |
 | `javaOpts`              | Custom JVM parameters                                                  | `[]`                    |
 | `disableInitialization` | Skip performing the initial bootstrapping for Jenkins                  | `no`                    |
 | `command`               | Override default container command (useful when using custom images)   | `[]`                    |
 | `args`                  | Override default container args (useful when using custom images)      | `[]`                    |
 | `extraEnvVars`          | Array with extra environment variables to add to the Jenkins container | `[]`                    |
-| `extraEnvVarsCM`        | Name of existing ConfigMap containing extra env vars                   | `nil`                   |
-| `extraEnvVarsSecret`    | Name of existing Secret containing extra env vars                      | `nil`                   |
+| `extraEnvVarsCM`        | Name of existing ConfigMap containing extra env vars                   | `""`                    |
+| `extraEnvVarsSecret`    | Name of existing Secret containing extra env vars                      | `""`                    |
 
 
 ### Jenkins deployment parameters
@@ -103,12 +103,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                    | Description                                                                               | Value           |
 | --------------------------------------- | ----------------------------------------------------------------------------------------- | --------------- |
 | `updateStrategy.type`                   | Jenkins deployment strategy type                                                          | `RollingUpdate` |
-| `priorityClassName`                     | Jenkins pod priority class name                                                           | `nil`           |
+| `priorityClassName`                     | Jenkins pod priority class name                                                           | `""`            |
 | `hostAliases`                           | Jenkins pod host aliases                                                                  | `[]`            |
 | `extraVolumes`                          | Optionally specify extra list of additional volumes for Jenkins pods                      | `[]`            |
 | `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for Jenkins container(s)         | `[]`            |
 | `sidecars`                              | Add additional sidecar containers to the Jenkins pod                                      | `{}`            |
-| `initContainers`                        | Add additional init containers to the Jenkins pods                                        | `{}`            |
+| `initContainers`                        | Add additional init containers to the Jenkins pods                                        | `[]`            |
 | `lifecycleHooks`                        | Add lifecycle hooks to the Jenkins deployment                                             | `{}`            |
 | `podLabels`                             | Extra labels for Jenkins pods                                                             | `{}`            |
 | `podAnnotations`                        | Annotations for Jenkins pods                                                              | `{}`            |
@@ -152,16 +152,16 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.type`                     | Jenkins service type                                                                                  | `LoadBalancer`           |
 | `service.port`                     | Jenkins service HTTP port                                                                             | `80`                     |
 | `service.httpsPort`                | Jenkins service HTTPS port                                                                            | `443`                    |
-| `service.nodePorts.http`           | Node port for HTTP                                                                                    | `nil`                    |
-| `service.nodePorts.https`          | Node port for HTTPS                                                                                   | `nil`                    |
-| `service.clusterIP`                | Jenkins service Cluster IP                                                                            | `nil`                    |
-| `service.loadBalancerIP`           | Jenkins service Load Balancer IP                                                                      | `nil`                    |
+| `service.nodePorts.http`           | Node port for HTTP                                                                                    | `""`                     |
+| `service.nodePorts.https`          | Node port for HTTPS                                                                                   | `""`                     |
+| `service.clusterIP`                | Jenkins service Cluster IP                                                                            | `""`                     |
+| `service.loadBalancerIP`           | Jenkins service Load Balancer IP                                                                      | `""`                     |
 | `service.loadBalancerSourceRanges` | Jenkins service Load Balancer sources                                                                 | `[]`                     |
 | `service.externalTrafficPolicy`    | Jenkins service external traffic policy                                                               | `Cluster`                |
 | `service.annotations`              | Additional custom annotations for Jenkins service                                                     | `{}`                     |
 | `ingress.enabled`                  | Enable ingress record generation for Jenkins                                                          | `false`                  |
 | `ingress.pathType`                 | Ingress path type                                                                                     | `ImplementationSpecific` |
-| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                         | `nil`                    |
+| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                         | `""`                     |
 | `ingress.hostname`                 | Default host for the ingress record                                                                   | `jenkins.local`          |
 | `ingress.path`                     | Default path for the ingress record                                                                   | `ImplementationSpecific` |
 | `ingress.annotations`              | Additional custom annotations for the ingress record                                                  | `{}`                     |
@@ -179,14 +179,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                          | Description                                                                                     | Value                   |
 | --------------------------------------------- | ----------------------------------------------------------------------------------------------- | ----------------------- |
 | `persistence.enabled`                         | Enable persistence using Persistent Volume Claims                                               | `true`                  |
-| `persistence.storageClass`                    | Persistent Volume storage class                                                                 | `nil`                   |
+| `persistence.storageClass`                    | Persistent Volume storage class                                                                 | `""`                    |
 | `persistence.annotations`                     | Additional custom annotations for the PVC                                                       | `{}`                    |
 | `persistence.accessModes`                     | Persistent Volume access modes                                                                  | `[]`                    |
 | `persistence.size`                            | Persistent Volume size                                                                          | `8Gi`                   |
 | `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`            | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`          | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r92`      |
+| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r124`     |
 | `volumePermissions.image.pullPolicy`          | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`          | The resources limits for the init container                                                     | `{}`                    |
@@ -201,7 +201,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                            | Start a sidecar prometheus exporter to expose Jenkins metrics                                    | `false`                       |
 | `metrics.image.registry`                     | Jenkins Exporter image registry                                                                  | `docker.io`                   |
 | `metrics.image.repository`                   | Jenkins Exporter image repository                                                                | `bitnami/jenkins-exporter`    |
-| `metrics.image.tag`                          | Jenkins Jenkins Exporter image tag (immutable tags are recommended)                              | `0.20171225.0-debian-10-r459` |
+| `metrics.image.tag`                          | Jenkins Jenkins Exporter image tag (immutable tags are recommended)                              | `0.20171225.0-debian-10-r490` |
 | `metrics.image.pullPolicy`                   | Jenkins Exporter image pull policy                                                               | `IfNotPresent`                |
 | `metrics.image.pullSecrets`                  | Jenkins Exporter image pull secrets                                                              | `[]`                          |
 | `metrics.containerSecurityContext.enabled`   | Enabled Jenkins exporter containers' Security Context                                            | `true`                        |
@@ -216,9 +216,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.service.loadBalancerSourceRanges`   | Jenkins exporter service Load Balancer sources                                                   | `[]`                          |
 | `metrics.service.annotations`                | Additional custom annotations for Jenkins exporter service                                       | `{}`                          |
 | `metrics.serviceMonitor.enabled`             | Create ServiceMonitor resource(s) for scraping metrics using PrometheusOperator                  | `false`                       |
-| `metrics.serviceMonitor.namespace`           | The namespace in which the ServiceMonitor will be created                                        | `nil`                         |
+| `metrics.serviceMonitor.namespace`           | The namespace in which the ServiceMonitor will be created                                        | `""`                          |
 | `metrics.serviceMonitor.interval`            | The interval at which metrics should be scraped                                                  | `30s`                         |
-| `metrics.serviceMonitor.scrapeTimeout`       | The timeout after which the scrape is ended                                                      | `nil`                         |
+| `metrics.serviceMonitor.scrapeTimeout`       | The timeout after which the scrape is ended                                                      | `""`                          |
 | `metrics.serviceMonitor.relabellings`        | Metrics relabellings to add to the scrape endpoint                                               | `[]`                          |
 | `metrics.serviceMonitor.honorLabels`         | Specify honorLabels parameter to add the scrape endpoint                                         | `false`                       |
 | `metrics.serviceMonitor.additionalLabels`    | Additional labels that can be used so ServiceMonitor resource(s) can be discovered by Prometheus | `{}`                          |

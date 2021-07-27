@@ -9,8 +9,13 @@ metadata:
       {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
     {{- end }}
 spec:
+  {{- if .Values.web.podDisruptionBudget.minAvailable }}
+  minAvailable: {{ .Values.web.podDisruptionBudget.minAvailable }}
+  {{- end }}
+  {{- if .Values.web.podDisruptionBudget.maxUnavailable }}
+  maxUnavailable: {{ .Values.web.podDisruptionBudget.maxUnavailable }}
+  {{- end }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: web
-  {{- include "common.tplvalues.render" (dict "value" (omit .Values.web.podDisruptionBudget "enabled") "context" $) | nindent 2 }}
 {{- end }}
