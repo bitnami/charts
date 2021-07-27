@@ -34,4 +34,4 @@ spec:
       protocol: UDP
       port: {{ .Values.containerPorts.dns }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
-  
+  sessionAffinity: None
