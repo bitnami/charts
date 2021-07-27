@@ -123,6 +123,9 @@ volumePermissions:
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
 schedulerName: ""
+## @param lifecycleHooks for the PostgreSQL container to automate configuration before or after startup
+##
+lifecycleHooks: {}
 ## Pod Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 ## @param securityContext.enabled Enable security context
