@@ -338,6 +338,14 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ## Upgrading
 
+### To 9.0.0
+
+This version updates the settings used to communicate Kibana with Elasticsearch, adapting it to Elasticsearch X-Pack Security features.
+
+Previous setting `elasticsearch.tls` has been replaced with `elasticsearch.security.tls.enabled`. Other settings regarding certificate verification can be found under `elasticsearch.security.tls.*`, such as verification method and custom truststore.
+
+Additionally, support for the Kibana server using TLS/SSL encryption (HTTPS for port 5601) has been added.
+
 ### To 8.0.0
 
 The Kibana container configuration logic was migrated to bash.
