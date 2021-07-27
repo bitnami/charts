@@ -1130,6 +1130,12 @@ metrics:
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
+  ## @param metrics.extraVolumes Optionally specify extra list of additional volumes for the Redis(TM) metrics sidecar
+  ##
+  extraVolumes: []
+  ## @param metrics.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Redis(TM) metrics sidecar
+  ##
+  extraVolumeMounts: []
   ## Redis(TM) exporter resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## @param metrics.resources.limits The resources limits for the Redis(TM) exporter container
