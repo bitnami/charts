@@ -90,14 +90,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Redis(TM) Image parameters
 
-| Name                | Description                                          | Value                 |
-| ------------------- | ---------------------------------------------------- | --------------------- |
-| `image.registry`    | Redis(TM) image registry                             | `docker.io`           |
-| `image.repository`  | Redis(TM) image repository                           | `bitnami/redis`       |
-| `image.tag`         | Redis(TM) image tag (immutable tags are recommended) | `6.2.4-debian-10-r13` |
-| `image.pullPolicy`  | Redis(TM) image pull policy                          | `IfNotPresent`        |
-| `image.pullSecrets` | Redis(TM) image pull secrets                         | `[]`                  |
-| `image.debug`       | Enable image debug mode                              | `false`               |
+| Name                | Description                                          | Value                |
+| ------------------- | ---------------------------------------------------- | -------------------- |
+| `image.registry`    | Redis(TM) image registry                             | `docker.io`          |
+| `image.repository`  | Redis(TM) image repository                           | `bitnami/redis`      |
+| `image.tag`         | Redis(TM) image tag (immutable tags are recommended) | `6.2.5-debian-10-r0` |
+| `image.pullPolicy`  | Redis(TM) image pull policy                          | `IfNotPresent`       |
+| `image.pullSecrets` | Redis(TM) image pull secrets                         | `[]`                 |
+| `image.debug`       | Enable image debug mode                              | `false`              |
 
 
 ### Redis(TM) common configuration parameters
@@ -276,7 +276,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sentinel.enabled`                            | Use Redis(TM) Sentinel on Redis(TM) pods.                                                        | `false`                  |
 | `sentinel.image.registry`                     | Redis(TM) Sentinel image registry                                                                | `docker.io`              |
 | `sentinel.image.repository`                   | Redis(TM) Sentinel image repository                                                              | `bitnami/redis-sentinel` |
-| `sentinel.image.tag`                          | Redis(TM) Sentinel image tag (immutable tags are recommended)                                    | `6.2.4-debian-10-r14`    |
+| `sentinel.image.tag`                          | Redis(TM) Sentinel image tag (immutable tags are recommended)                                    | `6.2.5-debian-10-r0`     |
 | `sentinel.image.pullPolicy`                   | Redis(TM) Sentinel image pull policy                                                             | `IfNotPresent`           |
 | `sentinel.image.pullSecrets`                  | Redis(TM) Sentinel image pull secrets                                                            | `[]`                     |
 | `sentinel.image.debug`                        | Enable image debug mode                                                                          | `false`                  |
@@ -344,7 +344,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                           | `""`    |
 | `serviceAccount.automountServiceAccountToken` | Whether to auto mount the service account token                                                                  | `true`  |
 | `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                             | `{}`    |
-| `pdb.create`                                  | Specifies whether a ServiceAccount should be created                                                             | `false` |
+| `pdb.create`                                  | Specifies whether a PodDisruptionBudget should be created                                                        | `false` |
 | `pdb.minAvailable`                            | Min number of pods that must still be available after the eviction                                               | `1`     |
 | `pdb.maxUnavailable`                          | Max number of pods that can be unavailable after the eviction                                                    | `""`    |
 | `tls.enabled`                                 | Enable TLS traffic                                                                                               | `false` |
@@ -365,15 +365,15 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                            | Start a sidecar prometheus exporter to expose Redis(TM) metrics                                  | `false`                  |
 | `metrics.image.registry`                     | Redis(TM) Exporter image registry                                                                | `docker.io`              |
 | `metrics.image.repository`                   | Redis(TM) Exporter image repository                                                              | `bitnami/redis-exporter` |
-| `metrics.image.tag`                          | Redis(TM) Redis(TM) Exporter image tag (immutable tags are recommended)                          | `1.24.0-debian-10-r9`    |
+| `metrics.image.tag`                          | Redis(TM) Redis(TM) Exporter image tag (immutable tags are recommended)                          | `1.24.0-debian-10-r36`   |
 | `metrics.image.pullPolicy`                   | Redis(TM) Exporter image pull policy                                                             | `IfNotPresent`           |
 | `metrics.image.pullSecrets`                  | Redis(TM) Exporter image pull secrets                                                            | `[]`                     |
 | `metrics.redisTargetHost`                    | A way to specify an alternative Redis(TM) hostname                                               | `localhost`              |
 | `metrics.extraArgs`                          | Extra arguments for Redis(TM) exporter, for example:                                             | `{}`                     |
-| `metrics.extraVolumes`                       | Optionally specify extra list of additional volumes for the Redis(TM) metrics sidecar             | `[]`            |
-| `metrics.extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for the Redis(TM) metrics sidecar        | `[]`            |
 | `metrics.containerSecurityContext.enabled`   | Enabled Redis(TM) exporter containers' Security Context                                          | `true`                   |
 | `metrics.containerSecurityContext.runAsUser` | Set Redis(TM) exporter containers' Security Context runAsUser                                    | `1001`                   |
+| `metrics.extraVolumes`                       | Optionally specify extra list of additional volumes for the Redis(TM) metrics sidecar            | `[]`                     |
+| `metrics.extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for the Redis(TM) metrics sidecar       | `[]`                     |
 | `metrics.resources.limits`                   | The resources limits for the Redis(TM) exporter container                                        | `{}`                     |
 | `metrics.resources.requests`                 | The requested resources for the Redis(TM) exporter container                                     | `{}`                     |
 | `metrics.podLabels`                          | Extra labels for Redis(TM) exporter pods                                                         | `{}`                     |
@@ -404,7 +404,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r112`     |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r139`     |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `Always`                |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
@@ -413,7 +413,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sysctl.enabled`                                       | Enable init container to modify Kernel settings                                                 | `false`                 |
 | `sysctl.image.registry`                                | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `sysctl.image.repository`                              | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `sysctl.image.tag`                                     | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r112`     |
+| `sysctl.image.tag`                                     | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r139`     |
 | `sysctl.image.pullPolicy`                              | Bitnami Shell image pull policy                                                                 | `Always`                |
 | `sysctl.image.pullSecrets`                             | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `sysctl.command`                                       | Override default init-sysctl container command (useful when using custom images)                | `[]`                    |
