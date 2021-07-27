@@ -576,6 +576,16 @@ extraVolumeMounts: []
 ##         containerPort: 1234
 ##
 initContainers: {}
+## @param initContainersPost Add additional init containers to the Keycloak pods after the initContainer which generates tls certificates
+## Example:
+## initContainersPost:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+initContainersPost: {}
 ## @param sidecars Add additional sidecar containers to the Keycloak pods
 ## Example:
 ## sidecars:
