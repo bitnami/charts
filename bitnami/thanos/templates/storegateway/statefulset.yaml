@@ -5,6 +5,9 @@ metadata:
   name: {{ include "common.names.fullname" . }}-storegateway
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: storegateway
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
 spec:
   replicas: {{ .Values.storegateway.replicaCount }}
   podManagementPolicy: {{ .Values.storegateway.podManagementPolicy }}
@@ -21,7 +24,10 @@ spec:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: storegateway
-        {{- if and .Values.storegateway.enabled .Values.storegateway.podLabels }}
+        {{- if .Values.commonLabels }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.storegateway.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.podLabels "context" $) | nindent 8 }}
         {{- end }}
       annotations:
@@ -125,7 +131,7 @@ spec:
               containerPort: 10901
               protocol: TCP
           {{- if .Values.storegateway.livenessProbe.enabled }}
-          livenessProbe: 
+          livenessProbe:
             httpGet:
               path: /-/healthy
               port: http
@@ -136,7 +142,7 @@ spec:
             failureThreshold: {{ .Values.storegateway.livenessProbe.failureThreshold }}
           {{- end }}
           {{- if .Values.storegateway.readinessProbe.enabled }}
-          readinessProbe: 
+          readinessProbe:
             httpGet:
               path: /-/ready
               port: http

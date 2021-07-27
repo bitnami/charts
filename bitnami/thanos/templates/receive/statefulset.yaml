@@ -5,6 +5,9 @@ metadata:
   name: {{ include "common.names.fullname" . }}-receive
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: receive
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
 spec:
   replicas: {{ .Values.receive.replicaCount }}
   podManagementPolicy: {{ .Values.receive.podManagementPolicy }}
@@ -21,7 +24,10 @@ spec:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: receive
-        {{- if and .Values.receive.enabled .Values.receive.podLabels }}
+        {{- if .Values.commonLabels }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.receive.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.receive.podLabels "context" $) | nindent 8 }}
         {{- end }}
       annotations:
@@ -61,7 +67,7 @@ spec:
       containers:
         {{- if .Values.receive.extraContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.receive.extraContainers "context" $) | nindent 8 }}
-        {{- end }}         
+        {{- end }}
         - name: receive
           image: {{ include "thanos.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
@@ -118,7 +124,7 @@ spec:
               name: remote-write
               protocol: TCP
           {{- if .Values.receive.livenessProbe.enabled }}
-          livenessProbe: 
+          livenessProbe:
             httpGet:
               path: /-/healthy
               port: http
@@ -129,7 +135,7 @@ spec:
             failureThreshold: {{ .Values.receive.livenessProbe.failureThreshold }}
           {{- end }}
           {{- if .Values.receive.readinessProbe.enabled }}
-          readinessProbe: 
+          readinessProbe:
             httpGet:
               path: /-/ready
               port: http

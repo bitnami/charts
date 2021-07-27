@@ -1,25 +1,22 @@
 name: Generate Chart Readme
 
-on: 
+on:
   pull_request:
-    branches:    
+    branches:
       - master
     paths:
-      - 'bitnami/airflow/values.yaml'
-      - 'bitnami/dokuwiki/values.yaml'
-      - 'bitnami/drupal/values.yaml'
-      - 'bitnami/ejbca/values.yaml'
+      - 'bitnami/**/values.yaml'
 
 jobs:
   generate-chart-readme:
     runs-on: ubuntu-latest
 
     steps:
-
       - name: Checkout bitnami-labs/readme-generator-for-helm
         uses: actions/checkout@v2
         with:
           repository: 'bitnami-labs/readme-generator-for-helm'
+          ref: '55cab5dd2191c4ffa7245cfefa428d4d9bb12730'
           path: readme-generator-for-helm
 
       - name: Cache node modules

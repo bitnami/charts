@@ -52,18 +52,18 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `nil` |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
 
 ### Common parameters
 
 | Name                | Description                                                                                                | Value |
 | ------------------- | ---------------------------------------------------------------------------------------------------------- | ----- |
-| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                                       | `nil` |
-| `nameOverride`      | String to partially override drupal.fullname template (will maintain the release name)                     | `nil` |
-| `fullnameOverride`  | String to fully override drupal.fullname template                                                          | `nil` |
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                                       | `""`  |
+| `nameOverride`      | String to partially override drupal.fullname template (will maintain the release name)                     | `""`  |
+| `fullnameOverride`  | String to fully override drupal.fullname template                                                          | `""`  |
 | `commonAnnotations` | Common annotations to add to all Drupal resources (sub-charts are not considered). Evaluated as a template | `{}`  |
 | `commonLabels`      | Common labels to add to all Drupal resources (sub-charts are not considered). Evaluated as a template      | `{}`  |
 | `extraDeploy`       | Array of extra objects to deploy with the release (evaluated as a template).                               | `[]`  |
@@ -75,7 +75,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------ | --------------------------------------------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`                     | Drupal image registry                                                                                                 | `docker.io`          |
 | `image.repository`                   | Drupal Image name                                                                                                     | `bitnami/drupal`     |
-| `image.tag`                          | Drupal Image tag                                                                                                      | `9.2.0-debian-10-r0` |
+| `image.tag`                          | Drupal Image tag                                                                                                      | `9.2.2-debian-10-r0` |
 | `image.pullPolicy`                   | Drupal image pull policy                                                                                              | `IfNotPresent`       |
 | `image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                      | `[]`                 |
 | `image.debug`                        | Specify if debug logs should be enabled                                                                               | `false`              |
@@ -86,32 +86,32 @@ The command removes all the Kubernetes components associated with the chart and 
 | `drupalPassword`                     | Application password                                                                                                  | `""`                 |
 | `drupalEmail`                        | Admin email                                                                                                           | `user@example.com`   |
 | `allowEmptyPassword`                 | Allow DB blank passwords                                                                                              | `true`               |
-| `command`                            | Override default container command (useful when using custom images)                                                  | `nil`                |
-| `args`                               | Override default container args (useful when using custom images)                                                     | `nil`                |
+| `command`                            | Override default container command (useful when using custom images)                                                  | `[]`                 |
+| `args`                               | Override default container args (useful when using custom images)                                                     | `[]`                 |
 | `updateStrategy.type`                | Update strategy - only really applicable for deployments with RWO PVs attached                                        | `RollingUpdate`      |
 | `hostAliases`                        | Add deployment host aliases                                                                                           | `[]`                 |
 | `extraEnvVars`                       | Extra environment variables                                                                                           | `[]`                 |
-| `extraEnvVarsCM`                     | ConfigMap containing extra env vars                                                                                   | `nil`                |
-| `extraEnvVarsSecret`                 | Secret containing extra env vars (in case of sensitive data)                                                          | `nil`                |
+| `extraEnvVarsCM`                     | ConfigMap containing extra env vars                                                                                   | `""`                 |
+| `extraEnvVarsSecret`                 | Secret containing extra env vars (in case of sensitive data)                                                          | `""`                 |
 | `extraVolumes`                       | Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`    | `[]`                 |
 | `extraVolumeMounts`                  | Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`. | `[]`                 |
 | `initContainers`                     | Add additional init containers to the pod (evaluated as a template)                                                   | `[]`                 |
 | `sidecars`                           | Attach additional containers to the pod (evaluated as a template)                                                     | `[]`                 |
 | `tolerations`                        | Tolerations for pod assignment                                                                                        | `[]`                 |
-| `existingSecret`                     | Name of a secret with the application password                                                                        | `nil`                |
-| `smtpHost`                           | SMTP host                                                                                                             | `nil`                |
-| `smtpPort`                           | SMTP port                                                                                                             | `nil`                |
-| `smtpUser`                           | SMTP user                                                                                                             | `nil`                |
-| `smtpPassword`                       | SMTP password                                                                                                         | `nil`                |
-| `smtpProtocol`                       | SMTP Protocol (options: ssl,tls, nil)                                                                                 | `nil`                |
+| `existingSecret`                     | Name of a secret with the application password                                                                        | `""`                 |
+| `smtpHost`                           | SMTP host                                                                                                             | `""`                 |
+| `smtpPort`                           | SMTP port                                                                                                             | `""`                 |
+| `smtpUser`                           | SMTP user                                                                                                             | `""`                 |
+| `smtpPassword`                       | SMTP password                                                                                                         | `""`                 |
+| `smtpProtocol`                       | SMTP Protocol (options: ssl,tls, nil)                                                                                 | `""`                 |
 | `containerPorts`                     | Container ports                                                                                                       | `{}`                 |
 | `sessionAffinity`                    | Control where client requests go, to the same pod or round-robin. Values: ClientIP or None                            | `None`               |
 | `persistence.enabled`                | Enable persistence using PVC                                                                                          | `true`               |
-| `persistence.storageClass`           | PVC Storage Class for Drupal volume                                                                                   | `nil`                |
+| `persistence.storageClass`           | PVC Storage Class for Drupal volume                                                                                   | `""`                 |
 | `persistence.accessMode`             | PVC Access Mode for Drupal volume                                                                                     | `ReadWriteOnce`      |
 | `persistence.size`                   | PVC Storage Request for Drupal volume                                                                                 | `8Gi`                |
-| `persistence.existingClaim`          | A manually managed Persistent Volume Claim                                                                            | `nil`                |
-| `persistence.hostPath`               | If defined, the drupal-data volume will mount to the specified hostPath.                                              | `nil`                |
+| `persistence.existingClaim`          | A manually managed Persistent Volume Claim                                                                            | `""`                 |
+| `persistence.hostPath`               | If defined, the drupal-data volume will mount to the specified hostPath.                                              | `""`                 |
 | `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                   | `""`                 |
 | `podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                              | `soft`               |
 | `nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                             | `""`                 |
@@ -140,7 +140,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                                  | `1`                  |
 | `customLivenessProbe`                | Override default liveness probe                                                                                       | `{}`                 |
 | `customReadinessProbe`               | Override default readiness probe                                                                                      | `{}`                 |
-| `lifecycleHooks`                     | LifecycleHook to set additional configuration at startup Evaluated as a template                                      | `nil`                |
+| `lifecycleHooks`                     | LifecycleHook to set additional configuration at startup Evaluated as a template                                      | `{}`                 |
 | `podAnnotations`                     | Pod annotations                                                                                                       | `{}`                 |
 | `podLabels`                          | Add additional labels to the pod (evaluated as a template)                                                            | `{}`                 |
 
@@ -153,13 +153,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.port`                     | Service HTTP port                                                                             | `80`                     |
 | `service.httpsPort`                | Service HTTPS port                                                                            | `443`                    |
 | `service.loadBalancerSourceRanges` | Restricts access for LoadBalancer (only with `service.type: LoadBalancer`)                    | `[]`                     |
-| `service.loadBalancerIP`           | loadBalancerIP for the Drupal Service (optional, cloud specific)                              | `nil`                    |
+| `service.loadBalancerIP`           | loadBalancerIP for the Drupal Service (optional, cloud specific)                              | `""`                     |
 | `service.nodePorts`                | Kubernetes node port                                                                          | `{}`                     |
 | `service.externalTrafficPolicy`    | Enable client source IP preservation                                                          | `Cluster`                |
 | `ingress.enabled`                  | Enable ingress controller resource                                                            | `false`                  |
 | `ingress.certManager`              | Add annotations for cert-manager                                                              | `false`                  |
 | `ingress.pathType`                 | Ingress Path type                                                                             | `ImplementationSpecific` |
-| `ingress.apiVersion`               | Override API Version (automatically detected if not set)                                      | `nil`                    |
+| `ingress.apiVersion`               | Override API Version (automatically detected if not set)                                      | `""`                     |
 | `ingress.hostname`                 | Default host for the ingress resource                                                         | `drupal.local`           |
 | `ingress.path`                     | The Path to Drupal. You may need to set this to '/*' in order to use this                     | `ImplementationSpecific` |
 | `ingress.annotations`              | Ingress annotations done as key:value pairs                                                   | `{}`                     |
@@ -181,11 +181,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `mariadb.auth.username`                     | Database user to create                                                                  | `bn_drupal`      |
 | `mariadb.auth.password`                     | Password for the database                                                                | `""`             |
 | `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                    | `true`           |
-| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                          | `nil`            |
+| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                          | `""`             |
 | `mariadb.primary.persistence.accessModes`   | Database Persistent Volume Access Modes                                                  | `[]`             |
 | `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                          | `8Gi`            |
-| `mariadb.primary.persistence.hostPath`      | Set path in case you want to use local host path volumes (not recommended in production) | `nil`            |
-| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas                 | `nil`            |
+| `mariadb.primary.persistence.hostPath`      | Set path in case you want to use local host path volumes (not recommended in production) | `""`             |
+| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas                 | `""`             |
 | `externalDatabase.host`                     | Host of the existing database                                                            | `""`             |
 | `externalDatabase.port`                     | Port of the existing database                                                            | `3306`           |
 | `externalDatabase.user`                     | Existing username in the external db                                                     | `bn_drupal`      |
@@ -200,7 +200,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r111`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r139`     |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `Always`                |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                                                                                                    | `{}`                    |
@@ -214,7 +214,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`           | Start a exporter side-car                        | `false`                   |
 | `metrics.image.registry`    | Apache exporter image registry                   | `docker.io`               |
 | `metrics.image.repository`  | Apache exporter image repository                 | `bitnami/apache-exporter` |
-| `metrics.image.tag`         | Apache exporter image tag                        | `0.9.0-debian-10-r9`      |
+| `metrics.image.tag`         | Apache exporter image tag                        | `0.9.0-debian-10-r38`     |
 | `metrics.image.pullPolicy`  | Image pull policy                                | `IfNotPresent`            |
 | `metrics.image.pullSecrets` | Specify docker-registry secret names as an array | `[]`                      |
 | `metrics.resources`         | Metrics exporter resource requests and limits    | `{}`                      |
@@ -232,14 +232,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `certificates.customCertificate.keyLocation`         | Location in the container to store the private key                   | `/etc/ssl/private/ssl-cert-snakeoil.key` |
 | `certificates.customCertificate.chainLocation`       | Location in the container to store the certificate chain             | `/etc/ssl/certs/mychain.pem`             |
 | `certificates.customCAs`                             | Defines a list of secrets to import into the container trust store   | `[]`                                     |
-| `certificates.command`                               | Override default container command (useful when using custom images) | `nil`                                    |
-| `certificates.args`                                  | Override default container args (useful when using custom images)    | `nil`                                    |
+| `certificates.command`                               | Override default container command (useful when using custom images) | `[]`                                     |
+| `certificates.args`                                  | Override default container args (useful when using custom images)    | `[]`                                     |
 | `certificates.extraEnvVars`                          | Container sidecar extra environment variables (eg proxy)             | `[]`                                     |
-| `certificates.extraEnvVarsCM`                        | ConfigMap containing extra env vars                                  | `nil`                                    |
-| `certificates.extraEnvVarsSecret`                    | Secret containing extra env vars (in case of sensitive data)         | `nil`                                    |
+| `certificates.extraEnvVarsCM`                        | ConfigMap containing extra env vars                                  | `""`                                     |
+| `certificates.extraEnvVarsSecret`                    | Secret containing extra env vars (in case of sensitive data)         | `""`                                     |
 | `certificates.image.registry`                        | Container sidecar registry                                           | `docker.io`                              |
 | `certificates.image.repository`                      | Container sidecar image                                              | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Container sidecar image tag                                          | `10-debian-10-r111`                      |
+| `certificates.image.tag`                             | Container sidecar image tag                                          | `10-debian-10-r139`                      |
 | `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                  | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                 | `[]`                                     |
 

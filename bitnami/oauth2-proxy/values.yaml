@@ -1,0 +1,552 @@
+## @section Global parameters
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
+
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.storageClass Global StorageClass for Persistent Volume(s)
+##
+global:
+  imageRegistry: ""
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+  storageClass: ""
+
+## @section Common parameters
+##
+
+## @param kubeVersion Override Kubernetes version
+##
+kubeVersion: ""
+## @param nameOverride String to partially override common.names.fullname
+##
+nameOverride: ""
+## @param fullnameOverride String to fully override common.names.fullname
+##
+fullnameOverride: ""
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+## @param clusterDomain Kubernetes cluster domain name
+##
+clusterDomain: cluster.local
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
+
+## Enable diagnostic mode in the deployment
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the deployment
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the deployment
+  ##
+  args:
+    - infinity
+
+## @section Traffic Exposure Parameters
+##
+
+## OAuth2 Proxy service parameters
+##
+service:
+  ## @param service.type OAuth2 Proxy service type
+  ##
+  type: ClusterIP
+  ## @param service.port OAuth2 Proxy service HTTP port
+  ##
+  port: 80
+  ## Node ports to expose
+  ## @param service.nodePorts.http Node port for HTTP
+  ## NOTE: choose port between <30000-32767>
+  ##
+  nodePorts:
+    http: ""
+  ## @param service.clusterIP OAuth2 Proxy service Cluster IP
+  ## e.g.:
+  ## clusterIP: None
+  ##
+  clusterIP: ""
+  ## @param service.loadBalancerIP OAuth2 Proxy service Load Balancer IP
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+  ##
+  loadBalancerIP: ""
+  ## @param service.loadBalancerSourceRanges OAuth2 Proxy service Load Balancer sources
+  ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+  ## e.g:
+  ## loadBalancerSourceRanges:
+  ##   - 10.10.10.0/24
+  ##
+  loadBalancerSourceRanges: []
+  ## @param service.externalTrafficPolicy OAuth2 Proxy service external traffic policy
+  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ##
+  externalTrafficPolicy: Cluster
+  ## @param service.annotations Additional custom annotations for OAuth2 Proxy service
+  ##
+  annotations: {}
+
+## Configure the ingress resource that allows you to access the WordPress installation
+## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
+##
+ingress:
+  ## @param ingress.enabled Enable ingress record generation for WordPress
+  ##
+  enabled: false
+  ## @param ingress.certManager Add the corresponding annotations for cert-manager integration
+  ##
+  certManager: false
+  ## @param ingress.pathType Ingress path type
+  ##
+  pathType: ImplementationSpecific
+  ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
+  ##
+  apiVersion: ""
+  ## @param ingress.hostname Default host for the ingress record
+  ##
+  hostname: oaut2-proxy.local
+  ## @param ingress.path Default path for the ingress record
+  ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
+  ##
+  path: /
+  ## @param ingress.annotations Additional custom annotations for the ingress record
+  ## NOTE: If `ingress.certManager=true`, annotation `kubernetes.io/tls-acme: "true"` will automatically be added
+  ##
+  annotations: {}
+  ## @param ingress.tls Enable TLS configuration for the host defined at `ingress.hostname` parameter
+  ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
+  ## You can:
+  ##   - Relay on cert-manager to create it by setting `ingress.certManager=true`
+  ##   - Relay on Helm to create self-signed certificates by setting `ingress.tls=true` and `ingress.certManager=false`
+  ##
+  tls: false
+  ## @param ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
+  ## e.g:
+  ## extraHosts:
+  ##   - name: oaut2-proxy.local
+  ##     path: /
+  ##
+  extraHosts: []
+  ## @param ingress.extraPaths An array with additional arbitrary paths that may need to be added to the ingress under the main host
+  ## e.g:
+  ## extraPaths:
+  ## - path: /*
+  ##   backend:
+  ##     serviceName: ssl-redirect
+  ##     servicePort: use-annotation
+  ##
+  extraPaths: []
+  ## @param ingress.extraTls TLS configuration for additional hostname(s) to be covered with this ingress record
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ## e.g:
+  ## extraTls:
+  ## - hosts:
+  ##     - oaut2-proxy.local
+  ##   secretName: oaut2-proxy.local-tls
+  ##
+  extraTls: []
+
+## @section OAuth2 Proxy Image parameters
+##
+
+## Bitnami OAuth2 Proxy image
+## ref: https://hub.docker.com/r/bitnami/redis/tags/
+## @param image.registry OAuth2 Proxy image registry
+## @param image.repository OAuth2 Proxy image repository
+## @param image.tag OAuth2 Proxy image tag (immutable tags are recommended)
+## @param image.pullPolicy OAuth2 Proxy image pull policy
+## @param image.pullSecrets OAuth2 Proxy image pull secrets
+##
+image:
+  registry: docker.io
+  repository: bitnami/oauth2-proxy
+  tag: 7.1.3-debian-10-r69
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets
+  ## Secrets must be manually created in the namespace
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  pullSecrets: []
+
+## @section OAuth2 Proxy configuration parameters
+##
+
+## Configuration section
+##
+configuration:
+  ## @param configuration.clientID OAuth client ID
+  ##
+  clientID: "XXXXXXX"
+  ## @param configuration.clientSecret OAuth client secret
+  ##
+  clientSecret: "XXXXXXXX"
+  ## Create a new secret with the following command openssl rand -base64 32 | head -c 32 | base64
+  ## Use an existing secret for OAuth2 credentials (see secret.yaml for required fields)
+  ##
+  ## @param configuration.cookieSecret OAuth cookie secret
+  ##
+  cookieSecret: "XXXXXXXXXXXXXXXX"
+  ## @param configuration.existingSecret Secret with the client ID, secret and cookie secret
+  ##
+  existingSecret: ""
+  ## e.g:
+  ## google:
+  ##   adminEmail: xxxx
+  ##   serviceAccountJson: xxxx
+  ##   existingSecret: google-secret
+  ## Alternatively, use an existing secret (see secret-google.yaml for required fields)
+  ##
+  ## @param configuration.google.enabled Enable Google service account
+  ## @param configuration.google.adminEmail Google admin email
+  ## @param configuration.google.serviceAccountJson Google Service account JSON
+  ## @param configuration.google.existingSecret Existing secret containing Google Service Account
+  ##
+  google:
+    enabled: false
+    adminEmail: ""
+    serviceAccountJson: ""
+    existingSecret: ""
+  ## Custom configuration file: oauth2_proxy.cfg
+  ## content: |
+  ##   pass_basic_auth = false
+  ##   pass_access_token = true
+  ##
+  ## @param configuration.content Default configuration
+  ##
+  content: |
+    email_domains = [ "*" ]
+    upstreams = [ "file:///dev/null" ]
+
+  ## @param configuration.existingConfigmap Configmap with the OAuth2 Proxy configuration
+  ##
+  existingConfigmap: ""
+  ## Authorize individual email addresses
+  ## @param configuration.authenticatedEmailsFile.enabled Enable authenticated emails file
+  ## @param configuration.authenticatedEmailsFile.content Restricted access list (one email per line)
+  ## @param configuration.authenticatedEmailsFile.existingSecret Secret with the authenticated emails file
+  ##
+  authenticatedEmailsFile:
+    enabled: false
+    ## One email per line
+    ## e.g:
+    ## content: |-
+    ##   name1@domain
+    ##   name2@domain
+    ## If you override the config with restricted_access it will configure a user list within this chart what takes care of the configmap
+    ##
+    content: ""
+    existingSecret: ""
+
+  ## Additionally authenticate against a htpasswd file. Entries must be created with "htpasswd -s" for SHA encryption
+  ## @param configuration.htpasswdFile.enabled Enable htpasswd file
+  ## @param configuration.htpasswdFile.existingSecret Existing secret for htpasswd file
+  ## @param configuration.htpasswdFile.content htpasswd file entries (one row per user)
+  ##
+  htpasswdFile:
+    enabled: false
+    ## Alternatively supply an existing secret which contains the required information
+    ##
+    existingSecret: ""
+    ## One row for each user
+    ## e.g:
+    ## entries: |
+    ##    testuser:{SHA}EWhzdhgoYJWy0z2gyzhRYlN9DSiv
+    ##
+    content: ""
+
+## @section OAuth2 Proxy deployment parameters
+##
+
+## @param containerPort OAuth2 Proxy port number
+##
+containerPort: 4180
+
+## @param replicaCount Number of OAuth2 Proxy replicas to deploy
+##
+replicaCount: 1
+
+## @param extraArgs add extra args to the default command
+##
+extraArgs: []
+## Configure extra options for OAuth2 Proxy containers' liveness and readiness probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+## @param livenessProbe.enabled Enable livenessProbe on OAuth2 Proxy nodes
+## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+## @param livenessProbe.periodSeconds Period seconds for livenessProbe
+## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+## @param livenessProbe.failureThreshold Failure threshold for livenessProbe
+## @param livenessProbe.successThreshold Success threshold for livenessProbe
+##
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 0
+  periodSeconds: 10
+  timeoutSeconds: 1
+  failureThreshold: 5
+  successThreshold: 1
+## @param readinessProbe.enabled Enable readinessProbe on OAuth2 Proxy nodes
+## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+## @param readinessProbe.periodSeconds Period seconds for readinessProbe
+## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+## @param readinessProbe.failureThreshold Failure threshold for readinessProbe
+## @param readinessProbe.successThreshold Success threshold for readinessProbe
+##
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 0
+  periodSeconds: 10
+  timeoutSeconds: 1
+  failureThreshold: 5
+  successThreshold: 1
+## @param customLivenessProbe Custom livenessProbe that overrides the default one
+##
+customLivenessProbe: {}
+## @param customReadinessProbe Custom readinessProbe that overrides the default one
+##
+customReadinessProbe: {}
+## OAuth2 Proxy resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## @param resources.limits The resources limits for the OAuth2 Proxy containers
+## @param resources.requests The requested resources for the OAuth2 Proxy containers
+##
+resources:
+  limits: {}
+  requests: {}
+
+## Limits the number of pods of the replicated application that are down simultaneously from voluntary disruptions
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions
+## e.g:
+## podDisruptionBudget:
+##   minAvailable: 1
+##   maxUnavailable: 1
+## @param pdb.create Enable a Pod Disruption Budget creation
+## @param pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+##
+pdb:
+  create: false
+  minAvailable: 1
+  maxUnavailable: 1
+
+## Configure Pods Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+## @param podSecurityContext.enabled Enabled OAuth2 Proxy pods' Security Context
+## @param podSecurityContext.fsGroup Set OAuth2 Proxy pod's Security Context fsGroup
+##
+podSecurityContext:
+  enabled: true
+  fsGroup: 1001
+## Configure Container Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+## @param containerSecurityContext.enabled Enabled OAuth2 Proxy containers' Security Context
+## @param containerSecurityContext.runAsUser Set OAuth2 Proxy containers' Security Context runAsUser
+##
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1001
+
+## @param command Override default container command (useful when using custom images)
+##
+command: []
+## @param args Override default container args (useful when using custom images)
+##
+args: []
+## @param hostAliases OAuth2 Proxy pods host aliases
+## ref: https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
+## @param podLabels Extra labels for OAuth2 Proxy pods
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
+podLabels: {}
+## @param podAnnotations Annotations for OAuth2 Proxy pods
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+##
+podAnnotations: {}
+## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+##
+podAffinityPreset: ""
+## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+##
+podAntiAffinityPreset: soft
+## Node affinity preset
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+##
+nodeAffinityPreset:
+  ## @param nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ##
+  type: ""
+  ## @param nodeAffinityPreset.key Node label key to match. Ignored if `affinity` is set
+  ##
+  key: ""
+  ## @param nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set
+  ## E.g.
+  ## values:
+  ##   - e2e-az1
+  ##   - e2e-az2
+  ##
+  values: []
+## @param affinity Affinity for OAuth2 Proxy pods assignment
+## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+## NOTE: `podAffinityPreset`, `podAntiAffinityPreset`, and `nodeAffinityPreset` will be ignored when it's set
+##
+affinity: {}
+## @param nodeSelector Node labels for OAuth2 Proxy pods assignment
+## ref: https://kubernetes.io/docs/user-guide/node-selection/
+##
+nodeSelector: {}
+## @param tolerations Tolerations for OAuth2 Proxy pods assignment
+## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+##
+tolerations: []
+## @param updateStrategy.type OAuth2 Proxy statefulset strategy type
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+##
+updateStrategy:
+  ## StrategyType
+  ## Can be set to RollingUpdate or OnDelete
+  ##
+  type: RollingUpdate
+## @param priorityClassName OAuth2 Proxy pods' priorityClassName
+##
+priorityClassName: ""
+## @param lifecycleHooks for the OAuth2 Proxy container(s) to automate configuration before or after startup
+##
+lifecycleHooks: {}
+## @param extraEnvVars Array with extra environment variables to add to OAuth2 Proxy nodes
+## e.g:
+## extraEnvVars:
+##   - name: FOO
+##     value: "bar"
+##
+extraEnvVars: []
+## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars for OAuth2 Proxy nodes
+##
+extraEnvVarsCM: ""
+## @param extraEnvVarsSecret Name of existing Secret containing extra env vars for OAuth2 Proxy nodes
+##
+extraEnvVarsSecret: ""
+## @param extraVolumes Optionally specify extra list of additional volumes for the OAuth2 Proxy pod(s)
+##
+extraVolumes: []
+## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for the OAuth2 Proxy container(s)
+##
+extraVolumeMounts: []
+## @param sidecars Add additional sidecar containers to the OAuth2 Proxy pod(s)
+## e.g:
+## sidecars:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+sidecars: []
+## @param initContainers Add additional init containers to the OAuth2 Proxy pod(s)
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+## e.g:
+## initContainers:
+##  - name: your-image-name
+##    image: your-image
+##    imagePullPolicy: Always
+##    command: ['sh', '-c', 'echo "hello world"']
+##
+initContainers: []
+
+## ServiceAccount configuration
+##
+serviceAccount:
+  ## @param serviceAccount.create Specifies whether a ServiceAccount should be created
+  ##
+  create: true
+  ## @param serviceAccount.name The name of the ServiceAccount to use
+  ## If not set and create is true, a name is generated using the common.names.fullname template
+  ##
+  name: ""
+
+## @section External Redis(TM) parameters
+##
+externalRedis:
+  ## @param externalRedis.host External Redis(TM) server host
+  ##
+  host: ""
+  ## @param externalRedis.password External Redis(TM) user password
+  ##
+  password: ""
+  ## @param externalRedis.port External Redis(TM) server port
+  ##
+  port: 6379
+  ## @param externalRedis.existingSecret The name of an existing secret with Redis(TM) credentials
+  ## NOTE: Must contain key `redis-password`
+  ## NOTE: When it's set, the `externalRedis.password` parameter is ignored
+  ##
+  existingSecret: ""
+
+## @section Redis(TM) sub-chart parameters
+##
+redis:
+  ## @param redis.enabled Deploy Redis(TM) sub-chart
+  ##
+  enabled: true
+  ## @param redis.architecture Redis(TM) architecture
+  ##
+  architecture: "standalone"
+  master:
+    ## @param redis.master.service.port Redis(TM) (without Sentinel) service port
+    ##
+    service:
+      port: 6379
+  replica:
+    ## @param redis.replica.replicaCount Number of Redis(TM) replicas
+    ##
+    replicaCount: 3
+  auth:
+    ## @param redis.auth.enabled Enable Redis(TM) authentication
+    ##
+    enabled: true
+    ## @param redis.auth.existingSecret Secret with Redis(TM) credentials
+    ##
+    existingSecret: ""
+    ## @param redis.auth.existingSecretPasswordKey Key inside the existing secret with Redis(TM) credentials
+    ##
+    existingSecretPasswordKey: ""
+    ## @param redis.auth.sentinel Enable authentication in the Sentinel nodes
+    ##
+    sentinel: true
+  sentinel:
+    ## @param redis.sentinel.enabled Enable Redis(TM) sentinel in the deployment
+    ##
+    enabled: false
+    ## @param redis.sentinel.masterSet Name of the Redis(TM) Sentinel master set
+    ##
+    masterSet: mymaster
+    service:
+      ## @param redis.sentinel.service.port Redis(TM) (with Sentinel) service port
+      ##
+      port: 6379
+      ## @param redis.sentinel.service.sentinelPort Redis(TM) (with Sentinel) sentinel service port
+      ##
+      sentinelPort: 26379

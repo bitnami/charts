@@ -84,107 +84,106 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## Parameters
 
-The following tables lists the recommended configurations for each application used in the data platform. If you need to configure any other parameters apart from the ones mentioned below, you can refer to the corresponding chart and update the values.yaml accordingly.
-
 ### Global parameters
 
-| Parameter                 | Description                                     | Default                                                 |
-|:--------------------------|:------------------------------------------------|:--------------------------------------------------------|
-| `global.imageRegistry`    | Global Docker image registry                    | `nil`                                                   |
-| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]` (does not add image pull secrets to deployed pods) |
-| `global.storageClass`     | Global storage class for dynamic provisioning   | `nil`                                                   |
+| Name                      | Description                                     | Value |
+| ------------------------- | ----------------------------------------------- | ----- |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
+| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
+
 
 ### Zookeeper chart parameters
 
-Parameters below are set as per the recommended values, they can be overwritten if required.
+| Name                                 | Description                                                                               | Value  |
+| ------------------------------------ | ----------------------------------------------------------------------------------------- | ------ |
+| `zookeeper.enabled`                  | Switch to enable or disable the Zookeeper helm chart                                      | `true` |
+| `zookeeper.replicaCount`             | Number of Zookeeper replicas                                                              | `3`    |
+| `zookeeper.heapSize`                 | Size in MB for the Java Heap options (Xmx and XMs).                                       | `4096` |
+| `zookeeper.resources.limits`         | The resources limits for Zookeeper containers                                             | `{}`   |
+| `zookeeper.resources.requests`       | The requested resources for Zookeeper containers                                          | `{}`   |
+| `zookeeper.affinity.podAntiAffinity` | Zookeeper pods Anti Affinity rules for best possible resiliency (evaluated as a template) | `{}`   |
 
-| Parameter                      | Description                                                                     | Default                                                                              |
-|:-------------------------------|:--------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------|
-| `zookeeper.enabled`            | Switch to enable or disable the Zookeeper helm chart                            | `true`                                                                               |
-| `zookeeper.replicaCount`       | Number of Zookeeper nodes                                                       | `3`                                                                                  |
-| `zookeeper.heap`               | Zookeepers's Java Heap size                                                     | Zookeeper Java Heap size set for optimal resource usage                              |
-| `zookeeper.resources.limits`   | The resources limits for Zookeeper containers                                   | `{}`                                                                                 |
-| `zookeeper.resources.requests` | The requested resources for Zookeeper containers for a small kubernetes cluster | Zookeeper pods Resource requests for optimal resource usage size                     |
-| `zookeeper.affinity`           | Affinity for pod assignment                                                     | Zookeeper pods Affinity rules for best possible resiliency (evaluated as a template) |
 
 ### Kafka chart parameters
 
-Parameters below are set as per the recommended values, they can be overwritten if required.
+| Name                                     | Description                                                                               | Value                 |
+| ---------------------------------------- | ----------------------------------------------------------------------------------------- | --------------------- |
+| `kafka.enabled`                          | Switch to enable or disable the Kafka helm chart                                          | `true`                |
+| `kafka.replicaCount`                     | Number of Kafka replicas                                                                  | `3`                   |
+| `kafka.heapOpts`                         | Kafka's Java Heap size                                                                    | `-Xmx4096m -Xms4096m` |
+| `kafka.resources.limits`                 | The resources limits for Kafka containers                                                 | `{}`                  |
+| `kafka.resources.requests`               | The requested resources for Kafka containers                                              | `{}`                  |
+| `kafka.affinity.podAntiAffinity`         | Zookeeper pods Anti Affinity rules for best possible resiliency (evaluated as a template) | `{}`                  |
+| `kafka.affinity.podAffinity`             | Zookeeper pods Affinity rules for best possible resiliency (evaluated as a template)      | `{}`                  |
+| `kafka.metrics.kafka.enabled`            | Whether or not to create a standalone Kafka exporter to expose Kafka metrics              | `false`               |
+| `kafka.metrics.kafka.resources.limits`   | The resources limits for the container                                                    | `{}`                  |
+| `kafka.metrics.kafka.resources.requests` | Kafka Exporter container resource requests                                                | `{}`                  |
+| `kafka.metrics.kafka.service.port`       | Kafka Exporter Prometheus port to be used in Wavefront configuration                      | `9308`                |
+| `kafka.metrics.jmx.enabled`              | Whether or not to expose JMX metrics to Prometheus                                        | `false`               |
+| `kafka.metrics.jmx.resources.limits`     | The resources limits for the container                                                    | `{}`                  |
+| `kafka.metrics.jmx.resources.requests`   | JMX Exporter container resource requests                                                  | `{}`                  |
+| `kafka.metrics.jmx.service.port`         | JMX Exporter Prometheus port                                                              | `5556`                |
+| `kafka.zookeeper.enabled`                | Switch to enable or disable the Zookeeper helm chart                                      | `false`               |
+| `kafka.externalZookeeper.servers`        | Server or list of external Zookeeper servers to use                                       | `[]`                  |
 
-| Parameter                   | Description                                                                 | Default                                                                              |
-|:----------------------------|:----------------------------------------------------------------------------|:-------------------------------------------------------------------------------------|
-| `kafka.enabled`             | Switch to enable or disable the Kafka helm chart                            | `true`                                                                               |
-| `kafka.replicaCount`        | Number of Kafka nodes                                                       | `3`                                                                                  |
-| `kafka.heapOpts`            | Kafka's Java Heap size                                                      | Kafka Java Heap size set for optimal resource usage                                  |
-| `kafka.resources.limits`    | The resources limits for Kafka containers                                   | `{}`                                                                                 |
-| `kafka.resources.requests`  | The requested resources for Kafka containers for a small kubernetes cluster | Kafka pods Resource requests set for optimal resource usage                          |
-| `kafka.affinity`            | Affinity for pod assignment                                                 | Kafka pods affinity rules set for best possible resiliency (evaluated as a template) |
-| `kafka.metrics.kafka.enabled`  | Whether or not to create a standalone Kafka exporter to expose Kafka metrics                          | `false`                                                 |
-| `kafka.metrics.kafka.resources.requests`       | Kafka Exporter container resource requests              | Kafka Exporter pod resource requests set for optimal resource usage      |
-| `kafka.metrics.kafka.service.port`               | Kafka Exporter Prometheus port                                                                                                    | `9308`    |
-| `kafka.metrics.jmx.enabled`                      | Whether or not to expose JMX metrics to Prometheus                                                                                | `false`   |
-| `kafka.metrics.jmx.resources.requests`           | JMX Exporter container resource requests                  | JMX exporter pod resource requests set for best possible resiliency    |
-| `kafka.metrics.jmx.service.port`                 | JMX Exporter Prometheus port                                                                                                      | `5556`    |
-| `kafka.zookeeper.enabled`   | Switch to enable or disable the Zookeeper helm chart                        | `false` Common Zookeeper deployment used for kafka and solr                          |
-| `kafka.externalZookeeper.servers` | Server or list of external Zookeeper servers to use                         | Zookeeper installed as a subchart to be used                                         |
 
 ### Solr chart parameters
 
-Parameters below are set as per the recommended values, they can be overwritten if required.
+| Name                                 | Description                                                                                    | Value                 |
+| ------------------------------------ | ---------------------------------------------------------------------------------------------- | --------------------- |
+| `solr.enabled`                       | Switch to enable or disable the Solr helm chart                                                | `true`                |
+| `solr.replicaCount`                  | Number of Solr replicas                                                                        | `2`                   |
+| `solr.authentication.enabled`        | Enable Solr authentication. BUG: Exporter deployment does not work with authentication enabled | `false`               |
+| `solr.javaMem`                       | Java recommended memory options to pass to the Solr container                                  | `-Xmx4096m -Xms4096m` |
+| `solr.affinity.podAntiAffinity`      | Zookeeper pods Anti Affinity rules for best possible resiliency (evaluated as a template)      | `{}`                  |
+| `solr.resources.limits`              | The resources limits for Solr containers                                                       | `{}`                  |
+| `solr.resources.requests`            | The requested resources for Solr containers                                                    | `{}`                  |
+| `solr.exporter.enabled`              | Start a prometheus exporter                                                                    | `false`               |
+| `solr.exporter.port`                 | Solr exporter port                                                                             | `9983`                |
+| `solr.exporter.affinity.podAffinity` | Zookeeper pods Affinity rules for best possible resiliency (evaluated as a template)           | `{}`                  |
+| `solr.exporter.resources.limits`     | The resources limits for the container                                                         | `{}`                  |
+| `solr.exporter.resources.requests`   | The requested resources for the container                                                      | `{}`                  |
+| `solr.zookeeper.enabled`             | Enable Zookeeper deployment. Needed for Solr cloud.                                            | `false`               |
+| `solr.externalZookeeper.servers`     | Servers for an already existing Zookeeper.                                                     | `[]`                  |
 
-| Parameter                        | Description                                         | Default                                                                             |
-|:---------------------------------|:----------------------------------------------------|:------------------------------------------------------------------------------------|
-| `solr.enabled`                   | Switch to enable or disable the Solr helm chart     | `true`                                                                              |
-| `solr.replicaCount`              | Number of Solr nodes                                | `2`                                                                                 |
-| `solr.authentication.enabled`    | Enable Solr authentication                          | `true`                                                                              |
-| `solr.resources.limits`          | The resources limits for Solr containers            | `{}`                                                                                |
-| `solr.resources.requests`        | The requested resources for Solr containers         | Solr pods resource requests set for optimal resource usage                          |
-| `solr.javaMem`                   | Java memory options to pass to the Solr container   | Solr Java Heap size set for optimal resource usage                                  |
-| `solr.heap`                      | Java Heap options to pass to the solr container     | `nil`                                                                               |
-| `solr.affinity`                  | Affinity for Solr pods assignment                   | Solr pods Affinity rules set for best possible resiliency (evaluated as a template) |
-| `solr.exporter.enabled`          | Start a prometheus exporter                         | `false`                                                                             |
-| `solr.exporter.port`             | Solr exporter port                                  | `9983`                                                                              |
-| `solr.exporter.resources`        | Exporter resource requests/limit                    | Solr exporter pod resource requests for optimal resource usage size                 |
-| `solr.exporter.affinity`         | Affinity for Solr pods assignment                   | Solr exporter pod affinity rules for best possible resiliency (evaluated as a template) |
-| `solr.zookeeper.enabled`         | Enable Zookeeper deployment. Needed for Solr cloud. | `false` common zookeeper used between kafka and solr                                |
-| `solr.externalZookeeper.servers` | Servers for an already existing Zookeeper.          | Zookeeper installed as a subchart to be used                                        |
 
 ### Spark chart parameters
 
-Parameters below are set as per the recommended values, they can be overwritten if required.
+| Name                                    | Description                                                                               | Value   |
+| --------------------------------------- | ----------------------------------------------------------------------------------------- | ------- |
+| `spark.enabled`                         | Switch to enable or disable the Spark helm chart                                          | `true`  |
+| `spark.master.webPort`                  | Specify the port where the web interface will listen on the master                        | `8080`  |
+| `spark.master.resources.limits`         | The resources limits for the container                                                    | `{}`    |
+| `spark.master.resources.requests`       | The resources limits for the container                                                    | `{}`    |
+| `spark.master.affinity.podAntiAffinity` | Zookeeper pods Anti Affinity rules for best possible resiliency (evaluated as a template) | `{}`    |
+| `spark.worker.replicaCount`             | Set the number of workers                                                                 | `2`     |
+| `spark.worker.webPort`                  | Specify the port where the web interface will listen on the worker                        | `8081`  |
+| `spark.worker.affinity.podAntiAffinity` | Zookeeper pods Anti Affinity rules for best possible resiliency (evaluated as a template) | `{}`    |
+| `spark.worker.resources.limits`         | The resources limits for the container                                                    | `{}`    |
+| `spark.worker.resources.requests`       | The resources limits for the container                                                    | `{}`    |
+| `spark.metrics.enabled`                 | Start a side-car Prometheus exporter                                                      | `false` |
+| `spark.metrics.masterAnnotations`       | Annotations for enabling prometheus to access the metrics endpoint of the master nodes    | `{}`    |
+| `spark.metrics.workerAnnotations`       | Annotations for enabling prometheus to access the metrics endpoint of the worker nodes    | `{}`    |
 
-| Parameter                   | Description                                      | Default                                                                                     |
-|:----------------------------|:-------------------------------------------------|:--------------------------------------------------------------------------------------------|
-| `spark.enabled`             | Switch to enable or disable the Spark helm chart | `true`                                                                                      |
-| `spark.master.webPort`      | Specify the port where the web interface will listen on the master                                                                  | `8080`   |
-| `spark.master.affinity`     | Spark master affinity for pod assignment         | Spark master pod Affinity rules set for best possible resiliency (evaluated as a template)  |
-| `spark.master.resources`    | CPU/Memory resource requests/limits for Master   | Spark master pods resource requests set for optimal resource usage                          |
-| `spark.worker.replicaCount` | Set the number of workers                        | `2`                                                                                         |
-| `spark.worker.webPort`      | Specify the port where the web interface will listen on the worker                                                                         | `8081`    |
-| `spark.worker.javaOptions`  | Set options for the JVM in the form `-Dx=y`      | No default                                                                                  |
-| `spark.worker.affinity`     | Spark worker affinity for pod assignment         | Spark worker pods Affinity rules set for best possible resiliency (evaluated as a template) |
-| `spark.worker.resources`    | CPU/Memory resource requests/limits for worker   | Spark worker pods resource requests set for optimal resource usage                          |
-| `spark.metrics.enabled`     | Start a side-car prometheus exporter                                                                                           | `false`       |
-| `spark.metrics.masterAnnotations`       | Annotations for enabling prometheus to access the metrics endpoint of the master nodes  | `{prometheus.io/scrape: "true", prometheus.io/path: "/metrics/", prometheus.io/port: "8080"}` |
-| `spark.metrics.workerAnnotations`       | Annotations for enabling prometheus to access the metrics endpoint of the worker nodes   | `{prometheus.io/scrape: "true", prometheus.io/path: "/metrics/", prometheus.io/port: "8081"}` |
-| `spark.metrics.resources.requests` | The requested resources for the metrics exporter container  | Spark exporter container resource requests for optimal resource usage size|
 
 ### Tanzu Observability (Wavefront) chart parameters
 
-| Parameter                                  | Description                                                                                                            | Default                                                 |
-|--------------------------------------------|------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| `wavefront.enabled`                        | Switch to enable or disable the Wavefront helm chart                                                                   | `true`                                                  |
-| `wavefront.clusterName`                    | Unique name for the Kubernetes cluster (required)                                                                      | `KUBERNETES_CLUSTER_NAME`                               |
-| `wavefront.wavefront.url`                  | Wavefront URL for your cluster (required)                                                                              | `https://YOUR_CLUSTER.wavefront.com`                    |
-| `wavefront.wavefront.token`                | Wavefront API Token (required)                                                                                         | `YOUR_API_TOKEN`                                        |
-| `wavefront.wavefront.existingSecret`       | Name of an existing secret containing the token                                                                        | `nil`                                                   |
-| `wavefront.collector.discovery.enabled`    | Rules based and Prometheus endpoints auto-discovery                                                                    | `true`                                                  |
-| `wavefront.collector.discovery.enableRuntimeConfigs` | Enable runtime discovery rules                                                                               | `true`                                                 |
-| `wavefront.collector.discovery.config`     | Configuration for rules based auto-discovery                                                                           | Data Platform components pods discovery config                                                   |
-| `wavefront.collector.resources.limits`     | The resources limits for the collector container                                                                       | `{}`                                                    |
-| `wavefront.collector.resources.requests`   | The requested resources for the collector container                                                                    | Collectors pods resource requests for optimal resource usage size                       |
-| `wavefront.proxy.resources.limits`         | The resources limits for the proxy container                                                                           | `{}`                                                    |
-| `wavefront.proxy.resources.requests`       | The requested resources for the proxy container                                                                        | Proxy pods resource resource requests for optimal resource usage size                                |
+| Name                                                 | Description                                          | Value                                |
+| ---------------------------------------------------- | ---------------------------------------------------- | ------------------------------------ |
+| `wavefront.enabled`                                  | Switch to enable or disable the Wavefront helm chart | `false`                              |
+| `wavefront.clusterName`                              | Unique name for the Kubernetes cluster (required)    | `KUBERNETES_CLUSTER_NAME`            |
+| `wavefront.wavefront.url`                            | Wavefront URL for your cluster (required)            | `https://YOUR_CLUSTER.wavefront.com` |
+| `wavefront.wavefront.token`                          | Wavefront API Token (required)                       | `YOUR_API_TOKEN`                     |
+| `wavefront.wavefront.existingSecret`                 | Name of an existing secret containing the token      | `""`                                 |
+| `wavefront.collector.resources.limits`               | The resources limits for the collector container     | `{}`                                 |
+| `wavefront.collector.resources.requests`             | The requested resources for the collector container  | `{}`                                 |
+| `wavefront.collector.discovery.enabled`              | Rules based and Prometheus endpoints auto-discovery  | `true`                               |
+| `wavefront.collector.discovery.enableRuntimeConfigs` | Enable runtime discovery rules                       | `true`                               |
+| `wavefront.collector.discovery.config`               | Configuration for rules based auto-discovery         | `[]`                                 |
+| `wavefront.proxy.resources.limits`                   | The resources limits for the proxy container         | `{}`                                 |
+| `wavefront.proxy.resources.requests`                 | The requested resources for the proxy container      | `{}`                                 |
+
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -233,6 +232,10 @@ Find more information about how to deal with common errors related to Bitnami’
 In order to render complete information about the deployment including all the sub-charts, please use --render-subchart-notes flag while installing the chart.
 
 ## Upgrading
+
+### To 6.0.0
+
+This major updates the Kafka subchart and the Solr subchart to their newest major, 13.0.0 and 1.0.0 respectively.
 
 ### To 5.0.0
 

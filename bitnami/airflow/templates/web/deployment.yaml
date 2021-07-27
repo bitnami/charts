@@ -115,7 +115,7 @@ spec:
             - name: AIRFLOW_LDAP_UID_FIELD
               value: {{ .Values.ldap.uidField }}
             - name: AIRFLOW_LDAP_USE_TLS
-              value: {{ ternary "yes" "no" .Values.ldap.tls.enabled | quote }}
+              value: {{ ternary "True" "False" .Values.ldap.tls.enabled | quote }}
             {{- if .Values.ldap.tls.enabled }}
             - name: AIRFLOW_LDAP_ALLOW_SELF_SIGNED
               value: {{ .Values.ldap.tls.allowSelfSigned }}

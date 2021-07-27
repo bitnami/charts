@@ -2,6 +2,7 @@ apiVersion: {{ template "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ template "odoo.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -12,6 +13,12 @@ metadata:
 spec:
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+  {{- if .Values.updateStrategy }}
+  strategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
+  {{- end }}
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
   template:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
@@ -24,8 +31,14 @@ spec:
       {{- end }}
     spec:
       {{- include "odoo.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.schedulerName }}
+      schedulerName: {{ .Values.schedulerName | quote }}
+      {{- end }}
+      serviceAccountName: {{ template "odoo.serviceAccountName" . }}
       {{- if .Values.hostAliases }}
+      # yamllint disable rule:indentation
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
+      # yamllint enable rule:indentation
       {{- end }}
       {{- if .Values.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
@@ -42,11 +55,32 @@ spec:
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.podSecurityContext.enabled }}
-      securityContext:
-        fsGroup: {{ .Values.podSecurityContext.fsGroup }}
+      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
-      {{- if .Values.initContainers }}
-      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
+      {{- if or (and .Values.volumePermissions.enabled .Values.persistence.enabled) .Values.initContainers }}
+
+      initContainers:
+        {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
+        - name: volume-permissions
+          image: {{ include "odoo.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          command:
+            - sh
+            - -c
+            - |
+              mkdir -p "/bitnami/odoo"
+              chown -R "odoo:root" "/bitnami/odoo"
+          securityContext: {{- .Values.volumePermissions.securityContext | toYaml | nindent 12 }}
+          {{- if .Values.volumePermissions.resources }}
+          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: odoo-data
+              mountPath: /bitnami/odoo
+        {{- end }}
+        {{- if .Values.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
+        {{- end }}
       {{- end }}
       containers:
         - name: {{ template "odoo.fullname" . }}
@@ -63,17 +97,45 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
           {{- end }}
           env:
-            - name: POSTGRESQL_HOST
-              value: {{ ternary (include "odoo.postgresql.fullname" .) .Values.externalDatabase.host .Values.postgresql.enabled | quote }}
-            - name: POSTGRESQL_USER
-              value: {{ ternary "postgres" .Values.externalDatabase.user .Values.postgresql.enabled | quote }}
-            - name: POSTGRESQL_PORT_NUMBER
-              value: {{ ternary "5432" .Values.externalDatabase.port .Values.postgresql.enabled | quote }}
-            - name: POSTGRESQL_PASSWORD
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" .Values.image.debug | quote }}
+            - name: ALLOW_EMPTY_PASSWORD
+              value: {{ ternary "yes" "no" .Values.allowEmptyPassword | quote }}
+            - name: ODOO_DATABASE_HOST
+              value: {{ template "odoo.databaseHost" . }}
+            - name: ODOO_DATABASE_PORT_NUMBER
+              value: {{ template "odoo.databasePort" . }}
+            - name: ODOO_DATABASE_NAME
+              value: {{ template "odoo.databaseName" . }}
+            - name: ODOO_DATABASE_USER
+              value: {{ template "odoo.databaseUser" . }}
+            - name: ODOO_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "odoo.databaseSecretName" . | quote }}
+                  key: "postgresql-password"
+            {{- if and (not .Values.postgresql.enabled) .Values.externalDatabase.create }}
+            - name: POSTGRESQL_CLIENT_DATABASE_HOST
+              value: {{ template "odoo.databaseHost" . }}
+            - name: POSTGRESQL_CLIENT_DATABASE_PORT_NUMBER
+              value: {{ template "odoo.databasePort" . }}
+            - name: POSTGRESQL_CLIENT_POSTGRES_USER
+              value: {{ .Values.externalDatabase.postgresqlPostgresUser }}
+            - name: POSTGRESQL_CLIENT_POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "odoo.databaseSecretName" . }}
-                  key: {{ ternary "postgresql-password" "db-password" .Values.postgresql.enabled | quote }}
+                  key: "postgresql-postgres-password"
+            - name: POSTGRESQL_CLIENT_CREATE_DATABASE_NAME
+              value: {{ template "odoo.databaseName" . }}
+            - name: POSTGRESQL_CLIENT_CREATE_DATABASE_USERNAME
+              value: {{ template "odoo.databaseUser" . }}
+            - name: POSTGRESQL_CLIENT_CREATE_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "odoo.databaseSecretName" . }}
+                  key: "postgresql-password"
+            {{- end }}
             - name: ODOO_EMAIL
               value: {{ .Values.odooEmail | quote }}
             - name: ODOO_PASSWORD
@@ -81,29 +143,35 @@ spec:
                 secretKeyRef:
                   name: {{ template "odoo.secretName" . }}
                   key: odoo-password
+            - name: ODOO_SKIP_BOOTSTRAP
+              value: {{ .Values.skipInstall | quote }}
+            - name: ODOO_LOAD_DEMO_DATA
+              value: {{ ternary "yes" "no" .Values.loadDemoData | quote }}
+            {{- if .Values.withoutDemo }}
             - name: WITHOUT_DEMO
               value: {{ .Values.withoutDemo | quote }}
+            {{- end }}
             {{- if .Values.smtpHost }}
-            - name: SMTP_HOST
+            - name: ODOO_SMTP_HOST
               value: {{ .Values.smtpHost | quote }}
             {{- end }}
             {{- if .Values.smtpPort }}
-            - name: SMTP_PORT
+            - name: ODOO_SMTP_PORT_NUMBER
               value: {{ .Values.smtpPort | quote }}
             {{- end }}
             {{- if .Values.smtpUser }}
-            - name: SMTP_USER
+            - name: ODOO_SMTP_USER
               value: {{ .Values.smtpUser | quote }}
             {{- end }}
-            {{- if .Values.smtpPassword }}
-            - name: SMTP_PASSWORD
+            {{- if or .Values.smtpPassword .Values.smtpExistingSecret }}
+            - name: ODOO_SMTP_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "odoo.secretName" . }}
+                  name: {{ template "odoo.smtpSecretName" . }}
                   key: smtp-password
             {{- end }}
             {{- if .Values.smtpProtocol }}
-            - name: SMTP_PROTOCOL
+            - name: ODOO_SMTP_PROTOCOL
               value: {{ .Values.smtpProtocol | quote }}
             {{- end }}
             {{- if .Values.extraEnvVars }}
@@ -120,11 +188,11 @@ spec:
             {{- end }}
           ports:
             - name: http
-              containerPort: 8069
+              containerPort: {{ .Values.containerPort }}
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
-              path: /
+              path: {{ .Values.livenessProbe.path }}
               port: http
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
@@ -137,7 +205,7 @@ spec:
           {{- if .Values.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
-              path: /
+              path: {{ .Values.readinessProbe.path }}
               port: http
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
@@ -147,12 +215,29 @@ spec:
           {{- else if .Values.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
+          {{- if .Values.startupProbe.enabled }}
+          startupProbe:
+            httpGet:
+              path: {{ .Values.startupProbe.path }}
+              port: http
+            initialDelaySeconds: {{ .Values.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.startupProbe.failureThreshold }}
+          {{- else if .Values.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: odoo-data
               mountPath: /bitnami/odoo
+            {{- if .Values.customPostInitScripts }}
+            - mountPath: /docker-entrypoint-init.d
+              name: custom-postinit
+            {{- end }}
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -167,6 +252,12 @@ spec:
           {{- else }}
           emptyDir: {}
           {{- end }}
+        {{- if .Values.customPostInitScripts }}
+        - name: custom-postinit
+          configMap:
+            name: {{ printf "%s-postinit" (include "common.names.fullname" .) }}
+            defaultMode: 0755
+        {{- end }}
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
