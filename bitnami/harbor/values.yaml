@@ -2947,7 +2947,7 @@ externalDatabase:
 
 ## @section Redis&trade; Parameters
 
-## Redis(TM) chart configuration
+## Redis&trade; chart configuration
 ## ref: https://github.com/bitnami/charts/blob/master/bitnami/redis/values.yaml
 ##
 redis:
@@ -2972,21 +2972,21 @@ redis:
   ## @param redis.architecture Cluster settings
   ##
   architecture: standalone
-  ## Redis(TM) Master parameters
+  ## Redis&trade; Master parameters
   ## @param redis.master.persistence.enabled Enable persistence for master Redis
   ##
   master:
     persistence:
       enabled: true
-  ## Redis(TM) Replica parameters
+  ## Redis&trade; Replica parameters
   ## @param redis.replica.persistence.enabled Enable persistence for replica Redis
   ##
   replica:
     persistence:
       enabled: true
-## If the Redis(TM) included in the chart is disabled, Harbor will use below
-## Redis(TM) parameters to connect to an external Redis(TM) server.
-## Support for both Redis(TM) and Redis+Sentinel(TM)
+## If the Redis&trade; included in the chart is disabled, Harbor will use below
+## Redis&trade; parameters to connect to an external Redis&trade; server.
+## Support for both Redis&trade; and Redis+Sentinel&trade;
 ##
 externalRedis:
   ## @param externalRedis.host Host of the external redis
@@ -2995,7 +2995,7 @@ externalRedis:
   ## @param externalRedis.port Port of the external redis
   ##
   port: 6379
-  ## Redis(TM) sentinel configuration
+  ## Redis&trade; sentinel configuration
   ## If sentinel is enabled the below sentinel configurations are used as the hostname
   ##
   sentinel:

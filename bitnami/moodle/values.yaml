@@ -39,7 +39,7 @@ extraDeploy: []
 
 ## @section Moodle&trade; parameters
 
-## Bitnami Moodle(TM) image version
+## Bitnami Moodle&trade; image version
 ## ref: https://hub.docker.com/r/bitnami/moodle/tags/
 ## @param image.registry Moodle image registry
 ## @param image.repository Moodle image repository
@@ -71,7 +71,7 @@ image:
 ## @param replicaCount Number of Moodle replicas (requires ReadWriteMany PVC support)
 ##
 replicaCount: 1
-## @param moodleSkipInstall Skip Moodle(TM) installation wizard. Useful for migrations and restoring from SQL dump
+## @param moodleSkipInstall Skip Moodle&trade; installation wizard. Useful for migrations and restoring from SQL dump
 ## ref: https://github.com/bitnami/bitnami-docker-moodle#configuration
 ##
 moodleSkipInstall: false
@@ -262,10 +262,10 @@ containerSecurityContext:
   enabled: true
   runAsUser: 1001
 ## Configure extra options for liveness and readiness probes
-## Moodle(TM) core exposes /user/login to unauthenticated requests, making it a good
+## Moodle&trade; core exposes /user/login to unauthenticated requests, making it a good
 ## default liveness and readiness path. However, that may not always be the
 ## case. For example, if the image value is overridden to an image containing a
-## module that alters that route, or an image that does not auto-install Moodle(TM).
+## module that alters that route, or an image that does not auto-install Moodle&trade;.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe
 ## @param livenessProbe.path Request path for livenessProbe
@@ -343,7 +343,7 @@ service:
   ##   - 0.0.0.0/0
   ##
   loadBalancerSourceRanges: []
-  ## @param service.loadBalancerIP loadBalancerIP for the Moodle(TM) Service (optional, cloud specific)
+  ## @param service.loadBalancerIP loadBalancerIP for the Moodle&trade; Service (optional, cloud specific)
   ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
   ##
   loadBalancerIP:
@@ -361,7 +361,7 @@ service:
   ##
   externalTrafficPolicy: Cluster
 ## Configure the ingress resource that allows you to access the
-## Moodle(TM) installation. Set up the URL
+## Moodle&trade; installation. Set up the URL
 ## ref: http://kubernetes.io/docs/user-guide/ingress/
 ##
 ingress:
@@ -380,7 +380,7 @@ ingress:
   ## @param ingress.hostname When the ingress is enabled, a host pointing to this will be created
   ##
   hostname: minio.local
-  ## @param ingress.path The Path to Moodle(TM). You may need to set this to '/*' in order to use this with ALB ingress controllers.
+  ## @param ingress.path The Path to Moodle&trade;. You may need to set this to '/*' in order to use this with ALB ingress controllers.
   ##
   path: /
   ## @param ingress.annotations Map of Ingress annotations
@@ -615,7 +615,7 @@ metrics:
 
 ## @section Certificate injection parameters
 
-## Add custom certificates and certificate authorities to Moodle(TM) container
+## Add custom certificates and certificate authorities to Moodle&trade; container
 ##
 certificates:
   ## @param certificates.customCertificate.certificateSecret Secret containing the certificate and key to add

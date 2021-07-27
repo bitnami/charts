@@ -82,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                      | `[]`                  |
 | `image.debug`                        | Specify if debug logs should be enabled                                                                               | `false`               |
 | `replicaCount`                       | Number of Moodle replicas (requires ReadWriteMany PVC support)                                                        | `1`                   |
-| `moodleSkipInstall`                  | Skip Moodle(TM) installation wizard. Useful for migrations and restoring from SQL dump                                | `false`               |
+| `moodleSkipInstall`                  | Skip Moodle&trade; installation wizard. Useful for migrations and restoring from SQL dump                             | `false`               |
 | `moodleSiteName`                     | Site name                                                                                                             | `""`                  |
 | `moodleUsername`                     | User of the application                                                                                               | `user`                |
 | `moodlePassword`                     | Application password                                                                                                  | `""`                  |
@@ -148,29 +148,29 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Traffic Exposure Parameters
 
-| Name                               | Description                                                                                                 | Value                    |
-| ---------------------------------- | ----------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                     | Service type                                                                                                | `LoadBalancer`           |
-| `service.port`                     | Service HTTP port                                                                                           | `80`                     |
-| `service.httpsPort`                | Service HTTPS port                                                                                          | `443`                    |
-| `service.clusterIP`                | Service Cluster IP                                                                                          | `nil`                    |
-| `service.loadBalancerSourceRanges` | Service load balancer source ranges                                                                         | `[]`                     |
-| `service.loadBalancerIP`           | loadBalancerIP for the Moodle(TM) Service (optional, cloud specific)                                        | `nil`                    |
-| `service.nodePorts.http`           | Kubernetes HTTP node port                                                                                   | `""`                     |
-| `service.nodePorts.https`          | Kubernetes HTTPS node port                                                                                  | `""`                     |
-| `service.externalTrafficPolicy`    | Enable client source IP preservation                                                                        | `Cluster`                |
-| `ingress.enabled`                  | Set to true to enable ingress record generation                                                             | `false`                  |
-| `ingress.certManager`              | Set this to true in order to add the corresponding annotations for cert-manager                             | `false`                  |
-| `ingress.pathType`                 | Ingress Path type                                                                                           | `ImplementationSpecific` |
-| `ingress.apiVersion`               | Override API Version (automatically detected if not set)                                                    | `nil`                    |
-| `ingress.hostname`                 | When the ingress is enabled, a host pointing to this will be created                                        | `minio.local`            |
-| `ingress.path`                     | The Path to Moodle(TM). You may need to set this to '/*' in order to use this with ALB ingress controllers. | `ImplementationSpecific` |
-| `ingress.annotations`              | Map of Ingress annotations                                                                                  | `{}`                     |
-| `ingress.tls`                      | Enable TLS configuration for the hostname defined at ingress.hostname parameter                             | `false`                  |
-| `ingress.extraHosts`               | The list of additional hostnames to be covered with this ingress record.                                    | `[]`                     |
-| `ingress.extraPaths`               | Any additional arbitrary paths that may need to be added to the ingress under the main host.                | `[]`                     |
-| `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                      | `[]`                     |
-| `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets               | `[]`                     |
+| Name                               | Description                                                                                                    | Value                    |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                     | Service type                                                                                                   | `LoadBalancer`           |
+| `service.port`                     | Service HTTP port                                                                                              | `80`                     |
+| `service.httpsPort`                | Service HTTPS port                                                                                             | `443`                    |
+| `service.clusterIP`                | Service Cluster IP                                                                                             | `nil`                    |
+| `service.loadBalancerSourceRanges` | Service load balancer source ranges                                                                            | `[]`                     |
+| `service.loadBalancerIP`           | loadBalancerIP for the Moodle&trade; Service (optional, cloud specific)                                        | `nil`                    |
+| `service.nodePorts.http`           | Kubernetes HTTP node port                                                                                      | `""`                     |
+| `service.nodePorts.https`          | Kubernetes HTTPS node port                                                                                     | `""`                     |
+| `service.externalTrafficPolicy`    | Enable client source IP preservation                                                                           | `Cluster`                |
+| `ingress.enabled`                  | Set to true to enable ingress record generation                                                                | `false`                  |
+| `ingress.certManager`              | Set this to true in order to add the corresponding annotations for cert-manager                                | `false`                  |
+| `ingress.pathType`                 | Ingress Path type                                                                                              | `ImplementationSpecific` |
+| `ingress.apiVersion`               | Override API Version (automatically detected if not set)                                                       | `nil`                    |
+| `ingress.hostname`                 | When the ingress is enabled, a host pointing to this will be created                                           | `minio.local`            |
+| `ingress.path`                     | The Path to Moodle&trade;. You may need to set this to '/*' in order to use this with ALB ingress controllers. | `ImplementationSpecific` |
+| `ingress.annotations`              | Map of Ingress annotations                                                                                     | `{}`                     |
+| `ingress.tls`                      | Enable TLS configuration for the hostname defined at ingress.hostname parameter                                | `false`                  |
+| `ingress.extraHosts`               | The list of additional hostnames to be covered with this ingress record.                                       | `[]`                     |
+| `ingress.extraPaths`               | Any additional arbitrary paths that may need to be added to the ingress under the main host.                   | `[]`                     |
+| `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                         | `[]`                     |
+| `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                  | `[]`                     |
 
 
 ### Database parameters
