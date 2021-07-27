@@ -519,7 +519,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
-Return whether Redis(TM) uses password authentication or not
+Return whether Redis&trade; uses password authentication or not
 */}}
 {{- define "harbor.redis.auth.enabled" -}}
 {{- if or (and .Values.redis.enabled .Values.redis.auth.enabled) (and (not .Values.redis.enabled) (or .Values.externalRedis.password .Values.externalRedis.existingSecret)) }}

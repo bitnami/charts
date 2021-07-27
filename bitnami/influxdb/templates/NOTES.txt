@@ -20,16 +20,16 @@ In order to replicate the container startup scripts execute this command:
 
 {{- else }}
 
-InfluxDB(TM) can be accessed through following DNS names from within your cluster:
+InfluxDB&trade; can be accessed through following DNS names from within your cluster:
 
     {{- if eq .Values.architecture "high-availability" }}
-    InfluxDB Relay(TM) (write operations): {{ include "common.names.fullname" . }}-relay.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} (port {{ .Values.relay.service.port }})
-    InfluxDB(TM) servers (read operations):  {{ include "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} (port {{ .Values.influxdb.service.port }})
+    InfluxDB Relay&trade; (write operations): {{ include "common.names.fullname" . }}-relay.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} (port {{ .Values.relay.service.port }})
+    InfluxDB&trade; servers (read operations):  {{ include "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} (port {{ .Values.influxdb.service.port }})
     {{- else }}
-    InfluxDB(TM): {{ include "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} (port {{ .Values.influxdb.service.port }})
+    InfluxDB&trade;: {{ include "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} (port {{ .Values.influxdb.service.port }})
     {{- end }}
     {{- if .Values.metrics.enabled }}
-    InfluxDB(TM) Prometheus Metrics: {{ include "common.names.fullname" . }}-metrics.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} (port {{ .Values.metrics.service.port }})
+    InfluxDB&trade; Prometheus Metrics: {{ include "common.names.fullname" . }}-metrics.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} (port {{ .Values.metrics.service.port }})
     {{- end }}
 
 {{- if .Values.authEnabled }}
@@ -81,7 +81,7 @@ To connect to your database run the following commands:
 
 {{- if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}
 
-Note: Since NetworkPolicy is enabled, only pods with label "{{ include "common.names.fullname" . }}-client=true" will be able to connect to InfluxDB(TM) server(s).
+Note: Since NetworkPolicy is enabled, only pods with label "{{ include "common.names.fullname" . }}-client=true" will be able to connect to InfluxDB&trade; server(s).
 
 {{- end }}
 
@@ -90,7 +90,7 @@ To connect to your database from outside the cluster execute the following comma
 {{- if .Values.ingress.enabled }}
 {{- $ingressHost := .Values.ingress.hostname }}
   {{- if .Values.ingress.extraHosts }}
-  You should be able to access your new InfluxDB(TM) server(s) through:
+  You should be able to access your new InfluxDB&trade; server(s) through:
   {{- end }}
     {{- range .Values.ingress.extraHosts }}
     {{ if .tls }}https{{- else }}http{{ end }}://{{ .name }}

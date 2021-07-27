@@ -162,7 +162,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `relay.image.tag`                          | InfluxDB Relay&trade; image tag (immutable tags are recommended)                                                       | `0.20200717.0-scratch-r7` |
 | `relay.image.pullPolicy`                   | InfluxDB Relay&trade; image pull policy                                                                                | `IfNotPresent`            |
 | `relay.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                       | `[]`                      |
-| `relay.configuration`                      | InfluxDB Relay(TM) Configuration. Specify content for relay.toml                                                       | `{}`                      |
+| `relay.configuration`                      | InfluxDB Relay&trade; Configuration. Specify content for relay.toml                                                    | `{}`                      |
 | `relay.existingConfiguration`              | Name of existing ConfigMap object with the InfluxDB Relay&trade; configuration (`relay.configuration` will be ignored) | `""`                      |
 | `relay.replicaCount`                       | The number of InfluxDB Relay&trade; replicas to deploy                                                                 | `1`                       |
 | `relay.updateStrategy`                     | Update strategy, can be set to RollingUpdate or OnDelete by default.                                                   | `RollingUpdate`           |

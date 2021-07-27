@@ -138,7 +138,7 @@ Compile all warnings into a single message.
 */}}
 
 {{/*
-Return the Redis(TM) secret name
+Return the Redis&trade; secret name
 */}}
 {{- define "argocd.redis.secretName" -}}
 {{- if .Values.redis.enabled }}
@@ -155,7 +155,7 @@ Return the Redis(TM) secret name
 {{- end -}}
 
 {{/*
-Return the Redis(TM) secret key
+Return the Redis&trade; secret key
 */}}
 {{- define "argocd.redis.secretPasswordKey" -}}
 {{- if and .Values.redis.enabled .Values.redis.auth.existingSecret }}
@@ -168,7 +168,7 @@ Return the Redis(TM) secret key
 {{- end -}}
 
 {{/*
-Return whether Redis(TM) uses password authentication or not
+Return whether Redis&trade; uses password authentication or not
 */}}
 {{- define "argocd.redis.auth.enabled" -}}
 {{- if or (and .Values.redis.enabled .Values.redis.auth.enabled) (and (not .Values.redis.enabled) (or .Values.externalRedis.password .Values.externalRedis.existingSecret)) }}
@@ -177,7 +177,7 @@ Return whether Redis(TM) uses password authentication or not
 {{- end -}}
 
 {{/*
-Return the Redis(TM) hostname
+Return the Redis&trade; hostname
 */}}
 {{- define "argocd.redisHost" -}}
 {{- if .Values.redis.enabled }}
@@ -188,7 +188,7 @@ Return the Redis(TM) hostname
 {{- end -}}
 
 {{/*
-Return the Redis(TM) port
+Return the Redis&trade; port
 */}}
 {{- define "argocd.redisPort" -}}
 {{- if .Values.redis.enabled }}

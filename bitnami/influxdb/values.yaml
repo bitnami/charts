@@ -57,7 +57,7 @@ diagnosticMode:
 
 ## @section InfluxDB&trade; parameters
 
-## Bitnami InfluxDB(TM) image
+## Bitnami InfluxDB&trade; image
 ## ref: https://hub.docker.com/r/bitnami/influxdb/tags/
 ## @param image.registry InfluxDB&trade; image registry
 ## @param image.repository InfluxDB&trade; image repository
@@ -97,7 +97,7 @@ auth:
   ## @param auth.usePasswordFiles Whether to use files to provide secrets instead of env vars.
   ##
   usePasswordFiles: false
-  ## InfluxDB(TM) admin credentials
+  ## InfluxDB&trade; admin credentials
   ##
   admin:
     ## @param auth.admin.username InfluxDB&trade; admin user name
@@ -122,7 +122,7 @@ auth:
   ## See more influxdb 2.0 auth ref: https://docs.influxdata.com/influxdb/v2.0/security/tokens/
   ##
   createUserToken: false
-  ## InfluxDB(TM) credentials for user with 'admin' privileges on the db specified at 'database' parameter
+  ## InfluxDB&trade; credentials for user with 'admin' privileges on the db specified at 'database' parameter
   ##
   user:
     ## @param auth.user.username Name for InfluxDB&trade; user with 'admin' privileges on the bucket specified at `auth.user.bucket` and `auth.user.org` or `auth.admin.org`
@@ -138,14 +138,14 @@ auth:
     ## already create. If it is not null a new bucket will be created.
     ##
     bucket: ""
-  ## InfluxDB(TM) credentials for user with 'read' privileges on the db specified at 'database' parameter
+  ## InfluxDB&trade; credentials for user with 'read' privileges on the db specified at 'database' parameter
   ## @param auth.readUser.username Name for InfluxDB&trade; user with 'read' privileges on the bucket specified at `auth.user.bucket`
   ## @param auth.readUser.password InfluxDB&trade; password for `auth.readUser.username` user
   ##
   readUser:
     username: ""
     password: ""
-  ## InfluxDB(TM) credentials for user with 'write' privileges on the db specified at 'database' parameter
+  ## InfluxDB&trade; credentials for user with 'write' privileges on the db specified at 'database' parameter
   ## @param auth.writeUser.username Name for InfluxDB&trade; user with 'read' privileges on the bucket specified at `auth.user.bucket`
   ## @param auth.writeUser.password InfluxDB&trade; password for `auth.writeUser.username` user
   ##
@@ -155,7 +155,7 @@ auth:
   ## @param auth.existingSecret Name of existing Secret object with InfluxDB&trade; credentials (`auth.admin.password`, `auth.user.password`, `auth.readUser.password`, and `auth.writeUser.password` will be ignored and picked up from this secret)
   ##
   existingSecret: ""
-## InfluxDB(TM) backend parameters
+## InfluxDB&trade; backend parameters
 ##
 influxdb:
   ## @param influxdb.configuration Specify content for influxdb.conf
@@ -249,7 +249,7 @@ influxdb:
   ## @param influxdb.extraVolumeMounts Array of extra volume mounts to be added to the container (evaluated as template). Normally used with extraVolumes.
   ##
   extraVolumeMounts: []
-  ## K8s Security Context for InfluxDB(TM) pods
+  ## K8s Security Context for InfluxDB&trade; pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param influxdb.securityContext.enabled Enable security context for InfluxDB&trade;
   ## @param influxdb.securityContext.fsGroup Group ID for the InfluxDB&trade; filesystem
@@ -259,7 +259,7 @@ influxdb:
     enabled: true
     fsGroup: 1001
     runAsUser: 1001
-  ## InfluxDB(TM) pods' resource requests and limits
+  ## InfluxDB&trade; pods' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
@@ -279,7 +279,7 @@ influxdb:
     ##    cpu: 100m
     ##    memory: 128Mi
     requests: {}
-  ## InfluxDB(TM) pods' liveness probe
+  ## InfluxDB&trade; pods' liveness probe
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ## @param influxdb.livenessProbe.enabled Enable livenessProbe
   ## @param influxdb.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
@@ -295,7 +295,7 @@ influxdb:
     timeoutSeconds: 30
     successThreshold: 1
     failureThreshold: 6
-  ## InfluxDB(TM) pods' readiness probe
+  ## InfluxDB&trade; pods' readiness probe
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ## @param influxdb.readinessProbe.enabled Enable readinessProbe
   ## @param influxdb.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
@@ -371,7 +371,7 @@ influxdb:
 ## @section InfluxDB Relay&trade; parameters
 
 relay:
-  ## Bitnami InfluxDB Relay(TM) image
+  ## Bitnami InfluxDB Relay&trade; image
   ## ref: https://hub.docker.com/r/bitnami/influxdb-relay/tags/
   ## @param relay.image.registry InfluxDB Relay&trade; image registry
   ## @param relay.image.repository InfluxDB Relay&trade; image repository
@@ -395,7 +395,7 @@ relay:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-  ## @param relay.configuration [object] InfluxDB Relay(TM) Configuration. Specify content for relay.toml
+  ## @param relay.configuration [object] InfluxDB Relay&trade; Configuration. Specify content for relay.toml
   ## Alternatively, you can put your relay.toml under the files/conf/ directory
   ##
   configuration: |-
@@ -406,7 +406,7 @@ relay:
     # TCP address to bind to, for HTTP server.
     bind-addr = "0.0.0.0:9096"
 
-    # Array of InfluxDB(TM) instances to use as backends for Relay.
+    # Array of InfluxDB&trade; instances to use as backends for Relay.
     output = [
         {{- $influxdbReplicaCount := int .Values.influxdb.replicaCount }}
         {{- $influxdbFullname := include "common.names.fullname" . }}
@@ -473,7 +473,7 @@ relay:
   ## @param relay.extraVolumeMounts Array of extra volume mounts to be added to the container (evaluated as template). Normally used with extraVolumes.
   ##
   extraVolumeMounts: []
-  ## K8s Security Context for InfluxDB(TM) pods
+  ## K8s Security Context for InfluxDB&trade; pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param relay.securityContext.enabled Enable security context for InfluxDB Relay&trade;
   ## @param relay.securityContext.fsGroup Group ID for the InfluxDB Relay&trade; filesystem
@@ -483,7 +483,7 @@ relay:
     enabled: true
     fsGroup: 1001
     runAsUser: 1001
-  ## InfluxDB Relay(TM) pods' resource requests and limits
+  ## InfluxDB Relay&trade; pods' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
@@ -503,7 +503,7 @@ relay:
     ##    cpu: 100m
     ##    memory: 128Mi
     requests: {}
-  ## InfluxDB Relay(TM) pods' liveness probe
+  ## InfluxDB Relay&trade; pods' liveness probe
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ## @param relay.livenessProbe.enabled Enable livenessProbe
   ## @param relay.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
@@ -519,7 +519,7 @@ relay:
     timeoutSeconds: 5
     successThreshold: 1
     failureThreshold: 6
-  ## InfluxDB Relay(TM) pods' readiness probe
+  ## InfluxDB Relay&trade; pods' readiness probe
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ## @param relay.readinessProbe.enabled Enable readinessProbe
   ## @param relay.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
@@ -774,8 +774,8 @@ networkPolicy:
   ##
   enabled: false
   ## @param networkPolicy.allowExternal Don't require client label for connections
-  ## client labels will have network access to the ports InfluxDB(TM) is listening
-  ## on. When true, InfluxDB(TM) will accept connections from any source
+  ## client labels will have network access to the ports InfluxDB&trade; is listening
+  ## on. When true, InfluxDB&trade; will accept connections from any source
   ## (with the correct destination port).
   ##
   allowExternal: true
@@ -863,7 +863,7 @@ backup:
   ##
   retentionDays: 10
   ## Cronjob configuration
-  ## This cronjob is used to create InfluxDB(TM) backups
+  ## This cronjob is used to create InfluxDB&trade; backups
   ##
   cronjob:
     ## @param backup.cronjob.schedule Schedule in Cron format to save snapshots
