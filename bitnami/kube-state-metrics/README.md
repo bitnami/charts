@@ -52,17 +52,17 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `nil` |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
 
 ### Common parameters
 
 | Name                | Description                                                                                                   | Value |
 | ------------------- | ------------------------------------------------------------------------------------------------------------- | ----- |
-| `nameOverride`      | String to partially override `kube-state-metrics.name` template with a string (will prepend the release name) | `nil` |
-| `fullnameOverride`  | String to fully override `kube-state-metrics.fullname` template with a string                                 | `nil` |
+| `nameOverride`      | String to partially override `kube-state-metrics.name` template with a string (will prepend the release name) | `""`  |
+| `fullnameOverride`  | String to fully override `kube-state-metrics.fullname` template with a string                                 | `""`  |
 | `commonLabels`      | Add labels to all the deployed resources                                                                      | `{}`  |
 | `commonAnnotations` | Add annotations to all the deployed resources                                                                 | `{}`  |
 
@@ -76,14 +76,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rbac.apiVersion`                               | Version of the RBAC API                                                                   | `v1beta1`                    |
 | `rbac.pspEnabled`                               | PodSecurityPolicy                                                                         | `true`                       |
 | `serviceAccount.create`                         | Specify whether to create a ServiceAccount for kube-state-metrics                         | `true`                       |
-| `serviceAccount.name`                           | The name of the ServiceAccount to create                                                  | `nil`                        |
+| `serviceAccount.name`                           | The name of the ServiceAccount to create                                                  | `""`                         |
 | `image.registry`                                | kube-state-metrics image registry                                                         | `docker.io`                  |
 | `image.repository`                              | kube-state-metrics image repository                                                       | `bitnami/kube-state-metrics` |
-| `image.tag`                                     | kube-state-metrics Image tag (immutable tags are recommended)                             | `2.1.0-debian-10-r0`         |
+| `image.tag`                                     | kube-state-metrics Image tag (immutable tags are recommended)                             | `2.1.0-debian-10-r23`        |
 | `image.pullPolicy`                              | kube-state-metrics image pull policy                                                      | `IfNotPresent`               |
 | `image.pullSecrets`                             | Specify docker-registry secret names as an array                                          | `[]`                         |
 | `extraArgs`                                     | Additional command line arguments to pass to kube-state-metrics                           | `{}`                         |
-| `namespaces`                                    | Comma-separated list of namespaces to be enabled. Defaults to all namespaces              | `nil`                        |
+| `namespaces`                                    | Comma-separated list of namespaces to be enabled. Defaults to all namespaces              | `""`                         |
 | `kubeResources.certificatesigningrequests`      | Enable the `certificatesigningrequests` resource                                          | `true`                       |
 | `kubeResources.configmaps`                      | Enable the `configmaps` resource                                                          | `true`                       |
 | `kubeResources.cronjobs`                        | Enable the `cronjobs` resource                                                            | `true`                       |
@@ -117,9 +117,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `securityContext.runAsUser`                     | User ID for the container                                                                 | `1001`                       |
 | `service.type`                                  | Kubernetes service type                                                                   | `ClusterIP`                  |
 | `service.port`                                  | kube-state-metrics service port                                                           | `8080`                       |
-| `service.clusterIP`                             | Specific cluster IP when service type is cluster IP. Use `None` for headless service      | `nil`                        |
-| `service.nodePort`                              | Specify the nodePort value for the LoadBalancer and NodePort service types.               | `nil`                        |
-| `service.loadBalancerIP`                        | `loadBalancerIP` if service type is `LoadBalancer`                                        | `nil`                        |
+| `service.clusterIP`                             | Specific cluster IP when service type is cluster IP. Use `None` for headless service      | `""`                         |
+| `service.nodePort`                              | Specify the nodePort value for the LoadBalancer and NodePort service types.               | `""`                         |
+| `service.loadBalancerIP`                        | `loadBalancerIP` if service type is `LoadBalancer`                                        | `""`                         |
 | `service.loadBalancerSourceRanges`              | Address that are allowed when svc is `LoadBalancer`                                       | `[]`                         |
 | `service.annotations`                           | Additional annotations for kube-state-metrics service                                     | `{}`                         |
 | `service.labels`                                | Additional labels for kube-state-metrics service                                          | `{}`                         |
@@ -153,12 +153,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `readinessProbe.failureThreshold`               | Minimum consecutive failures for the probe                                                | `6`                          |
 | `readinessProbe.successThreshold`               | Minimum consecutive successes for the probe                                               | `1`                          |
 | `serviceMonitor.enabled`                        | Creates a ServiceMonitor to monitor kube-state-metrics                                    | `false`                      |
-| `serviceMonitor.namespace`                      | Namespace in which Prometheus is running                                                  | `nil`                        |
-| `serviceMonitor.jobLabel`                       | The name of the label on the target service to use as the job name in prometheus.         | `nil`                        |
-| `serviceMonitor.interval`                       | Scrape interval (use by default, falling back to Prometheus' default)                     | `nil`                        |
-| `serviceMonitor.scrapeTimeout`                  | Timeout after which the scrape is ended                                                   | `nil`                        |
+| `serviceMonitor.namespace`                      | Namespace in which Prometheus is running                                                  | `""`                         |
+| `serviceMonitor.jobLabel`                       | The name of the label on the target service to use as the job name in prometheus.         | `""`                         |
+| `serviceMonitor.interval`                       | Scrape interval (use by default, falling back to Prometheus' default)                     | `""`                         |
+| `serviceMonitor.scrapeTimeout`                  | Timeout after which the scrape is ended                                                   | `""`                         |
 | `serviceMonitor.selector`                       | ServiceMonitor selector labels                                                            | `{}`                         |
-| `serviceMonitor.honorLabels`                    | Honor metrics labels                                                                      | `nil`                        |
+| `serviceMonitor.honorLabels`                    | Honor metrics labels                                                                      | `""`                         |
 | `serviceMonitor.relabelings`                    | ServiceMonitor relabelings                                                                | `[]`                         |
 | `serviceMonitor.metricRelabelings`              | ServiceMonitor metricRelabelings                                                          | `[]`                         |
 

@@ -29,9 +29,24 @@ fullnameOverride:
 ##
 clusterDomain: cluster.local
 
+## Enable diagnostic mode in the deployment
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the deployment
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the deployment
+  ##
+  args:
+    - infinity
+
 ## @section MongoDB&reg; Sharded parameters
 
-## Bitnami MongoDB(R) Sharded image version
+## Bitnami MongoDB&reg; Sharded image version
 ## ref: https://hub.docker.com/r/bitnami/mongodb-sharded/tags/
 ## @param image.registry MongoDB&reg; Sharded image registry
 ## @param image.repository MongoDB&reg; Sharded Image name
@@ -60,7 +75,7 @@ image:
   ## Set to true if you would like to see extra information on logs
   ##
   debug: false
-## MongoDB(R) credentials
+## MongoDB&reg; credentials
 ## @param mongodbRootPassword MongoDB&reg; root password
 ## If set to null it will be randomly generated
 ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#setting-the-root-password-on-first-run
@@ -266,7 +281,7 @@ service:
   ##
   sessionAffinity: None
 ## Configure extra options for liveness probes
-## This applies to all the MongoDB(R) in the sharded cluster
+## This applies to all the MongoDB&reg; in the sharded cluster
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
 ## @param livenessProbe.enabled Enable livenessProbe
 ## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
@@ -283,7 +298,7 @@ livenessProbe:
   failureThreshold: 6
   successThreshold: 1
 ## Configure extra options for readiness probe
-## This applies to all the MongoDB(R) in the sharded cluster
+## This applies to all the MongoDB&reg; in the sharded cluster
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
 ## @param readinessProbe.enabled Enable readinessProbe
 ## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
@@ -371,7 +386,7 @@ configsvr:
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
   ##
   podManagementPolicy: OrderedReady
-  ## @param configsvr.updateStrategy.type updateStrategy for MongoDB(R) Primary, Secondary and Arbiter statefulsets
+  ## @param configsvr.updateStrategy.type updateStrategy for MongoDB&reg; Primary, Secondary and Arbiter statefulsets
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
@@ -454,7 +469,7 @@ configsvr:
     ##
     enabled: true
     ## @param configsvr.persistence.mountPath Path to mount the volume at
-    ## MongoDB(R) images.
+    ## MongoDB&reg; images.
     ##
     mountPath: /bitnami/mongodb
     ## @param configsvr.persistence.subPath Subdirectory of the volume to mount at
@@ -578,7 +593,7 @@ mongos:
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
   ##
   podManagementPolicy: OrderedReady
-  ## @param mongos.updateStrategy.type updateStrategy for MongoDB(R) Primary, Secondary and Arbiter statefulsets
+  ## @param mongos.updateStrategy.type updateStrategy for MongoDB&reg; Primary, Secondary and Arbiter statefulsets
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
@@ -1006,7 +1021,7 @@ shardsvr:
     ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
     ##
     podManagementPolicy: OrderedReady
-    ## @param shardsvr.arbiter.updateStrategy.type updateStrategy for MongoDB(R) Primary, Secondary and Arbiter statefulsets
+    ## @param shardsvr.arbiter.updateStrategy.type updateStrategy for MongoDB&reg; Primary, Secondary and Arbiter statefulsets
     ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
     ##
     updateStrategy:

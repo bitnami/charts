@@ -64,16 +64,17 @@ spec:
         - name: grafana-tempo-distributor
           image: {{ template "grafana-tempo.image" . }}
           imagePullPolicy: {{ .Values.tempo.image.pullPolicy }}
-          {{- if .Values.distributor.lifecycleHooks }}
-          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.distributor.lifecycleHooks "context" $) | nindent 12 }}
-          {{- end }}
           {{- if .Values.distributor.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.distributor.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
-          {{- if .Values.distributor.command }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.distributor.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.distributor.command "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.distributor.args }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.distributor.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.distributor.args "context" $) | nindent 12 }}
           {{- else }}
           args:
@@ -143,6 +144,7 @@ spec:
           {{- if .Values.distributor.resources }}
           resources: {{- toYaml .Values.distributor.resources | nindent 12 }}
           {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.distributor.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
@@ -168,6 +170,10 @@ spec:
             failureThreshold: {{ .Values.distributor.readinessProbe.failureThreshold }}
           {{- else if .Values.distributor.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.distributor.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.distributor.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.distributor.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
           {{- end }}
           volumeMounts:
             - name: tempo-config

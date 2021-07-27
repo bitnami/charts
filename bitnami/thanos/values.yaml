@@ -2759,7 +2759,7 @@ minio:
   ## to be used as an objstore for Thanos
   ##
   enabled: false
-  ## MinIO(R) credentials
+  ## MinIO&reg; credentials
   ## @param minio.accessKey.password MinIO&reg; Access Key
   ## @param minio.secretKey.password MinIO&reg; Secret Key
   ##

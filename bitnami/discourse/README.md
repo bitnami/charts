@@ -13,7 +13,7 @@ $ helm install my-release bitnami/discourse
 
 This chart bootstraps a [Discourse](https://www.discourse.org/) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-It also packages [Bitnami Postgresql](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) and [Bitnami Redis<sup>TM</sup>](https://github.com/bitnami/charts/tree/master/bitnami/redis) which are required as databases for the Discourse application.
+It also packages [Bitnami Postgresql](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) and [Bitnami Redis&trade;](https://github.com/bitnami/charts/tree/master/bitnami/redis) which are required as databases for the Discourse application.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
 
@@ -89,7 +89,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------------------- | --------------------------------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`                               | Discourse image registry                                                                                  | `docker.io`          |
 | `image.repository`                             | Discourse image repository                                                                                | `bitnami/discourse`  |
-| `image.tag`                                    | Discourse image tag                                                                                       | `2.7.6-debian-10-r0` |
+| `image.tag`                                    | Discourse image tag                                                                                       | `2.7.7-debian-10-r0` |
 | `image.pullPolicy`                             | Discourse image pull policy                                                                               | `IfNotPresent`       |
 | `image.pullSecrets`                            | Discourse image pull secrets                                                                              | `[]`                 |
 | `image.debug`                                  | Specify if debug logs should be enabled                                                                   | `false`              |
@@ -236,13 +236,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.database`                   | Name of the existing database (when using an external db)                                          | `bitnami_application` |
 
 
-### Redis<sup>TM</sup> parameters
+### Redis&trade; parameters
 
 | Name                                      | Description                                                                                                                                                               | Value            |
 | ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
 | `redis.enabled`                           | Whether to deploy a redis server to satisfy the applications requirements. To use an external redis instance set this to false and configure the externalRedis parameters | `true`           |
 | `redis.auth.enabled`                      | Use password authentication                                                                                                                                               | `false`          |
-| `redis.auth.password`                     | Redis(TM) password (both master and replica)                                                                                                                              | `""`             |
+| `redis.auth.password`                     | Redis&trade; password (both master and replica)                                                                                                                           | `""`             |
 | `redis.auth.existingSecret`               | Name of an existing Kubernetes secret object containing the password                                                                                                      | `""`             |
 | `redis.auth.existingSecretPasswordKey`    | Name of the key pointing to the password in your Kubernetes secret                                                                                                        | `redis-password` |
 | `redis.architecture`                      | Cluster settings                                                                                                                                                          | `standalone`     |
@@ -366,7 +366,7 @@ Note also that if you disable PostgreSQL per above you MUST supply values for th
 
 In case the database already contains data from a previous Discourse installation, you need to set the `discourse.skipInstall` parameter to _true_. Otherwise, the container would execute the installation wizard and could modify the existing data in the database. This parameter force the container to not execute the Discourse installation wizard.
 
-Similarly, you can specify an external Redis<sup>TM</sup> instance rather than installing one inside your cluster. First, you may disable the Redis<sup>TM</sup> installation with the `redis.enabled` option. As aforementioned, used the provided parameters to provide data about your instance:
+Similarly, you can specify an external Redis&trade; instance rather than installing one inside your cluster. First, you may disable the Redis&trade; installation with the `redis.enabled` option. As aforementioned, used the provided parameters to provide data about your instance:
 
 ```console
 redis.enabled=false
@@ -483,7 +483,7 @@ Full compatibility is not guaranteed due to the amount of involved changes, howe
 
 ### To 3.0.0
 
-This major updates the Redis<sup>TM</sup> subchart to it newest major, 14.0.0, which contains breaking changes. For more information on this subchart's major and the steps needed to migrate your data from your previous release, please refer to [Redis<sup>TM</sup> upgrade notes.](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1400).
+This major updates the Redis&trade; subchart to it newest major, 14.0.0, which contains breaking changes. For more information on this subchart's major and the steps needed to migrate your data from your previous release, please refer to [Redis&trade; upgrade notes.](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1400).
 
 ### To 2.0.0
 
@@ -558,7 +558,7 @@ postgresql 08:05:12.59 INFO  ==> Deploying PostgreSQL with persisted data...
 This new major version includes the following changes:
 
 * PostgreSQL dependency version was bumped to a new major version `9.X.X`, which includes changes that do no longer guarantee backwards compatibility. Check [PostgreSQL Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#900) for more information.
-* Redis<sup>TM</sup> dependency version was bumped to a new major version `11.X.X`, which includes breaking changes regarding sentinel. Discourse does not use this type of setup, so no issues are expected to happen in this case. Check [Redis<sup>TM</sup> Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1100) for more information.
+* Redis&trade; dependency version was bumped to a new major version `11.X.X`, which includes breaking changes regarding sentinel. Discourse does not use this type of setup, so no issues are expected to happen in this case. Check [Redis&trade; Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1100) for more information.
 * Some non-breaking changes so as to use the `bitnami/common` library chart.
 
 As a consequence, backwards compatibility from previous versions is not guaranteed during the upgrade. To upgrade to this new version `1.0.0` there are two alternatives:
@@ -591,7 +591,7 @@ As a consequence, backwards compatibility from previous versions is not guarante
   $ export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default discourse-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
   ```
 
-  > NOTE: You will need to export Redis<sup>TM</sup> credentials as well if your setup makes use of them.
+  > NOTE: You will need to export Redis&trade; credentials as well if your setup makes use of them.
 
 3. Scale down the Discourse deployment and delete the PostgreSQL statefulset. Notice the option `--cascade=false` in the latter.
 

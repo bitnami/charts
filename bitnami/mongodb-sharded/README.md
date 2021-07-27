@@ -61,11 +61,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name               | Description                                                                             | Value           |
-| ------------------ | --------------------------------------------------------------------------------------- | --------------- |
-| `nameOverride`     | String to partially override mongodb.fullname template (will maintain the release name) | `nil`           |
-| `fullnameOverride` | String to fully override mongodb.fullname template                                      | `nil`           |
-| `clusterDomain`    | Kubernetes Cluster Domain                                                               | `cluster.local` |
+| Name                     | Description                                                                             | Value           |
+| ------------------------ | --------------------------------------------------------------------------------------- | --------------- |
+| `nameOverride`           | String to partially override mongodb.fullname template (will maintain the release name) | `nil`           |
+| `fullnameOverride`       | String to fully override mongodb.fullname template                                      | `nil`           |
+| `clusterDomain`          | Kubernetes Cluster Domain                                                               | `cluster.local` |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                    | `[]`            |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `[]`            |
 
 
 ### MongoDB&reg; Sharded parameters
@@ -74,7 +77,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `image.registry`                      | MongoDB&reg; Sharded image registry                                                                                                                       | `docker.io`               |
 | `image.repository`                    | MongoDB&reg; Sharded Image name                                                                                                                           | `bitnami/mongodb-sharded` |
-| `image.tag`                           | MongoDB&reg; Sharded image tag (immutable tags are recommended)                                                                                           | `4.4.6-debian-10-r40`     |
+| `image.tag`                           | MongoDB&reg; Sharded image tag (immutable tags are recommended)                                                                                           | `4.4.7-debian-10-r9`      |
 | `image.pullPolicy`                    | MongoDB&reg; Sharded image pull policy                                                                                                                    | `IfNotPresent`            |
 | `image.pullSecrets`                   | Specify docker-registry secret names as an array                                                                                                          | `[]`                      |
 | `image.debug`                         | Specify if debug logs should be enabled                                                                                                                   | `false`                   |
@@ -105,7 +108,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`           | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                   |
 | `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                                                                          | `docker.io`               |
 | `volumePermissions.image.repository`  | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell`   |
-| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r126`       |
+| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r141`       |
 | `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                                                       | `Always`                  |
 | `volumePermissions.image.pullSecrets` | Init container volume-permissions image pull secrets                                                                                                      | `[]`                      |
 | `volumePermissions.resources`         | Init container resource requests/limit                                                                                                                    | `{}`                      |
@@ -157,7 +160,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `configsvr.nodeSelector`              | Config Server Node labels for pod assignment                                                            | `{}`               |
 | `configsvr.tolerations`               | Config Server Tolerations for pod assignment                                                            | `[]`               |
 | `configsvr.podManagementPolicy`       | Statefulset's pod management policy, allows parallel startup of pods                                    | `OrderedReady`     |
-| `configsvr.updateStrategy.type`       | updateStrategy for MongoDB(R) Primary, Secondary and Arbiter statefulsets                               | `RollingUpdate`    |
+| `configsvr.updateStrategy.type`       | updateStrategy for MongoDB&reg; Primary, Secondary and Arbiter statefulsets                             | `RollingUpdate`    |
 | `configsvr.config`                    | MongoDB&reg; configuration file                                                                         | `nil`              |
 | `configsvr.configCM`                  | ConfigMap name with Config Server configuration file (cannot be used with configsvr.config)             | `nil`              |
 | `configsvr.extraEnvVars`              | An array to add extra env vars                                                                          | `nil`              |
@@ -206,7 +209,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `mongos.nodeSelector`                               | Mongos Node labels for pod assignment                                                            | `{}`            |
 | `mongos.tolerations`                                | Mongos Tolerations for pod assignment                                                            | `[]`            |
 | `mongos.podManagementPolicy`                        | Statefulsets pod management policy, allows parallel startup of pods                              | `OrderedReady`  |
-| `mongos.updateStrategy.type`                        | updateStrategy for MongoDB(R) Primary, Secondary and Arbiter statefulsets                        | `RollingUpdate` |
+| `mongos.updateStrategy.type`                        | updateStrategy for MongoDB&reg; Primary, Secondary and Arbiter statefulsets                      | `RollingUpdate` |
 | `mongos.config`                                     | MongoDB&reg; configuration file                                                                  | `nil`           |
 | `mongos.configCM`                                   | ConfigMap name with MongoDB&reg; configuration file (cannot be used with mongos.config)          | `nil`           |
 | `mongos.extraEnvVars`                               | An array to add extra env vars                                                                   | `nil`           |
@@ -308,7 +311,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `shardsvr.arbiter.nodeSelector`              | Arbiter's Node labels for pod assignment                                                            | `{}`            |
 | `shardsvr.arbiter.tolerations`               | Arbiter's Tolerations for pod assignment                                                            | `[]`            |
 | `shardsvr.arbiter.podManagementPolicy`       | Statefulset's pod management policy, allows parallel startup of pods                                | `OrderedReady`  |
-| `shardsvr.arbiter.updateStrategy.type`       | updateStrategy for MongoDB(R) Primary, Secondary and Arbiter statefulsets                           | `RollingUpdate` |
+| `shardsvr.arbiter.updateStrategy.type`       | updateStrategy for MongoDB&reg; Primary, Secondary and Arbiter statefulsets                         | `RollingUpdate` |
 | `shardsvr.arbiter.config`                    | MongoDB&reg; configuration file                                                                     | `nil`           |
 | `shardsvr.arbiter.configCM`                  | ConfigMap name with MongoDB&reg; configuration file (cannot be used with shardsvr.arbiter.config)   | `nil`           |
 | `shardsvr.arbiter.extraEnvVars`              | An array to add extra env vars                                                                      | `nil`           |
@@ -332,7 +335,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                            | Start a side-car prometheus exporter                                               | `false`                    |
 | `metrics.image.registry`                     | MongoDB&reg; exporter image registry                                               | `docker.io`                |
 | `metrics.image.repository`                   | MongoDB&reg; exporter image name                                                   | `bitnami/mongodb-exporter` |
-| `metrics.image.tag`                          | MongoDB&reg; exporter image tag                                                    | `0.11.2-debian-10-r212`    |
+| `metrics.image.tag`                          | MongoDB&reg; exporter image tag                                                    | `0.11.2-debian-10-r227`    |
 | `metrics.image.pullPolicy`                   | MongoDB&reg; exporter image pull policy                                            | `Always`                   |
 | `metrics.image.pullSecrets`                  | MongoDB&reg; exporter image pull secrets                                           | `[]`                       |
 | `metrics.extraArgs`                          | String with extra arguments to the metrics exporter                                | `""`                       |
