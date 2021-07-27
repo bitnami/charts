@@ -41,10 +41,10 @@ spec:
         app.kubernetes.io/component: storegateway
         shard: {{ $index | quote }}
         {{- if $.Values.commonLabels }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
+        {{- include "common.tplvalues.render" ( dict "value" $.Values.commonLabels "context" $ ) | nindent 8 }}
         {{- end }}
         {{- if $.Values.storegateway.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.podLabels "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" $.Values.storegateway.podLabels "context" $) | nindent 8 }}
         {{- end }}
       annotations:
         checksum/ojbstore-configuration: {{ include (print $.Template.BasePath "/objstore-secret.yaml") $ | sha256sum }}
