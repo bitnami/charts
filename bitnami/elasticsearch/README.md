@@ -622,6 +622,12 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ## Upgrading
 
+### To 16.0.0
+
+This version replaces the Ingest and Coordinating Deployments with Statefulsets.
+
+Additionally, adds support for X-Pack Security features such as TLS/SSL encryption and basic authentication.
+
 ### To 15.0.0
 
 From this version onwards, Elasticsearch container components are now licensed under the [Elastic License](https://www.elastic.co/licensing/elastic-license) that is not currently accepted as an Open Source license by the Open Source Initiative (OSI).
