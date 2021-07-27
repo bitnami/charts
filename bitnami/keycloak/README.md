@@ -194,6 +194,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraVolumes`                          | Optionally specify extra list of additional volumes for Keycloak pods                     | `[]`                  |
 | `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for Keycloak container(s)        | `[]`                  |
 | `initContainers`                        | Add additional init containers to the Keycloak pods                                       | `{}`                  |
+| `initContainersPost`                    | Add additional init containers to the Keycloak pods after the TLS certs are generated     | `{}`                  |
 | `sidecars`                              | Add additional sidecar containers to the Keycloak pods                                    | `{}`                  |
 
 
