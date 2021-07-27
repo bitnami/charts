@@ -74,7 +74,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- | --------------------- |
 | `controller.image.registry`                              | Argo CD controller image registry                                                                    | `docker.io`           |
 | `controller.image.repository`                            | Argo CD controller image repository                                                                  | `bitnami/argo-cd`     |
-| `controller.image.tag`                                   | Argo CD controller image tag (immutable tags are recommended)                                        | `2.0.4-debian-10-r19` |
+| `controller.image.tag`                                   | Argo CD controller image tag (immutable tags are recommended)                                        | `2.0.4-debian-10-r21` |
 | `controller.image.pullPolicy`                            | Argo CD controller image pull policy                                                                 | `IfNotPresent`        |
 | `controller.image.pullSecrets`                           | Argo CD controller image pull secrets                                                                | `[]`                  |
 | `controller.replicaCount`                                | Number of Argo CD replicas to deploy                                                                 | `1`                   |
@@ -165,7 +165,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------------------------- | ------------------------------------------------------------------------------------------------ | ------------------------ |
 | `server.image.registry`                              | Argo CD server image registry                                                                    | `docker.io`              |
 | `server.image.repository`                            | Argo CD server image repository                                                                  | `bitnami/argo-cd`        |
-| `server.image.tag`                                   | Argo CD server image tag (immutable tags are recommended)                                        | `2.0.4-debian-10-r20`    |
+| `server.image.tag`                                   | Argo CD server image tag (immutable tags are recommended)                                        | `2.0.5-debian-10-r0`     |
 | `server.image.pullPolicy`                            | Argo CD server image pull policy                                                                 | `IfNotPresent`           |
 | `server.image.pullSecrets`                           | Argo CD server image pull secrets                                                                | `[]`                     |
 | `server.replicaCount`                                | Number of Argo CD server replicas to deploy                                                      | `1`                      |
@@ -283,7 +283,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- | --------------------- |
 | `repoServer.image.registry`                              | Argo CD repo server image registry                                                                   | `docker.io`           |
 | `repoServer.image.repository`                            | Argo CD repo server image repository                                                                 | `bitnami/argo-cd`     |
-| `repoServer.image.tag`                                   | Argo CD repo server image tag (immutable tags are recommended)                                       | `2.0.4-debian-10-r19` |
+| `repoServer.image.tag`                                   | Argo CD repo server image tag (immutable tags are recommended)                                       | `2.0.4-debian-10-r21` |
 | `repoServer.image.pullPolicy`                            | Argo CD repo server image pull policy                                                                | `IfNotPresent`        |
 | `repoServer.image.pullSecrets`                           | Argo CD repo server image pull secrets                                                               | `[]`                  |
 | `repoServer.replicaCount`                                | Number of Argo CD repo server replicas to deploy                                                     | `1`                   |
@@ -368,7 +368,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------- | --------------------------------------------------------------------------------------------- | ---------------------- |
 | `dex.image.registry`                              | Dex image registry                                                                            | `docker.io`            |
 | `dex.image.repository`                            | Dex image repository                                                                          | `bitnami/dex`          |
-| `dex.image.tag`                                   | Dex image tag (immutable tags are recommended)                                                | `2.29.0-debian-10-r18` |
+| `dex.image.tag`                                   | Dex image tag (immutable tags are recommended)                                                | `2.29.0-debian-10-r21` |
 | `dex.image.pullPolicy`                            | Dex image pull policy                                                                         | `IfNotPresent`         |
 | `dex.image.pullSecrets`                           | Dex image pull secrets                                                                        | `[]`                   |
 | `dex.enabled`                                     | Enable the creation of a Dex deployment for SSO                                               | `false`                |
@@ -487,25 +487,25 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Other Parameters
 
-| Name                                      | Description                                                                 | Value                 |
-| ----------------------------------------- | --------------------------------------------------------------------------- | --------------------- |
-| `rbac.create`                             | Specifies whether RBAC resources should be created                          | `true`                |
-| `redis.image.registry`                    | Argo CD controller image registry                                           | `docker.io`           |
-| `redis.image.repository`                  | Argo CD controller image repository                                         | `bitnami/redis`       |
-| `redis.image.tag`                         | Argo CD controller image tag (immutable tags are recommended)               | `6.2.4-debian-10-r37` |
-| `redis.image.pullPolicy`                  | Argo CD controller image pull policy                                        | `IfNotPresent`        |
-| `redis.image.pullSecrets`                 | Argo CD controller image pull secrets                                       | `[]`                  |
-| `redis.enabled`                           | Enable Redis dependency                                                     | `true`                |
-| `redis.nameOverride`                      | Name override for the Redis dependency                                      | `""`                  |
-| `redis.service.port`                      | Service port for Redis dependency                                           | `6379`                |
-| `redis.auth.enabled`                      | Enable Redis dependency authentication                                      | `true`                |
-| `redis.auth.existingSecret`               | Existing secret to load redis dependency password                           | `""`                  |
-| `redis.auth.existingSecretPasswordKey`    | Pasword key name inside the existing secret                                 | `redis-password`      |
-| `externalRedis.host`                      | External Redis host                                                         | `""`                  |
-| `externalRedis.port`                      | External Redis port                                                         | `6379`                |
-| `externalRedis.password`                  | External Redis password                                                     | `""`                  |
-| `externalRedis.existingSecret`            | Existing secret for the external redis                                      | `""`                  |
-| `externalRedis.existingSecretPasswordKey` | Password key for the existing secret containing the external redis password | `redis-password`      |
+| Name                                      | Description                                                                 | Value                |
+| ----------------------------------------- | --------------------------------------------------------------------------- | -------------------- |
+| `rbac.create`                             | Specifies whether RBAC resources should be created                          | `true`               |
+| `redis.image.registry`                    | Argo CD controller image registry                                           | `docker.io`          |
+| `redis.image.repository`                  | Argo CD controller image repository                                         | `bitnami/redis`      |
+| `redis.image.tag`                         | Argo CD controller image tag (immutable tags are recommended)               | `6.2.5-debian-10-r0` |
+| `redis.image.pullPolicy`                  | Argo CD controller image pull policy                                        | `IfNotPresent`       |
+| `redis.image.pullSecrets`                 | Argo CD controller image pull secrets                                       | `[]`                 |
+| `redis.enabled`                           | Enable Redis dependency                                                     | `true`               |
+| `redis.nameOverride`                      | Name override for the Redis dependency                                      | `""`                 |
+| `redis.service.port`                      | Service port for Redis dependency                                           | `6379`               |
+| `redis.auth.enabled`                      | Enable Redis dependency authentication                                      | `true`               |
+| `redis.auth.existingSecret`               | Existing secret to load redis dependency password                           | `""`                 |
+| `redis.auth.existingSecretPasswordKey`    | Pasword key name inside the existing secret                                 | `redis-password`     |
+| `externalRedis.host`                      | External Redis host                                                         | `""`                 |
+| `externalRedis.port`                      | External Redis port                                                         | `6379`               |
+| `externalRedis.password`                  | External Redis password                                                     | `""`                 |
+| `externalRedis.existingSecret`            | Existing secret for the external redis                                      | `""`                 |
+| `externalRedis.existingSecretPasswordKey` | Password key for the existing secret containing the external redis password | `redis-password`     |
 
 
 The above parameters map to the env variables defined in [bitnami/argo-cd](http://github.com/bitnami/bitnami-docker-argo-cd). For more information please refer to the [bitnami/argo-cd](http://github.com/bitnami/bitnami-docker-argo-cd) image documentation.

@@ -160,7 +160,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `configsvr.nodeSelector`              | Config Server Node labels for pod assignment                                                            | `{}`               |
 | `configsvr.tolerations`               | Config Server Tolerations for pod assignment                                                            | `[]`               |
 | `configsvr.podManagementPolicy`       | Statefulset's pod management policy, allows parallel startup of pods                                    | `OrderedReady`     |
-| `configsvr.updateStrategy.type`       | updateStrategy for MongoDB(R) Primary, Secondary and Arbiter statefulsets                               | `RollingUpdate`    |
+| `configsvr.updateStrategy.type`       | updateStrategy for MongoDB&reg; Primary, Secondary and Arbiter statefulsets                             | `RollingUpdate`    |
 | `configsvr.config`                    | MongoDB&reg; configuration file                                                                         | `nil`              |
 | `configsvr.configCM`                  | ConfigMap name with Config Server configuration file (cannot be used with configsvr.config)             | `nil`              |
 | `configsvr.extraEnvVars`              | An array to add extra env vars                                                                          | `nil`              |
@@ -209,7 +209,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `mongos.nodeSelector`                               | Mongos Node labels for pod assignment                                                            | `{}`            |
 | `mongos.tolerations`                                | Mongos Tolerations for pod assignment                                                            | `[]`            |
 | `mongos.podManagementPolicy`                        | Statefulsets pod management policy, allows parallel startup of pods                              | `OrderedReady`  |
-| `mongos.updateStrategy.type`                        | updateStrategy for MongoDB(R) Primary, Secondary and Arbiter statefulsets                        | `RollingUpdate` |
+| `mongos.updateStrategy.type`                        | updateStrategy for MongoDB&reg; Primary, Secondary and Arbiter statefulsets                      | `RollingUpdate` |
 | `mongos.config`                                     | MongoDB&reg; configuration file                                                                  | `nil`           |
 | `mongos.configCM`                                   | ConfigMap name with MongoDB&reg; configuration file (cannot be used with mongos.config)          | `nil`           |
 | `mongos.extraEnvVars`                               | An array to add extra env vars                                                                   | `nil`           |
@@ -311,7 +311,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `shardsvr.arbiter.nodeSelector`              | Arbiter's Node labels for pod assignment                                                            | `{}`            |
 | `shardsvr.arbiter.tolerations`               | Arbiter's Tolerations for pod assignment                                                            | `[]`            |
 | `shardsvr.arbiter.podManagementPolicy`       | Statefulset's pod management policy, allows parallel startup of pods                                | `OrderedReady`  |
-| `shardsvr.arbiter.updateStrategy.type`       | updateStrategy for MongoDB(R) Primary, Secondary and Arbiter statefulsets                           | `RollingUpdate` |
+| `shardsvr.arbiter.updateStrategy.type`       | updateStrategy for MongoDB&reg; Primary, Secondary and Arbiter statefulsets                         | `RollingUpdate` |
 | `shardsvr.arbiter.config`                    | MongoDB&reg; configuration file                                                                     | `nil`           |
 | `shardsvr.arbiter.configCM`                  | ConfigMap name with MongoDB&reg; configuration file (cannot be used with shardsvr.arbiter.config)   | `nil`           |
 | `shardsvr.arbiter.extraEnvVars`              | An array to add extra env vars                                                                      | `nil`           |

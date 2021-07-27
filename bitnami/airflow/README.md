@@ -308,30 +308,30 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Airflow database parameters
 
-| Name                                         | Description                                                                                     | Value             |
-| -------------------------------------------- | ----------------------------------------------------------------------------------------------- | ----------------- |
-| `postgresql.enabled`                         | Switch to enable or disable the PostgreSQL helm chart                                           | `true`            |
-| `postgresql.postgresqlUsername`              | Airflow Postgresql username                                                                     | `bn_airflow`      |
-| `postgresql.postgresqlPassword`              | Airflow Postgresql password                                                                     | `""`              |
-| `postgresql.postgresqlDatabase`              | Airflow Postgresql database                                                                     | `bitnami_airflow` |
-| `postgresql.existingSecret`                  | Name of an existing secret containing the PostgreSQL password ('postgresql-password' key)       | `""`              |
-| `externalDatabase.host`                      | Database host                                                                                   | `localhost`       |
-| `externalDatabase.user`                      | non-root Username for Airflow Database                                                          | `bn_airflow`      |
-| `externalDatabase.password`                  | Database password                                                                               | `""`              |
-| `externalDatabase.existingSecret`            | Name of an existing secret resource containing the DB password                                  | `""`              |
-| `externalDatabase.existingSecretPasswordKey` | Name of an existing secret key containing the DB password                                       | `""`              |
-| `externalDatabase.database`                  | Database name                                                                                   | `bitnami_airflow` |
-| `externalDatabase.port`                      | Database port number                                                                            | `5432`            |
-| `redis.enabled`                              | Switch to enable or disable the Redis(TM) helm                                                  | `true`            |
-| `redis.auth.enabled`                         | Switch to enable or disable authentication                                                      | `true`            |
-| `redis.auth.password`                        | Redis(TM) password                                                                              | `""`              |
-| `redis.auth.existingSecret`                  | Name of existing secret object containing the password                                          | `""`              |
-| `redis.architecture`                         | Cluster settings                                                                                | `standalone`      |
-| `externalRedis.host`                         | Redis(TM) host                                                                                  | `localhost`       |
-| `externalRedis.port`                         | Redis(TM) port number                                                                           | `6379`            |
-| `externalRedis.password`                     | Redis(TM) password                                                                              | `""`              |
-| `externalRedis.existingSecret`               | Name of an existing secret resource containing the Redis(TM) password in a 'redis-password' key | `""`              |
-| `externalRedis.username`                     | Redis(TM) username                                                                              | `""`              |
+| Name                                         | Description                                                                                        | Value             |
+| -------------------------------------------- | -------------------------------------------------------------------------------------------------- | ----------------- |
+| `postgresql.enabled`                         | Switch to enable or disable the PostgreSQL helm chart                                              | `true`            |
+| `postgresql.postgresqlUsername`              | Airflow Postgresql username                                                                        | `bn_airflow`      |
+| `postgresql.postgresqlPassword`              | Airflow Postgresql password                                                                        | `""`              |
+| `postgresql.postgresqlDatabase`              | Airflow Postgresql database                                                                        | `bitnami_airflow` |
+| `postgresql.existingSecret`                  | Name of an existing secret containing the PostgreSQL password ('postgresql-password' key)          | `""`              |
+| `externalDatabase.host`                      | Database host                                                                                      | `localhost`       |
+| `externalDatabase.user`                      | non-root Username for Airflow Database                                                             | `bn_airflow`      |
+| `externalDatabase.password`                  | Database password                                                                                  | `""`              |
+| `externalDatabase.existingSecret`            | Name of an existing secret resource containing the DB password                                     | `""`              |
+| `externalDatabase.existingSecretPasswordKey` | Name of an existing secret key containing the DB password                                          | `""`              |
+| `externalDatabase.database`                  | Database name                                                                                      | `bitnami_airflow` |
+| `externalDatabase.port`                      | Database port number                                                                               | `5432`            |
+| `redis.enabled`                              | Switch to enable or disable the Redis&trade; helm                                                  | `true`            |
+| `redis.auth.enabled`                         | Switch to enable or disable authentication                                                         | `true`            |
+| `redis.auth.password`                        | Redis&trade; password                                                                              | `""`              |
+| `redis.auth.existingSecret`                  | Name of existing secret object containing the password                                             | `""`              |
+| `redis.architecture`                         | Cluster settings                                                                                   | `standalone`      |
+| `externalRedis.host`                         | Redis&trade; host                                                                                  | `localhost`       |
+| `externalRedis.port`                         | Redis&trade; port number                                                                           | `6379`            |
+| `externalRedis.password`                     | Redis&trade; password                                                                              | `""`              |
+| `externalRedis.existingSecret`               | Name of an existing secret resource containing the Redis&trade; password in a 'redis-password' key | `""`              |
+| `externalRedis.username`                     | Redis&trade; username                                                                              | `""`              |
 
 
 ### Airflow metrics parameters

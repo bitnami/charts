@@ -964,11 +964,11 @@ externalDatabase:
   database: bitnami_airflow
   port: 5432
 
-## Redis(TM) chart configuration
+## Redis&trade; chart configuration
 ## ref: https://github.com/bitnami/charts/blob/master/bitnami/redis/values.yaml
-## @param redis.enabled Switch to enable or disable the Redis(TM) helm
+## @param redis.enabled Switch to enable or disable the Redis&trade; helm
 ## @param redis.auth.enabled Switch to enable or disable authentication
-## @param redis.auth.password Redis(TM) password
+## @param redis.auth.password Redis&trade; password
 ## @param redis.auth.existingSecret Name of existing secret object containing the password
 ## @param redis.architecture Cluster settings
 ##
@@ -976,7 +976,7 @@ redis:
   enabled: true
   auth:
     enabled: true
-    ## Redis(TM) password (both master and slave). Defaults to a random 10-character alphanumeric string if not set and auth.enabled is true.
+    ## Redis&trade; password (both master and slave). Defaults to a random 10-character alphanumeric string if not set and auth.enabled is true.
     ## It should always be set using the password value or in the existingSecret to avoid issues
     ## with Airflow.
     ## The password value is ignored if existingSecret is set
@@ -984,20 +984,20 @@ redis:
     existingSecret: ""
   architecture: standalone
 
-## External Redis(TM) configuration
+## External Redis&trade; configuration
 ## All of these values are only used when redis.enabled is set to false
-## @param externalRedis.host Redis(TM) host
-## @param externalRedis.port Redis(TM) port number
-## @param externalRedis.password Redis(TM) password
-## @param externalRedis.existingSecret Name of an existing secret resource containing the Redis(TM) password in a 'redis-password' key
-## @param externalRedis.username Redis(TM) username
+## @param externalRedis.host Redis&trade; host
+## @param externalRedis.port Redis&trade; port number
+## @param externalRedis.password Redis&trade; password
+## @param externalRedis.existingSecret Name of an existing secret resource containing the Redis&trade; password in a 'redis-password' key
+## @param externalRedis.username Redis&trade; username
 ##
 externalRedis:
   host: localhost
   port: 6379
   password: ""
   existingSecret: ""
-  ## Most Redis(TM) implementnations do not require a username to authenticate
+  ## Most Redis&trade; implementnations do not require a username to authenticate
   ## and it should be enough with the password
   ##
   username: ""

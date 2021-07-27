@@ -121,7 +121,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `configuration.google.adminEmail`                      | Google admin email                                  | `""`                                                          |
 | `configuration.google.serviceAccountJson`              | Google Service account JSON                         | `""`                                                          |
 | `configuration.google.existingSecret`                  | Existing secret containing Google Service Account   | `""`                                                          |
-| `configuration.content`                                | Default configuration                               | `email_domains = [ "*" ] upstreams = [ "file:///dev/null" ]`  |
+| `configuration.content`                                | Default configuration                               | `email_domains = [ "*" ]
+upstreams = [ "file:///dev/null" ]
+` |
 | `configuration.existingConfigmap`                      | Configmap with the OAuth2 Proxy configuration       | `""`                                                          |
 | `configuration.authenticatedEmailsFile.enabled`        | Enable authenticated emails file                    | `false`                                                       |
 | `configuration.authenticatedEmailsFile.content`        | Restricted access list (one email per line)         | `""`                                                          |
@@ -129,6 +131,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `configuration.htpasswdFile.enabled`                   | Enable htpasswd file                                | `false`                                                       |
 | `configuration.htpasswdFile.existingSecret`            | Existing secret for htpasswd file                   | `""`                                                          |
 | `configuration.htpasswdFile.content`                   | htpasswd file entries (one row per user)            | `""`                                                          |
+
 
 ### OAuth2 Proxy deployment parameters
 
@@ -181,38 +184,38 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for OAuth2 Proxy nodes                   | `""`            |
 | `extraVolumes`                       | Optionally specify extra list of additional volumes for the OAuth2 Proxy pod(s)            | `[]`            |
 | `extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for the OAuth2 Proxy container(s) | `[]`            |
-| `sidecars`                           | Add additional sidecar containers to the OAuth2 Proxy pod(s)                               | `{}`            |
-| `initContainers`                     | Add additional init containers to the OAuth2 Proxy pod(s)                                  | `{}`            |
+| `sidecars`                           | Add additional sidecar containers to the OAuth2 Proxy pod(s)                               | `[]`            |
+| `initContainers`                     | Add additional init containers to the OAuth2 Proxy pod(s)                                  | `[]`            |
 | `serviceAccount.create`              | Specifies whether a ServiceAccount should be created                                       | `true`          |
 | `serviceAccount.name`                | The name of the ServiceAccount to use                                                      | `""`            |
 
 
-### External Redis(TM) parameters
+### External Redis&trade; parameters
 
-| Name                           | Description                                               | Value  |
-| ------------------------------ | --------------------------------------------------------- | ------ |
-| `externalRedis.host`           | External Redis(TM) server host                            | `""`   |
-| `externalRedis.password`       | External Redis(TM) user password                          | `""`   |
-| `externalRedis.port`           | External Redis(TM) server port                            | `6379` |
-| `externalRedis.existingSecret` | The name of an existing secret with Redis(TM) credentials | `""`   |
+| Name                           | Description                                                  | Value  |
+| ------------------------------ | ------------------------------------------------------------ | ------ |
+| `externalRedis.host`           | External Redis&trade; server host                            | `""`   |
+| `externalRedis.password`       | External Redis&trade; user password                          | `""`   |
+| `externalRedis.port`           | External Redis&trade; server port                            | `6379` |
+| `externalRedis.existingSecret` | The name of an existing secret with Redis&trade; credentials | `""`   |
 
 
-### Redis(TM) sub-chart parameters
+### Redis&trade; sub-chart parameters
 
-| Name                                   | Description                                               | Value        |
-| -------------------------------------- | --------------------------------------------------------- | ------------ |
-| `redis.enabled`                        | Deploy Redis(TM) sub-chart                                | `true`       |
-| `redis.architecture`                   | Redis(TM) architecture                                    | `standalone` |
-| `redis.master.service.port`            | Redis(TM) (without Sentinel) service port                 | `6379`       |
-| `redis.replica.replicaCount`           | Number of Redis(TM) replicas                              | `3`          |
-| `redis.auth.enabled`                   | Enable Redis(TM) authentication                           | `true`       |
-| `redis.auth.existingSecret`            | Secret with Redis(TM) credentials                         | `""`         |
-| `redis.auth.existingSecretPasswordKey` | Key inside the existing secret with Redis(TM) credentials | `""`         |
-| `redis.auth.sentinel`                  | Enable authentication in the Sentinel nodes               | `true`       |
-| `redis.sentinel.enabled`               | Enable Redis(TM) sentinel in the deployment               | `false`      |
-| `redis.sentinel.masterSet`             | Name of the Redis(TM) Sentinel master set                 | `mymaster`   |
-| `redis.sentinel.service.port`          | Redis(TM) (with Sentinel) service port                    | `6379`       |
-| `redis.sentinel.service.sentinelPort`  | Redis(TM) (with Sentinel) sentinel service port           | `26379`      |
+| Name                                   | Description                                                  | Value        |
+| -------------------------------------- | ------------------------------------------------------------ | ------------ |
+| `redis.enabled`                        | Deploy Redis&trade; sub-chart                                | `true`       |
+| `redis.architecture`                   | Redis&trade; architecture                                    | `standalone` |
+| `redis.master.service.port`            | Redis&trade; (without Sentinel) service port                 | `6379`       |
+| `redis.replica.replicaCount`           | Number of Redis&trade; replicas                              | `3`          |
+| `redis.auth.enabled`                   | Enable Redis&trade; authentication                           | `true`       |
+| `redis.auth.existingSecret`            | Secret with Redis&trade; credentials                         | `""`         |
+| `redis.auth.existingSecretPasswordKey` | Key inside the existing secret with Redis&trade; credentials | `""`         |
+| `redis.auth.sentinel`                  | Enable authentication in the Sentinel nodes                  | `true`       |
+| `redis.sentinel.enabled`               | Enable Redis&trade; sentinel in the deployment               | `false`      |
+| `redis.sentinel.masterSet`             | Name of the Redis&trade; Sentinel master set                 | `mymaster`   |
+| `redis.sentinel.service.port`          | Redis&trade; (with Sentinel) service port                    | `6379`       |
+| `redis.sentinel.service.sentinelPort`  | Redis&trade; (with Sentinel) sentinel service port           | `26379`      |
 
 
 See https://github.com/bitnami-labs/readmenator to create the table
