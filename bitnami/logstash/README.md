@@ -55,13 +55,16 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name               | Description                                                                              | Value           |
-| ------------------ | ---------------------------------------------------------------------------------------- | --------------- |
-| `kubeVersion`      | Force target Kubernetes version (using Helm capabilities if not set)                     | `""`            |
-| `nameOverride`     | String to partially override logstash.fullname template (will maintain the release name) | `""`            |
-| `fullnameOverride` | String to fully override logstash.fullname template                                      | `""`            |
-| `clusterDomain`    | Default Kubernetes cluster domain                                                        | `cluster.local` |
-| `extraDeploy`      | Array of extra objects to deploy with the release (evaluated as a template).             | `[]`            |
+| Name                     | Description                                                                              | Value           |
+| ------------------------ | ---------------------------------------------------------------------------------------- | --------------- |
+| `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                     | `""`           |
+| `nameOverride`           | String to partially override logstash.fullname template (will maintain the release name) | `""`           |
+| `fullnameOverride`       | String to fully override logstash.fullname template                                      | `""`           |
+| `clusterDomain`          | Default Kubernetes cluster domain                                                        | `cluster.local` |
+| `extraDeploy`            | Array of extra objects to deploy with the release (evaluated as a template).             | `[]`           |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)  | `false`         |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                     | `[]`            |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                        | `[]`            |
 
 
 ### Logstash parameters

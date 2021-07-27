@@ -73,11 +73,11 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `commonAnnotations`      | Common annotations to add to all resources (sub-charts are not considered). Evaluated as a template                   | `{}`            |
 | `commonLabels`           | Common labels to add to all resources (sub-charts are not considered). Evaluated as a template                        | `{}`            |
 | `extraDeploy`            | Array of extra objects to deploy with the release (evaluated as a template)                                           | `[]`            |
+| `serviceAccount.enabled` | Enable service account (Note: Service Account will only be automatically created if `serviceAccount.name` is not set) | `false`         |
+| `serviceAccount.name`    | Name of an already existing service account. Setting this value disables the automatic service account creation       | `""`            |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                               | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                                                  | `[]`            |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                                                     | `[]`            |
-| `serviceAccount.enabled` | Enable service account (Note: Service Account will only be automatically created if `serviceAccount.name` is not set) | `false`         |
-| `serviceAccount.name`    | Name of an already existing service account. Setting this value disables the automatic service account creation       | `""`            |
 
 
 ### PostgreSQL with Repmgr parameters
