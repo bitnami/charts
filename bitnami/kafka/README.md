@@ -397,7 +397,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### Datadog Autodiscovery Integration
 
-The code below will help expose an additional port (5557 in this case) within your pods.  Metrics were unable to be collected with the default, exposed port.  
+The code below will help expose an additional port (5557 in this case) within your pods. Metrics were unable to be collected with the default, exposed port.
 
 With the additional `podAnnotations`, Datadog will now be able to properly discover the pods and begin gathering metrics.
 
@@ -430,8 +430,8 @@ podAnnotations:
   ad.datadoghq.com/jmx-exporter.check_names: '["kafka"]'
   ad.datadoghq.com/jmx-exporter.init_configs: '[{"is_jmx": true, "collect_default_metrics": true}]'
   ad.datadoghq.com/jmx-exporter.instances: '[{"host": "%%host%%","port":"5557","namespace":"kafka"}]'
-
 ```
+
 ### Setting custom parameters
 
 Any environment variable beginning with `KAFKA_CFG_` will be mapped to its corresponding Kafka key. For example, use `KAFKA_CFG_BACKGROUND_THREADS` in order to set `background.threads`. In order to pass custom environment variables use the `extraEnvVars` property.
