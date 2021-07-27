@@ -16,7 +16,7 @@
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" $ }}
 kind: StatefulSet
 metadata:
-  name: {{ include "common.names.fullname" $ }}-storegateway-{{ $index }}
+  name: {{ printf "%s-storegateway-%s" (include "common.names.fullname" $) $index | trunc 63 | trimSuffix "-" }}
   labels: {{- include "common.labels.standard" $ | nindent 4 }}
     app.kubernetes.io/component: storegateway
     {{- if $.Values.commonLabels }}
