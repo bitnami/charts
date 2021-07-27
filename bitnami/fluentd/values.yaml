@@ -8,25 +8,25 @@
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
 
 ## @section Common parameters
 
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
-kubeVersion:
+kubeVersion: ""
 ## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname template
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param clusterDomain Cluster Domain
 ##
 clusterDomain: cluster.local
@@ -112,6 +112,7 @@ forwarder:
   ## @param forwarder.containerSecurityContext.enabled Enable security context for the forwarder container
   ## @param forwarder.containerSecurityContext.privileged Run as privileged
   ## @param forwarder.containerSecurityContext.allowPrivilegeEscalation Allow Privilege Escalation
+  ## @param forwarder.containerSecurityContext.readOnlyRootFilesystem Require the use of a read only root file system
   ## @param forwarder.containerSecurityContext.capabilities.drop [array] Drop capabilities for the securityContext
   ##
   containerSecurityContext:
@@ -120,7 +121,7 @@ forwarder:
     allowPrivilegeEscalation: false
     ## Requires mounting an `extraVolume` of type `emptyDir` into /tmp
     ##
-    # readOnlyRootFilesystem: true
+    readOnlyRootFilesystem: ""
     capabilities:
       drop:
         - ALL
@@ -134,7 +135,7 @@ forwarder:
   ## @param forwarder.configMap Name of the config map that contains the Fluentd configuration files
   ## If not specified, one will be created by default
   ##
-  configMap:
+  configMap: ""
   ## @param forwarder.configMapFiles [object] Files to be added to be config map. Ignored if `forwarder.configMap` is set
   ##
   configMapFiles:
@@ -297,7 +298,7 @@ forwarder:
     ## @param forwarder.service.loadBalancerIP loadBalancerIP if service type is `LoadBalancer` (optional, cloud specific)
     ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
     ##
-    loadBalancerIP:
+    loadBalancerIP: ""
     ## @param forwarder.service.loadBalancerSourceRanges Addresses that are allowed when service is LoadBalancer
     ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ##
@@ -310,7 +311,7 @@ forwarder:
     ## e.g:
     ## clusterIP: None
     ##
-    clusterIP:
+    clusterIP: ""
     ## @param forwarder.service.annotations Provide any additional annotations which may be required
     ##
     annotations: {}
@@ -447,7 +448,7 @@ forwarder:
     create: true
     ## @param forwarder.serviceAccount.name The name of the ServiceAccount to create
     ## If not set and create is true, a name is generated using the common.names.fullname template
-    name:
+    name: ""
     ## @param forwarder.serviceAccount.annotations Additional Service Account annotations (evaluated as a template)
     ##
     annotations: {}
@@ -501,12 +502,12 @@ forwarder:
   ##      hostPath:
   ##        path: /run/log/journal/
   ##
-  extraVolumes:
+  extraVolumes: []
   ## @param forwarder.extraVolumeMounts Mount extra volume(s)
   ##   - name: systemd
   ##     mountPath: /run/log/journal/
   ##
-  extraVolumeMounts:
+  extraVolumeMounts: []
 ## Aggregator parameters
 ##
 aggregator:
@@ -537,6 +538,7 @@ aggregator:
   ## @param aggregator.containerSecurityContext.enabled Enable security context for the aggregator container
   ## @param aggregator.containerSecurityContext.privileged Run as privileged
   ## @param aggregator.containerSecurityContext.allowPrivilegeEscalation Allow Privilege Escalation
+  ## @param aggregator.containerSecurityContext.readOnlyRootFilesystem Require the use of a read only root file system
   ## @param aggregator.containerSecurityContext.capabilities.drop [array] Drop capabilities for the securityContext
   ##
   containerSecurityContext:
@@ -545,7 +547,7 @@ aggregator:
     allowPrivilegeEscalation: false
     ## Requires mounting an `extraVolume` of type `emptyDir` into /tmp
     ##
-    # readOnlyRootFilesystem: true
+    readOnlyRootFilesystem: ""
     capabilities:
       drop:
         - ALL
@@ -558,7 +560,7 @@ aggregator:
   configFile: fluentd.conf
   ## @param aggregator.configMap Name of the config map that contains the Fluentd configuration files
   ##
-  configMap:
+  configMap: ""
   ## @param aggregator.configMapFiles [object] Files to be added to be config map. Ignored if `aggregator.configMap` is set
   ##
   configMapFiles:
@@ -674,7 +676,7 @@ aggregator:
     ## @param aggregator.service.loadBalancerIP loadBalancerIP if service type is `LoadBalancer` (optional, cloud specific)
     ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
     ##
-    loadBalancerIP:
+    loadBalancerIP: ""
     ## @param aggregator.service.loadBalancerSourceRanges Addresses that are allowed when service is LoadBalancer
     ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ##
@@ -686,7 +688,7 @@ aggregator:
     ## e.g:
     ## clusterIP: None
     ##
-    clusterIP:
+    clusterIP: ""
     ## @param aggregator.service.annotations Provide any additional annotations which may be required
     ##
     annotations: {}
@@ -706,7 +708,7 @@ aggregator:
     pathType: ImplementationSpecific
     ## @param aggregator.ingress.apiVersion Override API Version (automatically detected if not set)
     ##
-    apiVersion:
+    apiVersion: ""
     ## @param aggregator.ingress.hostname Default host for the ingress resource
     ##
     hostname: fluentd.local
@@ -892,7 +894,7 @@ aggregator:
     create: false
     ## @param aggregator.serviceAccount.name The name of the ServiceAccount to create
     ## If not set and create is true, a name is generated using the common.names.fullname template
-    name:
+    name: ""
     ## @param aggregator.serviceAccount.annotations Additional Service Account annotations (evaluated as a template)
     ##
     annotations: {}
@@ -934,7 +936,7 @@ aggregator:
     ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
     ##   GKE, AWS & OpenStack)
     ##
-    storageClass:
+    storageClass: ""
     accessMode: ReadWriteOnce
     size: 10Gi
   ## @param aggregator.initContainers Add init containers to aggregator pods
@@ -963,12 +965,12 @@ aggregator:
   ##   - name: tmpDir
   ##       emptyDir: {}
   ##
-  extraVolumes:
+  extraVolumes: []
   ## @param aggregator.extraVolumeMounts Mount extra volume(s)
   ##   - name: tmpDir
   ##     mountPath: /tmp
   ##
-  extraVolumeMounts:
+  extraVolumeMounts: []
 ## @param serviceAccount Pods Service Account. This top-level global entry is DEPRECATED. Please use "forwarder.serviceAccount" instead.
 ## Only the forwarder was affected by the historical usage here.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
@@ -997,7 +999,7 @@ metrics:
     ## @param metrics.service.loadBalancerIP Load Balancer IP if the Prometheus metrics server type is `LoadBalancer`
     ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
     ##
-    loadBalancerIP:
+    loadBalancerIP: ""
     ## @param metrics.service.annotations [object] Annotations for the Prometheus Exporter service service
     ##
     annotations:
@@ -1012,19 +1014,19 @@ metrics:
     enabled: false
     ## @param metrics.serviceMonitor.namespace Namespace in which Prometheus is running
     ##
-    namespace:
+    namespace: ""
     ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped.
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ## e.g:
     ## interval: 10s
     ##
-    interval:
+    interval: ""
     ## @param metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ## e.g:
     ## scrapeTimeout: 10s
     ##
-    scrapeTimeout:
+    scrapeTimeout: ""
     ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
     ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
     ## e.g:
@@ -1050,8 +1052,8 @@ tls:
   ## @param tls.forwarder.existingSecret Name of the existing secret containing the TLS certificates for the Fluentd forwarder
   ##
   forwarder:
-    existingSecret:
+    existingSecret: ""
   ## @param tls.aggregator.existingSecret Name of the existing secret containing the TLS certificates for the Fluentd aggregator
   ##
   aggregator:
-    existingSecret:
+    existingSecret: ""

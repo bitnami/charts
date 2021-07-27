@@ -7,7 +7,7 @@
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
@@ -18,10 +18,10 @@ global:
 
 ## @param nameOverride String to partially override common.names.fullname template with a string (will prepend the release name)
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname template with a string
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
@@ -99,7 +99,7 @@ operator:
   ##
   serviceAccount:
     create: true
-    name:
+    name: ""
   ## Pod securityContext
   ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param operator.podSecurityContext.enabled Enable pods security context
@@ -151,7 +151,7 @@ operator:
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ## Allowed values: soft, hard
   ##
-  podAffinityPreset: ''
+  podAffinityPreset: ""
   ## @param operator.podAntiAffinityPreset Pod anti-affinity preset. Allowed values: `soft` or `hard`
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
@@ -162,12 +162,12 @@ operator:
   nodeAffinityPreset:
     ## @param operator.nodeAffinityPreset.type Node affinity preset type. Allowed values: `soft` or `hard`
     ##
-    type: ''
+    type: ""
     ## @param operator.nodeAffinityPreset.key Set nodeAffinity preset key
     ## E.g.
     ## key: "kubernetes.io/e2e-az-name"
     ##
-    key: ''
+    key: ""
     ## @param operator.nodeAffinityPreset.values Set nodeAffinity preset values
     ## E.g.
     ## values:
@@ -434,7 +434,7 @@ grafana:
     ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
     ##   GKE, AWS & OpenStack)
     ##
-    storageClass:
+    storageClass: ""
     ## @param grafana.persistence.accessMode Define the accessMode for the persistent storage
     ##
     accessMode: ReadWriteOnce

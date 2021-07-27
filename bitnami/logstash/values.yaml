@@ -616,10 +616,10 @@ metrics:
       path: /metrics
       port: metrics
     initialDelaySeconds: 60
-    periodSeconds: ""
-    timeoutSeconds: ""
-    successThreshold: ""
-    failureThreshold: ""
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 6
   ## Logstash Prometheus Exporter containers' readiness probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param metrics.readinessProbe.httpGet.path Request path for readinessProbe
@@ -635,10 +635,10 @@ metrics:
       path: /metrics
       port: metrics
     initialDelaySeconds: 60
-    periodSeconds: ""
-    timeoutSeconds: ""
-    successThreshold: ""
-    failureThreshold: ""
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 6
   service:
     ## @param metrics.service.type Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)
     ##

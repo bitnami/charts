@@ -50,9 +50,9 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `nil` |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
 
 ### Common parameters
@@ -60,8 +60,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                     | Description                                                                                  | Value           |
 | ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
 | `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                         | `""`            |
-| `nameOverride`           | String to partially override common.names.fullname template (will maintain the release name) | `nil`           |
-| `fullnameOverride`       | String to fully override common.names.fullname template                                      | `nil`           |
+| `nameOverride`           | String to partially override common.names.fullname template (will maintain the release name) | `""`            |
+| `fullnameOverride`       | String to fully override common.names.fullname template                                      | `""`            |
 | `commonLabels`           | Labels to add to all deployed objects                                                        | `{}`            |
 | `commonAnnotations`      | Annotations to add to all deployed objects                                                   | `{}`            |
 | `clusterDomain`          | Default Kubernetes cluster domain                                                            | `cluster.local` |
@@ -99,13 +99,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `auth.peer.certFilename`             | Name of the file containing the peer certificate                                                | `cert.pem`            |
 | `auth.peer.certKeyFilename`          | Name of the file containing the peer certificate private key                                    | `key.pem`             |
 | `auth.peer.caFilename`               | Name of the file containing the peer CA certificate                                             | `""`                  |
-| `autoCompactionMode`                 | Auto compaction mode, by default periodic. Valid values: ‘periodic’, ‘revision’.                | `nil`                 |
-| `autoCompactionRetention`            | Auto compaction retention for mvcc key value store in hour, by default 0, means disabled        | `nil`                 |
+| `autoCompactionMode`                 | Auto compaction mode, by default periodic. Valid values: ‘periodic’, ‘revision’.                | `""`                  |
+| `autoCompactionRetention`            | Auto compaction retention for mvcc key value store in hour, by default 0, means disabled        | `""`                  |
 | `initialClusterState`                | Initial cluster state. Allowed values: 'new' or 'existing'                                      | `""`                  |
-| `maxProcs`                           | Limits the number of operating system threads that can execute user-level                       | `nil`                 |
+| `maxProcs`                           | Limits the number of operating system threads that can execute user-level                       | `""`                  |
 | `removeMemberOnContainerTermination` | Use a PreStop hook to remove the etcd members from the etcd cluster on container termination    | `true`                |
-| `configuration`                      | etcd configuration. Specify content for etcd.conf.yml                                           | `nil`                 |
-| `existingConfigmap`                  | Existing ConfigMap with etcd configuration                                                      | `nil`                 |
+| `configuration`                      | etcd configuration. Specify content for etcd.conf.yml                                           | `""`                  |
+| `existingConfigmap`                  | Existing ConfigMap with etcd configuration                                                      | `""`                  |
 | `extraEnvVars`                       | Extra environment variables to be set on etcd container                                         | `[]`                  |
 | `extraEnvVarsCM`                     | Name of existing ConfigMap containing extra env vars                                            | `""`                  |
 | `extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars                                               | `""`                  |
@@ -154,8 +154,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `customStartupProbe`                    | Override default startup probe                                                            | `{}`            |
 | `extraVolumes`                          | Optionally specify extra list of additional volumes for etcd pods                         | `[]`            |
 | `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for etcd container(s)            | `[]`            |
-| `initContainers`                        | Add additional init containers to the etcd pods                                           | `{}`            |
-| `sidecars`                              | Add additional sidecar containers to the etcd pods                                        | `{}`            |
+| `initContainers`                        | Add additional init containers to the etcd pods                                           | `[]`            |
+| `sidecars`                              | Add additional sidecar containers to the etcd pods                                        | `[]`            |
 | `podAnnotations`                        | Annotations for etcd pods                                                                 | `{}`            |
 | `podLabels`                             | Extra labels for etcd pods                                                                | `{}`            |
 | `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
@@ -190,7 +190,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                       | Description                                                     | Value  |
 | -------------------------- | --------------------------------------------------------------- | ------ |
 | `persistence.enabled`      | If true, use a Persistent Volume Claim. If false, use emptyDir. | `true` |
-| `persistence.storageClass` | Persistent Volume Storage Class                                 | `nil`  |
+| `persistence.storageClass` | Persistent Volume Storage Class                                 | `""`   |
 | `persistence.annotations`  | Annotations for the PVC                                         | `{}`   |
 | `persistence.accessModes`  | Persistent Volume Access Modes                                  | `[]`   |
 | `persistence.size`         | PVC Storage Request for etcd data volume                        | `8Gi`  |
@@ -240,7 +240,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `disasterRecovery.cronjob.podAnnotations`       | Pod annotations for cronjob pods                                        | `{}`           |
 | `disasterRecovery.cronjob.resources.limits`     | Cronjob container resource limits                                       | `{}`           |
 | `disasterRecovery.cronjob.resources.requests`   | Cronjob container resource requests                                     | `{}`           |
-| `disasterRecovery.pvc.existingClaim`            | A manually managed Persistent Volume and Claim                          | `nil`          |
+| `disasterRecovery.pvc.existingClaim`            | A manually managed Persistent Volume and Claim                          | `""`           |
 | `disasterRecovery.pvc.size`                     | PVC Storage Request                                                     | `2Gi`          |
 | `disasterRecovery.pvc.storageClassName`         | Storage Class for snapshots volume                                      | `nfs`          |
 
@@ -262,7 +262,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------- | -------------------------------------------------------------- | ------- |
 | `pdb.create`         | Enable/disable a Pod Disruption Budget creation                | `false` |
 | `pdb.minAvailable`   | Minimum number/percentage of pods that should remain scheduled | `1`     |
-| `pdb.maxUnavailable` | Maximum number/percentage of pods that may be made unavailable | `nil`   |
+| `pdb.maxUnavailable` | Maximum number/percentage of pods that may be made unavailable | `""`    |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,

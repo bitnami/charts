@@ -8,13 +8,13 @@
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
 
 ## @section Common parameters
 
@@ -23,10 +23,10 @@ global:
 kubeVersion: ""
 ## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname template
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param commonLabels Labels to add to all deployed objects
 ##
 commonLabels: {}
@@ -161,10 +161,10 @@ auth:
 ## - 'periodic' for duration based retention, defaulting to hours if no time unit is provided (e.g. ‘5m’).
 ## - 'revision' for revision number based retention.
 ##
-autoCompactionMode:
+autoCompactionMode: ""
 ## @param autoCompactionRetention Auto compaction retention for mvcc key value store in hour, by default 0, means disabled
 ##
-autoCompactionRetention:
+autoCompactionRetention: ""
 ## @param initialClusterState Initial cluster state. Allowed values: 'new' or 'existing'
 ## If this values is not set, the default values below are set:
 ## - 'new': when installing the chart ('helm install ...')
@@ -175,7 +175,7 @@ initialClusterState: ""
 ## Go code simultaneously by setting GOMAXPROCS environment variable
 ## ref: https://golang.org/pkg/runtime
 ##
-maxProcs:
+maxProcs: ""
 ## @param removeMemberOnContainerTermination Use a PreStop hook to remove the etcd members from the etcd cluster on container termination
 ## they the containers are terminated
 ## NOTE: Ignored if lifecycleHooks is set or replicaCount=1
@@ -187,11 +187,11 @@ removeMemberOnContainerTermination: true
 ##    foo: bar
 ##    baz:
 ##
-configuration:
+configuration: ""
 ## @param existingConfigmap Existing ConfigMap with etcd configuration
 ## NOTE: When it's set the configuration parameter is ignored
 ##
-existingConfigmap:
+existingConfigmap: ""
 ## @param extraEnvVars Extra environment variables to be set on etcd container
 ## e.g:
 ## extraEnvVars:
@@ -348,7 +348,7 @@ extraVolumeMounts: []
 ##       - name: portname
 ##         containerPort: 1234
 ##
-initContainers: {}
+initContainers: []
 ## @param sidecars Add additional sidecar containers to the etcd pods
 ## e.g:
 ## sidecars:
@@ -359,7 +359,7 @@ initContainers: {}
 ##       - name: portname
 ##         containerPort: 1234
 ##
-sidecars: {}
+sidecars: []
 ## @param podAnnotations Annotations for etcd pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
@@ -472,7 +472,7 @@ persistence:
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##   GKE, AWS & OpenStack)
   ##
-  storageClass:
+  storageClass: ""
   ##
   ## @param persistence.annotations Annotations for the PVC
   ##
@@ -638,7 +638,7 @@ disasterRecovery:
     ## If defined, PVC must be created manually before volume will be bound
     ## The value is evaluated as a template, so, for example, the name can depend on .Release or .Chart
     ##
-    existingClaim:
+    existingClaim: ""
     ## @param disasterRecovery.pvc.size PVC Storage Request
     ##
     size: 2Gi
@@ -680,4 +680,4 @@ pdb:
   minAvailable: 1
   ## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
-  maxUnavailable:
+  maxUnavailable: ""

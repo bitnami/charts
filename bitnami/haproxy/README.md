@@ -52,18 +52,18 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `nil` |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
 
 ### Common parameters
 
 | Name                     | Description                                                                             | Value           |
 | ------------------------ | --------------------------------------------------------------------------------------- | --------------- |
-| `kubeVersion`            | Override Kubernetes version                                                             | `nil`           |
-| `nameOverride`           | String to partially override common.names.fullname                                      | `nil`           |
-| `fullnameOverride`       | String to fully override common.names.fullname                                          | `nil`           |
+| `kubeVersion`            | Override Kubernetes version                                                             | `""`            |
+| `nameOverride`           | String to partially override common.names.fullname                                      | `""`            |
+| `fullnameOverride`       | String to fully override common.names.fullname                                          | `""`            |
 | `commonLabels`           | Labels to add to all deployed objects                                                   | `{}`            |
 | `commonAnnotations`      | Annotations to add to all deployed objects                                              | `{}`            |
 | `clusterDomain`          | Kubernetes cluster domain name                                                          | `cluster.local` |
@@ -79,8 +79,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------- | ------------------------------------------------- | -------------- |
 | `service.type`                     | haproxy service type                              | `LoadBalancer` |
 | `service.ports`                    | List of haproxy service ports                     | `[]`           |
-| `service.clusterIP`                | haproxy service Cluster IP                        | `nil`          |
-| `service.loadBalancerIP`           | haproxy service Load Balancer IP                  | `nil`          |
+| `service.clusterIP`                | haproxy service Cluster IP                        | `""`           |
+| `service.loadBalancerIP`           | haproxy service Load Balancer IP                  | `""`           |
 | `service.loadBalancerSourceRanges` | haproxy service Load Balancer sources             | `[]`           |
 | `service.externalTrafficPolicy`    | haproxy service external traffic policy           | `Cluster`      |
 | `service.annotations`              | Additional custom annotations for haproxy service | `{}`           |
@@ -118,7 +118,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `containerSecurityContext.runAsUser` | Set haproxy containers' Security Context runAsUser                                        | `1001`                |
 | `pdb.create`                         | Enable a Pod Disruption Budget creation                                                   | `false`               |
 | `pdb.minAvailable`                   | Minimum number/percentage of pods that should remain scheduled                            | `1`                   |
-| `pdb.maxUnavailable`                 | Maximum number/percentage of pods that may be made unavailable                            | `nil`                 |
+| `pdb.maxUnavailable`                 | Maximum number/percentage of pods that may be made unavailable                            | `""`                  |
 | `autoscaling.enabled`                | Enable Horizontal POD autoscaling for HAProxy                                             | `false`               |
 | `autoscaling.minReplicas`            | Minimum number of HAProxy replicas                                                        | `1`                   |
 | `autoscaling.maxReplicas`            | Maximum number of HAProxy replicas                                                        | `11`                  |
@@ -144,12 +144,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `priorityClassName`                  | haproxy pods' priorityClassName                                                           | `""`                  |
 | `lifecycleHooks`                     | for the haproxy container(s) to automate configuration before or after startup            | `{}`                  |
 | `extraEnvVars`                       | Array with extra environment variables to add to haproxy nodes                            | `[]`                  |
-| `extraEnvVarsCM`                     | Name of existing ConfigMap containing extra env vars for haproxy nodes                    | `nil`                 |
-| `extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for haproxy nodes                       | `nil`                 |
+| `extraEnvVarsCM`                     | Name of existing ConfigMap containing extra env vars for haproxy nodes                    | `""`                  |
+| `extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for haproxy nodes                       | `""`                  |
 | `extraVolumes`                       | Optionally specify extra list of additional volumes for the haproxy pod(s)                | `[]`                  |
 | `extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for the haproxy container(s)     | `[]`                  |
 | `sidecars`                           | Add additional sidecar containers to the haproxy pod(s)                                   | `[]`                  |
-| `initContainers`                     | Add additional init containers to the haproxy pod(s)                                      | `{}`                  |
+| `initContainers`                     | Add additional init containers to the haproxy pod(s)                                      | `[]`                  |
 
 
 ### Other Parameters
