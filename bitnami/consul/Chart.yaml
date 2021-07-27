@@ -3,14 +3,12 @@ annotations:
 apiVersion: v2
 appVersion: 1.10.1
 dependencies:
-- name: common
+  - name: common
   repository: https://charts.bitnami.com/bitnami
   tags:
-  - bitnami-common
+    - bitnami-common
   version: 1.x.x
-description: Highly available and distributed service discovery and key-value store
-  designed with support for the modern data center to make distributed systems and
-  configuration easy.
+description: Highly available and distributed service discovery and key-value store designed with support for the modern data center to make distributed systems and configuration easy.
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/consul
 icon: https://bitnami.com/assets/stacks/consul/img/consul-stack-220x234.png
@@ -19,10 +17,10 @@ keywords:
 - configuring
 - services
 maintainers:
-- email: containers@bitnami.com
+  - email: containers@bitnami.com
   name: Bitnami
 name: consul
 sources:
-- https://github.com/bitnami/bitnami-docker-consul
-- https://www.consul.io/
+  - https://github.com/bitnami/bitnami-docker-consul
+  - https://www.consul.io/
 version: 9.2.18
