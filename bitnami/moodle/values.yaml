@@ -37,7 +37,7 @@ commonLabels: {}
 ##
 extraDeploy: []
 
-## @section Moodle<sup>TM</sup> parameters
+## @section Moodle&trade; parameters
 
 ## Bitnami Moodle(TM) image version
 ## ref: https://hub.docker.com/r/bitnami/moodle/tags/
@@ -247,16 +247,16 @@ resources:
     cpu: 300m
 ## Configure Pods Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-## @param podSecurityContext.enabled Enable Moodle<sup>TM</sup> pods' Security Context
-## @param podSecurityContext.fsGroup Moodle<sup>TM</sup> pods' group ID
+## @param podSecurityContext.enabled Enable Moodle&trade; pods' Security Context
+## @param podSecurityContext.fsGroup Moodle&trade; pods' group ID
 ##
 podSecurityContext:
   enabled: true
   fsGroup: 1001
 ## Configure Container Security Context (only main container)
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-## @param containerSecurityContext.enabled Enable Moodle<sup>TM</sup> containers' Security Context
-## @param containerSecurityContext.runAsUser Moodle<sup>TM</sup> containers' Security Context
+## @param containerSecurityContext.enabled Enable Moodle&trade; containers' Security Context
+## @param containerSecurityContext.runAsUser Moodle&trade; containers' Security Context
 ##
 containerSecurityContext:
   enabled: true
@@ -482,7 +482,7 @@ mariadb:
       ##   GKE, AWS & OpenStack)
       ##
       storageClass:
-      ## @param mariadb.primary.persistence.accessModes PVC Access Modes for Moodle<sup>TM</sup> volume
+      ## @param mariadb.primary.persistence.accessModes PVC Access Modes for Moodle&trade; volume
       ##
       accessModes:
         - ReadWriteOnce

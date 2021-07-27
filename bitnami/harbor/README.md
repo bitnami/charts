@@ -4,7 +4,7 @@ This Helm chart has been developed based on [goharbor/harbor-helm](https://githu
 For example, the following changes have been introduced:
 
 - Possibility to pull all the required images from a private registry through the  Global Docker image parameters.
-- Redis<sup>TM</sup> and PostgreSQL are managed as chart dependencies.
+- Redis&trade; and PostgreSQL are managed as chart dependencies.
 - Liveness and Readiness probes for all deployments are exposed to the values.yaml.
 - Uses new Helm chart labels formatting.
 - Uses Bitnami container images:
@@ -877,7 +877,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `externalDatabase.notarySignerPassword` | External database password for notary signer                                                              | `nil`                          |
 
 
-### Redis<sup>TM</sup> Parameters
+### Redis&trade; Parameters
 
 | Name                                      | Description                                                                                               | Value        |
 | ----------------------------------------- | --------------------------------------------------------------------------------------------------------- | ------------ |
@@ -1031,7 +1031,7 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ### To 10.0.0
 
-This major updates the Redis<sup>TM</sup> subchart to it newest major, 14.0.0, which contains breaking changes. For more information on this subchart's major and the steps needed to migrate your data from your previous release, please refer to [Redis<sup>TM</sup> upgrade notes.](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1400).
+This major updates the Redis&trade; subchart to it newest major, 14.0.0, which contains breaking changes. For more information on this subchart's major and the steps needed to migrate your data from your previous release, please refer to [Redis&trade; upgrade notes.](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1400).
 
 ### To 9.7.0
 
@@ -1106,7 +1106,7 @@ postgresql 08:05:12.59 INFO  ==> Deploying PostgreSQL with persisted data...
 
 ### To 8.0.0
 
-Redis<sup>TM</sup> dependency version was bumped to the new major version `11.x.x`, which introduced breaking changes regarding sentinel. By default, this Chart does not use of this feature and hence no issues are expected between upgrades. You may refer to [Redis<sup>TM</sup> Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1100) for further information.
+Redis&trade; dependency version was bumped to the new major version `11.x.x`, which introduced breaking changes regarding sentinel. By default, this Chart does not use of this feature and hence no issues are expected between upgrades. You may refer to [Redis&trade; Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1100) for further information.
 
 ### To 7.0.0
 
@@ -1141,10 +1141,10 @@ No issues are expected between upgrades but please double check the updated para
 
 ### To 4.0.0
 
-PostgreSQL and Redis<sup>TM</sup> dependencies were updated to the use the latest major versions, `8.x.x` and `10.x.x`, respectively. These major versions do not include changes that should break backwards compatibilities, check the links below for more information:
+PostgreSQL and Redis&trade; dependencies were updated to the use the latest major versions, `8.x.x` and `10.x.x`, respectively. These major versions do not include changes that should break backwards compatibilities, check the links below for more information:
 
 - [PostgreSQL Upgrade notes](https://github.com/bitnami/charts/blob/master/bitnami/postgresql/README.md#upgrade)
-- [Redis<sup>TM</sup> Upgrade notes](https://github.com/bitnami/charts/blob/master/bitnami/redis/README.md#upgrading-an-existing-release-to-a-new-major-version)
+- [Redis&trade; Upgrade notes](https://github.com/bitnami/charts/blob/master/bitnami/redis/README.md#upgrading-an-existing-release-to-a-new-major-version)
 
 ### To 3.0.0
 
@@ -1158,7 +1158,7 @@ This major version signifies this change.
 
 In this version, two major changes were performed:
 
-- This **chart depends on the Redis<sup>TM</sup> 5 chart instead of Redis<sup>TM</sup> 4**. There is a breaking change that will affect releases with `metrics.enabled: true`, since the default tag for the exporter image is now `v1.x.x`. This introduces many changes including metrics names. You'll want to use [this dashboard](https://github.com/oliver006/redis_exporter/blob/master/contrib/grafana_prometheus_redis_dashboard.json) now. Please see the [redis_exporter github page](https://github.com/oliver006/redis_exporter#upgrading-from-0x-to-1x) for more details.
+- This **chart depends on the Redis&trade; 5 chart instead of Redis&trade; 4**. There is a breaking change that will affect releases with `metrics.enabled: true`, since the default tag for the exporter image is now `v1.x.x`. This introduces many changes including metrics names. You'll want to use [this dashboard](https://github.com/oliver006/redis_exporter/blob/master/contrib/grafana_prometheus_redis_dashboard.json) now. Please see the [redis_exporter github page](https://github.com/oliver006/redis_exporter#upgrading-from-0x-to-1x) for more details.
 - This **chart depends on the PostgreSQL 11 chart instead of PostgreSQL 10**. You can find the main difference and notable changes in the following links: [https://www.postgresql.org/about/news/1894/](https://www.postgresql.org/about/news/1894/) and [https://www.postgresql.org/about/featurematrix/](https://www.postgresql.org/about/featurematrix/).
 
 For major releases of PostgreSQL, the internal data storage format is subject to change, thus complicating upgrades, you can see some errors like the following one in the logs:
