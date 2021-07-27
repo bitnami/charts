@@ -47,7 +47,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 
 
@@ -55,8 +55,8 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                | Description                                                                                              | Value |
 | ------------------- | -------------------------------------------------------------------------------------------------------- | ----- |
-| `nameOverride`      | String to partially override kubernetes-event-exporter.fullname include (will maintain the release name) | `nil` |
-| `fullnameOverride`  | String to fully override kubernetes-event-exporter.fullname template                                     | `nil` |
+| `nameOverride`      | String to partially override kubernetes-event-exporter.fullname include (will maintain the release name) | `""`  |
+| `fullnameOverride`  | String to fully override kubernetes-event-exporter.fullname template                                     | `""`  |
 | `commonAnnotations` | Annotations to add to all deployed objects                                                               | `{}`  |
 | `commonLabels`      | Labels to add to all deployed objects                                                                    | `{}`  |
 | `extraDeploy`       | Array of extra objects to deploy with the release (evaluated as a template)                              | `[]`  |
@@ -68,7 +68,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------- | ----------------------------------------------------------------------------------------- | ----------------------------------- |
 | `image.registry`                                  | Container image registry                                                                  | `docker.io`                         |
 | `image.repository`                                | Container image name                                                                      | `bitnami/kubernetes-event-exporter` |
-| `image.tag`                                       | Container image tag                                                                       | `0.10.0-debian-10-r0`               |
+| `image.tag`                                       | Container image tag                                                                       | `0.10.0-debian-10-r25`              |
 | `image.pullPolicy`                                | Container image pull policy                                                               | `IfNotPresent`                      |
 | `image.pullSecrets`                               | Specify docker-registry secret names as an array                                          | `[]`                                |
 | `hostAliases`                                     | Add deployment host aliases                                                               | `[]`                                |

@@ -63,12 +63,19 @@ spec:
         - name: nats
           image: {{ template "nats.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else }}
           command:
             {{- if .Values.command }}
             {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
             {{- else }}
             - {{ .Values.natsFilename }}
             {{- end }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else }}
           args:
             {{- if .Values.args }}
             {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
@@ -83,6 +90,7 @@ spec:
             - --{{ $key }}{{ if $value }}={{ $value }}{{ end }}
             {{- end }}
             {{- end }}
+          {{- end }}
           {{- if .Values.extraEnvVars }}
           env: {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
           {{- end }}
@@ -104,6 +112,7 @@ spec:
               containerPort: {{ .Values.cluster.service.port }}
             - name: monitoring
               containerPort: {{ .Values.monitoring.service.port }}
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.livenessProbe "enabled") "context" $) | nindent 12 }}
           {{- else if .Values.customLivenessProbe }}
@@ -113,6 +122,7 @@ spec:
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.readinessProbe "enabled") "context" $) | nindent 12 }}
           {{- else if .Values.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
           {{- end }}
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
@@ -128,11 +138,17 @@ spec:
         - name: metrics
           image: {{ template "nats.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.flags "context" $) | nindent 12 }}
             - "http://localhost:{{ .Values.monitoring.service.port }}"
+          {{- end }}
           ports:
             - name: metrics
               containerPort: {{ .Values.metrics.containerPort }}
+          {{- if not .Values.diagnosticMode.enabled }}
           livenessProbe:
             httpGet:
               path: /metrics
@@ -145,6 +161,7 @@ spec:
               port: metrics
             initialDelaySeconds: 5
             timeoutSeconds: 1
+          {{- end }}
           {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
           {{- end }}

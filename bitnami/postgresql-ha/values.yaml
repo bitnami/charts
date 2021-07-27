@@ -63,17 +63,6 @@ commonLabels: {}
 ## @param extraDeploy Array of extra objects to deploy with the release (evaluated as a template)
 ##
 extraDeploy: []
-## Enable diagnostic mode in the deployment
-## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
-## @param diagnosticMode.command [array] Command to override all containers in the deployment
-## @param diagnosticMode.args [array] Args to override all containers in the deployment
-##
-diagnosticMode:
-  enabled: false
-  command:
-    - sleep
-  args:
-    - infinity
 ## Pod Service Account
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 serviceAccount:
@@ -83,6 +72,21 @@ serviceAccount:
   ## @param serviceAccount.name Name of an already existing service account. Setting this value disables the automatic service account creation
   ##
   name: ""
+
+## Diagnostic mode in the deployment
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command [array] Command to override all containers in the deployment
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args [array] Args to override all containers in the deployment
+  ##
+  args:
+    - infinity
 
 ## @section PostgreSQL with Repmgr parameters
 

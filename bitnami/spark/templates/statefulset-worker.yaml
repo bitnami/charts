@@ -138,6 +138,10 @@ spec:
         - name: spark-worker
           image: {{ include "spark.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- end }}
           ports:
             - name: http
               containerPort: {{ .Values.worker.webPort }}
@@ -167,8 +171,8 @@ spec:
           env:
             - name: SPARK_MODE
               value: "worker"
-            - name: BASH_DEBUG
-              value: {{ ternary "1" "0" .Values.image.debug | quote }}
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
             - name: SPARK_DAEMON_MEMORY
               value: {{ .Values.worker.daemonMemoryLimit | quote }}
             {{- if .Values.metrics.enabled }}
@@ -248,6 +252,7 @@ spec:
             {{- if .Values.worker.extraEnvVars }}
             {{- toYaml .Values.worker.extraEnvVars | nindent 12 }}
             {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.worker.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
@@ -269,6 +274,7 @@ spec:
             timeoutSeconds: {{ .Values.worker.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.worker.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.worker.readinessProbe.failureThreshold }}
+          {{- end }}
           {{- end }}
           {{- if .Values.worker.resources }}
           resources: {{- toYaml .Values.worker.resources | nindent 12 }}

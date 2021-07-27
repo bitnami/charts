@@ -1,6 +1,6 @@
-# Redis<sup>TM</sup> Chart packaged by Bitnami
+# Redis&trade; Chart packaged by Bitnami
 
-[Redis<sup>TM</sup>](http://redis.io/) is an advanced key-value cache and store. It is often referred to as a data structure server since keys can contain strings, hashes, lists, sets, sorted sets, bitmaps and hyperloglogs.
+[Redis&trade;](http://redis.io/) is an advanced key-value cache and store. It is often referred to as a data structure server since keys can contain strings, hashes, lists, sets, sorted sets, bitmaps and hyperloglogs.
 
 Disclaimer: REDIS® is a registered trademark of Redis Labs Ltd.Any rights therein are reserved to Redis Labs Ltd. Any use by Bitnami is for referential purposes only and does not indicate any sponsorship, endorsement, or affiliation between Redis Labs Ltd.
 
@@ -13,24 +13,24 @@ $ helm install my-release bitnami/redis
 
 ## Introduction
 
-This chart bootstraps a [Redis<sup>TM</sup>](https://github.com/bitnami/bitnami-docker-redis) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Redis&trade;](https://github.com/bitnami/bitnami-docker-redis) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
 
-### Choose between Redis<sup>TM</sup> Helm Chart and Redis<sup>TM</sup> Cluster Helm Chart
+### Choose between Redis&trade; Helm Chart and Redis&trade; Cluster Helm Chart
 
-You can choose any of the two Redis<sup>TM</sup> Helm charts for deploying a Redis<sup>TM</sup> cluster.
+You can choose any of the two Redis&trade; Helm charts for deploying a Redis&trade; cluster.
 
-1. [Redis<sup>TM</sup> Helm Chart](https://github.com/bitnami/charts/tree/master/bitnami/redis) will deploy a master-slave cluster, with the [option](https://github.com/bitnami/charts/tree/master/bitnami/redis#redistm-sentinel-configuration-parameters) of enabling using Redis<sup>TM</sup> Sentinel.
-2. [Redis<sup>TM</sup> Cluster Helm Chart](https://github.com/bitnami/charts/tree/master/bitnami/redis-cluster) will deploy a Redis<sup>TM</sup> Cluster topology with sharding.
+1. [Redis&trade; Helm Chart](https://github.com/bitnami/charts/tree/master/bitnami/redis) will deploy a master-slave cluster, with the [option](https://github.com/bitnami/charts/tree/master/bitnami/redis#redistm-sentinel-configuration-parameters) of enabling using Redis&trade; Sentinel.
+2. [Redis&trade; Cluster Helm Chart](https://github.com/bitnami/charts/tree/master/bitnami/redis-cluster) will deploy a Redis&trade; Cluster topology with sharding.
 
 The main features of each chart are the following:
 
-| Redis<sup>TM</sup>                                     | Redis<sup>TM</sup> Cluster                                             |
+| Redis&trade;                                     | Redis&trade; Cluster                                             |
 |--------------------------------------------------------|------------------------------------------------------------------------|
 | Supports multiple databases                            | Supports only one database. Better if you have a big dataset           |
 | Single write point (single master)                     | Multiple write points (multiple masters)                               |
-| ![Redis<sup>TM</sup> Topology](img/redis-topology.png) | ![Redis<sup>TM</sup> Cluster Topology](img/redis-cluster-topology.png) |
+| ![Redis&trade; Topology](img/redis-topology.png) | ![Redis&trade; Cluster Topology](img/redis-cluster-topology.png) |
 
 ## Prerequisites
 
@@ -46,7 +46,7 @@ To install the chart with the release name `my-release`:
 $ helm install my-release bitnami/redis
 ```
 
-The command deploys Redis<sup>TM</sup> on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
+The command deploys Redis&trade; on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
@@ -370,6 +370,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.image.pullSecrets`                  | Redis(TM) Exporter image pull secrets                                                            | `[]`                     |
 | `metrics.redisTargetHost`                    | A way to specify an alternative Redis(TM) hostname                                               | `localhost`              |
 | `metrics.extraArgs`                          | Extra arguments for Redis(TM) exporter, for example:                                             | `{}`                     |
+| `metrics.extraVolumes`                       | Optionally specify extra list of additional volumes for the Redis(TM) metrics sidecar             | `[]`            |
+| `metrics.extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for the Redis(TM) metrics sidecar        | `[]`            |
 | `metrics.containerSecurityContext.enabled`   | Enabled Redis(TM) exporter containers' Security Context                                          | `true`                   |
 | `metrics.containerSecurityContext.runAsUser` | Set Redis(TM) exporter containers' Security Context runAsUser                                    | `1001`                   |
 | `metrics.resources.limits`                   | The resources limits for the Redis(TM) exporter container                                        | `{}`                     |
@@ -428,7 +430,7 @@ $ helm install my-release \
     bitnami/redis
 ```
 
-The above command sets the Redis<sup>TM</sup> server password to `secretpassword`.
+The above command sets the Redis&trade; server password to `secretpassword`.
 
 > NOTE: Once this chart is deployed, it is not possible to change the application's access credentials, such as usernames or passwords, using Helm. To change these application credentials after deployment, delete any persistent volumes (PVs) used by the chart and re-deploy it, or use the application's built-in administrative tools if available.
 
@@ -448,34 +450,34 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### Change Redis<sup>TM</sup> version
+### Change Redis&trade; version
 
-To modify the Redis<sup>TM</sup> version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/redis/tags/) using the `image.tag` parameter. For example, `image.tag=X.Y.Z`. This approach is also applicable to other images like exporters.
+To modify the Redis&trade; version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/redis/tags/) using the `image.tag` parameter. For example, `image.tag=X.Y.Z`. This approach is also applicable to other images like exporters.
 
 ### Cluster topologies
 
 #### Default: Master-Replicas
 
-When installing the chart with `architecture=replication`, it will deploy a Redis<sup>TM</sup> master StatefulSet (only one master node allowed) and a Redis<sup>TM</sup> replicas StatefulSet. The replicas will be read-replicas of the master. Two services will be exposed:
+When installing the chart with `architecture=replication`, it will deploy a Redis&trade; master StatefulSet (only one master node allowed) and a Redis&trade; replicas StatefulSet. The replicas will be read-replicas of the master. Two services will be exposed:
 
-- Redis<sup>TM</sup> Master service: Points to the master, where read-write operations can be performed
-- Redis<sup>TM</sup> Replicas service: Points to the replicas, where only read operations are allowed.
+- Redis&trade; Master service: Points to the master, where read-write operations can be performed
+- Redis&trade; Replicas service: Points to the replicas, where only read operations are allowed.
 
 In case the master crashes, the replicas will wait until the master node is respawned again by the Kubernetes Controller Manager.
 
 #### Standalone
 
-When installing the chart with `architecture=standalone`, it will deploy a standalone Redis<sup>TM</sup> StatefulSet (only one node allowed) and a Redis<sup>TM</sup> replicas StatefulSet. A single service will be exposed:
+When installing the chart with `architecture=standalone`, it will deploy a standalone Redis&trade; StatefulSet (only one node allowed) and a Redis&trade; replicas StatefulSet. A single service will be exposed:
 
-- Redis<sup>TM</sup> Master service: Points to the master, where read-write operations can be performed
+- Redis&trade; Master service: Points to the master, where read-write operations can be performed
 
 #### Master-Replicas with Sentinel
 
-When installing the chart with `architecture=replication` and `sentinel.enabled=true`, it will deploy a Redis<sup>TM</sup> master StatefulSet (only one master allowed) and a Redis<sup>TM</sup> replicas StatefulSet. In this case, the pods will contain an extra container with Redis<sup>TM</sup> Sentinel. This container will form a cluster of Redis<sup>TM</sup> Sentinel nodes, which will promote a new master in case the actual one fails. In addition to this, only one service is exposed:
+When installing the chart with `architecture=replication` and `sentinel.enabled=true`, it will deploy a Redis&trade; master StatefulSet (only one master allowed) and a Redis&trade; replicas StatefulSet. In this case, the pods will contain an extra container with Redis&trade; Sentinel. This container will form a cluster of Redis&trade; Sentinel nodes, which will promote a new master in case the actual one fails. In addition to this, only one service is exposed:
 
-- Redis<sup>TM</sup> service: Exposes port 6379 for Redis<sup>TM</sup> read-only operations and port 26379 for accessing Redis<sup>TM</sup> Sentinel.
+- Redis&trade; service: Exposes port 6379 for Redis&trade; read-only operations and port 26379 for accessing Redis&trade; Sentinel.
 
-For read-only operations, access the service using port 6379. For write operations, it's necessary to access the Redis<sup>TM</sup> Sentinel cluster and query the current master using the command below (using redis-cli or similar):
+For read-only operations, access the service using port 6379. For write operations, it's necessary to access the Redis&trade; Sentinel cluster and query the current master using the command below (using redis-cli or similar):
 
 ```
 SENTINEL get-master-addr-by-name <name of your MasterSet. e.g: mymaster>
@@ -487,9 +489,9 @@ In case the current master crashes, the Sentinel containers will elect a new mas
 
 ### Using a password file
 
-To use a password file for Redis<sup>TM</sup> you need to create a secret containing the password and then deploy the chart using that secret.
+To use a password file for Redis&trade; you need to create a secret containing the password and then deploy the chart using that secret.
 
-Refer to the chart documentation for more information on [using a password file for Redis<sup>TM</sup>](https://docs.bitnami.com/kubernetes/infrastructure/redis/administration/use-password-file/).
+Refer to the chart documentation for more information on [using a password file for Redis&trade;](https://docs.bitnami.com/kubernetes/infrastructure/redis/administration/use-password-file/).
 
 ### Securing traffic using TLS
 
@@ -519,7 +521,7 @@ tls-ca-cert-file
 
 ### Host Kernel Settings
 
-Redis<sup>TM</sup> may require some changes in the kernel of the host machine to work as expected, in particular increasing the `somaxconn` value and disabling transparent huge pages.
+Redis&trade; may require some changes in the kernel of the host machine to work as expected, in particular increasing the `somaxconn` value and disabling transparent huge pages.
 
 Refer to the chart documentation for more information on [configuring host kernel settings with an example](https://docs.bitnami.com/kubernetes/infrastructure/redis/administration/configure-kernel-settings/).
 
@@ -539,13 +541,13 @@ $ helm install my-release --set master.persistence.existingClaim=PVC_NAME bitnam
 
 ## Backup and restore
 
-Refer to the chart documentation for more information on [backing up and restoring Redis<sup>TM</sup> deployments](https://docs.bitnami.com/kubernetes/infrastructure/redis/administration/backup-restore/).
+Refer to the chart documentation for more information on [backing up and restoring Redis&trade; deployments](https://docs.bitnami.com/kubernetes/infrastructure/redis/administration/backup-restore/).
 
 ## NetworkPolicy
 
-To enable network policy for Redis<sup>TM</sup>, install [a networking plugin that implements the Kubernetes NetworkPolicy spec](https://kubernetes.io/docs/tasks/administer-cluster/declare-network-policy#before-you-begin), and set `networkPolicy.enabled` to `true`.
+To enable network policy for Redis&trade;, install [a networking plugin that implements the Kubernetes NetworkPolicy spec](https://kubernetes.io/docs/tasks/administer-cluster/declare-network-policy#before-you-begin), and set `networkPolicy.enabled` to `true`.
 
-Refer to the chart documenation for more information on [enabling the network policy in Redis<sup>TM</sup> deployments](https://docs.bitnami.com/kubernetes/infrastructure/redis/administration/enable-network-policy/).
+Refer to the chart documenation for more information on [enabling the network policy in Redis&trade; deployments](https://docs.bitnami.com/kubernetes/infrastructure/redis/administration/enable-network-policy/).
 
 ### Setting Pod's affinity
 
@@ -563,7 +565,7 @@ A major chart version change (like v1.2.3 -> v2.0.0) indicates that there is an 
 
 ### To 14.8.0
 
-The Redis<sup>TM</sup> sentinel exporter was removed in this version because the upstream project was deprecated. The regular Redis<sup>TM</sup> exporter is included in the sentinel scenario as usual.
+The Redis&trade; sentinel exporter was removed in this version because the upstream project was deprecated. The regular Redis&trade; exporter is included in the sentinel scenario as usual.
 
 ### To 14.0.0
 
@@ -579,7 +581,7 @@ The Redis<sup>TM</sup> sentinel exporter was removed in this version because the
 
 Consequences:
 
-Backwards compatibility is not guaranteed. To upgrade to `14.0.0`, install a new release of the Redis<sup>TM</sup> chart, and migrate the data from your previous release. You have 2 alternatives to do so:
+Backwards compatibility is not guaranteed. To upgrade to `14.0.0`, install a new release of the Redis&trade; chart, and migrate the data from your previous release. You have 2 alternatives to do so:
 
 - Create a backup of the database, and restore it on the new release as explained in the [Backup and restore](#backup-and-restore) section.
 - Reuse the PVC used to hold the master data on your previous release. To do so, use the `master.persistence.existingClaim` parameter. The following example assumes that the release name is `redis`:
@@ -592,7 +594,7 @@ $ helm install redis bitnami/redis --set auth.password=[PASSWORD] --set master.p
 
 ### To 13.0.0
 
-This major version updates the Redis<sup>TM</sup> docker image version used from `6.0` to `6.2`, the new stable version. There are no major changes in the chart and there shouldn't be any breaking changes in it as `6.2` is basically a stricter superset of `6.0`. For more information, please refer to [Redis<sup>TM</sup> 6.2 release notes](https://raw.githubusercontent.com/redis/redis/6.2/00-RELEASENOTES).
+This major version updates the Redis&trade; docker image version used from `6.0` to `6.2`, the new stable version. There are no major changes in the chart and there shouldn't be any breaking changes in it as `6.2` is basically a stricter superset of `6.0`. For more information, please refer to [Redis&trade; 6.2 release notes](https://raw.githubusercontent.com/redis/redis/6.2/00-RELEASENOTES).
 
 ### To 12.3.0
 
@@ -625,13 +627,13 @@ When deployed with sentinel enabled, only a group of nodes is deployed and the m
 
 ### To 9.0.0
 
-The metrics exporter has been changed from a separate deployment to a sidecar container, due to the latest changes in the Redis<sup>TM</sup> exporter code. Check the [official page](https://github.com/oliver006/redis_exporter/) for more information. The metrics container image was changed from oliver006/redis_exporter to bitnami/redis-exporter (Bitnami's maintained package of oliver006/redis_exporter).
+The metrics exporter has been changed from a separate deployment to a sidecar container, due to the latest changes in the Redis&trade; exporter code. Check the [official page](https://github.com/oliver006/redis_exporter/) for more information. The metrics container image was changed from oliver006/redis_exporter to bitnami/redis-exporter (Bitnami's maintained package of oliver006/redis_exporter).
 
 ### To 7.0.0
 
 In order to improve the performance in case of slave failure, we added persistence to the read-only slaves. That means that we moved from Deployment to StatefulSets. This should not affect upgrades from previous versions of the chart, as the deployments did not contain any persistence at all.
 
-This version also allows enabling Redis<sup>TM</sup> Sentinel containers inside of the Redis<sup>TM</sup> Pods (feature disabled by default). In case the master crashes, a new Redis<sup>TM</sup> node will be elected as master. In order to query the current master (no redis master service is exposed), you need to query first the Sentinel cluster. Find more information [in this section](#master-slave-with-sentinel).
+This version also allows enabling Redis&trade; Sentinel containers inside of the Redis&trade; Pods (feature disabled by default). In case the master crashes, a new Redis&trade; node will be elected as master. In order to query the current master (no redis master service is exposed), you need to query first the Sentinel cluster. Find more information [in this section](#master-slave-with-sentinel).
 
 ### To 11.0.0
 
@@ -652,15 +654,15 @@ For releases with `metrics.enabled: true` the default tag for the exporter image
 
 ### To 7.0.0
 
-This version causes a change in the Redis<sup>TM</sup> Master StatefulSet definition, so the command helm upgrade would not work out of the box. As an alternative, one of the following could be done:
+This version causes a change in the Redis&trade; Master StatefulSet definition, so the command helm upgrade would not work out of the box. As an alternative, one of the following could be done:
 
-- Recommended: Create a clone of the Redis<sup>TM</sup> Master PVC (for example, using projects like [this one](https://github.com/edseymour/pvc-transfer)). Then launch a fresh release reusing this cloned PVC.
+- Recommended: Create a clone of the Redis&trade; Master PVC (for example, using projects like [this one](https://github.com/edseymour/pvc-transfer)). Then launch a fresh release reusing this cloned PVC.
 
    ```
    helm install my-release bitnami/redis --set persistence.existingClaim=<NEW PVC>
    ```
 
-- Alternative (not recommended, do at your own risk): `helm delete --purge` does not remove the PVC assigned to the Redis<sup>TM</sup> Master StatefulSet. As a consequence, the following commands can be done to upgrade the release
+- Alternative (not recommended, do at your own risk): `helm delete --purge` does not remove the PVC assigned to the Redis&trade; Master StatefulSet. As a consequence, the following commands can be done to upgrade the release
 
    ```
    helm delete --purge <RELEASE>
@@ -674,7 +676,7 @@ Some values have changed as well:
 - `master.port` and `slave.port` have been changed to `redisPort` (same value for both master and slaves)
 - `master.securityContext` and `slave.securityContext` have been changed to `securityContext`(same values for both master and slaves)
 
-By default, the upgrade will not change the cluster topology. In case you want to use Redis<sup>TM</sup> Sentinel, you must explicitly set `sentinel.enabled` to `true`.
+By default, the upgrade will not change the cluster topology. In case you want to use Redis&trade; Sentinel, you must explicitly set `sentinel.enabled` to `true`.
 
 ### To 6.0.0
 
@@ -702,13 +704,13 @@ It also fixes https://github.com/helm/charts/issues/7726 where a deployment `ext
 
 Finally, it fixes https://github.com/helm/charts/issues/7803 by removing mutable labels in `spec.VolumeClaimTemplate.metadata.labels` so that it is upgradable.
 
-In order to upgrade, delete the Redis<sup>TM</sup> StatefulSet before upgrading:
+In order to upgrade, delete the Redis&trade; StatefulSet before upgrading:
 
 ```bash
 kubectl delete statefulsets.apps --cascade=false my-release-redis-master
 ```
 
-And edit the Redis<sup>TM</sup> slave (and metrics if enabled) deployment:
+And edit the Redis&trade; slave (and metrics if enabled) deployment:
 
 ```bash
 kubectl patch deployments my-release-redis-slave --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'

@@ -8,25 +8,25 @@
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
 
 ## @section Common parameters
 
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
-kubeVersion:
+kubeVersion: ""
 ## @param nameOverride String to partially override common.names.fullname
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param commonLabels Labels to add to all deployed objects
 ##
 commonLabels: {}
@@ -75,7 +75,7 @@ jasperreportsUsername: user
 ## Defaults to a random 10-character alphanumeric string if not set
 ## ref: https://github.com/bitnami/bitnami-docker-jasperreports#configuration
 ##
-jasperreportsPassword:
+jasperreportsPassword: ""
 ## @param jasperreportsEmail JasperReports user email
 ## ref: https://github.com/bitnami/bitnami-docker-jasperreports#configuration
 ##
@@ -93,12 +93,12 @@ allowEmptyPassword: "yes"
 ## @param smtpPassword SMTP password
 ## @param smtpProtocol SMTP protocol [`ssl`, `none`]
 ##
-smtpHost:
-smtpPort:
-smtpEmail:
-smtpUser:
-smtpPassword:
-smtpProtocol:
+smtpHost: ""
+smtpPort: ""
+smtpEmail: ""
+smtpUser: ""
+smtpPassword: ""
+smtpProtocol: ""
 ## @param command Override default container command (useful when using custom images)
 ##
 command: []
@@ -114,10 +114,10 @@ args: []
 extraEnvVars: []
 ## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars
 ##
-extraEnvVarsCM:
+extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Name of existing Secret containing extra env vars
 ##
-extraEnvVarsSecret:
+extraEnvVarsSecret: ""
 ## Strategy to use to update Pods
 ##
 updateStrategy:
@@ -310,7 +310,7 @@ persistence:
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##   GKE, AWS & OpenStack)
   ##
-  storageClass:
+  storageClass: ""
   ## @param persistence.accessModes Persistent Volume Access Mode
   ##
   accessModes:
@@ -342,7 +342,7 @@ service:
   nodePort: ""
   ## @param service.loadBalancerIP Kubernetes LoadBalancerIP to request
   ##
-  loadBalancerIP:
+  loadBalancerIP: ""
   ## @param service.externalTrafficPolicy Enable client source IP preservation
   ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
@@ -366,7 +366,7 @@ ingress:
   pathType: ImplementationSpecific
   ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
   ##
-  apiVersion:
+  apiVersion: ""
   ## @param ingress.hostname Default host for the ingress resource
   ##
   hostname: jasperreports.local
@@ -475,25 +475,25 @@ mariadb:
       ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
       ##   GKE, AWS & OpenStack)
       ##
-      storageClass:
+      storageClass: ""
       accessModes:
         - ReadWriteOnce
       size: 8Gi
       ## Set path in case you want to use local host path volumes (not recommended in production)
       ##
-      hostPath:
+      hostPath: ""
       ## Use an existing PVC
       ##
-      existingClaim:
+      existingClaim: ""
 ## External database configuration
 ##
 externalDatabase:
   ## @param externalDatabase.existingSecret Name of the database existing Secret Object
   ## NOTE: When it's set, the `externalDatabase.password` parameter is ignored
-  existingSecret:
+  existingSecret: ""
   ## @param externalDatabase.host Host of the existing database
   ##
-  host:
+  host: ""
   ## @param externalDatabase.port Port of the existing database
   ##
   port: 3306
@@ -502,7 +502,7 @@ externalDatabase:
   user: bn_jasperreports
   ## @param externalDatabase.password Password for the above username
   ##
-  password:
+  password: ""
   ## @param externalDatabase.database Name of the existing database
   ##
   database: bitnami_jasperreports

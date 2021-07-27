@@ -34,4 +34,4 @@ name: kong
 sources:
   - https://github.com/bitnami/bitnami-docker-kong
   - https://konghq.com/
-version: 3.7.9
+version: 3.8.0

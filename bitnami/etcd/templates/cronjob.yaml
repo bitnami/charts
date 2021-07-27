@@ -37,11 +37,16 @@ spec:
               {{- if .Values.containerSecurityContext.enabled }}
               securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 16 }}
               {{- end }}
+              {{- if .Values.diagnosticMode.enabled }}
+              command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+              args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+              {{- else }}
               command:
                 - /opt/bitnami/scripts/etcd/snapshot.sh
+              {{- end }}
               env:
                 - name: BITNAMI_DEBUG
-                  value: {{ ternary "true" "false" .Values.image.debug | quote }}
+                  value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
                 - name: ETCDCTL_API
                   value: "3"
                 - name: ETCD_ON_K8S

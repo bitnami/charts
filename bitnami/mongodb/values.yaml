@@ -10,24 +10,24 @@
 ## @param global.namespaceOverride Override the namespace for resource deployed by the chart, but can itself be overridden by the local namespaceOverride
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
-  namespaceOverride:
+  storageClass: ""
+  namespaceOverride: ""
 
 ## @section Common parameters
 ##
 
 ## @param nameOverride String to partially override mongodb.fullname template (will maintain the release name)
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override mongodb.fullname template
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param clusterDomain Default Kubernetes cluster domain
 ##
 clusterDomain: cluster.local
@@ -119,7 +119,7 @@ image:
 ## @param schedulerName Name of the scheduler (other than default) to dispatch pods
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
-schedulerName:
+schedulerName: ""
 ## @param architecture MongoDB&reg; architecture (`standalone` or `replicaset`)
 ##
 architecture: standalone
@@ -152,7 +152,7 @@ auth:
   ## @param auth.existingSecret Existing secret with MongoDB&reg; credentials (keys: `mongodb-password`, `mongodb-root-password`, ` mongodb-replica-set-key`)
   ## NOTE: When it's set the previous parameters are ignored.
   ##
-  existingSecret:
+  existingSecret: ""
 tls:
   ## @param tls.enabled Enable MongoDB&reg; TLS support between nodes in the cluster as well as between mongo clients and nodes
   ##
@@ -163,13 +163,13 @@ tls:
   ## @param tls.existingSecret Existing secret with TLS certificates (keys: `mongodb-ca-cert`, `mongodb-ca-key`, `client-pem`)
   ## NOTE: When it's set it will disable certificate creation
   ##
-  existingSecret:
+  existingSecret: ""
   ## Add Custom CA certificate
   ## @param tls.caCert Custom CA certificated (base64 encoded)
   ## @param tls.caKey CA certificate private key (base64 encoded)
   ##
-  caCert:
-  caKey:
+  caCert: ""
+  caKey: ""
   ## Bitnami Nginx image
   ## @param tls.image.registry Init container TLS certs setup image registry
   ## @param tls.image.repository Init container TLS certs setup image repository
@@ -263,7 +263,7 @@ configuration: ""
 ## @param existingConfigmap Name of existing ConfigMap with MongoDB&reg; configuration for Primary and Secondary nodes
 ## NOTE: When it's set the arbiter.configuration parameter is ignored
 ##
-existingConfigmap:
+existingConfigmap: ""
 ## @param initdbScripts Dictionary of initdb scripts
 ## Specify dictionary of scripts to be run at first boot
 ## Example:
@@ -275,13 +275,13 @@ existingConfigmap:
 initdbScripts: {}
 ## @param initdbScriptsConfigMap Existing ConfigMap with custom initdb scripts
 ##
-initdbScriptsConfigMap:
+initdbScriptsConfigMap: ""
 ## Command and args for running the container (set to default if not set). Use array form
 ## @param command Override default container command (useful when using custom images)
 ## @param args Override default container args (useful when using custom images)
 ##
-command:
-args:
+command: []
+args: []
 ## @param extraFlags MongoDB&reg; additional command line flags
 ## Example:
 ## extraFlags:
@@ -297,10 +297,10 @@ extraFlags: []
 extraEnvVars: []
 ## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars
 ##
-extraEnvVarsCM:
+extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Name of existing Secret containing extra env vars (in case of sensitive data)
 ##
-extraEnvVarsSecret:
+extraEnvVarsSecret: ""
 
 ## @section MongoDB&reg; statefulset parameters
 ##
@@ -374,7 +374,7 @@ podAnnotations: {}
 ## @param priorityClassName Name of the existing priority class to be used by MongoDB&reg; pod(s)
 ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
 ##
-priorityClassName:
+priorityClassName: ""
 ## MongoDB(R) pods' Security Context.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enable MongoDB&reg; pod(s)' Security Context
@@ -494,7 +494,7 @@ customStartupProbe: {}
 ##       - name: portname
 ##         containerPort: 1234
 ##
-initContainers: {}
+initContainers: []
 ## @param sidecars Add additional sidecar containers for the MongoDB&reg; pod(s)
 ## Example:
 ## sidecars:
@@ -521,7 +521,7 @@ initContainers: {}
 ##     - name: DEBUG
 ##       value: "true"
 ##
-sidecars: {}
+sidecars: []
 ## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for the MongoDB&reg; container(s)
 ## Examples:
 ## extraVolumeMounts:
@@ -548,7 +548,7 @@ pdb:
   minAvailable: 1
   ## @param pdb.maxUnavailable Maximum number/percentage of MongoDB&reg; pods that may be made unavailable after the eviction
   ##
-  maxUnavailable:
+  maxUnavailable: ""
 
 ## @section Traffic exposure parameters
 ##
@@ -576,7 +576,7 @@ service:
   ## e.g:
   ## clusterIP: None
   ##
-  clusterIP:
+  clusterIP: ""
   ## @param service.externalIPs Specify the externalIP value ClusterIP service type.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#external-ips
   ##
@@ -584,7 +584,7 @@ service:
   ## @param service.loadBalancerIP loadBalancerIP for MongoDB&reg; Service
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#loadbalancer
   ##
-  loadBalancerIP:
+  loadBalancerIP: ""
   ## @param service.loadBalancerSourceRanges Address(es) that are allowed when service is LoadBalancer
   ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
   ##
@@ -688,7 +688,7 @@ externalAccess:
     ## e.g:
     ## domain: mydomain.com
     ##
-    domain:
+    domain: ""
     ## @param externalAccess.service.annotations Service annotations for external access
     ##
     annotations: {}
@@ -734,7 +734,7 @@ externalAccess:
       ## e.g:
       ## domain: mydomain.com
       ##
-      domain:
+      domain: ""
       ## @param externalAccess.hidden.service.annotations Service annotations for external access
       ##
       annotations: {}
@@ -754,14 +754,14 @@ persistence:
   ## If defined, PVC must be created manually before volume will be bound
   ## Ignored when mongodb.architecture=replicaset
   ##
-  existingClaim:
+  existingClaim: ""
   ## @param persistence.storageClass PVC Storage Class for MongoDB&reg; data volume
   ## If defined, storageClassName: <storageClass>
   ## If set to "-", storageClassName: "", which disables dynamic provisioning
   ## If undefined (the default) or set to null, no storageClassName spec is
   ## set, choosing the default provisioner.
   ##
-  storageClass:
+  storageClass: ""
   ## @param persistence.accessModes PV Access Mode
   ##
   accessModes:
@@ -787,15 +787,15 @@ persistence:
     ## A label query over volumes to consider for binding (e.g. when using local volumes)
     ## See https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#labelselector-v1-meta for more details
     ##
-    selector:
+    selector: {}
     ## @param persistence.volumeClaimTemplates.requests Custom PVC requests attributes
     ## Sometime cloud providers use additional requests attributes to provision custom storage instance
     ## See https://cloud.ibm.com/docs/containers?topic=containers-file_storage#file_dynamic_statefulset
     ##
-    requests:
+    requests: {}
     ## @param persistence.volumeClaimTemplates.dataSource Add dataSource to the VolumeClaimTemplate
     ##
-    dataSource:
+    dataSource: {}
 
 ## @section RBAC parameters
 ##
@@ -810,7 +810,7 @@ serviceAccount:
   ## @param serviceAccount.name Name of the created serviceAccount
   ## If not set and create is true, a name is generated using the mongodb.fullname template
   ##
-  name:
+  name: ""
   ## @param serviceAccount.annotations Additional Service Account annotations
   ##
   annotations: {}
@@ -979,13 +979,13 @@ arbiter:
   ## @param arbiter.existingConfigmap Name of existing ConfigMap with Arbiter configuration
   ## NOTE: When it's set the arbiter.configuration parameter is ignored
   ##
-  existingConfigmap:
+  existingConfigmap: ""
   ## Command and args for running the container (set to default if not set). Use array form
   ## @param arbiter.command Override default container command (useful when using custom images)
   ## @param arbiter.args Override default container args (useful when using custom images)
   ##
-  command:
-  args:
+  command: []
+  args: []
   ## @param arbiter.extraFlags Arbiter additional command line flags
   ## Example:
   ## extraFlags:
@@ -1001,10 +1001,10 @@ arbiter:
   extraEnvVars: []
   ## @param arbiter.extraEnvVarsCM Name of existing ConfigMap containing extra env vars
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param arbiter.extraEnvVarsSecret Name of existing Secret containing extra env vars (in case of sensitive data)
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param arbiter.annotations Additional labels to be added to the Arbiter statefulset
   ##
   annotations: {}
@@ -1062,7 +1062,7 @@ arbiter:
   ## @param arbiter.priorityClassName Name of the existing priority class to be used by Arbiter pod(s)
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
-  priorityClassName:
+  priorityClassName: ""
   ## MongoDB(R) Arbiter pods' Security Context.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param arbiter.podSecurityContext.enabled Enable Arbiter pod(s)' Security Context
@@ -1159,7 +1159,7 @@ arbiter:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  initContainers: {}
+  initContainers: []
   ## @param arbiter.sidecars Add additional sidecar containers for the Arbiter pod(s)
   ## Example:
   ## sidecars:
@@ -1170,7 +1170,7 @@ arbiter:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## @param arbiter.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Arbiter container(s)
   ## Examples:
   ## extraVolumeMounts:
@@ -1197,7 +1197,7 @@ arbiter:
     minAvailable: 1
     ## @param arbiter.pdb.maxUnavailable Maximum number/percentage of Arbiter pods that may be made unavailable
     ##
-    maxUnavailable:
+    maxUnavailable: ""
   ## MongoDB(R) Arbiter service parameters
   ##
   service:
@@ -1220,13 +1220,13 @@ hidden:
   ## @param hidden.existingConfigmap Name of existing ConfigMap with Hidden node configuration
   ## NOTE: When it's set the hidden.configuration parameter is ignored
   ##
-  existingConfigmap:
+  existingConfigmap: ""
   ## Command and args for running the container (set to default if not set). Use array form
   ## @param hidden.command Override default container command (useful when using custom images)
   ## @param hidden.args Override default container args (useful when using custom images)
   ##
-  command:
-  args:
+  command: []
+  args: []
   ## @param hidden.extraFlags Hidden node additional command line flags
   ## Example:
   ## extraFlags:
@@ -1242,10 +1242,10 @@ hidden:
   extraEnvVars: []
   ## @param hidden.extraEnvVarsCM Name of existing ConfigMap containing extra env vars
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param hidden.extraEnvVarsSecret Name of existing Secret containing extra env vars (in case of sensitive data)
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param hidden.annotations Additional labels to be added to thehidden node statefulset
   ##
   annotations: {}
@@ -1315,7 +1315,7 @@ hidden:
   ## @param hidden.priorityClassName Name of the existing priority class to be used by hidden node pod(s)
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
-  priorityClassName:
+  priorityClassName: ""
   ## MongoDB(R) Hidden containers' resource requests and limits.
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -1388,7 +1388,7 @@ hidden:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  initContainers: {}
+  initContainers: []
   ## @param hidden.sidecars Add additional sidecar containers for the hidden node pod(s)
   ## Example:
   ## sidecars:
@@ -1399,7 +1399,7 @@ hidden:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## @param hidden.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the hidden node container(s)
   ## Examples:
   ## extraVolumeMounts:
@@ -1426,7 +1426,7 @@ hidden:
     minAvailable: 1
     ## @param hidden.pdb.maxUnavailable Maximum number/percentage of hidden node pods that may be made unavailable
     ##
-    maxUnavailable:
+    maxUnavailable: ""
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
@@ -1440,7 +1440,7 @@ hidden:
     ## If undefined (the default) or set to null, no storageClassName spec is
     ## set, choosing the default provisioner.
     ##
-    storageClass:
+    storageClass: ""
     ## @param hidden.persistence.accessModes PV Access Mode
     ##
     accessModes:
@@ -1464,10 +1464,10 @@ hidden:
       ## @param hidden.persistence.volumeClaimTemplates.selector A label query over volumes to consider for binding (e.g. when using local volumes)
       ## See https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#labelselector-v1-meta for more details
       ##
-      selector:
+      selector: {}
       ## @param hidden.persistence.volumeClaimTemplates.dataSource Set volumeClaimTemplate dataSource
       ##
-      dataSource:
+      dataSource: {}
 
 ## @section Metrics parameters
 ##
@@ -1588,7 +1588,7 @@ metrics:
     enabled: false
     ## @param metrics.serviceMonitor.namespace Namespace which Prometheus is running in
     ##
-    namespace:
+    namespace: ""
     ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped
     ##
     interval: 30s
@@ -1596,7 +1596,7 @@ metrics:
     ## e.g:
     ## scrapeTimeout: 30s
     ##
-    scrapeTimeout:
+    scrapeTimeout: ""
     ## @param metrics.serviceMonitor.additionalLabels Used to pass Labels that are used by the Prometheus installed in your cluster to select Service Monitors to work with
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
     ##
@@ -1613,7 +1613,7 @@ metrics:
     additionalLabels: {}
     ## @param metrics.prometheusRule.namespace Namespace where prometheusRules resource should be created
     ##
-    namespace:
+    namespace: ""
     ## @param metrics.prometheusRule.rules Rules to be created, check values for an example
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#rulegroup
     ##      https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/
