@@ -50,18 +50,18 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `nil` |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
 
 ### Common parameters
 
 | Name                | Description                                                                                           | Value |
 | ------------------- | ----------------------------------------------------------------------------------------------------- | ----- |
-| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                                  | `nil` |
-| `nameOverride`      | String to partially override dokuwiki.fullname template with a string (will prepend the release name) | `nil` |
-| `fullnameOverride`  | String to fully override dokuwiki.fullname template with a string                                     | `nil` |
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                                  | `""`  |
+| `nameOverride`      | String to partially override dokuwiki.fullname template with a string (will prepend the release name) | `""`  |
+| `fullnameOverride`  | String to fully override dokuwiki.fullname template with a string                                     | `""`  |
 | `commonAnnotations` | Annotations to add to all deployed objects                                                            | `{}`  |
 | `commonLabels`      | Labels to add to all deployed objects                                                                 | `{}`  |
 | `extraDeploy`       | Array of extra objects to deploy with the release (evaluated as a template).                          | `[]`  |
@@ -73,7 +73,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------ | --------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
 | `image.registry`                     | DokuWiki image registry                                                                                               | `docker.io`                   |
 | `image.repository`                   | DokuWiki image repository                                                                                             | `bitnami/dokuwiki`            |
-| `image.tag`                          | DokuWiki image tag                                                                                                    | `20200729.0.0-debian-10-r283` |
+| `image.tag`                          | DokuWiki image tag                                                                                                    | `20200729.0.0-debian-10-r307` |
 | `image.pullPolicy`                   | Image pull policy                                                                                                     | `IfNotPresent`                |
 | `image.pullSecrets`                  | Image pull policy                                                                                                     | `[]`                          |
 | `image.debug`                        | Enable image debugging                                                                                                | `false`                       |
@@ -85,10 +85,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dokuwikiFullName`                   | User's Full Name                                                                                                      | `User Name`                   |
 | `dokuwikiWikiName`                   | Wiki name                                                                                                             | `My Wiki`                     |
 | `persistence.enabled`                | Enable persistence using PVC                                                                                          | `true`                        |
-| `persistence.storageClass`           | PVC Storage Class for DokuWiki volume                                                                                 | `nil`                         |
+| `persistence.storageClass`           | PVC Storage Class for DokuWiki volume                                                                                 | `""`                          |
 | `persistence.accessMode`             | PVC Access Mode for DokuWiki volume                                                                                   | `ReadWriteOnce`               |
 | `persistence.size`                   | PVC Storage Request for DokuWiki volume                                                                               | `8Gi`                         |
-| `persistence.exitingClaim`           | Name of an existing PVC to be used                                                                                    | `nil`                         |
+| `persistence.existingClaim`          | Name of an existing PVC to be used                                                                                    | `""`                          |
 | `podSecurityContext.enabled`         | Enable securityContext on for DokuWiki deployment                                                                     | `true`                        |
 | `podSecurityContext.fsGroup`         | Group to configure permissions for volumes                                                                            | `1001`                        |
 | `containerSecurityContext.enabled`   | Enable securityContext on for DokuWiki deployment                                                                     | `true`                        |
@@ -114,17 +114,17 @@ The command removes all the Kubernetes components associated with the chart and 
 | `affinity`                           | Affinity for pod assignment                                                                                           | `{}`                          |
 | `nodeSelector`                       | Node labels for pod assignment                                                                                        | `{}`                          |
 | `tolerations`                        | Tolerations for pod assignment                                                                                        | `[]`                          |
-| `command`                            | Override default container command (useful when using custom images)                                                  | `nil`                         |
-| `args`                               | Override default container args (useful when using custom images)                                                     | `nil`                         |
+| `command`                            | Override default container command (useful when using custom images)                                                  | `[]`                          |
+| `args`                               | Override default container args (useful when using custom images)                                                     | `[]`                          |
 | `extraEnvVars`                       | An array to add extra env vars                                                                                        | `[]`                          |
-| `extraEnvVarsCM`                     | ConfigMap containing extra env vars                                                                                   | `nil`                         |
-| `extraEnvVarsSecret`                 | Secret containing extra env vars (in case of sensitive data)                                                          | `nil`                         |
+| `extraEnvVarsCM`                     | ConfigMap containing extra env vars                                                                                   | `""`                          |
+| `extraEnvVarsSecret`                 | Secret containing extra env vars (in case of sensitive data)                                                          | `""`                          |
 | `podAnnotations`                     | Pod annotations                                                                                                       | `{}`                          |
 | `customLivenessProbe`                | Override default liveness probe                                                                                       | `{}`                          |
 | `customReadinessProbe`               | Override default readiness probe                                                                                      | `{}`                          |
 | `extraVolumes`                       | Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`    | `[]`                          |
 | `extraVolumeMounts`                  | Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`. | `[]`                          |
-| `lifecycleHooks`                     | LifecycleHook to set additional configuration at startup. Evaluated as a template                                     | `nil`                         |
+| `lifecycleHooks`                     | LifecycleHook to set additional configuration at startup. Evaluated as a template                                     | `{}`                          |
 | `podLabels`                          | Add additional labels to the pod (evaluated as a template)                                                            | `{}`                          |
 | `sidecars`                           | Attach additional containers to the pod (evaluated as a template)                                                     | `[]`                          |
 
@@ -134,7 +134,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                            | Description                                                                                   | Value                    |
 | ------------------------------- | --------------------------------------------------------------------------------------------- | ------------------------ |
 | `service.type`                  | Kubernetes Service type                                                                       | `LoadBalancer`           |
-| `service.loadBalancerIP`        | Use serviceLoadBalancerIP to request a specific static IP, otherwise leave blank              | `nil`                    |
+| `service.loadBalancerIP`        | Use serviceLoadBalancerIP to request a specific static IP, otherwise leave blank              | `""`                     |
 | `service.port`                  | Service HTTP port                                                                             | `80`                     |
 | `service.httpsPort`             | Service HTTPS port                                                                            | `443`                    |
 | `service.nodePorts`             | Use nodePorts to request some specific ports when using NodePort                              | `{}`                     |
@@ -142,7 +142,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.enabled`               | Set to true to enable ingress record generation                                               | `false`                  |
 | `ingress.certManager`           | Set this to true in order to add the corresponding annotations for cert-manager               | `false`                  |
 | `ingress.pathType`              | Ingress Path type                                                                             | `ImplementationSpecific` |
-| `ingress.apiVersion`            | Override API Version (automatically detected if not set)                                      | `nil`                    |
+| `ingress.apiVersion`            | Override API Version (automatically detected if not set)                                      | `""`                     |
 | `ingress.hostname`              | When the ingress is enabled, a host pointing to this will be created                          | `dokuwiki.local`         |
 | `ingress.path`                  | The Path to Dokuwiki. You may need to set this to '/*' in order to use this                   | `ImplementationSpecific` |
 | `ingress.annotations`           | Ingress annotations done as key:value pairs                                                   | `{}`                     |
@@ -160,7 +160,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r112`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r138`     |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `Always`                |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                                                                                                    | `{}`                    |
@@ -174,7 +174,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`           | Start a exporter side-car                        | `false`                   |
 | `metrics.image.registry`    | Apache exporter image registry                   | `docker.io`               |
 | `metrics.image.repository`  | Apache exporter image name                       | `bitnami/apache-exporter` |
-| `metrics.image.tag`         | Apache exporter image tag                        | `0.9.0-debian-10-r11`     |
+| `metrics.image.tag`         | Apache exporter image tag                        | `0.9.0-debian-10-r37`     |
 | `metrics.image.pullPolicy`  | Image pull policy                                | `IfNotPresent`            |
 | `metrics.image.pullSecrets` | Specify docker-registry secret names as an array | `[]`                      |
 | `metrics.podAnnotations`    | Additional annotations for Metrics exporter pod  | `{}`                      |
@@ -186,20 +186,20 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                                 | Description                                                          | Value                                    |
 | ---------------------------------------------------- | -------------------------------------------------------------------- | ---------------------------------------- |
 | `certificates.customCertificate.certificateSecret`   | Secret containing the certificate and key to add                     | `""`                                     |
-| `certificates.customCertificate.chainSecret.name`    | Name of the secret containing the certificate chain                  | `nil`                                    |
-| `certificates.customCertificate.chainSecret.key`     | Key of the certificate chain file inside the secret                  | `nil`                                    |
+| `certificates.customCertificate.chainSecret.name`    | Name of the secret containing the certificate chain                  | `""`                                     |
+| `certificates.customCertificate.chainSecret.key`     | Key of the certificate chain file inside the secret                  | `""`                                     |
 | `certificates.customCertificate.certificateLocation` | Location in the container to store the certificate                   | `/etc/ssl/certs/ssl-cert-snakeoil.pem`   |
 | `certificates.customCertificate.keyLocation`         | Location in the container to store the private key                   | `/etc/ssl/private/ssl-cert-snakeoil.key` |
 | `certificates.customCertificate.chainLocation`       | Location in the container to store the certificate chain             | `/etc/ssl/certs/mychain.pem`             |
 | `certificates.customCAs`                             | Defines a list of secrets to import into the container trust store   | `[]`                                     |
-| `certificates.command`                               | Override default container command (useful when using custom images) | `nil`                                    |
-| `certificates.args`                                  | Override default container args (useful when using custom images)    | `nil`                                    |
+| `certificates.command`                               | Override default container command (useful when using custom images) | `[]`                                     |
+| `certificates.args`                                  | Override default container args (useful when using custom images)    | `[]`                                     |
 | `certificates.extraEnvVars`                          | Container sidecar extra environment variables (eg proxy)             | `[]`                                     |
-| `certificates.extraEnvVarsCM`                        | ConfigMap containing extra env vars                                  | `nil`                                    |
-| `certificates.extraEnvVarsSecret`                    | Secret containing extra env vars (in case of sensitive data)         | `nil`                                    |
+| `certificates.extraEnvVarsCM`                        | ConfigMap containing extra env vars                                  | `""`                                     |
+| `certificates.extraEnvVarsSecret`                    | Secret containing extra env vars (in case of sensitive data)         | `""`                                     |
 | `certificates.image.registry`                        | Container sidecar registry                                           | `docker.io`                              |
 | `certificates.image.repository`                      | Container sidecar image                                              | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Container sidecar image tag                                          | `10-debian-10-r112`                      |
+| `certificates.image.tag`                             | Container sidecar image tag                                          | `10-debian-10-r138`                      |
 | `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                  | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                 | `[]`                                     |
 

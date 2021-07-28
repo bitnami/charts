@@ -57,14 +57,17 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                | Description                                                                                  | Value           |
-| ------------------- | -------------------------------------------------------------------------------------------- | --------------- |
-| `nameOverride`      | String to partially override common.names.fullname template (will maintain the release name) | `""`            |
-| `fullnameOverride`  | String to fully override common.names.fullname template                                      | `""`            |
-| `clusterDomain`     | Kubernetes Cluster Domain                                                                    | `cluster.local` |
-| `extraDeploy`       | Extra objects to deploy (value evaluated as a template)                                      | `[]`            |
-| `commonLabels`      | Add labels to all the deployed resources                                                     | `{}`            |
-| `commonAnnotations` | Add annotations to all the deployed resources                                                | `{}`            |
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
+| `nameOverride`           | String to partially override common.names.fullname template (will maintain the release name) | `""`            |
+| `fullnameOverride`       | String to fully override common.names.fullname template                                      | `""`            |
+| `clusterDomain`          | Kubernetes Cluster Domain                                                                    | `cluster.local` |
+| `extraDeploy`            | Extra objects to deploy (value evaluated as a template)                                      | `[]`            |
+| `commonLabels`           | Add labels to all the deployed resources                                                     | `{}`            |
+| `commonAnnotations`      | Add annotations to all the deployed resources                                                | `{}`            |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)      | `false`         |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                         | `[]`            |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                            | `[]`            |
 
 
 ### Zookeeper chart parameters
@@ -73,7 +76,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`            | ZooKeeper image registry                                                                                                                 | `docker.io`           |
 | `image.repository`          | ZooKeeper image repository                                                                                                               | `bitnami/zookeeper`   |
-| `image.tag`                 | ZooKeeper Image tag (immutable tags are recommended)                                                                                     | `3.7.0-debian-10-r70` |
+| `image.tag`                 | ZooKeeper Image tag (immutable tags are recommended)                                                                                     | `3.7.0-debian-10-r97` |
 | `image.pullPolicy`          | ZooKeeper image pull policy                                                                                                              | `IfNotPresent`        |
 | `image.pullSecrets`         | Specify docker-registry secret names as an array                                                                                         | `[]`                  |
 | `image.debug`               | Specify if debug values should be set                                                                                                    | `false`               |
@@ -194,7 +197,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`           | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                                     | `docker.io`             |
 | `volumePermissions.image.repository`  | Init container volume-permissions image repository                                                                   | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`         | Init container volume-permissions image tag (immutable tags are recommended)                                         | `10-debian-10-r115`     |
+| `volumePermissions.image.tag`         | Init container volume-permissions image tag (immutable tags are recommended)                                         | `10-debian-10-r142`     |
 | `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                  | `Always`                |
 | `volumePermissions.image.pullSecrets` | Init container volume-permissions image pull secrets                                                                 | `[]`                    |
 | `volumePermissions.resources`         | Init container resource requests/limit                                                                               | `{}`                    |

@@ -8,25 +8,25 @@
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
 
 ## @section Common parameters
 
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
-kubeVersion:
+kubeVersion: ""
 ## @param nameOverride String to partially override common.names.fullname template with a string (will prepend the release name)
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname template with a string
 ##
-fullnameOverride:
+fullnameOverride: ""
 
 ## @section Kibana parameters
 
@@ -73,7 +73,7 @@ updateStrategy:
 ## @param schedulerName Alternative scheduler
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
-schedulerName:
+schedulerName: ""
 ## @param hostAliases Add deployment host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -83,7 +83,7 @@ hostAliases: []
 ## plugins:
 ##   - https://github.com/fbaligand/kibana-enhanced-table/releases/download/v1.5.0/enhanced-table-1.5.0_7.3.2.zip
 ##
-plugins:
+plugins: []
 ## Saved objects to import (NDJSON format)
 ##
 savedObjects:
@@ -92,35 +92,35 @@ savedObjects:
   ## urls:
   ##   - www.example.com/dashboard.ndjson
   ##
-  urls:
+  urls: []
   ## @param savedObjects.configmap Configmap containing NDJSON files to be imported during Kibana initialization (evaluated as a template)
   ##
-  configmap:
+  configmap: ""
 ## @param extraConfiguration Extra settings to be added to the default kibana.yml configmap that the chart creates (unless replaced using `configurationCM`). Evaluated as a template
 ##
-extraConfiguration:
+extraConfiguration: {}
 ## @param configurationCM ConfigMap containing a kibana.yml file that will replace the default one specified in configuration.yaml
 ##
-configurationCM:
+configurationCM: ""
 ## @param extraEnvVars Array containing extra env vars to configure Kibana
 ## For example:
 ## extraEnvVars:
 ##  - name: KIBANA_ELASTICSEARCH_URL
 ##    value: test
 ##
-extraEnvVars:
+extraEnvVars: []
 ## @param extraEnvVarsCM ConfigMap containing extra env vars to configure Kibana
 ##
-extraEnvVarsCM:
+extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Secret containing extra env vars to configure Kibana (in case of sensitive data)
 ##
-extraEnvVarsSecret:
+extraEnvVarsSecret: ""
 ## @param extraVolumes Array to add extra volumes. Requires setting `extraVolumeMounts`
 ##
-extraVolumes:
+extraVolumes: []
 ## @param extraVolumeMounts Array to add extra mounts. Normally used with `extraVolumes`
 ##
-extraVolumeMounts:
+extraVolumeMounts: []
 ## Init containers parameters:
 ## volumePermissions: Change the owner of the persist volume mountpoint to RunAsUser:fsGroup
 ##
@@ -167,10 +167,10 @@ persistence:
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##   GKE, AWS & OpenStack)
   ##
-  storageClass:
+  storageClass: ""
   ## @param persistence.existingClaim Provide an existing `PersistentVolumeClaim`
   ##
-  existingClaim:
+  existingClaim: ""
   ## @param persistence.accessMode Access mode to the PV
   ##
   accessMode: ReadWriteOnce
@@ -214,10 +214,10 @@ readinessProbe:
 forceInitScripts: false
 ## @param initScriptsCM Configmap with init scripts to execute
 ##
-initScriptsCM:
+initScriptsCM: ""
 ## @param initScriptsSecret Secret with init scripts to execute (for sensitive data)
 ##
-initScriptsSecret:
+initScriptsSecret: ""
 ## Service configuration
 ##
 service:
@@ -230,7 +230,7 @@ service:
   ## @param service.nodePort Specify the nodePort value for the LoadBalancer and NodePort service types
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
-  nodePort:
+  nodePort: ""
   ## @param service.externalTrafficPolicy Enable client source IP preservation
   ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
@@ -243,10 +243,10 @@ service:
   ## @param service.loadBalancerIP loadBalancerIP if Kibana service type is `LoadBalancer`
   ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
   ##
-  loadBalancerIP:
+  loadBalancerIP: ""
   ## @param service.extraPorts Extra ports to expose in the service (normally used with the `sidecar` value)
   ##
-  extraPorts:
+  extraPorts: []
 ## Configure the ingress resource that allows you to access the
 ## Kibana installation. Set up the URL
 ## ref: http://kubernetes.io/docs/user-guide/ingress/
@@ -263,7 +263,7 @@ ingress:
   pathType: ImplementationSpecific
   ## @param ingress.apiVersion Override API Version (automatically detected if not set)
   ##
-  apiVersion:
+  apiVersion: ""
   ## @param ingress.hostname Default host for the ingress resource. If specified as "*" no host rule is configured
   ##
   hostname: kibana.local
@@ -411,7 +411,7 @@ podLabels: {}
 ##  - name: portname
 ##    containerPort: 1234
 ##
-sidecars:
+sidecars: []
 ## @param initContainers Add additional init containers to the pod
 ## e.g.
 ## - name: your-image-name
@@ -421,7 +421,7 @@ sidecars:
 ##  - name: portname
 ##    containerPort: 1234
 ##
-initContainers:
+initContainers: []
 ## @param configuration [object] Kibana configuration
 ##
 configuration:
@@ -449,19 +449,19 @@ metrics:
     enabled: false
     ## @param metrics.serviceMonitor.namespace Namespace in which Prometheus is running
     ##
-    namespace:
+    namespace: ""
     ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped.
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ## e.g:
     ##   interval: 10s
     ##
-    interval:
+    interval: ""
     ## @param metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ## e.g:
     ##   scrapeTimeout: 10s
     ##
-    scrapeTimeout:
+    scrapeTimeout: ""
     ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
     ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
     ## e.g:
@@ -478,5 +478,5 @@ elasticsearch:
   ##   - elasticsearch-1
   ##   - elasticsearch-2
   ##
-  hosts:
-  port:
+  hosts: []
+  port: ""

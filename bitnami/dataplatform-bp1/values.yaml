@@ -8,13 +8,13 @@
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
 
 ## @section Zookeeper chart parameters
 
@@ -387,7 +387,7 @@ wavefront:
   wavefront:
     url: https://YOUR_CLUSTER.wavefront.com
     token: YOUR_API_TOKEN
-    existingSecret:
+    existingSecret: ""
   ## Wavefront Collector is responsible to get all Kubernetes metrics from your cluster.
   ## It will capture Kubernetes resources metrics available from the kubelets, as well as auto-discovery capabilities.
   ##

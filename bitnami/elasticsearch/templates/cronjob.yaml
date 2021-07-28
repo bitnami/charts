@@ -90,10 +90,14 @@ spec:
                 {{- if .Values.curator.extraVolumeMounts }}
                 {{- toYaml .Values.curator.extraVolumeMounts | nindent 16 }}
                 {{- end }}
-              {{ if .Values.curator.command }}
+              {{- if .Values.diagnosticMode.enabled }}
+              command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 16 }}
+              {{ else if .Values.curator.command }}
               command: {{ toYaml .Values.curator.command | nindent 16 }}
               {{- end }}
-              {{- if .Values.curator.dryrun }}
+              {{- if .Values.diagnosticMode.enabled }}
+              args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 16 }}
+              {{- else if .Values.curator.dryrun }}
               args: [ "--dry-run", "--config", "/etc/es-curator/config.yml", "/etc/es-curator/action_file.yml" ]
               {{- else }}
               args: [ "--config", "/etc/es-curator/config.yml", "/etc/es-curator/action_file.yml" ]

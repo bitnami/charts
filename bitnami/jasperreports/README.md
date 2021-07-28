@@ -54,7 +54,7 @@ The command removes all the Kubernetes components associated with the chart and 
 |---------------------------|-------------------------------------------------|-------|
 | `global.imageRegistry`    | Global Docker image registry                    | `nil` |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `nil` |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
 ### Common parameters
 
@@ -74,7 +74,7 @@ The command removes all the Kubernetes components associated with the chart and 
 |-------------------------|------------------------------------------------------------------------|-------------------------|
 | `image.registry`        | JasperReports image registry                                           | `docker.io`             |
 | `image.repository`      | JasperReports image repository                                         | `bitnami/jasperreports` |
-| `image.tag`             | JasperReports image tag (immutable tags are recommended)               | `7.8.0-debian-10-r251`  |
+| `image.tag`             | JasperReports image tag (immutable tags are recommended)               | `7.8.0-debian-10-r276`  |
 | `image.pullPolicy`      | JasperReports image pull policy                                        | `IfNotPresent`          |
 | `image.pullSecrets`     | Specify docker-registry secret names as an array                       | `[]`                    |
 | `jasperreportsUsername` | JasperReports user                                                     | `jasperadmin`           |
@@ -90,8 +90,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `command`               | Override default container command (useful when using custom images)   | `[]`                    |
 | `args`                  | Override default container args (useful when using custom images)      | `[]`                    |
 | `extraEnvVars`          | Extra environment variables to be set on Jasperreports container       | `[]`                    |
-| `extraEnvVarsCM`        | Name of existing ConfigMap containing extra env vars                   | `nil`                   |
-| `extraEnvVarsSecret`    | Name of existing Secret containing extra env vars                      | `nil`                   |
+| `extraEnvVarsCM`        | Name of existing ConfigMap containing extra env vars                   | `""`                    |
+| `extraEnvVarsSecret`    | Name of existing Secret containing extra env vars                      | `""`                    |
 | `updateStrategy.type`   | StrategyType                                                           | `RollingUpdate`         |
 
 ### Jasperreports deployment parameters
@@ -138,7 +138,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `initContainers`                     | Add additional init containers to the Jasperreports pods                                  | `[]`                       |
 | `sidecars`                           | Add additional sidecar containers to the Jasperreports pods                               | `[]`                       |
 | `persistence.enabled`                | Enable persistence using PVC                                                              | `true`                     |
-| `persistence.storageClass`           | PVC Storage Class for Jasperreports volume                                                | `nil`                      |
+| `persistence.storageClass`           | PVC Storage Class for Jasperreports volume                                                | `""`                       |
 | `persistence.accessModes`            | Persistent Volume Access Mode                                                             | `[]`                       |
 | `persistence.size`                   | PVC Storage Request for Jasperreports volume                                              | `8Gi`                      |
 | `persistence.existingClaim`          | An Existing PVC name for Jasperreports volume                                             | `""`                       |
@@ -150,13 +150,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.type`                  | Kubernetes Service type                                                                       | `LoadBalancer`           |
 | `service.port`                  | Service HTTP port                                                                             | `80`                     |
 | `service.nodePort`              | Kubernetes http node port                                                                     | `""`                     |
-| `service.loadBalancerIP`        | Kubernetes LoadBalancerIP to request                                                          | `nil`                    |
+| `service.loadBalancerIP`        | Kubernetes LoadBalancerIP to request                                                          | `""`                     |
 | `service.externalTrafficPolicy` | Enable client source IP preservation                                                          | `Cluster`                |
 | `service.annotations`           | Annotations for Jasperreports service                                                         | `{}`                     |
 | `ingress.enabled`               | Enable ingress controller resource                                                            | `false`                  |
 | `ingress.certManager`           | Add annotations for cert-manager                                                              | `false`                  |
 | `ingress.pathType`              | Ingress path type                                                                             | `ImplementationSpecific` |
-| `ingress.apiVersion`            | Force Ingress API version (automatically detected if not set)                                 | `nil`                    |
+| `ingress.apiVersion`            | Force Ingress API version (automatically detected if not set)                                 | `""`                     |
 | `ingress.hostname`              | Default host for the ingress resource                                                         | `jasperreports.local`    |
 | `ingress.path`                  | Ingress path                                                                                  | `ImplementationSpecific` |
 | `ingress.annotations`           | Ingress annotations                                                                           | `{}`                     |
@@ -177,16 +177,16 @@ The command removes all the Kubernetes components associated with the chart and 
 | `mariadb.auth.username`                     | Database user to create                              | `bn_jasperreports`      |
 | `mariadb.auth.password`                     | Password for the database                            | `""`                    |
 | `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                | `true`                  |
-| `mariadb.primary.persistence.storageClass`  | PVC Storage Class                                    | `nil`                   |
+| `mariadb.primary.persistence.storageClass`  | PVC Storage Class                                    | `""`                    |
 | `mariadb.primary.persistence.accessModes`   | Access mode of persistent volume                     | `[]`                    |
 | `mariadb.primary.persistence.size`          | Database Persistent Volume Size                      | `8Gi`                   |
-| `mariadb.primary.persistence.hostPath`      | Host mount path for MariaDB volume                   | `nil`                   |
-| `mariadb.primary.persistence.existingClaim` | Enable persistence using an existing PVC             | `nil`                   |
-| `externalDatabase.existingSecret`           | Name of the database existing Secret Object          | `nil`                   |
-| `externalDatabase.host`                     | Host of the existing database                        | `nil`                   |
+| `mariadb.primary.persistence.hostPath`      | Host mount path for MariaDB volume                   | `""`                    |
+| `mariadb.primary.persistence.existingClaim` | Enable persistence using an existing PVC             | `""`                    |
+| `externalDatabase.existingSecret`           | Name of the database existing Secret Object          | `""`                    |
+| `externalDatabase.host`                     | Host of the existing database                        | `""`                    |
 | `externalDatabase.port`                     | Port of the existing database                        | `3306`                  |
 | `externalDatabase.user`                     | Existing username in the external db                 | `bn_jasperreports`      |
-| `externalDatabase.password`                 | Password for the above username                      | `nil`                   |
+| `externalDatabase.password`                 | Password for the above username                      | `""`                    |
 | `externalDatabase.database`                 | Name of the existing database                        | `bitnami_jasperreports` |
 
 The above parameters map to the env variables defined in [bitnami/jasperreports](http://github.com/bitnami/bitnami-docker-jasperreports). For more information please refer to the [bitnami/jasperreports](http://github.com/bitnami/bitnami-docker-jasperreports) image documentation.

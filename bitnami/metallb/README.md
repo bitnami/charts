@@ -51,7 +51,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 
 
@@ -59,8 +59,8 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                | Description                                                                            | Value |
 | ------------------- | -------------------------------------------------------------------------------------- | ----- |
-| `nameOverride`      | String to partially override metallb.fullname include (will maintain the release name) | `nil` |
-| `fullnameOverride`  | String to fully override metallb.fullname template                                     | `nil` |
+| `nameOverride`      | String to partially override metallb.fullname include (will maintain the release name) | `""`  |
+| `fullnameOverride`  | String to fully override metallb.fullname template                                     | `""`  |
 | `commonLabels`      | Add labels to all the deployed resources                                               | `{}`  |
 | `commonAnnotations` | Add annotations to all the deployed resources                                          | `{}`  |
 
@@ -69,7 +69,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                    | Description                                                                                                                                 | Value   |
 | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `existingConfigMap`                     | Specify the name of an externally-defined ConfigMap to use as the configuration. This is mutually exclusive with the `configInline` option. | `nil`   |
+| `existingConfigMap`                     | Specify the name of an externally-defined ConfigMap to use as the configuration. This is mutually exclusive with the `configInline` option. | `""`    |
 | `configInline`                          | Specifies MetalLB's configuration directly, in yaml format.                                                                                 | `{}`    |
 | `rbac.create`                           | Specifies whether to install and use RBAC rules                                                                                             | `true`  |
 | `psp.create`                            | create specifies whether to install Pod Security Policies.                                                                                  | `false` |
@@ -85,13 +85,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
 | `controller.image.registry`                              | MetalLB Controller image registry                                                                                     | `docker.io`                  |
 | `controller.image.repository`                            | MetalLB Controller image repository                                                                                   | `bitnami/metallb-controller` |
-| `controller.image.tag`                                   | MetalLB Controller  image tag (immutable tags are recommended)                                                        | `0.10.2-debian-10-r0`        |
+| `controller.image.tag`                                   | MetalLB Controller  image tag (immutable tags are recommended)                                                        | `0.10.2-debian-10-r23`       |
 | `controller.image.pullPolicy`                            | MetalLB Controller image pull policy                                                                                  | `IfNotPresent`               |
 | `controller.image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                      | `[]`                         |
 | `controller.hostAliases`                                 | Deployment pod host aliases                                                                                           | `[]`                         |
 | `controller.rbac.create`                                 | create specifies whether to install and use RBAC rules.                                                               | `true`                       |
 | `controller.psp.create`                                  | create specifies whether to install Pod Security Policies.                                                            | `true`                       |
-| `controller.priorityClassName`                           | Set pod priorityClassName                                                                                             | `nil`                        |
+| `controller.priorityClassName`                           | Set pod priorityClassName                                                                                             | `""`                         |
 | `controller.resources.limits`                            | The resources limits for the container                                                                                | `{}`                         |
 | `controller.resources.requests`                          | The requested resources for the container                                                                             | `{}`                         |
 | `controller.nodeSelector`                                | Node labels for controller pod assignment                                                                             | `{}`                         |
@@ -141,13 +141,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `speaker.image.registry`                              | MetalLB Speaker image registry                                                                                         | `docker.io`               |
 | `speaker.image.repository`                            | MetalLB Speaker image repository                                                                                       | `bitnami/metallb-speaker` |
-| `speaker.image.tag`                                   | MetalLB Speaker  image tag (immutable tags are recommended)                                                            | `0.10.2-debian-10-r0`     |
+| `speaker.image.tag`                                   | MetalLB Speaker  image tag (immutable tags are recommended)                                                            | `0.10.2-debian-10-r26`    |
 | `speaker.image.pullPolicy`                            | MetalLB Speaker image pull policy                                                                                      | `IfNotPresent`            |
 | `speaker.image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                       | `[]`                      |
 | `speaker.rbac.create`                                 | create specifies whether to install and use RBAC rules.                                                                | `true`                    |
 | `speaker.hostAliases`                                 | Deployment pod host aliases                                                                                            | `[]`                      |
 | `speaker.psp.create`                                  | create specifies whether to install Pod Security Policies.                                                             | `true`                    |
-| `speaker.priorityClassName`                           | Set pod priorityClassName.                                                                                             | `nil`                     |
+| `speaker.priorityClassName`                           | Set pod priorityClassName.                                                                                             | `""`                      |
 | `speaker.resources.limits`                            | The resources limits for the container                                                                                 | `{}`                      |
 | `speaker.resources.requests`                          | The requested resources for the container                                                                              | `{}`                      |
 | `speaker.nodeSelector`                                | Node labels for speaker pod assignment                                                                                 | `{}`                      |
@@ -159,9 +159,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `speaker.serviceAccount.name`                         | The name of the ServiceAccount to use.  If not set and create is true, a name is generated using the fullname template | `""`                      |
 | `speaker.daemonset.terminationGracePeriodSeconds`     | Configure the grace time period for sig term                                                                           | `2`                       |
 | `speaker.daemonset.hostPorts.metrics`                 | HTTP Metrics Endpoint                                                                                                  | `7472`                    |
-| `speaker.secretName`                                  | References a Secret name for the member secret outside of the helm chart                                               | `nil`                     |
-| `speaker.secretKey`                                   | References a Secret key the member secret outside of the helm chart                                                    | `nil`                     |
-| `speaker.secretValue`                                 | Custom value for `speaker.secretKey`                                                                                   | `nil`                     |
+| `speaker.secretName`                                  | References a Secret name for the member secret outside of the helm chart                                               | `""`                      |
+| `speaker.secretKey`                                   | References a Secret key the member secret outside of the helm chart                                                    | `""`                      |
+| `speaker.secretValue`                                 | Custom value for `speaker.secretKey`                                                                                   | `""`                      |
 | `speaker.initContainers`                              | Extra initContainers to add to the daemonset                                                                           | `[]`                      |
 | `speaker.securityContext.enabled`                     | Enable pods' security context                                                                                          | `true`                    |
 | `speaker.securityContext.runAsUser`                   | User ID for the pods.                                                                                                  | `0`                       |
