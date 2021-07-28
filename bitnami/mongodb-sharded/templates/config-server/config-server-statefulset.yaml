@@ -94,6 +94,12 @@ spec:
             - containerPort: {{ .Values.service.port }}
               name: mongodb
           env:
+            - name: MONGODB_ENABLE_NUMACTL
+              {{- if $.Values.common.mongodbEnableNumactl }}
+              value: "yes"
+              {{- else }}
+              value: "no"
+              {{- end }}
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
             - name: MONGODB_SYSTEM_LOG_VERBOSITY
