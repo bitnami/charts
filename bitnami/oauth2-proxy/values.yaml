@@ -231,7 +231,7 @@ configuration:
   ##   pass_basic_auth = false
   ##   pass_access_token = true
   ##
-  ## @param configuration.content Default configuration
+  ## @param configuration.content [string] Default configuration
   ##
   content: |
     email_domains = [ "*" ]

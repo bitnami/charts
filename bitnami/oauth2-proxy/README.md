@@ -111,26 +111,24 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### OAuth2 Proxy configuration parameters
 
-| Name                                                   | Description                                         | Value                                                         |
-| ------------------------------------------------------ | --------------------------------------------------- | ------------------------------------------------------------- |
-| `configuration.clientID`                               | OAuth client ID                                     | `XXXXXXX`                                                     |
-| `configuration.clientSecret`                           | OAuth client secret                                 | `XXXXXXXX`                                                    |
-| `configuration.cookieSecret`                           | OAuth cookie secret                                 | `XXXXXXXXXXXXXXXX`                                            |
-| `configuration.existingSecret`                         | Secret with the client ID, secret and cookie secret | `""`                                                          |
-| `configuration.google.enabled`                         | Enable Google service account                       | `false`                                                       |
-| `configuration.google.adminEmail`                      | Google admin email                                  | `""`                                                          |
-| `configuration.google.serviceAccountJson`              | Google Service account JSON                         | `""`                                                          |
-| `configuration.google.existingSecret`                  | Existing secret containing Google Service Account   | `""`                                                          |
-| `configuration.content`                                | Default configuration                               | `email_domains = [ "*" ]
-upstreams = [ "file:///dev/null" ]
-` |
-| `configuration.existingConfigmap`                      | Configmap with the OAuth2 Proxy configuration       | `""`                                                          |
-| `configuration.authenticatedEmailsFile.enabled`        | Enable authenticated emails file                    | `false`                                                       |
-| `configuration.authenticatedEmailsFile.content`        | Restricted access list (one email per line)         | `""`                                                          |
-| `configuration.authenticatedEmailsFile.existingSecret` | Secret with the authenticated emails file           | `""`                                                          |
-| `configuration.htpasswdFile.enabled`                   | Enable htpasswd file                                | `false`                                                       |
-| `configuration.htpasswdFile.existingSecret`            | Existing secret for htpasswd file                   | `""`                                                          |
-| `configuration.htpasswdFile.content`                   | htpasswd file entries (one row per user)            | `""`                                                          |
+| Name                                                   | Description                                         | Value              |
+| ------------------------------------------------------ | --------------------------------------------------- | ------------------ |
+| `configuration.clientID`                               | OAuth client ID                                     | `XXXXXXX`          |
+| `configuration.clientSecret`                           | OAuth client secret                                 | `XXXXXXXX`         |
+| `configuration.cookieSecret`                           | OAuth cookie secret                                 | `XXXXXXXXXXXXXXXX` |
+| `configuration.existingSecret`                         | Secret with the client ID, secret and cookie secret | `""`               |
+| `configuration.google.enabled`                         | Enable Google service account                       | `false`            |
+| `configuration.google.adminEmail`                      | Google admin email                                  | `""`               |
+| `configuration.google.serviceAccountJson`              | Google Service account JSON                         | `""`               |
+| `configuration.google.existingSecret`                  | Existing secret containing Google Service Account   | `""`               |
+| `configuration.content`                                | Default configuration                               | `""`               |
+| `configuration.existingConfigmap`                      | Configmap with the OAuth2 Proxy configuration       | `""`               |
+| `configuration.authenticatedEmailsFile.enabled`        | Enable authenticated emails file                    | `false`            |
+| `configuration.authenticatedEmailsFile.content`        | Restricted access list (one email per line)         | `""`               |
+| `configuration.authenticatedEmailsFile.existingSecret` | Secret with the authenticated emails file           | `""`               |
+| `configuration.htpasswdFile.enabled`                   | Enable htpasswd file                                | `false`            |
+| `configuration.htpasswdFile.existingSecret`            | Existing secret for htpasswd file                   | `""`               |
+| `configuration.htpasswdFile.content`                   | htpasswd file entries (one row per user)            | `""`               |
 
 
 ### OAuth2 Proxy deployment parameters
