@@ -103,6 +103,10 @@ shards: 2
 ## Properties for all of the pods in the cluster (shards, config servers and mongos)
 ##
 common:
+  ## @param common.mongodbEnableNumactl Enable launch MongoDB instance prefixed with "numactl --interleave=all"
+  ## ref: https://docs.mongodb.com/manual/administration/production-notes/#mongodb-and-numa-hardware
+  ##
+  mongodbEnableNumactl: false
   ## @param common.useHostnames Enable DNS hostnames in the replica set config
   ##
   useHostnames: true
