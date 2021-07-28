@@ -133,10 +133,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `autoscaling.targetMemory`              | Target Memory utilization percentage                                                      | `""`    |
 | `extraVolumes`                          | Array to add extra volumes                                                                | `[]`    |
 | `extraVolumeMounts`                     | Array to add extra mount                                                                  | `[]`    |
-| `serviceAccount.autoMount`              | Auto-mount the service account token in the pod                                           | `false` |
 | `serviceAccount.create`                 | Enable creation of ServiceAccount for nginx pod                                           | `false` |
 | `serviceAccount.name`                   | The name of the ServiceAccount to use.                                                    | `""`    |
 | `serviceAccount.annotations`            | Annotations for service account. Evaluated as a template.                                 | `{}`    |
+| `serviceAccount.autoMount`              | Auto-mount the service account token in the pod                                           | `false` |
 | `sidecars`                              | Sidecar parameters                                                                        | `[]`    |
 | `initContainers`                        | Extra init containers                                                                     | `[]`    |
 | `pdb.create`                            | Created a PodDisruptionBudget                                                             | `false` |
