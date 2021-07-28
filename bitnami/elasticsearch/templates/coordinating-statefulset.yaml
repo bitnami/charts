@@ -154,9 +154,9 @@ spec:
             timeoutSeconds: {{ .Values.coordinating.startupProbe.timeoutSeconds }}
             successThreshold: {{ .Values.coordinating.startupProbe.successThreshold }}
             failureThreshold: {{ .Values.coordinating.startupProbe.failureThreshold }}
-            httpGet:
-              path: /_cluster/health?local=true
-              port: 9200
+            exec:
+              command:
+                - /opt/bitnami/scripts/elasticsearch/healthcheck.sh
           {{- else if .Values.coordinating.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.coordinating.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
@@ -167,9 +167,9 @@ spec:
             timeoutSeconds: {{ .Values.coordinating.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.coordinating.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.coordinating.livenessProbe.failureThreshold }}
-            httpGet:
-              path: /_cluster/health?local=true
-              port: http
+            exec:
+              command:
+                - /opt/bitnami/scripts/elasticsearch/healthcheck.sh
           {{- else if .Values.coordinating.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.coordinating.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
@@ -180,9 +180,9 @@ spec:
             timeoutSeconds: {{ .Values.coordinating.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.coordinating.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.coordinating.readinessProbe.failureThreshold }}
-            httpGet:
-              path: /_cluster/health?local=true
-              port: http
+            exec:
+              command:
+                - /opt/bitnami/scripts/elasticsearch/healthcheck.sh
           {{- else if .Values.coordinating.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.coordinating.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}

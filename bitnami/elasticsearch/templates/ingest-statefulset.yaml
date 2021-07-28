@@ -155,9 +155,9 @@ spec:
             timeoutSeconds: {{ .Values.ingest.startupProbe.timeoutSeconds }}
             successThreshold: {{ .Values.ingest.startupProbe.successThreshold }}
             failureThreshold: {{ .Values.ingest.startupProbe.failureThreshold }}
-            httpGet:
-              path: /_cluster/health?local=true
-              port: 9200
+            exec:
+              command:
+                - /opt/bitnami/scripts/elasticsearch/healthcheck.sh
           {{- else if .Values.ingest.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ingest.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
@@ -168,9 +168,9 @@ spec:
             timeoutSeconds: {{ .Values.ingest.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.ingest.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.ingest.livenessProbe.failureThreshold }}
-            httpGet:
-              path: /_cluster/health?local=true
-              port: 9200
+            exec:
+              command:
+                - /opt/bitnami/scripts/elasticsearch/healthcheck.sh
           {{- else if .Values.ingest.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ingest.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
@@ -181,9 +181,9 @@ spec:
             timeoutSeconds: {{ .Values.ingest.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.ingest.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.ingest.readinessProbe.failureThreshold }}
-            httpGet:
-              path: /_cluster/health?local=true
-              port: 9200
+            exec:
+              command:
+                - /opt/bitnami/scripts/elasticsearch/healthcheck.sh
           {{- else if .Values.ingest.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ingest.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}

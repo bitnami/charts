@@ -175,9 +175,9 @@ spec:
             timeoutSeconds: {{ .Values.data.startupProbe.timeoutSeconds }}
             successThreshold: {{ .Values.data.startupProbe.successThreshold }}
             failureThreshold: {{ .Values.data.startupProbe.failureThreshold }}
-            httpGet:
-              path: /_cluster/health?local=true
-              port: 9200
+            exec:
+              command:
+                - /opt/bitnami/scripts/elasticsearch/healthcheck.sh
           {{- else if .Values.data.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.data.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
@@ -188,9 +188,9 @@ spec:
             timeoutSeconds: {{ .Values.data.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.data.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.data.livenessProbe.failureThreshold }}
-            httpGet:
-              path: /_cluster/health?local=true
-              port: 9200
+            exec:
+              command:
+                - /opt/bitnami/scripts/elasticsearch/healthcheck.sh
           {{- else if .Values.data.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.data.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
@@ -201,9 +201,9 @@ spec:
             timeoutSeconds: {{ .Values.data.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.data.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.data.readinessProbe.failureThreshold }}
-            httpGet:
-              path: /_cluster/health?local=true
-              port: 9200
+            exec:
+              command:
+                - /opt/bitnami/scripts/elasticsearch/healthcheck.sh
           {{- else if .Values.data.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.data.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
