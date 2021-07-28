@@ -215,6 +215,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `grafana.image.repository`                                  | Grafana image name                                                                            | `bitnami/grafana`     |
 | `grafana.image.tag`                                         | Grafana image tag                                                                             | `7.5.10-debian-10-r9` |
 | `grafana.image.pullSecrets`                                 | Grafana image pull secrets                                                                    | `[]`                  |
+| `grafana.serviceAccount`                                    | Additional service account configuration                                                      | `{}`                  |
 | `grafana.podSecurityContext.enabled`                        | Enable pods security context                                                                  | `true`                |
 | `grafana.podSecurityContext.runAsUser`                      | User ID for the pods                                                                          | `1001`                |
 | `grafana.podSecurityContext.runAsGroup`                     | User ID for the pods                                                                          | `1001`                |
