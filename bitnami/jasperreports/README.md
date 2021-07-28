@@ -51,42 +51,44 @@ The command removes all the Kubernetes components associated with the chart and 
 ### Global parameters
 
 | Name                      | Description                                     | Value |
-|---------------------------|-------------------------------------------------|-------|
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| ------------------------- | ----------------------------------------------- | ----- |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
+
 
 ### Common parameters
 
 | Name                | Description                                                          | Value           |
-|---------------------|----------------------------------------------------------------------|-----------------|
-| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set) | `nil`           |
-| `nameOverride`      | String to partially override common.names.fullname                   | `nil`           |
-| `fullnameOverride`  | String to fully override common.names.fullname                       | `nil`           |
+| ------------------- | -------------------------------------------------------------------- | --------------- |
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set) | `""`            |
+| `nameOverride`      | String to partially override common.names.fullname                   | `""`            |
+| `fullnameOverride`  | String to fully override common.names.fullname                       | `""`            |
 | `commonLabels`      | Labels to add to all deployed objects                                | `{}`            |
 | `commonAnnotations` | Annotations to add to all deployed objects                           | `{}`            |
 | `clusterDomain`     | Default Kubernetes cluster domain                                    | `cluster.local` |
 | `extraDeploy`       | Array of extra objects to deploy with the release                    | `[]`            |
 
+
 ### JasperReports parameters
 
 | Name                    | Description                                                            | Value                   |
-|-------------------------|------------------------------------------------------------------------|-------------------------|
+| ----------------------- | ---------------------------------------------------------------------- | ----------------------- |
 | `image.registry`        | JasperReports image registry                                           | `docker.io`             |
 | `image.repository`      | JasperReports image repository                                         | `bitnami/jasperreports` |
-| `image.tag`             | JasperReports image tag (immutable tags are recommended)               | `7.8.0-debian-10-r276`  |
+| `image.tag`             | JasperReports image tag (immutable tags are recommended)               | `7.8.0-debian-10-r280`  |
 | `image.pullPolicy`      | JasperReports image pull policy                                        | `IfNotPresent`          |
 | `image.pullSecrets`     | Specify docker-registry secret names as an array                       | `[]`                    |
 | `jasperreportsUsername` | JasperReports user                                                     | `jasperadmin`           |
-| `jasperreportsPassword` | JasperReports password                                                 | `nil`                   |
+| `jasperreportsPassword` | JasperReports password                                                 | `""`                    |
 | `jasperreportsEmail`    | JasperReports user email                                               | `user@example.com`      |
 | `allowEmptyPassword`    | Set to `yes` to allow the container to be started with blank passwords | `no`                    |
-| `smtpHost`              | SMTP host                                                              | `nil`                   |
-| `smtpPort`              | SMTP port                                                              | `nil`                   |
-| `smtpEmail`             | SMTP email                                                             | `nil`                   |
-| `smtpUser`              | SMTP user                                                              | `nil`                   |
-| `smtpPassword`          | SMTP password                                                          | `nil`                   |
-| `smtpProtocol`          | SMTP protocol [`ssl`, `none`]                                          | `nil`                   |
+| `smtpHost`              | SMTP host                                                              | `""`                    |
+| `smtpPort`              | SMTP port                                                              | `""`                    |
+| `smtpEmail`             | SMTP email                                                             | `""`                    |
+| `smtpUser`              | SMTP user                                                              | `""`                    |
+| `smtpPassword`          | SMTP password                                                          | `""`                    |
+| `smtpProtocol`          | SMTP protocol [`ssl`, `none`]                                          | `""`                    |
 | `command`               | Override default container command (useful when using custom images)   | `[]`                    |
 | `args`                  | Override default container args (useful when using custom images)      | `[]`                    |
 | `extraEnvVars`          | Extra environment variables to be set on Jasperreports container       | `[]`                    |
@@ -94,10 +96,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVarsSecret`    | Name of existing Secret containing extra env vars                      | `""`                    |
 | `updateStrategy.type`   | StrategyType                                                           | `RollingUpdate`         |
 
+
 ### Jasperreports deployment parameters
 
 | Name                                 | Description                                                                               | Value                      |
-|--------------------------------------|-------------------------------------------------------------------------------------------|----------------------------|
+| ------------------------------------ | ----------------------------------------------------------------------------------------- | -------------------------- |
 | `hostAliases`                        | Add deployment host aliases                                                               | `[]`                       |
 | `containerPort`                      | HTTP port to expose at container level                                                    | `8080`                     |
 | `podSecurityContext.enabled`         | Enable pod's Security Context                                                             | `true`                     |
@@ -143,10 +146,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.size`                   | PVC Storage Request for Jasperreports volume                                              | `8Gi`                      |
 | `persistence.existingClaim`          | An Existing PVC name for Jasperreports volume                                             | `""`                       |
 
+
 ### Exposure parameters
 
 | Name                            | Description                                                                                   | Value                    |
-|---------------------------------|-----------------------------------------------------------------------------------------------|--------------------------|
+| ------------------------------- | --------------------------------------------------------------------------------------------- | ------------------------ |
 | `service.type`                  | Kubernetes Service type                                                                       | `LoadBalancer`           |
 | `service.port`                  | Service HTTP port                                                                             | `80`                     |
 | `service.nodePort`              | Kubernetes http node port                                                                     | `""`                     |
@@ -166,10 +170,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.extraTls`              | The tls configuration for additional hostnames to be covered with this ingress record.        | `[]`                     |
 | `ingress.secrets`               | If you're providing your own certificates, please use this to add the certificates as secrets | `[]`                     |
 
+
 ### Database parameters
 
 | Name                                        | Description                                          | Value                   |
-|---------------------------------------------|------------------------------------------------------|-------------------------|
+| ------------------------------------------- | ---------------------------------------------------- | ----------------------- |
 | `mariadb.enabled`                           | Whether to use the MariaDB chart                     | `true`                  |
 | `mariadb.architecture`                      | MariaDB architecture (`standalone` or `replication`) | `standalone`            |
 | `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                 | `""`                    |
@@ -188,6 +193,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.user`                     | Existing username in the external db                 | `bn_jasperreports`      |
 | `externalDatabase.password`                 | Password for the above username                      | `""`                    |
 | `externalDatabase.database`                 | Name of the existing database                        | `bitnami_jasperreports` |
+
 
 The above parameters map to the env variables defined in [bitnami/jasperreports](http://github.com/bitnami/bitnami-docker-jasperreports). For more information please refer to the [bitnami/jasperreports](http://github.com/bitnami/bitnami-docker-jasperreports) image documentation.
 
