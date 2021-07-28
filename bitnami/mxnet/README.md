@@ -51,17 +51,17 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `nil` |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
 
 ### Common parameters
 
 | Name               | Description                                                                                  | Value |
 | ------------------ | -------------------------------------------------------------------------------------------- | ----- |
-| `nameOverride`     | String to partially override common.names.fullname template (will maintain the release name) | `nil` |
-| `fullnameOverride` | String to fully override common.names.fullname template                                      | `nil` |
+| `nameOverride`     | String to partially override common.names.fullname template (will maintain the release name) | `""`  |
+| `fullnameOverride` | String to fully override common.names.fullname template                                      | `""`  |
 
 
 ### Common Mxnet parameters
@@ -92,8 +92,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.annotations`                  | Provide any additional annotations which may be required.                                             | `{}`                    |
 | `entrypoint`                           | The main entrypoint of your app, this will be executed as:                                            | `{}`                    |
 | `mode`                                 | Apache MXNet (Incubating) deployment mode. Can be `standalone` or `distributed`                       | `standalone`            |
-| `existingSecret`                       | Name of a secret with sensitive data to mount in the pods                                             | `nil`                   |
-| `configMap`                            | Name of an existing config map containing all the files you want to load in Apache MXNet (Incubating) | `nil`                   |
+| `existingSecret`                       | Name of a secret with sensitive data to mount in the pods                                             | `""`                    |
+| `configMap`                            | Name of an existing config map containing all the files you want to load in Apache MXNet (Incubating) | `""`                    |
 | `hostAliases`                          | Deployment pod host aliases                                                                           | `[]`                    |
 | `cloneFilesFromGit.enabled`            | Enable in order to download files from git repository                                                 | `false`                 |
 | `cloneFilesFromGit.extraVolumeMounts`  | Add extra volume mounts for the GIT container                                                         | `[]`                    |
