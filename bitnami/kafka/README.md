@@ -50,21 +50,24 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `nil` |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
 
 ### Common parameters
 
-| Name                | Description                                       | Value           |
-| ------------------- | ------------------------------------------------- | --------------- |
-| `nameOverride`      | String to partially override kafka.fullname       | `nil`           |
-| `fullnameOverride`  | String to fully override kafka.fullname           | `nil`           |
-| `clusterDomain`     | Default Kubernetes cluster domain                 | `cluster.local` |
-| `commonLabels`      | Labels to add to all deployed objects             | `{}`            |
-| `commonAnnotations` | Annotations to add to all deployed objects        | `{}`            |
-| `extraDeploy`       | Array of extra objects to deploy with the release | `[]`            |
+| Name                     | Description                                                                             | Value           |
+| ------------------------ | --------------------------------------------------------------------------------------- | --------------- |
+| `nameOverride`           | String to partially override kafka.fullname                                             | `""`            |
+| `fullnameOverride`       | String to fully override kafka.fullname                                                 | `""`            |
+| `clusterDomain`          | Default Kubernetes cluster domain                                                       | `cluster.local` |
+| `commonLabels`           | Labels to add to all deployed objects                                                   | `{}`            |
+| `commonAnnotations`      | Annotations to add to all deployed objects                                              | `{}`            |
+| `extraDeploy`            | Array of extra objects to deploy with the release                                       | `[]`            |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                    | `[]`            |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `[]`            |
 
 
 ### Kafka parameters
@@ -73,14 +76,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
 | `image.registry`                           | Kafka image registry                                                                                                                                 | `docker.io`                         |
 | `image.repository`                         | Kafka image repository                                                                                                                               | `bitnami/kafka`                     |
-| `image.tag`                                | Kafka image tag (immutable tags are recommended)                                                                                                     | `2.8.0-debian-10-r43`               |
+| `image.tag`                                | Kafka image tag (immutable tags are recommended)                                                                                                     | `2.8.0-debian-10-r55`               |
 | `image.pullPolicy`                         | Kafka image pull policy                                                                                                                              | `IfNotPresent`                      |
 | `image.pullSecrets`                        | Specify docker-registry secret names as an array                                                                                                     | `[]`                                |
 | `image.debug`                              | Set to true if you would like to see extra information on logs                                                                                       | `false`                             |
-| `config`                                   | Configuration file for Kafka. Auto-generated based on other parameters when not specified (see [below](                                              | `nil`                               |
-| `existingConfigmap`                        | ConfigMap with Kafka Configuration                                                                                                                   | `nil`                               |
-| `log4j`                                    | An optional log4j.properties file to overwrite the default of the Kafka brokers.                                                                     | `nil`                               |
-| `existingLog4jConfigMap`                   | The name of an existing ConfigMap containing a log4j.properties file.                                                                                | `nil`                               |
+| `config`                                   | Configuration file for Kafka. Auto-generated based on other parameters when not specified (see [below](                                              | `""`                                |
+| `existingConfigmap`                        | ConfigMap with Kafka Configuration                                                                                                                   | `""`                                |
+| `log4j`                                    | An optional log4j.properties file to overwrite the default of the Kafka brokers.                                                                     | `""`                                |
+| `existingLog4jConfigMap`                   | The name of an existing ConfigMap containing a log4j.properties file.                                                                                | `""`                                |
 | `heapOpts`                                 | Kafka's Java Heap size                                                                                                                               | `-Xmx1024m -Xms1024m`               |
 | `deleteTopicEnable`                        | Switch to enable topic deletion or not                                                                                                               | `false`                             |
 | `autoCreateTopicsEnable`                   | Switch to enable auto creation of topics. Enabling auto creation of topics not recommended for production or similar environments                    | `true`                              |
@@ -139,7 +142,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `auth.tlsEndpointIdentificationAlgorithm`  | DEPRECATED: use `auth.tls.endpointIdentificationAlgorithm` instead.                                                                                  | `https`                             |
 | `listeners`                                | The address(es) the socket server listens on. Auto-calculated it's set to an empty array                                                             | `[]`                                |
 | `advertisedListeners`                      | The address(es) (hostname:port) the broker will advertise to producers and consumers. Auto-calculated it's set to an empty array                     | `[]`                                |
-| `listenerSecurityProtocolMap`              | The protocol->listener mapping. Auto-calculated it's set to nil                                                                                      | `nil`                               |
+| `listenerSecurityProtocolMap`              | The protocol->listener mapping. Auto-calculated it's set to nil                                                                                      | `""`                                |
 | `allowPlaintextListener`                   | Allow to use the PLAINTEXT listener                                                                                                                  | `true`                              |
 | `interBrokerListenerName`                  | The listener that the brokers should communicate on                                                                                                  | `INTERNAL`                          |
 
@@ -151,10 +154,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replicaCount`                       | Number of Kafka nodes                                                                                                                                                                         | `1`             |
 | `minBrokerId`                        | Minimal broker.id value, nodes increment their `broker.id` respectively                                                                                                                       | `0`             |
 | `updateStrategy`                     | Update strategy for the stateful set                                                                                                                                                          | `RollingUpdate` |
-| `rollingUpdatePartition`             | Partition update strategy                                                                                                                                                                     | `nil`           |
+| `rollingUpdatePartition`             | Partition update strategy                                                                                                                                                                     | `""`            |
 | `hostAliases`                        | Add deployment host aliases                                                                                                                                                                   | `[]`            |
 | `podManagementPolicy`                | StatefulSet controller supports relax its ordering guarantees while preserving its uniqueness and identity guarantees. There are two valid pod management policies: OrderedReady and Parallel | `Parallel`      |
-| `schedulerName`                      | Name of the k8s scheduler (other than default)                                                                                                                                                | `nil`           |
+| `schedulerName`                      | Name of the k8s scheduler (other than default)                                                                                                                                                | `""`            |
 | `podLabels`                          | Kafka pod labels                                                                                                                                                                              | `{}`            |
 | `podAnnotations`                     | Kafka Pod annotations                                                                                                                                                                         | `{}`            |
 | `priorityClassName`                  | Name of the existing priority class to be used by kafka pods                                                                                                                                  | `""`            |
@@ -166,7 +169,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `affinity`                           | Affinity for pod assignment                                                                                                                                                                   | `{}`            |
 | `nodeSelector`                       | Node labels for pod assignment                                                                                                                                                                | `{}`            |
 | `tolerations`                        | Tolerations for pod assignment                                                                                                                                                                | `[]`            |
-| `terminationGracePeriodSeconds`      | Seconds the pod needs to gracefully terminate                                                                                                                                                 | `nil`           |
+| `terminationGracePeriodSeconds`      | Seconds the pod needs to gracefully terminate                                                                                                                                                 | `""`            |
 | `podSecurityContext.enabled`         | Enable security context for the pods                                                                                                                                                          | `true`          |
 | `podSecurityContext.fsGroup`         | Group ID for the filesystem used by the containers                                                                                                                                            | `1001`          |
 | `podSecurityContext.runAsUser`       | User ID for the service user running the pod                                                                                                                                                  | `1001`          |
@@ -175,49 +178,54 @@ The command removes all the Kubernetes components associated with the chart and 
 | `resources.requests`                 | The requested resources for Kafka containers                                                                                                                                                  | `{}`            |
 | `livenessProbe.enabled`              | Enable livenessProbe                                                                                                                                                                          | `true`          |
 | `livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                                                                                                       | `10`            |
+| `livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                                                                                                              | `10`            |
 | `livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                                                                                                             | `5`             |
+| `livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                                                                                                           | `3`             |
+| `livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                                                                                                           | `1`             |
 | `readinessProbe.enabled`             | Enable readinessProbe                                                                                                                                                                         | `true`          |
 | `readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                                                                                                                      | `5`             |
+| `readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                                                                                                             | `10`            |
 | `readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                                                                                                            | `5`             |
 | `readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                                                                                                          | `6`             |
+| `readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                                                                                                          | `1`             |
 | `customLivenessProbe`                | Custom Liveness probe configuration for Kafka                                                                                                                                                 | `{}`            |
 | `customReadinessProbe`               | Custom Readiness probe configuration for Kafka                                                                                                                                                | `{}`            |
 | `pdb.create`                         | Enable/disable a Pod Disruption Budget creation                                                                                                                                               | `false`         |
-| `pdb.minAvailable`                   | Minimum number/percentage of pods that should remain scheduled                                                                                                                                | `nil`           |
+| `pdb.minAvailable`                   | Minimum number/percentage of pods that should remain scheduled                                                                                                                                | `""`            |
 | `pdb.maxUnavailable`                 | Maximum number/percentage of pods that may be made unavailable                                                                                                                                | `1`             |
-| `sidecars`                           | Attach additional sidecar containers to the Kafka pod                                                                                                                                         | `{}`            |
+| `sidecars`                           | Attach additional sidecar containers to the Kafka pod                                                                                                                                         | `[]`            |
 | `initContainers`                     | Add extra init containers                                                                                                                                                                     | `[]`            |
 
 
 ### Exposure parameters
 
-| Name                                              | Description                                                                                   | Value                  |
-| ------------------------------------------------- | --------------------------------------------------------------------------------------------- | ---------------------- |
-| `service.type`                                    | Kubernetes Service type                                                                       | `ClusterIP`            |
-| `service.port`                                    | Kafka port for client connections                                                             | `9092`                 |
-| `service.internalPort`                            | Kafka port for inter-broker connections                                                       | `9093`                 |
-| `service.externalPort`                            | Kafka port for external connections                                                           | `9094`                 |
-| `service.nodePorts`                               | Specify the nodePort value for the LoadBalancer and NodePort service types.                   | `{}`                   |
-| `service.loadBalancerIP`                          | loadBalancerIP for Kafka Service                                                              | `nil`                  |
-| `service.loadBalancerSourceRanges`                | Address(es) that are allowed when service is LoadBalancer                                     | `[]`                   |
-| `service.annotations`                             | Service annotations                                                                           | `{}`                   |
-| `externalAccess.enabled`                          | Enable Kubernetes external cluster access to Kafka brokers                                    | `false`                |
-| `externalAccess.autoDiscovery.enabled`            | Enable using an init container to auto-detect external IPs/ports by querying the K8s API      | `false`                |
-| `externalAccess.autoDiscovery.image.registry`     | Init container auto-discovery image registry                                                  | `docker.io`            |
-| `externalAccess.autoDiscovery.image.repository`   | Init container auto-discovery image repository                                                | `bitnami/kubectl`      |
-| `externalAccess.autoDiscovery.image.tag`          | Init container auto-discovery image tag (immutable tags are recommended)                      | `1.19.12-debian-10-r5` |
-| `externalAccess.autoDiscovery.image.pullPolicy`   | Init container auto-discovery image pull policy                                               | `IfNotPresent`         |
-| `externalAccess.autoDiscovery.image.pullSecrets`  | Init container auto-discovery image pull secrets                                              | `[]`                   |
-| `externalAccess.autoDiscovery.resources.limits`   | Init container auto-discovery resource limits                                                 | `{}`                   |
-| `externalAccess.autoDiscovery.resources.requests` | Init container auto-discovery resource requests                                               | `{}`                   |
-| `externalAccess.service.type`                     | Kubernetes Service type for external access. It can be NodePort or LoadBalancer               | `LoadBalancer`         |
-| `externalAccess.service.port`                     | Kafka port used for external access when service type is LoadBalancer                         | `9094`                 |
-| `externalAccess.service.loadBalancerIPs`          | Array of load balancer IPs for each Kafka broker. Length must be the same as replicaCount     | `[]`                   |
-| `externalAccess.service.loadBalancerSourceRanges` | Address(es) that are allowed when service is LoadBalancer                                     | `[]`                   |
-| `externalAccess.service.nodePorts`                | Array of node ports used for each Kafka broker. Length must be the same as replicaCount       | `[]`                   |
-| `externalAccess.service.useHostIPs`               | Use service host IPs to configure Kafka external listener when service type is NodePort       | `false`                |
-| `externalAccess.service.domain`                   | Domain or external ip used to configure Kafka external listener when service type is NodePort | `nil`                  |
-| `externalAccess.service.annotations`              | Service annotations for external access                                                       | `{}`                   |
+| Name                                              | Description                                                                                   | Value                   |
+| ------------------------------------------------- | --------------------------------------------------------------------------------------------- | ----------------------- |
+| `service.type`                                    | Kubernetes Service type                                                                       | `ClusterIP`             |
+| `service.port`                                    | Kafka port for client connections                                                             | `9092`                  |
+| `service.internalPort`                            | Kafka port for inter-broker connections                                                       | `9093`                  |
+| `service.externalPort`                            | Kafka port for external connections                                                           | `9094`                  |
+| `service.nodePorts`                               | Specify the nodePort value for the LoadBalancer and NodePort service types.                   | `{}`                    |
+| `service.loadBalancerIP`                          | loadBalancerIP for Kafka Service                                                              | `""`                    |
+| `service.loadBalancerSourceRanges`                | Address(es) that are allowed when service is LoadBalancer                                     | `[]`                    |
+| `service.annotations`                             | Service annotations                                                                           | `{}`                    |
+| `externalAccess.enabled`                          | Enable Kubernetes external cluster access to Kafka brokers                                    | `false`                 |
+| `externalAccess.autoDiscovery.enabled`            | Enable using an init container to auto-detect external IPs/ports by querying the K8s API      | `false`                 |
+| `externalAccess.autoDiscovery.image.registry`     | Init container auto-discovery image registry                                                  | `docker.io`             |
+| `externalAccess.autoDiscovery.image.repository`   | Init container auto-discovery image repository                                                | `bitnami/kubectl`       |
+| `externalAccess.autoDiscovery.image.tag`          | Init container auto-discovery image tag (immutable tags are recommended)                      | `1.19.12-debian-10-r20` |
+| `externalAccess.autoDiscovery.image.pullPolicy`   | Init container auto-discovery image pull policy                                               | `IfNotPresent`          |
+| `externalAccess.autoDiscovery.image.pullSecrets`  | Init container auto-discovery image pull secrets                                              | `[]`                    |
+| `externalAccess.autoDiscovery.resources.limits`   | Init container auto-discovery resource limits                                                 | `{}`                    |
+| `externalAccess.autoDiscovery.resources.requests` | Init container auto-discovery resource requests                                               | `{}`                    |
+| `externalAccess.service.type`                     | Kubernetes Service type for external access. It can be NodePort or LoadBalancer               | `LoadBalancer`          |
+| `externalAccess.service.port`                     | Kafka port used for external access when service type is LoadBalancer                         | `9094`                  |
+| `externalAccess.service.loadBalancerIPs`          | Array of load balancer IPs for each Kafka broker. Length must be the same as replicaCount     | `[]`                    |
+| `externalAccess.service.loadBalancerSourceRanges` | Address(es) that are allowed when service is LoadBalancer                                     | `[]`                    |
+| `externalAccess.service.nodePorts`                | Array of node ports used for each Kafka broker. Length must be the same as replicaCount       | `[]`                    |
+| `externalAccess.service.useHostIPs`               | Use service host IPs to configure Kafka external listener when service type is NodePort       | `false`                 |
+| `externalAccess.service.domain`                   | Domain or external ip used to configure Kafka external listener when service type is NodePort | `""`                    |
+| `externalAccess.service.annotations`              | Service annotations for external access                                                       | `{}`                    |
 
 
 ### Persistence parameters
@@ -225,16 +233,16 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                              | Description                                                                                                                              | Value                     |
 | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `persistence.enabled`             | Enable Kafka data persistence using PVC, note that Zookeeper persistence is unaffected                                                   | `true`                    |
-| `persistence.existingClaim`       | Provide an existing `PersistentVolumeClaim`, the value is evaluated as a template                                                        | `nil`                     |
-| `persistence.storageClass`        | PVC Storage Class for Kafka data volume                                                                                                  | `nil`                     |
+| `persistence.existingClaim`       | Provide an existing `PersistentVolumeClaim`, the value is evaluated as a template                                                        | `""`                      |
+| `persistence.storageClass`        | PVC Storage Class for Kafka data volume                                                                                                  | `""`                      |
 | `persistence.accessModes`         | PV Access Mode                                                                                                                           | `[]`                      |
 | `persistence.size`                | PVC Storage Request for Kafka data volume                                                                                                | `8Gi`                     |
 | `persistence.annotations`         | Annotations for the PVC                                                                                                                  | `{}`                      |
 | `persistence.selector`            | Selector to match an existing Persistent Volume for Kafka's data PVC. If set, the PVC can't have a PV dynamically provisioned for it     | `{}`                      |
 | `persistence.mountPath`           | Mount path of the Kafka data volume                                                                                                      | `/bitnami/kafka`          |
 | `logPersistence.enabled`          | Enable Kafka logs persistence using PVC, note that Zookeeper persistence is unaffected                                                   | `false`                   |
-| `logPersistence.existingClaim`    | A manually managed Persistent Volume and Claim                                                                                           | `nil`                     |
-| `logPersistence.existingLogClaim` | PV Storage Class                                                                                                                         | `nil`                     |
+| `logPersistence.existingClaim`    | A manually managed Persistent Volume and Claim                                                                                           | `""`                      |
+| `logPersistence.existingLogClaim` | PV Storage Class                                                                                                                         | `""`                      |
 | `logPersistence.accessModes`      | PV Access Mode                                                                                                                           | `[]`                      |
 | `logPersistence.size`             | PVC Storage Request for Kafka logs volume                                                                                                | `8Gi`                     |
 | `logPersistence.annotations`      | Annotations for the PVC                                                                                                                  | `{}`                      |
@@ -247,7 +255,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                          | Description                                                                                    | Value   |
 | --------------------------------------------- | ---------------------------------------------------------------------------------------------- | ------- |
 | `serviceAccount.create`                       | Enable creation of ServiceAccount for Kafka pods                                               | `true`  |
-| `serviceAccount.name`                         | The name of the service account to use. If not set and `create` is `true`, a name is generated | `nil`   |
+| `serviceAccount.name`                         | The name of the service account to use. If not set and `create` is `true`, a name is generated | `""`    |
 | `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created                         | `true`  |
 | `rbac.create`                                 | Whether to create & use RBAC resources or not                                                  | `false` |
 
@@ -260,7 +268,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.securityContext.runAsUser` | User ID for the container                                                                                            | `0`                     |
 | `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                     | `docker.io`             |
 | `volumePermissions.image.repository`          | Init container volume-permissions image name                                                                         | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Init container volume-permissions image tag                                                                          | `10-debian-10-r115`     |
+| `volumePermissions.image.tag`                 | Init container volume-permissions image tag                                                                          | `10-debian-10-r131`     |
 | `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                  | `Always`                |
 | `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                     | `[]`                    |
 | `volumePermissions.resources.limits`          | Init container volume-permissions resource  limits                                                                   | `{}`                    |
@@ -274,33 +282,33 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.kafka.enabled`                          | Whether or not to create a standalone Kafka exporter to expose Kafka metrics                                                     | `false`                  |
 | `metrics.kafka.image.registry`                   | Kafka exporter image registry                                                                                                    | `docker.io`              |
 | `metrics.kafka.image.repository`                 | Kafka exporter image repository                                                                                                  | `bitnami/kafka-exporter` |
-| `metrics.kafka.image.tag`                        | Kafka exporter image tag (immutable tags are recommended)                                                                        | `1.3.1-debian-10-r30`    |
+| `metrics.kafka.image.tag`                        | Kafka exporter image tag (immutable tags are recommended)                                                                        | `1.3.1-debian-10-r45`    |
 | `metrics.kafka.image.pullPolicy`                 | Kafka exporter image pull policy                                                                                                 | `IfNotPresent`           |
 | `metrics.kafka.image.pullSecrets`                | Specify docker-registry secret names as an array                                                                                 | `[]`                     |
-| `metrics.kafka.schedulerName`                    | Name of the k8s scheduler (other than default) for Kafka Exporter                                                                | `nil`                    |
+| `metrics.kafka.schedulerName`                    | Name of the k8s scheduler (other than default) for Kafka Exporter                                                                | `""`                     |
 | `metrics.kafka.extraFlags`                       | Extra flags to be passed to Kafka exporter                                                                                       | `{}`                     |
-| `metrics.kafka.certificatesSecret`               | Name of the existing secret containing the optional certificate and key files                                                    | `nil`                    |
+| `metrics.kafka.certificatesSecret`               | Name of the existing secret containing the optional certificate and key files                                                    | `""`                     |
 | `metrics.kafka.tlsCert`                          | The secret key from the certificatesSecret if 'client-cert' key different from the default (cert-file)                           | `cert-file`              |
 | `metrics.kafka.tlsKey`                           | The secret key from the certificatesSecret if 'client-key' key different from the default (key-file)                             | `key-file`               |
-| `metrics.kafka.tlsCaSecret`                      | Name of the existing secret containing the optional ca certificate for Kafka Exporter client authentication                      | `nil`                    |
+| `metrics.kafka.tlsCaSecret`                      | Name of the existing secret containing the optional ca certificate for Kafka Exporter client authentication                      | `""`                     |
 | `metrics.kafka.tlsCaCert`                        | The secret key from the certificatesSecret or tlsCaSecret if 'ca-cert' key different from the default (ca-file)                  | `ca-file`                |
 | `metrics.kafka.resources.limits`                 | Kafka Exporter container resource limits                                                                                         | `{}`                     |
 | `metrics.kafka.resources.requests`               | Kafka Exporter container resource requests                                                                                       | `{}`                     |
 | `metrics.kafka.affinity`                         | Affinity for Kafka Exporter pod assignment                                                                                       | `{}`                     |
 | `metrics.kafka.nodeSelector`                     | Node labels for Kafka Exporter pod assignment                                                                                    | `{}`                     |
 | `metrics.kafka.tolerations`                      | Tolerations for Kafka Exporter pod assignment                                                                                    | `[]`                     |
-| `metrics.kafka.initContainers`                   | Add init containers to the Kafka exporter pods                                                                                   | `{}`                     |
+| `metrics.kafka.initContainers`                   | Add init containers to the Kafka exporter pods                                                                                   | `[]`                     |
 | `metrics.kafka.service.type`                     | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`) for Kafka Exporter                                           | `ClusterIP`              |
 | `metrics.kafka.service.port`                     | Kafka Exporter Prometheus port                                                                                                   | `9308`                   |
 | `metrics.kafka.service.nodePort`                 | Kubernetes HTTP node port                                                                                                        | `""`                     |
-| `metrics.kafka.service.loadBalancerIP`           | loadBalancerIP if service type is `LoadBalancer`                                                                                 | `nil`                    |
+| `metrics.kafka.service.loadBalancerIP`           | loadBalancerIP if service type is `LoadBalancer`                                                                                 | `""`                     |
 | `metrics.kafka.service.loadBalancerSourceRanges` | Load Balancer sources                                                                                                            | `[]`                     |
-| `metrics.kafka.service.clusterIP`                | Static clusterIP or None for headless services                                                                                   | `nil`                    |
+| `metrics.kafka.service.clusterIP`                | Static clusterIP or None for headless services                                                                                   | `""`                     |
 | `metrics.kafka.service.annotations`              | Annotations for the Kafka Exporter Prometheus metrics service                                                                    | `{}`                     |
 | `metrics.jmx.enabled`                            | Whether or not to expose JMX metrics to Prometheus                                                                               | `false`                  |
 | `metrics.jmx.image.registry`                     | JMX exporter image registry                                                                                                      | `docker.io`              |
 | `metrics.jmx.image.repository`                   | JMX exporter image repository                                                                                                    | `bitnami/jmx-exporter`   |
-| `metrics.jmx.image.tag`                          | JMX exporter image tag (immutable tags are recommended)                                                                          | `0.15.0-debian-10-r135`  |
+| `metrics.jmx.image.tag`                          | JMX exporter image tag (immutable tags are recommended)                                                                          | `0.16.0-debian-10-r7`    |
 | `metrics.jmx.image.pullPolicy`                   | JMX exporter image pull policy                                                                                                   | `IfNotPresent`           |
 | `metrics.jmx.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                                 | `[]`                     |
 | `metrics.jmx.resources.limits`                   | JMX Exporter container resource limits                                                                                           | `{}`                     |
@@ -308,18 +316,18 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.jmx.service.type`                       | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`) for JMX Exporter                                             | `ClusterIP`              |
 | `metrics.jmx.service.port`                       | JMX Exporter Prometheus port                                                                                                     | `5556`                   |
 | `metrics.jmx.service.nodePort`                   | Kubernetes HTTP node port                                                                                                        | `""`                     |
-| `metrics.jmx.service.loadBalancerIP`             | loadBalancerIP if service type is `LoadBalancer`                                                                                 | `nil`                    |
+| `metrics.jmx.service.loadBalancerIP`             | loadBalancerIP if service type is `LoadBalancer`                                                                                 | `""`                     |
 | `metrics.jmx.service.loadBalancerSourceRanges`   | Load Balancer sources                                                                                                            | `[]`                     |
-| `metrics.jmx.service.clusterIP`                  | Static clusterIP or None for headless services                                                                                   | `nil`                    |
+| `metrics.jmx.service.clusterIP`                  | Static clusterIP or None for headless services                                                                                   | `""`                     |
 | `metrics.jmx.service.annotations`                | Annotations for the JMX Exporter Prometheus metrics service                                                                      | `{}`                     |
 | `metrics.jmx.whitelistObjectNames`               | Allows setting which JMX objects you want to expose to via JMX stats to JMX Exporter                                             | `[]`                     |
 | `metrics.jmx.config`                             | Configuration file for JMX exporter                                                                                              | `{}`                     |
-| `metrics.jmx.existingConfigmap`                  | Name of existing ConfigMap with JMX exporter configuration                                                                       | `nil`                    |
+| `metrics.jmx.existingConfigmap`                  | Name of existing ConfigMap with JMX exporter configuration                                                                       | `""`                     |
 | `metrics.serviceMonitor.enabled`                 | if `true`, creates a Prometheus Operator ServiceMonitor (requires `metrics.kafka.enabled` or `metrics.jmx.enabled` to be `true`) | `false`                  |
-| `metrics.serviceMonitor.namespace`               | Namespace in which Prometheus is running                                                                                         | `nil`                    |
-| `metrics.serviceMonitor.interval`                | Interval at which metrics should be scraped                                                                                      | `nil`                    |
-| `metrics.serviceMonitor.scrapeTimeout`           | Timeout after which the scrape is ended                                                                                          | `nil`                    |
-| `metrics.serviceMonitor.selector`                | ServiceMonitor selector labels                                                                                                   | `nil`                    |
+| `metrics.serviceMonitor.namespace`               | Namespace in which Prometheus is running                                                                                         | `""`                     |
+| `metrics.serviceMonitor.interval`                | Interval at which metrics should be scraped                                                                                      | `""`                     |
+| `metrics.serviceMonitor.scrapeTimeout`           | Timeout after which the scrape is ended                                                                                          | `""`                     |
+| `metrics.serviceMonitor.selector`                | ServiceMonitor selector labels                                                                                                   | `{}`                     |
 | `metrics.serviceMonitor.relabelings`             | Relabel configuration for the metrics                                                                                            | `[]`                     |
 | `metrics.serviceMonitor.metricRelabelings`       | MetricRelabelConfigs to apply to samples before ingestion                                                                        | `[]`                     |
 
@@ -331,13 +339,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `provisioning.enabled`            | Enable kafka provisioning Job                                         | `false`               |
 | `provisioning.image.registry`     | Kafka image registry                                                  | `docker.io`           |
 | `provisioning.image.repository`   | Kafka image repository                                                | `bitnami/kafka`       |
-| `provisioning.image.tag`          | Kafka image tag (immutable tags are recommended)                      | `2.8.0-debian-10-r42` |
+| `provisioning.image.tag`          | Kafka image tag (immutable tags are recommended)                      | `2.8.0-debian-10-r54` |
 | `provisioning.image.pullPolicy`   | Kafka image pull policy                                               | `IfNotPresent`        |
 | `provisioning.image.pullSecrets`  | Specify docker-registry secret names as an array                      | `[]`                  |
 | `provisioning.image.debug`        | Set to true if you would like to see extra information on logs        | `false`               |
 | `provisioning.numPartitions`      | Default number of partitions for topics when unspecified.             | `1`                   |
 | `provisioning.replicationFactor`  | Default replication factor for topics when unspecified.               | `1`                   |
-| `provisioning.schedulerName`      | Name of the k8s scheduler (other than default) for kafka provisioning | `nil`                 |
+| `provisioning.schedulerName`      | Name of the k8s scheduler (other than default) for kafka provisioning | `""`                  |
 | `provisioning.podAnnotations`     | Provisioning Pod annotations.                                         | `{}`                  |
 | `provisioning.resources.limits`   | The resources limits for the container                                | `{}`                  |
 | `provisioning.resources.requests` | The requested resources for the container                             | `{}`                  |
@@ -352,10 +360,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
 | `zookeeper.enabled`              | Switch to enable or disable the Zookeeper helm chart                                                                                                                    | `true`  |
 | `zookeeper.auth.enabled`         | Enable Zookeeper auth                                                                                                                                                   | `false` |
-| `zookeeper.auth.clientUser`      | User that will use Zookeeper clients to auth                                                                                                                            | `nil`   |
-| `zookeeper.auth.clientPassword`  | Password that will use Zookeeper clients to auth                                                                                                                        | `nil`   |
-| `zookeeper.auth.serverUsers`     | Comma, semicolon or whitespace separated list of user to be created. Specify them as a string, for example: "user1,user2,admin"                                         | `nil`   |
-| `zookeeper.auth.serverPasswords` | Comma, semicolon or whitespace separated list of passwords to assign to users when created. Specify them as a string, for example: "pass4user1, pass4user2, pass4admin" | `nil`   |
+| `zookeeper.auth.clientUser`      | User that will use Zookeeper clients to auth                                                                                                                            | `""`    |
+| `zookeeper.auth.clientPassword`  | Password that will use Zookeeper clients to auth                                                                                                                        | `""`    |
+| `zookeeper.auth.serverUsers`     | Comma, semicolon or whitespace separated list of user to be created. Specify them as a string, for example: "user1,user2,admin"                                         | `""`    |
+| `zookeeper.auth.serverPasswords` | Comma, semicolon or whitespace separated list of passwords to assign to users when created. Specify them as a string, for example: "pass4user1, pass4user2, pass4admin" | `""`    |
 | `externalZookeeper.servers`      | Server or list of external Zookeeper servers to use                                                                                                                     | `[]`    |
 
 

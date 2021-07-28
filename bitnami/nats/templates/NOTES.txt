@@ -1,5 +1,25 @@
 ** Please be patient while the chart is being deployed **
 
+{{- if .Values.diagnosticMode.enabled }}
+The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
+
+  command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 4 }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 4 }}
+
+Get the list of pods by executing:
+
+  kubectl get pods --namespace {{ .Release.Namespace }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Access the pod you want to debug by executing
+
+  kubectl exec --namespace {{ .Release.Namespace }} -ti <NAME OF THE POD> -- bash
+
+In order to replicate the container startup scripts execute this command:
+
+    /opt/bitnami/scripts/nats/entrypoint.sh
+
+{{- else }}
+
 {{- if or (contains .Values.client.service.type "LoadBalancer") (contains .Values.client.service.type "nodePort") }}
 {{- if not .Values.auth.enabled }}
 {{ if and (not .Values.networkPolicy.enabled) (.Values.networkPolicy.allowExternal) }}
@@ -100,6 +120,7 @@ To access the Monitoring svc from outside the cluster, follow the steps below:
 
 4. Access NATS Prometheus metrics by opening the URL obtained in a browser.
 
+{{- end }}
 {{- end }}
 
 {{- include "nats.validateValues" . -}}

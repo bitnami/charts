@@ -31,9 +31,9 @@ data:
     {{- end }}
 
     # Logging options
-    debug: {{ .Values.debug.enabled }}
-    trace: {{ .Values.debug.trace }}
-    logtime: {{ .Values.debug.logtime }}
+    debug: {{ ternary "true" "false" (or .Values.debug.enabled .Values.diagnosticMode.enabled) }}
+    trace: {{ ternary "true" "false" (or .Values.debug.trace .Values.diagnosticMode.enabled) }}
+    logtime: {{ ternary "true" "false" (or .Values.debug.logtime .Values.diagnosticMode.enabled) }}
 
     # Pid file
     pid_file: "/tmp/{{ .Values.natsFilename }}.pid"
