@@ -441,6 +441,12 @@ To enable the new features, it is not possible to do it by upgrading an existing
 
 ## Upgrading
 
+### To 12.0.0
+
+WordPress version was bumped to its latest major, `5.8.x`. Though no incompatibilities are expected while upgrading from previous versions, WordPress recommends backing up your application first.
+
+Site backups can be easily performed using tools such as [VaultPress](https://vaultpress.com/) or [All-in-One WP Migration](https://wordpress.org/plugins/all-in-one-wp-migration/).
+
 ### To 11.0.0
 
 The [Bitnami WordPress](https://github.com/bitnami/bitnami-docker-wordpress) image was refactored and now the source code is published in GitHub in the [`rootfs`](https://github.com/bitnami/bitnami-docker-wordpress/tree/master/5/debian-10/rootfs) folder of the container image.
