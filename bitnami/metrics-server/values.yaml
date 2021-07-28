@@ -7,7 +7,7 @@
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
@@ -18,10 +18,10 @@ global:
 
 ## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname template
 ##
-fullnameOverride:
+fullnameOverride: ""
 
 ## @section Metrics Server parameters
 
@@ -86,7 +86,7 @@ serviceAccount:
   create: true
   ## @param serviceAccount.name The name of the ServiceAccount to create
   ## If not set and create is true, a name is generated using the common.names.fullname template
-  name:
+  name: ""
   ## @param serviceAccount.automountServiceAccountToken Automount API credentials for a service account
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/#use-the-default-service-account-to-access-the-api-server
   ##
@@ -128,7 +128,7 @@ podLabels: {}
 podAnnotations: {}
 ## @param priorityClassName Priority class for pod scheduling
 ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
-priorityClassName:
+priorityClassName: ""
 ## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
@@ -145,8 +145,8 @@ podAntiAffinityPreset: soft
 ##
 podDisruptionBudget:
   enabled: false
-  minAvailable:
-  maxUnavailable:
+  minAvailable: ""
+  maxUnavailable: ""
 ## Node affinity preset
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
 ##
@@ -197,12 +197,12 @@ service:
   ## e.g:
   ## nodePort: 30001
   ##
-  nodePort:
+  nodePort: ""
   ## @param service.loadBalancerIP LoadBalancer IP if Service type is `LoadBalancer`
   ## Set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
-  loadBalancerIP:
+  loadBalancerIP: ""
   ## @param service.annotations Annotations for the Service
   ## set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer

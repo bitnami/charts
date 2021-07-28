@@ -107,7 +107,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `hostAliases`                           | Jenkins pod host aliases                                                                  | `[]`            |
 | `extraVolumes`                          | Optionally specify extra list of additional volumes for Jenkins pods                      | `[]`            |
 | `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for Jenkins container(s)         | `[]`            |
-| `sidecars`                              | Add additional sidecar containers to the Jenkins pod                                      | `{}`            |
+| `sidecars`                              | Add additional sidecar containers to the Jenkins pod                                      | `[]`            |
 | `initContainers`                        | Add additional init containers to the Jenkins pods                                        | `[]`            |
 | `lifecycleHooks`                        | Add lifecycle hooks to the Jenkins deployment                                             | `{}`            |
 | `podLabels`                             | Extra labels for Jenkins pods                                                             | `{}`            |

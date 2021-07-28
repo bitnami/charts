@@ -50,22 +50,22 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `nil` |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
 
 ### Common parameters
 
 | Name                     | Description                                                                                               | Value           |
 | ------------------------ | --------------------------------------------------------------------------------------------------------- | --------------- |
-| `nameOverride`           | String to partially override common.names.fullname template (will maintain the release name)              | `nil`           |
-| `fullnameOverride`       | String to fully override common.names.fullname template                                                   | `nil`           |
+| `nameOverride`           | String to partially override common.names.fullname template (will maintain the release name)              | `""`            |
+| `fullnameOverride`       | String to fully override common.names.fullname template                                                   | `""`            |
 | `clusterDomain`          | Cluster domain                                                                                            | `cluster.local` |
 | `commonAnnotations`      | Common annotations to add to all MySQL resources (sub-charts are not considered). Evaluated as a template | `{}`            |
 | `commonLabels`           | Common labels to add to all MySQL resources (sub-charts are not considered). Evaluated as a template      | `{}`            |
 | `extraDeploy`            | Array with extra yaml to deploy with the chart. Evaluated as a template                                   | `[]`            |
-| `schedulerName`          | Use an alternate scheduler, e.g. "stork".                                                                 | `nil`           |
+| `schedulerName`          | Use an alternate scheduler, e.g. "stork".                                                                 | `""`            |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                   | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                                      | `[]`            |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                                         | `[]`            |
@@ -88,12 +88,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `auth.password`            | Password for the new user. Ignored if existing secret is provided                                                                                                                   | `""`                  |
 | `auth.replicationUser`     | MySQL replication user                                                                                                                                                              | `replicator`          |
 | `auth.replicationPassword` | MySQL replication user password. Ignored if existing secret is provided                                                                                                             | `""`                  |
-| `auth.existingSecret`      | Use existing secret for password details. The secret has to contain the keys `mysql-root-password`, `mysql-replication-password` and `mysql-password`                               | `nil`                 |
+| `auth.existingSecret`      | Use existing secret for password details. The secret has to contain the keys `mysql-root-password`, `mysql-replication-password` and `mysql-password`                               | `""`                  |
 | `auth.forcePassword`       | Force users to specify required passwords                                                                                                                                           | `false`               |
 | `auth.usePasswordFiles`    | Mount credentials as files instead of using an environment variable                                                                                                                 | `false`               |
 | `auth.customPasswordFiles` | Use custom password files when `auth.usePasswordFiles` is set to `true`. Define path for keys `root` and `user`, also define `replicator` if `architecture` is set to `replication` | `{}`                  |
 | `initdbScripts`            | Dictionary of initdb scripts                                                                                                                                                        | `{}`                  |
-| `initdbScriptsConfigMap`   | ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)                                                                                                                 | `nil`                 |
+| `initdbScriptsConfigMap`   | ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)                                                                                                                 | `""`                  |
 
 
 ### MySQL Primary parameters
@@ -104,9 +104,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `primary.args`                               | Override default container args on MySQL Primary container(s) (useful when using custom images)                 | `[]`            |
 | `primary.hostAliases`                        | Deployment pod host aliases                                                                                     | `[]`            |
 | `primary.configuration`                      | Configure MySQL Primary with a custom my.cnf file                                                               | `""`            |
-| `primary.existingConfiguration`              | Name of existing ConfigMap with MySQL Primary configuration.                                                    | `nil`           |
+| `primary.existingConfiguration`              | Name of existing ConfigMap with MySQL Primary configuration.                                                    | `""`            |
 | `primary.updateStrategy`                     | Update strategy type for the MySQL primary statefulset                                                          | `RollingUpdate` |
-| `primary.rollingUpdatePartition`             | Partition update strategy for MySQL Primary statefulset                                                         | `nil`           |
+| `primary.rollingUpdatePartition`             | Partition update strategy for MySQL Primary statefulset                                                         | `""`            |
 | `primary.podAnnotations`                     | Additional pod annotations for MySQL primary pods                                                               | `{}`            |
 | `primary.podAffinityPreset`                  | MySQL primary pod affinity preset. Ignored if `primary.affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
 | `primary.podAntiAffinityPreset`              | MySQL primary pod anti-affinity preset. Ignored if `primary.affinity` is set. Allowed values: `soft` or `hard`  | `soft`          |
@@ -148,8 +148,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `primary.extraEnvVarsCM`                     | Name of existing ConfigMap containing extra env vars for MySQL primary containers                               | `""`            |
 | `primary.extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for MySQL primary containers                                  | `""`            |
 | `primary.persistence.enabled`                | Enable persistence on MySQL primary replicas using a `PersistentVolumeClaim`. If false, use emptyDir            | `true`          |
-| `primary.persistence.existingClaim`          | Name of an existing `PersistentVolumeClaim` for MySQL primary replicas                                          | `nil`           |
-| `primary.persistence.storageClass`           | MySQL primary persistent volume storage Class                                                                   | `nil`           |
+| `primary.persistence.existingClaim`          | Name of an existing `PersistentVolumeClaim` for MySQL primary replicas                                          | `""`            |
+| `primary.persistence.storageClass`           | MySQL primary persistent volume storage Class                                                                   | `""`            |
 | `primary.persistence.annotations`            | MySQL primary persistent volume claim annotations                                                               | `{}`            |
 | `primary.persistence.accessModes`            | MySQL primary persistent volume access Modes                                                                    | `[]`            |
 | `primary.persistence.size`                   | MySQL primary persistent volume size                                                                            | `8Gi`           |
@@ -168,7 +168,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `primary.service.annotations`                | Provide any additional annotations which may be required                                                        | `{}`            |
 | `primary.pdb.enabled`                        | Enable/disable a Pod Disruption Budget creation for MySQL primary pods                                          | `false`         |
 | `primary.pdb.minAvailable`                   | Minimum number/percentage of MySQL primary pods that should remain scheduled                                    | `1`             |
-| `primary.pdb.maxUnavailable`                 | Maximum number/percentage of MySQL primary pods that may be made unavailable                                    | `nil`           |
+| `primary.pdb.maxUnavailable`                 | Maximum number/percentage of MySQL primary pods that may be made unavailable                                    | `""`            |
 | `primary.podLabels`                          | MySQL Primary pod label. If labels are same as commonLabels , this will take precedence                         | `{}`            |
 
 
@@ -181,9 +181,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `secondary.command`                            | Override default container command on MySQL Secondary container(s) (useful when using custom images)                | `[]`            |
 | `secondary.args`                               | Override default container args on MySQL Secondary container(s) (useful when using custom images)                   | `[]`            |
 | `secondary.configuration`                      | Configure MySQL Secondary with a custom my.cnf file                                                                 | `""`            |
-| `secondary.existingConfiguration`              | Name of existing ConfigMap with MySQL Secondary configuration.                                                      | `nil`           |
+| `secondary.existingConfiguration`              | Name of existing ConfigMap with MySQL Secondary configuration.                                                      | `""`            |
 | `secondary.updateStrategy`                     | Update strategy type for the MySQL secondary statefulset                                                            | `RollingUpdate` |
-| `secondary.rollingUpdatePartition`             | Partition update strategy for MySQL Secondary statefulset                                                           | `nil`           |
+| `secondary.rollingUpdatePartition`             | Partition update strategy for MySQL Secondary statefulset                                                           | `""`            |
 | `secondary.podAnnotations`                     | Additional pod annotations for MySQL secondary pods                                                                 | `{}`            |
 | `secondary.podAffinityPreset`                  | MySQL secondary pod affinity preset. Ignored if `secondary.affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
 | `secondary.podAntiAffinityPreset`              | MySQL secondary pod anti-affinity preset. Ignored if `secondary.affinity` is set. Allowed values: `soft` or `hard`  | `soft`          |
@@ -225,7 +225,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `secondary.extraEnvVarsCM`                     | Name of existing ConfigMap containing extra env vars for MySQL secondary containers                                 | `""`            |
 | `secondary.extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for MySQL secondary containers                                    | `""`            |
 | `secondary.persistence.enabled`                | Enable persistence on MySQL secondary replicas using a `PersistentVolumeClaim`                                      | `true`          |
-| `secondary.persistence.storageClass`           | MySQL secondary persistent volume storage Class                                                                     | `nil`           |
+| `secondary.persistence.storageClass`           | MySQL secondary persistent volume storage Class                                                                     | `""`            |
 | `secondary.persistence.annotations`            | MySQL secondary persistent volume claim annotations                                                                 | `{}`            |
 | `secondary.persistence.accessModes`            | MySQL secondary persistent volume access Modes                                                                      | `[]`            |
 | `secondary.persistence.size`                   | MySQL secondary persistent volume size                                                                              | `8Gi`           |
@@ -244,7 +244,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `secondary.service.annotations`                | Provide any additional annotations which may be required                                                            | `{}`            |
 | `secondary.pdb.enabled`                        | Enable/disable a Pod Disruption Budget creation for MySQL secondary pods                                            | `false`         |
 | `secondary.pdb.minAvailable`                   | Minimum number/percentage of MySQL secondary pods that should remain scheduled                                      | `1`             |
-| `secondary.pdb.maxUnavailable`                 | Maximum number/percentage of MySQL secondary pods that may be made unavailable                                      | `nil`           |
+| `secondary.pdb.maxUnavailable`                 | Maximum number/percentage of MySQL secondary pods that may be made unavailable                                      | `""`            |
 | `secondary.podLabels`                          | Additional pod labels for MySQL secondary pods                                                                      | `{}`            |
 
 
@@ -253,7 +253,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                         | Description                                            | Value   |
 | ---------------------------- | ------------------------------------------------------ | ------- |
 | `serviceAccount.create`      | Enable the creation of a ServiceAccount for MySQL pods | `true`  |
-| `serviceAccount.name`        | Name of the created ServiceAccount                     | `nil`   |
+| `serviceAccount.name`        | Name of the created ServiceAccount                     | `""`    |
 | `serviceAccount.annotations` | Annotations for MySQL Service Account                  | `{}`    |
 | `rbac.create`                | Whether to create & use RBAC resources or not          | `false` |
 
@@ -310,12 +310,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                                  | `3`                       |
 | `metrics.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                                  | `1`                       |
 | `metrics.serviceMonitor.enabled`             | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator                                          | `false`                   |
-| `metrics.serviceMonitor.namespace`           | Specify the namespace in which the serviceMonitor resource will be created                                            | `nil`                     |
+| `metrics.serviceMonitor.namespace`           | Specify the namespace in which the serviceMonitor resource will be created                                            | `""`                      |
 | `metrics.serviceMonitor.interval`            | Specify the interval at which metrics should be scraped                                                               | `30s`                     |
-| `metrics.serviceMonitor.scrapeTimeout`       | Specify the timeout after which the scrape is ended                                                                   | `nil`                     |
-| `metrics.serviceMonitor.relabellings`        | Specify Metric Relabellings to add to the scrape endpoint                                                             | `nil`                     |
+| `metrics.serviceMonitor.scrapeTimeout`       | Specify the timeout after which the scrape is ended                                                                   | `""`                      |
+| `metrics.serviceMonitor.relabellings`        | Specify Metric Relabellings to add to the scrape endpoint                                                             | `[]`                      |
 | `metrics.serviceMonitor.honorLabels`         | Specify honorLabels parameter to add the scrape endpoint                                                              | `false`                   |
-| `metrics.serviceMonitor.release`             | Specify the release for ServiceMonitor. Sometimes it should be custom for prometheus operator to work                 | `nil`                     |
 | `metrics.serviceMonitor.additionalLabels`    | Used to pass Labels that are used by the Prometheus installed in your cluster to select Service Monitors to work with | `{}`                      |
 
 
