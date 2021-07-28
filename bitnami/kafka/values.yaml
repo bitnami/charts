@@ -1062,11 +1062,14 @@ metrics:
       ##   - myRegistryKeySecretName
       ##
       pullSecrets: []
-    ## Specify the named port to bte referenced by JMX_PORT
+    ## Specify the named port to be referenced by JMX_PORT
     ## Usually this will match metrics.jmx.prometheus.port
+    ## If you change this, but do not require the Datadog JMX Integration,
+    ##   then you should also update metrics.jmx.config jmxUrl to match accordingly.
     ## For Datadog Integration, use a different port than metrics.jmx.prometheus.port
+    ## For Datadog Integration, use a different port than metrics.jmx.config jmxUrl.
     ## @param metrics.jmx.port Specify port for named `metrics` port.
-    port: 5556
+    port: 5555
     ## Prometheus JMX Export port
     ## @param metrics.jmx.prometheus.port Specify port launched by Prometheus Exporter. For Datadog Integration, this should NOT match `metrics.jmx.port`.
     prometheus:
