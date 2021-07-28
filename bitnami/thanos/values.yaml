@@ -1850,7 +1850,7 @@ storegateway:
   ## Sharded parameters
   ## @param storegateway.sharded.enabled Enable sharding for Thanos Store Gateway
   ## @param storegateway.sharded.hashPartioning.shards Setting hashPartioning will create multiple store statefulsets based on the number of shards specified using the hashmod of the blocks
-  ## @param storegateway.sharded.timePartioning [array] Setting time timePartioning will create multiple store deployments based on the number of partitions
+  ## @param storegateway.sharded.timePartioning [array] Setting time timePartioning will create multiple store deployments based on the number of partions
   ##
   sharded:
     enabled: false
