@@ -395,7 +395,7 @@ relay:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-  ## @param relay.configuration [object] InfluxDB Relay&trade; Configuration. Specify content for relay.toml
+  ## @param relay.configuration [string] InfluxDB Relay&trade; Configuration. Specify content for relay.toml
   ## Alternatively, you can put your relay.toml under the files/conf/ directory
   ##
   configuration: |-
