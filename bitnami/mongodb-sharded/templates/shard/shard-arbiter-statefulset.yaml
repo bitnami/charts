@@ -88,7 +88,7 @@ spec:
               name: mongodb
           env:
             - name: BITNAMI_DEBUG
-              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
+              value: {{ ternary "true" "false" (or $.Values.image.debug $.Values.diagnosticMode.enabled) | quote }}
             - name: MONGODB_SYSTEM_LOG_VERBOSITY
               value: {{ $.Values.common.mongodbSystemLogVerbosity | quote }}
             - name: MONGODB_DISABLE_SYSTEM_LOG
@@ -173,11 +173,11 @@ spec:
                 name: {{ include "common.tplvalues.render" ( dict "value" $.Values.shardsvr.arbiter.extraEnvVarsSecret "context" $ ) }}
             {{- end }}
           {{- end }}
-          {{- if .Values.diagnosticMode.enabled }}
+          {{- if $.Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
           {{- end }}
-          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if not $.Values.diagnosticMode.enabled }}
           {{- if $.Values.livenessProbe.enabled }}
           livenessProbe:
             tcpSocket:
@@ -243,7 +243,7 @@ spec:
                   name: {{ include "mongodb-sharded.secret" $ }}
                   key: mongodb-root-password
           {{- end }}
-          {{- if .Values.diagnosticMode.enabled }}
+          {{- if $.Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
           {{- else }}
@@ -265,7 +265,7 @@ spec:
           ports:
             - name: metrics
               containerPort: {{ $.Values.metrics.containerPort }}
-          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if not $.Values.diagnosticMode.enabled }}
           {{- if $.Values.metrics.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
