@@ -121,7 +121,7 @@ forwarder:
     allowPrivilegeEscalation: false
     ## Requires mounting an `extraVolume` of type `emptyDir` into /tmp
     ##
-    readOnlyRootFilesystem: ""
+    readOnlyRootFilesystem: false
     capabilities:
       drop:
         - ALL
@@ -547,7 +547,7 @@ aggregator:
     allowPrivilegeEscalation: false
     ## Requires mounting an `extraVolume` of type `emptyDir` into /tmp
     ##
-    readOnlyRootFilesystem: ""
+    readOnlyRootFilesystem: false
     capabilities:
       drop:
         - ALL
