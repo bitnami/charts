@@ -58,13 +58,16 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                | Description                                                                           | Value |
-| ------------------- | ------------------------------------------------------------------------------------- | ----- |
-| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                  | `""`  |
-| `nameOverride`      | String to partially override ebjca.fullname template (will maintain the release name) | `""`  |
-| `fullnameOverride`  | String to fully override ebjca.fullname template                                      | `""`  |
-| `commonLabels`      | Add labels to all the deployed resources                                              | `{}`  |
-| `commonAnnotations` | Annotations to be added to all deployed resources                                     | `{}`  |
+| Name                     | Description                                                                             | Value   |
+| ------------------------ | --------------------------------------------------------------------------------------- | ------- |
+| `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                    | `""`    |
+| `nameOverride`           | String to partially override ebjca.fullname template (will maintain the release name)   | `""`    |
+| `fullnameOverride`       | String to fully override ebjca.fullname template                                        | `""`    |
+| `commonLabels`           | Add labels to all the deployed resources                                                | `{}`    |
+| `commonAnnotations`      | Annotations to be added to all deployed resources                                       | `{}`    |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false` |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                    | `[]`    |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `[]`    |
 
 
 ### EJBCA parameters
@@ -76,6 +79,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.tag`                          | EJBCA image tag                                                                           | `6.15.2-6-debian-10-r294` |
 | `image.pullPolicy`                   | EJBCA image pull policy                                                                   | `IfNotPresent`            |
 | `image.pullSecrets`                  | Specify docker-registry secret names as an array                                          | `[]`                      |
+| `image.debug`                        | Enable image debug mode                                                                   | `false`                   |
 | `replicaCount`                       | Number of EJBCA replicas to deploy                                                        | `1`                       |
 | `extraVolumeMounts`                  | Additional volume mounts (used along with `extraVolumes`)                                 | `[]`                      |
 | `extraVolumes`                       | Array of extra volumes to be added deployment. Requires setting `extraVolumeMounts`       | `[]`                      |

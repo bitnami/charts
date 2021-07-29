@@ -308,30 +308,30 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Airflow database parameters
 
-| Name                                         | Description                                                                                     | Value             |
-| -------------------------------------------- | ----------------------------------------------------------------------------------------------- | ----------------- |
-| `postgresql.enabled`                         | Switch to enable or disable the PostgreSQL helm chart                                           | `true`            |
-| `postgresql.postgresqlUsername`              | Airflow Postgresql username                                                                     | `bn_airflow`      |
-| `postgresql.postgresqlPassword`              | Airflow Postgresql password                                                                     | `""`              |
-| `postgresql.postgresqlDatabase`              | Airflow Postgresql database                                                                     | `bitnami_airflow` |
-| `postgresql.existingSecret`                  | Name of an existing secret containing the PostgreSQL password ('postgresql-password' key)       | `""`              |
-| `externalDatabase.host`                      | Database host                                                                                   | `localhost`       |
-| `externalDatabase.user`                      | non-root Username for Airflow Database                                                          | `bn_airflow`      |
-| `externalDatabase.password`                  | Database password                                                                               | `""`              |
-| `externalDatabase.existingSecret`            | Name of an existing secret resource containing the DB password                                  | `""`              |
-| `externalDatabase.existingSecretPasswordKey` | Name of an existing secret key containing the DB password                                       | `""`              |
-| `externalDatabase.database`                  | Database name                                                                                   | `bitnami_airflow` |
-| `externalDatabase.port`                      | Database port number                                                                            | `5432`            |
-| `redis.enabled`                              | Switch to enable or disable the Redis(TM) helm                                                  | `true`            |
-| `redis.auth.enabled`                         | Switch to enable or disable authentication                                                      | `true`            |
-| `redis.auth.password`                        | Redis(TM) password                                                                              | `""`              |
-| `redis.auth.existingSecret`                  | Name of existing secret object containing the password                                          | `""`              |
-| `redis.architecture`                         | Cluster settings                                                                                | `standalone`      |
-| `externalRedis.host`                         | Redis(TM) host                                                                                  | `localhost`       |
-| `externalRedis.port`                         | Redis(TM) port number                                                                           | `6379`            |
-| `externalRedis.password`                     | Redis(TM) password                                                                              | `""`              |
-| `externalRedis.existingSecret`               | Name of an existing secret resource containing the Redis(TM) password in a 'redis-password' key | `""`              |
-| `externalRedis.username`                     | Redis(TM) username                                                                              | `""`              |
+| Name                                         | Description                                                                                        | Value             |
+| -------------------------------------------- | -------------------------------------------------------------------------------------------------- | ----------------- |
+| `postgresql.enabled`                         | Switch to enable or disable the PostgreSQL helm chart                                              | `true`            |
+| `postgresql.postgresqlUsername`              | Airflow Postgresql username                                                                        | `bn_airflow`      |
+| `postgresql.postgresqlPassword`              | Airflow Postgresql password                                                                        | `""`              |
+| `postgresql.postgresqlDatabase`              | Airflow Postgresql database                                                                        | `bitnami_airflow` |
+| `postgresql.existingSecret`                  | Name of an existing secret containing the PostgreSQL password ('postgresql-password' key)          | `""`              |
+| `externalDatabase.host`                      | Database host                                                                                      | `localhost`       |
+| `externalDatabase.user`                      | non-root Username for Airflow Database                                                             | `bn_airflow`      |
+| `externalDatabase.password`                  | Database password                                                                                  | `""`              |
+| `externalDatabase.existingSecret`            | Name of an existing secret resource containing the DB password                                     | `""`              |
+| `externalDatabase.existingSecretPasswordKey` | Name of an existing secret key containing the DB password                                          | `""`              |
+| `externalDatabase.database`                  | Database name                                                                                      | `bitnami_airflow` |
+| `externalDatabase.port`                      | Database port number                                                                               | `5432`            |
+| `redis.enabled`                              | Switch to enable or disable the Redis&trade; helm                                                  | `true`            |
+| `redis.auth.enabled`                         | Switch to enable or disable authentication                                                         | `true`            |
+| `redis.auth.password`                        | Redis&trade; password                                                                              | `""`              |
+| `redis.auth.existingSecret`                  | Name of existing secret object containing the password                                             | `""`              |
+| `redis.architecture`                         | Cluster settings                                                                                   | `standalone`      |
+| `externalRedis.host`                         | Redis&trade; host                                                                                  | `localhost`       |
+| `externalRedis.port`                         | Redis&trade; port number                                                                           | `6379`            |
+| `externalRedis.password`                     | Redis&trade; password                                                                              | `""`              |
+| `externalRedis.existingSecret`               | Name of an existing secret resource containing the Redis&trade; password in a 'redis-password' key | `""`              |
+| `externalRedis.username`                     | Redis&trade; username                                                                              | `""`              |
 
 
 ### Airflow metrics parameters
@@ -430,7 +430,7 @@ git.plugins.repositories[0].path=plugins
 
 ### Existing Secrets
 
-You can use an existing secret to configure your Airflow auth, external Postgres, and external Redis<sup>TM</sup> passwords:
+You can use an existing secret to configure your Airflow auth, external Postgres, and external Redis&trade; passwords:
 
 ```console
 postgresql.enabled=false
@@ -489,7 +489,7 @@ Celery executor is the default value for this chart with it you can scale out th
 
 The kubernetes executor is introduced in Apache Airflow 1.10.0. The Kubernetes executor will create a new pod for every task instance using the `pod_template.yaml` that you can find [templates/config/configmap.yaml](https://github.com/bitnami/charts/blob/master/bitnami/airflow/templates/config/configmap.yaml), otherwise you can override this template using `worker.podTemplate`. To enable `KubernetesExecutor` set the following parameters.
 
-> NOTE: Redis<sup>TM</sup> is not needed to be deployed when using KubernetesExecutor so you must disable it using `redis.enabled=false`.
+> NOTE: Redis&trade; is not needed to be deployed when using KubernetesExecutor so you must disable it using `redis.enabled=false`.
 
 ```console
 executor=KubernetesExecutor
@@ -545,7 +545,7 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ### To 10.0.0
 
-This major updates the Redis<sup>TM</sup> subchart to it newest major, 14.0.0, which contains breaking changes. For more information on this subchart's major and the steps needed to migrate your data from your previous release, please refer to [Redis<sup>TM</sup> upgrade notes.](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1400).
+This major updates the Redis&trade; subchart to it newest major, 14.0.0, which contains breaking changes. For more information on this subchart's major and the steps needed to migrate your data from your previous release, please refer to [Redis&trade; upgrade notes.](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1400).
 
 ### To 7.0.0
 

@@ -55,15 +55,18 @@ To uninstall/delete the `my-release` deployment:
 
 ### Common parameters
 
-| Name                | Description                                                                                              | Value           |
-| ------------------- | -------------------------------------------------------------------------------------------------------- | --------------- |
-| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                                     | `""`            |
-| `nameOverride`      | String to partially override kong.fullname template with a string (will prepend the release name)        | `""`            |
-| `fullnameOverride`  | String to fully override kong.fullname template with a string                                            | `""`            |
-| `commonAnnotations` | Common annotations to add to all Kong resources (sub-charts are not considered). Evaluated as a template | `{}`            |
-| `commonLabels`      | Common labels to add to all Kong resources (sub-charts are not considered). Evaluated as a template      | `{}`            |
-| `clusterDomain`     | Kubernetes cluster domain                                                                                | `cluster.local` |
-| `extraDeploy`       | Array of extra objects to deploy with the release (evaluated as a template).                             | `[]`            |
+| Name                     | Description                                                                                              | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------------------- | --------------- |
+| `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                                     | `""`            |
+| `nameOverride`           | String to partially override kong.fullname template with a string (will prepend the release name)        | `""`            |
+| `fullnameOverride`       | String to fully override kong.fullname template with a string                                            | `""`            |
+| `commonAnnotations`      | Common annotations to add to all Kong resources (sub-charts are not considered). Evaluated as a template | `{}`            |
+| `commonLabels`           | Common labels to add to all Kong resources (sub-charts are not considered). Evaluated as a template      | `{}`            |
+| `clusterDomain`          | Kubernetes cluster domain                                                                                | `cluster.local` |
+| `extraDeploy`            | Array of extra objects to deploy with the release (evaluated as a template).                             | `[]`            |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                  | `false`         |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                                     | `[]`            |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                                        | `[]`            |
 
 
 ### Deployment parameters
@@ -75,6 +78,7 @@ To uninstall/delete the `my-release` deployment:
 | `image.tag`                             | kong image tag (immutable tags are recommended)                                                                                                                                  | `2.5.0-debian-10-r0`  |
 | `image.pullPolicy`                      | kong image pull policy                                                                                                                                                           | `IfNotPresent`        |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                                                                                 | `[]`                  |
+| `image.debug`                           | Enable image debug mode                                                                                                                                                          | `false`               |
 | `database`                              | Select which database backend Kong will use. Can be 'postgresql' or 'cassandra'                                                                                                  | `postgresql`          |
 | `replicaCount`                          | Number of replicas of the kong Pod                                                                                                                                               | `2`                   |
 | `hostAliases`                           | Add deployment host aliases                                                                                                                                                      | `[]`                  |

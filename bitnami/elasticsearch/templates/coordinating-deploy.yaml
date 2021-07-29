@@ -83,9 +83,13 @@ spec:
           securityContext:
             runAsUser: {{ .Values.coordinating.securityContext.runAsUser }}
           {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- end }}
           env:
             - name: BITNAMI_DEBUG
-              value: {{ ternary "true" "false" .Values.image.debug | quote }}
+              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
             - name: ELASTICSEARCH_CLUSTER_NAME
               value: {{ .Values.name | quote }}
             - name: ELASTICSEARCH_CLUSTER_HOSTS
@@ -121,6 +125,7 @@ spec:
               containerPort: 9200
             - name: transport
               containerPort: 9300
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.coordinating.startupProbe.enabled }}
           startupProbe:
             initialDelaySeconds: {{ .Values.coordinating.startupProbe.initialDelaySeconds }}
@@ -159,6 +164,7 @@ spec:
               port: http
           {{- else if .Values.coordinating.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.coordinating.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
           {{- end }}
           {{- if .Values.coordinating.resources }}
           resources: {{- toYaml .Values.coordinating.resources | nindent 12 }}

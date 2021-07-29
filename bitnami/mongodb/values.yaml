@@ -87,7 +87,7 @@ diagnosticMode:
 ## @section MongoDB&reg; parameters
 ##
 
-## Bitnami MongoDB(R) image
+## Bitnami MongoDB&reg; image
 ## ref: https://hub.docker.com/r/bitnami/mongodb/tags/
 ## @param image.registry MongoDB&reg; image registry
 ## @param image.repository MongoDB&reg; image registry
@@ -126,7 +126,7 @@ architecture: standalone
 ## @param useStatefulSet Set to true to use a StatefulSet instead of a Deployment (only when `architecture=standalone`)
 ##
 useStatefulSet: false
-## MongoDB(R) Authentication parameters
+## MongoDB&reg; Authentication parameters
 ##
 auth:
   ## @param auth.enabled Enable authentication
@@ -137,7 +137,7 @@ auth:
   ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#setting-the-root-password-on-first-run
   ##
   rootPassword: ""
-  ## MongoDB(R) custom user and database
+  ## MongoDB&reg; custom user and database
   ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#creating-a-user-and-database-on-first-run
   ## @param auth.username MongoDB&reg; custom user (mandatory if `auth.database` is set)
   ## @param auth.password MongoDB&reg; custom user password
@@ -202,7 +202,7 @@ enableIPv6: false
 ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#enabling/disabling-directoryperdb
 ##
 directoryPerDB: false
-## MongoDB(R) System Log configuration
+## MongoDB&reg; System Log configuration
 ## ref: https://github.com/bitnami/bitnami-docker-mongodb#configuring-system-log-verbosity-level
 ## @param systemLogVerbosity MongoDB&reg; system log verbosity level
 ## @param disableSystemLog Switch to enable/disable MongoDB&reg; system log
@@ -375,7 +375,7 @@ podAnnotations: {}
 ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
 ##
 priorityClassName: ""
-## MongoDB(R) pods' Security Context.
+## MongoDB&reg; pods' Security Context.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enable MongoDB&reg; pod(s)' Security Context
 ## @param podSecurityContext.fsGroup Group ID for the volumes of the MongoDB&reg; pod(s)
@@ -391,7 +391,7 @@ podSecurityContext:
   ##   value: "10000"
   ##
   sysctls: []
-## MongoDB(R) containers' Security Context (main and metrics container).
+## MongoDB&reg; containers' Security Context (main and metrics container).
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled Enable MongoDB&reg; container(s)' Security Context
 ## @param containerSecurityContext.runAsUser User ID for the MongoDB&reg; container
@@ -401,7 +401,7 @@ containerSecurityContext:
   enabled: true
   runAsUser: 1001
   runAsNonRoot: true
-## MongoDB(R) containers' resource requests and limits.
+## MongoDB&reg; containers' resource requests and limits.
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious
 ## choice for the user. This also increases chances charts run on environments with little
@@ -423,7 +423,7 @@ resources:
   ##    memory: 128Mi
   ##
   requests: {}
-## MongoDB(R) pods' liveness probe. Evaluated as a template.
+## MongoDB&reg; pods' liveness probe. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ## @param livenessProbe.enabled Enable livenessProbe
 ## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
@@ -439,7 +439,7 @@ livenessProbe:
   timeoutSeconds: 5
   failureThreshold: 6
   successThreshold: 1
-## MongoDB(R) pods' readiness probe. Evaluated as a template.
+## MongoDB&reg; pods' readiness probe. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ## @param readinessProbe.enabled Enable readinessProbe
 ## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
@@ -536,7 +536,7 @@ extraVolumeMounts: []
 ##     emptyDir: {}
 ##
 extraVolumes: []
-## MongoDB(R) Pod Disruption Budget configuration
+## MongoDB&reg; Pod Disruption Budget configuration
 ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
 ##
 pdb:
@@ -592,7 +592,7 @@ service:
   ## @param service.annotations Provide any additional annotations that may be required
   ##
   annotations: {}
-## External Access to MongoDB(R) nodes configuration
+## External Access to MongoDB&reg; nodes configuration
 ##
 externalAccess:
   ## @param externalAccess.enabled Enable Kubernetes external cluster access to MongoDB&reg; nodes
@@ -652,7 +652,7 @@ externalAccess:
       ##    memory: 128Mi
       ##
       requests: {}
-  ## Parameters to configure K8s service(s) used to externally access MongoDB(R)
+  ## Parameters to configure K8s service(s) used to externally access MongoDB&reg;
   ## A new service per broker will be created
   ##
   service:
@@ -692,13 +692,13 @@ externalAccess:
     ## @param externalAccess.service.annotations Service annotations for external access
     ##
     annotations: {}
-  ## External Access to MongoDB(R) Hidden nodes configuration
+  ## External Access to MongoDB&reg; Hidden nodes configuration
   ##
   hidden:
     ## @param externalAccess.hidden.enabled Enable Kubernetes external cluster access to MongoDB&reg; hidden nodes
     ##
     enabled: false
-    ## Parameters to configure K8s service(s) used to externally access MongoDB(R)
+    ## Parameters to configure K8s service(s) used to externally access MongoDB&reg;
     ## A new service per broker will be created
     ##
     service:
@@ -773,7 +773,7 @@ persistence:
   ##
   annotations: {}
   ## @param persistence.mountPath Path to mount the volume at
-  ## MongoDB(R) images.
+  ## MongoDB&reg; images.
   ##
   mountPath: /bitnami/mongodb
   ## @param persistence.subPath Subdirectory of the volume to mount at
@@ -819,8 +819,8 @@ serviceAccount:
 ##
 rbac:
   ## @param rbac.create Whether to create & use RBAC resources or not
-  ## binding MongoDB(R) ServiceAccount to a role
-  ## that allows MongoDB(R) pods querying the K8s API
+  ## binding MongoDB&reg; ServiceAccount to a role
+  ## that allows MongoDB&reg; pods querying the K8s API
   ## this needs to be set to 'true' to enable the mongo-labeler sidecar primary mongodb discovery
   ##
   create: false
@@ -1063,7 +1063,7 @@ arbiter:
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
   priorityClassName: ""
-  ## MongoDB(R) Arbiter pods' Security Context.
+  ## MongoDB&reg; Arbiter pods' Security Context.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param arbiter.podSecurityContext.enabled Enable Arbiter pod(s)' Security Context
   ## @param arbiter.podSecurityContext.fsGroup Group ID for the volumes of the Arbiter pod(s)
@@ -1079,7 +1079,7 @@ arbiter:
     ##   value: "10000"
     ##
     sysctls: []
-  ## MongoDB(R) Arbiter containers' Security Context (only main container).
+  ## MongoDB&reg; Arbiter containers' Security Context (only main container).
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param arbiter.containerSecurityContext.enabled Enable Arbiter container(s)' Security Context
   ## @param arbiter.containerSecurityContext.runAsUser User ID for the Arbiter container
@@ -1087,7 +1087,7 @@ arbiter:
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
-  ## MongoDB(R) Arbiter containers' resource requests and limits.
+  ## MongoDB&reg; Arbiter containers' resource requests and limits.
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
@@ -1109,7 +1109,7 @@ arbiter:
     ##    memory: 128Mi
     ##
     requests: {}
-  ## MongoDB(R) Arbiter pods' liveness probe. Evaluated as a template.
+  ## MongoDB&reg; Arbiter pods' liveness probe. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ## @param arbiter.livenessProbe.enabled Enable livenessProbe
   ## @param arbiter.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
@@ -1125,7 +1125,7 @@ arbiter:
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
-  ## MongoDB(R) Arbiter pods' readiness probe. Evaluated as a template.
+  ## MongoDB&reg; Arbiter pods' readiness probe. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ## @param arbiter.readinessProbe.enabled Enable readinessProbe
   ## @param arbiter.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
@@ -1185,7 +1185,7 @@ arbiter:
   ##     emptyDir: {}
   ##
   extraVolumes: []
-  ## MongoDB(R) Arbiter Pod Disruption Budget configuration
+  ## MongoDB&reg; Arbiter Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
   ##
   pdb:
@@ -1198,7 +1198,7 @@ arbiter:
     ## @param arbiter.pdb.maxUnavailable Maximum number/percentage of Arbiter pods that may be made unavailable
     ##
     maxUnavailable: ""
-  ## MongoDB(R) Arbiter service parameters
+  ## MongoDB&reg; Arbiter service parameters
   ##
   service:
     ## @param arbiter.service.nameOverride The arbiter service name
@@ -1316,7 +1316,7 @@ hidden:
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
   priorityClassName: ""
-  ## MongoDB(R) Hidden containers' resource requests and limits.
+  ## MongoDB&reg; Hidden containers' resource requests and limits.
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
@@ -1338,7 +1338,7 @@ hidden:
     ##    memory: 128Mi
     ##
     requests: {}
-  ## MongoDB(R) Hidden pods' liveness probe. Evaluated as a template.
+  ## MongoDB&reg; Hidden pods' liveness probe. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ## @param hidden.livenessProbe.enabled Enable livenessProbe
   ## @param hidden.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
@@ -1354,7 +1354,7 @@ hidden:
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
-  ## MongoDB(R) Hidden pods' readiness probe. Evaluated as a template.
+  ## MongoDB&reg; Hidden pods' readiness probe. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ## @param hidden.readinessProbe.enabled Enable readinessProbe
   ## @param hidden.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
@@ -1378,7 +1378,7 @@ hidden:
   ## Ignored when readinessProbe.enabled=true
   ##
   customReadinessProbe: {}
-  ## @param hidden.initContainers Add init containers to the MongoDB(R) Hidden pods.
+  ## @param hidden.initContainers Add init containers to the MongoDB&reg; Hidden pods.
   ## Example:
   ## initContainers:
   ##   - name: your-image-name
@@ -1414,7 +1414,7 @@ hidden:
   ##     emptyDir: {}
   ##
   extraVolumes: []
-  ## MongoDB(R) Hidden Pod Disruption Budget configuration
+  ## MongoDB&reg; Hidden Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
   ##
   pdb:
@@ -1451,7 +1451,7 @@ hidden:
     ## @param hidden.persistence.annotations PVC annotations
     ##
     annotations: {}
-    ## @param hidden.persistence.mountPath The path the volume will be mounted at, useful when using different MongoDB(R) images.
+    ## @param hidden.persistence.mountPath The path the volume will be mounted at, useful when using different MongoDB&reg; images.
     ##
     mountPath: /bitnami/mongodb
     ## @param hidden.persistence.subPath The subdirectory of the volume to mount to, useful in dev environments
@@ -1476,7 +1476,7 @@ metrics:
   ## @param metrics.enabled Enable using a sidecar Prometheus exporter
   ##
   enabled: false
-  ## Bitnami MongoDB(R) Promtheus Exporter image
+  ## Bitnami MongoDB&reg; Promtheus Exporter image
   ## ref: https://hub.docker.com/r/bitnami/mongodb-exporter/tags/
   ## @param metrics.image.registry MongoDB&reg; Prometheus exporter image registry
   ## @param metrics.image.repository MongoDB&reg; Prometheus exporter image repository

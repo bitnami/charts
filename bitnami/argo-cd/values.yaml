@@ -1955,7 +1955,7 @@ redis:
     ##
     existingSecret: ""
     ##
-    ## Password key to be retrieved from Redis(TM) secret
+    ## Password key to be retrieved from Redis&trade; secret
     ##
     existingSecretPasswordKey: 'redis-password'
 
@@ -1966,18 +1966,18 @@ redis:
   ## architecture: standalone
 
 ##
-## External Redis(TM)
+## External Redis&trade;
 ##
 externalRedis:
-  ## Redis(TM) host
+  ## Redis&trade; host
   ## @param externalRedis.host External Redis host
   ##
   host: ""
-  ## Redis(TM) port
+  ## Redis&trade; port
   ## @param externalRedis.port External Redis port
   ##
   port: 6379
-  ## Redis(TM) password for authentication
+  ## Redis&trade; password for authentication
   ## Ignored if existingSecret is set
   ## @param externalRedis.password External Redis password
   ##
@@ -1986,7 +1986,7 @@ externalRedis:
   ## @param externalRedis.existingSecret Existing secret for the external redis
   ##
   existingSecret: ""
-  ## Password key to be retrieved from Redis(TM) secret
+  ## Password key to be retrieved from Redis&trade; secret
   ## @param externalRedis.existingSecretPasswordKey Password key for the existing secret containing the external redis password
   ##
   existingSecretPasswordKey: 'redis-password'

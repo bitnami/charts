@@ -37,6 +37,21 @@ clusterDomain: cluster.local
 ##
 extraDeploy: []
 
+## Enable diagnostic mode in the deployment
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the deployment
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the deployment
+  ##
+  args:
+    - infinity
+
 ## @section Cassandra parameters
 
 ## Bitnami Cassandra image
@@ -430,8 +445,8 @@ networkPolicy:
   enabled: false
   ## @param networkPolicy.allowExternal Don't require client label for connections
   ## The Policy model to apply. When set to false, only pods with the correct
-  ## client label will have network access to the port Redis(TM) is listening
-  ## on. When true, Redis(TM) will accept connections from any source
+  ## client label will have network access to the port Redis&trade; is listening
+  ## on. When true, Redis&trade; will accept connections from any source
   ## (with the correct destination port).
   ##
   allowExternal: true
