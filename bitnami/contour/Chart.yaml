@@ -27,4 +27,4 @@ sources:
   - https://github.com/envoyproxy/envoy
   - https://github.com/bitnami/bitnami-docker-contour
   - https://projectcontour.io
-version: 5.0.3
+version: 5.0.4
