@@ -101,7 +101,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `hub.baseUrl`                               | Hub base URL                                                                              | `/`                  |
 | `hub.adminUser`                             | Hub Dummy authenticator admin user                                                        | `user`               |
 | `hub.password`                              | Hub Dummy authenticator password                                                          | `""`                 |
-| `hub.configuration`                         | Hub configuration file (to be used by jupyterhub_config.py)                               | `{}`                 |
+| `hub.configuration`                         | Hub configuration file (to be used by jupyterhub_config.py)                               | `""`                 |
 | `hub.containerPort`                         | Hub container port                                                                        | `8081`               |
 | `hub.existingConfigmap`                     | Configmap with Hub init scripts (replaces the scripts in templates/hub/configmap.yml)     | `""`                 |
 | `hub.existingSecret`                        | Secret with hub configuration (replaces the hub.configuration value) and proxy token      | `""`                 |

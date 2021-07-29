@@ -127,7 +127,7 @@ hub:
   ## This configuration uses the values for the `singleuser` section. In the upstream chart the
   ## values.yaml file is mounted in the hub container. This is chart, we tried to separate both
   ## configuration so we could follow the Bitnami value standards
-  ## @param hub.configuration [object] Hub configuration file (to be used by jupyterhub_config.py)
+  ## @param hub.configuration [string] Hub configuration file (to be used by jupyterhub_config.py)
   ##
   configuration: |
     Chart:
