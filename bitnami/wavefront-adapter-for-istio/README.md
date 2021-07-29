@@ -62,24 +62,26 @@ The command removes all the Kubernetes components associated with the chart and 
 ### Global parameters
 
 | Name                      | Description                                        | Value           |
-|---------------------------|----------------------------------------------------|-----------------|
-| `global.imageRegistry`    | Global Docker image registry                       | `nil`           |
+| ------------------------- | -------------------------------------------------- | --------------- |
+| `global.imageRegistry`    | Global Docker image registry                       | `""`            |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array    | `[]`            |
-| `kubeVersion`             | Override Kubernetes version                        | `nil`           |
-| `nameOverride`            | String to partially override common.names.fullname | `nil`           |
-| `fullnameOverride`        | String to fully override common.names.fullname     | `nil`           |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)       | `""`            |
+| `kubeVersion`             | Override Kubernetes version                        | `""`            |
+| `nameOverride`            | String to partially override common.names.fullname | `""`            |
+| `fullnameOverride`        | String to fully override common.names.fullname     | `""`            |
 | `commonLabels`            | Labels to add to all deployed objects              | `{}`            |
 | `commonAnnotations`       | Annotations to add to all deployed objects         | `{}`            |
 | `clusterDomain`           | Kubernetes cluster domain name                     | `cluster.local` |
 | `extraDeploy`             | Array of extra objects to deploy with the release  | `[]`            |
 
+
 ### Wavefront Adapter for Istio deployment parameters
 
 | Name                                    | Description                                                                               | Value                                 |
-|-----------------------------------------|-------------------------------------------------------------------------------------------|---------------------------------------|
+| --------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------- |
 | `image.registry`                        | Adapter image registry                                                                    | `docker.io`                           |
 | `image.repository`                      | Adapter image repository                                                                  | `bitnami/wavefront-adapter-for-istio` |
-| `image.tag`                             | Adapter image tag (immutabe tags are recommended)                                         | `1.0.3-debian-10-r0`                  |
+| `image.tag`                             | Adapter image tag (immutabe tags are recommended)                                         | `0.1.5-debian-10-r106`                |
 | `image.pullPolicy`                      | Adapter image pull policy                                                                 | `IfNotPresent`                        |
 | `image.pullSecrets`                     | Adapter image pull secrets                                                                | `[]`                                  |
 | `image.debug`                           | Enable image debug mode                                                                   | `false`                               |
@@ -121,38 +123,41 @@ The command removes all the Kubernetes components associated with the chart and 
 | `updateStrategy.type`                   | Adapter deployment update strategy                                                        | `RollingUpdate`                       |
 | `containerPort`                         | Adapter container port                                                                    | `8000`                                |
 | `extraEnvVars`                          | Add extra environment variables to the Adapter container                                  | `[]`                                  |
-| `extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars                                      | `nil`                                 |
-| `extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars                                         | `nil`                                 |
+| `extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars                                      | `""`                                  |
+| `extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars                                         | `""`                                  |
 | `extraVolumes`                          | Optionally specify extra list of additional volumes for Adapter pods                      | `[]`                                  |
 | `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for Adapter container(s)         | `[]`                                  |
-| `initContainers`                        | Add additional init containers to the Adapter pods                                        | `{}`                                  |
-| `sidecars`                              | Add additional sidecar containers to the Adapter pod                                      | `{}`                                  |
-| `externalProxy.host`                    | Host of a wavefront-proxy instance (required if wavefront.enabled = false)                | `nil`                                 |
+| `initContainers`                        | Add additional init containers to the Adapter pods                                        | `[]`                                  |
+| `sidecars`                              | Add additional sidecar containers to the Adapter pod                                      | `[]`                                  |
+| `externalProxy.host`                    | Host of a wavefront-proxy instance (required if wavefront.enabled = false)                | `""`                                  |
 | `externalProxy.port`                    | Host of a wavefront-proxy instance (required if wavefront.enabled = false)                | `2878`                                |
 | `adapterLogLevel`                       | Adapter log level                                                                         | `info`                                |
+| `istio.create`                          | Deploy istio objects                                                                      | `true`                                |
 | `istio.namespace`                       | Namespace to deploy the Istio objects                                                     | `istio-system`                        |
-| `istio.apiVersion`                      | Override Istio API version                                                                | `nil`                                 |
+| `istio.apiVersion`                      | Override Istio API version                                                                | `""`                                  |
 | `metrics.flushInterval`                 | Interval to flush the metrics                                                             | `5s`                                  |
 | `metrics.source`                        | Source tag for all metrics handled by the adapter                                         | `istio`                               |
 | `metrics.prefix`                        | Prefix to prepend to all metrics handled by the adapter                                   | `istio`                               |
 | `metrics.http`                          | Enable the collection of http metrics                                                     | `true`                                |
 | `metrics.tcp`                           | Enable the collection of tcp metrics                                                      | `true`                                |
 
+
 ### Traffic Exposure Parameters
 
 | Name                               | Description                                  | Value       |
-|------------------------------------|----------------------------------------------|-------------|
+| ---------------------------------- | -------------------------------------------- | ----------- |
 | `service.type`                     | Adapter service type                         | `ClusterIP` |
 | `service.port`                     | Adapter service port                         | `8000`      |
-| `service.loadBalancerIP`           | Adapter service LoadBalancer IP              | `nil`       |
-| `service.loadBalancerSourceRanges` | loadBalancerIP source ranges for the Service | `nil`       |
+| `service.loadBalancerIP`           | Adapter service LoadBalancer IP              | `""`        |
+| `service.loadBalancerSourceRanges` | loadBalancerIP source ranges for the Service | `[]`        |
 | `service.nodePorts.http`           | NodePort for the HTTP endpoint               | `""`        |
 | `service.externalTrafficPolicy`    | External traffic policy for the service      | `Cluster`   |
+
 
 ### Wavefront sub-chart parameters
 
 | Name                              | Description                                                                               | Value                                |
-|-----------------------------------|-------------------------------------------------------------------------------------------|--------------------------------------|
+| --------------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------ |
 | `wavefront.enabled`               | Deploy Wavefront chart (necessary if externalProxyHost is not set)                        | `true`                               |
 | `wavefront.wavefront.url`         | Wavefront SAAS service URL                                                                | `https://YOUR_CLUSTER.wavefront.com` |
 | `wavefront.wavefront.token`       | Wavefront SAAS token                                                                      | `YOUR_API_TOKEN`                     |
@@ -161,6 +166,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `wavefront.proxy.enabled`         | Deploy Wavefront Proxy (required if externalProxyHost is not set)                         | `true`                               |
 | `wavefront.proxy.port`            | Deployed Wavefront Proxy port (required if externalProxyHost is not set)                  | `2878`                               |
 | `wavefront.serviceAccount.create` | Create Wavefront serivce account (not necessary as the Adapter only uses wavefront-proxy) | `false`                              |
+
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

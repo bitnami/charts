@@ -1,0 +1,33 @@
+annotations:
+  category: Infrastructure
+apiVersion: v2
+appVersion: 7.3.2
+dependencies:
+  - condition: postgresql.enabled
+    name: postgresql
+    repository: https://charts.bitnami.com/bitnami
+    version: 10.X.X
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 1.x.x
+description: Concourse is a pipeline-based continuous thing-doer.
+engine: gotpl
+home: https://github.com/concourse/concourse
+icon: https://bitnami.com/assets/stacks/concourse/img/concourse-stack-220x234.png
+keywords:
+  - concourse
+  - ci
+  - cd
+  - http
+  - web
+  - application
+maintainers:
+  - email: containers@bitnami.com
+    name: Bitnami
+name: concourse
+sources:
+  - https://github.com/bitnami/bitnami-docker-concourse
+  - https://github.com/concourse/concourse
+version: 0.1.1

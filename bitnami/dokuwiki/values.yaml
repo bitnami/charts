@@ -8,25 +8,25 @@
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
 
 ## @section Common parameters
 
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
-kubeVersion:
+kubeVersion: ""
 ## @param nameOverride String to partially override dokuwiki.fullname template with a string (will prepend the release name)
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override dokuwiki.fullname template with a string
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param commonAnnotations Annotations to add to all deployed objects
 ##
 commonAnnotations: {}
@@ -51,7 +51,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/dokuwiki
-  tag: 20200729.0.0-debian-10-r283
+  tag: 20200729.0.0-debian-10-r307
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -108,6 +108,7 @@ dokuwikiWikiName: My Wiki
 ## @param persistence.storageClass PVC Storage Class for DokuWiki volume
 ## @param persistence.accessMode PVC Access Mode for DokuWiki volume
 ## @param persistence.size PVC Storage Request for DokuWiki volume
+## @param persistence.existingClaim Name of an existing PVC to be used
 ##
 persistence:
   enabled: true
@@ -118,9 +119,10 @@ persistence:
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##   GKE, AWS & OpenStack)
   ##
-  storageClass:
+  storageClass: ""
   accessMode: ReadWriteOnce
   size: 8Gi
+  existingClaim: ""
 ## @param podSecurityContext.enabled Enable securityContext on for DokuWiki deployment
 ## @param podSecurityContext.fsGroup Group to configure permissions for volumes
 ##
@@ -215,19 +217,19 @@ nodeSelector: {}
 tolerations: []
 ## @param command Override default container command (useful when using custom images)
 ##
-command:
+command: []
 ## @param args Override default container args (useful when using custom images)
 ##
-args:
+args: []
 ## @param extraEnvVars An array to add extra env vars
 ##
 extraEnvVars: []
 ## @param extraEnvVarsCM ConfigMap containing extra env vars
 ##
-extraEnvVarsCM:
+extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Secret containing extra env vars (in case of sensitive data)
 ##
-extraEnvVarsSecret:
+extraEnvVarsSecret: ""
 ## @param podAnnotations Pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
@@ -246,7 +248,7 @@ extraVolumes: []
 extraVolumeMounts: []
 ## @param lifecycleHooks LifecycleHook to set additional configuration at startup. Evaluated as a template
 ##
-lifecycleHooks:
+lifecycleHooks: {}
 ## @param podLabels Add additional labels to the pod (evaluated as a template)
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
@@ -266,7 +268,7 @@ service:
   type: LoadBalancer
   ## @param service.loadBalancerIP Use serviceLoadBalancerIP to request a specific static IP, otherwise leave blank
   ##
-  loadBalancerIP:
+  loadBalancerIP: ""
   ## @param service.port Service HTTP port
   ##
   port: 80
@@ -301,7 +303,7 @@ ingress:
   pathType: ImplementationSpecific
   ## @param ingress.apiVersion Override API Version (automatically detected if not set)
   ##
-  apiVersion:
+  apiVersion: ""
   ## @param ingress.hostname When the ingress is enabled, a host pointing to this will be created
   ##
   hostname: dokuwiki.local
@@ -376,7 +378,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r112
+    tag: 10-debian-10-r138
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -422,7 +424,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.9.0-debian-10-r11
+    tag: 0.9.0-debian-10-r37
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -457,8 +459,8 @@ certificates:
   customCertificate:
     certificateSecret: ""
     chainSecret:
-      name:
-      key:
+      name: ""
+      key: ""
     certificateLocation: /etc/ssl/certs/ssl-cert-snakeoil.pem
     keyLocation: /etc/ssl/private/ssl-cert-snakeoil.key
     chainLocation: /etc/ssl/certs/mychain.pem
@@ -467,22 +469,22 @@ certificates:
   customCAs: []
   ## @param certificates.command Override default container command (useful when using custom images)
   ##
-  command:
+  command: []
   ## @param certificates.args Override default container args (useful when using custom images)
   ## args:
   ## - secret: custom-CA
   ## - secret: more-custom-CAs
   ##
-  args:
+  args: []
   ## @param certificates.extraEnvVars Container sidecar extra environment variables (eg proxy)
   ##
   extraEnvVars: []
   ## @param certificates.extraEnvVarsCM ConfigMap containing extra env vars
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param certificates.extraEnvVarsSecret Secret containing extra env vars (in case of sensitive data)
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param certificates.image.registry Container sidecar registry
   ## @param certificates.image.repository Container sidecar image
   ## @param certificates.image.tag Container sidecar image tag
@@ -492,7 +494,7 @@ certificates:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r112
+    tag: 10-debian-10-r138
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images

@@ -36,6 +36,10 @@ spec:
         - name: metrics
           image: {{ include "elasticsearch.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else }}
           args:
             {{- if gt (int .Values.coordinating.replicas) 0 }}
             # Prefer coordinating only nodes to do the initial metrics query
@@ -48,9 +52,11 @@ spec:
             {{- if .Values.metrics.extraArgs }}
             {{- toYaml .Values.metrics.extraArgs | nindent 12 }}
             {{- end }}
+          {{- end }}
           ports:
             - name: metrics
               containerPort: 9114
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.metrics.livenessProbe.enabled }}
           livenessProbe:
             initialDelaySeconds: {{ .Values.metrics.livenessProbe.initialDelaySeconds }}
@@ -76,6 +82,7 @@ spec:
               port: metrics
           {{- else if .Values.metrics.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
           {{- end }}
           {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
