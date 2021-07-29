@@ -508,7 +508,7 @@ To horizontally scale this chart once it has been deployed, two options are avai
 
 When scaling down the solution, unnecessary RabbitMQ nodes are automatically stopped, but they are not removed from the cluster. You need to manually remove them by running the `rabbitmqctl forget_cluster_node` command.
 
-Refer to the chart documentation for [more information on scaling the Rabbit cluster horizontally](https://docs.bitnami.com/kubernetes/infrastructure/rabbitmq/administration/scale-out/).
+Refer to the chart documentation for [more information on scaling the Rabbit cluster horizontally](https://docs.bitnami.com/kubernetes/infrastructure/rabbitmq/administration/scale-deployment/).
 
 ### Enable TLS support
 
