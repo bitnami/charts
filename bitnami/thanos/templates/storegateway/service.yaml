@@ -8,6 +8,9 @@ metadata:
     {{- if and .Values.metrics.enabled .Values.metrics.serviceMonitor.enabled }}
     prometheus-operator/monitor: 'true'
     {{- end }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
   {{- if .Values.storegateway.service.annotations }}
   annotations: {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.service.annotations "context" $) | nindent 4 }}
   {{- end }}

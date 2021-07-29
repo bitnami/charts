@@ -52,18 +52,18 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `nil` |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
 
 ### Common parameters
 
 | Name                | Description                                        | Value |
 | ------------------- | -------------------------------------------------- | ----- |
-| `kubeVersion`       | Override Kubernetes version                        | `nil` |
-| `nameOverride`      | String to partially override common.names.fullname | `nil` |
-| `fullnameOverride`  | String to fully override common.names.fullname     | `nil` |
+| `kubeVersion`       | Override Kubernetes version                        | `""`  |
+| `nameOverride`      | String to partially override common.names.fullname | `""`  |
+| `fullnameOverride`  | String to fully override common.names.fullname     | `""`  |
 | `commonAnnotations` | Annotations to add to all deployed objects         | `{}`  |
 | `commonLabels`      | Labels to add to all deployed objects              | `{}`  |
 | `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`  |
@@ -71,14 +71,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Osclass Image parameters
 
-| Name                | Description                                        | Value                |
-| ------------------- | -------------------------------------------------- | -------------------- |
-| `image.registry`    | Osclass image registry                             | `docker.io`          |
-| `image.repository`  | Osclass image repository                           | `bitnami/osclass`    |
-| `image.tag`         | Osclass image tag (immutable tags are recommended) | `4.4.0-debian-10-r6` |
-| `image.pullPolicy`  | Osclass image pull policy                          | `IfNotPresent`       |
-| `image.pullSecrets` | Osclass image pull secrets                         | `nil`                |
-| `image.debug`       | Enable Bitnami debug mode in Osclass image         | `false`              |
+| Name                | Description                                        | Value                 |
+| ------------------- | -------------------------------------------------- | --------------------- |
+| `image.registry`    | Osclass image registry                             | `docker.io`           |
+| `image.repository`  | Osclass image repository                           | `bitnami/osclass`     |
+| `image.tag`         | Osclass image tag (immutable tags are recommended) | `4.4.0-debian-10-r61` |
+| `image.pullPolicy`  | Osclass image pull policy                          | `IfNotPresent`        |
+| `image.pullSecrets` | Osclass image pull secrets                         | `[]`                  |
+| `image.debug`       | Enable Bitnami debug mode in Osclass image         | `false`               |
 
 
 ### Osclass Configuration parameters
@@ -90,13 +90,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `osclassSiteTitle`   | Osclass site title                                     | `user`             |
 | `osclassPassword`    | Osclass user password                                  | `""`               |
 | `osclassEmail`       | Osclass user email                                     | `user@example.com` |
-| `existingSecret`     | Name of existing secret containing Osclass credentials | `nil`              |
+| `existingSecret`     | Name of existing secret containing Osclass credentials | `""`               |
 | `allowEmptyPassword` | Allow the container to be started with blank passwords | `true`             |
-| `smtpHost`           | SMTP server host                                       | `nil`              |
-| `smtpPort`           | SMTP server port                                       | `nil`              |
-| `smtpUser`           | SMTP username                                          | `nil`              |
-| `smtpPassword`       | SMTP user password                                     | `nil`              |
-| `smtpProtocol`       | SMTP protocol                                          | `nil`              |
+| `smtpHost`           | SMTP server host                                       | `""`               |
+| `smtpPort`           | SMTP server port                                       | `""`               |
+| `smtpUser`           | SMTP username                                          | `""`               |
+| `smtpPassword`       | SMTP user password                                     | `""`               |
+| `smtpProtocol`       | SMTP protocol                                          | `""`               |
 
 
 ### Osclass deployment parameters
@@ -126,20 +126,20 @@ The command removes all the Kubernetes components associated with the chart and 
 | `customLivenessProbe`                                | Custom livenessProbe that overrides the default one                                       | `{}`                                     |
 | `customReadinessProbe`                               | Custom readinessProbe that overrides the default one                                      | `{}`                                     |
 | `certificates.customCertificate.certificateSecret`   | name of the secret with custom certificates                                               | `""`                                     |
-| `certificates.customCertificate.chainSecret.name`    | name of the secret with the chain                                                         | `nil`                                    |
-| `certificates.customCertificate.chainSecret.key`     | key of the secret with the chain                                                          | `nil`                                    |
+| `certificates.customCertificate.chainSecret.name`    | name of the secret with the chain                                                         | `""`                                     |
+| `certificates.customCertificate.chainSecret.key`     | key of the secret with the chain                                                          | `""`                                     |
 | `certificates.customCertificate.certificateLocation` | Location of the certificate inside the container                                          | `/etc/ssl/certs/ssl-cert-snakeoil.pem`   |
 | `certificates.customCertificate.keyLocation`         | Location of the certificate key inside the container                                      | `/etc/ssl/private/ssl-cert-snakeoil.key` |
 | `certificates.customCertificate.chainLocation`       | Location of the certificate chain inside the container                                    | `/etc/ssl/certs/mychain.pem`             |
 | `certificates.customCAs`                             | Array with custom CAs                                                                     | `[]`                                     |
-| `certificates.command`                               | Override certificate container command                                                    | `nil`                                    |
-| `certificates.args`                                  | Override certificate container args                                                       | `nil`                                    |
+| `certificates.command`                               | Override certificate container command                                                    | `[]`                                     |
+| `certificates.args`                                  | Override certificate container args                                                       | `[]`                                     |
 | `certificates.extraEnvVars`                          | An array to add extra env vars                                                            | `[]`                                     |
-| `certificates.extraEnvVarsCM`                        | ConfigMap with extra environment variables                                                | `nil`                                    |
-| `certificates.extraEnvVarsSecret`                    | Secret with extra environment variables                                                   | `nil`                                    |
+| `certificates.extraEnvVarsCM`                        | ConfigMap with extra environment variables                                                | `""`                                     |
+| `certificates.extraEnvVarsSecret`                    | Secret with extra environment variables                                                   | `""`                                     |
 | `certificates.image.registry`                        | Apache Exporter image registry                                                            | `docker.io`                              |
 | `certificates.image.repository`                      | Apache Exporter image repository                                                          | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Apache Exporter image tag (immutable tags are recommended)                                | `10`                                     |
+| `certificates.image.tag`                             | Apache Exporter image tag (immutable tags are recommended)                                | `10-debian-10-r139`                      |
 | `certificates.image.pullPolicy`                      | Apache Exporter image pull policy                                                         | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Apache Exporter image pull secrets                                                        | `[]`                                     |
 | `lifecycleHooks`                                     | lifecycleHooks for the container to automate configuration before or after startup.       | `{}`                                     |
@@ -148,13 +148,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replicaCount`                                       | Number of Osclass replicas to deploy                                                      | `1`                                      |
 | `containerPorts.http`                                | WordPress HTTP container port                                                             | `8080`                                   |
 | `containerPorts.https`                               | WordPress HTTPS container port                                                            | `8443`                                   |
-| `command`                                            | Override default container command (useful when using custom images)                      | `nil`                                    |
-| `args`                                               | Override default container args (useful when using custom images)                         | `nil`                                    |
+| `command`                                            | Override default container command (useful when using custom images)                      | `[]`                                     |
+| `args`                                               | Override default container args (useful when using custom images)                         | `[]`                                     |
 | `updateStrategy.type`                                | Osclass deployment strategy type                                                          | `RollingUpdate`                          |
 | `updateStrategy.rollingUpdate`                       | Osclass deployment rolling update configuration parameters                                | `{}`                                     |
 | `extraEnvVars`                                       | Array with extra environment variables to add to the Osclass container                    | `[]`                                     |
-| `extraEnvVarsCM`                                     | Name of existing ConfigMap containing extra env vars                                      | `nil`                                    |
-| `extraEnvVarsSecret`                                 | Name of existing Secret containing extra env vars                                         | `nil`                                    |
+| `extraEnvVarsCM`                                     | Name of existing ConfigMap containing extra env vars                                      | `""`                                     |
+| `extraEnvVarsSecret`                                 | Name of existing Secret containing extra env vars                                         | `""`                                     |
 | `extraVolumes`                                       | Optionally specify extra list of additional volumes for Osclass pods                      | `[]`                                     |
 | `extraVolumeMounts`                                  | Optionally specify extra list of additional volumeMounts for Osclass container(s)         | `[]`                                     |
 | `initContainers`                                     | Add additional init containers to the Osclass pods                                        | `[]`                                     |
@@ -178,19 +178,19 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.type`                     | WordPress service type                                                                                | `LoadBalancer`           |
 | `service.port`                     | WordPress service HTTP port                                                                           | `80`                     |
 | `service.httpsPort`                | WordPress service HTTPS port                                                                          | `443`                    |
-| `service.clusterIP`                | WordPress service Cluster IP                                                                          | `nil`                    |
-| `service.loadBalancerIP`           | Osclass service Load Balancer IP                                                                      | `nil`                    |
+| `service.clusterIP`                | WordPress service Cluster IP                                                                          | `""`                     |
+| `service.loadBalancerIP`           | Osclass service Load Balancer IP                                                                      | `""`                     |
 | `service.loadBalancerSourceRanges` | Osclass service Load Balancer sources                                                                 | `[]`                     |
 | `service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                      | `None`                   |
-| `service.nodePorts.http`           | Node port for HTTP                                                                                    | `nil`                    |
-| `service.nodePorts.https`          | Node port for HTTPS                                                                                   | `nil`                    |
+| `service.nodePorts.http`           | Node port for HTTP                                                                                    | `""`                     |
+| `service.nodePorts.https`          | Node port for HTTPS                                                                                   | `""`                     |
 | `service.externalTrafficPolicy`    | Osclass service external traffic policy                                                               | `Cluster`                |
 | `ingress.enabled`                  | Enable ingress record generation for Osclass                                                          | `false`                  |
 | `ingress.certManager`              | Add the corresponding annotations for cert-manager integration                                        | `false`                  |
 | `ingress.pathType`                 | Ingress path type                                                                                     | `ImplementationSpecific` |
-| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                         | `nil`                    |
+| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                         | `""`                     |
 | `ingress.hostname`                 | Default host for the ingress record                                                                   | `osclass.local`          |
-| `ingress.path`                     | Default path for the ingress record                                                                   | `/`                      |
+| `ingress.path`                     | Default path for the ingress record                                                                   | `ImplementationSpecific` |
 | `ingress.annotations`              | Additional custom annotations for the ingress record                                                  | `{}`                     |
 | `ingress.tls`                      | Enable TLS configuration for the host defined at `ingress.hostname` parameter                         | `false`                  |
 | `ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                            | `[]`                     |
@@ -215,19 +215,19 @@ The command removes all the Kubernetes components associated with the chart and 
 | `mariadb.auth.username`                    | MariaDB custom user name                                                                        | `bn_osclass`            |
 | `mariadb.auth.password`                    | MariaDB custom user password                                                                    | `""`                    |
 | `mariadb.primary.persistence.enabled`      | Enable persistence on MariaDB using PVC(s)                                                      | `true`                  |
-| `mariadb.primary.persistence.storageClass` | Persistent Volume storage class                                                                 | `nil`                   |
+| `mariadb.primary.persistence.storageClass` | Persistent Volume storage class                                                                 | `""`                    |
 | `mariadb.primary.persistence.accessModes`  | Persistent Volume access modes                                                                  | `[]`                    |
 | `mariadb.primary.persistence.size`         | Persistent Volume size                                                                          | `8Gi`                   |
 | `persistence.enabled`                      | Enable persistence using Persistent Volume Claims                                               | `true`                  |
-| `persistence.storageClass`                 | Persistent Volume storage class                                                                 | `nil`                   |
+| `persistence.storageClass`                 | Persistent Volume storage class                                                                 | `""`                    |
 | `persistence.accessModes`                  | Persistent Volume access modes                                                                  | `[]`                    |
 | `persistence.size`                         | Persistent Volume size                                                                          | `8Gi`                   |
-| `persistence.existingClaim`                | The name of an existing PVC to use for persistence                                              | `nil`                   |
-| `persistence.hostPath`                     | If defined, the osclass-data volume will mount to the specified hostPath.                       | `nil`                   |
+| `persistence.existingClaim`                | The name of an existing PVC to use for persistence                                              | `""`                    |
+| `persistence.hostPath`                     | If defined, the osclass-data volume will mount to the specified hostPath.                       | `""`                    |
 | `volumePermissions.enabled`                | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`         | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`       | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`              | Bitnami Shell image tag (immutable tags are recommended)                                        | `10`                    |
+| `volumePermissions.image.tag`              | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r139`     |
 | `volumePermissions.image.pullPolicy`       | Bitnami Shell image pull policy                                                                 | `Always`                |
 | `volumePermissions.image.pullSecrets`      | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`       | The resources limits for the init container                                                     | `{}`                    |
@@ -240,7 +240,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------- | -------------------------------------------------------------- | ------- |
 | `pdb.create`               | Enable a Pod Disruption Budget creation                        | `false` |
 | `pdb.minAvailable`         | Minimum number/percentage of pods that should remain scheduled | `1`     |
-| `pdb.maxUnavailable`       | Maximum number/percentage of pods that may be made unavailable | `nil`   |
+| `pdb.maxUnavailable`       | Maximum number/percentage of pods that may be made unavailable | `""`    |
 | `autoscaling.enabled`      | Enable Horizontal POD autoscaling for Osclass                  | `false` |
 | `autoscaling.minReplicas`  | Minimum number of Osclass replicas                             | `1`     |
 | `autoscaling.maxReplicas`  | Maximum number of Osclass replicas                             | `11`    |
@@ -255,7 +255,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                         | Start a sidecar prometheus exporter to expose metrics                        | `false`                   |
 | `metrics.image.registry`                  | Apache Exporter image registry                                               | `docker.io`               |
 | `metrics.image.repository`                | Apache Exporter image repository                                             | `bitnami/apache-exporter` |
-| `metrics.image.tag`                       | Apache Exporter image tag (immutable tags are recommended)                   | `0.8.0-debian-10-r374`    |
+| `metrics.image.tag`                       | Apache Exporter image tag (immutable tags are recommended)                   | `0.9.0-debian-10-r37`     |
 | `metrics.image.pullPolicy`                | Apache Exporter image pull policy                                            | `IfNotPresent`            |
 | `metrics.image.pullSecrets`               | Apache Exporter image pull secrets                                           | `[]`                      |
 | `metrics.resources.limits`                | The resources limits for the Prometheus exporter container                   | `{}`                      |
@@ -265,10 +265,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.service.port`                    | Metrics service port                                                         | `9117`                    |
 | `metrics.service.annotations`             | Additional custom annotations for Metrics service                            | `{}`                      |
 | `metrics.serviceMonitor.enabled`          | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator | `false`                   |
-| `metrics.serviceMonitor.namespace`        | The namespace in which the ServiceMonitor will be created                    | `nil`                     |
+| `metrics.serviceMonitor.namespace`        | The namespace in which the ServiceMonitor will be created                    | `""`                      |
 | `metrics.serviceMonitor.interval`         | The interval at which metrics should be scraped                              | `30s`                     |
-| `metrics.serviceMonitor.scrapeTimeout`    | The timeout after which the scrape is ended                                  | `nil`                     |
-| `metrics.serviceMonitor.relabellings`     | Metrics relabellings to add to the scrape endpoint                           | `nil`                     |
+| `metrics.serviceMonitor.scrapeTimeout`    | The timeout after which the scrape is ended                                  | `""`                      |
+| `metrics.serviceMonitor.relabellings`     | Metrics relabellings to add to the scrape endpoint                           | `[]`                      |
 | `metrics.serviceMonitor.honorLabels`      | Labels to honor to add to the scrape endpoint                                | `false`                   |
 | `metrics.serviceMonitor.additionalLabels` | Additional custom labels for the ServiceMonitor                              | `{}`                      |
 

@@ -50,9 +50,10 @@ spec:
       securityContext:
         fsGroup: {{ .Values.ingest.securityContext.fsGroup }}
       {{- end }}
-      {{- if .Values.sysctlImage.enabled }}
-      ## Image that performs the sysctl operation to modify Kernel settings (needed sometimes to avoid boot errors)
+      {{- if or .Values.ingest.initContainers  .Values.sysctlImage.enabled }}
       initContainers:
+        {{- if .Values.sysctlImage.enabled }}
+        ## Image that performs the sysctl operation to modify Kernel settings (needed sometimes to avoid boot errors)
         - name: sysctl
           image: {{ include "elasticsearch.sysctl.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
@@ -66,6 +67,10 @@ spec:
           {{- if .Values.sysctlImage.resources }}
           resources: {{- toYaml .Values.sysctlImage.resources | nindent 12 }}
           {{- end }}
+        {{- end }}
+        {{- if .Values.ingest.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.ingest.initContainers "context" $) | nindent 8 }}
+        {{- end }}
       {{- end }}
       containers:
         - name: elasticsearch
@@ -75,9 +80,13 @@ spec:
           securityContext:
             runAsUser: {{ .Values.ingest.securityContext.runAsUser }}
           {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- end }}
           env:
             - name: BITNAMI_DEBUG
-              value: {{ ternary "true" "false" .Values.image.debug | quote }}
+              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
             - name: ELASTICSEARCH_CLUSTER_NAME
               value: {{ .Values.name | quote }}
             - name: ELASTICSEARCH_CLUSTER_HOSTS
@@ -113,6 +122,7 @@ spec:
               containerPort: 9200
             - name: transport
               containerPort: 9300
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.ingest.startupProbe.enabled }}
           startupProbe:
             initialDelaySeconds: {{ .Values.ingest.startupProbe.initialDelaySeconds }}
@@ -152,6 +162,7 @@ spec:
           {{- else if .Values.ingest.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ingest.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
+          {{- end }}
           {{- if .Values.ingest.resources }}
           resources: {{- toYaml .Values.ingest.resources | nindent 12 }}
           {{- end}}
@@ -183,6 +194,9 @@ spec:
             - name: custom-init-scripts-secret
               mountPath: /docker-entrypoint-initdb.d/init-scripts-secret
             {{- end }}
+        {{- if .Values.ingest.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.ingest.sidecars "context" $) | nindent 8 }}
+        {{- end }}
       volumes:
         {{- if or .Values.config .Values.extraConfig }}
         - name: config

@@ -88,7 +88,7 @@ spec:
           {{- if .Values.operator.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
-              path: /metrics
+              path: {{ .Values.operator.livenessProbe.path }}
               port: http
               scheme: HTTP
             initialDelaySeconds: {{ .Values.operator.livenessProbe.initialDelaySeconds }}
@@ -100,7 +100,7 @@ spec:
           {{- if .Values.operator.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
-              path: /metrics
+              path: {{ .Values.operator.readinessProbe.path }}
               port: http
               scheme: HTTP
             initialDelaySeconds: {{ .Values.operator.readinessProbe.initialDelaySeconds }}
