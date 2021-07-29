@@ -158,8 +158,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------------------- | -------------------------------------------------------- | ----------- |
 | `hub.networkPolicy.enabled`               | Deploy Hub network policies                              | `true`      |
 | `hub.networkPolicy.allowInterspaceAccess` | Allow communication between pods in different namespaces | `true`      |
-| `hub.networkPolicy.extraIngress`          | Add extra ingress rules to the NetworkPolicy             | `[]`        |
-| `hub.networkPolicy.extraEgress`           | Add extra ingress rules to the NetworkPolicy             | `[]`        |
+| `hub.networkPolicy.extraIngress`          | Add extra ingress rules to the NetworkPolicy             | `""`        |
+| `hub.networkPolicy.extraEgress`           | Add extra ingress rules to the NetworkPolicy             | `""`        |
 | `hub.service.type`                        | Hub service type                                         | `ClusterIP` |
 | `hub.service.port`                        | Hub service HTTP port                                    | `8081`      |
 | `hub.service.loadBalancerIP`              | Hub service LoadBalancer IP (optional, cloud specific)   | `""`        |
@@ -243,8 +243,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------------------------- | -------------------------------------------------------------------------------------------- | ------------------------ |
 | `proxy.networkPolicy.enabled`                   | Deploy Proxy network policies                                                                | `true`                   |
 | `proxy.networkPolicy.allowInterspaceAccess`     | Allow communication between pods in different namespaces                                     | `true`                   |
-| `proxy.networkPolicy.extraIngress`              | Add extra ingress rules to the NetworkPolicy                                                 | `[]`                     |
-| `proxy.networkPolicy.extraEgress`               | Add extra egress rules to the NetworkPolicy                                                  | `[]`                     |
+| `proxy.networkPolicy.extraIngress`              | Add extra ingress rules to the NetworkPolicy                                                 | `""`                     |
+| `proxy.networkPolicy.extraEgress`               | Add extra egress rules to the NetworkPolicy                                                  | `""`                     |
 | `proxy.service.api.type`                        | API service type                                                                             | `ClusterIP`              |
 | `proxy.service.api.port`                        | API service port                                                                             | `8001`                   |
 | `proxy.service.api.loadBalancerIP`              | API service LoadBalancer IP (optional, cloud specific)                                       | `""`                     |
@@ -366,8 +366,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `singleuser.networkPolicy.enabled`                  | Deploy Single User network policies                      | `true`  |
 | `singleuser.networkPolicy.allowInterspaceAccess`    | Allow communication between pods in different namespaces | `true`  |
 | `singleuser.networkPolicy.allowCloudMetadataAccess` | Allow Single User pods to access Cloud Metada endpoints  | `false` |
-| `singleuser.networkPolicy.extraIngress`             | Add extra ingress rules to the NetworkPolicy             | `[]`    |
-| `singleuser.networkPolicy.extraEgress`              | Add extra egress rules to the NetworkPolicy              | `[]`    |
+| `singleuser.networkPolicy.extraIngress`             | Add extra ingress rules to the NetworkPolicy             | `""`    |
+| `singleuser.networkPolicy.extraEgress`              | Add extra egress rules to the NetworkPolicy              | `""`    |
 
 
 ### Auxiliary image parameters

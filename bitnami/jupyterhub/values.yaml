@@ -479,10 +479,10 @@ hub:
     allowInterspaceAccess: true
     ## @param hub.networkPolicy.extraIngress Add extra ingress rules to the NetworkPolicy
     ##
-    extraIngress: []
-    ## @param hub.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    extraIngress: ""
+    ## @param hub.networkPolicy.extraEgress [string] Add extra ingress rules to the NetworkPolicy
     ##
-    extraEgress:
+    extraEgress: |
       ## Hub --> Any IP:PORT
       ##
       - to:
@@ -785,16 +785,16 @@ proxy:
     ## @param proxy.networkPolicy.allowInterspaceAccess Allow communication between pods in different namespaces
     ##
     allowInterspaceAccess: true
-    ## @param proxy.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## @param proxy.networkPolicy.extraIngress [string] Add extra ingress rules to the NetworkPolicy
     ##
-    extraIngress:
+    extraIngress: |
       ## Any IP --> Proxy
       ##
       - ports:
-          - port: "{{ .Values.proxy.containerPort.http }}"
+          - port: {{ .Values.proxy.containerPort.http }}
     ## @param proxy.networkPolicy.extraEgress Add extra egress rules to the NetworkPolicy
     ##
-    extraEgress: []
+    extraEgress: ""
   service:
     api:
       ## @param proxy.service.api.type API service type
@@ -1273,10 +1273,10 @@ singleuser:
     allowCloudMetadataAccess: false
     ## @param singleuser.networkPolicy.extraIngress Add extra ingress rules to the NetworkPolicy
     ##
-    extraIngress: []
+    extraIngress: ""
     ## @param singleuser.networkPolicy.extraEgress Add extra egress rules to the NetworkPolicy
     ##
-    extraEgress: []
+    extraEgress: ""
 
 ## @section Auxiliary image parameters
 
