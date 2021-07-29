@@ -56,18 +56,18 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `nil` |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
 
 ### Common parameters
 
 | Name               | Description                                                                                               | Value |
 | ------------------ | --------------------------------------------------------------------------------------------------------- | ----- |
-| `kubeVersion`      | Force target Kubernetes version (using Helm capabilities if not set)                                      | `nil` |
-| `nameOverride`     | String to partially override common.names.fullname template with a string (will prepend the release name) | `nil` |
-| `fullnameOverride` | String to fully override common.names.fullname template with a string                                     | `nil` |
+| `kubeVersion`      | Force target Kubernetes version (using Helm capabilities if not set)                                      | `""`  |
+| `nameOverride`     | String to partially override common.names.fullname template with a string (will prepend the release name) | `""`  |
+| `fullnameOverride` | String to fully override common.names.fullname template with a string                                     | `""`  |
 
 
 ### Kibana parameters
@@ -76,33 +76,33 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `image.registry`                       | Kibana image registry                                                                                                                                     | `docker.io`              |
 | `image.repository`                     | Kibana image repository                                                                                                                                   | `bitnami/kibana`         |
-| `image.tag`                            | Kibana image tag (immutable tags are recommended)                                                                                                         | `7.13.2-debian-10-r0`    |
+| `image.tag`                            | Kibana image tag (immutable tags are recommended)                                                                                                         | `7.13.4-debian-10-r0`    |
 | `image.pullPolicy`                     | Kibana image pull policy                                                                                                                                  | `IfNotPresent`           |
 | `image.pullSecrets`                    | Specify docker-registry secret names as an array                                                                                                          | `[]`                     |
 | `replicaCount`                         | Number of replicas of the Kibana Pod                                                                                                                      | `1`                      |
 | `updateStrategy.type`                  | Set up update strategy for Kibana installation.                                                                                                           | `RollingUpdate`          |
-| `schedulerName`                        | Alternative scheduler                                                                                                                                     | `nil`                    |
+| `schedulerName`                        | Alternative scheduler                                                                                                                                     | `""`                     |
 | `hostAliases`                          | Add deployment host aliases                                                                                                                               | `[]`                     |
-| `plugins`                              | Array containing the Kibana plugins to be installed in deployment                                                                                         | `nil`                    |
-| `savedObjects.urls`                    | Array containing links to NDJSON files to be imported during Kibana initialization                                                                        | `nil`                    |
-| `savedObjects.configmap`               | Configmap containing NDJSON files to be imported during Kibana initialization (evaluated as a template)                                                   | `nil`                    |
-| `extraConfiguration`                   | Extra settings to be added to the default kibana.yml configmap that the chart creates (unless replaced using `configurationCM`). Evaluated as a template  | `nil`                    |
-| `configurationCM`                      | ConfigMap containing a kibana.yml file that will replace the default one specified in configuration.yaml                                                  | `nil`                    |
-| `extraEnvVars`                         | Array containing extra env vars to configure Kibana                                                                                                       | `nil`                    |
-| `extraEnvVarsCM`                       | ConfigMap containing extra env vars to configure Kibana                                                                                                   | `nil`                    |
-| `extraEnvVarsSecret`                   | Secret containing extra env vars to configure Kibana (in case of sensitive data)                                                                          | `nil`                    |
-| `extraVolumes`                         | Array to add extra volumes. Requires setting `extraVolumeMounts`                                                                                          | `nil`                    |
-| `extraVolumeMounts`                    | Array to add extra mounts. Normally used with `extraVolumes`                                                                                              | `nil`                    |
+| `plugins`                              | Array containing the Kibana plugins to be installed in deployment                                                                                         | `[]`                     |
+| `savedObjects.urls`                    | Array containing links to NDJSON files to be imported during Kibana initialization                                                                        | `[]`                     |
+| `savedObjects.configmap`               | Configmap containing NDJSON files to be imported during Kibana initialization (evaluated as a template)                                                   | `""`                     |
+| `extraConfiguration`                   | Extra settings to be added to the default kibana.yml configmap that the chart creates (unless replaced using `configurationCM`). Evaluated as a template  | `{}`                     |
+| `configurationCM`                      | ConfigMap containing a kibana.yml file that will replace the default one specified in configuration.yaml                                                  | `""`                     |
+| `extraEnvVars`                         | Array containing extra env vars to configure Kibana                                                                                                       | `[]`                     |
+| `extraEnvVarsCM`                       | ConfigMap containing extra env vars to configure Kibana                                                                                                   | `""`                     |
+| `extraEnvVarsSecret`                   | Secret containing extra env vars to configure Kibana (in case of sensitive data)                                                                          | `""`                     |
+| `extraVolumes`                         | Array to add extra volumes. Requires setting `extraVolumeMounts`                                                                                          | `[]`                     |
+| `extraVolumeMounts`                    | Array to add extra mounts. Normally used with `extraVolumes`                                                                                              | `[]`                     |
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                  |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`              |
 | `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell`  |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r107`      |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r138`      |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `Always`                 |
 | `volumePermissions.image.pullSecrets`  | Init container volume-permissions image pull secrets                                                                                                      | `[]`                     |
 | `volumePermissions.resources`          | Volume Permissions resources                                                                                                                              | `{}`                     |
 | `persistence.enabled`                  | Enable persistence                                                                                                                                        | `true`                   |
-| `persistence.storageClass`             | Kibana data Persistent Volume Storage Class                                                                                                               | `nil`                    |
-| `persistence.existingClaim`            | Provide an existing `PersistentVolumeClaim`                                                                                                               | `nil`                    |
+| `persistence.storageClass`             | Kibana data Persistent Volume Storage Class                                                                                                               | `""`                     |
+| `persistence.existingClaim`            | Provide an existing `PersistentVolumeClaim`                                                                                                               | `""`                     |
 | `persistence.accessMode`               | Access mode to the PV                                                                                                                                     | `ReadWriteOnce`          |
 | `persistence.size`                     | Size for the PV                                                                                                                                           | `10Gi`                   |
 | `livenessProbe.enabled`                | Enable/disable the Liveness probe                                                                                                                         | `true`                   |
@@ -118,19 +118,19 @@ The command removes all the Kubernetes components associated with the chart and 
 | `readinessProbe.failureThreshold`      | Minimum consecutive failures for the probe to be considered failed after having succeeded.                                                                | `6`                      |
 | `readinessProbe.successThreshold`      | Minimum consecutive successes for the probe to be considered successful after having failed.                                                              | `1`                      |
 | `forceInitScripts`                     | Force execution of init scripts                                                                                                                           | `false`                  |
-| `initScriptsCM`                        | Configmap with init scripts to execute                                                                                                                    | `nil`                    |
-| `initScriptsSecret`                    | Secret with init scripts to execute (for sensitive data)                                                                                                  | `nil`                    |
+| `initScriptsCM`                        | Configmap with init scripts to execute                                                                                                                    | `""`                     |
+| `initScriptsSecret`                    | Secret with init scripts to execute (for sensitive data)                                                                                                  | `""`                     |
 | `service.port`                         | Kubernetes Service port                                                                                                                                   | `5601`                   |
 | `service.type`                         | Kubernetes Service type                                                                                                                                   | `ClusterIP`              |
-| `service.nodePort`                     | Specify the nodePort value for the LoadBalancer and NodePort service types                                                                                | `nil`                    |
+| `service.nodePort`                     | Specify the nodePort value for the LoadBalancer and NodePort service types                                                                                | `""`                     |
 | `service.externalTrafficPolicy`        | Enable client source IP preservation                                                                                                                      | `Cluster`                |
 | `service.annotations`                  | Annotations for Kibana service (evaluated as a template)                                                                                                  | `{}`                     |
-| `service.loadBalancerIP`               | loadBalancerIP if Kibana service type is `LoadBalancer`                                                                                                   | `nil`                    |
-| `service.extraPorts`                   | Extra ports to expose in the service (normally used with the `sidecar` value)                                                                             | `nil`                    |
+| `service.loadBalancerIP`               | loadBalancerIP if Kibana service type is `LoadBalancer`                                                                                                   | `""`                     |
+| `service.extraPorts`                   | Extra ports to expose in the service (normally used with the `sidecar` value)                                                                             | `[]`                     |
 | `ingress.enabled`                      | Enable ingress controller resource                                                                                                                        | `false`                  |
 | `ingress.certManager`                  | Add annotations for cert-manager                                                                                                                          | `false`                  |
 | `ingress.pathType`                     | Ingress Path type                                                                                                                                         | `ImplementationSpecific` |
-| `ingress.apiVersion`                   | Override API Version (automatically detected if not set)                                                                                                  | `nil`                    |
+| `ingress.apiVersion`                   | Override API Version (automatically detected if not set)                                                                                                  | `""`                     |
 | `ingress.hostname`                     | Default host for the ingress resource. If specified as "*" no host rule is configured                                                                     | `kibana.local`           |
 | `ingress.path`                         | The Path to Kibana. You may need to set this to '/*' in order to use this with ALB ingress controllers.                                                   | `ImplementationSpecific` |
 | `ingress.annotations`                  | Ingress annotations                                                                                                                                       | `{}`                     |
@@ -156,15 +156,15 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tolerations`                          | Tolerations for pod assignment                                                                                                                            | `[]`                     |
 | `podAnnotations`                       | Pod annotations                                                                                                                                           | `{}`                     |
 | `podLabels`                            | Extra labels to add to Pod                                                                                                                                | `{}`                     |
-| `sidecars`                             | Attach additional containers to the pod                                                                                                                   | `nil`                    |
-| `initContainers`                       | Add additional init containers to the pod                                                                                                                 | `nil`                    |
+| `sidecars`                             | Attach additional containers to the pod                                                                                                                   | `[]`                     |
+| `initContainers`                       | Add additional init containers to the pod                                                                                                                 | `[]`                     |
 | `configuration`                        | Kibana configuration                                                                                                                                      | `{}`                     |
 | `metrics.enabled`                      | Start a side-car prometheus exporter                                                                                                                      | `false`                  |
 | `metrics.service.annotations`          | Prometheus annotations for the Kibana service                                                                                                             | `{}`                     |
 | `metrics.serviceMonitor.enabled`       | If `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)                                                    | `false`                  |
-| `metrics.serviceMonitor.namespace`     | Namespace in which Prometheus is running                                                                                                                  | `nil`                    |
-| `metrics.serviceMonitor.interval`      | Interval at which metrics should be scraped.                                                                                                              | `nil`                    |
-| `metrics.serviceMonitor.scrapeTimeout` | Timeout after which the scrape is ended                                                                                                                   | `nil`                    |
+| `metrics.serviceMonitor.namespace`     | Namespace in which Prometheus is running                                                                                                                  | `""`                     |
+| `metrics.serviceMonitor.interval`      | Interval at which metrics should be scraped.                                                                                                              | `""`                     |
+| `metrics.serviceMonitor.scrapeTimeout` | Timeout after which the scrape is ended                                                                                                                   | `""`                     |
 | `metrics.serviceMonitor.selector`      | Prometheus instance selector labels                                                                                                                       | `{}`                     |
 | `elasticsearch`                        | Properties for Elasticsearch                                                                                                                              | `{}`                     |
 

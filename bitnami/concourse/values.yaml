@@ -86,7 +86,7 @@ secrets:
   ## Extra Reads: https://github.com/concourse/concourse/issues/1865#issuecomment-464166994
   ## https://concourse-ci.org/global-resources.html#complications-with-reusing-containers
   ##
-  teamAuthorizedKeys:
+  teamAuthorizedKeys: []
 
   ## @param secrets.localUsers List of `username:password` or `username:bcrypted_password` combinations for all your local concourse users. Auto-generated if not set
   ## For details of expected format, see https://concourse-ci.org/local-auth.html

@@ -68,12 +68,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name               | Description                                                                                               | Value           |
-| ------------------ | --------------------------------------------------------------------------------------------------------- | --------------- |
-| `nameOverride`     | String to partially override common.names.fullname template with a string (will prepend the release name) | `""`            |
-| `fullnameOverride` | String to fully override common.names.fullname template with a string                                     | `""`            |
-| `schedulerName`    | Name of the Kubernetes scheduler (other than default)                                                     | `""`            |
-| `clusterDomain`    | Kubernetes DNS Domain name to use                                                                         | `cluster.local` |
+| Name                     | Description                                                                                               | Value           |
+| ------------------------ | --------------------------------------------------------------------------------------------------------- | --------------- |
+| `nameOverride`           | String to partially override common.names.fullname template with a string (will prepend the release name) | `""`            |
+| `fullnameOverride`       | String to fully override common.names.fullname template with a string                                     | `""`            |
+| `schedulerName`          | Name of the Kubernetes scheduler (other than default)                                                     | `""`            |
+| `clusterDomain`          | Kubernetes DNS Domain name to use                                                                         | `cluster.local` |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                   | `false`         |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                                      | `[]`            |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                                         | `[]`            |
 
 
 ### MariaDB Galera parameters
@@ -82,7 +85,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `image.registry`                           | MariaDB Galera image registry                                                                                                                                                                 | `docker.io`               |
 | `image.repository`                         | MariaDB Galera image repository                                                                                                                                                               | `bitnami/mariadb-galera`  |
-| `image.tag`                                | MariaDB Galera image tag (immutable tags are recommended)                                                                                                                                     | `10.5.11-debian-10-r0`    |
+| `image.tag`                                | MariaDB Galera image tag (immutable tags are recommended)                                                                                                                                     | `10.5.11-debian-10-r24`   |
 | `image.pullPolicy`                         | MariaDB Galera image pull policy                                                                                                                                                              | `IfNotPresent`            |
 | `image.pullSecrets`                        | Specify docker-registry secret names as an array                                                                                                                                              | `[]`                      |
 | `image.debug`                              | Specify if debug logs should be enabled                                                                                                                                                       | `false`                   |
@@ -196,7 +199,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                          | Start a side-car prometheus exporter                                                                                                                                                          | `false`                   |
 | `metrics.image.registry`                   | MariaDB Prometheus exporter image registry                                                                                                                                                    | `docker.io`               |
 | `metrics.image.repository`                 | MariaDB Prometheus exporter image repository                                                                                                                                                  | `bitnami/mysqld-exporter` |
-| `metrics.image.tag`                        | MariaDB Prometheus exporter image tag (immutable tags are recommended)                                                                                                                        | `0.13.0-debian-10-r19`    |
+| `metrics.image.tag`                        | MariaDB Prometheus exporter image tag (immutable tags are recommended)                                                                                                                        | `0.13.0-debian-10-r44`    |
 | `metrics.image.pullPolicy`                 | MariaDB Prometheus exporter image pull policy                                                                                                                                                 | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                | MariaDB Prometheus exporter image pull secrets                                                                                                                                                | `[]`                      |
 | `metrics.extraFlags`                       | MariaDB Prometheus exporter additional command line flags                                                                                                                                     | `[]`                      |
@@ -215,9 +218,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.prometheusRules.enabled`          | if `true`, creates a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true`, and makes little sense without ServiceMonitor)                                         | `false`                   |
 | `metrics.prometheusRules.selector`         | Additional labels to add to the PrometheusRule so it is picked up by the operator                                                                                                             | `{}`                      |
 | `metrics.prometheusRules.rules`            | PrometheusRule rules to configure                                                                                                                                                             | `{}`                      |
-| `diagnosticMode.enabled`                   | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                                                                                                       | `false`                   |
-| `diagnosticMode.command`                   | Command to override all containers in the deployment                                                                                                                                          | `[]`                      |
-| `diagnosticMode.args`                      | Args to override all containers in the deployment                                                                                                                                             | `[]`                      |
 
 
 The above parameters map to the env variables defined in [bitnami/mariadb-galera](http://github.com/bitnami/bitnami-docker-mariadb-galera). For more information please refer to the [bitnami/mariadb-galera](http://github.com/bitnami/bitnami-docker-mariadb-galera) image documentation.

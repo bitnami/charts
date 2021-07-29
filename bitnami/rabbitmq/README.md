@@ -63,6 +63,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `kubeVersion`                             | Force target Kubernetes version (using Helm capabilities if not set)                                                                     | `""`                                              |
 | `clusterDomain`                           | Kubernetes Cluster Domain                                                                                                                | `cluster.local`                                   |
 | `extraDeploy`                             | Array of extra objects to deploy with the release                                                                                        | `[]`                                              |
+| `diagnosticMode.enabled`                  | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                                                  | `false`                                           |
+| `diagnosticMode.command`                  | Command to override all containers in the deployment                                                                                     | `[]`                                              |
+| `diagnosticMode.args`                     | Args to override all containers in the deployment                                                                                        | `[]`                                              |
 | `hostAliases`                             | Deployment pod host aliases                                                                                                              | `[]`                                              |
 | `commonAnnotations`                       | Annotations to add to all deployed objects                                                                                               | `{}`                                              |
 | `auth.username`                           | RabbitMQ application username                                                                                                            | `user`                                            |
@@ -505,7 +508,7 @@ To horizontally scale this chart once it has been deployed, two options are avai
 
 When scaling down the solution, unnecessary RabbitMQ nodes are automatically stopped, but they are not removed from the cluster. You need to manually remove them by running the `rabbitmqctl forget_cluster_node` command.
 
-Refer to the chart documentation for [more information on scaling the Rabbit cluster horizontally](https://docs.bitnami.com/kubernetes/infrastructure/rabbitmq/administration/scale-out/).
+Refer to the chart documentation for [more information on scaling the Rabbit cluster horizontally](https://docs.bitnami.com/kubernetes/infrastructure/rabbitmq/administration/scale-deployment/).
 
 ### Enable TLS support
 

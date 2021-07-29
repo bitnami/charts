@@ -237,6 +237,7 @@ spec:
           secret:
             items:
             - key: authenticated-emails-list
+              path: authenticated-emails-list
             secretName: {{ include "oauth2-proxy.authenticatedEmailsSecret" . }}
         {{- end }}
         {{- if or .Values.configuration.existingConfigmap .Values.configuration.content }}
