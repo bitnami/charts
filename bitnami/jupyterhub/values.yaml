@@ -2,6 +2,7 @@
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
@@ -17,6 +18,7 @@ global:
   storageClass: ""
 
 ## @section Common parameters
+##
 
 ## @param kubeVersion Override Kubernetes version
 ##
@@ -38,6 +40,7 @@ commonAnnotations: {}
 extraDeploy: []
 
 ## @section Hub deployment parameters
+##
 
 ## Hub deployment parameters
 ##
@@ -313,11 +316,13 @@ hub:
     ## limits:
     ##   cpu: 200m
     ##   memory: 256Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##   cpu: 200m
     ##   memory: 10Mi
+    ##
     requests: {}
   ## hub containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
@@ -448,6 +453,7 @@ hub:
   sidecars: []
 
   ## @section Hub RBAC parameters
+  ##
 
   ## ServiceAccount parameters
   ##
@@ -467,6 +473,7 @@ hub:
     create: true
 
   ## @section Hub Traffic Exposure Parameters
+  ##
 
   ## Network policy
   ##
@@ -491,6 +498,7 @@ hub:
     ##
     type: ClusterIP
     ## @param hub.service.port Hub service HTTP port
+    ##
     port: 8081
     ## @param hub.service.loadBalancerIP Hub service LoadBalancer IP (optional, cloud specific)
     ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
@@ -513,6 +521,7 @@ hub:
     externalTrafficPolicy: Cluster
 
 ## @section Proxy deployment parameters
+##
 
 ## Proxy deployment parameters
 ##
@@ -642,11 +651,13 @@ proxy:
     ## limits:
     ##   cpu: 200m
     ##   memory: 256Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##   cpu: 200m
     ##   memory: 10Mi
+    ##
     requests: {}
   ## proxy containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
@@ -775,6 +786,7 @@ proxy:
   sidecars: []
 
   ## @section Proxy Traffic Exposure Parameters
+  ##
 
   ## Network policy
   ##
@@ -791,7 +803,7 @@ proxy:
       ## Any IP --> Proxy
       ##
       - ports:
-          - port: "{{ .Values.proxy.containerPort.http }}"
+          - port: 8000
     ## @param proxy.networkPolicy.extraEgress Add extra egress rules to the NetworkPolicy
     ##
     extraEgress: []
@@ -917,6 +929,7 @@ proxy:
     secrets: []
 
 ## @section Image puller deployment parameters
+##
 
 ## Image Puller deployment parameters
 ##
@@ -948,11 +961,13 @@ imagePuller:
     ## limits:
     ##   cpu: 200m
     ##   memory: 256Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##   cpu: 200m
     ##   memory: 10Mi
+    ##
     requests: {}
   ## imagePuller containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
@@ -1084,6 +1099,7 @@ imagePuller:
   sidecars: []
 
 ## @section Singleuser deployment parameters
+##
 
 ## Singleuser deployment parameters
 ## NOTE: The values in this section are used for generating the hub.configuration value. In case you provide
@@ -1141,11 +1157,13 @@ singleuser:
     ## limits:
     ##   cpu: 200m
     ##   memory: 256Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##   cpu: 200m
     ##   memory: 10Mi
+    ##
     requests: {}
   ## singleuser containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
@@ -1219,6 +1237,7 @@ singleuser:
   sidecars: []
 
   ## @section Single User RBAC parameters
+  ##
 
   ## Service account parameters
   ##
@@ -1232,6 +1251,7 @@ singleuser:
     name: ""
 
   ## @section Single User Persistence parameters
+  ##
 
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
@@ -1258,6 +1278,7 @@ singleuser:
     size: 10Gi
 
   ## @section Traffic exposure parameters
+  ##
 
   ## Network policy
   ##
@@ -1279,6 +1300,7 @@ singleuser:
     extraEgress: []
 
 ## @section Auxiliary image parameters
+##
 
 ## @param auxiliaryImage.registry Auxiliary image registry
 ## @param auxiliaryImage.repository Auxiliary image repository
@@ -1301,6 +1323,7 @@ auxiliaryImage:
   pullSecrets: []
 
 ## @section External Database settings
+##
 
 ## External Database Configuration
 ## All of these values are only used when postgresql.enabled is set to false
@@ -1327,6 +1350,7 @@ externalDatabase:
   port: 5432
 
 ## @section PostgreSQL subchart settings
+##
 
 ## PostgreSQL chart configuration
 ## https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
