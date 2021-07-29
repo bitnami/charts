@@ -47,7 +47,7 @@ Create the name of the service account to use
 {{- if .Values.configuration.authenticatedEmailsFile.existingSecret -}}
 {{- .Values.configuration.authenticatedEmailsFile.existingSecret -}}
 {{- else -}}
-{{- printf "%s-external-redis" (include "common.names.fullname" .) -}}
+{{- printf "%s-access-list" (include "common.names.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
