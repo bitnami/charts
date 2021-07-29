@@ -27,4 +27,3 @@ sources:
   - https://github.com/bitnami/bitnami-docker-mongodb-sharded
   - https://mongodb.org
 version: 3.9.0
-
