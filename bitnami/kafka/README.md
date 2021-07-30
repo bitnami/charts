@@ -321,7 +321,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.jmx.service.clusterIP`                  | Static clusterIP or None for headless services                                                                                   | `""`                     |
 | `metrics.jmx.service.annotations`                | Annotations for the JMX Exporter Prometheus metrics service                                                                      | `{}`                     |
 | `metrics.jmx.whitelistObjectNames`               | Allows setting which JMX objects you want to expose to via JMX stats to JMX Exporter                                             | `[]`                     |
-| `metrics.jmx.config`                             | Configuration file for JMX exporter                                                                                              | `{}`                     |
+| `metrics.jmx.config`                             | Configuration file for JMX exporter                                                                                              | `""`                     |
 | `metrics.jmx.existingConfigmap`                  | Name of existing ConfigMap with JMX exporter configuration                                                                       | `""`                     |
 | `metrics.serviceMonitor.enabled`                 | if `true`, creates a Prometheus Operator ServiceMonitor (requires `metrics.kafka.enabled` or `metrics.jmx.enabled` to be `true`) | `false`                  |
 | `metrics.serviceMonitor.namespace`               | Namespace in which Prometheus is running                                                                                         | `""`                     |

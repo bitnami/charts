@@ -1127,7 +1127,7 @@ metrics:
       - java.lang:*
       - kafka.network:*
       - kafka.log:*
-    ## @param metrics.jmx.config [object] Configuration file for JMX exporter
+    ## @param metrics.jmx.config [string] Configuration file for JMX exporter
     ## Specify content for jmx-kafka-prometheus.yml. Evaluated as a template
     ##
     ## Credits to the incubator/kafka chart for the JMX configuration.

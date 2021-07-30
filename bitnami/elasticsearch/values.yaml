@@ -1164,7 +1164,7 @@ curator:
   env: {}
   ## Curator configMaps
   configMaps:
-    ## @param curator.configMaps.action_file_yml [object] Contents of the Curator action_file.yml
+    ## @param curator.configMaps.action_file_yml [string] Contents of the Curator action_file.yml
     ## Delete indices older than 90 days
     ##
     action_file_yml: |-
@@ -1189,7 +1189,7 @@ curator:
             stats_result:
             epoch:
             exclude: False
-    ## @param curator.configMaps.config_yml [object] Contents of the Curator config.yml (overrides config)
+    ## @param curator.configMaps.config_yml [string] Contents of the Curator config.yml (overrides config)
     ## Default config (this value is evaluated as a template)
     ##
     config_yml: |-
