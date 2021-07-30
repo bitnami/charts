@@ -276,6 +276,21 @@ Return true if a log4j ConfigMap object should be created.
 {{- end -}}
 
 {{/*
+Return the SASL mechanism to use for the Kafka exporter to access Kafka
+The exporter uses a different nomenclature so we need to do this hack
+*/}}
+{{- define "kafka.metrics.kafka.saslMechanism" -}}
+{{- $saslMechanisms := coalesce .Values.auth.sasl.mechanisms .Values.auth.saslMechanisms }}
+{{- if contains "scram-sha-512" $saslMechanisms }}
+    {{- printf "scram-sha512" -}}
+{{- else if contains "scram-sha-256" $saslMechanisms }}
+    {{- printf "scram-sha256" -}}
+{{- else -}}
+    {{- printf "plain" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the Kafka configuration configmap
 */}}
 {{- define "kafka.metrics.jmx.configmapName" -}}
