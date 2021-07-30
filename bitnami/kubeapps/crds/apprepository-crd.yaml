@@ -17,11 +17,14 @@ spec:
       schema:
         openAPIV3Schema:
           type: object
-          required: [ "spec" ]
+          required:
+            - spec
           properties:
             spec:
               type: object
-              required: [ "type", "url" ]
+              required:
+                - type
+                - url
               properties:
                 type:
                   type: string
@@ -35,11 +38,14 @@ spec:
                   properties:
                     header:
                       type: object
-                      required: [ "secretKeyRef" ]
+                      required:
+                        - secretKeyRef
                       properties:
                         secretKeyRef:
                           type: object
-                          required: [ "key", "name" ]
+                          required:
+                            - key
+                            - name
                           properties:
                             key:
                               type: string
@@ -47,11 +53,14 @@ spec:
                               type: string
                     customCA:
                       type: object
-                      required: [ "secretKeyRef" ]
+                      required:
+                        - secretKeyRef
                       properties:
                         secretKeyRef:
                           type: object
-                          required: [ "key", "name" ]
+                          required:
+                            - key
+                            - name
                           properties:
                             key:
                               type: string
