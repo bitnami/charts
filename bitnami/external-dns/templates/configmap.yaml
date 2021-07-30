@@ -9,7 +9,7 @@ data:
   {{ .Values.designate.customCA.filename }}: |
 {{ .Values.designate.customCA.content | indent 4 }}
 {{- end }}
-{{- if .Value.rfc2136.rfc3645Enabled }}
+{{- if .Values.rfc2136.rfc3645Enabled }}
   krb5.conf: |
 {{ required "rfc2136.kerberosConfig must be set if rfc2136.3645Enabled is `true`" .Values.rfc2136.kerberosConfig | indent 4 }}
 {{- end }}

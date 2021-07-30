@@ -220,21 +220,19 @@ spec:
             - --rfc2136-port={{ .Values.rfc2136.port }}
             - --rfc2136-zone={{ required "rfc2136.zone must be supplied for provider 'rfc2136'" .Values.rfc2136.zone }}
             - --rfc2136-min-ttl={{ .Values.rfc2136.minTTL }}
-              {{- if .Values.rfc2136.rfc3645Enabled -}}
-            - --rfc2136-gss-tsig
-            - --rfc2136-kerberos-realm={{ required "rfc2136.kerberosRealm must be supplied for provider `rfc2136` if `rfc2136.rfc3645Enabled` is true." .Values.rfc2136.kerberosRealm | quote }}
-                {{- if .Values.rfc2136.tsigAxfr }}
+              {{- if .Values.rfc2136.tsigAxfr }}
             - --rfc2136-tsig-axfr
-                {{- end }}
               {{- end }}
-              {{- if .Values.rfc2136.tsigKeyname }}
+              {{- if .Values.rfc2136.rfc3645Enabled }}
+            - --rfc2136-gss-tsig
+            - --rfc2136-kerberos-realm={{ required "rfc2136.kerberosRealm must be supplied for provider `rfc2136` if `rfc2136.rfc3645Enabled` is true." .Values.rfc2136.kerberosRealm }}
+              {{- else }}
+                {{- if .Values.rfc2136.tsigKeyname }}
             - --rfc2136-tsig-secret-alg={{ .Values.rfc2136.tsigSecretAlg }}
             - --rfc2136-tsig-keyname={{ .Values.rfc2136.tsigKeyname }}
-                {{- if .Values.rfc2136.tsigAxfr }}
-            - --rfc2136-tsig-axfr
-                {{- end }}
-              {{- else }}
+                {{- else }}
             - --rfc2136-insecure
+                {{- end }}
               {{- end }}
             {{- end }}
             {{- if eq .Values.provider "pdns" }}
@@ -453,9 +451,9 @@ spec:
                   key: infoblox_wapi_password
             {{- end }}
             {{- end }}
-            {{- if or .Values.rfc2136.tsigSecret .Values.rfc2136.secretName }}
+            {{- if or .Values.rfc2136.secretName .Values.rfc2136.tsigSecret (and .Values.rfc2136.kerberosUsername .Values.rfc2136.kerberosPassword) }}
             # RFC 2136 environment variables
-            {{- if and .Values.rfc2136.rfc3645Enabled .Values.rfc2136.kerberosSecretName }}
+            {{- if and .Values.rfc2136.rfc3645Enabled }}
             - name: EXTERNAL_DNS_RFC2136_KERBEROS_USERNAME
               valueFrom:
                 secretKeyRef:
