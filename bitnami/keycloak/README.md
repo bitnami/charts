@@ -222,6 +222,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.extraHosts`               | The list of additional hostnames to be covered with this ingress record.                      | `[]`                     |
 | `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.        | `[]`                     |
 | `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets | `[]`                     |
+| `ingress.existingSecret`           | Provide your certificates as a secret.                                                        | `""`                     |
 | `ingress.servicePort`              | Service port to be used                                                                       | `http`                   |
 | `networkPolicy.enabled`            | Enable the default NetworkPolicy policy                                                       | `false`                  |
 | `networkPolicy.allowExternal`      | Don't require client label for connections                                                    | `true`                   |

@@ -56,8 +56,9 @@ spec:
         fsGroup: {{ .Values.coordinating.securityContext.fsGroup }}
       {{- end }}
       {{- if or .Values.coordinating.initContainers .Values.sysctlImage.enabled }}
-      ## Image that performs the sysctl operation to modify Kernel settings (needed sometimes to avoid boot errors)
       initContainers:
+        {{- if .Values.sysctlImage.enabled }}
+        ## Image that performs the sysctl operation to modify Kernel settings (needed sometimes to avoid boot errors)
         - name: sysctl
           image: {{ include "elasticsearch.sysctl.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
@@ -71,6 +72,7 @@ spec:
           {{- if .Values.sysctlImage.resources }}
           resources: {{- toYaml .Values.sysctlImage.resources | nindent 12 }}
           {{- end }}
+        {{- end }}
         {{- if .Values.coordinating.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.coordinating.initContainers "context" $) | nindent 8 }}
         {{- end }}
