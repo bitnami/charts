@@ -846,7 +846,7 @@ metrics:
   ## @param metrics.serviceMonitor.interval Scrape interval. If not set, the Prometheus default scrape interval is used
   ## @param metrics.serviceMonitor.scrapeTimeout Scrape timeout. If not set, the Prometheus default scrape timeout is used
   ## @param metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
-  ## @param metrics.serviceMonitor.metricsRelabelings MetricRelabelConfigs to apply to samples before ingestion
+  ## @param metrics.serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion
   ##
   serviceMonitor:
     enabled: false
