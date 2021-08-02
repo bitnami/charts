@@ -316,47 +316,47 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 
 ### Metrics parameters
 
-| Name                                         | Description                                                                                            | Value                       |
-| -------------------------------------------- | ------------------------------------------------------------------------------------------------------ | --------------------------- |
-| `metricsImage.registry`                      | PostgreSQL Prometheus exporter image registry                                                          | `docker.io`                 |
-| `metricsImage.repository`                    | PostgreSQL Prometheus exporter image repository                                                        | `bitnami/postgres-exporter` |
-| `metricsImage.tag`                           | PostgreSQL Prometheus exporter image tag                                                               | `0.9.0-debian-10-r108`      |
-| `metricsImage.pullPolicy`                    | PostgreSQL Prometheus exporter image pull policy                                                       | `IfNotPresent`              |
-| `metricsImage.pullSecrets`                   | Specify docker-registry secret names as an array                                                       | `[]`                        |
-| `metricsImage.debug`                         | Specify if debug logs should be enabled                                                                | `false`                     |
-| `metrics.enabled`                            | Enable PostgreSQL Prometheus exporter                                                                  | `false`                     |
-| `metrics.securityContext.enabled`            | Enable security context for PostgreSQL Prometheus exporter                                             | `true`                      |
-| `metrics.securityContext.runAsUser`          | User ID for the PostgreSQL Prometheus exporter container                                               | `1001`                      |
-| `metrics.resources.limits`                   | The resources limits for the container                                                                 | `{}`                        |
-| `metrics.resources.requests`                 | The requested resources for the container                                                              | `{}`                        |
-| `metrics.livenessProbe.enabled`              | Enable livenessProbe                                                                                   | `true`                      |
-| `metrics.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                | `30`                        |
-| `metrics.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                       | `10`                        |
-| `metrics.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                      | `5`                         |
-| `metrics.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                    | `6`                         |
-| `metrics.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                    | `1`                         |
-| `metrics.readinessProbe.enabled`             | Enable readinessProbe                                                                                  | `true`                      |
-| `metrics.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                               | `5`                         |
-| `metrics.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                      | `10`                        |
-| `metrics.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                     | `5`                         |
-| `metrics.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                   | `6`                         |
-| `metrics.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                   | `1`                         |
-| `metrics.startupProbe.enabled`               | Enable startupProbe                                                                                    | `false`                     |
-| `metrics.startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                                 | `5`                         |
-| `metrics.startupProbe.periodSeconds`         | Period seconds for startupProbe                                                                        | `10`                        |
-| `metrics.startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe                                                                       | `5`                         |
-| `metrics.startupProbe.failureThreshold`      | Failure threshold for startupProbe                                                                     | `10`                        |
-| `metrics.startupProbe.successThreshold`      | Success threshold for startupProbe                                                                     | `1`                         |
-| `metrics.annotations`                        | Annotations for PostgreSQL Prometheus exporter service                                                 | `{}`                        |
-| `metrics.customMetrics`                      | Additional custom metrics                                                                              | `""`                        |
-| `metrics.extraEnvVars`                       | An array to add extra environment variables to configure postgres-exporter                             | `{}`                        |
-| `metrics.serviceMonitor.enabled`             | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`) | `false`                     |
-| `metrics.serviceMonitor.namespace`           | Optional namespace which Prometheus is running in                                                      | `""`                        |
-| `metrics.serviceMonitor.interval`            | How frequently to scrape metrics (use by default, falling back to Prometheus' default)                 | `""`                        |
-| `metrics.serviceMonitor.scrapeTimeout`       | Service monitor scrape timeout                                                                         | `""`                        |
-| `metrics.serviceMonitor.selector`            | (https://github.com/bitnami/bitnami-docker-prometheus-operator#tldr)                                   | `{}`                        |
-| `metrics.serviceMonitor.relabelings`         | ServiceMonitor relabelings. Value is evaluated as a template                                           | `[]`                        |
-| `metrics.serviceMonitor.metricRelabelings`   | ServiceMonitor metricRelabelings. Value is evaluated as a template                                     | `[]`                        |
+| Name                                         | Description                                                                                                                                               | Value                       |
+| -------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
+| `metricsImage.registry`                      | PostgreSQL Prometheus exporter image registry                                                                                                             | `docker.io`                 |
+| `metricsImage.repository`                    | PostgreSQL Prometheus exporter image repository                                                                                                           | `bitnami/postgres-exporter` |
+| `metricsImage.tag`                           | PostgreSQL Prometheus exporter image tag                                                                                                                  | `0.9.0-debian-10-r108`      |
+| `metricsImage.pullPolicy`                    | PostgreSQL Prometheus exporter image pull policy                                                                                                          | `IfNotPresent`              |
+| `metricsImage.pullSecrets`                   | Specify docker-registry secret names as an array                                                                                                          | `[]`                        |
+| `metricsImage.debug`                         | Specify if debug logs should be enabled                                                                                                                   | `false`                     |
+| `metrics.enabled`                            | Enable PostgreSQL Prometheus exporter                                                                                                                     | `false`                     |
+| `metrics.securityContext.enabled`            | Enable security context for PostgreSQL Prometheus exporter                                                                                                | `true`                      |
+| `metrics.securityContext.runAsUser`          | User ID for the PostgreSQL Prometheus exporter container                                                                                                  | `1001`                      |
+| `metrics.resources.limits`                   | The resources limits for the container                                                                                                                    | `{}`                        |
+| `metrics.resources.requests`                 | The requested resources for the container                                                                                                                 | `{}`                        |
+| `metrics.livenessProbe.enabled`              | Enable livenessProbe                                                                                                                                      | `true`                      |
+| `metrics.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                                                                   | `30`                        |
+| `metrics.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                                                                          | `10`                        |
+| `metrics.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                                                                         | `5`                         |
+| `metrics.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                                                                       | `6`                         |
+| `metrics.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                                                                       | `1`                         |
+| `metrics.readinessProbe.enabled`             | Enable readinessProbe                                                                                                                                     | `true`                      |
+| `metrics.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                                                                                  | `5`                         |
+| `metrics.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                                                                         | `10`                        |
+| `metrics.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                                                                        | `5`                         |
+| `metrics.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                                                                      | `6`                         |
+| `metrics.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                                                                      | `1`                         |
+| `metrics.startupProbe.enabled`               | Enable startupProbe                                                                                                                                       | `false`                     |
+| `metrics.startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                                                                                    | `5`                         |
+| `metrics.startupProbe.periodSeconds`         | Period seconds for startupProbe                                                                                                                           | `10`                        |
+| `metrics.startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe                                                                                                                          | `5`                         |
+| `metrics.startupProbe.failureThreshold`      | Failure threshold for startupProbe                                                                                                                        | `10`                        |
+| `metrics.startupProbe.successThreshold`      | Success threshold for startupProbe                                                                                                                        | `1`                         |
+| `metrics.annotations`                        | Annotations for PostgreSQL Prometheus exporter service                                                                                                    | `{}`                        |
+| `metrics.customMetrics`                      | Additional custom metrics                                                                                                                                 | `""`                        |
+| `metrics.extraEnvVars`                       | An array to add extra environment variables to configure postgres-exporter                                                                                | `{}`                        |
+| `metrics.serviceMonitor.enabled`             | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)                                                    | `false`                     |
+| `metrics.serviceMonitor.namespace`           | Optional namespace which Prometheus is running in                                                                                                         | `""`                        |
+| `metrics.serviceMonitor.interval`            | How frequently to scrape metrics (use by default, falling back to Prometheus' default)                                                                    | `""`                        |
+| `metrics.serviceMonitor.scrapeTimeout`       | Service monitor scrape timeout                                                                                                                            | `""`                        |
+| `metrics.serviceMonitor.selector`            | Defaults to what's used if you follow CoreOS Prometheus Install Instructions (https://github.com/bitnami/charts/tree/master/bitnami/kube-prometheus#tldr) | `{}`                        |
+| `metrics.serviceMonitor.relabelings`         | ServiceMonitor relabelings. Value is evaluated as a template                                                                                              | `[]`                        |
+| `metrics.serviceMonitor.metricRelabelings`   | ServiceMonitor metricRelabelings. Value is evaluated as a template                                                                                        | `[]`                        |
 
 
 ### Volume permissions parameters
