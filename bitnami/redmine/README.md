@@ -546,7 +546,7 @@ image:
   repository: bitnami/redmine
   tag: 4.2.2
 ...
-metrics:
+mailReceiver:
   image:
     registry: docker.io
     repository: bitnami/redmine

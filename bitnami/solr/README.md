@@ -360,10 +360,6 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ## Upgrading
 
-### To 1.0.0
-
-This major updates the Zookeeper subchart to it newest major, 7.0.0, which renames all TLS-related settings. For more information on this subchart's major, please refer to [zookeeper upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/zookeeper#to-700).
-
 ### To 2.0.0
 
 In this version, the `image` block is defined once and is used in the different templates, while in the previous version, the `image` block was duplicated for the main container and the metrics one
@@ -389,3 +385,7 @@ metrics:
 ```
 
 See [PR#foobar](https://github.com/bitnami/charts/pull/foobar) for more info about the implemented changes
+
+### To 1.0.0
+
+This major updates the Zookeeper subchart to it newest major, 7.0.0, which renames all TLS-related settings. For more information on this subchart's major, please refer to [zookeeper upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/zookeeper#to-700).
