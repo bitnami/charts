@@ -177,7 +177,7 @@ To connect to your database from outside the cluster execute the following comma
 {{- $requiredPassword := list -}}
 {{- $secretName := include "redis.secretName" . -}}
 {{- $secretPasswordKey := include "redis.secretPasswordKey" . -}}
-{{- if and .Values.auth.enabled (not .Values.auth.existingSecret) -}}
+{{- if and .Values.auth.enabled (not .Values.auth.existingSecret) (not .Values.global.redis.password) -}}
   {{- $requiredRedisPassword := dict "valueKey" "auth.password" "secret" $secretName "field" $secretPasswordKey -}}
   {{- $requiredPassword = append $requiredPassword $requiredRedisPassword -}}
 {{- end -}}

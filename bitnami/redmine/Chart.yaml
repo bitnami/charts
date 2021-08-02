@@ -1,7 +1,7 @@
 annotations:
   category: ProjectManagement
 apiVersion: v2
-appVersion: 4.2.1
+appVersion: 4.2.2
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -36,4 +36,4 @@ name: redmine
 sources:
   - https://github.com/bitnami/bitnami-docker-redmine
   - http://www.redmine.org/
-version: 16.0.1
+version: 16.0.2
