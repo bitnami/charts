@@ -98,8 +98,8 @@ spec:
         {{- end }}
       containers:
         - name: controller
-          image: {{ include "argocd.application-controller.image" . }}
-          imagePullPolicy: {{ .Values.controller.image.pullPolicy }}
+          image: {{ include "argocd.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.controller.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.controller.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}

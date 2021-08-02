@@ -1,22 +1,8 @@
 {{/*
-Return the proper Argo CD controller image name
+Return the proper Argo CD image name
 */}}
-{{- define "argocd.application-controller.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.controller.image "global" .Values.global) }}
-{{- end -}}
-
-{{/*
-Return the proper Argo CD server image name
-*/}}
-{{- define "argocd.server.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.server.image "global" .Values.global) }}
-{{- end -}}
-
-{{/*
-Return the proper Argo CD repoServer image name
-*/}}
-{{- define "argocd.repo-server.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.repoServer.image "global" .Values.global) }}
+{{- define "argocd.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) }}
 {{- end -}}
 
 {{/*
@@ -37,7 +23,7 @@ Return the proper image name (for the init container volume-permissions image)
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "argocd.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.controller.image .Values.server.image .Values.repoServer.image .Values.dex.image .Values.volumePermissions.image) "global" .Values.global) -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.dex.image .Values.volumePermissions.image) "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
