@@ -224,11 +224,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                             | Description                                                                                                                     | Value                                                                         |
 | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
 | `exporter.enabled`                               | Start a side-car prometheus exporter                                                                                            | `false`                                                                       |
-| `exporter.image.registry`                        | Solr exporter image registry                                                                                                    | `docker.io`                                                                   |
-| `exporter.image.repository`                      | Solr exporter image name                                                                                                        | `bitnami/solr`                                                                |
-| `exporter.image.tag`                             | Solr exporter image tag                                                                                                         | `8.9.0-debian-10-r14`                                                         |
-| `exporter.image.pullPolicy`                      | Image pull policy                                                                                                               | `IfNotPresent`                                                                |
-| `exporter.image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                                | `[]`                                                                          |
 | `exporter.livenessProbe.enabled`                 | Enable livenessProbe                                                                                                            | `true`                                                                        |
 | `exporter.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                                         | `10`                                                                          |
 | `exporter.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                                | `5`                                                                           |
@@ -368,3 +363,29 @@ Find more information about how to deal with common errors related to Bitnami’
 ### To 1.0.0
 
 This major updates the Zookeeper subchart to it newest major, 7.0.0, which renames all TLS-related settings. For more information on this subchart's major, please refer to [zookeeper upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/zookeeper#to-700).
+
+### To 2.0.0
+
+In this version, the `image` block is defined once and is used in the different templates, while in the previous version, the `image` block was duplicated for the main container and the metrics one
+
+```yaml
+image:
+  registry: docker.io
+  repository: bitnami/solr
+  tag: 8.9.0
+```
+VS
+```yaml
+image:
+  registry: docker.io
+  repository: bitnami/solr
+  tag: 8.9.0
+...
+metrics:
+  image:
+    registry: docker.io
+    repository: bitnami/solr
+    tag: 8.9.0
+```
+
+See [PR#foobar](https://github.com/bitnami/charts/pull/foobar) for more info about the implemented changes
