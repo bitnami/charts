@@ -62,9 +62,6 @@ You have 4 alternatives:
 {{- end }}
 
 {{- include "common.warnings.rollingTag" .Values.image }}
-{{- if .Values.mailReceiver.enabled }}
-{{- include "common.warnings.rollingTag" .Values.mailReceiver.image }}
-{{- end }}
 
 {{- $passwordValidationErrors := list }}
 
