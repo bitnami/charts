@@ -392,8 +392,8 @@ $ helm delete --purge my-release
 | `curator.dryrun`                             | Run Curator in dry-run mode                                                                       | `false`                         |
 | `curator.command`                            | Command to execute                                                                                | `[]`                            |
 | `curator.env`                                | Environment variables to add to the cronjob container                                             | `{}`                            |
-| `curator.configMaps.action_file_yml`         | Contents of the Curator action_file.yml                                                           | `{}`                            |
-| `curator.configMaps.config_yml`              | Contents of the Curator config.yml (overrides config)                                             | `{}`                            |
+| `curator.configMaps.action_file_yml`         | Contents of the Curator action_file.yml                                                           | `""`                            |
+| `curator.configMaps.config_yml`              | Contents of the Curator config.yml (overrides config)                                             | `""`                            |
 | `curator.resources.limits`                   | The resources limits for the container                                                            | `{}`                            |
 | `curator.resources.requests`                 | The requested resources for the container                                                         | `{}`                            |
 | `curator.priorityClassName`                  | Priority Class Name                                                                               | `""`                            |

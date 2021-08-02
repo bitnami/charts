@@ -76,7 +76,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------- | ---------------------------------------------------------------------- | ----------------------- |
 | `image.registry`        | JasperReports image registry                                           | `docker.io`             |
 | `image.repository`      | JasperReports image repository                                         | `bitnami/jasperreports` |
-| `image.tag`             | JasperReports image tag (immutable tags are recommended)               | `7.8.0-debian-10-r280`  |
+| `image.tag`             | JasperReports image tag (immutable tags are recommended)               | `7.8.0-debian-10-r281`  |
 | `image.pullPolicy`      | JasperReports image pull policy                                        | `IfNotPresent`          |
 | `image.pullSecrets`     | Specify docker-registry secret names as an array                       | `[]`                    |
 | `jasperreportsUsername` | JasperReports user                                                     | `jasperadmin`           |
@@ -393,11 +393,11 @@ mariadb 12:13:25.01 INFO  ==> Running mysql_upgrade
 ...
 ```
 
-### to 8.0.0
+### To 8.0.0
 
 JasperReports 7.5.0 includes some new configuration options that are required to be added if you upgrade from previous versions. Please check the [official community guide](https://community.jaspersoft.com/documentation/tibco-jasperreports-server-upgrade-guide/v750/upgrading-72-75) to upgrade your previous JasperReports installation.
 
-### 7.0.0
+### To 7.0.0
 
 Helm performs a lookup for the object based on its group (apps), version (v1), and kind (Deployment). Also known as its GroupVersionKind, or GVK. Changing the GVK is considered a compatibility breaker from Kubernetes' point of view, so you cannot "upgrade" those objects to the new GVK in-place. Earlier versions of Helm 3 did not perform the lookup correctly which has since been fixed to match the spec.
 
@@ -405,7 +405,7 @@ In https://github.com/helm/charts/pull/17298 the `apiVersion` of the deployment 
 
 This major version signifies this change.
 
-### 3.0.0
+### To 3.0.0
 
 Backwards compatibility is not guaranteed unless you modify the labels used on the chart's deployments.
 Use the workaround below to upgrade from versions previous to 3.0.0. The following example assumes that the release name is jasperreports:

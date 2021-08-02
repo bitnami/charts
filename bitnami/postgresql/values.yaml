@@ -845,6 +845,8 @@ metrics:
   ## @param metrics.serviceMonitor.namespace Optional namespace in which to create ServiceMonitor
   ## @param metrics.serviceMonitor.interval Scrape interval. If not set, the Prometheus default scrape interval is used
   ## @param metrics.serviceMonitor.scrapeTimeout Scrape timeout. If not set, the Prometheus default scrape timeout is used
+  ## @param metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
+  ## @param metrics.serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion
   ##
   serviceMonitor:
     enabled: false
@@ -852,6 +854,8 @@ metrics:
     namespace: ""
     interval: ""
     scrapeTimeout: ""
+    relabelings: []
+    metricRelabelings: []
   ## Custom PrometheusRule to be defined
   ## The value is evaluated as a template, so, for example, the value can depend on .Release or .Chart
   ## ref: https://github.com/coreos/prometheus-operator#customresourcedefinitions

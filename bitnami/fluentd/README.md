@@ -77,7 +77,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
 | `image.registry`                                               | Fluentd image registry                                                                                          | `docker.io`                                                |
 | `image.repository`                                             | Fluentd image repository                                                                                        | `bitnami/fluentd`                                          |
-| `image.tag`                                                    | Fluentd image tag (immutable tags are recommended)                                                              | `1.13.2-debian-10-r0`                                      |
+| `image.tag`                                                    | Fluentd image tag (immutable tags are recommended)                                                              | `1.13.3-debian-10-r0`                                      |
 | `image.pullPolicy`                                             | Fluentd image pull policy                                                                                       | `IfNotPresent`                                             |
 | `image.pullSecrets`                                            | Fluentd image pull secrets                                                                                      | `[]`                                                       |
 | `image.debug`                                                  | Enable image debug mode                                                                                         | `false`                                                    |
@@ -473,7 +473,7 @@ forwarder:
     create: true
 ```
 
-### 1.0.0
+### To 1.0.0
 
 In this version of the chart the Fluentd forwarder daemon system user will be root by default. This is done to ensure that mounted host paths are readable by the forwarder. For more context, check this [support case](https://github.com/bitnami/charts/issues/1905).
 
