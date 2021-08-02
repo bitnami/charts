@@ -393,7 +393,7 @@ To upgrade to `8.0.0`, backup phpBB data and the previous MariaDB databases, ins
 
 This upgrade also adapts the chart to the latest Bitnami good practices. Check the Parameters section for more information.
 
-### 7.0.0
+### To 7.0.0
 
 Helm performs a lookup for the object based on its group (apps), version (v1), and kind (Deployment). Also known as its GroupVersionKind, or GVK. Changing the GVK is considered a compatibility breaker from Kubernetes' point of view, so you cannot "upgrade" those objects to the new GVK in-place. Earlier versions of Helm 3 did not perform the lookup correctly which has since been fixed to match the spec.
 
