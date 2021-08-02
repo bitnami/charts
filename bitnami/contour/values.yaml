@@ -302,7 +302,7 @@ contour:
   ##     imagePullPolicy: Always
   ##
   initContainers: []
-  ## @param sidecars Add additional sidecar containers to the Contour pods
+  ## @param contour.sidecars Add additional sidecar containers to the Contour pods
   ## Example:
   ## sidecars:
   ##   - name: your-image-name
