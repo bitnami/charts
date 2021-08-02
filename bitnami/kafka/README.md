@@ -334,24 +334,18 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Kafka provisioning parameters
 
-| Name                              | Description                                                           | Value                 |
-| --------------------------------- | --------------------------------------------------------------------- | --------------------- |
-| `provisioning.enabled`            | Enable kafka provisioning Job                                         | `false`               |
-| `provisioning.image.registry`     | Kafka image registry                                                  | `docker.io`           |
-| `provisioning.image.repository`   | Kafka image repository                                                | `bitnami/kafka`       |
-| `provisioning.image.tag`          | Kafka image tag (immutable tags are recommended)                      | `2.8.0-debian-10-r56` |
-| `provisioning.image.pullPolicy`   | Kafka image pull policy                                               | `IfNotPresent`        |
-| `provisioning.image.pullSecrets`  | Specify docker-registry secret names as an array                      | `[]`                  |
-| `provisioning.image.debug`        | Set to true if you would like to see extra information on logs        | `false`               |
-| `provisioning.numPartitions`      | Default number of partitions for topics when unspecified.             | `1`                   |
-| `provisioning.replicationFactor`  | Default replication factor for topics when unspecified.               | `1`                   |
-| `provisioning.schedulerName`      | Name of the k8s scheduler (other than default) for kafka provisioning | `""`                  |
-| `provisioning.podAnnotations`     | Provisioning Pod annotations.                                         | `{}`                  |
-| `provisioning.resources.limits`   | The resources limits for the container                                | `{}`                  |
-| `provisioning.resources.requests` | The requested resources for the container                             | `{}`                  |
-| `provisioning.command`            | Override provisioning container command                               | `[]`                  |
-| `provisioning.args`               | Override provisioning container arguments                             | `[]`                  |
-| `provisioning.topics`             | Kafka provisioning topics                                             | `[]`                  |
+| Name                              | Description                                                           | Value   |
+| --------------------------------- | --------------------------------------------------------------------- | ------- |
+| `provisioning.enabled`            | Enable kafka provisioning Job                                         | `false` |
+| `provisioning.numPartitions`      | Default number of partitions for topics when unspecified.             | `1`     |
+| `provisioning.replicationFactor`  | Default replication factor for topics when unspecified.               | `1`     |
+| `provisioning.schedulerName`      | Name of the k8s scheduler (other than default) for kafka provisioning | `""`    |
+| `provisioning.podAnnotations`     | Provisioning Pod annotations.                                         | `{}`    |
+| `provisioning.resources.limits`   | The resources limits for the container                                | `{}`    |
+| `provisioning.resources.requests` | The requested resources for the container                             | `{}`    |
+| `provisioning.command`            | Override provisioning container command                               | `[]`    |
+| `provisioning.args`               | Override provisioning container arguments                             | `[]`    |
+| `provisioning.topics`             | Kafka provisioning topics                                             | `[]`    |
 
 
 ### Zookeeper chart parameters
@@ -674,6 +668,32 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ## Upgrading
 
+### To 14.0.0
+
+In this version, the `image` block is defined once and is used in the different templates, while in the previous version, the `image` block was duplicated for the main container and the provisioning one
+
+```yaml
+image:
+  registry: docker.io
+  repository: bitnami/kafka
+  tag: 2.8.0
+```
+VS
+```yaml
+image:
+  registry: docker.io
+  repository: bitnami/kafka
+  tag: 2.8.0
+...
+provisioning:
+  image:
+    registry: docker.io
+    repository: bitnami/kafka
+    tag: 2.8.0
+```
+
+See [PR#foobar](https://github.com/bitnami/charts/pull/foobar) for more info about the implemented changes
+
 ### To 13.0.0
 
 This major updates the Zookeeper subchart to it newest major, 7.0.0, which renames all TLS-related settings. For more information on this subchart's major, please refer to [zookeeper upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/zookeeper#to-700).
@@ -711,14 +731,14 @@ External access to brokers can now be achieved through the cluster's Kafka servi
 
 - `service.nodePort` -> deprecated  in favor of `service.nodePorts.client` and `service.nodePorts.external`
 
-### 11.7.0
+### To 11.7.0
 
 The way to configure the users and passwords changed. Now it is allowed to create multiple users during the installation by providing the list of users and passwords.
 
 - `auth.jaas.clientUser` (string) -> deprecated  in favor of `auth.jaas.clientUsers` (array).
 - `auth.jaas.clientPassword` (string) -> deprecated  in favor of `auth.jaas.clientPasswords` (array).
 
-### 11.0.0
+### To 11.0.0
 
 The way to configure listeners and athentication on Kafka is totally refactored allowing users to configure different authentication protocols on different listeners. Please check the sections [Listeners Configuration](listeners-configuration) and [Listeners Configuration](enable-kafka-for-kafka-and-zookeeper) for more information.
 
@@ -739,11 +759,11 @@ Backwards compatibility is not guaranteed you adapt your values.yaml to the new 
 - `metrics.kafka.extraFlag` -> new parameter
 - `metrics.kafka.certificatesSecret` -> new parameter
 
-### 10.0.0
+### To 10.0.0
 
 If you are setting the `config` or `log4j` parameter, backwards compatibility is not guaranteed, because the `KAFKA_MOUNTED_CONFDIR` has moved from `/opt/bitnami/kafka/conf` to `/bitnami/kafka/config`. In order to continue using these parameters, you must also upgrade your image to `docker.io/bitnami/kafka:2.4.1-debian-10-r38` or later.
 
-### 9.0.0
+### To 9.0.0
 
 Backwards compatibility is not guaranteed you adapt your values.yaml to the new format. Here you can find some parameters that were renamed on this major version:
 
@@ -765,11 +785,11 @@ Backwards compatibility is not guaranteed you adapt your values.yaml to the new 
 
 Ports names were prefixed with the protocol to comply with Istio (see https://istio.io/docs/ops/deployment/requirements/).
 
-### 8.0.0
+### To 8.0.0
 
 There is not backwards compatibility since the brokerID changes to the POD_NAME. For more information see [this PR](https://github.com/bitnami/charts/pull/2028).
 
-### 7.0.0
+### To 7.0.0
 
 Backwards compatibility is not guaranteed when Kafka metrics are enabled, unless you modify the labels used on the exporter deployments.
 Use the workaround below to upgrade from versions previous to 7.0.0. The following example assumes that the release name is kafka:
@@ -779,7 +799,7 @@ helm upgrade kafka bitnami/kafka --version 6.1.8 --set metrics.kafka.enabled=fal
 helm upgrade kafka bitnami/kafka --version 7.0.0 --set metrics.kafka.enabled=true
 ```
 
-### 2.0.0
+### To 2.0.0
 
 Backwards compatibility is not guaranteed unless you modify the labels used on the chart's deployments.
 Use the workaround below to upgrade from versions previous to 2.0.0. The following example assumes that the release name is kafka:
@@ -789,7 +809,7 @@ kubectl delete statefulset kafka-kafka --cascade=false
 kubectl delete statefulset kafka-zookeeper --cascade=false
 ```
 
-### 1.0.0
+### To 1.0.0
 
 Backwards compatibility is not guaranteed unless you modify the labels used on the chart's deployments.
 Use the workaround below to upgrade from versions previous to 1.0.0. The following example assumes that the release name is kafka:
