@@ -619,3 +619,5 @@ repoServer:
     repository: bitnami/argo-cd
     tag: 2.0.5
 ```
+
+See [PR#7113](https://github.com/bitnami/charts/pull/7113) for more info about the implemented changes
