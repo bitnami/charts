@@ -1104,9 +1104,9 @@ metrics:
     ## scrapeTimeout: 10s
     ##
     scrapeTimeout: ""
-    ## @param metrics.serviceMonitor.selector [object] Defaults to what's used if you follow CoreOS [Prometheus Install Instructions](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#tldr)
-    ## [Prometheus Selector Label](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-operator-1)
-    ## [Kube Prometheus Selector Label](https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#exporters)
+    ## @param metrics.serviceMonitor.selector [object] Defaults to what's used if you follow CoreOS Prometheus Install Instructions (https://github.com/bitnami/charts/tree/master/bitnami/kube-prometheus#tldr)
+    ## Prometheus Selector Label (https://github.com/bitnami/charts/tree/master/bitnami/kube-prometheus#prometheus-operator-parameters)
+    ## Kube Prometheus Selector Label (https://github.com/bitnami/charts/tree/master/bitnami/kube-prometheus#exporters)
     ##
     selector:
       prometheus: kube-prometheus

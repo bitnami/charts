@@ -270,6 +270,13 @@ grafana:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
+  ## @param grafana.serviceAccount Additional service account configuration
+  ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md#configuring-the-serviceaccount
+  ## e.g:
+  ## serviceAccount:
+  ##   annotations:
+  ##     iam.gke.io/gcp-service-account: "grafana@preprodz.iam.gserviceaccount.com"
+  serviceAccount: {}
   ## Pod securityContext
   ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param grafana.podSecurityContext.enabled Enable pods security context

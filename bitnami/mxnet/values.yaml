@@ -8,22 +8,22 @@
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
 
 ## @section Common parameters
 
 ## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname template
 ##
-fullnameOverride:
+fullnameOverride: ""
 
 ## @section Common Mxnet parameters
 
@@ -154,10 +154,10 @@ entrypoint:
 mode: standalone
 ## @param existingSecret Name of a secret with sensitive data to mount in the pods
 ##
-existingSecret:
+existingSecret: ""
 ## @param configMap Name of an existing config map containing all the files you want to load in Apache MXNet (Incubating)
 ##
-configMap:
+configMap: ""
 ## @param hostAliases Deployment pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##

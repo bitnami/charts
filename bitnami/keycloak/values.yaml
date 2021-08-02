@@ -703,6 +703,8 @@ ingress:
   ##     certificate: ""
   ##
   secrets: []
+  ## @param ingress.existingSecret It is you own the certificate as secret.
+  existingSecret: ""
   ## @param ingress.servicePort Service port to be used
   ## Default is http. Alternative is https.
   ##

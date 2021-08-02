@@ -76,13 +76,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------- | ---------------------------------------------------------------------- | ----------------------- |
 | `image.registry`        | JasperReports image registry                                           | `docker.io`             |
 | `image.repository`      | JasperReports image repository                                         | `bitnami/jasperreports` |
-| `image.tag`             | JasperReports image tag (immutable tags are recommended)               | `7.8.0-debian-10-r251`  |
+| `image.tag`             | JasperReports image tag (immutable tags are recommended)               | `7.8.0-debian-10-r281`  |
 | `image.pullPolicy`      | JasperReports image pull policy                                        | `IfNotPresent`          |
 | `image.pullSecrets`     | Specify docker-registry secret names as an array                       | `[]`                    |
-| `jasperreportsUsername` | JasperReports user                                                     | `user`                  |
+| `jasperreportsUsername` | JasperReports user                                                     | `jasperadmin`           |
 | `jasperreportsPassword` | JasperReports password                                                 | `""`                    |
 | `jasperreportsEmail`    | JasperReports user email                                               | `user@example.com`      |
-| `allowEmptyPassword`    | Set to `yes` to allow the container to be started with blank passwords | `yes`                   |
+| `allowEmptyPassword`    | Set to `yes` to allow the container to be started with blank passwords | `no`                    |
 | `smtpHost`              | SMTP host                                                              | `""`                    |
 | `smtpPort`              | SMTP port                                                              | `""`                    |
 | `smtpEmail`             | SMTP email                                                             | `""`                    |
@@ -104,22 +104,20 @@ The command removes all the Kubernetes components associated with the chart and 
 | `hostAliases`                        | Add deployment host aliases                                                               | `[]`                       |
 | `containerPort`                      | HTTP port to expose at container level                                                    | `8080`                     |
 | `podSecurityContext.enabled`         | Enable pod's Security Context                                                             | `true`                     |
-| `podSecurityContext.fsGroup`         | Set pod's Security Context fsGroup                                                        | `0`                        |
+| `podSecurityContext.fsGroup`         | Set pod's Security Context fsGroup                                                        | `1001`                     |
 | `containerSecurityContext.enabled`   | Enable container's Security Context                                                       | `true`                     |
-| `containerSecurityContext.runAsUser` | Set container's Security Context runAsUser                                                | `0`                        |
+| `containerSecurityContext.runAsUser` | Set container's Security Context runAsUser                                                | `1001`                     |
 | `resources.limits`                   | The resources limits for the Jasperreports container                                      | `{}`                       |
 | `resources.requests`                 | The requested resources for the Jasperreports container                                   | `{}`                       |
 | `livenessProbe.enabled`              | Enable livenessProbe                                                                      | `true`                     |
-| `livenessProbe.httpGet.path`         | Request path for livenessProbe                                                            | `/jasperserver/login.html` |
-| `livenessProbe.httpGet.port`         | Port for livenessProbe                                                                    | `http`                     |
-| `livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                   | `300`                      |
+| `livenessProbe.path`                 | Request path for livenessProbe                                                            | `/jasperserver/login.html` |
+| `livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                   | `450`                      |
 | `livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                          | `10`                       |
 | `livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                         | `5`                        |
 | `livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                       | `6`                        |
 | `livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                       | `1`                        |
 | `readinessProbe.enabled`             | Enable readinessProbe                                                                     | `true`                     |
-| `readinessProbe.httpGet.path`        | Request path for readinessProbe                                                           | `/jasperserver/login.html` |
-| `readinessProbe.httpGet.port`        | Port for readinessProbe                                                                   | `http`                     |
+| `readinessProbe.path`                | Request path for readinessProbe                                                           | `/jasperserver/login.html` |
 | `readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                  | `30`                       |
 | `readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                         | `10`                       |
 | `readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                        | `5`                        |
@@ -283,6 +281,21 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 11.0.0
+
+The [Bitnami JasperReports](https://github.com/bitnami/bitnami-docker-jasperreports) image was migrated to a "non-root" user approach. Previously the container ran as the `root` user and the Tomcat daemon was started as the `tomcat` user. From now on, both the container and the Tomcat daemon run as user `1001`. You can revert this behavior by setting the parameters `containerSecurityContext.runAsUser` to `root`.
+
+Consequences:
+
+- The HTTP/HTTPS ports exposed by the container are now `8080/8443` instead of `80/443`.
+- Backwards compatibility is not guaranteed.
+
+To upgrade to `11.0.0`, backup JasperReports data and the previous MariaDB databases, install a new JasperReports chart and import the backups and data, ensuring the `1001` user has the appropriate permissions on the migrated volume.
+
+In addition to this, the image was refactored and now the source code is published in GitHub in the [`rootfs`](https://github.com/bitnami/bitnami-docker-jasperreports/tree/master/7/debian-10/rootfs) folder of the container image.
+
+We also fixed a regression with readiness and liveness probes. Now the kind of probe cannot be configured under the *readinessProbe/livenessProbe* sections but in the *customReadinessProbe/customLivenessProbe* sections.
 
 ### To 10.0.0
 
