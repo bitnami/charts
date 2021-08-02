@@ -692,7 +692,7 @@ provisioning:
     tag: 2.8.0
 ```
 
-See [PR#foobar](https://github.com/bitnami/charts/pull/foobar) for more info about the implemented changes
+See [PR#7114](https://github.com/bitnami/charts/pull/7114) for more info about the implemented changes
 
 ### To 13.0.0
 

@@ -384,7 +384,7 @@ metrics:
     tag: 8.9.0
 ```
 
-See [PR#foobar](https://github.com/bitnami/charts/pull/foobar) for more info about the implemented changes
+See [PR#7114](https://github.com/bitnami/charts/pull/7114) for more info about the implemented changes
 
 ### To 1.0.0
 

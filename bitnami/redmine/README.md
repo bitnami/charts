@@ -553,7 +553,7 @@ mailReceiver:
     tag: 4.2.2
 ```
 
-See [PR#foobar](https://github.com/bitnami/charts/pull/foobar) for more info about the implemented changes
+See [PR#7114](https://github.com/bitnami/charts/pull/7114) for more info about the implemented changes
 
 ### To 16.0.0
 
