@@ -224,11 +224,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                             | Description                                                                                                                     | Value                                                                         |
 | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
 | `exporter.enabled`                               | Start a side-car prometheus exporter                                                                                            | `false`                                                                       |
-| `exporter.image.registry`                        | Solr exporter image registry                                                                                                    | `docker.io`                                                                   |
-| `exporter.image.repository`                      | Solr exporter image name                                                                                                        | `bitnami/solr`                                                                |
-| `exporter.image.tag`                             | Solr exporter image tag                                                                                                         | `8.9.0-debian-10-r14`                                                         |
-| `exporter.image.pullPolicy`                      | Image pull policy                                                                                                               | `IfNotPresent`                                                                |
-| `exporter.image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                                | `[]`                                                                          |
 | `exporter.livenessProbe.enabled`                 | Enable livenessProbe                                                                                                            | `true`                                                                        |
 | `exporter.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                                         | `10`                                                                          |
 | `exporter.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                                | `5`                                                                           |
@@ -364,6 +359,32 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 2.0.0
+
+In this version, the `image` block is defined once and is used in the different templates, while in the previous version, the `image` block was duplicated for the main container and the metrics one
+
+```yaml
+image:
+  registry: docker.io
+  repository: bitnami/solr
+  tag: 8.9.0
+```
+VS
+```yaml
+image:
+  registry: docker.io
+  repository: bitnami/solr
+  tag: 8.9.0
+...
+metrics:
+  image:
+    registry: docker.io
+    repository: bitnami/solr
+    tag: 8.9.0
+```
+
+See [PR#7114](https://github.com/bitnami/charts/pull/7114) for more info about the implemented changes
 
 ### To 1.0.0
 

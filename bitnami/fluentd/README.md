@@ -473,7 +473,7 @@ forwarder:
     create: true
 ```
 
-### 1.0.0
+### To 1.0.0
 
 In this version of the chart the Fluentd forwarder daemon system user will be root by default. This is done to ensure that mounted host paths are readable by the forwarder. For more context, check this [support case](https://github.com/bitnami/charts/issues/1905).
 

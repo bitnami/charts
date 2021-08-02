@@ -67,20 +67,20 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 
 ### Common parameters
 
-| Name                | Description                                        | Value                 |
-| ------------------- | -------------------------------------------------- | --------------------- |
-| `kubeVersion`       | Override Kubernetes version                        | `""`                  |
-| `nameOverride`      | String to partially override common.names.fullname | `""`                  |
-| `fullnameOverride`  | String to fully override common.names.fullname     | `""`                  |
-| `commonLabels`      | Labels to add to all deployed objects              | `{}`                  |
-| `commonAnnotations` | Annotations to add to all deployed objects         | `{}`                  |
-| `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`                  |
-| `image.registry`    | Redmine image registry                             | `docker.io`           |
-| `image.repository`  | Redmine image repository                           | `bitnami/redmine`     |
-| `image.tag`         | Redmine image tag (immutable tags are recommended) | `4.2.1-debian-10-r71` |
-| `image.pullPolicy`  | Redmine image pull policy                          | `IfNotPresent`        |
-| `image.pullSecrets` | Redmine image pull secrets                         | `[]`                  |
-| `image.debug`       | Enable image debug mode                            | `false`               |
+| Name                | Description                                        | Value                |
+| ------------------- | -------------------------------------------------- | -------------------- |
+| `kubeVersion`       | Override Kubernetes version                        | `""`                 |
+| `nameOverride`      | String to partially override common.names.fullname | `""`                 |
+| `fullnameOverride`  | String to fully override common.names.fullname     | `""`                 |
+| `commonLabels`      | Labels to add to all deployed objects              | `{}`                 |
+| `commonAnnotations` | Annotations to add to all deployed objects         | `{}`                 |
+| `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`                 |
+| `image.registry`    | Redmine image registry                             | `docker.io`          |
+| `image.repository`  | Redmine image repository                           | `bitnami/redmine`    |
+| `image.tag`         | Redmine image tag (immutable tags are recommended) | `4.2.2-debian-10-r0` |
+| `image.pullPolicy`  | Redmine image pull policy                          | `IfNotPresent`       |
+| `image.pullSecrets` | Redmine image pull secrets                         | `[]`                 |
+| `image.debug`       | Enable image debug mode                            | `false`              |
 
 
 ### Redmine Configuration parameters
@@ -260,63 +260,58 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 
 ### Mail Receiver/Cron Job Parameters
 
-| Name                                                 | Description                                                                                                                                   | Value                 |
-| ---------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
-| `mailReceiver.enabled`                               | Whether to enable scheduled mail-to-task CronJob                                                                                              | `false`               |
-| `mailReceiver.schedule`                              | Kubernetes CronJob schedule                                                                                                                   | `*/5 * * * *`         |
-| `mailReceiver.suspend`                               | Whether to create suspended CronJob                                                                                                           | `true`                |
-| `mailReceiver.image.registry`                        | Redmine MailReceiver image registry                                                                                                           | `docker.io`           |
-| `mailReceiver.image.repository`                      | Redmine MailReceiver image repository                                                                                                         | `bitnami/redmine`     |
-| `mailReceiver.image.tag`                             | Redmine MailReceiver image tag (immutable tags are recommended)                                                                               | `4.2.1-debian-10-r70` |
-| `mailReceiver.image.pullPolicy`                      | Redmine MailReceiver image pull policy                                                                                                        | `IfNotPresent`        |
-| `mailReceiver.image.pullSecrets`                     | Redmine MailReceiver image pull secrets                                                                                                       | `[]`                  |
-| `mailReceiver.podAnnotations`                        | Additional pod annotations                                                                                                                    | `{}`                  |
-| `mailReceiver.podLabels`                             | Additional pod labels                                                                                                                         | `{}`                  |
-| `mailReceiver.priorityClassName`                     | Redmine pods' priority.                                                                                                                       | `""`                  |
-| `mailReceiver.mailProtocol`                          | Mail protocol to use for reading emails. Allowed values: `IMAP` and `POP3`                                                                    | `IMAP`                |
-| `mailReceiver.host`                                  | Server to receive emails from                                                                                                                 | `""`                  |
-| `mailReceiver.port`                                  | TCP port on the `host`                                                                                                                        | `993`                 |
-| `mailReceiver.username`                              | Login to authenticate on the `host`                                                                                                           | `""`                  |
-| `mailReceiver.password`                              | Password to authenticate on the `host`                                                                                                        | `""`                  |
-| `mailReceiver.ssl`                                   | Whether use SSL/TLS to connect to the `host`                                                                                                  | `true`                |
-| `mailReceiver.startTLS`                              | Whether use StartTLS to connect to the `host`                                                                                                 | `false`               |
-| `mailReceiver.imapFolder`                            | IMAP only. Folder to read emails from                                                                                                         | `INBOX`               |
-| `mailReceiver.moveOnSuccess`                         | IMAP only. Folder to move processed emails to                                                                                                 | `""`                  |
-| `mailReceiver.moveOnFailure`                         | IMAP only. Folder to move emails with processing errors to                                                                                    | `""`                  |
-| `mailReceiver.unknownUserAction`                     | Action to perform is an email received from unregistered user                                                                                 | `ignore`              |
-| `mailReceiver.noPermissionCheck`                     | Whether skip permission check during creating a new task                                                                                      | `0`                   |
-| `mailReceiver.noAccountNotice`                       | Whether send an email to an unregistered user created during a new task creation                                                              | `1`                   |
-| `mailReceiver.defaultGroup`                          | Defines a group list to add created user to                                                                                                   | `""`                  |
-| `mailReceiver.project`                               | Defines identifier of the target project for a new task                                                                                       | `""`                  |
-| `mailReceiver.projectFromSubaddress`                 | Defines email address to select project from subaddress                                                                                       | `""`                  |
-| `mailReceiver.status`                                | Defines a new task status                                                                                                                     | `""`                  |
-| `mailReceiver.tracker`                               | Defines a new task tracker                                                                                                                    | `""`                  |
-| `mailReceiver.category`                              | Defines a new task category                                                                                                                   | `""`                  |
-| `mailReceiver.priority`                              | Defines a new task priority                                                                                                                   | `""`                  |
-| `mailReceiver.assignedTo`                            | Defines a new task assignee                                                                                                                   | `""`                  |
-| `mailReceiver.allowOverride`                         | Defines if email content is allowed to set attributes values. Values is a comma separated list of attributes or `all` to allow all attributes | `""`                  |
-| `mailReceiver.extraEnvVars`                          | Extra environment variables to be set on mailReceiver container                                                                               | `[]`                  |
-| `mailReceiver.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars                                                                                          | `""`                  |
-| `mailReceiver.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars                                                                                             | `""`                  |
-| `mailReceiver.extraVolumes`                          | Optionally specify extra list of additional volumes for mailReceiver container                                                                | `[]`                  |
-| `mailReceiver.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for mailReceiver container                                                           | `[]`                  |
-| `mailReceiver.command`                               | Override default container command (useful when using custom images)                                                                          | `[]`                  |
-| `mailReceiver.args`                                  | Override default container args (useful when using custom images)                                                                             | `[]`                  |
-| `mailReceiver.podSecurityContext.enabled`            | Enabled Redmine pods' Security Context                                                                                                        | `true`                |
-| `mailReceiver.podSecurityContext.fsGroup`            | Set Redmine pod's Security Context fsGroup                                                                                                    | `1001`                |
-| `mailReceiver.containerSecurityContext.enabled`      | mailReceiver Container securityContext                                                                                                        | `false`               |
-| `mailReceiver.containerSecurityContext.runAsUser`    | User ID for the mailReceiver container                                                                                                        | `1001`                |
-| `mailReceiver.containerSecurityContext.runAsNonRoot` | Whether to run the mailReceiver container as a non-root user                                                                                  | `true`                |
-| `mailReceiver.initContainers`                        | Add additional init containers to the mailReceiver pods                                                                                       | `[]`                  |
-| `mailReceiver.sidecars`                              | Add additional sidecar containers to the mailReceiver pods                                                                                    | `[]`                  |
-| `mailReceiver.podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                           | `""`                  |
-| `mailReceiver.podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                      | `soft`                |
-| `mailReceiver.nodeAffinityPreset.type`               | Node affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                          | `""`                  |
-| `mailReceiver.nodeAffinityPreset.key`                | Node label key to match. Ignored if `affinity` is set.                                                                                        | `""`                  |
-| `mailReceiver.nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                                                                                     | `[]`                  |
-| `mailReceiver.affinity`                              | Affinity for pod assignment                                                                                                                   | `{}`                  |
-| `mailReceiver.nodeSelector`                          | Node labels for pod assignment                                                                                                                | `{}`                  |
-| `mailReceiver.tolerations`                           | Tolerations for pod assignment                                                                                                                | `[]`                  |
+| Name                                                 | Description                                                                                                                                   | Value         |
+| ---------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | ------------- |
+| `mailReceiver.enabled`                               | Whether to enable scheduled mail-to-task CronJob                                                                                              | `false`       |
+| `mailReceiver.schedule`                              | Kubernetes CronJob schedule                                                                                                                   | `*/5 * * * *` |
+| `mailReceiver.suspend`                               | Whether to create suspended CronJob                                                                                                           | `true`        |
+| `mailReceiver.podAnnotations`                        | Additional pod annotations                                                                                                                    | `{}`          |
+| `mailReceiver.podLabels`                             | Additional pod labels                                                                                                                         | `{}`          |
+| `mailReceiver.priorityClassName`                     | Redmine pods' priority.                                                                                                                       | `""`          |
+| `mailReceiver.mailProtocol`                          | Mail protocol to use for reading emails. Allowed values: `IMAP` and `POP3`                                                                    | `IMAP`        |
+| `mailReceiver.host`                                  | Server to receive emails from                                                                                                                 | `""`          |
+| `mailReceiver.port`                                  | TCP port on the `host`                                                                                                                        | `993`         |
+| `mailReceiver.username`                              | Login to authenticate on the `host`                                                                                                           | `""`          |
+| `mailReceiver.password`                              | Password to authenticate on the `host`                                                                                                        | `""`          |
+| `mailReceiver.ssl`                                   | Whether use SSL/TLS to connect to the `host`                                                                                                  | `true`        |
+| `mailReceiver.startTLS`                              | Whether use StartTLS to connect to the `host`                                                                                                 | `false`       |
+| `mailReceiver.imapFolder`                            | IMAP only. Folder to read emails from                                                                                                         | `INBOX`       |
+| `mailReceiver.moveOnSuccess`                         | IMAP only. Folder to move processed emails to                                                                                                 | `""`          |
+| `mailReceiver.moveOnFailure`                         | IMAP only. Folder to move emails with processing errors to                                                                                    | `""`          |
+| `mailReceiver.unknownUserAction`                     | Action to perform is an email received from unregistered user                                                                                 | `ignore`      |
+| `mailReceiver.noPermissionCheck`                     | Whether skip permission check during creating a new task                                                                                      | `0`           |
+| `mailReceiver.noAccountNotice`                       | Whether send an email to an unregistered user created during a new task creation                                                              | `1`           |
+| `mailReceiver.defaultGroup`                          | Defines a group list to add created user to                                                                                                   | `""`          |
+| `mailReceiver.project`                               | Defines identifier of the target project for a new task                                                                                       | `""`          |
+| `mailReceiver.projectFromSubaddress`                 | Defines email address to select project from subaddress                                                                                       | `""`          |
+| `mailReceiver.status`                                | Defines a new task status                                                                                                                     | `""`          |
+| `mailReceiver.tracker`                               | Defines a new task tracker                                                                                                                    | `""`          |
+| `mailReceiver.category`                              | Defines a new task category                                                                                                                   | `""`          |
+| `mailReceiver.priority`                              | Defines a new task priority                                                                                                                   | `""`          |
+| `mailReceiver.assignedTo`                            | Defines a new task assignee                                                                                                                   | `""`          |
+| `mailReceiver.allowOverride`                         | Defines if email content is allowed to set attributes values. Values is a comma separated list of attributes or `all` to allow all attributes | `""`          |
+| `mailReceiver.extraEnvVars`                          | Extra environment variables to be set on mailReceiver container                                                                               | `[]`          |
+| `mailReceiver.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars                                                                                          | `""`          |
+| `mailReceiver.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars                                                                                             | `""`          |
+| `mailReceiver.extraVolumes`                          | Optionally specify extra list of additional volumes for mailReceiver container                                                                | `[]`          |
+| `mailReceiver.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for mailReceiver container                                                           | `[]`          |
+| `mailReceiver.command`                               | Override default container command (useful when using custom images)                                                                          | `[]`          |
+| `mailReceiver.args`                                  | Override default container args (useful when using custom images)                                                                             | `[]`          |
+| `mailReceiver.podSecurityContext.enabled`            | Enabled Redmine pods' Security Context                                                                                                        | `true`        |
+| `mailReceiver.podSecurityContext.fsGroup`            | Set Redmine pod's Security Context fsGroup                                                                                                    | `1001`        |
+| `mailReceiver.containerSecurityContext.enabled`      | mailReceiver Container securityContext                                                                                                        | `false`       |
+| `mailReceiver.containerSecurityContext.runAsUser`    | User ID for the mailReceiver container                                                                                                        | `1001`        |
+| `mailReceiver.containerSecurityContext.runAsNonRoot` | Whether to run the mailReceiver container as a non-root user                                                                                  | `true`        |
+| `mailReceiver.initContainers`                        | Add additional init containers to the mailReceiver pods                                                                                       | `[]`          |
+| `mailReceiver.sidecars`                              | Add additional sidecar containers to the mailReceiver pods                                                                                    | `[]`          |
+| `mailReceiver.podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                           | `""`          |
+| `mailReceiver.podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                      | `soft`        |
+| `mailReceiver.nodeAffinityPreset.type`               | Node affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                          | `""`          |
+| `mailReceiver.nodeAffinityPreset.key`                | Node label key to match. Ignored if `affinity` is set.                                                                                        | `""`          |
+| `mailReceiver.nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                                                                                     | `[]`          |
+| `mailReceiver.affinity`                              | Affinity for pod assignment                                                                                                                   | `{}`          |
+| `mailReceiver.nodeSelector`                          | Node labels for pod assignment                                                                                                                | `{}`          |
+| `mailReceiver.tolerations`                           | Tolerations for pod assignment                                                                                                                | `[]`          |
 
 
 ### Custom Certificates parameters
@@ -332,7 +327,7 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `certificates.customCA`                              | Defines a list of secrets to import into the container trust store | `[]`                                     |
 | `certificates.image.registry`                        | Redmine image registry                                             | `docker.io`                              |
 | `certificates.image.repository`                      | Redmine image repository                                           | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Redmine image tag (immutable tags are recommended)                 | `10-debian-10-r133`                      |
+| `certificates.image.tag`                             | Redmine image tag (immutable tags are recommended)                 | `10-debian-10-r148`                      |
 | `certificates.image.pullPolicy`                      | Redmine image pull policy                                          | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Redmine image pull secrets                                         | `[]`                                     |
 | `certificates.extraEnvVars`                          | Container sidecar extra environment variables (e.g. proxy)         | `[]`                                     |
@@ -534,7 +529,33 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ## Upgrading
 
-### 16.0.0
+### To 17.0.0
+
+In this version, the `image` block is defined once and is used in the different templates, while in the previous version, the `image` block was duplicated for the main container and the mail receiver one
+
+```yaml
+image:
+  registry: docker.io
+  repository: bitnami/redmine
+  tag: 4.2.2
+```
+VS
+```yaml
+image:
+  registry: docker.io
+  repository: bitnami/redmine
+  tag: 4.2.2
+...
+mailReceiver:
+  image:
+    registry: docker.io
+    repository: bitnami/redmine
+    tag: 4.2.2
+```
+
+See [PR#7114](https://github.com/bitnami/charts/pull/7114) for more info about the implemented changes
+
+### To 16.0.0
 
 The [Bitnami Redmine](https://github.com/bitnami/bitnami-docker-redmine) image was refactored and now the source code is published in GitHub in the [`rootfs`](https://github.com/bitnami/bitnami-docker-redmine/tree/master/4/debian-10/rootfs) folder of the container image repository.
 
@@ -548,7 +569,7 @@ In addition, the `replicas` parameter was renamed to `replicaCount`.
 
 Full compatibility is not guaranteed due to the amount of involved changes, however no breaking changes are expected aside from the ones mentioned above.
 
-### 15.0.0
+### To 15.0.0
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version includes all the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
