@@ -33,6 +33,21 @@ fullnameOverride: ""
 ##
 clusterDomain: cluster.local
 
+## Enable diagnostic mode in the deployment
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the deployment
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the deployment
+  ##
+  args:
+    - infinity
+
 ## @section Elasticsearch parameters
 
 ## Bitnami Elasticsearch image version
@@ -1149,7 +1164,7 @@ curator:
   env: {}
   ## Curator configMaps
   configMaps:
-    ## @param curator.configMaps.action_file_yml [object] Contents of the Curator action_file.yml
+    ## @param curator.configMaps.action_file_yml [string] Contents of the Curator action_file.yml
     ## Delete indices older than 90 days
     ##
     action_file_yml: |-
@@ -1174,7 +1189,7 @@ curator:
             stats_result:
             epoch:
             exclude: False
-    ## @param curator.configMaps.config_yml [object] Contents of the Curator config.yml (overrides config)
+    ## @param curator.configMaps.config_yml [string] Contents of the Curator config.yml (overrides config)
     ## Default config (this value is evaluated as a template)
     ##
     config_yml: |-

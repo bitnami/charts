@@ -32,6 +32,21 @@ clusterDomain: cluster.local
 ##
 extraDeploy: []
 
+## Enable diagnostic mode in the deployment
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the deployment
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the deployment
+  ##
+  args:
+    - infinity
+
 ## @section Logstash parameters
 
 ## Bitnami Logstash image
@@ -601,10 +616,10 @@ metrics:
       path: /metrics
       port: metrics
     initialDelaySeconds: 60
-    periodSeconds: ""
-    timeoutSeconds: ""
-    successThreshold: ""
-    failureThreshold: ""
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 6
   ## Logstash Prometheus Exporter containers' readiness probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param metrics.readinessProbe.httpGet.path Request path for readinessProbe
@@ -620,10 +635,10 @@ metrics:
       path: /metrics
       port: metrics
     initialDelaySeconds: 60
-    periodSeconds: ""
-    timeoutSeconds: ""
-    successThreshold: ""
-    failureThreshold: ""
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 6
   service:
     ## @param metrics.service.type Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)
     ##

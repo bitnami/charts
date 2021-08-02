@@ -97,10 +97,10 @@ spec:
             - containerPort: {{ $.Values.service.port }}
               name: mongodb
           env:
-            {{- if $.Values.image.debug }}
+            - name: MONGODB_ENABLE_NUMACTL
+              value: {{ ternary "yes" "no" $.Values.common.mongodbEnableNumactl | quote}}
             - name: BITNAMI_DEBUG
-              value: "true"
-            {{- end }}
+              value: {{ ternary "true" "false" (or $.Values.image.debug $.Values.diagnosticMode.enabled) | quote }}
             - name: MONGODB_SYSTEM_LOG_VERBOSITY
               value: {{ $.Values.common.mongodbSystemLogVerbosity | quote }}
             - name: MONGODB_MAX_TIMEOUT
@@ -185,9 +185,15 @@ spec:
                 name: {{ include "mongodb-sharded.tplValue" ( dict "value" $.Values.shardsvr.dataNode.extraEnvVarsSecret "context" $ ) }}
             {{- end }}
           {{- end }}
+          {{- if $.Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" $.Values.diagnosticMode.command "context" $) | nindent 12 }}
+          args: {{- include "common.tplvalues.render" (dict "value" $.Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else }}
           command:
             - /bin/bash
             - /entrypoint/replicaset-entrypoint.sh
+          {{- end }}
+          {{- if not $.Values.diagnosticMode.enabled }}
           {{- if $.Values.livenessProbe.enabled }}
           livenessProbe:
             exec:
@@ -213,6 +219,7 @@ spec:
             timeoutSeconds: {{ $.Values.readinessProbe.timeoutSeconds }}
             successThreshold: {{ $.Values.readinessProbe.successThreshold }}
             failureThreshold: {{ $.Values.readinessProbe.failureThreshold }}
+          {{- end }}
           {{- end }}
           volumeMounts:
             - name: replicaset-entrypoint-configmap
@@ -262,6 +269,10 @@ spec:
                   name: {{ include "mongodb-sharded.secret" $ }}
                   key: mongodb-root-password
           {{- end }}
+          {{- if $.Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" $.Values.diagnosticMode.command "context" $) | nindent 12 }}
+          args: {{- include "common.tplvalues.render" (dict "value" $.Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else }}
           command:
             - sh
             - -ec
@@ -271,6 +282,7 @@ spec:
               export MONGODB_ROOT_PASSWORD="$(cat "${MONGODB_ROOT_PASSWORD_FILE}")"
               {{- end }}
               /bin/mongodb_exporter --web.listen-address ":{{ $.Values.metrics.containerPort }}" --mongodb.uri mongodb://root:`echo $MONGODB_ROOT_PASSWORD | sed -r "s/@/%40/g;s/:/%3A/g"`@localhost:{{ $.Values.service.port }}/admin {{ $.Values.metrics.extraArgs }}
+          {{- end }}
           {{- if $.Values.usePasswordFile }}
           volumeMounts:
             - name: secrets
@@ -279,6 +291,7 @@ spec:
           ports:
             - name: metrics
               containerPort: {{ $.Values.metrics.containerPort }}
+          {{- if not $.Values.diagnosticMode.enabled }}
           {{- if $.Values.metrics.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
@@ -300,6 +313,7 @@ spec:
             timeoutSeconds: {{ $.Values.metrics.readinessProbe.timeoutSeconds }}
             failureThreshold: {{ $.Values.metrics.readinessProbe.failureThreshold }}
             successThreshold: {{ $.Values.metrics.readinessProbe.successThreshold }}
+          {{- end }}
           {{- end }}
           resources: {{ toYaml $.Values.metrics.resources | nindent 12 }}
         {{- end }}

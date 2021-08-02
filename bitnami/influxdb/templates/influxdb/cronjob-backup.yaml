@@ -91,13 +91,23 @@ spec:
           containers:
             - name: influxdb-backup-dummy-container
               image: {{ include "influxdb.image" . | quote }}
+              {{- if .Values.diagnosticMode.enabled }}
+              command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 16 }}
+              args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 16 }}
+              {{- else }}
               command:
                 - "/bin/true"
+              {{- end }}
             {{- if .Values.backup.uploadProviders.google.enabled }}
             - name: gsutil-cp
               image: {{ include "gcloudSdk.image" . }}
+              {{- if .Values.diagnosticMode.enabled }}
+              command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 16 }}
+              args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 16 }}
+              {{- else }}
               command:
                 - "/tmp/upload-google.sh"
+              {{- end }}
               volumeMounts:
                 - name: {{ include "common.names.fullname" . }}-backups
                   mountPath: {{ .Values.backup.directory | quote }}
@@ -110,8 +120,13 @@ spec:
             {{- if .Values.backup.uploadProviders.azure.enabled }}
             - name: azure-cli
               image: {{ include "azureCli.image" . }}
+              {{- if .Values.diagnosticMode.enabled }}
+              command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 16 }}
+              args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 16 }}
+              {{- else }}
               command:
               - "/tmp/upload-azure.sh"
+              {{- end }}
               env:
                 - name: AZURE_STORAGE_CONNECTION_STRING
                   valueFrom:
