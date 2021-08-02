@@ -132,6 +132,12 @@ spec:
                   - name
                   type: object
                 type: array
+              ingressClassName:
+                description: IngressClassName optionally specifies the ingress class
+                  to use for this HTTPProxy. This replaces the deprecated `kubernetes.io/ingress.class`
+                  annotation. For backwards compatibility, when that annotation is
+                  set, it is given precedence over this field.
+                type: string
               routes:
                 description: Routes are the ingress routes. If TCPProxy is present,
                   Routes is ignored.
@@ -788,8 +794,9 @@ spec:
                               the backend service's certificate
                             properties:
                               caSecret:
-                                description: Name of the Kubernetes secret be used
-                                  to validate the certificate presented by the backend
+                                description: Name or namespaced name of the Kubernetes
+                                  secret used to validate the certificate presented
+                                  by the backend
                                 type: string
                               subjectName:
                                 description: Key which is expected to be present in
@@ -1044,8 +1051,9 @@ spec:
                             backend service's certificate
                           properties:
                             caSecret:
-                              description: Name of the Kubernetes secret be used to
-                                validate the certificate presented by the backend
+                              description: Name or namespaced name of the Kubernetes
+                                secret used to validate the certificate presented
+                                by the backend
                               type: string
                             subjectName:
                               description: Key which is expected to be present in
