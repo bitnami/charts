@@ -274,16 +274,6 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `grafana.sidecars`                                          | Add additional sidecar containers to the grafana pod(s)                                       | `[]`                  |
 
 
-### PluginInit parameters
-
-| Name                                  | Description                            | Value                 |
-| ------------------------------------- | -------------------------------------- | --------------------- |
-| `grafanaPluginInit.image.registry`    | Grafana Plugin Init image registry     | `docker.io`           |
-| `grafanaPluginInit.image.repository`  | Grafana Plugin Init image name         | `bitnami/grafana`     |
-| `grafanaPluginInit.image.tag`         | Grafana Plugin Init image tag          | `7.5.10-debian-10-r9` |
-| `grafanaPluginInit.image.pullSecrets` | Grafana Plugin Init image pull secrets | `[]`                  |
-
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
@@ -365,3 +355,29 @@ Find more information about how to deal with common errors related to Bitnami’
 ```bash
 $ helm upgrade my-release bitnami/grafana-operator
 ```
+
+### To 1.0.0
+
+In this version, the `image` block is defined once and is used in the different templates, while in the previous version, the `image` block was duplicated for the grafana container and the grafana plugin init one
+
+```yaml
+image:
+  registry: docker.io
+  repository: bitnami/grafana
+  tag: 7.5.10
+```
+VS
+```yaml
+image:
+  registry: docker.io
+  repository: bitnami/grafana
+  tag: 7.5.10
+...
+grafanaPluginInit:
+  image:
+    registry: docker.io
+    repository: bitnami/grafana
+    tag: 7.5.10
+```
+
+See [PR#7114](https://github.com/bitnami/charts/pull/7114) for more info about the implemented changes
