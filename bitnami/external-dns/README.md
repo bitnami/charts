@@ -377,7 +377,7 @@ This version also introduces `bitnami/common`, a [library chart](https://helm.sh
   - `rbac.serviceAccountAnnotations` -> `serviceAccount.annotations`
 - It is now possible to create serviceAccount, clusterRole and clusterRoleBinding manually and give the serviceAccount to the chart.
 
-### 2.0.0
+### To 2.0.0
 
 Backwards compatibility is not guaranteed unless you modify the labels used on the chart's deployments.
 Use the workaround below to upgrade from versions previous to 1.0.0. The following example assumes that the release name is `my-release`:

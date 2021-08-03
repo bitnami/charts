@@ -695,7 +695,7 @@ must be specified.
 - `disableCommands` is now interpreted as an array of strings instead of a string of comma separated values.
 - `master.persistence.path` now defaults to `/data`.
 
-### 4.0.0
+### To 4.0.0
 
 This version removes the `chart` label from the `spec.selector.matchLabels`
 which is immutable since `StatefulSet apps/v1beta2`. It has been inadvertently

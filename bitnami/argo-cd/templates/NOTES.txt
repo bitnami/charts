@@ -48,9 +48,7 @@ WARNING: server.configEnabled is disabled, a config map called "argocd-cm" must 
 WARNING: config.createExtraKnownHosts is disabled, a secret called "argocd-ssh-known-hosts-cm" must exist in your namespace
 {{- end -}}
 
-{{- include "common.warnings.rollingTag" .Values.server.image }}
-{{- include "common.warnings.rollingTag" .Values.controller.image }}
-{{- include "common.warnings.rollingTag" .Values.repoServer.image }}
+{{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.dex.image }}
 
 {{- include "argocd.validateValues" . }}
