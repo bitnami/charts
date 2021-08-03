@@ -122,6 +122,7 @@ $ helm uninstall my-release
 | `contour.tlsExistingSecret`                       | Name of the existingSecret to be use in Contour deployment. If it is not nil `contour.certgen` will be disabled.                   | `""`                                            |
 | `contour.service.extraPorts`                      | Extra ports to expose (normally used with the `sidecar` value)                                                                     | `[]`                                            |
 | `contour.initContainers`                          | Attach additional init containers to Contour pods                                                                                  | `[]`                                            |
+| `contour.sidecars`                                        | Add additional sidecar containers to the Contour pods                                                                              | `[]`                                            |
 | `contour.extraVolumes`                            | Array to add extra volumes                                                                                                         | `[]`                                            |
 | `contour.extraVolumeMounts`                       | Array to add extra mounts (normally used with extraVolumes)                                                                        | `[]`                                            |
 | `contour.extraEnvVars`                            | Array containing extra env vars to be added to all Contour containers                                                              | `[]`                                            |
@@ -275,6 +276,7 @@ $ helm uninstall my-release
 | Name                | Description                                                                                                          | Value  |
 | ------------------- | -------------------------------------------------------------------------------------------------------------------- | ------ |
 | `rbac.create`       | Create the RBAC roles for API accessibility                                                                          | `true` |
+| `rbac.rules`        | Custom RBAC rules                                                                                                    | `[]`   |
 | `tlsExistingSecret` | Name of the existingSecret to be use in both contour and envoy. If it is not nil `contour.certgen` will be disabled. | `""`   |
 
 

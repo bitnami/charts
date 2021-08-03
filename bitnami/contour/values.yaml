@@ -302,6 +302,17 @@ contour:
   ##     imagePullPolicy: Always
   ##
   initContainers: []
+  ## @param contour.sidecars Add additional sidecar containers to the Contour pods
+  ## Example:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
   ## @param contour.extraVolumes Array to add extra volumes
   ##
   extraVolumes: []
@@ -814,6 +825,18 @@ prometheus:
 ##
 rbac:
   create: true
+  ## @param rbac.rules Custom RBAC rules to set
+  ## e.g:
+  ## rules:
+  ##   - apiGroups:
+  ##       - ""
+  ##     resources:
+  ##       - pods
+  ##     verbs:
+  ##       - get
+  ##       - list
+  ##
+  rules: []
 ## @param tlsExistingSecret Name of the existingSecret to be use in both contour and envoy. If it is not nil `contour.certgen` will be disabled.
 ##
 tlsExistingSecret: ""
