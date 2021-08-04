@@ -2,6 +2,7 @@
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
@@ -44,6 +45,7 @@ global:
     existingSecret: ""
 
 ## @section General parameters
+##
 
 ## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
 ##
@@ -65,6 +67,7 @@ commonLabels: {}
 extraDeploy: []
 ## Pod Service Account
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+##
 serviceAccount:
   ## @param serviceAccount.enabled Enable service account (Note: Service Account will only be automatically created if `serviceAccount.name` is not set)
   ##
@@ -89,6 +92,7 @@ diagnosticMode:
     - infinity
 
 ## @section PostgreSQL with Repmgr parameters
+##
 
 ## Bitnami PostgreSQL image
 ## ref: https://hub.docker.com/r/bitnami/postgresql/tags/
@@ -258,11 +262,13 @@ postgresql:
     ## limits:
     ##    cpu: 250m
     ##    memory: 256Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##    cpu: 250m
     ##    memory: 256Mi
+    ##
     requests: {}
   ## PostgreSQL container's liveness probe
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
@@ -537,6 +543,7 @@ postgresql:
     certCAFilename: ""
 
 ## @section Pgpool parameters
+##
 
 ## Bitnami Pgpool image
 ## ref: https://hub.docker.com/r/bitnami/pgpool/tags/
@@ -727,11 +734,13 @@ pgpool:
     ## limits:
     ##    cpu: 250m
     ##    memory: 256Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##    cpu: 250m
     ##    memory: 256Mi
+    ##
     requests: {}
   ## Pgpool container's liveness probe
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
@@ -855,6 +864,10 @@ pgpool:
   ## @param pgpool.useLoadBalancing Use Pgpool Load-Balancing
   ##
   useLoadBalancing: true
+  ## @param pgpool.loadBalancingOnWrite LoadBalancer on write actions behavior
+  ## one of: [off, transaction, trans_transaction, always]
+  ##
+  loadBalancingOnWrite: transaction
   ## @param pgpool.configuration Pgpool configuration
   ## You can use this parameter to specify the content for pgpool.conf
   ## Otherwise, a repmgr.conf will be generated based on the environment variables
@@ -920,6 +933,7 @@ pgpool:
     certCAFilename: ""
 
 ## @section LDAP parameters
+##
 
 ## LDAP parameters
 ## @param ldap.enabled Enable LDAP support
@@ -946,6 +960,7 @@ ldap:
   nssInitgroupsIgnoreusers: root,nslcd
 
 ## @section Metrics parameters
+##
 
 ## Bitnami PostgreSQL Prometheus exporter image
 ## ref: https://hub.docker.com/r/bitnami/pgpool/tags/
@@ -1003,11 +1018,13 @@ metrics:
     ## limits:
     ##    cpu: 250m
     ##    memory: 256Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##    cpu: 250m
     ##    memory: 256Mi
+    ##
     requests: {}
   ## Prometheus exporter container's liveness probe
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
@@ -1120,6 +1137,7 @@ metrics:
     metricRelabelings: []
 
 ## @section Volume permissions parameters
+##
 
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint
@@ -1171,14 +1189,17 @@ volumePermissions:
     ## limits:
     ##    cpu: 100m
     ##    memory: 128Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##    cpu: 100m
     ##    memory: 128Mi
+    ##
     requests: {}
 
 ## @section Persistence parameters
+##
 
 persistence:
   ## @param persistence.enabled Enable data persistence
@@ -1218,6 +1239,7 @@ persistence:
   selector: {}
 
 ## @section Traffic Exposure parameters
+##
 
 ## PgPool service parameters
 ##
