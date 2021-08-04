@@ -47,7 +47,7 @@ clusterDomain: cluster.local
 image:
   registry: docker.io
   repository: bitnami/thanos
-  tag: 0.22.0-scratch-r0
+  tag: 0.22.0-scratch-r1
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -2738,7 +2738,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r140
+    tag: 10-debian-10-r151
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
