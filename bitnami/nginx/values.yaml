@@ -52,7 +52,7 @@ commonAnnotations: {}
 image:
   registry: docker.io
   repository: bitnami/nginx
-  tag: 1.21.1-debian-10-r0
+  tag: 1.21.1-debian-10-r25
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -325,7 +325,7 @@ cloneStaticSiteFromGit:
   image:
     registry: docker.io
     repository: bitnami/git
-    tag: 2.32.0-debian-10-r25
+    tag: 2.32.0-debian-10-r51
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -429,7 +429,7 @@ ldapDaemon:
   image:
     registry: docker.io
     repository: bitnami/nginx-ldap-auth-daemon
-    tag: 0.20200116.0-debian-10-r387
+    tag: 0.20200116.0-debian-10-r412
     pullPolicy: IfNotPresent
   ## @param ldapDaemon.port LDAP Auth Daemon port
   ##
@@ -749,7 +749,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/nginx-exporter
-    tag: 0.9.0-debian-10-r93
+    tag: 0.9.0-debian-10-r119
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
