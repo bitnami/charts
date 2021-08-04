@@ -458,7 +458,7 @@ rfc2136:
   ## @param rfc2136.kerberosRealm When using the rfc2136 provider with rfc3645Enabled, specify the realm to authenticate to (optional)
   ##
   kerberosRealm: ""
-  
+
 ## PowerDNS configuration to be set via arguments/env. variables
 ##
 pdns:
