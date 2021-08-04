@@ -1,4 +1,4 @@
-{{- if and (eq .Values.provider "designate") .Values.designate.customCA.enabled | or (and (eq .Values.provider "rfc2136") .Values.rfc2136.rfc3645Enabled) }}
+{{- if (include "external-dns.createConfigMap" .) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
