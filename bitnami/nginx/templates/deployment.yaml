@@ -33,6 +33,7 @@ spec:
       {{- end }}
     spec:
       {{- include "nginx.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.serviceAccount.autoMount }}
       serviceAccountName: {{ template "nginx.serviceAccountName" . }}
       {{- if .Values.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
@@ -185,8 +186,10 @@ spec:
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
+            {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap .Values.ldapDaemon.enabled}}
             - name: nginx-server-block-paths
               mountPath: /opt/bitnami/nginx/conf/server_blocks
+            {{- end }}
             {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap }}
             - name: nginx-server-block
               mountPath: /opt/bitnami/nginx/conf/server_blocks/common

@@ -1,9 +1,9 @@
 dependencies:
 - name: wavefront
   repository: https://charts.bitnami.com/bitnami
-  version: 3.1.1
+  version: 3.1.9
 - name: common
   repository: https://charts.bitnami.com/bitnami
-  version: 1.5.2
-digest: sha256:8697c3359250466066a0e3735e40823356e1b6d94b0ee6df4ae2be92e56eadfb
-generated: "2021-05-23T08:28:49.085255388Z"
+  version: 1.7.1
+digest: sha256:6d48b5c8aecee9897ba93d0180a901cd6c4f61da154cae503146975c2c0b58a4
+generated: "2021-08-04T02:21:00.56714727Z"

@@ -51,18 +51,18 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `nil` |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
 
 ### Common parameters
 
 | Name                | Description                                        | Value           |
 | ------------------- | -------------------------------------------------- | --------------- |
-| `kubeVersion`       | Override Kubernetes version                        | `nil`           |
-| `nameOverride`      | String to partially override common.names.fullname | `nil`           |
-| `fullnameOverride`  | String to fully override common.names.fullname     | `nil`           |
+| `kubeVersion`       | Override Kubernetes version                        | `""`            |
+| `nameOverride`      | String to partially override common.names.fullname | `""`            |
+| `fullnameOverride`  | String to fully override common.names.fullname     | `""`            |
 | `commonLabels`      | Labels to add to all deployed objects              | `{}`            |
 | `commonAnnotations` | Annotations to add to all deployed objects         | `{}`            |
 | `clusterDomain`     | Kubernetes cluster domain name                     | `cluster.local` |
@@ -71,14 +71,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Jenkins Image parameters
 
-| Name                | Description                                        | Value                   |
-| ------------------- | -------------------------------------------------- | ----------------------- |
-| `image.registry`    | Jenkins image registry                             | `docker.io`             |
-| `image.repository`  | Jenkins image repository                           | `bitnami/jenkins`       |
-| `image.tag`         | Jenkins image tag (immutable tags are recommended) | `2.277.4-debian-10-r14` |
-| `image.pullPolicy`  | Jenkins image pull policy                          | `IfNotPresent`          |
-| `image.pullSecrets` | Jenkins image pull secrets                         | `[]`                    |
-| `image.debug`       | Enable image debug mode                            | `false`                 |
+| Name                | Description                                        | Value                  |
+| ------------------- | -------------------------------------------------- | ---------------------- |
+| `image.registry`    | Jenkins image registry                             | `docker.io`            |
+| `image.repository`  | Jenkins image repository                           | `bitnami/jenkins`      |
+| `image.tag`         | Jenkins image tag (immutable tags are recommended) | `2.289.3-debian-10-r0` |
+| `image.pullPolicy`  | Jenkins image pull policy                          | `IfNotPresent`         |
+| `image.pullSecrets` | Jenkins image pull secrets                         | `[]`                   |
+| `image.debug`       | Enable image debug mode                            | `false`                |
 
 
 ### Jenkins Configuration parameters
@@ -87,15 +87,15 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------- | ---------------------------------------------------------------------- | ----------------------- |
 | `jenkinsUser`           | Jenkins username                                                       | `user`                  |
 | `jenkinsPassword`       | Jenkins user password                                                  | `""`                    |
-| `jenkinsHost`           | Jenkins host to create application URLs                                | `nil`                   |
+| `jenkinsHost`           | Jenkins host to create application URLs                                | `""`                    |
 | `jenkinsHome`           | Jenkins home directory                                                 | `/bitnami/jenkins/home` |
 | `javaOpts`              | Custom JVM parameters                                                  | `[]`                    |
 | `disableInitialization` | Skip performing the initial bootstrapping for Jenkins                  | `no`                    |
 | `command`               | Override default container command (useful when using custom images)   | `[]`                    |
 | `args`                  | Override default container args (useful when using custom images)      | `[]`                    |
 | `extraEnvVars`          | Array with extra environment variables to add to the Jenkins container | `[]`                    |
-| `extraEnvVarsCM`        | Name of existing ConfigMap containing extra env vars                   | `nil`                   |
-| `extraEnvVarsSecret`    | Name of existing Secret containing extra env vars                      | `nil`                   |
+| `extraEnvVarsCM`        | Name of existing ConfigMap containing extra env vars                   | `""`                    |
+| `extraEnvVarsSecret`    | Name of existing Secret containing extra env vars                      | `""`                    |
 
 
 ### Jenkins deployment parameters
@@ -103,12 +103,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                    | Description                                                                               | Value           |
 | --------------------------------------- | ----------------------------------------------------------------------------------------- | --------------- |
 | `updateStrategy.type`                   | Jenkins deployment strategy type                                                          | `RollingUpdate` |
-| `priorityClassName`                     | Jenkins pod priority class name                                                           | `nil`           |
+| `priorityClassName`                     | Jenkins pod priority class name                                                           | `""`            |
 | `hostAliases`                           | Jenkins pod host aliases                                                                  | `[]`            |
 | `extraVolumes`                          | Optionally specify extra list of additional volumes for Jenkins pods                      | `[]`            |
 | `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for Jenkins container(s)         | `[]`            |
-| `sidecars`                              | Add additional sidecar containers to the Jenkins pod                                      | `{}`            |
-| `initContainers`                        | Add additional init containers to the Jenkins pods                                        | `{}`            |
+| `sidecars`                              | Add additional sidecar containers to the Jenkins pod                                      | `[]`            |
+| `initContainers`                        | Add additional init containers to the Jenkins pods                                        | `[]`            |
 | `lifecycleHooks`                        | Add lifecycle hooks to the Jenkins deployment                                             | `{}`            |
 | `podLabels`                             | Extra labels for Jenkins pods                                                             | `{}`            |
 | `podAnnotations`                        | Annotations for Jenkins pods                                                              | `{}`            |
@@ -152,16 +152,16 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.type`                     | Jenkins service type                                                                                  | `LoadBalancer`           |
 | `service.port`                     | Jenkins service HTTP port                                                                             | `80`                     |
 | `service.httpsPort`                | Jenkins service HTTPS port                                                                            | `443`                    |
-| `service.nodePorts.http`           | Node port for HTTP                                                                                    | `nil`                    |
-| `service.nodePorts.https`          | Node port for HTTPS                                                                                   | `nil`                    |
-| `service.clusterIP`                | Jenkins service Cluster IP                                                                            | `nil`                    |
-| `service.loadBalancerIP`           | Jenkins service Load Balancer IP                                                                      | `nil`                    |
+| `service.nodePorts.http`           | Node port for HTTP                                                                                    | `""`                     |
+| `service.nodePorts.https`          | Node port for HTTPS                                                                                   | `""`                     |
+| `service.clusterIP`                | Jenkins service Cluster IP                                                                            | `""`                     |
+| `service.loadBalancerIP`           | Jenkins service Load Balancer IP                                                                      | `""`                     |
 | `service.loadBalancerSourceRanges` | Jenkins service Load Balancer sources                                                                 | `[]`                     |
 | `service.externalTrafficPolicy`    | Jenkins service external traffic policy                                                               | `Cluster`                |
 | `service.annotations`              | Additional custom annotations for Jenkins service                                                     | `{}`                     |
 | `ingress.enabled`                  | Enable ingress record generation for Jenkins                                                          | `false`                  |
 | `ingress.pathType`                 | Ingress path type                                                                                     | `ImplementationSpecific` |
-| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                         | `nil`                    |
+| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                         | `""`                     |
 | `ingress.hostname`                 | Default host for the ingress record                                                                   | `jenkins.local`          |
 | `ingress.path`                     | Default path for the ingress record                                                                   | `ImplementationSpecific` |
 | `ingress.annotations`              | Additional custom annotations for the ingress record                                                  | `{}`                     |
@@ -179,14 +179,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                          | Description                                                                                     | Value                   |
 | --------------------------------------------- | ----------------------------------------------------------------------------------------------- | ----------------------- |
 | `persistence.enabled`                         | Enable persistence using Persistent Volume Claims                                               | `true`                  |
-| `persistence.storageClass`                    | Persistent Volume storage class                                                                 | `nil`                   |
+| `persistence.storageClass`                    | Persistent Volume storage class                                                                 | `""`                    |
 | `persistence.annotations`                     | Additional custom annotations for the PVC                                                       | `{}`                    |
 | `persistence.accessModes`                     | Persistent Volume access modes                                                                  | `[]`                    |
 | `persistence.size`                            | Persistent Volume size                                                                          | `8Gi`                   |
 | `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`            | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`          | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r92`      |
+| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r144`     |
 | `volumePermissions.image.pullPolicy`          | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`          | The resources limits for the init container                                                     | `{}`                    |
@@ -201,7 +201,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                            | Start a sidecar prometheus exporter to expose Jenkins metrics                                    | `false`                       |
 | `metrics.image.registry`                     | Jenkins Exporter image registry                                                                  | `docker.io`                   |
 | `metrics.image.repository`                   | Jenkins Exporter image repository                                                                | `bitnami/jenkins-exporter`    |
-| `metrics.image.tag`                          | Jenkins Jenkins Exporter image tag (immutable tags are recommended)                              | `0.20171225.0-debian-10-r459` |
+| `metrics.image.tag`                          | Jenkins Jenkins Exporter image tag (immutable tags are recommended)                              | `0.20171225.0-debian-10-r510` |
 | `metrics.image.pullPolicy`                   | Jenkins Exporter image pull policy                                                               | `IfNotPresent`                |
 | `metrics.image.pullSecrets`                  | Jenkins Exporter image pull secrets                                                              | `[]`                          |
 | `metrics.containerSecurityContext.enabled`   | Enabled Jenkins exporter containers' Security Context                                            | `true`                        |
@@ -216,9 +216,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.service.loadBalancerSourceRanges`   | Jenkins exporter service Load Balancer sources                                                   | `[]`                          |
 | `metrics.service.annotations`                | Additional custom annotations for Jenkins exporter service                                       | `{}`                          |
 | `metrics.serviceMonitor.enabled`             | Create ServiceMonitor resource(s) for scraping metrics using PrometheusOperator                  | `false`                       |
-| `metrics.serviceMonitor.namespace`           | The namespace in which the ServiceMonitor will be created                                        | `nil`                         |
+| `metrics.serviceMonitor.namespace`           | The namespace in which the ServiceMonitor will be created                                        | `""`                          |
 | `metrics.serviceMonitor.interval`            | The interval at which metrics should be scraped                                                  | `30s`                         |
-| `metrics.serviceMonitor.scrapeTimeout`       | The timeout after which the scrape is ended                                                      | `nil`                         |
+| `metrics.serviceMonitor.scrapeTimeout`       | The timeout after which the scrape is ended                                                      | `""`                          |
 | `metrics.serviceMonitor.relabellings`        | Metrics relabellings to add to the scrape endpoint                                               | `[]`                          |
 | `metrics.serviceMonitor.honorLabels`         | Specify honorLabels parameter to add the scrape endpoint                                         | `false`                       |
 | `metrics.serviceMonitor.additionalLabels`    | Additional labels that can be used so ServiceMonitor resource(s) can be discovered by Prometheus | `{}`                          |
@@ -249,25 +249,25 @@ helm install my-release -f values.yaml bitnami/jenkins
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling vs Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### Ingress
+### Configure Ingress
 
 This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/master/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/master/bitnami/contour) you can utilize the ingress controller to serve your application.
 
 To enable Ingress integration, set `ingress.enabled` to `true`. The `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host. [Learn more about configuring and using Ingress](https://docs.bitnami.com/kubernetes/apps/jenkins/configuration/configure-ingress/).
 
-### TLS Secrets
+### Configure TLS Secrets for use with Ingress
 
-The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/apps/jenkins/administration/enable-tls/).
+The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/apps/jenkins/administration/enable-tls-ingress/).
 
-### Adding extra environment variables
+### Configure extra environment variables
 
-In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property.
+To add extra environment variables (useful for advanced operations like custom init scripts), use the `extraEnvVars` property.
 
 ```yaml
 extraEnvVars:
@@ -275,27 +275,27 @@ extraEnvVars:
     value: DEBUG
 ```
 
-Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
+Alternatively, use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
 
-### Sidecars and Init Containers
+### Configure Sidecars and Init Containers
 
 If additional containers are needed in the same pod as Jenkins (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. Similarly, you can add extra init containers using the `initContainers` parameter.
 
 [Learn more about configuring and using sidecar and init containers](https://docs.bitnami.com/kubernetes/apps/jenkins/configuration/configure-sidecar-init-containers/).
 
-### Deploying extra resources
+### Deploy extra resources
 
 There are cases where you may want to deploy extra objects, such a ConfigMap containing your app's configuration or some extra deployment with a micro service used by your app. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter.
 
-### Setting Pod's affinity
+### Set Pod affinity
 
-This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+This chart allows you to set custom Pod affinity using the `XXX.affinity` parameter(s). Find more information about Pod affinity in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+As an alternative, you can use the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 
 ## Persistence
 
-The [Bitnami Jenkins](https://github.com/bitnami/bitnami-docker-jenkins) image stores the Jenkins data and configurations at the `/bitnami/jenkins` path of the container. Persistent Volume Claims are used to keep the data across deployments.
+The [Bitnami Jenkins](https://github.com/bitnami/bitnami-docker-jenkins) image stores the Jenkins data and configurations at the `/bitnami/jenkins` path of the container. Persistent Volume Claims (PVCs) are used to keep the data across deployments.
 
 If you encounter errors when working with persistent volumes, refer to our [troubleshooting guide for persistent volumes](https://docs.bitnami.com/kubernetes/faq/troubleshooting/troubleshooting-persistence-volumes/).
 
@@ -346,24 +346,9 @@ This version also introduces `bitnami/common`, a [library chart](https://helm.sh
 
 ### To 6.0.0
 
-[On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
+[On November 13, 2020, Helm v2 support formally ended](https://github.com/helm/charts#status-of-the-project). This major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
-**What changes were introduced in this major version?**
-
-- Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
-- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
-
-**Considerations when upgrading to this version**
-
-- If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
-- If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
-- If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
-
-**Useful links**
-
-- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
-- https://helm.sh/docs/topics/v2_v3_migration/
-- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+[Learn more about this change and related upgrade considerations](https://docs.bitnami.com/kubernetes/apps/jenkins/administration/upgrade-helm3/).
 
 ### To 5.0.0
 
@@ -377,7 +362,7 @@ Consequences:
 
 To upgrade to `5.0.0`, install a new Jenkins chart, and migrate your Jenkins data ensuring the `jenkins` user has the appropriate permissions.
 
-### 4.0.0
+### To 4.0.0
 
 Helm performs a lookup for the object based on its group (apps), version (v1), and kind (Deployment). Also known as its GroupVersionKind, or GVK. Changing the GVK is considered a compatibility breaker from Kubernetes' point of view, so you cannot "upgrade" those objects to the new GVK in-place. Earlier versions of Helm 3 did not perform the lookup correctly which has since been fixed to match the spec.
 
@@ -385,7 +370,7 @@ In 4dfac075aacf74405e31ae5b27df4369e84eb0b0 the `apiVersion` of the deployment r
 
 This major version signifies this change.
 
-### 1.0.0
+### To 1.0.0
 
 Backwards compatibility is not guaranteed unless you modify the labels used on the chart's deployments.
 Use the workaround below to upgrade from versions previous to 1.0.0. The following example assumes that the release name is jenkins:

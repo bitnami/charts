@@ -26,6 +26,7 @@ data:
         server {
             {{- if .Values.internalTLS.enabled }}
             listen {{ template "harbor.portal.containerPort" . }} ssl;
+            listen [::]:{{ template "harbor.portal.containerPort" . }} ssl;
             # SSL
             ssl_certificate /etc/harbor/ssl/portal/tls.crt;
             ssl_certificate_key /etc/harbor/ssl/portal/tls.key;
@@ -37,6 +38,7 @@ data:
             ssl_session_cache shared:SSL:10m;
             {{- else }}
             listen {{ template "harbor.portal.containerPort" . }};
+            listen [::]:{{ template "harbor.portal.containerPort" . }};
             {{- end }}
             server_name  localhost;
             root   /opt/bitnami/harbor;
