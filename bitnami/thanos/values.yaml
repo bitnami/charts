@@ -2463,8 +2463,8 @@ receive:
     ## choice for the user. This also increases chances charts run on environments with little
     ## resources, such as Minikube. If you do want to specify resources, uncomment the following
     ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    ## @param receive.resources.limits The resources limits for the Thanos Receive container
-    ## @param receive.resources.requests The requested resources for the Thanos Receive container
+    ## @param receive.distributor.resources.limits The resources limits for the Thanos Receive container
+    ## @param receive.distributor.resources.requests The requested resources for the Thanos Receive container
     ##
     resources:
     ## Example:
@@ -2477,7 +2477,7 @@ receive:
     ##    cpu: 100m
     ##    memory: 128Mi
     requests: {}
-    ## @param receive.extraContainers Extra containers running as sidecars to Thanos Receive Distributor container
+    ## @param receive.distributor.extraContainers Extra containers running as sidecars to Thanos Receive Distributor container
     ## Example:
     ## - name: oAuth2-proxy
     ##   args:
@@ -2499,7 +2499,7 @@ receive:
     ##       name: secret-proxy-tls
     ##
     extraContainers: []
-    ## @param receive.extraEnv Extra environment variables for Thanos Receive Distributor container
+    ## @param receive.distributor.extraEnv Extra environment variables for Thanos Receive Distributor container
     ##
     ## extraEnv:
     ## - name: VARNAME1
@@ -2511,31 +2511,31 @@ receive:
     ##       key: varname2-key
     ##
     extraEnv: []
-    ## @param receive.extraVolumes Extra volumes to add to Thanos Receive Distributor
+    ## @param receive.distributor.extraVolumes Extra volumes to add to Thanos Receive Distributor
     ##
     extraVolumes: []
-    ## @param receive.extraVolumeMounts Extra volume mounts to add to the receive distributor container
+    ## @param receive.distributor.extraVolumeMounts Extra volume mounts to add to the receive distributor container
     ##
     extraVolumeMounts: []
-    ## @param receive.extraFlags Extra Flags to passed to Thanos Receive Distributor
+    ## @param receive.distributor.extraFlags Extra Flags to passed to Thanos Receive Distributor
     ##
     extraFlags: []
-    ## @param receive.replicaCount Number of Thanos Receive Distributor replicas to deploy
+    ## @param receive.distributor.replicaCount Number of Thanos Receive Distributor replicas to deploy
     ##
     replicaCount: 1
-    ## @param receive.strategyType StrategyType, can be set to RollingUpdate or Recreate by default.
+    ## @param receive.distributor.strategyType StrategyType, can be set to RollingUpdate or Recreate by default.
     ##
     strategyType: RollingUpdate
-    ## @param receive.affinity Thanos Receive Distributor affinity for pod assignment
+    ## @param receive.distributor.affinity Thanos Receive Distributor affinity for pod assignment
     ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
     ## Note: receive.podAffinityPreset, receive.podAntiAffinityPreset, and receive.nodeAffinityPreset will be ignored when it's set
     ##
     affinity: {}
-    ## @param receive.nodeSelector Thanos Receive Distributor node labels for pod assignment
+    ## @param receive.distributor.nodeSelector Thanos Receive Distributor node labels for pod assignment
     ## ref: https://kubernetes.io/docs/user-guide/node-selection/
     ##
     nodeSelector: {}
-    ## @param receive.tolerations Thanos Receive Distributor tolerations for pod assignment
+    ## @param receive.distributor.tolerations Thanos Receive Distributor tolerations for pod assignment
     ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
     ##
     tolerations: []
