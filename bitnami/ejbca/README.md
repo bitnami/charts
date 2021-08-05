@@ -248,23 +248,23 @@ Refer to the [chart documentation on using an external database](https://docs.bi
 
 ### Set Pod affinity
 
-This chart allows you to set custom Pod affinity using the `affinity` parameter. Find more information about Pod affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+This chart allows you to set custom Pod affinity using the `affinity` parameter. Find more information about Pod affinity in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
-## Persistence
-
-The [Bitnami EJBCA](https://github.com/bitnami/bitnami-docker-discourse) image stores the EJBCA data and configurations at the `/bitnami` path of the container.
-
-Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube. See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
-
-## Configure a private registry
+### Configure a private registry
 
 The `image.tag` parameter allows specifying which image will be pulled for the chart, as described in the [documentation for using a different image version](https://docs.bitnami.com/kubernetes/apps/ejbca/configuration/change-image-version/).
 
 When configuring the `image.tag` parameter to use an image in a private registry, it is necessary to also [specify an image pull secret](https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod). This image pull secret must be passed to the chart at deployment time using the `imagePullSecrets` parameter in a `values.yaml` file (it cannot be passed using the `--set` parameter).
 
 Refer to the [chart documentation for more information on configuring a private registry](https://docs.bitnami.com/kubernetes/apps/ejbca/configuration/configure-private-registry/).
+
+## Persistence
+
+The [Bitnami EJBCA](https://github.com/bitnami/bitnami-docker-discourse) image stores the EJBCA data and configurations at the `/bitnami` path of the container.
+
+Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube. See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
 
 ## Troubleshooting
 
