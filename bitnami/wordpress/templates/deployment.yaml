@@ -164,9 +164,9 @@ spec:
             - name: WORDPRESS_PLUGINS
               value: {{ join "," .Values.wordpressPlugins | quote }}
             - name: APACHE_HTTP_PORT_NUMBER
-              containerPort: {{ .Values.containerPorts.http | quote }}
+              value: {{ .Values.containerPorts.http | quote }}
             - name: APACHE_HTTPS_PORT_NUMBER
-              containerPort: {{ .Values.containerPorts.https | quote }}
+              value: {{ .Values.containerPorts.https | quote }}
             {{- if .Values.multisite.enable }}
             - name: WORDPRESS_ENABLE_MULTISITE
               value: "yes"
