@@ -190,63 +190,18 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### Configuring HAProxy
+### Configure HAProxy
 
-By default, HAProxy is deployed with a sample, non-functional, configuration. You will need to edit the following several values to adapt it to your use case:
+By default, HAProxy is deployed with a sample, non-functional, configuration. You will need to edit the following values to adapt it to your use case:
 
-First, set the set the configuration to be injected in the `haproxy.cfg` file by changing the `configuration` value. Alternatively, you can provide an existing ConfigMap with `haproxy.cfg` by using the `existingConfigmap` value. The example below configures HAProxy to forward all requests to port 8080 to a service called `service1:8080` (which we assume it is accessible from inside the cluster).
+* Set the configuration to be injected in the `haproxy.cfg` file by changing the `configuration` parameter. Alternatively, you can provide an existing ConfigMap with `haproxy.cfg` by using the `existingConfigmap` parameter.
+* Based on your HAProxy configuration, edit the `containerPorts` and `service.ports` parameters. In the `containerPorts` parameter, set all the ports that the HAProxy configuration uses, and in the `service.ports` parameter, set the ports to be externally exposed.
 
-```yaml
-configuration: |
-  global
-    log 127.0.0.1 local2
-    maxconn 4096
+Refer to the [chart documentation for a more detailed configuration example](https://docs.bitnami.com/kubernetes/infrastructure/haproxy/get-started/configure-proxy).
 
-  defaults
-    mode http
-    log global
-    option httplog
-    option dontlognull
-    option http-server-close
-    option forwardfor except 127.0.0.0/8
-    option redispatch
-    retries 3
-    timeout http-request 20s
-    timeout queue 1m
-    timeout connect 10s
-    timeout client 1m
-    timeout server 1m
-    timeout http-keep-alive 30s
-    timeout check 10s
-    maxconn 3000
+### Add extra environment variables
 
-  frontend fe_http
-    option forwardfor except 127.0.0.1
-    option httpclose
-    bind *:8080
-    default_backend be_http
-
-  backend be_http
-    balance roundrobin
-    server nginx service:8080 check port 8080
-```
-
-After that, and based on your HAProxy configuration, edit the `containerPorts` and `service.ports` values. In `containerPorts` set all the ports that the HAProxy configuration uses, and set the ports you want to externally expose in the `service.ports` value. For the example above, it would look like this:
-
-```yaml
-service:
-  - name: http
-    port: 80 # We use port 80 in the service
-    targetPort: http
-
-containerPorts:
-  - name: http
-    containerPort: 8080
-```
-
-### Additional environment variables
-
-In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property.
+To add extra environment variables (useful for advanced operations like custom init scripts), use the `extraEnvVars` property.
 
 ```yaml
 extraEnvVars:
@@ -254,15 +209,17 @@ extraEnvVars:
     value: error
 ```
 
-Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
+Alternatively, use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
 
-### Sidecars
+### Use Sidecars and Init Containers
 
-If additional containers are needed in the same pod as haproxy (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/apps/haproxy/administration/configure-use-sidecars/).
+If additional containers are needed in the same pod (such as additional metrics or logging exporters), they can be defined using the `sidecars` config parameter. Similarly, extra init containers can be added using the `initContainers` parameter.
 
-### Pod affinity
+Refer to the chart documentation for more information on, and examples of, configuring and using [sidecars and init containers](https://docs.bitnami.com/kubernetes/infrastructure/haproxy/configuration/configure-sidecar-init-containers/).
 
-This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+### Set Pod affinity
+
+This chart allows you to set custom Pod affinity using the `affinity` parameter. Find more information about Pod affinity in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 

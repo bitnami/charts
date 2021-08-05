@@ -595,7 +595,7 @@ service:
 ## External Access to MongoDB&reg; nodes configuration
 ##
 externalAccess:
-  ## @param externalAccess.enabled Enable Kubernetes external cluster access to MongoDB&reg; nodes
+  ## @param externalAccess.enabled Enable Kubernetes external cluster access to MongoDB&reg; nodes (only for replicaset architecture)
   ##
   enabled: false
   ## External IPs auto-discovery configuration
