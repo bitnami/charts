@@ -224,10 +224,10 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### Set up replication
 
-By default, this Chart only deploys a single pod running EJBCA. Should you want to increase the number of replicas, you may follow these simple steps to ensure everything works smoothly:
+By default, this chart only deploys a single pod running EJBCA. To increase the number of replicas, follow the steps below:
 
-1. Create a conventional release with only one replica, that will be scaled later.
-2. Wait for the release to complete and EJBCA to be running successfully. You may verify you have access to the main page in order to do this.
+1. Create a conventional release with only one replica. This will be scaled later.
+2. Wait for the release to complete and for EJBCA to be running. Verify access to the main page of the application.
 3. Perform an upgrade specifying the number of replicas and the credentials that were previously used. Set the parameters `replicaCount`, `ejbcaAdminPassword` and `mariadb.auth.password` accordingly.
 
 For example, for a release using `secretPassword` and `dbPassword` to scale up to a total of `2` replicas, the aforementioned parameters should hold these values `replicaCount=2`, `ejbcaAdminPassword=secretPassword`, `mariadb.auth.password=dbPassword`.
