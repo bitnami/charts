@@ -36,7 +36,7 @@ data:
     wp total-cache flush all
 
     # Revoke permissions to edit wp-config.php
-    chmod -w bitnami/wordpress/wp-config.php
+    chmod a-w bitnami/wordpress/wp-config.php
   {{- end }}
   {{- if .Values.customPostInitScripts }}
   {{- include "common.tplvalues.render" (dict "value" .Values.customPostInitScripts "context" $) | nindent 2 }}
