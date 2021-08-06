@@ -345,6 +345,16 @@ $ helm upgrade my-release bitnami/cassandra --set dbUser.password=[PASSWORD]
 
 | Note: you need to substitute the placeholder _[PASSWORD]_ with the value obtained in the installation notes.
 
+### To 8.0.0
+
+Cassandra's version was bumped to `4.0`, [the new major](https://cassandra.apache.org/_/blog/Apache-Cassandra-4.0-is-Here.html) considered LTS. Among other features, this release removes support for [Thrift](https://issues.apache.org/jira/browse/CASSANDRA-11115), which means that the following properties of the chart will no longer be available:
+
+  - `cluster.enableRPC`
+  - `service.thriftPort`
+  - `service.nodePorts.thrift`
+  - `containerPorts.thrift`
+
+For this version, there have been [intensive efforts](https://cwiki.apache.org/confluence/display/CASSANDRA/4.0+Quality%3A+Components+and+Test+Plans) from Apache to ensure that a safe cluster upgrade can be performed. Nevertheless, a backup creation prior to undergoing the upgrade process is recommended. Please, refer to the [official guide](https://cassandra.apache.org/doc/latest/operating/backups.html#snapshots) for further information.
 ### To 7.0.0
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.

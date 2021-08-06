@@ -30,16 +30,6 @@ spec:
       {{- else if eq .Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-    {{- if .Values.cluster.enableRPC }}
-    - name: thrift
-      port: {{ .Values.service.thriftPort }}
-      targetPort: thrift
-      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.thrift)) }}
-      nodePort: {{ .Values.service.nodePorts.thrift }}
-      {{- else if eq .Values.service.type "ClusterIP" }}
-      nodePort: null
-      {{- end }}
-    {{- end }}
     - name: metrics
       port: {{ .Values.service.metricsPort }}
       {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.metrics)) }}
