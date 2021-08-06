@@ -256,7 +256,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 The `image.tag` parameter allows specifying which image will be pulled for the chart, as described in the [documentation for using a different image version](https://docs.bitnami.com/kubernetes/apps/ejbca/configuration/change-image-version/).
 
-When configuring the `image.tag` parameter to use an image in a private registry, it is necessary to also [specify an image pull secret](https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod). This image pull secret must be passed to the chart at deployment time using the `imagePullSecrets` parameter in a `values.yaml` file (it cannot be passed using the `--set` parameter).
+When configuring the `image.tag` parameter to use an image in a private registry, it is necessary to also [specify an image pull secret](https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod). This image pull secret must be passed to the chart at deployment time using the `global.imagePullSecrets` parameter in a `values.yaml` file (it cannot be passed using the `--set` parameter).
 
 Refer to the [chart documentation for more information on configuring a private registry](https://docs.bitnami.com/kubernetes/apps/ejbca/configuration/configure-private-registry/).
 
