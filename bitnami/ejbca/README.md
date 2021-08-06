@@ -236,7 +236,7 @@ For example, for a release using `secretPassword` and `dbPassword` to scale up t
 
 ### Configure Sidecars and Init Containers
 
-If additional containers are needed in the same pod as Jenkins (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. Similarly, you can add extra init containers using the `initContainers` parameter.
+If additional containers are needed in the same pod as EJBCA (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. Similarly, you can add extra init containers using the `initContainers` parameter.
 
 [Learn more about configuring and using sidecar and init containers](https://docs.bitnami.com/kubernetes/apps/ejbca/configuration/configure-sidecar-init-containers/).
 
