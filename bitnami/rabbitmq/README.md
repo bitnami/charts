@@ -501,7 +501,7 @@ $ helm upgrade my-release bitnami/rabbitmq --set auth.password=[PASSWORD] --set 
 
 ### To 8.20.0
 
-This new version of the chart bumps the RabbitMQ version to `3.9.1`. It is considered a minor release, and no breaking changes are expected. Additionally, RabbitMQ 3.9.X nodes can run alongside 3.8.x nodes.
+This new version of the chart bumps the RabbitMQ version to `3.9.1`. It is considered a minor release, and no breaking changes are expected. Additionally, RabbitMQ `3.9.X` nodes can run alongside `3.8.X` nodes.
 
 See the [Upgrading guide](https://www.rabbitmq.com/upgrade.html) and the [RabbitMQ change log](https://www.rabbitmq.com/changelog.html) for further documentation.
 
