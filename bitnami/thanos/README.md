@@ -851,18 +851,18 @@ You can specify the Ruler configuration using the `ruler.config` parameter.
 
 In addition, you can also set an external ConfigMap with the configuration file. This is done by setting the `ruler.existingConfigmap` parameter. Note that this will override the previous option.
 
-### Store time partions
+### Store time partitions
 
 Thanos store supports partion based on time.
 
-Setting time partions will create N number of store deployment based on the number of items in the list. Each item must contain min and max time for querying in the supported format (see details at [Thanos documentation](https://thanos.io/tip/components/store.md/#time-based-partioning)).
+Setting time partitions will create N number of store deployment based on the number of items in the list. Each item must contain min and max time for querying in the supported format (see details at [Thanos documentation](https://thanos.io/tip/components/store.md/#time-based-partitioning)).
 
 > Note: leaving this empty list ([]) will create a single store for all data.
 
 For instance, to use 3 stores you can use a **values.yaml** like the one below:
 
 ```yaml
-timePartioning:
+timePartitioning:
   # One store for data older than 6 weeks
   - min: ""
     max: -6w
@@ -971,7 +971,7 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ### To 5.3.0
 
-This version introduces hash and time partioning for the store gateway.
+This version introduces hash and time partitioning for the store gateway.
 
 ### To 5.0.0
 

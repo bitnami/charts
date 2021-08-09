@@ -1,15 +1,15 @@
 {{- if and .Values.storegateway.enabled .Values.storegateway.sharded.enabled }}
 
 {{- $shards := int 0 }}
-{{- $hashPartioning := false }}
-{{- $timePartioning := false }}
+{{- $hashPartitioning := false }}
+{{- $timePartitioning := false }}
 
-{{- if .Values.storegateway.sharded.hashPartioning.shards }}
-  {{- $shards = int .Values.storegateway.sharded.hashPartioning.shards }}
-  {{- $hashPartioning = true }}
+{{- if .Values.storegateway.sharded.hashPartitioning.shards }}
+  {{- $shards = int .Values.storegateway.sharded.hashPartitioning.shards }}
+  {{- $hashPartitioning = true }}
 {{- else }}
-  {{- $shards = len .Values.storegateway.sharded.timePartioning }}
-  {{- $timePartioning = true }}
+  {{- $shards = len .Values.storegateway.sharded.timePartitioning }}
+  {{- $timePartitioning = true }}
 {{- end }}
 
 {{- range $index, $_ := until $shards }}
@@ -135,7 +135,7 @@ spec:
             {{- if $.Values.storegateway.extraFlags }}
             {{- $.Values.storegateway.extraFlags | toYaml | nindent 12 }}
             {{- end }}
-            {{- if $hashPartioning }}
+            {{- if $hashpartitioning }}
             - |
               --selector.relabel-config=
                 - action: hashmod
@@ -146,8 +146,8 @@ spec:
                   source_labels: ["shard"]
                   regex: {{ $index }}
           {{- end }}
-          {{- if $timePartioning }}
-          {{- $partion := (slice $.Values.storegateway.sharded.timePartioning  $index) | first }}
+          {{- if $timepartitioning }}
+          {{- $partion := (slice $.Values.storegateway.sharded.timepartitioning  $index) | first }}
           {{- if $partion.max }}
             - --max-time={{ $partion.max }}
           {{- end}}

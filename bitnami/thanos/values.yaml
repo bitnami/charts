@@ -1849,14 +1849,14 @@ storegateway:
     maxUnavailable: ""
   ## Sharded parameters
   ## @param storegateway.sharded.enabled Enable sharding for Thanos Store Gateway
-  ## @param storegateway.sharded.hashPartioning.shards Setting hashPartioning will create multiple store statefulsets based on the number of shards specified using the hashmod of the blocks
-  ## @param storegateway.sharded.timePartioning [array] Setting time timePartioning will create multiple store deployments based on the number of partions
+  ## @param storegateway.sharded.hashPartitioning.shards Setting hashPartitioning will create multiple store statefulsets based on the number of shards specified using the hashmod of the blocks
+  ## @param storegateway.sharded.timePartitioning [array] Setting time timePartitioning will create multiple store deployments based on the number of partitions
   ##
   sharded:
     enabled: false
-    hashPartioning:
+    hashPartitioning:
       shards: ""
-    timePartioning:
+    timePartitioning:
       - min: ""
         max: ""
 

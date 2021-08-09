@@ -1,4 +1,14 @@
-{{- if and .Values.storegateway.enabled (not .Values.storegateway.sharded.enabled) }}
+{{- if and .Values.storegateway.enabled .Values.storegateway.sharded.enabled }}
+
+{{- $shards := int 0 }}
+
+{{- if .Values.storegateway.sharded.hashpartitioning.shards }}
+  {{- $shards = int .Values.storegateway.sharded.hashpartitioning.shards }}
+{{- else }}
+  {{- $shards = len .Values.storegateway.sharded.timepartitioning }}
+{{- end }}
+
+{{- range $index, $_ := until $shards }}
 apiVersion: v1
 kind: Service
 metadata:
