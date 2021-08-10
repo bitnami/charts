@@ -93,6 +93,12 @@ initLimit: 10
 ## @param syncLimit How far out of date a server can be from a leader
 ##
 syncLimit: 5
+## @param preAllocSize Block size for transaction log file
+##
+preAllocSize: 65536
+## @param snapCount The number of transactions recorded in the transaction log before a snapshot can be taken (and the transaction log rolled)
+##
+snapCount: 100000
 ## @param maxClientCnxns Limits the number of concurrent connections that a single client may make to a single member of the ZooKeeper ensemble
 ##
 maxClientCnxns: 60
