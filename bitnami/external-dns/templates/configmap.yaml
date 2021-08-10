@@ -11,6 +11,6 @@ data:
 {{- end }}
 {{- if .Values.rfc2136.rfc3645Enabled }}
   krb5.conf: |
-{{ required "rfc2136.kerberosConfig must be set if rfc2136.3645Enabled is `true`" .Values.rfc2136.kerberosConfig | indent 4 }}
+{{ .Values.rfc2136.kerberosConfig | indent 4 }}
 {{- end }}
 {{- end }}

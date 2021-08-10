@@ -728,6 +728,18 @@ external-dns: rfc2136.kerberosRealm
 {{- end -}}
 
 {{/*
+Validate values of RFC2136 DNS:
+- Must provide the kerberos config when provider is rfc2136 and rfc3645Enabled is true
+*/}}
+{{- define "external-dns.validateValues.rfc2136.kerberosConfig" -}}
+{{- if and (eq .Values.provider "rfc2136") .Values.rfc2136.rfc3645Enabled (not .Values.rfc2136.kerberosConfig) -}}
+external-dns: rfc2136.kerberosConfig
+    You must provide the kerberos config when provider is rfc2136 and rfc3645Enabled is true
+    Please set the kerberosConfig parameter (--set-file rfc2136.kerberosConfig="path/to/krb5.conf")
+{{- end -}}
+{{- end -}}
+
+{{/*
 Validate values of External DNS:
 - must provide the Scaleway access key when provider is "scaleway"
 */}}
