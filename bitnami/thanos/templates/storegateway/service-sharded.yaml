@@ -12,7 +12,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "common.names.fullname" $ }}-storegateway
+  name: {{ printf "%s-storegateway-%s" (include "common.names.fullname" $) $index | trunc 63 | trimSuffix "-" }}
   labels: {{- include "common.labels.standard" $ | nindent 4 }}
     app.kubernetes.io/component: storegateway
     {{- if and $.Values.metrics.enabled $.Values.metrics.serviceMonitor.enabled }}
@@ -25,43 +25,44 @@ metadata:
   annotations: {{- include "common.tplvalues.render" (dict "value" $.Values.storegateway.service.annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
-  type: {{ .Values.storegateway.service.type }}
-  {{- if and .Values.storegateway.service.clusterIP (eq .Values.storegateway.service.type "ClusterIP") }}
-  clusterIP: {{ .Values.storegateway.service.clusterIP }}
+  type: {{ $.Values.storegateway.service.type }}
+  {{- if not (empty $.Values.storegateway.sharded.service.clusterIPs) }}
+  clusterIP: {{ index $.Values.storegateway.sharded.service.clusterIPs $index }}
   {{- end }}
-  {{- if ne .Values.storegateway.service.type "ClusterIP" }}
-  externalTrafficPolicy: {{ .Values.storegateway.service.externalTrafficPolicy }}
+  {{- if ne $.Values.storegateway.service.type "ClusterIP" }}
+  externalTrafficPolicy: {{ $.Values.storegateway.service.externalTrafficPolicy }}
   {{- end }}
-  {{- if and .Values.storegateway.service.loadBalancerIP (eq .Values.storegateway.service.type "LoadBalancer") }}
-  loadBalancerIP: {{ .Values.storegateway.service.loadBalancerIP }}
+  {{- if not (empty $.Values.storegateway.sharded.service.loadBalancerIPs) }}
+  loadBalancerIP: {{ $.Values.storegateway.sharded.service.loadBalancerIPs }}
   {{- end }}
-  {{- if and (eq .Values.storegateway.service.type "LoadBalancer") .Values.storegateway.service.loadBalancerSourceRanges }}
-  loadBalancerSourceRanges: {{- toYaml .Values.storegateway.service.loadBalancerSourceRanges | nindent 4 }}
+  {{- if and (eq $.Values.storegateway.service.type "LoadBalancer") $.Values.storegateway.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges: {{- toYaml $.Values.storegateway.service.loadBalancerSourceRanges | nindent 4 }}
   {{- end }}
   ports:
-    - port: {{ .Values.storegateway.service.http.port }}
+    - port: {{ $.Values.storegateway.service.http.port }}
       targetPort: http
       protocol: TCP
       name: http
-      {{- if (and (or (eq .Values.storegateway.service.type "NodePort") (eq .Values.storegateway.service.type "LoadBalancer")) .Values.storegateway.service.http.nodePort) }}
-      nodePort: {{ .Values.storegateway.service.http.nodePort }}
-      {{- else if eq .Values.storegateway.service.type "ClusterIP" }}
+      {{- if not (empty $.Values.storegateway.sharded.service.http.nodePorts) }}
+      nodePort: {{ index $.Values.storegateway.sharded.service.http.nodePorts $index }}
+      {{- else if eq $.Values.storegateway.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-    - port: {{ .Values.storegateway.service.grpc.port }}
+    - port: {{ $.Values.storegateway.service.grpc.port }}
       targetPort: grpc
       protocol: TCP
       name: grpc
-      {{- if (and (or (eq .Values.storegateway.service.type "NodePort") (eq .Values.storegateway.service.type "LoadBalancer")) .Values.storegateway.service.grpc.nodePort) }}
-      nodePort: {{ .Values.storegateway.service.grpc.nodePort }}
-      {{- else if eq .Values.storegateway.service.type "ClusterIP" }}
+      {{- if not (empty $.Values.storegateway.sharded.service.grpc.nodePorts) }}
+      nodePort: {{ index $.Values.storegateway.sharded.service.grpc.nodePorts $index }}
+      {{- else if eq $.Values.storegateway.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
   selector:
-    {{- if .Values.storegateway.service.labelSelectorsOverride }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.service.labelSelectorsOverride "context" $) | nindent 4 }}
+    {{- if $.Values.storegateway.service.labelSelectorsOverride }}
+    {{- include "common.tplvalues.render" (dict "value" $.Values.storegateway.service.labelSelectorsOverride "context" $) | nindent 4 }}
     {{- else }}
-    {{- include "common.labels.matchLabels" . | nindent 4 }}
+    {{- include "common.labels.matchLabels" $ | nindent 4 }}
     app.kubernetes.io/component: storegateway
+    shard: {{ $index | quote }}
     {{- end }}
 {{- end }}

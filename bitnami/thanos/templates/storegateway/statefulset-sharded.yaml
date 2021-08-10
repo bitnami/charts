@@ -25,7 +25,7 @@ metadata:
 spec:
   replicas: {{ $.Values.storegateway.replicaCount }}
   podManagementPolicy: {{ $.Values.storegateway.podManagementPolicy }}
-  serviceName: {{ include "common.names.fullname" $ }}-storegateway-headless
+  serviceName: {{ printf "%s-storegateway-%s" (include "common.names.fullname" $) $index | trunc 63 | trimSuffix "-" }}
   updateStrategy:
     type: {{ $.Values.storegateway.updateStrategyType }}
     {{- if (eq "OnDelete" $.Values.storegateway.updateStrategyType) }}
