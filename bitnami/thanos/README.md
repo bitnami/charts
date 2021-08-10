@@ -855,7 +855,7 @@ In addition, you can also set an external ConfigMap with the configuration file.
 
 Thanos store supports partion based on time.
 
-Setting time partitions will create N number of store deployment based on the number of items in the list. Each item must contain min and max time for querying in the supported format (see details at [Thanos documentation](https://thanos.io/tip/components/store.md/#time-based-partitioning)).
+Setting time partitions will create N number of store statefulsets based on the number of items in the `timePartitioning` list. Each item must contain the min and max time for querying in the supported format (find more details at [Thanos documentation](https://thanos.io/tip/components/store.md/#time-based-partitioning)).
 
 > Note: leaving this empty list ([]) will create a single store for all data.
 
