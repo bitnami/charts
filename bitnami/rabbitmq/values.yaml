@@ -703,6 +703,10 @@ service:
   ## @param service.type Kubernetes Service type
   ##
   type: ClusterIP
+
+  ## @param service.portEnabled Amqp port. Cannot be disabled when `auth.tls.enabled` is `false`. Listener can be disabled with `listeners.tcp = none`.
+  portEnabled: true
+
   ## @param service.port Amqp port
   ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
   ##
