@@ -82,7 +82,7 @@ $ helm uninstall my-release
 | `contour.enabled`                                 | Contour Deployment creation.                                                                                                       | `true`                                          |
 | `contour.image.registry`                          | Contour image registry                                                                                                             | `docker.io`                                     |
 | `contour.image.repository`                        | Contour image name                                                                                                                 | `bitnami/contour`                               |
-| `contour.image.tag`                               | Contour image tag                                                                                                                  | `1.18.0-debian-10-r0`                           |
+| `contour.image.tag`                               | Contour image tag                                                                                                                  | `1.18.0-debian-10-r5`                           |
 | `contour.image.pullPolicy`                        | Contour Image pull policy                                                                                                          | `IfNotPresent`                                  |
 | `contour.image.pullSecrets`                       | Contour Image pull secrets                                                                                                         | `[]`                                            |
 | `contour.hostAliases`                             | Add deployment host aliases                                                                                                        | `[]`                                            |
@@ -122,7 +122,7 @@ $ helm uninstall my-release
 | `contour.tlsExistingSecret`                       | Name of the existingSecret to be use in Contour deployment. If it is not nil `contour.certgen` will be disabled.                   | `""`                                            |
 | `contour.service.extraPorts`                      | Extra ports to expose (normally used with the `sidecar` value)                                                                     | `[]`                                            |
 | `contour.initContainers`                          | Attach additional init containers to Contour pods                                                                                  | `[]`                                            |
-| `contour.sidecars`                                        | Add additional sidecar containers to the Contour pods                                                                              | `[]`                                            |
+| `contour.sidecars`                                | Add additional sidecar containers to the Contour pods                                                                              | `[]`                                            |
 | `contour.extraVolumes`                            | Array to add extra volumes                                                                                                         | `[]`                                            |
 | `contour.extraVolumeMounts`                       | Array to add extra mounts (normally used with extraVolumes)                                                                        | `[]`                                            |
 | `contour.extraEnvVars`                            | Array containing extra env vars to be added to all Contour containers                                                              | `[]`                                            |
@@ -138,7 +138,7 @@ $ helm uninstall my-release
 | `envoy.enabled`                                     | Envoy Proxy Daemonset creation                                                                                        | `true`                 |
 | `envoy.image.registry`                              | Envoy Proxy image registry                                                                                            | `docker.io`            |
 | `envoy.image.repository`                            | Envoy Proxy image repository                                                                                          | `bitnami/envoy`        |
-| `envoy.image.tag`                                   | Envoy Proxy image tag (immutable tags are recommended)                                                                | `1.17.3-debian-10-r66` |
+| `envoy.image.tag`                                   | Envoy Proxy image tag (immutable tags are recommended)                                                                | `1.17.3-debian-10-r71` |
 | `envoy.image.pullPolicy`                            | Envoy image pull policy                                                                                               | `IfNotPresent`         |
 | `envoy.image.pullSecrets`                           | Envoy image pull secrets                                                                                              | `[]`                   |
 | `envoy.extraArgs`                                   | Extra arguments passed to Envoy container                                                                             | `[]`                   |
@@ -212,7 +212,7 @@ $ helm uninstall my-release
 | `defaultBackend.enabled`                            | Enable a default backend based on NGINX                                                              | `false`                |
 | `defaultBackend.image.registry`                     | Default backend image registry                                                                       | `docker.io`            |
 | `defaultBackend.image.repository`                   | Default backend image name                                                                           | `bitnami/nginx`        |
-| `defaultBackend.image.tag`                          | Default backend image tag                                                                            | `1.21.1-debian-10-r18` |
+| `defaultBackend.image.tag`                          | Default backend image tag                                                                            | `1.21.1-debian-10-r23` |
 | `defaultBackend.image.pullPolicy`                   | Image pull policy                                                                                    | `IfNotPresent`         |
 | `defaultBackend.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                     | `[]`                   |
 | `defaultBackend.extraArgs`                          | Additional command line arguments to pass to NGINX container                                         | `{}`                   |
@@ -276,7 +276,7 @@ $ helm uninstall my-release
 | Name                | Description                                                                                                          | Value  |
 | ------------------- | -------------------------------------------------------------------------------------------------------------------- | ------ |
 | `rbac.create`       | Create the RBAC roles for API accessibility                                                                          | `true` |
-| `rbac.rules`        | Custom RBAC rules                                                                                                    | `[]`   |
+| `rbac.rules`        | Custom RBAC rules to set                                                                                             | `[]`   |
 | `tlsExistingSecret` | Name of the existingSecret to be use in both contour and envoy. If it is not nil `contour.certgen` will be disabled. | `""`   |
 
 

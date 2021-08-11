@@ -75,13 +75,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------- | ----------------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`                       | Apache image registry                                                                     | `docker.io`            |
 | `image.repository`                     | Apache image repository                                                                   | `bitnami/apache`       |
-| `image.tag`                            | Apache image tag (immutable tags are recommended)                                         | `2.4.48-debian-10-r28` |
+| `image.tag`                            | Apache image tag (immutable tags are recommended)                                         | `2.4.48-debian-10-r52` |
 | `image.pullPolicy`                     | Apache image pull policy                                                                  | `IfNotPresent`         |
 | `image.pullSecrets`                    | Apache image pull secrets                                                                 | `[]`                   |
 | `image.debug`                          | Enable image debug mode                                                                   | `false`                |
 | `git.registry`                         | Git image registry                                                                        | `docker.io`            |
 | `git.repository`                       | Git image name                                                                            | `bitnami/git`          |
-| `git.tag`                              | Git image tag                                                                             | `2.32.0-debian-10-r26` |
+| `git.tag`                              | Git image tag                                                                             | `2.32.0-debian-10-r51` |
 | `git.pullPolicy`                       | Git image pull policy                                                                     | `IfNotPresent`         |
 | `git.pullSecrets`                      | Specify docker-registry secret names as an array                                          | `[]`                   |
 | `replicaCount`                         | Number of replicas of the Apache deployment                                               | `1`                    |
@@ -146,11 +146,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.enabled`               | Enable ingress record generation for Apache                                   | `false`                  |
 | `ingress.pathType`              | Ingress path type                                                             | `ImplementationSpecific` |
 | `ingress.apiVersion`            | Force Ingress API version (automatically detected if not set)                 | `""`                     |
+| `ingress.ingressClassName`      | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+) | `""`                     |
 | `ingress.hostname`              | Default host for the ingress record                                           | `example.local`          |
 | `ingress.path`                  | Default path for the ingress record                                           | `ImplementationSpecific` |
 | `ingress.annotations`           | Additional custom annotations for the ingress record                          | `{}`                     |
 | `ingress.tls`                   | Enable TLS configuration for the hosts defined                                | `[]`                     |
-| `ingress.ingressClassName`      | (Kubernetes 1.18+) IngressClass that will be be used to implement the Ingress | `""`                     |
 | `ingress.certManager`           | Add the corresponding annotations for cert-manager integration                | `false`                  |
 | `ingress.hosts`                 | An array with additional hostname(s) to be covered with the ingress record    | `[]`                     |
 | `ingress.secrets`               | Custom TLS certificates as secrets                                            | `[]`                     |
@@ -163,7 +163,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`            | Start a sidecar prometheus exporter to expose Apache metrics | `false`                   |
 | `metrics.image.registry`     | Apache Exporter image registry                               | `docker.io`               |
 | `metrics.image.repository`   | Apache Exporter image repository                             | `bitnami/apache-exporter` |
-| `metrics.image.tag`          | Apache Exporter image tag (immutable tags are recommended)   | `0.9.0-debian-10-r25`     |
+| `metrics.image.tag`          | Apache Exporter image tag (immutable tags are recommended)   | `0.10.0-debian-10-r5`     |
 | `metrics.image.pullPolicy`   | Apache Exporter image pull policy                            | `IfNotPresent`            |
 | `metrics.image.pullSecrets`  | Apache Exporter image pull secrets                           | `[]`                      |
 | `metrics.podAnnotations`     | Additional custom annotations for Apache exporter service    | `{}`                      |
