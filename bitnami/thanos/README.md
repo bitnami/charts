@@ -538,6 +538,13 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `storegateway.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                             | `false`         |
 | `storegateway.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                              | `1`             |
 | `storegateway.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                                              | `""`            |
+| `storegateway.sharded.enabled`                                   | Enable sharding for Thanos Store Gateway                                                                                                 | `false`         |
+| `storegateway.sharded.hashPartitioning.shards`                   | Setting hashPartitioning will create multiple store statefulsets based on the number of shards specified using the hashmod of the blocks | `""`            |
+| `storegateway.sharded.timePartitioning`                          | Setting time timePartitioning will create multiple store deployments based on the number of partitions                                   | `[]`            |
+| `storegateway.sharded.service.clusterIPs`                        | Array of cluster IPs for each Store Gateway service. Length must be the same as the number of shards                                     | `[]`            |
+| `storegateway.sharded.service.loadBalancerIPs`                   | Array of load balancer IPs for each Store Gateway service. Length must be the same as the number of shards                               | `[]`            |
+| `storegateway.sharded.service.http.nodePorts`                    | Array of http node ports used for Store Gateway service. Length must be the same as the number of shards                                 | `[]`            |
+| `storegateway.sharded.service.grpc.nodePorts`                    | Array of grpc node ports used for Store Gateway service. Length must be the same as the number of shards                                 | `[]`            |
 
 
 ### Thanos Ruler parameters
