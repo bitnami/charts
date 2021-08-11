@@ -66,7 +66,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/cassandra
-  tag: 4.0.0-debian-10-r0
+  tag: 4.0.0-debian-10-r2
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -127,7 +127,6 @@ existingConfiguration: ""
 ## @param cluster.numTokens Number of tokens for each node
 ## @param cluster.datacenter Datacenter name
 ## @param cluster.rack Rack name
-## @param cluster.enableRPC Enable Thrift RPC endpoint
 ## @param cluster.endpointSnitch Endpoint Snitch
 ## @param cluster.internodeEncryption DEPRECATED: use tls.internode and tls.client instead. Encryption values.
 ## @param cluster.clientEncryption Client Encryption
@@ -139,7 +138,6 @@ cluster:
   numTokens: 256
   datacenter: dc1
   rack: rack1
-  enableRPC: true
   endpointSnitch: SimpleSnitch
   ## NOTE: internodeEncryption requires tlsEncryptionSecretName
   ##
@@ -374,14 +372,12 @@ hostNetwork: false
 ## @param containerPorts.tls TLS Port on the Host and Container
 ## @param containerPorts.jmx JMX Port on the Host and Container
 ## @param containerPorts.cql CQL Port on the Host and Container
-## @param containerPorts.thrift Thrift Port on the Host and Container
 ##
 containerPorts:
   intra: 7000
   tls: 7001
   jmx: 7199
   cql: 9042
-  thrift: 9160
 
 ## @section RBAC parameters
 
@@ -411,21 +407,16 @@ service:
   ## @param service.port Cassandra service CQL Port
   ##
   port: 9042
-  ## @param service.thriftPort Cassandra service Thrift Port
-  ##
-  thriftPort: 9160
   ## @param service.metricsPort Cassandra service metrics port
   ##
   metricsPort: 8080
   ## Node ports to expose
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ## @param service.nodePorts.cql Node port for CQL
-  ## @param service.nodePorts.thrift Node port for Thrift
   ## @param service.nodePorts.metrics Node port for metrics
   ##
   nodePorts:
     cql: ""
-    thrift: ""
     metrics: ""
   ## @param service.loadBalancerIP LoadBalancerIP if service type is `LoadBalancer`
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -515,7 +506,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r157
+    tag: 10-debian-10-r158
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -579,7 +570,7 @@ metrics:
     registry: docker.io
     pullPolicy: IfNotPresent
     repository: bitnami/cassandra-exporter
-    tag: 2.3.4-debian-10-r482
+    tag: 2.3.4-debian-10-r483
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/

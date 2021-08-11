@@ -92,7 +92,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cluster.numTokens`           | Number of tokens for each node                                                                                         | `256`                    |
 | `cluster.datacenter`          | Datacenter name                                                                                                        | `dc1`                    |
 | `cluster.rack`                | Rack name                                                                                                              | `rack1`                  |
-| `cluster.enableRPC`           | Enable Thrift RPC endpoint                                                                                             | `true`                   |
 | `cluster.endpointSnitch`      | Endpoint Snitch                                                                                                        | `SimpleSnitch`           |
 | `cluster.internodeEncryption` | DEPRECATED: use tls.internode and tls.client instead. Encryption values.                                               | `none`                   |
 | `cluster.clientEncryption`    | Client Encryption                                                                                                      | `false`                  |
@@ -160,7 +159,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `containerPorts.tls`                 | TLS Port on the Host and Container                                                        | `7001`          |
 | `containerPorts.jmx`                 | JMX Port on the Host and Container                                                        | `7199`          |
 | `containerPorts.cql`                 | CQL Port on the Host and Container                                                        | `9042`          |
-| `containerPorts.thrift`              | Thrift Port on the Host and Container                                                     | `9160`          |
 
 
 ### RBAC parameters
@@ -178,10 +176,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------- | --------------------------------------------------------- | ----------- |
 | `service.type`                | Cassandra service type                                    | `ClusterIP` |
 | `service.port`                | Cassandra service CQL Port                                | `9042`      |
-| `service.thriftPort`          | Cassandra service Thrift Port                             | `9160`      |
 | `service.metricsPort`         | Cassandra service metrics port                            | `8080`      |
 | `service.nodePorts.cql`       | Node port for CQL                                         | `""`        |
-| `service.nodePorts.thrift`    | Node port for Thrift                                      | `""`        |
 | `service.nodePorts.metrics`   | Node port for metrics                                     | `""`        |
 | `service.loadBalancerIP`      | LoadBalancerIP if service type is `LoadBalancer`          | `""`        |
 | `service.annotations`         | Provide any additional annotations which may be required. | `{}`        |
@@ -344,6 +340,17 @@ $ helm upgrade my-release bitnami/cassandra --set dbUser.password=[PASSWORD]
 ```
 
 | Note: you need to substitute the placeholder _[PASSWORD]_ with the value obtained in the installation notes.
+
+### To 8.0.0
+
+Cassandra's version was bumped to `4.0`, [the new major](https://cassandra.apache.org/_/blog/Apache-Cassandra-4.0-is-Here.html) considered LTS. Among other features, this release removes support for [Thrift](https://issues.apache.org/jira/browse/CASSANDRA-11115), which means that the following properties of the chart will no longer be available:
+
+  - `cluster.enableRPC`
+  - `service.thriftPort`
+  - `service.nodePorts.thrift`
+  - `containerPorts.thrift`
+
+For this version, there have been [intensive efforts](https://cwiki.apache.org/confluence/display/CASSANDRA/4.0+Quality%3A+Components+and+Test+Plans) from Apache to ensure that a safe cluster upgrade can be performed. Nevertheless, a backup creation prior to undergoing the upgrade process is recommended. Please, refer to the [official guide](https://cassandra.apache.org/doc/latest/operating/backups.html#snapshots) for further information.
 
 ### To 7.0.0
 
