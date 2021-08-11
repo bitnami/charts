@@ -443,6 +443,22 @@ rfc2136:
   ## @param rfc2136.minTTL When using the rfc2136 provider, specify minimal TTL (in duration format) for records[ns, us, ms, s, m, h], see more https://golang.org/pkg/time/#ParseDuration
   ##
   minTTL: "0s"
+  ## @param rfc2136.rfc3645Enabled When using the rfc2136 provider, extend using RFC3645 to support secure updates over Kerberos with GSS-TSIG
+  ##
+  rfc3645Enabled: false
+  ## @param rfc2136.kerberosConfig When using the rfc2136 provider with rfc3645Enabled, the contents of a configuration file for krb5 (optional)
+  ##
+  kerberosConfig: ""
+  ## @param rfc2136.kerberosUsername When using the rfc2136 provider with rfc3645Enabled, specify the username to authenticate with (optional)
+  ##
+  kerberosUsername: ""
+  ## @param rfc2136.kerberosPassword When using the rfc2136 provider with rfc3645Enabled, specify the password to authenticate with (optional)
+  ##
+  kerberosPassword: ""
+  ## @param rfc2136.kerberosRealm When using the rfc2136 provider with rfc3645Enabled, specify the realm to authenticate to (required when provider=rfc2136 and rfc2136.rfc3645Enabled=true)
+  ##
+  kerberosRealm: ""
+
 ## PowerDNS configuration to be set via arguments/env. variables
 ##
 pdns:
