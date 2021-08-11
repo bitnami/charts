@@ -186,6 +186,10 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := append $messages (include "thanos.validateValues.objstore" .) -}}
 {{- $messages := append $messages (include "thanos.validateValues.ruler.alertmanagers" .) -}}
 {{- $messages := append $messages (include "thanos.validateValues.ruler.config" .) -}}
+{{- $messages := append $messages (include "thanos.validateValues.sharded.service.clusterIPs" .) -}}
+{{- $messages := append $messages (include "thanos.validateValues.sharded.service.loadBalancerIPs" .) -}}
+{{- $messages := append $messages (include "thanos.validateValues.sharded.service.http.nodePorts" .) -}}
+{{- $messages := append $messages (include "thanos.validateValues.sharded.service.grpc.nodePorts" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -237,6 +241,67 @@ thanos: ruler configuration
       3) Put your ruler.yml under the 'files/conf/' directory
 {{- end -}}
 {{- end -}}
+
+{{/* Validate values of Thanos - number of sharded service clusterIPs */}}
+{{- define "thanos.validateValues.sharded.service.clusterIPs" -}}
+{{- if and .Values.storegateway.sharded.enabled (not (empty .Values.storegateway.sharded.service.clusterIPs) ) -}}
+{{- if eq "false" (include "thanos.validateProperty" (dict "property" $.Values.storegateway.sharded.service.clusterIPs "context" $) ) }}
+thanos: storegateway sharded service clusterIPs
+    The number of shards does not match the number of ClusterIPs $.Values.storegateway.sharded.service.clusterIPs
+{{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of Thanos - number of sharded service loadBalancerIPs */}}
+{{- define "thanos.validateValues.sharded.service.loadBalancerIPs" -}}
+{{- if and .Values.storegateway.sharded.enabled (not (empty .Values.storegateway.sharded.service.loadBalancerIPs) ) -}}
+{{- if eq "false" (include "thanos.validateProperty" (dict "property" $.Values.storegateway.sharded.service.loadBalancerIPs "context" $) ) }}
+thanos: storegateway sharded service loadBalancerIPs
+    The number of shards does not match the number of loadBalancerIPs $.Values.storegateway.sharded.service.loadBalancerIPs
+{{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of Thanos - number of sharded service http.nodePorts */}}
+{{- define "thanos.validateValues.sharded.service.http.nodePorts" -}}
+{{- if and .Values.storegateway.sharded.enabled (not (empty .Values.storegateway.sharded.service.http.nodePorts) ) -}}
+{{- if eq "false" (include "thanos.validateProperty" (dict "property" $.Values.storegateway.sharded.service.http.nodePorts "context" $) ) }}
+thanos: storegateway sharded service http.nodePorts
+    The number of shards does not match the number of http.nodePorts $.Values.storegateway.sharded.service.http.nodePorts
+{{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of Thanos - number of sharded service grpc.nodePorts */}}
+{{- define "thanos.validateValues.sharded.service.grpc.nodePorts" -}}
+{{- if and .Values.storegateway.sharded.enabled (not (empty .Values.storegateway.sharded.service.grpc.nodePorts) ) -}}
+{{- if eq "false" (include "thanos.validateProperty" (dict "property" $.Values.storegateway.sharded.service.grpc.nodePorts "context" $) ) }}
+thanos: storegateway sharded service grpc.nodePorts
+    The number of shards does not match the number of grpc.nodePorts $.Values.storegateway.sharded.service.grpc.nodePorts
+{{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{- define "thanos.validateProperty" -}}
+{{/*Get number of shards */}}
+{{- $shards := int 0 }}
+{{- if .context.Values.storegateway.sharded.hashPartitioning.shards }}
+  {{- $shards = int .context.Values.storegateway.sharded.hashPartitioning.shards }}
+{{- else }}
+  {{- $shards = len .context.Values.storegateway.sharded.timePartitioning }}
+{{- end }}
+{{- $propertyLength := (len .property) -}}
+{{/* Validate property */}}
+{{- if ne $shards $propertyLength -}}
+
+false
+{{- end }}
+
+
+
+{{- end }}
+
+
 
 {{/* Service account name
 Usage:
