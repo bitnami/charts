@@ -16,7 +16,7 @@
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" $ }}
 kind: StatefulSet
 metadata:
-  name: {{ printf "%s-storegateway-%s" (include "common.names.fullname" $) $index | trunc 63 | trimSuffix "-" }}
+  name: {{ printf "%s-storegateway-%s" (include "common.names.fullname" $) (toString $index) | trunc 63 | trimSuffix "-" }}
   labels: {{- include "common.labels.standard" $ | nindent 4 }}
     app.kubernetes.io/component: storegateway
     {{- if $.Values.commonLabels }}
@@ -26,7 +26,7 @@ spec:
   replicas: {{ $.Values.storegateway.replicaCount }}
   podManagementPolicy: {{ $.Values.storegateway.podManagementPolicy }}
   {{- $svcNamePrefix := printf "%s-storegateway" (include "common.names.fullname" $) | trunc 61 | trimSuffix "-" }}
-  serviceName: {{ printf "%s-%s" $svcNamePrefix }}
+  serviceName: {{ printf "%s-%s" $svcNamePrefix (toString $index)}}
   updateStrategy:
     type: {{ $.Values.storegateway.updateStrategyType }}
     {{- if (eq "OnDelete" $.Values.storegateway.updateStrategyType) }}
