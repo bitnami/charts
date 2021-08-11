@@ -66,7 +66,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/zookeeper
-  tag: 3.7.0-debian-10-r97
+  tag: 3.7.0-debian-10-r106
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -93,6 +93,12 @@ initLimit: 10
 ## @param syncLimit How far out of date a server can be from a leader
 ##
 syncLimit: 5
+## @param preAllocSize Block size for transaction log file
+##
+preAllocSize: 65536
+## @param snapCount The number of transactions recorded in the transaction log before a snapshot can be taken (and the transaction log rolled)
+##
+snapCount: 100000
 ## @param maxClientCnxns Limits the number of concurrent connections that a single client may make to a single member of the ZooKeeper ensemble
 ##
 maxClientCnxns: 60
@@ -279,6 +285,10 @@ nodeSelector: {}
 ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
+## @param topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+##
+topologySpreadConstraints: {}
 ## @param podLabels ZooKeeper pod labels
 ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
@@ -493,7 +503,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r142
+    tag: 10-debian-10-r151
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

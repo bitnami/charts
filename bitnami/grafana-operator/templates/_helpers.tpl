@@ -23,28 +23,6 @@ Also, we can't use a single if because lazy evaluation is not an option
 {{- end -}}
 
 {{/*
-Return the proper grafana-operator grafana PluginInit baseImage name
-*/}}
-{{- define "grafana-operator.pluginInit.baseImage" -}}
-{{- $registryName := .Values.grafanaPluginInit.image.registry -}}
-{{- $repositoryName := .Values.grafanaPluginInit.image.repository -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-Also, we can't use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s" .Values.global.imageRegistry $repositoryName -}}
-    {{- else -}}
-        {{- printf "%s/%s" $registryName $repositoryName -}}
-    {{- end -}}
-{{- else -}}
-    {{- printf "%s/%s" $registryName $repositoryName -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
 Create the name of the grafana-operator service account to use
 */}}
 {{- define "grafana-operator.serviceAccountName" -}}

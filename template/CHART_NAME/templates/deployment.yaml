@@ -12,7 +12,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.%%MAIN_OBJECT_BLOCK%%.replicaCount }}
   {{- if .Values.%%MAIN_OBJECT_BLOCK%%.updateStrategy }}
   strategy: {{- toYaml .Values.%%MAIN_OBJECT_BLOCK%%.updateStrategy | nindent 4 }}
   {{- end }}
@@ -93,7 +93,7 @@ spec:
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
-              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
+              value: {{ ternary "true" "false" (or .Values.%%MAIN_OBJECT_BLOCK%%.image.debug .Values.diagnosticMode.enabled) | quote }}
             - name: foo
               value: bar
             {{- if .Values.%%MAIN_OBJECT_BLOCK%%.extraEnvVars }}

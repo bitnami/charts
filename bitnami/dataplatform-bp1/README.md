@@ -233,6 +233,10 @@ In order to render complete information about the deployment including all the s
 
 ## Upgrading
 
+### To 7.0.0
+
+This major updates the Kafka subchart and the Solr subchart to their newest major, 14.0.0 and 2.0.0 respectively. [Here](https://github.com/bitnami/charts/pull/7114) you can find more information about the changes introduced in those versions.
+
 ### To 6.0.0
 
 This major updates the Kafka subchart and the Solr subchart to their newest major, 13.0.0 and 1.0.0 respectively.

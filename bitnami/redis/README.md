@@ -111,6 +111,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `auth.existingSecret`            | The name of an existing secret with Redis&trade; credentials                            | `""`          |
 | `auth.existingSecretPasswordKey` | Password key to be retrieved from existing secret                                       | `""`          |
 | `auth.usePasswordFiles`          | Mount credentials as files instead of using an environment variable                     | `false`       |
+| `commonConfiguration`            | Common configuration to be added into the ConfigMap                                     | `""`          |
 | `existingConfigmap`              | The name of an existing ConfigMap with your custom configuration for Redis&trade; nodes | `""`          |
 
 
@@ -694,7 +695,7 @@ must be specified.
 - `disableCommands` is now interpreted as an array of strings instead of a string of comma separated values.
 - `master.persistence.path` now defaults to `/data`.
 
-### 4.0.0
+### To 4.0.0
 
 This version removes the `chart` label from the `spec.selector.matchLabels`
 which is immutable since `StatefulSet apps/v1beta2`. It has been inadvertently

@@ -83,6 +83,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tickTime`                  | Basic time unit in milliseconds used by ZooKeeper for heartbeats                                                                         | `2000`                |
 | `initLimit`                 | ZooKeeper uses to limit the length of time the ZooKeeper servers in quorum have to connect to a leader                                   | `10`                  |
 | `syncLimit`                 | How far out of date a server can be from a leader                                                                                        | `5`                   |
+| `preAllocSize`            | Block size for transaction log file | `65536`                  |
+| `snapCount`            | The number of transactions recorded in the transaction log before a snapshot can be taken (and the transaction log rolled) | `100000`                  |
 | `maxClientCnxns`            | Limits the number of concurrent connections that a single client may make to a single member of the ZooKeeper ensemble                   | `60`                  |
 | `fourlwCommandsWhitelist`   | A list of comma separated Four Letter Words commands to use                                                                              | `srvr, mntr, ruok`    |
 | `listenOnAllIPs`            | Allow Zookeeper to listen for connections from its peers on all available IP addresses                                                   | `false`               |
@@ -129,6 +131,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `affinity`                           | Affinity for pod assignment                                                                                                                                                                       | `{}`            |
 | `nodeSelector`                       | Node labels for pod assignment                                                                                                                                                                    | `{}`            |
 | `tolerations`                        | Tolerations for pod assignment                                                                                                                                                                    | `[]`            |
+| `topologySpreadConstraints`          | Topology Spread Constraints for pod assignment                                                                                                                                                    | `{}`            |
 | `podLabels`                          | ZooKeeper pod labels                                                                                                                                                                              | `{}`            |
 | `podAnnotations`                     | ZooKeeper Pod annotations                                                                                                                                                                         | `{}`            |
 | `priorityClassName`                  | Name of the existing priority class to be used by ZooKeeper pods, priority class needs to be created beforehand                                                                                   | `""`            |
@@ -360,7 +363,7 @@ This new version renames the parameters used to configure TLS for both client an
 - `service.tls.quorum_keystore_password` is renamed to `tls.quorum.keystorePassword`
 - `service.tls.quorum_truststore_password` is renamed to `tls.quorum.truststorePassword`
 
-### 6.1.0
+### To 6.1.0
 
 This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
 
