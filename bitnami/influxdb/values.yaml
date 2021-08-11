@@ -648,7 +648,7 @@ ingress:
   ## @param ingress.path Ingress path*' in order to use this
   ## with ALB ingress controllers.
   ##
-  path: /*
+  path: /
   ## @param ingress.annotations Ingress annotations
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md

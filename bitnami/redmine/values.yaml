@@ -97,7 +97,7 @@ redmineLanguage: en
 # customPostInitScripts:
 #   enable-logs.sh: |
 #     #!/bin/bash
-#     sed -i s/;logfile/logfile/ /opt/bitnami/redmine/conf/redmine.conf
+#     sed -i "s/;logfile/logfile/" /opt/bitnami/redmine/config/configuration.yml
 #     ...
 customPostInitScripts: {}
 ## SMTP mail delivery configuration

@@ -19,9 +19,11 @@ spec:
     - name: {{ .Values.service.epmdPortName }}
       port: 4369
       targetPort: epmd
+    {{- if or (.Values.service.portEnabled) (not .Values.auth.tls.enabled) }}
     - name: amqp
       port: {{ .Values.service.port }}
       targetPort: {{ .Values.service.portName }}
+    {{- end }}
     {{- if .Values.auth.tls.enabled }}
     - name: {{ .Values.service.tlsPortName }}
       port: {{ .Values.service.tlsPort }}
