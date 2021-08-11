@@ -73,27 +73,27 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### MySQL common parameters
 
-| Name                       | Description                                                                                                                                                                         | Value                 |
-| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
-| `image.registry`           | MySQL image registry                                                                                                                                                                | `docker.io`           |
-| `image.repository`         | MySQL image repository                                                                                                                                                              | `bitnami/mysql`       |
-| `image.tag`                | MySQL image tag (immutable tags are recommended)                                                                                                                                    | `8.0.26-debian-10-r0` |
-| `image.pullPolicy`         | MySQL image pull policy                                                                                                                                                             | `IfNotPresent`        |
-| `image.pullSecrets`        | Specify docker-registry secret names as an array                                                                                                                                    | `[]`                  |
-| `image.debug`              | Specify if debug logs should be enabled                                                                                                                                             | `false`               |
-| `architecture`             | MySQL architecture (`standalone` or `replication`)                                                                                                                                  | `standalone`          |
-| `auth.rootPassword`        | Password for the `root` user. Ignored if existing secret is provided                                                                                                                | `""`                  |
-| `auth.database`            | Name for a custom database to create                                                                                                                                                | `my_database`         |
-| `auth.username`            | Name for a custom user to create                                                                                                                                                    | `""`                  |
-| `auth.password`            | Password for the new user. Ignored if existing secret is provided                                                                                                                   | `""`                  |
-| `auth.replicationUser`     | MySQL replication user                                                                                                                                                              | `replicator`          |
-| `auth.replicationPassword` | MySQL replication user password. Ignored if existing secret is provided                                                                                                             | `""`                  |
-| `auth.existingSecret`      | Use existing secret for password details. The secret has to contain the keys `mysql-root-password`, `mysql-replication-password` and `mysql-password`                               | `""`                  |
-| `auth.forcePassword`       | Force users to specify required passwords                                                                                                                                           | `false`               |
-| `auth.usePasswordFiles`    | Mount credentials as files instead of using an environment variable                                                                                                                 | `false`               |
-| `auth.customPasswordFiles` | Use custom password files when `auth.usePasswordFiles` is set to `true`. Define path for keys `root` and `user`, also define `replicator` if `architecture` is set to `replication` | `{}`                  |
-| `initdbScripts`            | Dictionary of initdb scripts                                                                                                                                                        | `{}`                  |
-| `initdbScriptsConfigMap`   | ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)                                                                                                                 | `""`                  |
+| Name                       | Description                                                                                                                                                                         | Value                  |
+| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
+| `image.registry`           | MySQL image registry                                                                                                                                                                | `docker.io`            |
+| `image.repository`         | MySQL image repository                                                                                                                                                              | `bitnami/mysql`        |
+| `image.tag`                | MySQL image tag (immutable tags are recommended)                                                                                                                                    | `8.0.26-debian-10-r10` |
+| `image.pullPolicy`         | MySQL image pull policy                                                                                                                                                             | `IfNotPresent`         |
+| `image.pullSecrets`        | Specify docker-registry secret names as an array                                                                                                                                    | `[]`                   |
+| `image.debug`              | Specify if debug logs should be enabled                                                                                                                                             | `false`                |
+| `architecture`             | MySQL architecture (`standalone` or `replication`)                                                                                                                                  | `standalone`           |
+| `auth.rootPassword`        | Password for the `root` user. Ignored if existing secret is provided                                                                                                                | `""`                   |
+| `auth.database`            | Name for a custom database to create                                                                                                                                                | `my_database`          |
+| `auth.username`            | Name for a custom user to create                                                                                                                                                    | `""`                   |
+| `auth.password`            | Password for the new user. Ignored if existing secret is provided                                                                                                                   | `""`                   |
+| `auth.replicationUser`     | MySQL replication user                                                                                                                                                              | `replicator`           |
+| `auth.replicationPassword` | MySQL replication user password. Ignored if existing secret is provided                                                                                                             | `""`                   |
+| `auth.existingSecret`      | Use existing secret for password details. The secret has to contain the keys `mysql-root-password`, `mysql-replication-password` and `mysql-password`                               | `""`                   |
+| `auth.forcePassword`       | Force users to specify required passwords                                                                                                                                           | `false`                |
+| `auth.usePasswordFiles`    | Mount credentials as files instead of using an environment variable                                                                                                                 | `false`                |
+| `auth.customPasswordFiles` | Use custom password files when `auth.usePasswordFiles` is set to `true`. Define path for keys `root` and `user`, also define `replicator` if `architecture` is set to `replication` | `{}`                   |
+| `initdbScripts`            | Dictionary of initdb scripts                                                                                                                                                        | `{}`                   |
+| `initdbScriptsConfigMap`   | ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)                                                                                                                 | `""`                   |
 
 
 ### MySQL Primary parameters
@@ -123,23 +123,23 @@ The command removes all the Kubernetes components associated with the chart and 
 | `primary.resources.limits`                   | The resources limits for MySQL primary containers                                                               | `{}`            |
 | `primary.resources.requests`                 | The requested resources for MySQL primary containers                                                            | `{}`            |
 | `primary.livenessProbe.enabled`              | Enable livenessProbe                                                                                            | `true`          |
-| `primary.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                         | `120`           |
+| `primary.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                         | `5`             |
 | `primary.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                                | `10`            |
 | `primary.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                               | `1`             |
 | `primary.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                             | `3`             |
 | `primary.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                             | `1`             |
 | `primary.readinessProbe.enabled`             | Enable readinessProbe                                                                                           | `true`          |
-| `primary.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                                        | `30`            |
+| `primary.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                                        | `5`             |
 | `primary.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                               | `10`            |
 | `primary.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                              | `1`             |
 | `primary.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                            | `3`             |
 | `primary.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                            | `1`             |
 | `primary.startupProbe.enabled`               | Enable startupProbe                                                                                             | `true`          |
-| `primary.startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                                          | `120`           |
+| `primary.startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                                          | `15`            |
 | `primary.startupProbe.periodSeconds`         | Period seconds for startupProbe                                                                                 | `10`            |
 | `primary.startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe                                                                                | `1`             |
-| `primary.startupProbe.failureThreshold`      | Failure threshold for startupProbe                                                                              | `60`            |
-| `primary.startupProbe.successThreshold`      | Success threshold for v                                                                                         | `1`             |
+| `primary.startupProbe.failureThreshold`      | Failure threshold for startupProbe                                                                              | `10`            |
+| `primary.startupProbe.successThreshold`      | Success threshold for startupProbe                                                                              | `1`             |
 | `primary.customLivenessProbe`                | Override default liveness probe for MySQL primary containers                                                    | `{}`            |
 | `primary.customReadinessProbe`               | Override default readiness probe for MySQL primary containers                                                   | `{}`            |
 | `primary.customStartupProbe`                 | Override default startup probe for MySQL primary containers                                                     | `{}`            |
@@ -200,22 +200,22 @@ The command removes all the Kubernetes components associated with the chart and 
 | `secondary.resources.limits`                   | The resources limits for MySQL secondary containers                                                                 | `{}`            |
 | `secondary.resources.requests`                 | The requested resources for MySQL secondary containers                                                              | `{}`            |
 | `secondary.livenessProbe.enabled`              | Enable livenessProbe                                                                                                | `true`          |
-| `secondary.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                             | `120`           |
+| `secondary.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                             | `5`             |
 | `secondary.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                                    | `10`            |
 | `secondary.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                                   | `1`             |
 | `secondary.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                                 | `3`             |
 | `secondary.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                                 | `1`             |
 | `secondary.readinessProbe.enabled`             | Enable readinessProbe                                                                                               | `true`          |
-| `secondary.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                                            | `30`            |
+| `secondary.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                                            | `5`             |
 | `secondary.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                                   | `10`            |
 | `secondary.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                                  | `1`             |
 | `secondary.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                                | `3`             |
 | `secondary.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                                | `1`             |
 | `secondary.startupProbe.enabled`               | Enable startupProbe                                                                                                 | `true`          |
-| `secondary.startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                                              | `120`           |
+| `secondary.startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                                              | `15`            |
 | `secondary.startupProbe.periodSeconds`         | Period seconds for startupProbe                                                                                     | `10`            |
 | `secondary.startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe                                                                                    | `1`             |
-| `secondary.startupProbe.failureThreshold`      | Failure threshold for startupProbe                                                                                  | `60`            |
+| `secondary.startupProbe.failureThreshold`      | Failure threshold for startupProbe                                                                                  | `15`            |
 | `secondary.startupProbe.successThreshold`      | Success threshold for startupProbe                                                                                  | `1`             |
 | `secondary.customLivenessProbe`                | Override default liveness probe for MySQL secondary containers                                                      | `{}`            |
 | `secondary.customReadinessProbe`               | Override default readiness probe for MySQL secondary containers                                                     | `{}`            |
@@ -274,7 +274,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`           | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                                     | `docker.io`             |
 | `volumePermissions.image.repository`  | Init container volume-permissions image repository                                                                   | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`         | Init container volume-permissions image tag (immutable tags are recommended)                                         | `10-debian-10-r140`     |
+| `volumePermissions.image.tag`         | Init container volume-permissions image tag (immutable tags are recommended)                                         | `10-debian-10-r151`     |
 | `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                  | `Always`                |
 | `volumePermissions.image.pullSecrets` | Specify docker-registry secret names as an array                                                                     | `[]`                    |
 | `volumePermissions.resources`         | Init container volume-permissions resources                                                                          | `{}`                    |
@@ -287,7 +287,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                            | Start a side-car prometheus exporter                                                                                  | `false`                   |
 | `metrics.image.registry`                     | Exporter image registry                                                                                               | `docker.io`               |
 | `metrics.image.repository`                   | Exporter image repository                                                                                             | `bitnami/mysqld-exporter` |
-| `metrics.image.tag`                          | Exporter image tag (immutable tags are recommended)                                                                   | `0.13.0-debian-10-r43`    |
+| `metrics.image.tag`                          | Exporter image tag (immutable tags are recommended)                                                                   | `0.13.0-debian-10-r54`    |
 | `metrics.image.pullPolicy`                   | Exporter image pull policy                                                                                            | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                      | `[]`                      |
 | `metrics.service.type`                       | Kubernetes service type for MySQL Prometheus Exporter                                                                 | `ClusterIP`               |
