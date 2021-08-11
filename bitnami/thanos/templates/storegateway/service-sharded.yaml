@@ -2,10 +2,10 @@
 
 {{- $shards := int 0 }}
 
-{{- if .Values.storegateway.sharded.hashpartitioning.shards }}
-  {{- $shards = int .Values.storegateway.sharded.hashpartitioning.shards }}
+{{- if .Values.storegateway.sharded.hashPartitioning.shards }}
+  {{- $shards = int .Values.storegateway.sharded.hashPartitioning.shards }}
 {{- else }}
-  {{- $shards = len .Values.storegateway.sharded.timepartitioning }}
+  {{- $shards = len .Values.storegateway.sharded.timePartitioning }}
 {{- end }}
 
 {{- range $index, $_ := until $shards }}
@@ -66,4 +66,6 @@ spec:
     app.kubernetes.io/component: storegateway
     shard: {{ $index | quote }}
     {{- end }}
+---
+{{- end }}
 {{- end }}

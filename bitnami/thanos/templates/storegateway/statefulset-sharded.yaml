@@ -136,7 +136,7 @@ spec:
             {{- if $.Values.storegateway.extraFlags }}
             {{- $.Values.storegateway.extraFlags | toYaml | nindent 12 }}
             {{- end }}
-            {{- if $hashpartitioning }}
+            {{- if $hashPartitioning }}
             - |
               --selector.relabel-config=
                 - action: hashmod
@@ -147,8 +147,8 @@ spec:
                   source_labels: ["shard"]
                   regex: {{ $index }}
           {{- end }}
-          {{- if $timepartitioning }}
-          {{- $partion := (slice $.Values.storegateway.sharded.timepartitioning  $index) | first }}
+          {{- if $timePartitioning }}
+          {{- $partion := (slice $.Values.storegateway.sharded.timePartitioning  $index) | first }}
           {{- if $partion.max }}
             - --max-time={{ $partion.max }}
           {{- end}}
