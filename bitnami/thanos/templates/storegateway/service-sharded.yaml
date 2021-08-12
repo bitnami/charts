@@ -27,13 +27,13 @@ metadata:
   {{- end }}
 spec:
   type: {{ $.Values.storegateway.service.type }}
-  {{- if ne "false" (include "thanos.validateProperty" (dict "property" $.Values.storegateway.sharded.service.clusterIPs "context" $) ) }}
+  {{- if ne "false" (include "thanos.validateValues.storegateway.sharded.length" (dict "property" $.Values.storegateway.sharded.service.clusterIPs "context" $) ) }}
   clusterIP: {{ index $.Values.storegateway.sharded.service.clusterIPs $index }}
   {{- end }}
   {{- if ne $.Values.storegateway.service.type "ClusterIP" }}
   externalTrafficPolicy: {{ $.Values.storegateway.service.externalTrafficPolicy }}
   {{- end }}
-  {{- if ne "false" (include "thanos.validateProperty" (dict "property" $.Values.storegateway.sharded.service.loadBalancerIPs "context" $) ) }}
+  {{- if ne "false" (include "thanos.validateValues.storegateway.sharded.length" (dict "property" $.Values.storegateway.sharded.service.loadBalancerIPs "context" $) ) }}
   loadBalancerIP: {{ $.Values.storegateway.sharded.service.loadBalancerIPs }}
   {{- end }}
   {{- if and (eq $.Values.storegateway.service.type "LoadBalancer") $.Values.storegateway.service.loadBalancerSourceRanges }}
@@ -44,7 +44,7 @@ spec:
       targetPort: http
       protocol: TCP
       name: http
-      {{- if ne "false" (include "thanos.validateProperty" (dict "property" $.Values.storegateway.sharded.service.http.nodePorts "context" $) ) }}
+      {{- if ne "false" (include "thanos.validateValues.storegateway.sharded.length" (dict "property" $.Values.storegateway.sharded.service.http.nodePorts "context" $) ) }}
       nodePort: {{ index $.Values.storegateway.sharded.service.http.nodePorts $index }}
       {{- else if eq $.Values.storegateway.service.type "ClusterIP" }}
       nodePort: null
@@ -53,7 +53,7 @@ spec:
       targetPort: grpc
       protocol: TCP
       name: grpc
-      {{- if ne "false" (include "thanos.validateProperty" (dict "property" $.Values.storegateway.sharded.service.grpc.nodePorts "context" $) ) }}
+      {{- if ne "false" (include "thanos.validateValues.storegateway.sharded.length" (dict "property" $.Values.storegateway.sharded.service.grpc.nodePorts "context" $) ) }}
       nodePort: {{ index $.Values.storegateway.sharded.service.grpc.nodePorts $index }}
       {{- else if eq $.Values.storegateway.service.type "ClusterIP" }}
       nodePort: null
