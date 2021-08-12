@@ -281,6 +281,7 @@ thanos: storegateway.sharded.service.grpc.nodePorts
 false
 {{- end }}
 {{- end }}
+
 {{/* Service account name
 Usage:
 {{ include "thanos.serviceaccount.name" (dict "component" "bucketweb" "context" $) }}
