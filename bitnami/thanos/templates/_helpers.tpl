@@ -240,7 +240,7 @@ thanos: ruler configuration
 {{- end -}}
 
 {{/* Validate values of Thanos - number of sharded service properties */}}
-{{- define "thanos.validateValues.sharded.service" .) -}}
+{{- define "thanos.validateValues.sharded.service" -}}
 {{- if and .Values.storegateway.sharded.enabled (not (empty .Values.storegateway.sharded.service.clusterIPs) ) -}}
 {{- if eq "false" (include "thanos.validateValues.storegateway.sharded.length" (dict "property" $.Values.storegateway.sharded.service.clusterIPs "context" $) ) }}
 thanos: storegateway.sharded.service.clusterIPs
