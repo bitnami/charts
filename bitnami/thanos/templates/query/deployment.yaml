@@ -102,7 +102,7 @@ spec:
             {{- if and $query.dnsDiscovery.enabled $query.dnsDiscovery.sidecarsService $query.dnsDiscovery.sidecarsNamespace }}
             - --store=dnssrv+_grpc._tcp.{{- include "common.tplvalues.render" ( dict "value" $query.dnsDiscovery.sidecarsService "context" $) -}}.{{- include "common.tplvalues.render"  ( dict "value" $query.dnsDiscovery.sidecarsNamespace "context" $) -}}.svc.{{ .Values.clusterDomain }}
             {{- end }}
-            {{- if .Values.storegateway.sharded.enabled }}
+            {{- if and .Values.storegateway.enabled .Values.storegateway.sharded.enabled }}
             {{- range $index, $_ := until $shards }}
             - --store=dnssrv+_grpc._tcp.{{ include "common.names.fullname" $ }}-storegateway-{{ toString $index }}.{{ $.Release.Namespace }}.svc.{{ $.Values.clusterDomain }}
             {{- end }}
