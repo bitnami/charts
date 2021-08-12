@@ -287,13 +287,13 @@ extraVolumes: []
 ## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for WordPress container(s)
 ##
 extraVolumeMounts: []
-## @param extraPorts Optionally specify extra list of additional ports for WordPress container(s)
+## @param extraContainerPorts Optionally specify extra list of additional ports for WordPress container(s)
 ## e.g:
-## extraPorts:
+## extraContainerPorts:
 ##   - name: myservice
 ##     containerPort: 9090
 ##
-extraPorts: []
+extraContainerPorts: []
 ## @param sidecars Add additional sidecar containers to the WordPress pod
 ## e.g:
 ## sidecars:
