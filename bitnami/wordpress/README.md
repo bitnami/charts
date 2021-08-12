@@ -147,6 +147,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `hostAliases`                           | WordPress pod host aliases                                                                | `[]`            |
 | `extraVolumes`                          | Optionally specify extra list of additional volumes for WordPress pods                    | `[]`            |
 | `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for WordPress container(s)       | `[]`            |
+| `extraContainerPorts`                   | Optionally specify extra list of additional ports for WordPress container(s)              | `[]`            |
 | `sidecars`                              | Add additional sidecar containers to the WordPress pod                                    | `[]`            |
 | `initContainers`                        | Add additional init containers to the WordPress pods                                      | `[]`            |
 | `podLabels`                             | Extra labels for WordPress pods                                                           | `{}`            |
