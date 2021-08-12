@@ -329,7 +329,7 @@ serviceAccount:
   create: true
   name: ""
   annotations: {}
-  
+
 ## @param containerPort Port to expose at container level
 ##
 containerPort: 5601
