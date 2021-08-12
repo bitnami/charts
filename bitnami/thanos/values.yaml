@@ -47,7 +47,7 @@ clusterDomain: cluster.local
 image:
   registry: docker.io
   repository: bitnami/thanos
-  tag: 0.22.0-scratch-r1
+  tag: 0.22.0-scratch-r2
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -1632,15 +1632,28 @@ storegateway:
     values: []
   ## @param storegateway.affinity Thanos Store Gateway affinity for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## If you have set storegateway.sharded.enabled: true you can set shardLoopId (or any other parameter) by setting the below code block under this 'affinity' section:
+  ## affinity:
+  ##   matchLabels:
+  ##     shard: "{{ .shardLoopId }}"
   ## Note: storegateway.podAffinityPreset, storegateway.podAntiAffinityPreset, and storegateway.nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
   ## @param storegateway.nodeSelector Thanos Store Gateway node labels for pod assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## If you have set storegateway.sharded.enabled: true you can set shardLoopId (or any other parameter) by setting the below code block under this 'nodeSelector' section:
+  ## nodeSelector: { shardId: "{{ .shardLoopId }}" }
   ##
   nodeSelector: {}
   ## @param storegateway.tolerations Thanos Store Gateway tolerations for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ## If you have set storegateway.sharded.enabled: true you can set shardLoopId (or any other parameter) by setting the below code block under this 'nodeSelector' section:
+  ## tolerations:
+  ## - key: "shardId"
+  ##   operator: "Equal"
+  ##   value: "{{ .shardLoopId }}"
+  ##   effect: "NoSchedule"
+  ##
   ##
   tolerations: []
   ## @param storegateway.podLabels Thanos Store Gateway pod labels
@@ -1834,6 +1847,45 @@ storegateway:
     ## @param storegateway.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
     ##
     maxUnavailable: ""
+  ## Sharded parameters
+  ## @param storegateway.sharded.enabled Enable sharding for Thanos Store Gateway
+  ## @param storegateway.sharded.hashPartitioning.shards Setting hashPartitioning will create multiple store statefulsets based on the number of shards specified using the hashmod of the blocks
+  ## @param storegateway.sharded.timePartitioning [array] Setting time timePartitioning will create multiple store deployments based on the number of partitions
+  ## @param storegateway.sharded.service.clusterIPs Array of cluster IPs for each Store Gateway service. Length must be the same as the number of shards
+  ## Example:
+  ## clusterIPs:
+  ##   - X.X.X.X
+  ##   - Y.Y.Y.Y
+  ## @param storegateway.sharded.service.loadBalancerIPs Array of load balancer IPs for each Store Gateway service. Length must be the same as the number of shards
+  ## Example:
+  ## loadBalancerIPs:
+  ##   - X.X.X.X
+  ##   - Y.Y.Y.Y
+  ## @param storegateway.sharded.service.http.nodePorts Array of http node ports used for Store Gateway service. Length must be the same as the number of shards
+  ## Example:
+  ## nodePorts:
+  ##   - 30001
+  ##   - 30002
+  ## @param storegateway.sharded.service.grpc.nodePorts Array of grpc node ports used for Store Gateway service. Length must be the same as the number of shards
+  ## Example:
+  ## nodePorts:
+  ##   - 30011
+  ##   - 30012
+  ##
+  sharded:
+    enabled: false
+    hashPartitioning:
+      shards: ""
+    timePartitioning:
+      - min: ""
+        max: ""
+    service:
+      clusterIPs: []
+      loadBalancerIPs: []
+      http:
+        nodePorts: []
+      grpc:
+        nodePorts: []
 
 ## @section Thanos Ruler parameters
 
@@ -2738,7 +2790,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r151
+    tag: 10-debian-10-r159
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##

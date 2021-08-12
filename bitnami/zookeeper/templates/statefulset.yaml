@@ -286,6 +286,10 @@ spec:
               value: {{ .Values.initLimit | quote }}
             - name: ZOO_SYNC_LIMIT
               value: {{ .Values.syncLimit | quote }}
+            - name: ZOO_PRE_ALLOC_SIZE
+              value: {{ .Values.preAllocSize | quote }}
+            - name: ZOO_SNAPCOUNT
+              value: {{ .Values.snapCount | quote }}
             - name: ZOO_MAX_CLIENT_CNXNS
               value: {{ .Values.maxClientCnxns | quote }}
             - name: ZOO_4LW_COMMANDS_WHITELIST
