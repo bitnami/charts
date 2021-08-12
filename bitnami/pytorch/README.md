@@ -170,14 +170,15 @@ Bitnami will release a new chart updating its containers if a new version of the
 The PyTorch chart supports three different ways to load your files. In order of priority, they are:
 
   1. Existing config map
-  2. Files under the `files` directory
+  2. Files under the `files` directory (including subfolders)
   3. Cloning a git repository
+
 
 This means that if you specify a config map with your files, it won't look for the `files/` directory nor the git repository.
 
 In order to use use an existing config map, set the `configMap=my-config-map` parameter.
 
-To load your files from the `files/` directory you don't have to set any option. Just copy your files inside and don't specify a `ConfigMap`.
+To load your files from the `files/` directory you don't have to set any option. Just copy your files inside and don't specify a `ConfigMap` (on the command line, unset the default from `values.yaml` by`--set configMap=null`).
 
 Finally, if you want to clone a git repository you can use those parameters:
 

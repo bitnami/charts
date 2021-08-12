@@ -137,9 +137,13 @@ spec:
             {{- if .Values.configMap }}
             - name: ext-files
               mountPath: /app
-            {{- else if .Files.Glob "files/*" }}
+            {{- else if .Files.Glob "files/**" }}
+            {{ range $path, $bytes := .Files.Glob ( printf "files/**") }}
+            {{ $name := base $path }}
             - name: local-files
-              mountPath: /app
+              mountPath: {{ printf "/app/%s/%s" (index (regexSplit "files" (dir $path) -1) 1) $name | indent 2 }}
+              subPath: {{- sha256sum (printf "%s/%s" (index (regexSplit "files" (dir $path) -1) 1 ) $name ) | indent 2 }}
+            {{ end }}
             {{- else if .Values.cloneFilesFromGit.enabled }}
             - name: git-cloned-files
               mountPath: /app
@@ -154,7 +158,7 @@ spec:
         - name: ext-files
           configMap:
             name: {{ .Values.configMap }}
-        {{- else if .Files.Glob "files/*" }}
+        {{- else if .Files.Glob "files/**" }}
         - name: local-files
           configMap:
             name: {{ include "common.names.fullname" . }}-files
