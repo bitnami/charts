@@ -19,29 +19,33 @@ Params:
   {{- $valueKeyPassword := printf "%s.password" $authPrefix -}}
   {{- $valueKeyReplicaSetKey := printf "%s.replicaSetKey" $authPrefix -}}
   {{- $valueKeyAuthEnabled := printf "%s.enabled" $authPrefix -}}
+  {{- $bypassUpgradeValidation := include "common.mongodb.values.bypassUpgradeValidation" . -}}
 
   {{- $authEnabled := include "common.utils.getValueFromKey" (dict "key" $valueKeyAuthEnabled "context" .context) -}}
 
-  {{- if and (not $existingSecret) (eq $enabled "true") (eq $authEnabled "true") -}}
-    {{- $requiredPasswords := list -}}
+  {{- if eq $bypassUpgradeValidation "false" -}}
 
-    {{- $requiredRootPassword := dict "valueKey" $valueKeyRootPassword "secret" .secret "field" "mongodb-root-password" -}}
-    {{- $requiredPasswords = append $requiredPasswords $requiredRootPassword -}}
+    {{- if and (not $existingSecret) (eq $enabled "true") (eq $authEnabled "true") -}}
+      {{- $requiredPasswords := list -}}
 
-    {{- $valueUsername := include "common.utils.getValueFromKey" (dict "key" $valueKeyUsername "context" .context) }}
-    {{- $valueDatabase := include "common.utils.getValueFromKey" (dict "key" $valueKeyDatabase "context" .context) }}
-    {{- if and $valueUsername $valueDatabase -}}
-        {{- $requiredPassword := dict "valueKey" $valueKeyPassword "secret" .secret "field" "mongodb-password" -}}
-        {{- $requiredPasswords = append $requiredPasswords $requiredPassword -}}
+      {{- $requiredRootPassword := dict "valueKey" $valueKeyRootPassword "secret" .secret "field" "mongodb-root-password" -}}
+      {{- $requiredPasswords = append $requiredPasswords $requiredRootPassword -}}
+
+      {{- $valueUsername := include "common.utils.getValueFromKey" (dict "key" $valueKeyUsername "context" .context) }}
+      {{- $valueDatabase := include "common.utils.getValueFromKey" (dict "key" $valueKeyDatabase "context" .context) }}
+      {{- if and $valueUsername $valueDatabase -}}
+          {{- $requiredPassword := dict "valueKey" $valueKeyPassword "secret" .secret "field" "mongodb-password" -}}
+          {{- $requiredPasswords = append $requiredPasswords $requiredPassword -}}
+      {{- end -}}
+
+      {{- if (eq $architecture "replicaset") -}}
+          {{- $requiredReplicaSetKey := dict "valueKey" $valueKeyReplicaSetKey "secret" .secret "field" "mongodb-replica-set-key" -}}
+          {{- $requiredPasswords = append $requiredPasswords $requiredReplicaSetKey -}}
+      {{- end -}}
+
+      {{- include "common.validations.values.multiple.empty" (dict "required" $requiredPasswords "context" .context) -}}
+
     {{- end -}}
-
-    {{- if (eq $architecture "replicaset") -}}
-        {{- $requiredReplicaSetKey := dict "valueKey" $valueKeyReplicaSetKey "secret" .secret "field" "mongodb-replica-set-key" -}}
-        {{- $requiredPasswords = append $requiredPasswords $requiredReplicaSetKey -}}
-    {{- end -}}
-
-    {{- include "common.validations.values.multiple.empty" (dict "required" $requiredPasswords "context" .context) -}}
-
   {{- end -}}
 {{- end -}}
 
@@ -104,5 +108,18 @@ Params:
     {{- .context.Values.mongodb.architecture -}}
   {{- else -}}
     {{- .context.Values.architecture -}}
+  {{- end -}}
+{{- end -}}
+
+Usage:
+{{ include "common.mongodb.values.bypassUpgradeValidation" }}
+Params:
+  - subchart - Boolean - Optional. Whether to bypassUpgradeValidation for password environment variables. Default: false
+*/}}
+{{- define "common.mongodb.values.bypassUpgradeValidation" -}}
+  {{- if .subchart -}}
+    {{- .context.Values.mongodb.bypassUpgradeValidation -}}
+  {{- else -}}
+    {{- .context.Values.bypassUpgradeValidation -}}
   {{- end -}}
 {{- end -}}

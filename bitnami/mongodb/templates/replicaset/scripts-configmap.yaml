@@ -80,6 +80,17 @@ data:
     {{- end }}
 
     echo "Advertised Hostname: $MONGODB_ADVERTISED_HOSTNAME"
+    if [[ -n "$VAULT_CREDENTIAL_FILE" ]] && [[ -f "$VAULT_CREDENTIAL_FILE" ]]; then
+        while read -r line; do
+        line=$(echo "$line" | sed 's/: /=/g')
+        declare $line; 
+        done < "$VAULT_CREDENTIAL_FILE"
+        export MONGODB_ROOT_PASSWORD="$MONGODB_ROOT_PASSWORD"
+        export MONGODB_USERNAME="$MONGODB_USERNAME"
+        export MONGODB_PASSWORD="$MONGODB_PASSWORD"
+        export MONGODB_DATABASE="$MONGODB_DATABASE"
+        export MONGODB_USER_ROLE="$MONGODB_USER_ROLE"
+    fi    
 
     if [[ "$MY_POD_NAME" = "{{ $fullname }}-0" ]]; then
         echo "Pod name matches initial primary pod name, configuring node as a primary"
@@ -123,4 +134,14 @@ data:
     export MONGODB_ROOT_PASSWORD="" MONGODB_USERNAME="" MONGODB_DATABASE="" MONGODB_PASSWORD=""
     export MONGODB_ROOT_PASSWORD_FILE="" MONGODB_USERNAME_FILE="" MONGODB_DATABASE_FILE="" MONGODB_PASSWORD_FILE=""
     exec /opt/bitnami/scripts/mongodb/entrypoint.sh /opt/bitnami/scripts/mongodb/run.sh
+  setup-arbiter.sh: |-
+    #!/bin/bash
+    if [[ -n "$VAULT_CREDENTIAL_FILE" ]] && [[ -f "$VAULT_CREDENTIAL_FILE" ]]; then
+        while read -r line; do
+        line=$(echo "$line" | sed 's/: /=/g')
+        declare $line; 
+        done < "$VAULT_CREDENTIAL_FILE"
+        export MONGODB_INITIAL_PRIMARY_ROOT_PASSWORD="$MONGODB_ROOT_PASSWORD"
+    fi
+    exec /opt/bitnami/scripts/mongodb/entrypoint.sh /opt/bitnami/scripts/mongodb/run.sh    
 {{- end }}

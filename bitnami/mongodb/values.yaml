@@ -123,6 +123,9 @@ schedulerName: ""
 ## @param architecture MongoDB&reg; architecture (`standalone` or `replicaset`)
 ##
 architecture: standalone
+
+bypassUpgradeValidation: false
+
 ## @param useStatefulSet Set to true to use a StatefulSet instead of a Deployment (only when `architecture=standalone`)
 ##
 useStatefulSet: false
@@ -143,6 +146,14 @@ auth:
   ## @param auth.password MongoDB&reg; custom user password
   ## @param auth.database MongoDB&reg; custom database
   ##
+  # username: username
+  # password: password
+  # database: database
+  ## By default custom user role is readWrite to database configured above
+  # userRole: readWrite
+  #vaultCredentials: /tmp/credentialFile
+  ## Key used for replica set authentication
+  ## Ignored when mongodb.architecture=standalone
   username: ""
   password: ""
   database: ""
