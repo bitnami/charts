@@ -74,9 +74,11 @@ spec:
             runAsUser: {{ .Values.securityContext.runAsUser }}
           {{- end }}
           env:
+            - name: KIBANA_PORT_NUMBER
+              value: {{ .Values.containerPort | quote }}
             - name: KIBANA_ELASTICSEARCH_URL
               value: {{ include "kibana.elasticsearch.url" . | quote }}
-            - name: KIBANA_ELASTICSEARCH_PORT
+            - name: KIBANA_ELASTICSEARCH_PORT_NUMBER
               value: {{ include "kibana.elasticsearch.port" . | quote }}
             - name: KIBANA_FORCE_INITSCRIPTS
               value: {{ .Values.forceInitScripts | quote }}
@@ -96,15 +98,15 @@ spec:
           {{- end }}
           ports:
             - name: http
-              containerPort: 5601
+              containerPort: {{ .Values.containerPort }}
               protocol: TCP
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
             {{- if .Values.configuration.server.rewriteBasePath }}
-              path: {{ .Values.configuration.server.basePath }}/app/kibana
+              path: {{ .Values.configuration.server.basePath }}/api/status
             {{- else }}
-              path: /app/kibana
+              path: /api/status
             {{- end }}
               port: http
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
@@ -117,9 +119,9 @@ spec:
           readinessProbe:
             httpGet:
             {{- if .Values.configuration.server.rewriteBasePath }}
-              path: {{ .Values.configuration.server.basePath }}/app/kibana
+              path: {{ .Values.configuration.server.basePath }}/api/status
             {{- else }}
-              path: /app/kibana
+              path: /api/status
             {{- end }}
               port: http
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}

@@ -80,6 +80,8 @@ spec:
             {{- include "airflow.configure.database" . | nindent 12 }}
             {{- include "airflow.configure.redis" . | nindent 12 }}
             {{- include "airflow.configure.airflow.kubernetesExecutor" . | nindent 12 }}
+            - name: AIRFLOW_EXECUTOR
+              value: {{ .Values.executor }}
             - name: AIRFLOW_WEBSERVER_HOST
               value: '0.0.0.0'
             - name: AIRFLOW_WEBSERVER_PORT_NUMBER
@@ -106,7 +108,6 @@ spec:
             - name: AIRFLOW_LDAP_BIND_USER
               value: {{ .Values.ldap.binddn }}
             - name: AIRFLOW_LDAP_BIND_PASSWORD
-              value: {{ .Values.ldap.bindpw }}
               valueFrom:
                 secretKeyRef:
                   name: {{ include "airflow.ldapSecretName" . }}
@@ -114,7 +115,7 @@ spec:
             - name: AIRFLOW_LDAP_UID_FIELD
               value: {{ .Values.ldap.uidField }}
             - name: AIRFLOW_LDAP_USE_TLS
-              value: {{ ternary "yes" "no" .Values.ldap.tls.enabled | quote }}
+              value: {{ ternary "True" "False" .Values.ldap.tls.enabled | quote }}
             {{- if .Values.ldap.tls.enabled }}
             - name: AIRFLOW_LDAP_ALLOW_SELF_SIGNED
               value: {{ .Values.ldap.tls.allowSelfSigned }}
@@ -174,9 +175,9 @@ spec:
               port: http
           {{- end }}
             {{ omit .Values.web.readinessProbe "enabled" | toYaml | nindent 12 }}
-        {{- else if .Values.web.customRedinessProbe }}
+        {{- else if .Values.web.customReadinessProbe }}
           readinessProbe:
-            {{- include "common.tplvalues.render" (dict "value" .Values.web.customRedinessProbe "context" $) | trim | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.web.customReadinessProbe "context" $) | trim | nindent 12 }}
         {{- end }}
           volumeMounts:
           {{- if .Files.Glob "files/dags/*.py" }}

@@ -31,10 +31,17 @@ spec:
       schedulerName: {{ .Values.metrics.kafka.schedulerName | quote }}
       {{- end }}
       serviceAccountName: {{ template "kafka.serviceAccountName" . }}
+      {{- if .Values.metrics.kafka.initContainers }}
+      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.kafka.initContainers "context" $) | nindent 8 }}
+      {{- end }}
       containers:
         - name: kafka-exporter
           image: {{ include "kafka.metrics.kafka.image" . }}
           imagePullPolicy: {{ .Values.metrics.kafka.image.pullPolicy | quote }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else }}
           command:
             - /bin/bash
             - -ec
@@ -47,6 +54,7 @@ spec:
               --sasl.enabled \
               --sasl.username="$SASL_USERNAME" \
               --sasl.password="${SASL_USER_PASSWORD%%,*}" \
+              --sasl.mechanism="{{ include "kafka.metrics.kafka.saslMechanism" . }}" \
               {{- end }}
               {{- if (include "kafka.client.tlsEncryption" .) }}
               --tls.enabled \
@@ -74,6 +82,7 @@ spec:
                 secretKeyRef:
                   name: {{ include "kafka.jaasSecretName" . }}
                   key: client-passwords
+          {{- end }}
           {{- end }}
           ports:
             - name: metrics

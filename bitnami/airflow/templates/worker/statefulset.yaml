@@ -1,4 +1,4 @@
-{{- if eq .Values.executor "CeleryExecutor" }}
+{{- if or (eq .Values.executor "CeleryExecutor") (eq .Values.executor "CeleryKubernetesExecutor") }}
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
@@ -103,6 +103,8 @@ spec:
             {{- include "airflow.configure.airflow.common"  . | nindent 12 }}
             {{- include "airflow.configure.database" . | nindent 12 }}
             {{- include "airflow.configure.redis" . | nindent 12 }}
+            - name: AIRFLOW_EXECUTOR
+              value: {{ include "airflow.worker.executor" . }}
             - name: AIRFLOW_WEBSERVER_HOST
               value: {{ include "common.names.fullname" . }}
             - name: AIRFLOW_WEBSERVER_PORT_NUMBER
@@ -147,9 +149,9 @@ spec:
             tcpSocket:
               port: worker
             {{ omit .Values.worker.readinessProbe "enabled" | toYaml | nindent 12 }}
-          {{- else if .Values.worker.customRedinessProbe }}
+          {{- else if .Values.worker.customReadinessProbe }}
           readinessProbe:
-            {{- include "common.tplvalues.render" (dict "value" .Values.worker.customRedinessProbe "context" $) | trim | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.worker.customReadinessProbe "context" $) | trim | nindent 12 }}
           {{- end }}
           volumeMounts:
           {{- if .Files.Glob "files/dags/*.py" }}

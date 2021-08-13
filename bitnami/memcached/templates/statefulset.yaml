@@ -50,6 +50,9 @@ spec:
       {{- if .Values.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" .) | nindent 8 }}
       {{- end }}
+      {{- if .Values.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName | quote }}
       {{- end }}
@@ -58,13 +61,44 @@ spec:
         fsGroup: {{ .Values.securityContext.fsGroup }}
         runAsUser: {{ .Values.securityContext.runAsUser }}
       {{- end }}
+      serviceAccountName: {{ template "memcached.serviceAccountName" . }}
+      {{- if or .Values.persistence.enabled .Values.initContainers }}
+      initContainers:
+        {{- if .Values.persistence.enabled }}
+        - name: volume-permissions
+          image: {{ include "memcached.volumePermissions.image" . }}
+          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          command:
+            - /bin/bash
+            - -ec
+            - |
+              touch /cache-state/memory_file
+              chown -R {{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }} /cache-state
+          securityContext:
+            runAsUser: 0
+          {{- if .Values.volumePermissions.resources }}
+          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: data
+              mountPath: /cache-state
+        {{- end }}
+        {{- if .Values.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      {{- end }}
       containers:
         - name: memcached
           {{- if .Values.persistence.enabled }}
           lifecycle:
             preStop:
               exec:
-                command: ["/bin/sh", "-c", "/usr/bin/pkill -10 memcached ; sleep 60s"]
+                command:
+                  - /bin/bash
+                  - -ec
+                  - |
+                    /usr/bin/pkill -10 memcached
+                    sleep 60s
           {{- end }}
           image: {{ template "memcached.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
@@ -75,7 +109,7 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.arguments "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.persistence.enabled }}
-            - -e/cache-state/memory_file
+            - --memory-file=/cache-state/memory_file
           {{- end }}
           {{- if or .Values.extraEnv .Values.memcachedUsername .Values.memcachedPassword }}
           env:
@@ -145,6 +179,9 @@ spec:
           {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
           {{- end }}
+        {{- end }}
+        {{- if .Values.sidecars }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
         - name: tmp

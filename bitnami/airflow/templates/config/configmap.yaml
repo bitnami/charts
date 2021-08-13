@@ -1,4 +1,4 @@
-{{- $kube := eq .Values.executor "KubernetesExecutor" -}}
+{{- $kube := or (eq .Values.executor "KubernetesExecutor") (eq .Values.executor "CeleryKubernetesExecutor") -}}
 {{- if or .Values.config $kube }}
 apiVersion: v1
 kind: ConfigMap
@@ -47,9 +47,10 @@ data:
             - "/bin/bash"
             - "-ce"
             - |
-                . /opt/bitnami/base/helpers
+                . /opt/bitnami/scripts/airflow-worker-env.sh
+                . /opt/bitnami/scripts/libairflowworker.sh
 
-                nami_initialize airflow-worker
+                airflow_generate_config # Generate the config file
                 cp /opt/bitnami/airflow/airflow.cfg /opt/bitnami/airflow/k8s-executor-config/airflow.cfg
 
           env:
@@ -57,6 +58,8 @@ data:
             {{- include "airflow.configure.database" . | nindent 12 }}
             {{- include "airflow.configure.redis" . | nindent 12 }}
             {{- include "airflow.configure.airflow.kubernetesExecutor" . | nindent 12 }}
+            - name: AIRFLOW_EXECUTOR
+              value: {{ .Values.executor }}
             - name: AIRFLOW_WEBSERVER_HOST
               value: {{ include "common.names.fullname" . }}
             - name: AIRFLOW_WEBSERVER_PORT_NUMBER
@@ -100,12 +103,17 @@ data:
         {{- if .Values.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
         {{- end }}
+        {{- if .Values.worker.resources }}
+          resources: {{- toYaml .Values.worker.resources | nindent 12 }}
+        {{- end }}
           env:
             - name: AIRFLOW__CORE__EXECUTOR
               value: LocalExecutor
             {{- include "airflow.configure.airflow.common"  . | nindent 12 }}
             {{- include "airflow.configure.database" . | nindent 12 }}
             {{- include "airflow.configure.redis" . | nindent 12 }}
+            - name: AIRFLOW_EXECUTOR
+              value: {{ .Values.executor }}
             - name: AIRFLOW_WEBSERVER_HOST
               value: {{ include "common.names.fullname" . }}
             - name: AIRFLOW_WEBSERVER_PORT_NUMBER

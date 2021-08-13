@@ -151,13 +151,19 @@ spec:
         - name: kafka
           image: {{ include "kafka.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
-          {{- if .Values.args }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
-              value: {{ ternary "true" "false" .Values.image.debug | quote }}
+              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
             - name: MY_POD_IP
               valueFrom:
                 fieldRef:
@@ -190,7 +196,7 @@ spec:
             {{- end }}
             - name: KAFKA_CFG_LISTENERS
               {{- if .Values.listeners }}
-              value: {{ .Values.listeners }}
+              value: {{ join "," .Values.listeners }}
               {{- else if .Values.externalAccess.enabled }}
               value: "INTERNAL://:{{ $interBrokerPort }},CLIENT://:9092,EXTERNAL://:9094"
               {{- else }}
@@ -210,7 +216,7 @@ spec:
             {{- else }}
             - name: KAFKA_CFG_ADVERTISED_LISTENERS
               {{- if .Values.advertisedListeners }}
-              value: {{ .Values.advertisedListeners }}
+              value: {{ join "," .Values.advertisedListeners }}
               {{- else }}
               value: "INTERNAL://$(MY_POD_NAME).{{ $fullname }}-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $interBrokerPort }},CLIENT://$(MY_POD_NAME).{{ $fullname }}-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $clientPort }}"
               {{- end }}
@@ -239,7 +245,7 @@ spec:
                   key: inter-broker-password
             {{- end }}
             {{- end }}
-            {{- if (coalesce .Values.auth.sasl.jaas.zookeeperUser .Values.auth.jaas.zookeeperUser) }}
+            {{- if and .Values.zookeeper.auth.enabled (coalesce .Values.auth.sasl.jaas.zookeeperUser .Values.auth.jaas.zookeeperUser) }}
             - name: KAFKA_ZOOKEEPER_PROTOCOL
               value: "SASL"
             - name: KAFKA_ZOOKEEPER_USER
@@ -251,11 +257,11 @@ spec:
                   key: zookeeper-password
             {{- end }}
             {{- if (include "kafka.tlsEncryption" .) }}
-            - name: KAFKA_CFG_TLS_TYPE
+            - name: KAFKA_TLS_TYPE
               value: {{ upper .Values.auth.tls.type | quote }}
             - name: KAFKA_CFG_SSL_ENDPOINT_IDENTIFICATION_ALGORITHM
-              value: {{ coalesce .Values.auth.tls.endpointIdentificationAlgorithm .Values.auth.tlsEndpointIdentificationAlgorithm | quote }}
-            - name: KAFKA_CFG_TLS_CLIENT_AUTH
+              value: {{ default "" (coalesce .Values.auth.tls.endpointIdentificationAlgorithm .Values.auth.tlsEndpointIdentificationAlgorithm) | quote }}
+            - name: KAFKA_TLS_CLIENT_AUTH
               value: {{ ternary "required" "none" (eq .Values.auth.clientProtocol "mtls") | quote }}
             {{- $tlsPassword := coalesce .Values.auth.tls.password .Values.auth.jksPassword }}
             - name: KAFKA_CERTIFICATE_PASSWORD
@@ -327,6 +333,7 @@ spec:
             - name: kafka-external
               containerPort: 9094
             {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             tcpSocket:
@@ -350,6 +357,7 @@ spec:
             successThreshold: {{ .Values.readinessProbe.successThreshold }}
           {{- else if .Values.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
           {{- end }}
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
@@ -393,6 +401,10 @@ spec:
         - name: jmx-exporter
           image: {{ template "kafka.metrics.jmx.image" . }}
           imagePullPolicy: {{ .Values.metrics.jmx.image.pullPolicy | quote }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else }}
           command:
             - java
             - -XX:+UnlockExperimentalVMOptions
@@ -403,6 +415,7 @@ spec:
             - jmx_prometheus_httpserver.jar
             - "5556"
             - /etc/jmx-kafka/jmx-kafka-prometheus.yml
+          {{- end }}
           ports:
             - name: metrics
               containerPort: 5556
@@ -489,6 +502,9 @@ spec:
           requests:
             storage: {{ .Values.persistence.size | quote }}
         {{ include "kafka.storageClass" . | nindent 8 }}
+        {{- if .Values.persistence.selector }}
+        selector: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.selector "context" $) | nindent 10 }}
+        {{- end -}}
 {{- end }}
 {{- if and .Values.logPersistence.enabled (not .Values.logPersistence.existingClaim) }}
     - metadata:
@@ -505,5 +521,8 @@ spec:
           requests:
             storage: {{ .Values.logPersistence.size | quote }}
         {{ include "kafka.storageClass" . | nindent 8 }}
+        {{- if .Values.logPersistence.selector }}
+        selector: {{- include "common.tplvalues.render" (dict "value" .Values.logPersistence.selector "context" $) | nindent 10 }}
+        {{- end -}}
 {{- end }}
 {{- end }}

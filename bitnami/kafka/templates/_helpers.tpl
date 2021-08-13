@@ -47,13 +47,6 @@ Return the proper Kafka image name
 {{- end -}}
 
 {{/*
-Return the proper Kafka provisioning image name
-*/}}
-{{- define "kafka.provisioning.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.provisioning.image "global" .Values.global) }}
-{{- end -}}
-
-{{/*
 Return the proper image name (for the init container auto-discovery image)
 */}}
 {{- define "kafka.externalAccess.autoDiscovery.image" -}}
@@ -206,7 +199,7 @@ Return true if a JAAS credentials secret object should be created
 */}}
 {{- define "kafka.createJaasSecret" -}}
 {{- $secretName := coalesce .Values.auth.sasl.jaas.existingSecret .Values.auth.jaas.existingSecret -}}
-{{- if and (or (include "kafka.client.saslAuthentication" .) (include "kafka.interBroker.saslAuthentication" .) .Values.auth.jaas.zookeeperUser) (empty $secretName) -}}
+{{- if and (or (include "kafka.client.saslAuthentication" .) (include "kafka.interBroker.saslAuthentication" .) (and .Values.zookeeper.auth.enabled .Values.auth.jaas.zookeeperUser)) (empty $secretName) -}}
     {{- true -}}
 {{- end -}}
 {{- end -}}
@@ -272,6 +265,21 @@ Return true if a log4j ConfigMap object should be created.
 {{- define "kafka.log4j.createConfigMap" -}}
 {{- if and .Values.log4j (not .Values.existingLog4jConfigMap) }}
     {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the SASL mechanism to use for the Kafka exporter to access Kafka
+The exporter uses a different nomenclature so we need to do this hack
+*/}}
+{{- define "kafka.metrics.kafka.saslMechanism" -}}
+{{- $saslMechanisms := coalesce .Values.auth.sasl.mechanisms .Values.auth.saslMechanisms }}
+{{- if contains "scram-sha-512" $saslMechanisms }}
+    {{- printf "scram-sha512" -}}
+{{- else if contains "scram-sha-256" $saslMechanisms }}
+    {{- printf "scram-sha256" -}}
+{{- else -}}
+    {{- printf "plain" -}}
 {{- end -}}
 {{- end -}}
 
@@ -354,7 +362,7 @@ kafka: rbac.create
 
 {{/* Validate values of Kafka - SASL mechanisms must be provided when using SASL */}}
 {{- define "kafka.validateValues.saslMechanisms" -}}
-{{- if and (or (.Values.auth.clientProtocol | regexFind "sasl") (.Values.auth.interBrokerProtocol | regexFind "sasl") .Values.auth.jaas.zookeeperUser) (not .Values.auth.saslMechanisms) }}
+{{- if and (or (.Values.auth.clientProtocol | regexFind "sasl") (.Values.auth.interBrokerProtocol | regexFind "sasl") (and .Values.zookeeper.auth.enabled .Values.auth.jaas.zookeeperUser)) (not .Values.auth.saslMechanisms) }}
 kafka: auth.saslMechanisms
     The SASL mechanisms are required when either auth.clientProtocol or auth.interBrokerProtocol use SASL or Zookeeper user is provided.
 {{- end }}

@@ -1,27 +1,47 @@
+## @section Global parameters
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
-## Current available global Docker image parameters: imageRegistry and imagePullSecrets
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
-# global:
-#   imageRegistry: myRegistryName
-#   imagePullSecrets:
-#     - myRegistryKeySecretName
-#   storageClass: myStorageClass
+global:
+  imageRegistry: ""
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+  storageClass: ""
+
+## @section Zookeeper chart parameters
 
 zookeeper:
+  ## @param zookeeper.enabled Switch to enable or disable the Zookeeper helm chart
+  ##
   enabled: true
+  ## @param zookeeper.replicaCount Number of Zookeeper replicas
+  ##
   replicaCount: 3
-  ## Size in MB for the Java Heap options (Xmx and XMs). This env var is ignored if Xmx an Xms are configured via JVMFLAGS
+  ## @param zookeeper.heapSize Size in MB for the Java Heap options (Xmx and XMs).
+  ## This env var is ignored if Xmx an Xms are configured via JVMFLAGS
   ##
   heapSize: 4096
+  ## Recommended values for cpu and memory requests
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param zookeeper.resources.limits The resources limits for Zookeeper containers
+  ## @param zookeeper.resources.requests [object] The requested resources for Zookeeper containers
+  ##
   resources:
-    ## Recommended values for cpu and memory requests
-    ##
     limits: {}
     requests:
       cpu: 250m
       memory: 5120Mi
   ## Anti Affinity rules set for resiliency
+  ## @param zookeeper.affinity.podAntiAffinity [object] Zookeeper pods Anti Affinity rules for best possible resiliency (evaluated as a template)
+  ## @skip zookeeper.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution
   ##
   affinity:
     podAntiAffinity:
@@ -32,24 +52,40 @@ zookeeper:
                 operator: In
                 values:
                   - zookeeper
+              - key: app.kubernetes.io/instance
+                operator: In
+                values:
+                  - '{{ .Release.Name }}'
           topologyKey: "kubernetes.io/hostname"
+
+## @section Kafka chart parameters
 
 ## Kafka Subchart parameters
 ##
 kafka:
+  ## @param kafka.enabled Switch to enable or disable the Kafka helm chart
+  ##
   enabled: true
+  ## @param kafka.replicaCount Number of Kafka replicas
+  ##
   replicaCount: 3
-  ## Kafka's Java Heap size
+  ## @param kafka.heapOpts Kafka's Java Heap size
   ##
   heapOpts: -Xmx4096m -Xms4096m
+  ## Recommended values for cpu and memory requests
+  ## @param kafka.resources.limits The resources limits for Kafka containers
+  ## @param kafka.resources.requests [object] The requested resources for Kafka containers
+  ##
   resources:
-    ## Recommended values for cpu and memory requests
-    ##
     limits: {}
     requests:
       cpu: 250m
       memory: 5120Mi
   ## Anti Affinity rules set for resiliency and Affinity rules set for optimal performance
+  ## @param kafka.affinity.podAntiAffinity [object] Zookeeper pods Anti Affinity rules for best possible resiliency (evaluated as a template)
+  ## @skip kafka.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution
+  ## @param kafka.affinity.podAffinity [object] Zookeeper pods Affinity rules for best possible resiliency (evaluated as a template)
+  ## @skip kafka.affinity.podAffinity.preferredDuringSchedulingIgnoredDuringExecution
   ##
   affinity:
     podAntiAffinity:
@@ -60,6 +96,10 @@ kafka:
                 operator: In
                 values:
                   - kafka
+              - key: app.kubernetes.io/instance
+                operator: In
+                values:
+                  - '{{ .Release.Name }}'
           topologyKey: "kubernetes.io/hostname"
     podAffinity:
       preferredDuringSchedulingIgnoredDuringExecution:
@@ -71,6 +111,10 @@ kafka:
                   operator: In
                   values:
                     - zookeeper
+                - key: app.kubernetes.io/instance
+                  operator: In
+                  values:
+                    - '{{ .Release.Name }}'
             topologyKey: "kubernetes.io/hostname"
   ## Prometheus Exporters / Metrics
   ##
@@ -78,9 +122,13 @@ kafka:
     ## Prometheus Kafka Exporter: exposes complimentary metrics to JMX Exporter
     ##
     kafka:
+      ## @param kafka.metrics.kafka.enabled Whether or not to create a standalone Kafka exporter to expose Kafka metrics
+      ##
       enabled: false
       ## Prometheus Kafka Exporter' resource requests and limits
       ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+      ## @param kafka.metrics.kafka.resources.limits The resources limits for the container
+      ## @param kafka.metrics.kafka.resources.requests [object] Kafka Exporter container resource requests
       ##
       resources:
         limits: {}
@@ -90,16 +138,19 @@ kafka:
       ## Service configuration
       ##
       service:
-        ## Kafka Exporter Prometheus port to be used in wavefront configuration
+        ## @param kafka.metrics.kafka.service.port Kafka Exporter Prometheus port to be used in Wavefront configuration
         ##
         port: 9308
-
-    ## Prometheus JMX Exporter: exposes the majority of Kafkas metrics
+    ## Prometheus JMX Exporter: exposes the majority of Kafka's metrics
     ##
     jmx:
+      ## @param kafka.metrics.jmx.enabled Whether or not to expose JMX metrics to Prometheus
+      ##
       enabled: false
       ## Prometheus JMX Exporter' resource requests and limits
       ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+      ## @param kafka.metrics.jmx.resources.limits The resources limits for the container
+      ## @param kafka.metrics.jmx.resources.requests [object] JMX Exporter container resource requests
       ##
       resources:
         limits: {}
@@ -109,107 +160,43 @@ kafka:
       ## Service configuration
       ##
       service:
-        ## JMX Exporter Prometheus port
+        ## @param kafka.metrics.jmx.service.port JMX Exporter Prometheus port
         ##
         port: 5556
+  ## @param kafka.zookeeper.enabled Switch to enable or disable the Zookeeper helm chart
+  ##
   zookeeper:
     enabled: false
-  ## This value is only used when zookeeper.enabled is set to false.
+  ## External Zookeeper. This value is only used when zookeeper.enabled is set to false.
+  ## @param kafka.externalZookeeper.servers Server or list of external Zookeeper servers to use
   ##
   externalZookeeper:
-    ## Server or list of external zookeeper servers to use. This is set to the zookeeper deployed as part of this chart
+    ## This is set to the zookeeper deployed as part of this chart
     ##
     servers:
       - '{{ .Release.Name }}-zookeeper'
 
-## Spark Subchart parameters
-##
-spark:
-  enabled: true
-  ## Spark master specific configuration
-  ##
-  master:
-    ## Spark container ports
-    ##
-    webPort: 8080
-    resources:
-      ## Recommended values for cpu and memory requests
-      ##
-      limits: {}
-      requests:
-        cpu: 250m
-        memory: 5120Mi
-    ## Anti affinity rules set for resiliency
-    ##
-    affinity:
-      podAntiAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchExpressions:
-                - key: app.kubernetes.io/component
-                  operator: In
-                  values:
-                    - worker
-            topologyKey: "kubernetes.io/hostname"
-  ## Spark worker specific configuration
-  ##
-  worker:
-    replicaCount: 2
-    ## Spark container ports
-    ##
-    webPort: 8081
-    ## Anti affinity rules set for resiliency
-    ##
-    affinity:
-      podAntiAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchExpressions:
-                - key: app.kubernetes.io/component
-                  operator: In
-                  values:
-                    - worker
-                    - master
-            topologyKey: "kubernetes.io/hostname"
-    resources:
-      ## Recommended values for cpu and memory requests
-      ##
-      limits: {}
-      requests:
-        cpu: 250m
-        memory: 5120Mi
-  ## Metrics configuration
-  ##
-  metrics:
-    enabled: false
-    ## Annotations for the Prometheus metrics on master nodes
-    ##
-    masterAnnotations:
-      prometheus.io/scrape: 'true'
-      prometheus.io/path: '/metrics/'
-      prometheus.io/port: '8080'
-    ## Annotations for the Prometheus metrics on worker nodes
-    ##
-    workerAnnotations:
-      prometheus.io/scrape: 'true'
-      prometheus.io/path: '/metrics/'
-      prometheus.io/port: '8081'
+## @section Solr chart parameters
 
 ## Solr Subchart parameters
 ##
 solr:
+  ## @param solr.enabled Switch to enable or disable the Solr helm chart
+  ##
   enabled: true
+  ## @param solr.replicaCount Number of Solr replicas
+  ##
   replicaCount: 2
-  ## Exporter deployment does not work with authentication enabled- Bug
+  ## @param solr.authentication.enabled Enable Solr authentication. BUG: Exporter deployment does not work with authentication enabled
   ##
   authentication:
     enabled: false
-
-  ## Java memory options recommended value
+  ## @param solr.javaMem Java recommended memory options to pass to the Solr container
   ##
   javaMem: -Xmx4096m -Xms4096m
-
   ## Anti affinity rules set for resiliency
+  ## @param solr.affinity.podAntiAffinity [object] Zookeeper pods Anti Affinity rules for best possible resiliency (evaluated as a template)
+  ## @skip solr.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution
   ##
   affinity:
     podAntiAffinity:
@@ -220,9 +207,15 @@ solr:
                 operator: In
                 values:
                   - solr
+              - key: app.kubernetes.io/instance
+                operator: In
+                values:
+                  - '{{ .Release.Name }}'
           topologyKey: "kubernetes.io/hostname"
   resources:
     ## Recommended values for cpu and memory requests
+    ## @param solr.resources.limits The resources limits for Solr containers
+    ## @param solr.resources.requests [object] The requested resources for Solr containers
     ##
     limits: {}
     requests:
@@ -231,10 +224,15 @@ solr:
   ## Configuration for the solr prometheus exporter
   ##
   exporter:
+    ## @param solr.exporter.enabled Start a prometheus exporter
+    ##
     enabled: false
-    ## Solr exporter port
+    ## @param solr.exporter.port Solr exporter port
     ##
     port: 9983
+    ## @param solr.exporter.affinity.podAffinity [object] Zookeeper pods Affinity rules for best possible resiliency (evaluated as a template)
+    ## @skip solr.exporter.affinity.podAffinity.preferredDuringSchedulingIgnoredDuringExecution
+    ##
     affinity:
       podAffinity:
         preferredDuringSchedulingIgnoredDuringExecution:
@@ -246,45 +244,158 @@ solr:
                     operator: In
                     values:
                       - solr
+                  - key: app.kubernetes.io/instance
+                    operator: In
+                    values:
+                      - '{{ .Release.Name }}'
               topologyKey: "kubernetes.io/hostname"
+    ## Solr Prometheus exporter container resource requests and limits
+    ## @param solr.exporter.resources.limits The resources limits for the container
+    ## @param solr.exporter.resources.requests [object] The requested resources for the container
+    ##
     resources:
       limits: {}
       requests:
         cpu: 100m
         memory: 128Mi
+  ## @param solr.zookeeper.enabled Enable Zookeeper deployment. Needed for Solr cloud.
+  ##
   zookeeper:
     enabled: false
-  ## This value is only used when zookeeper.enabled is set to false
+  ## External Zookeeper. This value is only used when zookeeper.enabled is set to false.
+  ## @param solr.externalZookeeper.servers Servers for an already existing Zookeeper.
   ##
   externalZookeeper:
-    ## Server or list of external zookeeper servers to use. In this case, it is set to the zookeeper deployed as part of this chart.
+    ## In this case, it is set to the zookeeper deployed as part of this chart.
     ##
     servers:
       - '{{ .Release.Name }}-zookeeper'
 
+## @section Spark chart parameters
+
+## Spark Subchart parameters
+##
+spark:
+  ## @param spark.enabled Switch to enable or disable the Spark helm chart
+  ##
+  enabled: true
+  ## Spark master specific configuration
+  ##
+  master:
+    ## @param spark.master.webPort Specify the port where the web interface will listen on the master
+    ##
+    webPort: 8080
+    ## @param spark.master.resources.limits The resources limits for the container
+    ## @param spark.master.resources.requests [object] The resources limits for the container
+    ##
+    resources:
+      ## Recommended values for cpu and memory requests
+      ##
+      limits: {}
+      requests:
+        cpu: 250m
+        memory: 5120Mi
+    ## Anti affinity rules set for resiliency
+    ## @param spark.master.affinity.podAntiAffinity [object] Zookeeper pods Anti Affinity rules for best possible resiliency (evaluated as a template)
+    ## @skip spark.master.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution
+    ##
+    affinity:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+                - key: app.kubernetes.io/component
+                  operator: In
+                  values:
+                    - worker
+                - key: app.kubernetes.io/instance
+                  operator: In
+                  values:
+                    - '{{ .Release.Name }}'
+            topologyKey: "kubernetes.io/hostname"
+  ## Spark worker specific configuration
+  ##
+  worker:
+    ## @param spark.worker.replicaCount Set the number of workers
+    ##
+    replicaCount: 2
+    ## @param spark.worker.webPort Specify the port where the web interface will listen on the worker
+    ##
+    webPort: 8081
+    ## Anti affinity rules set for resiliency
+    ## @param spark.worker.affinity.podAntiAffinity [object] Zookeeper pods Anti Affinity rules for best possible resiliency (evaluated as a template)
+    ## @skip spark.worker.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution
+    ##
+    affinity:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+                - key: app.kubernetes.io/component
+                  operator: In
+                  values:
+                    - worker
+                    - master
+                - key: app.kubernetes.io/instance
+                  operator: In
+                  values:
+                    - '{{ .Release.Name }}'
+            topologyKey: "kubernetes.io/hostname"
+    ## @param spark.worker.resources.limits The resources limits for the container
+    ## @param spark.worker.resources.requests [object] The resources limits for the container
+    ##
+    resources:
+      limits: {}
+      requests:
+        cpu: 250m
+        memory: 5120Mi
+  ## Metrics configuration
+  ##
+  metrics:
+    ## @param spark.metrics.enabled Start a side-car Prometheus exporter
+    ##
+    enabled: false
+    ## @param spark.metrics.masterAnnotations [object] Annotations for enabling prometheus to access the metrics endpoint of the master nodes
+    ##
+    masterAnnotations:
+      prometheus.io/scrape: 'true'
+      prometheus.io/path: '/metrics/'
+      prometheus.io/port: '8080'
+    ## @param spark.metrics.workerAnnotations [object] Annotations for enabling prometheus to access the metrics endpoint of the worker nodes
+    ##
+    workerAnnotations:
+      prometheus.io/scrape: 'true'
+      prometheus.io/path: '/metrics/'
+      prometheus.io/port: '8081'
+
+## @section Tanzu Observability (Wavefront) chart parameters
+
 ## Wavefront Subchart parameters
 ##
 wavefront:
+  ## @param wavefront.enabled Switch to enable or disable the Wavefront helm chart
+  ##
   enabled: false
-  ## This is a unique name for the cluster (required)
+  ## @param wavefront.clusterName Unique name for the Kubernetes cluster (required)
   ## All metrics will receive a `cluster` tag with this value
   ##
   clusterName: KUBERNETES_CLUSTER_NAME
-  ## Wavefront URL (cluster) and API Token (required)
+  ## @param wavefront.wavefront.url Wavefront URL for your cluster (required)
+  ## @param wavefront.wavefront.token Wavefront API Token (required)
+  ## @param wavefront.wavefront.existingSecret Name of an existing secret containing the token
   ##
   wavefront:
     url: https://YOUR_CLUSTER.wavefront.com
     token: YOUR_API_TOKEN
-    ## Name of an existing secret containing the token
-    ##
-    existingSecret:
+    existingSecret: ""
   ## Wavefront Collector is responsible to get all Kubernetes metrics from your cluster.
-  ## It will capture Kubernetes resources metrics available from the kubelets,
-  ## as well as auto-discovery capabilities.
+  ## It will capture Kubernetes resources metrics available from the kubelets, as well as auto-discovery capabilities.
   ##
   collector:
     ## Rules based discovery configuration
     ## Ref: https://github.com/wavefrontHQ/wavefront-kubernetes-collector/blob/master/docs/discovery.md
+    ## @param wavefront.collector.resources.limits The resources limits for the collector container
+    ## @param wavefront.collector.resources.requests [object] The requested resources for the collector container
     ##
     resources:
       limits: {}
@@ -292,12 +403,14 @@ wavefront:
         cpu: 200m
         memory: 10Mi
     discovery:
+      ## @param wavefront.collector.discovery.enabled Rules based and Prometheus endpoints auto-discovery
+      ##
       enabled: true
-      ## Whether to enable runtime discovery configurations
+      ## @param wavefront.collector.discovery.enableRuntimeConfigs Enable runtime discovery rules
       ## Ref: https://github.com/wavefrontHQ/wavefront-collector-for-kubernetes/blob/master/docs/discovery.md#runtime-configurations
       ##
       enableRuntimeConfigs: true
-      ## Can be used to add additional discovery rules
+      ## @param wavefront.collector.discovery.config [array] Configuration for rules based auto-discovery
       ##
       config:
         ## auto-discover kafka-exporter
@@ -310,8 +423,7 @@ wavefront:
           port: 9308
           path: /metrics
           scheme: http
-          prefix: kube.kafka.
-
+          prefix: kafka.
         ## auto-discover jmx exporter
         ##
         - name: kafka-jmx-discovery
@@ -322,8 +434,7 @@ wavefront:
           port: 5556
           path: /metrics
           scheme: http
-          prefix: kube.kafkajmx.
-
+          prefix: kafkajmx.
         ## auto-discover solr
         ##
         - name: solr-discovery
@@ -334,8 +445,6 @@ wavefront:
           port: 9983
           path: /metrics
           scheme: http
-          prefix: kube.solr.
-
         ## auto-discover spark
         ##
         - name: spark-worker-discovery
@@ -346,8 +455,7 @@ wavefront:
           port: 8081
           path: /metrics/
           scheme: http
-          prefix: kube.spark.
-
+          prefix: spark.
         ## auto-discover spark
         ##
         - name: spark-master-discovery
@@ -358,10 +466,12 @@ wavefront:
           port: 8080
           path: /metrics/
           scheme: http
-          prefix: kube.spark.
+          prefix: spark.
   proxy:
     ## Wavefront Proxy resource requests and limits
     ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ## @param wavefront.proxy.resources.limits The resources limits for the proxy container
+    ## @param wavefront.proxy.resources.requests [object] The requested resources for the proxy container
     ##
     resources:
       limits: {}

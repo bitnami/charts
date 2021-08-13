@@ -84,9 +84,13 @@ spec:
           securityContext:
             runAsUser: {{ .Values.influxdb.securityContext.runAsUser }}
           {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- end }}
           env:
             - name: BITNAMI_DEBUG
-              value: {{ ternary "true" "false" .Values.image.debug | quote }}
+              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
             - name: POD_IP
               valueFrom:
                 fieldRef:
@@ -187,6 +191,7 @@ spec:
             - name: rpc
               containerPort: {{ .Values.influxdb.containerPorts.rpc }}
               protocol: TCP
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.influxdb.livenessProbe.enabled }}
           {{- $livenessTimeout := sub (int .Values.influxdb.livenessProbe.timeoutSeconds) 1 }}
           livenessProbe: {{- omit .Values.influxdb.livenessProbe "enabled" | toYaml | nindent 12 }}
@@ -240,6 +245,7 @@ spec:
                   fi
           {{- else if .Values.influxdb.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
           {{- end }}
           {{- if .Values.influxdb.resources }}
           resources: {{- toYaml .Values.influxdb.resources | nindent 12 }}

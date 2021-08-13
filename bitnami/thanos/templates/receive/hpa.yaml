@@ -5,10 +5,13 @@ metadata:
   name: {{ include "common.names.fullname" . }}-receive
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: receive
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
 spec:
   scaleTargetRef:
-    apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
-    kind: Deployment
+    apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
+    kind: StatefulSet
     name: {{ include "common.names.fullname" . }}-receive
   minReplicas: {{ .Values.receive.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.receive.autoscaling.maxReplicas }}
@@ -25,4 +28,4 @@ spec:
         name: cpu
         targetAverageUtilization: {{ .Values.receive.autoscaling.targetCPU }}
     {{- end }}
-{{- end }}    
+{{- end }}

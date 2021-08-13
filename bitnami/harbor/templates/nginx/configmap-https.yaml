@@ -18,7 +18,7 @@ data:
     pid /opt/bitnami/nginx/tmp/nginx.pid;
 
     events {
-      worker_connections 1024;
+      worker_connections 3096;
       use epoll;
       multi_accept on;
     }
@@ -59,6 +59,7 @@ data:
       {{- if .Values.notary.enabled }}
       server {
         listen 4443 ssl;
+        listen [::]:4443 ssl;
         server_tokens off;
         # ssl
         ssl_certificate /etc/nginx/cert/tls.crt;
@@ -94,6 +95,7 @@ data:
 
       server {
         listen 8443 ssl;
+        listen [::]:8443 ssl;
         server_tokens off;
         # SSL
         ssl_certificate /etc/nginx/cert/tls.crt;
@@ -225,6 +227,7 @@ data:
       }
       server {
           listen 8080;
+          listen [::]:8080;
           return 301 https://$host$request_uri;
       }
     }

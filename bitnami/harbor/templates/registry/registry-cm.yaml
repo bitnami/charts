@@ -60,6 +60,9 @@ data:
         {{- if .Values.persistence.imageChartStorage.s3.secure }}
         secure: {{ .Values.persistence.imageChartStorage.s3.secure }}
         {{- end }}
+        {{- if .Values.persistence.imageChartStorage.s3.skipverify }}
+        skipverify: {{ .Values.persistence.imageChartStorage.s3.skipverify }}
+        {{- end }}
         {{- if .Values.persistence.imageChartStorage.s3.v4auth }}
         v4auth: {{ .Values.persistence.imageChartStorage.s3.v4auth }}
         {{- end }}
@@ -122,7 +125,7 @@ data:
         region: {{ .Values.persistence.imageChartStorage.oss.region }}
         bucket: {{ .Values.persistence.imageChartStorage.oss.bucket }}
         {{- if .Values.persistence.imageChartStorage.oss.endpoint }}
-        endpoint: {{ .Values.persistence.imageChartStorage.oss.endpoint }}
+        endpoint: {{ .Values.persistence.imageChartStorage.oss.bucket }}.{{ .Values.persistence.imageChartStorage.oss.endpoint }}
         {{- end }}
         {{- if .Values.persistence.imageChartStorage.oss.internal }}
         internal: {{ .Values.persistence.imageChartStorage.oss.internal }}
@@ -185,14 +188,6 @@ data:
             ipfilteredby: {{ .Values.registry.middleware.cloudFront.ipfilteredby }}
     {{- end }}
     {{- end }}
-    notifications:
-      endpoints:
-        - name: harbor
-          disabled: false
-          url: http://{{ template "harbor.core" . }}/service/notifications
-          timeout: 3000ms
-          threshold: 5
-          backoff: 1s
   ctl-config.yml: |+
     ---
     {{- if .Values.internalTLS.enabled }}

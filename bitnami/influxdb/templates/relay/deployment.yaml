@@ -56,15 +56,21 @@ spec:
           securityContext:
             runAsUser: {{ .Values.relay.securityContext.runAsUser }}
           {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else }}
           command:
             - /influxdb-relay
           args:
             - -config
             - /conf/relay.toml
+          {{- end }}
           ports:
             - name: http
               containerPort: {{ .Values.relay.containerPorts.http }}
               protocol: TCP
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.relay.livenessProbe.enabled }}
           livenessProbe: {{- omit .Values.relay.livenessProbe "enabled" | toYaml | nindent 12 }}
             tcpSocket:
@@ -78,6 +84,7 @@ spec:
               port: http
           {{- else if .Values.relay.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.relay.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
           {{- end }}
           {{- if .Values.relay.resources }}
           resources: {{- toYaml .Values.relay.resources | nindent 12 }}
