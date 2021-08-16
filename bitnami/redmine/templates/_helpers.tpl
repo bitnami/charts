@@ -106,6 +106,19 @@ Return the database host for Redmine
 {{- end -}}
 
 {{/*
+Return the database port for Redmine
+*/}}
+{{- define "redmine.database.port" -}}
+{{- if and (eq .Values.databaseType "mariadb") (.Values.mariadb.enabled) -}}
+    {{- printf "3306" -}}
+{{- else if and (eq .Values.databaseType "postgresql") (.Values.postgresql.enabled) -}}
+    {{- printf "5432" -}}
+{{- else }}
+    {{- .Values.externalDatabase.port }}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the database name for Redmine
 */}}
 {{- define "redmine.database.name" -}}
