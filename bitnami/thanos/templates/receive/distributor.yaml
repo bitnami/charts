@@ -103,13 +103,13 @@ spec:
             {{- toYaml .Values.receive.distributor.extraEnv | nindent 12 }}
             {{- end }}
           ports:
-            - containerPort: 10901
+            - containerPort: {{ .Values.receive.service.grpc.port }}
               name: grpc
               protocol: TCP
-            - containerPort: 10902
+            - containerPort: {{ .Values.receive.service.http.port }}
               name: http
               protocol: TCP
-            - containerPort: 19291
+            - containerPort: {{ .Values.receive.service.remoteWrite.port }}
               name: remote-write
               protocol: TCP
           {{- if .Values.receive.livenessProbe.enabled }}
