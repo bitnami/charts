@@ -61,7 +61,7 @@ spec:
           {{- if .Values.extraEnvVars }}
           env:
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
-            {{- end }}
+          {{- end }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- if .Values.containerSecurityContext.enabled }}
           # yamllint disable rule:indentation
