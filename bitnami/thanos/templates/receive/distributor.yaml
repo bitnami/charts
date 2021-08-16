@@ -29,7 +29,7 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.receive.distributor.podLabels "context" $) | nindent 8 }}
         {{- end }}
       annotations:
-        checksum/ojbstore-configuration: {{ include (print $.Template.BasePath "/objstore-secret.yaml") . | sha256sum }}
+        checksum/objstore-configuration: {{ include (print $.Template.BasePath "/objstore-secret.yaml") . | sha256sum }}
         {{- if (include "thanos.receive.createConfigmap" .) }}
         checksum/receive-configuration: {{ include (print $.Template.BasePath "/receive/configmap.yaml") . | sha256sum }}
         {{- end }}
@@ -76,9 +76,9 @@ spec:
             - receive
             - --log.level={{ .Values.receive.logLevel }}
             - --log.format={{ .Values.receive.logFormat }}
-            - --grpc-address=0.0.0.0:10901
-            - --http-address=0.0.0.0:10902
-            - --remote-write.address=0.0.0.0:19291
+            - --grpc-address=0.0.0.0:{{ .Values.receive.service.grpc.port }}
+            - --http-address=0.0.0.0:{{ .Values.receive.service.http.port }}
+            - --remote-write.address=0.0.0.0:{{ .Values.receive.service.remoteWrite.port }}
             - --label={{ .Values.receive.replicaLabel }}="$(NAME)"
             - --label=receive="true"
             - --receive.hashrings-file=/var/lib/thanos-receive/hashrings.json

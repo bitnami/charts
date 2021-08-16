@@ -2471,11 +2471,13 @@ receive:
     ## limits:
     ##    cpu: 100m
     ##    memory: 128Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##    cpu: 100m
     ##    memory: 128Mi
+    ##
     requests: {}
     ## @param receive.distributor.extraContainers Extra containers running as sidecars to Thanos Receive Distributor container
     ## Example:
@@ -2963,7 +2965,6 @@ receive:
     ## @param receive.ingress.pathType Ingress Path type
     ##
     pathType: ImplementationSpecific
-
 
 ## @section Metrics parameters
 
