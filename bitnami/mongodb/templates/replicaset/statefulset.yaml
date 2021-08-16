@@ -254,6 +254,8 @@ spec:
                   name: {{ include "mongodb.secretName" . }}
                   key: mongodb-password
             {{- end }}
+            - name: MONGODB_ROOT_USER
+              value: {{ .Values.auth.rootUser | quote }}
             - name: MONGODB_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
