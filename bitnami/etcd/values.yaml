@@ -105,6 +105,9 @@ auth:
     ## @param auth.rbac.existingSecret Name of the existing secret containing credentials for the root user
     ##
     existingSecret: ""
+    ## @param auth.rbac.existingSecretPasswordKey Name of key containing password to be retrieved from the existing secret
+    ##
+    existingSecretPasswordKey: ""
   ## TLS authentication for client-to-server communications
   ## ref: https://etcd.io/docs/current/op-guide/security/
   ##
