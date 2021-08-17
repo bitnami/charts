@@ -519,6 +519,10 @@ postgresql 08:05:12.59 INFO  ==> Deploying PostgreSQL with persisted data...
 - https://helm.sh/docs/topics/v2_v3_migration/
 - https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
 
+### To 4.0.0
+
+This major updates the Cassandra subchart to its newest major, 4.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/cassandra#to-800) you can find more information about the changes introduced in those versions.
+
 ### To 2.0.0
 
 PostgreSQL and Cassandra dependencies versions were bumped to new major versions, `9.x.x` and `6.x.x` respectively. Both of these include breaking changes and hence backwards compatibility is no longer guaranteed.
