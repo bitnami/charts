@@ -2,6 +2,7 @@
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
@@ -17,6 +18,7 @@ global:
   storageClass: ""
 
 ## @section Common parameters
+##
 
 ## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
 ##
@@ -53,6 +55,7 @@ diagnosticMode:
     - infinity
 
 ## @section Zookeeper chart parameters
+##
 
 ## Bitnami Zookeeper image version
 ## ref: https://hub.docker.com/r/bitnami/zookeeper/tags/
@@ -173,6 +176,7 @@ namespaceOverride: ""
 hostAliases: []
 
 ## @section Statefulset parameters
+##
 
 ## Extra volumes and extra volume mounts allows you to mount other volumes
 ## Example Use Cases: mount certificates to enable tls
@@ -197,6 +201,7 @@ extraVolumes: []
 ## - name: zookeeper-truststore
 ##   mountPath: /certs/truststore
 ##   readOnly: true
+##
 extraVolumeMounts: []
 ## @param updateStrategy StatefulSet controller supports automated updates. There are two valid update strategies: `RollingUpdate` and `OnDelete`
 ## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#updating-statefulsets
@@ -220,6 +225,22 @@ podManagementPolicy: Parallel
 ## @param replicaCount Number of ZooKeeper nodes
 ##
 replicaCount: 1
+
+## @param containerPort ZooKeeper port
+##
+containerPort: 2181
+
+## @param tlsContainerPort ZooKeeper TLS port
+##
+tlsContainerPort: 3181
+
+## @param followerContainerPort ZooKeeper follower port
+##
+followerContainerPort: 2888
+## @param electionContainerPort ZooKeeper election port
+##
+electionContainerPort: 3888
+
 ## @param minServerId Minimal SERVER_ID value, nodes increment their IDs respectively
 ## Servers increment their ID starting at this minimal value.
 ## E.g., with `minServerId=10` and 3 replicas, server IDs will be 10, 11, 12 for z-0, z-1 and z-2 respectively.
@@ -357,6 +378,7 @@ customLivenessProbe: {}
 customReadinessProbe: {}
 
 ## @section Traffic Exposure parameters
+##
 
 ## Kubernetes configuration
 ## For minikube, set this to NodePort, elsewhere use LoadBalancer
@@ -411,9 +433,11 @@ serviceAccount:
   create: false
   ## @param serviceAccount.name The name of the ServiceAccount to use.
   ## If not set and create is true, a name is generated using the common.names.fullname template
+  ##
   name: ""
   ## @param serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
   ## Can be set to false if pods using this serviceAccount do not need to use K8s API
+  ##
   automountServiceAccountToken: true
 ## Network policies
 ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
@@ -429,6 +453,7 @@ networkPolicy:
   allowExternal: true
 
 ## @section Persistence parameters
+##
 
 ## Zookeeper data Persistent Volume Storage Class
 ## If defined, storageClassName: <storageClass>
@@ -486,6 +511,7 @@ persistence:
     selector: {}
 
 ## @section Volume Permissions parameters
+##
 
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
@@ -518,6 +544,7 @@ volumePermissions:
   resources: {}
 
 ## @section Metrics parameters
+##
 
 ## Zookeeper Prometheus Exporter configuration
 ##
@@ -540,9 +567,9 @@ metrics:
     ## @param metrics.service.annotations [object] Annotations for the Zookeeper to auto-discover the metrics endpoint
     ##
     annotations:
-      prometheus.io/scrape: 'true'
-      prometheus.io/port: '{{ .Values.metrics.service.port }}'
-      prometheus.io/path: '/metrics'
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "{{ .Values.metrics.service.port }}"
+      prometheus.io/path: "/metrics"
   ## Prometheus Operator ServiceMonitor configuration
   ##
   serviceMonitor:
@@ -606,6 +633,7 @@ metrics:
     rules: []
 
 ## @section TLS/SSL parameters
+##
 
 ## Enable SSL/TLS encryption
 ##
@@ -673,9 +701,11 @@ tls:
     ## limits:
     ##    cpu: 100m
     ##    memory: 128Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##    cpu: 100m
     ##    memory: 128Mi
+    ##
     requests: {}

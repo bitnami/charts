@@ -24,7 +24,7 @@ spec:
   ports:
     {{ if not .Values.service.disableBaseClientPort }}
     - name: tcp-client
-      port: 2181
+      port: {{ .Values.service.port }}
       targetPort: client
     {{ end }}
     {{ if .Values.tls.client.enabled }}
@@ -33,10 +33,10 @@ spec:
       targetPort: client-tls
     {{ end }}
     - name: follower
-      port: 2888
+      port: {{ .Values.service.followerPort }}
       targetPort: follower
     - name: tcp-election
-      port: 3888
+      port: {{ .Values.service.electionPort }}
       targetPort: election
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: zookeeper
