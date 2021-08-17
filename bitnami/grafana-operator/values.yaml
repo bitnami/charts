@@ -432,8 +432,9 @@ grafana:
   ##
   persistence:
     ## @param grafana.persistence.enabled Enable persistent storage for the grafana deployment
-    ## Note that you might also want to change the update strategy of the Deployment
-    ## in order to avoid deployment failure due to multi-attach of the same volume.
+    ## NOTE: In order to avoid deployment failure due to multi-attach of the same volume,
+    ## you might also want to set `grafana.updateStrategy` to Recreate.
+    ## More information can be found here: https://github.com/grafana-operator/grafana-operator/issues/453
     ##
     enabled: false
     ## @param grafana.persistence.storageClass Define the storageClass for the persistent storage if not defined default is used
