@@ -279,7 +279,7 @@ spec:
             - name: ZOO_DATA_LOG_DIR
               value: {{ .Values.dataLogDir | quote }}
             - name: ZOO_PORT_NUMBER
-              value: {{ .Values.service.port | quote }}
+              value: {{ .Values.containerPort | quote }}
             - name: ZOO_TICK_TIME
               value: {{ .Values.tickTime | quote }}
             - name: ZOO_INIT_LIMIT
@@ -305,8 +305,8 @@ spec:
             - name: ZOO_SERVERS
               {{- $replicaCount := int .Values.replicaCount }}
               {{- $minServerId := int .Values.minServerId }}
-              {{- $followerPort := int .Values.service.followerPort }}
-              {{- $electionPort := int .Values.service.electionPort }}
+              {{- $followerPort := int .Values.followerContainerPort }}
+              {{- $electionPort := int .Values.electionContainerPort }}
               {{- $releaseNamespace := include "zookeeper.namespace" . }}
               {{- $zookeeperFullname := include "common.names.fullname" . }}
               {{- $zookeeperHeadlessServiceName := printf "%s-%s" $zookeeperFullname "headless" | trunc 63  }}
@@ -401,16 +401,16 @@ spec:
           ports:
             {{- if not .Values.service.disableBaseClientPort }}
             - name: client
-              containerPort: {{ .Values.service.port }}
+              containerPort: {{ .Values.containerPort }}
             {{- end }}
             {{- if .Values.tls.client.enabled }}
             - name: client-tls
-              containerPort: {{ .Values.service.tlsClientPort }}
+              containerPort: {{ .Values.tlsContainerPort }}
             {{- end }}
             - name: follower
-              containerPort: {{ .Values.service.followerPort }}
+              containerPort: {{ .Values.followerContainerPort }}
             - name: election
-              containerPort: {{ .Values.service.electionPort }}
+              containerPort: {{ .Values.electionContainerPort }}
             {{- if .Values.metrics.enabled }}
             - name: metrics
               containerPort: {{ .Values.metrics.containerPort }}
@@ -420,12 +420,12 @@ spec:
           livenessProbe:
             exec:
               {{- if not .Values.service.disableBaseClientPort }}
-              command: ['/bin/bash', '-c', 'echo "ruok" | timeout {{ .Values.livenessProbe.probeCommandTimeout }} nc -w {{ .Values.livenessProbe.probeCommandTimeout }} localhost {{ .Values.service.port }} | grep imok']
+              command: ['/bin/bash', '-c', 'echo "ruok" | timeout {{ .Values.livenessProbe.probeCommandTimeout }} nc -w {{ .Values.livenessProbe.probeCommandTimeout }} localhost {{ .Values.containerPort }} | grep imok']
               {{- else }}
               {{- if not .Values.tls.client.enabled }}
-              command: ['/bin/bash', '-c', 'echo "ruok" | timeout {{ .Values.livenessProbe.probeCommandTimeout }} openssl s_client -quiet -crlf -connect localhost:{{ .Values.service.tlsClientPort }} | grep imok']
+              command: ['/bin/bash', '-c', 'echo "ruok" | timeout {{ .Values.livenessProbe.probeCommandTimeout }} openssl s_client -quiet -crlf -connect localhost:{{ .Values.tlsContainerPort }} | grep imok']
               {{- else }}
-              command: ['/bin/bash', '-c', 'echo "ruok" | timeout {{ .Values.livenessProbe.probeCommandTimeout }} openssl s_client -quiet -crlf -connect localhost:{{ .Values.service.tlsClientPort }} -cert {{ .Values.service.tls.client_cert_pem_path }} -key {{ .Values.service.tls.client_key_pem_path }} | grep imok']
+              command: ['/bin/bash', '-c', 'echo "ruok" | timeout {{ .Values.livenessProbe.probeCommandTimeout }} openssl s_client -quiet -crlf -connect localhost:{{ .Values.tlsContainerPort }} -cert {{ .Values.service.tls.client_cert_pem_path }} -key {{ .Values.service.tls.client_key_pem_path }} | grep imok']
               {{- end }}
               {{- end }}
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
@@ -440,12 +440,12 @@ spec:
           readinessProbe:
             exec:
               {{- if not .Values.service.disableBaseClientPort }}
-              command: ['/bin/bash', '-c', 'echo "ruok" | timeout {{ .Values.readinessProbe.probeCommandTimeout }} nc -w {{ .Values.readinessProbe.probeCommandTimeout }} localhost {{ .Values.service.port }} | grep imok']
+              command: ['/bin/bash', '-c', 'echo "ruok" | timeout {{ .Values.readinessProbe.probeCommandTimeout }} nc -w {{ .Values.readinessProbe.probeCommandTimeout }} localhost {{ .Values.containerPort }} | grep imok']
               {{- else }}
               {{- if not .Values.tls.client.enabled }}
-              command: ['/bin/bash', '-c', 'echo "ruok" | timeout {{ .Values.readinessProbe.probeCommandTimeout }} openssl s_client -quiet -crlf -connect localhost:{{ .Values.service.tlsClientPort }} | grep imok']
+              command: ['/bin/bash', '-c', 'echo "ruok" | timeout {{ .Values.readinessProbe.probeCommandTimeout }} openssl s_client -quiet -crlf -connect localhost:{{ .Values.tlsContainerPort }} | grep imok']
               {{- else }}
-              command: ['/bin/bash', '-c', 'echo "ruok" | timeout {{ .Values.readinessProbe.probeCommandTimeout }} openssl s_client -quiet -crlf -connect localhost:{{ .Values.service.tlsClientPort }} -cert {{ .Values.service.tls.client_cert_pem_path }} -key {{ .Values.service.tls.client_key_pem_path }} | grep imok']
+              command: ['/bin/bash', '-c', 'echo "ruok" | timeout {{ .Values.readinessProbe.probeCommandTimeout }} openssl s_client -quiet -crlf -connect localhost:{{ .Values.tlsContainerPort }} -cert {{ .Values.service.tls.client_cert_pem_path }} -key {{ .Values.service.tls.client_key_pem_path }} | grep imok']
               {{- end }}
               {{- end }}
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
