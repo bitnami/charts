@@ -57,8 +57,12 @@ You have 4 alternatives:
   echo Username: $REDMINE_USERNAME
   echo Password: $REDMINE_PASSWORD
 
-   You can access the DB using the following password:
-   {{ include "common.utils.secret.getvalue" (dict "secret" $dbSecretName "field" "mariadb-password" "context" $) }}
+  You can access the DB using the following password:
+  {{- if eq .Values.databaseType "mariadb" }}
+  {{ include "common.utils.secret.getvalue" (dict "secret" $dbSecretName "field" "mariadb-password" "context" $) }}
+  {{- else if eq .Values.databaseType "postgresql" }}
+  {{ include "common.utils.secret.getvalue" (dict "secret" $dbSecretName "field" "postgresql-password" "context" $) }}
+  {{ end }}
 {{- end }}
 
 {{- include "common.warnings.rollingTag" .Values.image }}
