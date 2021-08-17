@@ -138,7 +138,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "etcd.secretName" . }}
-                  key: etcd-root-password
+                  key: {{ include "etcd.secretPasswordKey" . }}
             {{- end }}
             - name: ETCD_ADVERTISE_CLIENT_URLS
               value: "{{ $etcdClientProtocol }}://$(MY_POD_NAME).{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.svc.{{ $clusterDomain }}:{{ .Values.service.port }}"
