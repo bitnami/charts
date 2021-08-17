@@ -182,6 +182,9 @@ data:
     HEADLESS_SERVICE="{{ template "common.names.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
     REDIS_SERVICE="{{ template "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
 
+    # Waits for DNS to add this ip to the service DNS entry
+    retry_while not_exists_dns_entry
+
     [[ -f $REDIS_PASSWORD_FILE ]] && export REDIS_PASSWORD="$(< "${REDIS_PASSWORD_FILE}")"
 
     if [[ ! -f /opt/bitnami/redis-sentinel/etc/sentinel.conf ]]; then
@@ -199,25 +202,11 @@ data:
 
     export REDIS_REPLICATION_MODE="slave"
 
-    # Waits for DNS to add this ip to the service DNS entry
-    retry_while not_exists_dns_entry
-
     if [[ -z "$(getent ahosts "$HEADLESS_SERVICE" | grep -v "^${myip}")" ]]; then
         export REDIS_REPLICATION_MODE="master"
     fi
 
-    # Clean sentineles from the current sentinel nodes
-    for node in $( getent ahosts "$HEADLESS_SERVICE" | grep -v "^${myip}" | cut -f 1 -d ' ' | uniq ); do
-        info "Cleaning sentinels in sentinel node: $node"
-        if is_boolean_yes "$REDIS_SENTINEL_TLS_ENABLED"; then
-            redis-cli {{- if .Values.auth.enabled }} -a $REDIS_PASSWORD {{- end }} -h $node -p {{ .Values.sentinel.service.sentinelPort }} --tls --cert ${REDIS_SENTINEL_TLS_CERT_FILE} --key ${REDIS_SENTINEL_TLS_KEY_FILE} --cacert ${REDIS_SENTINEL_TLS_CA_FILE} sentinel reset "*"
-        else
-            redis-cli {{- if .Values.auth.enabled }} -a $REDIS_PASSWORD {{- end }} -h $node -p {{ .Values.sentinel.service.sentinelPort }} sentinel reset "*"
-        fi
-        sleep {{ .Values.sentinel.cleanDelaySeconds }}
-    done
-    info "Sentinels clean up done"
-
+    # check master node firstly and quit as soon as possible when master is not ready.
     if [[ "$REDIS_REPLICATION_MODE" = "master" ]]; then
         REDIS_MASTER_HOST=${myip}
         REDIS_MASTER_PORT_NUMBER="{{ .Values.master.service.port }}"
@@ -247,6 +236,20 @@ data:
             exit 1
         fi
     fi
+
+    # Clean sentineles from the current sentinel nodes after failover completed.
+    for node in $( getent ahosts "$HEADLESS_SERVICE" | grep -v "^${myip}" | cut -f 1 -d ' ' | uniq ); do
+        info "Cleaning sentinels in sentinel node: $node"
+        if is_boolean_yes "$REDIS_SENTINEL_TLS_ENABLED"; then
+            redis-cli {{- if .Values.auth.enabled }} -a $REDIS_PASSWORD {{- end }} -h $node -p {{ .Values.sentinel.service.sentinelPort }} --tls --cert ${REDIS_SENTINEL_TLS_CERT_FILE} --key ${REDIS_SENTINEL_TLS_KEY_FILE} --cacert ${REDIS_SENTINEL_TLS_CA_FILE} sentinel reset "*"
+        else
+            redis-cli {{- if .Values.auth.enabled }} -a $REDIS_PASSWORD {{- end }} -h $node -p {{ .Values.sentinel.service.sentinelPort }} sentinel reset "*"
+        fi
+        sleep {{ .Values.sentinel.cleanDelaySeconds }}
+    done
+    info "Sentinels clean up done"
+
+
     sentinel_conf_set "sentinel monitor" "{{ .Values.sentinel.masterSet }} "$REDIS_MASTER_HOST" "$REDIS_MASTER_PORT_NUMBER" {{ .Values.sentinel.quorum }}"
 
     add_replica() {
