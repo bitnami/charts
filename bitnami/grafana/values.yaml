@@ -8,28 +8,28 @@
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
 
 ## @section Common parameters
 
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
-kubeVersion:
+kubeVersion: ""
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
 ## @param nameOverride String to partially override grafana.fullname template (will maintain the release name)
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override grafana.fullname template
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param clusterDomain Default Kubernetes cluster domain
 ##
 clusterDomain: cluster.local
@@ -47,7 +47,7 @@ clusterDomain: cluster.local
 image:
   registry: docker.io
   repository: bitnami/grafana
-  tag: 8.0.4-debian-10-r0
+  tag: 8.1.1-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -72,10 +72,10 @@ admin:
   user: "admin"
   ## @param admin.password Admin password. If a password is not provided a random password will be generated
   ##
-  password:
+  password: ""
   ## @param admin.existingSecret Name of the existing secret containing admin password
   ##
-  existingSecret:
+  existingSecret: ""
   ## @param admin.existingSecretPasswordKey Password key on the existing secret
   ##
   existingSecretPasswordKey: password
@@ -95,10 +95,10 @@ smtp:
   ## e.g:
   ##   host: mysmtphost.com
   ##
-  host:
+  host: ""
   ## @param smtp.existingSecret Name of existing secret containing SMTP credentials (user and password)
   ##
-  existingSecret:
+  existingSecret: ""
   ## @param smtp.existingSecretUserKey User key on the existing secret
   ##
   existingSecretUserKey: user
@@ -110,7 +110,7 @@ smtp:
 ## Example:
 ## plugins: grafana-kubernetes-app,grafana-example-app
 ##
-plugins:
+plugins: ""
 ## Ldap configuration for Grafana
 ## @param ldap.enabled Enable LDAP for Grafana
 ## @param ldap.allowSignUp Allows LDAP sign up for Grafana
@@ -119,7 +119,7 @@ plugins:
 ldap:
   enabled: false
   allowSignUp: false
-  configMapName:
+  configMapName: ""
 ## @param extraEnvVars Array containing extra env vars to configure Grafana
 ## For example:
 ## extraEnvVars:
@@ -144,8 +144,8 @@ extraConfigmaps: {}
 ##
 config:
   useGrafanaIniFile: false
-  grafanaIniConfigMap:
-  grafanaIniSecret:
+  grafanaIniConfigMap: ""
+  grafanaIniSecret: ""
 ## Create dasboard provider to load dashboards, a default one is created to load dashboards
 ## from "/opt/bitnami/grafana/dashboards"
 ## @param dashboardsProvider.enabled Enable the use of a Grafana dashboard provider
@@ -156,7 +156,7 @@ dashboardsProvider:
   ## Important to set the Path to "/opt/bitnami/grafana/dashboards"
   ## Evaluated as a template.
   ##
-  configMapName:
+  configMapName: ""
 ## @param dashboardsConfigMaps Array with the names of a series of ConfigMaps containing dashboards files
 ## They will be mounted by the default dashboard provider if it is enabled
 ## Use an array with the configMap names.
@@ -173,7 +173,7 @@ dashboardsConfigMaps: []
 ## @param datasources.secretName Secret name containing custom datasource files
 ##
 datasources:
-  secretName:
+  secretName: ""
 
 ## @section Deployment parameters
 
@@ -195,7 +195,7 @@ updateStrategy:
 ## @param schedulerName Alternative scheduler
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
-schedulerName:
+schedulerName: ""
 ## @param priorityClassName Priority class name
 ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
 ##
@@ -320,7 +320,7 @@ readinessProbe:
 ##       - name: portname
 ##         containerPort: 1234
 ##
-sidecars: {}
+sidecars: []
 ## @param extraVolumes Additional volumes for the Grafana pod
 ## Example:
 ## extraVolumes:
@@ -354,8 +354,8 @@ persistence:
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##   GKE, AWS & OpenStack)
   ##
-  storageClass:
-  existingClaim:
+  storageClass: ""
+  existingClaim: ""
   accessMode: ReadWriteOnce
   size: 10Gi
 
@@ -366,7 +366,7 @@ persistence:
 ## @param serviceAccount.annotations Annotations to add to the ServiceAccount Metadata
 serviceAccount:
   create: true
-  name:
+  name: ""
   annotations: {}
 
 ## @section Traffic exposure parameters
@@ -383,11 +383,11 @@ service:
   ## @param service.nodePort Specify the nodePort value for the LoadBalancer and NodePort service types
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
-  nodePort:
+  nodePort: ""
   ## @param service.loadBalancerIP loadBalancerIP if Grafana service type is `LoadBalancer` (optional, cloud specific)
   ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
   ##
-  loadBalancerIP:
+  loadBalancerIP: ""
   ## @param service.loadBalancerSourceRanges loadBalancerSourceRanges if Grafana service type is `LoadBalancer` (optional, cloud specific)
   ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
   ## e.g:
@@ -416,7 +416,7 @@ ingress:
   pathType: ImplementationSpecific
   ## @param ingress.apiVersion Override API Version (automatically detected if not set)
   ##
-  apiVersion:
+  apiVersion: ""
   ## @param ingress.hostname When the ingress is enabled, a host pointing to this will be created
   ##
   hostname: grafana.local
@@ -498,19 +498,19 @@ metrics:
     enabled: false
     ## @param metrics.serviceMonitor.namespace Namespace in which Prometheus is running
     ##
-    namespace:
+    namespace: ""
     ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped.
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ## e.g:
     ## interval: 10s
     ##
-    interval:
+    interval: ""
     ## @param metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ## e.g:
     ## scrapeTimeout: 10s
     ##
-    scrapeTimeout:
+    scrapeTimeout: ""
     ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
     ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
     ## e.g:
@@ -536,7 +536,7 @@ imageRenderer:
   image:
     registry: docker.io
     repository: bitnami/grafana-image-renderer
-    tag: 3.0.1-debian-10-r6
+    tag: 3.0.1-debian-10-r42
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -568,6 +568,26 @@ imageRenderer:
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ##
   affinity: {}
+  ## Grafana Image Renderer containers' resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param imageRenderer.resources.limits The resources limits for Grafana containers
+  ## @param imageRenderer.resources.requests The requested resources for Grafana containers
+  ##
+  resources:
+    ## Example:
+    ## limits:
+    ##    cpu: 500m
+    ##    memory: 1Gi
+    limits: {}
+    ## Examples:
+    ## requests:
+    ##    cpu: 250m
+    ##    memory: 256Mi
+    requests: {}
   ## SecurityContext configuration
   ## @param imageRenderer.securityContext.enabled Enable securityContext on for Grafana Image Renderer deployment
   ## @param imageRenderer.securityContext.fsGroup Group to configure permissions for volumes
@@ -603,16 +623,16 @@ imageRenderer:
       enabled: false
       ## @param imageRenderer.metrics.serviceMonitor.namespace Namespace in which Prometheus is running
       ##
-      namespace:
+      namespace: ""
       ## @param imageRenderer.metrics.serviceMonitor.interval Interval at which metrics should be scraped.
       ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
       ## e.g:
       ## interval: 10s
       ##
-      interval:
+      interval: ""
       ## @param imageRenderer.metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
       ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
       ## e.g:
       ## scrapeTimeout: 10s
       ##
-      scrapeTimeout:
+      scrapeTimeout: ""

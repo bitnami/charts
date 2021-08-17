@@ -63,7 +63,13 @@ spec:
         - name: fluentd
           image: {{ include "fluentd.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- end }}
           env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
             - name: FLUENTD_CONF
               value: {{ .Values.forwarder.configFile }}
             - name: FLUENTD_OPT
@@ -84,6 +90,7 @@ spec:
               containerPort: {{ .Values.metrics.service.port }}
               protocol: TCP
             {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.forwarder.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
@@ -105,6 +112,7 @@ spec:
             timeoutSeconds: {{ .Values.forwarder.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.forwarder.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.forwarder.readinessProbe.failureThreshold }}
+          {{- end }}
           {{- end }}
           {{- if .Values.forwarder.resources }}
           resources: {{- toYaml .Values.forwarder.resources | nindent 12 }}

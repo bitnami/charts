@@ -125,6 +125,8 @@ data:
         echo "Couldn't find the expected Java Key Stores (JKS) files! They are mandatory when encryption via TLS is enabled."
         exit 1
     fi
+    export KAFKA_TLS_TRUSTSTORE_FILE="/opt/bitnami/kafka/config/certs/kafka.truststore.jks"
+
     {{- else if eq .Values.auth.tls.type "pem" }}
     PEM_CA="/certs/kafka.truststore.pem"
     PEM_CERT="/certs/kafka-${ID}.keystore.pem"
@@ -138,6 +140,7 @@ data:
         echo "Couldn't find the expected PEM files! They are mandatory when encryption via TLS is enabled."
         exit 1
     fi
+    export KAFKA_TLS_TRUSTSTORE_FILE="/opt/bitnami/kafka/config/certs/kafka.truststore.pem"
     {{- end }}
     {{- end }}
 

@@ -50,11 +50,12 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                      | Description                                        | Value           |
 | ------------------------- | -------------------------------------------------- | --------------- |
-| `global.imageRegistry`    | Global Docker image registry                       | `nil`           |
+| `global.imageRegistry`    | Global Docker image registry                       | `""`            |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array    | `[]`            |
-| `kubeVersion`             | Override Kubernetes version                        | `nil`           |
-| `nameOverride`            | String to partially override common.names.fullname | `nil`           |
-| `fullnameOverride`        | String to fully override common.names.fullname     | `nil`           |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)       | `""`            |
+| `kubeVersion`             | Override Kubernetes version                        | `""`            |
+| `nameOverride`            | String to partially override common.names.fullname | `""`            |
+| `fullnameOverride`        | String to fully override common.names.fullname     | `""`            |
 | `commonLabels`            | Labels to add to all deployed objects              | `{}`            |
 | `commonAnnotations`       | Annotations to add to all deployed objects         | `{}`            |
 | `clusterDomain`           | Kubernetes cluster domain name                     | `cluster.local` |
@@ -67,7 +68,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------ |
 | `image.registry`                        | Adapter image registry                                                                    | `docker.io`                          |
 | `image.repository`                      | Adapter image repository                                                                  | `bitnami/wavefront-hpa-adapter`      |
-| `image.tag`                             | Adapter image tag (immutabe tags are recommended)                                         | `1.0.3-debian-10-r0`                 |
+| `image.tag`                             | Adapter image tag (immutabe tags are recommended)                                         | `0.9.8-scratch-r3`                   |
 | `image.pullPolicy`                      | Adapter image pull policy                                                                 | `IfNotPresent`                       |
 | `image.pullSecrets`                     | Adapter image pull secrets                                                                | `[]`                                 |
 | `image.debug`                           | Enable image debug mode                                                                   | `false`                              |
@@ -110,19 +111,19 @@ The command removes all the Kubernetes components associated with the chart and 
 | `updateStrategy.type`                   | Adapter deployment update strategy                                                        | `RollingUpdate`                      |
 | `containerPort`                         | Adapter container port                                                                    | `6443`                               |
 | `extraEnvVars`                          | Add extra environment variables to the Adapter container                                  | `[]`                                 |
-| `extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars                                      | `nil`                                |
-| `extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars                                         | `nil`                                |
+| `extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars                                      | `""`                                 |
+| `extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars                                         | `""`                                 |
 | `extraVolumes`                          | Optionally specify extra list of additional volumes for Adapter pods                      | `[]`                                 |
 | `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for Adapter container(s)         | `[]`                                 |
-| `initContainers`                        | Add additional init containers to the Adapter pods                                        | `{}`                                 |
-| `sidecars`                              | Add additional sidecar containers to the Adapter pod                                      | `{}`                                 |
+| `initContainers`                        | Add additional init containers to the Adapter pods                                        | `[]`                                 |
+| `sidecars`                              | Add additional sidecar containers to the Adapter pod                                      | `[]`                                 |
 | `adapterMetricPrefix`                   | Adapter metric `prefix` parameter                                                         | `kubernetes`                         |
 | `adapterAPIClientTimeout`               | Adapter API timeout                                                                       | `10s`                                |
 | `adapterMetricRelistInterval`           | Adapter metric relist interval                                                            | `10m`                                |
 | `adapterLogLevel`                       | Adapter log level                                                                         | `info`                               |
 | `adapterRules`                          | Adapter array of rules                                                                    | `[]`                                 |
 | `adapterSSLCertDir`                     | Adapter SSL Certs directory                                                               | `/etc/ssl/certs`                     |
-| `adapterSSLCertsSecret`                 | Adapter SSL Certs secret (will use autogenerated if empty)                                | `nil`                                |
+| `adapterSSLCertsSecret`                 | Adapter SSL Certs secret (will use autogenerated if empty)                                | `""`                                 |
 | `wavefront.url`                         | External Wavefront URL                                                                    | `https://YOUR_CLUSTER.wavefront.com` |
 | `wavefront.token`                       | External Wavefront Token                                                                  | `YOUR_API_TOKEN`                     |
 
@@ -133,8 +134,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------- | -------------------------------------------- | ----------- |
 | `service.type`                     | Adapter service type                         | `ClusterIP` |
 | `service.port`                     | Adapter service port                         | `443`       |
-| `service.loadBalancerIP`           | Adapter service LoadBalancer IP              | `nil`       |
-| `service.loadBalancerSourceRanges` | loadBalancerIP source ranges for the Service | `nil`       |
+| `service.loadBalancerIP`           | Adapter service LoadBalancer IP              | `""`        |
+| `service.loadBalancerSourceRanges` | loadBalancerIP source ranges for the Service | `[]`        |
 | `service.nodePorts.http`           | NodePort for the HTTP endpoint               | `""`        |
 | `service.externalTrafficPolicy`    | External traffic policy for the service      | `Cluster`   |
 
@@ -145,7 +146,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------- | ----------------------------------------------------------- | ------ |
 | `rbac.create`           | Weather to create & use RBAC resources or not               | `true` |
 | `serviceAccount.create` | Enable the creation of a ServiceAccount for Reconciler pods | `true` |
-| `serviceAccount.name`   | Name of the created ServiceAccount                          | `nil`  |
+| `serviceAccount.name`   | Name of the created ServiceAccount                          | `""`   |
 | `apiService.create`     | Create the APIService objects in Kubernetes API             | `true` |
 
 

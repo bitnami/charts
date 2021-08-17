@@ -131,15 +131,19 @@ spec:
           {{- if .Values.arbiter.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.arbiter.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
-          {{- if .Values.arbiter.command }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.arbiter.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.command "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.arbiter.args }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.arbiter.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.args "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
-              value: {{ ternary "true" "false" .Values.image.debug | quote }}
+              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
             - name: MY_POD_NAME
               valueFrom:
                 fieldRef:
@@ -201,6 +205,7 @@ spec:
           ports:
             - containerPort: 27017
               name: mongodb
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.arbiter.livenessProbe.enabled }}
           livenessProbe:
             tcpSocket:
@@ -224,6 +229,7 @@ spec:
             failureThreshold: {{ .Values.arbiter.readinessProbe.failureThreshold }}
           {{- else if .Values.arbiter.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
           {{- end }}
           {{- if .Values.arbiter.resources }}
           resources: {{- toYaml .Values.arbiter.resources | nindent 12 }}
