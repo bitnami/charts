@@ -58,6 +58,20 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           args:
             - -conf=/data/config.yaml
+          {{- if .Values.extraEnv }}
+          env: {{- include "common.tplvalues.render" (dict "value" .Values.extraEnv "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if or .Values.extraEnvVarsCM .Values.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- end }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- if .Values.containerSecurityContext.enabled }}
           # yamllint disable rule:indentation
