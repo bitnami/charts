@@ -96,6 +96,17 @@ Return the secret with etcd credentials
 {{- end -}}
 
 {{/*
+Get the secret password key to be retrieved from etcd secret.
+*/}}
+{{- define "etcd.secretPasswordKey" -}}
+{{- if and .Values.auth.rbac.existingSecret .Values.auth.rbac.existingSecretPasswordKey -}}
+{{- printf "%s" .Values.auth.rbac.existingSecretPasswordKey -}}
+{{- else -}}
+{{- printf "etcd-root-password" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the proper Disaster Recovery PVC name
 */}}
 {{- define "etcd.disasterRecovery.pvc.name" -}}

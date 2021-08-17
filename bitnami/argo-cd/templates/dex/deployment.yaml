@@ -120,7 +120,7 @@ spec:
           args:
             - rundex
             {{- if .Values.dex.extraArgs }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.dex.extraArgs "context" $) | nindent 8 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.dex.extraArgs "context" $) | nindent 12 }}
             {{- end }}
           {{- end }}
           ports:
