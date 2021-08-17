@@ -344,6 +344,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.image.tag`                    | Airflow Exporter image tag (immutable tags are recommended) | `0.20210126.0-debian-10-r171` |
 | `metrics.image.pullPolicy`             | Airflow Exporter image pull policy                          | `IfNotPresent`                |
 | `metrics.image.pullSecrets`            | Airflow Exporter image pull secrets                         | `[]`                          |
+| `metrics.extraEnvVars`                 | Add extra environment variables                             | `[]`                          |
+| `metrics.extraEnvVarsCM`               | ConfigMap with extra environment variables                  | `""`                          |
+| `metrics.extraEnvVarsSecret`           | Secret with extra environment variables                     | `""`                          |
 | `metrics.hostAliases`                  | Deployment pod host aliases                                 | `[]`                          |
 | `metrics.serviceMonitor.enabled`       | Create ServiceMonitor resource                              | `false`                       |
 | `metrics.serviceMonitor.namespace`     | The namespace in which the ServiceMonitor will be created   | `""`                          |

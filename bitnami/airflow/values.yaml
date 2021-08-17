@@ -1051,6 +1051,15 @@ metrics:
     scrapeTimeout: 10s
     # ServiceMonitor Labels
     labels: {}
+  ## @param metrics.extraEnvVars Array containing extra environment variables
+  ##
+  extraEnvVars: []
+  ## @param metrics.extraEnvVarsCM ConfigMap containing extra environment variables
+  ##
+  extraEnvVarsCM: ""
+  ## @param metrics.extraEnvVarsSecret Secret containing extra environment variables (in case of sensitive data)
+  ##
+  extraEnvVarsSecret: ""
   ## @param metrics.resources Metrics exporter resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
