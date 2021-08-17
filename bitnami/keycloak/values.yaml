@@ -146,6 +146,14 @@ auth:
     ##       kubectl create secret generic SECRET_NAME --from-file=./keycloak.truststore.jks --from-file=./keycloak-0.keystore.jks --from-file=./keycloak-1.keystore.jks ...
     ##
     existingSecret: ""
+    ## @param auth.tls.truststoreFilename Truststore specific filename inside the existing secret
+    ## Note: Setting up this value, you will use the same trustore file in all the replicas
+    ##
+    truststoreFilename: ""
+    ## @param auth.tls.keystoreFilename Keystore specific filename inside the existing secret
+    ## Note: Setting up this value, you will use the same trustore file in all the replicas
+    ##
+    keystoreFilename: ""
     ## @param auth.tls.jksSecret DEPRECATED. Use `auth.tls.existingSecret` instead
     ##
     jksSecret: ""
