@@ -58,8 +58,8 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           args:
             - -conf=/data/config.yaml
-          {{- if .Values.extraEnv }}
-          env: {{- include "common.tplvalues.render" (dict "value" .Values.extraEnv "context" $) | nindent 12 }}
+          {{- if .Values.extraEnvVars }}
+          env: {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
           {{- end }}
           {{- if or .Values.extraEnvVarsCM .Values.extraEnvVarsSecret }}
           envFrom:
