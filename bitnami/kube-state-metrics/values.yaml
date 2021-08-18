@@ -2,6 +2,7 @@
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
@@ -17,6 +18,7 @@ global:
   storageClass: ""
 
 ## @section Common parameters
+##
 
 ## @param nameOverride String to partially override `kube-state-metrics.name` template with a string (will prepend the release name)
 ##
@@ -32,6 +34,7 @@ commonLabels: {}
 commonAnnotations: {}
 
 ## @section kube-state-metrics parameters
+##
 
 ## @param hostAliases Add deployment host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
@@ -59,6 +62,7 @@ serviceAccount:
   create: true
   ## @param serviceAccount.name The name of the ServiceAccount to create
   ## If not set and create is true, a name is generated using the kube-state-metrics.fullname template
+  ##
   name: ""
 ## Bitnami kube-state-metrics image version
 ## ref: https://hub.docker.com/r/bitnami/kube-state-metrics/tags/
@@ -214,11 +218,13 @@ resources:
   ## limits:
   ##    cpu: 100m
   ##    memory: 128Mi
+  ##
   limits: {}
   ## Examples:
   ## requests:
   ##    cpu: 100m
   ##    memory: 128Mi
+  ##
   requests: {}
 ## @param replicaCount Desired number of controller pods
 ##
@@ -348,7 +354,7 @@ serviceMonitor:
   ## e.g:
   ## honorLabels: false
   ##
-  honorLabels: ""
+  honorLabels: false
   ## @param serviceMonitor.relabelings ServiceMonitor relabelings
   ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
   ##
