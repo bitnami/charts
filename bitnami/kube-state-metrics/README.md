@@ -158,7 +158,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceMonitor.interval`                       | Scrape interval (use by default, falling back to Prometheus' default)                     | `""`                         |
 | `serviceMonitor.scrapeTimeout`                  | Timeout after which the scrape is ended                                                   | `""`                         |
 | `serviceMonitor.selector`                       | ServiceMonitor selector labels                                                            | `{}`                         |
-| `serviceMonitor.honorLabels`                    | Honor metrics labels                                                                      | `""`                         |
+| `serviceMonitor.honorLabels`                    | Honor metrics labels                                                                      | `false`                      |
 | `serviceMonitor.relabelings`                    | ServiceMonitor relabelings                                                                | `[]`                         |
 | `serviceMonitor.metricRelabelings`              | ServiceMonitor metricRelabelings                                                          | `[]`                         |
 
