@@ -269,9 +269,9 @@ It is possible to deploy the Collector as a `Daemonset` or a `Deployment`. Refer
 
 The most common use case is to deploy the Wavefront Collector as a `DaemonSet` to obtain information from the different nodes. However, there are some use cases where a `Deployment` can be used to gather data (at application level) without deploying a pod per node.
 
-### Change Wavefront version
+### Use a different Wavefront version
 
-To modify the application version used in this chart, specify a [different image tag](https://hub.docker.com/r/bitnami/Wavefront-kubernetes-collector/tags/) using the `collector.image.tag` parameter. For example, `collector.image.tag=X.Y.Z`. This approach is also applicable to other images like the proxy.
+The `image.tag` parameter allows specifying which image will be pulled for the chart. Refer to the [chart documentation for more information on this parameter and how to use it with images from a private registry](https://docs.bitnami.com/kubernetes/apps/wavefront/configuration/change-image-version/).
 
 ### Use Sidecars and Init Containers
 

@@ -348,9 +348,9 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### Change MySQL version
+### Use a different MySQL version
 
-To modify the MySQL version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/mysql/tags/) using the `image.tag` parameter. For example, `image.tag=X.Y.Z`. This approach is also applicable to other images like exporters.
+The `image.tag` parameter allows specifying which image will be pulled for the chart. Refer to the [chart documentation for more information on this parameter and how to use it with images from a private registry](https://docs.bitnami.com/kubernetes/infrastructure/mysql/configuration/change-image-version/).
 
 ### Customize a new MySQL instance
 

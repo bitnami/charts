@@ -340,9 +340,9 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 At the top level, there is a service object which defines the services for both primary and readReplicas. For deeper customization, there are service objects for both the primary and read types individually. This allows you to override the values in the top level service object so that the primary and read can be of different service types and with different clusterIPs / nodePorts. Also in the case you want the primary and read to be of type nodePort, you will need to set the nodePorts to different values to prevent a collision. The values that are deeper in the primary.service or readReplicas.service objects will take precedence over the top level service object.
 
-### Change PostgreSQL version
+### Use a different PostgreSQL version
 
-To modify the PostgreSQL version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/postgresql/tags/) using the `image.tag` parameter. For example, `image.tag=X.Y.Z`. This approach is also applicable to other images like exporters.
+The `image.tag` parameter allows specifying which image will be pulled for the chart. Refer to the [chart documentation for more information on this parameter and how to use it with images from a private registry](https://docs.bitnami.com/kubernetes/infrastructure/postgresql/configuration/change-image-version/).
 
 ### postgresql.conf / pg_hba.conf files as configMap
 
