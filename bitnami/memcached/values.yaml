@@ -138,7 +138,7 @@ service:
   annotations: {}
 
 ## Memcached Autoscaling
-## @param autoscaling.enabled Enable memcached statefulset autoscaling
+## @param autoscaling.enabled Enable memcached statefulset autoscaling (requires architecture: "high-availability")
 ## @param autoscaling.minReplicas memcached statefulset autoscaling minimum number of replicas
 ## @param autoscaling.maxReplicas memcached statefulset autoscaling maximum number of replicas
 ## @param autoscaling.targetCPU memcached statefulset autoscaling target CPU percentage
