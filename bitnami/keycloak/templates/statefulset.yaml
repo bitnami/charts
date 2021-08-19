@@ -100,6 +100,14 @@ spec:
                 echo "Couldn't find the expected PEM certificates! They are mandatory when encryption via TLS is enabled."
                 exit 1
             fi
+            {{- else if and .Values.auth.tls.truststoreFilename .Values.auth.tls.keystoreFilename }}
+            if [[ -f {{ printf "/certs/%s" .Values.auth.tls.truststoreFilename | quote }} ]] && [[ -f {{ printf "/certs/%s" .Values.auth.tls.keystoreFilename | quote }} ]]; then
+                cp {{ printf "/certs/%s" .Values.auth.tls.truststoreFilename | quote }} "/opt/bitnami/keycloak/certs/keycloak.truststore.jks"
+                cp {{ printf "/certs/%s" .Values.auth.tls.keystoreFilename | quote }} "/opt/bitnami/keycloak/certs/keycloak.keystore.jks"
+            else
+                echo "Couldn't find the expected Java Key Stores (JKS) files! They are mandatory when encryption via TLS is enabled."
+                exit 1
+            fi
             {{- else }}
             if [[ -f "/certs/keycloak.truststore.jks" ]] && [[ -f "/certs/keycloak-${ID}.keystore.jks" ]]; then
                 cp "/certs/keycloak.truststore.jks" "/opt/bitnami/keycloak/certs/keycloak.truststore.jks"

@@ -73,6 +73,7 @@ spec:
           securityContext:
             runAsUser: {{ .Values.securityContext.runAsUser }}
           {{- end }}
+          serviceAccountName: {{ include "kibana.serviceAccountName" . }}
           env:
             - name: KIBANA_PORT_NUMBER
               value: {{ .Values.containerPort | quote }}

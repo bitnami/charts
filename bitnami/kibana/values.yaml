@@ -321,6 +321,15 @@ ingress:
   ##   certificate:
   ##
   secrets: []
+
+## @param serviceAccount.create Enable creation of ServiceAccount for Kibana
+## @param serviceAccount.name Name of serviceAccount
+## @param serviceAccount.annotations Additional custom annotations for the ServiceAccount
+serviceAccount:
+  create: true
+  name: ""
+  annotations: {}
+
 ## @param containerPort Port to expose at container level
 ##
 containerPort: 5601
