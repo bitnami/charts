@@ -22,7 +22,7 @@ Return the proper Docker Image Registry Secret Names
 {{- end -}}
 
 {{/*
-Return the appropriate apiVersion for networkpolicy.
+Return the appropriate apiVersion for networkpolicy
 */}}
 {{- define "networkPolicy.apiVersion" -}}
 {{- if semverCompare ">=1.4-0, <1.7-0" .Capabilities.KubeVersion.GitVersion -}}
