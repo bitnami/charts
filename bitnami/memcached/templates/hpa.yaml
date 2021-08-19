@@ -15,7 +15,7 @@ spec:
   scaleTargetRef:
     apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
     kind: StatefulSet
-    name: {{ include "memcached.fullname" . }}
+    name: {{ template "common.names.fullname" . }}
   minReplicas: {{ .Values.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.autoscaling.maxReplicas }}
   metrics:
