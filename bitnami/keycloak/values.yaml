@@ -126,7 +126,7 @@ auth:
   ##   tlsTruststorePassword:
   ##     name: keycloak-test2.credentials
   ##
-  existingSecretPerPassword: ""
+  existingSecretPerPassword: {}
   ## TLS encryption parameters
   ## ref: https://github.com/bitnami/bitnami-docker-keycloak#tls-encryption
   ##
