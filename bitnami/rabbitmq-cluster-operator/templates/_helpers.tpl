@@ -6,7 +6,7 @@ Return the proper RabbitMQ Cluster Operator image name
 {{- end -}}
 
 {{/*
-Return the proper image name (for the init container volume-permissions image)
+Return the proper RabbitMQ image name
 */}}
 {{- define "rmqco.rabbitmq.image" -}}
 {{- include "common.images.image" ( dict "imageRoot" .Values.rabbitmqImage "global" .Values.global ) -}}
