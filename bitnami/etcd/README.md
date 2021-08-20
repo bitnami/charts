@@ -200,22 +200,28 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Volume Permissions parameters
 
-| Name                                    | Description                                                                                                          | Value                   |
-| --------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `volumePermissions.enabled`             | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                 |
-| `volumePermissions.image.registry`      | Init container volume-permissions image registry                                                                     | `docker.io`             |
-| `volumePermissions.image.repository`    | Init container volume-permissions image name                                                                         | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`           | Init container volume-permissions image tag                                                                          | `10-debian-10-r165`     |
-| `volumePermissions.image.pullPolicy`    | Init container volume-permissions image pull policy                                                                  | `Always`                |
-| `volumePermissions.image.pullSecrets`   | Specify docker-registry secret names as an array                                                                     | `[]`                    |
-| `volumePermissions.resources.limits`    | Init container volume-permissions resource  limits                                                                   | `{}`                    |
-| `volumePermissions.resources.requests`  | Init container volume-permissions resource  requests                                                                 | `{}`                    |
-| `networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                                                                           | `false`                 |
-| `networkPolicy.allowExternal`           | Don't require client label for connections                                                                           | `true`                  |
-| `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                                         | `[]`                    |
-| `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                         | `[]`                    |
-| `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                                               | `{}`                    |
-| `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                                           | `{}`                    |
+| Name                                   | Description                                                                                                          | Value                   |
+| -------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                 |
+| `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                     | `docker.io`             |
+| `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                         | `bitnami/bitnami-shell` |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                          | `10-debian-10-r165`     |
+| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                  | `Always`                |
+| `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                     | `[]`                    |
+| `volumePermissions.resources.limits`   | Init container volume-permissions resource  limits                                                                   | `{}`                    |
+| `volumePermissions.resources.requests` | Init container volume-permissions resource  requests                                                                 | `{}`                    |
+
+
+### Network Policy parameters
+
+| Name                                    | Description                                                | Value   |
+| --------------------------------------- | ---------------------------------------------------------- | ------- |
+| `networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                 | `false` |
+| `networkPolicy.allowExternal`           | Don't require client label for connections                 | `true`  |
+| `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy               | `[]`    |
+| `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy               | `[]`    |
+| `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces     | `{}`    |
+| `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces | `{}`    |
 
 
 ### Metrics parameters
