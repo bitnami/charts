@@ -289,7 +289,7 @@ serviceAccount:
 ##
 sidecars: []
 
-## @param sidecarSingleProcessNamespace Enable sharing the process namespace for sidecards
+## @param sidecarSingleProcessNamespace Enable sharing the process namespace with sidecars
 ## This will switch pod.spec.shareProcessNamespace parameter
 ##
 sidecarSingleProcessNamespace: false
