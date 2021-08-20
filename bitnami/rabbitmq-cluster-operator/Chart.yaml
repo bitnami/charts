@@ -12,10 +12,11 @@ description: The RabbitMQ Cluster Kubernetes Operator automates provisioning, ma
 engine: gotpl
 home: https://github.com/rabbitmq/cluster-operator
 icon: https://bitnami.com/assets/stacks/rabbitmq-cluster-operator/img/rabbitmq-cluster-operator-stack-220x234.png
-keywords:
   - rabbitmq
   - operator
   - infrastructure
+  - message queue
+  - AMQP
 maintainers:
   - email: containers@bitnami.com
     name: Bitnami
