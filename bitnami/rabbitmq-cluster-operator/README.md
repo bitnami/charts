@@ -174,8 +174,15 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 | `readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                      | `5`                                 |
 | `readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                    | `5`                                 |
 | `readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                    | `1`                                 |
+| `startupProbe.enabled`               | Enable startupProbe on RabbitMQ Cluster Operator nodes                                                  | `false`                             |
+| `startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                                  | `5`                                 |
+| `startupProbe.periodSeconds`         | Period seconds for startupProbe                                                                         | `30`                                |
+| `startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe                                                                        | `5`                                 |
+| `startupProbe.failureThreshold`      | Failure threshold for startupProbe                                                                      | `5`                                 |
+| `startupProbe.successThreshold`      | Success threshold for startupProbe                                                                      | `1`                                 |
 | `customLivenessProbe`                | Custom livenessProbe that overrides the default one                                                     | `{}`                                |
 | `customReadinessProbe`               | Custom readinessProbe that overrides the default one                                                    | `{}`                                |
+| `customStartupProbe`                 | Custom startupProbe that overrides the default one                                                      | `{}`                                |
 | `resources.limits`                   | The resources limits for the RabbitMQ Cluster Operator containers                                       | `{}`                                |
 | `resources.requests`                 | The requested resources for the RabbitMQ Cluster Operator containers                                    | `{}`                                |
 | `installCRDs`                        | Install RabbitMQ Cluster CRD                                                                            | `true`                              |
