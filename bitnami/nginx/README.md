@@ -138,6 +138,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.annotations`            | Annotations for service account. Evaluated as a template.                                 | `{}`    |
 | `serviceAccount.autoMount`              | Auto-mount the service account token in the pod                                           | `false` |
 | `sidecars`                              | Sidecar parameters                                                                        | `[]`    |
+| `sidecarSingleProcessNamespace`         | Enable sharing the process namespace with sidecars                                       | `false` |
 | `initContainers`                        | Extra init containers                                                                     | `[]`    |
 | `pdb.create`                            | Created a PodDisruptionBudget                                                             | `false` |
 | `pdb.minAvailable`                      | Min number of pods that must still be available after the eviction                        | `1`     |
@@ -290,9 +291,9 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### Change NGINX version
+### Use a different NGINX version
 
-To modify the NGINX version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/nginx/tags/) using the `image.tag` parameter. For example, `image.tag=X.Y.Z`. This approach is also applicable to other images like exporters.
+To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter. Refer to the [chart documentation for more information on these parameters and how to use them with images from a private registry](https://docs.bitnami.com/kubernetes/infrastructure/nginx/configuration/change-image-version/).
 
 ### Deploying your custom web application
 

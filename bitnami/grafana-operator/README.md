@@ -153,7 +153,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | ------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------- | -------------------------- |
 | `operator.enabled`                                           | Enable the deployment of the Grafana Operator                                                                          | `true`                     |
 | `operator.replicaCount`                                      | Number of grafana-operator Pod replicas                                                                                | `1`                        |
-| `operator.updateStrategy.type`                               | Set up update strategy for Grafana installation.                                                                       | `Recreate`                 |
+| `operator.updateStrategy.type`                               | Set up update strategy for Grafana Operator installation.                                                              | `Recreate`                 |
 | `operator.image.registry`                                    | Grafana Operator image registry                                                                                        | `docker.io`                |
 | `operator.image.repository`                                  | Grafana Operator image name                                                                                            | `bitnami/grafana-operator` |
 | `operator.image.tag`                                         | Grafana Operator image tag                                                                                             | `3.10.3-debian-10-r9`      |
@@ -230,6 +230,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `grafana.resources.limits`                                  | The resources limits for the container                                                        | `{}`                   |
 | `grafana.resources.requests`                                | The requested resources for the container                                                     | `{}`                   |
 | `grafana.replicaCount`                                      | Specify the amount of replicas running                                                        | `1`                    |
+| `grafana.updateStrategy`                                    | Set up update strategy for Grafana installation.                                              | `{}`                   |
 | `grafana.podAffinityPreset`                                 | Pod affinity preset                                                                           | `""`                   |
 | `grafana.podAntiAffinityPreset`                             | Pod anti-affinity preset                                                                      | `soft`                 |
 | `grafana.nodeAffinityPreset.type`                           | Set nodeAffinity preset type                                                                  | `""`                   |

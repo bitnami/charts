@@ -288,6 +288,12 @@ serviceAccount:
 ##         containerPort: 1234
 ##
 sidecars: []
+
+## @param sidecarSingleProcessNamespace Enable sharing the process namespace with sidecars
+## This will switch pod.spec.shareProcessNamespace parameter
+##
+sidecarSingleProcessNamespace: false
+
 ## @param initContainers Extra init containers
 ##
 initContainers: []
