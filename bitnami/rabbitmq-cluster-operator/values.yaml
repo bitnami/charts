@@ -297,6 +297,8 @@ serviceAccount:
   ##
   name: ""
 
+## @section Metrics parameters
+##
 metrics:
   ## @param metrics.enabled Create a service for accessing the metrics endpoint
   ##
