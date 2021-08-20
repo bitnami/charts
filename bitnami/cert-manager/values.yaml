@@ -66,7 +66,7 @@ controller:
   image:
     registry: docker.io
     repository: bitnami/cert-manager
-    tag: 1.5.1-debian-10-r0
+    tag: 1.5.2-debian-10-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -95,7 +95,7 @@ controller:
     image:
       registry: docker.io
       repository: bitnami/acmesolver
-      tag: 1.5.0-debian-10-r4
+      tag: 1.5.1-debian-10-r3
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -284,7 +284,7 @@ webhook:
   image:
     registry: docker.io
     repository: bitnami/cert-manager-webhook
-    tag: 1.5.0-debian-10-r4
+    tag: 1.5.1-debian-10-r3
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -523,7 +523,7 @@ cainjector:
   image:
     registry: docker.io
     repository: bitnami/cainjector
-    tag: 1.5.0-debian-10-r4
+    tag: 1.5.1-debian-10-r3
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
