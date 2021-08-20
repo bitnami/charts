@@ -69,7 +69,7 @@ spec:
             - bash
             - -ec
             - |
-                {{- if (not (empty (.Values.galera.bootstrap.bootstrapFromNode | quote)))}}
+                {{- if (not (empty .Values.galera.bootstrap.bootstrapFromNode))}}
                 {{- $fullname := include "common.names.fullname" . }}
                 {{- $bootstrapFromNode := int .Values.galera.bootstrap.bootstrapFromNode }}
                 # Bootstrap from the indicated node
