@@ -230,7 +230,6 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `grafana.resources.limits`                                  | The resources limits for the container                                                        | `{}`                   |
 | `grafana.resources.requests`                                | The requested resources for the container                                                     | `{}`                   |
 | `grafana.replicaCount`                                      | Specify the amount of replicas running                                                        | `1`                    |
-| `grafana.updateStrategy`                                    | Set up update strategy for Grafana installation.                                              | `{}`                   |
 | `grafana.podAffinityPreset`                                 | Pod affinity preset                                                                           | `""`                   |
 | `grafana.podAntiAffinityPreset`                             | Pod anti-affinity preset                                                                      | `soft`                 |
 | `grafana.nodeAffinityPreset.type`                           | Set nodeAffinity preset type                                                                  | `""`                   |
@@ -270,6 +269,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `grafana.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                            | `5`                    |
 | `grafana.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                          | `6`                    |
 | `grafana.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                          | `1`                    |
+| `grafana.updateStrategy`                                    | Set up update strategy for Grafana installation.                                              | `{}`                   |
 | `grafana.extraVolumes`                                      | Optionally specify extra list of additional volumes for the grafana pod(s)                    | `[]`                   |
 | `grafana.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the grafana container(s)         | `[]`                   |
 | `grafana.sidecars`                                          | Add additional sidecar containers to the grafana pod(s)                                       | `[]`                   |

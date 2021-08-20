@@ -344,15 +344,15 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.image.tag`                    | Airflow Exporter image tag (immutable tags are recommended)               | `0.20210126.0-debian-10-r171` |
 | `metrics.image.pullPolicy`             | Airflow Exporter image pull policy                                        | `IfNotPresent`                |
 | `metrics.image.pullSecrets`            | Airflow Exporter image pull secrets                                       | `[]`                          |
-| `metrics.extraEnvVars`                 | Array containing extra environment variables                              | `[]`                          |
-| `metrics.extraEnvVarsCM`               | ConfigMap containing extra environment variables                          | `""`                          |
-| `metrics.extraEnvVarsSecret`           | Secret containing extra environment variables (in case of sensitive data) | `""`                          |
 | `metrics.hostAliases`                  | Deployment pod host aliases                                               | `[]`                          |
 | `metrics.serviceMonitor.enabled`       | Create ServiceMonitor resource                                            | `false`                       |
 | `metrics.serviceMonitor.namespace`     | The namespace in which the ServiceMonitor will be created                 | `""`                          |
 | `metrics.serviceMonitor.interval`      | Interval in which prometheus scrapes                                      | `60s`                         |
 | `metrics.serviceMonitor.scrapeTimeout` | Scrape Timeout duration for prometheus                                    | `10s`                         |
 | `metrics.serviceMonitor.labels`        | Additional labels to attach                                               | `{}`                          |
+| `metrics.extraEnvVars`                 | Array containing extra environment variables                              | `[]`                          |
+| `metrics.extraEnvVarsCM`               | ConfigMap containing extra environment variables                          | `""`                          |
+| `metrics.extraEnvVarsSecret`           | Secret containing extra environment variables (in case of sensitive data) | `""`                          |
 | `metrics.resources`                    | Metrics exporter resource requests and limits                             | `{}`                          |
 | `metrics.tolerations`                  | Metrics exporter labels and tolerations for pod assignment                | `[]`                          |
 | `metrics.podLabels`                    | Metrics exporter pod Annotation and Labels                                | `{}`                          |
