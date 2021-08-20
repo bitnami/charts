@@ -277,7 +277,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------- | ----------------------------------------------------------------------------- | ------------------ |
 | `postgresql.enabled`              | Deploy a PostgreSQL server to satisfy the applications database requirements  | `true`             |
 | `postgresql.postgresqlUsername`   | Keycloak PostgreSQL user (has superuser privileges if username is `postgres`) | `bn_keycloak`      |
-| `postgresql.postgresqlPassword`   | Keycloak PostgreSQL password - ignored if existingSecret is provided          | `some-password`    |
+| `postgresql.postgresqlPassword`   | Keycloak PostgreSQL password - ignored if existingSecret is provided          | `""`               |
 | `postgresql.postgresqlDatabase`   | Name of the database to create                                                | `bitnami_keycloak` |
 | `postgresql.existingSecret`       | Use an existing secret file with the PostgreSQL password                      | `""`               |
 | `postgresql.persistence.enabled`  | Enable database persistence using PVC                                         | `true`             |
