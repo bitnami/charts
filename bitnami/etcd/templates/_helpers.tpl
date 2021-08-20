@@ -22,6 +22,17 @@ Return the proper Docker Image Registry Secret Names
 {{- end -}}
 
 {{/*
+Return the appropriate apiVersion for networkpolicy
+*/}}
+{{- define "networkPolicy.apiVersion" -}}
+{{- if semverCompare ">=1.4-0, <1.7-0" .Capabilities.KubeVersion.GitVersion -}}
+{{- print "extensions/v1beta1" -}}
+{{- else -}}
+{{- print "networking.k8s.io/v1" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the proper etcd peer protocol
 */}}
 {{- define "etcd.peerProtocol" -}}
