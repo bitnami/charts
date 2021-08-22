@@ -29,7 +29,9 @@ ingress:
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
 kubeVersion: ""
-
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
 ## @section Contour parameters
 
 ## @param replicaCount Number of Contour Pod replicas
@@ -82,7 +84,7 @@ configInline:
     # configmap-name: leader-elect
     ## @param configInline.leaderelection.configmap-namespace This needs to be edited by when you deploy to a namespace other than `projectcontour`
     ##
-    configmap-namespace: '{{ .Release.Namespace }}'
+    configmap-namespace: "{{ .Release.Namespace }}"
   ## @param configInline.envoy-service-name Envoy service name
   ## The expression used here is the same as in templates/envoy/service.yaml and ensures that Contour is using the configured
   ## Envoy service name so it can automatically update the ingress.status field.
@@ -339,7 +341,7 @@ contour:
 ## @section Envoy parameters
 
 envoy:
-  ## @param envoy.enabled Envoy Proxy Daemonset creation
+  ## @param envoy.enabled Envoy Proxy creation
   ##
   enabled: true
   ## Bitnami Envoy image
@@ -394,6 +396,30 @@ envoy:
     ## cpu: 100m
     ## memory: 25Mi
     requests: {}
+  ## @param envoy.kind Install as Deployment or DaemonSet
+  kind: DaemonSet
+  ## @param envoy.replicaCount Desired number of Controller pods
+  replicaCount: 1
+  ## @param envoy.updateStrategy Strategy to use to update Pods
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy: {}
+  ## @param envoy.revisionHistoryLimit The number of old history to retain to allow rollback
+  ##
+  revisionHistoryLimit: 10
+  ## Controller Autoscaling configuration
+  ## @param envoy.autoscaling.enabled Enable autoscaling for Controller
+  ## @param envoy.autoscaling.minReplicas Minimum number of Controller replicas
+  ## @param envoy.autoscaling.maxReplicas Maximum number of Controller replicas
+  ## @param envoy.autoscaling.targetCPU Target CPU utilization percentage
+  ## @param envoy.autoscaling.targetMemory Target Memory utilization percentage
+  ##
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 11
+    targetCPU: ""
+    targetMemory: ""
   ## @param envoy.podAffinityPreset Envoy Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ## Allowed values: soft, hard
@@ -814,7 +840,7 @@ prometheus:
   serviceMonitor:
     namespace: ""
     enabled: false
-    jobLabel: 'app.kubernetes.io/name'
+    jobLabel: "app.kubernetes.io/name"
     interval: ""
     metricRelabelings: []
     relabelings: []
