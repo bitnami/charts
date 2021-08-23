@@ -91,7 +91,7 @@ internalTLS:
 
 ipFamily:
   ## Enable listening on IPv6 ([::]) for nginx-based components (nginx,portal)
-  ## Note that enabling ipv6 will cause nginx to crash on start on systems 
+  ## Note that enabling ipv6 will cause nginx to crash on start on systems
   ## with IPv6 disabled using the `ipv6.disable` kernel flag)
   ## @param ipFamily.ipv6.enabled Enable listening on IPv6 ([::]) for nginx-based components (nginx,portal)
   ipv6:
