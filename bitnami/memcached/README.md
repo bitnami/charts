@@ -77,6 +77,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                | `[]`                         |
 | `image.debug`                                 | Enable image debug mode                                                                         | `false`                      |
 | `architecture`                                | Memcached architecture. Allowed values: standalone or high-availability                         | `standalone`                 |
+| `autoscaling.enabled`                         | Enable Memcached statefulset autoscaling                                                        | `false`                      |
+| `autoscaling.minReplicas`                     | Memcached statefulset autoscaling minimum number of replicas                                    | `3`                          |
+| `autoscaling.maxReplicas`                     | Memcached statefulset autoscaling maximum number of replicas                                    | `6`                          |
+| `autoscaling.targetCPU`                       | Memcached statefulset autoscaling target CPU percentage                                         | `50`                         |
+| `autoscaling.targetMemory`                    | Memcached statefulset autoscaling target CPU memory                                             | `50`                         |
 | `hostAliases`                                 | Add deployment host aliases                                                                     | `[]`                         |
 | `memcachedUsername`                           | Memcached admin user                                                                            | `""`                         |
 | `memcachedPassword`                           | Memcached admin password                                                                        | `""`                         |
