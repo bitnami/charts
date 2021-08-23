@@ -22,7 +22,6 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 - Kubernetes 1.12+
 - Helm 3.1.0
 - PV provisioner support in the underlying infrastructure
-- ReadWriteMany volumes for deployment scaling
 
 ## Installing the Chart
 
@@ -50,14 +49,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 In the Bitnami catalog we offer both the *bitnami/rabbitmq* and *bitnami/rabbitmq-operator* charts. Each solution covers different needs and use cases.
 
-The *bitnami/rabbitmq* chart deploys a single RabbitMQ installation using a Kubernetes Deployment object (together with Services, PVCs, ConfigMaps, etc.). The figure below shows the deployed objects in the cluster after executing *helm install*:
+The *bitnami/rabbitmq* chart deploys a single RabbitMQ installation using a Kubernetes StatefulSet object (together with Services, PVCs, ConfigMaps, etc.). The figure below shows the deployed objects in the cluster after executing *helm install*:
 
 ```
                     +--------------+             +-----+
                     |              |             |     |
  Service            |   RabbitMQ   +<------------+ PVC |
 <-------------------+              |             |     |
-                    |  Deployment  |             +-----+
+                    |  StatefulSet |             +-----+
                     |              |
                     +-----------+--+
                                 ^                +------------+
@@ -68,7 +67,7 @@ The *bitnami/rabbitmq* chart deploys a single RabbitMQ installation using a Kube
 
 ```
 
-Its lifecycle is managed using Helm and, at the RabbitMQ container level, the following operations are automated: persistence management, configuration based on environment variables and plugin initialization. The Deployments do not require any ServiceAccounts with special RBAC privileges so this solution would fit better in more restricted Kubernetes installations.
+Its lifecycle is managed using Helm and, at the RabbitMQ container level, the following operations are automated: persistence management, configuration based on environment variables and plugin initialization. The StatefulSet do not require any ServiceAccounts with special RBAC privileges so this solution would fit better in more restricted Kubernetes installations.
 
 The *bitnami/rabbitmq-operator* chart deploys a RabbitMQ Operator installation using a Kubernetes Deployment.  The figure below shows the RabbitMQ operator deployment after executing *helm install*:
 
@@ -85,7 +84,7 @@ The *bitnami/rabbitmq-operator* chart deploys a RabbitMQ Operator installation u
             +-----------------+
 ```
 
-The operator will extend the Kubernetes API with the following object: *RabbitmqCluster*. From that moment, the user will be able to deploy objects of these kinds and the previously deployed Operator will take care of deploying all the required Deployments, ConfigMaps and Services for running a RabbitMQ instance. Its lifecycle is managed using *kubectl* on the RabbitmqCluster objects. The following figure shows the deployed objects after deploying a *RabbitmqCluster* object using *kubectl*:
+The operator will extend the Kubernetes API with the following object: *RabbitmqCluster*. From that moment, the user will be able to deploy objects of these kinds and the previously deployed Operator will take care of deploying all the required StatefulSets, ConfigMaps and Services for running a RabbitMQ instance. Its lifecycle is managed using *kubectl* on the RabbitmqCluster objects. The following figure shows the deployed objects after deploying a *RabbitmqCluster* object using *kubectl*:
 
 ```
   +--------------------+
@@ -108,7 +107,7 @@ The operator will extend the Kubernetes API with the following object: *Rabbitmq
     │    │                        |              |             |     |           │
     └────►     Service            |   RabbitMQ   +<------------+ PVC |           │
          │    <-------------------+              |             |     |           │
-         │                        |  Deployment  |             +-----+           │
+         │                        |  StatefulSet |             +-----+           │
          │                        |              |                               │
          │                        +-----------+--+                               │
          │                                    ^                +------------+    │
@@ -218,11 +217,17 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 
 ### Other Parameters
 
+| Name                    | Description                                          | Value  |
+| ----------------------- | ---------------------------------------------------- | ------ |
+| `rbac.create`           | Specifies whether RBAC resources should be created   | `true` |
+| `serviceAccount.create` | Specifies whether a ServiceAccount should be created | `true` |
+| `serviceAccount.name`   | The name of the ServiceAccount to use.               | `""`   |
+
+
+### Metrics parameters
+
 | Name                                       | Description                                                                 | Value                    |
 | ------------------------------------------ | --------------------------------------------------------------------------- | ------------------------ |
-| `rbac.create`                              | Specifies whether RBAC resources should be created                          | `true`                   |
-| `serviceAccount.create`                    | Specifies whether a ServiceAccount should be created                        | `true`                   |
-| `serviceAccount.name`                      | The name of the ServiceAccount to use.                                      | `""`                     |
 | `metrics.enabled`                          | Create a service for accessing the metrics endpoint                         | `false`                  |
 | `metrics.service.type`                     | RabbitMQ Cluster Operator metrics service type                              | `ClusterIP`              |
 | `metrics.service.port`                     | RabbitMQ Cluster Operator metrics service HTTP port                         | `80`                     |
