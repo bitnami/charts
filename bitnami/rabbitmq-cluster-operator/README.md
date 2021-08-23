@@ -32,7 +32,7 @@ To install the chart with the release name `my-release`:
 helm install my-release bitnami/rabbitmq-cluster-operators
 ```
 
-The command deploys rabbitmq-cluster-operator on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
+The command deploy the RabbitMQ Cluster Kubernetes Operator on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
