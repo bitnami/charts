@@ -136,6 +136,21 @@ service:
   ## @param service.annotations Additional annotations for Memcached service
   ##
   annotations: {}
+
+## Memcached Autoscaling
+## @param autoscaling.enabled Enable memcached statefulset autoscaling (requires architecture: "high-availability")
+## @param autoscaling.minReplicas memcached statefulset autoscaling minimum number of replicas
+## @param autoscaling.maxReplicas memcached statefulset autoscaling maximum number of replicas
+## @param autoscaling.targetCPU memcached statefulset autoscaling target CPU percentage
+## @param autoscaling.targetMemory memcached statefulset autoscaling target CPU memory
+##
+autoscaling:
+  enabled: false
+  minReplicas: 3
+  maxReplicas: 6
+  targetCPU: 50
+  targetMemory: 50
+
 ## Memcached containers' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious
