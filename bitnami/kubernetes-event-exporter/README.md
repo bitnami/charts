@@ -68,7 +68,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------- | ----------------------------------------------------------------------------------------- | ----------------------------------- |
 | `image.registry`                                  | Container image registry                                                                  | `docker.io`                         |
 | `image.repository`                                | Container image name                                                                      | `bitnami/kubernetes-event-exporter` |
-| `image.tag`                                       | Container image tag                                                                       | `0.10.0-debian-10-r28`              |
+| `image.tag`                                       | Container image tag                                                                       | `0.10.0-debian-10-r38`              |
 | `image.pullPolicy`                                | Container image pull policy                                                               | `IfNotPresent`                      |
 | `image.pullSecrets`                               | Specify docker-registry secret names as an array                                          | `[]`                                |
 | `hostAliases`                                     | Add deployment host aliases                                                               | `[]`                                |

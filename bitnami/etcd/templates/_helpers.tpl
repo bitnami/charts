@@ -22,6 +22,17 @@ Return the proper Docker Image Registry Secret Names
 {{- end -}}
 
 {{/*
+Return the appropriate apiVersion for networkpolicy
+*/}}
+{{- define "networkPolicy.apiVersion" -}}
+{{- if semverCompare ">=1.4-0, <1.7-0" .Capabilities.KubeVersion.GitVersion -}}
+{{- print "extensions/v1beta1" -}}
+{{- else -}}
+{{- print "networking.k8s.io/v1" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the proper etcd peer protocol
 */}}
 {{- define "etcd.peerProtocol" -}}
@@ -93,6 +104,17 @@ Return the secret with etcd credentials
     {{- else -}}
         {{- printf "%s" (include "common.names.fullname" .) -}}
     {{- end -}}
+{{- end -}}
+
+{{/*
+Get the secret password key to be retrieved from etcd secret.
+*/}}
+{{- define "etcd.secretPasswordKey" -}}
+{{- if and .Values.auth.rbac.existingSecret .Values.auth.rbac.existingSecretPasswordKey -}}
+{{- printf "%s" .Values.auth.rbac.existingSecretPasswordKey -}}
+{{- else -}}
+{{- printf "etcd-root-password" -}}
+{{- end -}}
 {{- end -}}
 
 {{/*

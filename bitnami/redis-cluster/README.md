@@ -96,7 +96,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
 | `image.registry`                        | Redis&trade; cluster image registry                                                                                                                 | `docker.io`             |
 | `image.repository`                      | Redis&trade; cluster image repository                                                                                                               | `bitnami/redis-cluster` |
-| `image.tag`                             | Redis&trade; cluster image tag (immutable tags are recommended)                                                                                     | `6.2.5-debian-10-r0`    |
+| `image.tag`                             | Redis&trade; cluster image tag (immutable tags are recommended)                                                                                     | `6.2.5-debian-10-r9`    |
 | `image.pullPolicy`                      | Redis&trade; cluster image pull policy                                                                                                              | `IfNotPresent`          |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                                                    | `[]`                    |
 | `image.debug`                           | Enable image debug mode                                                                                                                             | `false`                 |
@@ -149,7 +149,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`             | Enable init container that changes volume permissions in the registry (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`      | Init container volume-permissions image registry                                                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`    | Init container volume-permissions image repository                                                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`           | Init container volume-permissions image tag                                                                                                         | `10-debian-10-r141`     |
+| `volumePermissions.image.tag`           | Init container volume-permissions image tag                                                                                                         | `10-debian-10-r151`     |
 | `volumePermissions.image.pullPolicy`    | Init container volume-permissions image pull policy                                                                                                 | `Always`                |
 | `volumePermissions.image.pullSecrets`   | Specify docker-registry secret names as an array                                                                                                    | `[]`                    |
 | `volumePermissions.resources.limits`    | The resources limits for the container                                                                                                              | `{}`                    |
@@ -262,7 +262,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                         | Start a side-car prometheus exporter                                                                                     | `false`                  |
 | `metrics.image.registry`                  | Redis&trade; exporter image registry                                                                                     | `docker.io`              |
 | `metrics.image.repository`                | Redis&trade; exporter image name                                                                                         | `bitnami/redis-exporter` |
-| `metrics.image.tag`                       | Redis&trade; exporter image tag                                                                                          | `1.24.0-debian-10-r38`   |
+| `metrics.image.tag`                       | Redis&trade; exporter image tag                                                                                          | `1.24.0-debian-10-r48`   |
 | `metrics.image.pullPolicy`                | Redis&trade; exporter image pull policy                                                                                  | `IfNotPresent`           |
 | `metrics.image.pullSecrets`               | Specify docker-registry secret names as an array                                                                         | `[]`                     |
 | `metrics.resources`                       | Metrics exporter resource requests and limits                                                                            | `{}`                     |
@@ -291,7 +291,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sysctlImage.command`            | sysctlImage command to execute                     | `[]`                    |
 | `sysctlImage.registry`           | sysctlImage Init container registry                | `docker.io`             |
 | `sysctlImage.repository`         | sysctlImage Init container repository              | `bitnami/bitnami-shell` |
-| `sysctlImage.tag`                | sysctlImage Init container tag                     | `10-debian-10-r141`     |
+| `sysctlImage.tag`                | sysctlImage Init container tag                     | `10-debian-10-r151`     |
 | `sysctlImage.pullPolicy`         | sysctlImage Init container pull policy             | `Always`                |
 | `sysctlImage.pullSecrets`        | Specify docker-registry secret names as an array   | `[]`                    |
 | `sysctlImage.mountHostSys`       | Mount the host `/sys` folder to `/host-sys`        | `false`                 |
@@ -329,9 +329,9 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### Change Redis&trade; version
+### Use a different Redis&trade; version
 
-To modify the Redis&trade; version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/redis-cluster/tags/) using the `image.tag` parameter. For example, `image.tag=X.Y.Z`. This approach is also applicable to other images like exporters.
+To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter. Refer to the [chart documentation for more information on these parameters and how to use them with images from a private registry](https://docs.bitnami.com/kubernetes/infrastructure/redis-cluster/configuration/change-image-version/).
 
 ### Cluster topology
 

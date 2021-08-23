@@ -138,7 +138,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "etcd.secretName" . }}
-                  key: etcd-root-password
+                  key: {{ include "etcd.secretPasswordKey" . }}
             {{- end }}
             - name: ETCD_ADVERTISE_CLIENT_URLS
               value: "{{ $etcdClientProtocol }}://$(MY_POD_NAME).{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.svc.{{ $clusterDomain }}:{{ .Values.service.port }}"
@@ -336,13 +336,13 @@ spec:
         {{- if or .Values.auth.client.enableAuthentication (and .Values.auth.client.secureTransport (not .Values.auth.client.useAutoTLS )) }}
         - name: etcd-client-certs
           secret:
-            secretName: {{ required "A secret containing the client certificates is required" .Values.auth.client.existingSecret }}
+            secretName: {{ required "A secret containing the client certificates is required" (tpl .Values.auth.client.existingSecret .) }}
             defaultMode: 256
         {{- end }}
         {{- if or .Values.auth.peer.enableAuthentication (and .Values.auth.peer.secureTransport (not .Values.auth.peer.useAutoTLS )) }}
         - name: etcd-peer-certs
           secret:
-            secretName: {{ required "A secret containing the peer certificates is required" .Values.auth.peer.existingSecret }}
+            secretName: {{ required "A secret containing the peer certificates is required" (tpl .Values.auth.peer.existingSecret .) }}
             defaultMode: 256
         {{- end }}
         {{- if .Values.extraVolumes }}
