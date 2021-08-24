@@ -158,7 +158,7 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 | `image.pullSecrets`                  | RabbitMQ Cluster Operator image pull secrets                                                            | `[]`                                |
 | `rabbitmqImage.registry`             | RabbitMQ Image registry                                                                                 | `docker.io`                         |
 | `rabbitmqImage.repository`           | RabbitMQ Image repository                                                                               | `bitnami/rabbitmq`                  |
-| `rabbitmqImage.tag`                  | RabbitMQ Image tag (immutable tags are recommended)                                                     | `3.8.21-debian-10-r0`               |
+| `rabbitmqImage.tag`                  | RabbitMQ Image tag (immutable tags are recommended)                                                     | `3.8.21-debian-10-r11`              |
 | `rabbitmqImage.pullSecrets`          | RabbitMQ Image pull secrets                                                                             | `[]`                                |
 | `replicaCount`                       | Number of RabbitMQ Cluster Operator replicas to deploy                                                  | `1`                                 |
 | `livenessProbe.enabled`              | Enable livenessProbe on RabbitMQ Cluster Operator nodes                                                 | `true`                              |

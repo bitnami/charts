@@ -77,11 +77,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                | `[]`                         |
 | `image.debug`                                 | Enable image debug mode                                                                         | `false`                      |
 | `architecture`                                | Memcached architecture. Allowed values: standalone or high-availability                         | `standalone`                 |
-| `autoscaling.enabled`                         | Enable Memcached statefulset autoscaling                                                        | `false`                      |
-| `autoscaling.minReplicas`                     | Memcached statefulset autoscaling minimum number of replicas                                    | `3`                          |
-| `autoscaling.maxReplicas`                     | Memcached statefulset autoscaling maximum number of replicas                                    | `6`                          |
-| `autoscaling.targetCPU`                       | Memcached statefulset autoscaling target CPU percentage                                         | `50`                         |
-| `autoscaling.targetMemory`                    | Memcached statefulset autoscaling target CPU memory                                             | `50`                         |
 | `hostAliases`                                 | Add deployment host aliases                                                                     | `[]`                         |
 | `memcachedUsername`                           | Memcached admin user                                                                            | `""`                         |
 | `memcachedPassword`                           | Memcached admin password                                                                        | `""`                         |
@@ -97,6 +92,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.nodePort`                            | Kubernetes Service nodePort                                                                     | `""`                         |
 | `service.loadBalancerIP`                      | `loadBalancerIP` if service type is `LoadBalancer`                                              | `""`                         |
 | `service.annotations`                         | Additional annotations for Memcached service                                                    | `{}`                         |
+| `autoscaling.enabled`                         | Enable memcached statefulset autoscaling (requires architecture: "high-availability")           | `false`                      |
+| `autoscaling.minReplicas`                     | memcached statefulset autoscaling minimum number of replicas                                    | `3`                          |
+| `autoscaling.maxReplicas`                     | memcached statefulset autoscaling maximum number of replicas                                    | `6`                          |
+| `autoscaling.targetCPU`                       | memcached statefulset autoscaling target CPU percentage                                         | `50`                         |
+| `autoscaling.targetMemory`                    | memcached statefulset autoscaling target CPU memory                                             | `50`                         |
 | `resources.limits`                            | CPU/Memory resource limits                                                                      | `{}`                         |
 | `resources.requests`                          | CPU/Memory resource requests                                                                    | `{}`                         |
 | `portName`                                    | Name of the main port exposed by memcached                                                      | `memcache`                   |
