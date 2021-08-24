@@ -51,17 +51,17 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `nil` |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
 
 ### Common parameters
 
 | Name               | Description                                                                                  | Value |
 | ------------------ | -------------------------------------------------------------------------------------------- | ----- |
-| `nameOverride`     | String to partially override common.names.fullname template (will maintain the release name) | `nil` |
-| `fullnameOverride` | String to fully override common.names.fullname template                                      | `nil` |
+| `nameOverride`     | String to partially override common.names.fullname template (will maintain the release name) | `""`  |
+| `fullnameOverride` | String to fully override common.names.fullname template                                      | `""`  |
 
 
 ### Common Mxnet parameters
@@ -70,19 +70,19 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------- | ----------------------------------------------------------------------------------------------------- | ----------------------- |
 | `image.registry`                       | Apache MXNet (Incubating) image registry                                                              | `docker.io`             |
 | `image.repository`                     | Apache MXNet (Incubating) image repository                                                            | `bitnami/mxnet`         |
-| `image.tag`                            | Apache MXNet (Incubating) image tag (immutable tags are recommended)                                  | `1.8.0-debian-10-r83`   |
+| `image.tag`                            | Apache MXNet (Incubating) image tag (immutable tags are recommended)                                  | `1.8.0-debian-10-r112`  |
 | `image.pullPolicy`                     | Image pull policy                                                                                     | `IfNotPresent`          |
 | `image.pullSecrets`                    | Specify docker-registry secret names as an array                                                      | `[]`                    |
 | `image.debug`                          | Specify if debug logs should be enabled                                                               | `false`                 |
 | `git.registry`                         | Git image registry                                                                                    | `docker.io`             |
 | `git.repository`                       | Git image repository                                                                                  | `bitnami/git`           |
-| `git.tag`                              | Git image tag (immutable tags are recommended)                                                        | `2.32.0-debian-10-r12`  |
+| `git.tag`                              | Git image tag (immutable tags are recommended)                                                        | `2.32.0-debian-10-r44`  |
 | `git.pullPolicy`                       | Git image pull policy                                                                                 | `IfNotPresent`          |
 | `git.pullSecrets`                      | Specify docker-registry secret names as an array                                                      | `[]`                    |
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory                           | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                      | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                    | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                          | `10-debian-10-r112`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                          | `10-debian-10-r144`     |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                   | `Always`                |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                      | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                                                | `{}`                    |
@@ -92,8 +92,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.annotations`                  | Provide any additional annotations which may be required.                                             | `{}`                    |
 | `entrypoint`                           | The main entrypoint of your app, this will be executed as:                                            | `{}`                    |
 | `mode`                                 | Apache MXNet (Incubating) deployment mode. Can be `standalone` or `distributed`                       | `standalone`            |
-| `existingSecret`                       | Name of a secret with sensitive data to mount in the pods                                             | `nil`                   |
-| `configMap`                            | Name of an existing config map containing all the files you want to load in Apache MXNet (Incubating) | `nil`                   |
+| `existingSecret`                       | Name of a secret with sensitive data to mount in the pods                                             | `""`                    |
+| `configMap`                            | Name of an existing config map containing all the files you want to load in Apache MXNet (Incubating) | `""`                    |
 | `hostAliases`                          | Deployment pod host aliases                                                                           | `[]`                    |
 | `cloneFilesFromGit.enabled`            | Enable in order to download files from git repository                                                 | `false`                 |
 | `cloneFilesFromGit.extraVolumeMounts`  | Add extra volume mounts for the GIT container                                                         | `[]`                    |

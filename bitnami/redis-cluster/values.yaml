@@ -54,7 +54,7 @@ diagnosticMode:
 
 ## @section Redis&trade; Cluster Common parameters
 
-## Bitnami Redis(TM) image version
+## Bitnami Redis&trade; image version
 ## ref: https://hub.docker.com/r/bitnami/redis/tags/
 ## @param image.registry Redis&trade; cluster image registry
 ## @param image.repository Redis&trade; cluster image repository
@@ -66,10 +66,10 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/redis-cluster
-  ## Bitnami Redis(TM) image tag
+  ## Bitnami Redis&trade; image tag
   ## ref: https://github.com/bitnami/bitnami-docker-redis#supported-tags-and-respective-dockerfile-links
   ##
-  tag: 6.2.5-debian-10-r0
+  tag: 6.2.5-debian-10-r9
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -95,8 +95,8 @@ image:
 networkPolicy:
   enabled: false
   ## When set to false, only pods with the correct
-  ## client label will have network access to the port Redis(TM) is listening
-  ## on. When true, Redis(TM) will accept connections from any source
+  ## client label will have network access to the port Redis&trade; is listening
+  ## on. When true, Redis&trade; will accept connections from any source
   ## (with the correct destination port).
   ##
   allowExternal: true
@@ -127,7 +127,7 @@ rbac:
     ##      - gce.unprivileged
     ##
     rules: []
-## Redis(TM) pod Security Context
+## Redis&trade; pod Security Context
 ## @param podSecurityContext.enabled Enable Redis&trade; pod Security Context
 ## @param podSecurityContext.fsGroup Group ID for the pods
 ## @param podSecurityContext.runAsUser User ID for the pods
@@ -209,7 +209,7 @@ tls:
   ## @param tls.dhParamsFilename File containing DH params (in order to support DH based ciphers)
   ##
   dhParamsFilename: ""
-## Redis(TM) Service properties for standalone mode.
+## Redis&trade; Service properties for standalone mode.
 ##
 service:
   ## @param service.port Kubernetes Service port
@@ -293,7 +293,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r141
+    tag: 10-debian-10-r151
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -396,7 +396,7 @@ redis:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podAnnotations: {}
-  ## Redis(TM) resource requests and limits
+  ## Redis&trade; resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## @param redis.resources.limits The resources limits for the container
   ## @param redis.resources.requests The requested resources for the container
@@ -424,7 +424,7 @@ redis:
   ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/share-process-namespace/
   ##
   shareProcessNamespace: false
-  ## Configure extra options for Redis(TM) liveness probes
+  ## Configure extra options for Redis&trade; liveness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
   ## @param redis.livenessProbe.enabled Enable livenessProbe
   ## @param redis.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
@@ -440,7 +440,7 @@ redis:
     timeoutSeconds: 5
     successThreshold: 1
     failureThreshold: 5
-  ## Configure extra options for Redis(TM) readiness probes
+  ## Configure extra options for Redis&trade; readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
   ## @param redis.readinessProbe.enabled Enable readinessProbe
   ## @param redis.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
@@ -464,7 +464,7 @@ redis:
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAntiAffinityPreset: soft
-  ## Redis(TM) node affinity preset
+  ## Redis&trade; node affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
   ##
   nodeAffinityPreset:
@@ -620,13 +620,13 @@ updateJob:
 
 ## @section Cluster management parameters
 
-## Redis(TM) Cluster settings
+## Redis&trade; Cluster settings
 ##
 cluster:
   ## @param cluster.init Enable the initialization of the Redis&trade; Cluster
   ##
   init: true
-  ## Number of Redis(TM) nodes to be deployed
+  ## Number of Redis&trade; nodes to be deployed
   ##
   ## Note:
   ## This is total number of nodes including the replicas. Meaning there will be 3 master and 3 replica
@@ -641,7 +641,7 @@ cluster:
   ## 1 means that we want a replica for every master created
   ##
   replicas: 1
-  ## Configuration to access the Redis(TM) Cluster from outside the Kubernetes cluster
+  ## Configuration to access the Redis&trade; Cluster from outside the Kubernetes cluster
   ##
   externalAccess:
     ## @param cluster.externalAccess.enabled Enable access to the Redis
@@ -661,11 +661,11 @@ cluster:
       ## @param cluster.externalAccess.service.annotations Annotations to add to the services used to expose every Pod of the Redis&trade; Cluster
       ##
       annotations: {}
-  ## This section allows to update the Redis(TM) cluster nodes.
+  ## This section allows to update the Redis&trade; cluster nodes.
   ##
   update:
     ## @param cluster.update.addNodes Boolean to specify if you want to add nodes after the upgrade
-    ## Setting this to true a hook will add nodes to the Redis(TM) cluster after the upgrade. currentNumberOfNodes is required
+    ## Setting this to true a hook will add nodes to the Redis&trade; cluster after the upgrade. currentNumberOfNodes is required
     ##
     addNodes: false
     ## @param cluster.update.currentNumberOfNodes Number of currently deployed Redis&trade; nodes
@@ -692,7 +692,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/redis-exporter
-    tag: 1.24.0-debian-10-r38
+    tag: 1.24.0-debian-10-r48
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -750,8 +750,8 @@ metrics:
     ##    labels:
     ##      severity: error
     ##    annotations:
-    ##      summary: Redis(TM) instance {{ "{{ $instance }}" }} down
-    ##      description: Redis(TM) instance {{ "{{ $instance }}" }} is down.
+    ##      summary: Redis&trade; instance {{ "{{ $instance }}" }} down
+    ##      description: Redis&trade; instance {{ "{{ $instance }}" }} is down.
     ##  - alert: RedisMemoryHigh
     ##    expr: >
     ##       redis_memory_used_bytes{service="{{ template "common.names.fullname" . }}-metrics"} * 100
@@ -762,16 +762,16 @@ metrics:
     ##    labels:
     ##      severity: error
     ##    annotations:
-    ##      summary: Redis(TM) instance {{ "{{ $instance }}" }} is using too much memory
-    ##      description: Redis(TM) instance {{ "{{ $instance }}" }} is using {{ "{{ $value }}" }}% of its available memory.
+    ##      summary: Redis&trade; instance {{ "{{ $instance }}" }} is using too much memory
+    ##      description: Redis&trade; instance {{ "{{ $instance }}" }} is using {{ "{{ $value }}" }}% of its available memory.
     ##  - alert: RedisKeyEviction
     ##    expr: increase(redis_evicted_keys_total{service="{{ template "common.names.fullname" . }}-metrics"}[5m]) > 0
     ##    for: 1s
     ##    labels:
     ##      severity: error
     ##    annotations:
-    ##      summary: Redis(TM) instance {{ "{{ $instance }}" }} has evicted keys
-    ##      description: Redis(TM) instance {{ "{{ $instance }}" }} has evicted {{ "{{ $value }}" }} keys in the last 5 minutes.
+    ##      summary: Redis&trade; instance {{ "{{ $instance }}" }} has evicted keys
+    ##      description: Redis&trade; instance {{ "{{ $instance }}" }} has evicted {{ "{{ $value }}" }} keys in the last 5 minutes.
     ##
     rules: []
   ## @param metrics.priorityClassName Metrics exporter pod priorityClassName
@@ -808,7 +808,7 @@ sysctlImage:
   ##
   registry: docker.io
   repository: bitnami/bitnami-shell
-  tag: 10-debian-10-r141
+  tag: 10-debian-10-r151
   pullPolicy: Always
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.

@@ -51,7 +51,7 @@ hub:
     repository: bitnami/jupyterhub
     ## @param hub.image.tag Hub image tag (immutabe tags are recommended)
     ##
-    tag: 1.4.2-debian-10-r0
+    tag: 1.4.2-debian-10-r16
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -127,7 +127,7 @@ hub:
   ## This configuration uses the values for the `singleuser` section. In the upstream chart the
   ## values.yaml file is mounted in the hub container. This is chart, we tried to separate both
   ## configuration so we could follow the Bitnami value standards
-  ## @param hub.configuration [object] Hub configuration file (to be used by jupyterhub_config.py)
+  ## @param hub.configuration [string] Hub configuration file (to be used by jupyterhub_config.py)
   ##
   configuration: |
     Chart:
@@ -479,10 +479,10 @@ hub:
     allowInterspaceAccess: true
     ## @param hub.networkPolicy.extraIngress Add extra ingress rules to the NetworkPolicy
     ##
-    extraIngress: []
-    ## @param hub.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    extraIngress: ""
+    ## @param hub.networkPolicy.extraEgress [string] Add extra ingress rules to the NetworkPolicy
     ##
-    extraEgress:
+    extraEgress: |
       ## Hub --> Any IP:PORT
       ##
       - to:
@@ -527,7 +527,7 @@ proxy:
   image:
     registry: docker.io
     repository: bitnami/configurable-http-proxy
-    tag: 4.4.0-debian-10-r40
+    tag: 4.5.0-debian-10-r14
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -785,16 +785,16 @@ proxy:
     ## @param proxy.networkPolicy.allowInterspaceAccess Allow communication between pods in different namespaces
     ##
     allowInterspaceAccess: true
-    ## @param proxy.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## @param proxy.networkPolicy.extraIngress [string] Add extra ingress rules to the NetworkPolicy
     ##
-    extraIngress:
+    extraIngress: |
       ## Any IP --> Proxy
       ##
       - ports:
-          - port: "{{ .Values.proxy.containerPort.http }}"
+          - port: {{ .Values.proxy.containerPort.http }}
     ## @param proxy.networkPolicy.extraEgress Add extra egress rules to the NetworkPolicy
     ##
-    extraEgress: []
+    extraEgress: ""
   service:
     api:
       ## @param proxy.service.api.type API service type
@@ -1098,7 +1098,7 @@ singleuser:
   image:
     registry: docker.io
     repository: bitnami/jupyter-base-notebook
-    tag: 1.4.1-debian-10-r65
+    tag: 1.4.1-debian-10-r82
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1273,10 +1273,10 @@ singleuser:
     allowCloudMetadataAccess: false
     ## @param singleuser.networkPolicy.extraIngress Add extra ingress rules to the NetworkPolicy
     ##
-    extraIngress: []
+    extraIngress: ""
     ## @param singleuser.networkPolicy.extraEgress Add extra egress rules to the NetworkPolicy
     ##
-    extraEgress: []
+    extraEgress: ""
 
 ## @section Auxiliary image parameters
 
@@ -1289,7 +1289,7 @@ singleuser:
 auxiliaryImage:
   registry: docker.io
   repository: bitnami/bitnami-shell
-  tag: 10-debian-10-r134
+  tag: 10-debian-10-r151
   pullPolicy: Always
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.

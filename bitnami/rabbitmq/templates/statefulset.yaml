@@ -212,8 +212,10 @@ spec:
             {{- end }}
           {{- end }}
           ports:
+            {{- if or (.Values.service.portEnabled) (not .Values.auth.tls.enabled) }}
             - name: amqp
               containerPort: 5672
+            {{- end }}
             {{- if .Values.auth.tls.enabled }}
             - name: amqp-ssl
               containerPort: {{ .Values.service.tlsPort }}

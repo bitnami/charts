@@ -98,8 +98,8 @@ spec:
         {{- end }}
       containers:
         - name: controller
-          image: {{ include "argocd.application-controller.image" . }}
-          imagePullPolicy: {{ .Values.controller.image.pullPolicy }}
+          image: {{ include "argocd.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.controller.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.controller.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
@@ -125,7 +125,7 @@ spec:
             - --self-heal-timeout-seconds
             - {{ .Values.controller.defaultArgs.selfHealTimeout | quote }}
             - --repo-server
-            - {{ include "argocd.application-controller" . }}:{{ .Values.repoServer.service.port }}
+            - {{ include "argocd.repo-server" . }}:{{ .Values.repoServer.service.port }}
             - --logformat
             - {{ .Values.controller.logFormat }}
             - --loglevel
@@ -134,7 +134,7 @@ spec:
             - --redis
             - {{ include "argocd.redisHost" . }}:{{ include "argocd.redisPort" . }}
           {{- if .Values.controller.extraArgs }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.controller.extraArgs "context" $) | nindent 8 }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.controller.extraArgs "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           ports:

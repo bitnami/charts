@@ -79,7 +79,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.name`                           | The name of the ServiceAccount to create                                                  | `""`                         |
 | `image.registry`                                | kube-state-metrics image registry                                                         | `docker.io`                  |
 | `image.repository`                              | kube-state-metrics image repository                                                       | `bitnami/kube-state-metrics` |
-| `image.tag`                                     | kube-state-metrics Image tag (immutable tags are recommended)                             | `2.1.0-debian-10-r23`        |
+| `image.tag`                                     | kube-state-metrics Image tag (immutable tags are recommended)                             | `2.1.1-debian-10-r0`         |
 | `image.pullPolicy`                              | kube-state-metrics image pull policy                                                      | `IfNotPresent`               |
 | `image.pullSecrets`                             | Specify docker-registry secret names as an array                                          | `[]`                         |
 | `extraArgs`                                     | Additional command line arguments to pass to kube-state-metrics                           | `{}`                         |
@@ -158,7 +158,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceMonitor.interval`                       | Scrape interval (use by default, falling back to Prometheus' default)                     | `""`                         |
 | `serviceMonitor.scrapeTimeout`                  | Timeout after which the scrape is ended                                                   | `""`                         |
 | `serviceMonitor.selector`                       | ServiceMonitor selector labels                                                            | `{}`                         |
-| `serviceMonitor.honorLabels`                    | Honor metrics labels                                                                      | `""`                         |
+| `serviceMonitor.honorLabels`                    | Honor metrics labels                                                                      | `false`                      |
 | `serviceMonitor.relabelings`                    | ServiceMonitor relabelings                                                                | `[]`                         |
 | `serviceMonitor.metricRelabelings`              | ServiceMonitor metricRelabelings                                                          | `[]`                         |
 

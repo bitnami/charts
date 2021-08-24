@@ -73,44 +73,45 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### etcd parameters
 
-| Name                                 | Description                                                                                     | Value                 |
-| ------------------------------------ | ----------------------------------------------------------------------------------------------- | --------------------- |
-| `image.registry`                     | etcd image registry                                                                             | `docker.io`           |
-| `image.repository`                   | etcd image name                                                                                 | `bitnami/etcd`        |
-| `image.tag`                          | etcd image tag                                                                                  | `3.5.0-debian-10-r24` |
-| `image.pullPolicy`                   | etcd image pull policy                                                                          | `IfNotPresent`        |
-| `image.pullSecrets`                  | etcd image pull secrets                                                                         | `[]`                  |
-| `image.debug`                        | Enable image debug mode                                                                         | `false`               |
-| `auth.rbac.enabled`                  | Switch to enable RBAC authentication                                                            | `true`                |
-| `auth.rbac.allowNoneAuthentication`  | Allow to use etcd without configuring RBAC authentication                                       | `true`                |
-| `auth.rbac.rootPassword`             | Root user password. The root user is always `root`                                              | `""`                  |
-| `auth.rbac.existingSecret`           | Name of the existing secret containing credentials for the root user                            | `""`                  |
-| `auth.client.secureTransport`        | Switch to encrypt client-to-server communications using TLS certificates                        | `false`               |
-| `auth.client.useAutoTLS`             | Switch to automatically create the TLS certificates                                             | `false`               |
-| `auth.client.existingSecret`         | Name of the existing secret containing the TLS certificates for client-to-server communications | `""`                  |
-| `auth.client.enableAuthentication`   | Switch to enable host authentication using TLS certificates. Requires existing secret           | `false`               |
-| `auth.client.certFilename`           | Name of the file containing the client certificate                                              | `cert.pem`            |
-| `auth.client.certKeyFilename`        | Name of the file containing the client certificate private key                                  | `key.pem`             |
-| `auth.client.caFilename`             | Name of the file containing the client CA certificate                                           | `""`                  |
-| `auth.peer.secureTransport`          | Switch to encrypt server-to-server communications using TLS certificates                        | `false`               |
-| `auth.peer.useAutoTLS`               | Switch to automatically create the TLS certificates                                             | `false`               |
-| `auth.peer.existingSecret`           | Name of the existing secret containing the TLS certificates for server-to-server communications | `""`                  |
-| `auth.peer.enableAuthentication`     | Switch to enable host authentication using TLS certificates. Requires existing secret           | `false`               |
-| `auth.peer.certFilename`             | Name of the file containing the peer certificate                                                | `cert.pem`            |
-| `auth.peer.certKeyFilename`          | Name of the file containing the peer certificate private key                                    | `key.pem`             |
-| `auth.peer.caFilename`               | Name of the file containing the peer CA certificate                                             | `""`                  |
-| `autoCompactionMode`                 | Auto compaction mode, by default periodic. Valid values: ‘periodic’, ‘revision’.                | `""`                  |
-| `autoCompactionRetention`            | Auto compaction retention for mvcc key value store in hour, by default 0, means disabled        | `""`                  |
-| `initialClusterState`                | Initial cluster state. Allowed values: 'new' or 'existing'                                      | `""`                  |
-| `maxProcs`                           | Limits the number of operating system threads that can execute user-level                       | `""`                  |
-| `removeMemberOnContainerTermination` | Use a PreStop hook to remove the etcd members from the etcd cluster on container termination    | `true`                |
-| `configuration`                      | etcd configuration. Specify content for etcd.conf.yml                                           | `""`                  |
-| `existingConfigmap`                  | Existing ConfigMap with etcd configuration                                                      | `""`                  |
-| `extraEnvVars`                       | Extra environment variables to be set on etcd container                                         | `[]`                  |
-| `extraEnvVarsCM`                     | Name of existing ConfigMap containing extra env vars                                            | `""`                  |
-| `extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars                                               | `""`                  |
-| `command`                            | Default container command (useful when using custom images)                                     | `[]`                  |
-| `args`                               | Default container args (useful when using custom images)                                        | `[]`                  |
+| Name                                  | Description                                                                                     | Value                 |
+| ------------------------------------- | ----------------------------------------------------------------------------------------------- | --------------------- |
+| `image.registry`                      | etcd image registry                                                                             | `docker.io`           |
+| `image.repository`                    | etcd image name                                                                                 | `bitnami/etcd`        |
+| `image.tag`                           | etcd image tag                                                                                  | `3.5.0-debian-10-r57` |
+| `image.pullPolicy`                    | etcd image pull policy                                                                          | `IfNotPresent`        |
+| `image.pullSecrets`                   | etcd image pull secrets                                                                         | `[]`                  |
+| `image.debug`                         | Enable image debug mode                                                                         | `false`               |
+| `auth.rbac.enabled`                   | Switch to enable RBAC authentication                                                            | `true`                |
+| `auth.rbac.allowNoneAuthentication`   | Allow to use etcd without configuring RBAC authentication                                       | `true`                |
+| `auth.rbac.rootPassword`              | Root user password. The root user is always `root`                                              | `""`                  |
+| `auth.rbac.existingSecret`            | Name of the existing secret containing credentials for the root user                            | `""`                  |
+| `auth.rbac.existingSecretPasswordKey` | Name of key containing password to be retrieved from the existing secret                        | `""`                  |
+| `auth.client.secureTransport`         | Switch to encrypt client-to-server communications using TLS certificates                        | `false`               |
+| `auth.client.useAutoTLS`              | Switch to automatically create the TLS certificates                                             | `false`               |
+| `auth.client.existingSecret`          | Name of the existing secret containing the TLS certificates for client-to-server communications | `""`                  |
+| `auth.client.enableAuthentication`    | Switch to enable host authentication using TLS certificates. Requires existing secret           | `false`               |
+| `auth.client.certFilename`            | Name of the file containing the client certificate                                              | `cert.pem`            |
+| `auth.client.certKeyFilename`         | Name of the file containing the client certificate private key                                  | `key.pem`             |
+| `auth.client.caFilename`              | Name of the file containing the client CA certificate                                           | `""`                  |
+| `auth.peer.secureTransport`           | Switch to encrypt server-to-server communications using TLS certificates                        | `false`               |
+| `auth.peer.useAutoTLS`                | Switch to automatically create the TLS certificates                                             | `false`               |
+| `auth.peer.existingSecret`            | Name of the existing secret containing the TLS certificates for server-to-server communications | `""`                  |
+| `auth.peer.enableAuthentication`      | Switch to enable host authentication using TLS certificates. Requires existing secret           | `false`               |
+| `auth.peer.certFilename`              | Name of the file containing the peer certificate                                                | `cert.pem`            |
+| `auth.peer.certKeyFilename`           | Name of the file containing the peer certificate private key                                    | `key.pem`             |
+| `auth.peer.caFilename`                | Name of the file containing the peer CA certificate                                             | `""`                  |
+| `autoCompactionMode`                  | Auto compaction mode, by default periodic. Valid values: ‘periodic’, ‘revision’.                | `""`                  |
+| `autoCompactionRetention`             | Auto compaction retention for mvcc key value store in hour, by default 0, means disabled        | `""`                  |
+| `initialClusterState`                 | Initial cluster state. Allowed values: 'new' or 'existing'                                      | `""`                  |
+| `maxProcs`                            | Limits the number of operating system threads that can execute user-level                       | `""`                  |
+| `removeMemberOnContainerTermination`  | Use a PreStop hook to remove the etcd members from the etcd cluster on container termination    | `true`                |
+| `configuration`                       | etcd configuration. Specify content for etcd.conf.yml                                           | `""`                  |
+| `existingConfigmap`                   | Existing ConfigMap with etcd configuration                                                      | `""`                  |
+| `extraEnvVars`                        | Extra environment variables to be set on etcd container                                         | `[]`                  |
+| `extraEnvVarsCM`                      | Name of existing ConfigMap containing extra env vars                                            | `""`                  |
+| `extraEnvVarsSecret`                  | Name of existing Secret containing extra env vars                                               | `""`                  |
+| `command`                             | Default container command (useful when using custom images)                                     | `[]`                  |
+| `args`                                | Default container args (useful when using custom images)                                        | `[]`                  |
 
 
 ### etcd statefulset parameters
@@ -204,11 +205,23 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                     | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                         | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                          | `10-debian-10-r134`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                          | `10-debian-10-r165`     |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                  | `Always`                |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                     | `[]`                    |
 | `volumePermissions.resources.limits`   | Init container volume-permissions resource  limits                                                                   | `{}`                    |
 | `volumePermissions.resources.requests` | Init container volume-permissions resource  requests                                                                 | `{}`                    |
+
+
+### Network Policy parameters
+
+| Name                                    | Description                                                | Value   |
+| --------------------------------------- | ---------------------------------------------------------- | ------- |
+| `networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                 | `false` |
+| `networkPolicy.allowExternal`           | Don't require client label for connections                 | `true`  |
+| `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy               | `[]`    |
+| `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy               | `[]`    |
+| `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces     | `{}`    |
+| `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces | `{}`    |
 
 
 ### Metrics parameters

@@ -116,8 +116,8 @@ spec:
                   key: {{ include "argocd.redis.secretPasswordKey" . }}
       containers:
         - name: argocd-server
-          image: {{ include "argocd.server.image" . }}
-          imagePullPolicy: {{ .Values.server.image.pullPolicy }}
+          image: {{ include "argocd.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.server.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.server.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
@@ -153,7 +153,7 @@ spec:
             - --insecure
             {{- end }}
             {{- if .Values.server.extraArgs }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.server.extraArgs "context" $) | nindent 8 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.server.extraArgs "context" $) | nindent 12 }}
             {{- end }}
           {{- end }}
           ports:

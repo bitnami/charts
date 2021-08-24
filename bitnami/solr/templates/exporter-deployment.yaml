@@ -66,8 +66,8 @@ spec:
         {{- end }}
       containers:
         - name: solr-exporter
-          image: {{ include "exporter.image" . }}
-          imagePullPolicy: {{ .Values.exporter.image.pullPolicy }}
+          image: {{ include "solr.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.exporter.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.exporter.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}

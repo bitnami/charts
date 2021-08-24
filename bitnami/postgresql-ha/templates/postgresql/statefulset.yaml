@@ -106,6 +106,7 @@ spec:
             - |
               mkdir -p {{ .Values.persistence.mountPath }}/conf {{ .Values.persistence.mountPath }}/data {{ .Values.persistence.mountPath }}/lock
               chmod 700 {{ .Values.persistence.mountPath }}/conf {{ .Values.persistence.mountPath }}/data {{ .Values.persistence.mountPath }}/lock
+              chown {{ .Values.postgresql.containerSecurityContext.runAsUser }}:{{ .Values.postgresql.securityContext.fsGroup }} {{ .Values.persistence.mountPath }}
               find {{ .Values.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | \
                 xargs chown -R {{ .Values.postgresql.containerSecurityContext.runAsUser }}:{{ .Values.postgresql.securityContext.fsGroup }}
           securityContext: {{- .Values.volumePermissions.securityContext | toYaml | nindent 12 }}
