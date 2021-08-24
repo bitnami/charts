@@ -88,6 +88,19 @@ volumePermissions:
 ##
 internalTLS:
   enabled: false
+
+ipFamily:
+  ## Enable listening on IPv6 ([::]) for nginx-based components (nginx,portal)
+  ## Note that enabling ipv6 will cause nginx to crash on start on systems
+  ## with IPv6 disabled using the `ipv6.disable` kernel flag)
+  ## @param ipFamily.ipv6.enabled Enable listening on IPv6 ([::]) for nginx-based components (nginx,portal)
+  ipv6:
+    enabled: true
+  ## ipv4Enabled set to true if ipv4 is enabled in cluster
+  ## @param ipFamily.ipv4.enabled Enable listening on IPv4 for nginx-based components (nginx,portal)
+  ipv4:
+    enabled: true
+
 ## @param caBundleSecretName The custom ca bundle secret name, the secret must contain key named "ca.crt" which will be injected into the trust store for chartmuseum, clair, core, jobservice, registry, trivy components.
 ##
 caBundleSecretName: ""

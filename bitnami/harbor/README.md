@@ -124,6 +124,12 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `ingress.controller`               | The ingress controller type. Currently supports `default`, `gce` and `ncp`                                                                                                                                                                                                     | `default`                |
 | `ingress.annotations`              | Ingress annotations done as key:value pairs                                                                                                                                                                                                                                    | `{}`                     |
 
+### IP family parameters
+
+| Name                      | Description                                     | Value |
+| ------------------------- | ----------------------------------------------- | ----- |
+| `ipFamily.ipv6.enabled`                                         | Enable listening on IPv6 (`[::]`) for nginx-based components (nginx,portal) - Note that enabling ipv6 will cause nginx to crash on start on systems with IPv6 disabled using the `ipv6.disable` kernel flag                                                                                                                                                                                                                                                                                                                    | `true`  
+| `ipFamily.ipv4.enabled`                                         | If ipv4 is enabled in cluster, all ipv4 related configs will set correspondly, but currently it only affects the nginx related components                                                                                                                                                                                                                                                                                                                    | `true`            
 
 ### Persistence Parameters
 
