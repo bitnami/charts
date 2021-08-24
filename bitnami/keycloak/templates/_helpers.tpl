@@ -155,7 +155,7 @@ Return the Database encrypted password
 */}}
 {{- define "keycloak.databaseEncryptedPassword" -}}
 {{- if .Values.postgresql.enabled }}
-    {{- .Values.postgresql.postgresqlPassword | b64enc | quote -}}
+    {{- (.Values.postgresql.postgresqlPassword | default (randAlphaNum 10)) | b64enc | quote -}}
 {{- else -}}
     {{- .Values.externalDatabase.password | b64enc | quote -}}
 {{- end -}}

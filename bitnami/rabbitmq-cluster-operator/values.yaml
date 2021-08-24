@@ -1,0 +1,380 @@
+## @section Global parameters
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
+
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.storageClass Global StorageClass for Persistent Volume(s)
+##
+global:
+  imageRegistry:
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+  storageClass:
+
+## @section Common parameters
+##
+
+## @param kubeVersion Override Kubernetes version
+##
+kubeVersion:
+## @param nameOverride String to partially override common.names.fullname
+##
+nameOverride:
+## @param fullnameOverride String to fully override common.names.fullname
+##
+fullnameOverride:
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+## @param clusterDomain Kubernetes cluster domain name
+##
+clusterDomain: cluster.local
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
+
+## @section RabbitMQ Cluster Operator Parameters
+##
+
+## Bitnami RabbitMQ Cluster Operator image
+## ref: https://hub.docker.com/r/bitnami/redis/tags/
+## @param image.registry RabbitMQ Cluster Operator image registry
+## @param image.repository RabbitMQ Cluster Operator image repository
+## @param image.tag RabbitMQ Cluster Operator image tag (immutable tags are recommended)
+## @param image.pullPolicy RabbitMQ Cluster Operator image pull policy
+## @param image.pullSecrets RabbitMQ Cluster Operator image pull secrets
+##
+image:
+  registry: docker.io
+  repository: bitnami/rabbitmq-cluster-operator
+  tag: 1.8.1-scratch-r0
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  pullSecrets: []
+
+## Bitnami RabbitMQ Image
+## ref: https://hub.docker.com/r/bitnami/redis/tags/
+## @param rabbitmqImage.registry RabbitMQ Image registry
+## @param rabbitmqImage.repository RabbitMQ Image repository
+## @param rabbitmqImage.tag RabbitMQ Image tag (immutable tags are recommended)
+## @param rabbitmqImage.pullSecrets RabbitMQ Image pull secrets
+##
+rabbitmqImage:
+  registry: docker.io
+  repository: bitnami/rabbitmq
+  tag: 3.8.21-debian-10-r11
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-rabbitmqImage-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  pullSecrets: []
+
+## @param replicaCount Number of RabbitMQ Cluster Operator replicas to deploy
+##
+replicaCount: 1
+## Configure extra options for RabbitMQ Cluster Operator containers' liveness and readiness probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+## @param livenessProbe.enabled Enable livenessProbe on RabbitMQ Cluster Operator nodes
+## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+## @param livenessProbe.periodSeconds Period seconds for livenessProbe
+## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+## @param livenessProbe.failureThreshold Failure threshold for livenessProbe
+## @param livenessProbe.successThreshold Success threshold for livenessProbe
+##
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 5
+  periodSeconds: 30
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 5
+## @param readinessProbe.enabled Enable readinessProbe on RabbitMQ Cluster Operator nodes
+## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+## @param readinessProbe.periodSeconds Period seconds for readinessProbe
+## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+## @param readinessProbe.failureThreshold Failure threshold for readinessProbe
+## @param readinessProbe.successThreshold Success threshold for readinessProbe
+##
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 5
+  periodSeconds: 30
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 5
+## @param startupProbe.enabled Enable startupProbe on RabbitMQ Cluster Operator nodes
+## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+## @param startupProbe.periodSeconds Period seconds for startupProbe
+## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
+## @param startupProbe.failureThreshold Failure threshold for startupProbe
+## @param startupProbe.successThreshold Success threshold for startupProbe
+##
+startupProbe:
+  enabled: false
+  initialDelaySeconds: 5
+  periodSeconds: 30
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 5
+
+## @param customLivenessProbe Custom livenessProbe that overrides the default one
+##
+customLivenessProbe: {}
+## @param customReadinessProbe Custom readinessProbe that overrides the default one
+##
+customReadinessProbe: {}
+## @param customStartupProbe Custom startupProbe that overrides the default one
+##
+customStartupProbe: {}
+
+## RabbitMQ Cluster Operator resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## @param resources.limits The resources limits for the RabbitMQ Cluster Operator containers
+## @param resources.requests The requested resources for the RabbitMQ Cluster Operator containers
+##
+resources:
+  limits: {}
+  requests: {}
+
+## @param installCRDs Install RabbitMQ Cluster CRD
+##
+installCRDs: true
+
+## Configure Pods Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+## @param podSecurityContext.enabled Enabled RabbitMQ Cluster Operator pods' Security Context
+## @param podSecurityContext.fsGroup Set RabbitMQ Cluster Operator pod's Security Context fsGroup
+##
+podSecurityContext:
+  enabled: true
+  fsGroup: 1001
+## Configure Container Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+## @param containerSecurityContext.enabled Enabled RabbitMQ Cluster Operator containers' Security Context
+## @param containerSecurityContext.runAsUser Set RabbitMQ Cluster Operator containers' Security Context runAsUser
+##
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1001
+
+## @param command Override default container command (useful when using custom images)
+##
+command: []
+## @param args Override default container args (useful when using custom images)
+##
+args: []
+## @param hostAliases RabbitMQ Cluster Operator pods host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
+## @param podLabels Extra labels for RabbitMQ Cluster Operator pods
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
+podLabels: {}
+## @param podAnnotations Annotations for RabbitMQ Cluster Operator pods
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+##
+podAnnotations: {}
+## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+##
+podAffinityPreset: ""
+## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+##
+podAntiAffinityPreset: soft
+## Node affinity preset
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+##
+nodeAffinityPreset:
+  ## @param nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ##
+  type: ""
+  ## @param nodeAffinityPreset.key Node label key to match. Ignored if `affinity` is set
+  ##
+  key: ""
+  ## @param nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set
+  ## E.g.
+  ## values:
+  ##   - e2e-az1
+  ##   - e2e-az2
+  ##
+  values: []
+## @param affinity Affinity for RabbitMQ Cluster Operator pods assignment
+## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+## NOTE: `podAffinityPreset`, `podAntiAffinityPreset`, and `nodeAffinityPreset` will be ignored when it's set
+##
+affinity: {}
+## @param nodeSelector Node labels for RabbitMQ Cluster Operator pods assignment
+## ref: https://kubernetes.io/docs/user-guide/node-selection/
+##
+nodeSelector: {}
+## @param tolerations Tolerations for RabbitMQ Cluster Operator pods assignment
+## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+##
+tolerations: []
+## @param updateStrategy.type RabbitMQ Cluster Operator statefulset strategy type
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+##
+updateStrategy:
+  ## StrategyType
+  ## Can be set to RollingUpdate or OnDelete
+  ##
+  type: RollingUpdate
+## @param priorityClassName RabbitMQ Cluster Operator pods' priorityClassName
+##
+priorityClassName: ""
+## @param lifecycleHooks for the RabbitMQ Cluster Operator container(s) to automate configuration before or after startup
+##
+lifecycleHooks: {}
+
+## @param containerPort RabbitMQ Cluster Operator container port (used for metrics)
+##
+containerPort: 9782
+
+## @param extraEnvVars Array with extra environment variables to add to RabbitMQ Cluster Operator nodes
+## e.g:
+## extraEnvVars:
+##   - name: FOO
+##     value: "bar"
+##
+extraEnvVars: []
+## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars for RabbitMQ Cluster Operator nodes
+##
+extraEnvVarsCM: ""
+## @param extraEnvVarsSecret Name of existing Secret containing extra env vars for RabbitMQ Cluster Operator nodes
+##
+extraEnvVarsSecret: ""
+## @param extraVolumes Optionally specify extra list of additional volumes for the RabbitMQ Cluster Operator pod(s)
+##
+extraVolumes: []
+## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for the RabbitMQ Cluster Operator container(s)
+##
+extraVolumeMounts: []
+## @param sidecars Add additional sidecar containers to the RabbitMQ Cluster Operator pod(s)
+## e.g:
+## sidecars:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+sidecars: []
+## @param initContainers Add additional init containers to the RabbitMQ Cluster Operator pod(s)
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+## e.g:
+## initContainers:
+##  - name: your-image-name
+##    image: your-image
+##    imagePullPolicy: Always
+##    command: ['sh', '-c', 'echo "hello world"']
+##
+initContainers: []
+
+## @section Other Parameters
+##
+
+## RBAC configuration
+##
+rbac:
+  ## @param rbac.create Specifies whether RBAC resources should be created
+  ##
+  create: true
+
+## ServiceAccount configuration
+##
+serviceAccount:
+  ## @param serviceAccount.create Specifies whether a ServiceAccount should be created
+  ##
+  create: true
+  ## @param serviceAccount.name The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the common.names.fullname template
+  ##
+  name: ""
+
+## @section Metrics parameters
+##
+metrics:
+  ## @param metrics.enabled Create a service for accessing the metrics endpoint
+  ##
+  enabled: false
+  ## Metrics service parameters
+  ##
+  service:
+    ## @param metrics.service.type RabbitMQ Cluster Operator metrics service type
+    ##
+    type: ClusterIP
+    ## @param metrics.service.port RabbitMQ Cluster Operator metrics service HTTP port
+    ##
+    port: 80
+    ## Node ports to expose
+    ## @param metrics.service.nodePorts.http Node port for HTTP
+    ## NOTE: choose port between <30000-32767>
+    ##
+    nodePorts:
+      http: ""
+    ## @param metrics.service.clusterIP RabbitMQ Cluster Operator metrics service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param metrics.service.loadBalancerIP RabbitMQ Cluster Operator metrics service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param metrics.service.loadBalancerSourceRanges RabbitMQ Cluster Operator metrics service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param metrics.service.externalTrafficPolicy RabbitMQ Cluster Operator metrics service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param metrics.service.annotations [object] Additional custom annotations for RabbitMQ Cluster Operator metrics service
+    ##
+    annotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "{{ .Values.metrics.service.port }}"
+  serviceMonitor:
+    ## @param metrics.serviceMonitor.enabled Specify if a servicemonitor will be deployed for prometheus-operator
+    ##
+    enabled: false
+    ## @param metrics.serviceMonitor.jobLabel Specify the jobLabel to use for the prometheus-operator
+    ##
+    jobLabel: app.kubernetes.io/name
+    ## @param metrics.serviceMonitor.interval Scrape interval. If not set, the Prometheus default scrape interval is used
+    ##
+    interval: ""
+    ## @param metrics.serviceMonitor.metricRelabelings Specify additional relabeling of metrics
+    ##
+    metricRelabelings: []
+    ## @param metrics.serviceMonitor.relabelings Specify general relabeling
+    ##
+    relabelings: []

@@ -284,6 +284,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `pgpool.clientIdleLimit`                    | The time in seconds to disconnect a client if it remains idle since the last query (PGPOOL_CLIENT_IDLE_LIMIT)      | `""`                 |
 | `pgpool.connectionLifeTime`                 | The time in seconds to terminate the cached connections to the PostgreSQL backend (PGPOOL_CONNECTION_LIFE_TIME)    | `""`                 |
 | `pgpool.useLoadBalancing`                   | Use Pgpool Load-Balancing                                                                                          | `true`               |
+| `pgpool.loadBalancingOnWrite`               | LoadBalancer on write actions behavior                                                                             | `transaction`        |
 | `pgpool.configuration`                      | Pgpool configuration                                                                                               | `{}`                 |
 | `pgpool.configurationCM`                    | ConfigMap with Pgpool configuration                                                                                | `""`                 |
 | `pgpool.initdbScripts`                      | Dictionary of initdb scripts                                                                                       | `{}`                 |
@@ -548,8 +549,8 @@ In more complex scenarios, we may have the following tree of dependencies
         v                    v                  v
 +-------+------+    +--------+------+  +--------+------+
 |              |    |               |  |               |
-|PostgreSQL HA |    |  Sub-chart 1  |  |  Sub-chart 2  |
-|              |    |               |  |               |
+| PostgreSQL HA |  | Sub-chart 1 |  | Sub-chart 2 |
+|---------------|--|-------------|--|-------------|
 +--------------+    +---------------+  +---------------+
 ```
 
