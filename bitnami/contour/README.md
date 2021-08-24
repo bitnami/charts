@@ -403,6 +403,10 @@ Find more information about how to deal with common errors related to Bitnami’
 
 Please carefully read through the guide "Upgrading Contour" at https://projectcontour.io/resources/upgrading/.
 
+### To 5.2.0
+
+This version bumps the Envoy container from 1.17.X to 1.19.X; this Envoy version is officially supported by Contour since 1.18.0, see https://github.com/projectcontour/contour/releases/tag/v1.18.0
+
 ### To 5.0.0
 
 In this version it was synchronized CRD with the official [Contour repository](https://github.com/projectcontour/contour/blob/main/examples/render/contour.yaml)
