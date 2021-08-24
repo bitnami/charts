@@ -27,7 +27,7 @@ rules:
     verbs: [ "get", "update", "patch" ]
   - apiGroups: [ "coordination.k8s.io" ]
     resources: [ "leases" ]
-    verbs: [ "create" ]
+    verbs: [ "create", "get", "update" ]
 ---
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: RoleBinding
