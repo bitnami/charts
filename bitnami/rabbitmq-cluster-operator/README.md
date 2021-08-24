@@ -129,18 +129,18 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `nil` |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
 
 ### Common parameters
 
 | Name                | Description                                        | Value           |
 | ------------------- | -------------------------------------------------- | --------------- |
-| `kubeVersion`       | Override Kubernetes version                        | `nil`           |
-| `nameOverride`      | String to partially override common.names.fullname | `nil`           |
-| `fullnameOverride`  | String to fully override common.names.fullname     | `nil`           |
+| `kubeVersion`       | Override Kubernetes version                        | `""`            |
+| `nameOverride`      | String to partially override common.names.fullname | `""`            |
+| `fullnameOverride`  | String to fully override common.names.fullname     | `""`            |
 | `commonLabels`      | Labels to add to all deployed objects              | `{}`            |
 | `commonAnnotations` | Annotations to add to all deployed objects         | `{}`            |
 | `clusterDomain`     | Kubernetes cluster domain name                     | `cluster.local` |
