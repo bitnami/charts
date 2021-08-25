@@ -356,8 +356,7 @@ ingress:
   ## @param ingress.annotations [object] Additional custom annotations for the ingress record
   ## NOTE: If `ingress.certManager=true`, annotation `kubernetes.io/tls-acme: "true"` will automatically be added
   ##
-  annotations:
-    kubernetes.io/ingress.class: nginx
+  annotations: {}
   ## @param ingress.tls Enable TLS configuration for the host defined at `ingress.hostname` parameter
   ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
   ## You can:
@@ -432,8 +431,7 @@ mgmtIngress:
   ##
   ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
   ##
-  annotations:
-    kubernetes.io/ingress.class: nginx
+  annotations: {}
   ## @param mgmtIngress.tls Enable TLS configuration for the hostname defined at `mgmtIngress.hostname` parameter
   ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.mgmtIngress.hostname }}
   ## You can use the mgmtIngress.secrets parameter to create this TLS secret, relay on cert-manager to create it, or
