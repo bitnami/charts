@@ -692,12 +692,20 @@ gateway:
     ## @param gateway.auth.azure.secretKey Secret Key to access MinIO using Azure Gateway
     ## @param gateway.auth.azure.storageAccountName Azure Storage Account Name to use to access Azure Blob Storage
     ## @param gateway.auth.azure.storageAccountKey Azure Storage Account Key to use to access Azure Blob Storage
+    ## @param gateway.auth.azure.storageAccountNameExistingSecret Existing Secret name to extract Azure Storage Account Name from to access Azure Blob Storage
+    ## @param gateway.auth.azure.storageAccountNameExistingSecretKey Existing Secret key to extract Azure Storage Account Name from to use to access Azure Blob Storage
+    ## @param gateway.auth.azure.storageAccountKeyExistingSecret Existing Secret name to extract Azure Storage Account Key from to access Azure Blob Storage
+    ## @param gateway.auth.azure.storageAccountKeyExistingSecretKey Existing Secret key to extract Azure Storage Account Key from to use to access Azure Blob Storage
     ##
     azure:
       accessKey: ""
       secretKey: ""
       storageAccountName: ""
       storageAccountKey: ""
+      storageAccountNameExistingSecret: ""
+      storageAccountNameExistingSecretKey: ""
+      storageAccountKeyExistingSecret: ""
+      storageAccountKeyExistingSecretKey: ""
     ## Authentication configuration for GCS. Ignored unless type=gcs
     ## @param gateway.auth.gcs.accessKey Access Key to access MinIO using GCS Gateway
     ## @param gateway.auth.gcs.secretKey Secret Key to access MinIO using GCS Gateway
