@@ -2502,7 +2502,7 @@ receive:
     ##
     extraContainers: []
     ## @param receive.distributor.extraEnv Extra environment variables for Thanos Receive Distributor container
-    ##
+    ## Example:
     ## extraEnv:
     ## - name: VARNAME1
     ##   value: value1
