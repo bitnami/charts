@@ -684,6 +684,21 @@ gateway:
   ## @param gateway.replicaCount Number of MinIO&reg; Gateway replicas
   ##
   replicaCount: 4
+  ## @param gateway.updateStrategy Update strategy for MinIO&reg; Gateway replicas
+  updateStrategy:
+    type: Recreate
+  ## Autoscaling configuration for MinIO&reg; Gateway. overrides gateway.replicaCount if enabled
+  ## @param autoscaling.enabled Enable autoscaling for MinIO&reg; Gateway deployment
+  ## @param autoscaling.minReplicas Minimum number of replicas to scale back
+  ## @param autoscaling.maxReplicas Maximum number of replicas to scale out
+  ## @param autoscaling.targetCPU Target CPU utilization percentage
+  ## @param autoscaling.targetMemory Target Memory utilization percentage
+  autoscaling:
+    enabled: false
+    minReplicas: "4"
+    maxReplicas: "4"
+    targetCPU: ""
+    targetMemory: ""
   ## Gateway authentication configuration
   ##
   auth:

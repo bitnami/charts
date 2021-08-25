@@ -12,8 +12,12 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  {{- if not .Values.gateway.autoscaling.enabled }}
   replicas: {{ .Values.gateway.replicaCount }}
-  {{- if .Values.deployment.updateStrategy }}
+  {{- end }}
+  {{- if .Values.gateway.updateStrategy }}
+  strategy: {{- toYaml .Values.gateway.updateStrategy | nindent 4 }}
+  {{- else }}
   strategy: {{- toYaml .Values.deployment.updateStrategy | nindent 4 }}
   {{- end }}
   selector:

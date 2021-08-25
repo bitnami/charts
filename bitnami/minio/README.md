@@ -252,12 +252,17 @@ The command removes all the Kubernetes components associated with the chart and 
 
 
 ### Gateway parameters
-
 | Name                                                     | Description                                                                                  | Value                      |
 |----------------------------------------------------------|----------------------------------------------------------------------------------------------|----------------------------|
 | `gateway.enabled`                                        | Use MinIO&reg; as Gateway for other storage systems                                          | `false`                    |
 | `gateway.type`                                           | Gateway type. Supported types are: `azure`, `gcs`, `nas`, `s3`                               | `s3`                       |
 | `gateway.replicaCount`                                   | Number of MinIO&reg; Gateway replicas                                                        | `4`                        |
+| `gateway.updateStrategy.type`                            | Update strategy for MinIO&reg; Gateway replicas                                              | `Recreate`                 |
+| `gateway.autoscaling.enabled`                            | Enable autoscaling for MinIO&reg; Gateway deployment                                         | `false`                    |
+| `gateway.autoscaling.minReplicas`                        | Minimum number of replicas to scale back                                                     | `4`                        |
+| `gateway.autoscaling.maxReplicas`                        | Maximum number of replicas to scale out                                                      | `4`                        |
+| `gateway.autoscaling.targetCPU`                          | Target CPU utilization percentage                                                            | `""`                       |
+| `gateway.autoscaling.targetMemory`                       | Target Memory utilization percentage                                                         | `""`                       |
 | `gateway.auth.azure.accessKey`                           | Access Key to access MinIO using Azure Gateway                                               | `""`                       |
 | `gateway.auth.azure.secretKey`                           | Secret Key to access MinIO using Azure Gateway                                               | `""`                       |
 | `gateway.auth.azure.storageAccountName`                  | Azure Storage Account Name to use to access Azure Blob Storage                               | `""`                       |

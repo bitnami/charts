@@ -246,7 +246,7 @@ minio: gateway.auth.azure
     The StorageAccount name and key are required to use MinIO&reg; as a Azure Gateway.
     Please set a valid StorageAccount information (--set gateway.auth.azure.storageAccountName="xxxx",gateway.auth.azure.storageAccountKey="yyyy")
     Alternatively, specify secrets info to extract StorageAccount name and key:
-    (--set gateway.auth.azure.storageAccountNameExistingSecret="xxxx", --set gateway.auth.azure.storageAccountNameExistingSecretKey="yyyy",
+    --set gateway.auth.azure.storageAccountNameExistingSecret="xxxx", --set gateway.auth.azure.storageAccountNameExistingSecretKey="yyyy",
     --set gateway.auth.azure.storageAccountKeyExistingSecret="aaaa", --set gateway.auth.azure.storageAccountKeyExistingSecretKey="bbbb"
 {{- end -}}
 {{- end -}}
