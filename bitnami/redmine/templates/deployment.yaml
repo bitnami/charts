@@ -121,10 +121,8 @@ spec:
                   {{- else }}
                   key: postgresql-password
                   {{- end }}
-            {{- if (include "redmine.useExternalDB" .) }}
             - name: REDMINE_DATABASE_PORT_NUMBER
-              value: {{ .Values.externalDatabase.port | quote }}
-            {{- end }}
+              value: {{ include "redmine.database.port" . | quote }}
             - name: REDMINE_USERNAME
               value: {{ default "" .Values.redmineUsername | quote }}
             - name: REDMINE_PASSWORD

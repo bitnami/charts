@@ -51,7 +51,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/memcached
-  tag: 1.6.10-debian-10-r0
+  tag: 1.6.10-debian-10-r29
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -136,6 +136,21 @@ service:
   ## @param service.annotations Additional annotations for Memcached service
   ##
   annotations: {}
+
+## Memcached Autoscaling
+## @param autoscaling.enabled Enable memcached statefulset autoscaling (requires architecture: "high-availability")
+## @param autoscaling.minReplicas memcached statefulset autoscaling minimum number of replicas
+## @param autoscaling.maxReplicas memcached statefulset autoscaling maximum number of replicas
+## @param autoscaling.targetCPU memcached statefulset autoscaling target CPU percentage
+## @param autoscaling.targetMemory memcached statefulset autoscaling target CPU memory
+##
+autoscaling:
+  enabled: false
+  minReplicas: 3
+  maxReplicas: 6
+  targetCPU: 50
+  targetMemory: 50
+
 ## Memcached containers' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -305,7 +320,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/memcached-exporter
-    tag: 0.9.0-debian-10-r107
+    tag: 0.9.0-debian-10-r136
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -426,7 +441,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r143
+    tag: 10-debian-10-r171
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
