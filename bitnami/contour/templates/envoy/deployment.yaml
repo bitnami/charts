@@ -1,16 +1,25 @@
-{{- if and .Values.envoy.enabled (eq .Values.envoy.kind "daemonset") }}
+{{- if and .Values.envoy.enabled (eq .Values.envoy.kind "deployment") }}
 apiVersion: apps/v1
-kind: DaemonSet
+kind: Deployment
 metadata:
-  name: {{ include "common.names.fullname" . }}-envoy
+  name: {{ printf "%s-envoy" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ .Release.Namespace }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: envoy
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
-  updateStrategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxUnavailable: 10%
+  {{- if not .Values.envoy.autoscaling.enabled }}
+  replicas: {{ .Values.envoy.replicaCount }}
+  {{- end }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  {{- if .Values.updateStrategy }}
+  strategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
+  {{- end }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: envoy
@@ -184,7 +193,7 @@ spec:
             successThreshold: {{ .Values.envoy.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.envoy.livenessProbe.failureThreshold }}
           {{- end }}
-          resources: {{ toYaml .Values.envoy.resources | nindent 12 }}
+          resources: {{- toYaml .Values.envoy.resources | nindent 12 }}
           volumeMounts:
             - name: envoy-config
               mountPath: /config

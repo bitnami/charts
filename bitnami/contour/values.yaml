@@ -4,7 +4,7 @@
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
 
 ## @param global.imageRegistry Global Docker image registry
-## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.imagePullSecrets [array] Global Docker registry secret names as an array
 ##
 global:
   imageRegistry: ""
@@ -29,6 +29,9 @@ ingress:
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
 kubeVersion: ""
+## @param extraDeploy [array] Array of extra objects to deploy with the release
+##
+extraDeploy: []
 
 ## @section Contour parameters
 
@@ -42,96 +45,20 @@ replicaCount: 2
 ##   existingConfigMap: contour
 ##
 existingConfigMap: ""
-## configInline specifies Contour's configuration directly, in yaml format.
-## When configInline is used, Helm manages
-## Contour's configuration ConfigMap as part of the release, and existingConfigMap is ignored.
-## Refer to https://projectcontour.io/docs/v1.2.1/configuration/ for available options.
-## Evaluated as a template
+## @param configInline [object] Specifies Contour's configuration directly in YAML format
+## When configInline is used, Helm manages Contour's configuration ConfigMap as
+## part of the release, and existingConfigMap is ignored.
+## Refer to https://projectcontour.io/docs/latest/configuration for available options.
 ##
 configInline:
-  ## Should Contour expect to be running inside a k8s cluster
-  # incluster: true
-  ##
-  ## path to kubeconfig (if not running inside a k8s cluster)
-  # kubeconfig: /path/to/.kube/config
-  ##
-  ## Client request timeout to be passed to Envoy as the connection manager request_timeout.
-  ## Defaults to 0, which Envoy interprets as disabled. Note that this is the timeout for the whole request,
-  ## not an idle timeout.
-  # request-timeout: 0s
-  ##
-  ## @param configInline.disablePermitInsecure Disable ingressroute permitInsecure field
-  ##
   disablePermitInsecure: false
   tls:
-    ## Minimum TLS version that Contour will negotiate
-    # minimum-protocol-version: "1.1"
-    ##
-    ## @param configInline.tls.fallback-certificate Defines the name/namespace matching a secret to use as the fallback certificate
-    ## Used when requests which don't match the SNI defined for a vhost.
-    ## Example:
-    ## fallback-certificate:
-    ##   name: fallback-secret-name
-    ##   namespace: '{{ .Release.Namespace }}'
-    ##
     fallback-certificate: {}
-  ## The following config shows the defaults for the leader election.
-  ##
   leaderelection:
-    ## Configmap name for leader election
-    # configmap-name: leader-elect
-    ## @param configInline.leaderelection.configmap-namespace This needs to be edited by when you deploy to a namespace other than `projectcontour`
-    ##
-    configmap-namespace: '{{ .Release.Namespace }}'
-  ## @param configInline.envoy-service-name Envoy service name
-  ## The expression used here is the same as in templates/envoy/service.yaml and ensures that Contour is using the configured
-  ## Envoy service name so it can automatically update the ingress.status field.
+    configmap-namespace: "{{ .Release.Namespace }}"
   envoy-service-name: '{{ include "common.names.fullname" . }}-envoy'
-  ## Logging options
-  ## @param configInline.accesslog-format Access log format
-  ## To enable JSON logging in Envoy
-  ## accesslog-format: json
-  ##
   accesslog-format: envoy
-  ## To enable JSON logging in Envoy
-  # accesslog-format: json
-  ## The default fields that will be logged are specified below.
-  ## To customise this list, just add or remove entries.
-  ## The canonical list is available at https://godoc.org/github.com/projectcontour/contour/internal/envoy#JSONFields
-  # json-fields:
-  #   - "@timestamp"
-  #   - "authority"
-  #   - "bytes_received"
-  #   - "bytes_sent"
-  #   - "downstream_local_address"
-  #   - "downstream_remote_address"
-  #   - "duration"
-  #   - "method"
-  #   - "path"
-  #   - "protocol"
-  #   - "request_id"
-  #   - "requested_server_name"
-  #   - "response_code"
-  #   - "response_flags"
-  #   - "uber_trace_id"
-  #   - "upstream_cluster"
-  #   - "upstream_host"
-  #   - "upstream_local_address"
-  #   - "upstream_service_time"
-  #   - "user_agent"
-  #   - "x_forwarded_for"
-  #
-  # default-http-versions:
-  #   - "HTTP/2"
-  #   - "HTTP/1.1"
-  #
-  # The following shows the default proxy timeout settings.
-  # timeouts:
-  #   request-timeout: infinity
-  #   connection-idle-timeout: 60s
-  #   stream-idle-timeout: 5m
-  #   max-connection-duration: infinity
-  #   connection-shutdown-grace-period: 5s
+
 contour:
   ## @param contour.enabled Contour Deployment creation.
   ##
@@ -140,12 +67,12 @@ contour:
   ## @param contour.image.repository Contour image name
   ## @param contour.image.tag Contour image tag
   ## @param contour.image.pullPolicy Contour Image pull policy
-  ## @param contour.image.pullSecrets Contour Image pull secrets
+  ## @param contour.image.pullSecrets [array] Contour Image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/contour
-    tag: 1.18.0-debian-10-r27
+    tag: 1.18.0-debian-10-r28
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -159,11 +86,11 @@ contour:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-  ## @param contour.hostAliases Add deployment host aliases
+  ## @param contour.hostAliases [array] Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-  ## @param contour.extraArgs Extra arguments passed to Contour container
+  ## @param contour.extraArgs [array] Extra arguments passed to Contour container
   ##
   extraArgs: []
   ## Contour container resource requests and limits
@@ -173,8 +100,8 @@ contour:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param contour.resources.limits Specify resource limits which the container is not allowed to succeed.
-  ## @param contour.resources.requests Specify resource requests which the container needs to spawn.
+  ## @param contour.resources.limits [object] Specify resource limits which the container is not allowed to succeed.
+  ## @param contour.resources.requests [object] Specify resource requests which the container needs to spawn.
   ##
   resources:
     ## Example:
@@ -202,7 +129,7 @@ contour:
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
   ## @param contour.nodeAffinityPreset.type Contour Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## @param contour.nodeAffinityPreset.key Contour Node label key to match Ignored if `affinity` is set.
-  ## @param contour.nodeAffinityPreset.values Contour Node label values to match. Ignored if `affinity` is set.
+  ## @param contour.nodeAffinityPreset.values [array] Contour Node label values to match. Ignored if `affinity` is set.
   ##
   nodeAffinityPreset:
     type: ""
@@ -216,20 +143,20 @@ contour:
     ##   - e2e-az2
     ##
     values: []
-  ## @param contour.affinity Affinity for Contour pod assignment
+  ## @param contour.affinity [object] Affinity for Contour pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
-  ## @param contour.nodeSelector Node labels for Contour pod assignment
+  ## @param contour.nodeSelector [object] Node labels for Contour pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-  ## @param contour.tolerations Tolerations for Contour pod assignment
+  ## @param contour.tolerations [array] Tolerations for Contour pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-  ## @param contour.podAnnotations Contour Pod annotations
+  ## @param contour.podAnnotations [object] Contour Pod annotations
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
@@ -290,11 +217,11 @@ contour:
   tlsExistingSecret: ""
   ## Contour Service properties
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#multi-port-services
-  ## @param contour.service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+  ## @param contour.service.extraPorts [array] Extra ports to expose (normally used with the `sidecar` value)
   ##
   service:
     extraPorts: []
-  ## @param contour.initContainers Attach additional init containers to Contour pods
+  ## @param contour.initContainers [array] Attach additional init containers to Contour pods
   ## For example:
   ## initContainers:
   ##   - name: your-image-name
@@ -302,7 +229,7 @@ contour:
   ##     imagePullPolicy: Always
   ##
   initContainers: []
-  ## @param contour.sidecars Add additional sidecar containers to the Contour pods
+  ## @param contour.sidecars [array] Add additional sidecar containers to the Contour pods
   ## Example:
   ## sidecars:
   ##   - name: your-image-name
@@ -313,13 +240,13 @@ contour:
   ##         containerPort: 1234
   ##
   sidecars: []
-  ## @param contour.extraVolumes Array to add extra volumes
+  ## @param contour.extraVolumes [array] Array to add extra volumes
   ##
   extraVolumes: []
-  ## @param contour.extraVolumeMounts Array to add extra mounts (normally used with extraVolumes)
+  ## @param contour.extraVolumeMounts [array] Array to add extra mounts (normally used with extraVolumes)
   ##
   extraVolumeMounts: []
-  ## @param contour.extraEnvVars Array containing extra env vars to be added to all Contour containers
+  ## @param contour.extraEnvVars [array] Array containing extra env vars to be added to all Contour containers
   ## For example:
   ## extraEnvVars:
   ##  - name: MY_ENV_VAR
@@ -339,7 +266,7 @@ contour:
 ## @section Envoy parameters
 
 envoy:
-  ## @param envoy.enabled Envoy Proxy Daemonset creation
+  ## @param envoy.enabled Envoy Proxy creation
   ##
   enabled: true
   ## Bitnami Envoy image
@@ -348,12 +275,12 @@ envoy:
   ## @param envoy.image.repository Envoy Proxy image repository
   ## @param envoy.image.tag Envoy Proxy image tag (immutable tags are recommended)
   ## @param envoy.image.pullPolicy Envoy image pull policy
-  ## @param envoy.image.pullSecrets Envoy image pull secrets
+  ## @param envoy.image.pullSecrets [array] Envoy image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/envoy
-    tag: 1.19.0-debian-10-r14
+    tag: 1.19.1-debian-10-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -367,10 +294,10 @@ envoy:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-  ## @param envoy.extraArgs Extra arguments passed to Envoy container
+  ## @param envoy.extraArgs [array] Extra arguments passed to Envoy container
   ##
   extraArgs: []
-  ## @param envoy.hostAliases Add deployment host aliases
+  ## @param envoy.hostAliases [array] Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
@@ -381,8 +308,8 @@ envoy:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param envoy.resources.limits Specify resource limits which the container is not allowed to succeed.
-  ## @param envoy.resources.requests Specify resource requests which the container needs to spawn.
+  ## @param envoy.resources.limits [object] Specify resource limits which the container is not allowed to succeed.
+  ## @param envoy.resources.requests [object] Specify resource requests which the container needs to spawn.
   resources:
     ## Example:
     ## limits:
@@ -394,6 +321,32 @@ envoy:
     ## cpu: 100m
     ## memory: 25Mi
     requests: {}
+  ## @param envoy.kind Install as deployment or daemonset
+  ##
+  kind: daemonset
+  ## @param envoy.replicaCount Desired number of Controller pods
+  ##
+  replicaCount: 1
+  ## @param envoy.updateStrategy [object] Strategy to use to update Pods
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy: {}
+  ## @param envoy.revisionHistoryLimit The number of old history to retain to allow rollback
+  ##
+  revisionHistoryLimit: 10
+  ## Controller Autoscaling configuration
+  ## @param envoy.autoscaling.enabled Enable autoscaling for Controller
+  ## @param envoy.autoscaling.minReplicas Minimum number of Controller replicas
+  ## @param envoy.autoscaling.maxReplicas Maximum number of Controller replicas
+  ## @param envoy.autoscaling.targetCPU Target CPU utilization percentage
+  ## @param envoy.autoscaling.targetMemory Target Memory utilization percentage
+  ##
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 11
+    targetCPU: ""
+    targetMemory: ""
   ## @param envoy.podAffinityPreset Envoy Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ## Allowed values: soft, hard
@@ -408,7 +361,7 @@ envoy:
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
   ## @param envoy.nodeAffinityPreset.type Envoy Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## @param envoy.nodeAffinityPreset.key Envoy Node label key to match Ignored if `affinity` is set.
-  ## @param envoy.nodeAffinityPreset.values Envoy Node label values to match. Ignored if `affinity` is set.
+  ## @param envoy.nodeAffinityPreset.values [array] Envoy Node label values to match. Ignored if `affinity` is set.
   ##
   nodeAffinityPreset:
     type: ""
@@ -419,20 +372,20 @@ envoy:
     ##   - e2e-az2
     ##
     values: []
-  ## @param envoy.affinity Affinity for Envoy pod assignment
+  ## @param envoy.affinity [object] Affinity for Envoy pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
-  ## @param envoy.nodeSelector Node labels for Envoy pod assignment
+  ## @param envoy.nodeSelector [object] Node labels for Envoy pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-  ## @param envoy.tolerations Tolerations for Envoy pod assignment
+  ## @param envoy.tolerations [array] Tolerations for Envoy pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-  ## @param envoy.podAnnotations Envoy Pod annotations
+  ## @param envoy.podAnnotations [object] Envoy Pod annotations
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
@@ -518,16 +471,16 @@ envoy:
     ## clusterIP: None
     ##
     clusterIP: ""
-    ## @param envoy.service.externalIPs Envoy service external IP addresses
+    ## @param envoy.service.externalIPs [array] Envoy service external IP addresses
     ##
     externalIPs: []
     ## @param envoy.service.loadBalancerIP IP address to assign to load balancer (if supported)
     ##
     loadBalancerIP: ""
-    ## @param envoy.service.loadBalancerSourceRanges List of IP CIDRs allowed access to load balancer (if supported)
+    ## @param envoy.service.loadBalancerSourceRanges [array] List of IP CIDRs allowed access to load balancer (if supported)
     ##
     loadBalancerSourceRanges: []
-    ## @param envoy.service.annotations Annotations for Envoy service
+    ## @param envoy.service.annotations [object] Annotations for Envoy service
     ##
     annotations: {}
     ports:
@@ -545,7 +498,7 @@ envoy:
     nodePorts:
       http: ""
       https: ""
-    ## @param envoy.service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+    ## @param envoy.service.extraPorts [array] Extra ports to expose (normally used with the `sidecar` value)
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#multi-port-services
     ##
     extraPorts: []
@@ -574,7 +527,7 @@ envoy:
   containerPorts:
     http: 80
     https: 443
-  ## @param envoy.initContainers Attach additional init containers to Envoy pods
+  ## @param envoy.initContainers [array] Attach additional init containers to Envoy pods
   ## For example:
   ## initContainers:
   ##   - name: your-image-name
@@ -582,13 +535,13 @@ envoy:
   ##     imagePullPolicy: Always
   ##
   initContainers: []
-  ## @param envoy.extraVolumes Array to add extra volumes
+  ## @param envoy.extraVolumes [array] Array to add extra volumes
   ##
   extraVolumes: []
-  ## @param envoy.extraVolumeMounts Array to add extra mounts (normally used with extraVolumes)
+  ## @param envoy.extraVolumeMounts [array] Array to add extra mounts (normally used with extraVolumes)
   ##
   extraVolumeMounts: []
-  ## @param envoy.extraEnvVars Array containing extra env vars to be added to all Envoy containers
+  ## @param envoy.extraEnvVars [array] Array containing extra env vars to be added to all Envoy containers
   ## For example:
   ## extraEnvVars:
   ##  - name: MY_ENV_VAR
@@ -616,12 +569,12 @@ defaultBackend:
   ## @param defaultBackend.image.repository Default backend image name
   ## @param defaultBackend.image.tag Default backend image tag
   ## @param defaultBackend.image.pullPolicy Image pull policy
-  ## @param defaultBackend.image.pullSecrets Specify docker-registry secret names as an array
+  ## @param defaultBackend.image.pullSecrets [array] Specify docker-registry secret names as an array
   ##
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.21.1-debian-10-r44
+    tag: 1.21.1-debian-10-r45
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -635,13 +588,13 @@ defaultBackend:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-  ## @param defaultBackend.extraArgs Additional command line arguments to pass to NGINX container
+  ## @param defaultBackend.extraArgs [object] Additional command line arguments to pass to NGINX container
   ##
   extraArgs: {}
   ## @param defaultBackend.containerPort HTTP container port number
   ##
   containerPort: 8080
-  ## @param defaultBackend.hostAliases Add deployment host aliases
+  ## @param defaultBackend.hostAliases [array] Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
@@ -669,8 +622,8 @@ defaultBackend:
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube.
-  ## @param defaultBackend.resources.limits The resources limits for the Default backend container
-  ## @param defaultBackend.resources.requests The requested resources for the Default backend container
+  ## @param defaultBackend.resources.limits [object] The resources limits for the Default backend container
+  ## @param defaultBackend.resources.requests [object] The requested resources for the Default backend container
   ##
   resources:
     ## Example:
@@ -725,17 +678,17 @@ defaultBackend:
     periodSeconds: 5
     successThreshold: 1
     timeoutSeconds: 5
-  ## @param defaultBackend.customLivenessProbe Override default liveness probe, it overrides the default one (evaluated as a template)
+  ## @param defaultBackend.customLivenessProbe [object] Override default liveness probe, it overrides the default one (evaluated as a template)
   ##
   customLivenessProbe: {}
-  ## @param defaultBackend.customReadinessProbe Override default readiness probe, it overrides the default one (evaluated as a template)
+  ## @param defaultBackend.customReadinessProbe [object] Override default readiness probe, it overrides the default one (evaluated as a template)
   ##
   customReadinessProbe: {}
-  ## @param defaultBackend.podLabels Extra labels for Controller pods
+  ## @param defaultBackend.podLabels [object] Extra labels for Controller pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
-  ## @param defaultBackend.podAnnotations Annotations for Controller pods
+  ## @param defaultBackend.podAnnotations [object] Annotations for Controller pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
@@ -757,7 +710,7 @@ defaultBackend:
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
   ## @param defaultBackend.nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## @param defaultBackend.nodeAffinityPreset.key Node label key to match. Ignored if `affinity` is set.
-  ## @param defaultBackend.nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set.
+  ## @param defaultBackend.nodeAffinityPreset.values [array] Node label values to match. Ignored if `affinity` is set.
   ##
   nodeAffinityPreset:
     type: ""
@@ -768,16 +721,16 @@ defaultBackend:
     ##   - e2e-az2
     ##
     values: []
-  ## @param defaultBackend.affinity Affinity for pod assignment. Evaluated as a template.
+  ## @param defaultBackend.affinity [object] Affinity for pod assignment. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: defaultBackend.podAffinityPreset, defaultBackend.podAntiAffinityPreset, and defaultBackend.nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
-  ## @param defaultBackend.nodeSelector Node labels for pod assignment. Evaluated as a template.
+  ## @param defaultBackend.nodeSelector [object] Node labels for pod assignment. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-  ## @param defaultBackend.tolerations Tolerations for pod assignment. Evaluated as a template.
+  ## @param defaultBackend.tolerations [array] Tolerations for pod assignment. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
@@ -807,14 +760,14 @@ defaultBackend:
 ## @param prometheus.serviceMonitor.enabled Specify if a servicemonitor will be deployed for prometheus-operator.
 ## @param prometheus.serviceMonitor.jobLabel Specify the jobLabel to use for the prometheus-operator
 ## @param prometheus.serviceMonitor.interval Specify the scrape interval if not specified use default prometheus scrapeIntervall, the Prometheus default scrape interval is used.
-## @param prometheus.serviceMonitor.metricRelabelings Specify additional relabeling of metrics.
-## @param prometheus.serviceMonitor.relabelings Specify general relabeling.
+## @param prometheus.serviceMonitor.metricRelabelings [array] Specify additional relabeling of metrics.
+## @param prometheus.serviceMonitor.relabelings [array] Specify general relabeling.
 ##
 prometheus:
   serviceMonitor:
     namespace: ""
     enabled: false
-    jobLabel: 'app.kubernetes.io/name'
+    jobLabel: "app.kubernetes.io/name"
     interval: ""
     metricRelabelings: []
     relabelings: []
@@ -825,7 +778,7 @@ prometheus:
 ##
 rbac:
   create: true
-  ## @param rbac.rules Custom RBAC rules to set
+  ## @param rbac.rules [array] Custom RBAC rules to set
   ## e.g:
   ## rules:
   ##   - apiGroups:
