@@ -285,9 +285,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sentinel.quorum`                             | Sentinel Quorum                                                                                     | `2`                      |
 | `sentinel.downAfterMilliseconds`              | Timeout for detecting a Redis&trade; node is down                                                   | `60000`                  |
 | `sentinel.failoverTimeout`                    | Timeout for performing a election failover                                                          | `18000`                  |
-| `sentinel.cleanDelaySeconds`                  | Delay seconds when cleaning nodes IPs                                                               | `5`                      |
 | `sentinel.parallelSyncs`                      | Number of replicas that can be reconfigured in parallel to use the new master after a failover      | `1`                      |
-| `sentinel.staticID`                           | Enable static Sentinel IDs for each replica                                                         | `false`                  |
 | `sentinel.configuration`                      | Configuration for Redis&trade; Sentinel nodes                                                       | `""`                     |
 | `sentinel.command`                            | Override default container command (useful when using custom images)                                | `[]`                     |
 | `sentinel.args`                               | Override default container args (useful when using custom images)                                   | `[]`                     |
