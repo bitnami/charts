@@ -397,7 +397,7 @@ spec:
               /bin/mongodb_exporter --mongodb.uri "{{ include "mongodb.mongodb_exporter.uri" . }}" {{ .Values.metrics.extraFlags }}
           {{- end }}
           env:
-          {{- if and .Values.auth.enabled }}
+          {{- if .Values.auth.enabled }}
           {{- if not (or .Values.metrics.username .Values.metrics.password ) }}
           - name: MONGODB_ROOT_PASSWORD
             valueFrom:
