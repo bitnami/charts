@@ -240,8 +240,8 @@ Validate values of MinIO&reg; - when using MinIO&reg; as an Azure Gateway, the S
 {{- define "minio.validateValues.gateway.azure.credentials" -}}
 {{- if and .Values.gateway.enabled (eq .Values.gateway.type "azure")
     (or (empty .Values.gateway.auth.azure.storageAccountName) (empty .Values.gateway.auth.azure.storageAccountKey))
-    (or (empty .Values.gateway.auth.azure.storageAccountNameExistingSecret) (empty .Values.gateway.auth.azure.storageAccountNameExistingSecretKey))
-    (or (empty .Values.gateway.auth.azure.storageAccountKeyExistingSecret) (empty .Values.gateway.auth.azure.storageAccountKeyExistingSecretKey)) }}
+    (or (empty .Values.gateway.auth.azure.storageAccountNameExistingSecret) (empty .Values.gateway.auth.azure.storageAccountNameExistingSecretKey)
+        (empty .Values.gateway.auth.azure.storageAccountKeyExistingSecret) (empty .Values.gateway.auth.azure.storageAccountKeyExistingSecretKey)) }}
 minio: gateway.auth.azure
     The StorageAccount name and key are required to use MinIO&reg; as a Azure Gateway.
     Please set a valid StorageAccount information (--set gateway.auth.azure.storageAccountName="xxxx",gateway.auth.azure.storageAccountKey="yyyy")
