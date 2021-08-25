@@ -1,4 +1,4 @@
-{{- if and .Values.envoy.enabled (eq .Values.envoy.kind "Deployment") }}
+{{- if and .Values.envoy.enabled (eq .Values.envoy.kind "deployment") }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
