@@ -26,7 +26,6 @@ In order to replicate the container startup scripts execute this command:
 Cassandra can be accessed through the following URLs from within the cluster:
 
   - CQL: {{ include "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:{{ .Values.service.port }}
-  - Thrift: {{ include "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:{{ .Values.service.thriftPort }}
 
 To get your password run:
 

@@ -89,7 +89,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------------------- | --------------------------------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`                               | Discourse image registry                                                                                  | `docker.io`          |
 | `image.repository`                             | Discourse image repository                                                                                | `bitnami/discourse`  |
-| `image.tag`                                    | Discourse image tag                                                                                       | `2.7.6-debian-10-r0` |
+| `image.tag`                                    | Discourse image tag                                                                                       | `2.7.7-debian-10-r6` |
 | `image.pullPolicy`                             | Discourse image pull policy                                                                               | `IfNotPresent`       |
 | `image.pullSecrets`                            | Discourse image pull secrets                                                                              | `[]`                 |
 | `image.debug`                                  | Specify if debug logs should be enabled                                                                   | `false`              |
@@ -242,7 +242,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
 | `redis.enabled`                           | Whether to deploy a redis server to satisfy the applications requirements. To use an external redis instance set this to false and configure the externalRedis parameters | `true`           |
 | `redis.auth.enabled`                      | Use password authentication                                                                                                                                               | `false`          |
-| `redis.auth.password`                     | Redis(TM) password (both master and replica)                                                                                                                              | `""`             |
+| `redis.auth.password`                     | Redis&trade; password (both master and replica)                                                                                                                           | `""`             |
 | `redis.auth.existingSecret`               | Name of an existing Kubernetes secret object containing the password                                                                                                      | `""`             |
 | `redis.auth.existingSecretPasswordKey`    | Name of the key pointing to the password in your Kubernetes secret                                                                                                        | `redis-password` |
 | `redis.architecture`                      | Cluster settings                                                                                                                                                          | `standalone`     |

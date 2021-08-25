@@ -35,8 +35,8 @@ spec:
       terminationGracePeriodSeconds: 0
       initContainers:
         - name: wait-for-available-kafka
-          image: {{ include "kafka.provisioning.image" . }}
-          imagePullPolicy: {{ .Values.provisioning.image.pullPolicy | quote }}
+          image: {{ include "kafka.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           command:
             - /bin/bash
             - -c
@@ -50,8 +50,8 @@ spec:
               echo "Kafka is available";
       containers:
         - name: kafka-provisioning
-          image: {{ include "kafka.provisioning.image" . }}
-          imagePullPolicy: {{ .Values.provisioning.image.pullPolicy | quote }}
+          image: {{ include "kafka.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
           {{- else }}

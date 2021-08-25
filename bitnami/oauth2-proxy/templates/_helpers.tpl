@@ -47,7 +47,7 @@ Create the name of the service account to use
 {{- if .Values.configuration.authenticatedEmailsFile.existingSecret -}}
 {{- .Values.configuration.authenticatedEmailsFile.existingSecret -}}
 {{- else -}}
-{{- printf "%s-external-redis" (include "common.names.fullname" .) -}}
+{{- printf "%s-access-list" (include "common.names.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
@@ -105,7 +105,7 @@ Get the password secret.
 {{- end -}}
 
 {{/*
-Get the password key to be retrieved from Redis(TM) secret.
+Get the password key to be retrieved from Redis&trade; secret.
 */}}
 {{- define "oauth2-proxy.redis.secretPasswordKey" -}}
 {{- if and .Values.redis.auth.existingSecret .Values.redis.auth.existingSecretPasswordKey -}}

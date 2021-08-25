@@ -74,7 +74,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------- | ------------------------------------------------------------------------------ | -------------------- |
 | `image.registry`       | NATS image registry                                                            | `docker.io`          |
 | `image.repository`     | NATS image repository                                                          | `bitnami/nats`       |
-| `image.tag`            | NATS image tag (immutable tags are recommended)                                | `2.3.2-debian-10-r0` |
+| `image.tag`            | NATS image tag (immutable tags are recommended)                                | `2.3.4-debian-10-r0` |
 | `image.pullPolicy`     | Image pull policy                                                              | `IfNotPresent`       |
 | `image.pullSecrets`    | Specify docker-registry secret names as an array                               | `[]`                 |
 | `auth.enabled`         | Switch to enable/disable client authentication                                 | `true`               |
@@ -194,7 +194,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                  | Enable Prometheus metrics via exporter side-car                                                        | `false`                 |
 | `metrics.image.registry`           | Prometheus metrics exporter image registry                                                             | `docker.io`             |
 | `metrics.image.repository`         | Prometheus metrics exporter image repository                                                           | `bitnami/nats-exporter` |
-| `metrics.image.tag`                | Prometheus metrics exporter image tag (immutable tags are recommended)                                 | `0.8.0-debian-10-r10`   |
+| `metrics.image.tag`                | Prometheus metrics exporter image tag (immutable tags are recommended)                                 | `0.8.0-debian-10-r36`   |
 | `metrics.image.pullPolicy`         | Prometheus metrics image pull policy                                                                   | `IfNotPresent`          |
 | `metrics.image.pullSecrets`        | Prometheus metrics image pull secrets                                                                  | `[]`                    |
 | `metrics.resources`                | Metrics exporter resource requests and limits                                                          | `{}`                    |
@@ -242,13 +242,13 @@ $ helm install my-release -f values.yaml bitnami/nats
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling vs Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### Adding extra environment variables
+### Add extra environment variables
 
 In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property.
 
@@ -260,39 +260,19 @@ extraEnvVars:
 
 Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
 
-### Sidecars and Init Containers
+### Use Sidecars and Init Containers
 
-If you have a need for additional containers to run within the same pod as the NATS app (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
+If additional containers are needed in the same pod (such as additional metrics or logging exporters), they can be defined using the `sidecars` config parameter. Similarly, extra init containers can be added using the `initContainers` parameter.
 
-```yaml
-sidecars:
-  - name: your-image-name
-    image: your-image
-    imagePullPolicy: Always
-    ports:
-      - name: portname
-       containerPort: 1234
-```
+Refer to the chart documentation for more information on, and examples of, configuring and using [sidecars and init containers](https://docs.bitnami.com/kubernetes/infrastructure/nats/configuration/configure-sidecar-init-containers/).
 
-Similarly, you can add extra init containers using the `initContainers` parameter.
-
-```yaml
-initContainers:
-  - name: your-image-name
-    image: your-image
-    imagePullPolicy: Always
-    ports:
-      - name: portname
-        containerPort: 1234
-```
-
-### Deploying extra resources
+### Deploy extra resources
 
 There are cases where you may want to deploy extra objects, such a ConfigMap containing your app's configuration or some extra deployment with a micro service used by your app. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter.
 
-### Setting Pod's affinity
+### Set Pod affinity
 
-This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+This chart allows you to set custom Pod affinity using the `affinity` parameter. Find more information about Pod affinity in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
@@ -325,24 +305,9 @@ Consequences:
 
 ### To 5.0.0
 
-[On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
+[On November 13, 2020, Helm v2 support formally ended](https://github.com/helm/charts#status-of-the-project). This major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
-**What changes were introduced in this major version?**
-
-- Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
-- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
-
-**Considerations when upgrading to this version**
-
-- If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
-- If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
-- If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
-
-**Useful links**
-
-- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
-- https://helm.sh/docs/topics/v2_v3_migration/
-- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+[Learn more about this change and related upgrade considerations](https://docs.bitnami.com/kubernetes/infrastructure/nats/administration/upgrade-helm3/).
 
 ### To 1.0.0
 

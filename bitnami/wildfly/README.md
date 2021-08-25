@@ -71,14 +71,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### WildFly Image parameters
 
-| Name                | Description                                        | Value                  |
-| ------------------- | -------------------------------------------------- | ---------------------- |
-| `image.registry`    | WildFly image registry                             | `docker.io`            |
-| `image.repository`  | WildFly image repository                           | `bitnami/wildfly`      |
-| `image.tag`         | WildFly image tag (immutable tags are recommended) | `24.0.0-debian-10-r10` |
-| `image.pullPolicy`  | WildFly image pull policy                          | `IfNotPresent`         |
-| `image.pullSecrets` | WildFly image pull secrets                         | `[]`                   |
-| `image.debug`       | Enable image debug mode                            | `false`                |
+| Name                | Description                                        | Value                 |
+| ------------------- | -------------------------------------------------- | --------------------- |
+| `image.registry`    | WildFly image registry                             | `docker.io`           |
+| `image.repository`  | WildFly image repository                           | `bitnami/wildfly`     |
+| `image.tag`         | WildFly image tag (immutable tags are recommended) | `24.0.1-debian-10-r2` |
+| `image.pullPolicy`  | WildFly image pull policy                          | `IfNotPresent`        |
+| `image.pullSecrets` | WildFly image pull secrets                         | `[]`                  |
+| `image.debug`       | Enable image debug mode                            | `false`               |
 
 
 ### WildFly Configuration parameters
@@ -180,7 +180,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`            | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`          | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r125`     |
+| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r146`     |
 | `volumePermissions.image.pullPolicy`          | Bitnami Shell image pull policy                                                                 | `Always`                |
 | `volumePermissions.image.pullSecrets`         | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`          | The resources limits for the init container                                                     | `{}`                    |

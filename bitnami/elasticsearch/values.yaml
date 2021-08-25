@@ -62,7 +62,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/elasticsearch
-  tag: 7.13.4-debian-10-r0
+  tag: 7.14.0-debian-10-r21
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1052,7 +1052,7 @@ curator:
   image:
     registry: docker.io
     repository: bitnami/elasticsearch-curator
-    tag: 5.8.4-debian-10-r69
+    tag: 5.8.4-debian-10-r102
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1164,7 +1164,7 @@ curator:
   env: {}
   ## Curator configMaps
   configMaps:
-    ## @param curator.configMaps.action_file_yml [object] Contents of the Curator action_file.yml
+    ## @param curator.configMaps.action_file_yml [string] Contents of the Curator action_file.yml
     ## Delete indices older than 90 days
     ##
     action_file_yml: |-
@@ -1189,7 +1189,7 @@ curator:
             stats_result:
             epoch:
             exclude: False
-    ## @param curator.configMaps.config_yml [object] Contents of the Curator config.yml (overrides config)
+    ## @param curator.configMaps.config_yml [string] Contents of the Curator config.yml (overrides config)
     ## Default config (this value is evaluated as a template)
     ##
     config_yml: |-
@@ -1306,7 +1306,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/elasticsearch-exporter
-    tag: 1.2.1-debian-10-r19
+    tag: 1.2.1-debian-10-r53
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1489,7 +1489,7 @@ sysctlImage:
   ##
   registry: docker.io
   repository: bitnami/bitnami-shell
-  tag: 10-debian-10-r138
+  tag: 10-debian-10-r171
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1542,7 +1542,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r138
+    tag: 10-debian-10-r171
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

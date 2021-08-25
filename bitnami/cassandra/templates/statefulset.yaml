@@ -307,8 +307,6 @@ spec:
             - name: JVM_EXTRA_OPTS
               value: {{ .Values.jvm.extraOpts | quote }}
             {{- end }}
-            - name: CASSANDRA_ENABLE_RPC
-              value: {{ .Values.cluster.enableRPC | quote }}
             {{- if .Values.cluster.enableUDF }}
             - name: CASSANDRA_ENABLE_USER_DEFINED_FUNCTIONS
               value: {{ .Values.cluster.enableUDF | quote }}
@@ -405,13 +403,6 @@ spec:
               {{- if .Values.hostNetwork }}
               hostPort: {{ .Values.containerPorts.cql }}
               {{- end }}
-            {{- if .Values.cluster.enableRPC }}
-            - name: thrift
-              containerPort: {{ .Values.containerPorts.thrift | default "9160" }}
-              {{- if .Values.hostNetwork }}
-              hostPort: {{ .Values.containerPorts.thrift }}
-              {{- end }}
-            {{- end }}
           {{- if .Values.resources }}
           resources: {{ toYaml .Values.resources | nindent 12 }}
           {{- end }}

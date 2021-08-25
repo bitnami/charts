@@ -49,7 +49,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 
 
@@ -57,8 +57,8 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name               | Description                                                                                  | Value |
 | ------------------ | -------------------------------------------------------------------------------------------- | ----- |
-| `nameOverride`     | String to partially override common.names.fullname template (will maintain the release name) | `nil` |
-| `fullnameOverride` | String to fully override common.names.fullname template                                      | `nil` |
+| `nameOverride`     | String to partially override common.names.fullname template (will maintain the release name) | `""`  |
+| `fullnameOverride` | String to fully override common.names.fullname template                                      | `""`  |
 
 
 ### Metrics Server parameters
@@ -67,15 +67,15 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------ |
 | `image.registry`                                  | Metrics Server image registry                                                                                                                                            | `docker.io`              |
 | `image.repository`                                | Metrics Server image repository                                                                                                                                          | `bitnami/metrics-server` |
-| `image.tag`                                       | Metrics Server image tag (immutable tags are recommended)                                                                                                                | `0.5.0-debian-10-r32`    |
+| `image.tag`                                       | Metrics Server image tag (immutable tags are recommended)                                                                                                                | `0.5.0-debian-10-r59`    |
 | `image.pullPolicy`                                | Metrics Server image pull policy                                                                                                                                         | `IfNotPresent`           |
 | `image.pullSecrets`                               | Metrics Server image pull secrets                                                                                                                                        | `[]`                     |
 | `hostAliases`                                     | Add deployment host aliases                                                                                                                                              | `[]`                     |
 | `replicas`                                        | Number of metrics-server nodes to deploy                                                                                                                                 | `1`                      |
-| `updateStrategy.type`                             | Set up update strategy for metrics-server installation                                                                                                                   | `RollingUpdate`          |
+| `updateStrategy.type`                             | Set up update strategy for metrics-server installation.                                                                                                                  | `RollingUpdate`          |
 | `rbac.create`                                     | Enable RBAC authentication                                                                                                                                               | `true`                   |
 | `serviceAccount.create`                           | Specifies whether a ServiceAccount should be created                                                                                                                     | `true`                   |
-| `serviceAccount.name`                             | The name of the ServiceAccount to create                                                                                                                                 | `nil`                    |
+| `serviceAccount.name`                             | The name of the ServiceAccount to create                                                                                                                                 | `""`                     |
 | `serviceAccount.automountServiceAccountToken`     | Automount API credentials for a service account                                                                                                                          | `true`                   |
 | `apiService.create`                               | Specifies whether the v1beta1.metrics.k8s.io API service should be created. You can check if it is needed with `kubectl get --raw "/apis/metrics.k8s.io/v1beta1/nodes"`. | `false`                  |
 | `securePort`                                      | Port where metrics-server will be running                                                                                                                                | `8443`                   |
@@ -84,12 +84,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraArgs`                                       | Extra arguments to pass to metrics-server on start up                                                                                                                    | `{}`                     |
 | `podLabels`                                       | Pod labels                                                                                                                                                               | `{}`                     |
 | `podAnnotations`                                  | Pod annotations                                                                                                                                                          | `{}`                     |
-| `priorityClassName`                               | Priority class for pod scheduling                                                                                                                                        | `nil`                    |
+| `priorityClassName`                               | Priority class for pod scheduling                                                                                                                                        | `""`                     |
 | `podAffinityPreset`                               | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                      | `""`                     |
 | `podAntiAffinityPreset`                           | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                 | `soft`                   |
 | `podDisruptionBudget.enabled`                     | Create a PodDisruptionBudget                                                                                                                                             | `false`                  |
-| `podDisruptionBudget.minAvailable`                | Minimum available instances                                                                                                                                              | `nil`                    |
-| `podDisruptionBudget.maxUnavailable`              | Maximum unavailable instances                                                                                                                                            | `nil`                    |
+| `podDisruptionBudget.minAvailable`                | Minimum available instances                                                                                                                                              | `""`                     |
+| `podDisruptionBudget.maxUnavailable`              | Maximum unavailable instances                                                                                                                                            | `""`                     |
 | `nodeAffinityPreset.type`                         | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                | `""`                     |
 | `nodeAffinityPreset.key`                          | Node label key to match. Ignored if `affinity` is set.                                                                                                                   | `""`                     |
 | `nodeAffinityPreset.values`                       | Node label values to match. Ignored if `affinity` is set.                                                                                                                | `[]`                     |
@@ -99,8 +99,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tolerations`                                     | Tolerations for pod assignment                                                                                                                                           | `[]`                     |
 | `service.type`                                    | Kubernetes Service type                                                                                                                                                  | `ClusterIP`              |
 | `service.port`                                    | Kubernetes Service port                                                                                                                                                  | `443`                    |
-| `service.nodePort`                                | Kubernetes Service port                                                                                                                                                  | `nil`                    |
-| `service.loadBalancerIP`                          | LoadBalancer IP if Service type is `LoadBalancer`                                                                                                                        | `nil`                    |
+| `service.nodePort`                                | Kubernetes Service port                                                                                                                                                  | `""`                     |
+| `service.loadBalancerIP`                          | LoadBalancer IP if Service type is `LoadBalancer`                                                                                                                        | `""`                     |
 | `service.annotations`                             | Annotations for the Service                                                                                                                                              | `{}`                     |
 | `service.labels`                                  | Labels for the Service                                                                                                                                                   | `{}`                     |
 | `resources.limits`                                | The resources limits for the container                                                                                                                                   | `{}`                     |

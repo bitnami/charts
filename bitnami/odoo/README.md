@@ -69,7 +69,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`                         |
 | `image.registry`    | Odoo image registry                                | `docker.io`                  |
 | `image.repository`  | Odoo image repository                              | `bitnami/odoo`               |
-| `image.tag`         | Odoo image tag (immutable tags are recommended)    | `14.0.20210710-debian-10-r0` |
+| `image.tag`         | Odoo image tag (immutable tags are recommended)    | `14.0.20210810-debian-10-r0` |
 | `image.pullPolicy`  | Odoo image pull policy                             | `IfNotPresent`               |
 | `image.pullSecrets` | Odoo image pull secrets                            | `[]`                         |
 | `image.debug`       | Enable image debug mode                            | `false`                      |
@@ -270,9 +270,9 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### Change Odoo version
+### Use a different Odoo version
 
-To modify the Odoo version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/odoo/tags/) using the `image.tag` parameter. For example, `image.tag=X.Y.Z`. This approach is also applicable to other images like exporters.
+To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter. Refer to the [chart documentation for more information on these parameters and how to use them with images from a private registry](https://docs.bitnami.com/kubernetes/apps/odoo/configuration/change-image-version/).
 
 ### Using an external database
 

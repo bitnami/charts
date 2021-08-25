@@ -31,6 +31,9 @@ schedulerName: ""
 ## @param clusterDomain Kubernetes DNS Domain name to use
 ##
 clusterDomain: cluster.local
+## @param extraDeploy Array of extra objects to deploy with the release (evaluated as a template)
+##
+extraDeploy: []
 
 ## Diagnostic mode in the deployment
 ##
@@ -61,7 +64,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mariadb-galera
-  tag: 10.5.11-debian-10-r24
+  tag: 10.5.12-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -687,7 +690,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mysqld-exporter
-    tag: 0.13.0-debian-10-r44
+    tag: 0.13.0-debian-10-r74
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/

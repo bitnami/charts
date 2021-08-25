@@ -75,8 +75,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "component" "kafka" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "component" "kafka" "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.nodeSelector }}
@@ -257,11 +257,11 @@ spec:
                   key: zookeeper-password
             {{- end }}
             {{- if (include "kafka.tlsEncryption" .) }}
-            - name: KAFKA_CFG_TLS_TYPE
+            - name: KAFKA_TLS_TYPE
               value: {{ upper .Values.auth.tls.type | quote }}
             - name: KAFKA_CFG_SSL_ENDPOINT_IDENTIFICATION_ALGORITHM
               value: {{ default "" (coalesce .Values.auth.tls.endpointIdentificationAlgorithm .Values.auth.tlsEndpointIdentificationAlgorithm) | quote }}
-            - name: KAFKA_CFG_TLS_CLIENT_AUTH
+            - name: KAFKA_TLS_CLIENT_AUTH
               value: {{ ternary "required" "none" (eq .Values.auth.clientProtocol "mtls") | quote }}
             {{- $tlsPassword := coalesce .Values.auth.tls.password .Values.auth.jksPassword }}
             - name: KAFKA_CERTIFICATE_PASSWORD

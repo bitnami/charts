@@ -58,7 +58,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/keycloak
-  tag: 14.0.0-debian-10-r0
+  tag: 15.0.2-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -126,7 +126,7 @@ auth:
   ##   tlsTruststorePassword:
   ##     name: keycloak-test2.credentials
   ##
-  existingSecretPerPassword: ""
+  existingSecretPerPassword: {}
   ## TLS encryption parameters
   ## ref: https://github.com/bitnami/bitnami-docker-keycloak#tls-encryption
   ##
@@ -146,6 +146,14 @@ auth:
     ##       kubectl create secret generic SECRET_NAME --from-file=./keycloak.truststore.jks --from-file=./keycloak-0.keystore.jks --from-file=./keycloak-1.keystore.jks ...
     ##
     existingSecret: ""
+    ## @param auth.tls.truststoreFilename Truststore specific filename inside the existing secret
+    ## Note: Setting up this value, you will use the same trustore file in all the replicas
+    ##
+    truststoreFilename: ""
+    ## @param auth.tls.keystoreFilename Keystore specific filename inside the existing secret
+    ## Note: Setting up this value, you will use the same trustore file in all the replicas
+    ##
+    keystoreFilename: ""
     ## @param auth.tls.jksSecret DEPRECATED. Use `auth.tls.existingSecret` instead
     ##
     jksSecret: ""
@@ -282,7 +290,7 @@ keycloakConfigCli:
   image:
     registry: docker.io
     repository: bitnami/keycloak-config-cli
-    tag: 4.0.1-debian-10-r0
+    tag: 4.2.0-debian-10-r9
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -703,6 +711,8 @@ ingress:
   ##     certificate: ""
   ##
   secrets: []
+  ## @param ingress.existingSecret It is you own the certificate as secret.
+  existingSecret: ""
   ## @param ingress.servicePort Service port to be used
   ## Default is http. Alternative is https.
   ##
@@ -860,7 +870,7 @@ postgresql:
   ## Defaults to a random 10-character alphanumeric string if not set
   ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#setting-the-root-password-on-first-run
   ##
-  postgresqlPassword: some-password
+  postgresqlPassword: ""
   ## @param postgresql.postgresqlDatabase Name of the database to create
   ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#creating-a-database-on-first-run
   ##

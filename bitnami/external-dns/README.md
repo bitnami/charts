@@ -67,7 +67,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `image.registry`                              | ExternalDNS image registry                                                                                                                                                   | `docker.io`               |
 | `image.repository`                            | ExternalDNS image repository                                                                                                                                                 | `bitnami/external-dns`    |
-| `image.tag`                                   | ExternalDNS Image tag (immutable tags are recommended)                                                                                                                       | `0.8.0-debian-10-r47`     |
+| `image.tag`                                   | ExternalDNS Image tag (immutable tags are recommended)                                                                                                                       | `0.9.0-debian-10-r11`     |
 | `image.pullPolicy`                            | ExternalDNS image pull policy                                                                                                                                                | `IfNotPresent`            |
 | `image.pullSecrets`                           | ExternalDNS image pull secrets                                                                                                                                               | `[]`                      |
 | `hostAliases`                                 | Deployment pod host aliases                                                                                                                                                  | `[]`                      |
@@ -171,6 +171,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rfc2136.tsigKeyname`                         | When using the rfc2136 provider, specify the tsig keyname to enable security (optional)                                                                                      | `externaldns-key`         |
 | `rfc2136.tsigAxfr`                            | When using the rfc2136 provider, enable AFXR to enable security (optional)                                                                                                   | `true`                    |
 | `rfc2136.minTTL`                              | When using the rfc2136 provider, specify minimal TTL (in duration format) for records[ns, us, ms, s, m, h], see more https://golang.org/pkg/time/#ParseDuration              | `0s`                      |
+| `rfc2136.rfc3645Enabled`                      | When using the rfc2136 provider, extend using RFC3645 to support secure updates over Kerberos with GSS-TSIG                                                                  | `false`                   |
+| `rfc2136.kerberosConfig`                      | When using the rfc2136 provider with rfc3645Enabled, the contents of a configuration file for krb5 (optional)                                                                | `""`                      |
+| `rfc2136.kerberosUsername`                    | When using the rfc2136 provider with rfc3645Enabled, specify the username to authenticate with (optional)                                                                    | `""`                      |
+| `rfc2136.kerberosPassword`                    | When using the rfc2136 provider with rfc3645Enabled, specify the password to authenticate with (optional)                                                                    | `""`                      |
+| `rfc2136.kerberosRealm`                       | When using the rfc2136 provider with rfc3645Enabled, specify the realm to authenticate to (required when provider=rfc2136 and rfc2136.rfc3645Enabled=true)                   | `""`                      |
 | `pdns.apiUrl`                                 | When using the PowerDNS provider, specify the API URL of the server.                                                                                                         | `""`                      |
 | `pdns.apiPort`                                | When using the PowerDNS provider, specify the API port of the server.                                                                                                        | `8081`                    |
 | `pdns.apiKey`                                 | When using the PowerDNS provider, specify the API key of the server.                                                                                                         | `""`                      |
@@ -372,7 +377,7 @@ This version also introduces `bitnami/common`, a [library chart](https://helm.sh
   - `rbac.serviceAccountAnnotations` -> `serviceAccount.annotations`
 - It is now possible to create serviceAccount, clusterRole and clusterRoleBinding manually and give the serviceAccount to the chart.
 
-### 2.0.0
+### To 2.0.0
 
 Backwards compatibility is not guaranteed unless you modify the labels used on the chart's deployments.
 Use the workaround below to upgrade from versions previous to 1.0.0. The following example assumes that the release name is `my-release`:
