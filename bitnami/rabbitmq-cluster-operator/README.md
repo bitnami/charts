@@ -129,18 +129,18 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 
 | Name                      | Description                                     | Value |
 | ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `nil` |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `nil` |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
 
 ### Common parameters
 
 | Name                | Description                                        | Value           |
 | ------------------- | -------------------------------------------------- | --------------- |
-| `kubeVersion`       | Override Kubernetes version                        | `nil`           |
-| `nameOverride`      | String to partially override common.names.fullname | `nil`           |
-| `fullnameOverride`  | String to fully override common.names.fullname     | `nil`           |
+| `kubeVersion`       | Override Kubernetes version                        | `""`            |
+| `nameOverride`      | String to partially override common.names.fullname | `""`            |
+| `fullnameOverride`  | String to fully override common.names.fullname     | `""`            |
 | `commonLabels`      | Labels to add to all deployed objects              | `{}`            |
 | `commonAnnotations` | Annotations to add to all deployed objects         | `{}`            |
 | `clusterDomain`     | Kubernetes cluster domain name                     | `cluster.local` |
@@ -158,7 +158,7 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 | `image.pullSecrets`                  | RabbitMQ Cluster Operator image pull secrets                                                            | `[]`                                |
 | `rabbitmqImage.registry`             | RabbitMQ Image registry                                                                                 | `docker.io`                         |
 | `rabbitmqImage.repository`           | RabbitMQ Image repository                                                                               | `bitnami/rabbitmq`                  |
-| `rabbitmqImage.tag`                  | RabbitMQ Image tag (immutable tags are recommended)                                                     | `3.8.21-debian-10-r0`               |
+| `rabbitmqImage.tag`                  | RabbitMQ Image tag (immutable tags are recommended)                                                     | `3.8.21-debian-10-r11`              |
 | `rabbitmqImage.pullSecrets`          | RabbitMQ Image pull secrets                                                                             | `[]`                                |
 | `replicaCount`                       | Number of RabbitMQ Cluster Operator replicas to deploy                                                  | `1`                                 |
 | `livenessProbe.enabled`              | Enable livenessProbe on RabbitMQ Cluster Operator nodes                                                 | `true`                              |
