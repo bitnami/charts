@@ -71,23 +71,23 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Tomcat parameters
 
-| Name                          | Description                                                          | Value                 |
-| ----------------------------- | -------------------------------------------------------------------- | --------------------- |
-| `image.registry`              | Tomcat image registry                                                | `docker.io`           |
-| `image.repository`            | Tomcat image repository                                              | `bitnami/tomcat`      |
-| `image.tag`                   | Tomcat image tag (immutable tags are recommended)                    | `10.0.8-debian-10-r1` |
-| `image.pullPolicy`            | Tomcat image pull policy                                             | `IfNotPresent`        |
-| `image.pullSecrets`           | Specify docker-registry secret names as an array                     | `[]`                  |
-| `image.debug`                 | Specify if debug logs should be enabled                              | `false`               |
-| `hostAliases`                 | Deployment pod host aliases                                          | `[]`                  |
-| `tomcatUsername`              | Tomcat admin user                                                    | `user`                |
-| `tomcatPassword`              | Tomcat admin password                                                | `""`                  |
-| `tomcatAllowRemoteManagement` | Enable remote access to management interface                         | `0`                   |
-| `command`                     | Override default container command (useful when using custom images) | `[]`                  |
-| `args`                        | Override default container args (useful when using custom images)    | `[]`                  |
-| `extraEnvVars`                | Extra environment variables to be set on Tomcat container            | `[]`                  |
-| `extraEnvVarsCM`              | Name of existing ConfigMap containing extra environment variables    | `""`                  |
-| `extraEnvVarsSecret`          | Name of existing Secret containing extra environment variables       | `""`                  |
+| Name                          | Description                                                          | Value                  |
+| ----------------------------- | -------------------------------------------------------------------- | ---------------------- |
+| `image.registry`              | Tomcat image registry                                                | `docker.io`            |
+| `image.repository`            | Tomcat image repository                                              | `bitnami/tomcat`       |
+| `image.tag`                   | Tomcat image tag (immutable tags are recommended)                    | `10.0.10-debian-10-r6` |
+| `image.pullPolicy`            | Tomcat image pull policy                                             | `IfNotPresent`         |
+| `image.pullSecrets`           | Specify docker-registry secret names as an array                     | `[]`                   |
+| `image.debug`                 | Specify if debug logs should be enabled                              | `false`                |
+| `hostAliases`                 | Deployment pod host aliases                                          | `[]`                   |
+| `tomcatUsername`              | Tomcat admin user                                                    | `user`                 |
+| `tomcatPassword`              | Tomcat admin password                                                | `""`                   |
+| `tomcatAllowRemoteManagement` | Enable remote access to management interface                         | `0`                    |
+| `command`                     | Override default container command (useful when using custom images) | `[]`                   |
+| `args`                        | Override default container args (useful when using custom images)    | `[]`                   |
+| `extraEnvVars`                | Extra environment variables to be set on Tomcat container            | `[]`                   |
+| `extraEnvVarsCM`              | Name of existing ConfigMap containing extra environment variables    | `""`                   |
+| `extraEnvVarsSecret`          | Name of existing Secret containing extra environment variables       | `""`                   |
 
 
 ### Tomcat deployment parameters
@@ -177,7 +177,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                            | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                          | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                 | `10-debian-10-r126`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                 | `10-debian-10-r159`     |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                         | `Always`                |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                            | `[]`                    |
 | `volumePermissions.resources.limits`   | Init container volume-permissions resource  limits                          | `{}`                    |
@@ -213,9 +213,9 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### Change Tomcat version
+### Use a different Tomcat version
 
-To modify the Tomcat version used in this chart, specify a [valid image tag](https://hub.docker.com/r/bitnami/tomcat/tags/) using the `image.tag` parameter - for example, `image.tag=X.Y.Z`. This approach is also applicable to other images like exporters.
+To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter. Refer to the [chart documentation for more information on these parameters and how to use them with images from a private registry](https://docs.bitnami.com/kubernetes/infrastructure/tomcat/configuration/change-image-version/).
 
 ### Add extra environment variables
 

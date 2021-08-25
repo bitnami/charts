@@ -8,25 +8,25 @@
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
-  imageRegistry:
+  imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass:
+  storageClass: ""
 
 ## @section Common parameters
 
 ## @param kubeVersion Override Kubernetes version
 ##
-kubeVersion:
+kubeVersion: ""
 ## @param nameOverride String to partially override common.names.fullname
 ##
-nameOverride:
+nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname
 ##
-fullnameOverride:
+fullnameOverride: ""
 ## @param commonLabels Labels to add to all deployed objects
 ##
 commonLabels: {}
@@ -40,6 +40,21 @@ clusterDomain: cluster.local
 ##
 extraDeploy: []
 
+## Enable diagnostic mode in the deployment
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the deployment
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the deployment
+  ##
+  args:
+    - infinity
+
 ## @section %%MAIN_CONTAINER%% Parameters
 
 ## %%MAIN_CONTAINER/POD_DESCRIPTION%%
@@ -47,12 +62,12 @@ extraDeploy: []
 %%MAIN_OBJECT_BLOCK%%:
   ## Bitnami %%MAIN_CONTAINER image
   ## ref: https://hub.docker.com/r/bitnami/redis/tags/
-  ## @param image.registry %%MAIN_CONTAINER%% image registry
-  ## @param image.repository %%MAIN_CONTAINER%% image repository
-  ## @param image.tag %%MAIN_CONTAINER%% image tag (immutable tags are recommended)
-  ## @param image.pullPolicy %%MAIN_CONTAINER%% image pull policy
-  ## @param image.pullSecrets %%MAIN_CONTAINER%% image pull secrets
-  ## @param image.debug Enable image debug mode
+  ## @param %%MAIN_OBJECT_BLOCK%%.image.registry %%MAIN_CONTAINER%% image registry
+  ## @param %%MAIN_OBJECT_BLOCK%%.image.repository %%MAIN_CONTAINER%% image repository
+  ## @param %%MAIN_OBJECT_BLOCK%%.image.tag %%MAIN_CONTAINER%% image tag (immutable tags are recommended)
+  ## @param %%MAIN_OBJECT_BLOCK%%.image.pullPolicy %%MAIN_CONTAINER%% image pull policy
+  ## @param %%MAIN_OBJECT_BLOCK%%.image.pullSecrets %%MAIN_CONTAINER%% image pull secrets
+  ## @param %%MAIN_OBJECT_BLOCK%%.image.debug Enable %%MAIN_CONTAINER%% image debug mode
   ##
   image:
     registry: docker.io
@@ -139,7 +154,7 @@ extraDeploy: []
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
-  
+
   %%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
 
   ## @param %%MAIN_OBJECT_BLOCK%%.existingConfigmap The name of an existing ConfigMap with your custom configuration for %%MAIN_CONTAINER_NAME%%

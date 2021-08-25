@@ -107,7 +107,7 @@ Return the PostgreSQL Secret Name
 {{- else if .Values.externalDatabase.existingSecret }}
     {{- printf "%s" .Values.externalDatabase.existingSecret -}}
 {{- else -}}
-    {{- printf "%s-%s" .Release.Name "externaldb" -}}
+    {{- printf "%s-externaldb" (include "common.names.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 

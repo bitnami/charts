@@ -43,6 +43,7 @@ spec:
       {{- if .Values.schedulerName }}
       schedulerName: {{ .Values.schedulerName | quote }}
       {{- end }}
+      serviceAccountName: {{ include "kibana.serviceAccountName" . }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
         fsGroup: {{ .Values.securityContext.fsGroup }}
@@ -104,9 +105,9 @@ spec:
           livenessProbe:
             httpGet:
             {{- if .Values.configuration.server.rewriteBasePath }}
-              path: {{ .Values.configuration.server.basePath }}/app/kibana
+              path: {{ .Values.configuration.server.basePath }}/api/status
             {{- else }}
-              path: /app/kibana
+              path: /api/status
             {{- end }}
               port: http
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
@@ -119,9 +120,9 @@ spec:
           readinessProbe:
             httpGet:
             {{- if .Values.configuration.server.rewriteBasePath }}
-              path: {{ .Values.configuration.server.basePath }}/app/kibana
+              path: {{ .Values.configuration.server.basePath }}/api/status
             {{- else }}
-              path: /app/kibana
+              path: /api/status
             {{- end }}
               port: http
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}

@@ -65,8 +65,8 @@ spec:
           {{- end }}
           containers:
             - name: {{ template "redmine.mailReceiver.fullname" . }}
-              image: {{ template "redmine.mailReceiver.image" . }}
-              imagePullPolicy: {{ .Values.mailReceiver.image.pullPolicy | quote }}
+              image: {{ template "redmine.image" . }}
+              imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
               {{- if .Values.mailReceiver.containerSecurityContext.enabled }}
               securityContext: {{- omit .Values.mailReceiver.containerSecurityContext "enabled" | toYaml | nindent 16 }}
               {{- end }}

@@ -1,0 +1,8 @@
+** Please be patient while the chart is being deployed **
+
+Watch the RabbitMQ Cluster Operator Deployment status using the command:
+
+    kubectl get deploy -w --namespace {{ .Release.Namespace }} -l app.kubernetes.io/name={{ include "common.names.name" . }},app.kubernetes.io/instance={{ .Release.Name }}
+
+{{ include "common.warnings.rollingTag" .Values.image }}
+{{ include "common.warnings.rollingTag" .Values.rabbitmqImage }}
