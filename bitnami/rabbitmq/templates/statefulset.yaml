@@ -145,7 +145,8 @@ spec:
               value: "rabbit@$(MY_POD_NAME)"
             {{- end }}
             - name: RABBITMQ_MNESIA_DIR
-              value: "/bitnami/rabbitmq/mnesia/$(RABBITMQ_NODE_NAME)"
+              # value: "/bitnami/rabbitmq/mnesia/$(RABBITMQ_NODE_NAME)"
+              value: "/bitnami/rabbitmq/mnesia/MnesiaData"
             - name: RABBITMQ_LDAP_ENABLE
               value: {{ ternary "yes" "no" .Values.ldap.enabled | quote }}
             {{- if .Values.ldap.enabled }}
@@ -301,6 +302,10 @@ spec:
               mountPath: /bitnami/rabbitmq/conf
             - name: data
               mountPath: /bitnami/rabbitmq/mnesia
+              subPath: data
+            - name: data
+              mountPath: /opt/bitnami/rabbitmq/etc/rabbitmq
+              subPath: conf
             {{- if .Values.auth.tls.enabled }}
             - name: certs
               mountPath: /opt/bitnami/rabbitmq/certs
