@@ -878,10 +878,12 @@ postgresql:
   ## @param postgresql.existingSecret Use an existing secret file with the PostgreSQL password
   ##
   existingSecret: ""
-  ## PostgreSQL data Persistent Volume Storage Class
-  ## @param postgresql.persistence.enabled Enable database persistence using PVC
+  ## Enable persistence using Persistent Volume Claims
+  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes
   ##
   persistence:
+    ## @param postgresql.persistence.enabled Enable PostgreSQL persistence using PVC
+    ##
     enabled: true
 ## External database configuration
 ##
