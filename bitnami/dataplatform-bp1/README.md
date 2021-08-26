@@ -195,6 +195,14 @@ $ helm install my-release \
 
 The above command deploys the data platform with Kafka with 3 nodes (replicas).
 
+In a YAML file that specifies the values for the below parameters can be provided while installing the chart. For example,
+
+```console
+$ helm install my-release -f values.yaml bitnami/dataplatform-bp1
+```
+
+> **Tip**: You can use the default [values.yaml](values.yaml)
+
 In case you need to deploy the data platform with [Tanzu Observability](https://docs.wavefront.com/kubernetes.html) Framework for all the applications (Kafka/Spark/Solr) in the data platform, you can specify the 'enabled' parameter using the `--set <component>.metrics.enabled=true` argument to `helm install`. For Solr, the parameter is `solr.exporter.enabled=true` For Example,
 
 ```console
@@ -209,13 +217,73 @@ $ helm install my-release bitnami/dataplatform-bp1 \
     --set wavefront.wavefront.token=<YOUR_API_TOKEN>
 ```
 
-Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
+If you want to use an existing Wavefront deployment, edit the Wavefront Collector ConfigMap and add the following snippet under Prometheus sources. Once done, restart the wavefront collectors DaemonSet.
 
 ```console
-$ helm install my-release -f values.yaml bitnami/dataplatform-bp1
+$ kubectl edit configmap wavefront-collector-config -n wavefront
 ```
+Add the below config:
+```console
+     config:
+        ## auto-discover kafka-exporter
+        - name: kafka-discovery
+          type: prometheus
+          selectors:
+            images:
+              - '*bitnami/kafka-exporter*'
+          port: 9308
+          path: /metrics
+          scheme: http
+          prefix: kafka.
 
-> **Tip**: You can use the default [values.yaml](values.yaml)
+        ## auto-discover jmx exporter
+        - name: kafka-jmx-discovery
+          type: prometheus
+          selectors:
+            images:
+              - '*bitnami/jmx-exporter*'
+          port: 5556
+          path: /metrics
+          scheme: http
+          prefix: kafkajmx.
+
+        ## auto-discover solr
+        - name: solr-discovery
+          type: prometheus
+          selectors:
+            images:
+              - '*bitnami/solr*'
+          port: 9983
+          path: /metrics
+          scheme: http
+
+        ## auto-discover spark
+        - name: spark-worker-discovery
+          type: prometheus
+          selectors:
+            images:
+              - '*bitnami/spark*'
+          port: 8081
+          path: /metrics/
+          scheme: http
+          prefix: spark.
+        
+        ## auto-discover spark
+        - name: spark-master-discovery
+          type: prometheus
+          selectors:
+            images:
+              - '*bitnami/spark*'
+          port: 8080
+          path: /metrics/
+          scheme: http
+          prefix: spark.
+```
+Below is the command to restart the DaemonSets
+
+```console
+$ kubectl rollout restart daemonsets wavefront-collector 
+```
 
 ## Configuration and installation details
 
@@ -232,6 +300,10 @@ Find more information about how to deal with common errors related to Bitnami’
 In order to render complete information about the deployment including all the sub-charts, please use --render-subchart-notes flag while installing the chart.
 
 ## Upgrading
+
+### To 7.0.1
+
+This minor updates the README file to configure the wavefront to the existing setup.
 
 ### To 7.0.0
 
