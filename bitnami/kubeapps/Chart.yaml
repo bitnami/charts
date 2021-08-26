@@ -17,7 +17,7 @@ dependencies:
   # other plugins only.
   - name: redis
     repository: https://charts.bitnami.com/bitnami
-    version: 14.x.x
+    version: 15.x.x
     condition: redis.enabled
 description: Kubeapps is a dashboard for your Kubernetes cluster that makes it easy to deploy and manage applications in your cluster using Helm
 home: https://kubeapps.com
