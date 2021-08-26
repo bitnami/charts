@@ -156,7 +156,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | ---------------------------------- | --------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`                   | Grafana image registry                                                            | `docker.io`          |
 | `image.repository`                 | Grafana image repository                                                          | `bitnami/grafana`    |
-| `image.tag`                        | Grafana image tag (immutable tags are recommended)                                | `8.1.2-debian-10-r0` |
+| `image.tag`                        | Grafana image tag (immutable tags are recommended)                                | `8.1.2-debian-10-r5` |
 | `image.pullPolicy`                 | Grafana image pull policy                                                         | `IfNotPresent`       |
 | `image.pullSecrets`                | Grafana image pull secrets                                                        | `[]`                 |
 | `hostAliases`                      | Add deployment host aliases                                                       | `[]`                 |
@@ -262,7 +262,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `ingress.pathType`                 | Ingress Path type                                                                             | `ImplementationSpecific` |
 | `ingress.apiVersion`               | Override API Version (automatically detected if not set)                                      | `""`                     |
 | `ingress.hostname`                 | When the ingress is enabled, a host pointing to this will be created                          | `grafana.local`          |
-| `ingress.path`                     | Default path for the ingress resource                                                         | `ImplementationSpecific` |
+| `ingress.path`                     | Default path for the ingress resource                                                         | `/`                      |
 | `ingress.annotations`              | Ingress annotations                                                                           | `{}`                     |
 | `ingress.tls`                      | Enable TLS configuration for the hostname defined at ingress.hostname parameter               | `false`                  |
 | `ingress.extraHosts`               | The list of additional hostnames to be covered with this ingress record.                      | `[]`                     |
@@ -292,7 +292,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `imageRenderer.enabled`                              | Enable using a remote rendering service to render PNG images                                           | `false`                          |
 | `imageRenderer.image.registry`                       | Grafana Image Renderer image registry                                                                  | `docker.io`                      |
 | `imageRenderer.image.repository`                     | Grafana Image Renderer image repository                                                                | `bitnami/grafana-image-renderer` |
-| `imageRenderer.image.tag`                            | Grafana Image Renderer image tag (immutable tags are recommended)                                      | `3.0.1-debian-10-r52`            |
+| `imageRenderer.image.tag`                            | Grafana Image Renderer image tag (immutable tags are recommended)                                      | `3.0.1-debian-10-r57`            |
 | `imageRenderer.image.pullPolicy`                     | Grafana Image Renderer image pull policy                                                               | `IfNotPresent`                   |
 | `imageRenderer.image.pullSecrets`                    | Grafana image Renderer pull secrets                                                                    | `[]`                             |
 | `imageRenderer.replicaCount`                         | Number of Grafana Image Renderer Pod replicas                                                          | `1`                              |
