@@ -153,11 +153,15 @@ Return the Database user
 {{/*
 Return the Database encrypted password
 */}}
-{{- define "keycloak.databaseEncryptedPassword" -}}
+{{- define "keycloak.databaseSecretName" -}}
 {{- if .Values.postgresql.enabled }}
-    {{- (.Values.postgresql.postgresqlPassword | default (randAlphaNum 10)) | b64enc | quote -}}
+    {{- if .Values.postgresql.existingSecret -}}
+        {{- printf "%s" .Values.postgresql.existingSecret -}}
+    {{- else }}
+        {{- printf "%s" (include "keycloak.postgresql.fullname" .) -}}
+    {{- end -}}
 {{- else -}}
-    {{- .Values.externalDatabase.password | b64enc | quote -}}
+    {{- printf "%s" (include "common.secrets.name" (dict "existingSecret" .Values.auth.existingSecret "context" $)) -}}
 {{- end -}}
 {{- end -}}
 

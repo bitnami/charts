@@ -67,20 +67,20 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 
 ### Common parameters
 
-| Name                | Description                                        | Value                |
-| ------------------- | -------------------------------------------------- | -------------------- |
-| `kubeVersion`       | Override Kubernetes version                        | `""`                 |
-| `nameOverride`      | String to partially override common.names.fullname | `""`                 |
-| `fullnameOverride`  | String to fully override common.names.fullname     | `""`                 |
-| `commonLabels`      | Labels to add to all deployed objects              | `{}`                 |
-| `commonAnnotations` | Annotations to add to all deployed objects         | `{}`                 |
-| `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`                 |
-| `image.registry`    | Redmine image registry                             | `docker.io`          |
-| `image.repository`  | Redmine image repository                           | `bitnami/redmine`    |
-| `image.tag`         | Redmine image tag (immutable tags are recommended) | `4.2.2-debian-10-r7` |
-| `image.pullPolicy`  | Redmine image pull policy                          | `IfNotPresent`       |
-| `image.pullSecrets` | Redmine image pull secrets                         | `[]`                 |
-| `image.debug`       | Enable image debug mode                            | `false`              |
+| Name                | Description                                        | Value                 |
+| ------------------- | -------------------------------------------------- | --------------------- |
+| `kubeVersion`       | Override Kubernetes version                        | `""`                  |
+| `nameOverride`      | String to partially override common.names.fullname | `""`                  |
+| `fullnameOverride`  | String to fully override common.names.fullname     | `""`                  |
+| `commonLabels`      | Labels to add to all deployed objects              | `{}`                  |
+| `commonAnnotations` | Annotations to add to all deployed objects         | `{}`                  |
+| `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`                  |
+| `image.registry`    | Redmine image registry                             | `docker.io`           |
+| `image.repository`  | Redmine image repository                           | `bitnami/redmine`     |
+| `image.tag`         | Redmine image tag (immutable tags are recommended) | `4.2.2-debian-10-r12` |
+| `image.pullPolicy`  | Redmine image pull policy                          | `IfNotPresent`        |
+| `image.pullSecrets` | Redmine image pull secrets                         | `[]`                  |
+| `image.debug`       | Enable image debug mode                            | `false`               |
 
 
 ### Redmine Configuration parameters
@@ -184,7 +184,7 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `ingress.pathType`                 | Ingress path type                                                                                     | `ImplementationSpecific` |
 | `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                         | `""`                     |
 | `ingress.hostname`                 | Default host for the ingress record                                                                   | `redmine.local`          |
-| `ingress.path`                     | Default path for the ingress record                                                                   | `ImplementationSpecific` |
+| `ingress.path`                     | Default path for the ingress record                                                                   | `/`                      |
 | `ingress.annotations`              | Additional custom annotations for the ingress record                                                  | `{}`                     |
 | `ingress.tls`                      | Enable TLS configuration for the host defined at `ingress.hostname` parameter                         | `false`                  |
 | `ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                            | `[]`                     |
@@ -327,7 +327,7 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `certificates.customCA`                              | Defines a list of secrets to import into the container trust store | `[]`                                     |
 | `certificates.image.registry`                        | Redmine image registry                                             | `docker.io`                              |
 | `certificates.image.repository`                      | Redmine image repository                                           | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Redmine image tag (immutable tags are recommended)                 | `10-debian-10-r165`                      |
+| `certificates.image.tag`                             | Redmine image tag (immutable tags are recommended)                 | `10-debian-10-r170`                      |
 | `certificates.image.pullPolicy`                      | Redmine image pull policy                                          | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Redmine image pull secrets                                         | `[]`                                     |
 | `certificates.extraEnvVars`                          | Container sidecar extra environment variables (e.g. proxy)         | `[]`                                     |

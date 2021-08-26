@@ -72,7 +72,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
 | `image.registry`              | Nginx Ingress Controller image registry                                                                                                            | `docker.io`                        |
 | `image.repository`            | Nginx Ingress Controller image repository                                                                                                          | `bitnami/nginx-ingress-controller` |
-| `image.tag`                   | Nginx Ingress Controller image tag (immutable tags are recommended)                                                                                | `0.48.1-debian-10-r17`             |
+| `image.tag`                   | Nginx Ingress Controller image tag (immutable tags are recommended)                                                                                | `0.48.1-debian-10-r38`             |
 | `image.pullPolicy`            | Nginx Ingress Controller image pull policy                                                                                                         | `IfNotPresent`                     |
 | `image.pullSecrets`           | Specify docker-registry secret names as an array                                                                                                   | `[]`                               |
 | `containerPorts`              | Controller container ports to open                                                                                                                 | `{}`                               |
@@ -92,8 +92,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `udpConfigMapNamespace`       | Allows customization of the udp-services-configmap namespace                                                                                       | `""`                               |
 | `maxmindLicenseKey`           | License key used to download Geolite2 database                                                                                                     | `""`                               |
 | `dhParam`                     | A base64ed Diffie-Hellman parameter                                                                                                                | `""`                               |
-| `tcp`                         | TCP service key:value pairs                                                                                                                        | `""`                               |
-| `udp`                         | UDP service key:value pairs                                                                                                                        | `""`                               |
+| `tcp`                         | TCP service key:value pairs                                                                                                                        | `{}`                               |
+| `udp`                         | UDP service key:value pairs                                                                                                                        | `{}`                               |
 | `command`                     | Override default container command (useful when using custom images)                                                                               | `[]`                               |
 | `args`                        | Override default container args (useful when using custom images)                                                                                  | `[]`                               |
 | `extraArgs`                   | Additional command line arguments to pass to nginx-ingress-controller                                                                              | `{}`                               |
@@ -174,7 +174,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `defaultBackend.hostAliases`                        | Add deployment host aliases                                                               | `[]`                   |
 | `defaultBackend.image.registry`                     | Default backend image registry                                                            | `docker.io`            |
 | `defaultBackend.image.repository`                   | Default backend image repository                                                          | `bitnami/nginx`        |
-| `defaultBackend.image.tag`                          | Default backend image tag (immutable tags are recommended)                                | `1.21.1-debian-10-r24` |
+| `defaultBackend.image.tag`                          | Default backend image tag (immutable tags are recommended)                                | `1.21.1-debian-10-r46` |
 | `defaultBackend.image.pullPolicy`                   | Image pull policy                                                                         | `IfNotPresent`         |
 | `defaultBackend.image.pullSecrets`                  | Specify docker-registry secret names as an array                                          | `[]`                   |
 | `defaultBackend.extraArgs`                          | Additional command line arguments to pass to Nginx container                              | `{}`                   |

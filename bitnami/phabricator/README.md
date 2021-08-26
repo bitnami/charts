@@ -76,7 +76,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------- | -------------------------------------------------------------------- | ------------------------- |
 | `image.registry`                 | Phabricator image registry                                           | `docker.io`               |
 | `image.repository`               | Phabricator image repository                                         | `bitnami/phabricator`     |
-| `image.tag`                      | Phabricator image tag (immutable tags are recommended)               | `2021.26.0-debian-10-r35` |
+| `image.tag`                      | Phabricator image tag (immutable tags are recommended)               | `2021.26.0-debian-10-r56` |
 | `image.pullPolicy`               | Image pull policy                                                    | `IfNotPresent`            |
 | `image.pullSecrets`              | Specify docker-registry secret names as an array                     | `[]`                      |
 | `image.debug`                    | Specify if debug logs should be enabled                              | `false`                   |
@@ -182,7 +182,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.pathType`              | Ingress path type                                                                                            | `ImplementationSpecific` |
 | `ingress.apiVersion`            | Force Ingress API version (automatically detected if not set)                                                | `""`                     |
 | `ingress.hostname`              | Default host for the ingress resource                                                                        | `phabricator.local`      |
-| `ingress.path`                  | The Path to Phabricator. You may need to set this to '/*' in order to use this with ALB ingress controllers. | `ImplementationSpecific` |
+| `ingress.path`                  | The Path to Phabricator. You may need to set this to '/*' in order to use this with ALB ingress controllers. | `/`                      |
 | `ingress.annotations`           | Ingress annotations                                                                                          | `{}`                     |
 | `ingress.extraHosts`            | The list of additional hostnames to be covered with this ingress record.                                     | `[]`                     |
 | `ingress.extraPaths`            | Any additional arbitrary paths that may need to be added to the ingress under the main host.                 | `[]`                     |
@@ -219,7 +219,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory ( | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                              | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                            | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)  | `10-debian-10-r151`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)  | `10-debian-10-r172`     |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                           | `Always`                |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                              | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                        | `{}`                    |
@@ -233,7 +233,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`            | Start a side-car prometheus exporter                       | `false`                   |
 | `metrics.image.registry`     | Apache exporter image registry                             | `docker.io`               |
 | `metrics.image.repository`   | Apache exporter image repository                           | `bitnami/apache-exporter` |
-| `metrics.image.tag`          | Apache exporter image tag (immutable tags are recommended) | `0.10.0-debian-10-r5`     |
+| `metrics.image.tag`          | Apache exporter image tag (immutable tags are recommended) | `0.10.0-debian-10-r26`    |
 | `metrics.image.pullPolicy`   | Image pull policy                                          | `IfNotPresent`            |
 | `metrics.image.pullSecrets`  | Specify docker-registry secret names as an array           | `[]`                      |
 | `metrics.podAnnotations`     | Additional annotations for Metrics exporter pod            | `{}`                      |
