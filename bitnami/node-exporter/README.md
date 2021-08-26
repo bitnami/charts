@@ -78,7 +78,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.name`                         | The name of the ServiceAccount to create                                                  | `""`                    |
 | `image.registry`                              | Node Exporter image registry                                                              | `docker.io`             |
 | `image.repository`                            | Node Exporter image repository                                                            | `bitnami/node-exporter` |
-| `image.tag`                                   | Node Exporter Image tag (immutable tags are recommended)                                  | `1.2.2-debian-10-r0`    |
+| `image.tag`                                   | Node Exporter Image tag (immutable tags are recommended)                                  | `1.2.2-debian-10-r18`   |
 | `image.pullPolicy`                            | Node Exporter image pull policy                                                           | `IfNotPresent`          |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                          | `[]`                    |
 | `extraArgs`                                   | Additional command line arguments to pass to node-exporter                                | `{}`                    |
