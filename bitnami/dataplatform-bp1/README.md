@@ -282,7 +282,7 @@ Add the below config:
 Below is the command to restart the DaemonSets
 
 ```console
-$ kubectl rollout restart daemonsets wavefront-collector 
+$ kubectl rollout restart daemonsets wavefront-collector -n wavefront
 ```
 
 ## Configuration and installation details
@@ -303,7 +303,7 @@ In order to render complete information about the deployment including all the s
 
 ### To 7.0.1
 
-This minor updates the README file to configure the wavefront to the existing setup.
+This minor version updates the README file with instructions on how to enable existing Wavefront deployment for the data platform blueprint.
 
 ### To 7.0.0
 
