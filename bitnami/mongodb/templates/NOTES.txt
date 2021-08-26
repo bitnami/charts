@@ -90,14 +90,14 @@ MongoDB&reg; can be accessed on the following DNS name(s) and ports from within 
 
 To get the root password run:
 
-    export MONGODB_ROOT_PASSWORD=$(kubectl get secret --namespace {{ template "mongodb.namespace" . }} {{ template "mongodb.fullname" . }} -o jsonpath="{.data.mongodb-root-password}" | base64 --decode)
+    export MONGODB_ROOT_PASSWORD=$(kubectl get secret --namespace {{ template "mongodb.namespace" . }} {{ template "mongodb.secretName" . }} -o jsonpath="{.data.mongodb-root-password}" | base64 --decode)
 
 {{- end }}
 {{- if and .Values.auth.username .Values.auth.database .Values.auth.password }}
 
 To get the password for "{{ .Values.auth.username }}" run:
 
-    export MONGODB_PASSWORD=$(kubectl get secret --namespace {{ template "mongodb.namespace" . }} {{ template "mongodb.fullname" . }} -o jsonpath="{.data.mongodb-password}" | base64 --decode)
+    export MONGODB_PASSWORD=$(kubectl get secret --namespace {{ template "mongodb.namespace" . }} {{ template "mongodb.secretName" . }} -o jsonpath="{.data.mongodb-password}" | base64 --decode)
 
 {{- end }}
 
