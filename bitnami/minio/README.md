@@ -257,7 +257,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `gateway.enabled`                                        | Use MinIO&reg; as Gateway for other storage systems                                          | `false`                    |
 | `gateway.type`                                           | Gateway type. Supported types are: `azure`, `gcs`, `nas`, `s3`                               | `s3`                       |
 | `gateway.replicaCount`                                   | Number of MinIO&reg; Gateway replicas                                                        | `4`                        |
-| `gateway.updateStrategy.type`                            | Update strategy for MinIO&reg; Gateway replicas                                              | `Recreate`                 |
+| `gateway.updateStrategy.type`                            | Update strategy type for MinIO&reg; Gateway replicas                                              | `Recreate`                 |
 | `gateway.autoscaling.enabled`                            | Enable autoscaling for MinIO&reg; Gateway deployment                                         | `false`                    |
 | `gateway.autoscaling.minReplicas`                        | Minimum number of replicas to scale back                                                     | `4`                        |
 | `gateway.autoscaling.maxReplicas`                        | Maximum number of replicas to scale out                                                      | `4`                        |

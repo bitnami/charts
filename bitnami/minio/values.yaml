@@ -684,7 +684,7 @@ gateway:
   ## @param gateway.replicaCount Number of MinIO&reg; Gateway replicas
   ##
   replicaCount: 4
-  ## @param gateway.updateStrategy Update strategy for MinIO&reg; Gateway replicas
+  ## @param gateway.updateStrategy.type Update strategy type for MinIO&reg; Gateway replicas
   updateStrategy:
     type: Recreate
   ## Autoscaling configuration for MinIO&reg; Gateway. overrides gateway.replicaCount if enabled
