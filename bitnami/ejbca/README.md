@@ -252,13 +252,9 @@ This chart allows you to set custom Pod affinity using the `affinity` parameter.
 
 As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
-### Configure a private registry
+### Use a different EJBCA version
 
-The `image.tag` parameter allows specifying which image will be pulled for the chart, as described in the [documentation for using a different image version](https://docs.bitnami.com/kubernetes/apps/ejbca/configuration/change-image-version/).
-
-When configuring the `image.tag` parameter to use an image in a private registry, it is necessary to also [specify an image pull secret](https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod). This image pull secret must be passed to the chart at deployment time using the `global.imagePullSecrets` parameter in a `values.yaml` file (it cannot be passed using the `--set` parameter).
-
-Refer to the [chart documentation for more information on configuring a private registry](https://docs.bitnami.com/kubernetes/apps/ejbca/configuration/configure-private-registry/).
+To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter. Refer to the [chart documentation for more information on these parameters and how to use them with images from a private registry](https://docs.bitnami.com/kubernetes/apps/ejbca/configuration/change-image-version/).
 
 ## Persistence
 

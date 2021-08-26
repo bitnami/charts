@@ -153,7 +153,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | ------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------- | -------------------------- |
 | `operator.enabled`                                           | Enable the deployment of the Grafana Operator                                                                          | `true`                     |
 | `operator.replicaCount`                                      | Number of grafana-operator Pod replicas                                                                                | `1`                        |
-| `operator.updateStrategy.type`                               | Set up update strategy for Grafana installation.                                                                       | `Recreate`                 |
+| `operator.updateStrategy.type`                               | Set up update strategy for Grafana Operator installation.                                                              | `Recreate`                 |
 | `operator.image.registry`                                    | Grafana Operator image registry                                                                                        | `docker.io`                |
 | `operator.image.repository`                                  | Grafana Operator image name                                                                                            | `bitnami/grafana-operator` |
 | `operator.image.tag`                                         | Grafana Operator image tag                                                                                             | `3.10.3-debian-10-r9`      |
@@ -269,6 +269,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `grafana.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                            | `5`                    |
 | `grafana.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                          | `6`                    |
 | `grafana.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                          | `1`                    |
+| `grafana.updateStrategy`                                    | Set up update strategy for Grafana installation.                                              | `{}`                   |
 | `grafana.extraVolumes`                                      | Optionally specify extra list of additional volumes for the grafana pod(s)                    | `[]`                   |
 | `grafana.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the grafana container(s)         | `[]`                   |
 | `grafana.sidecars`                                          | Add additional sidecar containers to the grafana pod(s)                                       | `[]`                   |

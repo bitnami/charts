@@ -43,6 +43,7 @@ spec:
       {{- if .Values.schedulerName }}
       schedulerName: {{ .Values.schedulerName | quote }}
       {{- end }}
+      serviceAccountName: {{ include "kibana.serviceAccountName" . }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
         fsGroup: {{ .Values.securityContext.fsGroup }}
@@ -73,7 +74,6 @@ spec:
           securityContext:
             runAsUser: {{ .Values.securityContext.runAsUser }}
           {{- end }}
-          serviceAccountName: {{ include "kibana.serviceAccountName" . }}
           env:
             - name: KIBANA_PORT_NUMBER
               value: {{ .Values.containerPort | quote }}

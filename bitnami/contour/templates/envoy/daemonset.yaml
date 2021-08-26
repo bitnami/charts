@@ -1,5 +1,4 @@
-{{- if .Values.envoy.enabled }}
----
+{{- if and .Values.envoy.enabled (eq .Values.envoy.kind "daemonset") }}
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:

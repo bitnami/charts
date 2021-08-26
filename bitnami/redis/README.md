@@ -285,9 +285,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sentinel.quorum`                             | Sentinel Quorum                                                                                     | `2`                      |
 | `sentinel.downAfterMilliseconds`              | Timeout for detecting a Redis&trade; node is down                                                   | `60000`                  |
 | `sentinel.failoverTimeout`                    | Timeout for performing a election failover                                                          | `18000`                  |
-| `sentinel.cleanDelaySeconds`                  | Delay seconds when cleaning nodes IPs                                                               | `5`                      |
 | `sentinel.parallelSyncs`                      | Number of replicas that can be reconfigured in parallel to use the new master after a failover      | `1`                      |
-| `sentinel.staticID`                           | Enable static Sentinel IDs for each replica                                                         | `false`                  |
 | `sentinel.configuration`                      | Configuration for Redis&trade; Sentinel nodes                                                       | `""`                     |
 | `sentinel.command`                            | Override default container command (useful when using custom images)                                | `[]`                     |
 | `sentinel.args`                               | Override default container args (useful when using custom images)                                   | `[]`                     |
@@ -451,9 +449,9 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### Change Redis&trade; version
+### Use a different Redis&trade; version
 
-To modify the Redis&trade; version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/redis/tags/) using the `image.tag` parameter. For example, `image.tag=X.Y.Z`. This approach is also applicable to other images like exporters.
+To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter. Refer to the [chart documentation for more information on these parameters and how to use them with images from a private registry](https://docs.bitnami.com/kubernetes/infrastructure/redis/configuration/change-image-version/).
 
 ### Cluster topologies
 
