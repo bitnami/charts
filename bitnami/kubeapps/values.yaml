@@ -1593,10 +1593,10 @@ kubeappsapis:
   extraEnvVars: []
   ## @param kubeappsapis.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for the KubeappsAPIs container
   ##
-  extraEnvVarsCM:
+  extraEnvVarsCM: ""
   ## @param kubeappsapis.extraEnvVarsSecret Name of existing Secret containing extra env vars for the KubeappsAPIs container
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: ""
   ## @param kubeappsapis.containerPort KubeappsAPIs HTTP container port
   ##
   containerPort: 50051
@@ -1729,7 +1729,7 @@ kubeappsapis:
   tolerations: []
   ## @param kubeappsapis.priorityClassName Priority class name for KubeappsAPIs pods
   ##
-  priorityClassName:
+  priorityClassName: ""
   ## @param kubeappsapis.hostAliases Custom host aliases for KubeappsAPIs pods
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
