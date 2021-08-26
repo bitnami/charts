@@ -16,7 +16,11 @@ spec:
   scaleTargetRef:
     apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
     kind: StatefulSet
+    {{ - if  .Values.sentinel.enabled }}
+    name: {{ printf "%s-node" (include "common.names.fullname" .) }}
+    {{ - else }}
     name: {{ printf "%s-replicas" (include "common.names.fullname" .) }}
+    {{ - end }}
   minReplicas: {{ .Values.replica.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.replica.autoscaling.maxReplicas }}
   metrics:
