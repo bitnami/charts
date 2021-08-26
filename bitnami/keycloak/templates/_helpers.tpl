@@ -161,7 +161,7 @@ Return the Database encrypted password
         {{- printf "%s" (include "keycloak.postgresql.fullname" .) -}}
     {{- end -}}
 {{- else -}}
-    {{- printf "%s-external-secret" ( include "common.names.fullname" . ) -}}
+    {{- printf "%s" (include "common.secrets.name" (dict "existingSecret" .Values.auth.existingSecret "context" $)) -}}
 {{- end -}}
 {{- end -}}
 
