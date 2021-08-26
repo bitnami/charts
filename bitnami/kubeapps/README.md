@@ -486,8 +486,8 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `kubeappsapis.replicaCount`                          | Number of frontend replicas to deploy                                                                                   | `1`                     |
 | `kubeappsapis.terminationGracePeriodSeconds`         | The grace time period for sig term                                                                                      | `300`                   |
 | `kubeappsapis.extraEnvVars`                          | Array with extra environment variables to add to the KubeappsAPIs container                                             | `[]`                    |
-| `kubeappsapis.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for the KubeappsAPIs container                                     | `nil`                   |
-| `kubeappsapis.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for the KubeappsAPIs container                                        | `nil`                   |
+| `kubeappsapis.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for the KubeappsAPIs container                                     | `""`                    |
+| `kubeappsapis.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for the KubeappsAPIs container                                        | `""`                    |
 | `kubeappsapis.containerPort`                         | KubeappsAPIs HTTP container port                                                                                        | `50051`                 |
 | `kubeappsapis.resources.limits.cpu`                  | The CPU limits for the KubeappsAPIs container                                                                           | `250m`                  |
 | `kubeappsapis.resources.limits.memory`               | The memory limits for the KubeappsAPIs container                                                                        | `256Mi`                 |
@@ -523,7 +523,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `kubeappsapis.affinity`                              | Affinity for pod assignment                                                                                             | `{}`                    |
 | `kubeappsapis.nodeSelector`                          | Node labels for pod assignment                                                                                          | `{}`                    |
 | `kubeappsapis.tolerations`                           | Tolerations for pod assignment                                                                                          | `[]`                    |
-| `kubeappsapis.priorityClassName`                     | Priority class name for KubeappsAPIs pods                                                                               | `nil`                   |
+| `kubeappsapis.priorityClassName`                     | Priority class name for KubeappsAPIs pods                                                                               | `""`                    |
 | `kubeappsapis.hostAliases`                           | Custom host aliases for KubeappsAPIs pods                                                                               | `[]`                    |
 | `kubeappsapis.service.port`                          | KubeappsAPIs service HTTP port                                                                                          | `8080`                  |
 | `kubeappsapis.service.annotations`                   | Additional custom annotations for KubeappsAPIs service                                                                  | `{}`                    |
