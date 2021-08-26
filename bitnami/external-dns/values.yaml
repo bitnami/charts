@@ -275,7 +275,7 @@ designate:
   ## @param designate.customCAHostPath When using the Designate provider, use a CA file already on the host to validate Openstack APIs.  This conflicts with `designate.customCA.enabled`
   ## This conflicts setting the above customCA to true and chart rendering will fail if you set customCA to true and specify customCAHostPath
   ##
-  customCAHostPath: /path/to/cafile
+  customCAHostPath: ""
   ## Use a custom CA (optional)
   ## @param designate.customCA.enabled When using the Designate provider, enable a custom CA (optional)
   ## @param designate.customCA.content When using the Designate provider, set the content of the custom CA
