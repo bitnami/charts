@@ -167,6 +167,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `affinity`                              | Affinity for pod assignment                                                               | `{}`            |
 | `nodeSelector`                          | Node labels for pod assignment                                                            | `{}`            |
 | `tolerations`                           | Tolerations for pod assignment                                                            | `[]`            |
+| `terminationGracePeriodSeconds`         | Seconds the pod needs to gracefully terminate                                             | `""`            |
 | `priorityClassName`                     | Name of the priority class to be used by etcd pods                                        | `""`            |
 
 

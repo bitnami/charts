@@ -83,15 +83,16 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### WildFly Configuration parameters
 
-| Name                 | Description                                                            | Value  |
-| -------------------- | ---------------------------------------------------------------------- | ------ |
-| `wildflyUsername`    | WildFly username                                                       | `user` |
-| `wildflyPassword`    | WildFly user password                                                  | `""`   |
-| `command`            | Override default container command (useful when using custom images)   | `[]`   |
-| `args`               | Override default container args (useful when using custom images)      | `[]`   |
-| `extraEnvVars`       | Array with extra environment variables to add to the WildFly container | `[]`   |
-| `extraEnvVarsCM`     | Name of existing ConfigMap containing extra env vars                   | `""`   |
-| `extraEnvVarsSecret` | Name of existing Secret containing extra env vars                      | `""`   |
+| Name                      | Description                                                            | Value   |
+| ------------------------- | ---------------------------------------------------------------------- | ------- |
+| `wildflyUsername`         | WildFly username                                                       | `user`  |
+| `wildflyPassword`         | WildFly user password                                                  | `""`    |
+| `exposeManagementConsole` | Allows exposing the WildFly Management console outside the cluster     | `false` |
+| `command`                 | Override default container command (useful when using custom images)   | `[]`    |
+| `args`                    | Override default container args (useful when using custom images)      | `[]`    |
+| `extraEnvVars`            | Array with extra environment variables to add to the WildFly container | `[]`    |
+| `extraEnvVarsCM`          | Name of existing ConfigMap containing extra env vars                   | `""`    |
+| `extraEnvVarsSecret`      | Name of existing Secret containing extra env vars                      | `""`    |
 
 
 ### WildFly deployment parameters
@@ -146,7 +147,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------ |
 | `service.type`                     | WildFly service type                                                                                  | `LoadBalancer`           |
 | `service.port`                     | WildFly service HTTP port                                                                             | `80`                     |
-| `service.mgmtPort`                 | WildFly service management console port                                                               | `443`                    |
+| `service.mgmtPort`                 | WildFly service management console port                                                               | `9990`                   |
 | `service.nodePorts.http`           | Node port for HTTP                                                                                    | `""`                     |
 | `service.nodePorts.mgmt`           | Node port for Management console                                                                      | `""`                     |
 | `service.clusterIP`                | WildFly service Cluster IP                                                                            | `""`                     |
@@ -154,7 +155,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.loadBalancerSourceRanges` | WildFly service Load Balancer sources                                                                 | `[]`                     |
 | `service.externalTrafficPolicy`    | WildFly service external traffic policy                                                               | `Cluster`                |
 | `service.annotations`              | Additional custom annotations for WildFly service                                                     | `{}`                     |
-| `service.extraPorts`               | Extra port to expose on WildFly service                                                               | `[]`                     |
+| `service.extraPorts`               | Extra ports to expose on WildFly service                                                              | `[]`                     |
 | `ingress.enabled`                  | Enable ingress record generation for WildFly                                                          | `false`                  |
 | `ingress.certManager`              | Add the corresponding annotations for cert-manager integration                                        | `false`                  |
 | `ingress.pathType`                 | Ingress path type                                                                                     | `ImplementationSpecific` |
@@ -167,6 +168,16 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host | `[]`                     |
 | `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                   | `[]`                     |
 | `ingress.secrets`                  | Custom TLS certificates as secrets                                                                    | `[]`                     |
+| `mgmtIngress.enabled`              | Set to true to enable ingress record generation for the Management console                            | `false`                  |
+| `mgmtIngress.certManager`          | Set this to true in order to add the corresponding annotations for cert-manager                       | `false`                  |
+| `mgmtIngress.pathType`             | Ingress path type                                                                                     | `ImplementationSpecific` |
+| `mgmtIngress.hostname`             | When the Management ingress is enabled, a host pointing to this will be created                       | `management.local`       |
+| `mgmtIngress.annotations`          | Health Ingress annotations                                                                            | `undefined`              |
+| `mgmtIngress.tls`                  | Enable TLS configuration for the hostname defined at `mgmtIngress.hostname` parameter                 | `false`                  |
+| `mgmtIngress.extraHosts`           | The list of additional hostnames to be covered with this Management ingress record                    | `undefined`              |
+| `mgmtIngress.extraPaths`           | An array with additional arbitrary paths that may need to be added to the ingress under the main host | `[]`                     |
+| `mgmtIngress.extraTls`             | TLS configuration for additional hostnames to be covered                                              | `undefined`              |
+| `mgmtIngress.secrets`              | TLS Secret configuration                                                                              | `undefined`              |
 
 
 ### Persistence Parameters
