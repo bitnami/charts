@@ -1743,7 +1743,8 @@ kubeappsapis:
     ## @param kubeappsapis.service.annotations Additional custom annotations for KubeappsAPIs service
     ##
     annotations: {}
-## Redis&trade; chart configuration
+
+## @section Redis&trade; chart configuration
 ## ref: https://github.com/bitnami/charts/blob/master/bitnami/redis/values.yaml
 ##
 redis:
@@ -1751,7 +1752,7 @@ redis:
   ## ref: https://github.com/bitnami/bitnami-docker-redis/blob/master/README.md#setting-the-server-password-on-first-run
   ##
   redisPassword: ""
-  ## @param redis.enabled Enable the redis deployment when deploying Kubeapps APIs.
+  ## @param redis.enabled Enable the Redis&trade; deployment when deploying Kubeapps APIs.
   ## We currently have the situation that Redis is required for the fluxv2 plugin only.
   ## Until such a point that we're releasing with the fluxv2 plugin enabled, or the
   ## plugin cache support has been generalised so all plugins use Redis, we'll need
