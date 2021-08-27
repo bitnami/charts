@@ -93,6 +93,7 @@ spec:
             failureThreshold: {{ .Values.contour.livenessProbe.failureThreshold }}
           {{- end }}
           name: shutdown-manager
+          resources: {{- toYaml .Values.envoy.shutdownManager.resources | nindent 12 }}
           {{- if .Values.envoy.extraVolumeMounts }}
           volumeMounts:
             {{- include "common.tplvalues.render" ( dict "value" .Values.envoy.extraVolumeMounts "context" $ ) | nindent 12 }}
