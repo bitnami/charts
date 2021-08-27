@@ -142,6 +142,8 @@ $ helm uninstall my-release
 | `envoy.hostAliases`                                 | Add deployment host aliases                                                                                           | `[]`                  |
 | `envoy.resources.limits`                            | Specify resource limits which the container is not allowed to succeed.                                                | `{}`                  |
 | `envoy.resources.requests`                          | Specify resource requests which the container needs to spawn.                                                         | `{}`                  |
+| `envoy.shutdownManager.resources.limits`            | Specify resource limits which the container is not allowed to succeed.                                                | `{}`                  |
+| `envoy.shutdownManager.resources.requests`          | Specify resource requests which the container needs to spawn.                                                         | `{}`                  |
 | `envoy.kind`                                        | Install as deployment or daemonset                                                                                    | `daemonset`           |
 | `envoy.replicaCount`                                | Desired number of Controller pods                                                                                     | `1`                   |
 | `envoy.updateStrategy`                              | Strategy to use to update Pods                                                                                        | `{}`                  |
