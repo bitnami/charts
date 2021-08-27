@@ -208,6 +208,7 @@ $ helm install my-release bitnami/dataplatform-bp1 \
     --set wavefront.wavefront.url=https://<YOUR_CLUSTER>.wavefront.com \
     --set wavefront.wavefront.token=<YOUR_API_TOKEN>
 ```
+
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
@@ -223,6 +224,7 @@ If you want to use an existing Wavefront deployment, edit the Wavefront Collecto
 ```console
 $ kubectl edit configmap wavefront-collector-config -n wavefront
 ```
+
 Add the below config:
 ```yaml
      config:
@@ -280,6 +282,7 @@ Add the below config:
           scheme: http
           prefix: spark.
 ```
+
 Below is the command to restart the DaemonSets
 
 ```console
