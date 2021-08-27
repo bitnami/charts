@@ -17,8 +17,8 @@ spec:
   replicas: {{ .Values.envoy.replicaCount }}
   {{- end }}
   revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
-  {{- if .Values.updateStrategy }}
-  strategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
+  {{- if .Values.envoy.updateStrategy }}
+  strategy: {{- toYaml .Values.envoy.updateStrategy | nindent 4 }}
   {{- end }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
@@ -102,6 +102,7 @@ spec:
             failureThreshold: {{ .Values.contour.livenessProbe.failureThreshold }}
           {{- end }}
           name: shutdown-manager
+          resources: {{- toYaml .Values.envoy.shutdownManager.resources | nindent 12 }}
           {{- if .Values.envoy.extraVolumeMounts }}
           volumeMounts:
             {{- include "common.tplvalues.render" ( dict "value" .Values.envoy.extraVolumeMounts "context" $ ) | nindent 12 }}

@@ -45,7 +45,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/nginx-ingress-controller
-  tag: 0.48.1-debian-10-r37
+  tag: 0.48.1-debian-10-r38
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -439,7 +439,7 @@ defaultBackend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.21.1-debian-10-r45
+    tag: 1.21.1-debian-10-r46
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images

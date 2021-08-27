@@ -76,7 +76,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------ | ----------------------------------------------------------------------------------------- | ------------------------- |
 | `image.registry`                     | EJBCA image registry                                                                      | `docker.io`               |
 | `image.repository`                   | EJBCA image name                                                                          | `bitnami/ejbca`           |
-| `image.tag`                          | EJBCA image tag                                                                           | `6.15.2-6-debian-10-r315` |
+| `image.tag`                          | EJBCA image tag                                                                           | `6.15.2-6-debian-10-r335` |
 | `image.pullPolicy`                   | EJBCA image pull policy                                                                   | `IfNotPresent`            |
 | `image.pullSecrets`                  | Specify docker-registry secret names as an array                                          | `[]`                      |
 | `image.debug`                        | Enable image debug mode                                                                   | `false`                   |
@@ -159,7 +159,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.pathType`    | Ingress Path type                                                                             | `ImplementationSpecific` |
 | `ingress.apiVersion`  | Override API Version (automatically detected if not set)                                      | `""`                     |
 | `ingress.hostname`    | Default host for the ingress resource                                                         | `ejbca.local`            |
-| `ingress.path`        | The Path to EJBCA. You may need to set this to '/*' in order to use this                      | `ImplementationSpecific` |
+| `ingress.path`        | The Path to EJBCA. You may need to set this to '/*' in order to use this                      | `/`                      |
 | `ingress.annotations` | Ingress annotations done as key:value pairs                                                   | `{}`                     |
 | `ingress.tls`         | Enable TLS configuration for the hostname defined at ingress.hostname parameter               | `false`                  |
 | `ingress.extraHosts`  | The list of additional hostnames to be covered with this ingress record.                      | `[]`                     |
