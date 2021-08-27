@@ -226,6 +226,7 @@ $ kubectl edit configmap wavefront-collector-config -n wavefront
 ```
 
 Add the below config:
+
 ```yaml
      config:
         ## auto-discover kafka-exporter
