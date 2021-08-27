@@ -198,6 +198,9 @@ socketSendBufferBytes: 102400
 ## @param zookeeperConnectionTimeoutMs Timeout in ms for connecting to Zookeeper
 ##
 zookeeperConnectionTimeoutMs: 6000
+## @param zookeeperChrootPath Path which puts data under some path in the global ZooKeeper namespace
+##
+zookeeperChrootPath: ""
 ## @param authorizerClassName The Authorizer is configured by setting authorizer.class.name=kafka.security.authorizer.AclAuthorizer in server.properties.
 ##
 authorizerClassName: ""
