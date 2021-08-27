@@ -195,6 +195,16 @@ $ helm install my-release \
 
 The above command deploys the data platform with Kafka with 3 nodes (replicas).
 
+Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
+
+```console
+$ helm install my-release -f values.yaml bitnami/dataplatform-bp1
+```
+
+> **Tip**: You can use the default [values.yaml](values.yaml)
+
+### Data Platform Deployment with Observability Framework
+
 In case you need to deploy the data platform with [Tanzu Observability](https://docs.wavefront.com/kubernetes.html) Framework for all the applications (Kafka/Spark/Solr) in the data platform, you can specify the 'enabled' parameter using the `--set <component>.metrics.enabled=true` argument to `helm install`. For Solr, the parameter is `solr.exporter.enabled=true` For Example,
 
 ```console
@@ -208,16 +218,6 @@ $ helm install my-release bitnami/dataplatform-bp1 \
     --set wavefront.wavefront.url=https://<YOUR_CLUSTER>.wavefront.com \
     --set wavefront.wavefront.token=<YOUR_API_TOKEN>
 ```
-
-Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
-
-```console
-$ helm install my-release -f values.yaml bitnami/dataplatform-bp1
-```
-
-> **Tip**: You can use the default [values.yaml](values.yaml)
-
-### Data Platform Deployment with Observability Framework
 
 If you want to use an existing Wavefront deployment, edit the Wavefront Collector ConfigMap and add the following snippet under Prometheus sources. Once done, restart the wavefront collectors DaemonSet.
 
