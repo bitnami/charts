@@ -1194,6 +1194,9 @@ metrics:
     ## @param metrics.serviceMonitor.relabellings Metrics relabellings to add to the scrape endpoint
     ##
     relabellings: []
+    ## @param metrics.serviceMonitor.metricRelabelings Metrics metricRelabelings to add to the scrape endpoint
+    ##
+    metricRelabelings: []
     ## @param metrics.serviceMonitor.honorLabels Specify honorLabels parameter to add the scrape endpoint
     ##
     honorLabels: false
