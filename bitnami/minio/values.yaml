@@ -213,7 +213,8 @@ statefulset:
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
 hostAliases: []
-## @param containerPort MinIO&reg; container port to open
+## @param containerPorts.api MinIO&reg; container port to open for MinIO&reg; API
+## @param containerPorts.console MinIO&reg; container port to open for MinIO&reg; Console
 ##
 containerPorts:
   api: 9000
@@ -398,7 +399,8 @@ service:
   ## @param service.type MinIO&reg; service type
   ##
   type: ClusterIP
-  ## @param service.port MinIO&reg; service port
+  ## @param service.ports.api MinIO&reg; API service port
+  ## @param service.ports.console MinIO&reg; Console service port
   ##
   ports:
     api: 9000
