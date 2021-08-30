@@ -480,7 +480,7 @@ persistence:
     - ReadWriteOnce
   ## @param persistence.size PVC Storage Request for ZooKeeper data volume
   ##
-  size: 8Gi
+  size: 20Gi
   ## @param persistence.annotations Annotations for the PVC
   ##
   annotations: {}
@@ -495,7 +495,7 @@ persistence:
   dataLogDir:
     ## @param persistence.dataLogDir.size PVC Storage Request for ZooKeeper's Data log directory
     ##
-    size: 8Gi
+    size: 20Gi
     ## @param persistence.dataLogDir.existingClaim Provide an existing `PersistentVolumeClaim` for Zookeeper's Data log directory
     ## If defined, PVC must be created manually before volume will be bound
     ## The value is evaluated as a template
