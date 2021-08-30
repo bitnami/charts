@@ -215,7 +215,9 @@ statefulset:
 hostAliases: []
 ## @param containerPort MinIO&reg; container port to open
 ##
-containerPort: 9000
+containerPorts:
+  api: 9000
+  console: 9001
 ## MinIO&reg; pod Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enable pod Security Context
@@ -398,7 +400,9 @@ service:
   type: ClusterIP
   ## @param service.port MinIO&reg; service port
   ##
-  port: 9000
+  ports:
+    api: 9000
+    console: 9001
   ## @param service.nodePort Specify the nodePort value for the LoadBalancer and NodePort service types
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
@@ -449,7 +453,7 @@ ingress:
   ## @param ingress.servicePort Service port to be used
   ## Default is http. Alternative is https.
   ##
-  servicePort: minio
+  servicePort: minio-console
   ## @param ingress.annotations Ingress annotations
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md

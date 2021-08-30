@@ -20,7 +20,7 @@ metadata:
   {{- end }}
 spec:
   endpoints:
-    - port: minio
+    - port: minio-console
       path: {{ .Values.metrics.serviceMonitor.path }}
       {{- if .Values.metrics.serviceMonitor.interval }}
       interval: {{ .Values.metrics.serviceMonitor.interval }}
