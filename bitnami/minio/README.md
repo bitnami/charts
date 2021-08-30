@@ -466,12 +466,12 @@ Find more information about how to deal with common errors related to Bitnami's 
 ### To 8.0.0
 
 This version updates MinIO&reg; after some major changes, affecting its Web UI. MinIO&reg; has replaced its MinIO&reg; Browser with the MinIO&reg; Console, and Web UI has been moved to a separated port. As a result the following variables have been affected:
-- `.Values.service.port` has been slit into `.Values.service.ports.api` (default: 9090) and `.Values.service.ports.console` (default: 9091).
-- `.Values.containerPort` has been slit into `.Values.containerPorts.api` (default: 9090) and `.Values.containerPort.console` (default: 9091).
+- `.Values.service.port` has been slit into `.Values.service.ports.api` (default: 9000) and `.Values.service.ports.console` (default: 9001).
+- `.Values.containerPort` has been slit into `.Values.containerPorts.api` (default: 9000) and `.Values.containerPort.console` (default: 9001).
 - Service port `minio` has been replaced with `minio-api` and `minio-console` with target ports minio-api and minio-console respectively.
 - Liveness, readiness and startup probes now use port `minio-console` instead of `minio`.
 
-Please note that Web UI, previously running on port 9090 will now use port 9091 leaving port 9090 for the MinIO&reg; Server API.
+Please note that Web UI, previously running on port 9000 will now use port 9001 leaving port 9000 for the MinIO&reg; Server API.
 
 ### To 7.0.0
 
