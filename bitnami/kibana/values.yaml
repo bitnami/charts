@@ -507,41 +507,52 @@ tls:
   ##
   passwordsSecret: ""
 
-## @param elasticsearch [object] Properties for Elasticsearch
+## Elasticsearch parameters
 ##
 elasticsearch:
+  ## @param elasticsearch.hosts List of elasticsearch hosts to connect to.
   ## e.g:
   ## hosts:
   ##   - elasticsearch-1
   ##   - elasticsearch-2
   ##
   hosts: []
+  ## @param elasticsearch.port Elasticsearch port
+  ##
   port: ""
 
   security:
     auth:
+      ## @param elasticsearch.security.auth.enabled Set to 'true' if Elasticsearch has authentication enabled
+      ##
       enabled: false
+      ## @param elasticsearch.security.auth.kibanaUsername Kibana server user to authenticate with Elasticsearch
+      ##
       kibanaUsername: "elastic"
+      ## @param elasticsearch.security.auth.kibanaPassword Kibana server password to authenticate with Elasticsearch
+      ##
       kibanaPassword:
-      ## Name of the existing secret containing Kibana password
+      ## @param elasticsearch.security.auth.existingSecret Name of the existing secret containing the Password for the Kibana user
       ##
       existingSecret:
     tls:
-      ## Elasticsearch REST API has TLS/SSL enabled
+      ## @param elasticsearch.security.tls.enabled Set to 'true' if Elasticsearch API uses TLS/SSL (HTTPS)
+      ##
       enabled: false
-      ## Verification mode for SSL communications.
+      ## @param elasticsearch.security.tls.verificationMode Verification mode for SSL communications.
       ## Supported values: full, certificate, none.
       ## Ref: https://www.elastic.co/guide/en/kibana/7.x/settings.html#elasticsearch-ssl-verificationmode
       verificationMode: "full"
-      ## Name of the existing secret containing Elasticsearch Truststore or CA certificate. Required unless verificationMode=none
+      ## @param elasticsearch.security.tls.existingSecret Name of the existing secret containing Elasticsearch Truststore or CA certificate. Required unless verificationMode=none
+      ##
       ##
       existingSecret:
-      ## Set to true to use PEM certificates instead of PKCS12.
+      ## @param elasticsearch.security.tls.usePemCerts Set to 'true' to use PEM certificates instead of PKCS12.
       ##
       usePemCerts: false
-      ## Password to access the PKCS12 trustore if it is password-protected.
+      ## @param elasticsearch.security.tls.truststorePassword Password to access the PKCS12 trustore in case it is password-protected.
       ##
       truststorePassword:
-      ## Name of a existing secret containing the Truststore password
+      ## @param elasticsearch.security.tls.passwordsSecret Name of a existing secret containing the Truststore password
       ##
       passwordsSecret:
