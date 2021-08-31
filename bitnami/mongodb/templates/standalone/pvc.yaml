@@ -18,7 +18,6 @@ metadata:
   {{- include "common.tplvalues.render" ( dict "value" .Values.persistence.annotations "context" $) | nindent 4 }}
   {{- end }}
   {{- end }}
-
 spec:
   accessModes:
   {{- range .Values.persistence.accessModes }}
