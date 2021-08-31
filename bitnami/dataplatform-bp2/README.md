@@ -253,7 +253,7 @@ $ helm install my-release bitnami/dataplatform-bp2 \
     --set wavefront.wavefront.token=<YOUR_API_TOKEN>
 ```
 
-If you want to use an existing Wavefront deployment, edit the Wavefront Collector ConfigMap and add the following snippet under Prometheus sources. Once done, restart the wavefront collectors DaemonSet.
+If you want to use an existing Wavefront deployment, edit the Wavefront Collector ConfigMap and add the following snippet under discovery. Once done, restart the wavefront collectors DaemonSet.
 
 ```console
 $ kubectl edit configmap wavefront-collector-config -n wavefront
@@ -262,7 +262,7 @@ $ kubectl edit configmap wavefront-collector-config -n wavefront
 Add the below config:
 
 ```yaml
-       config:
+        plugins:
         ## auto-discover kafka-exporter
         - name: kafka-discovery
           type: prometheus
