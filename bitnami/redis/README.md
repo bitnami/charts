@@ -290,6 +290,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sentinel.command`                            | Override default container command (useful when using custom images)                                | `[]`                     |
 | `sentinel.args`                               | Override default container args (useful when using custom images)                                   | `[]`                     |
 | `sentinel.preExecCmds`                        | Additional commands to run prior to starting Redis&trade; Sentinel                                  | `[]`                     |
+| `sentinel.extraEnvVars`                       | Array with extra environment variables to add to Redis&trade; Sentinel nodes                        | `[]`                     |
+| `sentinel.extraEnvVarsCM`                     | Name of existing ConfigMap containing extra env vars for Redis&trade; Sentinel nodes                | `""`                     |
+| `sentinel.extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for Redis&trade; Sentinel nodes                   | `""`                     |
 | `sentinel.containerPort`                      | Container port to open on Redis&trade; Sentinel nodes                                               | `26379`                  |
 | `sentinel.livenessProbe.enabled`              | Enable livenessProbe on Redis&trade; Sentinel nodes                                                 | `true`                   |
 | `sentinel.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                             | `20`                     |
