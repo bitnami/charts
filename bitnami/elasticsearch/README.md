@@ -644,7 +644,10 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ### To 16.0.0
 
-This version replaces the Ingest and Coordinating Deployments with Statefulsets.
+This version replaces the Ingest and Coordinating Deployments with Statefulsets. This change is required so Coordinating and Ingest nodes have their services associated,
+required for TLS hostname verification.
+
+We haven't encountered any issues during our upgrade test, but we recommend creating volumes backups before upgrading this major version, especially for users with additional volumes and custom configurations.
 
 Additionally, this version adds support for X-Pack Security features such as TLS/SSL encryption and basic authentication.
 
