@@ -176,6 +176,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                               | Description                                                                       | Value       |
 | ---------------------------------- | --------------------------------------------------------------------------------- | ----------- |
 | `service.type`                     | Kubernetes Service type                                                           | `ClusterIP` |
+| `service.clusterIP`                | Kubernetes service Cluster IP                                                     | `""`        |
 | `service.port`                     | etcd client port                                                                  | `2379`      |
 | `service.clientPortNameOverride`   | etcd client port name override                                                    | `""`        |
 | `service.peerPort`                 | etcd peer port                                                                    | `2380`      |
