@@ -74,7 +74,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------ | ------------------------------------------------------------- | --------------------- |
 | `image.registry`               | Solr image registry                                           | `docker.io`           |
 | `image.repository`             | Solr image repository                                         | `bitnami/solr`        |
-| `image.tag`                    | Solr image tag (immutable tags are recommended)               | `8.9.0-debian-10-r35` |
+| `image.tag`                    | Solr image tag (immutable tags are recommended)               | `8.9.0-debian-10-r58` |
 | `image.pullPolicy`             | image pull policy                                             | `IfNotPresent`        |
 | `image.pullSecrets`            | Specify docker-registry secret names as an array              | `[]`                  |
 | `coreName`                     | Solr core name to be created                                  | `my-core`             |
@@ -147,7 +147,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                               | Enable init container that changes volume permissions in the registry (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`                        | Init container volume-permissions image registry                                                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                      | Init container volume-permissions image name                                                                                                        | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                             | Init container volume-permissions image tag                                                                                                         | `10-debian-10-r149`     |
+| `volumePermissions.image.tag`                             | Init container volume-permissions image tag                                                                                                         | `10-debian-10-r172`     |
 | `volumePermissions.image.pullPolicy`                      | Init container volume-permissions image pull policy                                                                                                 | `Always`                |
 | `volumePermissions.image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                                                    | `[]`                    |
 | `volumePermissions.resources.limits`                      | The resources limits for the container                                                                                                              | `{}`                    |
@@ -196,7 +196,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.pathType`        | Path type for the ingress resource                                                                    | `ImplementationSpecific` |
 | `ingress.apiVersion`      | Override API Version (automatically detected if not set)                                              | `""`                     |
 | `ingress.hostname`        | Default host for the ingress resource                                                                 | `solr.local`             |
-| `ingress.path`            | The Path to Solr. You may need to set this to '/*' in order to use this with ALB ingress controllers. | `ImplementationSpecific` |
+| `ingress.path`            | The Path to Solr. You may need to set this to '/*' in order to use this with ALB ingress controllers. | `/`                      |
 | `ingress.annotations`     | Ingress annotations                                                                                   | `{}`                     |
 | `ingress.tls`             | Enable TLS configuration for the hostname defined at ingress.hostname parameter                       | `false`                  |
 | `ingress.existingSecret`  | The name of an existing Secret in the same namespase to use on the generated Ingress resource         | `""`                     |
@@ -307,9 +307,9 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### Change Solr version
+### Use a different Apache Solr version
 
-To modify the Solr version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/solr/tags/) using the `image.tag` parameter. For example, `image.tag=X.Y.Z`. This approach is also applicable to other images like exporters.
+To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter. Refer to the [chart documentation for more information on these parameters and how to use them with images from a private registry](https://docs.bitnami.com/kubernetes/infrastructure/solr/configuration/change-image-version/).
 
 ### Add extra environment variables
 

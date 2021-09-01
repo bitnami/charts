@@ -168,15 +168,15 @@ $ helm install my-release -f values.yaml bitnami/wavefront-hpa-adapter
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling vs Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### Connecting to a Wavefront instance
+### Connect to a Wavefront instance
 
-Wavefront HPA for Kubernetes only works when setting a Wavefront SaaS instance with a proper API token. This is done by setting the `wavefront.url` and `wavefront.token` values. Sign up for an account in the [official Wavefront page](https://www.wavefront.com/sign-up).
+Wavefront HPA for Kubernetes only works when it configured to use a Wavefront SaaS instance with a proper API token. This is done by setting the `wavefront.url` and `wavefront.token` values. Obtain an instance and an API token by signing up for an account through the [official Wavefront sign-up page](https://www.wavefront.com/sign-up). Refer to the [chart documentation for a configuration example](https://docs.bitnami.com/kubernetes/apps/wavefront-hpa-adapter-for-kubernetes/get-started/configure-connection/).
 
 ## Troubleshooting
 

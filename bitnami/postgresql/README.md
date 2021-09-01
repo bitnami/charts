@@ -88,14 +88,14 @@ $ kubectl delete pvc -l release=my-release
 | --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
 | `image.registry`                              | PostgreSQL image registry                                                                                                                                 | `docker.io`                 |
 | `image.repository`                            | PostgreSQL image repository                                                                                                                               | `bitnami/postgresql`        |
-| `image.tag`                                   | PostgreSQL image tag (immutable tags are recommended)                                                                                                     | `11.12.0-debian-10-r70`     |
+| `image.tag`                                   | PostgreSQL image tag (immutable tags are recommended)                                                                                                     | `11.13.0-debian-10-r12`     |
 | `image.pullPolicy`                            | PostgreSQL image pull policy                                                                                                                              | `IfNotPresent`              |
 | `image.pullSecrets`                           | Specify image pull secrets                                                                                                                                | `[]`                        |
 | `image.debug`                                 | Specify if debug values should be set                                                                                                                     | `false`                     |
 | `volumePermissions.enabled`                   | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                     |
 | `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                                                          | `docker.io`                 |
 | `volumePermissions.image.repository`          | Init container volume-permissions image repository                                                                                                        | `bitnami/bitnami-shell`     |
-| `volumePermissions.image.tag`                 | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `10-debian-10-r150`         |
+| `volumePermissions.image.tag`                 | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `10-debian-10-r172`         |
 | `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                                                       | `Always`                    |
 | `volumePermissions.image.pullSecrets`         | Init container volume-permissions image pull secrets                                                                                                      | `[]`                        |
 | `volumePermissions.securityContext.runAsUser` | User ID for the init container                                                                                                                            | `0`                         |
@@ -287,7 +287,7 @@ $ kubectl delete pvc -l release=my-release
 | `metrics.prometheusRule.rules`                | (https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/) to be created                                                                | `[]`                        |
 | `metrics.image.registry`                      | PostgreSQL Exporter image registry                                                                                                                        | `docker.io`                 |
 | `metrics.image.repository`                    | PostgreSQL Exporter image repository                                                                                                                      | `bitnami/postgres-exporter` |
-| `metrics.image.tag`                           | PostgreSQL Exporter image tag (immutable tags are recommended)                                                                                            | `0.10.0-debian-10-r18`      |
+| `metrics.image.tag`                           | PostgreSQL Exporter image tag (immutable tags are recommended)                                                                                            | `0.10.0-debian-10-r40`      |
 | `metrics.image.pullPolicy`                    | PostgreSQL Exporter image pull policy                                                                                                                     | `IfNotPresent`              |
 | `metrics.image.pullSecrets`                   | Specify image pull secrets                                                                                                                                | `[]`                        |
 | `metrics.customMetrics`                       | Define additional custom metrics                                                                                                                          | `{}`                        |
@@ -340,9 +340,9 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 At the top level, there is a service object which defines the services for both primary and readReplicas. For deeper customization, there are service objects for both the primary and read types individually. This allows you to override the values in the top level service object so that the primary and read can be of different service types and with different clusterIPs / nodePorts. Also in the case you want the primary and read to be of type nodePort, you will need to set the nodePorts to different values to prevent a collision. The values that are deeper in the primary.service or readReplicas.service objects will take precedence over the top level service object.
 
-### Change PostgreSQL version
+### Use a different PostgreSQL version
 
-To modify the PostgreSQL version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/postgresql/tags/) using the `image.tag` parameter. For example, `image.tag=X.Y.Z`. This approach is also applicable to other images like exporters.
+To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter. Refer to the [chart documentation for more information on these parameters and how to use them with images from a private registry](https://docs.bitnami.com/kubernetes/infrastructure/postgresql/configuration/change-image-version/).
 
 ### postgresql.conf / pg_hba.conf files as configMap
 

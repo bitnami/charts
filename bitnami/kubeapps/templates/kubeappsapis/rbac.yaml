@@ -1,0 +1,55 @@
+{{- if .Values.featureFlags.kubeappsAPIsServer }}
+{{- if .Values.rbac.create -}}
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
+kind: ClusterRole
+metadata:
+  name: "kubeapps:controller:kubeapps-apis-dev-{{ .Release.Namespace }}"
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: kubeappsapis
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" . ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+rules:
+  - apiGroups:
+      - "packageinstalls.packaging.carvel.dev"
+      - "packagerepositories.packaging.carvel.dev"
+      - "source.toolkit.fluxcd.io"
+      - "helm.toolkit.fluxcd.io"
+    resources: ['*']
+    verbs: ['*']
+  # So that our dev user is seen as having access to a namespace.
+  # We'll need to add rbac for our dev user to install later as well.
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["get", "list"]
+{{- if .Values.kubeappsapis.unsafeUseDemoSA }}
+# Dev-only ClusterRoleBinding to the ServiceAccount
+---
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
+kind: ClusterRoleBinding
+metadata:
+  name: "kubeapps:controller:kubeapps-apis-dev-{{ .Release.Namespace }}"
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: kubeappsapis
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" . ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: "kubeapps:controller:kubeapps-apis-dev-{{ .Release.Namespace }}"
+subjects:
+  - kind: ServiceAccount
+    name: {{ template "kubeapps.kubeappsapis.fullname" . }}
+    namespace: {{ .Release.Namespace }}
+{{- end }}
+{{- end }}
+{{- end }}

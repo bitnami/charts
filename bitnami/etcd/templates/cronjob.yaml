@@ -96,7 +96,7 @@ spec:
             {{- if .Values.auth.client.secureTransport }}
             - name: certs
               secret:
-                secretName: {{ required "A secret containinig the client certificates is required" .Values.auth.client.existingSecret }}
+                secretName: {{ required "A secret containinig the client certificates is required" (tpl .Values.auth.client.existingSecret .) }}
                 defaultMode: 256
             {{- end }}
             - name: snapshot-volume

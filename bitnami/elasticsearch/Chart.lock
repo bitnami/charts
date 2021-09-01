@@ -4,6 +4,6 @@ dependencies:
   version: 1.8.0
 - name: kibana
   repository: https://charts.bitnami.com/bitnami
-  version: 8.1.9
-digest: sha256:d4161a3af7155a8e0b549f489d9d3e13615bc1f9926f570fb04d6966be8a407e
-generated: "2021-08-04T17:56:24.767510356Z"
+  version: 8.2.1
+digest: sha256:1d1f40af5af88558edbfc0e7040a709e3f5a190ce3ae123a465c3762b400a7b4
+generated: "2021-08-24T17:36:48.822561707Z"

@@ -77,7 +77,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`           | MySQL image registry                                                                                                                                                                | `docker.io`            |
 | `image.repository`         | MySQL image repository                                                                                                                                                              | `bitnami/mysql`        |
-| `image.tag`                | MySQL image tag (immutable tags are recommended)                                                                                                                                    | `8.0.26-debian-10-r10` |
+| `image.tag`                | MySQL image tag (immutable tags are recommended)                                                                                                                                    | `8.0.26-debian-10-r31` |
 | `image.pullPolicy`         | MySQL image pull policy                                                                                                                                                             | `IfNotPresent`         |
 | `image.pullSecrets`        | Specify docker-registry secret names as an array                                                                                                                                    | `[]`                   |
 | `image.debug`              | Specify if debug logs should be enabled                                                                                                                                             | `false`                |
@@ -274,7 +274,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`           | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                                     | `docker.io`             |
 | `volumePermissions.image.repository`  | Init container volume-permissions image repository                                                                   | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`         | Init container volume-permissions image tag (immutable tags are recommended)                                         | `10-debian-10-r151`     |
+| `volumePermissions.image.tag`         | Init container volume-permissions image tag (immutable tags are recommended)                                         | `10-debian-10-r172`     |
 | `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                  | `Always`                |
 | `volumePermissions.image.pullSecrets` | Specify docker-registry secret names as an array                                                                     | `[]`                    |
 | `volumePermissions.resources`         | Init container volume-permissions resources                                                                          | `{}`                    |
@@ -287,7 +287,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                            | Start a side-car prometheus exporter                                                                                  | `false`                   |
 | `metrics.image.registry`                     | Exporter image registry                                                                                               | `docker.io`               |
 | `metrics.image.repository`                   | Exporter image repository                                                                                             | `bitnami/mysqld-exporter` |
-| `metrics.image.tag`                          | Exporter image tag (immutable tags are recommended)                                                                   | `0.13.0-debian-10-r54`    |
+| `metrics.image.tag`                          | Exporter image tag (immutable tags are recommended)                                                                   | `0.13.0-debian-10-r75`    |
 | `metrics.image.pullPolicy`                   | Exporter image pull policy                                                                                            | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                      | `[]`                      |
 | `metrics.service.type`                       | Kubernetes service type for MySQL Prometheus Exporter                                                                 | `ClusterIP`               |
@@ -348,9 +348,9 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### Change MySQL version
+### Use a different MySQL version
 
-To modify the MySQL version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/mysql/tags/) using the `image.tag` parameter. For example, `image.tag=X.Y.Z`. This approach is also applicable to other images like exporters.
+To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter. Refer to the [chart documentation for more information on these parameters and how to use them with images from a private registry](https://docs.bitnami.com/kubernetes/infrastructure/mysql/configuration/change-image-version/).
 
 ### Customize a new MySQL instance
 

@@ -25,7 +25,7 @@ spec:
   ports:
     {{ if not .Values.service.disableBaseClientPort }}
     - name: tcp-client
-      port: 2181
+      port: {{ .Values.service.port }}
       targetPort: client
       {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.client)) }}
       nodePort: {{ .Values.service.nodePorts.client }}
@@ -44,10 +44,10 @@ spec:
       {{- end }}
     {{ end }}
     - name: follower
-      port: 2888
+      port: {{ .Values.service.followerPort }}
       targetPort: follower
     - name: tcp-election
-      port: 3888
+      port: {{ .Values.service.electionPort }}
       targetPort: election
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: zookeeper

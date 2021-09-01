@@ -78,13 +78,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------- | ---------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `image.registry`          | MinIO&reg; image registry                                                                                  | `docker.io`               |
 | `image.repository`        | MinIO&reg; image repository                                                                                | `bitnami/minio`           |
-| `image.tag`               | MinIO&reg; image tag (immutable tags are recommended)                                                      | `2021.6.17-debian-10-r38` |
+| `image.tag`               | MinIO&reg; image tag (immutable tags are recommended)                                                      | `2021.6.17-debian-10-r58` |
 | `image.pullPolicy`        | Image pull policy                                                                                          | `IfNotPresent`            |
 | `image.pullSecrets`       | Specify docker-registry secret names as an array                                                           | `[]`                      |
 | `image.debug`             | Specify if debug logs should be enabled                                                                    | `false`                   |
 | `clientImage.registry`    | MinIO&reg; Client image registry                                                                           | `docker.io`               |
 | `clientImage.repository`  | MinIO&reg; Client image repository                                                                         | `bitnami/minio-client`    |
-| `clientImage.tag`         | MinIO&reg; Client image tag (immutable tags are recommended)                                               | `2021.7.27-debian-10-r7`  |
+| `clientImage.tag`         | MinIO&reg; Client image tag (immutable tags are recommended)                                               | `2021.7.27-debian-10-r28` |
 | `mode`                    | MinIO&reg; server mode (`standalone` or `distributed`)                                                     | `standalone`              |
 | `accessKey.password`      | MinIO&reg; Access Key. Ignored if existing secret is provided.                                             | `""`                      |
 | `accessKey.forcePassword` | Option to force users to specify a password. That is required for 'helm upgrade' to work properly.         | `false`                   |
@@ -211,7 +211,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                                                     | `docker.io`             |
 | `volumePermissions.image.repository`                   | Init container volume-permissions image repository                                                                   | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                         | `10-debian-10-r151`     |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                         | `10-debian-10-r172`     |
 | `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                                                                  | `Always`                |
 | `volumePermissions.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                     | `[]`                    |
 | `volumePermissions.resources.limits`                   | Init container volume-permissions resource limits                                                                    | `{}`                    |
@@ -253,24 +253,34 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Gateway parameters
 
-| Name                                    | Description                                                    | Value                      |
-| --------------------------------------- | -------------------------------------------------------------- | -------------------------- |
-| `gateway.enabled`                       | Use MinIO&reg; as Gateway for other storage systems            | `false`                    |
-| `gateway.type`                          | Gateway type. Supported types are: `azure`, `gcs`, `nas`, `s3` | `s3`                       |
-| `gateway.replicaCount`                  | Number of MinIO&reg; Gateway replicas                          | `4`                        |
-| `gateway.auth.azure.accessKey`          | Access Key to access MinIO using Azure Gateway                 | `""`                       |
-| `gateway.auth.azure.secretKey`          | Secret Key to access MinIO using Azure Gateway                 | `""`                       |
-| `gateway.auth.azure.storageAccountName` | Azure Storage Account Name to use to access Azure Blob Storage | `""`                       |
-| `gateway.auth.azure.storageAccountKey`  | Azure Storage Account Key to use to access Azure Blob Storage  | `""`                       |
-| `gateway.auth.gcs.accessKey`            | Access Key to access MinIO using GCS Gateway                   | `""`                       |
-| `gateway.auth.gcs.secretKey`            | Secret Key to access MinIO using GCS Gateway                   | `""`                       |
-| `gateway.auth.gcs.keyJSON`              | Service Account key to access GCS                              | `""`                       |
-| `gateway.auth.gcs.projectID`            | GCP Project ID to use                                          | `""`                       |
-| `gateway.auth.nas.accessKey`            | Access Key to access MinIO using NAS Gateway                   | `""`                       |
-| `gateway.auth.nas.secretKey`            | Secret Key to access MinIO using NAS Gateway                   | `""`                       |
-| `gateway.auth.s3.accessKey`             | Access Key to use to access AWS S3                             | `""`                       |
-| `gateway.auth.s3.secretKey`             | Secret Key to use to access AWS S3                             | `""`                       |
-| `gateway.auth.s3.serviceEndpoint`       | AWS S3 endpoint                                                | `https://s3.amazonaws.com` |
+| Name                                                     | Description                                                                                        | Value                      |
+| -------------------------------------------------------- | -------------------------------------------------------------------------------------------------- | -------------------------- |
+| `gateway.enabled`                                        | Use MinIO&reg; as Gateway for other storage systems                                                | `false`                    |
+| `gateway.type`                                           | Gateway type. Supported types are: `azure`, `gcs`, `nas`, `s3`                                     | `s3`                       |
+| `gateway.replicaCount`                                   | Number of MinIO&reg; Gateway replicas                                                              | `4`                        |
+| `gateway.updateStrategy.type`                            | Update strategy type for MinIO&reg; Gateway replicas                                               | `Recreate`                 |
+| `gateway.autoscaling.enabled`                            | Enable autoscaling for MinIO&reg; Gateway deployment                                               | `false`                    |
+| `gateway.autoscaling.minReplicas`                        | Minimum number of replicas to scale back                                                           | `4`                        |
+| `gateway.autoscaling.maxReplicas`                        | Maximum number of replicas to scale out                                                            | `4`                        |
+| `gateway.autoscaling.targetCPU`                          | Target CPU utilization percentage                                                                  | `""`                       |
+| `gateway.autoscaling.targetMemory`                       | Target Memory utilization percentage                                                               | `""`                       |
+| `gateway.auth.azure.accessKey`                           | Access Key to access MinIO using Azure Gateway                                                     | `""`                       |
+| `gateway.auth.azure.secretKey`                           | Secret Key to access MinIO using Azure Gateway                                                     | `""`                       |
+| `gateway.auth.azure.storageAccountName`                  | Azure Storage Account Name to use to access Azure Blob Storage                                     | `""`                       |
+| `gateway.auth.azure.storageAccountKey`                   | Azure Storage Account Key to use to access Azure Blob Storage                                      | `""`                       |
+| `gateway.auth.azure.storageAccountNameExistingSecret`    | Existing Secret name to extract Azure Storage Account Name from to access Azure Blob Storage       | `""`                       |
+| `gateway.auth.azure.storageAccountNameExistingSecretKey` | Existing Secret key to extract Azure Storage Account Name from to use to access Azure Blob Storage | `""`                       |
+| `gateway.auth.azure.storageAccountKeyExistingSecret`     | Existing Secret name to extract Azure Storage Account Key from to access Azure Blob Storage        | `""`                       |
+| `gateway.auth.azure.storageAccountKeyExistingSecretKey`  | Existing Secret key to extract Azure Storage Account Key from to use to access Azure Blob Storage  | `""`                       |
+| `gateway.auth.gcs.accessKey`                             | Access Key to access MinIO using GCS Gateway                                                       | `""`                       |
+| `gateway.auth.gcs.secretKey`                             | Secret Key to access MinIO using GCS Gateway                                                       | `""`                       |
+| `gateway.auth.gcs.keyJSON`                               | Service Account key to access GCS                                                                  | `""`                       |
+| `gateway.auth.gcs.projectID`                             | GCP Project ID to use                                                                              | `""`                       |
+| `gateway.auth.nas.accessKey`                             | Access Key to access MinIO using NAS Gateway                                                       | `""`                       |
+| `gateway.auth.nas.secretKey`                             | Secret Key to access MinIO using NAS Gateway                                                       | `""`                       |
+| `gateway.auth.s3.accessKey`                              | Access Key to use to access AWS S3                                                                 | `""`                       |
+| `gateway.auth.s3.secretKey`                              | Secret Key to use to access AWS S3                                                                 | `""`                       |
+| `gateway.auth.s3.serviceEndpoint`                        | AWS S3 endpoint                                                                                    | `https://s3.amazonaws.com` |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,

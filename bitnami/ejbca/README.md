@@ -76,7 +76,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------ | ----------------------------------------------------------------------------------------- | ------------------------- |
 | `image.registry`                     | EJBCA image registry                                                                      | `docker.io`               |
 | `image.repository`                   | EJBCA image name                                                                          | `bitnami/ejbca`           |
-| `image.tag`                          | EJBCA image tag                                                                           | `6.15.2-6-debian-10-r315` |
+| `image.tag`                          | EJBCA image tag                                                                           | `6.15.2-6-debian-10-r335` |
 | `image.pullPolicy`                   | EJBCA image pull policy                                                                   | `IfNotPresent`            |
 | `image.pullSecrets`                  | Specify docker-registry secret names as an array                                          | `[]`                      |
 | `image.debug`                        | Enable image debug mode                                                                   | `false`                   |
@@ -159,7 +159,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.pathType`    | Ingress Path type                                                                             | `ImplementationSpecific` |
 | `ingress.apiVersion`  | Override API Version (automatically detected if not set)                                      | `""`                     |
 | `ingress.hostname`    | Default host for the ingress resource                                                         | `ejbca.local`            |
-| `ingress.path`        | The Path to EJBCA. You may need to set this to '/*' in order to use this                      | `ImplementationSpecific` |
+| `ingress.path`        | The Path to EJBCA. You may need to set this to '/*' in order to use this                      | `/`                      |
 | `ingress.annotations` | Ingress annotations done as key:value pairs                                                   | `{}`                     |
 | `ingress.tls`         | Enable TLS configuration for the hostname defined at ingress.hostname parameter               | `false`                  |
 | `ingress.extraHosts`  | The list of additional hostnames to be covered with this ingress record.                      | `[]`                     |
@@ -252,13 +252,9 @@ This chart allows you to set custom Pod affinity using the `affinity` parameter.
 
 As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
-### Configure a private registry
+### Use a different EJBCA version
 
-The `image.tag` parameter allows specifying which image will be pulled for the chart, as described in the [documentation for using a different image version](https://docs.bitnami.com/kubernetes/apps/ejbca/configuration/change-image-version/).
-
-When configuring the `image.tag` parameter to use an image in a private registry, it is necessary to also [specify an image pull secret](https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod). This image pull secret must be passed to the chart at deployment time using the `global.imagePullSecrets` parameter in a `values.yaml` file (it cannot be passed using the `--set` parameter).
-
-Refer to the [chart documentation for more information on configuring a private registry](https://docs.bitnami.com/kubernetes/apps/ejbca/configuration/configure-private-registry/).
+To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter. Refer to the [chart documentation for more information on these parameters and how to use them with images from a private registry](https://docs.bitnami.com/kubernetes/apps/ejbca/configuration/change-image-version/).
 
 ## Persistence
 
