@@ -263,6 +263,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `gateway.autoscaling.maxReplicas`                        | Maximum number of replicas to scale out                                                                  | `4`                        |
 | `gateway.autoscaling.targetCPU`                          | Target CPU utilization percentage                                                                        | `""`                       |
 | `gateway.autoscaling.targetMemory`                       | Target Memory utilization percentage                                                                     | `""`                       |
+| `gateway.priorityClassName`                              | Pod priority class name for MinIO&reg; Gateway                                                           | `""`                       |
 | `gateway.pdb.create`                                     | Enable/disable a Pod Disruption Budget creation for MinIO&reg; Gateway                                   | `false`                    |
 | `gateway.pdb.minAvailable`                               | Minimum number/percentage of pods that must still be available after the eviction for MinIO&reg; Gateway | `1`                        |
 | `gateway.pdb.maxUnavailable`                             | Maximum number/percentage of pods that may be made unavailable after the eviction for MinIO&reg; Gateway | `""`                       |

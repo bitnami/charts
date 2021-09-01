@@ -707,6 +707,8 @@ gateway:
     create: false
     minAvailable: 1
     maxUnavailable: ""
+  ## @param gateway.priorityClassName Pod priority class name for MinIO&reg; Gateway
+  priorityClassName: ""
   ## Gateway authentication configuration
   ##
   auth:

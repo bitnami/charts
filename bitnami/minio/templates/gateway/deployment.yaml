@@ -13,6 +13,9 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  {{- if .Values.gateway.priorityClassName }}
+  priorityClassName: {{ .Values.gateway.priorityClassName | quote}}
+  {{- end }}
   {{- if not .Values.gateway.autoscaling.enabled }}
   replicas: {{ .Values.gateway.replicaCount }}
   {{- end }}
