@@ -1,4 +1,4 @@
-{{- if and (eq .Values.architecture "replication") (not .Values.sentinel.enabled) }}
+{{- if and .Values.replica.autoscaling.enabled (not .Values.sentinel.enabled) }}
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
