@@ -76,7 +76,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------- | --------------------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`                  | Keycloak image registry                                                                       | `docker.io`            |
 | `image.repository`                | Keycloak image repository                                                                     | `bitnami/keycloak`     |
-| `image.tag`                       | Keycloak image tag (immutable tags are recommended)                                           | `15.0.2-debian-10-r3`  |
+| `image.tag`                       | Keycloak image tag (immutable tags are recommended)                                           | `15.0.2-debian-10-r4`  |
 | `image.pullPolicy`                | Keycloak image pull policy                                                                    | `IfNotPresent`         |
 | `image.pullSecrets`               | Specify docker-registry secret names as an array                                              | `[]`                   |
 | `image.debug`                     | Specify if debug logs should be enabled                                                       | `false`                |
@@ -123,7 +123,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `keycloakConfigCli.enabled`                               | Whether to enable keycloak-config-cli                                                           | `false`                       |
 | `keycloakConfigCli.image.registry`                        | keycloak-config-cli container image registry                                                    | `docker.io`                   |
 | `keycloakConfigCli.image.repository`                      | keycloak-config-cli container image repository                                                  | `bitnami/keycloak-config-cli` |
-| `keycloakConfigCli.image.tag`                             | keycloak-config-cli container image tag                                                         | `4.2.0-debian-10-r12`         |
+| `keycloakConfigCli.image.tag`                             | keycloak-config-cli container image tag                                                         | `4.2.0-debian-10-r15`         |
 | `keycloakConfigCli.image.pullPolicy`                      | keycloak-config-cli container image pull policy                                                 | `IfNotPresent`                |
 | `keycloakConfigCli.image.pullSecrets`                     | keycloak-config-cli container image pull secrets                                                | `[]`                          |
 | `keycloakConfigCli.annotations`                           | Annotations for keycloak-config-cli job                                                         | `undefined`                   |
@@ -280,7 +280,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `postgresql.postgresqlPassword`   | Keycloak PostgreSQL password - ignored if existingSecret is provided          | `""`               |
 | `postgresql.postgresqlDatabase`   | Name of the database to create                                                | `bitnami_keycloak` |
 | `postgresql.existingSecret`       | Use an existing secret file with the PostgreSQL password                      | `""`               |
-| `postgresql.persistence.enabled`  | Enable database persistence using PVC                                         | `true`             |
+| `postgresql.persistence.enabled`  | Enable PostgreSQL persistence using PVC                                       | `true`             |
 | `externalDatabase.host`           | Host of the external database                                                 | `""`               |
 | `externalDatabase.port`           | Database port                                                                 | `5432`             |
 | `externalDatabase.user`           | non admin username for Keycloak Database                                      | `bn_keycloak`      |
