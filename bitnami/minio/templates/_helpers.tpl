@@ -276,6 +276,13 @@ minio: persistence.accessModes
 {{- end -}}
 
 {{/*
+Label used to uniquely identify MinIO&reg; gateway deployment
+*/}}
+{{- define "minio.gateway.pdb.selector" -}}
+app: minio.gateway
+{{- end -}}
+
+{{/*
 Validate values of MinIO&reg; - when using MinIO&reg; as a S3 Gateway, the Access & Secret keys are required
 */}}
 {{- define "minio.validateValues.gateway.s3.credentials" -}}
