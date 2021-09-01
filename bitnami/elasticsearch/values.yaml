@@ -490,9 +490,9 @@ coordinating:
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName: ""
-  ## Update strategy for ElasticSearch coordinating deployment
-  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
-  ## @param coordinating.updateStrategy.type Update strategy for Coordinating Deployment
+  ## Update strategy for ElasticSearch coordinating statefulset
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ## @param coordinating.updateStrategy.type Update strategy for Coordinating Statefulset
   ##
   updateStrategy:
     type: RollingUpdate

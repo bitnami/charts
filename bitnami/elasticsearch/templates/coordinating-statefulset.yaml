@@ -32,7 +32,7 @@ spec:
         checksum/tls: {{ include (print $.Template.BasePath "/tls-secret.yaml") . | sha256sum }}
         {{- end }}
         {{- if .Values.coordinating.podAnnotations }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.master.podAnnotations "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.coordinating.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
     spec:
       {{- include "elasticsearch.imagePullSecrets" . | nindent 6 }}

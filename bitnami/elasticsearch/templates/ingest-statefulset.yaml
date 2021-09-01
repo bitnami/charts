@@ -9,8 +9,8 @@ metadata:
     app: ingest
 spec:
   updateStrategy:
-    type: {{ .Values.master.updateStrategy.type }}
-    {{- if (eq "OnDelete" .Values.master.updateStrategy.type) }}
+    type: {{ .Values.ingest.updateStrategy.type }}
+    {{- if (eq "OnDelete" .Values.ingest.updateStrategy.type) }}
     rollingUpdate: null
     {{- end }}
   selector:
