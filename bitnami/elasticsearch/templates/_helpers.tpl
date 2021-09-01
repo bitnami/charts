@@ -271,7 +271,7 @@ Return the proper ES curator image name
 {{- end -}}
 
 {{/*
-Return the elasticsearch TLS credentials secret
+Return the elasticsearch TLS credentials secret for master nodes.
 */}}
 {{- define "elasticsearch.master.tlsSecretName" -}}
 {{- $secretName := .Values.security.tls.master.existingSecret -}}
@@ -283,7 +283,7 @@ Return the elasticsearch TLS credentials secret
 {{- end -}}
 
 {{/*
-Return the elasticsearch TLS credentials secret
+Return the elasticsearch TLS credentials secret for data nodes.
 */}}
 {{- define "elasticsearch.data.tlsSecretName" -}}
 {{- $secretName := .Values.security.tls.data.existingSecret -}}
@@ -295,7 +295,7 @@ Return the elasticsearch TLS credentials secret
 {{- end -}}
 
 {{/*
-Return the elasticsearch TLS credentials secret
+Return the elasticsearch TLS credentials secret for ingest nodes.
 */}}
 {{- define "elasticsearch.ingest.tlsSecretName" -}}
 {{- $secretName := .Values.security.tls.ingest.existingSecret -}}
@@ -307,7 +307,7 @@ Return the elasticsearch TLS credentials secret
 {{- end -}}
 
 {{/*
-Return the elasticsearch TLS credentials secret
+Return the elasticsearch TLS credentials secret for coordinating-only nodes.
 */}}
 {{- define "elasticsearch.coordinating.tlsSecretName" -}}
 {{- $secretName := .Values.security.tls.coordinating.existingSecret -}}
@@ -328,7 +328,7 @@ Return true if a TLS credentials secret object should be created
 {{- end -}}
 
 {{/*
-Return the Elasticsearch authentication credentials secret name
+Return true if an authentication credentials secret object should be created
 */}}
 {{- define "elasticsearch.createSecret" -}}
 {{- if and .Values.security.enabled (not .Values.security.existingSecret) }}
@@ -344,7 +344,7 @@ Return the Elasticsearch authentication credentials secret name
 {{- end -}}
 
 {{/*
-Return the Elasticsearch authentication credentials secret name
+Return true if a TLS password secret object should be created
 */}}
 {{- define "elasticsearch.createTlsPasswordsSecret" -}}
 {{- if and .Values.security.enabled (not .Values.security.tls.passwordsSecret) (or .Values.security.tls.keystorePassword .Values.security.tls.truststorePassword .Values.security.tls.keyPassword ) }}
@@ -353,7 +353,7 @@ Return the Elasticsearch authentication credentials secret name
 {{- end -}}
 
 {{/*
-Return the Elasticsearch TLS secrets
+Return the Elasticsearch TLS password secret name
 */}}
 {{- define "elasticsearch.tlsPasswordsSecret" -}}
 {{- coalesce .Values.security.tls.passwordsSecret (printf "%s-tls-pass" (include "common.names.fullname" .)) -}}

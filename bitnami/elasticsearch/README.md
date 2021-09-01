@@ -645,7 +645,7 @@ Find more information about how to deal with common errors related to Bitnami’
 
 This version replaces the Ingest and Coordinating Deployments with Statefulsets.
 
-Additionally, adds support for X-Pack Security features such as TLS/SSL encryption and basic authentication.
+Additionally, this version adds support for X-Pack Security features such as TLS/SSL encryption and basic authentication.
 
 ### To 15.0.0
 
