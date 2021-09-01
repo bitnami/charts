@@ -375,6 +375,10 @@ podAnnotations: {}
 ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
 ##
 priorityClassName: ""
+## @param runtimeClassName Name of the runtime class to be used by MongoDB&reg; pod(s)
+## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+##
+runtimeClassName: ""
 ## MongoDB&reg; pods' Security Context.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enable MongoDB&reg; pod(s)' Security Context
@@ -1063,6 +1067,10 @@ arbiter:
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
   priorityClassName: ""
+  ## @param arbiter.runtimeClassName Name of the runtime class to be used by Arbiter pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## MongoDB&reg; Arbiter pods' Security Context.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param arbiter.podSecurityContext.enabled Enable Arbiter pod(s)' Security Context
@@ -1316,6 +1324,10 @@ hidden:
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
   priorityClassName: ""
+  ## @param hidden.runtimeClassName Name of the runtime class to be used by hidden node pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## MongoDB&reg; Hidden containers' resource requests and limits.
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
