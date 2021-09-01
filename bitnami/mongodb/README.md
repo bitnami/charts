@@ -433,8 +433,8 @@ Refer to the [chart documentation for more information on each of these architec
 | `metrics.serviceMonitor.namespace`           | Namespace which Prometheus is running in                                                                              | `""`                       |
 | `metrics.serviceMonitor.interval`            | Interval at which metrics should be scraped                                                                           | `30s`                      |
 | `metrics.serviceMonitor.scrapeTimeout`       | Specify the timeout after which the scrape is ended                                                                   | `""`                       |
-| `metrics.serviceMonitor.relabelings`         | RelabelConfigs to apply to samples before scraping                                                                    | `[]`                       |
-| `metrics.serviceMonitor.metricRelabelings`   | MetricRelabelConfigs to apply to samples before ingestion                                                             | `[]`                       |
+| `metrics.serviceMonitor.relabellings`        | RelabelConfigs to apply to samples before scraping.                                                                   | `[]`                       |
+| `metrics.serviceMonitor.metricRelabelings`   | MetricsRelabelConfigs to apply to samples before ingestion.                                                           | `[]`                       |
 | `metrics.serviceMonitor.additionalLabels`    | Used to pass Labels that are used by the Prometheus installed in your cluster to select Service Monitors to work with | `{}`                       |
 | `metrics.prometheusRule.enabled`             | Set this to true to create prometheusRules for Prometheus operator                                                    | `false`                    |
 | `metrics.prometheusRule.additionalLabels`    | Additional labels that can be used so prometheusRules will be discovered by Prometheus                                | `{}`                       |

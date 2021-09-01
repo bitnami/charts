@@ -121,7 +121,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `kafka.zookeeper.heapSize`                      | Size in MB for the Java Heap options (Xmx and XMs) in Zookeeper. This env var is ignored if Xmx an Xms are configured via JVMFLAGS | `4096`                |
 | `kafka.zookeeper.resources.limits`              | Resource limits for zookeeper                                                                                                      | `{}`                  |
 | `kafka.zookeeper.resources.requests.cpu`        | CPU capacity request for zookeeper                                                                                                 | `250m`                |
-| `kafka.zookeeper.resources.requests.memory`     | Memory capacity request for zookeeper                                                                                              | `5120Mi`              |
+| `kafka.zookeeper.resources.requests.memory`     | Memory capacity request for zookeeper                                                                                              | `5Gi`                 |
 | `kafka.zookeeper.affinity.podAntiAffinity`      | Zookeeper pod anti affinity rules                                                                                                  | `{}`                  |
 | `kafka.externalZookeeper.servers`               | Array of external Zookeeper servers                                                                                                | `[]`                  |
 
@@ -134,13 +134,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `spark.master.webPort`                   | Web port for spark master              | `8080`   |
 | `spark.master.resources.limits`          | Spark master resource limits           | `{}`     |
 | `spark.master.resources.requests.cpu`    | Spark master CPUs                      | `250m`   |
-| `spark.master.resources.requests.memory` | Spark master requested memory          | `5120Mi` |
+| `spark.master.resources.requests.memory` | Spark master requested memory          | `5Gi`    |
 | `spark.master.affinity.podAntiAffinity`  | Anti affinity rules set for resiliency | `{}`     |
 | `spark.worker.replicaCount`              | Number of spark workers                | `2`      |
 | `spark.worker.webPort`                   | Web port for spark master              | `8081`   |
 | `spark.worker.resources.limits`          | Spark master resource limits           | `{}`     |
 | `spark.worker.resources.requests.cpu`    | Spark master CPUs                      | `250m`   |
-| `spark.worker.resources.requests.memory` | Spark master requested memory          | `5120Mi` |
+| `spark.worker.resources.requests.memory` | Spark master requested memory          | `5Gi`    |
 | `spark.worker.affinity.podAntiAffinity`  | Anti affinity rules set for resiliency | `{}`     |
 | `spark.metrics.enabled`                  | Enable Prometheus exporter for Spark   | `false`  |
 | `spark.metrics.masterAnnotations`        | Annotations for Spark master exporter  | `{}`     |
@@ -154,25 +154,25 @@ The command removes all the Kubernetes components associated with the chart and 
 | `elasticsearch.enabled`                                | Enable Elasticsearch                         | `true`   |
 | `elasticsearch.global.kibanaEnabled`                   | Enable Kibana                                | `true`   |
 | `elasticsearch.master.replicas`                        | Number of Elasticsearch replicas             | `3`      |
-| `elasticsearch.master.heapSize`                        | Heap Size for Elasticsearch master           | `512m`   |
+| `elasticsearch.master.heapSize`                        | Heap Size for Elasticsearch master           | `768m`   |
 | `elasticsearch.master.affinity.podAntiAffinity`        | Elasticsearch pod anti affinity              | `{}`     |
 | `elasticsearch.master.resources.limits`                | Elasticsearch master resource limits         | `{}`     |
 | `elasticsearch.master.resources.requests.cpu`          | Elasticsearch master CPUs                    | `250m`   |
-| `elasticsearch.master.resources.requests.memory`       | Elasticsearch master requested memory        | `1048Mi` |
+| `elasticsearch.master.resources.requests.memory`       | Elasticsearch master requested memory        | `1Gi`    |
 | `elasticsearch.master.affinity.podAntiAffinity`        | Anti affinity rules set for resiliency       | `{}`     |
 | `elasticsearch.data.name`                              | Elasticsearch data node name                 | `data`   |
 | `elasticsearch.data.replicas`                          | Number of Elasticsearch replicas             | `2`      |
-| `elasticsearch.data.heapSize`                          | Heap Size for Elasticsearch data node        | `2560m`  |
+| `elasticsearch.data.heapSize`                          | Heap Size for Elasticsearch data node        | `4096m`  |
 | `elasticsearch.data.affinity.podAntiAffinity`          | Anti affinity rules set for resiliency       | `{}`     |
 | `elasticsearch.data.resources.limits`                  | Elasticsearch data node resource limits      | `{}`     |
 | `elasticsearch.data.resources.requests.cpu`            | Elasticsearch data node CPUs                 | `250m`   |
 | `elasticsearch.data.resources.requests.memory`         | Elasticsearch data node requested memory     | `5Gi`    |
 | `elasticsearch.coordinating.replicas`                  | Number of Elasticsearch replicas             | `2`      |
-| `elasticsearch.coordinating.heapSize`                  | Heap Size for Elasticsearch coordinating     | `1024m`  |
+| `elasticsearch.coordinating.heapSize`                  | Heap Size for Elasticsearch coordinating     | `768m`   |
 | `elasticsearch.coordinating.affinity.podAntiAffinity`  | Anti affinity rules set for resiliency       | `{}`     |
 | `elasticsearch.coordinating.resources.limits`          | Elasticsearch coordinating resource limits   | `{}`     |
-| `elasticsearch.coordinating.resources.requests.cpu`    | Elasticsearch coordinating CPUs              | `100m`   |
-| `elasticsearch.coordinating.resources.requests.memory` | Elasticsearch coordinating requested memory  | `2Gi`    |
+| `elasticsearch.coordinating.resources.requests.cpu`    | Elasticsearch coordinating CPUs              | `250m`   |
+| `elasticsearch.coordinating.resources.requests.memory` | Elasticsearch coordinating requested memory  | `1Gi`    |
 | `elasticsearch.metrics.enabled`                        | Enable Prometheus exporter for Elasticsearch | `false`  |
 | `elasticsearch.metrics.resources.limits`               | Elasticsearch metrics resource limits        | `{}`     |
 | `elasticsearch.metrics.resources.requests.cpu`         | Elasticsearch metrics CPUs                   | `100m`   |
@@ -188,8 +188,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `logstash.replicaCount`                      | Number of Logstash replicas                    | `2`     |
 | `logstash.affinity.podAntiAffinity`          | Logstash pod anti affinity                     | `{}`    |
 | `logstash.resources.limits`                  | Elasticsearch metrics resource limits          | `{}`    |
-| `logstash.resources.requests.cpu`            | Elasticsearch metrics CPUs                     | `100m`  |
-| `logstash.resources.requests.memory`         | Elasticsearch metrics requested memory         | `128Mi` |
+| `logstash.resources.requests.cpu`            | Elasticsearch metrics CPUs                     | `250m`  |
+| `logstash.resources.requests.memory`         | Elasticsearch metrics requested memory         | `1500Mi`|
 | `logstash.metrics.enabled`                   | Enable metrics for logstash                    | `false` |
 | `logstash.metrics.resources.limits`          | Elasticsearch metrics resource limits          | `{}`    |
 | `logstash.metrics.resources.requests.cpu`    | Elasticsearch metrics CPUs                     | `100m`  |
@@ -228,6 +228,16 @@ $ helm install my-release \
 
 The above command deploys the data platform with Kafka with 3 nodes (replicas).
 
+Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example
+
+```console
+$ helm install my-release -f values.yaml bitnami/dataplatform-bp2
+```
+
+> **Tip**: You can use the default [values.yaml](values.yaml)
+
+### Data Platform Deployment with Observability Framework
+
 In case you need to deploy the data platform with Tanzu Observability Framework for all the applications (Kafka/Spark/Elasticsearch/Logstash) in the data platform, you can specify the 'enabled' parameter using the `--set <component>.metrics.enabled=true` argument to `helm install`. For Example,
 
 ```console
@@ -243,15 +253,88 @@ $ helm install my-release bitnami/dataplatform-bp2 \
     --set wavefront.wavefront.token=<YOUR_API_TOKEN>
 ```
 
-The above command deploys the data platform with the Tanzu Observability Framework.
-
-Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
+If you want to use an existing Wavefront deployment, edit the Wavefront Collector ConfigMap and add the following snippet under discovery plugins. Once done, restart the wavefront collectors DaemonSet.
 
 ```console
-$ helm install my-release -f values.yaml bitnami/dataplatform-bp2
+$ kubectl edit configmap wavefront-collector-config -n wavefront
 ```
 
-> **Tip**: You can use the default [values.yaml](values.yaml)
+Add the below config:
+
+```yaml
+      discovery:
+        enable_runtime_plugins: true
+        plugins:
+        ## auto-discover kafka-exporter
+        - name: kafka-discovery
+          type: prometheus
+          selectors:
+            images:
+              - '*bitnami/kafka-exporter*'
+          port: 9308
+          path: /metrics
+          scheme: http
+          prefix: kafka.
+
+        ## auto-discover jmx exporter
+        - name: kafka-jmx-discovery
+          type: prometheus
+          selectors:
+            images:
+              - '*bitnami/jmx-exporter*'
+          port: 5556
+          path: /metrics
+          scheme: http
+          prefix: kafkajmx.
+
+        ## auto-discover elasticsearch
+        - name: elasticsearch-discovery
+          type: prometheus
+          selectors:
+            images:
+              - '*bitnami/elasticsearch-exporter*'
+          port: 9114
+          path: /metrics
+          scheme: http
+
+        ## auto-discover logstash
+        - name: logstash-discovery
+          type: prometheus
+          selectors:
+            images:
+              - '*bitnami/logstash-exporter*'
+          port: 9198
+          path: /metrics
+          scheme: http
+
+        ## auto-discover spark
+        - name: spark-worker-discovery
+          type: prometheus
+          selectors:
+            images:
+              - '*bitnami/spark*'
+          port: 8081
+          path: /metrics/
+          scheme: http
+          prefix: spark.
+
+        ## auto-discover spark
+        - name: spark-master-discovery
+          type: prometheus
+          selectors:
+            images:
+              - '*bitnami/spark*'
+          port: 8080
+          path: /metrics/
+          scheme: http
+          prefix: spark.
+```
+
+Below is the command to restart the DaemonSets
+
+```console
+$ kubectl rollout restart daemonsets wavefront-collector -n wavefront
+```
 
 ## Configuration and installation details
 
@@ -276,6 +359,10 @@ Elasticsearch dependency version was bumped to a new major version changing the 
 Regular upgrade is compatible from previous versions.
 
 ## Upgrading
+
+### To 6.0.0
+
+This major version updates resources for elasticsearch and logstash values. Also updates the README file with instructions on how to enable existing Wavefront deployment for the data platform blueprint.
 
 ### To 5.0.0
 
