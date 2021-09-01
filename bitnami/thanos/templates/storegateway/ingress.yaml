@@ -1,0 +1,50 @@
+{{- if .Values.thanos.storegateway.ingress.enabled -}}
+apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
+kind: Ingress
+metadata:
+  name: thanos-storegateway
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  annotations:
+    {{- if .Values.thanos.storegateway.ingress.certManager }}
+    kubernetes.io/tls-acme: "true"
+    {{- end }}
+    {{- range $key, $value := .Values.thanos.storegateway.ingress.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+spec:
+  {{- if and .Values.thanos.storegateway.ingress.ingressClassName }}
+  ingressClassName: {{ .Values.thanos.storegateway.ingress.ingressClassName | quote }}
+  {{- end }}
+  rules:
+    {{- if .Values.thanos.storegateway.ingress.hostname }}
+    - host: {{ .Values.thanos.storegateway.ingress.hostname }}
+      http:
+        paths:
+          - path: {{ .Values.thanos.storegateway.ingress.path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+            pathType: {{ .Values.thanos.storegateway.ingress.pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" "thanos-storegateway" "servicePort" "http" "context" $)  | nindent 14 }}
+    {{- end }}
+    {{- range .Values.thanos.storegateway.ingress.extraHosts }}
+    - host: {{ .name }}
+      http:
+        paths:
+          - path: {{ default "/" .path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
+            pathType: {{ default "ImplementationSpecific" .pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" "thanos-storegateway" "servicePort" "http" "context" $) | nindent 14 }}
+    {{- end }}
+  {{- if or .Values.thanos.storegateway.ingress.tls .Values.thanos.storegateway.ingress.extraTls .Values.thanos.storegateway.ingress.hosts }}
+  tls:
+    {{- if or .Values.thanos.storegateway.ingress.secrets .Values.thanos.storegateway.ingress.tls }}
+    - hosts:
+        - {{ .Values.thanos.storegateway.ingress.hostname }}
+      secretName: {{ printf "%s-tls" .Values.thanos.storegateway.ingress.hostname }}
+    {{- end }}
+    {{- if .Values.thanos.storegateway.ingress.extraTls }}
+    {{- toYaml .Values.thanos.storegateway.ingress.extraTls | nindent 4 }}
+    {{- end }}
+  {{- end }}
+{{- end }}

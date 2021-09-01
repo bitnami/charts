@@ -1,0 +1,50 @@
+{{- if .Values.thanos.compactor.ingress.enabled -}}
+apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
+kind: Ingress
+metadata:
+  name: thanos-compactor
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  annotations:
+    {{- if .Values.thanos.compactor.ingress.certManager }}
+    kubernetes.io/tls-acme: "true"
+    {{- end }}
+    {{- range $key, $value := .Values.thanos.compactor.ingress.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+spec:
+  {{- if and .Values.thanos.compactor.ingress.ingressClassName }}
+  ingressClassName: {{ .Values.thanos.compactor.ingress.ingressClassName | quote }}
+  {{- end }}
+  rules:
+    {{- if .Values.thanos.compactor.ingress.hostname }}
+    - host: {{ .Values.thanos.compactor.ingress.hostname }}
+      http:
+        paths:
+          - path: {{ .Values.thanos.compactor.ingress.path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+            pathType: {{ .Values.thanos.compactor.ingress.pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" "thanos-compactor" "servicePort" "http" "context" $)  | nindent 14 }}
+    {{- end }}
+    {{- range .Values.thanos.compactor.ingress.extraHosts }}
+    - host: {{ .name }}
+      http:
+        paths:
+          - path: {{ default "/" .path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
+            pathType: {{ default "ImplementationSpecific" .pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" "thanos-compactor" "servicePort" "http" "context" $) | nindent 14 }}
+    {{- end }}
+  {{- if or .Values.thanos.compactor.ingress.tls .Values.thanos.compactor.ingress.extraTls .Values.thanos.compactor.ingress.hosts }}
+  tls:
+    {{- if or .Values.thanos.compactor.ingress.secrets .Values.thanos.compactor.ingress.tls }}
+    - hosts:
+        - {{ .Values.thanos.compactor.ingress.hostname }}
+      secretName: {{ printf "%s-tls" .Values.thanos.compactor.ingress.hostname }}
+    {{- end }}
+    {{- if .Values.thanos.compactor.ingress.extraTls }}
+    {{- toYaml .Values.thanos.compactor.ingress.extraTls | nindent 4 }}
+    {{- end }}
+  {{- end }}
+{{- end }}
