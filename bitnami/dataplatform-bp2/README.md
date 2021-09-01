@@ -263,6 +263,7 @@ Add the below config:
 
 ```yaml
       discovery:
+        enable_runtime_plugins: true
         plugins:
         ## auto-discover kafka-exporter
         - name: kafka-discovery

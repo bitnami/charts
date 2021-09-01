@@ -481,7 +481,7 @@ logstash:
                 values:
                   - '{{ .Release.Name }}'
           topologyKey: "kubernetes.io/hostname"
-  ## @param extraEnvVars Array containing extra env vars to configure Logstash
+  ## @param logstash.extraEnvVars Array containing extra env vars to configure Logstash
   ## For example:
   ## extraEnvVars:
   ##  - name: ELASTICSEARCH_HOST
