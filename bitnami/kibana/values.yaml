@@ -481,7 +481,7 @@ metrics:
     #   prometheus: my-prometheus
     selector: {}
 
-## Kibana server TLS configuration
+## @section Kibana server TLS configuration
 ##
 tls:
   ## @param tls.enabled Enable SSL/TLS encryption for Kibana server (HTTPS)
@@ -507,7 +507,7 @@ tls:
   ##
   passwordsSecret: ""
 
-## Elasticsearch parameters
+## @section Elasticsearch parameters
 ##
 elasticsearch:
   ## @param elasticsearch.hosts List of elasticsearch hosts to connect to.
