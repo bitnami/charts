@@ -545,7 +545,6 @@ elasticsearch:
       verificationMode: "full"
       ## @param elasticsearch.security.tls.existingSecret Name of the existing secret containing Elasticsearch Truststore or CA certificate. Required unless verificationMode=none
       ##
-      ##
       existingSecret:
       ## @param elasticsearch.security.tls.usePemCerts Set to 'true' to use PEM certificates instead of PKCS12.
       ##
