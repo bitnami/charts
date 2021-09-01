@@ -931,6 +931,12 @@ ingest:
   ## @param ingest.replicas Desired number of Elasticsearch ingest nodes
   ##
   replicas: 2
+  ## Update strategy for ElasticSearch ingest statefulset
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ## @param ingest.updateStrategy.type Update strategy for Ingest statefulset
+  ##
+  updateStrategy:
+    type: RollingUpdate
   ## @param ingest.heapSize Ingest node heap size
   ##
   heapSize: 128m
