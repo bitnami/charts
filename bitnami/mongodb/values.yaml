@@ -1597,6 +1597,12 @@ metrics:
     ## scrapeTimeout: 30s
     ##
     scrapeTimeout: ""
+    ## @param metrics.serviceMonitor.relabellings RelabelConfigs to apply to samples before scraping.
+    ##
+    relabellings: []
+    ## @param metrics.serviceMonitor.metricRelabelings MetricsRelabelConfigs to apply to samples before ingestion.
+    ##
+    metricRelabelings: []
     ## @param metrics.serviceMonitor.additionalLabels Used to pass Labels that are used by the Prometheus installed in your cluster to select Service Monitors to work with
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
     ##

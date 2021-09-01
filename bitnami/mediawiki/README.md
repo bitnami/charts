@@ -76,7 +76,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------- | -------------------------------------------------------------------- | ---------------------- |
 | `image.registry`     | MediaWiki image registry                                             | `docker.io`            |
 | `image.repository`   | MediaWiki image repository                                           | `bitnami/mediawiki`    |
-| `image.tag`          | MediaWiki image tag (immutable tags are recommended)                 | `1.36.1-debian-10-r34` |
+| `image.tag`          | MediaWiki image tag (immutable tags are recommended)                 | `1.36.1-debian-10-r55` |
 | `image.pullPolicy`   | Image pull policy                                                    | `IfNotPresent`         |
 | `image.pullSecrets`  | Specify docker-registry secret names as an array                     | `[]`                   |
 | `hostAliases`        | Deployment pod host aliases                                          | `[]`                   |
@@ -166,7 +166,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.pathType`              | Ingress path type                                                                                          | `ImplementationSpecific` |
 | `ingress.apiVersion`            | Force Ingress API version (automatically detected if not set)                                              | `""`                     |
 | `ingress.hostname`              | Default host for the ingress resource                                                                      | `mediawiki.local`        |
-| `ingress.path`                  | The Path to Mediawiki. You may need to set this to '/*' in order to use this with ALB ingress controllers. | `ImplementationSpecific` |
+| `ingress.path`                  | The Path to Mediawiki. You may need to set this to '/*' in order to use this with ALB ingress controllers. | `/`                      |
 | `ingress.annotations`           | Ingress annotations                                                                                        | `{}`                     |
 | `ingress.tls`                   | Enable TLS configuration for the hostname defined at ingress.hostname parameter                            | `false`                  |
 | `ingress.extraHosts`            | The list of additional hostnames to be covered with this ingress record.                                   | `[]`                     |
@@ -206,7 +206,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                         | Start a side-car prometheus exporter                                         | `false`                   |
 | `metrics.image.registry`                  | Apache exporter image registry                                               | `docker.io`               |
 | `metrics.image.repository`                | Apache exporter image repository                                             | `bitnami/apache-exporter` |
-| `metrics.image.tag`                       | Apache exporter image tag (immutable tags are recommended)                   | `0.10.0-debian-10-r5`     |
+| `metrics.image.tag`                       | Apache exporter image tag (immutable tags are recommended)                   | `0.10.0-debian-10-r26`    |
 | `metrics.image.pullPolicy`                | Image pull policy                                                            | `IfNotPresent`            |
 | `metrics.image.pullSecrets`               | Specify docker-registry secret names as an array                             | `[]`                      |
 | `metrics.resources`                       | Exporter resource requests/limit                                             | `{}`                      |

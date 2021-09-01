@@ -74,7 +74,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------- | ------------------------------------------------------------------------------ | -------------------- |
 | `image.registry`       | NATS image registry                                                            | `docker.io`          |
 | `image.repository`     | NATS image repository                                                          | `bitnami/nats`       |
-| `image.tag`            | NATS image tag (immutable tags are recommended)                                | `2.3.4-debian-10-r0` |
+| `image.tag`            | NATS image tag (immutable tags are recommended)                                | `2.4.0-debian-10-r0` |
 | `image.pullPolicy`     | Image pull policy                                                              | `IfNotPresent`       |
 | `image.pullSecrets`    | Specify docker-registry secret names as an array                               | `[]`                 |
 | `auth.enabled`         | Switch to enable/disable client authentication                                 | `true`               |
@@ -175,7 +175,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.pathType`                  | Ingress Path type                                                                                     | `ImplementationSpecific` |
 | `ingress.apiVersion`                | Override API Version (automatically detected if not set)                                              | `""`                     |
 | `ingress.hostname`                  | When the ingress is enabled, a host pointing to this will be created                                  | `nats.local`             |
-| `ingress.path`                      | The Path to NATS. You may need to set this to '/*' in order to use this with ALB ingress controllers. | `ImplementationSpecific` |
+| `ingress.path`                      | The Path to NATS. You may need to set this to '/*' in order to use this with ALB ingress controllers. | `/`                      |
 | `ingress.annotations`               | Ingress annotations                                                                                   | `{}`                     |
 | `ingress.tls`                       | Enable TLS configuration for the hostname defined at ingress.hostname parameter                       | `false`                  |
 | `ingress.extraHosts`                | The list of additional hostnames to be covered with this ingress record.                              | `[]`                     |
@@ -194,7 +194,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                  | Enable Prometheus metrics via exporter side-car                                                        | `false`                 |
 | `metrics.image.registry`           | Prometheus metrics exporter image registry                                                             | `docker.io`             |
 | `metrics.image.repository`         | Prometheus metrics exporter image repository                                                           | `bitnami/nats-exporter` |
-| `metrics.image.tag`                | Prometheus metrics exporter image tag (immutable tags are recommended)                                 | `0.8.0-debian-10-r36`   |
+| `metrics.image.tag`                | Prometheus metrics exporter image tag (immutable tags are recommended)                                 | `0.8.0-debian-10-r57`   |
 | `metrics.image.pullPolicy`         | Prometheus metrics image pull policy                                                                   | `IfNotPresent`          |
 | `metrics.image.pullSecrets`        | Prometheus metrics image pull secrets                                                                  | `[]`                    |
 | `metrics.resources`                | Metrics exporter resource requests and limits                                                          | `{}`                    |

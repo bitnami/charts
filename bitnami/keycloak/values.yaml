@@ -58,7 +58,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/keycloak
-  tag: 15.0.2-debian-10-r3
+  tag: 15.0.2-debian-10-r4
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -290,7 +290,7 @@ keycloakConfigCli:
   image:
     registry: docker.io
     repository: bitnami/keycloak-config-cli
-    tag: 4.2.0-debian-10-r12
+    tag: 4.2.0-debian-10-r15
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -878,10 +878,12 @@ postgresql:
   ## @param postgresql.existingSecret Use an existing secret file with the PostgreSQL password
   ##
   existingSecret: ""
-  ## PostgreSQL data Persistent Volume Storage Class
-  ## @param postgresql.persistence.enabled Enable database persistence using PVC
+  ## Enable persistence using Persistent Volume Claims
+  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes
   ##
   persistence:
+    ## @param postgresql.persistence.enabled Enable PostgreSQL persistence using PVC
+    ##
     enabled: true
 ## External database configuration
 ##

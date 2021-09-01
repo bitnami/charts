@@ -62,7 +62,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/minio
-  tag: 2021.6.17-debian-10-r57
+  tag: 2021.6.17-debian-10-r58
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -88,7 +88,7 @@ image:
 clientImage:
   registry: docker.io
   repository: bitnami/minio-client
-  tag: 2021.7.27-debian-10-r26
+  tag: 2021.7.27-debian-10-r28
 ## @param mode MinIO&reg; server mode (`standalone` or `distributed`)
 ## ref: https://docs.minio.io/docs/distributed-minio-quickstart-guide
 ##
@@ -568,7 +568,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r170
+    tag: 10-debian-10-r172
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -684,6 +684,21 @@ gateway:
   ## @param gateway.replicaCount Number of MinIO&reg; Gateway replicas
   ##
   replicaCount: 4
+  ## @param gateway.updateStrategy.type Update strategy type for MinIO&reg; Gateway replicas
+  updateStrategy:
+    type: Recreate
+  ## Autoscaling configuration for MinIO&reg; Gateway. overrides gateway.replicaCount if enabled
+  ## @param gateway.autoscaling.enabled Enable autoscaling for MinIO&reg; Gateway deployment
+  ## @param gateway.autoscaling.minReplicas Minimum number of replicas to scale back
+  ## @param gateway.autoscaling.maxReplicas Maximum number of replicas to scale out
+  ## @param gateway.autoscaling.targetCPU Target CPU utilization percentage
+  ## @param gateway.autoscaling.targetMemory Target Memory utilization percentage
+  autoscaling:
+    enabled: false
+    minReplicas: "4"
+    maxReplicas: "4"
+    targetCPU: ""
+    targetMemory: ""
   ## Gateway authentication configuration
   ##
   auth:
@@ -692,12 +707,20 @@ gateway:
     ## @param gateway.auth.azure.secretKey Secret Key to access MinIO using Azure Gateway
     ## @param gateway.auth.azure.storageAccountName Azure Storage Account Name to use to access Azure Blob Storage
     ## @param gateway.auth.azure.storageAccountKey Azure Storage Account Key to use to access Azure Blob Storage
+    ## @param gateway.auth.azure.storageAccountNameExistingSecret Existing Secret name to extract Azure Storage Account Name from to access Azure Blob Storage
+    ## @param gateway.auth.azure.storageAccountNameExistingSecretKey Existing Secret key to extract Azure Storage Account Name from to use to access Azure Blob Storage
+    ## @param gateway.auth.azure.storageAccountKeyExistingSecret Existing Secret name to extract Azure Storage Account Key from to access Azure Blob Storage
+    ## @param gateway.auth.azure.storageAccountKeyExistingSecretKey Existing Secret key to extract Azure Storage Account Key from to use to access Azure Blob Storage
     ##
     azure:
       accessKey: ""
       secretKey: ""
       storageAccountName: ""
       storageAccountKey: ""
+      storageAccountNameExistingSecret: ""
+      storageAccountNameExistingSecretKey: ""
+      storageAccountKeyExistingSecret: ""
+      storageAccountKeyExistingSecretKey: ""
     ## Authentication configuration for GCS. Ignored unless type=gcs
     ## @param gateway.auth.gcs.accessKey Access Key to access MinIO using GCS Gateway
     ## @param gateway.auth.gcs.secretKey Secret Key to access MinIO using GCS Gateway
