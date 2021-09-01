@@ -1,9 +1,9 @@
 dependencies:
 - name: common
   repository: https://charts.bitnami.com/bitnami
-  version: 1.7.1
+  version: 1.8.0
 - name: kube-state-metrics
   repository: https://charts.bitnami.com/bitnami
-  version: 2.1.4
-digest: sha256:0a7da332a8cdcd54ac8636452b28d756b51f6a42ca5e9c4829a31d93fe81eeb7
-generated: "2021-08-02T12:38:04.916960877Z"
+  version: 2.1.7
+digest: sha256:cfdbf4a6785015f183bea8df469d1b4814fabc05ab67ab8316b45145101d1882
+generated: "2021-08-26T09:26:15.70039237Z"
