@@ -1541,7 +1541,7 @@ postgresql:
 
 ## @section kubeappsapis parameters
 kubeappsapis:
-  ## @param kubeappsapis.unsafeUseDemoSA If true, replace the user's credentials by a full-granted demo service account. Just intented for development purposes.
+  ## @param kubeappsapis.unsafeUseDemoSA If true, replace the user's credentials by a full-granted demo service account. Just intended for development purposes.
   unsafeUseDemoSA: false
   ## @param kubeappsapis.enabledPlugins Enabled plugins for the Kubeapps-APIs service
   ## e.g:
@@ -1645,9 +1645,9 @@ kubeappsapis:
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
   livenessProbe:
-    enabled: false
+    enabled: true
     httpGet:
-      path: /live
+      path: /core/plugins/v1alpha1/configured-plugins
       port: 50051
     initialDelaySeconds: 60
     periodSeconds: 10
@@ -1663,9 +1663,9 @@ kubeappsapis:
   ## @param kubeappsapis.readinessProbe.successThreshold Success threshold for readinessProbe
   ##
   readinessProbe:
-    enabled: false
+    enabled: true
     httpGet:
-      path: /ready
+      path: /core/plugins/v1alpha1/configured-plugins
       port: 50051
     initialDelaySeconds: 0
     periodSeconds: 10
