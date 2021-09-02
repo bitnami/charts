@@ -642,6 +642,10 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ## Upgrading
 
+### To 17.0.0
+
+This version bumps in a major the version of the Kibana Helm Chart bundled as dependecy, [here](https://github.com/bitnami/charts/tree/master/bitnami/kibana#to-900) you can see the changes implemented in this Kibana major version.
+
 ### To 16.0.0
 
 This version replaces the Ingest and Coordinating Deployments with Statefulsets. This change is required so Coordinating and Ingest nodes have their services associated, required for TLS hostname verification.
