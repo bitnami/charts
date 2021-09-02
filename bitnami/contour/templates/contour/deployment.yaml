@@ -68,8 +68,8 @@ spec:
             - --contour-cert-file=/certs/tls.crt
             - --contour-key-file=/certs/tls.key
             - --config-path=/config/contour.yaml
-            {{- if .Values.ingressClass }}
-            - --ingress-class-name={{ .Values.ingressClass }}
+            {{- if .Values.contour.ingressClass }}
+            - --ingress-class-name={{ .Values.contour.ingressClass }}
             {{- end }}
             {{- if .Values.contour.extraArgs }}
             {{- include "common.tplvalues.render" (dict "value" .Values.contour.extraArgs "context" $) | nindent 12 }}
