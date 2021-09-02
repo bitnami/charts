@@ -694,6 +694,12 @@ persistence:
   ##    emptyDir: {}
   ##
   volumes: []
+  ## @param persistence.annotations Persistence annotations. Evaluated as a template
+  ## Example:
+  ## annotations:
+  ##   example.io/disk-volume-type: SSD
+  ##
+  annotations: {}
 
 ## @section Exposure parameters
 
