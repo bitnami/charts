@@ -120,13 +120,13 @@ security:
     ## @param security.tls.coordinating.existingSecret Existing secret containing the certificates for the coordinating nodes
     ##
     master:
-      existingSecret:
+      existingSecret: ""
     data:
-      existingSecret:
+      existingSecret: ""
     ingest:
-      existingSecret:
+      existingSecret: ""
     coordinating:
-      existingSecret:
+      existingSecret: ""
     ## @param security.tls.keystorePassword Password to access the JKS/PKCS12 keystore or PEM key when they are password-protected.
     ##
     keystorePassword: ""
@@ -1106,7 +1106,7 @@ ingest:
     ## @param ingest.service.loadBalancerIP loadBalancerIP if ingest nodes service type is `LoadBalancer`
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
-    loadBalancerIP:
+    loadBalancerIP: ""
 
   ## Provide functionality to use RBAC
   ##
