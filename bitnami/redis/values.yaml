@@ -824,6 +824,19 @@ sentinel:
   ## @param sentinel.preExecCmds Additional commands to run prior to starting Redis&trade; Sentinel
   ##
   preExecCmds: []
+  ## @param sentinel.extraEnvVars Array with extra environment variables to add to Redis&trade; Sentinel nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param sentinel.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Redis&trade; Sentinel nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param sentinel.extraEnvVarsSecret Name of existing Secret containing extra env vars for Redis&trade; Sentinel nodes
+  ##
+  extraEnvVarsSecret: ""
   ## @param sentinel.containerPort Container port to open on Redis&trade; Sentinel nodes
   ##
   containerPort: 26379
