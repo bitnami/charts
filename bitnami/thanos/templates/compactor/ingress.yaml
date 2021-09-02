@@ -1,32 +1,32 @@
-{{- if .Values.thanos.compactor.ingress.enabled -}}
+{{- if .Values.compactor.ingress.enabled -}}
 apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
   name: thanos-compactor
   labels: {{- include "common.labels.standard" . | nindent 4 }}
   annotations:
-    {{- if .Values.thanos.compactor.ingress.certManager }}
+    {{- if .Values.compactor.ingress.certManager }}
     kubernetes.io/tls-acme: "true"
     {{- end }}
-    {{- range $key, $value := .Values.thanos.compactor.ingress.annotations }}
+    {{- range $key, $value := .Values.compactor.ingress.annotations }}
     {{ $key }}: {{ $value | quote }}
     {{- end }}
 spec:
-  {{- if and .Values.thanos.compactor.ingress.ingressClassName }}
-  ingressClassName: {{ .Values.thanos.compactor.ingress.ingressClassName | quote }}
+  {{- if and .Values.compactor.ingress.ingressClassName }}
+  ingressClassName: {{ .Values.compactor.ingress.ingressClassName | quote }}
   {{- end }}
   rules:
-    {{- if .Values.thanos.compactor.ingress.hostname }}
-    - host: {{ .Values.thanos.compactor.ingress.hostname }}
+    {{- if .Values.compactor.ingress.hostname }}
+    - host: {{ .Values.compactor.ingress.hostname }}
       http:
         paths:
-          - path: {{ .Values.thanos.compactor.ingress.path }}
+          - path: {{ .Values.compactor.ingress.path }}
             {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
-            pathType: {{ .Values.thanos.compactor.ingress.pathType }}
+            pathType: {{ .Values.compactor.ingress.pathType }}
             {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" "thanos-compactor" "servicePort" "http" "context" $)  | nindent 14 }}
     {{- end }}
-    {{- range .Values.thanos.compactor.ingress.extraHosts }}
+    {{- range .Values.compactor.ingress.extraHosts }}
     - host: {{ .name }}
       http:
         paths:
@@ -36,15 +36,15 @@ spec:
             {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" "thanos-compactor" "servicePort" "http" "context" $) | nindent 14 }}
     {{- end }}
-  {{- if or .Values.thanos.compactor.ingress.tls .Values.thanos.compactor.ingress.extraTls .Values.thanos.compactor.ingress.hosts }}
+  {{- if or .Values.compactor.ingress.tls .Values.compactor.ingress.extraTls .Values.compactor.ingress.hosts }}
   tls:
-    {{- if or .Values.thanos.compactor.ingress.secrets .Values.thanos.compactor.ingress.tls }}
+    {{- if or .Values.compactor.ingress.secrets .Values.compactor.ingress.tls }}
     - hosts:
-        - {{ .Values.thanos.compactor.ingress.hostname }}
-      secretName: {{ printf "%s-tls" .Values.thanos.compactor.ingress.hostname }}
+        - {{ .Values.compactor.ingress.hostname }}
+      secretName: {{ printf "%s-tls" .Values.compactor.ingress.hostname }}
     {{- end }}
-    {{- if .Values.thanos.compactor.ingress.extraTls }}
-    {{- toYaml .Values.thanos.compactor.ingress.extraTls | nindent 4 }}
+    {{- if .Values.compactor.ingress.extraTls }}
+    {{- toYaml .Values.compactor.ingress.extraTls | nindent 4 }}
     {{- end }}
   {{- end }}
 {{- end }}
