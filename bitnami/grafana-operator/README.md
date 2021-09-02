@@ -239,7 +239,7 @@ For more details regarding what is possible with those CRDs please have a look a
 
 There are cases where you may want to deploy extra objects, such as custom *Grafana*, *GrafanaDashboard* or *GrafanaDataSource* objects. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter.
 
-Refer to the documentation on deploying extra Grafana resources for an [example of deploying a custom Grafana definition](https://docs.bitnami.com/kubernetes/infrastructure/grafana-operator/configuration/deploy-extra-resources/).
+Refer to the documentation on deploying extra Grafana resources for an [example of deploying a custom Grafana definition](https://docs.bitnami.com/kubernetes/infrastructure/grafana-operator/configuration/deploy-extra-resources/) or to the [tutorial on managing multiple Grafana instances and dashboards on Kubernetes with the Grafana Operator](https://docs.bitnami.com/tutorials/manage-multiple-grafana-operator).
 
 ## Troubleshooting
 
