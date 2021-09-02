@@ -128,74 +128,75 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Spark parameters
 
-| Name                                     | Description                            | Value    |
-| ---------------------------------------- | -------------------------------------- | -------- |
-| `spark.enabled`                          | Enable Spark subchart                  | `true`   |
-| `spark.master.webPort`                   | Web port for spark master              | `8080`   |
-| `spark.master.resources.limits`          | Spark master resource limits           | `{}`     |
-| `spark.master.resources.requests.cpu`    | Spark master CPUs                      | `250m`   |
-| `spark.master.resources.requests.memory` | Spark master requested memory          | `5Gi`    |
-| `spark.master.affinity.podAntiAffinity`  | Anti affinity rules set for resiliency | `{}`     |
-| `spark.worker.replicaCount`              | Number of spark workers                | `2`      |
-| `spark.worker.webPort`                   | Web port for spark master              | `8081`   |
-| `spark.worker.resources.limits`          | Spark master resource limits           | `{}`     |
-| `spark.worker.resources.requests.cpu`    | Spark master CPUs                      | `250m`   |
-| `spark.worker.resources.requests.memory` | Spark master requested memory          | `5Gi`    |
-| `spark.worker.affinity.podAntiAffinity`  | Anti affinity rules set for resiliency | `{}`     |
-| `spark.metrics.enabled`                  | Enable Prometheus exporter for Spark   | `false`  |
-| `spark.metrics.masterAnnotations`        | Annotations for Spark master exporter  | `{}`     |
-| `spark.metrics.workerAnnotations`        | Annotations for Spark worker exporter  | `{}`     |
+| Name                                     | Description                            | Value   |
+| ---------------------------------------- | -------------------------------------- | ------- |
+| `spark.enabled`                          | Enable Spark subchart                  | `true`  |
+| `spark.master.webPort`                   | Web port for spark master              | `8080`  |
+| `spark.master.resources.limits`          | Spark master resource limits           | `{}`    |
+| `spark.master.resources.requests.cpu`    | Spark master CPUs                      | `250m`  |
+| `spark.master.resources.requests.memory` | Spark master requested memory          | `5Gi`   |
+| `spark.master.affinity.podAntiAffinity`  | Anti affinity rules set for resiliency | `{}`    |
+| `spark.worker.replicaCount`              | Number of spark workers                | `2`     |
+| `spark.worker.webPort`                   | Web port for spark master              | `8081`  |
+| `spark.worker.resources.limits`          | Spark master resource limits           | `{}`    |
+| `spark.worker.resources.requests.cpu`    | Spark master CPUs                      | `250m`  |
+| `spark.worker.resources.requests.memory` | Spark master requested memory          | `5Gi`   |
+| `spark.worker.affinity.podAntiAffinity`  | Anti affinity rules set for resiliency | `{}`    |
+| `spark.metrics.enabled`                  | Enable Prometheus exporter for Spark   | `false` |
+| `spark.metrics.masterAnnotations`        | Annotations for Spark master exporter  | `{}`    |
+| `spark.metrics.workerAnnotations`        | Annotations for Spark worker exporter  | `{}`    |
 
 
 ### Elasticsearch parameters
 
-| Name                                                   | Description                                  | Value    |
-| ------------------------------------------------------ | -------------------------------------------- | -------- |
-| `elasticsearch.enabled`                                | Enable Elasticsearch                         | `true`   |
-| `elasticsearch.global.kibanaEnabled`                   | Enable Kibana                                | `true`   |
-| `elasticsearch.master.replicas`                        | Number of Elasticsearch replicas             | `3`      |
-| `elasticsearch.master.heapSize`                        | Heap Size for Elasticsearch master           | `768m`   |
-| `elasticsearch.master.affinity.podAntiAffinity`        | Elasticsearch pod anti affinity              | `{}`     |
-| `elasticsearch.master.resources.limits`                | Elasticsearch master resource limits         | `{}`     |
-| `elasticsearch.master.resources.requests.cpu`          | Elasticsearch master CPUs                    | `250m`   |
-| `elasticsearch.master.resources.requests.memory`       | Elasticsearch master requested memory        | `1Gi`    |
-| `elasticsearch.master.affinity.podAntiAffinity`        | Anti affinity rules set for resiliency       | `{}`     |
-| `elasticsearch.data.name`                              | Elasticsearch data node name                 | `data`   |
-| `elasticsearch.data.replicas`                          | Number of Elasticsearch replicas             | `2`      |
-| `elasticsearch.data.heapSize`                          | Heap Size for Elasticsearch data node        | `4096m`  |
-| `elasticsearch.data.affinity.podAntiAffinity`          | Anti affinity rules set for resiliency       | `{}`     |
-| `elasticsearch.data.resources.limits`                  | Elasticsearch data node resource limits      | `{}`     |
-| `elasticsearch.data.resources.requests.cpu`            | Elasticsearch data node CPUs                 | `250m`   |
-| `elasticsearch.data.resources.requests.memory`         | Elasticsearch data node requested memory     | `5Gi`    |
-| `elasticsearch.coordinating.replicas`                  | Number of Elasticsearch replicas             | `2`      |
-| `elasticsearch.coordinating.heapSize`                  | Heap Size for Elasticsearch coordinating     | `768m`   |
-| `elasticsearch.coordinating.affinity.podAntiAffinity`  | Anti affinity rules set for resiliency       | `{}`     |
-| `elasticsearch.coordinating.resources.limits`          | Elasticsearch coordinating resource limits   | `{}`     |
-| `elasticsearch.coordinating.resources.requests.cpu`    | Elasticsearch coordinating CPUs              | `250m`   |
-| `elasticsearch.coordinating.resources.requests.memory` | Elasticsearch coordinating requested memory  | `1Gi`    |
-| `elasticsearch.metrics.enabled`                        | Enable Prometheus exporter for Elasticsearch | `false`  |
-| `elasticsearch.metrics.resources.limits`               | Elasticsearch metrics resource limits        | `{}`     |
-| `elasticsearch.metrics.resources.requests.cpu`         | Elasticsearch metrics CPUs                   | `100m`   |
-| `elasticsearch.metrics.resources.requests.memory`      | Elasticsearch metrics requested memory       | `128Mi`  |
-| `elasticsearch.metrics.service.annotations`            | Elasticsearch metrics service annotations    | `{}`     |
+| Name                                                   | Description                                  | Value   |
+| ------------------------------------------------------ | -------------------------------------------- | ------- |
+| `elasticsearch.enabled`                                | Enable Elasticsearch                         | `true`  |
+| `elasticsearch.global.kibanaEnabled`                   | Enable Kibana                                | `true`  |
+| `elasticsearch.master.replicas`                        | Number of Elasticsearch replicas             | `3`     |
+| `elasticsearch.master.heapSize`                        | Heap Size for Elasticsearch master           | `768m`  |
+| `elasticsearch.master.affinity.podAntiAffinity`        | Elasticsearch pod anti affinity              | `{}`    |
+| `elasticsearch.master.resources.limits`                | Elasticsearch master resource limits         | `{}`    |
+| `elasticsearch.master.resources.requests.cpu`          | Elasticsearch master CPUs                    | `250m`  |
+| `elasticsearch.master.resources.requests.memory`       | Elasticsearch master requested memory        | `1Gi`   |
+| `elasticsearch.master.affinity.podAntiAffinity`        | Anti affinity rules set for resiliency       | `{}`    |
+| `elasticsearch.data.name`                              | Elasticsearch data node name                 | `data`  |
+| `elasticsearch.data.replicas`                          | Number of Elasticsearch replicas             | `2`     |
+| `elasticsearch.data.heapSize`                          | Heap Size for Elasticsearch data node        | `4096m` |
+| `elasticsearch.data.affinity.podAntiAffinity`          | Anti affinity rules set for resiliency       | `{}`    |
+| `elasticsearch.data.resources.limits`                  | Elasticsearch data node resource limits      | `{}`    |
+| `elasticsearch.data.resources.requests.cpu`            | Elasticsearch data node CPUs                 | `250m`  |
+| `elasticsearch.data.resources.requests.memory`         | Elasticsearch data node requested memory     | `5Gi`   |
+| `elasticsearch.coordinating.replicas`                  | Number of Elasticsearch replicas             | `2`     |
+| `elasticsearch.coordinating.heapSize`                  | Heap Size for Elasticsearch coordinating     | `768m`  |
+| `elasticsearch.coordinating.affinity.podAntiAffinity`  | Anti affinity rules set for resiliency       | `{}`    |
+| `elasticsearch.coordinating.resources.limits`          | Elasticsearch coordinating resource limits   | `{}`    |
+| `elasticsearch.coordinating.resources.requests.cpu`    | Elasticsearch coordinating CPUs              | `250m`  |
+| `elasticsearch.coordinating.resources.requests.memory` | Elasticsearch coordinating requested memory  | `1Gi`   |
+| `elasticsearch.metrics.enabled`                        | Enable Prometheus exporter for Elasticsearch | `false` |
+| `elasticsearch.metrics.resources.limits`               | Elasticsearch metrics resource limits        | `{}`    |
+| `elasticsearch.metrics.resources.requests.cpu`         | Elasticsearch metrics CPUs                   | `100m`  |
+| `elasticsearch.metrics.resources.requests.memory`      | Elasticsearch metrics requested memory       | `128Mi` |
+| `elasticsearch.metrics.service.annotations`            | Elasticsearch metrics service annotations    | `{}`    |
 
 
 ### Logstash parameters
 
-| Name                                         | Description                                    | Value   |
-| -------------------------------------------- | ---------------------------------------------- | ------- |
-| `logstash.enabled`                           | Enable Logstash                                | `true`  |
-| `logstash.replicaCount`                      | Number of Logstash replicas                    | `2`     |
-| `logstash.affinity.podAntiAffinity`          | Logstash pod anti affinity                     | `{}`    |
-| `logstash.resources.limits`                  | Elasticsearch metrics resource limits          | `{}`    |
-| `logstash.resources.requests.cpu`            | Elasticsearch metrics CPUs                     | `250m`  |
-| `logstash.resources.requests.memory`         | Elasticsearch metrics requested memory         | `1500Mi`|
-| `logstash.metrics.enabled`                   | Enable metrics for logstash                    | `false` |
-| `logstash.metrics.resources.limits`          | Elasticsearch metrics resource limits          | `{}`    |
-| `logstash.metrics.resources.requests.cpu`    | Elasticsearch metrics CPUs                     | `100m`  |
-| `logstash.metrics.resources.requests.memory` | Elasticsearch metrics requested memory         | `128Mi` |
-| `logstash.metrics.service.port`              | Logstash Prometheus port                       | `9198`  |
-| `logstash.metrics.service.annotations`       | Annotations for the Prometheus metrics service | `{}`    |
+| Name                                         | Description                                           | Value    |
+| -------------------------------------------- | ----------------------------------------------------- | -------- |
+| `logstash.enabled`                           | Enable Logstash                                       | `true`   |
+| `logstash.replicaCount`                      | Number of Logstash replicas                           | `2`      |
+| `logstash.affinity.podAntiAffinity`          | Logstash pod anti affinity                            | `{}`     |
+| `logstash.extraEnvVars`                      | Array containing extra env vars to configure Logstash | `[]`     |
+| `logstash.resources.limits`                  | Elasticsearch metrics resource limits                 | `{}`     |
+| `logstash.resources.requests.cpu`            | Elasticsearch metrics CPUs                            | `250m`   |
+| `logstash.resources.requests.memory`         | Elasticsearch metrics requested memory                | `1500Mi` |
+| `logstash.metrics.enabled`                   | Enable metrics for logstash                           | `false`  |
+| `logstash.metrics.resources.limits`          | Elasticsearch metrics resource limits                 | `{}`     |
+| `logstash.metrics.resources.requests.cpu`    | Elasticsearch metrics CPUs                            | `100m`   |
+| `logstash.metrics.resources.requests.memory` | Elasticsearch metrics requested memory                | `128Mi`  |
+| `logstash.metrics.service.port`              | Logstash Prometheus port                              | `9198`   |
+| `logstash.metrics.service.annotations`       | Annotations for the Prometheus metrics service        | `{}`     |
 
 
 ### Tanzu Observability (Wavefront) parameters
