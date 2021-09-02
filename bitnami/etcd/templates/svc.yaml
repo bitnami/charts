@@ -1,3 +1,4 @@
+{{- if .Values.service.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -46,3 +47,4 @@ spec:
       nodePort: null
       {{- end }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+{{- end }}
