@@ -426,7 +426,7 @@ service:
   ## @param service.type Kubernetes Service type
   ##
   type: ClusterIP
-  ## @param service.enable create second service if equal true
+  ## @param service.enabled create second service if equal true
   ##
   enabled: true
   ## @param service.clusterIP Kubernetes service Cluster IP
