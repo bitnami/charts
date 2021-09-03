@@ -843,14 +843,27 @@ git:
 ## @param ldap.binddn Bind DN
 ## @param ldap.bindpw Bind Password
 ## @param ldap.uidField Field used for uid
+## @param ldap.rolesMapping mapping from LDAP DN to a list of roles
+## @param ldap.groupField LDAP user attribute which has their role DNs
+## @param ldap.rolesSyncAtLogin replace ALL the user's roles each login, or only on registration
 ##
 ldap:
   enabled: false
-  uri: 'ldap://ldap_server:389'
-  base: 'ou=example,o=org'
-  binddn: 'cn=user,ou=example,o=org'
-  bindpw: ""
-  uidField: 'uid'
+  uri: 'ldap://ldap_server:1389'
+  base: 'dc=example,dc=org'
+  uidField: 'cn'
+  binddn: 'cn=admin,dc=example,dc=org'
+  bindpw: ''
+  userRegistration: 'True'
+  userRegistrationRole: 'Public'
+  firstnameField: 'givenName'
+  lastnameField: 'sn'
+  emailField: 'email'
+  rolesMapping: '{ "cn=All,ou=Groups,dc=example,dc=org": ["User"], "cn=Admins,ou=Groups,dc=example,dc=org": ["Admin"], }'
+  groupField: 'memberOf'
+  rolesSyncAtLogin: 'True'
+  permanentSessionLifetime: '1800'
+
   ## SSL/TLS parameters for LDAP
   ## @param ldap.tls.enabled Enabled TLS/SSL for LDAP, you must include the CA file.
   ## @param ldap.tls.allowSelfSigned Allow to use self signed certificates
