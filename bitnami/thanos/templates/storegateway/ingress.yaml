@@ -1,0 +1,50 @@
+{{- if .Values.storegateway.ingress.enabled -}}
+apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
+kind: Ingress
+metadata:
+  name: thanos-storegateway
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  annotations:
+    {{- if .Values.storegateway.ingress.certManager }}
+    kubernetes.io/tls-acme: "true"
+    {{- end }}
+    {{- range $key, $value := .Values.storegateway.ingress.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+spec:
+  {{- if and .Values.storegateway.ingress.ingressClassName }}
+  ingressClassName: {{ .Values.storegateway.ingress.ingressClassName | quote }}
+  {{- end }}
+  rules:
+    {{- if .Values.storegateway.ingress.hostname }}
+    - host: {{ .Values.storegateway.ingress.hostname }}
+      http:
+        paths:
+          - path: {{ .Values.storegateway.ingress.path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+            pathType: {{ .Values.storegateway.ingress.pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" "thanos-storegateway" "servicePort" "http" "context" $)  | nindent 14 }}
+    {{- end }}
+    {{- range .Values.storegateway.ingress.extraHosts }}
+    - host: {{ .name }}
+      http:
+        paths:
+          - path: {{ default "/" .path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
+            pathType: {{ default "ImplementationSpecific" .pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" "thanos-storegateway" "servicePort" "http" "context" $) | nindent 14 }}
+    {{- end }}
+  {{- if or .Values.storegateway.ingress.tls .Values.storegateway.ingress.extraTls .Values.storegateway.ingress.hosts }}
+  tls:
+    {{- if or .Values.storegateway.ingress.secrets .Values.storegateway.ingress.tls }}
+    - hosts:
+        - {{ .Values.storegateway.ingress.hostname }}
+      secretName: {{ printf "%s-tls" .Values.storegateway.ingress.hostname }}
+    {{- end }}
+    {{- if .Values.storegateway.ingress.extraTls }}
+    {{- toYaml .Values.storegateway.ingress.extraTls | nindent 4 }}
+    {{- end }}
+  {{- end }}
+{{- end }}
