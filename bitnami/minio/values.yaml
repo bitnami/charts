@@ -684,6 +684,21 @@ gateway:
   ## @param gateway.replicaCount Number of MinIO&reg; Gateway replicas
   ##
   replicaCount: 4
+  ## @param gateway.updateStrategy.type Update strategy type for MinIO&reg; Gateway replicas
+  updateStrategy:
+    type: Recreate
+  ## Autoscaling configuration for MinIO&reg; Gateway. overrides gateway.replicaCount if enabled
+  ## @param gateway.autoscaling.enabled Enable autoscaling for MinIO&reg; Gateway deployment
+  ## @param gateway.autoscaling.minReplicas Minimum number of replicas to scale back
+  ## @param gateway.autoscaling.maxReplicas Maximum number of replicas to scale out
+  ## @param gateway.autoscaling.targetCPU Target CPU utilization percentage
+  ## @param gateway.autoscaling.targetMemory Target Memory utilization percentage
+  autoscaling:
+    enabled: false
+    minReplicas: "4"
+    maxReplicas: "4"
+    targetCPU: ""
+    targetMemory: ""
   ## Gateway authentication configuration
   ##
   auth:
@@ -692,12 +707,20 @@ gateway:
     ## @param gateway.auth.azure.secretKey Secret Key to access MinIO using Azure Gateway
     ## @param gateway.auth.azure.storageAccountName Azure Storage Account Name to use to access Azure Blob Storage
     ## @param gateway.auth.azure.storageAccountKey Azure Storage Account Key to use to access Azure Blob Storage
+    ## @param gateway.auth.azure.storageAccountNameExistingSecret Existing Secret name to extract Azure Storage Account Name from to access Azure Blob Storage
+    ## @param gateway.auth.azure.storageAccountNameExistingSecretKey Existing Secret key to extract Azure Storage Account Name from to use to access Azure Blob Storage
+    ## @param gateway.auth.azure.storageAccountKeyExistingSecret Existing Secret name to extract Azure Storage Account Key from to access Azure Blob Storage
+    ## @param gateway.auth.azure.storageAccountKeyExistingSecretKey Existing Secret key to extract Azure Storage Account Key from to use to access Azure Blob Storage
     ##
     azure:
       accessKey: ""
       secretKey: ""
       storageAccountName: ""
       storageAccountKey: ""
+      storageAccountNameExistingSecret: ""
+      storageAccountNameExistingSecretKey: ""
+      storageAccountKeyExistingSecret: ""
+      storageAccountKeyExistingSecretKey: ""
     ## Authentication configuration for GCS. Ignored unless type=gcs
     ## @param gateway.auth.gcs.accessKey Access Key to access MinIO using GCS Gateway
     ## @param gateway.auth.gcs.secretKey Secret Key to access MinIO using GCS Gateway

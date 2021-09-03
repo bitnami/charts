@@ -76,7 +76,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `image.registry`                       | Kibana image registry                                                                                                                                     | `docker.io`              |
 | `image.repository`                     | Kibana image repository                                                                                                                                   | `bitnami/kibana`         |
-| `image.tag`                            | Kibana image tag (immutable tags are recommended)                                                                                                         | `7.14.0-debian-10-r0`    |
+| `image.tag`                            | Kibana image tag (immutable tags are recommended)                                                                                                         | `7.14.1-debian-10-r0`    |
 | `image.pullPolicy`                     | Kibana image pull policy                                                                                                                                  | `IfNotPresent`           |
 | `image.pullSecrets`                    | Specify docker-registry secret names as an array                                                                                                          | `[]`                     |
 | `replicaCount`                         | Number of replicas of the Kibana Pod                                                                                                                      | `1`                      |
@@ -96,7 +96,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                  |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`              |
 | `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell`  |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r172`      |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r180`      |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `Always`                 |
 | `volumePermissions.image.pullSecrets`  | Init container volume-permissions image pull secrets                                                                                                      | `[]`                     |
 | `volumePermissions.resources`          | Volume Permissions resources                                                                                                                              | `{}`                     |
@@ -169,7 +169,37 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.interval`      | Interval at which metrics should be scraped.                                                                                                              | `""`                     |
 | `metrics.serviceMonitor.scrapeTimeout` | Timeout after which the scrape is ended                                                                                                                   | `""`                     |
 | `metrics.serviceMonitor.selector`      | Prometheus instance selector labels                                                                                                                       | `{}`                     |
-| `elasticsearch`                        | Properties for Elasticsearch                                                                                                                              | `{}`                     |
+
+
+### Kibana server TLS configuration
+
+| Name                   | Description                                                                    | Value   |
+| ---------------------- | ------------------------------------------------------------------------------ | ------- |
+| `tls.enabled`          | Enable SSL/TLS encryption for Kibana server (HTTPS)                            | `false` |
+| `tls.autoGenerated`    | Create self-signed TLS certificates. Currently only supports PEM certificates. | `false` |
+| `tls.existingSecret`   | Name of the existing secret containing Kibana server certificates              | `""`    |
+| `tls.usePemCerts`      | Use this variable if your secrets contain PEM certificates instead of PKCS12   | `false` |
+| `tls.keyPassword`      | Password to access the PEM key when it is password-protected.                  | `""`    |
+| `tls.keystorePassword` | Password to access the PKCS12 keystore when it is password-protected.          | `""`    |
+| `tls.passwordsSecret`  | Name of a existing secret containing the Keystore or PEM key password          | `""`    |
+
+
+### Elasticsearch parameters
+
+| Name                                            | Description                                                                                                              | Value     |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------- |
+| `elasticsearch.hosts`                           | List of elasticsearch hosts to connect to.                                                                               | `[]`      |
+| `elasticsearch.port`                            | Elasticsearch port                                                                                                       | `""`      |
+| `elasticsearch.security.auth.enabled`           | Set to 'true' if Elasticsearch has authentication enabled                                                                | `false`   |
+| `elasticsearch.security.auth.kibanaUsername`    | Kibana server user to authenticate with Elasticsearch                                                                    | `elastic` |
+| `elasticsearch.security.auth.kibanaPassword`    | Kibana server password to authenticate with Elasticsearch                                                                | `""`      |
+| `elasticsearch.security.auth.existingSecret`    | Name of the existing secret containing the Password for the Kibana user                                                  | `""`      |
+| `elasticsearch.security.tls.enabled`            | Set to 'true' if Elasticsearch API uses TLS/SSL (HTTPS)                                                                  | `false`   |
+| `elasticsearch.security.tls.verificationMode`   | Verification mode for SSL communications.                                                                                | `full`    |
+| `elasticsearch.security.tls.existingSecret`     | Name of the existing secret containing Elasticsearch Truststore or CA certificate. Required unless verificationMode=none | `""`      |
+| `elasticsearch.security.tls.usePemCerts`        | Set to 'true' to use PEM certificates instead of PKCS12.                                                                 | `false`   |
+| `elasticsearch.security.tls.truststorePassword` | Password to access the PKCS12 trustore in case it is password-protected.                                                 | `""`      |
+| `elasticsearch.security.tls.passwordsSecret`    | Name of a existing secret containing the Truststore password                                                             | `""`      |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
@@ -340,6 +370,14 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 9.0.0
+
+This version updates the settings used to communicate Kibana with Elasticsearch, adapting it to Elasticsearch X-Pack Security features.
+
+Previous setting `elasticsearch.tls` has been replaced with `elasticsearch.security.tls.enabled`. Other settings regarding certificate verification can be found under `elasticsearch.security.tls.*`, such as verification method and custom truststore.
+
+Additionally, support for the Kibana server using TLS/SSL encryption (HTTPS for port 5601) has been added.
 
 ### To 8.0.0
 

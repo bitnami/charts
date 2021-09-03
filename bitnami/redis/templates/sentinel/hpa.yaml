@@ -1,8 +1,8 @@
-{{- if and .Values.replica.autoscaling.enabled (not .Values.sentinel.enabled) }}
+{{- if and .Values.replica.autoscaling.enabled .Values.sentinel.enabled }}
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ printf "%s-replicas" (include "common.names.fullname" .) }}
+  name: {{ printf "%s-node" (include "common.names.fullname" .) }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: replica
@@ -16,7 +16,7 @@ spec:
   scaleTargetRef:
     apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
     kind: StatefulSet
-    name: {{ printf "%s-replicas" (include "common.names.fullname" .) }}
+    name: {{ printf "%s-node" (include "common.names.fullname" .) }}
   minReplicas: {{ .Values.replica.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.replica.autoscaling.maxReplicas }}
   metrics:

@@ -40,7 +40,7 @@ jobs:
 
       - name: Get list of files with changes in Pull Request
         id: pr-file-changes
-        uses: trilom/file-changes-action@v1.2.3
+        uses: trilom/file-changes-action@v1.2.4
         with:
           fileOutput: ' '
 
