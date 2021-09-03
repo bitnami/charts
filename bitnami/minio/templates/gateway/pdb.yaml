@@ -19,5 +19,5 @@ spec:
   maxUnavailable: {{ .Values.gateway.pdb.maxUnavailable }}
   {{- end }}
   selector:
-    matchLabels: {{- include "minio.gateway.pdb.selector" . | nindent 6 }}
+    matchLabels: {{ include "common.labels.matchLabels" . | nindent 6 }}
 {{- end }}
