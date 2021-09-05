@@ -12,8 +12,12 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  {{- if not .Values.gateway.autoscaling.enabled }}
   replicas: {{ .Values.gateway.replicaCount }}
-  {{- if .Values.deployment.updateStrategy }}
+  {{- end }}
+  {{- if .Values.gateway.updateStrategy }}
+  strategy: {{- toYaml .Values.gateway.updateStrategy | nindent 4 }}
+  {{- else }}
   strategy: {{- toYaml .Values.deployment.updateStrategy | nindent 4 }}
   {{- end }}
   selector:
@@ -96,13 +100,23 @@ spec:
             - name: AZURE_STORAGE_ACCOUNT
               valueFrom:
                 secretKeyRef:
+                {{- if not ( or (empty .Values.gateway.auth.azure.storageAccountNameExistingSecret) (empty .Values.gateway.auth.azure.storageAccountNameExistingSecretKey))}}
+                  name: {{ .Values.gateway.auth.azure.storageAccountNameExistingSecret }}
+                  key: {{ .Values.gateway.auth.azure.storageAccountNameExistingSecretKey }}
+                {{- else }}
                   name: {{ include "minio.secretName" . }}
                   key: azure-storage-account-name
+                {{- end }}
             - name: AZURE_STORAGE_KEY
               valueFrom:
                 secretKeyRef:
+                {{- if not ( or (empty .Values.gateway.auth.azure.storageAccountNameExistingSecret) (empty .Values.gateway.auth.azure.storageAccountNameExistingSecretKey))}}
+                  name: {{ .Values.gateway.auth.azure.storageAccountKeyExistingSecret }}
+                  key: {{ .Values.gateway.auth.azure.storageAccountKeyExistingSecretKey }}
+                {{- else }}
                   name: {{ include "minio.secretName" . }}
                   key: azure-storage-account-key
+                {{- end }}
             {{- else if and (eq .Values.gateway.type "gcs") .Values.gateway.auth.gcs.keyJSON }}
             - name: GOOGLE_APPLICATION_CREDENTIALS
               value: "/opt/bitnami/minio/secrets/key.json"

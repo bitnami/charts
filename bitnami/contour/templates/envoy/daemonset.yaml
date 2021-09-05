@@ -191,6 +191,8 @@ spec:
               mountPath: /config
             - name: envoycert
               mountPath: /certs
+            - name: envoy-admin
+              mountPath: /admin
             {{- if .Values.envoy.extraVolumeMounts }}
               {{- include "common.tplvalues.render" ( dict "value" .Values.envoy.extraVolumeMounts "context" $ ) | nindent 12 }}
             {{- end }}
@@ -222,6 +224,8 @@ spec:
             - name: envoycert
               mountPath: /certs
               readOnly: true
+            - name: envoy-admin
+              mountPath: /admin
             {{- if .Values.envoy.extraVolumeMounts }}
               {{- include "common.tplvalues.render" ( dict "value" .Values.envoy.extraVolumeMounts "context" $ ) | nindent 12 }}
             {{- end }}
@@ -250,6 +254,8 @@ spec:
       automountServiceAccountToken: {{ .Values.envoy.serviceAccount.automountServiceAccountToken }}
       serviceAccountName: {{ include "envoy.envoyServiceAccountName" . }}
       volumes:
+        - name: envoy-admin
+          emptyDir: {}
         - name: envoy-config
           emptyDir: {}
         - name: envoycert

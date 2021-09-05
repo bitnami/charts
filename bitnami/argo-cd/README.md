@@ -70,13 +70,13 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Argo CD image parameters
 
-| Name                | Description                                        | Value                 |
-| ------------------- | -------------------------------------------------- | --------------------- |
-| `image.registry`    | Argo CD image registry                             | `docker.io`           |
-| `image.repository`  | Argo CD image repository                           | `bitnami/argo-cd`     |
-| `image.tag`         | Argo CD image tag (immutable tags are recommended) | `2.0.5-debian-10-r28` |
-| `image.pullPolicy`  | Argo CD image pull policy                          | `IfNotPresent`        |
-| `image.pullSecrets` | Argo CD image pull secrets                         | `[]`                  |
+| Name                | Description                                        | Value                |
+| ------------------- | -------------------------------------------------- | -------------------- |
+| `image.registry`    | Argo CD image registry                             | `docker.io`          |
+| `image.repository`  | Argo CD image repository                           | `bitnami/argo-cd`    |
+| `image.tag`         | Argo CD image tag (immutable tags are recommended) | `2.1.1-debian-10-r0` |
+| `image.pullPolicy`  | Argo CD image pull policy                          | `IfNotPresent`       |
+| `image.pullSecrets` | Argo CD image pull secrets                         | `[]`                 |
 
 
 ### Argo CD application controller parameters
@@ -364,7 +364,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------- | --------------------------------------------------------------------------------------------- | ---------------------- |
 | `dex.image.registry`                              | Dex image registry                                                                            | `docker.io`            |
 | `dex.image.repository`                            | Dex image repository                                                                          | `bitnami/dex`          |
-| `dex.image.tag`                                   | Dex image tag (immutable tags are recommended)                                                | `2.30.0-debian-10-r18` |
+| `dex.image.tag`                                   | Dex image tag (immutable tags are recommended)                                                | `2.30.0-debian-10-r28` |
 | `dex.image.pullPolicy`                            | Dex image pull policy                                                                         | `IfNotPresent`         |
 | `dex.image.pullSecrets`                           | Dex image pull secrets                                                                        | `[]`                   |
 | `dex.enabled`                                     | Enable the creation of a Dex deployment for SSO                                               | `false`                |
@@ -488,7 +488,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rbac.create`                             | Specifies whether RBAC resources should be created                          | `true`                |
 | `redis.image.registry`                    | Argo CD controller image registry                                           | `docker.io`           |
 | `redis.image.repository`                  | Argo CD controller image repository                                         | `bitnami/redis`       |
-| `redis.image.tag`                         | Argo CD controller image tag (immutable tags are recommended)               | `6.2.5-debian-10-r29` |
+| `redis.image.tag`                         | Argo CD controller image tag (immutable tags are recommended)               | `6.2.5-debian-10-r39` |
 | `redis.image.pullPolicy`                  | Argo CD controller image pull policy                                        | `IfNotPresent`        |
 | `redis.image.pullSecrets`                 | Argo CD controller image pull secrets                                       | `[]`                  |
 | `redis.enabled`                           | Enable Redis dependency                                                     | `true`                |

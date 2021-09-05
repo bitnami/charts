@@ -17,6 +17,9 @@ metadata:
     {{ $key }}: {{ $value | quote }}
     {{- end }}
 spec:
+  {{- if and $query.ingress.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
+  ingressClassName: {{ $query.ingress.ingressClassName | quote }}
+  {{- end }}
   rules:
     {{- if $query.ingress.hostname }}
     - host: {{ $query.ingress.hostname }}

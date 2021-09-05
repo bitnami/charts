@@ -164,10 +164,6 @@ data:
     sentinel_conf_add() {
         echo $'\n'"$@" >> "/opt/bitnami/redis-sentinel/etc/sentinel.conf"
     }
-    sentinel_conf_remove() {
-        sed -e '/^$1-/d' -e '/^$/d' /opt/bitnami/redis-sentinel/etc/sentinel.conf > /opt/bitnami/redis-sentinel/etc/sentinel.conf.tmp
-        mv /opt/bitnami/redis-sentinel/etc/sentinel.conf.tmp /opt/bitnami/redis-sentinel/etc/sentinel.conf
-    }
     host_id() {
         echo "$1" | openssl sha1 | awk '{print $2}'
     }
@@ -193,16 +189,14 @@ data:
 
     [[ -f $REDIS_PASSWORD_FILE ]] && export REDIS_PASSWORD="$(< "${REDIS_PASSWORD_FILE}")"
 
-    if [[ ! -f /opt/bitnami/redis-sentinel/etc/sentinel.conf ]]; then
-        cp /opt/bitnami/redis-sentinel/mounted-etc/sentinel.conf /opt/bitnami/redis-sentinel/etc/sentinel.conf
-        {{- if .Values.auth.enabled }}
-        printf "\nsentinel auth-pass %s %s" "{{ .Values.sentinel.masterSet }}" "$REDIS_PASSWORD" >> /opt/bitnami/redis-sentinel/etc/sentinel.conf
-        {{- if .Values.auth.sentinel }}
-        printf "\nrequirepass %s" "$REDIS_PASSWORD" >> /opt/bitnami/redis-sentinel/etc/sentinel.conf
-        {{- end }}
-        {{- end }}
-        printf "\nsentinel myid %s" "$(host_id "$HOSTNAME")" >> /opt/bitnami/redis-sentinel/etc/sentinel.conf
-    fi
+    cp /opt/bitnami/redis-sentinel/mounted-etc/sentinel.conf /opt/bitnami/redis-sentinel/etc/sentinel.conf
+    {{- if .Values.auth.enabled }}
+    printf "\nsentinel auth-pass %s %s" "{{ .Values.sentinel.masterSet }}" "$REDIS_PASSWORD" >> /opt/bitnami/redis-sentinel/etc/sentinel.conf
+    {{- if .Values.auth.sentinel }}
+    printf "\nrequirepass %s" "$REDIS_PASSWORD" >> /opt/bitnami/redis-sentinel/etc/sentinel.conf
+    {{- end }}
+    {{- end }}
+    printf "\nsentinel myid %s" "$(host_id "$HOSTNAME")" >> /opt/bitnami/redis-sentinel/etc/sentinel.conf
 
     if [[ -z "$(getent ahosts "$HEADLESS_SERVICE" | grep -v "^${myip}")" ]]; then
         # Only node available on the network, master by default
@@ -236,9 +230,6 @@ data:
             sentinel_conf_add "sentinel known-replica {{ .Values.sentinel.masterSet }} $ip {{ .Values.replica.containerPort }}"
         fi
     }
-
-    # removes generated known sentinels and replicas
-    sentinel_conf_remove "sentinel known"
 
     # Add available hosts on the network as known replicas & sentinels
     for node in $(seq 0 {{ .Values.replica.replicaCount }}); do
