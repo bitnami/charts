@@ -64,6 +64,9 @@ spec:
       {{- if .Values.secondary.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.secondary.tolerations "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.secondary.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.secondary.topologySpreadConstraints "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.secondary.priorityClassName }}
       priorityClassName: {{ .Values.secondary.priorityClassName | quote }}
       {{- else if .Values.priorityClassName }}
