@@ -77,7 +77,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------- | ----------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                      | etcd image registry                                                                             | `docker.io`           |
 | `image.repository`                    | etcd image name                                                                                 | `bitnami/etcd`        |
-| `image.tag`                           | etcd image tag                                                                                  | `3.5.0-debian-10-r57` |
+| `image.tag`                           | etcd image tag                                                                                  | `3.5.0-debian-10-r64` |
 | `image.pullPolicy`                    | etcd image pull policy                                                                          | `IfNotPresent`        |
 | `image.pullSecrets`                   | etcd image pull secrets                                                                         | `[]`                  |
 | `image.debug`                         | Enable image debug mode                                                                         | `false`               |
@@ -176,6 +176,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                               | Description                                                                       | Value       |
 | ---------------------------------- | --------------------------------------------------------------------------------- | ----------- |
 | `service.type`                     | Kubernetes Service type                                                           | `ClusterIP` |
+| `service.enabled`                  | create second service if equal true                                               | `true`      |
+| `service.clusterIP`                | Kubernetes service Cluster IP                                                     | `""`        |
 | `service.port`                     | etcd client port                                                                  | `2379`      |
 | `service.clientPortNameOverride`   | etcd client port name override                                                    | `""`        |
 | `service.peerPort`                 | etcd peer port                                                                    | `2380`      |
@@ -206,7 +208,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                     | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                         | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                          | `10-debian-10-r165`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                          | `10-debian-10-r172`     |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                  | `Always`                |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                     | `[]`                    |
 | `volumePermissions.resources.limits`   | Init container volume-permissions resource  limits                                                                   | `{}`                    |

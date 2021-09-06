@@ -146,9 +146,7 @@ spec:
             {{- if .Values.aws.apiRetries }}
             - --aws-api-retries={{ .Values.aws.apiRetries }}
             {{- end }}
-            {{- if .Values.aws.zoneType }}
             - --aws-zone-type={{ .Values.aws.zoneType }}
-            {{- end }}
             {{- if .Values.aws.assumeRoleArn }}
             - --aws-assume-role={{ .Values.aws.assumeRoleArn }}
             {{- end }}

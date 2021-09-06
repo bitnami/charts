@@ -140,7 +140,7 @@ kafka:
       limits: {}
       requests:
         cpu: 250m
-        memory: 5120Mi
+        memory: 5Gi
     ## Anti Affinity rules set for resiliency
     ## @param kafka.zookeeper.affinity.podAntiAffinity [object] Zookeeper pod anti affinity rules
     ## @skip kafka.zookeeper.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution
@@ -191,7 +191,7 @@ spark:
       limits: {}
       requests:
         cpu: 250m
-        memory: 5120Mi
+        memory: 5Gi
     affinity:
       podAntiAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
@@ -226,7 +226,7 @@ spark:
       limits: {}
       requests:
         cpu: 250m
-        memory: 5120Mi
+        memory: 5Gi
     affinity:
       podAntiAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
@@ -288,7 +288,7 @@ elasticsearch:
     ## Number of master-eligible node(s) replicas to deploy
     ##
     replicas: 3
-    heapSize: 512m
+    heapSize: 768m
     ## Affinity for pod assignment
     ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
     ## Note: podAffinityPreset, podAntiAffinityPreset, and nodeAffinityPreset will be ignored when it's set
@@ -325,7 +325,7 @@ elasticsearch:
       limits: {}
       requests:
         cpu: 250m
-        memory: 1048Mi
+        memory: 1Gi
   ## Elasticsearch data node parameters
   ## @param elasticsearch.data.name Elasticsearch data node name
   ## @param elasticsearch.data.replicas Number of Elasticsearch replicas
@@ -340,7 +340,7 @@ elasticsearch:
     ## Number of data node(s) replicas to deploy
     ##
     replicas: 2
-    heapSize: 2560m
+    heapSize: 4096m
     ## Affinity for pod assignment
     ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
     ## Note: podAffinityPreset, podAntiAffinityPreset, and nodeAffinityPreset will be ignored when it's set
@@ -385,7 +385,7 @@ elasticsearch:
     ## Number of coordinating-only node(s) replicas to deploy
     ##
     replicas: 2
-    heapSize: 1024m
+    heapSize: 768m
     ## Affinity for pod assignment
     ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
     ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
@@ -418,8 +418,8 @@ elasticsearch:
       ##
       limits: {}
       requests:
-        cpu: 100m
-        memory: 2Gi
+        cpu: 250m
+        memory: 1Gi
   ## Elasticsearch Prometheus exporter configuration
   ## ref: https://hub.docker.com/r/bitnami/elasticsearch-exporter/tags/
   ##
@@ -481,7 +481,15 @@ logstash:
                 values:
                   - '{{ .Release.Name }}'
           topologyKey: "kubernetes.io/hostname"
-
+  ## @param logstash.extraEnvVars Array containing extra env vars to configure Logstash
+  ## For example:
+  ## extraEnvVars:
+  ##  - name: ELASTICSEARCH_HOST
+  ##    value: "x.y.z"
+  ##
+  extraEnvVars:
+    - name: LS_JAVA_OPTS
+      value: "-Xmx1g -Xms1g"
   ## Logstash containers' resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## @param logstash.resources.limits Elasticsearch metrics resource limits
@@ -491,8 +499,8 @@ logstash:
   resources:
     limits: {}
     requests:
-      cpu: 100m
-      memory: 128Mi
+      cpu: 250m
+      memory: 1500Mi
   ## Prometheus metrics
   ##
   metrics:

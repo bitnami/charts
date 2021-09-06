@@ -90,7 +90,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.pathType`                 | Ingress path type                                                                                     | `ImplementationSpecific` |
 | `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                         | `""`                     |
 | `ingress.hostname`                 | Default host for the ingress record                                                                   | `oaut2-proxy.local`      |
-| `ingress.path`                     | Default path for the ingress record                                                                   | `ImplementationSpecific` |
+| `ingress.path`                     | Default path for the ingress record                                                                   | `/`                      |
 | `ingress.annotations`              | Additional custom annotations for the ingress record                                                  | `{}`                     |
 | `ingress.tls`                      | Enable TLS configuration for the host defined at `ingress.hostname` parameter                         | `false`                  |
 | `ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                            | `[]`                     |
@@ -104,7 +104,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ------------------------------------------------------- | ---------------------- |
 | `image.registry`    | OAuth2 Proxy image registry                             | `docker.io`            |
 | `image.repository`  | OAuth2 Proxy image repository                           | `bitnami/oauth2-proxy` |
-| `image.tag`         | OAuth2 Proxy image tag (immutable tags are recommended) | `7.1.3-debian-10-r74`  |
+| `image.tag`         | OAuth2 Proxy image tag (immutable tags are recommended) | `7.1.3-debian-10-r100` |
 | `image.pullPolicy`  | OAuth2 Proxy image pull policy                          | `IfNotPresent`         |
 | `image.pullSecrets` | OAuth2 Proxy image pull secrets                         | `[]`                   |
 
