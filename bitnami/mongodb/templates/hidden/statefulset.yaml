@@ -398,7 +398,7 @@ spec:
           {{- end }}
           env:
           {{- if .Values.auth.enabled }}
-          {{- if not (or .Values.metrics.username .Values.metrics.password ) }}
+          {{- if not .Values.metrics.username }}
           - name: MONGODB_ROOT_PASSWORD
             valueFrom:
               secretKeyRef:
