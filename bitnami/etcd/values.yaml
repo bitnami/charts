@@ -646,7 +646,7 @@ metrics:
     ##
     tlsConfig: {}
     ##
-    ## @param metrics.podMonitor.relabelings [array] add relabling rules to be applied by prometheus
+    ## @param metrics.podMonitor.relabelings [array] Prometheus relabeling rules
     relabelings: []
 
 ## @section Snapshotting parameters
