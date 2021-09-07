@@ -117,6 +117,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `primary.affinity`                           | Affinity for MariaDB primary pods assignment                                                                      | `{}`            |
 | `primary.nodeSelector`                       | Node labels for MariaDB primary pods assignment                                                                   | `{}`            |
 | `primary.tolerations`                        | Tolerations for MariaDB primary pods assignment                                                                   | `[]`            |
+| `primary.topologySpreadConstraints`          | Topology Spread Constraints for MariaDB primary pods assignment                                                   | `{}`            |
 | `primary.priorityClassName`                  | Priority class for MariaDB primary pods assignment                                                                | `""`            |
 | `primary.podSecurityContext.enabled`         | Enable security context for MariaDB primary pods                                                                  | `true`          |
 | `primary.podSecurityContext.fsGroup`         | Group ID for the mounted volumes' filesystem                                                                      | `1001`          |
@@ -189,6 +190,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `secondary.affinity`                           | Affinity for MariaDB secondary pods assignment                                                                        | `{}`            |
 | `secondary.nodeSelector`                       | Node labels for MariaDB secondary pods assignment                                                                     | `{}`            |
 | `secondary.tolerations`                        | Tolerations for MariaDB secondary pods assignment                                                                     | `[]`            |
+| `secondary.topologySpreadConstraints`          | Topology Spread Constraints for MariaDB secondary pods assignment                                                     | `{}`            |
 | `secondary.priorityClassName`                  | Priority class for MariaDB secondary pods assignment                                                                  | `""`            |
 | `secondary.podSecurityContext.enabled`         | Enable security context for MariaDB secondary pods                                                                    | `true`          |
 | `secondary.podSecurityContext.fsGroup`         | Group ID for the mounted volumes' filesystem                                                                          | `1001`          |
