@@ -104,6 +104,8 @@ data:
         ARGS+=("--slaveof" "${REDIS_MASTER_HOST}" "${REDIS_MASTER_PORT_NUMBER}")
     fi
 
+    ARGS+=("--replica-announce-ip" "${HOSTNAME}")
+
     {{- if .Values.auth.enabled }}
     ARGS+=("--requirepass" "${REDIS_PASSWORD}")
     ARGS+=("--masterauth" "${REDIS_MASTER_PASSWORD}")
@@ -197,12 +199,13 @@ data:
     {{- end }}
     {{- end }}
     printf "\nsentinel myid %s" "$(host_id "$HOSTNAME")" >> /opt/bitnami/redis-sentinel/etc/sentinel.conf
+    printf "\nsentinel announce-ip %s" "${HOSTNAME}.${HEADLESS_SERVICE}" >> /opt/bitnami/redis-sentinel/etc/sentinel.conf
 
     if [[ -z "$(getent ahosts "$HEADLESS_SERVICE" | grep -v "^${myip}")" ]]; then
         # Only node available on the network, master by default
         export REDIS_REPLICATION_MODE="master"
-
-        REDIS_MASTER_HOST=${myip}
+        
+        REDIS_MASTER_HOST="${HOSTNAME}.${HEADLESS_SERVICE}"
         REDIS_MASTER_PORT_NUMBER="{{ .Values.master.containerPort }}"
     else
         export REDIS_REPLICATION_MODE="slave"
@@ -234,7 +237,7 @@ data:
     # Add available hosts on the network as known replicas & sentinels
     for node in $(seq 0 {{ .Values.replica.replicaCount }}); do
         hostname="{{ template "common.names.fullname" . }}-node-$node"
-        ip="$(getent hosts "$hostname.$HEADLESS_SERVICE" | awk '{ print $1 }')"
+        ip="$(getent hosts "$hostname.$HEADLESS_SERVICE" | awk '{ print $2 }')"
 
         add_known_sentinel "$hostname" "$ip"
         add_known_replica "$ip"
