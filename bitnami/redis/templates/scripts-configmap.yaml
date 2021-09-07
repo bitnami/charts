@@ -104,7 +104,7 @@ data:
         ARGS+=("--slaveof" "${REDIS_MASTER_HOST}" "${REDIS_MASTER_PORT_NUMBER}")
     fi
 
-    ARGS+=("--replica-announce-ip" "${HOSTNAME}")
+    ARGS+=("--replica-announce-ip" "${HOSTNAME}.${HEADLESS_SERVICE}")
 
     {{- if .Values.auth.enabled }}
     ARGS+=("--requirepass" "${REDIS_PASSWORD}")
