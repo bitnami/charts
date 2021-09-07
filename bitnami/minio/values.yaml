@@ -617,7 +617,8 @@ serviceAccount:
 
 ## @section Other parameters
 
-## MinIO&reg; Pod Disruption Budget configuration (only in distributed mode)
+## MinIO&reg; Pod Disruption Budget configuration in distributed mode.
+## If MinIO&reg; Gateway is enabled, creates a Pod Disruption Budget for the Gateway instead (mutually exclusive with distributed mode).
 ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
 ##
 pdb:
@@ -699,14 +700,6 @@ gateway:
     maxReplicas: "4"
     targetCPU: ""
     targetMemory: ""
-  ## PodDisruptionBudget configuration for MinIO&reg; Gateway
-  ## @param gateway.pdb.create Enable/disable a Pod Disruption Budget creation for MinIO&reg; Gateway
-  ## @param gateway.pdb.minAvailable Minimum number/percentage of pods that must still be available after the eviction for MinIO&reg; Gateway
-  ## @param gateway.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable after the eviction for MinIO&reg; Gateway
-  pdb:
-    create: false
-    minAvailable: 1
-    maxUnavailable: ""
   ## @param gateway.priorityClassName Pod priority class name for MinIO&reg; Gateway
   priorityClassName: ""
   ## Gateway authentication configuration

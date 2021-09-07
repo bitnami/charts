@@ -1,5 +1,5 @@
-{{- if and .Values.gateway.pdb.create .Values.gateway.enabled }}
-apiVersion: policy/v1beta1
+{{- if and .Values.pdb.create .Values.gateway.enabled }}
+apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodDisruptionBudget
 metadata:
   name: {{ include "common.names.fullname" . }}
@@ -12,11 +12,11 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- if .Values.gateway.pdb.minAvailable }}
-  minAvailable: {{ .Values.gateway.pdb.minAvailable }}
+  {{- if .Values.pdb.minAvailable }}
+  minAvailable: {{ .Values.pdb.minAvailable }}
   {{- end }}
-  {{- if .Values.gateway.pdb.maxUnavailable }}
-  maxUnavailable: {{ .Values.gateway.pdb.maxUnavailable }}
+  {{- if .Values.pdb.maxUnavailable }}
+  maxUnavailable: {{ .Values.pdb.maxUnavailable }}
   {{- end }}
   selector:
     matchLabels: {{ include "common.labels.matchLabels" . | nindent 6 }}

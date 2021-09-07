@@ -229,11 +229,11 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Other parameters
 
-| Name                 | Description                                                                       | Value   |
-| -------------------- | --------------------------------------------------------------------------------- | ------- |
-| `pdb.create`         | Enable/disable a Pod Disruption Budget creation                                   | `false` |
-| `pdb.minAvailable`   | Minimum number/percentage of pods that must still be available after the eviction | `1`     |
-| `pdb.maxUnavailable` | Maximum number/percentage of pods that may be made unavailable after the eviction | `""`    |
+| Name                 | Description                                                                                                                                       | Value   |
+|----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|---------|
+| `pdb.create`         | Enable/disable a Pod Disruption Budget creation in distributed mode. If Gateway is enabled, provides a Pod Disruption Budget for Gateway instead. | `false` |
+| `pdb.minAvailable`   | Minimum number/percentage of pods that must still be available after the eviction                                                                 | `1`     |
+| `pdb.maxUnavailable` | Maximum number/percentage of pods that may be made unavailable after the eviction                                                                 | `""`    |
 
 
 ### Metrics parameters
@@ -264,9 +264,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `gateway.autoscaling.targetCPU`                          | Target CPU utilization percentage                                                                        | `""`                       |
 | `gateway.autoscaling.targetMemory`                       | Target Memory utilization percentage                                                                     | `""`                       |
 | `gateway.priorityClassName`                              | Pod priority class name for MinIO&reg; Gateway                                                           | `""`                       |
-| `gateway.pdb.create`                                     | Enable/disable a Pod Disruption Budget creation for MinIO&reg; Gateway                                   | `false`                    |
-| `gateway.pdb.minAvailable`                               | Minimum number/percentage of pods that must still be available after the eviction for MinIO&reg; Gateway | `1`                        |
-| `gateway.pdb.maxUnavailable`                             | Maximum number/percentage of pods that may be made unavailable after the eviction for MinIO&reg; Gateway | `""`                       |
 | `gateway.auth.azure.accessKey`                           | Access Key to access MinIO using Azure Gateway                                                           | `""`                       |
 | `gateway.auth.azure.secretKey`                           | Secret Key to access MinIO using Azure Gateway                                                           | `""`                       |
 | `gateway.auth.azure.storageAccountName`                  | Azure Storage Account Name to use to access Azure Blob Storage                                           | `""`                       |
