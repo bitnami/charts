@@ -365,11 +365,9 @@ spec:
     - metadata:
         name: data
         labels: {{- include "common.labels.matchLabels" . | nindent 10 }}
-        {{- if or .Values.persistence.annotations }}
+        {{- if .Values.persistence.annotations }}
         annotations:
-          {{- if .Values.persistence.annotations }}
           {{- include "common.tplvalues.render" ( dict "value" .Values.persistence.annotations "context" $) | nindent 10 }}
-          {{- end }}
         {{- end }}
       spec:
         accessModes:
