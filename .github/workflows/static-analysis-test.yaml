@@ -1,0 +1,33 @@
+name: Static analysis test
+on:
+  pull_request:
+    branches:
+      - master
+    # These hardcoded paths are set for the PoC on the Apache chart
+    paths:
+      - "bitnami/apache/templates/*"
+      - "bitnami/apache/values.yaml"
+
+jobs:
+  static-analysis-test:
+    name: Static analysis test
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout Bitnami charts code
+        uses: actions/checkout@v2
+
+      - name: Prepare test resources
+        run: |
+          mkdir test-resources
+          cp bitnami/apache/ci/static-analysis/.trivyignore test-resources/
+
+      - name: Helm template
+        run: |
+          helm repo add bitnami https://charts.bitnami.com/bitnami
+          helm dependency build bitnami/apache/
+          helm template apache bitnami/apache/ -f bitnami/apache/values.yaml > test-resources/generated-manifests.yaml
+
+      - name: Run Trivy vulnerability scanner in IaC mode
+        uses: docker://bitnami/trivy:latest
+        with:
+          args: config --exit-code 1 --ignorefile test-resources/.trivyignore test-resources/

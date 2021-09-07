@@ -1,0 +1,18 @@
+# Default capabilities not dropped: avd.aquasec.com/appshield/ksv003
+KSV003
+# CPU not limited: avd.aquasec.com/appshield/ksv011
+KSV011
+# Root file system is not read-only: avd.aquasec.com/appshield/ksv014
+KSV014
+# CPU requests not specified: avd.aquasec.com/appshield/ksv015
+KSV015
+# Memory requests not specified: avd.aquasec.com/appshield/ksv016
+KSV016
+# Memory not limited: avd.aquasec.com/appshield/ksv018
+KSV018
+# Seccomp policies disabled: avd.aquasec.com/appshield/ksv019
+KSV019
+# Runs with low user ID: avd.aquasec.com/appshield/ksv020
+KSV020
+# Runs with low group ID: avd.aquasec.com/appshield/ksv021
+KSV021
