@@ -71,7 +71,7 @@ spec:
               {{- range $key, $value := .Values.metrics.kafka.extraFlags }}
               --{{ $key }}{{ if $value }}={{ $value }}{{ end }} \
               {{- end }}
-              --web.listen-address=:9308
+              --web.listen-address=:{{ .Values.metrics.kafka.service.port }}
           {{- if (include "kafka.client.saslAuthentication" .) }}
           {{- $clientUsers := coalesce .Values.auth.sasl.jaas.clientUsers .Values.auth.jaas.clientUsers }}
           env:
@@ -86,7 +86,7 @@ spec:
           {{- end }}
           ports:
             - name: metrics
-              containerPort: 9308
+              containerPort: {{ .Values.metrics.kafka.service.port }}
           {{- if .Values.metrics.kafka.resources }}
           resources: {{ toYaml .Values.metrics.kafka.resources | nindent 12 }}
           {{- end }}
