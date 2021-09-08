@@ -229,11 +229,11 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Other parameters
 
-| Name                 | Description                                                                                                                                       | Value   |
-|----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|---------|
-| `pdb.create`         | Enable/disable a Pod Disruption Budget creation in distributed mode. If Gateway is enabled, provides a Pod Disruption Budget for Gateway instead. | `false` |
-| `pdb.minAvailable`   | Minimum number/percentage of pods that must still be available after the eviction                                                                 | `1`     |
-| `pdb.maxUnavailable` | Maximum number/percentage of pods that may be made unavailable after the eviction                                                                 | `""`    |
+| Name                 | Description                                                                       | Value   |
+|----------------------|-----------------------------------------------------------------------------------|---------|
+| `pdb.create`         | Enable/disable a Pod Disruption Budget creation                                   | `false` |
+| `pdb.minAvailable`   | Minimum number/percentage of pods that must still be available after the eviction | `1`     |
+| `pdb.maxUnavailable` | Maximum number/percentage of pods that may be made unavailable after the eviction | `""`    |
 
 
 ### Metrics parameters
