@@ -309,7 +309,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.pathType`         | Ingress Path type                                                                                     | `ImplementationSpecific` |
 | `ingress.apiVersion`       | Override API Version (automatically detected if not set)                                              | `""`                     |
 | `ingress.hostname`         | Default host for the ingress record                                                                   | `airflow.local`          |
-| `ingress.path`             | Default path for the ingress record                                                                   | `ImplementationSpecific` |
+| `ingress.path`             | Default path for the ingress record                                                                   | `/`                      |
 | `ingress.annotations`      | Ingress annotations done as key:value pairs                                                           | `{}`                     |
 | `ingress.tls`              | Enable TLS configuration for the host defined at `ingress.hostname` parameter                         | `false`                  |
 | `ingress.certManager`      | Add the corresponding annotations for cert-manager integration                                        | `false`                  |
