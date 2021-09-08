@@ -51,6 +51,8 @@ spec:
           securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" .Values.git.image.debug | quote }}
             - name: AIRFLOW_PROMETHEUS_DATABASE_BACKEND
               value: "postgres"
             - name: AIRFLOW_PROMETHEUS_DATABASE_HOST

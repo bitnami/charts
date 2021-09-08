@@ -112,9 +112,12 @@ Returns the init container that will clone repositories files from a given list 
   {{- if .Values.git.clone.extraVolumeMounts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.git.clone.extraVolumeMounts "context" $) | nindent 4 }}
   {{- end }}
-{{- if .Values.git.clone.extraEnvVars }}
-  env: {{- include "common.tplvalues.render" (dict "value" .Values.git.clone.extraEnvVars "context" $) | nindent 4 }}
-{{- end }}
+  env:
+    - name: BITNAMI_DEBUG
+      value: {{ ternary "true" "false" .Values.git.image.debug | quote }}
+    {{- if .Values.git.clone.extraEnvVars }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.git.clone.extraEnvVars "context" $) | nindent 4 }}
+    {{- end }}
 {{- if or .Values.git.clone.extraEnvVarsCM .Values.git.clone.extraEnvVarsSecret }}
   envFrom:
     {{- if .Values.git.clone.extraEnvVarsCM }}
@@ -175,9 +178,12 @@ Returns the a container that will pull and sync repositories files from a given 
   {{- if .Values.git.sync.extraVolumeMounts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.git.sync.extraVolumeMounts "context" $) | nindent 4 }}
   {{- end }}
-{{- if .Values.git.sync.extraEnvVars }}
-  env: {{- include "common.tplvalues.render" (dict "value" .Values.git.sync.extraEnvVars "context" $) | nindent 4 }}
-{{- end }}
+  env:
+    - name: BITNAMI_DEBUG
+      value: {{ ternary "true" "false" .Values.git.image.debug | quote }}
+    {{- if .Values.git.sync.extraEnvVars }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.git.sync.extraEnvVars "context" $) | nindent 4 }}
+    {{- end }}
 {{- if or .Values.git.sync.extraEnvVarsCM .Values.git.sync.extraEnvVarsSecret }}
   envFrom:
     {{- if .Values.git.sync.extraEnvVarsCM }}

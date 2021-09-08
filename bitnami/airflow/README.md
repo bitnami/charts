@@ -55,36 +55,38 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                                 | Description                                                                                                         | Value   |
-| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------- | ------- |
-| `kubeVersion`                        | Force target Kubernetes version (using Helm capabilities if not set)                                                | `""`    |
-| `nameOverride`                       | String to partially override airflow.fullname template with a string (will prepend the release name)                | `""`    |
-| `fullnameOverride`                   | String to fully override airflow.fullname template with a string                                                    | `""`    |
-| `affinity`                           | Affinity for pod assignment (evaluated as a template)                                                               | `{}`    |
-| `commonAnnotations`                  | Annotations to add to all deployed objects                                                                          | `{}`    |
-| `commonLabels`                       | Labels to add to all deployed objects                                                                               | `{}`    |
-| `containerSecurityContext.enabled`   | Enable container security context                                                                                   | `true`  |
-| `containerSecurityContext.runAsUser` | User ID for the container                                                                                           | `1001`  |
-| `extraDeploy`                        | A list of extra kubernetes resources to be deployed                                                                 | `[]`    |
-| `extraEnvVars`                       | Extra environment variables to add to web, worker and scheduler pods                                                | `[]`    |
-| `extraEnvVarsCM`                     | ConfigMap containing extra env vars to add to web, worker and scheduler pods                                        | `""`    |
-| `extraEnvVarsSecret`                 | Secret containing extra env vars to add to web, worker and scheduler pods                                           | `""`    |
-| `initContainers`                     | List of init containers to be added to the web, worker and scheduler pods                                           | `[]`    |
-| `networkPolicies.enabled`            | Switch to enable network policies                                                                                   | `false` |
-| `nodeAffinityPreset.key`             | Node label key to match. Ignored if `affinity` is set.                                                              | `""`    |
-| `nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                           | `""`    |
-| `nodeAffinityPreset.values`          | Node label values to match. Ignored if `affinity` is set.                                                           | `[]`    |
-| `nodeSelector`                       | Node labels for pod assignment                                                                                      | `{}`    |
-| `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`.                                | `""`    |
-| `podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`.                           | `soft`  |
-| `podSecurityContext.enabled`         | Enable pod security context                                                                                         | `true`  |
-| `podSecurityContext.fsGroup`         | fsGroup ID for the pod                                                                                              | `1001`  |
-| `rbac.create`                        | If true, create & use RBAC resources                                                                                | `false` |
-| `serviceAccount.annotations`         | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                          | `{}`    |
-| `serviceAccount.create`              | Specifies whether a ServiceAccount should be created                                                                | `false` |
-| `serviceAccount.name`                | Name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`    |
-| `sidecars`                           | List of sidecar containers to be added to web, worker and scheduler pods                                            | `[]`    |
-| `tolerations`                        | Tolerations for pod assignment                                                                                      | `[]`    |
+| Name                                          | Description                                                                                                         | Value   |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------- |
+| `kubeVersion`                                 | Force target Kubernetes version (using Helm capabilities if not set)                                                | `""`    |
+| `nameOverride`                                | String to partially override airflow.fullname template with a string (will prepend the release name)                | `""`    |
+| `fullnameOverride`                            | String to fully override airflow.fullname template with a string                                                    | `""`    |
+| `affinity`                                    | Affinity for pod assignment (evaluated as a template)                                                               | `{}`    |
+| `commonAnnotations`                           | Annotations to add to all deployed objects                                                                          | `{}`    |
+| `commonLabels`                                | Labels to add to all deployed objects                                                                               | `{}`    |
+| `containerSecurityContext.enabled`            | Enable container security context                                                                                   | `true`  |
+| `containerSecurityContext.runAsUser`          | User ID for the container                                                                                           | `1001`  |
+| `containerSecurityContext.runAsNonRoot`       | Set Controller container's Security Context runAsNonRoot                                                            | `true`  |
+| `extraDeploy`                                 | A list of extra kubernetes resources to be deployed                                                                 | `[]`    |
+| `extraEnvVars`                                | Extra environment variables to add to web, worker and scheduler pods                                                | `[]`    |
+| `extraEnvVarsCM`                              | ConfigMap containing extra env vars to add to web, worker and scheduler pods                                        | `""`    |
+| `extraEnvVarsSecret`                          | Secret containing extra env vars to add to web, worker and scheduler pods                                           | `""`    |
+| `initContainers`                              | List of init containers to be added to the web, worker and scheduler pods                                           | `[]`    |
+| `networkPolicies.enabled`                     | Switch to enable network policies                                                                                   | `false` |
+| `nodeAffinityPreset.key`                      | Node label key to match. Ignored if `affinity` is set.                                                              | `""`    |
+| `nodeAffinityPreset.type`                     | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                           | `""`    |
+| `nodeAffinityPreset.values`                   | Node label values to match. Ignored if `affinity` is set.                                                           | `[]`    |
+| `nodeSelector`                                | Node labels for pod assignment                                                                                      | `{}`    |
+| `podAffinityPreset`                           | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`.                                | `""`    |
+| `podAntiAffinityPreset`                       | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`.                           | `soft`  |
+| `podSecurityContext.enabled`                  | Enable pod security context                                                                                         | `true`  |
+| `podSecurityContext.fsGroup`                  | fsGroup ID for the pod                                                                                              | `1001`  |
+| `rbac.create`                                 | If true, create & use RBAC resources                                                                                | `false` |
+| `serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                          | `{}`    |
+| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                | `false` |
+| `serviceAccount.name`                         | Name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`    |
+| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                      | `true`  |
+| `sidecars`                                    | List of sidecar containers to be added to web, worker and scheduler pods                                            | `[]`    |
+| `tolerations`                                 | Tolerations for pod assignment                                                                                      | `[]`    |
 
 
 ### Airflow common parameters
@@ -142,9 +144,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `web.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                        | `1`                  |
 | `web.customLivenessProbe`                | Custom liveness probe for the Web component                                 | `{}`                 |
 | `web.customReadinessProbe`               | Custom rediness probe for the Web component                                 | `{}`                 |
-| `web.podDisruptionBudget.enabled`        | Enable PodDisruptionBudget for web pods                                     | `false`              |
-| `web.podDisruptionBudget.minAvailable`   | Minimum available instances; ignored if there is no PodDisruptionBudget     | `1`                  |
-| `web.podDisruptionBudget.maxUnavailable` | Maximum available instances; ignored if there is no PodDisruptionBudget     | `""`                 |
+| `web.pdb.create`                         | Enable/disable a Pod Disruption Budget for web pods                         | `false`              |
+| `web.pdb.minAvailable`                   | Minimum number/percentage of pods that should remain scheduled              | `1`                  |
+| `web.pdb.maxUnavailable`                 | Maximum number/percentage of pods that may be made unavailable              | `""`                 |
 | `web.sidecars`                           | Add sidecars to the Web pods                                                | `[]`                 |
 | `web.initContainers`                     | Add initContainers to the Web pods                                          | `[]`                 |
 | `web.priorityClassName`                  | Priority Class Name                                                         | `""`                 |
@@ -152,41 +154,46 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.type`                           | Airflow service type                                                        | `ClusterIP`          |
 | `service.port`                           | Airflow service HTTP port                                                   | `8080`               |
 | `service.nodePort`                       | Airflow service NodePort                                                    | `""`                 |
-| `service.loadBalancerIP`                 | loadBalancerIP if service type is `LoadBalancer` (optional, cloud specific) | `""`                 |
+| `service.clusterIP`                      | Airflow service Cluster IP                                                  | `""`                 |
+| `service.loadBalancerIP`                 | Airflow service Load Balancer IP                                            | `""`                 |
+| `service.loadBalancerSourceRanges`       | Airflow service Load Balancer sources                                       | `[]`                 |
+| `service.externalTrafficPolicy`          | Airflow service external traffic policy                                     | `Cluster`            |
+| `service.extraPorts`                     | Extra ports to expose (normally used with the `sidecar` value)              | `[]`                 |
 | `service.annotations`                    | Additional custom annotations for Airflow service                           | `{}`                 |
 
 
 ### Airflow scheduler parameters
 
-| Name                                         | Description                                                             | Value                       |
-| -------------------------------------------- | ----------------------------------------------------------------------- | --------------------------- |
-| `scheduler.image.registry`                   | Airflow Scheduler image registry                                        | `docker.io`                 |
-| `scheduler.image.repository`                 | Airflow Scheduler image repository                                      | `bitnami/airflow-scheduler` |
-| `scheduler.image.tag`                        | Airflow Scheduler image tag (immutable tags are recommended)            | `2.1.3-debian-10-r8`        |
-| `scheduler.image.pullPolicy`                 | Airflow Scheduler image pull policy                                     | `IfNotPresent`              |
-| `scheduler.image.pullSecrets`                | Airflow Scheduler image pull secrets                                    | `[]`                        |
-| `scheduler.image.debug`                      | Enable image debug mode                                                 | `false`                     |
-| `scheduler.replicaCount`                     | Number of scheduler replicas                                            | `1`                         |
-| `scheduler.command`                          | Override cmd                                                            | `[]`                        |
-| `scheduler.args`                             | Override args                                                           | `[]`                        |
-| `scheduler.hostAliases`                      | Deployment pod host aliases                                             | `[]`                        |
-| `scheduler.podLabels`                        | Add extra labels to the web's pods                                      | `{}`                        |
-| `scheduler.podAnnotations`                   | Add extra annotations to the web's pods                                 | `{}`                        |
-| `scheduler.extraVolumeMounts`                | Add extra volume mounts                                                 | `[]`                        |
-| `scheduler.extraVolumes`                     | Add extra volumes                                                       | `[]`                        |
-| `scheduler.extraEnvVars`                     | Add extra environment variables                                         | `[]`                        |
-| `scheduler.extraEnvVarsCM`                   | ConfigMap with extra environment variables                              | `""`                        |
-| `scheduler.extraEnvVarsSecret`               | Secret with extra environment variables                                 | `""`                        |
-| `scheduler.resources.limits`                 | The resources limits for the Scheduler container                        | `{}`                        |
-| `scheduler.resources.requests`               | The requested resources for the Scheduler container                     | `{}`                        |
-| `scheduler.customLivenessProbe`              | Custom Liveness probe                                                   | `{}`                        |
-| `scheduler.customReadinessProbe`             | Custom Liveness probe                                                   | `{}`                        |
-| `scheduler.podDisruptionBudget.enabled`      | Enable PodDisruptionBudget for scheduler pods                           | `false`                     |
-| `scheduler.podDisruptionBudget.minAvailable` | Minimum available instances; ignored if there is no PodDisruptionBudget | `1`                         |
-| `scheduler.sidecars`                         | Add sidecars to the scheduler pods.                                     | `[]`                        |
-| `scheduler.initContainers`                   | Add initContainers to the scheduler pods.                               | `[]`                        |
-| `scheduler.priorityClassName`                | Priority Class Name                                                     | `""`                        |
-| `scheduler.nodeSelector`                     | Node labels for pod assignment                                          | `{}`                        |
+| Name                             | Description                                                    | Value                       |
+| -------------------------------- | -------------------------------------------------------------- | --------------------------- |
+| `scheduler.image.registry`       | Airflow Scheduler image registry                               | `docker.io`                 |
+| `scheduler.image.repository`     | Airflow Scheduler image repository                             | `bitnami/airflow-scheduler` |
+| `scheduler.image.tag`            | Airflow Scheduler image tag (immutable tags are recommended)   | `2.1.3-debian-10-r8`        |
+| `scheduler.image.pullPolicy`     | Airflow Scheduler image pull policy                            | `IfNotPresent`              |
+| `scheduler.image.pullSecrets`    | Airflow Scheduler image pull secrets                           | `[]`                        |
+| `scheduler.image.debug`          | Enable image debug mode                                        | `false`                     |
+| `scheduler.replicaCount`         | Number of scheduler replicas                                   | `1`                         |
+| `scheduler.command`              | Override cmd                                                   | `[]`                        |
+| `scheduler.args`                 | Override args                                                  | `[]`                        |
+| `scheduler.hostAliases`          | Deployment pod host aliases                                    | `[]`                        |
+| `scheduler.podLabels`            | Add extra labels to the web's pods                             | `{}`                        |
+| `scheduler.podAnnotations`       | Add extra annotations to the web's pods                        | `{}`                        |
+| `scheduler.extraVolumeMounts`    | Add extra volume mounts                                        | `[]`                        |
+| `scheduler.extraVolumes`         | Add extra volumes                                              | `[]`                        |
+| `scheduler.extraEnvVars`         | Add extra environment variables                                | `[]`                        |
+| `scheduler.extraEnvVarsCM`       | ConfigMap with extra environment variables                     | `""`                        |
+| `scheduler.extraEnvVarsSecret`   | Secret with extra environment variables                        | `""`                        |
+| `scheduler.resources.limits`     | The resources limits for the Scheduler container               | `{}`                        |
+| `scheduler.resources.requests`   | The requested resources for the Scheduler container            | `{}`                        |
+| `scheduler.customLivenessProbe`  | Custom Liveness probe                                          | `{}`                        |
+| `scheduler.customReadinessProbe` | Custom Liveness probe                                          | `{}`                        |
+| `scheduler.pdb.create`           | Enable/disable a Pod Disruption Budget for scheduler pods      | `false`                     |
+| `scheduler.pdb.minAvailable`     | Minimum number/percentage of pods that should remain scheduled | `1`                         |
+| `scheduler.pdb.maxUnavailable`   | Maximum number/percentage of pods that may be made unavailable | `""`                        |
+| `scheduler.sidecars`             | Add sidecars to the scheduler pods.                            | `[]`                        |
+| `scheduler.initContainers`       | Add initContainers to the scheduler pods.                      | `[]`                        |
+| `scheduler.priorityClassName`    | Priority Class Name                                            | `""`                        |
+| `scheduler.nodeSelector`         | Node labels for pod assignment                                 | `{}`                        |
 
 
 ### Airflow worker parameters
@@ -229,14 +236,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                                 | `1`                      |
 | `worker.customLivenessProbe`                | Custom Liveness probe                                                                                                | `{}`                     |
 | `worker.customReadinessProbe`               | Custom Liveness probe                                                                                                | `{}`                     |
-| `worker.podDisruptionBudget.enabled`        | Enable PodDisruptionBudget for worker pods                                                                           | `false`                  |
-| `worker.podDisruptionBudget.minAvailable`   | Minimum available instances; ignored if there is no PodDisruptionBudget                                              | `1`                      |
-| `worker.podDisruptionBudget.maxUnavailable` | Maximum available instances; ignored if there is no PodDisruptionBudget                                              | `""`                     |
+| `worker.pdb.create`                         | Enable/disable a Pod Disruption Budget for worker pods                                                               | `false`                  |
+| `worker.pdb.minAvailable`                   | Minimum number/percentage of pods that should remain scheduled                                                       | `1`                      |
+| `worker.pdb.maxUnavailable`                 | Maximum number/percentage of pods that may be made unavailable                                                       | `""`                     |
 | `worker.autoscaling.enabled`                | Whether enable horizontal pod autoscale                                                                              | `false`                  |
-| `worker.autoscaling.replicas.min`           | Configure a minimum amount of pods                                                                                   | `1`                      |
-| `worker.autoscaling.replicas.max`           | Configure a maximum amount of pods                                                                                   | `3`                      |
-| `worker.autoscaling.targets.cpu`            | Define the CPU target to trigger the scaling actions (utilization percentage)                                        | `80`                     |
-| `worker.autoscaling.targets.memory`         | Define the memory target to trigger the scaling actions (utilization percentage)                                     | `80`                     |
+| `worker.autoscaling.minReplicas`            | Configure a minimum amount of pods                                                                                   | `1`                      |
+| `worker.autoscaling.maxReplicas`            | Configure a maximum amount of pods                                                                                   | `3`                      |
+| `worker.autoscaling.targetCPU`              | Define the CPU target to trigger the scaling actions (utilization percentage)                                        | `80`                     |
+| `worker.autoscaling.targetMemory`           | Define the memory target to trigger the scaling actions (utilization percentage)                                     | `80`                     |
 | `worker.updateStrategy`                     | StatefulSet controller supports automated updates. There are two valid update strategies: RollingUpdate and OnDelete | `RollingUpdate`          |
 | `worker.rollingUpdatePartition`             | Partition update strategy                                                                                            | `""`                     |
 | `worker.sidecars`                           | Add sidecars to the worker pods.                                                                                     | `[]`                     |
@@ -256,6 +263,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `git.image.tag`                | Git image tag (immutable tags are recommended)                                         | `2.33.0-debian-10-r16` |
 | `git.image.pullPolicy`         | Git image pull policy                                                                  | `IfNotPresent`         |
 | `git.image.pullSecrets`        | Git image pull secrets                                                                 | `[]`                   |
+| `git.image.debug`              | Enable image debug mode                                                                | `false`                |
 | `git.dags.enabled`             | Enable in order to download DAG files from git repositories.                           | `false`                |
 | `git.dags.repositories`        | Array of repositories from which to download DAG files                                 | `[]`                   |
 | `git.plugins.enabled`          | Enable in order to download Plugins files from git repositories.                       | `false`                |
@@ -295,15 +303,22 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Airflow exposing parameters
 
-| Name                  | Description                                                                            | Value                    |
-| --------------------- | -------------------------------------------------------------------------------------- | ------------------------ |
-| `ingress.enabled`     | Set to true to enable ingress record generation                                        | `false`                  |
-| `ingress.apiVersion`  | Override API Version (automatically detected if not set)                               | `""`                     |
-| `ingress.pathType`    | Ingress Path type                                                                      | `ImplementationSpecific` |
-| `ingress.certManager` | Set this to true in order to add the corresponding annotations for cert-manager        | `false`                  |
-| `ingress.annotations` | Ingress annotations done as key:value pairs                                            | `{}`                     |
-| `ingress.hosts`       | The list of hostnames to be covered with this ingress record.                          | `[]`                     |
-| `ingress.secrets`     | If you're providing your own certificates, use this to add the certificates as secrets | `[]`                     |
+| Name                       | Description                                                                                           | Value                    |
+| -------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------ |
+| `ingress.enabled`          | Set to true to enable ingress record generation                                                       | `false`                  |
+| `ingress.pathType`         | Ingress Path type                                                                                     | `ImplementationSpecific` |
+| `ingress.apiVersion`       | Override API Version (automatically detected if not set)                                              | `""`                     |
+| `ingress.hostname`         | Default host for the ingress record                                                                   | `airflow.local`          |
+| `ingress.path`             | Default path for the ingress record                                                                   | `ImplementationSpecific` |
+| `ingress.annotations`      | Ingress annotations done as key:value pairs                                                           | `{}`                     |
+| `ingress.tls`              | Enable TLS configuration for the host defined at `ingress.hostname` parameter                         | `false`                  |
+| `ingress.certManager`      | Add the corresponding annotations for cert-manager integration                                        | `false`                  |
+| `ingress.selfSigned`       | Create a TLS secret for this ingress record using self-signed certificates generated by Helm          | `false`                  |
+| `ingress.extraHosts`       | An array with additional hostname(s) to be covered with the ingress record                            | `[]`                     |
+| `ingress.extraPaths`       | An array with additional arbitrary paths that may need to be added to the ingress under the main host | `[]`                     |
+| `ingress.extraTls`         | TLS configuration for additional hostname(s) to be covered with this ingress record                   | `[]`                     |
+| `ingress.secrets`          | Custom TLS certificates as secrets                                                                    | `[]`                     |
+| `ingress.ingressClassName` | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                         | `""`                     |
 
 
 ### Airflow database parameters
@@ -336,27 +351,32 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Airflow metrics parameters
 
-| Name                                   | Description                                                               | Value                         |
-| -------------------------------------- | ------------------------------------------------------------------------- | ----------------------------- |
-| `metrics.enabled`                      | Start a side-car prometheus exporter                                      | `false`                       |
-| `metrics.image.registry`               | Airflow Exporter image registry                                           | `docker.io`                   |
-| `metrics.image.repository`             | Airflow Exporter image repository                                         | `bitnami/airflow-exporter`    |
-| `metrics.image.tag`                    | Airflow Exporter image tag (immutable tags are recommended)               | `0.20210126.0-debian-10-r201` |
-| `metrics.image.pullPolicy`             | Airflow Exporter image pull policy                                        | `IfNotPresent`                |
-| `metrics.image.pullSecrets`            | Airflow Exporter image pull secrets                                       | `[]`                          |
-| `metrics.hostAliases`                  | Deployment pod host aliases                                               | `[]`                          |
-| `metrics.serviceMonitor.enabled`       | Create ServiceMonitor resource                                            | `false`                       |
-| `metrics.serviceMonitor.namespace`     | The namespace in which the ServiceMonitor will be created                 | `""`                          |
-| `metrics.serviceMonitor.interval`      | Interval in which prometheus scrapes                                      | `60s`                         |
-| `metrics.serviceMonitor.scrapeTimeout` | Scrape Timeout duration for prometheus                                    | `10s`                         |
-| `metrics.serviceMonitor.labels`        | Additional labels to attach                                               | `{}`                          |
-| `metrics.extraEnvVars`                 | Array containing extra environment variables                              | `[]`                          |
-| `metrics.extraEnvVarsCM`               | ConfigMap containing extra environment variables                          | `""`                          |
-| `metrics.extraEnvVarsSecret`           | Secret containing extra environment variables (in case of sensitive data) | `""`                          |
-| `metrics.resources`                    | Metrics exporter resource requests and limits                             | `{}`                          |
-| `metrics.tolerations`                  | Metrics exporter labels and tolerations for pod assignment                | `[]`                          |
-| `metrics.podLabels`                    | Metrics exporter pod Annotation and Labels                                | `{}`                          |
-| `metrics.nodeSelector`                 | Node labels for pod assignment                                            | `{}`                          |
+| Name                                       | Description                                                                       | Value                         |
+| ------------------------------------------ | --------------------------------------------------------------------------------- | ----------------------------- |
+| `metrics.enabled`                          | Start a side-car prometheus exporter                                              | `false`                       |
+| `metrics.image.registry`                   | Airflow Exporter image registry                                                   | `docker.io`                   |
+| `metrics.image.repository`                 | Airflow Exporter image repository                                                 | `bitnami/airflow-exporter`    |
+| `metrics.image.tag`                        | Airflow Exporter image tag (immutable tags are recommended)                       | `0.20210126.0-debian-10-r201` |
+| `metrics.image.pullPolicy`                 | Airflow Exporter image pull policy                                                | `IfNotPresent`                |
+| `metrics.image.pullSecrets`                | Airflow Exporter image pull secrets                                               | `[]`                          |
+| `metrics.image.debug`                      | Enable image debug mode                                                           | `false`                       |
+| `metrics.hostAliases`                      | Deployment pod host aliases                                                       | `[]`                          |
+| `metrics.serviceMonitor.enabled`           | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator      | `false`                       |
+| `metrics.serviceMonitor.namespace`         | Namespace which Prometheus is running in                                          | `""`                          |
+| `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in prometheus. | `""`                          |
+| `metrics.serviceMonitor.interval`          | Interval at which metrics should be scraped                                       | `60s`                         |
+| `metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                           | `10s`                         |
+| `metrics.serviceMonitor.relabelings`       | RelabelConfigs to apply to samples before scraping                                | `[]`                          |
+| `metrics.serviceMonitor.metricRelabelings` | MetricRelabelConfigs to apply to samples before ingestion                         | `[]`                          |
+| `metrics.serviceMonitor.selector`          | ServiceMonitor selector labels                                                    | `{}`                          |
+| `metrics.serviceMonitor.honorLabels`       | honorLabels chooses the metric's labels on collisions with target labels          | `false`                       |
+| `metrics.extraEnvVars`                     | Array containing extra environment variables                                      | `[]`                          |
+| `metrics.extraEnvVarsCM`                   | ConfigMap containing extra environment variables                                  | `""`                          |
+| `metrics.extraEnvVarsSecret`               | Secret containing extra environment variables (in case of sensitive data)         | `""`                          |
+| `metrics.resources`                        | Metrics exporter resource requests and limits                                     | `{}`                          |
+| `metrics.tolerations`                      | Metrics exporter labels and tolerations for pod assignment                        | `[]`                          |
+| `metrics.podLabels`                        | Metrics exporter pod Annotation and Labels                                        | `{}`                          |
+| `metrics.nodeSelector`                     | Node labels for pod assignment                                                    | `{}`                          |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
@@ -545,6 +565,18 @@ The Bitnami Airflow chart relies on the PostgreSQL chart persistence. This means
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Notable changes
+
+### To 11.0.0
+
+This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository.
+
+Affected values:
+
+- `PodDisruptionBudget` renamed as `pdb`.
+- `ingress.hosts` value have been replaced with `ingress.hostname`, `ingress.path` and `ingress.tls`. In addition, variables `extraHosts`, `extraPaths` and `extraTls` have been added to accept custom configurations.
+- `serviceMonitor.labels` renamed as `serviceMonitor.selector`.
+
+Additionally also updates the Redis&trade; subchart to it newest major, 14.0.0, which contains similar changes.
 
 ### To 10.0.0
 

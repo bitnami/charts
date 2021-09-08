@@ -1,4 +1,4 @@
-{{- if and .Values.web.podDisruptionBudget.enabled (or (eq .Values.executor "CeleryExecutor") (eq .Values.executor "CeleryKubernetesExecutor")) }}
+{{- if and .Values.web.pdb.create (or (eq .Values.executor "CeleryExecutor") (eq .Values.executor "CeleryKubernetesExecutor")) }}
 kind: PodDisruptionBudget
 apiVersion: policy/v1beta1
 metadata:
@@ -9,11 +9,11 @@ metadata:
       {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
     {{- end }}
 spec:
-  {{- if .Values.web.podDisruptionBudget.minAvailable }}
-  minAvailable: {{ .Values.web.podDisruptionBudget.minAvailable }}
+  {{- if .Values.web.pdb.minAvailable }}
+  minAvailable: {{ .Values.web.pdb.minAvailable }}
   {{- end }}
-  {{- if .Values.web.podDisruptionBudget.maxUnavailable }}
-  maxUnavailable: {{ .Values.web.podDisruptionBudget.maxUnavailable }}
+  {{- if .Values.web.pdb.maxUnavailable }}
+  maxUnavailable: {{ .Values.web.pdb.maxUnavailable }}
   {{- end }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}

@@ -13,15 +13,19 @@ spec:
     apiVersion: apps/v1
     kind: StatefulSet
     name: {{ include "common.names.fullname" . }}-worker
-  minReplicas: {{ .Values.worker.autoscaling.replicas.min }}
-  maxReplicas: {{ .Values.worker.autoscaling.replicas.max }}
+  minReplicas: {{ .Values.worker.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.worker.autoscaling.maxReplicas }}
   metrics:
+    {{- if .Values.worker.autoscaling.targetCPU }}
     - type: Resource
       resource:
         name: cpu
-        targetAverageUtilization: {{ .Values.worker.autoscaling.targets.cpu }}
+        targetAverageUtilization: {{ .Values.worker.autoscaling.targetCPU }}
+    {{- end }}
+    {{- if .Values.worker.autoscaling.targetMemory }}
     - type: Resource
       resource:
         name: memory
-        targetAverageUtilization: {{ .Values.worker.autoscaling.targets.memory }}
+        targetAverageUtilization: {{ .Values.worker.autoscaling.targetMemory  }}
+    {{- end }}
 {{- end }}

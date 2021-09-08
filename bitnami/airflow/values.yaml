@@ -42,10 +42,12 @@ commonLabels: {}
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled Enable container security context
 ## @param containerSecurityContext.runAsUser User ID for the container
+## @param containerSecurityContext.runAsNonRoot Set Controller container's Security Context runAsNonRoot
 ##
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
+  runAsNonRoot: true
 ## @param extraDeploy A list of extra kubernetes resources to be deployed
 ##
 extraDeploy: []
@@ -133,11 +135,13 @@ rbac:
 ## @param serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
 ## @param serviceAccount.create Specifies whether a ServiceAccount should be created
 ## @param serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
+## @param serviceAccount.automountServiceAccountToken Automount service account token for the server service account
 ##
 serviceAccount:
   annotations: {}
   create: false
   name: ""
+  automountServiceAccountToken: true
 ## @param sidecars List of sidecar containers to be added to web, worker and scheduler pods
 ## Example:
 ## sidecars:
@@ -320,14 +324,14 @@ web:
   ## @param web.customReadinessProbe Custom rediness probe for the Web component
   ##
   customReadinessProbe: {}
-  ## Enable PodDisruptionBudget for Web pods
+  ## Enable PodDisruptionBudget for web pods
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
-  ## @param web.podDisruptionBudget.enabled Enable PodDisruptionBudget for web pods
-  ## @param web.podDisruptionBudget.minAvailable Minimum available instances; ignored if there is no PodDisruptionBudget
-  ## @param web.podDisruptionBudget.maxUnavailable Maximum available instances; ignored if there is no PodDisruptionBudget
+  ## @param web.pdb.create Enable/disable a Pod Disruption Budget for web pods
+  ## @param web.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param web.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
-  podDisruptionBudget:
-    enabled: false
+  pdb:
+    create: false
     minAvailable: 1
     maxUnavailable: ""
   ## @param web.sidecars Add sidecars to the Web pods
@@ -361,23 +365,46 @@ web:
   ##
   nodeSelector: {}
 
-## Airflow service parameters. For minikube, set this to NodePort, elsewhere use LoadBalancer
-## @param service.type Airflow service type
-## @param service.port Airflow service HTTP port
-## @param service.nodePort Airflow service NodePort
-## @param service.loadBalancerIP loadBalancerIP if service type is `LoadBalancer` (optional, cloud specific)
-## @param service.annotations Additional custom annotations for Airflow service
+## Airflow service parameters.
+## For minikube, set this to NodePort, elsewhere use LoadBalancer
 ##
 service:
+  ## @param service.type Airflow service type
+  ##
   type: ClusterIP
+  ## @param service.port Airflow service HTTP port
+  ##
   port: 8080
-  ## NodePort
+  ## @param service.nodePort Airflow service NodePort
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
   nodePort: ""
+  ## @param service.clusterIP Airflow service Cluster IP
+  ## e.g.:
+  ## clusterIP: None
+  ##
+  clusterIP: ""
+  ## @param service.loadBalancerIP Airflow service Load Balancer IP
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+  ##
   loadBalancerIP: ""
+  ## @param service.loadBalancerSourceRanges Airflow service Load Balancer sources
+  ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+  ## e.g:
+  ## loadBalancerSourceRanges:
+  ##   - 10.10.10.0/24
+  ##
+  loadBalancerSourceRanges: []
+  ## @param service.externalTrafficPolicy Airflow service external traffic policy
+  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ##
+  externalTrafficPolicy: Cluster
+  ## @param service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+  ##
+  extraPorts: []
+  ## @param service.annotations Additional custom annotations for Airflow service
+  ##
   annotations: {}
-
 ## @section Airflow scheduler parameters
 
 scheduler:
@@ -472,13 +499,14 @@ scheduler:
   customReadinessProbe: {}
   ## Enable PodDisruptionBudget for scheduler pods
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
-  ## @param scheduler.podDisruptionBudget.enabled Enable PodDisruptionBudget for scheduler pods
-  ## @param scheduler.podDisruptionBudget.minAvailable Minimum available instances; ignored if there is no PodDisruptionBudget
+  ## @param scheduler.pdb.create Enable/disable a Pod Disruption Budget for scheduler pods
+  ## @param scheduler.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param scheduler.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
-  podDisruptionBudget:
-    enabled: false
+  pdb:
+    create: false
     minAvailable: 1
-    # maxUnavailable: 1
+    maxUnavailable: ""
   ## @param scheduler.sidecars Add sidecars to the scheduler pods.
   ## Example:
   ## sidecars:
@@ -645,30 +673,28 @@ worker:
   customReadinessProbe: {}
   ## Enable PodDisruptionBudget for worker pods
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
-  ## @param worker.podDisruptionBudget.enabled Enable PodDisruptionBudget for worker pods
-  ## @param worker.podDisruptionBudget.minAvailable Minimum available instances; ignored if there is no PodDisruptionBudget
-  ## @param worker.podDisruptionBudget.maxUnavailable Maximum available instances; ignored if there is no PodDisruptionBudget
+  ## @param worker.pdb.create Enable/disable a Pod Disruption Budget for worker pods
+  ## @param worker.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param worker.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
-  podDisruptionBudget:
-    enabled: false
+  pdb:
+    create: false
     minAvailable: 1
     maxUnavailable: ""
   ## Enable HorizontalPodAutoscaler for worker pods
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
   ## @param worker.autoscaling.enabled Whether enable horizontal pod autoscale
-  ## @param worker.autoscaling.replicas.min Configure a minimum amount of pods
-  ## @param worker.autoscaling.replicas.max Configure a maximum amount of pods
-  ## @param worker.autoscaling.targets.cpu Define the CPU target to trigger the scaling actions (utilization percentage)
-  ## @param worker.autoscaling.targets.memory Define the memory target to trigger the scaling actions (utilization percentage)
+  ## @param worker.autoscaling.minReplicas Configure a minimum amount of pods
+  ## @param worker.autoscaling.maxReplicas Configure a maximum amount of pods
+  ## @param worker.autoscaling.targetCPU Define the CPU target to trigger the scaling actions (utilization percentage)
+  ## @param worker.autoscaling.targetMemory Define the memory target to trigger the scaling actions (utilization percentage)
   ##
   autoscaling:
     enabled: false
-    replicas:
-      min: 1
-      max: 3
-    targets:
-      cpu: 80
-      memory: 80
+    minReplicas: 1
+    maxReplicas: 3
+    targetCPU: 80
+    targetMemory: 80
   ## @param worker.updateStrategy StatefulSet controller supports automated updates. There are two valid update strategies: RollingUpdate and OnDelete
   ## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#updating-statefulsets
   ##
@@ -730,6 +756,7 @@ git:
   ## @param git.image.tag Git image tag (immutable tags are recommended)
   ## @param git.image.pullPolicy Git image pull policy
   ## @param git.image.pullSecrets Git image pull secrets
+  ## @param git.image.debug Enable image debug mode
   ##
   image:
     registry: docker.io
@@ -748,6 +775,10 @@ git:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
+    ## Set to true if you would like to see extra information on logs
+    ## It turns BASH and/or NAMI debugging in the image
+    ##
+    debug: false
   ## Get DAG files from git repositories
   ## @param git.dags.enabled Enable in order to download DAG files from git repositories.
   ## @param git.dags.repositories Array of repositories from which to download DAG files
@@ -872,60 +903,91 @@ ldap:
 
 ## Configure the ingress resource that allows you to access the Airflow installation.
 ## ref: http://kubernetes.io/docs/user-guide/ingress/
-## @param ingress.enabled Set to true to enable ingress record generation
-## @param ingress.apiVersion Override API Version (automatically detected if not set)
-## @param ingress.pathType Ingress Path type
-## @param ingress.certManager Set this to true in order to add the corresponding annotations for cert-manager
-## @param ingress.annotations Ingress annotations done as key:value pairs
-## @param ingress.hosts The list of hostnames to be covered with this ingress record.
-## @param ingress.secrets If you're providing your own certificates, use this to add the certificates as secrets
 ##
 ingress:
-  enabled: false
-  apiVersion: ""
-  pathType: ImplementationSpecific
-  certManager: false
-  ## For a full list of possible ingress annotations, please see
-  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ## @param ingress.enabled Set to true to enable ingress record generation
   ##
-  ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
-  ## If certManager is set to true, annotation kubernetes.io/tls-acme: "true" will automatically be set
-  ## Example:
-  ## kubernetes.io/ingress.class: nginx
+  enabled: false
+  ## @param ingress.pathType Ingress Path type
+  ##
+  pathType: ImplementationSpecific
+  ## @param ingress.apiVersion Override API Version (automatically detected if not set)
+  ##
+  apiVersion: ""
+  ## @param ingress.hostname Default host for the ingress record
+  ##
+  hostname: airflow.local
+  ## @param ingress.path Default path for the ingress record
+  ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
+  ##
+  path: /
+  ## @param ingress.annotations Ingress annotations done as key:value pairs
   ##
   annotations: {}
-  ## Most likely this will be just one host, but in the event more hosts are needed, this is an array
+  ## @param ingress.tls Enable TLS configuration for the host defined at `ingress.hostname` parameter
+  ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
+  ## You can:
+  ##   - Use the `ingress.secrets` parameter to create this TLS secret
+  ##   - Relay on cert-manager to create it by setting `ingress.certManager=true`
+  ##   - Relay on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
   ##
-  hosts:
-    - name: airflow.local
-      path: /
-      ## Set this to true in order to enable TLS on the ingress record
-      ##
-      tls: false
-      ## Optionally specify the TLS hosts for the ingress record
-      ## Useful when the Ingress controller supports www-redirection
-      ## If not specified, the above host name will be used
-      ## Examples:
-      ## - www.airflow.local
-      ## - airflow.local
-      ##
-      tlsHosts: []
-      ## If TLS is set to true, you must declare what secret will store the key/certificate for TLS
-      ##
-      tlsSecret: airflow.local-tls
-  ## Key and certificate should start with -----BEGIN CERTIFICATE----- or
-  ## -----BEGIN RSA PRIVATE KEY-----
+  tls: false
+  ## @param ingress.certManager Add the corresponding annotations for cert-manager integration
   ##
-  ## name should line up with a tlsSecret set further up
-  ## If you're using cert-manager, this is unneeded, as it will create the secret for you if it is not set
+  certManager: false
+  ## @param ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
   ##
+  selfSigned: false
+  ## @param ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
+  ## e.g:
+  ## extraHosts:
+  ##   - name: %%COMPONENT_NAME%%.local
+  ##     path: /
+  ##
+  extraHosts: []
+  ## @param ingress.extraPaths An array with additional arbitrary paths that may need to be added to the ingress under the main host
+  ## e.g:
+  ## extraPaths:
+  ## - path: /*
+  ##   backend:
+  ##     serviceName: ssl-redirect
+  ##     servicePort: use-annotation
+  ##
+  extraPaths: []
+  ## @param ingress.extraTls TLS configuration for additional hostname(s) to be covered with this ingress record
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ## e.g:
+  ## extraTls:
+  ## - hosts:
+  ##     - %%COMPONENT_NAME%%.local
+  ##   secretName: %%COMPONENT_NAME%%.local-tls
+  ##
+  extraTls: []
+  ## @param ingress.secrets Custom TLS certificates as secrets
+  ## NOTE: 'key' and 'certificate' are expected in PEM format
+  ## NOTE: 'name' should line up with a 'secretName' set further up
+  ## If it is not set and you're using cert-manager, this is unneeded, as it will create a secret for you with valid certificates
+  ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created valid for 365 days
   ## It is also possible to create and manage the certificates outside of this helm chart
   ## Please see README.md for more information
-  # - name: airflow.local-tls
-  #   key:
-  #   certificate:
+  ## e.g:
+  ## secrets:
+  ##   - name: %%COMPONENT_NAME%%.local-tls
+  ##     key: |-
+  ##       -----BEGIN RSA PRIVATE KEY-----
+  ##       ...
+  ##       -----END RSA PRIVATE KEY-----
+  ##     certificate: |-
+  ##       -----BEGIN CERTIFICATE-----
+  ##       ...
+  ##       -----END CERTIFICATE-----
+  ##
   secrets: []
-
+  ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+  ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+  ##
+  ingressClassName: ""
 ## @section Airflow database parameters
 
 ## PostgreSQL chart configuration
@@ -1014,6 +1076,7 @@ metrics:
   ## @param metrics.image.tag Airflow Exporter image tag (immutable tags are recommended)
   ## @param metrics.image.pullPolicy Airflow Exporter image pull policy
   ## @param metrics.image.pullSecrets Airflow Exporter image pull secrets
+  ## @param metrics.image.debug Enable image debug mode
   ##
   image:
     registry: docker.io
@@ -1028,29 +1091,55 @@ metrics:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
+    ## Set to true if you would like to see extra information on logs
+    ## It turns BASH and/or NAMI debugging in the image
+    ##
+    debug: false
   ## @param metrics.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
   ## Prometheus Operator ServiceMonitor resource
-  ## @param metrics.serviceMonitor.enabled Create ServiceMonitor resource
-  ## @param metrics.serviceMonitor.namespace The namespace in which the ServiceMonitor will be created
-  ## @param metrics.serviceMonitor.interval Interval in which prometheus scrapes
-  ## @param metrics.serviceMonitor.scrapeTimeout Scrape Timeout duration for prometheus
-  ## @param metrics.serviceMonitor.labels Additional labels to attach
   ##
   serviceMonitor:
+    ## @param metrics.serviceMonitor.enabled Create ServiceMonitor Resource for scraping metrics using PrometheusOperator
+    ##
     enabled: false
-    ## Namespace in which Prometheus is running
+    ## @param metrics.serviceMonitor.namespace Namespace which Prometheus is running in
     ## e.g:
     ## namespace: monitoring
+    ##
     namespace: ""
-    ## Interval at which metrics should be scraped.
+    ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+    ##
+    jobLabel: ""
+    ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ##
     interval: 60s
+    ## @param metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ##
     scrapeTimeout: 10s
-    # ServiceMonitor Labels
-    labels: {}
+    ## @param metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+    ##
+    relabelings: []
+    ## @param metrics.serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+    ##
+    metricRelabelings: []
+    ## @param metrics.serviceMonitor.selector ServiceMonitor selector labels
+    ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+    ##
+    ## selector:
+    ##   prometheus: my-prometheus
+    ##
+    selector: {}
+    ## @param metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+    ##
+    honorLabels: false
+
   ## @param metrics.extraEnvVars Array containing extra environment variables
   ##
   extraEnvVars: []
