@@ -246,6 +246,10 @@ spec:
             - name: MONGODB_DATABASE
               value: {{ .Values.auth.database | quote }}
             {{- end }}
+            {{- if .Values.metrics.username }}
+            - name: MONGODB_METRICS_USERNAME
+              value: {{ .Values.metrics.username | quote }}
+            {{- end }}
             {{- if .Values.auth.enabled }}
             {{- if and .Values.auth.username .Values.auth.database }}
             - name: MONGODB_PASSWORD
@@ -253,6 +257,13 @@ spec:
                 secretKeyRef:
                   name: {{ include "mongodb.secretName" . }}
                   key: mongodb-password
+            {{- end }}
+            {{- if .Values.metrics.username }}
+            - name: MONGODB_METRICS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mongodb.secretName" . }}
+                  key: mongodb-metrics-password
             {{- end }}
             - name: MONGODB_ROOT_PASSWORD
               valueFrom:
