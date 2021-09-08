@@ -9,8 +9,16 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" . ) | nindent 4 }}
     {{- end }}
   annotations:
-    {{- if .Values.ingress.certManager }}
-    kubernetes.io/tls-acme: "true"
+    {{- with .Values.ingress.certManager }}
+      {{- with .clusterIssuer }}
+    cert-manager.io/cluster-issuer: {{ . }}
+      {{- end }}
+      {{- with .httpIngressClass }}
+    acme.cert-manager.io/http01-ingress-class: {{ . }}
+      {{- end }}
+      {{- with .commonName }}
+    cert-manager.io/common-name: {{ . }}
+      {{- end }}
     {{- end }}
     {{- if .Values.ingress.annotations }}
     {{- include "common.tplvalues.render" (dict "value" .Values.ingress.annotations "context" . ) | nindent 4 }}
