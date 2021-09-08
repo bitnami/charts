@@ -56,14 +56,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### RabitMQ Image parameters
 
-| Name                | Description                                                    | Value                 |
-| ------------------- | -------------------------------------------------------------- | --------------------- |
-| `image.registry`    | RabbitMQ image registry                                        | `docker.io`           |
-| `image.repository`  | RabbitMQ image repository                                      | `bitnami/rabbitmq`    |
-| `image.tag`         | RabbitMQ image tag (immutable tags are recommended)            | `3.8.19-debian-10-r0` |
-| `image.pullPolicy`  | RabbitMQ image pull policy                                     | `IfNotPresent`        |
-| `image.pullSecrets` | Specify docker-registry secret names as an array               | `[]`                  |
-| `image.debug`       | Set to true if you would like to see extra information on logs | `false`               |
+| Name                | Description                                                    | Value                |
+| ------------------- | -------------------------------------------------------------- | -------------------- |
+| `image.registry`    | RabbitMQ image registry                                        | `docker.io`          |
+| `image.repository`  | RabbitMQ image repository                                      | `bitnami/rabbitmq`   |
+| `image.tag`         | RabbitMQ image tag (immutable tags are recommended)            | `3.9.5-debian-10-r0` |
+| `image.pullPolicy`  | RabbitMQ image pull policy                                     | `IfNotPresent`       |
+| `image.pullSecrets` | Specify docker-registry secret names as an array               | `[]`                 |
+| `image.debug`       | Set to true if you would like to see extra information on logs | `false`              |
 
 
 ### Common parameters
@@ -218,7 +218,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.distPortName`             | Erlang distribution service port name                                                                                   | `dist`                   |
 | `service.distNodePort`             | Node port override for `dist` port, if serviceType is `NodePort`                                                        | `""`                     |
 | `service.managerPortEnabled`       | RabbitMQ Manager port                                                                                                   | `true`                   |
-| `service.managerPort`              | RabbitMQ Manager port                                                                                                   | `true`                   |
+| `service.managerPort`              | RabbitMQ Manager port                                                                                                   | `15672`                  |
 | `service.managerPortName`          | RabbitMQ Manager service port name                                                                                      | `http-stats`             |
 | `service.managerNodePort`          | Node port override for `http-stats` port, if serviceType `NodePort`                                                     | `""`                     |
 | `service.metricsPort`              | RabbitMQ Prometheues metrics port                                                                                       | `9419`                   |
@@ -281,7 +281,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                     | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                   | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                          | `10-debian-10-r125`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                          | `10-debian-10-r180`     |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                  | `Always`                |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                     | `[]`                    |
 | `volumePermissions.resources.limits`   | Init container volume-permissions resource limits                                                                    | `{}`                    |
@@ -499,6 +499,12 @@ $ helm upgrade my-release bitnami/rabbitmq --set auth.password=[PASSWORD] --set 
 ```
 
 | Note: you need to substitute the placeholders [PASSWORD] and [RABBITMQ_ERLANG_COOKIE] with the values obtained in the installation notes.
+
+### To 8.21.0
+
+This new version of the chart bumps the RabbitMQ version to `3.9.1`. It is considered a minor release, and no breaking changes are expected. Additionally, RabbitMQ `3.9.X` nodes can run alongside `3.8.X` nodes.
+
+See the [Upgrading guide](https://www.rabbitmq.com/upgrade.html) and the [RabbitMQ change log](https://www.rabbitmq.com/changelog.html) for further documentation.
 
 ### To 8.0.0
 

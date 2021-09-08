@@ -1,0 +1,50 @@
+{{- if .Values.compactor.ingress.enabled -}}
+apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
+kind: Ingress
+metadata:
+  name: thanos-compactor
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  annotations:
+    {{- if .Values.compactor.ingress.certManager }}
+    kubernetes.io/tls-acme: "true"
+    {{- end }}
+    {{- range $key, $value := .Values.compactor.ingress.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+spec:
+  {{- if and .Values.compactor.ingress.ingressClassName }}
+  ingressClassName: {{ .Values.compactor.ingress.ingressClassName | quote }}
+  {{- end }}
+  rules:
+    {{- if .Values.compactor.ingress.hostname }}
+    - host: {{ .Values.compactor.ingress.hostname }}
+      http:
+        paths:
+          - path: {{ .Values.compactor.ingress.path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+            pathType: {{ .Values.compactor.ingress.pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" "thanos-compactor" "servicePort" "http" "context" $)  | nindent 14 }}
+    {{- end }}
+    {{- range .Values.compactor.ingress.extraHosts }}
+    - host: {{ .name }}
+      http:
+        paths:
+          - path: {{ default "/" .path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
+            pathType: {{ default "ImplementationSpecific" .pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" "thanos-compactor" "servicePort" "http" "context" $) | nindent 14 }}
+    {{- end }}
+  {{- if or .Values.compactor.ingress.tls .Values.compactor.ingress.extraTls .Values.compactor.ingress.hosts }}
+  tls:
+    {{- if or .Values.compactor.ingress.secrets .Values.compactor.ingress.tls }}
+    - hosts:
+        - {{ .Values.compactor.ingress.hostname }}
+      secretName: {{ printf "%s-tls" .Values.compactor.ingress.hostname }}
+    {{- end }}
+    {{- if .Values.compactor.ingress.extraTls }}
+    {{- toYaml .Values.compactor.ingress.extraTls | nindent 4 }}
+    {{- end }}
+  {{- end }}
+{{- end }}

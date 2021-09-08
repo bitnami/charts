@@ -59,20 +59,20 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                | Description                                        | Value                        |
-| ------------------- | -------------------------------------------------- | ---------------------------- |
-| `kubeVersion`       | Override Kubernetes version                        | `""`                         |
-| `nameOverride`      | String to partially override common.names.fullname | `""`                         |
-| `fullnameOverride`  | String to fully override common.names.fullname     | `""`                         |
-| `commonLabels`      | Labels to add to all deployed objects              | `{}`                         |
-| `commonAnnotations` | Annotations to add to all deployed objects         | `{}`                         |
-| `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`                         |
-| `image.registry`    | Odoo image registry                                | `docker.io`                  |
-| `image.repository`  | Odoo image repository                              | `bitnami/odoo`               |
-| `image.tag`         | Odoo image tag (immutable tags are recommended)    | `14.0.20210810-debian-10-r0` |
-| `image.pullPolicy`  | Odoo image pull policy                             | `IfNotPresent`               |
-| `image.pullSecrets` | Odoo image pull secrets                            | `[]`                         |
-| `image.debug`       | Enable image debug mode                            | `false`                      |
+| Name                | Description                                        | Value                         |
+| ------------------- | -------------------------------------------------- | ----------------------------- |
+| `kubeVersion`       | Override Kubernetes version                        | `""`                          |
+| `nameOverride`      | String to partially override common.names.fullname | `""`                          |
+| `fullnameOverride`  | String to fully override common.names.fullname     | `""`                          |
+| `commonLabels`      | Labels to add to all deployed objects              | `{}`                          |
+| `commonAnnotations` | Annotations to add to all deployed objects         | `{}`                          |
+| `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`                          |
+| `image.registry`    | Odoo image registry                                | `docker.io`                   |
+| `image.repository`  | Odoo image repository                              | `bitnami/odoo`                |
+| `image.tag`         | Odoo image tag (immutable tags are recommended)    | `14.0.20210810-debian-10-r14` |
+| `image.pullPolicy`  | Odoo image pull policy                             | `IfNotPresent`                |
+| `image.pullSecrets` | Odoo image pull secrets                            | `[]`                          |
+| `image.debug`       | Enable image debug mode                            | `false`                       |
 
 
 ### Odoo Configuration parameters
@@ -175,7 +175,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.pathType`                 | Ingress path type                                                                                     | `ImplementationSpecific` |
 | `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                         | `""`                     |
 | `ingress.hostname`                 | Default host for the ingress record                                                                   | `odoo.local`             |
-| `ingress.path`                     | Default path for the ingress record                                                                   | `ImplementationSpecific` |
+| `ingress.path`                     | Default path for the ingress record                                                                   | `/`                      |
 | `ingress.annotations`              | Additional custom annotations for the ingress record                                                  | `{}`                     |
 | `ingress.tls`                      | Enable TLS configuration for the host defined at `ingress.hostname` parameter                         | `false`                  |
 | `ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                            | `[]`                     |
@@ -186,19 +186,19 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Persistence Parameters
 
-| Name                                          | Description                                                                                     | Value   |
-| --------------------------------------------- | ----------------------------------------------------------------------------------------------- | ------- |
-| `persistence.enabled`                         | Enable persistence using Persistent Volume Claims                                               | `true`  |
-| `persistence.storageClass`                    | Persistent Volume storage class                                                                 | `""`    |
-| `persistence.accessModes`                     | Persistent Volume access modes                                                                  | `[]`    |
-| `persistence.accessMode`                      | Persistent Volume access mode (DEPRECATED: use `persistence.accessModes` instead)               | `[]`    |
-| `persistence.size`                            | Persistent Volume size                                                                          | `10Gi`  |
-| `persistence.dataSource`                      | Custom PVC data source                                                                          | `{}`    |
-| `persistence.existingClaim`                   | The name of an existing PVC to use for persistence                                              | `""`    |
-| `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false` |
-| `volumePermissions.resources.limits`          | The resources limits for the init container                                                     | `{}`    |
-| `volumePermissions.resources.requests`        | The requested resources for the init container                                                  | `{}`    |
-| `volumePermissions.securityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`     |
+| Name                                          | Description                                                                                     | Value           |
+| --------------------------------------------- | ----------------------------------------------------------------------------------------------- | --------------- |
+| `persistence.enabled`                         | Enable persistence using Persistent Volume Claims                                               | `true`          |
+| `persistence.storageClass`                    | Persistent Volume storage class                                                                 | `""`            |
+| `persistence.accessModes`                     | Persistent Volume access modes                                                                  | `[]`            |
+| `persistence.accessMode`                      | Persistent Volume access mode (DEPRECATED: use `persistence.accessModes` instead)               | `ReadWriteOnce` |
+| `persistence.size`                            | Persistent Volume size                                                                          | `10Gi`          |
+| `persistence.dataSource`                      | Custom PVC data source                                                                          | `{}`            |
+| `persistence.existingClaim`                   | The name of an existing PVC to use for persistence                                              | `""`            |
+| `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`         |
+| `volumePermissions.resources.limits`          | The resources limits for the init container                                                     | `{}`            |
+| `volumePermissions.resources.requests`        | The requested resources for the init container                                                  | `{}`            |
+| `volumePermissions.securityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`             |
 
 
 ### Other Parameters

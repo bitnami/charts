@@ -75,27 +75,44 @@ $ helm delete --purge my-release
 
 ### Elasticsearch parameters
 
-| Name                    | Description                                                                                                                                         | Value                   |
-| ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `image.registry`        | Elasticsearch image registry                                                                                                                        | `docker.io`             |
-| `image.repository`      | Elasticsearch image repository                                                                                                                      | `bitnami/elasticsearch` |
-| `image.tag`             | Elasticsearch image tag (immutable tags are recommended)                                                                                            | `7.14.0-debian-10-r1`   |
-| `image.pullPolicy`      | Elasticsearch image pull policy                                                                                                                     | `IfNotPresent`          |
-| `image.pullSecrets`     | Elasticsearch image pull secrets                                                                                                                    | `[]`                    |
-| `image.debug`           | Enable image debug mode                                                                                                                             | `false`                 |
-| `name`                  | Elasticsearch cluster name                                                                                                                          | `""`                    |
-| `plugins`               | Comma, semi-colon or space separated list of plugins to install at initialization                                                                   | `""`                    |
-| `snapshotRepoPath`      | File System snapshot repository path                                                                                                                | `""`                    |
-| `config`                | Override elasticsearch configuration                                                                                                                | `{}`                    |
-| `extraConfig`           | Append extra configuration to the elasticsearch node configuration                                                                                  | `{}`                    |
-| `extraVolumes`          | A list of volumes to be added to the pod                                                                                                            | `[]`                    |
-| `extraVolumeMounts`     | A list of volume mounts to be added to the pod                                                                                                      | `[]`                    |
-| `initScripts`           | Dictionary of init scripts. Evaluated as a template.                                                                                                | `{}`                    |
-| `initScriptsCM`         | ConfigMap with the init scripts. Evaluated as a template.                                                                                           | `""`                    |
-| `initScriptsSecret`     | Secret containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time that contain sensitive data. Evaluated as a template. | `""`                    |
-| `extraEnvVars`          | Array containing extra env vars to be added to all pods (evaluated as a template)                                                                   | `[]`                    |
-| `extraEnvVarsConfigMap` | ConfigMap containing extra env vars to be added to all pods (evaluated as a template)                                                               | `""`                    |
-| `extraEnvVarsSecret`    | Secret containing extra env vars to be added to all pods (evaluated as a template)                                                                  | `""`                    |
+| Name                                       | Description                                                                                                                                         | Value                          |
+| ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
+| `image.registry`                           | Elasticsearch image registry                                                                                                                        | `docker.io`                    |
+| `image.repository`                         | Elasticsearch image repository                                                                                                                      | `bitnami/elasticsearch`        |
+| `image.tag`                                | Elasticsearch image tag (immutable tags are recommended)                                                                                            | `7.14.1-debian-10-r0`          |
+| `image.pullPolicy`                         | Elasticsearch image pull policy                                                                                                                     | `IfNotPresent`                 |
+| `image.pullSecrets`                        | Elasticsearch image pull secrets                                                                                                                    | `[]`                           |
+| `image.debug`                              | Enable image debug mode                                                                                                                             | `false`                        |
+| `security.enabled`                         | Enable X-Pack Security settings                                                                                                                     | `false`                        |
+| `security.elasticPassword`                 | Password for 'elastic' user                                                                                                                         | `""`                           |
+| `security.existingSecret`                  | Name of the existing secret containing the Elasticsearch password                                                                                   | `""`                           |
+| `security.fipsMode`                        | Configure elasticsearch with FIPS 140 compliant mode                                                                                                | `false`                        |
+| `security.tls.restEncryption`              | Enable SSL/TLS encryption for Elasticsearch REST API.                                                                                               | `true`                         |
+| `security.tls.autoGenerated`               | Create self-signed TLS certificates.                                                                                                                | `false`                        |
+| `security.tls.verificationMode`            | Verification mode for SSL communications.                                                                                                           | `full`                         |
+| `security.tls.master.existingSecret`       | Existing secret containing the certificates for the master nodes                                                                                    | `""`                           |
+| `security.tls.data.existingSecret`         | Existing secret containing the certificates for the data nodes                                                                                      | `""`                           |
+| `security.tls.ingest.existingSecret`       | Existing secret containing the certificates for the ingest nodes                                                                                    | `""`                           |
+| `security.tls.coordinating.existingSecret` | Existing secret containing the certificates for the coordinating nodes                                                                              | `""`                           |
+| `security.tls.keystorePassword`            | Password to access the JKS/PKCS12 keystore or PEM key when they are password-protected.                                                             | `""`                           |
+| `security.tls.truststorePassword`          | Password to access the JKS/PKCS12 truststore when they are password-protected.                                                                      | `""`                           |
+| `security.tls.keystoreFilename`            | Name of the keystore file                                                                                                                           | `elasticsearch.keystore.jks`   |
+| `security.tls.truststoreFilename`          | Name of the truststore                                                                                                                              | `elasticsearch.truststore.jks` |
+| `security.tls.usePemCerts`                 | Use this variable if your secrets contain PEM certificates instead of JKS/PKCS12                                                                    | `false`                        |
+| `security.tls.keyPassword`                 | Password to access the PEM key when they are password-protected.                                                                                    | `""`                           |
+| `name`                                     | Elasticsearch cluster name                                                                                                                          | `elastic`                      |
+| `plugins`                                  | Comma, semi-colon or space separated list of plugins to install at initialization                                                                   | `""`                           |
+| `snapshotRepoPath`                         | File System snapshot repository path                                                                                                                | `""`                           |
+| `config`                                   | Override elasticsearch configuration                                                                                                                | `{}`                           |
+| `extraConfig`                              | Append extra configuration to the elasticsearch node configuration                                                                                  | `{}`                           |
+| `extraVolumes`                             | A list of volumes to be added to the pod                                                                                                            | `[]`                           |
+| `extraVolumeMounts`                        | A list of volume mounts to be added to the pod                                                                                                      | `[]`                           |
+| `initScripts`                              | Dictionary of init scripts. Evaluated as a template.                                                                                                | `{}`                           |
+| `initScriptsCM`                            | ConfigMap with the init scripts. Evaluated as a template.                                                                                           | `""`                           |
+| `initScriptsSecret`                        | Secret containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time that contain sensitive data. Evaluated as a template. | `""`                           |
+| `extraEnvVars`                             | Array containing extra env vars to be added to all pods (evaluated as a template)                                                                   | `[]`                           |
+| `extraEnvVarsConfigMap`                    | ConfigMap containing extra env vars to be added to all pods (evaluated as a template)                                                               | `""`                           |
+| `extraEnvVarsSecret`                       | Secret containing extra env vars to be added to all pods (evaluated as a template)                                                                  | `""`                           |
 
 
 ### Master parameters
@@ -177,7 +194,7 @@ $ helm delete --purge my-release
 | `coordinating.replicas`                           | Desired number of Elasticsearch coordinating-only nodes                                                                   | `2`             |
 | `coordinating.hostAliases`                        | Add deployment host aliases                                                                                               | `[]`            |
 | `coordinating.schedulerName`                      | Name of the k8s scheduler (other than default)                                                                            | `""`            |
-| `coordinating.updateStrategy.type`                | Update strategy for Coordinating Deployment                                                                               | `RollingUpdate` |
+| `coordinating.updateStrategy.type`                | Update strategy for Coordinating Statefulset                                                                              | `RollingUpdate` |
 | `coordinating.heapSize`                           | Coordinating-only node heap size                                                                                          | `128m`          |
 | `coordinating.podAnnotations`                     | Annotations for coordinating pods.                                                                                        | `{}`            |
 | `coordinating.podLabels`                          | Extra labels to add to Pod                                                                                                | `{}`            |
@@ -300,58 +317,61 @@ $ helm delete --purge my-release
 
 ### Ingest parameters
 
-| Name                                        | Description                                                                                                    | Value       |
-| ------------------------------------------- | -------------------------------------------------------------------------------------------------------------- | ----------- |
-| `ingest.enabled`                            | Enable ingest nodes                                                                                            | `false`     |
-| `ingest.name`                               | Ingest node pod name                                                                                           | `ingest`    |
-| `ingest.fullnameOverride`                   | String to fully override elasticsearch.ingest.fullname template with a string                                  | `""`        |
-| `ingest.replicas`                           | Desired number of Elasticsearch ingest nodes                                                                   | `2`         |
-| `ingest.heapSize`                           | Ingest node heap size                                                                                          | `128m`      |
-| `ingest.podAnnotations`                     | Annotations for ingest pods.                                                                                   | `{}`        |
-| `ingest.hostAliases`                        | Add deployment host aliases                                                                                    | `[]`        |
-| `ingest.schedulerName`                      | Name of the k8s scheduler (other than default)                                                                 | `""`        |
-| `ingest.podLabels`                          | Extra labels to add to Pod                                                                                     | `{}`        |
-| `ingest.securityContext.enabled`            | Enable security context for ingest pods                                                                        | `true`      |
-| `ingest.securityContext.fsGroup`            | Group ID for the container for ingest pods                                                                     | `1001`      |
-| `ingest.securityContext.runAsUser`          | User ID for the container for ingest pods                                                                      | `1001`      |
-| `ingest.podAffinityPreset`                  | Ingest Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                     | `""`        |
-| `ingest.podAntiAffinityPreset`              | Ingest Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                | `""`        |
-| `ingest.nodeAffinityPreset.type`            | Ingest Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`               | `""`        |
-| `ingest.nodeAffinityPreset.key`             | Ingest Node label key to match Ignored if `affinity` is set.                                                   | `""`        |
-| `ingest.nodeAffinityPreset.values`          | Ingest Node label values to match. Ignored if `affinity` is set.                                               | `[]`        |
-| `ingest.affinity`                           | Ingest Affinity for pod assignment                                                                             | `{}`        |
-| `ingest.nodeSelector`                       | Ingest Node labels for pod assignment                                                                          | `{}`        |
-| `ingest.tolerations`                        | Ingest Tolerations for pod assignment                                                                          | `[]`        |
-| `ingest.resources.limits`                   | The resources limits for the container                                                                         | `{}`        |
-| `ingest.resources.requests`                 | The requested resources for the container                                                                      | `{}`        |
-| `ingest.startupProbe.enabled`               | Enable/disable the startup probe (ingest nodes pod)                                                            | `false`     |
-| `ingest.startupProbe.initialDelaySeconds`   | Delay before startup probe is initiated (ingest nodes pod)                                                     | `90`        |
-| `ingest.startupProbe.periodSeconds`         | How often to perform the probe (ingest nodes pod)                                                              | `10`        |
-| `ingest.startupProbe.timeoutSeconds`        | When the probe times out (ingest nodes pod)                                                                    | `5`         |
-| `ingest.startupProbe.failureThreshold`      | Minimum consecutive failures for the probe to be considered failed after having succeeded                      | `5`         |
-| `ingest.startupProbe.successThreshold`      | Minimum consecutive successes for the probe to be considered successful after having failed (ingest nodes pod) | `1`         |
-| `ingest.livenessProbe.enabled`              | Enable/disable the liveness probe (ingest nodes pod)                                                           | `true`      |
-| `ingest.livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated (ingest nodes pod)                                                    | `90`        |
-| `ingest.livenessProbe.periodSeconds`        | How often to perform the probe (ingest nodes pod)                                                              | `10`        |
-| `ingest.livenessProbe.timeoutSeconds`       | When the probe times out (ingest nodes pod)                                                                    | `5`         |
-| `ingest.livenessProbe.failureThreshold`     | Minimum consecutive failures for the probe to be considered failed after having succeeded                      | `5`         |
-| `ingest.livenessProbe.successThreshold`     | Minimum consecutive successes for the probe to be considered successful after having failed (ingest nodes pod) | `1`         |
-| `ingest.readinessProbe.enabled`             | Enable/disable the readiness probe (ingest nodes pod)                                                          | `true`      |
-| `ingest.readinessProbe.initialDelaySeconds` | Delay before readiness probe is initiated (ingest nodes pod)                                                   | `90`        |
-| `ingest.readinessProbe.periodSeconds`       | How often to perform the probe (ingest nodes pod)                                                              | `10`        |
-| `ingest.readinessProbe.timeoutSeconds`      | When the probe times out (ingest nodes pod)                                                                    | `5`         |
-| `ingest.readinessProbe.failureThreshold`    | Minimum consecutive failures for the probe to be considered failed after having succeeded                      | `5`         |
-| `ingest.readinessProbe.successThreshold`    | Minimum consecutive successes for the probe to be considered successful after having failed (ingest nodes pod) | `1`         |
-| `ingest.customStartupProbe`                 | Override default startup probe                                                                                 | `{}`        |
-| `ingest.customLivenessProbe`                | Override default liveness probe                                                                                | `{}`        |
-| `ingest.customReadinessProbe`               | Override default readiness probe                                                                               | `{}`        |
-| `ingest.initContainers`                     | Extra init containers to add to the Elasticsearch ingest pod(s)                                                | `[]`        |
-| `ingest.sidecars`                           | Extra sidecar containers to add to the Elasticsearch ingest pod(s)                                             | `[]`        |
-| `ingest.service.type`                       | Kubernetes Service type (ingest nodes)                                                                         | `ClusterIP` |
-| `ingest.service.port`                       | Kubernetes Service port Elasticsearch transport port (ingest nodes)                                            | `9300`      |
-| `ingest.service.nodePort`                   | Kubernetes Service nodePort (ingest nodes)                                                                     | `""`        |
-| `ingest.service.annotations`                | Annotations for ingest nodes service                                                                           | `{}`        |
-| `ingest.service.loadBalancerIP`             | loadBalancerIP if ingest nodes service type is `LoadBalancer`                                                  | `""`        |
+| Name                                        | Description                                                                                                    | Value           |
+| ------------------------------------------- | -------------------------------------------------------------------------------------------------------------- | --------------- |
+| `ingest.enabled`                            | Enable ingest nodes                                                                                            | `false`         |
+| `ingest.name`                               | Ingest node pod name                                                                                           | `ingest`        |
+| `ingest.fullnameOverride`                   | String to fully override elasticsearch.ingest.fullname template with a string                                  | `""`            |
+| `ingest.replicas`                           | Desired number of Elasticsearch ingest nodes                                                                   | `2`             |
+| `ingest.updateStrategy.type`                | Update strategy for Ingest statefulset                                                                         | `RollingUpdate` |
+| `ingest.heapSize`                           | Ingest node heap size                                                                                          | `128m`          |
+| `ingest.podAnnotations`                     | Annotations for ingest pods.                                                                                   | `{}`            |
+| `ingest.hostAliases`                        | Add deployment host aliases                                                                                    | `[]`            |
+| `ingest.schedulerName`                      | Name of the k8s scheduler (other than default)                                                                 | `""`            |
+| `ingest.podLabels`                          | Extra labels to add to Pod                                                                                     | `{}`            |
+| `ingest.securityContext.enabled`            | Enable security context for ingest pods                                                                        | `true`          |
+| `ingest.securityContext.fsGroup`            | Group ID for the container for ingest pods                                                                     | `1001`          |
+| `ingest.securityContext.runAsUser`          | User ID for the container for ingest pods                                                                      | `1001`          |
+| `ingest.podAffinityPreset`                  | Ingest Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                     | `""`            |
+| `ingest.podAntiAffinityPreset`              | Ingest Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                | `""`            |
+| `ingest.nodeAffinityPreset.type`            | Ingest Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`               | `""`            |
+| `ingest.nodeAffinityPreset.key`             | Ingest Node label key to match Ignored if `affinity` is set.                                                   | `""`            |
+| `ingest.nodeAffinityPreset.values`          | Ingest Node label values to match. Ignored if `affinity` is set.                                               | `[]`            |
+| `ingest.affinity`                           | Ingest Affinity for pod assignment                                                                             | `{}`            |
+| `ingest.nodeSelector`                       | Ingest Node labels for pod assignment                                                                          | `{}`            |
+| `ingest.tolerations`                        | Ingest Tolerations for pod assignment                                                                          | `[]`            |
+| `ingest.resources.limits`                   | The resources limits for the container                                                                         | `{}`            |
+| `ingest.resources.requests`                 | The requested resources for the container                                                                      | `{}`            |
+| `ingest.startupProbe.enabled`               | Enable/disable the startup probe (ingest nodes pod)                                                            | `false`         |
+| `ingest.startupProbe.initialDelaySeconds`   | Delay before startup probe is initiated (ingest nodes pod)                                                     | `90`            |
+| `ingest.startupProbe.periodSeconds`         | How often to perform the probe (ingest nodes pod)                                                              | `10`            |
+| `ingest.startupProbe.timeoutSeconds`        | When the probe times out (ingest nodes pod)                                                                    | `5`             |
+| `ingest.startupProbe.failureThreshold`      | Minimum consecutive failures for the probe to be considered failed after having succeeded                      | `5`             |
+| `ingest.startupProbe.successThreshold`      | Minimum consecutive successes for the probe to be considered successful after having failed (ingest nodes pod) | `1`             |
+| `ingest.livenessProbe.enabled`              | Enable/disable the liveness probe (ingest nodes pod)                                                           | `true`          |
+| `ingest.livenessProbe.initialDelaySeconds`  | Delay before liveness probe is initiated (ingest nodes pod)                                                    | `90`            |
+| `ingest.livenessProbe.periodSeconds`        | How often to perform the probe (ingest nodes pod)                                                              | `10`            |
+| `ingest.livenessProbe.timeoutSeconds`       | When the probe times out (ingest nodes pod)                                                                    | `5`             |
+| `ingest.livenessProbe.failureThreshold`     | Minimum consecutive failures for the probe to be considered failed after having succeeded                      | `5`             |
+| `ingest.livenessProbe.successThreshold`     | Minimum consecutive successes for the probe to be considered successful after having failed (ingest nodes pod) | `1`             |
+| `ingest.readinessProbe.enabled`             | Enable/disable the readiness probe (ingest nodes pod)                                                          | `true`          |
+| `ingest.readinessProbe.initialDelaySeconds` | Delay before readiness probe is initiated (ingest nodes pod)                                                   | `90`            |
+| `ingest.readinessProbe.periodSeconds`       | How often to perform the probe (ingest nodes pod)                                                              | `10`            |
+| `ingest.readinessProbe.timeoutSeconds`      | When the probe times out (ingest nodes pod)                                                                    | `5`             |
+| `ingest.readinessProbe.failureThreshold`    | Minimum consecutive failures for the probe to be considered failed after having succeeded                      | `5`             |
+| `ingest.readinessProbe.successThreshold`    | Minimum consecutive successes for the probe to be considered successful after having failed (ingest nodes pod) | `1`             |
+| `ingest.customStartupProbe`                 | Override default startup probe                                                                                 | `{}`            |
+| `ingest.customLivenessProbe`                | Override default liveness probe                                                                                | `{}`            |
+| `ingest.customReadinessProbe`               | Override default readiness probe                                                                               | `{}`            |
+| `ingest.initContainers`                     | Extra init containers to add to the Elasticsearch ingest pod(s)                                                | `[]`            |
+| `ingest.sidecars`                           | Extra sidecar containers to add to the Elasticsearch ingest pod(s)                                             | `[]`            |
+| `ingest.service.type`                       | Kubernetes Service type (ingest nodes)                                                                         | `ClusterIP`     |
+| `ingest.service.port`                       | Kubernetes Service port Elasticsearch transport port (ingest nodes)                                            | `9300`          |
+| `ingest.service.nodePort`                   | Kubernetes Service nodePort (ingest nodes)                                                                     | `""`            |
+| `ingest.service.annotations`                | Annotations for ingest nodes service                                                                           | `{}`            |
+| `ingest.service.loadBalancerIP`             | loadBalancerIP if ingest nodes service type is `LoadBalancer`                                                  | `""`            |
+| `ingest.serviceAccount.create`              | Create a default serviceaccount for elasticsearch curator                                                      | `false`         |
+| `ingest.serviceAccount.name`                | Name of the created serviceAccount                                                                             | `""`            |
 
 
 ### Curator parameters
@@ -362,7 +382,7 @@ $ helm delete --purge my-release
 | `curator.name`                               | Elasticsearch Curator pod name                                                                    | `curator`                       |
 | `curator.image.registry`                     | Elasticsearch Curator image registry                                                              | `docker.io`                     |
 | `curator.image.repository`                   | Elasticsearch Curator image repository                                                            | `bitnami/elasticsearch-curator` |
-| `curator.image.tag`                          | Elasticsearch Curator image tag                                                                   | `5.8.4-debian-10-r82`           |
+| `curator.image.tag`                          | Elasticsearch Curator image tag                                                                   | `5.8.4-debian-10-r110`          |
 | `curator.image.pullPolicy`                   | Elasticsearch Curator image pull policy                                                           | `IfNotPresent`                  |
 | `curator.image.pullSecrets`                  | Elasticsearch Curator image pull secrets                                                          | `[]`                            |
 | `curator.cronjob.schedule`                   | Schedule for the CronJob                                                                          | `0 1 * * *`                     |
@@ -410,7 +430,7 @@ $ helm delete --purge my-release
 | `metrics.name`                               | Metrics pod name                                                                                          | `metrics`                        |
 | `metrics.image.registry`                     | Metrics exporter image registry                                                                           | `docker.io`                      |
 | `metrics.image.repository`                   | Metrics exporter image repository                                                                         | `bitnami/elasticsearch-exporter` |
-| `metrics.image.tag`                          | Metrics exporter image tag                                                                                | `1.2.1-debian-10-r33`            |
+| `metrics.image.tag`                          | Metrics exporter image tag                                                                                | `1.2.1-debian-10-r61`            |
 | `metrics.image.pullPolicy`                   | Metrics exporter image pull policy                                                                        | `IfNotPresent`                   |
 | `metrics.image.pullSecrets`                  | Metrics exporter image pull secrets                                                                       | `[]`                             |
 | `metrics.extraArgs`                          | Extra arguments to add to the default exporter command                                                    | `[]`                             |
@@ -456,7 +476,7 @@ $ helm delete --purge my-release
 | `sysctlImage.enabled`            | Enable kernel settings modifier image       | `true`                  |
 | `sysctlImage.registry`           | Kernel settings modifier image registry     | `docker.io`             |
 | `sysctlImage.repository`         | Kernel settings modifier image repository   | `bitnami/bitnami-shell` |
-| `sysctlImage.tag`                | Kernel settings modifier image tag          | `10-debian-10-r151`     |
+| `sysctlImage.tag`                | Kernel settings modifier image tag          | `10-debian-10-r179`     |
 | `sysctlImage.pullPolicy`         | Kernel settings modifier image pull policy  | `Always`                |
 | `sysctlImage.pullSecrets`        | Kernel settings modifier image pull secrets | `[]`                    |
 | `sysctlImage.resources.limits`   | The resources limits for the container      | `{}`                    |
@@ -470,7 +490,7 @@ $ helm delete --purge my-release
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r151`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r179`     |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `Always`                |
 | `volumePermissions.image.pullSecrets`  | Init container volume-permissions image pull secrets                                                                                                      | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                                                                                                    | `{}`                    |
@@ -621,6 +641,18 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 17.0.0
+
+This version bumps in a major the version of the Kibana Helm Chart bundled as dependecy, [here](https://github.com/bitnami/charts/tree/master/bitnami/kibana#to-900) you can see the changes implemented in this Kibana major version.
+
+### To 16.0.0
+
+This version replaces the Ingest and Coordinating Deployments with Statefulsets. This change is required so Coordinating and Ingest nodes have their services associated, required for TLS hostname verification.
+
+We haven't encountered any issues during our upgrade test, but we recommend creating volumes backups before upgrading this major version, especially for users with additional volumes and custom configurations.
+
+Additionally, this version adds support for X-Pack Security features such as TLS/SSL encryption and basic authentication.
 
 ### To 15.0.0
 
