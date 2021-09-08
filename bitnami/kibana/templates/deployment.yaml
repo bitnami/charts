@@ -153,11 +153,12 @@ spec:
           livenessProbe:
             httpGet:
             {{- if .Values.configuration.server.rewriteBasePath }}
-              path: {{ .Values.configuration.server.basePath }}/api/status
+              path: {{ .Values.configuration.server.basePath }}/login
             {{- else }}
-              path: /api/status
+              path: /login
             {{- end }}
               port: http
+              scheme: {{ ternary "HTTPS" "HTTP" .Values.tls.enabled }}
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
@@ -168,11 +169,12 @@ spec:
           readinessProbe:
             httpGet:
             {{- if .Values.configuration.server.rewriteBasePath }}
-              path: {{ .Values.configuration.server.basePath }}/api/status
+              path: {{ .Values.configuration.server.basePath }}/login
             {{- else }}
-              path: /api/status
+              path: /login
             {{- end }}
               port: http
+              scheme: {{ ternary "HTTPS" "HTTP" .Values.tls.enabled }}
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
