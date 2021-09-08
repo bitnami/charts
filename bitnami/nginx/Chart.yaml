@@ -1,7 +1,7 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 1.21.2
+appVersion: 1.21.3
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -25,4 +25,4 @@ name: nginx
 sources:
   - https://github.com/bitnami/bitnami-docker-nginx
   - http://www.nginx.org
-version: 9.5.3
+version: 9.5.4
