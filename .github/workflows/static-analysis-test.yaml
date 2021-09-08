@@ -11,7 +11,7 @@ on:
 jobs:
   static-analysis-test:
     name: Static analysis test
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout Bitnami charts code
         uses: actions/checkout@v2
