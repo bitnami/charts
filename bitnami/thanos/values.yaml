@@ -2469,18 +2469,18 @@ receive:
     ## @param receive.distributor.resources.requests The requested resources for the Thanos Receive container
     ##
     resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    ##
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    ##
-    requests: {}
+      ## Example:
+      ## limits:
+      ##    cpu: 100m
+      ##    memory: 128Mi
+      ##
+      limits: {}
+      ## Examples:
+      ## requests:
+      ##    cpu: 100m
+      ##    memory: 128Mi
+      ##
+      requests: {}
     ## @param receive.distributor.extraContainers Extra containers running as sidecars to Thanos Receive Distributor container
     ## Example:
     ## - name: oAuth2-proxy
