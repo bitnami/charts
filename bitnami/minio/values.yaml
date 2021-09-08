@@ -701,6 +701,7 @@ gateway:
     targetCPU: ""
     targetMemory: ""
   ## @param gateway.priorityClassName Pod priority class name for MinIO&reg; Gateway
+  ##
   priorityClassName: ""
   ## Gateway authentication configuration
   ##
