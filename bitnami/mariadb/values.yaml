@@ -246,7 +246,7 @@ primary:
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-  ## @param primary.topologySpreadConstraints Topology Spread Constraints for for MariaDB primary pods assignment
+  ## @param primary.topologySpreadConstraints Topology Spread Constraints for MariaDB primary pods assignment
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
   ## E.g.
   ## topologySpreadConstraints:
@@ -561,7 +561,7 @@ secondary:
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-  ## @param secondary.topologySpreadConstraints Topology Spread Constraints for for MariaDB secondary pods assignment
+  ## @param secondary.topologySpreadConstraints Topology Spread Constraints for MariaDB secondary pods assignment
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
   ## E.g.
   ## topologySpreadConstraints:
