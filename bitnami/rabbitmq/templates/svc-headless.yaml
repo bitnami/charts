@@ -37,4 +37,6 @@ spec:
       port: {{ .Values.service.managerPort }}
       targetPort: stats
     {{- end }}
-  selector: {{ include "common.labels.matchLabels" . | nindent 4 }}
+  {{- if (eq "Parallel" .Values.podManagementPolicy) }}
+  publishNotReadyAddresses: true
+  {{- end }}
