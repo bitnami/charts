@@ -28,6 +28,6 @@ jobs:
           helm template apache bitnami/apache/ -f bitnami/apache/values.yaml > test-resources/generated-manifests.yaml
 
       - name: Run Trivy vulnerability scanner in IaC mode
-        uses: docker://bitnami/trivy:latest
+        uses: docker://bitnami/trivy:0
         with:
           args: config --exit-code 1 --ignorefile test-resources/.trivyignore test-resources/
