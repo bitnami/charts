@@ -1,3 +1,4 @@
+{{  $REDIS_SERVICE_NAME := printf "%s%s"  (upper .Release.Name | replace "-" "_") "_SERVICE_PORT_TCP_REDIS" }}
 {{- if (include "redis.createConfigmap" .) }}
 apiVersion: v1
 kind: ConfigMap
@@ -47,7 +48,11 @@ data:
   sentinel.conf: |-
     dir "/tmp"
     port {{ .Values.sentinel.containerPort }}
+    {{- if eq .Values.sentinel.service.type "NodePort" }}
+    sentinel monitor {{ .Values.sentinel.masterSet }} {{ template "common.names.fullname" . }}-node-0.{{ template "common.names.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} ${{ $REDIS_SERVICE_NAME }} {{ .Values.sentinel.quorum }}
+    {{- else }}
     sentinel monitor {{ .Values.sentinel.masterSet }} {{ template "common.names.fullname" . }}-node-0.{{ template "common.names.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} {{ .Values.sentinel.service.port }} {{ .Values.sentinel.quorum }}
+    {{- end }}
     sentinel down-after-milliseconds {{ .Values.sentinel.masterSet }} {{ .Values.sentinel.downAfterMilliseconds }}
     sentinel failover-timeout {{ .Values.sentinel.masterSet }} {{ .Values.sentinel.failoverTimeout }}
     sentinel parallel-syncs {{ .Values.sentinel.masterSet }} {{ .Values.sentinel.parallelSyncs }}
