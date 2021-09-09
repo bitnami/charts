@@ -191,16 +191,16 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Persistence parameters
 
-| Name                         | Description                                     | Value                         |
-| ---------------------------- | ----------------------------------------------- | ----------------------------- |
-| `persistence.enabled`        | Enable RabbitMQ data persistence using PVC      | `true`                        |
-| `persistence.storageClass`   | PVC Storage Class for RabbitMQ data volume      | `""`                          |
-| `persistence.selector`       | Selector to match an existing Persistent Volume | `{}`                          |
-| `persistence.accessMode`     | PVC Access Mode for RabbitMQ data volume        | `ReadWriteOnce`               |
-| `persistence.existingClaim`  | Provide an existing PersistentVolumeClaims      | `""`                          |
-| `persistence.size`           | PVC Storage Request for RabbitMQ data volume    | `8Gi`                         |
-| `persistence.volumes`        | Additional volumes without creating PVC         | `[]`                          |
-| `persistence.annotations`    | Annotations for the PVC                         | `{}`(evaluated as a template) |
+| Name                        | Description                                      | Value           |
+| --------------------------- | ------------------------------------------------ | --------------- |
+| `persistence.enabled`       | Enable RabbitMQ data persistence using PVC       | `true`          |
+| `persistence.storageClass`  | PVC Storage Class for RabbitMQ data volume       | `""`            |
+| `persistence.selector`      | Selector to match an existing Persistent Volume  | `{}`            |
+| `persistence.accessMode`    | PVC Access Mode for RabbitMQ data volume         | `ReadWriteOnce` |
+| `persistence.existingClaim` | Provide an existing PersistentVolumeClaims       | `""`            |
+| `persistence.size`          | PVC Storage Request for RabbitMQ data volume     | `8Gi`           |
+| `persistence.volumes`       | Additional volumes without creating PVC          | `[]`            |
+| `persistence.annotations`   | Persistence annotations. Evaluated as a template | `{}`            |
 
 
 ### Exposure parameters

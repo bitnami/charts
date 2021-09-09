@@ -230,7 +230,7 @@ The command removes all the Kubernetes components associated with the chart and 
 ### Other parameters
 
 | Name                 | Description                                                                       | Value   |
-|----------------------|-----------------------------------------------------------------------------------|---------|
+| -------------------- | --------------------------------------------------------------------------------- | ------- |
 | `pdb.create`         | Enable/disable a Pod Disruption Budget creation                                   | `false` |
 | `pdb.minAvailable`   | Minimum number/percentage of pods that must still be available after the eviction | `1`     |
 | `pdb.maxUnavailable` | Maximum number/percentage of pods that may be made unavailable after the eviction | `""`    |
@@ -252,35 +252,36 @@ The command removes all the Kubernetes components associated with the chart and 
 
 
 ### Gateway parameters
-| Name                                                     | Description                                                                                              | Value                      |
-|----------------------------------------------------------|----------------------------------------------------------------------------------------------------------|----------------------------|
-| `gateway.enabled`                                        | Use MinIO&reg; as Gateway for other storage systems                                                      | `false`                    |
-| `gateway.type`                                           | Gateway type. Supported types are: `azure`, `gcs`, `nas`, `s3`                                           | `s3`                       |
-| `gateway.replicaCount`                                   | Number of MinIO&reg; Gateway replicas                                                                    | `4`                        |
-| `gateway.updateStrategy.type`                            | Update strategy type for MinIO&reg; Gateway replicas                                                     | `Recreate`                 |
-| `gateway.autoscaling.enabled`                            | Enable autoscaling for MinIO&reg; Gateway deployment                                                     | `false`                    |
-| `gateway.autoscaling.minReplicas`                        | Minimum number of replicas to scale back                                                                 | `4`                        |
-| `gateway.autoscaling.maxReplicas`                        | Maximum number of replicas to scale out                                                                  | `4`                        |
-| `gateway.autoscaling.targetCPU`                          | Target CPU utilization percentage                                                                        | `""`                       |
-| `gateway.autoscaling.targetMemory`                       | Target Memory utilization percentage                                                                     | `""`                       |
-| `gateway.priorityClassName`                              | Pod priority class name for MinIO&reg; Gateway                                                           | `""`                       |
-| `gateway.auth.azure.accessKey`                           | Access Key to access MinIO using Azure Gateway                                                           | `""`                       |
-| `gateway.auth.azure.secretKey`                           | Secret Key to access MinIO using Azure Gateway                                                           | `""`                       |
-| `gateway.auth.azure.storageAccountName`                  | Azure Storage Account Name to use to access Azure Blob Storage                                           | `""`                       |
-| `gateway.auth.azure.storageAccountKey`                   | Azure Storage Account Key to use to access Azure Blob Storage                                            | `""`                       |
-| `gateway.auth.azure.storageAccountNameExistingSecret`    | Existing Secret name to extract Azure Storage Account Name from to access Azure Blob Storage             | `""`                       |
-| `gateway.auth.azure.storageAccountNameExistingSecretKey` | Existing Secret key to extract Azure Storage Account Name from to access Azure Blob Storage              | `""`                       |
-| `gateway.auth.azure.storageAccountKeyExistingSecret`     | Existing Secret name to extract Azure Storage Account Key from to access Azure Blob Storage              | `""`                       |
-| `gateway.auth.azure.storageAccountKeyExistingSecretKey`  | Existing Secret key to extract Azure Storage Account Key from to access Azure Blob Storage               | `""`                       |
-| `gateway.auth.gcs.accessKey`                             | Access Key to access MinIO using GCS Gateway                                                             | `""`                       |
-| `gateway.auth.gcs.secretKey`                             | Secret Key to access MinIO using GCS Gateway                                                             | `""`                       |
-| `gateway.auth.gcs.keyJSON`                               | Service Account key to access GCS                                                                        | `""`                       |
-| `gateway.auth.gcs.projectID`                             | GCP Project ID to use                                                                                    | `""`                       |
-| `gateway.auth.nas.accessKey`                             | Access Key to access MinIO using NAS Gateway                                                             | `""`                       |
-| `gateway.auth.nas.secretKey`                             | Secret Key to access MinIO using NAS Gateway                                                             | `""`                       |
-| `gateway.auth.s3.accessKey`                              | Access Key to use to access AWS S3                                                                       | `""`                       |
-| `gateway.auth.s3.secretKey`                              | Secret Key to use to access AWS S3                                                                       | `""`                       |
-| `gateway.auth.s3.serviceEndpoint`                        | AWS S3 endpoint                                                                                          | `https://s3.amazonaws.com` |
+
+| Name                                                     | Description                                                                                        | Value                      |
+| -------------------------------------------------------- | -------------------------------------------------------------------------------------------------- | -------------------------- |
+| `gateway.enabled`                                        | Use MinIO&reg; as Gateway for other storage systems                                                | `false`                    |
+| `gateway.type`                                           | Gateway type. Supported types are: `azure`, `gcs`, `nas`, `s3`                                     | `s3`                       |
+| `gateway.replicaCount`                                   | Number of MinIO&reg; Gateway replicas                                                              | `4`                        |
+| `gateway.updateStrategy.type`                            | Update strategy type for MinIO&reg; Gateway replicas                                               | `Recreate`                 |
+| `gateway.autoscaling.enabled`                            | Enable autoscaling for MinIO&reg; Gateway deployment                                               | `false`                    |
+| `gateway.autoscaling.minReplicas`                        | Minimum number of replicas to scale back                                                           | `4`                        |
+| `gateway.autoscaling.maxReplicas`                        | Maximum number of replicas to scale out                                                            | `4`                        |
+| `gateway.autoscaling.targetCPU`                          | Target CPU utilization percentage                                                                  | `""`                       |
+| `gateway.autoscaling.targetMemory`                       | Target Memory utilization percentage                                                               | `""`                       |
+| `gateway.priorityClassName`                              | Pod priority class name for MinIO&reg; Gateway                                                     | `""`                       |
+| `gateway.auth.azure.accessKey`                           | Access Key to access MinIO using Azure Gateway                                                     | `""`                       |
+| `gateway.auth.azure.secretKey`                           | Secret Key to access MinIO using Azure Gateway                                                     | `""`                       |
+| `gateway.auth.azure.storageAccountName`                  | Azure Storage Account Name to use to access Azure Blob Storage                                     | `""`                       |
+| `gateway.auth.azure.storageAccountKey`                   | Azure Storage Account Key to use to access Azure Blob Storage                                      | `""`                       |
+| `gateway.auth.azure.storageAccountNameExistingSecret`    | Existing Secret name to extract Azure Storage Account Name from to access Azure Blob Storage       | `""`                       |
+| `gateway.auth.azure.storageAccountNameExistingSecretKey` | Existing Secret key to extract Azure Storage Account Name from to use to access Azure Blob Storage | `""`                       |
+| `gateway.auth.azure.storageAccountKeyExistingSecret`     | Existing Secret name to extract Azure Storage Account Key from to access Azure Blob Storage        | `""`                       |
+| `gateway.auth.azure.storageAccountKeyExistingSecretKey`  | Existing Secret key to extract Azure Storage Account Key from to use to access Azure Blob Storage  | `""`                       |
+| `gateway.auth.gcs.accessKey`                             | Access Key to access MinIO using GCS Gateway                                                       | `""`                       |
+| `gateway.auth.gcs.secretKey`                             | Secret Key to access MinIO using GCS Gateway                                                       | `""`                       |
+| `gateway.auth.gcs.keyJSON`                               | Service Account key to access GCS                                                                  | `""`                       |
+| `gateway.auth.gcs.projectID`                             | GCP Project ID to use                                                                              | `""`                       |
+| `gateway.auth.nas.accessKey`                             | Access Key to access MinIO using NAS Gateway                                                       | `""`                       |
+| `gateway.auth.nas.secretKey`                             | Secret Key to access MinIO using NAS Gateway                                                       | `""`                       |
+| `gateway.auth.s3.accessKey`                              | Access Key to use to access AWS S3                                                                 | `""`                       |
+| `gateway.auth.s3.secretKey`                              | Secret Key to use to access AWS S3                                                                 | `""`                       |
+| `gateway.auth.s3.serviceEndpoint`                        | AWS S3 endpoint                                                                                    | `https://s3.amazonaws.com` |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
