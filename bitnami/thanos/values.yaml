@@ -2452,6 +2452,98 @@ receive:
   ## @param receive.enabled Enable/disable Thanos Receive component
   ##
   enabled: false
+  ## @param receive.mode Mode to run receiver in. Valid options are "standalone" or "dual-mode"
+  ## ref: https://github.com/thanos-io/thanos/blob/release-0.22/docs/proposals-accepted/202012-receive-split.md
+  ## Enables running the Thanos Receiver in dual mode. Setting this to "dual-mode" will create a deployment for
+  ## the stateless thanos distributor.
+  mode: standalone
+
+  distributor:
+    ## Thanos Receive Distributor containers' resource requests and limits
+    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ## We usually recommend not to specify default resources and to leave this as a conscious
+    ## choice for the user. This also increases chances charts run on environments with little
+    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## @param receive.distributor.resources.limits The resources limits for the Thanos Receive container
+    ## @param receive.distributor.resources.requests The requested resources for the Thanos Receive container
+    ##
+    resources:
+      ## Example:
+      ## limits:
+      ##    cpu: 100m
+      ##    memory: 128Mi
+      ##
+      limits: {}
+      ## Examples:
+      ## requests:
+      ##    cpu: 100m
+      ##    memory: 128Mi
+      ##
+      requests: {}
+    ## @param receive.distributor.extraContainers Extra containers running as sidecars to Thanos Receive Distributor container
+    ## Example:
+    ## - name: oAuth2-proxy
+    ##   args:
+    ##     - -https-address=:9092
+    ##     - -upstream=http://localhost:9091
+    ##     - -skip-auth-regex=^/metrics
+    ##   image: openshift/oauth-proxy:v1.1.0
+    ##   ports:
+    ##       - containerPort: 9092
+    ##         name: proxy
+    ##   resources:
+    ##       limits:
+    ##         memory: 16Mi
+    ##       requests:
+    ##         memory: 4Mi
+    ##         cpu: 20m
+    ##   volumeMounts:
+    ##     - mountPath: /secrets/proxy-tls
+    ##       name: secret-proxy-tls
+    ##
+    extraContainers: []
+    ## @param receive.distributor.extraEnv Extra environment variables for Thanos Receive Distributor container
+    ## Example:
+    ## extraEnv:
+    ## - name: VARNAME1
+    ##   value: value1
+    ## - name: VARNAME2
+    ##   valueFrom:
+    ##     secretKeyRef:
+    ##       name: existing-secret
+    ##       key: varname2-key
+    ##
+    extraEnv: []
+    ## @param receive.distributor.extraVolumes Extra volumes to add to Thanos Receive Distributor
+    ##
+    extraVolumes: []
+    ## @param receive.distributor.extraVolumeMounts Extra volume mounts to add to the receive distributor container
+    ##
+    extraVolumeMounts: []
+    ## @param receive.distributor.extraFlags Extra Flags to passed to Thanos Receive Distributor
+    ##
+    extraFlags: []
+    ## @param receive.distributor.replicaCount Number of Thanos Receive Distributor replicas to deploy
+    ##
+    replicaCount: 1
+    ## @param receive.distributor.strategyType StrategyType, can be set to RollingUpdate or Recreate by default.
+    ##
+    strategyType: RollingUpdate
+    ## @param receive.distributor.affinity Thanos Receive Distributor affinity for pod assignment
+    ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+    ## Note: receive.podAffinityPreset, receive.podAntiAffinityPreset, and receive.nodeAffinityPreset will be ignored when it's set
+    ##
+    affinity: {}
+    ## @param receive.distributor.nodeSelector Thanos Receive Distributor node labels for pod assignment
+    ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+    ##
+    nodeSelector: {}
+    ## @param receive.distributor.tolerations Thanos Receive Distributor tolerations for pod assignment
+    ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+    ##
+    tolerations: []
+
   ## @param receive.logLevel Thanos Receive log level
   ##
   logLevel: info

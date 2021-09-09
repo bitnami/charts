@@ -1005,6 +1005,10 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ## Upgrading
 
+### To 5.4.0
+
+This version introduces support for the receiver dual-mode implementation for Thanos [v0.22+](https://github.com/thanos-io/thanos/releases/tag/v0.22.0)
+
 ### To 5.3.0
 
 This version introduces hash and time partitioning for the store gateway.
