@@ -2454,7 +2454,7 @@ receive:
   enabled: false
   ## @param receive.mode Mode to run receiver in. Valid options are "standalone" or "dual-mode"
   ## ref: https://github.com/thanos-io/thanos/blob/release-0.22/docs/proposals-accepted/202012-receive-split.md
-  ## Enables running the Thanos Receiver in dual mode. Setting this to "dual-mode" will create a deployment for 
+  ## Enables running the Thanos Receiver in dual mode. Setting this to "dual-mode" will create a deployment for
   ## the stateless thanos distributor.
   mode: standalone
 
