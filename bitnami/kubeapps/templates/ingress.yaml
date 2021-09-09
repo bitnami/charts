@@ -9,15 +9,15 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" . ) | nindent 4 }}
     {{- end }}
   annotations:
-    {{- with .Values.ingress.certManager }}
-      {{- with .clusterIssuer }}
-    cert-manager.io/cluster-issuer: {{ . }}
+    {{- if .Values.ingress.certManager }}
+      {{- if .Values.ingress.certManager.clusterIssuer }}
+    cert-manager.io/cluster-issuer: {{ .Values.ingress.certManager.clusterIssuer }}
       {{- end }}
-      {{- with .httpIngressClass }}
-    acme.cert-manager.io/http01-ingress-class: {{ . }}
+      {{- if .Values.ingress.certManager.httpIngressClass }}
+    acme.cert-manager.io/http01-ingress-class: {{ .Values.ingress.certManager.httpIngressClass }}
       {{- end }}
-      {{- with .commonName }}
-    cert-manager.io/common-name: {{ . }}
+      {{- if .Values.ingress.certManager.commonName }}
+    cert-manager.io/common-name: {{ .Values.ingress.certManager.commonName }}
       {{- end }}
     {{- end }}
     {{- if .Values.ingress.annotations }}
