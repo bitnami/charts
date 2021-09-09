@@ -1509,7 +1509,7 @@ metrics:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-  
+
   ## @param metrics.username String with username for the metrics exporter
   ## If undefined the root user will be used for the metrics exporter
   username: ""
@@ -1517,7 +1517,7 @@ metrics:
   ## @param metrics.password String with password for the metrics exporter
   ## If undefined the auth.rootPassword will be used for the metrics exporter
   password: ""
- 
+
   ## @param metrics.extraFlags String with extra flags to the metrics exporter
   ## ref: https://github.com/percona/mongodb_exporter/blob/master/mongodb_exporter.go
   ##
