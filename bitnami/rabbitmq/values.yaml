@@ -641,6 +641,7 @@ serviceAccount:
   ## @param serviceAccount.name Name of the created serviceAccount
   ## If not set and create is true, a name is generated using the rabbitmq.fullname template
   ##
+  automountServiceAccountToken: true
   name: ""
 
 ## Role Based Access
