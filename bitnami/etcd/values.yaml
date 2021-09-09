@@ -645,6 +645,9 @@ metrics:
     ##       name: existingSecretName
     ##
     tlsConfig: {}
+    ## @param metrics.podMonitor.relabelings [array] Prometheus relabeling rules
+    ##
+    relabelings: []
 
 ## @section Snapshotting parameters
 

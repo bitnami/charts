@@ -30,6 +30,10 @@ spec:
       {{- if .Values.metrics.podMonitor.tlsConfig }}
       tlsConfig: {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.podMonitor.tlsConfig "context" $ ) | nindent 8 }}
       {{- end }}
+      {{- if .Values.metrics.podMonitor.relabelings }}
+      relabelings: 
+      {{- include "common.tplvalues.render" (dict "value" .Values.metrics.podMonitor.relabelings "context" $) | nindent 8 }}
+      {{- end }}
   namespaceSelector:
     matchNames:
       - {{ .Release.Namespace }}

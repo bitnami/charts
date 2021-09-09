@@ -240,6 +240,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.podMonitor.additionalLabels` | Additional labels that can be used so PodMonitors will be discovered by Prometheus | `{}`         |
 | `metrics.podMonitor.scheme`           | Scheme to use for scraping                                                         | `http`       |
 | `metrics.podMonitor.tlsConfig`        | TLS configuration used for scrape endpoints used by Prometheus                     | `{}`         |
+| `metrics.podMonitor.relabelings`      | Prometheus relabeling rules                                                        | `[]`         |
 
 
 ### Snapshotting parameters
