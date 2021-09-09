@@ -617,7 +617,8 @@ serviceAccount:
 
 ## @section Other parameters
 
-## MinIO&reg; Pod Disruption Budget configuration (only in distributed mode)
+## MinIO&reg; Pod Disruption Budget configuration in distributed mode.
+## If MinIO&reg; Gateway is enabled, creates a Pod Disruption Budget for the Gateway instead (mutually exclusive with distributed mode).
 ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
 ##
 pdb:
@@ -699,6 +700,9 @@ gateway:
     maxReplicas: "4"
     targetCPU: ""
     targetMemory: ""
+  ## @param gateway.priorityClassName Pod priority class name for MinIO&reg; Gateway
+  ##
+  priorityClassName: ""
   ## Gateway authentication configuration
   ##
   auth:
