@@ -122,6 +122,7 @@ To uninstall/delete the `my-release` deployment:
 | `service.exposeAdmin`           | Add the Kong Admin ports to the service                                                       | `false`                  |
 | `service.adminHttpPort`         | kong admin HTTPS service port (only if service.exposeAdmin=true)                              | `8001`                   |
 | `service.adminHttpsPort`        | kong admin HTTPS service port (only if service.exposeAdmin=true)                              | `8444`                   |
+| `service.disableHttpPort`       | Disable Kong proxy HTTP and Kong admin HTTP ports                                             | `false`                  |
 | `service.proxyHttpNodePort`     | Port to bind to for NodePort service type (proxy HTTP)                                        | `""`                     |
 | `service.proxyHttpsNodePort`    | Port to bind to for NodePort service type (proxy HTTPS)                                       | `""`                     |
 | `service.adminHttpNodePort`     | Port to bind to for NodePort service type (admin HTTP)                                        | `""`                     |

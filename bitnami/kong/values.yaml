@@ -257,6 +257,9 @@ service:
   ## @param service.adminHttpsPort kong admin HTTPS service port (only if service.exposeAdmin=true)
   ##
   adminHttpsPort: 8444
+  ## @param service.disableHttpPort Disable Kong proxy HTTP and Kong admin HTTP ports
+  ##
+  disableHttpPort: false
   ## Specify the nodePort value for the LoadBalancer and NodePort service types.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ## @param service.proxyHttpNodePort Port to bind to for NodePort service type (proxy HTTP)
