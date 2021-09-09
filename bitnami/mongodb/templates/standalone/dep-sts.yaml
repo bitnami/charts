@@ -29,7 +29,11 @@ spec:
   {{- else }}
   strategy:
   {{- end }}
+    {{- if .Values.useStatefulSet }}
     type: {{ .Values.strategyType }}
+    {{- else }}
+    type: Recreate
+    {{- end -}}
     {{- if or (and (not .Values.useStatefulSet) (eq "Recreate" .Values.strategyType)) (and .Values.useStatefulSet (eq "OnDelete" .Values.strategyType))  }}
     rollingUpdate: null
     {{- end }}
