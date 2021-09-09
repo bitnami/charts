@@ -260,6 +260,6 @@ spec:
             secretName: {{ template "elasticsearch.initScriptsSecret" . }}
             defaultMode: 0755
         {{- end }}
-      - name: "data"
-        emptyDir: {}
+        - name: "data"
+          emptyDir: {}
 {{- end }}
