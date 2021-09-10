@@ -1,4 +1,3 @@
-{{  $REDIS_SERVICE_NAME := printf "%s%s"  (upper .Release.Name | replace "-" "_") "_SERVICE_PORT_TCP_REDIS" }}
 {{- if (include "redis.createConfigmap" .) }}
 apiVersion: v1
 kind: ConfigMap
@@ -49,7 +48,9 @@ data:
     dir "/tmp"
     port {{ .Values.sentinel.containerPort }}
     {{- if eq .Values.sentinel.service.type "NodePort" }}
-    sentinel monitor {{ .Values.sentinel.masterSet }} {{ template "common.names.fullname" . }}-node-0.{{ template "common.names.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} ${{ $REDIS_SERVICE_NAME }} {{ .Values.sentinel.quorum }}
+    REDIS_SERVICE_ENV_NAME={{ printf "%s%s"  (upper (include "common.names.fullname" .)| replace "-" "_") "_SERVICE_PORT_TCP_REDIS" }}
+    REDIS_SERVICE_PORT=${!REDIS_SERVICE_ENV_NAME}
+    sentinel monitor {{ .Values.sentinel.masterSet }} {{ template "common.names.fullname" . }}-node-0.{{ template "common.names.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} $REDIS_SERVICE_PORT {{ .Values.sentinel.quorum }}
     {{- else }}
     sentinel monitor {{ .Values.sentinel.masterSet }} {{ template "common.names.fullname" . }}-node-0.{{ template "common.names.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} {{ .Values.sentinel.service.port }} {{ .Values.sentinel.quorum }}
     {{- end }}
