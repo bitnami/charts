@@ -855,7 +855,7 @@ ldap:
   base: 'dc=example,dc=org'
   uidField: 'cn'
   binddn: 'cn=admin,dc=example,dc=org'
-  bindpw: 'PuvSXQhyM9MukoN90juqgGfPxxMxA2fg'
+  bindpw: ''
   userRegistration: 'True'
   userRegistrationRole: 'Public'
   rolesMapping: '{ "cn=All,ou=Groups,dc=example,dc=org": ["User"], "cn=Admins,ou=Groups,dc=example,dc=org": ["Admin"], }'
