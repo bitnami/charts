@@ -8,9 +8,9 @@
   {{- range.spec.ports }} 
     {{- if .nodePort}}
       {{- $usedports = (append $usedports .nodePort) }}
-    {{- end}}
-  {{- end}}
-{{- end}}
+    {{- end }}
+  {{- end }}
+{{- end }}
 
 {{- /*
 comments that start with # are rendered in the output when you debug, so you can less and search for them
@@ -49,10 +49,9 @@ remove the template comments and leave the yaml comments to help debug
       {{$nodeportfound = true}}
     {{- else }}
       {{- /* nodeport has already been chosen and locked in, just work through the rest of the list to get to the next nodeport selection */}}
-    {{- end}} 
+    {{- end }}
   {{- end }}
-
-{{- end}}
+{{- end }}
 
 {{- /* print the usedports and chosenports for debugging */}}
 #usedports {{$usedports}}
@@ -94,4 +93,4 @@ data:
   {{- end }}
   {{- end }}
 {{- end }}
-{{- end}}
+{{- end }}
