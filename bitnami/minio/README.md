@@ -74,36 +74,36 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### MinIO&reg; parameters
 
-| Name                      | Description                                                                                                | Value                     |
-| ------------------------- | ---------------------------------------------------------------------------------------------------------- | ------------------------- |
-| `image.registry`          | MinIO&reg; image registry                                                                                  | `docker.io`               |
-| `image.repository`        | MinIO&reg; image repository                                                                                | `bitnami/minio`           |
-| `image.tag`               | MinIO&reg; image tag (immutable tags are recommended)                                                      | `2021.6.17-debian-10-r58` |
-| `image.pullPolicy`        | Image pull policy                                                                                          | `IfNotPresent`            |
-| `image.pullSecrets`       | Specify docker-registry secret names as an array                                                           | `[]`                      |
-| `image.debug`             | Specify if debug logs should be enabled                                                                    | `false`                   |
-| `clientImage.registry`    | MinIO&reg; Client image registry                                                                           | `docker.io`               |
-| `clientImage.repository`  | MinIO&reg; Client image repository                                                                         | `bitnami/minio-client`    |
-| `clientImage.tag`         | MinIO&reg; Client image tag (immutable tags are recommended)                                               | `2021.7.27-debian-10-r28` |
-| `mode`                    | MinIO&reg; server mode (`standalone` or `distributed`)                                                     | `standalone`              |
-| `accessKey.password`      | MinIO&reg; Access Key. Ignored if existing secret is provided.                                             | `""`                      |
-| `accessKey.forcePassword` | Option to force users to specify a password. That is required for 'helm upgrade' to work properly.         | `false`                   |
-| `secretKey.password`      | MinIO&reg; Secret Key. Ignored if existing secret is provided.                                             | `""`                      |
-| `secretKey.forcePassword` | Option to force users to specify a password. That is required for 'helm upgrade' to work properly.         | `false`                   |
-| `existingSecret`          | Use existing secret (ignores accessKey, and secretKey passwords)                                           | `""`                      |
-| `useCredentialsFile`      | Mount MinIO&reg; secret as a file instead of passing environment variable                                  | `false`                   |
-| `forceNewKeys`            | Force admin credentials (access and secret key) to be reconfigured every time they change in the secrets   | `false`                   |
-| `defaultBuckets`          | Comma, semi-colon or space separated list of buckets to create at initialization (only in standalone mode) | `""`                      |
-| `disableWebUI`            | Disable MinIO&reg; Web UI                                                                                  | `false`                   |
-| `tls.enabled`             | Enable tls in front of the container                                                                       | `false`                   |
-| `tls.existingSecret`      | Name of an existing secret holding the certificate information                                             | `""`                      |
-| `tls.secretName`          | DEPRECATED. Use `tls.existingSecret` instead.                                                              | `""`                      |
-| `tls.mountPath`           | The mount path where the secret will be located                                                            | `""`                      |
-| `extraEnv`                | Extra environment variables to be set on MinIO&reg; container                                              | `{}`                      |
-| `extraEnvVarsCM`          | ConfigMap with extra environment variables                                                                 | `""`                      |
-| `extraEnvVarsSecret`      | Secret with extra environment variables                                                                    | `""`                      |
-| `command`                 | Default container command (useful when using custom images). Use array form                                | `[]`                      |
-| `args`                    | Default container args (useful when using custom images). Use array form                                   | `[]`                      |
+| Name                      | Description                                                                                                | Value                   |
+| ------------------------- | ---------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `image.registry`          | MinIO&reg; image registry                                                                                  | `docker.io`             |
+| `image.repository`        | MinIO&reg; image repository                                                                                | `bitnami/minio`         |
+| `image.tag`               | MinIO&reg; image tag (immutable tags are recommended)                                                      | `2021.9.9-debian-10-r0` |
+| `image.pullPolicy`        | Image pull policy                                                                                          | `IfNotPresent`          |
+| `image.pullSecrets`       | Specify docker-registry secret names as an array                                                           | `[]`                    |
+| `image.debug`             | Specify if debug logs should be enabled                                                                    | `false`                 |
+| `clientImage.registry`    | MinIO&reg; Client image registry                                                                           | `docker.io`             |
+| `clientImage.repository`  | MinIO&reg; Client image repository                                                                         | `bitnami/minio-client`  |
+| `clientImage.tag`         | MinIO&reg; Client image tag (immutable tags are recommended)                                               | `2021.9.2-debian-10-r7` |
+| `mode`                    | MinIO&reg; server mode (`standalone` or `distributed`)                                                     | `standalone`            |
+| `accessKey.password`      | MinIO&reg; Access Key. Ignored if existing secret is provided.                                             | `""`                    |
+| `accessKey.forcePassword` | Option to force users to specify a password. That is required for 'helm upgrade' to work properly.         | `false`                 |
+| `secretKey.password`      | MinIO&reg; Secret Key. Ignored if existing secret is provided.                                             | `""`                    |
+| `secretKey.forcePassword` | Option to force users to specify a password. That is required for 'helm upgrade' to work properly.         | `false`                 |
+| `existingSecret`          | Use existing secret (ignores accessKey, and secretKey passwords)                                           | `""`                    |
+| `useCredentialsFile`      | Mount MinIO&reg; secret as a file instead of passing environment variable                                  | `false`                 |
+| `forceNewKeys`            | Force admin credentials (access and secret key) to be reconfigured every time they change in the secrets   | `false`                 |
+| `defaultBuckets`          | Comma, semi-colon or space separated list of buckets to create at initialization (only in standalone mode) | `""`                    |
+| `disableWebUI`            | Disable MinIO&reg; Web UI                                                                                  | `false`                 |
+| `tls.enabled`             | Enable tls in front of the container                                                                       | `false`                 |
+| `tls.existingSecret`      | Name of an existing secret holding the certificate information                                             | `""`                    |
+| `tls.secretName`          | DEPRECATED. Use `tls.existingSecret` instead.                                                              | `""`                    |
+| `tls.mountPath`           | The mount path where the secret will be located                                                            | `""`                    |
+| `extraEnv`                | Extra environment variables to be set on MinIO&reg; container                                              | `{}`                    |
+| `extraEnvVarsCM`          | ConfigMap with extra environment variables                                                                 | `""`                    |
+| `extraEnvVarsSecret`      | Secret with extra environment variables                                                                    | `""`                    |
+| `command`                 | Default container command (useful when using custom images). Use array form                                | `[]`                    |
+| `args`                    | Default container args (useful when using custom images). Use array form                                   | `[]`                    |
 
 
 ### MinIO&reg; deployment/statefulset parameters
@@ -118,7 +118,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `statefulset.zones`                     | Number of zones (only for MinIO&reg; distributed mode)                                                                                                                                        | `1`             |
 | `statefulset.drivesPerNode`             | Number of drives attached to every node (only for MinIO&reg; distributed mode)                                                                                                                | `1`             |
 | `hostAliases`                           | MinIO&reg; pod host aliases                                                                                                                                                                   | `[]`            |
-| `containerPort`                         | MinIO&reg; container port to open                                                                                                                                                             | `9000`          |
+| `containerPorts.api`                    | MinIO&reg; container port to open for MinIO&reg; API                                                                                                                                          | `9000`          |
+| `containerPorts.console`                | MinIO&reg; container port to open for MinIO&reg; Console                                                                                                                                      | `9001`          |
 | `podSecurityContext.enabled`            | Enable pod Security Context                                                                                                                                                                   | `true`          |
 | `podSecurityContext.fsGroup`            | Group ID for the container                                                                                                                                                                    | `1001`          |
 | `containerSecurityContext.enabled`      | Enable container Security Context                                                                                                                                                             | `true`          |
@@ -168,8 +169,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                               | Description                                                                                                 | Value                    |
 | ---------------------------------- | ----------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `service.type`                     | MinIO&reg; service type                                                                                     | `ClusterIP`              |
-| `service.port`                     | MinIO&reg; service port                                                                                     | `9000`                   |
-| `service.nodePort`                 | Specify the nodePort value for the LoadBalancer and NodePort service types                                  | `""`                     |
+| `service.ports.api`                | MinIO&reg; API service port                                                                                 | `9000`                   |
+| `service.ports.console`            | MinIO&reg; Console service port                                                                             | `9001`                   |
+| `service.nodePorts.api`            | Specify the MinIO&reg API nodePort value for the LoadBalancer and NodePort service types                    | `""`                     |
+| `service.nodePorts.console`        | Specify the MinIO&reg Console nodePort value for the LoadBalancer and NodePort service types                | `""`                     |
 | `service.loadBalancerIP`           | loadBalancerIP if service type is `LoadBalancer` (optional, cloud specific)                                 | `""`                     |
 | `service.loadBalancerSourceRanges` | Addresses that are allowed when service is LoadBalancer                                                     | `[]`                     |
 | `service.externalTrafficPolicy`    | Enable client source IP preservation                                                                        | `Cluster`                |
@@ -180,7 +183,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.hostname`                 | Default host for the ingress resource                                                                       | `minio.local`            |
 | `ingress.path`                     | The Path to MinIO&reg;. You may need to set this to '/*' in order to use this with ALB ingress controllers. | `/`                      |
 | `ingress.pathType`                 | Ingress path type                                                                                           | `ImplementationSpecific` |
-| `ingress.servicePort`              | Service port to be used                                                                                     | `minio`                  |
+| `ingress.servicePort`              | Service port to be used                                                                                     | `minio-console`          |
 | `ingress.annotations`              | Ingress annotations                                                                                         | `{}`                     |
 | `ingress.tls`                      | Enable TLS configuration for the hostname defined at `ingress.hostname` parameter                           | `false`                  |
 | `ingress.extraHosts`               | The list of additional hostnames to be covered with this ingress record.                                    | `[]`                     |
@@ -211,7 +214,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                                                     | `docker.io`             |
 | `volumePermissions.image.repository`                   | Init container volume-permissions image repository                                                                   | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                         | `10-debian-10-r172`     |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                         | `10-debian-10-r188`     |
 | `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                                                                  | `Always`                |
 | `volumePermissions.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                     | `[]`                    |
 | `volumePermissions.resources.limits`                   | Init container volume-permissions resource limits                                                                    | `{}`                    |
@@ -264,6 +267,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `gateway.autoscaling.maxReplicas`                        | Maximum number of replicas to scale out                                                            | `4`                        |
 | `gateway.autoscaling.targetCPU`                          | Target CPU utilization percentage                                                                  | `""`                       |
 | `gateway.autoscaling.targetMemory`                       | Target Memory utilization percentage                                                               | `""`                       |
+| `gateway.priorityClassName`                              | Pod priority class name for MinIO&reg; Gateway                                                     | `""`                       |
 | `gateway.auth.azure.accessKey`                           | Access Key to access MinIO using Azure Gateway                                                     | `""`                       |
 | `gateway.auth.azure.secretKey`                           | Secret Key to access MinIO using Azure Gateway                                                     | `""`                       |
 | `gateway.auth.azure.storageAccountName`                  | Azure Storage Account Name to use to access Azure Blob Storage                                     | `""`                       |
@@ -472,6 +476,17 @@ There are cases where you may want to deploy extra objects, such a ConfigMap con
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 8.0.0
+
+This version updates MinIO&reg; after some major changes, affecting its Web UI. MinIO&reg; has replaced its MinIO&reg; Browser with the MinIO&reg; Console, and Web UI has been moved to a separated port. As a result the following variables have been affected:
+- `.Values.service.port` has been slit into `.Values.service.ports.api` (default: 9000) and `.Values.service.ports.console` (default: 9001).
+- `.Values.containerPort` has been slit into `.Values.containerPorts.api` (default: 9000) and `.Values.containerPort.console` (default: 9001).
+- `.Values.service.nodePort`has been slit into `.Values.nodePorts.api` and `.Values.nodePorts.console`.
+- Service port `minio` has been replaced with `minio-api` and `minio-console` with target ports minio-api and minio-console respectively.
+- Liveness, readiness and startup probes now use port `minio-console` instead of `minio`.
+
+Please note that Web UI, previously running on port 9000 will now use port 9001 leaving port 9000 for the MinIO&reg; Server API.
 
 ### To 7.0.0
 

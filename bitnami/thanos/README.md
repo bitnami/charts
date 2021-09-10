@@ -671,6 +671,19 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | Name                                                        | Description                                                                                                                        | Value                    |
 | ----------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `receive.enabled`                                           | Enable/disable Thanos Receive component                                                                                            | `false`                  |
+| `receive.mode`                                              | Mode to run receiver in. Valid options are "standalone" or "dual-mode"                                                             | `standalone`             |
+| `receive.distributor.resources.limits`                      | The resources limits for the Thanos Receive container                                                                              | `{}`                     |
+| `receive.distributor.resources.requests`                    | The requested resources for the Thanos Receive container                                                                           | `{}`                     |
+| `receive.distributor.extraContainers`                       | Extra containers running as sidecars to Thanos Receive Distributor container                                                       | `[]`                     |
+| `receive.distributor.extraEnv`                              | Extra environment variables for Thanos Receive Distributor container                                                               | `[]`                     |
+| `receive.distributor.extraVolumes`                          | Extra volumes to add to Thanos Receive Distributor                                                                                 | `[]`                     |
+| `receive.distributor.extraVolumeMounts`                     | Extra volume mounts to add to the receive distributor container                                                                    | `[]`                     |
+| `receive.distributor.extraFlags`                            | Extra Flags to passed to Thanos Receive Distributor                                                                                | `[]`                     |
+| `receive.distributor.replicaCount`                          | Number of Thanos Receive Distributor replicas to deploy                                                                            | `1`                      |
+| `receive.distributor.strategyType`                          | StrategyType, can be set to RollingUpdate or Recreate by default.                                                                  | `RollingUpdate`          |
+| `receive.distributor.affinity`                              | Thanos Receive Distributor affinity for pod assignment                                                                             | `{}`                     |
+| `receive.distributor.nodeSelector`                          | Thanos Receive Distributor node labels for pod assignment                                                                          | `{}`                     |
+| `receive.distributor.tolerations`                           | Thanos Receive Distributor tolerations for pod assignment                                                                          | `[]`                     |
 | `receive.logLevel`                                          | Thanos Receive log level                                                                                                           | `info`                   |
 | `receive.logFormat`                                         | Thanos Receive log format                                                                                                          | `logfmt`                 |
 | `receive.tsdbRetention`                                     | Thanos Receive TSDB retention period                                                                                               | `15d`                    |
@@ -1004,6 +1017,10 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 5.4.0
+
+This version introduces support for the receiver dual-mode implementation for Thanos [v0.22+](https://github.com/thanos-io/thanos/releases/tag/v0.22.0)
 
 ### To 5.3.0
 
